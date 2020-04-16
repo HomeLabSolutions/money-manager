@@ -41,4 +41,8 @@
         <item name="colorPrimaryDark">@color/primary_color</item>
     </style>
 
+    <style name="ThemeOverlay.MoneyManager.AppBarLayout" parent="">
+        <item name="colorPrimary">@android:color/white</item>
+    </style>
+
 </resources>
