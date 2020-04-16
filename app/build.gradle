@@ -1,0 +1,99 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
+
+apply from: '../shared_dependencies.gradle'
+
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+android {
+
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties["keyAlias"]
+            keyPassword keystoreProperties["keyPassword"]
+            storeFile file(keystoreProperties["storeFile"])
+            storePassword keystoreProperties["storePassword"]
+        }
+    }
+
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
+
+    def versionMajor = 1
+    def versionMinor = 0
+    def versionPatch = 0
+    def versionBuild = 1
+
+    defaultConfig {
+        applicationId names.applicationId
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+        versionCode 1000 * (1000 * versionMajor + 100 * versionMinor + versionPatch) + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+
+        vectorDrawables.useSupportLibrary = true
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            versionNameSuffix "-debug"
+            minifyEnabled false
+            multiDexEnabled true
+        }
+    }
+
+    viewBinding {
+        enabled = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    dynamicFeatures = [
+            ':incomeexpense'
+    ]
+}
+
+dependencies {
+
+    implementation project(':core')
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
+    implementation "androidx.appcompat:appcompat:$versions.appCompat"
+    implementation "androidx.constraintlayout:constraintlayout:$versions.contraintLayout"
+
+    implementation "androidx.navigation:navigation-fragment-ktx:$versions.navigation"
+    implementation "androidx.navigation:navigation-ui-ktx:$versions.navigation"
+
+    implementation "com.google.firebase:firebase-analytics:$versions.firebaseAnalytics"
+    implementation "com.google.firebase:firebase-auth:$versions.firebaseAuth"
+    implementation "com.firebaseui:firebase-ui-auth:$versions.firebaseUiAuth"
+    implementation "com.google.android.gms:play-services-auth:$versions.googlePlayAuth"
+
+    implementation "com.facebook.android:facebook-login:$versions.facebookAuth"
+    implementation("com.twitter.sdk.android:twitter:$versions.twitter") {
+        transitive = true
+    }
+
+    implementation "com.github.bumptech.glide:glide:${versions.glide}"
+
+    kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
+}

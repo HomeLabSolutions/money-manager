@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_nav_host_fragment"
+    app:startDestination="@+id/action_income_expense">
+
+    <fragment
+        android:id="@+id/action_income_expense"
+        android:name="com.d9tilov.moneymanager.incomeexpense.IncomeExpenseFragment"
+        android:label="fragment_title_screen"
+        tools:layout="@layout/fragment_income_expense" />
+
+    <fragment
+        android:id="@+id/action_chart"
+        android:name="com.d9tilov.moneymanager.statistics.StatisticsFragment"
+        android:label="fragment_title_screen"
+        tools:layout="@layout/fragment_statistics" />
+
+    <fragment
+        android:id="@+id/action_settings"
+        android:name="com.d9tilov.moneymanager.settings.SettingsFragment"
+        android:label="fragment_title_screen"
+        tools:layout="@layout/fragment_settings" />
+</navigation>

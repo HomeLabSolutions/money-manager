@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="headline1_text_size">84sp</dimen>
+    <dimen name="headline4_text_size">35sp</dimen>
+    <dimen name="headline6_text_size">18sp</dimen>
+    <dimen name="subtitle1_text_size">18sp</dimen>
+    <dimen name="subtitle2_text_size">18sp</dimen>
+    <dimen name="body1_text_size">18sp</dimen>
+    <dimen name="body2_text_size">16sp</dimen>
+    <dimen name="button_text_size">16sp</dimen>
+    <dimen name="caption_text_size">14sp</dimen>
+    <dimen name="overline_text_size">12sp</dimen>
+</resources>

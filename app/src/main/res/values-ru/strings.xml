@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bottom_menu_income_expense">Расход/Доход</string>
+    <string name="bottom_menu_chart">Статистика</string>
+    <string name="bottom_menu_settings">Настройки</string>
+    <string name="tab_income">Доходы</string>
+    <string name="tab_expense">Расходы</string>
+    <string name="settings_login">Войти</string>
+    <string name="settings_logout">Выйти</string>
+    <string name="settings_app_version">Версия %s</string>
+</resources>

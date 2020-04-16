@@ -1,0 +1,4 @@
+rootProject.name='MoneyManager'
+include ':app'
+include ':core'
+include ':incomeexpense'
