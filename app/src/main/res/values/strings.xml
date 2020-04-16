@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name" translatable="false">MoneyManager</string>
+    <string name="facebook_application_id" translatable="false">224976218580875</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb224976218580875</string>
+    <string name="bottom_menu_income_expense">Income/Expense</string>
+    <string name="bottom_menu_chart">Chart</string>
+    <string name="bottom_menu_settings">Settings</string>
+    <string name="tab_income">Income</string>
+    <string name="tab_expense">Expense</string>
+    <string name="settings_login">Login</string>
+    <string name="settings_logout">Logout</string>
+    <string name="settings_app_version">Version %s</string>
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_income_expense"
+        android:enabled="true"
+        android:icon="@drawable/ic_format_list"
+        android:title="@string/bottom_menu_income_expense"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_chart"
+        android:enabled="true"
+        android:icon="@drawable/ic_pie_chart"
+        android:title="@string/bottom_menu_chart"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_settings"
+        android:enabled="true"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/bottom_menu_settings"
+        app:showAsAction="ifRoom" />
+</menu>
