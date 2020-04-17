@@ -8,3 +8,5 @@ interface SplashNavigator:BaseNavigator {
 interface IncomeNavigator : BaseNavigator {}
 
 interface ExpenseNavigator : BaseNavigator {}
+
+interface SettingsNavigator : BaseNavigator {}

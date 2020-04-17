@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/action_settings"
-        android:name="com.d9tilov.moneymanager.settings.SettingsFragment"
+        android:name="com.d9tilov.moneymanager.settings.ui.SettingsFragment"
         android:label="fragment_title_screen"
         tools:layout="@layout/fragment_settings" />
 </navigation>

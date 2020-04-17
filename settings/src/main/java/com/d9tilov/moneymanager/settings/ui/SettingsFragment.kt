@@ -1,6 +1,5 @@
-package com.d9tilov.moneymanager.settings
+package com.d9tilov.moneymanager.settings.ui
 
-import android.accounts.AccountManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -11,23 +10,27 @@ import androidx.fragment.app.Fragment
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseActivity
+import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.databinding.FragmentSettingsBinding
+import com.d9tilov.moneymanager.settings.di.inject
+import com.d9tilov.moneymanager.settings.vm.SettingsViewModel
 import com.d9tilov.moneymanager.splash.ui.SplashActivity
 import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.FirebaseAuth
+import javax.inject.Inject
 
-class SettingsFragment : Fragment(R.layout.fragment_settings) {
+class SettingsFragment : Fragment(R.layout.fragment_settings), SettingsNavigator {
 
-    private var baseActivity: BaseActivity? = null
+    @Inject
+    internal lateinit var viewModel: SettingsViewModel
+    private lateinit var baseActivity: BaseActivity
     private lateinit var binding: FragmentSettingsBinding
-    private lateinit var auth: FirebaseAuth
+
     private lateinit var googleSignInClient: GoogleSignInClient
-    private lateinit var accountManager: AccountManager
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -36,21 +39,20 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        inject()
+        viewModel.setNavigator(this)
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
-        auth = FirebaseAuth.getInstance()
-        accountManager = AccountManager.get(requireContext())
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSettingsBinding.bind(view)
 
-        baseActivity?.setProgressBar(R.id.settings_progress_bar)
+        baseActivity.setProgressBar(R.id.settings_progress_bar)
         updateUI()
         binding.settingsLogin.setOnClickListener {
             val signInIntent = googleSignInClient.signInIntent
@@ -82,7 +84,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun updateUI() {
         binding.settingsAppVersion.text = BuildConfig.VERSION_NAME
-        val currencyUser = auth.currentUser
+        val currencyUser = viewModel.getCurrentUser()
         if (currencyUser == null) {
             requireActivity().finish()
             startActivity(
@@ -96,21 +98,13 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 settingsName.text = currencyUser.displayName
                 GlideApp
                     .with(this@SettingsFragment)
-                    .load(auth.currentUser?.photoUrl)
+                    .load(viewModel.getCurrentUser()?.photoUrl)
                     .centerCrop()
                     .into(settingsAvatar)
                 settingsLogin.visibility = GONE
                 settingsLogout.visibility = VISIBLE
             }
         }
-    }
-
-    private fun showProgress() {
-        baseActivity?.showProgressBar()
-    }
-
-    private fun hideProgress() {
-        baseActivity?.hideProgressBar()
     }
 
     companion object {

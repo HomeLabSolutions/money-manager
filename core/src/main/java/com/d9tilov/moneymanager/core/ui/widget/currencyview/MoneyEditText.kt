@@ -11,8 +11,7 @@ import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Co
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DEFAULT_DECIMAL_SEPARATOR
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
-import java.util.Locale
-import java.util.StringTokenizer
+import java.util.*
 
 class MoneyEditText @JvmOverloads constructor(
     context: Context,
