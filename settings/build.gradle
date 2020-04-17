@@ -39,8 +39,6 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "androidx.constraintlayout:constraintlayout:$versions.contraintLayout"
-
     kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
 
     implementation "com.google.firebase:firebase-analytics:$versions.firebaseAnalytics"

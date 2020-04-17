@@ -68,10 +68,9 @@ android {
 
     dynamicFeatures = [
             ':incomeexpense',
-            ':settings'
+            ':settings',
+            ':statistics'
     ]
-
-
 }
 
 dependencies {
@@ -81,7 +80,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
     implementation "androidx.appcompat:appcompat:$versions.appCompat"
-    implementation "androidx.constraintlayout:constraintlayout:$versions.contraintLayout"
 
     implementation "androidx.navigation:navigation-fragment-ktx:$versions.navigation"
     implementation "androidx.navigation:navigation-ui-ktx:$versions.navigation"

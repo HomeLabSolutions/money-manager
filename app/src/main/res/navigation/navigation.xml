@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/action_chart"
-        android:name="com.d9tilov.moneymanager.statistics.StatisticsFragment"
+        android:name="com.d9tilov.moneymanager.statistics.ui.StatisticsFragment"
         android:label="fragment_title_screen"
         tools:layout="@layout/fragment_statistics" />
 
