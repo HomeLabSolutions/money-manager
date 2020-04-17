@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="textAppearanceCurrencySignBig" format="reference" />
+    <attr name="textAppearanceCurrencySignMedium" format="reference" />
+    <attr name="textAppearanceCurrencySignSmall" format="reference" />
+    <attr name="textAppearanceCurrencySignExtraSmall" format="reference" />
+</resources>

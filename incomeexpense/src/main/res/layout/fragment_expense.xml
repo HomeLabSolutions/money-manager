@@ -15,8 +15,7 @@
         android:id="@+id/transaction_app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="40dp"
-        app:theme="@style/Widget.MoneyManager.AppBarLayout">
+        android:paddingBottom="40dp">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/cl_toolbar"
@@ -30,6 +29,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/expense_daily_sum_title"
                     style="@style/TextAppearance.MoneyManager.Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -38,6 +38,22 @@
                     android:text="@string/expense_daily_sum_to_spend"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/standard_left_margin"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="@dimen/standard_right_margin"
+                    android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Big"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/expense_daily_sum_title"
+                    app:scaleEnabled="true"
+                    app:signTextStyle="?attr/textAppearanceCurrencySignBig"
+                    app:sum="1002"
+                    app:sumTextStyle="?attr/textAppearanceHeadline1"
+                    tools:sumText="500" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.CollapsingToolbarLayout>

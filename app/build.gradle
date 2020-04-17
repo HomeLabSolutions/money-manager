@@ -67,8 +67,11 @@ android {
     }
 
     dynamicFeatures = [
-            ':incomeexpense'
+            ':incomeexpense',
+            ':settings'
     ]
+
+
 }
 
 dependencies {
