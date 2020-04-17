@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary_color">#000</color>
-    <color name="primary_dark_color">#000</color>
-    <color name="accent_color">#03DAC5</color>
-    <color name="secondary_color">#ffffff</color>
-    <color name="neutral_dark_color">#677177</color>
-    <color name="neutral_normal_color">#aaaaaa</color>
+    <color name="primary_color">#241B0D</color>
+    <color name="primary_dark_color">#E4DBBF</color>
+    <color name="accent_color">#70AB8F</color>
+    <color name="secondary_color">#DC5B21</color>
+    <color name="neutral_dark_color">#383127</color>
+    <color name="neutral_normal_color">#808080</color>
     <color name="neutral_light_color">#f4f3ee</color>
     <color name="error_color">#df4f60</color>
     <color name="success_color">#5c9a75</color>

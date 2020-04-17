@@ -13,4 +13,8 @@
 
     <dimen name="standard_left_margin">32sp</dimen>
     <dimen name="standard_right_margin">32sp</dimen>
+
+    <dimen name="currency_sign_big_size">50sp</dimen>
+    <dimen name="currency_sign_medium_size">30sp</dimen>
+    <dimen name="currency_sign_small_size">18sp</dimen>
 </resources>

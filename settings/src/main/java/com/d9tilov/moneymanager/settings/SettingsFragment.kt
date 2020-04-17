@@ -21,7 +21,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 
-
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private var baseActivity: BaseActivity? = null
@@ -55,7 +54,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         updateUI()
         binding.settingsLogin.setOnClickListener {
             val signInIntent = googleSignInClient.signInIntent
-            startActivityForResult(signInIntent, RC_SIGN_IN)
+            startActivityForResult(
+                signInIntent,
+                RC_SIGN_IN
+            )
         }
         binding.settingsLogout.setOnClickListener {
             AuthUI.getInstance()

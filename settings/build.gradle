@@ -1,0 +1,52 @@
+apply plugin: 'com.android.dynamic-feature'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+apply from: '../shared_dependencies.gradle'
+
+android {
+    compileSdkVersion versions.compileSdk
+
+    defaultConfig {
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+    }
+
+    viewBinding {
+        enabled true
+    }
+
+    buildTypes {
+        release {
+            consumerProguardFiles 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+    implementation project(':core')
+    implementation project(':app')
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation "androidx.constraintlayout:constraintlayout:$versions.contraintLayout"
+
+    kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
+
+    implementation "com.google.firebase:firebase-analytics:$versions.firebaseAnalytics"
+    implementation "com.google.firebase:firebase-auth:$versions.firebaseAuth"
+    implementation "com.firebaseui:firebase-ui-auth:$versions.firebaseUiAuth"
+    implementation "com.google.android.gms:play-services-auth:$versions.googlePlayAuth"
+
+    implementation "com.github.bumptech.glide:glide:${versions.glide}"
+}

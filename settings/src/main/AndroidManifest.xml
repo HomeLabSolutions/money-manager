@@ -1,5 +1,5 @@
 <manifest xmlns:dist="http://schemas.android.com/apk/distribution"
-    package="com.d9tilov.moneymanager.incomeexpense">
+    package="com.d9tilov.moneymanager.settings">
 
     <dist:module
         dist:instant="false"
@@ -10,3 +10,4 @@
         <dist:fusing dist:include="true" />
     </dist:module>
 </manifest>
+

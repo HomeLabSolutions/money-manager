@@ -1,9 +1,6 @@
 <resources>
-
-
-
     <style name="Widget.MoneyManager.AppBarLayout" parent="Widget.MaterialComponents.AppBarLayout.PrimarySurface">
-        <item name="elevation">0dp</item>
+        <item name="android:background">@android:color/white</item>
     </style>
 
     <style name="PlaidDarkOverlay" parent="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
@@ -12,10 +9,18 @@
     </style>
 
     <style name="Widget.MoneyManager.BottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView">
-        <item name="itemBackground">@color/primary_color</item>
+        <item name="itemBackground">?attr/colorPrimary</item>
         <item name="itemIconTint">@drawable/bottom_tab_selector</item>
         <item name="itemTextColor">@drawable/bottom_tab_selector</item>
-        <item name="selectableItemBackground">@color/secondary_color</item>
+        <item name="selectableItemBackground">?attr/colorSecondary</item>
+    </style>
+
+    <style name="Widget.MoneyManager.TabLayout" parent="Widget.MaterialComponents.TabLayout">
+        <item name="tabIndicatorColor">?attr/colorSecondary</item>
+        <item name="tabTextColor">@drawable/tabs_color_selector</item>
+        <item name="tabIndicatorFullWidth">false</item>
+        <item name="tabTextAppearance">@style/TextAppearance.MoneyManager.Tab</item>
+        <item name="android:background">?attr/colorPrimaryDark</item>
     </style>
 
 </resources>
