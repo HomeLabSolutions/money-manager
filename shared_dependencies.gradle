@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 dependencies {
+    implementation "androidx.constraintlayout:constraintlayout:${versions.contraintLayout}"
     implementation "com.google.android.material:material:${versions.material}"
     implementation "com.google.dagger:dagger:${versions.dagger}"
     implementation "androidx.core:core-ktx:${versions.kotlinCore}"

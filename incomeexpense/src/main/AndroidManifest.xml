@@ -2,8 +2,8 @@
     package="com.d9tilov.moneymanager.incomeexpense">
 
     <dist:module
-        dist:instant="false"
-        dist:title="@string/title_settings">
+        dist:instant="true"
+        dist:title="@string/title_income_expense">
         <dist:delivery>
             <dist:on-demand />
         </dist:delivery>

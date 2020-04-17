@@ -7,12 +7,12 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment
-import com.d9tilov.moneymanager.BuildConfig
-import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
-import com.d9tilov.moneymanager.databinding.FragmentSettingsBinding
+import com.d9tilov.moneymanager.settings.BuildConfig
+import com.d9tilov.moneymanager.settings.R
+import com.d9tilov.moneymanager.settings.databinding.FragmentSettingsBinding
 import com.d9tilov.moneymanager.settings.di.inject
 import com.d9tilov.moneymanager.settings.vm.SettingsViewModel
 import com.d9tilov.moneymanager.splash.ui.SplashActivity
@@ -42,7 +42,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), SettingsNavigator
         inject()
         viewModel.setNavigator(this)
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestIdToken(getString(com.d9tilov.moneymanager.R.string.default_web_client_id))
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
