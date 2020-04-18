@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="expense_daily_sum_to_spend">you can spend</string>
+    <string name="expense_daily_sum_to_spend_title">you can spend</string>
+    <string name="expense_spent_title">spent</string>
+    <string name="expense_left_to_title">left ot spent</string>
 </resources>

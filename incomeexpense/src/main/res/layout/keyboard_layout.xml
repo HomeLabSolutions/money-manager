@@ -1,0 +1,209 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinKeyboard
+        android:id="@+id/pin_keyboard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
+                android:layout_width="@dimen/pin_button_size"
+                android:layout_height="@dimen/pin_button_size"
+                android:layout_margin="@dimen/pin_button_margin"
+                android:background="@drawable/sel_pin_button">
+
+                <TextView
+                    style="@style/TextAppearance.MoneyManager.H6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:duplicateParentState="true"
+                    android:text="@string/_1" />
+            </com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton>
+
+            <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
+                android:layout_width="@dimen/pin_button_size"
+                android:layout_height="@dimen/pin_button_size"
+                android:layout_margin="@dimen/pin_button_margin"
+                android:background="@drawable/sel_pin_button">
+
+                <TextView
+                    style="@style/TextAppearance.MoneyManager.H6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:duplicateParentState="true"
+                    android:text="@string/_2" />
+            </com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton>
+
+            <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
+                android:layout_width="@dimen/pin_button_size"
+                android:layout_height="@dimen/pin_button_size"
+                android:layout_margin="@dimen/pin_button_margin"
+                android:background="@drawable/sel_pin_button">
+
+                <TextView
+                    style="@style/TextAppearance.MoneyManager.H6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:duplicateParentState="true"
+                    android:text="@string/_3" />
+            </com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
+                android:layout_width="@dimen/pin_button_size"
+                android:layout_height="@dimen/pin_button_size"
+                android:layout_margin="@dimen/pin_button_margin"
+                android:background="@drawable/sel_pin_button">
+
+                <TextView
+                    style="@style/TextAppearance.MoneyManager.H6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:duplicateParentState="true"
+                    android:text="@string/_4" />
+            </com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton>
+
+            <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
+                android:layout_width="@dimen/pin_button_size"
+                android:layout_height="@dimen/pin_button_size"
+                android:layout_margin="@dimen/pin_button_margin"
+                android:background="@drawable/sel_pin_button">
+
+                <TextView
+                    style="@style/TextAppearance.MoneyManager.H6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:duplicateParentState="true"
+                    android:text="@string/_5" />
+            </com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton>
+
+            <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
+                android:layout_width="@dimen/pin_button_size"
+                android:layout_height="@dimen/pin_button_size"
+                android:layout_margin="@dimen/pin_button_margin"
+                android:background="@drawable/sel_pin_button">
+
+                <TextView
+                    style="@style/TextAppearance.MoneyManager.H6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:duplicateParentState="true"
+                    android:singleLine="true"
+                    android:text="@string/_6" />
+            </com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
+                android:layout_width="@dimen/pin_button_size"
+                android:layout_height="@dimen/pin_button_size"
+                android:layout_margin="@dimen/pin_button_margin"
+                android:background="@drawable/sel_pin_button">
+
+                <TextView
+                    style="@style/TextAppearance.MoneyManager.H6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:duplicateParentState="true"
+                    android:text="@string/_7" />
+            </com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton>
+
+            <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
+                android:layout_width="@dimen/pin_button_size"
+                android:layout_height="@dimen/pin_button_size"
+                android:layout_margin="@dimen/pin_button_margin"
+                android:background="@drawable/sel_pin_button">
+
+                <TextView
+                    style="@style/TextAppearance.MoneyManager.H6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:duplicateParentState="true"
+                    android:text="@string/_8" />
+            </com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton>
+
+            <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
+                android:layout_width="@dimen/pin_button_size"
+                android:layout_height="@dimen/pin_button_size"
+                android:layout_margin="@dimen/pin_button_margin"
+                android:background="@drawable/sel_pin_button">
+
+                <TextView
+                    style="@style/TextAppearance.MoneyManager.H6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:duplicateParentState="true"
+                    android:text="@string/_9" />
+            </com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
+                android:layout_width="@dimen/pin_button_size"
+                android:layout_height="@dimen/pin_button_size"
+                android:layout_margin="@dimen/pin_button_margin">
+
+                <TextView
+                    style="@style/TextAppearance.MoneyManager.H6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:duplicateParentState="true" />
+            </com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton>
+
+            <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
+                android:layout_width="@dimen/pin_button_size"
+                android:layout_height="@dimen/pin_button_size"
+                android:layout_margin="@dimen/pin_button_margin"
+                android:background="@drawable/sel_pin_button">
+
+                <TextView
+                    style="@style/TextAppearance.MoneyManager.H6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:duplicateParentState="true"
+                    android:text="@string/_0" />
+            </com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton>
+
+            <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
+                android:layout_width="@dimen/pin_button_size"
+                android:layout_height="@dimen/pin_button_size"
+                android:layout_margin="@dimen/pin_button_margin">
+
+                <TextView
+                    style="@style/TextAppearance.MoneyManager.H6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:duplicateParentState="true" />
+            </com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton>
+        </TableRow>
+    </com.d9tilov.moneymanager.core.ui.widget.currencyview.PinKeyboard>
+</FrameLayout>
