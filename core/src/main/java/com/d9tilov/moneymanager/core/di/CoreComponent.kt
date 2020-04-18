@@ -6,7 +6,7 @@ import okhttp3.OkHttpClient
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
-@Component(modules = [CoreDataModule::class])
+@Component(modules = [CoreNetworkModule::class])
 @Singleton
 interface CoreComponent {
 

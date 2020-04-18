@@ -12,6 +12,7 @@ import com.d9tilov.moneymanager.core.di.CoreComponent
 import com.d9tilov.moneymanager.core.di.DaggerCoreComponent
 import com.facebook.FacebookSdk
 import com.facebook.appevents.AppEventsLogger
+import com.facebook.stetho.Stetho
 
 class App : Application() {
 
@@ -23,8 +24,11 @@ class App : Application() {
             MODE_NIGHT_AUTO_BATTERY
         }
         setDefaultNightMode(nightMode)
-        FacebookSdk.sdkInitialize(applicationContext);
-        AppEventsLogger.activateApp(this);
+        FacebookSdk.sdkInitialize(applicationContext)
+        AppEventsLogger.activateApp(this)
+        if (BuildConfig.DEBUG) {
+            Stetho.initializeWithDefaults(this)
+        }
     }
 
     private val coreComponent: CoreComponent by lazy {
