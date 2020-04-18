@@ -3,7 +3,7 @@
 
     <dist:module
         dist:instant="true"
-        dist:title="@string/title_settings">
+        dist:title="@string/feature_settings">
         <dist:delivery>
             <dist:on-demand />
         </dist:delivery>

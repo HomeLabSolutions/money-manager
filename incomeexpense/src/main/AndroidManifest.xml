@@ -3,7 +3,7 @@
 
     <dist:module
         dist:instant="true"
-        dist:title="@string/title_income_expense">
+        dist:title="@string/feature_income_expense">
         <dist:delivery>
             <dist:on-demand />
         </dist:delivery>

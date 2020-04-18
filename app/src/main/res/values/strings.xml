@@ -10,7 +10,7 @@
     <string name="settings_login">Login</string>
     <string name="settings_logout">Logout</string>
     <string name="settings_app_version">Version %s</string>
-    <string name="title_income_expense" translatable="false">incomeexpense</string>
-    <string name="title_settings" translatable="false">settings</string>
-    <string name="title_statistics" translatable="false">statistics</string>
+    <string name="feature_income_expense" translatable="false">incomeexpense</string>
+    <string name="feature_settings" translatable="false">settings</string>
+    <string name="feature_statistics" translatable="false">statistics</string>
 </resources>
