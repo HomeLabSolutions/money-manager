@@ -39,7 +39,7 @@ class CurrencyView @JvmOverloads constructor(
     private var showSign = true
     private var showSignBeforeValue = false
     private var enableInput = false
-    private var showCurrencyDelimiter = false
+    private var showCurrencyComma = false
     private var scaleEnable = enableInput
 
     var sum: BigDecimal = BigDecimal.ZERO
@@ -78,7 +78,7 @@ class CurrencyView @JvmOverloads constructor(
                     getBoolean(R.styleable.CurrencyView_showSignBeforeValue, false)
                 enableInput = getBoolean(R.styleable.CurrencyView_enableInput, false)
                 scaleEnable = getBoolean(R.styleable.CurrencyView_scaleEnabled, false)
-                showCurrencyDelimiter = getBoolean(R.styleable.CurrencyView_showDelimiter, false)
+                showCurrencyComma = getBoolean(R.styleable.CurrencyView_showComma, false)
                 sumTextSize = getDimensionPixelSize(
                     R.styleable.CurrencyView_sumTextSize,
                     resources.getDimensionPixelSize(R.dimen.currency_sum_text_size)
@@ -132,7 +132,7 @@ class CurrencyView @JvmOverloads constructor(
     }
 
     private fun formatInputSum(value: BigDecimal): String {
-        return if (showCurrencyDelimiter) {
+        return if (showCurrencyComma) {
             String.format(Locale.getDefault(), value.removeScale.toString())
         } else {
             String.format(
@@ -164,7 +164,7 @@ class CurrencyView @JvmOverloads constructor(
 
     private fun initSum() {
         moneyEditText.apply {
-            showDelimiter = showCurrencyDelimiter
+            showDelimiter = showCurrencyComma
             if (sumTextStyle < 0) {
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, sumTextSize.toFloat())
             } else {

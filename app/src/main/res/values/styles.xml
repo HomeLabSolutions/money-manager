@@ -1,6 +1,6 @@
 <resources>
     <style name="Widget.MoneyManager.AppBarLayout" parent="Widget.MaterialComponents.AppBarLayout.PrimarySurface">
-        <item name="android:background">@android:color/white</item>
+        <item name="android:background">?attr/colorPrimaryDark</item>
     </style>
 
     <style name="PlaidDarkOverlay" parent="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">

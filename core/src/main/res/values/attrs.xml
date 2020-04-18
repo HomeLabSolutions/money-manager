@@ -16,6 +16,6 @@
         <attr name="showSignBeforeValue" format="boolean" />
         <attr name="enableInput" format="boolean" />
         <attr name="scaleEnabled" format="boolean" />
-        <attr name="showDelimiter" format="boolean" />
+        <attr name="showComma" format="boolean" />
     </declare-styleable>
 </resources>
