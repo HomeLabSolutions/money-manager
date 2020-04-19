@@ -3,6 +3,7 @@ package com.d9tilov.moneymanager.core.ui.widget.currencyview
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.TableLayout
+import android.widget.TextView
 
 class PinKeyboard @JvmOverloads constructor(
     context: Context,
@@ -14,11 +15,11 @@ class PinKeyboard @JvmOverloads constructor(
         clickPinButton = click
     }
 
-    fun fireClickPinButton(button: PinButton?) {
+    fun fireClickPinButton(button: PinButton) {
         clickPinButton.onPinClick(button)
     }
 
     interface ClickPinButton {
-        fun onPinClick(button: PinButton?)
+        fun onPinClick(pinButton: PinButton)
     }
 }

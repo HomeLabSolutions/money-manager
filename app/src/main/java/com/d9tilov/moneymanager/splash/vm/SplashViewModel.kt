@@ -13,7 +13,6 @@ class SplashViewModel @Inject constructor(userInfoInteractor: UserInfoInteractor
 
     override fun onNavigatorAttached() {
         super.onNavigatorAttached()
-        Log.d("moggot", "onRouterAttached uid = " + auth.currentUser?.uid)
         if (auth.currentUser == null) {
             getNavigator()?.openAuthScreen()
         } else {

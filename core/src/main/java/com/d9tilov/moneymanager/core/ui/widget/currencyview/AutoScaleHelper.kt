@@ -17,7 +17,6 @@ class AutoScaleHelper(
 
     companion object {
         private const val PRECISION = 0.5f
-        private const val TEXT_WIDTH_OF_WHOLE_WIDTH_PERCENTAGE = 0.95
 
         fun create(
             rootView: CurrencyView, enableInput: Boolean
@@ -38,10 +37,10 @@ class AutoScaleHelper(
     private val signPaint = TextPaint()
     private val prefixPaint = TextPaint()
     private val textSizeMultiplier: Float = valueTextView.textSize / signTextView.textSize
-    private var minTextSize = min(
+    private var minTextSize = min(min(
         valueTextView.context.resources.displayMetrics.scaledDensity * PRECISION,
         signTextView.context.resources.displayMetrics.scaledDensity * PRECISION
-    )
+    ), prefixTextView.context.resources.displayMetrics.scaledDensity * PRECISION)
     private val valueTextSize = valueTextView.textSize
     private val signTextSize = signTextView.textSize
     private val maxTextSize = max(valueTextSize, signTextSize)
@@ -76,13 +75,13 @@ class AutoScaleHelper(
     }
 
     private fun autoScale() {
-        val targetWidth =
-            currencyView.width * TEXT_WIDTH_OF_WHOLE_WIDTH_PERCENTAGE - currencyView.paddingLeft - currencyView.paddingRight
+        val targetWidth = currencyView.width
         if (targetWidth <= 0) {
             return
         }
         var text = valueTextView.text
         var signText = signTextView.text
+        val prefixText = prefixTextView.text
         val method: TransformationMethod? = valueTextView.transformationMethod
         text = method?.getTransformation(text, valueTextView) ?: text
         val methodSign: TransformationMethod? = signTextView.transformationMethod
@@ -95,14 +94,16 @@ class AutoScaleHelper(
         valuePaint.set(valueTextView.paint)
         signPaint.set(signTextView.paint)
         prefixPaint.set(prefixTextView.paint)
+        prefixPaint.textSize = size
         valuePaint.textSize = size
-        signPaint.textSize = size / textSizeMultiplier
-        if ((valuePaint.measureText(text, 0, text.length)
+        signPaint.textSize = size
+        if ((prefixPaint.measureText(prefixTextView.text, 0, prefixTextView.text.length)
+                    + valuePaint.measureText(text, 0, text.length)
                     + currencyView.marginBetweenSign
                     + signPaint.measureText(signText, 0, signText.length)) > targetWidth
         ) {
             size = getAutoScaleTextSize(
-                text, signText, targetWidth.toFloat(), 0f, high,
+                prefixText, text, signText, targetWidth.toFloat(), 0f, high,
                 displayMetrics
             )
         }
@@ -121,10 +122,9 @@ class AutoScaleHelper(
         if (!enableInput) {
             val text = prefixTextView.text
             val measuredTextWidth = prefixPaint.measureText(text, 0, text.length)
-            val measuredView = prefixTextView.width
-            if (measuredTextWidth < measuredView) {
-                prefixTextView.layoutParams.width = measuredTextWidth.toInt()
-            }
+            val params = prefixTextView.layoutParams
+            params.width = measuredTextWidth.toInt()
+            prefixTextView.layoutParams = params
         }
     }
 
@@ -132,10 +132,9 @@ class AutoScaleHelper(
         if (!enableInput) {
             val text = valueTextView.text
             val measuredTextWidth = valuePaint.measureText(text, 0, text.length)
-            val measuredView = valueTextView.width
-            if (measuredTextWidth < measuredView) {
-                valueTextView.layoutParams.width = measuredTextWidth.toInt()
-            }
+            val params = valueTextView.layoutParams
+            params.width = measuredTextWidth.toInt()
+            valueTextView.layoutParams = params
         }
     }
 
@@ -143,15 +142,15 @@ class AutoScaleHelper(
         if (!enableInput) {
             val text = signTextView.text
             val measuredTextWidth = signPaint.measureText(text, 0, text.length)
-            val measuredView = signTextView.width
-            if (measuredTextWidth < measuredView) {
-                signTextView.layoutParams.width = measuredTextWidth.toInt()
-            }
+            val params = signTextView.layoutParams
+            params.width = measuredTextWidth.toInt()
+            signTextView.layoutParams = params
         }
     }
 
     //Binary search to define new text size
     private fun getAutoScaleTextSize(
+        prefixText: CharSequence,
         valueText: CharSequence,
         signText: CharSequence,
         targetWidth: Float,
@@ -160,17 +159,22 @@ class AutoScaleHelper(
         displayMetrics: DisplayMetrics
     ): Float {
         val mid = (low + high) / 2
+        prefixPaint.textSize = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_PX, mid,
+            displayMetrics
+        )
         valuePaint.textSize = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_PX, mid,
             displayMetrics
         )
         signPaint.textSize = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_PX, mid / textSizeMultiplier,
+            TypedValue.COMPLEX_UNIT_PX, mid,
             displayMetrics
         )
 
         val maxLineWidth =
-            valuePaint.measureText(valueText, 0, valueText.length) +
+            prefixPaint.measureText(prefixText, 0, prefixText.length) +
+                    valuePaint.measureText(valueText, 0, valueText.length) +
                     currencyView.marginBetweenSign +
                     signPaint.measureText(signText, 0, signText.length)
         return when {
@@ -179,13 +183,13 @@ class AutoScaleHelper(
             }
             maxLineWidth > targetWidth -> {
                 getAutoScaleTextSize(
-                    valueText, signText, targetWidth, low, mid,
+                    prefixText, valueText, signText, targetWidth, low, mid,
                     displayMetrics
                 )
             }
             maxLineWidth < targetWidth -> {
                 getAutoScaleTextSize(
-                    valueText, signText, targetWidth, mid, high,
+                    prefixText, valueText, signText, targetWidth, mid, high,
                     displayMetrics
                 )
             }

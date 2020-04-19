@@ -2,10 +2,13 @@ package com.d9tilov.moneymanager.core.ui.widget.currencyview
 
 import android.content.Context
 import android.os.Build
+import android.os.Bundle
+import android.os.Parcelable
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -35,6 +38,7 @@ class CurrencyView @JvmOverloads constructor(
     private var signTextSize = resources.getDimensionPixelSize(R.dimen.currency_sign_text_size)
     private var sumTextSize = resources.getDimensionPixelSize(R.dimen.currency_sum_text_size)
     private var signText = ""
+    private var currencyGravity = Gravity.START
     private var showUnderline = false
     private var showSign = true
     private var showSignBeforeValue = false
@@ -42,7 +46,7 @@ class CurrencyView @JvmOverloads constructor(
     private var showCurrencyComma = false
     private var scaleEnable = enableInput
 
-    var sum: BigDecimal = BigDecimal.ZERO
+    private var sum: BigDecimal = BigDecimal.ZERO
         set(value) {
             moneyEditText.setText(formatInputSum(value))
         }
@@ -54,18 +58,9 @@ class CurrencyView @JvmOverloads constructor(
 
     var marginBetweenSign = resources.getDimensionPixelSize(R.dimen.currency_margin_between_sign)
         private set
-    val moneyEditText =
-        MoneyEditText(context)
+    val moneyEditText = MoneyEditText(context)
     val signTextView: TextView = TextView(context)
     val prefixTextView: TextView = TextView(context)
-
-    companion object {
-        private const val DEFAULT_VALUE = -1
-        private const val MIN_LENGTH_OF_TEXT_SIZE_MULTIPLIER = 3
-
-        lateinit var PLUS_SIGN: String
-        lateinit var MINUS_SIGN: String
-    }
 
     init {
         PLUS_SIGN = context.getString(R.string.plus_sign)
@@ -91,6 +86,7 @@ class CurrencyView @JvmOverloads constructor(
                     R.styleable.CurrencyView_sumTextStyle,
                     DEFAULT_VALUE
                 )
+                currencyGravity = getInt(R.styleable.CurrencyView_gravity, Gravity.START)
                 sum = getString(R.styleable.CurrencyView_sum)?.toBigDecimal() ?: BigDecimal.ZERO
                 initSum()
 
@@ -143,7 +139,7 @@ class CurrencyView @JvmOverloads constructor(
     }
 
     private fun initPrefix() {
-        prefixTextView.apply {
+        with(prefixTextView) {
             if (sumTextStyle < 0) {
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, sumTextSize.toFloat())
             } else {
@@ -154,7 +150,7 @@ class CurrencyView @JvmOverloads constructor(
                 background = null
             }
             isSingleLine = true
-            gravity = Gravity.START or Gravity.CENTER_VERTICAL
+            gravity = currencyGravity
             text = prefixText
             includeFontPadding = false
             setPadding(0, 0, 0, 0)
@@ -163,7 +159,7 @@ class CurrencyView @JvmOverloads constructor(
     }
 
     private fun initSum() {
-        moneyEditText.apply {
+        with(moneyEditText) {
             showDelimiter = showCurrencyComma
             if (sumTextStyle < 0) {
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, sumTextSize.toFloat())
@@ -179,7 +175,7 @@ class CurrencyView @JvmOverloads constructor(
                 background = null
             }
             isSingleLine = true
-            gravity = Gravity.START or Gravity.CENTER_VERTICAL
+            gravity = currencyGravity
             setText(formatInputSum(sum))
             isEnabled = enableInput
             isFocusable = enableInput
@@ -190,7 +186,7 @@ class CurrencyView @JvmOverloads constructor(
     }
 
     private fun initSign() {
-        signTextView.apply {
+        with(signTextView) {
             if (signTextStyle < 0) {
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, signTextSize.toFloat())
             } else {
@@ -205,7 +201,7 @@ class CurrencyView @JvmOverloads constructor(
                 visibility = View.GONE
             }
             text = signText
-            gravity = Gravity.START or Gravity.CENTER_VERTICAL
+            gravity = currencyGravity
             includeFontPadding = false
             setPadding(0, 0, 0, 0)
             addView(this)
@@ -258,6 +254,7 @@ class CurrencyView @JvmOverloads constructor(
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         val centerY = (bottom - top) / 2
+        val wholeLength = right - left
         val prefixTextViewWidth = prefixTextView.measuredWidth
         val prefixTextViewHeight = prefixTextView.measuredHeight
         val valueEditTextWidth = moneyEditText.measuredWidth
@@ -268,27 +265,92 @@ class CurrencyView @JvmOverloads constructor(
         val prefixBaseLineMargin = TextViewCompat.getLastBaselineToBottomHeight(prefixTextView)
         val valueBaseLineMargin = TextViewCompat.getLastBaselineToBottomHeight(moneyEditText)
         val signBaseLineMargin = TextViewCompat.getLastBaselineToBottomHeight(signTextView)
-        prefixTextView.layout(
-            paddingLeft,
-            centerY + prefixBaseLineMargin + halfValueSize - valueBaseLineMargin - prefixTextViewHeight,
-            paddingLeft + prefixTextViewWidth,
-            centerY + prefixBaseLineMargin + halfValueSize - valueBaseLineMargin
-        )
-        if (showSign) {
-            signTextView.layout(
-                paddingLeft + prefixTextViewWidth + (if (showSignBeforeValue) 0 else (valueEditTextWidth + marginBetweenSign)),
-                centerY + signBaseLineMargin + halfValueSize - valueBaseLineMargin - signTextViewHeight,
-                paddingLeft + prefixTextViewWidth + (if (showSignBeforeValue) 0 else (valueEditTextWidth + marginBetweenSign + paddingRight)) + signTextViewWidth,
-                centerY + signBaseLineMargin + halfValueSize - valueBaseLineMargin
-            )
+
+        when (currencyGravity) {
+            Gravity.START -> {
+                prefixTextView.layout(
+                    paddingLeft + signTextViewWidth,
+                    centerY + prefixBaseLineMargin + halfValueSize - valueBaseLineMargin - prefixTextViewHeight,
+                    paddingLeft + prefixTextViewWidth + signTextViewWidth,
+                    centerY + prefixBaseLineMargin + halfValueSize - valueBaseLineMargin
+                )
+                if (showSign) {
+                    signTextView.layout(
+                        paddingLeft + (if (showSignBeforeValue) 0 else (valueEditTextWidth + marginBetweenSign)),
+                        centerY + signBaseLineMargin + halfValueSize - valueBaseLineMargin - signTextViewHeight,
+                        paddingLeft + (if (showSignBeforeValue) 0 else (valueEditTextWidth + marginBetweenSign + paddingRight)) + signTextViewWidth,
+                        centerY + signBaseLineMargin + halfValueSize - valueBaseLineMargin
+                    )
+                }
+                moneyEditText.layout(
+                    paddingLeft + prefixTextViewWidth + (if (showSignBeforeValue) (signTextViewWidth + marginBetweenSign) else 0),
+                    centerY - halfValueSize,
+                    paddingLeft + prefixTextViewWidth + (if (showSignBeforeValue) (signTextViewWidth + marginBetweenSign) else 0) + valueEditTextWidth,
+                    centerY - halfValueSize + valueEditTextHeight
+                )
+            }
+            Gravity.CENTER -> {
+                moneyEditText.layout(
+                    (wholeLength - paddingLeft - paddingRight) / 2 - valueEditTextWidth / 2,
+                    centerY - halfValueSize,
+                    (wholeLength - paddingLeft - paddingRight) / 2 - valueEditTextWidth / 2 + valueEditTextWidth,
+                    centerY - halfValueSize + valueEditTextHeight
+                )
+                if (showSign) {
+                    signTextView.layout(
+                        if (showSignBeforeValue) (wholeLength - paddingLeft - paddingRight) / 2 - valueEditTextWidth / 2 - marginBetweenSign - signTextViewWidth - prefixTextViewWidth
+                        else ((wholeLength - paddingLeft - paddingRight) / 2 - valueEditTextWidth / 2 + valueEditTextWidth + marginBetweenSign),
+                        centerY + signBaseLineMargin + halfValueSize - valueBaseLineMargin - signTextViewHeight,
+                        if (showSignBeforeValue) (wholeLength - paddingLeft - paddingRight) / 2 - valueEditTextWidth / 2 - marginBetweenSign - prefixTextViewWidth
+                        else ((wholeLength - paddingLeft - paddingRight) / 2 - valueEditTextWidth / 2 + valueEditTextWidth + marginBetweenSign + signTextViewWidth),
+                        centerY + signBaseLineMargin + halfValueSize - valueBaseLineMargin
+                    )
+                }
+                prefixTextView.layout(
+                    (wholeLength - paddingLeft - paddingRight) / 2 - valueEditTextWidth / 2 - prefixTextViewWidth,
+                    centerY + prefixBaseLineMargin + halfValueSize - valueBaseLineMargin - prefixTextViewHeight,
+                    (wholeLength - paddingLeft - paddingRight) / 2 - valueEditTextWidth / 2,
+                    centerY + prefixBaseLineMargin + halfValueSize - valueBaseLineMargin
+                )
+            }
+            Gravity.END -> {
+                if (showSign) {
+                    signTextView.layout(
+                        if (showSignBeforeValue) right - left - paddingRight - valueEditTextWidth - marginBetweenSign - signTextViewWidth - prefixTextViewWidth
+                        else right - left - paddingRight - signTextViewWidth,
+                        centerY + signBaseLineMargin + halfValueSize - valueBaseLineMargin - signTextViewHeight,
+                        if (showSignBeforeValue) right - left - paddingRight - valueEditTextWidth - marginBetweenSign - prefixTextViewWidth
+                        else right - left - paddingRight,
+                        centerY + signBaseLineMargin + halfValueSize - valueBaseLineMargin
+                    )
+                }
+                moneyEditText.layout(
+                    if (showSignBeforeValue) right - left - paddingRight - valueEditTextWidth
+                    else right - left - paddingRight - signTextViewWidth - marginBetweenSign - valueEditTextWidth,
+                    centerY - halfValueSize,
+                    if (showSignBeforeValue) right - left - paddingRight
+                    else right - left - paddingRight - signTextViewWidth - marginBetweenSign,
+                    centerY - halfValueSize + valueEditTextHeight
+                )
+                prefixTextView.layout(
+                    right - left - paddingRight - valueEditTextWidth - prefixTextViewWidth,
+                    centerY + prefixBaseLineMargin + halfValueSize - valueBaseLineMargin - prefixTextViewHeight,
+                    right - left - paddingRight - valueEditTextWidth,
+                    centerY + prefixBaseLineMargin + halfValueSize - valueBaseLineMargin
+                )
+            }
         }
-        moneyEditText.layout(
-            paddingLeft + prefixTextViewWidth + (if (showSignBeforeValue) (signTextViewWidth + marginBetweenSign) else 0),
-            centerY - halfValueSize,
-            paddingLeft + prefixTextViewWidth + (if (showSignBeforeValue) (signTextViewWidth + marginBetweenSign) else 0) + valueEditTextWidth,
-            centerY - halfValueSize + valueEditTextHeight
-        )
     }
+
+    fun setSum(value: String) {
+        moneyEditText.setText(value)
+    }
+
+    fun getSum(): String {
+        return moneyEditText.text.toString()
+    }
+
+    override fun onInterceptTouchEvent(ev: MotionEvent?) = !enableInput
 
     fun addTextChangedListener(textWatcher: TextWatcher) {
         moneyEditText.addTextChangedListener(textWatcher)
@@ -296,5 +358,34 @@ class CurrencyView @JvmOverloads constructor(
 
     fun removeTextChangedListener(textWatcher: TextWatcher) {
         moneyEditText.removeTextChangedListener(textWatcher)
+    }
+
+    override fun onSaveInstanceState(): Parcelable? {
+        val bundle = Bundle()
+        bundle.putParcelable(SUPER_STATE_KEY, super.onSaveInstanceState())
+        bundle.putString(SPARSE_STATE_KEY, moneyEditText.text.toString())
+        return bundle
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        var newState = state
+        if (newState is Bundle) {
+            val bundle = newState
+            moneyEditText.setText(bundle.getString(SPARSE_STATE_KEY, "0"))
+            newState = bundle.getParcelable(SUPER_STATE_KEY)
+        }
+        super.onRestoreInstanceState(newState)
+    }
+
+    companion object {
+        private const val SPARSE_STATE_KEY = "SPARSE_STATE_KEY"
+        private const val SUPER_STATE_KEY = "SUPER_STATE_KEY"
+
+        private const val DEFAULT_VALUE = -1
+        private const val MIN_LENGTH_OF_TEXT_SIZE_MULTIPLIER = 5
+
+        lateinit var PLUS_SIGN: String
+        lateinit var MINUS_SIGN: String
+
     }
 }

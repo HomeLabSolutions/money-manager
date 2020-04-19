@@ -1,5 +1,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent">
 
     <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinKeyboard
@@ -15,11 +16,12 @@
             <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
                 android:layout_width="@dimen/pin_button_size"
                 android:layout_height="@dimen/pin_button_size"
-                android:layout_margin="@dimen/pin_button_margin"
+                android:layout_marginEnd="@dimen/pin_button_margin_width"
+                android:layout_marginBottom="@dimen/pin_button_margin_height"
                 android:background="@drawable/sel_pin_button">
 
                 <TextView
-                    style="@style/TextAppearance.MoneyManager.H6"
+                    style="@style/TextAppearance.MoneyManager.H5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -30,11 +32,13 @@
             <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
                 android:layout_width="@dimen/pin_button_size"
                 android:layout_height="@dimen/pin_button_size"
-                android:layout_margin="@dimen/pin_button_margin"
+                android:layout_marginStart="@dimen/pin_button_margin_width"
+                android:layout_marginEnd="@dimen/pin_button_margin_width"
+                android:layout_marginBottom="@dimen/pin_button_margin_height"
                 android:background="@drawable/sel_pin_button">
 
                 <TextView
-                    style="@style/TextAppearance.MoneyManager.H6"
+                    style="@style/TextAppearance.MoneyManager.H5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -45,11 +49,12 @@
             <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
                 android:layout_width="@dimen/pin_button_size"
                 android:layout_height="@dimen/pin_button_size"
-                android:layout_margin="@dimen/pin_button_margin"
+                android:layout_marginStart="@dimen/pin_button_margin_width"
+                android:layout_marginBottom="@dimen/pin_button_margin_height"
                 android:background="@drawable/sel_pin_button">
 
                 <TextView
-                    style="@style/TextAppearance.MoneyManager.H6"
+                    style="@style/TextAppearance.MoneyManager.H5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -66,11 +71,13 @@
             <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
                 android:layout_width="@dimen/pin_button_size"
                 android:layout_height="@dimen/pin_button_size"
-                android:layout_margin="@dimen/pin_button_margin"
+                android:layout_marginTop="@dimen/pin_button_margin_height"
+                android:layout_marginEnd="@dimen/pin_button_margin_width"
+                android:layout_marginBottom="@dimen/pin_button_margin_height"
                 android:background="@drawable/sel_pin_button">
 
                 <TextView
-                    style="@style/TextAppearance.MoneyManager.H6"
+                    style="@style/TextAppearance.MoneyManager.H5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -81,11 +88,14 @@
             <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
                 android:layout_width="@dimen/pin_button_size"
                 android:layout_height="@dimen/pin_button_size"
-                android:layout_margin="@dimen/pin_button_margin"
+                android:layout_marginStart="@dimen/pin_button_margin_width"
+                android:layout_marginTop="@dimen/pin_button_margin_height"
+                android:layout_marginEnd="@dimen/pin_button_margin_width"
+                android:layout_marginBottom="@dimen/pin_button_margin_height"
                 android:background="@drawable/sel_pin_button">
 
                 <TextView
-                    style="@style/TextAppearance.MoneyManager.H6"
+                    style="@style/TextAppearance.MoneyManager.H5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -96,11 +106,13 @@
             <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
                 android:layout_width="@dimen/pin_button_size"
                 android:layout_height="@dimen/pin_button_size"
-                android:layout_margin="@dimen/pin_button_margin"
+                android:layout_marginStart="@dimen/pin_button_margin_width"
+                android:layout_marginTop="@dimen/pin_button_margin_height"
+                android:layout_marginBottom="@dimen/pin_button_margin_height"
                 android:background="@drawable/sel_pin_button">
 
                 <TextView
-                    style="@style/TextAppearance.MoneyManager.H6"
+                    style="@style/TextAppearance.MoneyManager.H5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -117,11 +129,13 @@
             <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
                 android:layout_width="@dimen/pin_button_size"
                 android:layout_height="@dimen/pin_button_size"
-                android:layout_margin="@dimen/pin_button_margin"
+                android:layout_marginTop="@dimen/pin_button_margin_height"
+                android:layout_marginEnd="@dimen/pin_button_margin_width"
+                android:layout_marginBottom="@dimen/pin_button_margin_height"
                 android:background="@drawable/sel_pin_button">
 
                 <TextView
-                    style="@style/TextAppearance.MoneyManager.H6"
+                    style="@style/TextAppearance.MoneyManager.H5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -132,11 +146,14 @@
             <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
                 android:layout_width="@dimen/pin_button_size"
                 android:layout_height="@dimen/pin_button_size"
-                android:layout_margin="@dimen/pin_button_margin"
+                android:layout_marginStart="@dimen/pin_button_margin_width"
+                android:layout_marginTop="@dimen/pin_button_margin_height"
+                android:layout_marginEnd="@dimen/pin_button_margin_width"
+                android:layout_marginBottom="@dimen/pin_button_margin_height"
                 android:background="@drawable/sel_pin_button">
 
                 <TextView
-                    style="@style/TextAppearance.MoneyManager.H6"
+                    style="@style/TextAppearance.MoneyManager.H5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -147,11 +164,13 @@
             <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
                 android:layout_width="@dimen/pin_button_size"
                 android:layout_height="@dimen/pin_button_size"
-                android:layout_margin="@dimen/pin_button_margin"
+                android:layout_marginStart="@dimen/pin_button_margin_width"
+                android:layout_marginTop="@dimen/pin_button_margin_height"
+                android:layout_marginBottom="@dimen/pin_button_margin_height"
                 android:background="@drawable/sel_pin_button">
 
                 <TextView
-                    style="@style/TextAppearance.MoneyManager.H6"
+                    style="@style/TextAppearance.MoneyManager.H5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -167,24 +186,29 @@
             <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
                 android:layout_width="@dimen/pin_button_size"
                 android:layout_height="@dimen/pin_button_size"
-                android:layout_margin="@dimen/pin_button_margin">
+                android:layout_marginTop="@dimen/pin_button_margin_height"
+                android:layout_marginEnd="@dimen/pin_button_margin_width"
+                android:background="@drawable/sel_pin_button">
 
                 <TextView
-                    style="@style/TextAppearance.MoneyManager.H6"
+                    style="@style/TextAppearance.MoneyManager.H5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:duplicateParentState="true" />
+                    android:duplicateParentState="true"
+                    android:text="@string/_dot" />
             </com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton>
 
             <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
                 android:layout_width="@dimen/pin_button_size"
                 android:layout_height="@dimen/pin_button_size"
-                android:layout_margin="@dimen/pin_button_margin"
+                android:layout_marginStart="@dimen/pin_button_margin_width"
+                android:layout_marginTop="@dimen/pin_button_margin_height"
+                android:layout_marginEnd="@dimen/pin_button_margin_width"
                 android:background="@drawable/sel_pin_button">
 
                 <TextView
-                    style="@style/TextAppearance.MoneyManager.H6"
+                    style="@style/TextAppearance.MoneyManager.H5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -195,14 +219,16 @@
             <com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
                 android:layout_width="@dimen/pin_button_size"
                 android:layout_height="@dimen/pin_button_size"
-                android:layout_margin="@dimen/pin_button_margin">
+                android:layout_marginStart="@dimen/pin_button_margin_width"
+                android:layout_marginTop="@dimen/pin_button_margin_height"
+                android:background="@drawable/sel_pin_button">
 
-                <TextView
-                    style="@style/TextAppearance.MoneyManager.H6"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:duplicateParentState="true" />
+                    android:duplicateParentState="true"
+                    app:srcCompat="@drawable/ic_backspace" />
             </com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton>
         </TableRow>
     </com.d9tilov.moneymanager.core.ui.widget.currencyview.PinKeyboard>

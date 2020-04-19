@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.d9tilov.moneymanager.incomeexpense.R
-import com.d9tilov.moneymanager.incomeexpense.presentation.adapter.IncomeExpenseAdapter
 import com.d9tilov.moneymanager.incomeexpense.databinding.FragmentIncomeExpenseBinding
+import com.d9tilov.moneymanager.incomeexpense.presentation.adapter.IncomeExpenseAdapter
 import kotlinx.android.synthetic.main.fragment_income_expense.*
 
 class IncomeExpenseFragment : Fragment(R.layout.fragment_income_expense) {

@@ -42,18 +42,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/standard_left_margin"
-                    android:layout_marginTop="32dp"
-                    android:visibility="gone"
+                    android:layout_marginTop="16dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
                     android:id="@+id/expense_daily_sum"
-                    android:visibility="gone"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/standard_left_margin"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:layout_marginEnd="@dimen/standard_right_margin"
                     android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Big"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -62,6 +60,7 @@
                     app:scaleEnabled="true"
                     app:signTextStyle="?attr/textAppearanceCurrencySignBig"
                     app:sum="1002"
+                    android:visibility="gone"
                     app:sumTextStyle="?attr/textAppearanceHeadline1"
                     tools:sumText="500" />
 
@@ -126,13 +125,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/standard_left_margin"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:layout_marginEnd="@dimen/standard_right_margin"
                     android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Medium"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:gravity="center"
                     app:layout_constraintHorizontal_chainStyle="spread"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/expense_daily_sum"
                     app:scaleEnabled="true"
                     app:signTextStyle="?attr/textAppearanceCurrencySignMedium"
                     app:sumTextStyle="?attr/textAppearanceHeadline4" />

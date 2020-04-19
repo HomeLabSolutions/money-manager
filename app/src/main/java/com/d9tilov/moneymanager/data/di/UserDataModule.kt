@@ -1,10 +1,8 @@
 package com.d9tilov.moneymanager.data.di
 
-import android.content.Context
 import com.d9tilov.moneymanager.data.base.local.db.AppDatabase
 import com.d9tilov.moneymanager.data.base.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.data.user.UserRepoImpl
-import com.d9tilov.moneymanager.data.user.local.UserDao
 import com.d9tilov.moneymanager.data.user.local.UserLocalSource
 import com.d9tilov.moneymanager.data.user.local.UserLocalSourceImpl
 import com.d9tilov.moneymanager.data.user.local.mappers.UserMapper

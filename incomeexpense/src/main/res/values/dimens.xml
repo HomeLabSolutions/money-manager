@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="pin_button_size">64dp</dimen>
-    <dimen name="pin_button_margin">8dp</dimen>
+    <dimen name="pin_button_margin_width">16dp</dimen>
+    <dimen name="pin_button_margin_height">4dp</dimen>
 </resources>
