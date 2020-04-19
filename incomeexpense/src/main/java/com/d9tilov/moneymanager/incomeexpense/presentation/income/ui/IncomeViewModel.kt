@@ -1,6 +1,6 @@
 package com.d9tilov.moneymanager.incomeexpense.presentation.income.ui
 
-import com.d9tilov.moneymanager.base.BaseViewModel
+import com.d9tilov.moneymanager.base.ui.BaseViewModel
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeNavigator
 import javax.inject.Inject
 

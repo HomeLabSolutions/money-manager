@@ -8,8 +8,9 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
 import androidx.fragment.app.Fragment
-import com.d9tilov.moneymanager.core.di.CoreComponent
-import com.d9tilov.moneymanager.core.di.DaggerCoreComponent
+import com.d9tilov.moneymanager.base.di.AppComponent
+import com.d9tilov.moneymanager.base.di.AppModule
+import com.d9tilov.moneymanager.base.di.DaggerAppComponent
 import com.facebook.FacebookSdk
 import com.facebook.appevents.AppEventsLogger
 import com.facebook.stetho.Stetho
@@ -31,16 +32,16 @@ class App : Application() {
         }
     }
 
-    private val coreComponent: CoreComponent by lazy {
-        DaggerCoreComponent.create()
+    private val appComponent: AppComponent by lazy {
+        DaggerAppComponent.builder().appModule(AppModule(applicationContext)).build()
     }
 
     companion object {
         @JvmStatic
-        fun coreComponent(context: Context) =
-            (context.applicationContext as App).coreComponent
+        fun appComponent(context: Context) =
+            (context.applicationContext as App).appComponent
     }
 }
 
-fun Activity.coreComponent() = App.coreComponent(this)
-fun Fragment.coreComponent() = App.coreComponent(requireContext())
+fun Activity.appComponent() = App.appComponent(this)
+fun Fragment.appComponent() = App.appComponent(requireContext())

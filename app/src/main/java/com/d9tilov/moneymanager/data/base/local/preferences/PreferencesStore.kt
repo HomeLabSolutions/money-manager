@@ -6,12 +6,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class PreferencesStore @Inject constructor(private val context: Context) {
+class PreferencesStore @Inject constructor(context: Context) {
 
     companion object {
         private const val STORE_NAME = "MoneyManagerPreferencesStore"
         private const val BASE_NAMESPACE = "com.d9tilov.moneymanager"
-        const val PREFERENCE_CLIENT_ID = BASE_NAMESPACE + "current.client.id"
+        const val PREFERENCE_CLIENT_UID = BASE_NAMESPACE + "current.client.uid"
     }
 
     private val sharedPreferences = context.getSharedPreferences(
@@ -19,14 +19,14 @@ class PreferencesStore @Inject constructor(private val context: Context) {
         Context.MODE_PRIVATE
     )
 
-    var clientId: String?
+    var uid: String?
         get() = sharedPreferences.getString(
-            PREFERENCE_CLIENT_ID,
+            PREFERENCE_CLIENT_UID,
             null
         )
-        set(clientId) {
+        set(clientUid) {
             sharedPreferences.edit {
-                putString(PREFERENCE_CLIENT_ID, clientId)
+                putString(PREFERENCE_CLIENT_UID, clientUid)
             }
         }
 }

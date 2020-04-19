@@ -9,14 +9,10 @@ class UserMapper @Inject constructor() {
     fun convertToDataModel(user: UserDbModel) =
         with(user) {
             UserProfile(
-                clientId = clientId,
+                uid = uid,
                 displayedName = userName,
                 firstName = firstName,
                 secondName = lastName,
-                pushNotificationSound = pushSound,
-                pushReportEnabled = pushReportEnabled,
-                hideTransactionDetailsInPushMessages = hideTransactionDetails,
-                fiscalDay = fiscalDay,
                 budgetDayCreation = budgetDayCreation
             )
         }
@@ -24,14 +20,10 @@ class UserMapper @Inject constructor() {
     fun convertToDbModel(clientProfileEntity: UserProfile, id: String) =
         with(clientProfileEntity) {
             UserDbModel(
-                clientId = id,
+                uid = id,
                 userName = displayedName,
                 firstName = firstName,
                 lastName = secondName,
-                pushSound = pushNotificationSound,
-                pushReportEnabled = pushReportEnabled,
-                hideTransactionDetails = hideTransactionDetailsInPushMessages,
-                fiscalDay = fiscalDay,
                 budgetDayCreation = budgetDayCreation
             )
         }

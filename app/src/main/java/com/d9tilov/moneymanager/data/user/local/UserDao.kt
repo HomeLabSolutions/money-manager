@@ -13,7 +13,7 @@ import io.reactivex.Flowable
 @Dao
 interface UserDao {
 
-    @Query("SELECT * FROM Users WHERE clientId = :id")
+    @Query("SELECT * FROM Users WHERE uid = :id")
     fun getById(id: String): Flowable<UserDbModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -25,7 +25,7 @@ buildscript {
             'retrofit'       : '2.6.4',
             'converter'      : '2.6.4',
             'lifecycle'      : '2.2.0',
-            'navigation'     : '2.2.1',
+            'navigation'     : '2.2.2',
             'firebaseAnalytics': '17.3.0',
             'firebaseAuth'     : '19.3.0',
             'firebaseUiAuth'   : '6.2.0',

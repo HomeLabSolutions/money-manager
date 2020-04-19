@@ -10,7 +10,6 @@ import com.d9tilov.moneymanager.home.HomeActivity
 import com.d9tilov.moneymanager.splash.di.inject
 import com.d9tilov.moneymanager.splash.vm.SplashViewModel
 import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.IdpResponse
 import javax.inject.Inject
 
 
@@ -52,13 +51,8 @@ class SplashActivity : BaseActivity(), SplashNavigator {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == RC_SIGN_IN) {
-            val response = IdpResponse.fromResultIntent(data)
-
-            if (resultCode == Activity.RESULT_OK) {
+        if (requestCode == RC_SIGN_IN && resultCode == Activity.RESULT_OK) {
                 openHomeScreen()
-            } else {
-            }
         }
     }
 
