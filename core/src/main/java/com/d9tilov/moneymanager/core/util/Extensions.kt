@@ -1,8 +1,10 @@
 package com.d9tilov.moneymanager.core.util
 
 import android.text.TextUtils
+import android.util.Log
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DECIMAL_SEPARATOR
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DEFAULT_DECIMAL_SEPARATOR
+import java.lang.NumberFormatException
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -17,11 +19,16 @@ val String?.toBigDecimal: BigDecimal
         if (TextUtils.isEmpty(this)) {
             return BigDecimal.ZERO
         }
-        var result = this?.let {
-            replace("\\s".toRegex(), "")
-                .replace(DECIMAL_SEPARATOR, DEFAULT_DECIMAL_SEPARATOR)
-                .toBigDecimal()
-        } ?: BigDecimal.ZERO
+        var result :BigDecimal
+        result = try {
+            this?.let {
+                replace("\\s".toRegex(), "")
+                    .replace(DECIMAL_SEPARATOR, DEFAULT_DECIMAL_SEPARATOR)
+                    .toBigDecimal()
+            } ?: BigDecimal.ZERO
+        } catch (ex:NumberFormatException) {
+            BigDecimal.ZERO
+        }
         result = result.setScale(2, RoundingMode.HALF_UP).stripTrailingZeros()
         if (result.scale() < 0) {
             result = result.setScale(0)
