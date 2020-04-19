@@ -14,7 +14,7 @@ class UserRepoImpl(
 
     override fun getUser(): Flowable<UserProfile> = userLocalSource.getCurrentUser()
     override fun createUser(entity: UserProfile): Completable {
-        preferencesStore.clientId = entity.clientId
+        preferencesStore.uid = entity.uid
         return userLocalSource.createCurrentUser(entity)
     }
 

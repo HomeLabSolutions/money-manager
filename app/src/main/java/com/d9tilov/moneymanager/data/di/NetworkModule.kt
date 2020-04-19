@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.core.di
+package com.d9tilov.moneymanager.data.di
 
 import com.d9tilov.moneymanager.core.BuildConfig
 import com.google.gson.Gson
@@ -9,11 +9,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
-/**
- * Dagger module to provide core data functionality.
- */
 @Module
-class CoreNetworkModule {
+class NetworkModule {
 
     @Provides
     fun provideOkHttpClient(interceptor: HttpLoggingInterceptor): OkHttpClient =
