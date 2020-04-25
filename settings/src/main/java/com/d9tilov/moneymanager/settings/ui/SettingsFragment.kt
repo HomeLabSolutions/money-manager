@@ -40,7 +40,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), SettingsNavigator
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         inject()
-        viewModel.setNavigator(this)
+        viewModel.navigator = this
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(com.d9tilov.moneymanager.R.string.default_web_client_id))
             .requestEmail()
@@ -65,6 +65,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), SettingsNavigator
             AuthUI.getInstance()
                 .signOut(requireContext())
                 .addOnCompleteListener {
+                    viewModel.logout()
                     updateUI()
                 }
         }

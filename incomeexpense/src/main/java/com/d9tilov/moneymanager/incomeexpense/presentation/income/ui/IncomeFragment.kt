@@ -18,7 +18,7 @@ class IncomeFragment : Fragment(), IncomeNavigator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         inject()
-        viewModel.setNavigator(this)
+        viewModel.navigator = this
     }
 
     override fun onCreateView(

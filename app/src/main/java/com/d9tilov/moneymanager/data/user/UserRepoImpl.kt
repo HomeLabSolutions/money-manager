@@ -23,7 +23,8 @@ class UserRepoImpl(
         return userLocalSource.updateCurrentUser(entity)
     }
 
-    override fun logout(entity: UserProfile): Completable {
-        throw NoSuchMethodException("Empty impl")
+    override fun logout(): Completable {
+        return userLocalSource.deleteUser()
+            .doOnComplete { preferencesStore.clearAllData() }
     }
 }

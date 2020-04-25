@@ -24,5 +24,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:${versions.lifecycle}"
     implementation "androidx.lifecycle:lifecycle-extensions:${versions.lifecycle}"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    implementation "io.reactivex.rxjava2:rxjava:$versions.rxjava2"
+    implementation "io.reactivex.rxjava2:rxandroid:$versions.rxAndroid"
 
 }

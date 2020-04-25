@@ -26,9 +26,11 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
 
         private const val DATABASE_NAME = "money-manager-db"
+        const val DEFAULT_DATA_ID = 0L
 
         // For Singleton instantiation
-        @Volatile private var instance: AppDatabase? = null
+        @Volatile
+        private var instance: AppDatabase? = null
 
         fun getInstance(context: Context): AppDatabase {
             return instance ?: synchronized(this) {
