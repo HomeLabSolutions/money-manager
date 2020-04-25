@@ -3,7 +3,6 @@ package com.d9tilov.moneymanager.core.ui.widget.currencyview
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.TableLayout
-import android.widget.TextView
 
 class PinKeyboard @JvmOverloads constructor(
     context: Context,

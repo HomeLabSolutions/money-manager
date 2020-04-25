@@ -10,6 +10,6 @@ interface UserLocalSource : Source {
     fun createCurrentUser(userProfile: UserProfile): Completable
     fun updateCurrentUser(userProfile: UserProfile): Completable
     fun getCurrentUser(): Flowable<UserProfile>
-    fun deleteUser(userProfile: UserProfile): Completable
+    fun deleteUser(): Completable
 
 }

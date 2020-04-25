@@ -29,7 +29,7 @@ class SplashActivity : BaseActivity(), SplashNavigator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         inject()
-        viewModel.setNavigator(this)
+        viewModel.navigator = this
     }
 
     override fun openHomeScreen() {
@@ -52,7 +52,7 @@ class SplashActivity : BaseActivity(), SplashNavigator {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RC_SIGN_IN && resultCode == Activity.RESULT_OK) {
-                openHomeScreen()
+            viewModel.createUser()
         }
     }
 

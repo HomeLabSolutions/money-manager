@@ -16,6 +16,6 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics), StatisticsNav
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         inject()
-        viewModel.setNavigator(this)
+        viewModel.navigator = this
     }
 }

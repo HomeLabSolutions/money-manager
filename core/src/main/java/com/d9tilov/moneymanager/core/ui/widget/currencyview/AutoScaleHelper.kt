@@ -37,10 +37,12 @@ class AutoScaleHelper(
     private val signPaint = TextPaint()
     private val prefixPaint = TextPaint()
     private val textSizeMultiplier: Float = valueTextView.textSize / signTextView.textSize
-    private var minTextSize = min(min(
-        valueTextView.context.resources.displayMetrics.scaledDensity * PRECISION,
-        signTextView.context.resources.displayMetrics.scaledDensity * PRECISION
-    ), prefixTextView.context.resources.displayMetrics.scaledDensity * PRECISION)
+    private var minTextSize = min(
+        min(
+            valueTextView.context.resources.displayMetrics.scaledDensity * PRECISION,
+            signTextView.context.resources.displayMetrics.scaledDensity * PRECISION
+        ), prefixTextView.context.resources.displayMetrics.scaledDensity * PRECISION
+    )
     private val valueTextSize = valueTextView.textSize
     private val signTextSize = signTextView.textSize
     private val maxTextSize = max(valueTextSize, signTextSize)

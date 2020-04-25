@@ -8,5 +8,5 @@ interface UserRepo {
     fun getUser(): Flowable<UserProfile>
     fun createUser(entity: UserProfile): Completable
     fun updateUser(entity: UserProfile): Completable
-    fun logout(entity: UserProfile): Completable
+    fun logout(): Completable
 }

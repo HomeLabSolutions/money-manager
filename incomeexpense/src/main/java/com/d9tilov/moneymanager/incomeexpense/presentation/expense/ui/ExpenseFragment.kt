@@ -23,7 +23,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense), ExpenseNavigator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         inject()
-        viewModel.setNavigator(this)
+        viewModel.navigator = this
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

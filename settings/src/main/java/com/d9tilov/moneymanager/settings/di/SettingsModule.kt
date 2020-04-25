@@ -2,6 +2,7 @@ package com.d9tilov.moneymanager.settings.di
 
 import android.content.Context
 import androidx.lifecycle.ViewModelProvider
+import com.d9tilov.moneymanager.domain.user.UserInfoInteractor
 import com.d9tilov.moneymanager.settings.ui.SettingsFragment
 import com.d9tilov.moneymanager.settings.vm.SettingsViewModel
 import com.d9tilov.moneymanager.settings.vm.SettingsViewModelFactory
@@ -20,5 +21,6 @@ class SettingsModule(private val fragment: SettingsFragment) {
     }
 
     @Provides
-    fun settingsViewModelFactory() = SettingsViewModelFactory()
+    fun settingsViewModelFactory(userInfoInteractor: UserInfoInteractor) =
+        SettingsViewModelFactory(userInfoInteractor)
 }

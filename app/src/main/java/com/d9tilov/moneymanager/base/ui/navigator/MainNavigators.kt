@@ -1,6 +1,6 @@
 package com.d9tilov.moneymanager.base.ui.navigator
 
-interface SplashNavigator:BaseNavigator {
+interface SplashNavigator : BaseNavigator {
     fun openHomeScreen()
     fun openAuthScreen()
 }

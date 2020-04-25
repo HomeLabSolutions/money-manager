@@ -4,26 +4,25 @@ import com.d9tilov.moneymanager.data.user.entities.UserProfile
 import com.d9tilov.moneymanager.data.user.local.entities.UserDbModel
 import javax.inject.Inject
 
-class UserMapper @Inject constructor() {
+class DataUserMapper @Inject constructor() {
 
-    fun convertToDataModel(user: UserDbModel) =
+    fun toDataModel(user: UserDbModel) =
         with(user) {
             UserProfile(
                 uid = uid,
-                displayedName = userName,
+                displayedName = "$firstName $lastName",
                 firstName = firstName,
-                secondName = lastName,
+                lastName = lastName,
                 budgetDayCreation = budgetDayCreation
             )
         }
 
-    fun convertToDbModel(clientProfileEntity: UserProfile, id: String) =
+    fun toDbModel(clientProfileEntity: UserProfile) =
         with(clientProfileEntity) {
             UserDbModel(
-                uid = id,
-                userName = displayedName,
+                uid = uid,
                 firstName = firstName,
-                lastName = secondName,
+                lastName = lastName,
                 budgetDayCreation = budgetDayCreation
             )
         }

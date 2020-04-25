@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="TextAppearance.MoneyManager.H1" parent="TextAppearance.MaterialComponents.Headline1">
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">@dimen/headline1_text_size</item>

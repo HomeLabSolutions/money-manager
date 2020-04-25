@@ -8,13 +8,7 @@ import androidx.room.PrimaryKey
 data class UserDbModel(
 
     @PrimaryKey @ColumnInfo(name = "uid") var uid: String,
-    @ColumnInfo(name = "userName") val userName: String? = "",
     @ColumnInfo(name = "firstName") val firstName: String? = "",
     @ColumnInfo(name = "lastName") val lastName: String? = "",
-    @ColumnInfo(name = "pushSound") val pushSound: String? = "",
-    @ColumnInfo(name = "pushReportEnabled") val pushReportEnabled: Boolean = true,
-    @ColumnInfo(name = "hideTransactionDetails") val hideTransactionDetails: Boolean = true,
-    @ColumnInfo(name = "fiscalDay") val fiscalDay: Int = 0,
     @ColumnInfo(name = "budgetDayCreation") val budgetDayCreation: Long
-
 )

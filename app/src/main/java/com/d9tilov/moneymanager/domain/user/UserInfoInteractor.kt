@@ -8,4 +8,5 @@ interface UserInfoInteractor {
 
     fun getCurrentUser(): Flowable<UserProfile>
     fun createUser(userProfile: UserProfile): Completable
+    fun logout(): Completable
 }

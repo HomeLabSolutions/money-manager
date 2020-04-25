@@ -176,7 +176,8 @@ class MoneyEditText @JvmOverloads constructor(
             start + (if (lengthAfter > 0) lengthAfter else 0) + getCharOccurrence(
                 result,
                 GROUPING_SEPARATOR
-            ) - getCharOccurrence(prevInput,
+            ) - getCharOccurrence(
+                prevInput,
                 GROUPING_SEPARATOR
             )
         if (newStart >= text.toString().length) {

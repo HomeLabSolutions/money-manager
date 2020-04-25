@@ -29,4 +29,11 @@ class PreferencesStore @Inject constructor(context: Context) {
                 putString(PREFERENCE_CLIENT_UID, clientUid)
             }
         }
+
+    fun clearAllData() {
+        val prefs: Map<String, *> = sharedPreferences.all
+        for ((key) in prefs) {
+            sharedPreferences.edit().remove(key).apply()
+        }
+    }
 }
