@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.home
+package com.d9tilov.moneymanager.presentation.home
 
 import android.os.Bundle
 import androidx.navigation.Navigation

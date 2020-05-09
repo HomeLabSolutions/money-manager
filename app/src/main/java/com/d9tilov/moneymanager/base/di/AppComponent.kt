@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.base.di
 
+import com.d9tilov.moneymanager.data.di.CategoryDataModule
 import com.d9tilov.moneymanager.data.di.DataBaseModule
 import com.d9tilov.moneymanager.data.di.NetworkModule
 import com.d9tilov.moneymanager.data.di.UserDataModule
@@ -14,7 +15,8 @@ import javax.inject.Singleton
         NetworkModule::class,
         DataBaseModule::class,
         UserDataModule::class,
-        UserDomainModule::class]
+        UserDomainModule::class,
+        CategoryDataModule::class]
 )
 @Singleton
 interface AppComponent {

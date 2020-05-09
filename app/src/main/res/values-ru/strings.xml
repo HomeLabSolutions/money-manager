@@ -8,4 +8,12 @@
     <string name="settings_login">Войти</string>
     <string name="settings_logout">Выйти</string>
     <string name="settings_app_version">Версия %s</string>
+
+    <string name="default_category_food">Еда</string>
+    <string name="default_category_car">Автомобиль</string>
+    <string name="default_category_home">Дом</string>
+    <string name="default_category_entertainment">Развлечения</string>
+    <string name="default_category_travels">Путешествия</string>
+    <string name="default_category_internet">Интернет</string>
+    <string name="default_category_doctor">Врач</string>
 </resources>

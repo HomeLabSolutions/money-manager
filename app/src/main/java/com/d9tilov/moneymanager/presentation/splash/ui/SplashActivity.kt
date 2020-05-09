@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.splash.ui
+package com.d9tilov.moneymanager.presentation.splash.ui
 
 import android.app.Activity
 import android.content.Intent
@@ -6,9 +6,9 @@ import android.os.Bundle
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
-import com.d9tilov.moneymanager.home.HomeActivity
-import com.d9tilov.moneymanager.splash.di.inject
-import com.d9tilov.moneymanager.splash.vm.SplashViewModel
+import com.d9tilov.moneymanager.presentation.home.HomeActivity
+import com.d9tilov.moneymanager.presentation.splash.di.inject
+import com.d9tilov.moneymanager.presentation.splash.vm.SplashViewModel
 import com.firebase.ui.auth.AuthUI
 import javax.inject.Inject
 

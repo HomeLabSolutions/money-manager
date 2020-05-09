@@ -10,12 +10,12 @@ import androidx.fragment.app.Fragment
 import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
+import com.d9tilov.moneymanager.presentation.splash.ui.SplashActivity
 import com.d9tilov.moneymanager.settings.BuildConfig
 import com.d9tilov.moneymanager.settings.R
 import com.d9tilov.moneymanager.settings.databinding.FragmentSettingsBinding
 import com.d9tilov.moneymanager.settings.di.inject
 import com.d9tilov.moneymanager.settings.vm.SettingsViewModel
-import com.d9tilov.moneymanager.splash.ui.SplashActivity
 import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient

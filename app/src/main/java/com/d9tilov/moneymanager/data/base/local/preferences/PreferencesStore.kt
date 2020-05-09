@@ -8,12 +8,6 @@ import javax.inject.Singleton
 @Singleton
 class PreferencesStore @Inject constructor(context: Context) {
 
-    companion object {
-        private const val STORE_NAME = "MoneyManagerPreferencesStore"
-        private const val BASE_NAMESPACE = "com.d9tilov.moneymanager"
-        const val PREFERENCE_CLIENT_UID = BASE_NAMESPACE + "current.client.uid"
-    }
-
     private val sharedPreferences = context.getSharedPreferences(
         STORE_NAME,
         Context.MODE_PRIVATE
@@ -36,4 +30,11 @@ class PreferencesStore @Inject constructor(context: Context) {
             sharedPreferences.edit().remove(key).apply()
         }
     }
+
+    companion object {
+        private const val STORE_NAME = "MoneyManagerPreferencesStore"
+        private const val BASE_NAMESPACE = "com.d9tilov.moneymanager"
+        const val PREFERENCE_CLIENT_UID = BASE_NAMESPACE + "current.client.uid"
+    }
+
 }

@@ -1,9 +1,9 @@
-package com.d9tilov.moneymanager.splash.di
+package com.d9tilov.moneymanager.presentation.splash.di
 
 import com.d9tilov.moneymanager.base.di.AppComponent
 import com.d9tilov.moneymanager.core.di.BaseActivityComponent
 import com.d9tilov.moneymanager.core.di.scope.FeatureScope
-import com.d9tilov.moneymanager.splash.ui.SplashActivity
+import com.d9tilov.moneymanager.presentation.splash.ui.SplashActivity
 import dagger.Component
 
 @Component(

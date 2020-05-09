@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.splash.vm
+package com.d9tilov.moneymanager.presentation.splash.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

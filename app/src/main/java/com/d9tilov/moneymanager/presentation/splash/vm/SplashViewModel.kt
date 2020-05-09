@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.splash.vm
+package com.d9tilov.moneymanager.presentation.splash.vm
 
 import com.d9tilov.moneymanager.base.ui.BaseViewModel
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
