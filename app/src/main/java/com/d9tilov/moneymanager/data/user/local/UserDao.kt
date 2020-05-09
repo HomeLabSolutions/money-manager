@@ -10,17 +10,17 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 
 @Dao
-interface UserDao {
+abstract class UserDao {
 
     @Query("SELECT * FROM Users WHERE uid = :id")
-    fun getById(id: String): Flowable<UserDbModel>
+    abstract fun getById(id: String): Flowable<UserDbModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(user: UserDbModel): Completable
+    abstract fun insert(user: UserDbModel): Completable
 
     @Update
-    fun update(user: UserDbModel): Completable
+    abstract fun update(user: UserDbModel): Completable
 
     @Query("DELETE FROM users WHERE uid=:uid")
-    fun delete(uid: String): Completable
+    abstract fun delete(uid: String): Completable
 }

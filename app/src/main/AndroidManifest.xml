@@ -31,7 +31,7 @@
         </activity>
 
         <activity
-            android:name=".splash.ui.SplashActivity"
+            android:name="com.d9tilov.moneymanager.presentation.splash.ui.SplashActivity"
             android:theme="@style/Theme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.d9tilov.moneymanager.home.HomeActivity"
+            android:name="com.d9tilov.moneymanager.presentation.home.HomeActivity"
             android:theme="@style/Theme.MoneyManager.Home" />
     </application>
 

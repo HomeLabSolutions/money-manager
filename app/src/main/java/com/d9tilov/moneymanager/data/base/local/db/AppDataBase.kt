@@ -7,11 +7,16 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.d9tilov.moneymanager.data.base.local.db.converters.CurrencyConverter
 import com.d9tilov.moneymanager.data.base.local.db.converters.DateConverter
+import com.d9tilov.moneymanager.data.category.local.CategoryDao
+import com.d9tilov.moneymanager.data.category.local.entities.CategoryDbModel
 import com.d9tilov.moneymanager.data.user.local.UserDao
 import com.d9tilov.moneymanager.data.user.local.entities.UserDbModel
 
 @Database(
-    entities = [UserDbModel::class],
+    entities = [
+        UserDbModel::class,
+        CategoryDbModel::class
+    ],
     version = 1,
     exportSchema = false
 )
@@ -22,11 +27,13 @@ import com.d9tilov.moneymanager.data.user.local.entities.UserDbModel
 
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
+    abstract fun categoryDao(): CategoryDao
 
     companion object {
 
         private const val DATABASE_NAME = "money-manager-db"
         const val DEFAULT_DATA_ID = 0L
+        const val NO_ID = -1L
 
         // For Singleton instantiation
         @Volatile
