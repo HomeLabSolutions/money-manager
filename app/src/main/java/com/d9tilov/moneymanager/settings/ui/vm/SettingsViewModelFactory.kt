@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.d9tilov.moneymanager.backup.domain.BackupInteractor
 import com.d9tilov.moneymanager.domain.user.UserInfoInteractor
-import com.d9tilov.moneymanager.settings.domain.SettingsInteractor
 import javax.inject.Inject
 
 class SettingsViewModelFactory @Inject constructor(

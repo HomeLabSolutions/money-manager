@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.settings.ui.vm
 
-import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.backup.domain.BackupInteractor
 import com.d9tilov.moneymanager.base.ui.BaseViewModel
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator

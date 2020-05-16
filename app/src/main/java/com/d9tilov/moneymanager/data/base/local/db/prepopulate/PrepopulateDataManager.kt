@@ -12,7 +12,6 @@ import com.d9tilov.moneymanager.data.base.local.db.AppDatabase.Companion.NO_ID
 import com.d9tilov.moneymanager.data.base.local.db.prepopulate.entity.PrepopulateCategory
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
-import javax.inject.Singleton
 
 class PrepopulateDataManager @Inject constructor(private val context: Context) {
 

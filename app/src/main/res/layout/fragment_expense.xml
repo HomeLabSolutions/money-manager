@@ -9,7 +9,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    tools:context="com.d9tilov.moneymanager.home.HomeActivity">
+    tools:context="com.d9tilov.moneymanager.home.ui.HomeActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/expense_app_bar_layout"

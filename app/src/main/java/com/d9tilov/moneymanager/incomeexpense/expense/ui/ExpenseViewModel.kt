@@ -5,7 +5,6 @@ import com.d9tilov.moneymanager.base.ui.BaseViewModel
 import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
 import com.d9tilov.moneymanager.core.util.ioScheduler
 import com.d9tilov.moneymanager.core.util.uiScheduler
-import com.d9tilov.moneymanager.settings.domain.SettingsInteractor
 import javax.inject.Inject
 
 class ExpenseViewModel @Inject constructor(private val backupInteractor: BackupInteractor) :

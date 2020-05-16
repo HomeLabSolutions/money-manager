@@ -3,7 +3,6 @@ package com.d9tilov.moneymanager.data.category.local
 import com.d9tilov.moneymanager.data.base.local.db.AppDatabase
 import com.d9tilov.moneymanager.data.base.local.db.AppDatabase.Companion.NO_ID
 import com.d9tilov.moneymanager.data.base.local.db.prepopulate.PrepopulateDataManager
-import com.d9tilov.moneymanager.data.base.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.data.category.entities.Category
 import com.d9tilov.moneymanager.data.category.local.entities.CategoryDbModel
 import com.d9tilov.moneymanager.data.category.local.mappers.CategoryMapper

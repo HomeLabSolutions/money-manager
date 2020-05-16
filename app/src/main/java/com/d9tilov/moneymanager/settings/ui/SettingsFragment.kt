@@ -1,19 +1,16 @@
 package com.d9tilov.moneymanager.settings.ui
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import androidx.fragment.app.Fragment
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.base.ui.BaseActivity
+import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.databinding.FragmentSettingsBinding
-import com.d9tilov.moneymanager.settings.di.inject
 import com.d9tilov.moneymanager.settings.ui.vm.SettingsViewModel
 import com.d9tilov.moneymanager.splash.ui.SplashActivity
 import com.firebase.ui.auth.AuthUI
@@ -23,24 +20,21 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import javax.inject.Inject
 
-class SettingsFragment : Fragment(R.layout.fragment_settings), SettingsNavigator {
+class SettingsFragment : BaseFragment<FragmentSettingsBinding, SettingsViewModel>(),
+    SettingsNavigator {
 
     @Inject
     internal lateinit var viewModel: SettingsViewModel
-    private lateinit var baseActivity: BaseActivity
-    private lateinit var binding: FragmentSettingsBinding
-
     private lateinit var googleSignInClient: GoogleSignInClient
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        this.baseActivity = activity as BaseActivity
-    }
+    override fun performDataBinding(view: View): FragmentSettingsBinding =
+        FragmentSettingsBinding.bind(view)
+    override fun getLayoutId() = R.layout.fragment_settings
+    override fun getViewModel() = viewModel
+    override fun getNavigator() = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        inject()
-        viewModel.navigator = this
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(com.d9tilov.moneymanager.R.string.default_web_client_id))
             .requestEmail()
@@ -50,18 +44,15 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), SettingsNavigator
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentSettingsBinding.bind(view)
-
-        baseActivity.setProgressBar(R.id.settings_progress_bar)
         updateUI()
-        binding.settingsLogin.setOnClickListener {
+        viewBinding.settingsLogin.setOnClickListener {
             val signInIntent = googleSignInClient.signInIntent
             startActivityForResult(
                 signInIntent,
                 RC_SIGN_IN
             )
         }
-        binding.settingsLogout.setOnClickListener {
+        viewBinding.settingsLogout.setOnClickListener {
             AuthUI.getInstance()
                 .signOut(requireContext())
                 .addOnCompleteListener {
@@ -69,14 +60,13 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), SettingsNavigator
                     updateUI()
                 }
         }
-        binding.settingsBackup.setOnClickListener {
+        viewBinding.settingsBackup.setOnClickListener {
             viewModel.backup()
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (requestCode == RC_SIGN_IN) {
             try {
                 updateUI()
@@ -87,7 +77,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), SettingsNavigator
     }
 
     private fun updateUI() {
-        binding.settingsAppVersion.text = BuildConfig.VERSION_NAME
+        viewBinding.settingsAppVersion.text = BuildConfig.VERSION_NAME
         val currencyUser = viewModel.getCurrentUser()
         if (currencyUser == null) {
             requireActivity().finish()
@@ -96,7 +86,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), SettingsNavigator
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             )
         } else {
-            with(binding) {
+            with(viewBinding) {
                 this.settingsAvatar.visibility = VISIBLE
                 settingsName.visibility = VISIBLE
                 settingsName.text = currencyUser.displayName

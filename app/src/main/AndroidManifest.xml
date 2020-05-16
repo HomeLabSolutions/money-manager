@@ -42,7 +42,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.d9tilov.moneymanager.home.HomeActivity"
+            android:name="com.d9tilov.moneymanager.home.ui.HomeActivity"
             android:theme="@style/Theme.MoneyManager.Home" />
 
         <meta-data

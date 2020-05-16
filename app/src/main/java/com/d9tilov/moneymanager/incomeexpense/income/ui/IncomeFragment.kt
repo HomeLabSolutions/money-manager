@@ -1,32 +1,21 @@
 package com.d9tilov.moneymanager.incomeexpense.income.ui
 
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.d9tilov.moneymanager.R
+import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeNavigator
-import com.d9tilov.moneymanager.incomeexpense.income.di.inject
+import com.d9tilov.moneymanager.databinding.FragmentIncomeBinding
 import javax.inject.Inject
 
-class IncomeFragment : Fragment(), IncomeNavigator {
+class IncomeFragment : BaseFragment<FragmentIncomeBinding, IncomeViewModel>(), IncomeNavigator {
 
     @Inject
     internal lateinit var viewModel: IncomeViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        inject()
-        viewModel.navigator = this
-    }
+    override fun performDataBinding(view: View): FragmentIncomeBinding =
+        FragmentIncomeBinding.bind(view)
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.fragment_income, container, false)
-    }
-
+    override fun getLayoutId() = R.layout.fragment_income
+    override fun getViewModel() = viewModel
+    override fun getNavigator() = this
 }
