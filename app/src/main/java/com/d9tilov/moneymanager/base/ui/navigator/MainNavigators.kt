@@ -9,6 +9,7 @@ interface IncomeNavigator : BaseNavigator {}
 
 interface ExpenseNavigator : BaseNavigator {}
 
-interface SettingsNavigator : BaseNavigator {}
+interface SettingsNavigator : BaseNavigator {
+}
 
 interface StatisticsNavigator : BaseNavigator {}

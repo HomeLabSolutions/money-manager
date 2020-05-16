@@ -1,11 +1,7 @@
 package com.d9tilov.moneymanager.base.di
 
-import com.d9tilov.moneymanager.data.di.CategoryDataModule
-import com.d9tilov.moneymanager.data.di.DataBaseModule
+import com.d9tilov.moneymanager.data.di.DatabaseModule
 import com.d9tilov.moneymanager.data.di.NetworkModule
-import com.d9tilov.moneymanager.data.di.UserDataModule
-import com.d9tilov.moneymanager.domain.user.UserInfoInteractor
-import com.d9tilov.moneymanager.domain.user.di.UserDomainModule
 import dagger.Component
 import javax.inject.Singleton
 
@@ -13,10 +9,7 @@ import javax.inject.Singleton
     modules = [
         AppModule::class,
         NetworkModule::class,
-        DataBaseModule::class,
-        UserDataModule::class,
-        UserDomainModule::class,
-        CategoryDataModule::class]
+        DatabaseModule::class]
 )
 @Singleton
 interface AppComponent {
@@ -26,6 +19,4 @@ interface AppComponent {
         fun build(): AppComponent
         fun appModule(appModule: AppModule): Builder
     }
-
-    fun provideUserInfoInteractor(): UserInfoInteractor
 }

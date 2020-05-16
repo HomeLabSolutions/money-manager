@@ -26,12 +26,13 @@ import com.d9tilov.moneymanager.data.user.local.entities.UserDbModel
 )
 
 abstract class AppDatabase : RoomDatabase() {
+
     abstract fun userDao(): UserDao
     abstract fun categoryDao(): CategoryDao
 
     companion object {
 
-        private const val DATABASE_NAME = "money-manager-db"
+        const val DATABASE_NAME = "money-manager-db"
         const val DEFAULT_DATA_ID = 0L
         const val NO_ID = -1L
 
@@ -46,8 +47,10 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         private fun buildDatabase(context: Context): AppDatabase {
+
             return Room.databaseBuilder(
-                context, AppDatabase::class.java,
+                context,
+                AppDatabase::class.java,
                 DATABASE_NAME
             ).build()
         }
