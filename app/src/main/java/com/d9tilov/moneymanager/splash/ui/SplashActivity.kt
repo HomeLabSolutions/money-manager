@@ -4,16 +4,14 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
-import com.d9tilov.moneymanager.home.HomeActivity
-import com.d9tilov.moneymanager.splash.di.inject
+import com.d9tilov.moneymanager.home.ui.HomeActivity
 import com.d9tilov.moneymanager.splash.vm.SplashViewModel
 import com.firebase.ui.auth.AuthUI
+import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
-
-class SplashActivity : BaseActivity(), SplashNavigator {
+class SplashActivity : DaggerAppCompatActivity(), SplashNavigator {
 
     private val providers = arrayListOf(
         AuthUI.IdpConfig.EmailBuilder().build(),
@@ -28,7 +26,6 @@ class SplashActivity : BaseActivity(), SplashNavigator {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        inject()
         viewModel.navigator = this
     }
 

@@ -1,14 +1,16 @@
 package com.d9tilov.moneymanager.base.di
 
 import android.content.Context
+import com.d9tilov.moneymanager.App
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class AppModule(private val context: Context) {
+class AppModule {
 
-    @Provides
     @Singleton
-    fun provideContext(): Context = context
+    @Provides
+    fun provideContext(application: App): Context = application
+
 }

@@ -18,6 +18,8 @@ dependencies {
     implementation "com.jakewharton.timber:timber:${versions.timber}"
     implementation "com.google.android.material:material:${versions.material}"
     implementation "com.google.dagger:dagger:${versions.dagger}"
+    kapt "com.google.dagger:dagger-android-processor:$versions.dagger"
+    implementation "com.google.dagger:dagger-android-support:$versions.daggerAndroidSupport"
     implementation "androidx.core:core-ktx:${versions.kotlinCore}"
     implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"
     implementation "com.squareup.retrofit2:converter-gson:${versions.converter}"
