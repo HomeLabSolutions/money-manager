@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <string name="expense_daily_sum_to_spend_title">сегодня можно потратить</string>
-    <string name="expense_spent_title">всего потрачено</string>
-    <string name="expense_left_to_title">осталось потратить</string>
-</resources>

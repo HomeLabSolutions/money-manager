@@ -19,6 +19,7 @@ buildscript {
             'kotlinCore'       : '1.2.0',
             'contraintLayout'  : '1.1.3',
 
+            'timber'           : '4.7.1',
             'dagger'           : '2.27',
             'okhttp'           : '4.5.0',
             'gson'             : '2.8.6',

@@ -14,8 +14,6 @@ import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
-@Singleton
 class PrepopulateDataManager @Inject constructor(private val context: Context) {
 
     fun createDefaultCategories(): List<PrepopulateCategory> {

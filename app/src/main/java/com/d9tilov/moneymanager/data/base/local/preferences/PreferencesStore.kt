@@ -3,9 +3,7 @@ package com.d9tilov.moneymanager.data.base.local.preferences
 import android.content.Context
 import androidx.core.content.edit
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class PreferencesStore @Inject constructor(context: Context) {
 
     private val sharedPreferences = context.getSharedPreferences(
@@ -24,6 +22,14 @@ class PreferencesStore @Inject constructor(context: Context) {
             }
         }
 
+    var databaseLoaded: Boolean
+        get() = sharedPreferences.getBoolean(PREFERENCE_DATABASE_LOADED, false)
+        set(loaded) {
+            sharedPreferences.edit() {
+                putBoolean(PREFERENCE_DATABASE_LOADED, loaded)
+            }
+        }
+
     fun clearAllData() {
         val prefs: Map<String, *> = sharedPreferences.all
         for ((key) in prefs) {
@@ -32,9 +38,10 @@ class PreferencesStore @Inject constructor(context: Context) {
     }
 
     companion object {
-        private const val STORE_NAME = "MoneyManagerPreferencesStore"
+        const val STORE_NAME = "MoneyManagerPreferencesStore"
         private const val BASE_NAMESPACE = "com.d9tilov.moneymanager"
         const val PREFERENCE_CLIENT_UID = BASE_NAMESPACE + "current.client.uid"
+        const val PREFERENCE_DATABASE_LOADED = BASE_NAMESPACE + "database.loaded"
     }
 
 }

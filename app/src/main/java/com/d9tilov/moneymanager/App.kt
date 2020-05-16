@@ -14,6 +14,9 @@ import com.d9tilov.moneymanager.base.di.DaggerAppComponent
 import com.facebook.FacebookSdk
 import com.facebook.appevents.AppEventsLogger
 import com.facebook.stetho.Stetho
+import timber.log.Timber
+import timber.log.Timber.DebugTree
+
 
 class App : Application() {
 
@@ -29,6 +32,9 @@ class App : Application() {
         AppEventsLogger.activateApp(this)
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this)
+        }
+        if (BuildConfig.DEBUG) {
+            Timber.plant(DebugTree())
         }
     }
 

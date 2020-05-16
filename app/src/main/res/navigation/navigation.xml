@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/action_income_expense"
-        android:name="com.d9tilov.moneymanager.incomeexpense.presentation.IncomeExpenseFragment"
+        android:name="com.d9tilov.moneymanager.incomeexpense.IncomeExpenseFragment"
         android:label="fragment_title_screen"
         tools:layout="@layout/fragment_income_expense" />
 

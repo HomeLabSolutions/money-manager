@@ -18,4 +18,8 @@
     <dimen name="currency_sign_big_size">50sp</dimen>
     <dimen name="currency_sign_medium_size">30sp</dimen>
     <dimen name="currency_sign_small_size">18sp</dimen>
+
+    <dimen name="pin_button_size">64dp</dimen>
+    <dimen name="pin_button_margin_width">16dp</dimen>
+    <dimen name="pin_button_margin_height">4dp</dimen>
 </resources>

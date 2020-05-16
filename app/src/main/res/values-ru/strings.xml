@@ -5,15 +5,23 @@
     <string name="bottom_menu_settings">Настройки</string>
     <string name="tab_income">Доходы</string>
     <string name="tab_expense">Расходы</string>
+
     <string name="settings_login">Войти</string>
     <string name="settings_logout">Выйти</string>
     <string name="settings_app_version">Версия %s</string>
+    <string name="settings_backup">Сделать бэкап</string>
+    <string name="settings_backup_success">База данных была успешно сохранена</string>
 
     <string name="default_category_food">Еда</string>
+    <string name="default_category_cafe">Кафе</string>
     <string name="default_category_car">Автомобиль</string>
     <string name="default_category_home">Дом</string>
     <string name="default_category_entertainment">Развлечения</string>
     <string name="default_category_travels">Путешествия</string>
     <string name="default_category_internet">Интернет</string>
     <string name="default_category_doctor">Врач</string>
+
+    <string name="expense_daily_sum_to_spend_title">сегодня можно потратить</string>
+    <string name="expense_spent_title">всего потрачено</string>
+    <string name="expense_left_to_title">осталось потратить</string>
 </resources>
