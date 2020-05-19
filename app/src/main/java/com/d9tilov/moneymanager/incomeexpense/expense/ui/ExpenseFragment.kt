@@ -11,12 +11,8 @@ import com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.PinKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
 import kotlinx.android.synthetic.main.keyboard_layout.view.*
-import javax.inject.Inject
 
 class ExpenseFragment : BaseFragment<FragmentExpenseBinding, ExpenseViewModel>(), ExpenseNavigator {
-
-    @Inject
-    internal lateinit var viewModel: ExpenseViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,6 +40,6 @@ class ExpenseFragment : BaseFragment<FragmentExpenseBinding, ExpenseViewModel>()
         FragmentExpenseBinding.bind(view)
 
     override fun getLayoutId() = R.layout.fragment_expense
-    override fun getViewModel() = viewModel
+    override fun getViewModelClass() = ExpenseViewModel::class.java
     override fun getNavigator() = this
 }

@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
+import android.widget.Toast
+import androidx.annotation.StringRes
 
 fun showLoadingDialog(context: Context, rootView: View): ProgressBar {
     val layout = rootView as ViewGroup
@@ -32,3 +34,6 @@ fun hideLoadingDialog(rootView: ViewGroup?, parentView: View?) {
         return
     rootView.removeView(parentView)
 }
+
+fun Context?.toast(@StringRes textId: Int, duration: Int = Toast.LENGTH_SHORT) = this?.let { Toast.makeText(it, textId, duration).show() }
+

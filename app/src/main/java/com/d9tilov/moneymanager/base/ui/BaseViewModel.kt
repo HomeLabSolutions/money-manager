@@ -1,11 +1,11 @@
 package com.d9tilov.moneymanager.base.ui
 
 import androidx.annotation.StringRes
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+
 
 abstract class BaseViewModel<T> : ViewModel() {
 
@@ -15,18 +15,25 @@ abstract class BaseViewModel<T> : ViewModel() {
             field?.let { onNavigatorAttached() }
         }
 
-    private val _message = MutableLiveData<Event<Int>>()
-    val message : LiveData<Event<Int>>
-        get() = _message
+    val msg = MutableLiveData<Int>()
+    val loading = MutableLiveData<Boolean>()
 
     // Post in background thread
     fun postMessage(@StringRes message: Int) {
-        _message.postValue(Event(message))
+        msg.postValue(message)
     }
 
     // Post in main thread
     fun setMessage(@StringRes message: Int) {
-        _message.value = Event(message)
+        msg.value = message
+    }
+
+    fun setLoading(show: Boolean) {
+        loading.value = show
+    }
+
+    fun postLoading(show: Boolean) {
+        loading.postValue(show)
     }
 
     private val compositeDisposable = CompositeDisposable()

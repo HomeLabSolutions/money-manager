@@ -8,12 +8,8 @@ import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.base.ui.navigator.HomeNavigator
 import com.d9tilov.moneymanager.databinding.ActivityMainBinding
 import com.d9tilov.moneymanager.home.ui.vm.HomeViewModel
-import javax.inject.Inject
 
 class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>(), HomeNavigator {
-
-    @Inject
-    lateinit var viewModel: HomeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,8 +21,11 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>(), HomeNav
         )
     }
 
-    override fun performDataBinding(): ActivityMainBinding =
-        ActivityMainBinding.inflate(layoutInflater)
+    override fun performDataBinding(): ActivityMainBinding {
+        initObservers()
+        return ActivityMainBinding.inflate(layoutInflater)
+    }
 
     override fun getNavigator() = this
+    override fun getViewModelClass() = HomeViewModel::class.java
 }
