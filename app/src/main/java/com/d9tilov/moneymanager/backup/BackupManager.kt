@@ -10,11 +10,16 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.storage.FileDownloadTask
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import io.reactivex.Completable
+import io.reactivex.subjects.CompletableSubject
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
 import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
+import java.lang.IllegalStateException
 import javax.inject.Inject
 
 
@@ -25,18 +30,21 @@ class BackupManager @Inject constructor(
 
     private val storageReference: StorageReference = FirebaseStorage.getInstance().reference
 
-    fun backupDatabase() {
+    fun backupDatabase(): Completable {
         val databaseUri = Uri.fromFile(databaseFile)
         val riversRef: StorageReference =
             storageReference.child("${preferencesStore.uid}/$DATABASE_NAME")
-
+        val result = CompletableSubject.create()
         riversRef.putFile(databaseUri)
             .addOnSuccessListener { taskSnapshot ->
                 Timber.d("File was uploaded successfully")
+                result.onComplete()
             }
             .addOnFailureListener {
                 Timber.d("Error while uploading file: ${it.message}")
+                result.onError(it)
             }
+        return result
     }
 
     fun restoreDatabase() {

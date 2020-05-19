@@ -2,31 +2,22 @@ package com.d9tilov.moneymanager.incomeexpense.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeExpenseNavigator
 import com.d9tilov.moneymanager.databinding.FragmentIncomeExpenseBinding
 import com.d9tilov.moneymanager.incomeexpense.adapter.IncomeExpenseAdapter
-import com.d9tilov.moneymanager.incomeexpense.vm.IncomeExpenseViewModel
 import kotlinx.android.synthetic.main.fragment_income_expense.*
-import javax.inject.Inject
 
-class IncomeExpenseFragment : BaseFragment<FragmentIncomeExpenseBinding, IncomeExpenseViewModel>(),
+class IncomeExpenseFragment : Fragment(R.layout.fragment_income_expense),
     IncomeExpenseNavigator {
 
-    @Inject
-    internal lateinit var viewModel: IncomeExpenseViewModel
     private lateinit var demoCollectionPagerAdapter: IncomeExpenseAdapter
-
-    override fun performDataBinding(view: View): FragmentIncomeExpenseBinding =
-        FragmentIncomeExpenseBinding.bind(view)
-
-    override fun getLayoutId() = R.layout.fragment_income_expense
-    override fun getViewModel() = viewModel
-    override fun getNavigator() = this
+    private lateinit var viewBinding: FragmentIncomeExpenseBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewBinding = FragmentIncomeExpenseBinding.bind(view)
         demoCollectionPagerAdapter =
             IncomeExpenseAdapter(
                 requireContext(),

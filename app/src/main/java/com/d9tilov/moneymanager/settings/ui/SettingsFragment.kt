@@ -18,19 +18,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import javax.inject.Inject
 
 class SettingsFragment : BaseFragment<FragmentSettingsBinding, SettingsViewModel>(),
     SettingsNavigator {
 
-    @Inject
-    internal lateinit var viewModel: SettingsViewModel
     private lateinit var googleSignInClient: GoogleSignInClient
 
     override fun performDataBinding(view: View): FragmentSettingsBinding =
         FragmentSettingsBinding.bind(view)
     override fun getLayoutId() = R.layout.fragment_settings
-    override fun getViewModel() = viewModel
+    override fun getViewModelClass() = SettingsViewModel::class.java
     override fun getNavigator() = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
