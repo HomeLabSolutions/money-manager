@@ -10,7 +10,7 @@ import dagger.android.ContributesAndroidInjector
 abstract class IncomeExpenseFrgProvider {
 
     @ContributesAndroidInjector
-    abstract fun provideIncomeExpenseFragmentFactory():IncomeExpenseFragment
+    abstract fun provideIncomeExpenseFragmentFactory(): IncomeExpenseFragment
     @ContributesAndroidInjector
     abstract fun provideIncomeFragmentFactory(): IncomeFragment
     @ContributesAndroidInjector

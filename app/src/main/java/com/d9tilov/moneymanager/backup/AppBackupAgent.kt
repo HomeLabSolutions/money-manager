@@ -6,8 +6,8 @@ import android.app.backup.BackupDataOutput
 import android.app.backup.FileBackupHelper
 import android.app.backup.SharedPreferencesBackupHelper
 import android.os.ParcelFileDescriptor
-import com.d9tilov.moneymanager.data.base.local.db.AppDatabase.Companion.DATABASE_NAME
-import com.d9tilov.moneymanager.data.base.local.preferences.PreferencesStore
+import com.d9tilov.moneymanager.base.data.local.db.AppDatabase.Companion.DATABASE_NAME
+import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import java.io.IOException
 
 class AppBackupAgent : BackupAgentHelper() {
@@ -41,9 +41,5 @@ class AppBackupAgent : BackupAgentHelper() {
         synchronized(this) {
             super.onRestore(data, appVersionCode, newState)
         }
-    }
-
-    companion object {
-        val sDataLock = Any()
     }
 }

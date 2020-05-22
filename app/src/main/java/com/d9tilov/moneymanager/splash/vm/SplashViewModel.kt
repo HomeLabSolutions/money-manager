@@ -4,11 +4,10 @@ import com.d9tilov.moneymanager.base.ui.BaseViewModel
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
 import com.d9tilov.moneymanager.core.util.ioScheduler
 import com.d9tilov.moneymanager.core.util.uiScheduler
-import com.d9tilov.moneymanager.domain.user.IUserInfoInteractor
-import com.d9tilov.moneymanager.domain.user.mappers.DomainUserMapper
+import com.d9tilov.moneymanager.user.domain.IUserInfoInteractor
 import com.google.firebase.auth.FirebaseAuth
-import timber.log.Timber
 import javax.inject.Inject
+import timber.log.Timber
 
 class SplashViewModel @Inject constructor(
     private val userInfoInteractor: IUserInfoInteractor

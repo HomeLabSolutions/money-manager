@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import com.d9tilov.moneymanager.home.ui.vm.HomeViewModel
 import com.d9tilov.moneymanager.incomeexpense.expense.ui.ExpenseViewModel
 import com.d9tilov.moneymanager.incomeexpense.income.ui.IncomeViewModel
-import com.d9tilov.moneymanager.incomeexpense.vm.IncomeExpenseViewModel
 import com.d9tilov.moneymanager.settings.ui.vm.SettingsViewModel
 import com.d9tilov.moneymanager.splash.vm.SplashViewModel
 import com.d9tilov.moneymanager.statistics.vm.StatisticsViewModel
@@ -44,5 +43,4 @@ internal abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(SettingsViewModel::class)
     abstract fun bindSettingsViewModel(viewModel: SettingsViewModel): ViewModel
-
 }

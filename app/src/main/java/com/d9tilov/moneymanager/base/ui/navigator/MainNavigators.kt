@@ -7,12 +7,12 @@ interface SplashNavigator : BaseNavigator {
     fun openAuthScreen()
 }
 
-interface IncomeNavigator : BaseNavigator {}
+interface IncomeNavigator : BaseNavigator
 
-interface ExpenseNavigator : BaseNavigator {}
+interface ExpenseNavigator : BaseNavigator
 
 interface IncomeExpenseNavigator : BaseNavigator
 
-interface SettingsNavigator : BaseNavigator {}
+interface SettingsNavigator : BaseNavigator
 
-interface StatisticsNavigator : BaseNavigator {}
+interface StatisticsNavigator : BaseNavigator

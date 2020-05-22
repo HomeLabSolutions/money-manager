@@ -2,10 +2,9 @@ package com.d9tilov.moneymanager.base.di
 
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.base.di.builder.ActivityBuilder
-import com.d9tilov.moneymanager.data.di.DatabaseModule
-import com.d9tilov.moneymanager.data.di.NetworkModule
-import com.d9tilov.moneymanager.data.di.UserDataModule
-import com.d9tilov.moneymanager.domain.di.UserDomainModule
+import com.d9tilov.moneymanager.category.di.CategoryModule
+import com.d9tilov.moneymanager.settings.di.SettingsModule
+import com.d9tilov.moneymanager.user.di.UserModule
 import dagger.Component
 import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
@@ -17,8 +16,9 @@ import javax.inject.Singleton
     ViewModelModule::class,
     NetworkModule::class,
     DatabaseModule::class,
-    UserDataModule::class,
-    UserDomainModule::class,
+    UserModule::class,
+    CategoryModule::class,
+    SettingsModule::class,
     AndroidInjectionModule::class,
     ActivityBuilder::class])
 interface AppComponent : AndroidInjector<App> {

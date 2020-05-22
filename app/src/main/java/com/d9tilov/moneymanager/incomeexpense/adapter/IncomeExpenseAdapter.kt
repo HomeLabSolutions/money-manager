@@ -35,5 +35,4 @@ class IncomeExpenseAdapter(private val context: Context, fm: FragmentManager) :
 
     override fun getCount() =
         TAB_COUNT
-
 }

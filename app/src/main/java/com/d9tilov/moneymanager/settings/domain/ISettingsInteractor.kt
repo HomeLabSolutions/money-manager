@@ -4,5 +4,4 @@ interface ISettingsInteractor {
 
     fun saveNumber()
     fun restoreNumber(): Int
-
 }
