@@ -26,7 +26,6 @@ class ExpenseFragment : BaseFragment<FragmentExpenseBinding, ExpenseViewModel>()
                     val digit = child.text.toString()
                     viewModel.updateNum(viewBinding.expenseMainSum.getSum())
                     viewBinding.expenseMainSum.setSum(viewModel.tapNum(digit))
-
                 }
                 is ImageView -> {
                     viewModel.updateNum(viewBinding.expenseMainSum.getSum())

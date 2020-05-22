@@ -38,9 +38,8 @@ abstract class BaseFragment<T : ViewBinding, V : BaseViewModel<out BaseNavigator
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProvider(this, viewModelFactory).get(getViewModelClass())
-        return inflater.inflate(getLayoutId(), container, false);
+        return inflater.inflate(getLayoutId(), container, false)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

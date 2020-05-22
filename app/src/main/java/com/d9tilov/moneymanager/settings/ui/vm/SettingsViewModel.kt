@@ -1,14 +1,13 @@
 package com.d9tilov.moneymanager.settings.ui.vm
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.d9tilov.moneymanager.base.ui.BaseViewModel
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
+import com.d9tilov.moneymanager.category.ICategoryInteractor
 import com.d9tilov.moneymanager.core.util.ioScheduler
 import com.d9tilov.moneymanager.core.util.uiScheduler
-import com.d9tilov.moneymanager.domain.category.ICategoryInteractor
-import com.d9tilov.moneymanager.domain.user.IUserInfoInteractor
 import com.d9tilov.moneymanager.settings.domain.ISettingsInteractor
+import com.d9tilov.moneymanager.user.domain.IUserInfoInteractor
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 

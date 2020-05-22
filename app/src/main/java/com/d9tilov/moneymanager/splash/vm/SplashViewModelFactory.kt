@@ -2,7 +2,7 @@ package com.d9tilov.moneymanager.splash.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.d9tilov.moneymanager.domain.user.IUserInfoInteractor
+import com.d9tilov.moneymanager.user.domain.IUserInfoInteractor
 
 class SplashViewModelFactory constructor(
     private val userInfoInteractor: IUserInfoInteractor

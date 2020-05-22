@@ -12,5 +12,4 @@ class AppModule {
     @Singleton
     @Provides
     fun provideContext(application: App): Context = application
-
 }
