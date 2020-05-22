@@ -1,8 +1,8 @@
 package com.d9tilov.moneymanager.settings.domain
 
-interface SettingsRepo {
+interface ISettingsInteractor {
 
     fun saveNumber()
+    fun restoreNumber(): Int
 
-    fun restoreNumber():Int
 }

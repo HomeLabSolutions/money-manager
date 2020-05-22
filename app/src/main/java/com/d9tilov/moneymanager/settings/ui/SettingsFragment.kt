@@ -2,14 +2,17 @@ package com.d9tilov.moneymanager.settings.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.lifecycle.Observer
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
+import com.d9tilov.moneymanager.data.base.local.db.AppDatabase
 import com.d9tilov.moneymanager.databinding.FragmentSettingsBinding
 import com.d9tilov.moneymanager.settings.ui.vm.SettingsViewModel
 import com.d9tilov.moneymanager.splash.ui.SplashActivity
@@ -60,6 +63,15 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, SettingsViewModel
         viewBinding.settingsBackup.setOnClickListener {
             viewModel.backup()
         }
+        viewBinding.settingsSave.setOnClickListener {
+            viewModel.save()
+            viewModel.restore()
+            Log.d("moggot","path = " + requireContext().getDatabasePath(AppDatabase.DATABASE_NAME).absolutePath)
+        }
+        viewModel.restore()
+        viewModel.numberLiveData.observe(
+            this.viewLifecycleOwner,
+            Observer { viewBinding.settingsNumber.text = it.toString() })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -74,6 +86,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, SettingsViewModel
     }
 
     private fun updateUI() {
+
         viewBinding.settingsAppVersion.text = BuildConfig.VERSION_NAME
         val currencyUser = viewModel.getCurrentUser()
         if (currencyUser == null) {
