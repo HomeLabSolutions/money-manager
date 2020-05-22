@@ -12,9 +12,9 @@ import com.d9tilov.moneymanager.data.user.local.UserLocalSource
 import com.d9tilov.moneymanager.data.user.local.UserLocalSourceImpl
 import com.d9tilov.moneymanager.data.user.local.mappers.DataUserMapper
 import com.d9tilov.moneymanager.domain.category.CategoryRepo
-import com.d9tilov.moneymanager.domain.user.UserInfoInteractor
-import com.d9tilov.moneymanager.domain.user.UserInfoInteractorImpl
 import com.d9tilov.moneymanager.domain.user.UserRepo
+import com.d9tilov.moneymanager.settings.data.SettingsRepoImpl
+import com.d9tilov.moneymanager.settings.domain.SettingsRepo
 import dagger.Module
 import dagger.Provides
 
@@ -38,12 +38,6 @@ class UserDataModule {
     )
 
     @Provides
-    fun provideUserInfoInteractor(
-        userRepo: UserRepo,
-        categoryRepo: CategoryRepo
-    ): UserInfoInteractor = UserInfoInteractorImpl(userRepo,categoryRepo)
-
-    @Provides
     fun provideCategoryLocalSource(
         categoryMapper: CategoryMapper,
         prepopulateDataManager: PrepopulateDataManager,
@@ -52,4 +46,8 @@ class UserDataModule {
 
     @Provides
     fun categoryRepo(categoryLocalSource: CategoryLocalSource) :CategoryRepo = CategoryRepoImpl(categoryLocalSource)
+
+    @Provides
+    fun settingsRepo(preferencesStore: PreferencesStore): SettingsRepo =
+        SettingsRepoImpl(preferencesStore)
 }

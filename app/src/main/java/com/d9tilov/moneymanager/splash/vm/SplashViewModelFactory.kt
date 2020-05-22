@@ -2,12 +2,10 @@ package com.d9tilov.moneymanager.splash.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.d9tilov.moneymanager.domain.user.UserInfoInteractor
-import com.d9tilov.moneymanager.domain.user.mappers.DomainUserMapper
+import com.d9tilov.moneymanager.domain.user.IUserInfoInteractor
 
 class SplashViewModelFactory constructor(
-    private val userInfoInteractor: UserInfoInteractor,
-    private val domainUserMapper: DomainUserMapper
+    private val userInfoInteractor: IUserInfoInteractor
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
@@ -15,6 +13,6 @@ class SplashViewModelFactory constructor(
         if (modelClass != SplashViewModel::class.java) {
             throw IllegalArgumentException("Unknown ViewModel class")
         }
-        return SplashViewModel(userInfoInteractor, domainUserMapper) as T
+        return SplashViewModel(userInfoInteractor) as T
     }
 }

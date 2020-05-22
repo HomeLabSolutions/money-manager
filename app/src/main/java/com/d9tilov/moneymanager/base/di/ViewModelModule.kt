@@ -6,6 +6,7 @@ import com.d9tilov.moneymanager.incomeexpense.expense.ui.ExpenseViewModel
 import com.d9tilov.moneymanager.incomeexpense.income.ui.IncomeViewModel
 import com.d9tilov.moneymanager.incomeexpense.vm.IncomeExpenseViewModel
 import com.d9tilov.moneymanager.settings.ui.vm.SettingsViewModel
+import com.d9tilov.moneymanager.splash.vm.SplashViewModel
 import com.d9tilov.moneymanager.statistics.vm.StatisticsViewModel
 import dagger.Binds
 import dagger.Module
@@ -33,6 +34,11 @@ internal abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(StatisticsViewModel::class)
     abstract fun bindStatisticsViewModel(viewModel: StatisticsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SplashViewModel::class)
+    abstract fun bindSplashViewModel(viewModel: SplashViewModel): ViewModel
 
     @Binds
     @IntoMap

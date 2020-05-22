@@ -1,22 +1,26 @@
 package com.d9tilov.moneymanager.settings.ui.vm
 
-import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.backup.domain.BackupInteractor
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.d9tilov.moneymanager.base.ui.BaseViewModel
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
 import com.d9tilov.moneymanager.core.util.ioScheduler
 import com.d9tilov.moneymanager.core.util.uiScheduler
-import com.d9tilov.moneymanager.domain.user.UserInfoInteractor
+import com.d9tilov.moneymanager.domain.category.ICategoryInteractor
+import com.d9tilov.moneymanager.domain.user.IUserInfoInteractor
+import com.d9tilov.moneymanager.settings.domain.ISettingsInteractor
 import com.google.firebase.auth.FirebaseAuth
-import timber.log.Timber
 import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(
-    private val userInfoInteractor: UserInfoInteractor,
-    private val backupInteractor: BackupInteractor
+    private val userInfoInteractor: IUserInfoInteractor,
+    private val categoryInteractor: ICategoryInteractor,
+    private val settingsInteractor: ISettingsInteractor
 ) : BaseViewModel<SettingsNavigator>() {
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+
+    val numberLiveData = MutableLiveData<Int>()
 
     fun getCurrentUser() = auth.currentUser
 
@@ -31,20 +35,18 @@ class SettingsViewModel @Inject constructor(
 
     fun backup() {
         subscribe(
-            backupInteractor.backupDatabase()
-                .doOnSubscribe { postLoading(true) }
+            categoryInteractor.createDefaultCategories()
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler)
-                .subscribe(
-                    {
-                        setLoading(false)
-                        setMessage(R.string.settings_backup_success)
-                    },
-                    {
-                        setLoading(false)
-                        setMessage(R.string.settings_backup_failed)
-                        Timber.d("Error while backup DB: ${it.message}")
-                    })
+                .subscribe()
         )
+    }
+
+    fun save() {
+        settingsInteractor.saveNumber()
+    }
+
+    fun restore() {
+        numberLiveData.value = settingsInteractor.restoreNumber()
     }
 }

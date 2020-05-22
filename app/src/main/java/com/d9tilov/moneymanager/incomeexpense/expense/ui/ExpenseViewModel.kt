@@ -1,13 +1,10 @@
 package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
-import com.d9tilov.moneymanager.backup.domain.BackupInteractor
 import com.d9tilov.moneymanager.base.ui.BaseViewModel
 import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
-import com.d9tilov.moneymanager.core.util.ioScheduler
-import com.d9tilov.moneymanager.core.util.uiScheduler
 import javax.inject.Inject
 
-class ExpenseViewModel @Inject constructor(private val backupInteractor: BackupInteractor) :
+class ExpenseViewModel @Inject constructor() :
     BaseViewModel<ExpenseNavigator>() {
 
     var mainSum: StringBuilder = StringBuilder()
@@ -33,15 +30,5 @@ class ExpenseViewModel @Inject constructor(private val backupInteractor: BackupI
         } else {
             "0"
         }
-    }
-
-    override fun onNavigatorAttached() {
-        super.onNavigatorAttached()
-        subscribe(
-            backupInteractor.restoreDatabase()
-                .subscribeOn(ioScheduler)
-                .observeOn(uiScheduler)
-                .subscribe()
-        )
     }
 }

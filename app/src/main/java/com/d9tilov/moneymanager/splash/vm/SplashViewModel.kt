@@ -4,15 +4,14 @@ import com.d9tilov.moneymanager.base.ui.BaseViewModel
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
 import com.d9tilov.moneymanager.core.util.ioScheduler
 import com.d9tilov.moneymanager.core.util.uiScheduler
-import com.d9tilov.moneymanager.domain.user.UserInfoInteractor
+import com.d9tilov.moneymanager.domain.user.IUserInfoInteractor
 import com.d9tilov.moneymanager.domain.user.mappers.DomainUserMapper
 import com.google.firebase.auth.FirebaseAuth
 import timber.log.Timber
 import javax.inject.Inject
 
 class SplashViewModel @Inject constructor(
-    private val userInfoInteractor: UserInfoInteractor,
-    private val domainUserMapper: DomainUserMapper
+    private val userInfoInteractor: IUserInfoInteractor
 ) : BaseViewModel<SplashNavigator>() {
 
     private val auth = FirebaseAuth.getInstance()
@@ -41,7 +40,7 @@ class SplashViewModel @Inject constructor(
 
     fun createUser() {
         subscribe(
-            userInfoInteractor.createUser(domainUserMapper.toDataModel(auth.currentUser))
+            userInfoInteractor.createUser(auth.currentUser)
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler)
                 .subscribe { navigator?.openHomeScreen() }

@@ -2,10 +2,9 @@
 <full-backup-content>
     <include
         domain="database"
-        path="."
-        requireFlags="deviceToDeviceTransfer" />
+        path="money-manager-db"/>
     <include
         domain="sharedpref"
-        path="."
-        requireFlags="deviceToDeviceTransfer" />
+        path="." />
+
 </full-backup-content>
