@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.splash.vm
 
+import com.d9tilov.moneymanager.App.Companion.TAG
 import com.d9tilov.moneymanager.base.ui.BaseViewModel
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
 import com.d9tilov.moneymanager.core.util.ioScheduler
@@ -20,7 +21,7 @@ class SplashViewModel @Inject constructor(
         if (auth.currentUser == null) {
             navigator?.openAuthScreen()
         } else {
-            subscribe(
+            unsubscribeOnDetach(
                 userInfoInteractor.getCurrentUser()
                     .subscribeOn(ioScheduler)
                     .observeOn(uiScheduler)
@@ -32,13 +33,13 @@ class SplashViewModel @Inject constructor(
                             navigator?.openAuthScreen()
                         }
                     }, {
-                        Timber.d("Error while getting user: ${it.message}") })
+                        Timber.tag(TAG).d("Error while getting user: ${it.message}") })
             )
         }
     }
 
     fun createUser() {
-        subscribe(
+        unsubscribeOnDetach(
             userInfoInteractor.createUser(auth.currentUser)
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler)

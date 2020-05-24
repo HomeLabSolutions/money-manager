@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.d9tilov.moneymanager.base.data.local.db.converters.CurrencyConverter
 import com.d9tilov.moneymanager.base.data.local.db.converters.DateConverter
+import com.d9tilov.moneymanager.base.data.local.db.converters.ModelTypeConverter
 import com.d9tilov.moneymanager.category.data.local.CategoryDao
 import com.d9tilov.moneymanager.category.data.local.entities.CategoryDbModel
 import com.d9tilov.moneymanager.user.data.local.UserDao
@@ -22,7 +23,8 @@ import com.d9tilov.moneymanager.user.data.local.entities.UserDbModel
 )
 @TypeConverters(
     CurrencyConverter::class,
-    DateConverter::class
+    DateConverter::class,
+    ModelTypeConverter::class
 )
 
 abstract class AppDatabase : RoomDatabase() {

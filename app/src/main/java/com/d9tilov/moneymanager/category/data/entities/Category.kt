@@ -1,36 +1,20 @@
 package com.d9tilov.moneymanager.category.data.entities
 
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase.Companion.DEFAULT_DATA_ID
+import com.d9tilov.moneymanager.category.CategoryType
 
 data class Category(
     val id: Long = DEFAULT_DATA_ID,
     val parent: Category? = null,
     val children: List<Category> = emptyList(),
+    val type: CategoryType,
     val name: String,
-    val icon: ByteArray,
-    val color: Int
+    @DrawableRes val icon: Int,
+    @ColorRes val color: Int
 ) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is Category) return false
-
-        if (id != other.id) return false
-        if (parent != other.parent) return false
-        if (children != other.children) return false
-        if (name != other.name) return false
-        if (!icon.contentEquals(other.icon)) return false
-        if (color != other.color) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = id.hashCode()
-        result = 31 * result + (parent?.hashCode() ?: 0)
-        result = 31 * result + children.hashCode()
-        result = 31 * result + name.hashCode()
-        result = 31 * result + icon.contentHashCode()
-        result = 31 * result + color
-        return result
+    companion object {
+        const val ALL_ITEMS_ID = -555L
     }
 }

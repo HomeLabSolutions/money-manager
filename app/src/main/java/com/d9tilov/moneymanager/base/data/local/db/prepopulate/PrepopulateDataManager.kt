@@ -7,9 +7,12 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
+import com.d9tilov.moneymanager.App.Companion.TAG
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase.Companion.NO_ID
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.entity.PrepopulateCategory
+import com.d9tilov.moneymanager.category.CategoryType
+import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
@@ -20,6 +23,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
             createCategory(
                 1,
                 NO_ID,
+                CategoryType.EXPENSE,
                 R.string.default_category_food,
                 R.drawable.ic_category_food,
                 R.color.category_deep_purple_a100
@@ -27,6 +31,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
             createCategory(
                 2,
                 1,
+                CategoryType.EXPENSE,
                 R.string.default_category_cafe,
                 R.drawable.ic_catefory_cafe,
                 R.color.blue_grey_400
@@ -34,6 +39,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
             createCategory(
                 3,
                 NO_ID,
+                CategoryType.EXPENSE,
                 R.string.default_category_car,
                 R.drawable.ic_category_car,
                 R.color.category_light_green_a200
@@ -41,6 +47,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
             createCategory(
                 4,
                 NO_ID,
+                CategoryType.EXPENSE,
                 R.string.default_category_doctor,
                 R.drawable.ic_category_doctor,
                 R.color.category_pink_300
@@ -48,6 +55,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
             createCategory(
                 5,
                 NO_ID,
+                CategoryType.EXPENSE,
                 R.string.default_category_entertainment,
                 R.drawable.ic_category_entertainment,
                 R.color.category_pink_a200
@@ -55,6 +63,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
             createCategory(
                 6,
                 NO_ID,
+                CategoryType.EXPENSE,
                 R.string.default_category_home,
                 R.drawable.ic_category_home,
                 R.color.category_teal_100
@@ -62,6 +71,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
             createCategory(
                 7,
                 NO_ID,
+                CategoryType.EXPENSE,
                 R.string.default_category_travels,
                 R.drawable.ic_category_travels,
                 R.color.category_yellow_400
@@ -69,6 +79,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
             createCategory(
                 8,
                 NO_ID,
+                CategoryType.EXPENSE,
                 R.string.default_category_internet,
                 R.drawable.ic_category_internet,
                 R.color.category_teal_600
@@ -79,6 +90,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
     private fun createCategory(
         id: Long,
         parentId: Long,
+        type: CategoryType,
         @StringRes name: Int,
         @DrawableRes icon: Int,
         @ColorRes color: Int
@@ -86,8 +98,9 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
         val bitmap = getBitmapFromVectorDrawable(icon)
         val stream = ByteArrayOutputStream()
         bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-        val bitmapArray: ByteArray = stream.toByteArray()
-        return PrepopulateCategory(id, parentId, context.getString(name), bitmapArray, color)
+        val bitmapArray = stream.toByteArray()
+        Timber.tag(TAG).d("Create category: ${context.getString(name)}")
+        return PrepopulateCategory(id, parentId, type, context.getString(name), icon, color)
     }
 
     private fun getBitmapFromVectorDrawable(

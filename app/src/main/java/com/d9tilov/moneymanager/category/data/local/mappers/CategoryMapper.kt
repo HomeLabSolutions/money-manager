@@ -8,18 +8,20 @@ import javax.inject.Inject
 
 class CategoryMapper @Inject constructor() {
 
-    fun toDataModel(model: CategoryDbModel, parentModel: CategoryDbModel?) = with(model) {
+    fun toDataModel(model: CategoryDbModel, parentModel: CategoryDbModel? = null) = with(model) {
         parentModel?.let {
             Category(
                 id = id,
                 name = name,
                 parent = toDataParentModel(parentModel),
+                type = type,
                 icon = icon,
                 color = color
             )
         } ?: Category(
             id = id,
             name = name,
+            type = type,
             icon = icon,
             color = color
         )
@@ -30,6 +32,7 @@ class CategoryMapper @Inject constructor() {
             Category(
                 id = id,
                 name = name,
+                type = type,
                 icon = icon,
                 color = color
             )
@@ -40,6 +43,7 @@ class CategoryMapper @Inject constructor() {
             CategoryDbModel(
                 id = id,
                 parentId = parent?.id ?: NO_ID,
+                type = type,
                 name = name,
                 icon = icon,
                 color = color
@@ -51,6 +55,7 @@ class CategoryMapper @Inject constructor() {
             CategoryDbModel(
                 id = id,
                 parentId = parentId,
+                type = type,
                 name = name,
                 icon = icon,
                 color = color
