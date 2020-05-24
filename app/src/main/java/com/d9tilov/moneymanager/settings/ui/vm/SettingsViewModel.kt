@@ -3,7 +3,7 @@ package com.d9tilov.moneymanager.settings.ui.vm
 import androidx.lifecycle.MutableLiveData
 import com.d9tilov.moneymanager.base.ui.BaseViewModel
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
-import com.d9tilov.moneymanager.category.ICategoryInteractor
+import com.d9tilov.moneymanager.category.domain.ICategoryInteractor
 import com.d9tilov.moneymanager.core.util.ioScheduler
 import com.d9tilov.moneymanager.core.util.uiScheduler
 import com.d9tilov.moneymanager.settings.domain.ISettingsInteractor
@@ -24,7 +24,7 @@ class SettingsViewModel @Inject constructor(
     fun getCurrentUser() = auth.currentUser
 
     fun logout() {
-        subscribe(
+        unsubscribeOnDetach(
             userInfoInteractor.logout()
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler)
@@ -33,8 +33,8 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun backup() {
-        subscribe(
-            categoryInteractor.createDefaultCategories()
+        unsubscribeOnDetach(
+            categoryInteractor.createExpenseDefaultCategories()
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler)
                 .subscribe()

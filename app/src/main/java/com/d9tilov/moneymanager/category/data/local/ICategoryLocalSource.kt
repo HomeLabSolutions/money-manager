@@ -7,11 +7,12 @@ import io.reactivex.Flowable
 
 interface ICategoryLocalSource : Source {
 
-    fun createDefaultCategories(): Completable
+    fun createExpenseDefaultCategories(): Completable
     fun create(category: Category): Completable
     fun getById(id: Long): Flowable<Category>
     fun getByParentId(id: Long): Flowable<List<Category>>
-    fun getAll(): Flowable<List<Category>>
+    fun getAllExpense(): Flowable<List<Category>>
+    fun getAllIncome(): Flowable<List<Category>>
     fun update(category: Category): Completable
     fun delete(category: Category): Completable
 }

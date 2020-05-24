@@ -2,7 +2,7 @@ package com.d9tilov.moneymanager.settings.ui.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.d9tilov.moneymanager.category.ICategoryInteractor
+import com.d9tilov.moneymanager.category.domain.ICategoryInteractor
 import com.d9tilov.moneymanager.settings.domain.ISettingsInteractor
 import com.d9tilov.moneymanager.user.domain.IUserInfoInteractor
 import javax.inject.Inject

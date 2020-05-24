@@ -2,14 +2,12 @@ package com.d9tilov.moneymanager.settings.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.lifecycle.Observer
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
@@ -66,7 +64,6 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, SettingsViewModel
         viewBinding.settingsSave.setOnClickListener {
             viewModel.save()
             viewModel.restore()
-            Log.d("moggot", "path = " + requireContext().getDatabasePath(AppDatabase.DATABASE_NAME).absolutePath)
         }
         viewModel.restore()
         viewModel.numberLiveData.observe(

@@ -35,4 +35,8 @@ class App : DaggerApplication() {
 
     override fun applicationInjector(): AndroidInjector<App> =
         DaggerAppComponent.factory().run { create(this@App) }
+
+    companion object {
+        const val TAG = "[MoneyManager]"
+    }
 }

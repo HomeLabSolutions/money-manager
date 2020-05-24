@@ -2,7 +2,7 @@ package com.d9tilov.moneymanager.user.di
 
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
-import com.d9tilov.moneymanager.category.ICategoryRepo
+import com.d9tilov.moneymanager.category.domain.ICategoryRepo
 import com.d9tilov.moneymanager.user.data.UserRepo
 import com.d9tilov.moneymanager.user.data.local.IUserLocalSource
 import com.d9tilov.moneymanager.user.data.local.UserLocalSource

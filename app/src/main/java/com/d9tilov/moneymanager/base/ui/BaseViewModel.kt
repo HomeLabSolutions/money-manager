@@ -38,7 +38,7 @@ abstract class BaseViewModel<T> : ViewModel() {
     private val compositeDisposable = CompositeDisposable()
 
     protected open fun onNavigatorAttached() {}
-    protected fun subscribe(event: Disposable) = compositeDisposable.add(event)
+    protected fun unsubscribeOnDetach(event: Disposable) = compositeDisposable.add(event)
 
     override fun onCleared() {
         if (!compositeDisposable.isDisposed) {

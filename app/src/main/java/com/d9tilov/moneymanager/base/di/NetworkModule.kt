@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.base.di
 
+import com.d9tilov.moneymanager.App.Companion.TAG
 import com.d9tilov.moneymanager.core.BuildConfig
 import com.google.gson.Gson
 import dagger.Module
@@ -21,7 +22,7 @@ class NetworkModule {
     fun provideLoggingInterceptor(): HttpLoggingInterceptor =
         HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
             override fun log(message: String) {
-                Timber.tag("HTTPS REQUEST: $message")
+                Timber.tag(TAG).d("HTTP REQUEST: $message")
             }
         }).apply {
             level = if (BuildConfig.DEBUG) {

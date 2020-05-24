@@ -15,7 +15,9 @@
         android:id="@+id/expense_app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="40dp">
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:paddingBottom="8dp">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/cl_toolbar"
@@ -138,6 +140,7 @@
                     app:sumTextStyle="?attr/textAppearanceHeadline4" />
 
                 <include
+                    android:id="@+id/expense_keyboard"
                     layout="@layout/keyboard_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -145,6 +148,16 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/expense_main_sum" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/expense_category_rv_list"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/expense_keyboard"
+                    tools:listitem="@layout/item_category" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -157,7 +170,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/expense_rv_list"
+            android:id="@+id/expense_transaction_rv_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
