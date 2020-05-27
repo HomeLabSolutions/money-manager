@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.incomeexpense.provider
+package com.d9tilov.moneymanager.incomeexpense.di
 
 import com.d9tilov.moneymanager.incomeexpense.expense.ui.ExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.income.ui.IncomeFragment

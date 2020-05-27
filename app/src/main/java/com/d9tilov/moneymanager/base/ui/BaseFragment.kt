@@ -32,13 +32,9 @@ abstract class BaseFragment<T : ViewBinding, V : BaseViewModel<out BaseNavigator
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this, viewModelFactory).get(getViewModelClass())
-        return inflater.inflate(getLayoutId(), container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,6 +48,14 @@ abstract class BaseFragment<T : ViewBinding, V : BaseViewModel<out BaseNavigator
     override fun onDetach() {
         activity = null
         super.onDetach()
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(getLayoutId(), container, false)
     }
 
     @CallSuper

@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.incomeexpense.adapter
+package com.d9tilov.moneymanager.incomeexpense.ui.adapter
 
 import android.content.Context
 import androidx.fragment.app.Fragment

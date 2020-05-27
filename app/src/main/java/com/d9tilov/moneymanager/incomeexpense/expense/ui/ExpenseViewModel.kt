@@ -47,4 +47,10 @@ class ExpenseViewModel @Inject constructor(private val categoryInteractor: ICate
             "0"
         }
     }
+
+    fun onCategoryClicked(category: Category) {
+        if (category.id == Category.ALL_ITEMS_ID) {
+            navigator?.openCategoriesScreen()
+        }
+    }
 }
