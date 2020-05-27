@@ -3,10 +3,11 @@ package com.d9tilov.moneymanager.base.ui
 import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.d9tilov.moneymanager.base.ui.navigator.BaseNavigator
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-abstract class BaseViewModel<T> : ViewModel() {
+abstract class BaseViewModel<T : BaseNavigator> : ViewModel() {
 
     var navigator: T? = null
         set(value) {

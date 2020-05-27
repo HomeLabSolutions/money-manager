@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.base.di
 
 import androidx.lifecycle.ViewModel
+import com.d9tilov.moneymanager.category.ui.vm.CategoryViewModel
 import com.d9tilov.moneymanager.home.ui.vm.HomeViewModel
 import com.d9tilov.moneymanager.incomeexpense.expense.ui.ExpenseViewModel
 import com.d9tilov.moneymanager.incomeexpense.income.ui.IncomeViewModel
@@ -43,4 +44,9 @@ internal abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(SettingsViewModel::class)
     abstract fun bindSettingsViewModel(viewModel: SettingsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CategoryViewModel::class)
+    abstract fun bindCategoryViewModel(viewModel: CategoryViewModel): ViewModel
 }

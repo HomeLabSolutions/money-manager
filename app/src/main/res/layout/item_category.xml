@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/category_item_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/category_view_size"
+        android:layout_height="@dimen/category_view_size"
         android:layout_gravity="center"
         app:srcCompat="@drawable/ic_catefory_cafe" />
 

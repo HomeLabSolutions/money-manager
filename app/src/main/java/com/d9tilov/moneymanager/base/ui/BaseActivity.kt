@@ -22,7 +22,6 @@ abstract class BaseActivity<T : ViewBinding, V : BaseViewModel<out BaseNavigator
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     protected lateinit var viewBinding: T
-    private lateinit var navigator: BaseNavigator
     private lateinit var viewModel: V
     private var progress: ProgressBar? = null
 
@@ -32,7 +31,6 @@ abstract class BaseActivity<T : ViewBinding, V : BaseViewModel<out BaseNavigator
         initObservers()
         viewBinding = performDataBinding()
         setContentView(viewBinding.root)
-        navigator = getNavigator()
     }
 
     abstract fun performDataBinding(): T

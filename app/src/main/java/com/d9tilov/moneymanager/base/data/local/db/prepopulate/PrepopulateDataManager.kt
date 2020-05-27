@@ -1,19 +1,13 @@
 package com.d9tilov.moneymanager.base.data.local.db.prepopulate
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.core.content.ContextCompat
-import com.d9tilov.moneymanager.App.Companion.TAG
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase.Companion.NO_ID
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.entity.PrepopulateCategory
 import com.d9tilov.moneymanager.category.CategoryType
-import timber.log.Timber
-import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
 class PrepopulateDataManager @Inject constructor(private val context: Context) {
@@ -95,29 +89,6 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
         @DrawableRes icon: Int,
         @ColorRes color: Int
     ): PrepopulateCategory {
-        val bitmap = getBitmapFromVectorDrawable(icon)
-        val stream = ByteArrayOutputStream()
-        bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-        val bitmapArray = stream.toByteArray()
-        Timber.tag(TAG).d("Create category: ${context.getString(name)}")
         return PrepopulateCategory(id, parentId, type, context.getString(name), icon, color)
-    }
-
-    private fun getBitmapFromVectorDrawable(
-        drawableId: Int
-    ): Bitmap? {
-        val drawable = ContextCompat.getDrawable(context, drawableId)
-        drawable?.let {
-            val bitmap = Bitmap.createBitmap(
-                drawable.intrinsicWidth,
-                drawable.intrinsicHeight, Bitmap.Config.ARGB_8888
-            )
-            val canvas = Canvas(bitmap)
-            drawable.setBounds(0, 0, canvas.width, canvas.height)
-            drawable.draw(canvas)
-            return bitmap
-        }
-
-        return null
     }
 }

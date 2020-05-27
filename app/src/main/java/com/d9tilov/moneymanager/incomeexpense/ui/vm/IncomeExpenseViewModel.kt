@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.incomeexpense.vm
+package com.d9tilov.moneymanager.incomeexpense.ui.vm
 
 import com.d9tilov.moneymanager.base.ui.BaseViewModel
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeExpenseNavigator

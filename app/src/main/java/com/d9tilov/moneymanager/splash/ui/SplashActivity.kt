@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
-import com.d9tilov.moneymanager.home.ui.HomeActivity
+import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.splash.vm.SplashViewModel
 import com.firebase.ui.auth.AuthUI
 import dagger.android.support.DaggerAppCompatActivity
@@ -30,7 +30,7 @@ class SplashActivity : DaggerAppCompatActivity(), SplashNavigator {
     }
 
     override fun openHomeScreen() {
-        startActivity(Intent(this, HomeActivity::class.java))
+        startActivity(Intent(this, MainActivity::class.java))
     }
 
     override fun openAuthScreen() {

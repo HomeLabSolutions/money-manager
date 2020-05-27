@@ -2,8 +2,9 @@ package com.d9tilov.moneymanager.base.di.builder
 
 import androidx.lifecycle.ViewModelProvider
 import com.d9tilov.moneymanager.base.ui.ViewModelFactory
-import com.d9tilov.moneymanager.home.ui.HomeActivity
-import com.d9tilov.moneymanager.incomeexpense.provider.IncomeExpenseFrgProvider
+import com.d9tilov.moneymanager.category.di.CategoryFrgProvider
+import com.d9tilov.moneymanager.home.ui.MainActivity
+import com.d9tilov.moneymanager.incomeexpense.di.IncomeExpenseFrgProvider
 import com.d9tilov.moneymanager.settings.di.provider.SettingsFrgProvider
 import com.d9tilov.moneymanager.splash.ui.SplashActivity
 import com.d9tilov.moneymanager.statistics.di.provider.StatisticsFrgProvider
@@ -24,7 +25,8 @@ interface ActivityBuilder {
         modules = [
             IncomeExpenseFrgProvider::class,
             SettingsFrgProvider::class,
-            StatisticsFrgProvider::class]
+            StatisticsFrgProvider::class,
+            CategoryFrgProvider::class]
     )
-    fun bindHomeActivity(): HomeActivity
+    fun bindMainActivity(): MainActivity
 }
