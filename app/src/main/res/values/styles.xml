@@ -1,6 +1,9 @@
 <resources>
 
     <style name="Widget.MoneyManager.AppBarLayout" parent="Widget.MaterialComponents.AppBarLayout.PrimarySurface">
+    </style>
+
+    <style name="Widget.MoneyManager.AppBarLayoutMotion" parent="Widget.MoneyManager.AppBarLayout">
         <item name="android:background">@android:color/white</item>
     </style>
 

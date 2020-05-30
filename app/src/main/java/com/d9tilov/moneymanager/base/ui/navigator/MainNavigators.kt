@@ -21,4 +21,11 @@ interface SettingsNavigator : BaseNavigator
 
 interface StatisticsNavigator : BaseNavigator
 
-interface CategoryNavigator : BaseNavigator
+interface CategoryNavigator : BaseNavigator {
+    fun openSubCategoryScreen(category: Category)
+    fun openCreateCategoryDialog()
+}
+
+interface SubCategoryNavigator:BaseNavigator {
+    fun openCreateCategoryDialog()
+}

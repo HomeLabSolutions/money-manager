@@ -7,22 +7,22 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.request.RequestOptions
-import com.d9tilov.moneymanager.App.Companion.TAG
+import com.d9tilov.moneymanager.App
+import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.recyclerview.CategoryDiffUtil
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.core.util.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
-import com.d9tilov.moneymanager.databinding.ItemCategoryBaseBinding
 import com.d9tilov.moneymanager.databinding.ItemCategoryBinding
 import kotlinx.android.extensions.LayoutContainer
 import org.xmlpull.v1.XmlPullParserException
 import timber.log.Timber
 
-class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
+class CategoryModifyAdapter :
+    RecyclerView.Adapter<CategoryModifyAdapter.ModifyCategoryViewHolder>() {
 
     var itemClickListener: OnItemClickListener<Category>? = null
     private var categories = emptyList<Category>()
@@ -31,17 +31,13 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>
         setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-        val viewBinding = if (viewType == ALL) ItemCategoryBaseBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        ) else
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ModifyCategoryViewHolder {
+        val viewBinding =
             ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        val viewHolder = CategoryViewHolder(viewBinding)
+        val viewHolder = ModifyCategoryViewHolder(viewBinding)
         viewBinding.root.setOnClickListener {
             val adapterPosition = viewHolder.adapterPosition
-            if (adapterPosition != NO_POSITION) {
+            if (adapterPosition != RecyclerView.NO_POSITION) {
                 itemClickListener?.onItemClick(categories[adapterPosition], adapterPosition)
             }
         }
@@ -50,12 +46,12 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>
 
     override fun getItemCount() = categories.size
 
-    override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ModifyCategoryViewHolder, position: Int) {
         holder.bind(categories[position])
     }
 
     fun updateItems(newCategories: List<Category>) {
-        Timber.tag(TAG).d("newCategories size : ${newCategories.size}")
+        Timber.tag(App.TAG).d("newCategories size : ${newCategories.size}")
         val diffUtilsCallback =
             CategoryDiffUtil(
                 categories,
@@ -66,9 +62,7 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>
         categories = newCategories
     }
 
-    override fun getItemViewType(position: Int) = if (position == 0) ALL else ORDINARY
-
-    class CategoryViewHolder(private val viewBinding: ViewBinding) :
+    class ModifyCategoryViewHolder(private val viewBinding: ViewBinding) :
         RecyclerView.ViewHolder(viewBinding.root),
         LayoutContainer {
 
@@ -80,26 +74,39 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>
                 is ItemCategoryBinding -> {
                     viewBinding.categoryItemTitle.text = category.name
                     viewBinding.categoryItemSubtitle.text = category.parent?.name
-                    val vectorDrawable = VectorDrawableCompat.create(
-                        containerView.resources,
-                        category.icon,
-                        null
-                    ) ?: throw XmlPullParserException("Wrong vector xml file format")
-                    val drawable = DrawableCompat.wrap(vectorDrawable)
-                    DrawableCompat.setTint(
-                        drawable.mutate(),
-                        ContextCompat.getColor(containerView.context, category.color)
-                    )
-                    GlideApp
-                        .with(containerView.context)
-                        .load(drawable)
-                        .apply(
-                            RequestOptions().override(
-                                IMAGE_SIZE_IN_PX,
-                                IMAGE_SIZE_IN_PX
+                    if (category.children.isNotEmpty()) {
+                        GlideApp
+                            .with(containerView.context)
+                            .load(R.drawable.ic_category_folder)
+                            .apply(
+                                RequestOptions().override(
+                                    IMAGE_SIZE_IN_PX,
+                                    IMAGE_SIZE_IN_PX
+                                )
                             )
+                            .into(viewBinding.categoryItemIcon)
+                    } else {
+                        val vectorDrawable = VectorDrawableCompat.create(
+                            containerView.resources,
+                            category.icon,
+                            null
+                        ) ?: throw XmlPullParserException("Wrong vector xml file format")
+                        val drawable = DrawableCompat.wrap(vectorDrawable)
+                        DrawableCompat.setTint(
+                            drawable.mutate(),
+                            ContextCompat.getColor(containerView.context, category.color)
                         )
-                        .into(viewBinding.categoryItemIcon)
+                        GlideApp
+                            .with(containerView.context)
+                            .load(drawable)
+                            .apply(
+                                RequestOptions().override(
+                                    IMAGE_SIZE_IN_PX,
+                                    IMAGE_SIZE_IN_PX
+                                )
+                            )
+                            .into(viewBinding.categoryItemIcon)
+                    }
                 }
             }
         }
@@ -107,12 +114,5 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>
         companion object {
             private const val IMAGE_SIZE_IN_PX = 136
         }
-    }
-
-    private companion object {
-
-        private const val IMAGE_SIZE_IN_PX = 136
-        private const val ALL = 0
-        private const val ORDINARY = 1
     }
 }

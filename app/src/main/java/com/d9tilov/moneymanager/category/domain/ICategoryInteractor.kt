@@ -8,4 +8,6 @@ interface ICategoryInteractor {
 
     fun createExpenseDefaultCategories(): Completable
     fun getExpenseCategories(): Flowable<List<Category>>
+    fun getAllCategories(): Flowable<List<Category>>
+    fun getChildrenByParent(parentCategory: Category): Flowable<List<Category>>
 }

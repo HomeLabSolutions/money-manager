@@ -1,9 +1,7 @@
 package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
@@ -17,7 +15,6 @@ import com.d9tilov.moneymanager.base.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.base.ui.recyclerview.SpaceItemDecoration
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.CategoryAdapter
-import com.d9tilov.moneymanager.category.ui.CategoryFragment
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.PinKeyboard
 import com.d9tilov.moneymanager.core.util.events.OnItemClickListener
