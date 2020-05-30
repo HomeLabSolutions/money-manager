@@ -6,10 +6,12 @@ import com.d9tilov.moneymanager.user.data.local.UserDao
 import dagger.Module
 import dagger.Provides
 import java.io.File
+import javax.inject.Singleton
 
 @Module
 class DatabaseModule {
 
+    @Singleton
     @Provides
     fun provideAppDataBase(context: Context) = AppDatabase.getInstance(context)
 

@@ -27,6 +27,10 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>
     var itemClickListener: OnItemClickListener<Category>? = null
     private var categories = emptyList<Category>()
 
+    init {
+        setHasStableIds(true)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val viewBinding = if (viewType == ALL) ItemCategoryBaseBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -62,6 +66,8 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>
         categories = newCategories
     }
 
+    override fun getItemViewType(position: Int) = if (position == 0) ALL else ORDINARY
+
     class CategoryViewHolder(private val viewBinding: ViewBinding) :
         RecyclerView.ViewHolder(viewBinding.root),
         LayoutContainer {
@@ -87,14 +93,21 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>
                     GlideApp
                         .with(containerView.context)
                         .load(drawable)
-                        .apply(RequestOptions().override(IMAGE_SIZE_IN_PX, IMAGE_SIZE_IN_PX))
+                        .apply(
+                            RequestOptions().override(
+                                IMAGE_SIZE_IN_PX,
+                                IMAGE_SIZE_IN_PX
+                            )
+                        )
                         .into(viewBinding.categoryItemIcon)
                 }
             }
         }
-    }
 
-    override fun getItemViewType(position: Int) = if (position == 0) ALL else ORDINARY
+        companion object {
+            private const val IMAGE_SIZE_IN_PX = 136
+        }
+    }
 
     private companion object {
 

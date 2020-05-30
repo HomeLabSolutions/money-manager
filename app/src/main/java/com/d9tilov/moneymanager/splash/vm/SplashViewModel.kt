@@ -7,10 +7,9 @@ import com.d9tilov.moneymanager.core.util.ioScheduler
 import com.d9tilov.moneymanager.core.util.uiScheduler
 import com.d9tilov.moneymanager.user.domain.IUserInfoInteractor
 import com.google.firebase.auth.FirebaseAuth
-import javax.inject.Inject
 import timber.log.Timber
 
-class SplashViewModel @Inject constructor(
+class SplashViewModel(
     private val userInfoInteractor: IUserInfoInteractor
 ) : BaseViewModel<SplashNavigator>() {
 

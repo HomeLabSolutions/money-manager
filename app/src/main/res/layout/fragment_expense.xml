@@ -13,6 +13,7 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/expense_app_bar_layout"
+        style="@style/Widget.MoneyManager.AppBarLayoutMotion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="32dp"

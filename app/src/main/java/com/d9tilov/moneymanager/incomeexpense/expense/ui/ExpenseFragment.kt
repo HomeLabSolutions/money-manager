@@ -1,9 +1,7 @@
 package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
@@ -17,7 +15,6 @@ import com.d9tilov.moneymanager.base.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.base.ui.recyclerview.SpaceItemDecoration
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.CategoryAdapter
-import com.d9tilov.moneymanager.category.ui.CategoryFragment
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.PinKeyboard
 import com.d9tilov.moneymanager.core.util.events.OnItemClickListener
@@ -25,7 +22,7 @@ import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
 import kotlinx.android.synthetic.main.keyboard_layout.view.pin_keyboard
 import timber.log.Timber
 
-class ExpenseFragment : BaseFragment<FragmentExpenseBinding, ExpenseViewModel>(), ExpenseNavigator {
+class ExpenseFragment : BaseFragment<FragmentExpenseBinding, ExpenseNavigator, ExpenseViewModel>(), ExpenseNavigator {
 
     private lateinit var categoryAdapter: CategoryAdapter
 
@@ -33,7 +30,6 @@ class ExpenseFragment : BaseFragment<FragmentExpenseBinding, ExpenseViewModel>()
         super.onCreate(savedInstanceState)
         categoryAdapter = CategoryAdapter()
         categoryAdapter.itemClickListener = onItemClickListener
-        viewModel.navigator = this
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -88,6 +84,5 @@ class ExpenseFragment : BaseFragment<FragmentExpenseBinding, ExpenseViewModel>()
     override fun openCategoriesScreen() {
         Timber.tag("moggot").d("activity = %s", activity)
         findNavController().navigate(R.id.action_mainFragment_to_category_dest)
-
     }
 }

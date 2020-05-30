@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
-apply plugin: 'androidx.navigation.safeargs'
+apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 apply from: '../shared_dependencies.gradle'
 
@@ -55,6 +55,9 @@ android {
     }
 
     viewBinding {
+        enabled = true
+    }
+    dataBinding {
         enabled = true
     }
 

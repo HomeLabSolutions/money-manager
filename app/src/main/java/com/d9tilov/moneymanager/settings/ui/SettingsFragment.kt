@@ -20,7 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 
-class SettingsFragment : BaseFragment<FragmentSettingsBinding, SettingsViewModel>(),
+class SettingsFragment : BaseFragment<FragmentSettingsBinding, SettingsNavigator, SettingsViewModel>(),
     SettingsNavigator {
 
     private lateinit var googleSignInClient: GoogleSignInClient
