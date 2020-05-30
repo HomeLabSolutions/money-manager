@@ -5,6 +5,9 @@
     <string name="tab_income">Income</string>
     <string name="tab_expense">Expense</string>
 
+    <string name="title_category">Categories</string>
+    <string name="title_sub_category">Category: %1$s</string>
+
     <string name="settings_login">Login</string>
     <string name="settings_logout">Logout</string>
     <string name="settings_app_version">Version %s</string>
