@@ -13,6 +13,9 @@ class CategoryInteractor(private val categoryRepo: ICategoryRepo) :
             .map { getOnlyChildrenWithAllItemsFolder(it) }
     }
 
+    override fun getAllCategories(): Flowable<List<Category>> = categoryRepo.getExpenseCategories()
+    override fun getChildrenByParent(parentCategory: Category): Flowable<List<Category>> = categoryRepo.getChildrenByParent(parentCategory)
+
     private fun getOnlyChildrenWithAllItemsFolder(categories: List<Category>): List<Category> {
         val categoriesAsChild = mutableListOf<Category>()
         for (category in categories) {

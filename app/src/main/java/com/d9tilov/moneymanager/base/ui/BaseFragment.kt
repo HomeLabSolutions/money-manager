@@ -10,31 +10,29 @@ import androidx.annotation.LayoutRes
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
+import com.d9tilov.moneymanager.base.di.ViewModelFactory
 import com.d9tilov.moneymanager.base.ui.navigator.BaseNavigator
 import com.d9tilov.moneymanager.core.util.toast
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-abstract class BaseFragment<T : ViewBinding, V : BaseViewModel<out BaseNavigator>> :
+abstract class BaseFragment<T : ViewBinding, N : BaseNavigator, V : BaseViewModel<N>> :
     DaggerFragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private var activity: BaseActivity<*, *>? = null
+    private var activity: BaseActivity<*>? = null
     protected lateinit var viewBinding: T
     protected lateinit var viewModel: V
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is BaseActivity<*, *>) {
+        if (context is BaseActivity<*>) {
             activity = context
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(getViewModelClass())
+        viewModel = ViewModelProvider(this, viewModelFactory)[getViewModelClass()]
+        viewModel.navigator = getNavigator()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -75,5 +73,5 @@ abstract class BaseFragment<T : ViewBinding, V : BaseViewModel<out BaseNavigator
     abstract fun getLayoutId(): Int
     abstract fun performDataBinding(view: View): T
     abstract fun getViewModelClass(): Class<V>
-    abstract fun getNavigator(): BaseNavigator
+    abstract fun getNavigator(): N
 }

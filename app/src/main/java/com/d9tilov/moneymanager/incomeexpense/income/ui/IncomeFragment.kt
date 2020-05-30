@@ -6,7 +6,7 @@ import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeNavigator
 import com.d9tilov.moneymanager.databinding.FragmentIncomeBinding
 
-class IncomeFragment : BaseFragment<FragmentIncomeBinding, IncomeViewModel>(), IncomeNavigator {
+class IncomeFragment : BaseFragment<FragmentIncomeBinding, IncomeNavigator, IncomeViewModel>(), IncomeNavigator {
 
     override fun performDataBinding(view: View): FragmentIncomeBinding =
         FragmentIncomeBinding.bind(view)

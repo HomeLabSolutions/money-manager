@@ -9,9 +9,8 @@ import com.d9tilov.moneymanager.core.util.uiScheduler
 import com.d9tilov.moneymanager.settings.domain.ISettingsInteractor
 import com.d9tilov.moneymanager.user.domain.IUserInfoInteractor
 import com.google.firebase.auth.FirebaseAuth
-import javax.inject.Inject
 
-class SettingsViewModel @Inject constructor(
+class SettingsViewModel(
     private val userInfoInteractor: IUserInfoInteractor,
     private val categoryInteractor: ICategoryInteractor,
     private val settingsInteractor: ISettingsInteractor

@@ -7,10 +7,13 @@ import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.domain.ICategoryInteractor
 import com.d9tilov.moneymanager.core.util.ioScheduler
 import com.d9tilov.moneymanager.core.util.uiScheduler
-import javax.inject.Inject
 
-class ExpenseViewModel @Inject constructor(private val categoryInteractor: ICategoryInteractor) :
+class ExpenseViewModel(categoryInteractor: ICategoryInteractor) :
     BaseViewModel<ExpenseNavigator>() {
+
+    val categories = MutableLiveData<List<Category>>()
+    var mainSum: StringBuilder = StringBuilder()
+        private set
 
     init {
         unsubscribeOnDetach(categoryInteractor.getExpenseCategories()
@@ -20,11 +23,6 @@ class ExpenseViewModel @Inject constructor(private val categoryInteractor: ICate
                 categories.value = it
             })
     }
-
-    val categories = MutableLiveData<List<Category>>()
-
-    var mainSum: StringBuilder = StringBuilder()
-        private set
 
     fun updateNum(num: String) {
         mainSum = StringBuilder(num)
