@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/settings_avatar"
@@ -20,13 +20,43 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
         android:textAppearance="?attr/textAppearanceHeadline6"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/settings_avatar"
         app:layout_constraintTop_toTopOf="@+id/settings_avatar"
         tools:text="@tools:sample/first_names" />
+
+    <TextView
+        android:id="@+id/settings_backup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/settings_backup"
+        android:textAppearance="@style/TextAppearance.MoneyManager.H6"
+        app:layout_constraintStart_toStartOf="@+id/settings_avatar"
+        app:layout_constraintTop_toBottomOf="@+id/settings_avatar" />
+
+    <TextView
+        android:id="@+id/settings_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Save"
+        android:textAppearance="@style/TextAppearance.MoneyManager.H6"
+        app:layout_constraintStart_toStartOf="@+id/settings_avatar"
+        app:layout_constraintTop_toBottomOf="@+id/settings_backup" />
+
+    <TextView
+        android:id="@+id/settings_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="0"
+        android:textAppearance="@style/TextAppearance.MoneyManager.H6"
+        app:layout_constraintStart_toEndOf="@+id/settings_save"
+        app:layout_constraintTop_toTopOf="@+id/settings_save" />
 
     <TextView
         android:id="@+id/settings_login"
@@ -38,17 +68,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ProgressBar
-        android:id="@+id/settings_progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/settings_logout"
@@ -69,8 +88,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:textAppearance="?attr/textAppearanceCaption"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         tools:text="Version 1.0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

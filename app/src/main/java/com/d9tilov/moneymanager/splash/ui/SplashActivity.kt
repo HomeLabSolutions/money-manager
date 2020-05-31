@@ -4,17 +4,14 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
-import com.d9tilov.moneymanager.home.HomeActivity
-import com.d9tilov.moneymanager.splash.di.inject
+import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.splash.vm.SplashViewModel
 import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.IdpResponse
+import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
-
-class SplashActivity : BaseActivity(), SplashNavigator {
+class SplashActivity : DaggerAppCompatActivity(), SplashNavigator {
 
     private val providers = arrayListOf(
         AuthUI.IdpConfig.EmailBuilder().build(),
@@ -29,12 +26,11 @@ class SplashActivity : BaseActivity(), SplashNavigator {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        inject()
-        viewModel.setNavigator(this)
+        viewModel.navigator = this
     }
 
     override fun openHomeScreen() {
-        startActivity(Intent(this, HomeActivity::class.java))
+        startActivity(Intent(this, MainActivity::class.java))
     }
 
     override fun openAuthScreen() {
@@ -52,13 +48,8 @@ class SplashActivity : BaseActivity(), SplashNavigator {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == RC_SIGN_IN) {
-            val response = IdpResponse.fromResultIntent(data)
-
-            if (resultCode == Activity.RESULT_OK) {
-                openHomeScreen()
-            } else {
-            }
+        if (requestCode == RC_SIGN_IN && resultCode == Activity.RESULT_OK) {
+            viewModel.createUser()
         }
     }
 

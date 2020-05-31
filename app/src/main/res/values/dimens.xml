@@ -10,4 +10,22 @@
     <dimen name="button_text_size">16sp</dimen>
     <dimen name="caption_text_size">14sp</dimen>
     <dimen name="overline_text_size">12sp</dimen>
+
+    <dimen name="standard_top_margin">16sp</dimen>
+    <dimen name="standard_bottom_margin">16sp</dimen>
+    <dimen name="standard_left_margin">32sp</dimen>
+    <dimen name="standard_right_margin">32sp</dimen>
+    <dimen name="standard_list_item_height">48dp</dimen>
+
+    <dimen name="currency_sign_big_size">50sp</dimen>
+    <dimen name="currency_sign_medium_size">30sp</dimen>
+    <dimen name="currency_sign_small_size">18sp</dimen>
+
+    <dimen name="pin_button_size">64dp</dimen>
+    <dimen name="pin_button_margin_width">16dp</dimen>
+    <dimen name="pin_button_margin_height">4dp</dimen>
+
+    <dimen name="recycler_view_category_offset">4dp</dimen>
+    <dimen name="category_item_size">80dp</dimen>
+    <dimen name="category_view_size">48dp</dimen>
 </resources>

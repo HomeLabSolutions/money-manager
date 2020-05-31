@@ -15,8 +15,9 @@ private const val PACKAGE_NAME = "com.d9tilov.moneymanager"
  */
 fun intentTo(addressableActivity: AddressableActivity): Intent {
     return Intent(Intent.ACTION_VIEW).setClassName(
-            PACKAGE_NAME,
-            addressableActivity.className)
+        PACKAGE_NAME,
+        addressableActivity.className
+    )
 }
 
 /**

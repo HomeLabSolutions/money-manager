@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <include
+        domain="database"
+        path="money-manager-db"/>
+    <include
+        domain="sharedpref"
+        path="." />
+
+</full-backup-content>

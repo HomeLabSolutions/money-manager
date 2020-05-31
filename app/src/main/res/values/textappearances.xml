@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="TextAppearance.MoneyManager.H1" parent="TextAppearance.MaterialComponents.Headline1">
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">@dimen/headline1_text_size</item>
@@ -48,6 +49,22 @@
 
     <style name="TextAppearance.MoneyManager.Overline" parent="TextAppearance.MaterialComponents.Overline">
         <item name="android:textSize">@dimen/overline_text_size</item>
+    </style>
+
+    <style name="TextAppearance.MoneyManager.CurrencySign.Big" parent="TextAppearance.MoneyManager.Subtitle2">
+        <item name="android:textSize">@dimen/currency_sign_big_size</item>
+    </style>
+
+    <style name="TextAppearance.MoneyManager.CurrencySign.Medium" parent="TextAppearance.MoneyManager.Subtitle2">
+        <item name="android:textSize">@dimen/currency_sign_medium_size</item>
+    </style>
+
+    <style name="TextAppearance.MoneyManager.CurrencySign.Small" parent="TextAppearance.MoneyManager.Subtitle2">
+        <item name="android:textSize">@dimen/currency_sign_small_size</item>
+    </style>
+
+    <style name="TextAppearance.MoneyManager.Tab" parent="TextAppearance.MoneyManager.H6">
+        <item name="android:textAllCaps">true</item>
     </style>
 
 </resources>

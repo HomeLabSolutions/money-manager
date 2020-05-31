@@ -4,5 +4,6 @@
 /.idea
 /build
 /captures
+/app/release
 .externalNativeBuild
 .cxx

@@ -2,15 +2,17 @@ package com.d9tilov.moneymanager.splash.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import javax.inject.Inject
+import com.d9tilov.moneymanager.user.domain.IUserInfoInteractor
 
-class SplashViewModelFactory @Inject constructor() : ViewModelProvider.Factory {
+class SplashViewModelFactory constructor(
+    private val userInfoInteractor: IUserInfoInteractor
+) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass != SplashViewModel::class.java) {
             throw IllegalArgumentException("Unknown ViewModel class")
         }
-        return SplashViewModel() as T
+        return SplashViewModel(userInfoInteractor) as T
     }
 }
