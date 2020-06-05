@@ -42,9 +42,7 @@ abstract class BaseViewModel<T : BaseNavigator> : ViewModel() {
     protected fun unsubscribeOnDetach(event: Disposable) = compositeDisposable.add(event)
 
     override fun onCleared() {
-        if (!compositeDisposable.isDisposed) {
-            compositeDisposable.dispose()
-        }
+        compositeDisposable.dispose()
         super.onCleared()
     }
 }

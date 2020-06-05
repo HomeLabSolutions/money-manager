@@ -21,7 +21,8 @@ abstract class ActivityBuilder {
             IncomeExpenseFrgProvider::class,
             SettingsFrgProvider::class,
             StatisticsFrgProvider::class,
-            CategoryFrgProvider::class]
+            CategoryFrgProvider::class
+        ]
     )
     abstract fun bindMainActivity(): MainActivity
 }

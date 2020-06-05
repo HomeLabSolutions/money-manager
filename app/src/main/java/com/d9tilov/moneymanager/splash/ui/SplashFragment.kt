@@ -27,6 +27,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashNavigator, Spla
     override fun getNavigator() = this
 
     override fun openHomeScreen() {
+        requireActivity().finish()
         startActivity(Intent(requireActivity(), MainActivity::class.java))
     }
 

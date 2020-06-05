@@ -15,7 +15,15 @@ data class Category(
     val type: CategoryType,
     val name: String,
     @DrawableRes val icon: Int,
-    @ColorRes val color: Int
+    @ColorRes val color: Int,
+    /*
+     *   priority in sorting on main screen. 0 - high, N - low
+     */
+    val priority: Int,
+    /*
+    *    order in adapter
+    */
+    val ordinal: Int
 ) : Parcelable {
     companion object {
         const val ALL_ITEMS_ID = -555L

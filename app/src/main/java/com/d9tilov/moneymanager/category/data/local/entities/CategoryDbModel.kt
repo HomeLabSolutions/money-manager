@@ -15,5 +15,7 @@ data class CategoryDbModel(
     @ColumnInfo(name = "type") val type: CategoryType,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "icon") val icon: Int,
-    @ColumnInfo(name = "color") val color: Int
+    @ColumnInfo(name = "color") val color: Int,
+    @ColumnInfo(name = "priority") val priority: Int,
+    @ColumnInfo(name = "ordinal") val ordinal: Int
 )

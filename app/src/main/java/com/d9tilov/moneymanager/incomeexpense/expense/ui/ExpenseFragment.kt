@@ -50,7 +50,8 @@ class ExpenseFragment : BaseFragment<FragmentExpenseBinding, ExpenseNavigator, E
         }
         viewModel.categories.observe(
             this.viewLifecycleOwner,
-            Observer { categoryAdapter.updateItems(it) })
+            Observer { categoryAdapter.updateItems(it) }
+        )
     }
 
     inner class PinClickListener : PinKeyboard.ClickPinButton {

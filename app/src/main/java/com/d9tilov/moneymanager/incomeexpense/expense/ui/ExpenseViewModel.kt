@@ -16,12 +16,14 @@ class ExpenseViewModel(categoryInteractor: ICategoryInteractor) :
         private set
 
     init {
-        unsubscribeOnDetach(categoryInteractor.getExpenseCategories()
-            .subscribeOn(ioScheduler)
-            .observeOn(uiScheduler)
-            .subscribe {
-                categories.value = it
-            })
+        unsubscribeOnDetach(
+            categoryInteractor.getExpenseCategories()
+                .subscribeOn(ioScheduler)
+                .observeOn(uiScheduler)
+                .subscribe {
+                    categories.value = it
+                }
+        )
     }
 
     fun updateNum(num: String) {

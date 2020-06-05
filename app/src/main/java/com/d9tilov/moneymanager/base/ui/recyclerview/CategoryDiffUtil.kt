@@ -21,10 +21,10 @@ class CategoryDiffUtil(
     }
 
     override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
-        return newCategoryList[newItemPosition].name
+        return newCategoryList[newItemPosition]
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldCategoryList[oldItemPosition].name == newCategoryList[newItemPosition].name
+        return oldCategoryList[oldItemPosition] == newCategoryList[newItemPosition]
     }
 }

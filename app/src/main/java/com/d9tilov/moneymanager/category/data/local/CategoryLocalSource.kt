@@ -41,14 +41,16 @@ class CategoryLocalSource(
         val parentFlowable = currentFlowable
             .flatMap { model -> categoryDao.getById(model.parentId) }
         val childrenFlowable = getByParentId(id)
-        return Flowable.zip(currentFlowable, parentFlowable, childrenFlowable,
+        return Flowable.zip(
+            currentFlowable, parentFlowable, childrenFlowable,
             Function3 { current, parent, children ->
                 val category = categoryMapper.toDataModel(current, parent)
                 if (current.parentId == NO_ID) {
                     category.copy(children = children)
                 }
                 category
-            })
+            }
+        )
     }
 
     override fun getByParentId(id: Long) =
@@ -72,10 +74,12 @@ class CategoryLocalSource(
             if (children != null) {
                 categories.add(
                     categoryMapper.toDataModel(parent)
-                        .copy(children = children.map {
-                            categoryMapper.toDataModel(it)
-                                .copy(parent = categoryMapper.toDataModel(parent))
-                        })
+                        .copy(
+                            children = children.map {
+                                categoryMapper.toDataModel(it)
+                                    .copy(parent = categoryMapper.toDataModel(parent))
+                            }
+                        )
                 )
             } else {
                 categories.add(categoryMapper.toDataModel(parent))
@@ -85,5 +89,10 @@ class CategoryLocalSource(
     }
 
     override fun update(category: Category) = categoryDao.update(categoryMapper.toDbModel(category))
-    override fun delete(category: Category) = categoryDao.update(categoryMapper.toDbModel(category))
+    override fun delete(category: Category): Completable {
+        return categoryDao.delete(category.id).andThen(
+            Observable.fromIterable(category.children)
+                .flatMapCompletable { child -> categoryDao.delete(child.id) }
+        )
+    }
 }
