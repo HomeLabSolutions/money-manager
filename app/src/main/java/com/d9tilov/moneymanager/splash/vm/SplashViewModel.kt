@@ -24,15 +24,19 @@ class SplashViewModel(
                 userInfoInteractor.getCurrentUser()
                     .subscribeOn(ioScheduler)
                     .observeOn(uiScheduler)
-                    .subscribe({
-                        if (it.uid == auth.uid) {
-                            navigator?.openHomeScreen()
-                        } else {
-                            auth.signOut()
-                            navigator?.openAuthScreen()
+                    .subscribe(
+                        {
+                            if (it.uid == auth.uid) {
+                                navigator?.openHomeScreen()
+                            } else {
+                                auth.signOut()
+                                navigator?.openAuthScreen()
+                            }
+                        },
+                        {
+                            Timber.tag(TAG).d("Error while getting user: ${it.message}")
                         }
-                    }, {
-                        Timber.tag(TAG).d("Error while getting user: ${it.message}") })
+                    )
             )
         }
     }

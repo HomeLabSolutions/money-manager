@@ -9,4 +9,6 @@ interface ICategoryRepo {
     fun createExpenseDefaultCategories(): Completable
     fun getExpenseCategories(): Flowable<List<Category>>
     fun getChildrenByParent(parentCategory: Category): Flowable<List<Category>>
+    fun update(category: Category): Completable
+    fun deleteCategory(category: Category): Completable
 }

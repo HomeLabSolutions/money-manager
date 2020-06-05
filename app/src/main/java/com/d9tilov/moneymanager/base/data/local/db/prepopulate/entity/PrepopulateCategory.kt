@@ -8,5 +8,7 @@ data class PrepopulateCategory(
     val type: CategoryType,
     val name: String,
     val icon: Int,
-    val color: Int
+    val color: Int,
+    val priority: Int,
+    val ordinal: Int
 )

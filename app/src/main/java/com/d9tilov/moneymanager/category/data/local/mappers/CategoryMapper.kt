@@ -16,14 +16,18 @@ class CategoryMapper @Inject constructor() {
                 parent = toDataParentModel(parentModel),
                 type = type,
                 icon = icon,
-                color = color
+                color = color,
+                priority = priority,
+                ordinal = ordinal
             )
         } ?: Category(
             id = id,
             name = name,
             type = type,
             icon = icon,
-            color = color
+            color = color,
+            priority = priority,
+            ordinal = ordinal
         )
     }
 
@@ -34,7 +38,9 @@ class CategoryMapper @Inject constructor() {
                 name = name,
                 type = type,
                 icon = icon,
-                color = color
+                color = color,
+                priority = priority,
+                ordinal = ordinal
             )
         }
 
@@ -46,7 +52,9 @@ class CategoryMapper @Inject constructor() {
                 type = type,
                 name = name,
                 icon = icon,
-                color = color
+                color = color,
+                priority = priority,
+                ordinal = ordinal
             )
         }
 
@@ -58,7 +66,9 @@ class CategoryMapper @Inject constructor() {
                 type = type,
                 name = name,
                 icon = icon,
-                color = color
+                color = color,
+                priority = priority,
+                ordinal = ordinal
             )
         }
 }

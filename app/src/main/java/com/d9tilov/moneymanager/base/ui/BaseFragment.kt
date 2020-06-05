@@ -58,12 +58,18 @@ abstract class BaseFragment<T : ViewBinding, N : BaseNavigator, V : BaseViewMode
 
     @CallSuper
     protected open fun initObservers() {
-        viewModel.msg.observe(this.viewLifecycleOwner, Observer { event ->
-            requireContext().toast(event)
-        })
-        viewModel.loading.observe(this.viewLifecycleOwner, Observer { show ->
-            if (show) showLoading() else hideLoading()
-        })
+        viewModel.msg.observe(
+            this.viewLifecycleOwner,
+            Observer { event ->
+                requireContext().toast(event)
+            }
+        )
+        viewModel.loading.observe(
+            this.viewLifecycleOwner,
+            Observer { show ->
+                if (show) showLoading() else hideLoading()
+            }
+        )
     }
 
     private fun showLoading() = activity?.showLoading()

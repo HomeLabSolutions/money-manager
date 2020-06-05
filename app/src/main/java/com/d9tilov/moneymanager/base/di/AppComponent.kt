@@ -24,7 +24,8 @@ import javax.inject.Singleton
 
         UserModule::class,
         CategoryModule::class,
-        SettingsModule::class]
+        SettingsModule::class
+    ]
 )
 interface AppComponent : AndroidInjector<App> {
     @Component.Builder

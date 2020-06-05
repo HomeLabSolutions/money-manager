@@ -1,10 +1,14 @@
 package com.d9tilov.moneymanager.base.ui
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import com.d9tilov.moneymanager.R
+import com.d9tilov.moneymanager.core.util.events.OnBackPressed
 import com.d9tilov.moneymanager.core.util.hideLoadingDialog
 import com.d9tilov.moneymanager.core.util.isNetworkConnected
 import com.d9tilov.moneymanager.core.util.showLoadingDialog
@@ -35,6 +39,25 @@ abstract class BaseActivity<T : ViewBinding> : DaggerAppCompatActivity() {
             hideLoadingDialog(viewBinding.root as ViewGroup, progress?.parent as ViewGroup)
             progress = null
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == android.R.id.home) {
+            onBackPressed()
+            true
+        } else {
+            super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onBackPressed() {
+        val navHostFragment =
+            this.supportFragmentManager.findFragmentById(R.id.mainNavGraph)
+        var currentFragment: Fragment? = null
+        navHostFragment?.let {
+            currentFragment = it.childFragmentManager.fragments[0]
+        }
+        (currentFragment as? OnBackPressed)?.onBackPressed() ?: super.onBackPressed()
     }
 
     companion object {
