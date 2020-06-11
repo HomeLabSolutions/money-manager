@@ -4,7 +4,7 @@ import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.incomeexpense.data.base.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
-import com.d9tilov.moneymanager.user.data.local.mappers.DataUserMapper
+import com.d9tilov.moneymanager.user.data.local.mapper.DataUserMapper
 import io.reactivex.Completable
 import io.reactivex.Flowable
 
@@ -12,12 +12,14 @@ class UserLocalSource(
     private val preferencesStore: PreferencesStore,
     database: AppDatabase,
     private val dataUserMapper: DataUserMapper
-) : IUserLocalSource {
+) : UserSource {
 
     private val userDao: UserDao = database.userDao()
 
-    override fun createCurrentUser(userProfile: UserProfile) =
-        userDao.insert(dataUserMapper.toDbModel(userProfile))
+    override fun createCurrentUser(userProfile: UserProfile): Completable {
+        preferencesStore.uid = userProfile.uid
+        return userDao.insert(dataUserMapper.toDbModel(userProfile))
+    }
 
     override fun updateCurrentUser(userProfile: UserProfile) =
         userDao.update(dataUserMapper.toDbModel(userProfile))
@@ -37,6 +39,7 @@ class UserLocalSource(
             Completable.error(WrongUidException())
         } else {
             return userDao.delete(currentUserId)
+                .doOnComplete { preferencesStore.clearAllData() }
         }
     }
 }

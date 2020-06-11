@@ -1,9 +1,9 @@
 package com.d9tilov.moneymanager.category.common
 
 import androidx.lifecycle.MutableLiveData
-import com.d9tilov.moneymanager.base.ui.BaseViewModel
-import com.d9tilov.moneymanager.base.ui.navigator.BaseNavigator
+import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.category.data.entities.Category
+import com.d9tilov.moneymanager.core.ui.BaseViewModel
 
 abstract class BaseCategoryViewModel<T : BaseNavigator> : BaseViewModel<T>() {
 

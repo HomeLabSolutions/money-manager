@@ -2,23 +2,20 @@ package com.d9tilov.moneymanager.category.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.request.RequestOptions
 import com.d9tilov.moneymanager.App.Companion.TAG
-import com.d9tilov.moneymanager.base.ui.BaseViewHolder
-import com.d9tilov.moneymanager.base.ui.recyclerview.CategoryDiffUtil
+import com.d9tilov.moneymanager.category.ui.diff.CategoryDiffUtil
 import com.d9tilov.moneymanager.category.data.entities.Category
+import com.d9tilov.moneymanager.core.ui.BaseViewHolder
+import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.databinding.ItemCategoryBaseBinding
 import com.d9tilov.moneymanager.databinding.ItemCategoryBinding
-import org.xmlpull.v1.XmlPullParserException
 import timber.log.Timber
 
 class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
@@ -75,16 +72,7 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>
                 is ItemCategoryBinding -> {
                     viewBinding.categoryItemTitle.text = category.name
                     viewBinding.categoryItemSubtitle.text = category.parent?.name
-                    val vectorDrawable = VectorDrawableCompat.create(
-                        context.resources,
-                        category.icon,
-                        null
-                    ) ?: throw XmlPullParserException("Wrong vector xml file format")
-                    val drawable = DrawableCompat.wrap(vectorDrawable)
-                    DrawableCompat.setTint(
-                        drawable.mutate(),
-                        ContextCompat.getColor(context, category.color)
-                    )
+                    val drawable = createTintDrawable(context, category.icon, category.color)
                     GlideApp
                         .with(context)
                         .load(drawable)

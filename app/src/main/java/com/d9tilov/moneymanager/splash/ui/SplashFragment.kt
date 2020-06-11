@@ -11,7 +11,7 @@ import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.splash.vm.SplashViewModel
 import com.firebase.ui.auth.AuthUI
 
-class SplashFragment : BaseFragment<FragmentSplashBinding, SplashNavigator, SplashViewModel>(), SplashNavigator {
+class SplashFragment : BaseFragment<FragmentSplashBinding, SplashNavigator, SplashViewModel>(R.layout.fragment_splash), SplashNavigator {
 
     private val providers = arrayListOf(
         AuthUI.IdpConfig.EmailBuilder().build(),
@@ -21,7 +21,6 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashNavigator, Spla
         AuthUI.IdpConfig.TwitterBuilder().build()
     )
 
-    override fun getLayoutId() = R.layout.fragment_splash
     override fun performDataBinding(view: View) = FragmentSplashBinding.bind(view)
     override fun getViewModelClass() = SplashViewModel::class.java
     override fun getNavigator() = this

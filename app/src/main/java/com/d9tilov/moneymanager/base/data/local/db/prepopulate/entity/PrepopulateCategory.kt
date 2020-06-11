@@ -4,6 +4,7 @@ import com.d9tilov.moneymanager.category.CategoryType
 
 data class PrepopulateCategory(
     val id: Long,
+    val clientId: String,
     val parentId: Long,
     val type: CategoryType,
     val name: String,

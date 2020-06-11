@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.d9tilov.moneymanager.user.data.local.entities.UserDbModel
+import com.d9tilov.moneymanager.user.data.local.entity.UserDbModel
 import io.reactivex.Completable
 import io.reactivex.Flowable
 

@@ -21,21 +21,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 
 class SettingsFragment :
-    BaseFragment<FragmentSettingsBinding, SettingsNavigator, SettingsViewModel>(),
+    BaseFragment<FragmentSettingsBinding, SettingsNavigator, SettingsViewModel>(R.layout.fragment_settings),
     SettingsNavigator {
 
     private lateinit var googleSignInClient: GoogleSignInClient
 
     override fun performDataBinding(view: View): FragmentSettingsBinding =
         FragmentSettingsBinding.bind(view)
-    override fun getLayoutId() = R.layout.fragment_settings
     override fun getViewModelClass() = SettingsViewModel::class.java
     override fun getNavigator() = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(com.d9tilov.moneymanager.R.string.default_web_client_id))
+            .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
@@ -44,33 +43,35 @@ class SettingsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         updateUI()
-        viewBinding.settingsLogin.setOnClickListener {
-            val signInIntent = googleSignInClient.signInIntent
-            startActivityForResult(
-                signInIntent,
-                RC_SIGN_IN
+        viewBinding?.run {
+            settingsLogin.setOnClickListener {
+                val signInIntent = googleSignInClient.signInIntent
+                startActivityForResult(
+                    signInIntent,
+                    RC_SIGN_IN
+                )
+            }
+            settingsLogout.setOnClickListener {
+                AuthUI.getInstance()
+                    .signOut(requireContext())
+                    .addOnCompleteListener {
+                        viewModel.logout()
+                        updateUI()
+                    }
+            }
+            settingsBackup.setOnClickListener {
+                viewModel.backup()
+            }
+            settingsSave.setOnClickListener {
+                viewModel.save()
+                viewModel.restore()
+            }
+            viewModel.restore()
+            viewModel.numberLiveData.observe(
+                viewLifecycleOwner,
+                Observer { settingsNumber.text = it.toString() }
             )
         }
-        viewBinding.settingsLogout.setOnClickListener {
-            AuthUI.getInstance()
-                .signOut(requireContext())
-                .addOnCompleteListener {
-                    viewModel.logout()
-                    updateUI()
-                }
-        }
-        viewBinding.settingsBackup.setOnClickListener {
-            viewModel.backup()
-        }
-        viewBinding.settingsSave.setOnClickListener {
-            viewModel.save()
-            viewModel.restore()
-        }
-        viewModel.restore()
-        viewModel.numberLiveData.observe(
-            this.viewLifecycleOwner,
-            Observer { viewBinding.settingsNumber.text = it.toString() }
-        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -86,7 +87,7 @@ class SettingsFragment :
 
     private fun updateUI() {
 
-        viewBinding.settingsAppVersion.text = BuildConfig.VERSION_NAME
+        viewBinding?.settingsAppVersion?.text = BuildConfig.VERSION_NAME
         val currencyUser = viewModel.getCurrentUser()
         if (currencyUser == null) {
             requireActivity().finish()
@@ -95,7 +96,7 @@ class SettingsFragment :
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             )
         } else {
-            with(viewBinding) {
+            viewBinding?.run {
                 this.settingsAvatar.visibility = VISIBLE
                 settingsName.visibility = VISIBLE
                 settingsName.text = currencyUser.displayName

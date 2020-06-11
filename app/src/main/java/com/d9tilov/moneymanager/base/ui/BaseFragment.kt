@@ -2,25 +2,24 @@ package com.d9tilov.moneymanager.base.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
-import com.d9tilov.moneymanager.base.di.ViewModelFactory
-import com.d9tilov.moneymanager.base.ui.navigator.BaseNavigator
+import com.d9tilov.moneymanager.core.ui.BaseNavigator
+import com.d9tilov.moneymanager.core.ui.BaseViewModel
+import com.d9tilov.moneymanager.core.ui.ViewModelFactory
 import com.d9tilov.moneymanager.core.util.toast
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-abstract class BaseFragment<T : ViewBinding, N : BaseNavigator, V : BaseViewModel<N>> :
-    DaggerFragment() {
+abstract class BaseFragment<T : ViewBinding, N : BaseNavigator, V : BaseViewModel<N>>(@LayoutRes layoutId: Int) :
+    DaggerFragment(layoutId) {
 
     private var activity: BaseActivity<*>? = null
-    protected lateinit var viewBinding: T
+    protected var viewBinding: T? = null
     protected lateinit var viewModel: V
 
     @Inject
@@ -43,17 +42,14 @@ abstract class BaseFragment<T : ViewBinding, N : BaseNavigator, V : BaseViewMode
 
     fun isNetworkConnected() = activity?.isNetworkEnabled()
 
+    override fun onDestroyView() {
+        viewBinding = null
+        super.onDestroyView()
+    }
+
     override fun onDetach() {
         activity = null
         super.onDetach()
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(getLayoutId(), container, false)
     }
 
     @CallSuper
@@ -75,8 +71,6 @@ abstract class BaseFragment<T : ViewBinding, N : BaseNavigator, V : BaseViewMode
     private fun showLoading() = activity?.showLoading()
     private fun hideLoading() = activity?.hideLoading()
 
-    @LayoutRes
-    abstract fun getLayoutId(): Int
     abstract fun performDataBinding(view: View): T
     abstract fun getViewModelClass(): Class<V>
     abstract fun getNavigator(): N

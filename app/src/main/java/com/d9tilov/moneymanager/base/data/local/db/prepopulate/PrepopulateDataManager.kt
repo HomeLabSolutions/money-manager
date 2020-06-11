@@ -5,17 +5,18 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.base.data.local.db.AppDatabase.Companion.NO_ID
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.entity.PrepopulateCategory
 import com.d9tilov.moneymanager.category.CategoryType
+import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
 import javax.inject.Inject
 
 class PrepopulateDataManager @Inject constructor(private val context: Context) {
 
-    fun createDefaultCategories(): List<PrepopulateCategory> {
+    fun createDefaultCategories(uid: String): List<PrepopulateCategory> {
         return listOf(
             createCategory(
                 1,
+                uid,
                 NO_ID,
                 CategoryType.EXPENSE,
                 R.string.default_category_food,
@@ -26,6 +27,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
             ),
             createCategory(
                 2,
+                uid,
                 1,
                 CategoryType.EXPENSE,
                 R.string.default_category_cafe,
@@ -36,6 +38,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
             ),
             createCategory(
                 3,
+                uid,
                 NO_ID,
                 CategoryType.EXPENSE,
                 R.string.default_category_car,
@@ -46,6 +49,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
             ),
             createCategory(
                 4,
+                uid,
                 NO_ID,
                 CategoryType.EXPENSE,
                 R.string.default_category_doctor,
@@ -56,6 +60,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
             ),
             createCategory(
                 5,
+                uid,
                 NO_ID,
                 CategoryType.EXPENSE,
                 R.string.default_category_entertainment,
@@ -66,6 +71,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
             ),
             createCategory(
                 6,
+                uid,
                 NO_ID,
                 CategoryType.EXPENSE,
                 R.string.default_category_home,
@@ -76,6 +82,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
             ),
             createCategory(
                 7,
+                uid,
                 NO_ID,
                 CategoryType.EXPENSE,
                 R.string.default_category_travels,
@@ -86,6 +93,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
             ),
             createCategory(
                 8,
+                uid,
                 NO_ID,
                 CategoryType.EXPENSE,
                 R.string.default_category_internet,
@@ -99,6 +107,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
 
     private fun createCategory(
         id: Long,
+        uid: String,
         parentId: Long,
         type: CategoryType,
         @StringRes name: Int,
@@ -109,6 +118,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
     ): PrepopulateCategory {
         return PrepopulateCategory(
             id,
+            uid,
             parentId,
             type,
             context.getString(name),

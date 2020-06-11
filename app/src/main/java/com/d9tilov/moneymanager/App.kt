@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
 import com.d9tilov.moneymanager.base.di.DaggerAppComponent
-import com.facebook.FacebookSdk
 import com.facebook.appevents.AppEventsLogger
 import com.facebook.stetho.Stetho
 import dagger.android.AndroidInjector
@@ -23,7 +22,6 @@ class App : DaggerApplication() {
             MODE_NIGHT_AUTO_BATTERY
         }
         setDefaultNightMode(nightMode)
-        FacebookSdk.sdkInitialize(applicationContext)
         AppEventsLogger.activateApp(this)
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this)

@@ -6,12 +6,11 @@ import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeNavigator
 import com.d9tilov.moneymanager.databinding.FragmentIncomeBinding
 
-class IncomeFragment : BaseFragment<FragmentIncomeBinding, IncomeNavigator, IncomeViewModel>(), IncomeNavigator {
+class IncomeFragment : BaseFragment<FragmentIncomeBinding, IncomeNavigator, IncomeViewModel>(R.layout.fragment_income), IncomeNavigator {
 
     override fun performDataBinding(view: View): FragmentIncomeBinding =
         FragmentIncomeBinding.bind(view)
 
-    override fun getLayoutId() = R.layout.fragment_income
     override fun getViewModelClass() = IncomeViewModel::class.java
     override fun getNavigator() = this
 }

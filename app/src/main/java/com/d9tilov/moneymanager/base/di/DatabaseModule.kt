@@ -1,11 +1,11 @@
 package com.d9tilov.moneymanager.base.di
 
 import android.content.Context
+import androidx.room.Room
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
-import com.d9tilov.moneymanager.user.data.local.UserDao
+import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DATABASE_NAME
 import dagger.Module
 import dagger.Provides
-import java.io.File
 import javax.inject.Singleton
 
 @Module
@@ -13,14 +13,7 @@ class DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideAppDataBase(context: Context) = AppDatabase.getInstance(context)
-
-    @Provides
-    fun provideUserDao(appDatabase: AppDatabase): UserDao {
-        return appDatabase.userDao()
+    fun provideDatabase(context: Context): AppDatabase {
+        return Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME).build()
     }
-
-    @Provides
-    fun provideDatabaseFile(context: Context): File =
-        context.getDatabasePath(AppDatabase.DATABASE_NAME)
 }
