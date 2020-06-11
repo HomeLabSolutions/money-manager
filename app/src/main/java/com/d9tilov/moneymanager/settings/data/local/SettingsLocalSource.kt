@@ -1,3 +1,5 @@
 package com.d9tilov.moneymanager.settings.data.local
 
-class SettingsLocalSource() : ISettingsLocalSource
+import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
+
+class SettingsLocalSource(preferencesStore: PreferencesStore) : SettingsSource

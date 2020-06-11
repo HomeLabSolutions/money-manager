@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.base.ui.navigator
 
 import com.d9tilov.moneymanager.category.data.entities.Category
+import com.d9tilov.moneymanager.core.ui.BaseNavigator
 
 interface HomeNavigator : BaseNavigator
 

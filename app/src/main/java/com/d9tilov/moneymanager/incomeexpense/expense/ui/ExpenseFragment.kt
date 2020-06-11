@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SnapHelper
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
@@ -18,24 +19,41 @@ import com.d9tilov.moneymanager.category.ui.CategoryAdapter
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.PinKeyboard
 import com.d9tilov.moneymanager.core.util.events.OnItemClickListener
+import com.d9tilov.moneymanager.core.util.toBigDecimal
 import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
+import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
 import kotlinx.android.synthetic.main.keyboard_layout.view.pin_keyboard
-import timber.log.Timber
 
-class ExpenseFragment : BaseFragment<FragmentExpenseBinding, ExpenseNavigator, ExpenseViewModel>(), ExpenseNavigator {
+class ExpenseFragment :
+    BaseFragment<FragmentExpenseBinding, ExpenseNavigator, ExpenseViewModel>(R.layout.fragment_expense),
+    ExpenseNavigator {
 
-    private lateinit var categoryAdapter: CategoryAdapter
+    private val categoryAdapter = CategoryAdapter()
+    private val transactionAdapter = TransactionAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        categoryAdapter = CategoryAdapter()
         categoryAdapter.itemClickListener = onItemClickListener
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        with(viewBinding) {
+        viewBinding?.run {
             transactionMainContent.pin_keyboard.setClickPinButton(PinClickListener())
+        }
+        initCategoryRecyclerView()
+        initTransactionsRecyclerView()
+        viewModel.categories.observe(
+            this.viewLifecycleOwner,
+            Observer { categoryAdapter.updateItems(it) }
+        )
+        viewModel.transactions.observe(
+            this.viewLifecycleOwner, Observer { transactionAdapter.updateItems(it) }
+        )
+    }
+
+    private fun initCategoryRecyclerView() {
+        viewBinding?.run {
             expenseCategoryRvList.layoutManager =
                 GridLayoutManager(requireContext(), 2, GridLayoutManager.HORIZONTAL, false)
             expenseCategoryRvList.adapter = categoryAdapter
@@ -48,23 +66,29 @@ class ExpenseFragment : BaseFragment<FragmentExpenseBinding, ExpenseNavigator, E
             val snapHelper: SnapHelper = ItemSnapHelper()
             snapHelper.attachToRecyclerView(expenseCategoryRvList)
         }
-        viewModel.categories.observe(
-            this.viewLifecycleOwner,
-            Observer { categoryAdapter.updateItems(it) }
-        )
+    }
+
+    private fun initTransactionsRecyclerView() {
+        viewBinding?.run {
+            expenseTransactionRvList.layoutManager =
+                LinearLayoutManager(requireContext())
+            expenseTransactionRvList.adapter = transactionAdapter
+        }
     }
 
     inner class PinClickListener : PinKeyboard.ClickPinButton {
         override fun onPinClick(pinButton: PinButton) {
-            when (val child = pinButton.getChildAt(0)) {
-                is TextView -> {
-                    val digit = child.text.toString()
-                    viewModel.updateNum(viewBinding.expenseMainSum.getSum())
-                    viewBinding.expenseMainSum.setSum(viewModel.tapNum(digit))
-                }
-                is ImageView -> {
-                    viewModel.updateNum(viewBinding.expenseMainSum.getSum())
-                    viewBinding.expenseMainSum.setSum(viewModel.removeNum())
+            viewBinding?.run {
+                when (val child = pinButton.getChildAt(0)) {
+                    is TextView -> {
+                        val digit = child.text.toString()
+                        viewModel.updateNum(expenseMainSum.getSum())
+                        expenseMainSum.setSum(viewModel.tapNum(digit))
+                    }
+                    is ImageView -> {
+                        viewModel.updateNum(expenseMainSum.getSum())
+                        expenseMainSum.setSum(viewModel.removeNum())
+                    }
                 }
             }
         }
@@ -72,18 +96,21 @@ class ExpenseFragment : BaseFragment<FragmentExpenseBinding, ExpenseNavigator, E
 
     private val onItemClickListener = object : OnItemClickListener<Category> {
         override fun onItemClick(item: Category, position: Int) {
-            viewModel.onCategoryClicked(item)
+            if (item.id == Category.ALL_ITEMS_ID) {
+                viewModel.openAllCategories()
+            } else {
+                viewModel.saveTransaction(item, viewBinding?.expenseMainSum?.getSum().toBigDecimal)
+                viewBinding?.expenseMainSum?.setSum("0")
+            }
         }
     }
 
     override fun performDataBinding(view: View): FragmentExpenseBinding =
         FragmentExpenseBinding.bind(view)
 
-    override fun getLayoutId() = R.layout.fragment_expense
     override fun getViewModelClass() = ExpenseViewModel::class.java
     override fun getNavigator() = this
     override fun openCategoriesScreen() {
-        Timber.tag("moggot").d("activity = %s", activity)
         findNavController().navigate(R.id.action_mainFragment_to_category_dest)
     }
 }

@@ -16,12 +16,9 @@ fun Fragment.showKeyboard(view: View?) {
 }
 
 fun Context.showSoftKeyboard(view: View) {
-    view.requestFocus()
-    Handler().post {
-        if (view.requestFocus()) {
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
-        }
+    if (view.requestFocus()) {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
     }
 }
 

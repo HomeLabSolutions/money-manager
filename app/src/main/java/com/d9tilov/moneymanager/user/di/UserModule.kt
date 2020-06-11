@@ -2,15 +2,16 @@ package com.d9tilov.moneymanager.user.di
 
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
-import com.d9tilov.moneymanager.category.domain.ICategoryRepo
-import com.d9tilov.moneymanager.user.data.UserRepo
-import com.d9tilov.moneymanager.user.data.local.IUserLocalSource
+import com.d9tilov.moneymanager.category.domain.CategoryRepo
+import com.d9tilov.moneymanager.user.data.UserDataRepo
+import com.d9tilov.moneymanager.user.data.local.UserSource
+import com.d9tilov.moneymanager.user.data.local.UserDao
 import com.d9tilov.moneymanager.user.data.local.UserLocalSource
-import com.d9tilov.moneymanager.user.data.local.mappers.DataUserMapper
-import com.d9tilov.moneymanager.user.domain.IUserInfoInteractor
-import com.d9tilov.moneymanager.user.domain.IUserRepo
+import com.d9tilov.moneymanager.user.data.local.mapper.DataUserMapper
+import com.d9tilov.moneymanager.user.domain.UserInteractor
+import com.d9tilov.moneymanager.user.domain.UserRepo
 import com.d9tilov.moneymanager.user.domain.UserInfoInteractor
-import com.d9tilov.moneymanager.user.mapper.DomainUserMapper
+import com.d9tilov.moneymanager.user.domain.mapper.UserDomainMapper
 import dagger.Module
 import dagger.Provides
 
@@ -18,30 +19,33 @@ import dagger.Provides
 class UserModule {
 
     @Provides
+    fun provideUserDao(appDatabase: AppDatabase): UserDao {
+        return appDatabase.userDao()
+    }
+
+    @Provides
     fun provideUserLocalSource(
-        userSharedPreferences: PreferencesStore,
+        preferenceStore: PreferencesStore,
         appDatabase: AppDatabase,
         dataUserMapper: DataUserMapper
-    ): IUserLocalSource = UserLocalSource(userSharedPreferences, appDatabase, dataUserMapper)
+    ): UserSource = UserLocalSource(preferenceStore, appDatabase, dataUserMapper)
 
     @Provides
     fun userRepo(
-        preferencesStore: PreferencesStore,
-        userLocalSource: IUserLocalSource
-    ): IUserRepo = UserRepo(
-        preferencesStore,
+        userLocalSource: UserSource
+    ): UserRepo = UserDataRepo(
         userLocalSource
     )
 
     @Provides
     fun provideUserInfoInteractor(
-        userRepo: IUserRepo,
-        categoryRepo: ICategoryRepo,
-        userMapper: DomainUserMapper
-    ): IUserInfoInteractor =
+        userRepo: UserRepo,
+        categoryRepo: CategoryRepo,
+        userDomainMapper: UserDomainMapper
+    ): UserInteractor =
         UserInfoInteractor(
             userRepo,
             categoryRepo,
-            userMapper
+            userDomainMapper
         )
 }

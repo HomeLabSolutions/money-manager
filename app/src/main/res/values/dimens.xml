@@ -27,5 +27,6 @@
 
     <dimen name="recycler_view_category_offset">4dp</dimen>
     <dimen name="category_item_size">84dp</dimen>
-    <dimen name="category_view_size">48dp</dimen>
+    <dimen name="category_item_icon_size">48dp</dimen>
+
 </resources>

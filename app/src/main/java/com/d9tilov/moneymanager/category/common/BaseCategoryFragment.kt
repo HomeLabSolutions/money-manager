@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -14,27 +13,27 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
-import com.d9tilov.moneymanager.base.ui.navigator.BaseNavigator
 import com.d9tilov.moneymanager.base.ui.recyclerview.SpaceItemDecoration
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.CategoryModifyAdapter
+import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.core.ui.recyclerview.SimpleItemTouchHelperCallback
 import com.d9tilov.moneymanager.core.util.events.OnBackPressed
 import com.d9tilov.moneymanager.core.util.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.util.events.OnItemLongClickListener
 import com.d9tilov.moneymanager.core.util.events.OnItemSwapListener
 import com.d9tilov.moneymanager.databinding.FragmentCategoryBinding
+import com.google.android.material.appbar.MaterialToolbar
 
 abstract class BaseCategoryFragment<N : BaseNavigator, V : BaseCategoryViewModel<N>> :
-    BaseFragment<FragmentCategoryBinding, N, V>(),
+    BaseFragment<FragmentCategoryBinding, N, V>(R.layout.fragment_category),
     OnBackPressed {
 
     protected abstract fun getToolbarTitle(): String
 
     protected lateinit var categoryAdapter: CategoryModifyAdapter
-    private lateinit var toolbar: Toolbar
+    private var toolbar: MaterialToolbar? = null
 
-    override fun getLayoutId() = R.layout.fragment_category
     override fun performDataBinding(view: View): FragmentCategoryBinding =
         FragmentCategoryBinding.bind(view)
 
@@ -50,7 +49,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator, V : BaseCategoryViewModel
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        with(viewBinding) {
+        viewBinding?.run {
             categoryRv.layoutManager =
                 GridLayoutManager(requireContext(), 4, GridLayoutManager.VERTICAL, false)
             categoryRv.adapter = categoryAdapter
@@ -97,8 +96,8 @@ abstract class BaseCategoryFragment<N : BaseNavigator, V : BaseCategoryViewModel
     }
 
     private fun initToolbar() {
-        toolbar = viewBinding.categoryToolbarContainer.toolbar
-        toolbar.title = getToolbarTitle()
+        toolbar = viewBinding?.categoryToolbarContainer?.toolbar
+        toolbar?.title = getToolbarTitle()
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)

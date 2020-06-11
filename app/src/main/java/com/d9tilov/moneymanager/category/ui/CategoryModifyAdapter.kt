@@ -13,9 +13,9 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.bumptech.glide.request.RequestOptions
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.base.ui.BaseViewHolder
-import com.d9tilov.moneymanager.base.ui.recyclerview.CategoryDiffUtil
+import com.d9tilov.moneymanager.category.ui.diff.CategoryDiffUtil
 import com.d9tilov.moneymanager.category.data.entities.Category
+import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemTouchHelperAdapter
 import com.d9tilov.moneymanager.core.util.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.util.events.OnItemLongClickListener

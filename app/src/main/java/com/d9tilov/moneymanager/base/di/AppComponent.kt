@@ -5,6 +5,7 @@ import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.base.di.builder.ActivityBuilder
 import com.d9tilov.moneymanager.category.di.CategoryModule
 import com.d9tilov.moneymanager.settings.di.SettingsModule
+import com.d9tilov.moneymanager.transaction.di.TransactionModule
 import com.d9tilov.moneymanager.user.di.UserModule
 import dagger.BindsInstance
 import dagger.Component
@@ -24,7 +25,8 @@ import javax.inject.Singleton
 
         UserModule::class,
         CategoryModule::class,
-        SettingsModule::class
+        SettingsModule::class,
+        TransactionModule::class
     ]
 )
 interface AppComponent : AndroidInjector<App> {
