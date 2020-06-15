@@ -5,13 +5,15 @@ import android.text.InputFilter
 import android.text.InputType
 import android.text.Spanned
 import android.util.AttributeSet
+import android.view.inputmethod.EditorInfo
 import androidx.appcompat.widget.AppCompatEditText
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DECIMAL_LENGTH
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DECIMAL_SEPARATOR
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DEFAULT_DECIMAL_SEPARATOR
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
-import java.util.*
+import java.util.Locale
+import java.util.StringTokenizer
 
 class MoneyEditText @JvmOverloads constructor(
     context: Context,
@@ -31,7 +33,8 @@ class MoneyEditText @JvmOverloads constructor(
 
     init {
         initInputFilter()
-        inputType = InputType.TYPE_CLASS_PHONE
+        inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        imeOptions = EditorInfo.IME_ACTION_DONE
         isSingleLine = true
         maxLines = 1
         initFormatter()

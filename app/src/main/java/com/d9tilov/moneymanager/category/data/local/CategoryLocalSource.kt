@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.category.data.local
 
-import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.PrepopulateDataManager
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
@@ -16,7 +15,6 @@ import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
-import timber.log.Timber
 
 class CategoryLocalSource(
     private val preferencesStore: PreferencesStore,
@@ -67,7 +65,6 @@ class CategoryLocalSource(
             val currentFlowable = categoryDao.getById(currentUserId, id)
             val parentFlowable = currentFlowable
                 .flatMap { model ->
-                    Timber.tag(App.TAG).d("parent id = ${model.parentId}")
                     categoryDao.getById(currentUserId, model.parentId)
                         .defaultIfEmpty(createDummyModel())
                 }
@@ -76,7 +73,6 @@ class CategoryLocalSource(
             return Maybe.zip(
                 currentFlowable, parentFlowable, childrenFlowable,
                 Function3 { current, parent, children ->
-                    Timber.tag(App.TAG).d("FUNC")
                     val category = categoryMapper.toDataModel(
                         current,
                         if (parent.id == NO_ID) null else parent

@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.transaction.domain
 
-import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -10,7 +9,6 @@ import com.d9tilov.moneymanager.transaction.domain.mapper.TransactionDomainMappe
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.functions.BiFunction
-import timber.log.Timber
 
 class TransactionUserInteractor(
     private val transactionRepo: TransactionRepo,
@@ -24,9 +22,7 @@ class TransactionUserInteractor(
     override fun getTransactionById(id: Long): Flowable<Transaction> {
         return transactionRepo.getTransactionById(id)
             .flatMapMaybe { transactionDataModel ->
-                Timber.tag(App.TAG).d("model = ${transactionDataModel.categoryId}")
                 categoryInteractor.getCategoryById(transactionDataModel.categoryId)
-                    .doOnError { Timber.tag(App.TAG).d("erroraa = {${it.message}}") }
                     .flatMap {
                         Maybe.fromCallable {
                             Transaction(
@@ -49,14 +45,11 @@ class TransactionUserInteractor(
             .flatMapSingle { list ->
                 Flowable.fromIterable(list)
                     .flatMap {
-                        Timber.tag(App.TAG).d("model = $it")
                         Flowable.zip(
-                            categoryInteractor.getCategoryById(it.categoryId).toFlowable()
-                                .doOnError { Timber.tag(App.TAG).d("error = {${it.message}}") },
+                            categoryInteractor.getCategoryById(it.categoryId).toFlowable(),
                             Flowable.fromCallable { it },
                             BiFunction<Category, TransactionDataModel, Transaction>
                             { category, transactionDataModel ->
-                                Timber.tag(App.TAG).d("FUNC111")
                                 Transaction(
                                     transactionDataModel.id,
                                     transactionDataModel.type,
@@ -69,8 +62,6 @@ class TransactionUserInteractor(
                                 )
                             }
                         )
-                            .doOnComplete { Timber.tag(App.TAG).d("complete2") }
-                            .doOnError { Timber.tag(App.TAG).d("error2 = {${it.message}}") }
                     }.toList()
             }
 

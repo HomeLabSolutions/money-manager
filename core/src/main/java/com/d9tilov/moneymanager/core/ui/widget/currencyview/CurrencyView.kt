@@ -17,8 +17,9 @@ import com.d9tilov.moneymanager.core.R
 import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.core.util.getColorFromAttr
 import com.d9tilov.moneymanager.core.util.removeScale
+import com.d9tilov.moneymanager.core.util.toBigDecimal
 import java.math.BigDecimal
-import java.util.*
+import java.util.Locale
 import kotlin.math.min
 
 class CurrencyView @JvmOverloads constructor(
@@ -342,12 +343,12 @@ class CurrencyView @JvmOverloads constructor(
         }
     }
 
-    fun setSum(value: String) {
-        moneyEditText.setText(value)
+    fun setValue(value: BigDecimal) {
+        moneyEditText.setText(value.toString())
     }
 
-    fun getSum(): String {
-        return moneyEditText.text.toString()
+    fun getValue(): BigDecimal {
+        return moneyEditText.text.toString().toBigDecimal
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent?) = !enableInput

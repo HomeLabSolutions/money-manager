@@ -30,4 +30,6 @@
     <string name="expense_left_to_title">осталось потратить</string>
 
     <string name="category_all">Все статьи</string>
+
+    <string name="delete">Удалить</string>
 </resources>

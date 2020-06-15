@@ -13,4 +13,8 @@ class IncomeFragment : BaseFragment<FragmentIncomeBinding, IncomeNavigator, Inco
 
     override fun getViewModelClass() = IncomeViewModel::class.java
     override fun getNavigator() = this
+
+    companion object {
+        fun newInstance() = IncomeFragment()
+    }
 }

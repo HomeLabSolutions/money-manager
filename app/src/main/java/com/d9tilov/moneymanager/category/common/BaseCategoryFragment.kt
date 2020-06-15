@@ -18,10 +18,10 @@ import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.CategoryModifyAdapter
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.core.ui.recyclerview.SimpleItemTouchHelperCallback
-import com.d9tilov.moneymanager.core.util.events.OnBackPressed
-import com.d9tilov.moneymanager.core.util.events.OnItemClickListener
-import com.d9tilov.moneymanager.core.util.events.OnItemLongClickListener
-import com.d9tilov.moneymanager.core.util.events.OnItemSwapListener
+import com.d9tilov.moneymanager.core.events.OnBackPressed
+import com.d9tilov.moneymanager.core.events.OnItemClickListener
+import com.d9tilov.moneymanager.core.events.OnItemLongClickListener
+import com.d9tilov.moneymanager.core.events.OnItemSwapListener
 import com.d9tilov.moneymanager.databinding.FragmentCategoryBinding
 import com.google.android.material.appbar.MaterialToolbar
 

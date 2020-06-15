@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.core.util.events
+package com.d9tilov.moneymanager.core.events
 
 interface OnBackPressed {
     fun onBackPressed(): Boolean

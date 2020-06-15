@@ -8,11 +8,11 @@ import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.request.RequestOptions
 import com.d9tilov.moneymanager.App.Companion.TAG
-import com.d9tilov.moneymanager.category.ui.diff.CategoryDiffUtil
 import com.d9tilov.moneymanager.category.data.entities.Category
+import com.d9tilov.moneymanager.category.ui.diff.CategoryDiffUtil
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.createTintDrawable
-import com.d9tilov.moneymanager.core.util.events.OnItemClickListener
+import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.databinding.ItemCategoryBaseBinding
 import com.d9tilov.moneymanager.databinding.ItemCategoryBinding

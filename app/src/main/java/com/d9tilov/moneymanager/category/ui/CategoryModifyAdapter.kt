@@ -17,9 +17,9 @@ import com.d9tilov.moneymanager.category.ui.diff.CategoryDiffUtil
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemTouchHelperAdapter
-import com.d9tilov.moneymanager.core.util.events.OnItemClickListener
-import com.d9tilov.moneymanager.core.util.events.OnItemLongClickListener
-import com.d9tilov.moneymanager.core.util.events.OnItemSwapListener
+import com.d9tilov.moneymanager.core.events.OnItemClickListener
+import com.d9tilov.moneymanager.core.events.OnItemLongClickListener
+import com.d9tilov.moneymanager.core.events.OnItemSwapListener
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.databinding.ItemCategoryBinding
 import org.xmlpull.v1.XmlPullParserException

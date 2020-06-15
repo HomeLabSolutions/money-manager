@@ -5,6 +5,7 @@ import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
+import com.d9tilov.moneymanager.core.events.SingleLiveEvent
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.core.util.addTo
 import com.d9tilov.moneymanager.core.util.ioScheduler
@@ -23,8 +24,7 @@ class ExpenseViewModel(
 
     val categories = MutableLiveData<List<Category>>()
     val transactions = MutableLiveData<List<Transaction>>()
-    var mainSum: StringBuilder = StringBuilder()
-        private set
+    val addTransactionEvent = SingleLiveEvent<Any>()
 
     init {
         categoryInteractor.getExpenseCategories()
@@ -37,33 +37,6 @@ class ExpenseViewModel(
             .observeOn(uiScheduler)
             .subscribe { transactions.value = it }
             .addTo(compositeDisposable)
-        // transactionInteractor.getTransactionById(1)
-        //     .subscribeOn(ioScheduler)
-        //     .observeOn(uiScheduler)
-        //     .subscribe { Timber.tag(App.TAG).d("tr = $it") }
-        //     .addTo(compositeDisposable)
-    }
-
-    fun updateNum(num: String) {
-        mainSum = StringBuilder(num)
-    }
-
-    fun tapNum(num: String): String {
-        mainSum.append(num)
-        return mainSum.toString()
-    }
-
-    fun removeNum(): String {
-        return if (mainSum.isNotEmpty() && mainSum.toString() != "0") {
-            mainSum.deleteCharAt(mainSum.length - 1)
-            if (mainSum.toString().isEmpty()) {
-                "0"
-            } else {
-                mainSum.toString()
-            }
-        } else {
-            "0"
-        }
     }
 
     fun openAllCategories() = navigator?.openCategoriesScreen()
@@ -79,8 +52,19 @@ class ExpenseViewModel(
             )
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler)
-                .subscribe({}, { Timber.tag(App.TAG).d("error = ${it.message}") })
+                .subscribe(
+                    { addTransactionEvent.call() },
+                    { Timber.tag(App.TAG).d("error = ${it.message}") }
+                )
                 .addTo(compositeDisposable)
         }
+    }
+
+    fun deleteTransaction(transaction: Transaction) {
+        transactionInteractor.removeTransaction(transaction)
+            .subscribeOn(ioScheduler)
+            .observeOn(uiScheduler)
+            .subscribe()
+            .addTo(compositeDisposable)
     }
 }

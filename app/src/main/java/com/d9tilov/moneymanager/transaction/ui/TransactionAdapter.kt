@@ -5,16 +5,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
-import com.d9tilov.moneymanager.App
+import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.databinding.ItemTransactionBinding
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.ui.diff.TransactionDiffUtil
-import timber.log.Timber
 
 class TransactionAdapter : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
+
+    var itemSwipeListener: OnItemSwipeListener<Transaction>? = null
 
     private var transactions = emptyList<Transaction>()
 
@@ -25,18 +26,17 @@ class TransactionAdapter : RecyclerView.Adapter<TransactionAdapter.TransactionVi
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
         val viewBinding =
             ItemTransactionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        val viewHolder = TransactionViewHolder(viewBinding)
-        return viewHolder
+        return TransactionViewHolder(viewBinding)
     }
 
     override fun getItemCount() = transactions.size
+    override fun getItemId(position: Int) = transactions[position].id
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
         holder.bind(transactions[position])
     }
 
     fun updateItems(newTransactions: List<Transaction>) {
-        Timber.tag(App.TAG).d("newTransactions size : ${newTransactions.size}")
         val diffUtilsCallback =
             TransactionDiffUtil(
                 transactions,
@@ -47,6 +47,11 @@ class TransactionAdapter : RecyclerView.Adapter<TransactionAdapter.TransactionVi
         transactions = newTransactions
     }
 
+    fun deleteItem(position: Int) {
+        val transactionToDelete = transactions[position]
+        itemSwipeListener?.onItemSwiped(transactionToDelete, position)
+    }
+
     class TransactionViewHolder(private val viewBinding: ItemTransactionBinding) :
         BaseViewHolder(viewBinding) {
 
@@ -54,6 +59,7 @@ class TransactionAdapter : RecyclerView.Adapter<TransactionAdapter.TransactionVi
             viewBinding.run {
                 itemTransactionCategory.text = transaction.category.name
                 itemTransactionDescription.text = transaction.description
+                itemTransactionSum.setValue(transaction.sum)
                 val drawable = createTintDrawable(
                     context,
                     transaction.category.icon,

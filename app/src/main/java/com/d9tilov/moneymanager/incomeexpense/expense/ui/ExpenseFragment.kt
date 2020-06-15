@@ -2,54 +2,93 @@ package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
+import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
+import com.d9tilov.moneymanager.base.ui.callback.SwipeToDeleteCallback
 import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
 import com.d9tilov.moneymanager.base.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.base.ui.recyclerview.SpaceItemDecoration
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.CategoryAdapter
-import com.d9tilov.moneymanager.core.ui.widget.currencyview.PinButton
-import com.d9tilov.moneymanager.core.ui.widget.currencyview.PinKeyboard
-import com.d9tilov.moneymanager.core.util.events.OnItemClickListener
-import com.d9tilov.moneymanager.core.util.toBigDecimal
+import com.d9tilov.moneymanager.core.events.OnItemClickListener
+import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
+import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
+import com.d9tilov.moneymanager.core.util.hideKeyboard
+import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
+import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
-import kotlinx.android.synthetic.main.keyboard_layout.view.pin_keyboard
+import timber.log.Timber
+import java.math.BigDecimal
 
 class ExpenseFragment :
     BaseFragment<FragmentExpenseBinding, ExpenseNavigator, ExpenseViewModel>(R.layout.fragment_expense),
-    ExpenseNavigator {
+    ExpenseNavigator,
+    OnKeyboardVisibleChange {
 
     private val categoryAdapter = CategoryAdapter()
     private val transactionAdapter = TransactionAdapter()
+    private val onItemClickListener = object : OnItemClickListener<Category> {
+        override fun onItemClick(item: Category, position: Int) {
+            if (item.id == Category.ALL_ITEMS_ID) {
+                viewModel.openAllCategories()
+            } else {
+                viewBinding?.let {
+                    viewModel.saveTransaction(item, it.expenseMainSum.getValue())
+                    it.expenseMainSum.setValue(BigDecimal.ZERO)
+                }
+            }
+        }
+    }
+    private val onItemSwipeListener = object : OnItemSwipeListener<Transaction> {
+        override fun onItemSwiped(item: Transaction, position: Int) {
+            viewModel.deleteTransaction(item)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         categoryAdapter.itemClickListener = onItemClickListener
+        transactionAdapter.itemSwipeListener = onItemSwipeListener
+    }
+
+    override fun onStart() {
+        super.onStart()
+        showKeyboard(viewBinding?.expenseMainSum)
+    }
+
+    override fun onStop() {
+        hideKeyboard()
+        super.onStop()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding?.run {
-            transactionMainContent.pin_keyboard.setClickPinButton(PinClickListener())
-        }
         initCategoryRecyclerView()
         initTransactionsRecyclerView()
-        viewModel.categories.observe(
-            this.viewLifecycleOwner,
-            Observer { categoryAdapter.updateItems(it) }
-        )
-        viewModel.transactions.observe(
-            this.viewLifecycleOwner, Observer { transactionAdapter.updateItems(it) }
-        )
+        viewModel.run {
+            categories.observe(
+                viewLifecycleOwner,
+                Observer { categoryAdapter.updateItems(it) }
+            )
+            transactions.observe(
+                viewLifecycleOwner, Observer { transactionAdapter.updateItems(it) }
+            )
+            addTransactionEvent.observe(
+                viewLifecycleOwner,
+                Observer { hideKeyboard(viewBinding?.expenseMainSum?.moneyEditText) }
+            )
+        }
     }
 
     private fun initCategoryRecyclerView() {
@@ -73,35 +112,11 @@ class ExpenseFragment :
             expenseTransactionRvList.layoutManager =
                 LinearLayoutManager(requireContext())
             expenseTransactionRvList.adapter = transactionAdapter
-        }
-    }
-
-    inner class PinClickListener : PinKeyboard.ClickPinButton {
-        override fun onPinClick(pinButton: PinButton) {
-            viewBinding?.run {
-                when (val child = pinButton.getChildAt(0)) {
-                    is TextView -> {
-                        val digit = child.text.toString()
-                        viewModel.updateNum(expenseMainSum.getSum())
-                        expenseMainSum.setSum(viewModel.tapNum(digit))
-                    }
-                    is ImageView -> {
-                        viewModel.updateNum(expenseMainSum.getSum())
-                        expenseMainSum.setSum(viewModel.removeNum())
-                    }
+            ItemTouchHelper(object : SwipeToDeleteCallback(requireContext()) {
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    transactionAdapter.deleteItem(viewHolder.adapterPosition)
                 }
-            }
-        }
-    }
-
-    private val onItemClickListener = object : OnItemClickListener<Category> {
-        override fun onItemClick(item: Category, position: Int) {
-            if (item.id == Category.ALL_ITEMS_ID) {
-                viewModel.openAllCategories()
-            } else {
-                viewModel.saveTransaction(item, viewBinding?.expenseMainSum?.getSum().toBigDecimal)
-                viewBinding?.expenseMainSum?.setSum("0")
-            }
+            }).attachToRecyclerView(expenseTransactionRvList)
         }
     }
 
@@ -112,5 +127,25 @@ class ExpenseFragment :
     override fun getNavigator() = this
     override fun openCategoriesScreen() {
         findNavController().navigate(R.id.action_mainFragment_to_category_dest)
+    }
+
+    override fun onOpenKeyboard() {
+        Timber.tag(App.TAG).d("keyboard shown")
+        viewBinding?.run {
+            expenseTransactionRvList.visibility = GONE
+            expenseCategoryRvList.visibility = VISIBLE
+        }
+    }
+
+    override fun onCloseKeyboard() {
+        Timber.tag(App.TAG).d("keyboard hidden")
+        viewBinding?.run {
+            expenseTransactionRvList.visibility = VISIBLE
+            expenseCategoryRvList.visibility = GONE
+        }
+    }
+
+    companion object {
+        fun newInstance() = ExpenseFragment()
     }
 }
