@@ -13,7 +13,7 @@ import io.reactivex.Flowable
 @Dao
 abstract class TransactionDao {
 
-    @Query("SELECT * FROM transactions WHERE clientId=:uid AND type=:type")
+    @Query("SELECT * FROM transactions WHERE clientId=:uid AND type=:type ORDER BY date DESC")
     abstract fun getAllByType(
         uid: String,
         type: TransactionType

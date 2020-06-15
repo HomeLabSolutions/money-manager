@@ -1,6 +1,8 @@
 package com.d9tilov.moneymanager.incomeexpense.ui.adapter
 
 import android.content.Context
+import android.util.SparseArray
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -11,17 +13,15 @@ import com.d9tilov.moneymanager.incomeexpense.income.ui.IncomeFragment
 class IncomeExpenseAdapter(private val context: Context, fm: FragmentManager) :
     FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
-    companion object {
-        private const val TAB_COUNT = 2
-    }
+    private val registeredFragments = SparseArray<Fragment>()
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> {
-                ExpenseFragment()
+                ExpenseFragment.newInstance()
             }
             else -> {
-                return IncomeFragment()
+                return IncomeFragment.newInstance()
             }
         }
     }
@@ -33,6 +33,24 @@ class IncomeExpenseAdapter(private val context: Context, fm: FragmentManager) :
         }
     }
 
-    override fun getCount() =
-        TAB_COUNT
+    fun getRegisteredFragment(position: Int): Fragment {
+        return registeredFragments[position]
+    }
+
+    override fun instantiateItem(container: ViewGroup, position: Int): Any {
+        val fragment = super.instantiateItem(container, position) as Fragment
+        registeredFragments.put(position, fragment)
+        return fragment
+    }
+
+    override fun getCount() = TAB_COUNT
+
+    override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
+        registeredFragments.remove(position)
+        super.destroyItem(container, position, obj)
+    }
+
+    companion object {
+        private const val TAB_COUNT = 2
+    }
 }

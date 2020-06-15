@@ -46,7 +46,6 @@
         <activity
             android:name="com.d9tilov.moneymanager.home.ui.MainActivity"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustPan|stateVisible"
             android:theme="@style/Theme.MoneyManager.Home" />
 
         <meta-data

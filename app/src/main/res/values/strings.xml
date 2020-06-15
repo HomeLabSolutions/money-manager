@@ -30,4 +30,6 @@
 
     <string name="category_all">All items</string>
 
+    <string name="delete">Delete</string>
+
 </resources>

@@ -45,7 +45,7 @@
         tools:text="Pie" />
 
     <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
-        android:id="@+id/cv_sum"
+        android:id="@+id/item_transaction_sum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|end"

@@ -2,7 +2,6 @@ package com.d9tilov.moneymanager.core.util
 
 import android.app.Activity
 import android.content.Context
-import android.os.Handler
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
@@ -27,11 +26,12 @@ fun Activity.hideKeyboard() {
     view?.let { hideKeyboard(it) }
 }
 
-fun Fragment.hideKeyboard() {
+fun Fragment.hideKeyboard(view:View? = null) {
     view?.let { activity?.hideKeyboard(it) }
 }
 
 fun Context.hideKeyboard(view: View) {
     val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    view.clearFocus()
 }
