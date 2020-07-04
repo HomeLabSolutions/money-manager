@@ -2,6 +2,7 @@ package com.d9tilov.moneymanager.category.ui.vm
 
 import android.util.Log
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryNavigator
+import com.d9tilov.moneymanager.category.CategoryType
 import com.d9tilov.moneymanager.category.common.BaseCategoryViewModel
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
@@ -14,10 +15,15 @@ class CategoryViewModel(private val categoryInteractor: CategoryInteractor) :
     BaseCategoryViewModel<CategoryNavigator>() {
 
     init {
-        categoryInteractor.getAllCategories()
+        categoryInteractor.getAllCategoriesByType(CategoryType.EXPENSE)
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
-            .subscribe { categories.value = it }
+            .subscribe { expenseCategories.value = it }
+            .addTo(compositeDisposable)
+        categoryInteractor.getAllCategoriesByType(CategoryType.INCOME)
+            .subscribeOn(ioScheduler)
+            .observeOn(uiScheduler)
+            .subscribe { incomeCategories.value = it }
             .addTo(compositeDisposable)
     }
 
@@ -44,7 +50,7 @@ class CategoryViewModel(private val categoryInteractor: CategoryInteractor) :
             updatedList.add(value.copy(ordinal = index))
         }
         Observable.fromIterable(updatedList)
-            .flatMapCompletable { category -> categoryInteractor.create(category) }
+            .flatMapCompletable { category -> categoryInteractor.update(category) }
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
             .subscribe()
@@ -52,7 +58,7 @@ class CategoryViewModel(private val categoryInteractor: CategoryInteractor) :
     }
 
     override fun update(name: String) {
-        categoryInteractor.update(categories.value!![0].copy(name = name))
+        categoryInteractor.update(expenseCategories.value!![0].copy(name = name))
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
             .subscribe()

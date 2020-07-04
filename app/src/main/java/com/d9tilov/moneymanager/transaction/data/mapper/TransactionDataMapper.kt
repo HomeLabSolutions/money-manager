@@ -8,14 +8,25 @@ import javax.inject.Inject
 class TransactionDataMapper @Inject constructor() : Mapper<TransactionDbModel, TransactionDataModel> {
     override fun toDataModel(model: TransactionDbModel): TransactionDataModel =
         with(model) {
-            TransactionDataModel(id, type, sum, categoryId, currency, date, description, qrCode)
+            TransactionDataModel(
+                id,
+                clientId,
+                type,
+                sum,
+                categoryId,
+                currency,
+                date,
+                description,
+                qrCode
+            )
         }
 
-    override fun toDbModel(model: TransactionDataModel, clientId: String): TransactionDbModel =
+    override fun toDbModel(model: TransactionDataModel): TransactionDbModel =
         with(model) {
             TransactionDbModel(
                 id,
                 clientId,
+                false,
                 type,
                 sum,
                 categoryId,
