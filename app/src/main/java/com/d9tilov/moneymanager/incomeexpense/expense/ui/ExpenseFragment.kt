@@ -17,7 +17,7 @@ import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.callback.SwipeToDeleteCallback
 import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
 import com.d9tilov.moneymanager.base.ui.recyclerview.ItemSnapHelper
-import com.d9tilov.moneymanager.base.ui.recyclerview.SpaceItemDecoration
+import com.d9tilov.moneymanager.base.ui.recyclerview.decoration.SpaceItemDecoration
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.CategoryAdapter
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
@@ -82,12 +82,22 @@ class ExpenseFragment :
                 Observer { categoryAdapter.updateItems(it) }
             )
             transactions.observe(
-                viewLifecycleOwner, Observer { transactionAdapter.updateItems(it) }
+                viewLifecycleOwner, Observer {
+                    transactionAdapter.submitList(it)
+                }
             )
             addTransactionEvent.observe(
                 viewLifecycleOwner,
                 Observer { hideKeyboard(viewBinding?.expenseMainSum?.moneyEditText) }
             )
+        }
+        viewBinding?.run {
+            expenseTransactionFill.setOnClickListener {
+                viewModel.generateData()
+            }
+            expenseTransactionClear.setOnClickListener {
+                viewModel.clearData()
+            }
         }
     }
 

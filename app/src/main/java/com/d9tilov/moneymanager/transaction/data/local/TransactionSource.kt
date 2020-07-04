@@ -1,14 +1,25 @@
 package com.d9tilov.moneymanager.transaction.data.local
 
+import androidx.paging.DataSource
 import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.data.entity.TransactionBaseDataModel
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Single
+import java.util.Date
 
 interface TransactionSource {
 
     fun insert(transaction: TransactionDataModel): Completable
     fun getById(id: Long): Flowable<TransactionDataModel>
-    fun getByType(transactionType: TransactionType): Flowable<List<TransactionDataModel>>
-    fun remove(transaction: TransactionDataModel): Completable
+    fun getAllByType(
+        from: Date,
+        to: Date,
+        transactionType: TransactionType
+    ): DataSource.Factory<Int, TransactionBaseDataModel>
+
+    fun getAllByType2(transactionType: TransactionType): Single<List<TransactionBaseDataModel>>
+
+    fun remove(transaction: TransactionBaseDataModel): Completable
 }

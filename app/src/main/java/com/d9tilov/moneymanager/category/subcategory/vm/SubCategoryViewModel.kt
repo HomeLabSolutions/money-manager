@@ -14,7 +14,7 @@ class SubCategoryViewModel(
         if (parentCategory == null || parentCategory.children.isEmpty()) {
             throw IllegalArgumentException("Parent category mustn't have at least one child")
         }
-        categories.value = parentCategory.children
+        expenseCategories.value = parentCategory.children
     }
 
     override fun onCategoryClicked(category: Category) {
