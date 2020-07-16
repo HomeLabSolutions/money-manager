@@ -3,6 +3,7 @@ package com.d9tilov.moneymanager.transaction.domain.entity
 interface BaseTransaction {
 
     val itemType: Int
+    val position: Int
 
     companion object {
         const val HEADER = 0

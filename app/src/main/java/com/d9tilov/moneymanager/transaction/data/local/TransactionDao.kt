@@ -37,7 +37,7 @@ abstract class TransactionDao {
     abstract fun insert(transaction: TransactionDbModel): Completable
 
     @Query("SELECT count(*) FROM transactions WHERE clientId=:uid AND type=:type AND isDate=1 AND date(:date/1000, 'unixepoch') >= date(date/1000, 'unixepoch', 'start of day') AND date(:date/1000, 'unixepoch') <= date(date/1000, 'unixepoch', 'start of day', '+1 day', '-1 second')")
-    abstract fun ableToInsertDate(uid: String, type: TransactionType, date: Date): Single<Int>
+    abstract fun getDateItemsCountInDayOfDay(uid: String, type: TransactionType, date: Date): Single<Int>
 
     @Update
     abstract fun update(transaction: TransactionDbModel): Completable

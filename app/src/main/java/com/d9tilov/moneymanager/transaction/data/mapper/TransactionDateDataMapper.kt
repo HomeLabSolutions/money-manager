@@ -19,9 +19,9 @@ class TransactionDateDataMapper @Inject constructor() :
     override fun toDbModel(model: TransactionDateDataModel) = with(model) {
         TransactionDbModel(
             id = DEFAULT_DATA_ID,
-            clientId = NO_ID.toString(),
+            clientId = clientId,
             isDate = true,
-            type = TransactionType.INCOME,
+            type = type,
             sum = BigDecimal.ZERO,
             categoryId = NO_ID,
             currency = null,

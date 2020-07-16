@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.transaction.data.local
 
+import android.util.Log
 import androidx.paging.DataSource
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
@@ -32,7 +33,11 @@ class TransactionLocalSource(
         return if (currentUserId == null) {
             Completable.error(WrongUidException())
         } else {
-            transactionDao.ableToInsertDate(currentUserId, transaction.type, transaction.date)
+            transactionDao.getDateItemsCountInDayOfDay(
+                currentUserId,
+                transaction.type,
+                transaction.date
+            )
                 .flatMapCompletable {
                     when {
                         it > 1 -> {
@@ -48,21 +53,40 @@ class TransactionLocalSource(
                             )
                         }
                         else -> {
+                            Log.d(
+                                "moggot", "insert: dateItem = ${createDateItem(
+                                    currentUserId,
+                                    transaction.type,
+                                    transaction.date
+                                )}"
+                            )
+                            Log.d(
+                                "moggot", "insert: item = ${transactionDataMapper.toDbModel(
+                                    transaction.copy(
+                                        clientId = currentUserId
+                                    )
+                                )}"
+                            )
                             transactionDao.insert(
                                 createDateItem(
                                     currentUserId,
                                     transaction.type,
                                     transaction.date
                                 )
-                            ).andThen(
-                                transactionDao.insert(
-                                    transactionDataMapper.toDbModel(
-                                        transaction.copy(
-                                            clientId = currentUserId
+                            )
+                                .doOnComplete { Log.d("moggot", "insert date complete") }
+                                .doOnError { Log.d("moggot", "insert date error: ${it.message}") }
+                                .andThen(
+                                    transactionDao.insert(
+                                        transactionDataMapper.toDbModel(
+                                            transaction.copy(
+                                                clientId = currentUserId
+                                            )
                                         )
                                     )
                                 )
-                            )
+                                .doOnComplete { Log.d("moggot", "insert date complete2") }
+                                .doOnError { Log.d("moggot", "insert date error2: ${it.message}") }
                         }
                     }
                 }
