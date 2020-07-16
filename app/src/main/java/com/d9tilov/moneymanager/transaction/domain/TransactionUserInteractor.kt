@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.transaction.domain
 
+import android.util.Log
 import androidx.paging.PagedList
 import androidx.paging.toFlowable
 import com.d9tilov.moneymanager.category.CategoryType
@@ -56,13 +57,18 @@ class TransactionUserInteractor(
             TransactionType.INCOME -> CategoryType.INCOME
             TransactionType.EXPENSE -> CategoryType.EXPENSE
         }
+        var itemPosition = -1
+        var itemHeaderPosition = itemPosition
         return categoryInteractor.getAllCategoriesByType(categoryType)
             .flatMap { categoryList ->
                 transactionRepo.getTransactionsByType(transactionType = type)
                     .map { transactionBaseDataModel ->
                         if (transactionBaseDataModel is TransactionDateDataModel) {
+                            itemPosition++
+                            itemHeaderPosition = itemPosition
                             return@map transactionHeaderDomainMapper.toDomain(
-                                transactionBaseDataModel
+                                transactionBaseDataModel,
+                                itemHeaderPosition
                             )
                         }
                         if (transactionBaseDataModel is TransactionDataModel) {
@@ -71,9 +77,11 @@ class TransactionUserInteractor(
                             if (category == null) {
                                 throw CategoryNotFoundException("Not found category with id: ${transactionBaseDataModel.categoryId}")
                             } else {
+                                itemPosition++
                                 return@map transactionDomainMapper.toDomain(
                                     transactionBaseDataModel,
-                                    category
+                                    category,
+                                    itemHeaderPosition
                                 )
                             }
                         }
@@ -94,6 +102,7 @@ class TransactionUserInteractor(
             TransactionType.INCOME -> CategoryType.INCOME
             TransactionType.EXPENSE -> CategoryType.EXPENSE
         }
+        var itemPosition = 0
         return categoryInteractor.getAllCategoriesByType(categoryType)
             .firstOrError()
             .flatMap { categoryList ->
@@ -103,7 +112,8 @@ class TransactionUserInteractor(
                             .map { transactionBaseDataModel ->
                                 if (transactionBaseDataModel is TransactionDateDataModel) {
                                     return@map transactionHeaderDomainMapper.toDomain(
-                                        transactionBaseDataModel
+                                        transactionBaseDataModel,
+                                        itemPosition
                                     )
                                 }
                                 if (transactionBaseDataModel is TransactionDataModel) {
@@ -114,10 +124,12 @@ class TransactionUserInteractor(
                                     } else {
                                         return@map transactionDomainMapper.toDomain(
                                             transactionBaseDataModel,
-                                            category
+                                            category,
+                                            itemPosition
                                         )
                                     }
                                 }
+                                ++itemPosition
                                 throw IllegalStateException("Unknown TransactionDataItem implementation")
 
                             }.toList()

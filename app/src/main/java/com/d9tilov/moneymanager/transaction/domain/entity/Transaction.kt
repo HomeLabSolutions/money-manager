@@ -17,7 +17,8 @@ data class Transaction(
     val currency: String? = null,
     val date: Date = Date(),
     val description: String = "",
-    val qrCode: String? = null
+    val qrCode: String? = null,
+    override val position: Int = 0
 ) : BaseTransaction {
     override val itemType: Int
         get() = ITEM

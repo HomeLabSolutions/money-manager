@@ -108,7 +108,6 @@ abstract class BaseCategoryFragment<N : BaseNavigator, V : BaseCategoryViewModel
     private val onItemClickListener = object : OnItemClickListener<Category> {
         override fun onItemClick(item: Category, position: Int) {
             viewModel.onCategoryClicked(item)
-            Log.d("moggot", "onClick")
         }
     }
 

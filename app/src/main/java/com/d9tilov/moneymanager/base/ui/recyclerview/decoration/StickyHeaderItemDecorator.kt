@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.base.ui.recyclerview.decoration
 
 import android.graphics.Canvas
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
@@ -78,10 +79,7 @@ class StickyHeaderItemDecorator<T>(private val adapter: StickyAdapter<T, Recycle
             return
         }
         viewOverlappedByHeader?.let {
-            if (preOverlappedPosition != overlappedHeaderPosition && shouldMoveHeader(
-                    it
-                )
-            ) {
+            if (preOverlappedPosition != overlappedHeaderPosition && shouldMoveHeader(it)) {
                 updateStickyHeader(topChildPosition, overlappedByHeaderPosition)
                 moveHeader(c, it)
             } else {
@@ -124,6 +122,7 @@ class StickyHeaderItemDecorator<T>(private val adapter: StickyAdapter<T, Recycle
 
     private fun getChildInContact(parent: RecyclerView, contactPoint: Int): View? {
         var childInContact: View? = null
+        Log.d("moggot", "getChildInContact: " + contactPoint)
         for (i in 0 until parent.childCount) {
             val child: View = parent.getChildAt(i)
             if (child.bottom > contactPoint) {

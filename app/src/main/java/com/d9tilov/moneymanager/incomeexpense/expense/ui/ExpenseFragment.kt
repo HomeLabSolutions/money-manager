@@ -3,6 +3,7 @@ package com.d9tilov.moneymanager.incomeexpense.expense.ui
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
+import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -18,6 +19,8 @@ import com.d9tilov.moneymanager.base.ui.callback.SwipeToDeleteCallback
 import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
 import com.d9tilov.moneymanager.base.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.base.ui.recyclerview.decoration.SpaceItemDecoration
+import com.d9tilov.moneymanager.base.ui.recyclerview.decoration.StickyHeaderItemDecorator
+import com.d9tilov.moneymanager.base.ui.recyclerview.decoration.StickyHeaderItemDecorator2
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.CategoryAdapter
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
@@ -26,6 +29,7 @@ import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
+import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
 import timber.log.Timber
@@ -122,6 +126,8 @@ class ExpenseFragment :
             expenseTransactionRvList.layoutManager =
                 LinearLayoutManager(requireContext())
             expenseTransactionRvList.adapter = transactionAdapter
+            val itemDecoration = StickyHeaderItemDecorator(transactionAdapter)
+            itemDecoration.attachToRecyclerView(expenseTransactionRvList)
             ItemTouchHelper(object : SwipeToDeleteCallback(requireContext()) {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     transactionAdapter.deleteItem(viewHolder.adapterPosition)
@@ -142,7 +148,7 @@ class ExpenseFragment :
     override fun onOpenKeyboard() {
         Timber.tag(App.TAG).d("keyboard shown")
         viewBinding?.run {
-            expenseTransactionRvList.visibility = GONE
+            expenseTransactionRvList.visibility = INVISIBLE
             expenseCategoryRvList.visibility = VISIBLE
         }
     }

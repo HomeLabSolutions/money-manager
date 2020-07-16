@@ -40,8 +40,7 @@ class ExpenseViewModel(
         transactionInteractor.getTransactionsByType(TransactionType.EXPENSE)
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
-            .subscribe {
-                transactions.value = it }
+            .subscribe { transactions.value = it }
             .addTo(compositeDisposable)
     }
 
@@ -61,9 +60,7 @@ class ExpenseViewModel(
             }
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
-            .subscribe {
-                Log.d("moggot", "generateData: subscribe")
-            }
+            .subscribe {}
             .addTo(compositeDisposable)
     }
 

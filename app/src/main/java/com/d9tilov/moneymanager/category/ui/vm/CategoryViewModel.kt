@@ -44,7 +44,6 @@ class CategoryViewModel(private val categoryInteractor: CategoryInteractor) :
     }
 
     override fun onItemSwap(categories: List<Category>) {
-        Log.d("moggot", "onItemSwap: ")
         val updatedList = mutableListOf<Category>()
         for ((index, value) in categories.withIndex()) {
             updatedList.add(value.copy(ordinal = index))

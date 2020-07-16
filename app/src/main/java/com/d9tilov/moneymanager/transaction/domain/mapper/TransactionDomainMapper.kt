@@ -14,8 +14,8 @@ class TransactionDomainMapper @Inject constructor() {
             )
         }
 
-    fun toDomain(transactionDataModel: TransactionDataModel, category: Category) =
+    fun toDomain(transactionDataModel: TransactionDataModel, category: Category, position:Int) =
         with(transactionDataModel) {
-            Transaction(id, clientId, type, sum, category, currency, date, description, qrCode)
+            Transaction(id, clientId, type, sum, category, currency, date, description, qrCode, position)
         }
 }

@@ -1,11 +1,11 @@
 package com.d9tilov.moneymanager.transaction.ui
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.request.RequestOptions
 import com.d9tilov.moneymanager.base.ui.recyclerview.adapter.StickyAdapter
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
@@ -65,12 +65,11 @@ class TransactionAdapter :
     }
 
     override fun getHeaderPositionForItem(itemPosition: Int): Int {
-        return (getItem(itemPosition) as TransactionHeader).position
+        return getItem(itemPosition)?.position ?: 0
     }
 
     override fun onBindHeaderViewHolder(holder: RecyclerView.ViewHolder, headerPosition: Int) {
-        val date = getItem(headerPosition) as TransactionHeader
-        (holder as TransactionHeaderViewHolder).bind(date)
+        (holder as TransactionHeaderViewHolder).bind(getItem(headerPosition) as TransactionHeader)
     }
 
     override fun onCreateHeaderViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
