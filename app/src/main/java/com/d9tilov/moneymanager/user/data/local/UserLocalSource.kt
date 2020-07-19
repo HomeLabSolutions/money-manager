@@ -1,8 +1,8 @@
 package com.d9tilov.moneymanager.user.data.local
 
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
+import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
-import com.d9tilov.moneymanager.incomeexpense.data.base.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.data.local.mapper.DataUserMapper
 import io.reactivex.Completable

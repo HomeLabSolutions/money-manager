@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.category.data
 
+import com.d9tilov.moneymanager.category.CategoryType
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.data.local.CategorySource
 import com.d9tilov.moneymanager.category.domain.CategoryRepo
@@ -17,7 +18,7 @@ class CategoryDataRepo(private val categoryLocalSource: CategorySource) :
 
     override fun getCategoryById(id: Long): Maybe<Category> = categoryLocalSource.getById(id)
 
-    override fun getExpenseCategories() = categoryLocalSource.getAllExpense()
+    override fun getCategoriesByType(type: CategoryType) = categoryLocalSource.getCategoriesByType(type)
     override fun getChildrenByParent(parentCategory: Category) =
         categoryLocalSource.getByParentId(parentCategory.id)
 

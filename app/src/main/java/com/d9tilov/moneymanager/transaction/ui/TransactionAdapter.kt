@@ -1,55 +1,92 @@
 package com.d9tilov.moneymanager.transaction.ui
 
+import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
+import com.d9tilov.moneymanager.base.ui.recyclerview.adapter.StickyAdapter
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.databinding.ItemTransactionBinding
+import com.d9tilov.moneymanager.databinding.ItemTransactionHeaderBinding
+import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
+import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction.Companion.HEADER
+import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction.Companion.ITEM
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
-import com.d9tilov.moneymanager.transaction.ui.diff.TransactionDiffUtil
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionHeader
 
-class TransactionAdapter : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
+class TransactionAdapter :
+    StickyAdapter<BaseTransaction, RecyclerView.ViewHolder, RecyclerView.ViewHolder>(
+        diffCallback
+    ) {
 
     var itemSwipeListener: OnItemSwipeListener<Transaction>? = null
-
-    private var transactions = emptyList<Transaction>()
 
     init {
         setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
-        val viewBinding =
-            ItemTransactionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return TransactionViewHolder(viewBinding)
-    }
-
-    override fun getItemCount() = transactions.size
-    override fun getItemId(position: Int) = transactions[position].id
-
-    override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
-        holder.bind(transactions[position])
-    }
-
-    fun updateItems(newTransactions: List<Transaction>) {
-        val diffUtilsCallback =
-            TransactionDiffUtil(
-                transactions,
-                newTransactions
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == ITEM) {
+            val viewBinding =
+                ItemTransactionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            TransactionViewHolder(viewBinding)
+        } else {
+            val viewBinding = ItemTransactionHeaderBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
             )
-        val diffUtilsResult = DiffUtil.calculateDiff(diffUtilsCallback, false)
-        diffUtilsResult.dispatchUpdatesTo(this)
-        transactions = newTransactions
+            TransactionHeaderViewHolder(viewBinding)
+        }
+    }
+
+    override fun getItemId(position: Int) = getItem(position).hashCode().toLong()
+
+    override fun getItemViewType(position: Int): Int {
+        if (getItem(position) is Transaction) {
+            return ITEM
+        }
+        return HEADER
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val type = getItem(position)?.itemType ?: 0
+        if (type == HEADER) {
+            (holder as TransactionHeaderViewHolder).bind(getItem(position) as TransactionHeader)
+        } else {
+            (holder as TransactionViewHolder).bind(getItem(position) as Transaction)
+        }
+    }
+
+    override fun getHeaderPositionForItem(itemPosition: Int): Int {
+        return getItem(itemPosition)?.position ?: 0
+    }
+
+    override fun onBindHeaderViewHolder(holder: RecyclerView.ViewHolder, headerPosition: Int) {
+        (holder as TransactionHeaderViewHolder).bind(getItem(headerPosition) as TransactionHeader)
+    }
+
+    override fun onCreateHeaderViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+        return createViewHolder(parent, HEADER)
     }
 
     fun deleteItem(position: Int) {
-        val transactionToDelete = transactions[position]
+        val transactionToDelete = getItem(position) as Transaction
         itemSwipeListener?.onItemSwiped(transactionToDelete, position)
+    }
+
+    class TransactionHeaderViewHolder(private val viewBinding: ItemTransactionHeaderBinding) :
+        BaseViewHolder(viewBinding) {
+
+        fun bind(transactionHeader: TransactionHeader) {
+            viewBinding.run { itemTransactionHeaderDate.text = transactionHeader.date.toString() }
+        }
     }
 
     class TransactionViewHolder(private val viewBinding: ItemTransactionBinding) :
@@ -80,6 +117,38 @@ class TransactionAdapter : RecyclerView.Adapter<TransactionAdapter.TransactionVi
 
         companion object {
             private const val IMAGE_SIZE_IN_PX = 136
+        }
+    }
+
+    companion object {
+
+        private val diffCallback = object : DiffUtil.ItemCallback<BaseTransaction>() {
+            override fun areItemsTheSame(
+                oldItem: BaseTransaction,
+                newItem: BaseTransaction
+            ): Boolean {
+                return if (oldItem is Transaction && newItem is Transaction) {
+                    oldItem.id == newItem.id
+                } else if (oldItem is TransactionHeader && newItem is TransactionHeader) {
+                    oldItem.date == newItem.date
+                } else {
+                    false
+                }
+            }
+
+            @SuppressLint("DiffUtilEquals")
+            override fun areContentsTheSame(
+                oldItem: BaseTransaction,
+                newItem: BaseTransaction
+            ): Boolean {
+                return if (oldItem is Transaction && newItem is Transaction) {
+                    oldItem == newItem
+                } else if (oldItem is TransactionHeader && newItem is TransactionHeader) {
+                    oldItem == newItem
+                } else {
+                    false
+                }
+            }
         }
     }
 }

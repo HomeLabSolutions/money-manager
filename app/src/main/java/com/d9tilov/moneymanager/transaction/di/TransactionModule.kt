@@ -8,10 +8,12 @@ import com.d9tilov.moneymanager.transaction.data.local.TransactionDao
 import com.d9tilov.moneymanager.transaction.data.local.TransactionLocalSource
 import com.d9tilov.moneymanager.transaction.data.local.TransactionSource
 import com.d9tilov.moneymanager.transaction.data.mapper.TransactionDataMapper
+import com.d9tilov.moneymanager.transaction.data.mapper.TransactionDateDataMapper
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.TransactionRepo
 import com.d9tilov.moneymanager.transaction.domain.TransactionUserInteractor
 import com.d9tilov.moneymanager.transaction.domain.mapper.TransactionDomainMapper
+import com.d9tilov.moneymanager.transaction.domain.mapper.TransactionHeaderDomainMapper
 import dagger.Module
 import dagger.Provides
 
@@ -27,8 +29,14 @@ class TransactionModule {
     fun provideTransactionLocalSource(
         preferencesStore: PreferencesStore,
         appDatabase: AppDatabase,
-        mapper: TransactionDataMapper
-    ): TransactionSource = TransactionLocalSource(preferencesStore, appDatabase, mapper)
+        transactionDataMapper: TransactionDataMapper,
+        transactionDateDataMapper: TransactionDateDataMapper
+    ): TransactionSource = TransactionLocalSource(
+        preferencesStore,
+        appDatabase,
+        transactionDataMapper,
+        transactionDateDataMapper
+    )
 
     @Provides
     fun provideTransactionRepo(transactionSource: TransactionSource): TransactionRepo =
@@ -38,6 +46,12 @@ class TransactionModule {
     fun provideTransactionInteractor(
         transactionRepo: TransactionRepo,
         categoryInteractor: CategoryInteractor,
-        transactionDomainMapper: TransactionDomainMapper
-    ): TransactionInteractor = TransactionUserInteractor(transactionRepo, categoryInteractor, transactionDomainMapper)
+        transactionDomainMapper: TransactionDomainMapper,
+        transactionHeaderDomainMapper: TransactionHeaderDomainMapper
+    ): TransactionInteractor = TransactionUserInteractor(
+        transactionRepo,
+        categoryInteractor,
+        transactionDomainMapper,
+        transactionHeaderDomainMapper
+    )
 }

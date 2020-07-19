@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.base.ui.recyclerview
+package com.d9tilov.moneymanager.base.ui.recyclerview.decoration
 
 import android.content.Context
 import android.graphics.Rect

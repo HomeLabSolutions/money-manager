@@ -2,6 +2,7 @@ package com.d9tilov.moneymanager.category.data.local
 
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.PrepopulateDataManager
+import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.category.CategoryType
 import com.d9tilov.moneymanager.category.data.entities.Category
@@ -9,7 +10,6 @@ import com.d9tilov.moneymanager.category.data.local.entities.CategoryDbModel
 import com.d9tilov.moneymanager.category.data.local.mappers.CategoryMapper
 import com.d9tilov.moneymanager.category.exception.CategoryExistException
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
-import com.d9tilov.moneymanager.incomeexpense.data.base.local.exceptions.WrongUidException
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
@@ -107,22 +107,12 @@ class CategoryLocalSource(
         }
     }
 
-    override fun getAllExpense(): Flowable<List<Category>> {
+    override fun getCategoriesByType(type: CategoryType): Flowable<List<Category>> {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
             Flowable.error(WrongUidException())
         } else {
-            categoryDao.getAllByType(currentUserId, CategoryType.EXPENSE)
-                .map { groupChildrenWithParent(it) }
-        }
-    }
-
-    override fun getAllIncome(): Flowable<List<Category>> {
-        val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            Flowable.error(WrongUidException())
-        } else {
-            categoryDao.getAllByType(currentUserId, CategoryType.INCOME)
+            categoryDao.getAllByType(currentUserId, type)
                 .map { groupChildrenWithParent(it) }
         }
     }

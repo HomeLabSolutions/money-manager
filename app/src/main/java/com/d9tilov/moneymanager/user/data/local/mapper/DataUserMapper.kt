@@ -18,7 +18,7 @@ class DataUserMapper @Inject constructor() : Mapper<UserDbModel, UserProfile> {
             )
         }
 
-    override fun toDbModel(model: UserProfile, clientId: String) =
+    override fun toDbModel(model: UserProfile) =
         with(model) {
             UserDbModel(
                 uid = uid,

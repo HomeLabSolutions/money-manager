@@ -1,3 +1,3 @@
-package com.d9tilov.moneymanager.incomeexpense.data.base.local.exceptions
+package com.d9tilov.moneymanager.base.data.local.exceptions
 
 class WrongUidException : Exception()

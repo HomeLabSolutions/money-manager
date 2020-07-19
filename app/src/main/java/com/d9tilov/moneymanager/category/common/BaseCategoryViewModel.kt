@@ -7,7 +7,8 @@ import com.d9tilov.moneymanager.core.ui.BaseViewModel
 
 abstract class BaseCategoryViewModel<T : BaseNavigator> : BaseViewModel<T>() {
 
-    val categories = MutableLiveData<List<Category>>()
+    val expenseCategories = MutableLiveData<List<Category>>()
+    val incomeCategories = MutableLiveData<List<Category>>()
     abstract fun onCategoryClicked(category: Category)
     abstract fun onCategoryRemoved(category: Category)
     abstract fun onItemSwap(categories: List<Category>)
