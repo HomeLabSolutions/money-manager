@@ -16,12 +16,12 @@ class CategoryUserInteractor(private val categoryRepo: CategoryRepo) :
 
     override fun getCategoryById(id: Long) = categoryRepo.getCategoryById(id)
 
-    override fun getExpenseCategories(): Flowable<List<Category>> {
-        return categoryRepo.getExpenseCategories()
+    override fun getGroupedCategoriesByType(type: CategoryType): Flowable<List<Category>> {
+        return categoryRepo.getCategoriesByType(type)
             .map { getAllWithChildrenInSingleList(it) }
     }
 
-    override fun getAllCategories(): Flowable<List<Category>> = categoryRepo.getExpenseCategories()
+    override fun getAllCategoriesByType(type:CategoryType): Flowable<List<Category>> = categoryRepo.getCategoriesByType(type)
     override fun getChildrenByParent(parentCategory: Category): Maybe<List<Category>> =
         categoryRepo.getChildrenByParent(parentCategory)
 

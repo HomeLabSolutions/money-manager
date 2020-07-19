@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
-import com.d9tilov.moneymanager.base.ui.recyclerview.SpaceItemDecoration
+import com.d9tilov.moneymanager.base.ui.recyclerview.decoration.SpaceItemDecoration
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.CategoryModifyAdapter
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
@@ -89,7 +89,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator, V : BaseCategoryViewModel
                 }
             })
         }
-        (viewModel as BaseCategoryViewModel<*>).categories.observe(
+        (viewModel as BaseCategoryViewModel<*>).expenseCategories.observe(
             this.viewLifecycleOwner,
             Observer { categoryAdapter.updateItems(it) }
         )
@@ -108,7 +108,6 @@ abstract class BaseCategoryFragment<N : BaseNavigator, V : BaseCategoryViewModel
     private val onItemClickListener = object : OnItemClickListener<Category> {
         override fun onItemClick(item: Category, position: Int) {
             viewModel.onCategoryClicked(item)
-            Log.d("moggot", "onClick")
         }
     }
 

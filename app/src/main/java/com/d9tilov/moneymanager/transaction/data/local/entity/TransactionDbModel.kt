@@ -24,6 +24,7 @@ data class TransactionDbModel(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "clientId", index = true) val clientId: String,
+    @ColumnInfo(name = "isDate") val isDate: Boolean,
     @ColumnInfo(name = "type") val type: TransactionType,
     @ColumnInfo(name = "sum") val sum: BigDecimal,
     @ColumnInfo(name = "categoryId") val categoryId: Long,
