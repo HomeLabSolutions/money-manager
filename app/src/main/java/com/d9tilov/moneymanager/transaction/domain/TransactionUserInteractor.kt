@@ -12,6 +12,7 @@ import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.mapper.TransactionDomainMapper
 import com.d9tilov.moneymanager.transaction.domain.mapper.TransactionHeaderDomainMapper
+import com.d9tilov.moneymanager.transaction.domain.paging.PagingConfig
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
@@ -69,13 +70,7 @@ class TransactionUserInteractor(
                             throw IllegalStateException("Unknown TransactionDataItem implementation")
                         }
                     }
-                    .toFlowable(
-                        PagedList.Config.Builder()
-                            .setInitialLoadSizeHint(INITIAL_PAGE_SIZE)
-                            .setPageSize(PAGE_SIZE)
-                            .setEnablePlaceholders(false)
-                            .build()
-                    )
+                    .toFlowable(PagingConfig.createConfig())
             }
     }
 
@@ -85,10 +80,5 @@ class TransactionUserInteractor(
 
     override fun clearAll(): Completable {
         return transactionRepo.clearAll()
-    }
-
-    companion object {
-        const val PAGE_SIZE = 30
-        const val INITIAL_PAGE_SIZE = 3 * PAGE_SIZE
     }
 }

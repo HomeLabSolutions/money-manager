@@ -115,30 +115,6 @@ class TransactionLocalSource(
         }
     }
 
-    override fun getAllByType2(
-        from: Date,
-        to: Date,
-        transactionType: TransactionType
-    ): Flowable<List<TransactionBaseDataModel>> {
-        val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            throw WrongUidException()
-        } else {
-            transactionDao.getAllByType2(currentUserId, from, to, transactionType)
-                .map {
-                    val newList = mutableListOf<TransactionBaseDataModel>()
-                    for (item in it) {
-                        if (item.isDate) {
-                            newList.add(transactionDateDataMapper.toDataModel(item))
-                        } else {
-                            newList.add(transactionDataMapper.toDataModel(item))
-                        }
-                    }
-                    newList.toList()
-                }
-        }
-    }
-
     override fun remove(transaction: TransactionDataModel): Completable {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
