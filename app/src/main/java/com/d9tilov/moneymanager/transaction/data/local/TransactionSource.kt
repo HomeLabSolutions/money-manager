@@ -18,12 +18,6 @@ interface TransactionSource {
         transactionType: TransactionType
     ): DataSource.Factory<Int, TransactionBaseDataModel>
 
-    fun getAllByType2(
-        from: Date,
-        to: Date,
-        transactionType: TransactionType
-    ): Flowable<List<TransactionBaseDataModel>>
-
     fun remove(transaction: TransactionDataModel): Completable
     fun clearAll(): Completable
 }

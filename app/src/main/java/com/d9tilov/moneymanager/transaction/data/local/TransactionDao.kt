@@ -24,14 +24,6 @@ abstract class TransactionDao {
         type: TransactionType
     ): DataSource.Factory<Int, TransactionDbModel>
 
-    @Query("SELECT * FROM transactions WHERE clientId=:clientId AND type = :type AND date >= :from AND date <= :to")
-    abstract fun getAllByType2(
-        clientId: String,
-        from: Date,
-        to: Date,
-        type: TransactionType
-    ): Flowable<List<TransactionDbModel>>
-
     @Query("SELECT * FROM transactions WHERE clientId =:uid AND id = :id")
     abstract fun getById(uid: String, id: Long): Flowable<TransactionDbModel>
 

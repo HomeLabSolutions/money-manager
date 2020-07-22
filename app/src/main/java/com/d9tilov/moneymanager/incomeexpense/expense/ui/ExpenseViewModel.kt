@@ -15,12 +15,11 @@ import com.d9tilov.moneymanager.core.util.ioScheduler
 import com.d9tilov.moneymanager.core.util.uiScheduler
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
-import com.d9tilov.moneymanager.transaction.domain.TransactionUserInteractor.Companion.INITIAL_PAGE_SIZE
-import com.d9tilov.moneymanager.transaction.domain.TransactionUserInteractor.Companion.PAGE_SIZE
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionHeader
 import com.d9tilov.moneymanager.transaction.domain.paging.ListDataSource
+import com.d9tilov.moneymanager.transaction.domain.paging.PagingConfig
 import com.d9tilov.moneymanager.transaction.domain.paging.UiThreadExecutor
 import io.reactivex.Observable
 import timber.log.Timber
@@ -68,12 +67,7 @@ class ExpenseViewModel(
     }
 
     private fun convert(list: List<BaseTransaction>): PagedList<BaseTransaction> {
-        val myConfig = PagedList.Config.Builder()
-            .setInitialLoadSizeHint(INITIAL_PAGE_SIZE)
-            .setPageSize(PAGE_SIZE)
-            .setEnablePlaceholders(false)
-            .build()
-        return PagedList.Builder(ListDataSource(list), myConfig)
+        return PagedList.Builder(ListDataSource(list), PagingConfig.createConfig())
             .setNotifyExecutor(UiThreadExecutor())
             .setFetchExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
             .build()
