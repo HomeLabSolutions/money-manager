@@ -39,6 +39,12 @@ android {
 
         vectorDrawables.useSupportLibrary = true
 
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.incremental": "true"]
+            }
+        }
+
     }
 
     buildTypes {
