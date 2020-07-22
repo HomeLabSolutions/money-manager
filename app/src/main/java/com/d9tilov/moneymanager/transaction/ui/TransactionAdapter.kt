@@ -1,7 +1,6 @@
 package com.d9tilov.moneymanager.transaction.ui
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -26,6 +25,7 @@ class TransactionAdapter :
     ) {
 
     var itemSwipeListener: OnItemSwipeListener<Transaction>? = null
+    // private var list = mutableListOf<BaseTransaction>()
 
     init {
         setHasStableIds(true)
@@ -45,6 +45,16 @@ class TransactionAdapter :
             TransactionHeaderViewHolder(viewBinding)
         }
     }
+
+    // fun addAll(items: List<BaseTransaction>) {
+    //     list.clear()
+    //     list.addAll(items)
+    //     notifyDataSetChanged()
+    // }
+
+    // override fun getItemCount(): Int {
+    //     return list.size
+    // }
 
     override fun getItemId(position: Int) = getItem(position).hashCode().toLong()
 

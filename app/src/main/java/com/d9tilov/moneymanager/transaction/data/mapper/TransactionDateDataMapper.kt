@@ -3,7 +3,6 @@ package com.d9tilov.moneymanager.transaction.data.mapper
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_DATA_ID
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
 import com.d9tilov.moneymanager.core.mapper.Mapper
-import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDateDataModel
 import com.d9tilov.moneymanager.transaction.data.local.entity.TransactionDbModel
 import java.math.BigDecimal
@@ -13,7 +12,7 @@ class TransactionDateDataMapper @Inject constructor() :
     Mapper<TransactionDbModel, TransactionDateDataModel> {
 
     override fun toDataModel(model: TransactionDbModel) = with(model) {
-        TransactionDateDataModel(clientId = clientId, type = type, date = date)
+        TransactionDateDataModel(id = id, clientId = clientId, type = type, date = date)
     }
 
     override fun toDbModel(model: TransactionDateDataModel) = with(model) {

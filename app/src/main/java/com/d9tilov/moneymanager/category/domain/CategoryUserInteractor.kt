@@ -21,7 +21,7 @@ class CategoryUserInteractor(private val categoryRepo: CategoryRepo) :
             .map { getAllWithChildrenInSingleList(it) }
     }
 
-    override fun getAllCategoriesByType(type:CategoryType): Flowable<List<Category>> = categoryRepo.getCategoriesByType(type)
+    override fun getAllCategoriesByType(type: CategoryType): Flowable<List<Category>> = categoryRepo.getCategoriesByType(type)
     override fun getChildrenByParent(parentCategory: Category): Maybe<List<Category>> =
         categoryRepo.getChildrenByParent(parentCategory)
 

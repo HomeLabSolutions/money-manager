@@ -1,7 +1,6 @@
 package com.d9tilov.moneymanager.base.data.local.preferences
 
 import android.content.Context
-import com.d9tilov.moneymanager.core.util.int
 import com.d9tilov.moneymanager.core.util.stringNullable
 import javax.inject.Inject
 

@@ -8,10 +8,10 @@ import javax.inject.Inject
 class TransactionHeaderDomainMapper @Inject constructor() {
 
     fun toDataModel(transaction: TransactionHeader) =
-        with(transaction) { TransactionDateDataModel("", TransactionType.EXPENSE, date) }
+        with(transaction) { TransactionDateDataModel(type = TransactionType.EXPENSE, date = date) }
 
-    fun toDomain(transactionDateDataModel: TransactionDateDataModel, position:Int) =
+    fun toDomain(transactionDateDataModel: TransactionDateDataModel) =
         with(transactionDateDataModel) {
-            TransactionHeader(date, position)
+            TransactionHeader(date)
         }
 }

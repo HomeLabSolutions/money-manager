@@ -12,8 +12,8 @@ interface CategoryInteractor {
     fun create(category: Category): Completable
     fun update(category: Category): Completable
     fun getCategoryById(id: Long): Maybe<Category>
-    fun getGroupedCategoriesByType(type:CategoryType): Flowable<List<Category>>
-    fun getAllCategoriesByType(type:CategoryType): Flowable<List<Category>>
+    fun getGroupedCategoriesByType(type: CategoryType): Flowable<List<Category>>
+    fun getAllCategoriesByType(type: CategoryType): Flowable<List<Category>>
     fun getChildrenByParent(parentCategory: Category): Maybe<List<Category>>
     fun deleteCategory(category: Category): Completable
 }
