@@ -1,7 +1,6 @@
 package com.d9tilov.moneymanager.base.ui.recyclerview.decoration
 
 import android.graphics.Canvas
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
@@ -19,7 +18,7 @@ class StickyHeaderItemDecorator<T>(private val adapter: StickyAdapter<T, Recycle
 
     fun attachToRecyclerView(recyclerView: RecyclerView?) {
         if (this.recyclerView === recyclerView) {
-            return  // nothing to do
+            return // nothing to do
         }
         recyclerView?.let { destroyCallbacks(it) }
         this.recyclerView = recyclerView

@@ -1,6 +1,6 @@
 package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
-import android.util.Log
+import android.os.AsyncTask
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
 import com.d9tilov.moneymanager.App
@@ -15,8 +15,13 @@ import com.d9tilov.moneymanager.core.util.ioScheduler
 import com.d9tilov.moneymanager.core.util.uiScheduler
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
+import com.d9tilov.moneymanager.transaction.domain.TransactionUserInteractor.Companion.INITIAL_PAGE_SIZE
+import com.d9tilov.moneymanager.transaction.domain.TransactionUserInteractor.Companion.PAGE_SIZE
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionHeader
+import com.d9tilov.moneymanager.transaction.domain.paging.ListDataSource
+import com.d9tilov.moneymanager.transaction.domain.paging.UiThreadExecutor
 import io.reactivex.Observable
 import timber.log.Timber
 import java.math.BigDecimal
@@ -37,15 +42,45 @@ class ExpenseViewModel(
             .observeOn(uiScheduler)
             .subscribe { categories.value = it }
             .addTo(compositeDisposable)
+
         transactionInteractor.getTransactionsByType(TransactionType.EXPENSE)
+            .map {
+                val newList = mutableListOf<BaseTransaction>()
+                var itemPosition = -1
+                var itemHeaderPosition = itemPosition
+                for (item in it) {
+                    if (item is TransactionHeader) {
+                        itemPosition++
+                        itemHeaderPosition = itemPosition
+                        newList.add(item.copy(position = itemHeaderPosition))
+                    }
+                    if (item is Transaction) {
+                        itemPosition++
+                        newList.add(item.copy(position = itemHeaderPosition))
+                    }
+                }
+                convert(newList)
+            }
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
             .subscribe { transactions.value = it }
             .addTo(compositeDisposable)
     }
 
+    private fun convert(list: List<BaseTransaction>): PagedList<BaseTransaction> {
+        val myConfig = PagedList.Config.Builder()
+            .setInitialLoadSizeHint(INITIAL_PAGE_SIZE)
+            .setPageSize(PAGE_SIZE)
+            .setEnablePlaceholders(false)
+            .build()
+        return PagedList.Builder(ListDataSource(list), myConfig)
+            .setNotifyExecutor(UiThreadExecutor())
+            .setFetchExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            .build()
+    }
+
     fun generateData() {
-        val numbers = IntArray(50) { it + 1 }.toList()
+        val numbers = IntArray(6) { it + 1 }.toList()
         Observable.fromIterable(numbers)
             .flatMapCompletable {
                 categoryInteractor.getCategoryById((3..8).random().toLong())
@@ -65,12 +100,7 @@ class ExpenseViewModel(
     }
 
     fun clearData() {
-        transactionInteractor.getTransactionsByType2(TransactionType.EXPENSE)
-            .flatMapCompletable {
-                Observable.fromIterable(it)
-                    .flatMapCompletable {
-                        transactionInteractor.removeTransaction(it) }
-            }
+        transactionInteractor.clearAll()
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
             .subscribe()

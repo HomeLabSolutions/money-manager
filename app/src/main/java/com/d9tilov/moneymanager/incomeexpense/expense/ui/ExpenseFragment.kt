@@ -20,7 +20,6 @@ import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
 import com.d9tilov.moneymanager.base.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.base.ui.recyclerview.decoration.SpaceItemDecoration
 import com.d9tilov.moneymanager.base.ui.recyclerview.decoration.StickyHeaderItemDecorator
-import com.d9tilov.moneymanager.base.ui.recyclerview.decoration.StickyHeaderItemDecorator2
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.CategoryAdapter
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
@@ -29,7 +28,6 @@ import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
-import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
 import timber.log.Timber
@@ -86,7 +84,8 @@ class ExpenseFragment :
                 Observer { categoryAdapter.updateItems(it) }
             )
             transactions.observe(
-                viewLifecycleOwner, Observer {
+                viewLifecycleOwner,
+                Observer {
                     transactionAdapter.submitList(it)
                 }
             )

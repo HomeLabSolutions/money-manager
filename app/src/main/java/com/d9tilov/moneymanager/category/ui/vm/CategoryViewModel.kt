@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.category.ui.vm
 
-import android.util.Log
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryNavigator
 import com.d9tilov.moneymanager.category.CategoryType
 import com.d9tilov.moneymanager.category.common.BaseCategoryViewModel

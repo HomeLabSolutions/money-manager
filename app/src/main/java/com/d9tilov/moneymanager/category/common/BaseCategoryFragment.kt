@@ -1,7 +1,6 @@
 package com.d9tilov.moneymanager.category.common
 
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity

@@ -6,7 +6,6 @@ import com.d9tilov.moneymanager.transaction.data.entity.TransactionBaseDataModel
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import io.reactivex.Single
 import java.util.Date
 
 interface TransactionRepo {
@@ -19,6 +18,7 @@ interface TransactionRepo {
         transactionType: TransactionType
     ): DataSource.Factory<Int, TransactionBaseDataModel>
 
-    fun getAllByType2(type: TransactionType): Single<List<TransactionBaseDataModel>>
-    fun removeTransaction(transaction: TransactionBaseDataModel): Completable
+    fun removeTransaction(transaction: TransactionDataModel): Completable
+
+    fun clearAll(): Completable
 }
