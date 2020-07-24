@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
@@ -89,6 +90,7 @@ class ExpenseFragment :
             transactions.observe(
                 viewLifecycleOwner,
                 Observer {
+                    Log.d("moggot", "onViewCreated: ${it.size}")
                     transactionAdapter.submitList(it)
                 }
             )
@@ -96,14 +98,6 @@ class ExpenseFragment :
                 viewLifecycleOwner,
                 Observer { hideKeyboard(viewBinding?.expenseMainSum?.moneyEditText) }
             )
-        }
-        viewBinding?.run {
-            expenseTransactionFill.setOnClickListener {
-                viewModel.generateData()
-            }
-            expenseTransactionClear.setOnClickListener {
-                viewModel.clearData()
-            }
         }
     }
 

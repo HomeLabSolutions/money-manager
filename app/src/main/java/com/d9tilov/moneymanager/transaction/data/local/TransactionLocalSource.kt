@@ -4,6 +4,8 @@ import androidx.paging.DataSource
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
+import com.d9tilov.moneymanager.core.util.getEndOfDay
+import com.d9tilov.moneymanager.core.util.getStartOfDay
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionBaseDataModel
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
@@ -81,7 +83,7 @@ class TransactionLocalSource(
             TransactionDateDataModel(
                 clientId = clientId,
                 type = type,
-                date = date
+                date = date.getEndOfDay()
             )
         )
     }
