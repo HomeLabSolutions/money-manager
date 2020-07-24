@@ -1,6 +1,6 @@
 package com.d9tilov.moneymanager.settings.domain
 
-class UserSettingsInteractor(private val settingsRepo: SettingsRepo) : SettingsInteractor {
+class SettingsInteractorImpl(private val settingsRepo: SettingsRepo) : SettingsInteractor {
     override fun saveNumber() {
     }
 

@@ -27,10 +27,10 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxjava:$versions.rxjava2"
     implementation "io.reactivex.rxjava2:rxandroid:$versions.rxAndroid"
 
-    implementation "com.google.dagger:dagger:$versions.dagger"
-    implementation "com.google.dagger:dagger-android:$versions.dagger"
-    implementation 'com.google.dagger:dagger-android-support:2.28.1'
-    kapt "com.google.dagger:dagger-compiler:$versions.dagger"
-    kapt 'com.google.dagger:dagger-android-processor:2.28.1'
+    implementation "com.google.dagger:hilt-android:$versions.hiltVersion"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$versions.hiltJetpackVersion"
+    kapt "com.google.dagger:hilt-android-compiler:$versions.hiltVersion"
+    kapt "androidx.hilt:hilt-compiler:$versions.hiltJetpackVersion"
+
 
 }

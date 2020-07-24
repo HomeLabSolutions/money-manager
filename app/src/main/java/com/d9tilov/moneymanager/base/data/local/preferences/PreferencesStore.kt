@@ -2,9 +2,12 @@ package com.d9tilov.moneymanager.base.data.local.preferences
 
 import android.content.Context
 import com.d9tilov.moneymanager.core.util.stringNullable
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class PreferencesStore @Inject constructor(context: Context) {
+@Singleton
+class PreferencesStore @Inject constructor(@ApplicationContext context: Context) {
 
     private val sharedPreferences = context.getSharedPreferences(
         STORE_NAME,

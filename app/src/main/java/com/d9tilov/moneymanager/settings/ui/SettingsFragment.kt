@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
@@ -19,17 +20,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SettingsFragment :
-    BaseFragment<FragmentSettingsBinding, SettingsNavigator, SettingsViewModel>(R.layout.fragment_settings),
+    BaseFragment<FragmentSettingsBinding, SettingsNavigator>(R.layout.fragment_settings),
     SettingsNavigator {
 
     private lateinit var googleSignInClient: GoogleSignInClient
 
     override fun performDataBinding(view: View): FragmentSettingsBinding =
         FragmentSettingsBinding.bind(view)
-    override fun getViewModelClass() = SettingsViewModel::class.java
+
     override fun getNavigator() = this
+    override val viewModel by viewModels<SettingsViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -15,21 +15,20 @@ import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.recyclerview.decoration.SpaceItemDecoration
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.CategoryModifyAdapter
-import com.d9tilov.moneymanager.core.ui.BaseNavigator
-import com.d9tilov.moneymanager.core.ui.recyclerview.SimpleItemTouchHelperCallback
 import com.d9tilov.moneymanager.core.events.OnBackPressed
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemLongClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwapListener
+import com.d9tilov.moneymanager.core.ui.BaseNavigator
+import com.d9tilov.moneymanager.core.ui.recyclerview.SimpleItemTouchHelperCallback
 import com.d9tilov.moneymanager.databinding.FragmentCategoryBinding
 import com.google.android.material.appbar.MaterialToolbar
 
-abstract class BaseCategoryFragment<N : BaseNavigator, V : BaseCategoryViewModel<N>> :
-    BaseFragment<FragmentCategoryBinding, N, V>(R.layout.fragment_category),
+abstract class BaseCategoryFragment<N : BaseNavigator> :
+    BaseFragment<FragmentCategoryBinding, N>(R.layout.fragment_category),
     OnBackPressed {
 
     protected abstract fun getToolbarTitle(): String
-
     protected lateinit var categoryAdapter: CategoryModifyAdapter
     private var toolbar: MaterialToolbar? = null
 
@@ -106,7 +105,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator, V : BaseCategoryViewModel
 
     private val onItemClickListener = object : OnItemClickListener<Category> {
         override fun onItemClick(item: Category, position: Int) {
-            viewModel.onCategoryClicked(item)
+            (viewModel as BaseCategoryViewModel<N>).onCategoryClicked(item)
         }
     }
 
@@ -118,13 +117,13 @@ abstract class BaseCategoryFragment<N : BaseNavigator, V : BaseCategoryViewModel
 
     private val onItemRemoveClickListener = object : OnItemClickListener<Category> {
         override fun onItemClick(item: Category, position: Int) {
-            viewModel.onCategoryRemoved(item)
+            (viewModel as BaseCategoryViewModel<N>).onCategoryRemoved(item)
         }
     }
 
     private val onItemSwapListener = object : OnItemSwapListener<Category> {
         override fun onItemSwap(items: List<Category>) {
-            viewModel.onItemSwap(items)
+            (viewModel as BaseCategoryViewModel<N>).onItemSwap(items)
         }
     }
 

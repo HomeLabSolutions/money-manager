@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.category.ui.vm
 
+import androidx.hilt.lifecycle.ViewModelInject
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryNavigator
 import com.d9tilov.moneymanager.category.CategoryType
 import com.d9tilov.moneymanager.category.common.BaseCategoryViewModel
@@ -10,7 +11,7 @@ import com.d9tilov.moneymanager.core.util.ioScheduler
 import com.d9tilov.moneymanager.core.util.uiScheduler
 import io.reactivex.Observable
 
-class CategoryViewModel(private val categoryInteractor: CategoryInteractor) :
+class CategoryViewModel @ViewModelInject constructor(private val categoryInteractor: CategoryInteractor) :
     BaseCategoryViewModel<CategoryNavigator>() {
 
     init {

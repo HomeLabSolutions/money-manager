@@ -17,7 +17,7 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 
-class TransactionUserInteractor(
+class TransactionInteractorImpl(
     private val transactionRepo: TransactionRepo,
     private val categoryInteractor: CategoryInteractor,
     private val transactionDomainMapper: TransactionDomainMapper,

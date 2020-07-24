@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.settings.ui.vm
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
@@ -11,7 +12,7 @@ import com.d9tilov.moneymanager.settings.domain.SettingsInteractor
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import com.google.firebase.auth.FirebaseAuth
 
-class SettingsViewModel(
+class SettingsViewModel @ViewModelInject constructor(
     private val userInfoInteractor: UserInteractor,
     private val categoryInteractor: CategoryInteractor,
     private val settingsInteractor: SettingsInteractor

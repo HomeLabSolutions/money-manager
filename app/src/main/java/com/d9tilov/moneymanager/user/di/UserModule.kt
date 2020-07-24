@@ -14,16 +14,22 @@ import com.d9tilov.moneymanager.user.domain.UserInfoInteractor
 import com.d9tilov.moneymanager.user.domain.mapper.UserDomainMapper
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 
 @Module
+@InstallIn(ActivityRetainedComponent::class)
 class UserModule {
 
     @Provides
+    @ActivityRetainedScoped
     fun provideUserDao(appDatabase: AppDatabase): UserDao {
         return appDatabase.userDao()
     }
 
     @Provides
+    @ActivityRetainedScoped
     fun provideUserLocalSource(
         preferenceStore: PreferencesStore,
         appDatabase: AppDatabase,
@@ -31,6 +37,7 @@ class UserModule {
     ): UserSource = UserLocalSource(preferenceStore, appDatabase, dataUserMapper)
 
     @Provides
+    @ActivityRetainedScoped
     fun userRepo(
         userLocalSource: UserSource
     ): UserRepo = UserDataRepo(
@@ -38,6 +45,7 @@ class UserModule {
     )
 
     @Provides
+    @ActivityRetainedScoped
     fun provideUserInfoInteractor(
         userRepo: UserRepo,
         categoryRepo: CategoryRepo,

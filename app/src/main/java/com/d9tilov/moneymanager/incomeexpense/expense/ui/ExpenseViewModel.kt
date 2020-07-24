@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
 import android.os.AsyncTask
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
 import com.d9tilov.moneymanager.App
@@ -26,7 +27,7 @@ import timber.log.Timber
 import java.math.BigDecimal
 import java.util.Date
 
-class ExpenseViewModel(
+class ExpenseViewModel @ViewModelInject constructor(
     private val categoryInteractor: CategoryInteractor,
     private val transactionInteractor: TransactionInteractor
 ) : BaseViewModel<ExpenseNavigator>() {
@@ -62,7 +63,7 @@ class ExpenseViewModel(
             }
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
-            .subscribe { transactions.value = it }
+            .subscribe({ transactions.value = it }, {})
             .addTo(compositeDisposable)
     }
 

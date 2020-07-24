@@ -11,7 +11,9 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.base.ui.navigator.HomeNavigator
 import com.d9tilov.moneymanager.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(), HomeNavigator {
 
     override fun onCreate(savedInstanceState: Bundle?) {

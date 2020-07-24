@@ -5,33 +5,32 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
-import com.d9tilov.moneymanager.core.ui.ViewModelFactory
 import com.d9tilov.moneymanager.core.util.toast
-import dagger.android.support.DaggerFragment
-import javax.inject.Inject
 
-abstract class BaseFragment<T : ViewBinding, N : BaseNavigator, V : BaseViewModel<N>>(@LayoutRes layoutId: Int) :
-    DaggerFragment(layoutId) {
+abstract class BaseFragment<T : ViewBinding, N : BaseNavigator>(@LayoutRes layoutId: Int) :
+    Fragment(layoutId) {
 
-    private var activity: BaseActivity<*>? = null
+    private var baseActivity: BaseActivity<*>? = null
+    protected abstract val viewModel: BaseViewModel<N>
     protected var viewBinding: T? = null
-    protected lateinit var viewModel: V
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is BaseActivity<*>) {
-            activity = context
+            baseActivity = context
         }
-        viewModel = ViewModelProvider(this, viewModelFactory)[getViewModelClass()]
-        viewModel.navigator = getNavigator()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        baseActivity?.let {
+            viewModel.navigator = getNavigator()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,7 +39,7 @@ abstract class BaseFragment<T : ViewBinding, N : BaseNavigator, V : BaseViewMode
         initObservers()
     }
 
-    fun isNetworkConnected() = activity?.isNetworkEnabled()
+    fun isNetworkConnected() = baseActivity?.isNetworkEnabled()
 
     override fun onDestroyView() {
         viewBinding = null
@@ -48,7 +47,7 @@ abstract class BaseFragment<T : ViewBinding, N : BaseNavigator, V : BaseViewMode
     }
 
     override fun onDetach() {
-        activity = null
+        baseActivity = null
         super.onDetach()
     }
 
@@ -68,10 +67,9 @@ abstract class BaseFragment<T : ViewBinding, N : BaseNavigator, V : BaseViewMode
         )
     }
 
-    private fun showLoading() = activity?.showLoading()
-    private fun hideLoading() = activity?.hideLoading()
+    private fun showLoading() = baseActivity?.showLoading()
+    private fun hideLoading() = baseActivity?.hideLoading()
 
     abstract fun performDataBinding(view: View): T
-    abstract fun getViewModelClass(): Class<V>
     abstract fun getNavigator(): N
 }
