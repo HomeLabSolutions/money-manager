@@ -16,7 +16,7 @@ import java.util.Date
 @Dao
 abstract class TransactionDao {
 
-    @Query("SELECT * FROM transactions WHERE clientId=:clientId AND type = :type AND date >= :from AND date <= :to")
+    @Query("SELECT * FROM transactions WHERE clientId=:clientId AND type = :type AND date(date/1000, 'unixepoch') >= date(:from/1000, 'unixepoch', 'start of day') AND date(date/1000, 'unixepoch') <= date(:to/1000, 'unixepoch', 'start of day', '+1 day', '-1 second') ORDER BY date DESC")
     abstract fun getAllByType(
         clientId: String,
         from: Date,
