@@ -5,6 +5,8 @@ import com.d9tilov.moneymanager.core.BuildConfig
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
 import javax.inject.Singleton
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -12,6 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import timber.log.Timber
 
 @Module
+@InstallIn(ApplicationComponent::class)
 class NetworkModule {
 
     @Provides

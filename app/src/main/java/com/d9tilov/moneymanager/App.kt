@@ -1,18 +1,18 @@
 package com.d9tilov.moneymanager
 
+import android.app.Application
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
-import com.d9tilov.moneymanager.base.di.DaggerAppComponent
 import com.facebook.appevents.AppEventsLogger
 import com.facebook.stetho.Stetho
-import dagger.android.AndroidInjector
-import dagger.android.DaggerApplication
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
-class App : DaggerApplication() {
+@HiltAndroidApp
+class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
@@ -29,11 +29,6 @@ class App : DaggerApplication() {
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
         }
-    }
-
-    override fun applicationInjector(): AndroidInjector<App> {
-        return DaggerAppComponent.builder()
-            .application(this).build()
     }
 
     companion object {

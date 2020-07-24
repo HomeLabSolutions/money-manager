@@ -8,7 +8,7 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 
-class CategoryUserInteractor(private val categoryRepo: CategoryRepo) :
+class CategoryInteractorImpl(private val categoryRepo: CategoryRepo) :
     CategoryInteractor {
     override fun createExpenseDefaultCategories() = categoryRepo.createExpenseDefaultCategories()
     override fun create(category: Category) = categoryRepo.create(category)

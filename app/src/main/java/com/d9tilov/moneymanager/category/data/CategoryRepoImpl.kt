@@ -7,7 +7,7 @@ import com.d9tilov.moneymanager.category.domain.CategoryRepo
 import io.reactivex.Completable
 import io.reactivex.Maybe
 
-class CategoryDataRepo(private val categoryLocalSource: CategorySource) :
+class CategoryRepoImpl(private val categoryLocalSource: CategorySource) :
     CategoryRepo {
 
     override fun createExpenseDefaultCategories() =

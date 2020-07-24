@@ -3,6 +3,7 @@ package com.d9tilov.moneymanager.splash.ui
 import android.app.Activity
 import android.content.Intent
 import android.view.View
+import androidx.fragment.app.viewModels
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
@@ -10,8 +11,10 @@ import com.d9tilov.moneymanager.databinding.FragmentSplashBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.splash.vm.SplashViewModel
 import com.firebase.ui.auth.AuthUI
+import dagger.hilt.android.AndroidEntryPoint
 
-class SplashFragment : BaseFragment<FragmentSplashBinding, SplashNavigator, SplashViewModel>(R.layout.fragment_splash), SplashNavigator {
+@AndroidEntryPoint
+class SplashFragment : BaseFragment<FragmentSplashBinding, SplashNavigator>(R.layout.fragment_splash), SplashNavigator {
 
     private val providers = arrayListOf(
         AuthUI.IdpConfig.EmailBuilder().build(),
@@ -22,8 +25,8 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashNavigator, Spla
     )
 
     override fun performDataBinding(view: View) = FragmentSplashBinding.bind(view)
-    override fun getViewModelClass() = SplashViewModel::class.java
     override fun getNavigator() = this
+    override val viewModel by viewModels<SplashViewModel>()
 
     override fun openHomeScreen() {
         requireActivity().finish()

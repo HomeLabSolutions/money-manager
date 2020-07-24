@@ -1,13 +1,14 @@
 package com.d9tilov.moneymanager.transaction.domain
 
 import androidx.paging.PagedList
+import com.d9tilov.moneymanager.base.domain.Interactor
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import io.reactivex.Completable
 import io.reactivex.Flowable
 
-interface TransactionInteractor {
+interface TransactionInteractor : Interactor {
 
     fun addTransaction(transaction: Transaction): Completable
     fun getTransactionById(id: Long): Flowable<Transaction>

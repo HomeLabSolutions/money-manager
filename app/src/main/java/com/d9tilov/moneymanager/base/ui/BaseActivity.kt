@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.ProgressBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
@@ -16,9 +17,8 @@ import com.d9tilov.moneymanager.core.util.hideLoadingDialog
 import com.d9tilov.moneymanager.core.util.isNetworkConnected
 import com.d9tilov.moneymanager.core.util.px
 import com.d9tilov.moneymanager.core.util.showLoadingDialog
-import dagger.android.support.DaggerAppCompatActivity
 
-abstract class BaseActivity<T : ViewBinding> : DaggerAppCompatActivity() {
+abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
 
     protected lateinit var viewBinding: T
     private var progress: ProgressBar? = null

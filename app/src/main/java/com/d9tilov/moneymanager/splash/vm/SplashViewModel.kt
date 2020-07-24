@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.splash.vm
 
+import androidx.hilt.lifecycle.ViewModelInject
 import com.d9tilov.moneymanager.App.Companion.TAG
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
@@ -11,7 +12,7 @@ import com.d9tilov.moneymanager.user.domain.UserInteractor
 import com.google.firebase.auth.FirebaseAuth
 import timber.log.Timber
 
-class SplashViewModel(
+class SplashViewModel @ViewModelInject constructor(
     private val userInfoInteractor: UserInteractor,
     private val categoryInteractor: CategoryInteractor
 ) : BaseViewModel<SplashNavigator>() {

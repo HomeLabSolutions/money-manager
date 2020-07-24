@@ -11,21 +11,27 @@ import com.d9tilov.moneymanager.transaction.data.mapper.TransactionDataMapper
 import com.d9tilov.moneymanager.transaction.data.mapper.TransactionDateDataMapper
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.TransactionRepo
-import com.d9tilov.moneymanager.transaction.domain.TransactionUserInteractor
+import com.d9tilov.moneymanager.transaction.domain.TransactionInteractorImpl
 import com.d9tilov.moneymanager.transaction.domain.mapper.TransactionDomainMapper
 import com.d9tilov.moneymanager.transaction.domain.mapper.TransactionHeaderDomainMapper
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 
 @Module
+@InstallIn(ActivityRetainedComponent::class)
 class TransactionModule {
 
     @Provides
+    @ActivityRetainedScoped
     fun provideTransactionDao(appDatabase: AppDatabase): TransactionDao {
         return appDatabase.transactionDao()
     }
 
     @Provides
+    @ActivityRetainedScoped
     fun provideTransactionLocalSource(
         preferencesStore: PreferencesStore,
         appDatabase: AppDatabase,
@@ -48,7 +54,7 @@ class TransactionModule {
         categoryInteractor: CategoryInteractor,
         transactionDomainMapper: TransactionDomainMapper,
         transactionHeaderDomainMapper: TransactionHeaderDomainMapper
-    ): TransactionInteractor = TransactionUserInteractor(
+    ): TransactionInteractor = TransactionInteractorImpl(
         transactionRepo,
         categoryInteractor,
         transactionDomainMapper,

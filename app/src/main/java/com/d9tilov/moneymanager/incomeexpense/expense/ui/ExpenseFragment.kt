@@ -5,6 +5,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -30,11 +31,13 @@ import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.math.BigDecimal
 
+@AndroidEntryPoint
 class ExpenseFragment :
-    BaseFragment<FragmentExpenseBinding, ExpenseNavigator, ExpenseViewModel>(R.layout.fragment_expense),
+    BaseFragment<FragmentExpenseBinding, ExpenseNavigator>(R.layout.fragment_expense),
     ExpenseNavigator,
     OnKeyboardVisibleChange {
 
@@ -138,8 +141,8 @@ class ExpenseFragment :
     override fun performDataBinding(view: View): FragmentExpenseBinding =
         FragmentExpenseBinding.bind(view)
 
-    override fun getViewModelClass() = ExpenseViewModel::class.java
     override fun getNavigator() = this
+    override val viewModel by viewModels<ExpenseViewModel>()
     override fun openCategoriesScreen() {
         findNavController().navigate(R.id.action_mainFragment_to_category_dest)
     }
