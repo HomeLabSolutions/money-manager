@@ -2,25 +2,30 @@ package com.d9tilov.moneymanager.base.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.lifecycle.Observer
 import androidx.viewbinding.ViewBinding
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.core.util.toast
 
-abstract class BaseFragment<T : ViewBinding, N : BaseNavigator>(@LayoutRes layoutId: Int) :
-    Fragment(layoutId) {
+abstract class BaseDialogFragment<V : ViewBinding, N : BaseNavigator> :
+    AppCompatDialogFragment() {
 
-    abstract fun performDataBinding(view: View): T
+    @get:LayoutRes
+    protected abstract val layoutId: Int
+    abstract fun performDataBinding(view: View): V
     abstract fun getNavigator(): N
 
-    private var baseActivity: BaseActivity<*>? = null
     protected abstract val viewModel: BaseViewModel<N>
-    protected var viewBinding: T? = null
+    protected var viewBinding: V? = null
+
+    private var baseActivity: BaseActivity<*>? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -36,22 +41,16 @@ abstract class BaseFragment<T : ViewBinding, N : BaseNavigator>(@LayoutRes layou
         }
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = LayoutInflater.from(requireContext()).inflate(layoutId, container, false)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewBinding = performDataBinding(view)
         initObservers()
-    }
-
-    fun isNetworkConnected() = baseActivity?.isNetworkEnabled()
-
-    override fun onDestroyView() {
-        viewBinding = null
-        super.onDestroyView()
-    }
-
-    override fun onDetach() {
-        baseActivity = null
-        super.onDetach()
     }
 
     @CallSuper

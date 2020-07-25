@@ -52,11 +52,11 @@ class ExpenseViewModel @ViewModelInject constructor(
                     if (item is TransactionHeader) {
                         itemPosition++
                         itemHeaderPosition = itemPosition
-                        newList.add(item.copy(position = itemHeaderPosition))
+                        newList.add(item.copy(headerPosition = itemHeaderPosition))
                     }
                     if (item is Transaction) {
                         itemPosition++
-                        newList.add(item.copy(position = itemHeaderPosition))
+                        newList.add(item.copy(headerPosition = itemHeaderPosition))
                     }
                 }
                 convert(newList)
@@ -136,10 +136,6 @@ class ExpenseViewModel @ViewModelInject constructor(
     }
 
     fun deleteTransaction(transaction: Transaction) {
-        transactionInteractor.removeTransaction(transaction)
-            .subscribeOn(ioScheduler)
-            .observeOn(uiScheduler)
-            .subscribe()
-            .addTo(compositeDisposable)
+        navigator?.openRemoveConfirmationDialog(transaction)
     }
 }

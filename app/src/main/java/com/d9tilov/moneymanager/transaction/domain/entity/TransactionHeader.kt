@@ -5,7 +5,7 @@ import java.util.Date
 
 data class TransactionHeader(
     val date: Date,
-    override val position: Int = 0
+    override val headerPosition: Int = 0
 ) : BaseTransaction {
     override val itemType: Int
         get() = HEADER

@@ -1,7 +1,6 @@
 package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
@@ -32,6 +31,7 @@ import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
+import com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialog
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.math.BigDecimal
@@ -89,16 +89,17 @@ class ExpenseFragment :
             )
             transactions.observe(
                 viewLifecycleOwner,
-                Observer {
-                    Log.d("moggot", "onViewCreated: ${it.size}")
-                    transactionAdapter.submitList(it)
-                }
+                Observer { transactionAdapter.submitList(it) }
             )
             addTransactionEvent.observe(
                 viewLifecycleOwner,
                 Observer { hideKeyboard(viewBinding?.expenseMainSum?.moneyEditText) }
             )
         }
+    }
+
+    fun cancelDelete() {
+        transactionAdapter.cancelDeletion()
     }
 
     private fun initCategoryRecyclerView() {
@@ -139,6 +140,12 @@ class ExpenseFragment :
     override val viewModel by viewModels<ExpenseViewModel>()
     override fun openCategoriesScreen() {
         findNavController().navigate(R.id.action_mainFragment_to_category_dest)
+    }
+
+    override fun openRemoveConfirmationDialog(transaction: Transaction) {
+        TransactionRemoveDialog.newInstance(transaction).let {
+            it.show(childFragmentManager, it.tag)
+        }
     }
 
     override fun onOpenKeyboard() {
