@@ -25,6 +25,7 @@ class TransactionAdapter :
     ) {
 
     var itemSwipeListener: OnItemSwipeListener<Transaction>? = null
+    private var removedItemPosition:Int = 0
     // private var list = mutableListOf<BaseTransaction>()
 
     init {
@@ -75,7 +76,7 @@ class TransactionAdapter :
     }
 
     override fun getHeaderPositionForItem(itemPosition: Int): Int {
-        return getItem(itemPosition)?.position ?: 0
+        return getItem(itemPosition)?.headerPosition ?: 0
     }
 
     override fun onBindHeaderViewHolder(holder: RecyclerView.ViewHolder, headerPosition: Int) {
@@ -87,8 +88,15 @@ class TransactionAdapter :
     }
 
     fun deleteItem(position: Int) {
-        val transactionToDelete = getItem(position) as Transaction
-        itemSwipeListener?.onItemSwiped(transactionToDelete, position)
+        if (getItem(position) is Transaction) {
+            removedItemPosition = position
+            val transactionToDelete = getItem(position) as Transaction
+            itemSwipeListener?.onItemSwiped(transactionToDelete, position)
+        }
+    }
+
+    fun cancelDeletion() {
+        notifyItemChanged(removedItemPosition)
     }
 
     class TransactionHeaderViewHolder(private val viewBinding: ItemTransactionHeaderBinding) :

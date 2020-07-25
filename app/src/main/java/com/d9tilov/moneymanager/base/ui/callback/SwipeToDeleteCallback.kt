@@ -70,6 +70,7 @@ abstract class SwipeToDeleteCallback(context: Context) :
         val itemView = viewHolder.itemView
         val itemHeight = itemView.bottom - itemView.top
         val isCanceled = dX == 0f && !isCurrentlyActive
+        itemView.alpha = 1f + dX / (itemView.right - itemView.left)
 
         if (isCanceled) {
             clearCanvas(

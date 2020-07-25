@@ -31,5 +31,9 @@
     <string name="category_all">All items</string>
 
     <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="remove_transaction_dialog_title">Remove transaction</string>
+    <string name="remove_transaction_dialog_subtitle">Do you really want to delete the transaction?</string>
 
 </resources>

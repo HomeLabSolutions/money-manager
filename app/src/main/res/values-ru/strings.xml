@@ -32,4 +32,8 @@
     <string name="category_all">Все статьи</string>
 
     <string name="delete">Удалить</string>
+    <string name="cancel">Отмена</string>
+
+    <string name="remove_transaction_dialog_title">Удаление транзакции</string>
+    <string name="remove_transaction_dialog_subtitle">Вы действительно хотите удалить транзакцию?</string>
 </resources>
