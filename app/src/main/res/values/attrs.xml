@@ -4,4 +4,5 @@
     <attr name="textAppearanceCurrencySignMedium" format="reference" />
     <attr name="textAppearanceCurrencySignSmall" format="reference" />
     <attr name="textAppearanceCurrencySignExtraSmall" format="reference" />
+    <attr name="moneyManagerBottomActionButtonStyle" format="reference" />
 </resources>

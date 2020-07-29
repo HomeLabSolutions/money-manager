@@ -23,6 +23,7 @@
         <item name="appBarLayoutStyle">@style/Widget.MoneyManager.AppBarLayout</item>
         <item name="bottomNavigationStyle">@style/Widget.MoneyManager.BottomNavigationStyle</item>
         <item name="tabStyle">@style/Widget.MoneyManager.TabLayout</item>
+        <item name="moneyManagerBottomActionButtonStyle">@style/Widget.MoneyManager.Button.BottomAction</item>
         <item name="textAppearanceCurrencySignBig">
             @style/TextAppearance.MoneyManager.CurrencySign.Big
         </item>
@@ -75,6 +76,19 @@
     <style name="ThemeOverlay.MoneyManager.CurrencyView.Small" parent="">
         <item name="android:textColorPrimary">@color/primary_color</item>
         <item name="android:textColorSecondary">@color/primary_color</item>
+    </style>
+
+    <style name="ThemeOverlay.MoneyManager.AppBarLayout" parent="">
+        <item name="colorPrimary">@android:color/white</item>
+    </style>
+
+    <style name="ThemeOverlay.MoneyManager.Toolbar.Inverted" parent="ThemeOverlay.MoneyManager.Toolbar">
+        <item name="actionMenuTextColor">@color/secondary_color</item>
+        <item name="colorSurface">@color/primary_dark_color</item>
+    </style>
+
+    <style name="ThemeOverlay.MoneyManager.Surface.NeutralLight" parent="">
+        <item name="colorSurface">@color/neutral_light_color</item>
     </style>
 
 </resources>

@@ -52,15 +52,15 @@
     </style>
 
     <style name="TextAppearance.MoneyManager.CurrencySign.Big" parent="TextAppearance.MoneyManager.Subtitle2">
-        <item name="android:textSize">@dimen/currency_sign_big_size</item>
+        <item name="android:textSize">@dimen/currency_sign_big_text_size</item>
     </style>
 
     <style name="TextAppearance.MoneyManager.CurrencySign.Medium" parent="TextAppearance.MoneyManager.Subtitle2">
-        <item name="android:textSize">@dimen/currency_sign_medium_size</item>
+        <item name="android:textSize">@dimen/currency_sign_medium_text_size</item>
     </style>
 
     <style name="TextAppearance.MoneyManager.CurrencySign.Small" parent="TextAppearance.MoneyManager.Subtitle2">
-        <item name="android:textSize">@dimen/currency_sign_small_size</item>
+        <item name="android:textSize">@dimen/currency_sign_small_text_size</item>
     </style>
 
     <style name="TextAppearance.MoneyManager.Tab" parent="TextAppearance.MoneyManager.H6">
