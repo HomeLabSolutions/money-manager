@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
 import com.d9tilov.moneymanager.base.ui.recyclerview.adapter.StickyAdapter
+import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.createTintDrawable
@@ -25,37 +26,36 @@ class TransactionAdapter :
     ) {
 
     var itemSwipeListener: OnItemSwipeListener<Transaction>? = null
-    private var removedItemPosition:Int = 0
-    // private var list = mutableListOf<BaseTransaction>()
+    var itemClickListener: OnItemClickListener<Transaction>? = null
+    private var removedItemPosition: Int = 0
 
     init {
         setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if (viewType == ITEM) {
+        val viewHolder: RecyclerView.ViewHolder
+        if (viewType == ITEM) {
             val viewBinding =
                 ItemTransactionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            TransactionViewHolder(viewBinding)
+            viewHolder = TransactionViewHolder(viewBinding)
+            viewBinding.root.setOnClickListener {
+                val adapterPosition = viewHolder.getAdapterPosition()
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    val item = getItem(adapterPosition) as Transaction
+                    itemClickListener?.onItemClick(item, adapterPosition)
+                }
+            }
         } else {
             val viewBinding = ItemTransactionHeaderBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
             )
-            TransactionHeaderViewHolder(viewBinding)
+            viewHolder = TransactionHeaderViewHolder(viewBinding)
         }
+        return viewHolder
     }
-
-    // fun addAll(items: List<BaseTransaction>) {
-    //     list.clear()
-    //     list.addAll(items)
-    //     notifyDataSetChanged()
-    // }
-
-    // override fun getItemCount(): Int {
-    //     return list.size
-    // }
 
     override fun getItemId(position: Int) = getItem(position).hashCode().toLong()
 

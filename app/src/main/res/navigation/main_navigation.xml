@@ -16,6 +16,12 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_mainFragment_to_edit_transaction_dest"
+            app:destination="@id/edit_transaction_dest"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <fragment
@@ -46,5 +52,10 @@
         android:id="@+id/sub_category_dest"
         android:name="com.d9tilov.moneymanager.category.subcategory.SubCategoryFragment"
         android:label="SubCategory" />
+
+    <fragment
+        android:id="@+id/edit_transaction_dest"
+        android:name="com.d9tilov.moneymanager.transaction.ui.EditTransactionFragment"
+        android:label="EditTransaction" />
 
 </navigation>

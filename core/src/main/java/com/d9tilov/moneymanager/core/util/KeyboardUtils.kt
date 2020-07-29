@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.core.util
+package com.mfms.common.util
 
 import android.app.Activity
 import android.content.Context
@@ -15,9 +15,10 @@ fun Fragment.showKeyboard(view: View?) {
 }
 
 fun Context.showSoftKeyboard(view: View) {
-    if (view.requestFocus()) {
+    view.requestFocus()
+    view.post {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
     }
 }
 
@@ -26,12 +27,14 @@ fun Activity.hideKeyboard() {
     view?.let { hideKeyboard(it) }
 }
 
-fun Fragment.hideKeyboard(view:View? = null) {
+fun Fragment.hideKeyboard() {
     view?.let { activity?.hideKeyboard(it) }
 }
 
 fun Context.hideKeyboard(view: View) {
-    val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-    view.clearFocus()
+    view.post {
+        val inputMethodManager =
+            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
 }

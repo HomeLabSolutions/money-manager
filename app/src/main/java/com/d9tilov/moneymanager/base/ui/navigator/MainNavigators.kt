@@ -34,6 +34,13 @@ interface CategoryNavigator : BaseNavigator {
     fun openCreateCategoryDialog()
 }
 
+interface EditTransactionNavigator : BaseNavigator {
+    fun save()
+    fun back()
+    fun openCategories()
+    fun openCalendar()
+}
+
 interface SubCategoryNavigator : BaseNavigator {
     fun openCreateCategoryDialog()
 }

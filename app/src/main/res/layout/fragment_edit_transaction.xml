@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/edit_transaction_toolbar_container"
+        layout="@layout/common_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/edit_transaction_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/edit_transaction_main_sum_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/standard_left_margin"
+                android:layout_marginTop="16dp"
+                android:text="@string/edit_transaction_sum_title"
+                android:textAppearance="?attr/textAppearanceCaption"
+                android:textColor="?android:attr/textColorSecondary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
+                android:id="@+id/edit_transaction_main_sum"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/standard_right_margin"
+                android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Big"
+                app:enableInput="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/edit_transaction_main_sum_title"
+                app:layout_constraintTop_toBottomOf="@+id/edit_transaction_main_sum_title"
+                app:layout_goneMarginEnd="@dimen/standard_right_margin"
+                app:scaleEnabled="true"
+                app:showComma="true"
+                app:signTextStyle="?attr/textAppearanceCurrencySignBig"
+                app:sum="5000"
+                app:sumTextStyle="?attr/textAppearanceHeadline1" />
+
+            <TextView
+                android:id="@+id/edit_transaction_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:drawableStart="@drawable/ic_category_food"
+                android:drawablePadding="@dimen/standard_half_left_margin"
+                android:gravity="center"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="?android:attr/textColorPrimary"
+                app:layout_constraintStart_toStartOf="@+id/edit_transaction_main_sum_title"
+                app:layout_constraintTop_toBottomOf="@+id/edit_transaction_main_sum"
+                tools:text="Food" />
+
+            <View
+                android:id="@+id/edit_transaction_delimiter"
+                android:layout_width="0dp"
+                android:layout_height="8dp"
+                android:layout_marginTop="26dp"
+                android:background="?attr/colorSurface"
+                android:theme="@style/ThemeOverlay.MoneyManager.Surface.NeutralLight"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edit_transaction_category" />
+
+            <EditText
+                android:id="@+id/edit_transaction_description"
+                style="@style/Widget.MoneyManager.EditText.Description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
+                android:gravity="top"
+                android:hint="@string/edit_transaction_description_hint"
+                android:importantForAutofill="no"
+                android:inputType="textCapSentences|textMultiLine"
+                android:minHeight="48dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edit_transaction_delimiter" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_menu"
+        style="?attr/moneyManagerBottomActionButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:text="@string/save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</LinearLayout>

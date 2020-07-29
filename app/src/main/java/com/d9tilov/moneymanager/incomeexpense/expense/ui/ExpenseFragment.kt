@@ -5,6 +5,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -26,12 +27,13 @@ import com.d9tilov.moneymanager.category.ui.CategoryAdapter
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
-import com.d9tilov.moneymanager.core.util.hideKeyboard
-import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
+import com.d9tilov.moneymanager.transaction.ui.EditTransactionFragment.Companion.ARG_EDIT_TRANSACTION
 import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
 import com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialog
+import com.mfms.common.util.hideKeyboard
+import com.mfms.common.util.showKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.math.BigDecimal
@@ -44,7 +46,7 @@ class ExpenseFragment :
 
     private val categoryAdapter = CategoryAdapter()
     private val transactionAdapter = TransactionAdapter()
-    private val onItemClickListener = object : OnItemClickListener<Category> {
+    private val onAllCategoriesClickListener = object : OnItemClickListener<Category> {
         override fun onItemClick(item: Category, position: Int) {
             if (item.id == Category.ALL_ITEMS_ID) {
                 viewModel.openAllCategories()
@@ -56,6 +58,12 @@ class ExpenseFragment :
             }
         }
     }
+    private val onTransactionClickListener = object : OnItemClickListener<Transaction> {
+        override fun onItemClick(item: Transaction, position: Int) {
+            val bundle = bundleOf(ARG_EDIT_TRANSACTION to item)
+            findNavController().navigate(R.id.action_mainFragment_to_edit_transaction_dest, bundle)
+        }
+    }
     private val onItemSwipeListener = object : OnItemSwipeListener<Transaction> {
         override fun onItemSwiped(item: Transaction, position: Int) {
             viewModel.deleteTransaction(item)
@@ -64,8 +72,9 @@ class ExpenseFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        categoryAdapter.itemClickListener = onItemClickListener
+        categoryAdapter.itemClickListener = onAllCategoriesClickListener
         transactionAdapter.itemSwipeListener = onItemSwipeListener
+        transactionAdapter.itemClickListener = onTransactionClickListener
     }
 
     override fun onStart() {
@@ -93,7 +102,7 @@ class ExpenseFragment :
             )
             addTransactionEvent.observe(
                 viewLifecycleOwner,
-                Observer { hideKeyboard(viewBinding?.expenseMainSum?.moneyEditText) }
+                Observer { hideKeyboard() }
             )
         }
     }

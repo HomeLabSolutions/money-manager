@@ -45,4 +45,19 @@
         <item name="android:maxLines">1</item>
     </style>
 
+    <style name="Widget.MoneyManager.Button.BottomAction" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:paddingStart">32dp</item>
+        <item name="android:paddingEnd">32dp</item>
+        <item name="backgroundTint">?colorPrimary</item>
+        <item name="iconPadding">-24dp</item>
+        <item name="iconTint">@drawable/button_icon_background</item>
+    </style>
+
+    <style name="Widget.MoneyManager.EditText.Description" parent="Widget.AppCompat.EditText">
+        <item name="android:textAppearance">?attr/textAppearanceBody1</item>
+        <item name="android:background">@null</item>
+    </style>
+
 </resources>
