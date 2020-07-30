@@ -39,4 +39,8 @@
 
     <string name="edit_transaction_sum_title">Сумма</string>
     <string name="edit_transaction_description_hint">Описание</string>
+
+    <string name="date_tomorrow">Завтра</string>
+    <string name="date_today">Сегодня</string>
+    <string name="date_yesterday">Вчера</string>
 </resources>

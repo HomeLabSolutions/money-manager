@@ -38,4 +38,8 @@
 
     <string name="edit_transaction_sum_title">Sum</string>
     <string name="edit_transaction_description_hint">Description</string>
+
+    <string name="date_tomorrow">Tomorrow</string>
+    <string name="date_today">Today</string>
+    <string name="date_yesterday">Yesterday</string>
 </resources>

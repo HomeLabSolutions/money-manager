@@ -104,7 +104,7 @@ class ExpenseViewModel @ViewModelInject constructor(
 
     private fun createTransaction(category: Category, number: Int): Transaction {
         val d = Date()
-        val rand = (number..number + 3).random()
+        val rand = (number..number + 1).random()
         val dateBefore = Date(d.time - rand * 24 * 3600 * 1000)
         return Transaction(
             type = TransactionType.EXPENSE,
