@@ -25,8 +25,8 @@ data class CategoryDbModel(
     @ColumnInfo(name = "parentId") val parentId: Long,
     @ColumnInfo(name = "type") val type: CategoryType,
     @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "icon") val icon: Int,
-    @ColumnInfo(name = "color") val color: Int,
+    @ColumnInfo(name = "icon") val iconName: String,
+    @ColumnInfo(name = "color") val colorName: String,
     @ColumnInfo(name = "priority") val priority: Int,
     @ColumnInfo(name = "ordinal") val ordinal: Int
 )

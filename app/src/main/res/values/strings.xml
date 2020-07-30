@@ -13,8 +13,6 @@
     <string name="settings_logout">Logout</string>
     <string name="settings_app_version">Version %s</string>
     <string name="settings_backup">Backup database</string>
-    <string name="settings_backup_success">Database was successfully backup</string>
-    <string name="settings_backup_failed">Database backup failed</string>
 
     <string name="default_category_food">Food</string>
     <string name="default_category_cafe">Cafe</string>

@@ -17,6 +17,8 @@ import timber.log.Timber
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(), HomeNavigator {
 
+    var forceShowKeyboard = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -53,6 +55,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), HomeNavigator {
 
     override fun onCloseKeyboard() {
         super.onCloseKeyboard()
+        forceShowKeyboard = false
         if (findNavController(R.id.mainNavGraph).currentDestination?.id == R.id.income_expense_dest) {
             viewBinding.bottomNavigation.visibility = VISIBLE
         }

@@ -28,6 +28,7 @@ import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
 import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
+import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.ui.EditTransactionFragment.Companion.ARG_EDIT_TRANSACTION
 import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
@@ -79,7 +80,14 @@ class ExpenseFragment :
 
     override fun onStart() {
         super.onStart()
-        showKeyboard(viewBinding?.expenseMainSum)
+        if ((activity as MainActivity).forceShowKeyboard) {
+            showKeyboard(viewBinding?.expenseMainSum)
+        } else {
+            viewBinding?.run {
+                expenseTransactionRvList.visibility = VISIBLE
+                expenseCategoryRvList.visibility = GONE
+            }
+        }
     }
 
     override fun onStop() {

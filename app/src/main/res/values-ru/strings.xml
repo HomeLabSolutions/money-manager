@@ -14,8 +14,6 @@
     <string name="settings_logout">Выйти</string>
     <string name="settings_app_version">Версия %s</string>
     <string name="settings_backup">Сделать бэкап</string>
-    <string name="settings_backup_success">База данных была успешно сохранена</string>
-    <string name="settings_backup_failed">При сохраненни базы дынных возникла ошибка</string>
 
     <string name="default_category_food">Еда</string>
     <string name="default_category_cafe">Кафе</string>

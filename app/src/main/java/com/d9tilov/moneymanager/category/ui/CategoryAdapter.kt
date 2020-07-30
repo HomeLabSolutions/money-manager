@@ -1,18 +1,22 @@
 package com.d9tilov.moneymanager.category.ui
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.request.RequestOptions
 import com.d9tilov.moneymanager.App.Companion.TAG
+import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.diff.CategoryDiffUtil
+import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.createTintDrawable
-import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.databinding.ItemCategoryBaseBinding
 import com.d9tilov.moneymanager.databinding.ItemCategoryBinding
@@ -70,19 +74,34 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>
         fun bind(category: Category) {
             when (viewBinding) {
                 is ItemCategoryBinding -> {
-                    viewBinding.categoryItemTitle.text = category.name
-                    viewBinding.categoryItemSubtitle.text = category.parent?.name
-                    val drawable = createTintDrawable(context, category.icon, category.color)
-                    GlideApp
-                        .with(context)
-                        .load(drawable)
-                        .apply(
-                            RequestOptions().override(
-                                IMAGE_SIZE_IN_PX,
-                                IMAGE_SIZE_IN_PX
+                    viewBinding.run {
+                        categoryItemTitle.text = category.name
+                        categoryItemTitle.setTextColor(
+                            ContextCompat.getColor(
+                                context,
+                                category.color
                             )
                         )
-                        .into(viewBinding.categoryItemIcon)
+                        categoryItemSubtitle.text = category.parent?.name
+                        val parentColor = ColorUtils.setAlphaComponent(
+                            ContextCompat.getColor(
+                                context,
+                                category.color
+                            ), 240
+                        )
+                        categoryItemSubtitle.setTextColor(parentColor)
+                        val drawable = createTintDrawable(context, category.icon, category.color)
+                        GlideApp
+                            .with(context)
+                            .load(drawable)
+                            .apply(
+                                RequestOptions().override(
+                                    IMAGE_SIZE_IN_PX,
+                                    IMAGE_SIZE_IN_PX
+                                )
+                            )
+                            .into(categoryItemIcon)
+                    }
                 }
             }
         }
