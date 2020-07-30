@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/primary_color</item>
         <item name="colorPrimaryDark">@color/primary_dark_color</item>
         <item name="colorAccent">@color/accent_color</item>
+        <item name="colorSecondary">@color/secondary_color</item>
         <item name="colorControlNormal">@color/control_normal_color</item>
         <item name="colorControlActivated">@color/control_activated_color</item>
         <item name="colorControlHighlight">@color/control_highlight_color</item>
@@ -14,7 +15,6 @@
         <item name="android:textColor">@color/text_normal_color</item>
         <item name="android:textColorPrimary">@color/text_primary_color</item>
         <item name="android:textColorHighlight">@color/text_highlight_color</item>
-        <item name="colorSecondary">@color/secondary_color</item>
         <item name="colorError">@color/error_color</item>
         <item name="android:textColorTertiary">@color/tertiary_color</item>
         <item name="textAppearanceHeadline1">@style/TextAppearance.MoneyManager.H1</item>
