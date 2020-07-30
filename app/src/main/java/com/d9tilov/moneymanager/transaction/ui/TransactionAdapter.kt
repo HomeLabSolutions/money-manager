@@ -10,7 +10,9 @@ import com.d9tilov.moneymanager.base.ui.recyclerview.adapter.StickyAdapter
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
+import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
+import com.d9tilov.moneymanager.core.util.formatDate
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.databinding.ItemTransactionBinding
 import com.d9tilov.moneymanager.databinding.ItemTransactionHeaderBinding
@@ -103,7 +105,8 @@ class TransactionAdapter :
         BaseViewHolder(viewBinding) {
 
         fun bind(transactionHeader: TransactionHeader) {
-            viewBinding.run { itemTransactionHeaderDate.text = transactionHeader.date.toString() }
+            viewBinding.itemTransactionHeaderDate.text =
+                formatDate(transactionHeader.date, TRANSACTION_DATE_FORMAT)
         }
     }
 

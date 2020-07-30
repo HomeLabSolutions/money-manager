@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.category.ui
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -11,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.request.RequestOptions
 import com.d9tilov.moneymanager.App.Companion.TAG
-import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.diff.CategoryDiffUtil
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
@@ -87,7 +85,8 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>
                             ContextCompat.getColor(
                                 context,
                                 category.color
-                            ), 240
+                            ),
+                            240
                         )
                         categoryItemSubtitle.setTextColor(parentColor)
                         val drawable = createTintDrawable(context, category.icon, category.color)

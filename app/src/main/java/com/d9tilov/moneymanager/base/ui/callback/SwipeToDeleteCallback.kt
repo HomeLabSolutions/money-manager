@@ -8,7 +8,6 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
-import android.util.Log
 import android.util.TypedValue
 import android.widget.TextView
 import androidx.core.content.ContextCompat
