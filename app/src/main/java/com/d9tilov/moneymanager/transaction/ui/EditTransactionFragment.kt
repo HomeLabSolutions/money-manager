@@ -9,12 +9,15 @@ import androidx.fragment.app.viewModels
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.EditTransactionNavigator
+import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.databinding.FragmentEditTransactionBinding
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.ui.vm.EditTransactionViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @AndroidEntryPoint
 class EditTransactionFragment : EditTransactionNavigator,
@@ -43,6 +46,10 @@ class EditTransactionFragment : EditTransactionNavigator,
         viewBinding?.let {
             it.editTransactionMainSum.setValue(transaction.sum)
             it.editTransactionCategory.text = transaction.category.name
+            it.editTransactionDate.text = SimpleDateFormat(
+                TRANSACTION_DATE_FORMAT,
+                Locale.getDefault()
+            ).format(transaction.date)
             val icon = createTintDrawable(
                 requireContext(),
                 transaction.category.icon,

@@ -54,26 +54,43 @@
 
             <TextView
                 android:id="@+id/edit_transaction_category"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:drawableStart="@drawable/ic_category_food"
                 android:drawablePadding="@dimen/standard_half_left_margin"
-                android:gravity="center"
-                android:textAppearance="?attr/textAppearanceBody2"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:gravity="start|center_vertical"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                app:layout_constraintEnd_toStartOf="@+id/edit_transaction_date"
                 android:textColor="?android:attr/textColorPrimary"
                 app:layout_constraintStart_toStartOf="@+id/edit_transaction_main_sum_title"
                 app:layout_constraintTop_toBottomOf="@+id/edit_transaction_main_sum"
                 tools:text="Food" />
 
-            <View
+            <TextView
+                android:id="@+id/edit_transaction_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/standard_right_margin"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textColor="?attr/colorAccent"
+                app:layout_constraintBottom_toBottomOf="@+id/edit_transaction_category"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/edit_transaction_category"
+                tools:text="27.04.2020" />
+
+            <ImageView
                 android:id="@+id/edit_transaction_delimiter"
                 android:layout_width="0dp"
-                android:layout_height="8dp"
-                android:layout_marginTop="26dp"
-                android:background="?attr/colorSurface"
-                android:theme="@style/ThemeOverlay.MoneyManager.Surface.NeutralLight"
+                android:layout_height="5dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="8dp"
+                android:layerType="software"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:src="@drawable/dotted_shape"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edit_transaction_category" />
 

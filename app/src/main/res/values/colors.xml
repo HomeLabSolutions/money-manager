@@ -3,6 +3,7 @@
     <color name="primary_color">#2d2d2d</color>
     <color name="primary_dark_color">#2d2d2d</color>
     <color name="accent_color">#e61628</color>
+    <color name="secondary_color">#f99225</color>
     <color name="control_normal_color">#fff</color>
     <color name="control_activated_color">#e61628</color>
     <color name="control_activated_color_light">#59e61628</color>
@@ -15,9 +16,9 @@
     <color name="text_primary_color">#b6be9a</color>
     <color name="text_primary_color_dark">#7eb13f</color>
     <color name="text_highlight_color">#e61628</color>
-    <color name="secondary_color">#00894d</color>
-    <color name="secondary_color_start">#42b584</color>
-    <color name="secondary_color_end">#0c6e43</color>
+    <color name="header_color">#00894d</color>
+    <color name="header_color_start">#42b584</color>
+    <color name="header_color_end">#0c6e43</color>
     <color name="tertiary_color">#ffe754</color>
     <color name="neutral_light_color">#f4f3ee</color>
     <color name="error_color">#e61628</color>
@@ -33,5 +34,6 @@
     <color name="picton_blue">#33B8FF</color>
 
     <color name="category_all_color">#ffffff</color>
+    <color name="edit_text_hint_text_color">#59ffffff</color>
 
 </resources>
