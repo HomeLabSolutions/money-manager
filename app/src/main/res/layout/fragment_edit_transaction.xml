@@ -31,7 +31,7 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/edit_transaction_sum_title"
                 android:textAppearance="?attr/textAppearanceCaption"
-                android:textColor="?android:attr/textColorSecondary"
+                android:textColor="@color/text_primary_color_dark"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -97,7 +97,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.button.MaterialButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_menu"
         style="?attr/moneyManagerBottomActionButtonStyle"
         android:layout_width="match_parent"

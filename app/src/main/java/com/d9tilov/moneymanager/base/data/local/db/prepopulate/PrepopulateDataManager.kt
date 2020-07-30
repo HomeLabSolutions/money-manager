@@ -32,7 +32,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
                 CategoryType.EXPENSE,
                 R.string.default_category_cafe,
                 R.drawable.ic_catefory_cafe,
-                R.color.blue_grey_400,
+                R.color.picton_blue,
                 1,
                 1
             ),
@@ -98,7 +98,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
                 CategoryType.EXPENSE,
                 R.string.default_category_internet,
                 R.drawable.ic_category_internet,
-                R.color.category_teal_600,
+                R.color.screamin_green,
                 7,
                 7
             )

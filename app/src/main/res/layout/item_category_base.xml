@@ -17,6 +17,7 @@
         android:id="@+id/category_item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/category_all_color"
         style="@style/Widget.MoneyManager.Category.Title"
         android:layout_gravity="bottom|center_horizontal"
         android:text="@string/category_all" />

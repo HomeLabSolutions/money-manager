@@ -39,7 +39,7 @@
         <item name="android:textSize">@dimen/body2_text_size</item>
     </style>
 
-    <style name="TextAppearance.MoneyManager.Button" parent="TextAppearance.MaterialComponents.Button">
+    <style name="TextAppearance.MoneyManager.Button" parent="TextAppearance.AppCompat.Button">
         <item name="android:textSize">@dimen/button_text_size</item>
     </style>
 

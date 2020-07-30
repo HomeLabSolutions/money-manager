@@ -9,24 +9,19 @@
         <item name="android:background">@android:color/white</item>
     </style>
 
-    <style name="PlaidDarkOverlay" parent="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
-        <!-- Used to theme dark elements in light themed screens.
-             Extend the material dark Action Bar overlay as this contains text styling. -->
-    </style>
-
     <style name="Widget.MoneyManager.BottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView">
-        <item name="itemBackground">?attr/colorPrimary</item>
+        <item name="android:background">@drawable/button_gradient</item>
         <item name="itemIconTint">@drawable/bottom_tab_selector</item>
         <item name="itemTextColor">@drawable/bottom_tab_selector</item>
         <item name="selectableItemBackground">?attr/colorSecondary</item>
     </style>
 
     <style name="Widget.MoneyManager.TabLayout" parent="Widget.MaterialComponents.TabLayout">
-        <item name="tabIndicatorColor">?attr/colorSecondary</item>
+        <item name="tabIndicatorColor">?attr/colorAccent</item>
         <item name="tabTextColor">@drawable/tabs_color_selector</item>
         <item name="tabIndicatorFullWidth">false</item>
         <item name="tabTextAppearance">@style/TextAppearance.MoneyManager.Tab</item>
-        <item name="android:background">?attr/colorPrimaryDark</item>
+        <item name="android:background">?attr/colorPrimary</item>
     </style>
 
     <style name="Widget.MoneyManager.Category.Title" parent="TextAppearance.MoneyManager.Caption">
@@ -38,20 +33,22 @@
 
     <style name="Widget.MoneyManager.Category.Subtitle" parent="TextAppearance.MoneyManager.Overline">
         <item name="android:textAllCaps">false</item>
-        <item name="android:textColor">@color/neutral_normal_color</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
         <item name="android:gravity">center</item>
         <item name="android:scrollHorizontally">false</item>
         <item name="android:ellipsize">end</item>
         <item name="android:maxLines">1</item>
     </style>
 
-    <style name="Widget.MoneyManager.Button.BottomAction" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+    <style name="Widget.MoneyManager.Button.BottomAction" parent="Widget.AppCompat.Button">
         <item name="android:insetTop">0dp</item>
         <item name="android:insetBottom">0dp</item>
         <item name="android:paddingStart">32dp</item>
         <item name="android:paddingEnd">32dp</item>
-        <item name="backgroundTint">?colorPrimary</item>
+        <item name="android:background">@drawable/button_gradient</item>
         <item name="iconPadding">-24dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/button_text_size</item>
         <item name="iconTint">@drawable/button_icon_background</item>
     </style>
 

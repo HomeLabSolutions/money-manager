@@ -90,8 +90,8 @@ class CategoryLocalSource(
         NO_ID,
         CategoryType.EXPENSE,
         "",
-        0,
-        0,
+        "",
+        "",
         0,
         0
     )

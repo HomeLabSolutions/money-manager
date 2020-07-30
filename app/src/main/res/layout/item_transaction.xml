@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="72dp">
+    android:background="?attr/colorPrimary"
+    android:foreground="?attr/selectableItemBackground"
+    android:minHeight="72dp"
+    tools:targetApi="m">
 
     <ImageView
         android:id="@+id/item_transaction_icon"
