@@ -32,13 +32,11 @@ interface RemoveTransactionNavigator : BaseNavigator {
 interface CategoryNavigator : BaseNavigator {
     fun openSubCategoryScreen(category: Category)
     fun openCreateCategoryDialog()
+    fun backToEditTransactionScreen(category: Category)
 }
 
 interface EditTransactionNavigator : BaseNavigator {
     fun save()
-    fun back()
-    fun openCategories()
-    fun openCalendar()
 }
 
 interface SubCategoryNavigator : BaseNavigator {

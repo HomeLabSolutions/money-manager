@@ -5,7 +5,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -22,6 +21,7 @@ import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
 import com.d9tilov.moneymanager.base.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.base.ui.recyclerview.decoration.SpaceItemDecoration
 import com.d9tilov.moneymanager.base.ui.recyclerview.decoration.StickyHeaderItemDecorator
+import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.CategoryAdapter
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
@@ -29,8 +29,8 @@ import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
 import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
+import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
-import com.d9tilov.moneymanager.transaction.ui.EditTransactionFragment.Companion.ARG_EDIT_TRANSACTION
 import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
 import com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialog
 import com.mfms.common.util.hideKeyboard
@@ -61,8 +61,11 @@ class ExpenseFragment :
     }
     private val onTransactionClickListener = object : OnItemClickListener<Transaction> {
         override fun onItemClick(item: Transaction, position: Int) {
-            val bundle = bundleOf(ARG_EDIT_TRANSACTION to item)
-            findNavController().navigate(R.id.action_mainFragment_to_edit_transaction_dest, bundle)
+            val action = IncomeExpenseFragmentDirections.toEditTransactionDest(
+                item,
+                item.category
+            )
+            findNavController().navigate(action)
         }
     }
     private val onItemSwipeListener = object : OnItemSwipeListener<Transaction> {
@@ -156,7 +159,9 @@ class ExpenseFragment :
     override fun getNavigator() = this
     override val viewModel by viewModels<ExpenseViewModel>()
     override fun openCategoriesScreen() {
-        findNavController().navigate(R.id.action_mainFragment_to_category_dest)
+        val action =
+            IncomeExpenseFragmentDirections.toCategoryDest(destination = CategoryDestination.MAIN_SCREEN)
+        findNavController().navigate(action)
     }
 
     override fun openRemoveConfirmationDialog(transaction: Transaction) {

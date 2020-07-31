@@ -27,7 +27,7 @@
     <string name="expense_spent_title">spent</string>
     <string name="expense_left_to_title">left ot spent</string>
 
-    <string name="category_all">All items</string>
+    <string name="category_all">All\nitems</string>
 
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>

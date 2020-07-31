@@ -7,7 +7,6 @@ import com.d9tilov.moneymanager.base.ui.navigator.SubCategoryNavigator
 import com.d9tilov.moneymanager.category.common.BaseCategoryViewModel
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
-import com.d9tilov.moneymanager.category.subcategory.SubCategoryFragment
 
 class SubCategoryViewModel @ViewModelInject constructor(
     private val categoryInteractor: CategoryInteractor,
@@ -15,7 +14,7 @@ class SubCategoryViewModel @ViewModelInject constructor(
 ) : BaseCategoryViewModel<SubCategoryNavigator>() {
 
     init {
-        val parentCategory = savedStateHandle.get<Category>(SubCategoryFragment.ARG_SUB_CATEGORY)
+        val parentCategory = savedStateHandle.get<Category>("parent_category")
         if (parentCategory == null || parentCategory.children.isEmpty()) {
             throw IllegalArgumentException("Parent category mustn't have at least one child")
         }

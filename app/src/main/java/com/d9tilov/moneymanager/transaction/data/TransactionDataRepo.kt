@@ -22,6 +22,8 @@ class TransactionDataRepo(private val transactionSource: TransactionSource) : Tr
         transactionType: TransactionType
     ) = transactionSource.getAllByType(from, to, transactionType)
 
+    override fun update(transaction: TransactionDataModel) = transactionSource.update(transaction)
+
     override fun removeTransaction(transaction: TransactionDataModel): Completable {
         return transactionSource.remove(transaction)
     }

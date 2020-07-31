@@ -28,7 +28,7 @@
     <string name="expense_spent_title">всего потрачено</string>
     <string name="expense_left_to_title">осталось потратить</string>
 
-    <string name="category_all">Все статьи</string>
+    <string name="category_all">Все\nстатьи</string>
 
     <string name="delete">Удалить</string>
     <string name="cancel">Отмена</string>

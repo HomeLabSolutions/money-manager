@@ -28,9 +28,9 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
     BaseFragment<FragmentCategoryBinding, N>(R.layout.fragment_category),
     OnBackPressed {
 
+    private var toolbar: MaterialToolbar? = null
     protected abstract fun getToolbarTitle(): String
     protected lateinit var categoryAdapter: CategoryModifyAdapter
-    private var toolbar: MaterialToolbar? = null
 
     override fun performDataBinding(view: View): FragmentCategoryBinding =
         FragmentCategoryBinding.bind(view)

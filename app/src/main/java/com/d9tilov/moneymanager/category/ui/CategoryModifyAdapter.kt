@@ -6,6 +6,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -13,13 +14,13 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.bumptech.glide.request.RequestOptions
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.category.ui.diff.CategoryDiffUtil
 import com.d9tilov.moneymanager.category.data.entities.Category
-import com.d9tilov.moneymanager.core.ui.BaseViewHolder
-import com.d9tilov.moneymanager.core.ui.recyclerview.ItemTouchHelperAdapter
+import com.d9tilov.moneymanager.category.ui.diff.CategoryDiffUtil
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemLongClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwapListener
+import com.d9tilov.moneymanager.core.ui.BaseViewHolder
+import com.d9tilov.moneymanager.core.ui.recyclerview.ItemTouchHelperAdapter
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.databinding.ItemCategoryBinding
 import org.xmlpull.v1.XmlPullParserException
@@ -139,40 +140,56 @@ class CategoryModifyAdapter :
         BaseViewHolder(viewBinding) {
 
         fun bind(category: Category) {
-            viewBinding.categoryItemTitle.text = category.name
-            viewBinding.categoryItemSubtitle.text = category.parent?.name
-            if (category.children.isNotEmpty()) {
-                GlideApp
-                    .with(context)
-                    .load(R.drawable.ic_category_folder)
-                    .apply(
-                        RequestOptions().override(
-                            IMAGE_SIZE_IN_PX,
-                            IMAGE_SIZE_IN_PX
-                        )
+            viewBinding.run {
+                categoryItemTitle.text = category.name
+                categoryItemTitle.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        category.color
                     )
-                    .into(viewBinding.categoryItemIcon)
-            } else {
-                val vectorDrawable = VectorDrawableCompat.create(
-                    context.resources,
-                    category.icon,
-                    null
-                ) ?: throw XmlPullParserException("Wrong vector xml file format")
-                val drawable = DrawableCompat.wrap(vectorDrawable)
-                DrawableCompat.setTint(
-                    drawable.mutate(),
-                    ContextCompat.getColor(context, category.color)
                 )
-                GlideApp
-                    .with(context)
-                    .load(drawable)
-                    .apply(
-                        RequestOptions().override(
-                            IMAGE_SIZE_IN_PX,
-                            IMAGE_SIZE_IN_PX
+                categoryItemSubtitle.text = category.parent?.name
+                val parentColor = ColorUtils.setAlphaComponent(
+                    ContextCompat.getColor(
+                        context,
+                        category.color
+                    ),
+                    240
+                )
+                categoryItemSubtitle.setTextColor(parentColor)
+                if (category.children.isNotEmpty()) {
+                    GlideApp
+                        .with(context)
+                        .load(R.drawable.ic_category_folder)
+                        .apply(
+                            RequestOptions().override(
+                                IMAGE_SIZE_IN_PX,
+                                IMAGE_SIZE_IN_PX
+                            )
                         )
+                        .into(categoryItemIcon)
+                } else {
+                    val vectorDrawable = VectorDrawableCompat.create(
+                        context.resources,
+                        category.icon,
+                        null
+                    ) ?: throw XmlPullParserException("Wrong vector xml file format")
+                    val drawable = DrawableCompat.wrap(vectorDrawable)
+                    DrawableCompat.setTint(
+                        drawable.mutate(),
+                        ContextCompat.getColor(context, category.color)
                     )
-                    .into(viewBinding.categoryItemIcon)
+                    GlideApp
+                        .with(context)
+                        .load(drawable)
+                        .apply(
+                            RequestOptions().override(
+                                IMAGE_SIZE_IN_PX,
+                                IMAGE_SIZE_IN_PX
+                            )
+                        )
+                        .into(categoryItemIcon)
+                }
             }
         }
 

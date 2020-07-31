@@ -5,6 +5,7 @@ import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.core.util.getEndOfDay
+import com.d9tilov.moneymanager.core.util.isSameDay
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionBaseDataModel
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
@@ -111,6 +112,70 @@ class TransactionLocalSource(
                         transactionDateDataMapper.toDataModel(transactionDbModel)
                     } else {
                         transactionDataMapper.toDataModel(transactionDbModel)
+                    }
+                }
+        }
+    }
+
+    override fun update(transaction: TransactionDataModel): Completable {
+        val currentUserId = preferencesStore.uid
+        return if (currentUserId == null) {
+            Completable.error(WrongUidException())
+        } else {
+            transactionDao.getById(currentUserId, transaction.id)
+                .firstOrError()
+                .flatMapCompletable { oldTransaction ->
+                    if (oldTransaction.date.isSameDay(transaction.date)) {
+                        transactionDao.update(transactionDataMapper.toDbModel(transaction))
+                    } else {
+                        val itemsCountOldTransactionDateSingle = transactionDao.getItemsCountInDay(
+                            currentUserId,
+                            oldTransaction.type,
+                            oldTransaction.date
+                        )
+                        val itemsCountNewTransactionDateSingle = transactionDao.getItemsCountInDay(
+                            currentUserId,
+                            transaction.type,
+                            transaction.date
+                        )
+                        itemsCountOldTransactionDateSingle.flatMapCompletable { count ->
+                            when (count) {
+                                0 -> {
+                                    Completable.error(IllegalArgumentException("Date count must be more than 0"))
+                                }
+                                1 -> {
+                                    transactionDao.deleteDate(
+                                        currentUserId,
+                                        oldTransaction.type,
+                                        oldTransaction.date
+                                    )
+                                }
+                                else -> {
+                                    Completable.complete()
+                                }
+                            }
+                        }
+                            .andThen(
+                                itemsCountNewTransactionDateSingle.flatMapCompletable { count ->
+                                    if (count == 0) {
+                                        transactionDao.insert(
+                                            createDateItem(
+                                                currentUserId,
+                                                transaction.type,
+                                                transaction.date
+                                            )
+                                        ).andThen(
+                                            transactionDao.update(
+                                                transactionDataMapper.toDbModel(transaction)
+                                            )
+                                        )
+                                    } else {
+                                        transactionDao.update(
+                                            transactionDataMapper.toDbModel(transaction)
+                                        )
+                                    }
+                                }
+                            )
                     }
                 }
         }
