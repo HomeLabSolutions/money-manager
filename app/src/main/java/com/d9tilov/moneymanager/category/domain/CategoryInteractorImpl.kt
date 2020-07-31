@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.category.domain
 
-import android.util.Log
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.category.CategoryType
 import com.d9tilov.moneymanager.category.data.entities.Category
@@ -40,7 +39,6 @@ class CategoryInteractorImpl(private val categoryRepo: CategoryRepo) :
             }
         }
         categoriesAsChild.add(0, createAllItemsFolder(categories))
-        Log.d("moggot", "getAllWithChildrenInSingleList: all = " + R.color.category_all_color)
         return categoriesAsChild
     }
 

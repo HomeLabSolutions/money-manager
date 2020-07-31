@@ -1,7 +1,10 @@
 package com.d9tilov.moneymanager.category.ui.vm
 
+import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.SavedStateHandle
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryNavigator
+import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.CategoryType
 import com.d9tilov.moneymanager.category.common.BaseCategoryViewModel
 import com.d9tilov.moneymanager.category.data.entities.Category
@@ -11,8 +14,10 @@ import com.d9tilov.moneymanager.core.util.ioScheduler
 import com.d9tilov.moneymanager.core.util.uiScheduler
 import io.reactivex.Observable
 
-class CategoryViewModel @ViewModelInject constructor(private val categoryInteractor: CategoryInteractor) :
-    BaseCategoryViewModel<CategoryNavigator>() {
+class CategoryViewModel @ViewModelInject constructor(
+    private val categoryInteractor: CategoryInteractor,
+    @Assisted val savedStateHandle: SavedStateHandle
+) : BaseCategoryViewModel<CategoryNavigator>() {
 
     init {
         categoryInteractor.getAllCategoriesByType(CategoryType.EXPENSE)
@@ -28,8 +33,13 @@ class CategoryViewModel @ViewModelInject constructor(private val categoryInterac
     }
 
     override fun onCategoryClicked(category: Category) {
+        val destination = savedStateHandle.get<CategoryDestination>("destination")
         if (category.children.isNotEmpty()) {
             navigator?.openSubCategoryScreen(category)
+        } else {
+            if (destination == CategoryDestination.EDIT_TRANSACTION_SCREEN) {
+                navigator?.backToEditTransactionScreen(category)
+            }
         }
     }
 

@@ -18,6 +18,7 @@ interface TransactionSource {
         transactionType: TransactionType
     ): DataSource.Factory<Int, TransactionBaseDataModel>
 
+    fun update(transaction: TransactionDataModel): Completable
     fun remove(transaction: TransactionDataModel): Completable
     fun clearAll(): Completable
 }

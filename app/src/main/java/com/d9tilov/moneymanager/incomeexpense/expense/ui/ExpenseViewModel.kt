@@ -63,7 +63,10 @@ class ExpenseViewModel @ViewModelInject constructor(
             }
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
-            .subscribe({ transactions.value = it }, {})
+            .subscribe(
+                { transactions.value = it },
+                { Timber.tag(App.TAG).d("Error while getting transaction list: $it") }
+            )
             .addTo(compositeDisposable)
     }
 

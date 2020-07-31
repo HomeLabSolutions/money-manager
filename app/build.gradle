@@ -45,7 +45,7 @@ android {
                 arguments += ["room.incremental": "true"]
             }
         }
-
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -127,8 +127,6 @@ dependencies {
     implementation "com.google.code.gson:gson:${versions.gson}"
 
     implementation "com.github.bumptech.glide:glide:${versions.glide}"
-
-    kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
 
     implementation "com.facebook.stetho:stetho:${versions.stetho}"
     implementation "com.facebook.stetho:stetho-okhttp3:${versions.stetho}"

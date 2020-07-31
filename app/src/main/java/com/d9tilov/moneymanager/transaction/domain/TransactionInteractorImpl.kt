@@ -54,7 +54,7 @@ class TransactionInteractorImpl(
             TransactionType.INCOME -> CategoryType.INCOME
             TransactionType.EXPENSE -> CategoryType.EXPENSE
         }
-        return categoryInteractor.getAllCategoriesByType(categoryType)
+        return categoryInteractor.getGroupedCategoriesByType(categoryType)
             .flatMap { categoryList ->
                 transactionRepo.getTransactionsByType(transactionType = type)
                     .map { item ->
@@ -73,6 +73,9 @@ class TransactionInteractorImpl(
                     .toFlowable(PagingConfig.createConfig())
             }
     }
+
+    override fun update(transaction: Transaction) =
+        transactionRepo.update(transactionDomainMapper.toDataModel(transaction))
 
     override fun removeTransaction(transaction: Transaction): Completable {
         return transactionRepo.removeTransaction(transactionDomainMapper.toDataModel(transaction))

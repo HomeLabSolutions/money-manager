@@ -13,6 +13,7 @@ interface TransactionInteractor : Interactor {
     fun addTransaction(transaction: Transaction): Completable
     fun getTransactionById(id: Long): Flowable<Transaction>
     fun getTransactionsByType(type: TransactionType): Flowable<PagedList<BaseTransaction>>
+    fun update(transaction: Transaction): Completable
     fun removeTransaction(transaction: Transaction): Completable
     fun clearAll(): Completable
 }
