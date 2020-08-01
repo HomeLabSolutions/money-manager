@@ -2,6 +2,7 @@ package com.d9tilov.moneymanager.base.ui.navigator
 
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
+import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 
 interface HomeNavigator : BaseNavigator
@@ -33,6 +34,7 @@ interface CategoryNavigator : BaseNavigator {
     fun openSubCategoryScreen(category: Category)
     fun openCreateCategoryDialog()
     fun backToEditTransactionScreen(category: Category)
+    fun backToMainScreen(transactionType: TransactionType)
 }
 
 interface EditTransactionNavigator : BaseNavigator {

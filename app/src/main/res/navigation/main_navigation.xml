@@ -22,6 +22,11 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <argument
+            android:name="transactionType"
+            android:defaultValue="@null"
+            app:argType="com.d9tilov.moneymanager.transaction.TransactionType"
+            app:nullable="true" />
     </fragment>
 
     <fragment
@@ -54,15 +59,33 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpTo="@+id/edit_transaction_dest"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/to_income_expense_dest"
+            app:destination="@id/income_expense_dest"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@+id/income_expense_dest"
+            app:popUpToInclusive="true" />
         <argument
             android:name="edited_transaction"
             app:argType="com.d9tilov.moneymanager.transaction.domain.entity.Transaction"
             app:nullable="true"
-            android:defaultValue="@null"/>
+            android:defaultValue="@null" />
         <argument
             android:name="destination"
             app:argType="com.d9tilov.moneymanager.category.CategoryDestination" />
+        <argument
+            android:name="sum"
+            android:defaultValue="@null"
+            app:argType="java.math.BigDecimal"
+            app:nullable="true" />
+        <argument
+            android:name="transactionType"
+            android:defaultValue="@null"
+            app:argType="com.d9tilov.moneymanager.transaction.TransactionType"
+            app:nullable="true" />
     </fragment>
 
     <fragment
@@ -81,6 +104,16 @@
         <argument
             android:name="parent_category"
             app:argType="com.d9tilov.moneymanager.category.data.entities.Category" />
+        <argument
+            android:name="sum"
+            app:argType="java.math.BigDecimal"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="transactionType"
+            app:argType="com.d9tilov.moneymanager.transaction.TransactionType"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 
     <fragment
