@@ -12,9 +12,14 @@ import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.core.util.addTo
 import com.d9tilov.moneymanager.core.util.ioScheduler
 import com.d9tilov.moneymanager.core.util.uiScheduler
+import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
+import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import io.reactivex.Observable
+import java.math.BigDecimal
 
 class CategoryViewModel @ViewModelInject constructor(
+    private val transactionInteractor: TransactionInteractor,
     private val categoryInteractor: CategoryInteractor,
     @Assisted val savedStateHandle: SavedStateHandle
 ) : BaseCategoryViewModel<CategoryNavigator>() {
@@ -39,6 +44,20 @@ class CategoryViewModel @ViewModelInject constructor(
         } else {
             if (destination == CategoryDestination.EDIT_TRANSACTION_SCREEN) {
                 navigator?.backToEditTransactionScreen(category)
+            } else if (destination == CategoryDestination.MAIN_WITH_SUM_SCREEN) {
+                val inputSum = requireNotNull(savedStateHandle.get<BigDecimal>("sum"))
+                val transactionType =
+                    requireNotNull(savedStateHandle.get<TransactionType>("transactionType"))
+                transactionInteractor.addTransaction(
+                    Transaction(
+                        type = transactionType,
+                        sum = inputSum,
+                        category = category
+                    )
+                )
+                    .subscribeOn(ioScheduler)
+                    .observeOn(uiScheduler)
+                    .subscribe { navigator?.backToMainScreen(transactionType) }
             }
         }
     }

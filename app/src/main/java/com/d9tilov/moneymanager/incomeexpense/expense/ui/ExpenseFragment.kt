@@ -30,6 +30,7 @@ import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
 import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
+import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
 import com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialog
@@ -159,9 +160,19 @@ class ExpenseFragment :
     override fun getNavigator() = this
     override val viewModel by viewModels<ExpenseViewModel>()
     override fun openCategoriesScreen() {
-        val action =
-            IncomeExpenseFragmentDirections.toCategoryDest(destination = CategoryDestination.MAIN_SCREEN)
-        findNavController().navigate(action)
+        viewBinding?.let {
+            val inputSum = it.expenseMainSum.getValue()
+            val action = if (inputSum.signum() > 0) {
+                IncomeExpenseFragmentDirections.toCategoryDest(
+                    destination = CategoryDestination.MAIN_WITH_SUM_SCREEN,
+                    sum = inputSum,
+                    transactionType = TransactionType.EXPENSE
+                )
+            } else {
+                IncomeExpenseFragmentDirections.toCategoryDest(destination = CategoryDestination.MAIN_SCREEN)
+            }
+            findNavController().navigate(action)
+        }
     }
 
     override fun openRemoveConfirmationDialog(transaction: Transaction) {
@@ -171,7 +182,7 @@ class ExpenseFragment :
     }
 
     override fun onOpenKeyboard() {
-        Timber.tag(App.TAG).d("keyboard shown")
+        Timber.tag(App.TAG).d("Keyboard shown")
         viewBinding?.run {
             expenseTransactionRvList.visibility = INVISIBLE
             expenseCategoryRvList.visibility = VISIBLE
@@ -179,7 +190,7 @@ class ExpenseFragment :
     }
 
     override fun onCloseKeyboard() {
-        Timber.tag(App.TAG).d("keyboard hidden")
+        Timber.tag(App.TAG).d("Kyboard hidden")
         viewBinding?.run {
             expenseTransactionRvList.visibility = VISIBLE
             expenseCategoryRvList.visibility = GONE

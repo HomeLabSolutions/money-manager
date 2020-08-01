@@ -8,6 +8,7 @@ import com.d9tilov.moneymanager.base.ui.navigator.CategoryNavigator
 import com.d9tilov.moneymanager.category.common.BaseCategoryFragment
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.vm.CategoryViewModel
+import com.d9tilov.moneymanager.transaction.TransactionType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -37,6 +38,11 @@ class CategoryFragment :
         val action = CategoryFragmentDirections.toEditTransactionDest(
             requireNotNull(transaction), category
         )
+        findNavController().navigate(action)
+    }
+
+    override fun backToMainScreen(transactionType: TransactionType) {
+        val action = CategoryFragmentDirections.toIncomeExpenseDest(transactionType)
         findNavController().navigate(action)
     }
 
