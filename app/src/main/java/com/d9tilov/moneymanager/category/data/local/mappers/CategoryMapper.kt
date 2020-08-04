@@ -22,8 +22,7 @@ class CategoryMapper @Inject constructor(@ApplicationContext private val context
                 type = type,
                 icon = iconResId,
                 color = colorResId,
-                priority = priority,
-                ordinal = ordinal
+                usageCount = usageCount
             )
         } ?: Category(
             id = id,
@@ -32,8 +31,7 @@ class CategoryMapper @Inject constructor(@ApplicationContext private val context
             type = type,
             icon = iconResId,
             color = colorResId,
-            priority = priority,
-            ordinal = ordinal
+            usageCount = usageCount
         )
     }
 
@@ -48,8 +46,7 @@ class CategoryMapper @Inject constructor(@ApplicationContext private val context
                 type = type,
                 icon = iconResId,
                 color = colorResId,
-                priority = priority,
-                ordinal = ordinal
+                usageCount = usageCount
             )
         }
 
@@ -65,25 +62,23 @@ class CategoryMapper @Inject constructor(@ApplicationContext private val context
                 name = name,
                 iconName = iconName,
                 colorName = colorName,
-                priority = priority,
-                ordinal = ordinal
+                usageCount = usageCount
             )
         }
 
-    fun toDataModelFromPrePopulate(model: PrepopulateCategory) =
+    fun toDataModelFromPrePopulate(model: PrepopulateCategory, uid: String) =
         with(model) {
             val iconName = context.resources.getResourceEntryName(icon)
             val colorName = context.resources.getResourceEntryName(color)
             CategoryDbModel(
                 id = id,
-                uid = clientId,
+                uid = uid,
                 parentId = parentId,
                 type = type,
                 name = name,
                 iconName = iconName,
                 colorName = colorName,
-                priority = priority,
-                ordinal = ordinal
+                usageCount = usageCount
             )
         }
 }

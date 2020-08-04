@@ -29,10 +29,6 @@ class SubCategoryViewModel @ViewModelInject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun onItemSwap(categories: List<Category>) {
-        TODO("Not yet implemented")
-    }
-
     override fun update(name: String) {
         TODO("Not yet implemented")
     }

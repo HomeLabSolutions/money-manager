@@ -98,4 +98,9 @@
         <item name="colorSurface">@color/neutral_light_color</item>
     </style>
 
+    <style name="Theme.MoneyManager.Material.Alert.Dialog" parent="Theme.MaterialComponents.Dialog.Alert">
+        <item name="colorSurface">@color/neutral_light_color</item>
+        <item name="android:background">@color/primary_color</item>
+    </style>
+
 </resources>

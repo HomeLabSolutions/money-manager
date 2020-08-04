@@ -6,6 +6,7 @@ import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeNavigator
+import com.d9tilov.moneymanager.core.events.OnDialogDismissListener
 import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
 import com.d9tilov.moneymanager.databinding.FragmentIncomeBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,7 +16,8 @@ import timber.log.Timber
 class IncomeFragment :
     BaseFragment<FragmentIncomeBinding, IncomeNavigator>(R.layout.fragment_income),
     IncomeNavigator,
-    OnKeyboardVisibleChange {
+    OnKeyboardVisibleChange,
+    OnDialogDismissListener {
 
     override fun performDataBinding(view: View): FragmentIncomeBinding =
         FragmentIncomeBinding.bind(view)
@@ -33,5 +35,9 @@ class IncomeFragment :
 
     override fun onCloseKeyboard() {
         Timber.tag(App.TAG).d("Kyboard hidden")
+    }
+
+    override fun onDismiss() {
+        TODO("Not yet implemented")
     }
 }

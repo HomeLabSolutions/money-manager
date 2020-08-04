@@ -5,7 +5,6 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
-import com.d9tilov.moneymanager.category.CategoryType
 import com.d9tilov.moneymanager.category.common.BaseCategoryViewModel
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
@@ -15,7 +14,6 @@ import com.d9tilov.moneymanager.core.util.uiScheduler
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
-import io.reactivex.Observable
 import java.math.BigDecimal
 
 class CategoryViewModel @ViewModelInject constructor(
@@ -25,12 +23,12 @@ class CategoryViewModel @ViewModelInject constructor(
 ) : BaseCategoryViewModel<CategoryNavigator>() {
 
     init {
-        categoryInteractor.getAllCategoriesByType(CategoryType.EXPENSE)
+        categoryInteractor.getAllCategoriesByType(TransactionType.EXPENSE)
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
             .subscribe { expenseCategories.value = it }
             .addTo(compositeDisposable)
-        categoryInteractor.getAllCategoriesByType(CategoryType.INCOME)
+        categoryInteractor.getAllCategoriesByType(TransactionType.INCOME)
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
             .subscribe { incomeCategories.value = it }
@@ -72,17 +70,7 @@ class CategoryViewModel @ViewModelInject constructor(
             .addTo(compositeDisposable)
     }
 
-    override fun onItemSwap(categories: List<Category>) {
-        val updatedList = mutableListOf<Category>()
-        for ((index, value) in categories.withIndex()) {
-            updatedList.add(value.copy(ordinal = index))
-        }
-        Observable.fromIterable(updatedList)
-            .flatMapCompletable { category -> categoryInteractor.update(category) }
-            .subscribeOn(ioScheduler)
-            .observeOn(uiScheduler)
-            .subscribe()
-            .addTo(compositeDisposable)
+    fun onItemMoveAndUnit(childItem: Category, parentItem: Category) {
     }
 
     override fun update(name: String) {

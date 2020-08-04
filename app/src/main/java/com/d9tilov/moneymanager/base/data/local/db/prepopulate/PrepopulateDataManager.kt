@@ -6,126 +6,97 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.entity.PrepopulateCategory
-import com.d9tilov.moneymanager.category.CategoryType
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
+import com.d9tilov.moneymanager.transaction.TransactionType
 import javax.inject.Inject
 
 class PrepopulateDataManager @Inject constructor(private val context: Context) {
 
-    fun createDefaultCategories(uid: String): List<PrepopulateCategory> {
+    fun createDefaultCategories(): List<PrepopulateCategory> {
         return listOf(
             createCategory(
                 1,
-                uid,
                 NO_ID,
-                CategoryType.EXPENSE,
+                TransactionType.EXPENSE,
                 R.string.default_category_food,
-                R.drawable.ic_category_food,
-                R.color.category_deep_purple_a100,
-                0,
-                0
+                R.drawable.ic_category_folder,
+                R.color.category_all_color
             ),
             createCategory(
                 2,
-                uid,
                 1,
-                CategoryType.EXPENSE,
+                TransactionType.EXPENSE,
                 R.string.default_category_cafe,
-                R.drawable.ic_catefory_cafe,
-                R.color.picton_blue,
-                1,
-                1
+                R.drawable.ic_category_cafe,
+                R.color.picton_blue
             ),
             createCategory(
                 3,
-                uid,
                 NO_ID,
-                CategoryType.EXPENSE,
+                TransactionType.EXPENSE,
                 R.string.default_category_car,
                 R.drawable.ic_category_car,
-                R.color.category_light_green_a200,
-                2,
-                2
+                R.color.category_light_green_a200
             ),
             createCategory(
                 4,
-                uid,
                 NO_ID,
-                CategoryType.EXPENSE,
+                TransactionType.EXPENSE,
                 R.string.default_category_doctor,
                 R.drawable.ic_category_doctor,
-                R.color.category_pink_300,
-                3,
-                3
+                R.color.category_pink_300
             ),
             createCategory(
                 5,
-                uid,
                 NO_ID,
-                CategoryType.EXPENSE,
+                TransactionType.EXPENSE,
                 R.string.default_category_entertainment,
                 R.drawable.ic_category_entertainment,
-                R.color.category_pink_a200,
-                4,
-                4
+                R.color.category_pink_a200
             ),
             createCategory(
                 6,
-                uid,
                 NO_ID,
-                CategoryType.EXPENSE,
+                TransactionType.EXPENSE,
                 R.string.default_category_home,
                 R.drawable.ic_category_home,
-                R.color.category_teal_100,
-                5,
-                5
+                R.color.category_teal_100
             ),
             createCategory(
                 7,
-                uid,
                 NO_ID,
-                CategoryType.EXPENSE,
+                TransactionType.EXPENSE,
                 R.string.default_category_travels,
                 R.drawable.ic_category_travels,
-                R.color.category_yellow_400,
-                6,
-                6
+                R.color.category_yellow_400
             ),
             createCategory(
                 8,
-                uid,
                 NO_ID,
-                CategoryType.EXPENSE,
+                TransactionType.EXPENSE,
                 R.string.default_category_internet,
                 R.drawable.ic_category_internet,
-                R.color.screamin_green,
-                7,
-                7
+                R.color.screamin_green
             )
         )
     }
 
     private fun createCategory(
         id: Long,
-        uid: String,
         parentId: Long,
-        type: CategoryType,
+        type: TransactionType,
         @StringRes name: Int,
         @DrawableRes icon: Int,
-        @ColorRes color: Int,
-        priority: Int,
-        ordinal: Int
+        @ColorRes color: Int
     ): PrepopulateCategory {
         return PrepopulateCategory(
             id,
-            uid,
             parentId,
             type,
             context.getString(name),
             icon,
             color,
-            priority,
-            ordinal
+            0
         )
     }
 }

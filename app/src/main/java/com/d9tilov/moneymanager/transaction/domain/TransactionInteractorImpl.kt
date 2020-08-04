@@ -2,7 +2,6 @@ package com.d9tilov.moneymanager.transaction.domain
 
 import androidx.paging.PagedList
 import androidx.paging.toFlowable
-import com.d9tilov.moneymanager.category.CategoryType
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.category.exception.CategoryNotFoundException
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -51,8 +50,8 @@ class TransactionInteractorImpl(
 
     override fun getTransactionsByType(type: TransactionType): Flowable<PagedList<BaseTransaction>> {
         val categoryType = when (type) {
-            TransactionType.INCOME -> CategoryType.INCOME
-            TransactionType.EXPENSE -> CategoryType.EXPENSE
+            TransactionType.INCOME -> TransactionType.INCOME
+            TransactionType.EXPENSE -> TransactionType.EXPENSE
         }
         return categoryInteractor.getGroupedCategoriesByType(categoryType)
             .flatMap { categoryList ->

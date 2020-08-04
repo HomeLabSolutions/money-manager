@@ -1,10 +1,10 @@
 package com.d9tilov.moneymanager.category.domain
 
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.category.CategoryType
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.data.entities.Category.Companion.ALL_ITEMS_ID
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
+import com.d9tilov.moneymanager.transaction.TransactionType
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
@@ -17,12 +17,14 @@ class CategoryInteractorImpl(private val categoryRepo: CategoryRepo) :
 
     override fun getCategoryById(id: Long) = categoryRepo.getCategoryById(id)
 
-    override fun getGroupedCategoriesByType(type: CategoryType): Flowable<List<Category>> {
+    override fun getGroupedCategoriesByType(type: TransactionType): Flowable<List<Category>> {
         return categoryRepo.getCategoriesByType(type)
             .map { getAllWithChildrenInSingleList(it) }
     }
 
-    override fun getAllCategoriesByType(type: CategoryType): Flowable<List<Category>> = categoryRepo.getCategoriesByType(type)
+    override fun getAllCategoriesByType(type: TransactionType): Flowable<List<Category>> =
+        categoryRepo.getCategoriesByType(type)
+
     override fun getChildrenByParent(parentCategory: Category): Maybe<List<Category>> =
         categoryRepo.getChildrenByParent(parentCategory)
 
@@ -46,11 +48,10 @@ class CategoryInteractorImpl(private val categoryRepo: CategoryRepo) :
         id = ALL_ITEMS_ID,
         clientId = NO_ID.toString(),
         children = categories,
-        type = CategoryType.EXPENSE,
+        type = TransactionType.EXPENSE,
         name = "",
         color = R.color.category_all_color,
         icon = R.drawable.ic_category_folder,
-        priority = -1,
-        ordinal = -1
+        usageCount = Integer.MAX_VALUE
     )
 }
