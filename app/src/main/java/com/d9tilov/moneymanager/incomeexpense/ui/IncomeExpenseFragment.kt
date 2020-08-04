@@ -7,6 +7,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.viewpager.widget.ViewPager
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeExpenseNavigator
+import com.d9tilov.moneymanager.core.events.OnDialogDismissListener
 import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
 import com.d9tilov.moneymanager.databinding.FragmentIncomeExpenseBinding
 import com.d9tilov.moneymanager.incomeexpense.ui.adapter.IncomeExpenseAdapter
@@ -20,6 +21,7 @@ class IncomeExpenseFragment :
 
     private val args by navArgs<IncomeExpenseFragmentArgs>()
     private val transactionType by lazy { args.transactionType }
+    private val transactionRemoveDialogDismiss by lazy { args.transactionRemoveDialogDismiss }
 
     private lateinit var demoCollectionPagerAdapter: IncomeExpenseAdapter
     private lateinit var viewBinding: FragmentIncomeExpenseBinding
@@ -57,6 +59,11 @@ class IncomeExpenseFragment :
             } else {
                 0
             }
+        if (transactionRemoveDialogDismiss) {
+            val currentFragment =
+                demoCollectionPagerAdapter.getRegisteredFragment(currentPage) as OnDialogDismissListener
+            currentFragment.onDismiss()
+        }
     }
 
     override fun onOpenKeyboard() {

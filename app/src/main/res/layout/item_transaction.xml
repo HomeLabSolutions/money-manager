@@ -17,7 +17,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_catefory_cafe" />
+        tools:src="@drawable/ic_category_cafe" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/item_transaction_guideline"

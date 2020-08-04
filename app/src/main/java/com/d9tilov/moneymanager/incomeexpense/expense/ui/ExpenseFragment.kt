@@ -23,7 +23,8 @@ import com.d9tilov.moneymanager.base.ui.recyclerview.decoration.SpaceItemDecorat
 import com.d9tilov.moneymanager.base.ui.recyclerview.decoration.StickyHeaderItemDecorator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entities.Category
-import com.d9tilov.moneymanager.category.ui.CategoryAdapter
+import com.d9tilov.moneymanager.category.ui.recycler.CategoryAdapter
+import com.d9tilov.moneymanager.core.events.OnDialogDismissListener
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
@@ -33,7 +34,6 @@ import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
-import com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialog
 import com.mfms.common.util.hideKeyboard
 import com.mfms.common.util.showKeyboard
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,7 +44,8 @@ import java.math.BigDecimal
 class ExpenseFragment :
     BaseFragment<FragmentExpenseBinding, ExpenseNavigator>(R.layout.fragment_expense),
     ExpenseNavigator,
-    OnKeyboardVisibleChange {
+    OnKeyboardVisibleChange,
+    OnDialogDismissListener {
 
     private val categoryAdapter = CategoryAdapter()
     private val transactionAdapter = TransactionAdapter()
@@ -64,7 +65,8 @@ class ExpenseFragment :
         override fun onItemClick(item: Transaction, position: Int) {
             val action = IncomeExpenseFragmentDirections.toEditTransactionDest(
                 item,
-                item.category
+                item.category,
+                TransactionType.EXPENSE
             )
             findNavController().navigate(action)
         }
@@ -119,7 +121,7 @@ class ExpenseFragment :
         }
     }
 
-    fun cancelDelete() {
+    override fun onDismiss() {
         transactionAdapter.cancelDeletion()
     }
 
@@ -169,16 +171,18 @@ class ExpenseFragment :
                     transactionType = TransactionType.EXPENSE
                 )
             } else {
-                IncomeExpenseFragmentDirections.toCategoryDest(destination = CategoryDestination.MAIN_SCREEN)
+                IncomeExpenseFragmentDirections.toCategoryDest(
+                    destination = CategoryDestination.MAIN_SCREEN,
+                    transactionType = TransactionType.EXPENSE
+                )
             }
             findNavController().navigate(action)
         }
     }
 
     override fun openRemoveConfirmationDialog(transaction: Transaction) {
-        TransactionRemoveDialog.newInstance(transaction).let {
-            it.show(childFragmentManager, it.tag)
-        }
+        val action = IncomeExpenseFragmentDirections.toRemoveTransactionDialog(transaction)
+        findNavController().navigate(action)
     }
 
     override fun onOpenKeyboard() {

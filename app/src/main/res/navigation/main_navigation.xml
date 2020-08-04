@@ -22,11 +22,21 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/to_remove_transaction_dialog"
+            app:destination="@id/remove_transaction_dialog"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <argument
             android:name="transactionType"
             android:defaultValue="@null"
             app:argType="com.d9tilov.moneymanager.transaction.TransactionType"
             app:nullable="true" />
+        <argument
+            android:name="transactionRemoveDialogDismiss"
+            android:defaultValue="false"
+            app:argType="boolean" />
     </fragment>
 
     <fragment
@@ -68,6 +78,12 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpTo="@+id/income_expense_dest"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/to_create_group_dialog"
+            app:destination="@id/unit_category_to_folder_dialog"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <argument
             android:name="edited_transaction"
             app:argType="com.d9tilov.moneymanager.transaction.domain.entity.Transaction"
@@ -83,9 +99,7 @@
             app:nullable="true" />
         <argument
             android:name="transactionType"
-            android:defaultValue="@null"
-            app:argType="com.d9tilov.moneymanager.transaction.TransactionType"
-            app:nullable="true" />
+            app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
     </fragment>
 
     <fragment
@@ -132,6 +146,48 @@
         <argument
             android:name="category"
             app:argType="com.d9tilov.moneymanager.category.data.entities.Category" />
+        <argument
+            android:name="transactionType"
+            app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
     </fragment>
 
+    <dialog
+        android:id="@+id/remove_transaction_dialog"
+        android:name="com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialogFragment"
+        tools:layout="@layout/fragment_dialog_remove">
+        <action
+            android:id="@+id/to_income_expense_dest"
+            app:destination="@id/income_expense_dest"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@+id/income_expense_dest"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="transaction"
+            app:argType="com.d9tilov.moneymanager.transaction.domain.entity.Transaction" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/unit_category_to_folder_dialog"
+        android:name="com.d9tilov.moneymanager.category.ui.CategoryUnitDialog"
+        tools:layout="@layout/fragment_dialog_category_union">
+        <action
+            android:id="@+id/to_income_expense_dest"
+            app:destination="@id/income_expense_dest"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@+id/income_expense_dest"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="firstCategory"
+            app:argType="com.d9tilov.moneymanager.category.data.entities.Category" />
+        <argument
+            android:name="secondCategory"
+            app:argType="com.d9tilov.moneymanager.category.data.entities.Category" />
+        <argument
+            android:name="transactionType"
+            app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
+    </dialog>
 </navigation>

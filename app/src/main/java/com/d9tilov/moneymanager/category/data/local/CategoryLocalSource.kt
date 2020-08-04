@@ -4,16 +4,17 @@ import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.PrepopulateDataManager
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
-import com.d9tilov.moneymanager.category.CategoryType
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.data.local.entities.CategoryDbModel
 import com.d9tilov.moneymanager.category.data.local.mappers.CategoryMapper
 import com.d9tilov.moneymanager.category.exception.CategoryExistException
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
+import com.d9tilov.moneymanager.transaction.TransactionType
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.functions.Function3
 
 class CategoryLocalSource(
@@ -30,31 +31,33 @@ class CategoryLocalSource(
         return if (currentUserId == null) {
             Completable.error(WrongUidException())
         } else {
-            val defaultCategories = prepopulateDataManager.createDefaultCategories(currentUserId)
+            val defaultCategories = prepopulateDataManager.createDefaultCategories()
             Observable.fromIterable(defaultCategories)
                 .flatMapCompletable {
                     categoryDao.create(
                         categoryMapper.toDataModelFromPrePopulate(
-                            it
+                            it, currentUserId
                         )
-                    )
+                    ).ignoreElement()
                 }
         }
     }
 
-    override fun create(category: Category): Completable =
-        try {
-            val currentUserId = preferencesStore.uid
-            if (currentUserId == null) {
-                Completable.error(WrongUidException())
-            } else {
-                val foundCategory =
-                    categoryDao.getByName(currentUserId, category.name).blockingFirst()
-                Completable.error(CategoryExistException("Category with name: ${foundCategory.name} has already existed"))
-            }
-        } catch (ex: Exception) {
-            categoryDao.create(categoryMapper.toDbModel(category))
+    override fun create(category: Category): Single<Long> {
+        val currentUserId = preferencesStore.uid
+        return if (currentUserId == null) {
+            Single.error(WrongUidException())
+        } else {
+            categoryDao.getCategoriesCountByName(currentUserId, category.name)
+                .flatMap { count ->
+                    if (count == 0) {
+                        categoryDao.create(categoryMapper.toDbModel(category.copy(clientId = currentUserId)))
+                    } else {
+                        Single.error(CategoryExistException("Category with name: ${category.name} has already existed"))
+                    }
+                }
         }
+    }
 
     override fun update(category: Category) = categoryDao.update(categoryMapper.toDbModel(category))
     override fun getById(id: Long): Maybe<Category> {
@@ -88,11 +91,10 @@ class CategoryLocalSource(
         NO_ID,
         "",
         NO_ID,
-        CategoryType.EXPENSE,
+        TransactionType.EXPENSE,
         "",
         "",
         "",
-        0,
         0
     )
 
@@ -107,7 +109,7 @@ class CategoryLocalSource(
         }
     }
 
-    override fun getCategoriesByType(type: CategoryType): Flowable<List<Category>> {
+    override fun getCategoriesByType(type: TransactionType): Flowable<List<Category>> {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
             Flowable.error(WrongUidException())

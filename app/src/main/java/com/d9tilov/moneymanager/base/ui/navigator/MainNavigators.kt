@@ -25,8 +25,14 @@ interface SettingsNavigator : BaseNavigator
 
 interface StatisticsNavigator : BaseNavigator
 
-interface RemoveTransactionNavigator : BaseNavigator {
+interface RemoveTransactionDialogNavigator : BaseNavigator {
     fun remove()
+    fun cancel()
+}
+
+interface CategoryUnionDialogNavigator : BaseNavigator {
+    fun accept()
+    fun showError(error: Throwable)
     fun cancel()
 }
 

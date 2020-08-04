@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    android:theme="@style/Theme.MoneyManager.Material.Alert.Dialog">
+
+    <TextView
+        android:id="@+id/category_dialog_union_title"
+        style="?materialAlertDialogTitleTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:paddingStart="@dimen/standard_left_margin"
+        android:paddingTop="16dp"
+        android:paddingEnd="@dimen/standard_right_margin"
+        tools:text="@string/category_unit_to_group_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/category_dialog_union_subtitle"
+        style="@style/MaterialAlertDialog.MaterialComponents.Body.Text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/standard_left_margin"
+        android:paddingTop="8dp"
+        android:paddingEnd="@dimen/standard_right_margin"
+        tools:text="@string/category_unit_new_name_subtitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/category_dialog_union_title" />
+
+    <include
+        android:id="@+id/category_dialog_union_folder"
+        layout="@layout/layout_union_new_folder"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/category_dialog_union_subtitle"
+        tools:visibility="visible" />
+
+    <include
+        android:id="@+id/category_dialog_current_folder"
+        layout="@layout/layout_union_current_folder"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/category_dialog_union_subtitle"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/category_dialog_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="category_dialog_union_folder,category_dialog_current_folder" />
+
+    <EditText
+        android:id="@+id/category_dialog_union_et_name"
+        style="@style/Widget.MoneyManager.EditText.Category.Union"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/standard_left_margin"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="@dimen/standard_right_margin"
+        android:gravity="start"
+        android:hint="@string/category_unit_name_group_hint"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:maxLines="1"
+        android:maxLength="@integer/max_category_name_length"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/category_dialog_barrier" />
+
+    <TextView
+        android:id="@+id/category_dialog_union_limit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/category_unit_to_group_limit"
+        app:layout_constraintEnd_toEndOf="@+id/category_dialog_union_et_name"
+        app:layout_constraintTop_toBottomOf="@+id/category_dialog_union_et_name" />
+
+    <TextView
+        android:id="@+id/category_dialog_union_error"
+        style="@style/Widget.MoneyManager.Error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/category_dialog_union_cancel"
+        app:layout_constraintStart_toStartOf="@+id/category_dialog_union_et_name"
+        app:layout_constraintTop_toBottomOf="@+id/category_dialog_union_limit"
+        tools:text="@string/category_unit_name_exist_error"
+        tools:visibility="visible" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/category_dialog_union_cancel"
+        style="?buttonBarNegativeButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/cancel"
+        app:layout_constraintEnd_toStartOf="@+id/category_dialog_union_confirm"
+        app:layout_constraintTop_toBottomOf="@+id/category_dialog_union_error" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/category_dialog_union_confirm"
+        style="?buttonBarPositiveButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintTop_toTopOf="@+id/category_dialog_union_cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="@string/save" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

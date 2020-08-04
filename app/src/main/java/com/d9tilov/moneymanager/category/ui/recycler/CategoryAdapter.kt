@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.category.ui
+package com.d9tilov.moneymanager.category.ui.recycler
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -23,7 +23,7 @@ import timber.log.Timber
 class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     var itemClickListener: OnItemClickListener<Category>? = null
-    private var categories = emptyList<Category>()
+    private var categories = mutableListOf<Category>()
 
     init {
         setHasStableIds(true)
@@ -36,7 +36,10 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>
             false
         ) else
             ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        val viewHolder = CategoryViewHolder(viewBinding)
+        val viewHolder =
+            CategoryViewHolder(
+                viewBinding
+            )
         viewBinding.root.setOnClickListener {
             val adapterPosition = viewHolder.adapterPosition
             if (adapterPosition != NO_POSITION) {
@@ -54,14 +57,22 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>
 
     fun updateItems(newCategories: List<Category>) {
         Timber.tag(TAG).d("newCategories size : ${newCategories.size}")
+        val sortedCategories = newCategories.sortedWith(
+            compareBy(
+                { it.children.isEmpty() },
+                { -it.usageCount },
+                { it.name }
+            )
+        )
         val diffUtilsCallback =
             CategoryDiffUtil(
                 categories,
                 newCategories
             )
         val diffUtilsResult = DiffUtil.calculateDiff(diffUtilsCallback, false)
+        categories.clear()
+        categories.addAll(sortedCategories)
         diffUtilsResult.dispatchUpdatesTo(this)
-        categories = newCategories
     }
 
     override fun getItemViewType(position: Int) = if (position == 0) ALL else ORDINARY

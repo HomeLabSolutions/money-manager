@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
-import com.d9tilov.moneymanager.category.CategoryType
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.core.events.SingleLiveEvent
@@ -37,7 +36,7 @@ class ExpenseViewModel @ViewModelInject constructor(
     val addTransactionEvent = SingleLiveEvent<Any>()
 
     init {
-        categoryInteractor.getGroupedCategoriesByType(CategoryType.EXPENSE)
+        categoryInteractor.getGroupedCategoriesByType(TransactionType.EXPENSE)
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
             .subscribe { categories.value = it }

@@ -1,5 +1,6 @@
-package com.d9tilov.moneymanager.category.ui
+package com.d9tilov.moneymanager.category.ui.recycler
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -18,23 +19,22 @@ import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.diff.CategoryDiffUtil
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemLongClickListener
-import com.d9tilov.moneymanager.core.events.OnItemSwapListener
+import com.d9tilov.moneymanager.core.events.OnItemMoveListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
-import com.d9tilov.moneymanager.core.ui.recyclerview.ItemTouchHelperAdapter
+import com.d9tilov.moneymanager.core.ui.recyclerview.ItemTouchHelperCallback
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.databinding.ItemCategoryBinding
 import org.xmlpull.v1.XmlPullParserException
 import timber.log.Timber
-import java.util.Collections
 
 class CategoryModifyAdapter :
     RecyclerView.Adapter<CategoryModifyAdapter.ModifyCategoryViewHolder>(),
-    ItemTouchHelperAdapter {
+    ItemTouchHelperCallback {
 
     var itemClickListener: OnItemClickListener<Category>? = null
     var itemLongClickListener: OnItemLongClickListener<Category>? = null
     var itemRemoveClickListener: OnItemClickListener<Category>? = null
-    var itemSwapListener: OnItemSwapListener<Category>? = null
+    var itemMoveListener: OnItemMoveListener<Category>? = null
     var editModeEnable = false
         private set
     private var categories = mutableListOf<Category>()
@@ -46,7 +46,10 @@ class CategoryModifyAdapter :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ModifyCategoryViewHolder {
         val viewBinding =
             ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        val viewHolder = ModifyCategoryViewHolder(viewBinding)
+        val viewHolder =
+            ModifyCategoryViewHolder(
+                viewBinding
+            )
         viewBinding.root.setOnClickListener {
             val adapterPosition = viewHolder.adapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
@@ -79,16 +82,17 @@ class CategoryModifyAdapter :
     override fun onBindViewHolder(
         holder: ModifyCategoryViewHolder,
         position: Int,
-        payloads: MutableList<Any>
+        payloads: List<Any>
     ) {
         if (payloads.isEmpty()) {
-            super.onBindViewHolder(holder, position, payloads)
-            return
-        }
-        if (payloads.contains(PAYLOAD_EDIT_MODE_ON)) {
-            holder.dispatchEditMode(true)
-        } else if (payloads.contains(PAYLOAD_EDIT_MODE_OFF)) {
-            holder.dispatchEditMode(false)
+            onBindViewHolder(holder, position)
+        } else {
+            Log.d("moggot", "pos: " + position)
+            if (payloads.contains(PAYLOAD_EDIT_MODE_ON)) {
+                holder.dispatchEditMode(true)
+            } else if (payloads.contains(PAYLOAD_EDIT_MODE_OFF)) {
+                holder.dispatchEditMode(false)
+            }
         }
     }
 
@@ -96,16 +100,22 @@ class CategoryModifyAdapter :
 
     fun updateItems(newCategories: List<Category>) {
         Timber.tag(App.TAG).d("newCategories size : ${newCategories.size}")
-        val sortedCategories = newCategories.sortedBy { it.ordinal }
+        val sortedCategories = newCategories.sortedWith(
+            compareBy(
+                { it.children.isEmpty() },
+                { -it.usageCount },
+                { it.name }
+            )
+        )
         val diffUtilsCallback =
             CategoryDiffUtil(
                 categories,
                 sortedCategories
             )
-        val diffUtilsResult = DiffUtil.calculateDiff(diffUtilsCallback, true)
+        val diffUtilsResult = DiffUtil.calculateDiff(diffUtilsCallback, false)
+        diffUtilsResult.dispatchUpdatesTo(this)
         categories.clear()
         categories.addAll(sortedCategories)
-        diffUtilsResult.dispatchUpdatesTo(this)
     }
 
     fun enableEditMode(enable: Boolean) {
@@ -117,23 +127,27 @@ class CategoryModifyAdapter :
         )
     }
 
-    override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
-        if (fromPosition < toPosition) {
-            for (i in fromPosition until toPosition) {
-                Collections.swap(categories, i, i + 1)
-            }
-        } else {
-            for (i in fromPosition downTo toPosition + 1) {
-                Collections.swap(categories, i, i - 1)
-            }
+    override fun onItemMoveToFolder(itemPosition: Int, folderPosition: Int) {
+        val itemChildren = categories[itemPosition].children
+        val folderChildren = categories[folderPosition].children
+        if (itemChildren.isNotEmpty() && folderChildren.isNotEmpty()) {
+            return
         }
-        notifyItemMoved(fromPosition, toPosition)
-        itemSwapListener?.onItemSwap(categories)
-        return true
-    }
-
-    override fun onItemDismiss(position: Int) {
-        TODO("Not yet implemented")
+        if (itemChildren.isEmpty() && folderChildren.isEmpty()) {
+            itemMoveListener?.onItemsUnitToFolder(
+                categories[itemPosition],
+                itemPosition,
+                categories[folderPosition],
+                folderPosition
+            )
+        } else if (itemChildren.isEmpty()) {
+            itemMoveListener?.onItemAddToFolder(
+                categories[itemPosition],
+                itemPosition,
+                categories[folderPosition],
+                folderPosition
+            )
+        }
     }
 
     class ModifyCategoryViewHolder(private val viewBinding: ItemCategoryBinding) :
@@ -157,43 +171,31 @@ class CategoryModifyAdapter :
                     240
                 )
                 categoryItemSubtitle.setTextColor(parentColor)
-                if (category.children.isNotEmpty()) {
-                    GlideApp
-                        .with(context)
-                        .load(R.drawable.ic_category_folder)
-                        .apply(
-                            RequestOptions().override(
-                                IMAGE_SIZE_IN_PX,
-                                IMAGE_SIZE_IN_PX
-                            )
+                val vectorDrawable = VectorDrawableCompat.create(
+                    context.resources,
+                    category.icon,
+                    null
+                ) ?: throw XmlPullParserException("Wrong vector xml file format")
+                val drawable = DrawableCompat.wrap(vectorDrawable)
+                DrawableCompat.setTint(
+                    drawable.mutate(),
+                    ContextCompat.getColor(context, category.color)
+                )
+                GlideApp
+                    .with(context)
+                    .load(drawable)
+                    .apply(
+                        RequestOptions().override(
+                            IMAGE_SIZE_IN_PX,
+                            IMAGE_SIZE_IN_PX
                         )
-                        .into(categoryItemIcon)
-                } else {
-                    val vectorDrawable = VectorDrawableCompat.create(
-                        context.resources,
-                        category.icon,
-                        null
-                    ) ?: throw XmlPullParserException("Wrong vector xml file format")
-                    val drawable = DrawableCompat.wrap(vectorDrawable)
-                    DrawableCompat.setTint(
-                        drawable.mutate(),
-                        ContextCompat.getColor(context, category.color)
                     )
-                    GlideApp
-                        .with(context)
-                        .load(drawable)
-                        .apply(
-                            RequestOptions().override(
-                                IMAGE_SIZE_IN_PX,
-                                IMAGE_SIZE_IN_PX
-                            )
-                        )
-                        .into(categoryItemIcon)
-                }
+                    .into(categoryItemIcon)
             }
         }
 
         fun dispatchEditMode(enable: Boolean) {
+            Log.d("moggot", "dispatchEditMode: " + enable)
             viewBinding.categoryItemRemove.visibility = if (enable) VISIBLE else GONE
             val animation = AnimationUtils.loadAnimation(
                 context,

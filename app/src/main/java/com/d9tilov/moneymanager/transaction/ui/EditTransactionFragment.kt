@@ -33,6 +33,7 @@ class EditTransactionFragment : EditTransactionNavigator,
     private val args by navArgs<EditTransactionFragmentArgs>()
     private val transaction by lazy { args.editedTransaction }
     private val category by lazy { args.category }
+    private val transactionType by lazy { args.transactionType }
     private var toolbar: MaterialToolbar? = null
     private lateinit var date: Date
 
@@ -78,7 +79,8 @@ class EditTransactionFragment : EditTransactionNavigator,
                 val action =
                     EditTransactionFragmentDirections.toCategoryDest(
                         transaction,
-                        CategoryDestination.EDIT_TRANSACTION_SCREEN
+                        CategoryDestination.EDIT_TRANSACTION_SCREEN,
+                        transactionType = transactionType
                     )
                 findNavController().navigate(action)
             }

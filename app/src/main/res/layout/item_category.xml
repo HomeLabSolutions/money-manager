@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/category_item_title"
-        app:srcCompat="@drawable/ic_catefory_cafe" />
+        app:srcCompat="@drawable/ic_category_cafe" />
 
     <TextView
         android:id="@+id/category_item_title"

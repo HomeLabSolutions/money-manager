@@ -7,7 +7,7 @@
     android:theme="?materialAlertDialogTheme">
 
     <TextView
-        android:id="@+id/dialog_title"
+        android:id="@+id/transaction_remove_dialog_title"
         style="?materialAlertDialogTitleTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
         tools:text="@string/remove_transaction_dialog_title" />
 
     <TextView
-        android:id="@+id/dialog_subtitle"
+        android:id="@+id/transaction_remove_dialog_subtitle"
         style="@style/MaterialAlertDialog.MaterialComponents.Body.Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -28,22 +28,22 @@
         android:paddingTop="16dp"
         android:paddingEnd="@dimen/standard_right_margin"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_title"
+        app:layout_constraintTop_toBottomOf="@+id/transaction_remove_dialog_title"
         tools:text="@string/remove_transaction_dialog_subtitle" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_cancel"
+        android:id="@+id/transaction_remove_button_cancel"
         style="?buttonBarNegativeButtonStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:layout_marginEnd="8dp"
         android:text="@string/cancel"
-        app:layout_constraintEnd_toStartOf="@+id/button_confirm"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_subtitle" />
+        app:layout_constraintEnd_toStartOf="@+id/transaction_remove_button_confirm"
+        app:layout_constraintTop_toBottomOf="@+id/transaction_remove_dialog_subtitle" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_confirm"
+        android:id="@+id/transaction_remove_button_confirm"
         style="?buttonBarPositiveButtonStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -51,5 +51,5 @@
         android:layout_marginEnd="8dp"
         android:text="@string/delete"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_subtitle" />
+        app:layout_constraintTop_toBottomOf="@+id/transaction_remove_dialog_subtitle" />
 </androidx.constraintlayout.widget.ConstraintLayout>

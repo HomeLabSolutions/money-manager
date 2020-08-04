@@ -1,15 +1,13 @@
 package com.d9tilov.moneymanager.base.data.local.db.prepopulate.entity
 
-import com.d9tilov.moneymanager.category.CategoryType
+import com.d9tilov.moneymanager.transaction.TransactionType
 
 data class PrepopulateCategory(
     val id: Long,
-    val clientId: String,
     val parentId: Long,
-    val type: CategoryType,
+    val type: TransactionType,
     val name: String,
     val icon: Int,
     val color: Int,
-    val priority: Int,
-    val ordinal: Int
+    val usageCount: Int
 )

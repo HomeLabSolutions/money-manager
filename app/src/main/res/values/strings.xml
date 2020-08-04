@@ -32,6 +32,8 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="add">Add</string>
+    <string name="letter_limit" translatable="false">%1$s/%2$s</string>
 
     <string name="remove_transaction_dialog_title">Remove transaction</string>
     <string name="remove_transaction_dialog_subtitle">Do you really want to delete the transaction?</string>
@@ -42,4 +44,13 @@
     <string name="date_tomorrow">Tomorrow</string>
     <string name="date_today">Today</string>
     <string name="date_yesterday">Yesterday</string>
+
+    <string name="category_unit_to_group_limit" translatable="false">%1$s/%2$s</string>
+    <string name="category_unit_to_group_title">Grouping</string>
+    <string name="category_add_to_group_title">Add to group</string>
+    <string name="category_unit_new_name_subtitle">Enter name of new group</string>
+    <string name="category_unit_to_group_subtitle">Add category \"%1$s\"\ to group %2$s?</string>
+    <string name="category_unit_name_group_hint">Name of group</string>
+    <string name="category_unit_empty_name_error">The name of group could\'t be empty</string>
+    <string name="category_unit_name_exist_error">Name of this group already exists</string>
 </resources>
