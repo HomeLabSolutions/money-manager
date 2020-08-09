@@ -87,8 +87,31 @@
                     app:srcCompat="@drawable/ic_arrow_forward" />
             </LinearLayout>
 
+            <View
+                android:id="@+id/category_creation_color"
+                android:layout_width="72dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/shape_rectange_round_corners"
+                app:layout_constraintStart_toStartOf="@+id/category_creation_icon_layout"
+                app:layout_constraintTop_toBottomOf="@+id/category_creation_icon_layout" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/category_creation_rv_color_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        android:visibility="invisible"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:listitem="@layout/item_color_picker"
+        tools:visibility="visible" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/category_creation_save"

@@ -74,9 +74,6 @@ class CategoryViewModel @ViewModelInject constructor(
             .addTo(compositeDisposable)
     }
 
-    fun onItemMoveAndUnit(childItem: Category, parentItem: Category) {
-    }
-
     override fun update(name: String) {
         categoryInteractor.update(expenseCategories.value!![0].copy(name = name))
             .subscribeOn(ioScheduler)

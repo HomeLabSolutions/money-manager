@@ -44,13 +44,11 @@ interface CategoryNavigator : BaseNavigator {
 }
 
 interface CategoryCreationNavigator : BaseNavigator {
-    fun openColorPicker()
-    fun openCategoryIconSet()
     fun save()
 }
 
 interface CategorySetNavigator : BaseNavigator {
-    fun save()
+    fun save(category: Category)
 }
 
 interface EditTransactionNavigator : BaseNavigator {

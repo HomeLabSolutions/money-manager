@@ -172,11 +172,28 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
+        <action
+            android:id="@+id/to_category_dest"
+            app:destination="@id/category_dest"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@+id/category_dest"
+            app:popUpToInclusive="true"/>
+
         <argument
             android:name="category"
             android:defaultValue="@null"
             app:argType="com.d9tilov.moneymanager.category.data.entities.Category"
             app:nullable="true" />
+
+        <argument
+            android:name="destination"
+            app:argType="com.d9tilov.moneymanager.category.CategoryDestination" />
+
+        <argument
+            android:name="transactionType"
+            app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
     </fragment>
 
     <fragment
@@ -185,11 +202,26 @@
         android:label="fragment_title_screen"
         tools:layout="@layout/fragment_category_icon_set">
 
+        <action
+            android:id="@+id/to_category_creation_dest"
+            app:destination="@id/category_creation_dest"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@+id/category_creation_dest"
+            app:popUpToInclusive="true" />
+
         <argument
             android:name="category"
-            android:defaultValue="@null"
-            app:argType="com.d9tilov.moneymanager.category.data.entities.Category"
-            app:nullable="true" />
+            app:argType="com.d9tilov.moneymanager.category.data.entities.Category" />
+
+        <argument
+            android:name="transactionType"
+            app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
+
+        <argument
+            android:name="destination"
+            app:argType="com.d9tilov.moneymanager.category.CategoryDestination" />
     </fragment>
 
     <dialog

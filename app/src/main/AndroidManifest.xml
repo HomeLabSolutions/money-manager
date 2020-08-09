@@ -45,7 +45,8 @@
         <activity
             android:name="com.d9tilov.moneymanager.home.ui.MainActivity"
             android:launchMode="singleTask"
-            android:theme="@style/Theme.MoneyManager.Home" />
+            android:theme="@style/Theme.MoneyManager.Home"
+            android:windowSoftInputMode="adjustResize"/>
 
         <meta-data
             android:name="com.google.android.backup.api_key"
