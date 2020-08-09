@@ -8,6 +8,9 @@
     <string name="title_category">Categories</string>
     <string name="title_transaction">Transaction</string>
     <string name="title_sub_category">Category: %1$s</string>
+    <string name="title_category_creation">Category</string>
+    <string name="title_category_set">Available categories</string>
+    <string name="title_category_creation_create">Category creation</string>
 
     <string name="settings_login">Login</string>
     <string name="settings_logout">Logout</string>
@@ -33,6 +36,7 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="add">Add</string>
+    <string name="create">Create</string>
     <string name="letter_limit" translatable="false">%1$s/%2$s</string>
 
     <string name="remove_transaction_dialog_title">Remove transaction</string>
@@ -45,7 +49,8 @@
     <string name="date_today">Today</string>
     <string name="date_yesterday">Yesterday</string>
 
-    <string name="category_unit_to_group_limit" translatable="false">%1$s/%2$s</string>
+    <string name="category_name_title">Category name</string>
+    <string name="category_name_hint">Enter name</string>
     <string name="category_unit_to_group_title">Grouping</string>
     <string name="category_add_to_group_title">Add to group</string>
     <string name="category_unit_new_name_subtitle">Enter name of new group</string>

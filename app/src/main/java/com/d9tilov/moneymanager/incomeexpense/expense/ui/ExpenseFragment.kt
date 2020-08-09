@@ -18,9 +18,9 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.callback.SwipeToDeleteCallback
 import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
-import com.d9tilov.moneymanager.base.ui.recyclerview.ItemSnapHelper
-import com.d9tilov.moneymanager.base.ui.recyclerview.decoration.SpaceItemDecoration
-import com.d9tilov.moneymanager.base.ui.recyclerview.decoration.StickyHeaderItemDecorator
+import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
+import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
+import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryAdapter
@@ -127,16 +127,19 @@ class ExpenseFragment :
 
     private fun initCategoryRecyclerView() {
         viewBinding?.run {
-            expenseCategoryRvList.layoutManager =
-                GridLayoutManager(requireContext(), 2, GridLayoutManager.HORIZONTAL, false)
+            val layoutManager =
+                GridLayoutManager(requireContext(), SPAN_COUNT, GridLayoutManager.HORIZONTAL, false)
+            expenseCategoryRvList.layoutManager = layoutManager
             expenseCategoryRvList.adapter = categoryAdapter
             expenseCategoryRvList.addItemDecoration(
-                SpaceItemDecoration(
-                    requireContext(),
-                    R.dimen.recycler_view_category_offset
+                GridSpaceItemDecoration(
+                    SPAN_COUNT,
+                    resources.getDimension(R.dimen.recycler_view_category_offset).toInt(),
+                    layoutManager.orientation
                 )
             )
-            val snapHelper: SnapHelper = ItemSnapHelper()
+            val snapHelper: SnapHelper =
+                ItemSnapHelper()
             snapHelper.attachToRecyclerView(expenseCategoryRvList)
         }
     }
@@ -146,7 +149,10 @@ class ExpenseFragment :
             expenseTransactionRvList.layoutManager =
                 LinearLayoutManager(requireContext())
             expenseTransactionRvList.adapter = transactionAdapter
-            val itemDecoration = StickyHeaderItemDecorator(transactionAdapter)
+            val itemDecoration =
+                StickyHeaderItemDecorator(
+                    transactionAdapter
+                )
             itemDecoration.attachToRecyclerView(expenseTransactionRvList)
             ItemTouchHelper(object : SwipeToDeleteCallback(requireContext()) {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -203,5 +209,6 @@ class ExpenseFragment :
 
     companion object {
         fun newInstance() = ExpenseFragment()
+        private const val SPAN_COUNT = 2
     }
 }

@@ -1,0 +1,29 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="@dimen/item_color_picker_size_wrapper"
+        android:layout_height="@dimen/item_color_picker_size_wrapper"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true">
+
+        <View
+            android:id="@+id/color_circle"
+            android:layout_width="@dimen/item_color_picker_size"
+            android:layout_height="@dimen/item_color_picker_size"
+            android:layout_centerInParent="true"
+            android:background="@drawable/color_picker_item_background"
+            android:elevation="2dp"
+            tools:backgroundTint="@color/category_pink_300" />
+
+        <View
+            android:id="@+id/color_border"
+            android:layout_width="@dimen/item_color_picker_size"
+            android:layout_height="@dimen/item_color_picker_size"
+            android:layout_centerInParent="true"
+            android:background="@drawable/color_picker_item_border_background"
+            android:elevation="2dp" />
+
+    </RelativeLayout>
+</layout>

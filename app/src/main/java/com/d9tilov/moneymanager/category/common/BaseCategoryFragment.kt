@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
-import com.d9tilov.moneymanager.base.ui.recyclerview.decoration.SpaceItemDecoration
+import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryModifyAdapter
 import com.d9tilov.moneymanager.core.events.OnBackPressed
@@ -47,20 +47,20 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         viewBinding?.run {
-            categoryRv.layoutManager =
-                GridLayoutManager(requireContext(), 4, GridLayoutManager.VERTICAL, false)
+            val layoutManager =
+                GridLayoutManager(requireContext(), SPAN_COUNT, GridLayoutManager.VERTICAL, false)
+            categoryRv.layoutManager = layoutManager
             categoryRv.adapter = categoryAdapter
             val callback =
                 SimpleItemTouchHelperCallback(
-                    categoryRv,
                     categoryAdapter
                 )
             val touchHelper = ItemTouchHelper(callback)
             touchHelper.attachToRecyclerView(categoryRv)
             categoryRv.addItemDecoration(
-                SpaceItemDecoration(
-                    requireContext(),
-                    R.dimen.recycler_view_category_offset
+                GridSpaceItemDecoration(
+                    spanCount = SPAN_COUNT,
+                    spacing = resources.getDimension(R.dimen.recycler_view_category_offset).toInt()
                 )
             )
             categoryRv.addOnItemTouchListener(object : OnItemTouchListener {
@@ -132,5 +132,9 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
             findNavController().popBackStack()
             false
         }
+    }
+
+    companion object {
+        private const val SPAN_COUNT = 4
     }
 }

@@ -15,15 +15,22 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/category_rv"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:paddingStart="@dimen/standard_left_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:paddingTop="@dimen/standard_top_margin"
-        android:paddingEnd="@dimen/standard_right_margin"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:paddingBottom="@dimen/standard_bottom_margin"
         app:layout_constraintTop_toBottomOf="@+id/category_toolbar_container" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/category_create"
+        style="?attr/moneyManagerBottomActionButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:text="@string/create"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.base.ui.recyclerview
+package com.d9tilov.moneymanager.core.ui.recyclerview
 
 import android.content.Context
 import android.util.DisplayMetrics

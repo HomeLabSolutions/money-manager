@@ -9,6 +9,9 @@
     <string name="title_category">Категории</string>
     <string name="title_transaction">Транзакция</string>
     <string name="title_sub_category">Категория: %1$s</string>
+    <string name="title_category_creation">Категория</string>
+    <string name="title_category_set">Доступные категории</string>
+    <string name="title_category_creation_create">Создание категории</string>
 
     <string name="settings_login">Войти</string>
     <string name="settings_logout">Выйти</string>
@@ -34,6 +37,7 @@
     <string name="cancel">Отмена</string>
     <string name="save">Сохранить</string>
     <string name="add">Добавить</string>
+    <string name="create">Создать</string>
 
     <string name="remove_transaction_dialog_title">Удаление транзакции</string>
     <string name="remove_transaction_dialog_subtitle">Вы действительно хотите удалить транзакцию?</string>
@@ -45,6 +49,8 @@
     <string name="date_today">Сегодня</string>
     <string name="date_yesterday">Вчера</string>
 
+    <string name="category_name_title">Название категории</string>
+    <string name="category_name_hint">Введите название</string>
     <string name="category_unit_to_group_title">Объединение в группу</string>
     <string name="category_add_to_group_title">Добавление в группу</string>
     <string name="category_unit_to_group_subtitle">Добавить категорию \"%1$s\"\ в группу \"%2$s\"\?</string>

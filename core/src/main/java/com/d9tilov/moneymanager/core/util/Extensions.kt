@@ -1,6 +1,9 @@
 package com.d9tilov.moneymanager.core.util
 
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
+import android.widget.EditText
 import com.d9tilov.moneymanager.core.AndroidDisposable
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DECIMAL_SEPARATOR
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DEFAULT_DECIMAL_SEPARATOR
@@ -51,3 +54,14 @@ val BigDecimal?.removeScale: BigDecimal
 
         return result
     }
+
+fun EditText.onChange(cb: (String) -> Unit) {
+    this.addTextChangedListener(object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            cb(s.toString())
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+    })
+}

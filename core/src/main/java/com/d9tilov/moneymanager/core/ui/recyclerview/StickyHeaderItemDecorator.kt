@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.base.ui.recyclerview.decoration
+package com.d9tilov.moneymanager.core.ui.recyclerview
 
 import android.graphics.Canvas
 import android.view.View
@@ -7,7 +7,6 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
-import com.d9tilov.moneymanager.base.ui.recyclerview.adapter.StickyAdapter
 
 class StickyHeaderItemDecorator<T>(private val adapter: StickyAdapter<T, RecyclerView.ViewHolder, RecyclerView.ViewHolder>) :
     ItemDecoration() {
