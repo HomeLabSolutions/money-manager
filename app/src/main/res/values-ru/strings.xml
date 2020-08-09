@@ -10,7 +10,7 @@
     <string name="title_transaction">Транзакция</string>
     <string name="title_sub_category">Категория: %1$s</string>
     <string name="title_category_creation">Категория</string>
-    <string name="title_category_set">Доступные категории</string>
+    <string name="title_category_set">Доступные иконки</string>
     <string name="title_category_creation_create">Создание категории</string>
 
     <string name="settings_login">Войти</string>

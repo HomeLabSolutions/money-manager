@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.category.data.entities.CategoryIcon
+import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
@@ -13,15 +13,17 @@ import com.d9tilov.moneymanager.databinding.ItemCategoryIconBinding
 class CategoryIconSetAdapter :
     RecyclerView.Adapter<CategoryIconSetAdapter.CategoryIconViewHolder>() {
 
+    var itemClickListener: OnItemClickListener<Int>? = null
+
     private val categoryIconList = listOf(
-        CategoryIcon(R.drawable.ic_category_cafe, R.color.category_deep_purple_a100),
-        CategoryIcon(R.drawable.ic_category_car, R.color.category_light_green_a200),
-        CategoryIcon(R.drawable.ic_category_doctor, R.color.category_pink_300),
-        CategoryIcon(R.drawable.ic_category_entertainment, R.color.category_pink_a200),
-        CategoryIcon(R.drawable.ic_category_food, R.color.category_teal_100),
-        CategoryIcon(R.drawable.ic_category_internet, R.color.category_yellow_400),
-        CategoryIcon(R.drawable.ic_category_home, R.color.category_screamin_green),
-        CategoryIcon(R.drawable.ic_category_travels, R.color.category_picton_blue)
+        R.drawable.ic_category_cafe to R.color.category_deep_purple_a100,
+        R.drawable.ic_category_car to R.color.category_light_green_a200,
+        R.drawable.ic_category_doctor to R.color.category_pink_300,
+        R.drawable.ic_category_entertainment to R.color.category_pink_a200,
+        R.drawable.ic_category_food to R.color.category_teal_100,
+        R.drawable.ic_category_internet to R.color.category_yellow_400,
+        R.drawable.ic_category_home to R.color.category_screamin_green,
+        R.drawable.ic_category_travels to R.color.category_picton_blue
     )
 
     init {
@@ -34,7 +36,17 @@ class CategoryIconSetAdapter :
             parent,
             false
         )
-        return CategoryIconViewHolder(viewBinding)
+        val viewHolder = CategoryIconViewHolder(viewBinding)
+        viewBinding.root.setOnClickListener {
+            val adapterPosition = viewHolder.adapterPosition
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                itemClickListener?.onItemClick(
+                    categoryIconList[adapterPosition].first,
+                    adapterPosition
+                )
+            }
+        }
+        return viewHolder
     }
 
     override fun getItemCount() = categoryIconList.size
@@ -46,9 +58,9 @@ class CategoryIconSetAdapter :
     class CategoryIconViewHolder(private val viewBinding: ItemCategoryIconBinding) :
         BaseViewHolder(viewBinding) {
 
-        fun bind(categoryItemIcon: CategoryIcon) {
+        fun bind(categoryItemIcon: Pair<Int, Int>) {
             val tintDrawable =
-                createTintDrawable(context, categoryItemIcon.drawableId, categoryItemIcon.colorId)
+                createTintDrawable(context, categoryItemIcon.first, categoryItemIcon.second)
             GlideApp
                 .with(context)
                 .load(tintDrawable)

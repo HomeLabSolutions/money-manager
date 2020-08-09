@@ -34,7 +34,7 @@ class CategoryFragment :
     }
 
     override fun openCreateCategoryScreen(category: Category?) {
-        val action = CategoryFragmentDirections.toCategoryCreationDest(category)
+        val action = CategoryFragmentDirections.toCategoryCreationDest(category, destination, transactionType)
         findNavController().navigate(action)
     }
 
@@ -58,7 +58,7 @@ class CategoryFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewBinding?.categoryCreate?.setOnClickListener {
-            val action = CategoryFragmentDirections.toCategoryCreationDest()
+            val action = CategoryFragmentDirections.toCategoryCreationDest(transactionType = transactionType, destination = destination)
             findNavController().navigate(action)
         }
     }

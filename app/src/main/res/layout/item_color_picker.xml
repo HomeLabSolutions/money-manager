@@ -4,9 +4,7 @@
     <RelativeLayout
         android:layout_width="@dimen/item_color_picker_size_wrapper"
         android:layout_height="@dimen/item_color_picker_size_wrapper"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:focusable="true">
+        android:padding="2dp">
 
         <View
             android:id="@+id/color_circle"

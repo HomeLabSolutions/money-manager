@@ -9,7 +9,7 @@
     <string name="title_transaction">Transaction</string>
     <string name="title_sub_category">Category: %1$s</string>
     <string name="title_category_creation">Category</string>
-    <string name="title_category_set">Available categories</string>
+    <string name="title_category_set">Available icons</string>
     <string name="title_category_creation_create">Category creation</string>
 
     <string name="settings_login">Login</string>

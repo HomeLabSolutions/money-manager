@@ -27,6 +27,16 @@
     <color name="error_color">#e61628</color>
     <color name="success_color">#00894d</color>
 
+    <color name="category_white">#FFFFFF</color>
+    <color name="category_pigment_indigo">#4F0080</color>
+    <color name="category_fuchsia_pink">#CB45CC</color>
+    <color name="category_international_klein_blue">#0037AE</color>
+    <color name="category_karry">#FEE8D3</color>
+    <color name="category_pistachio">#8DC701</color>
+    <color name="category_granny_apple">#CCF3E0</color>
+    <color name="category_corn">#E7B200</color>
+    <color name="category_trinidad">#E75802</color>
+    <color name="category_black">#000000</color>
     <color name="category_light_green_a200">#9DEA4F</color>
     <color name="category_teal_100">#A7D8DC</color>
     <color name="category_pink_300">#FB7C83</color>
