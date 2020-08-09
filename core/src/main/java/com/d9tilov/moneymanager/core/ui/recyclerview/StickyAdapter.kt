@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.base.ui.recyclerview.adapter
+package com.d9tilov.moneymanager.core.ui.recyclerview
 
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter

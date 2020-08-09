@@ -86,7 +86,7 @@
     </style>
 
     <style name="ThemeOverlay.MoneyManager.AppBarLayout" parent="">
-        <item name="colorPrimary">@android:color/white</item>
+        <item name="colorPrimary">@color/color_midnight_white</item>
     </style>
 
     <style name="ThemeOverlay.MoneyManager.Toolbar.Inverted" parent="ThemeOverlay.MoneyManager.Toolbar">

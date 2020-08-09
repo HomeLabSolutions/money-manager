@@ -1,8 +1,6 @@
 package com.d9tilov.moneymanager.category.ui
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
@@ -16,6 +14,7 @@ import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.exception.CategoryExistException
 import com.d9tilov.moneymanager.category.ui.vm.CategoryUnionViewModel
 import com.d9tilov.moneymanager.core.util.createTintDrawable
+import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.databinding.FragmentDialogCategoryUnionBinding
 import com.mfms.common.util.hideKeyboard
 import com.mfms.common.util.showKeyboard
@@ -58,7 +57,7 @@ class CategoryUnitDialog :
         super.onViewCreated(view, savedInstanceState)
         viewBinding?.let {
             it.categoryDialogUnionLimit.text = getString(
-                R.string.category_unit_to_group_limit,
+                R.string.letter_limit,
                 it.categoryDialogUnionEtName.text.length.toString(),
                 resources.getInteger(R.integer.max_category_name_length).toString()
             )
@@ -107,29 +106,16 @@ class CategoryUnitDialog :
                     )
                 }
             }
-            it.categoryDialogUnionEtName.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) {
-                    val isNameEmpty = s?.length == 0
-                    viewBinding?.categoryDialogUnionConfirm?.isEnabled = !isNameEmpty
-                    viewBinding?.categoryDialogUnionError?.visibility = INVISIBLE
-                    viewBinding?.categoryDialogUnionLimit?.text = getString(
-                        R.string.category_unit_to_group_limit,
-                        s?.length.toString(),
-                        resources.getInteger(R.integer.max_category_name_length).toString()
-                    )
-                }
-
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                }
-            })
+            it.categoryDialogUnionEtName.onChange { text ->
+                val isNameEmpty = text.isEmpty()
+                viewBinding?.categoryDialogUnionConfirm?.isEnabled = !isNameEmpty
+                viewBinding?.categoryDialogUnionError?.visibility = INVISIBLE
+                viewBinding?.categoryDialogUnionLimit?.text = getString(
+                    R.string.letter_limit,
+                    text.length.toString(),
+                    resources.getInteger(R.integer.max_category_name_length).toString()
+                )
+            }
         }
     }
 

@@ -12,7 +12,6 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemTouchHelperCallback
 
 class SimpleItemTouchHelperCallback(
-    private val recyclerView: RecyclerView,
     private val callback: ItemTouchHelperCallback
 ) : ItemTouchHelper.Callback() {
 

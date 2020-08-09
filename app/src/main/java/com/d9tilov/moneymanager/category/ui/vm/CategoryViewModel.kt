@@ -40,22 +40,26 @@ class CategoryViewModel @ViewModelInject constructor(
         if (category.children.isNotEmpty()) {
             navigator?.openSubCategoryScreen(category)
         } else {
-            if (destination == CategoryDestination.EDIT_TRANSACTION_SCREEN) {
-                navigator?.backToEditTransactionScreen(category)
-            } else if (destination == CategoryDestination.MAIN_WITH_SUM_SCREEN) {
-                val inputSum = requireNotNull(savedStateHandle.get<BigDecimal>("sum"))
-                val transactionType =
-                    requireNotNull(savedStateHandle.get<TransactionType>("transactionType"))
-                transactionInteractor.addTransaction(
-                    Transaction(
-                        type = transactionType,
-                        sum = inputSum,
-                        category = category
-                    )
+            when (destination) {
+                CategoryDestination.EDIT_TRANSACTION_SCREEN -> navigator?.backToEditTransactionScreen(
+                    category
                 )
-                    .subscribeOn(ioScheduler)
-                    .observeOn(uiScheduler)
-                    .subscribe { navigator?.backToMainScreen(transactionType) }
+                CategoryDestination.MAIN_WITH_SUM_SCREEN -> {
+                    val inputSum = requireNotNull(savedStateHandle.get<BigDecimal>("sum"))
+                    val transactionType =
+                        requireNotNull(savedStateHandle.get<TransactionType>("transactionType"))
+                    transactionInteractor.addTransaction(
+                        Transaction(
+                            type = transactionType,
+                            sum = inputSum,
+                            category = category
+                        )
+                    )
+                        .subscribeOn(ioScheduler)
+                        .observeOn(uiScheduler)
+                        .subscribe { navigator?.backToMainScreen(transactionType) }
+                }
+                CategoryDestination.MAIN_SCREEN -> navigator?.openCreateCategoryScreen(category)
             }
         }
     }

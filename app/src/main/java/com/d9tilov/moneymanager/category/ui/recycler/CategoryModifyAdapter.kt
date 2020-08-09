@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.category.ui.recycler
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -8,11 +7,8 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
-import com.bumptech.glide.request.RequestOptions
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.category.data.entities.Category
@@ -22,9 +18,9 @@ import com.d9tilov.moneymanager.core.events.OnItemLongClickListener
 import com.d9tilov.moneymanager.core.events.OnItemMoveListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemTouchHelperCallback
+import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.databinding.ItemCategoryBinding
-import org.xmlpull.v1.XmlPullParserException
 import timber.log.Timber
 
 class CategoryModifyAdapter :
@@ -87,7 +83,6 @@ class CategoryModifyAdapter :
         if (payloads.isEmpty()) {
             onBindViewHolder(holder, position)
         } else {
-            Log.d("moggot", "pos: " + position)
             if (payloads.contains(PAYLOAD_EDIT_MODE_ON)) {
                 holder.dispatchEditMode(true)
             } else if (payloads.contains(PAYLOAD_EDIT_MODE_OFF)) {
@@ -171,31 +166,15 @@ class CategoryModifyAdapter :
                     240
                 )
                 categoryItemSubtitle.setTextColor(parentColor)
-                val vectorDrawable = VectorDrawableCompat.create(
-                    context.resources,
-                    category.icon,
-                    null
-                ) ?: throw XmlPullParserException("Wrong vector xml file format")
-                val drawable = DrawableCompat.wrap(vectorDrawable)
-                DrawableCompat.setTint(
-                    drawable.mutate(),
-                    ContextCompat.getColor(context, category.color)
-                )
+                val tintDrawable = createTintDrawable(context, category.icon, category.color)
                 GlideApp
                     .with(context)
-                    .load(drawable)
-                    .apply(
-                        RequestOptions().override(
-                            IMAGE_SIZE_IN_PX,
-                            IMAGE_SIZE_IN_PX
-                        )
-                    )
+                    .load(tintDrawable)
                     .into(categoryItemIcon)
             }
         }
 
         fun dispatchEditMode(enable: Boolean) {
-            Log.d("moggot", "dispatchEditMode: " + enable)
             viewBinding.categoryItemRemove.visibility = if (enable) VISIBLE else GONE
             val animation = AnimationUtils.loadAnimation(
                 context,
@@ -206,10 +185,6 @@ class CategoryModifyAdapter :
             } else {
                 viewBinding.root.clearAnimation()
             }
-        }
-
-        companion object {
-            private const val IMAGE_SIZE_IN_PX = 136
         }
     }
 

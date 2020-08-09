@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/category_creation_toolbar_container"
+        layout="@layout/common_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/category_creation_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/category_creation_name_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/standard_left_margin"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="@dimen/standard_right_margin"
+                android:text="@string/category_name_title"
+                android:textAppearance="?attr/textAppearanceCaption"
+                android:textColor="@color/text_primary_color_dark"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/category_creation_et_name"
+                style="@style/Widget.MoneyManager.EditText.CategoryName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/standard_left_margin"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="@dimen/standard_right_margin"
+                android:hint="@string/category_name_hint"
+                android:importantForAutofill="no"
+                android:inputType="textCapSentences"
+                android:maxLines="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/category_creation_name_title" />
+
+            <TextView
+                android:id="@+id/category_creation_name_limit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceCaption"
+                app:layout_constraintEnd_toEndOf="@+id/category_creation_et_name"
+                app:layout_constraintTop_toBottomOf="@+id/category_creation_et_name"
+                tools:text="5/30" />
+
+            <LinearLayout
+                android:id="@+id/category_creation_icon_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/standard_left_margin"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/category_creation_name_limit">
+
+                <ImageView
+                    android:id="@+id/category_creation_icon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    tools:srcCompat="@drawable/ic_category_doctor"
+                    tools:tint="@color/category_pink_a200" />
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="8dp"
+                    app:tint="@color/color_midnight_white"
+                    app:srcCompat="@drawable/ic_arrow_forward" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/category_creation_save"
+        style="?attr/moneyManagerBottomActionButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:enabled="false"
+        android:text="@string/save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</LinearLayout>

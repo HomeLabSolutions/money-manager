@@ -28,7 +28,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
                 TransactionType.EXPENSE,
                 R.string.default_category_cafe,
                 R.drawable.ic_category_cafe,
-                R.color.picton_blue
+                R.color.category_picton_blue
             ),
             createCategory(
                 3,
@@ -76,7 +76,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
                 TransactionType.EXPENSE,
                 R.string.default_category_internet,
                 R.drawable.ic_category_internet,
-                R.color.screamin_green
+                R.color.category_screamin_green
             )
         )
     }

@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.category.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -28,13 +29,13 @@ class CategoryFragment :
     override val viewModel by viewModels<CategoryViewModel>()
 
     override fun openSubCategoryScreen(category: Category) {
-        val action =
-            CategoryFragmentDirections.toSubCategoryDest(destination, category)
+        val action = CategoryFragmentDirections.toSubCategoryDest(destination, category)
         findNavController().navigate(action)
     }
 
-    override fun openCreateCategoryDialog() {
-        TODO("Not yet implemented")
+    override fun openCreateCategoryScreen(category: Category?) {
+        val action = CategoryFragmentDirections.toCategoryCreationDest(category)
+        findNavController().navigate(action)
     }
 
     override fun backToEditTransactionScreen(category: Category) {
@@ -52,6 +53,14 @@ class CategoryFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         categoryAdapter.itemMoveListener = onItemMoveListener
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewBinding?.categoryCreate?.setOnClickListener {
+            val action = CategoryFragmentDirections.toCategoryCreationDest()
+            findNavController().navigate(action)
+        }
     }
 
     private val onItemMoveListener = object : OnItemMoveListener<Category> {

@@ -38,9 +38,19 @@ interface CategoryUnionDialogNavigator : BaseNavigator {
 
 interface CategoryNavigator : BaseNavigator {
     fun openSubCategoryScreen(category: Category)
-    fun openCreateCategoryDialog()
+    fun openCreateCategoryScreen(category: Category? = null)
     fun backToEditTransactionScreen(category: Category)
     fun backToMainScreen(transactionType: TransactionType)
+}
+
+interface CategoryCreationNavigator : BaseNavigator {
+    fun openColorPicker()
+    fun openCategoryIconSet()
+    fun save()
+}
+
+interface CategorySetNavigator : BaseNavigator {
+    fun save()
 }
 
 interface EditTransactionNavigator : BaseNavigator {

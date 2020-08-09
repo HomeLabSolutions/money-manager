@@ -86,7 +86,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="@string/category_unit_to_group_limit"
+        android:text="@string/letter_limit"
+        android:textAppearance="?attr/textAppearanceCaption"
         app:layout_constraintEnd_toEndOf="@+id/category_dialog_union_et_name"
         app:layout_constraintTop_toBottomOf="@+id/category_dialog_union_et_name" />
 

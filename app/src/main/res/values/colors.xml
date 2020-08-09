@@ -9,7 +9,10 @@
     <color name="control_activated_color_light">#59e61628</color>
     <color name="control_highlight_color">#828F89</color>
     <color name="button_normal_color">#f99225</color>
+    <color name="button_normal_color_disable">#2c292a</color>
     <color name="button_normal_color_start">#fae353</color>
+    <color name="button_normal_color_end_disable">#0f0f0f</color>
+    <color name="button_normal_color_start_disable">#3f3f3f</color>
     <color name="button_normal_color_end">#e43d3b</color>
     <color name="switch_thumb_normal_color">#f99225</color>
     <color name="text_normal_color">#f99225</color>
@@ -30,10 +33,12 @@
     <color name="category_deep_purple_a100">#C8A3FF</color>
     <color name="category_yellow_400">#EFFD5F</color>
     <color name="category_pink_a200">#FC44AA</color>
-    <color name="screamin_green">#33FF64</color>
-    <color name="picton_blue">#33B8FF</color>
+    <color name="category_screamin_green">#33FF64</color>
+    <color name="category_picton_blue">#33B8FF</color>
 
-    <color name="category_all_color">#ffffff</color>
+    <color name="category_all_color">@color/color_midnight_white</color>
+    <color name="color_midnight_white">#fdfbfc</color>
     <color name="edit_text_hint_text_color">#59ffffff</color>
+    <color name="button_disable_text_color">#59ffffff</color>
 
 </resources>
