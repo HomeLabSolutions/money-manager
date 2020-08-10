@@ -14,6 +14,6 @@ interface CategoryRepo {
     fun update(category: Category): Completable
     fun getCategoryById(id: Long): Maybe<Category>
     fun getCategoriesByType(type: TransactionType): Flowable<List<Category>>
-    fun getChildrenByParent(parentCategory: Category): Maybe<List<Category>>
+    fun getChildrenByParent(parentCategory: Category): Single<List<Category>>
     fun deleteCategory(category: Category): Completable
 }

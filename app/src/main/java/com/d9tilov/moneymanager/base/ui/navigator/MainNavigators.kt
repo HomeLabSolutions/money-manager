@@ -56,5 +56,7 @@ interface EditTransactionNavigator : BaseNavigator {
 }
 
 interface SubCategoryNavigator : BaseNavigator {
-    fun openCreateCategoryDialog()
+    fun backToEditTransactionScreen(category: Category)
+    fun backToMainScreen(transactionType: TransactionType)
+    fun openCreateCategoryScreen(category: Category? = null)
 }

@@ -7,7 +7,7 @@ import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
 import com.d9tilov.moneymanager.transaction.TransactionType
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import io.reactivex.Maybe
+import io.reactivex.Single
 
 class CategoryInteractorImpl(private val categoryRepo: CategoryRepo) :
     CategoryInteractor {
@@ -25,7 +25,7 @@ class CategoryInteractorImpl(private val categoryRepo: CategoryRepo) :
     override fun getAllCategoriesByType(type: TransactionType): Flowable<List<Category>> =
         categoryRepo.getCategoriesByType(type)
 
-    override fun getChildrenByParent(parentCategory: Category): Maybe<List<Category>> =
+    override fun getChildrenByParent(parentCategory: Category): Single<List<Category>> =
         categoryRepo.getChildrenByParent(parentCategory)
 
     override fun deleteCategory(category: Category): Completable =

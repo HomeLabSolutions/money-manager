@@ -23,9 +23,7 @@ class CategoryCreationViewModel @ViewModelInject constructor(
             categoryInteractor.create(category)
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler)
-                .subscribe { _ ->
-                    navigator?.save()
-                }
+                .subscribe { _ -> navigator?.save() }
                 .addTo(compositeDisposable)
         } else {
             categoryInteractor.update(category)

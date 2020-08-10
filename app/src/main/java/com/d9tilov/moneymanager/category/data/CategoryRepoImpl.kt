@@ -6,6 +6,7 @@ import com.d9tilov.moneymanager.category.domain.CategoryRepo
 import com.d9tilov.moneymanager.transaction.TransactionType
 import io.reactivex.Completable
 import io.reactivex.Maybe
+import io.reactivex.Observable
 
 class CategoryRepoImpl(private val categoryLocalSource: CategorySource) :
     CategoryRepo {
@@ -23,6 +24,11 @@ class CategoryRepoImpl(private val categoryLocalSource: CategorySource) :
 
     override fun getChildrenByParent(parentCategory: Category) =
         categoryLocalSource.getByParentId(parentCategory.id)
+            .flatMapSingle {
+                Observable.fromIterable(it)
+                    .map { subCategory -> subCategory.copy(parent = parentCategory) }
+                    .toList()
+            }
 
     override fun deleteCategory(category: Category): Completable =
         categoryLocalSource.delete(category)
