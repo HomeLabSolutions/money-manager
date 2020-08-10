@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryCreationNavigator
+import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryColorAdapter
 import com.d9tilov.moneymanager.category.ui.vm.CategoryCreationViewModel
@@ -44,7 +45,7 @@ class CategoryCreationFragment :
             type = transactionType,
             name = "",
             icon = R.drawable.ic_category_food,
-            color = R.color.category_deep_purple_a100
+            color = R.color.category_pink
         )
     }
     private val transactionType by lazy { args.transactionType }
@@ -174,10 +175,18 @@ class CategoryCreationFragment :
     }
 
     override fun save() {
-        val action = CategoryCreationFragmentDirections.toCategoryDest(
-            transactionType = transactionType,
-            destination = destination
-        )
+        val action = if (destination == CategoryDestination.CATEGORY_SCREEN) {
+            CategoryCreationFragmentDirections.toCategoryDest(
+                transactionType = transactionType,
+                destination = destination
+            )
+        } else {
+            CategoryCreationFragmentDirections.toSubCategoryDest(
+                transactionType = transactionType,
+                destination = destination,
+                parentCategory = category.parent!!
+            )
+        }
         findNavController().navigate(action)
     }
 }

@@ -22,28 +22,36 @@ class CategoryColorAdapter(@ColorRes private var chosenColor: Int?) :
 
     private val categoryColorList = listOf(
         R.color.category_white,
-        R.color.category_pigment_indigo,
-        R.color.category_fuchsia_pink,
-        R.color.category_international_klein_blue,
-        R.color.category_karry,
-        R.color.category_pistachio,
-        R.color.category_granny_apple,
-        R.color.category_corn,
-        R.color.category_trinidad,
         R.color.category_black,
-        R.color.category_deep_purple_a100,
-        R.color.category_light_green_a200,
-        R.color.category_pink_300,
-        R.color.category_pink_a200,
-        R.color.category_teal_100,
-        R.color.category_yellow_400,
-        R.color.category_screamin_green,
-        R.color.category_picton_blue
+        R.color.category_red,
+        R.color.category_yellow,
+        R.color.category_light_green,
+        R.color.category_green,
+        R.color.category_light_blue,
+        R.color.category_blue,
+        R.color.category_violet,
+        R.color.category_dark_red,
+        R.color.category_brick_red,
+        R.color.category_dark_orange,
+        R.color.category_orange,
+        R.color.category_light_yellow,
+        R.color.category_mint,
+        R.color.category_grass_green,
+        R.color.category_mud_green,
+        R.color.category_lollipop,
+        R.color.category_navy_blue,
+        R.color.category_grey_blue,
+        R.color.category_sad_blue,
+        R.color.category_grey,
+        R.color.category_purple,
+        R.color.category_flower_violet,
+        R.color.category_light_violet,
+        R.color.category_pink
     )
 
     init {
         if (chosenColor == null) {
-            chosenColor = R.color.category_fuchsia_pink
+            chosenColor = R.color.category_pink
         }
 
         selectedPosition = categoryColorList.indexOf(chosenColor!!)

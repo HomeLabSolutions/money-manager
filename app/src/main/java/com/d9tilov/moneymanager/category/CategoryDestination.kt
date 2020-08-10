@@ -9,6 +9,8 @@ sealed class CategoryDestination(open val name: String) : Parcelable {
         const val FROM_MAIN_SCREEN = "main"
         const val FROM_MAIN_WITH_SUM_SCREEN = "main_with_sum"
         const val FROM_EDIT_TRANSACTION_SCREEN = "edit_transaction"
+        const val FROM_CATEGORY_SCREEN = "category"
+        const val FROM_SUB_CATEGORY_SCREEN = "sub_category"
     }
 
     @Parcelize
@@ -19,4 +21,10 @@ sealed class CategoryDestination(open val name: String) : Parcelable {
 
     @Parcelize
     object EDIT_TRANSACTION_SCREEN : CategoryDestination(FROM_EDIT_TRANSACTION_SCREEN)
+
+    @Parcelize
+    object CATEGORY_SCREEN : CategoryDestination(FROM_CATEGORY_SCREEN)
+
+    @Parcelize
+    object SUB_CATEGORY_SCREEN : CategoryDestination(FROM_SUB_CATEGORY_SCREEN)
 }

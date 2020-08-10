@@ -54,7 +54,7 @@ class TransactionInteractorImpl(
             TransactionType.EXPENSE -> TransactionType.EXPENSE
         }
         return categoryInteractor.getGroupedCategoriesByType(categoryType)
-            .flatMap { categoryList ->
+            .switchMap { categoryList ->
                 transactionRepo.getTransactionsByType(transactionType = type)
                     .map { item ->
                         if (item is TransactionDateDataModel) {

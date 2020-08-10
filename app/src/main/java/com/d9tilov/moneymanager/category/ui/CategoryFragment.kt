@@ -7,6 +7,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryNavigator
+import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.common.BaseCategoryFragment
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.vm.CategoryViewModel
@@ -23,18 +24,24 @@ class CategoryFragment :
     private val transaction by lazy { args.editedTransaction }
     private val destination by lazy { args.destination }
     private val transactionType by lazy { args.transactionType }
+    private val sum by lazy { args.sum }
 
     override fun getNavigator() = this
     override fun getToolbarTitle() = getString(R.string.title_category)
     override val viewModel by viewModels<CategoryViewModel>()
 
     override fun openSubCategoryScreen(category: Category) {
-        val action = CategoryFragmentDirections.toSubCategoryDest(destination, category)
+        val action = CategoryFragmentDirections.toSubCategoryDest(
+            destination = destination,
+            parentCategory = category,
+            transactionType = transactionType,
+            sum = sum
+        )
         findNavController().navigate(action)
     }
 
     override fun openCreateCategoryScreen(category: Category?) {
-        val action = CategoryFragmentDirections.toCategoryCreationDest(category, destination, transactionType)
+        val action = CategoryFragmentDirections.toCategoryCreationDest(category, CategoryDestination.CATEGORY_SCREEN, transactionType)
         findNavController().navigate(action)
     }
 
