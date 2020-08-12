@@ -66,7 +66,8 @@ class ExpenseFragment :
             val action = IncomeExpenseFragmentDirections.toEditTransactionDest(
                 item,
                 item.category,
-                TransactionType.EXPENSE
+                TransactionType.EXPENSE,
+                CategoryDestination.MAIN_SCREEN
             )
             findNavController().navigate(action)
         }
@@ -187,7 +188,7 @@ class ExpenseFragment :
     }
 
     override fun openRemoveConfirmationDialog(transaction: Transaction) {
-        val action = IncomeExpenseFragmentDirections.toRemoveTransactionDialog(transaction)
+        val action = IncomeExpenseFragmentDirections.toRemoveTransactionDialog(transaction, CategoryDestination.MAIN_SCREEN)
         findNavController().navigate(action)
     }
 

@@ -39,8 +39,8 @@
     <string name="create">Create</string>
     <string name="letter_limit" translatable="false">%1$s/%2$s</string>
 
-    <string name="remove_transaction_dialog_title">Remove transaction</string>
-    <string name="remove_transaction_dialog_subtitle">Do you really want to delete the transaction?</string>
+    <string name="delete_transaction_dialog_title">Deleting a transaction</string>
+    <string name="delete_transaction_dialog_subtitle">Do you really want to delete the transaction?</string>
 
     <string name="edit_transaction_sum_title">Sum</string>
     <string name="edit_transaction_description_hint">Description</string>
@@ -58,4 +58,13 @@
     <string name="category_unit_name_group_hint">Name of group</string>
     <string name="category_unit_empty_name_error">The name of group could\'t be empty</string>
     <string name="category_unit_name_exist_error">Name of this group already exists</string>
+
+    <string name="category_delete_title">Deleting a category</string>
+    <string name="category_delete_sub_title">Do you want to delete the category \"%1$s\"\?\n\nAll operations with this category will also be deleted.</string>
+    <string name="category_delete_group_sub_title">Do you want to delete the category \"%1$s\"\?\nAll subcategories will also be deleted.\n\nAll operations with this category will be deleted too.</string>
+
+    <string name="sub_category_delete_title">Deleting a subcategory</string>
+    <string name="sub_category_delete_subtitle">Do you want to delete the subcategory \"%1$s\"\?\n\nAll operations with this category will also be deleted.</string>
+    <string name="sub_category_delete">Delete</string>
+    <string name="sub_category_delete_from_group">Delete from group</string>
 </resources>

@@ -4,6 +4,7 @@ import androidx.paging.DataSource
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
+import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.core.util.getEndOfDay
 import com.d9tilov.moneymanager.core.util.isSameDay
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -16,6 +17,7 @@ import com.d9tilov.moneymanager.transaction.data.mapper.TransactionDateDataMappe
 import com.d9tilov.moneymanager.transaction.exception.TransactionCreateException
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Observable
 import java.util.Date
 
 class TransactionLocalSource(
@@ -215,6 +217,50 @@ class TransactionLocalSource(
                     }
                 }
             }
+        }
+    }
+
+    override fun removeAllByCategory(category: Category): Completable {
+        val currentUserId = preferencesStore.uid
+        return if (currentUserId == null) {
+            Completable.error(WrongUidException())
+        } else {
+            transactionDao.getByCategoryId(currentUserId, category.id)
+                .firstOrError()
+                .flatMapCompletable {
+                    Observable.fromIterable(it)
+                        .flatMapCompletable { transaction ->
+                            transactionDao.getItemsCountInDay(
+                                currentUserId,
+                                transaction.type,
+                                transaction.date
+                            ).flatMapCompletable {
+                                when {
+                                    it > 1 -> {
+                                        transactionDao.deleteByCategoryId(
+                                            currentUserId,
+                                            category.id
+                                        )
+                                    }
+                                    it == 1 -> {
+                                        transactionDao.deleteByCategoryId(
+                                            currentUserId,
+                                            category.id
+                                        ).andThen(
+                                            transactionDao.deleteDate(
+                                                currentUserId,
+                                                transaction.type,
+                                                transaction.date
+                                            )
+                                        )
+                                    }
+                                    else -> {
+                                        Completable.error(TransactionCreateException("Can't create transaction. DataBase contains zero date item in day period"))
+                                    }
+                                }
+                            }
+                        }
+                }
         }
     }
 

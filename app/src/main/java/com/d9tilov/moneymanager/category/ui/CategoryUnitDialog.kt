@@ -16,7 +16,6 @@ import com.d9tilov.moneymanager.category.ui.vm.CategoryUnionViewModel
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.databinding.FragmentDialogCategoryUnionBinding
-import com.mfms.common.util.hideKeyboard
 import com.mfms.common.util.showKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -96,8 +95,12 @@ class CategoryUnitDialog :
                 it.categoryDialogUnionFolder.root.visibility = VISIBLE
             }
             it.categoryDialogUnionConfirm.setOnClickListener {
-                if (viewBinding?.categoryDialogUnionEtName?.text.toString().isEmpty()) {
+                if (secondCategory.children.isEmpty() && viewBinding?.categoryDialogUnionEtName?.text.toString()
+                    .isEmpty()
+                ) {
                     showError(IllegalArgumentException())
+                } else if (secondCategory.children.isNotEmpty()) {
+                    viewModel.addToGroup(firstCategory, secondCategory)
                 } else {
                     viewModel.createGroup(
                         firstCategory,
@@ -131,10 +134,5 @@ class CategoryUnitDialog :
     override fun onStart() {
         super.onStart()
         showKeyboard(viewBinding?.categoryDialogUnionEtName)
-    }
-
-    override fun onStop() {
-        hideKeyboard()
-        super.onStop()
     }
 }

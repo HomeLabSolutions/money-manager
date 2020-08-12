@@ -45,9 +45,14 @@ class CategoryFragment :
         findNavController().navigate(action)
     }
 
+    override fun openRemoveDialog(category: Category) {
+        val action = CategoryFragmentDirections.toRemoveCategoryDialog(category, destination, transactionType)
+        findNavController().navigate(action)
+    }
+
     override fun backToEditTransactionScreen(category: Category) {
         val action = CategoryFragmentDirections.toEditTransactionDest(
-            requireNotNull(transaction), category, transactionType
+            requireNotNull(transaction), category, transactionType, destination
         )
         findNavController().navigate(action)
     }

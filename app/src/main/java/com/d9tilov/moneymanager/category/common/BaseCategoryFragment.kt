@@ -43,6 +43,11 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
         categoryAdapter.itemRemoveClickListener = onItemRemoveClickListener
     }
 
+    override fun onStop() {
+        categoryAdapter.enableEditMode(false)
+        super.onStop()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
@@ -121,6 +126,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
     private val onItemRemoveClickListener = object : OnItemClickListener<Category> {
         override fun onItemClick(item: Category, position: Int) {
             (viewModel as BaseCategoryViewModel<N>).onCategoryRemoved(item)
+            categoryAdapter.enableEditMode(false)
         }
     }
 

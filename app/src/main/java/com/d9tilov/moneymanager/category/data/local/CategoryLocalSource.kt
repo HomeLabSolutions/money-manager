@@ -8,6 +8,7 @@ import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.data.local.entities.CategoryDbModel
 import com.d9tilov.moneymanager.category.data.local.mappers.CategoryMapper
 import com.d9tilov.moneymanager.category.exception.CategoryExistException
+import com.d9tilov.moneymanager.category.exception.NoCategoryParentException
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
 import com.d9tilov.moneymanager.transaction.TransactionType
 import io.reactivex.Completable
@@ -72,7 +73,7 @@ class CategoryLocalSource(
                         .defaultIfEmpty(createDummyModel())
                 }
             val childrenFlowable = getByParentId(id)
-                .defaultIfEmpty(emptyList())
+                .defaultIfEmpty(emptyList()).firstElement()
             return Maybe.zip(
                 currentFlowable, parentFlowable, childrenFlowable,
                 Function3 { current, parent, children ->
@@ -98,10 +99,10 @@ class CategoryLocalSource(
         0
     )
 
-    override fun getByParentId(id: Long): Maybe<List<Category>> {
+    override fun getByParentId(id: Long): Flowable<List<Category>> {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
-            Maybe.error(WrongUidException())
+            Flowable.error(WrongUidException())
         } else {
             categoryDao.getByParentId(currentUserId, id).map { list: List<CategoryDbModel> ->
                 list.map { categoryMapper.toDataParentModel(it) }
@@ -144,9 +145,77 @@ class CategoryLocalSource(
     }
 
     override fun delete(category: Category): Completable {
-        return categoryDao.delete(category.id).andThen(
-            Observable.fromIterable(category.children)
-                .flatMapCompletable { child -> categoryDao.delete(child.id) }
-        )
+        val currentUserId = preferencesStore.uid
+        return if (currentUserId == null) {
+            Completable.error(WrongUidException())
+        } else {
+            categoryDao.delete(currentUserId, category.id).andThen(
+                Observable.fromIterable(category.children)
+                    .flatMapCompletable { child -> categoryDao.delete(currentUserId, child.id) }
+            )
+        }
+    }
+
+    override fun deleteSubcategory(subCategory: Category): Single<Boolean> {
+        val currentUserId = preferencesStore.uid
+        return when {
+            currentUserId == null -> {
+                Single.error(WrongUidException())
+            }
+            subCategory.parent == null -> {
+                Single.error(NoCategoryParentException("Subcategory $subCategory has not parent"))
+            }
+            else -> {
+                categoryDao.delete(currentUserId, subCategory.id).toSingleDefault(false)
+                    .flatMapMaybe {
+                        categoryDao.getByParentId(
+                            currentUserId,
+                            subCategory.parent.id
+                        ).firstElement()
+                    }
+                    .flatMapSingle { list ->
+                        if (list.isEmpty()) {
+                            categoryDao.delete(
+                                currentUserId,
+                                subCategory.parent.id
+                            ).toSingleDefault(true)
+                        } else {
+                            Single.fromCallable { false }
+                        }
+                    }
+            }
+        }
+    }
+
+    override fun deleteFromGroup(subCategory: Category): Single<Boolean> {
+        val currentUserId = preferencesStore.uid
+        return when {
+            currentUserId == null -> {
+                Single.error(WrongUidException())
+            }
+            subCategory.parent == null -> {
+                Single.error(NoCategoryParentException("Subcategory $subCategory has not parent"))
+            }
+            else -> {
+                categoryDao.update(categoryMapper.toDbModel(subCategory.copy(parent = null)))
+                    .toSingleDefault(false)
+                    .flatMapMaybe {
+                        categoryDao.getByParentId(
+                            currentUserId,
+                            subCategory.parent.id
+                        ).firstElement()
+                    }
+                    .flatMapSingle { list ->
+                        if (list.isEmpty()) {
+                            categoryDao.delete(
+                                currentUserId,
+                                subCategory.parent.id
+                            ).toSingleDefault(true)
+                        } else {
+                            Single.fromCallable { false }
+                        }
+                    }
+            }
+        }
     }
 }

@@ -16,6 +16,8 @@ interface CategoryInteractor : Interactor {
     fun getCategoryById(id: Long): Maybe<Category>
     fun getGroupedCategoriesByType(type: TransactionType): Flowable<List<Category>>
     fun getAllCategoriesByType(type: TransactionType): Flowable<List<Category>>
-    fun getChildrenByParent(parentCategory: Category): Single<List<Category>>
+    fun getChildrenByParent(parentCategory: Category): Flowable<List<Category>>
     fun deleteCategory(category: Category): Completable
+    fun deleteSubCategory(subCategory: Category): Single<Boolean>
+    fun deleteFromGroup(subCategory: Category): Single<Boolean>
 }

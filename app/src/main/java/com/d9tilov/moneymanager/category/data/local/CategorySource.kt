@@ -14,7 +14,19 @@ interface CategorySource : Source {
     fun create(category: Category): Single<Long>
     fun update(category: Category): Completable
     fun getById(id: Long): Maybe<Category>
-    fun getByParentId(id: Long): Maybe<List<Category>>
+    fun getByParentId(id: Long): Flowable<List<Category>>
     fun getCategoriesByType(type: TransactionType): Flowable<List<Category>>
     fun delete(category: Category): Completable
+
+    /**
+     * Delete subcategory
+     * @return true - if delete parent group also, false - otherwise
+     */
+    fun deleteSubcategory(subCategory: Category): Single<Boolean>
+
+    /**
+     * Delete subcategory from group
+     * @return true - if delete parent group also, false - otherwise
+     */
+    fun deleteFromGroup(subCategory: Category): Single<Boolean>
 }

@@ -28,11 +28,6 @@ class CategoryViewModel @ViewModelInject constructor(
             .observeOn(uiScheduler)
             .subscribe { expenseCategories.value = it }
             .addTo(compositeDisposable)
-        categoryInteractor.getAllCategoriesByType(TransactionType.INCOME)
-            .subscribeOn(ioScheduler)
-            .observeOn(uiScheduler)
-            .subscribe { incomeCategories.value = it }
-            .addTo(compositeDisposable)
     }
 
     override fun onCategoryClicked(category: Category) {
@@ -64,14 +59,8 @@ class CategoryViewModel @ViewModelInject constructor(
         }
     }
 
-    fun onCategoryLongClicked() {}
-
     override fun onCategoryRemoved(category: Category) {
-        categoryInteractor.deleteCategory(category)
-            .subscribeOn(ioScheduler)
-            .observeOn(uiScheduler)
-            .subscribe()
-            .addTo(compositeDisposable)
+        navigator?.openRemoveDialog(category)
     }
 
     override fun update(name: String) {

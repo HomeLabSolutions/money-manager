@@ -30,7 +30,9 @@ class SubCategoryViewModel @ViewModelInject constructor(
         categoryInteractor.getChildrenByParent(parentCategory)
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
-            .subscribe { list -> expenseCategories.value = list }
+            .subscribe { list ->
+                expenseCategories.value = list
+            }
             .addTo(compositeDisposable)
     }
 
@@ -54,12 +56,12 @@ class SubCategoryViewModel @ViewModelInject constructor(
                     .observeOn(uiScheduler)
                     .subscribe { navigator?.backToMainScreen(transactionType) }
             }
-            CategoryDestination.MAIN_SCREEN -> navigator?.openCreateCategoryScreen(category)
+            else -> navigator?.openCreateCategoryScreen(category)
         }
     }
 
     override fun onCategoryRemoved(category: Category) {
-        TODO("Not yet implemented")
+        navigator?.openRemoveDialog(category)
     }
 
     override fun update(name: String) {

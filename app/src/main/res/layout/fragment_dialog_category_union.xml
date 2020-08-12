@@ -8,7 +8,8 @@
 
     <TextView
         android:id="@+id/category_dialog_union_title"
-        style="?materialAlertDialogTitleTextStyle"
+        style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
+        android:textColor="@color/secondary_color"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="start"
