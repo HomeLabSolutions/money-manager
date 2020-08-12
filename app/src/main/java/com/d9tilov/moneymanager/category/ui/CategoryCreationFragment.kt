@@ -9,18 +9,20 @@ import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryCreationNavigator
-import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entities.Category
+import com.d9tilov.moneymanager.category.ui.CategoryIconSetFragment.Companion.ARG_CATEGORY_ICON_ID
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryColorAdapter
 import com.d9tilov.moneymanager.category.ui.vm.CategoryCreationViewModel
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_DATA_ID
@@ -50,10 +52,12 @@ class CategoryCreationFragment :
         )
     }
     private val transactionType by lazy { args.transactionType }
-    private val destination by lazy { args.destination }
 
     @ColorRes
     private var color: Int = 0
+
+    @DrawableRes
+    private var icon: Int = 0
 
     private var toolbar: MaterialToolbar? = null
     private lateinit var categoryColorAdapter: CategoryColorAdapter
@@ -75,7 +79,7 @@ class CategoryCreationFragment :
             color = item
             viewBinding?.let {
                 it.categoryCreationRvColorPicker.visibility = INVISIBLE
-                setColorToIcon()
+                updateIcon(icon)
                 setColorToColorIcon()
             }
         }
@@ -83,6 +87,16 @@ class CategoryCreationFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<@DrawableRes Int>(
+            ARG_CATEGORY_ICON_ID
+        )?.observe(
+            viewLifecycleOwner
+        ) {
+            updateIcon(it)
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<@DrawableRes Int>(
+                ARG_CATEGORY_ICON_ID
+            )
+        }
         color = category.color
         viewBinding?.let {
             val colorLayoutManager =
@@ -91,7 +105,7 @@ class CategoryCreationFragment :
             it.categoryCreationRvColorPicker.adapter = categoryColorAdapter
             it.categoryCreationRvColorPicker.scrollToPosition(categoryColorAdapter.getSelectedPosition())
             it.categoryCreationEtName.setText(category.name)
-            setColorToIcon()
+            updateIcon(category.icon)
             setColorToColorIcon()
             it.categoryCreationNameLimit.text = getString(
                 R.string.letter_limit,
@@ -111,14 +125,7 @@ class CategoryCreationFragment :
             it.categoryCreationDelete.visibility =
                 if (category.id == DEFAULT_DATA_ID) GONE else VISIBLE
             it.categoryCreationIconLayout.setOnClickListener { _ ->
-                val action = CategoryCreationFragmentDirections.toCategorySetDest(
-                    destination,
-                    transactionType,
-                    category.copy(
-                        name = it.categoryCreationEtName.text.toString(),
-                        color = color
-                    )
-                )
+                val action = CategoryCreationFragmentDirections.toCategorySetDest()
                 findNavController().navigate(action)
             }
             it.categoryCreationSave.setOnClickListener { _ ->
@@ -126,7 +133,7 @@ class CategoryCreationFragment :
                     category.copy(
                         name = it.categoryCreationEtName.text.toString(),
                         color = color,
-                        icon = category.icon
+                        icon = icon
                     )
                 )
             }
@@ -138,17 +145,9 @@ class CategoryCreationFragment :
                     return@setOnClickListener
                 }
                 val action = if (category.parent != null) {
-                    CategoryCreationFragmentDirections.toRemoveSubCategoryDialog(
-                        destination,
-                        transactionType,
-                        category
-                    )
+                    CategoryCreationFragmentDirections.toRemoveSubCategoryDialog(category)
                 } else {
-                    CategoryCreationFragmentDirections.toRemoveCategoryDialog(
-                        CategoryDestination.CATEGORY_CREATION_SCREEN,
-                        transactionType,
-                        category
-                    )
+                    CategoryCreationFragmentDirections.toRemoveCategoryDialog(category)
                 }
                 findNavController().navigate(action)
             }
@@ -181,10 +180,11 @@ class CategoryCreationFragment :
         viewBinding?.categoryCreationColor?.background = colorDrawable
     }
 
-    private fun setColorToIcon() {
+    private fun updateIcon(@DrawableRes iconId: Int) {
+        this.icon = iconId
         val tintIcon = createTintDrawable(
             requireContext(),
-            category.icon,
+            icon,
             color
         )
         viewBinding?.categoryCreationIcon?.setImageDrawable(tintIcon)
@@ -199,18 +199,6 @@ class CategoryCreationFragment :
     }
 
     override fun save() {
-        val action = if (destination == CategoryDestination.SUB_CATEGORY_SCREEN) {
-            CategoryCreationFragmentDirections.toSubCategoryDest(
-                transactionType = transactionType,
-                destination = destination,
-                parentCategory = category.parent!!
-            )
-        } else {
-            CategoryCreationFragmentDirections.toCategoryDest(
-                transactionType = transactionType,
-                destination = destination
-            )
-        }
-        findNavController().navigate(action)
+        findNavController().popBackStack()
     }
 }

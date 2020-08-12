@@ -9,7 +9,6 @@ import androidx.navigation.fragment.navArgs
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseDialogFragment
 import com.d9tilov.moneymanager.base.ui.navigator.RemoveTransactionDialogNavigator
-import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.databinding.FragmentDialogRemoveBinding
 import com.d9tilov.moneymanager.transaction.ui.vm.RemoveTransactionViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,7 +19,6 @@ class TransactionRemoveDialogFragment :
     RemoveTransactionDialogNavigator {
 
     private val args by navArgs<TransactionRemoveDialogFragmentArgs>()
-    private val destination by lazy { args.destination }
     private val transaction by lazy { args.transaction }
 
     override val layoutId = R.layout.fragment_dialog_remove
@@ -37,9 +35,7 @@ class TransactionRemoveDialogFragment :
             transactionRemoveButtonConfirm.setOnClickListener { viewModel.remove(transaction) }
             transactionRemoveButtonCancel.setOnClickListener {
                 dismiss()
-                findNavController().previousBackStackEntry?.savedStateHandle?.set(
-                    ARGS_UNDO_REMOVE_LAYOUT_ON_DISMISS, true
-                )
+                findNavController().previousBackStackEntry?.savedStateHandle?.set(ARG_UNDO_REMOVE_LAYOUT_DISMISS, true)
             }
         }
     }
@@ -51,13 +47,10 @@ class TransactionRemoveDialogFragment :
 
     override fun remove() {
         dismiss()
-        if (destination != CategoryDestination.MAIN_SCREEN) {
-            val action = TransactionRemoveDialogFragmentDirections.toIncomeExpenseDest()
-            findNavController().navigate(action)
-        }
+        findNavController().popBackStack(R.id.edit_transaction_dest, true)
     }
 
     companion object {
-        const val ARGS_UNDO_REMOVE_LAYOUT_ON_DISMISS = "undo_remove_layout_on_dismiss"
+        const val ARG_UNDO_REMOVE_LAYOUT_DISMISS = "undo_remove_layout_dismiss"
     }
 }

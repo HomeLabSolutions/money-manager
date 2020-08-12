@@ -13,8 +13,6 @@ class CategoryDiffUtil(
 
     override fun getOldListSize() = oldCategoryList.size
     override fun getNewListSize() = newCategoryList.size
-    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int) =
-        newCategoryList[newItemPosition]
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
         oldCategoryList[oldItemPosition] == newCategoryList[newItemPosition]

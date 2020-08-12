@@ -5,27 +5,33 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
-import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
+import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entities.Category
+import com.d9tilov.moneymanager.category.ui.CategoryFragmentArgs
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryModifyAdapter
 import com.d9tilov.moneymanager.core.events.OnBackPressed
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemLongClickListener
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
-import com.d9tilov.moneymanager.category.ui.recycler.SimpleItemTouchHelperCallback
+import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.databinding.FragmentCategoryBinding
+import com.d9tilov.moneymanager.transaction.ui.EditTransactionFragment
 import com.google.android.material.appbar.MaterialToolbar
 
 abstract class BaseCategoryFragment<N : BaseNavigator> :
     BaseFragment<FragmentCategoryBinding, N>(R.layout.fragment_category),
     OnBackPressed {
+
+    private val args by navArgs<CategoryFragmentArgs>()
+    private val destination by lazy { args.destination }
 
     private var toolbar: MaterialToolbar? = null
     protected abstract fun getToolbarTitle(): String
@@ -39,8 +45,10 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
         categoryAdapter =
             CategoryModifyAdapter()
         categoryAdapter.itemClickListener = onItemClickListener
-        categoryAdapter.itemLongClickListener = onItemLongClickListener
-        categoryAdapter.itemRemoveClickListener = onItemRemoveClickListener
+        if (destination == CategoryDestination.MAIN_SCREEN) {
+            categoryAdapter.itemLongClickListener = onItemLongClickListener
+            categoryAdapter.itemRemoveClickListener = onItemRemoveClickListener
+        }
     }
 
     override fun onStop() {
@@ -50,22 +58,25 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Category>(
+            EditTransactionFragment.ARG_CATEGORY
+        )?.observe(
+            viewLifecycleOwner
+        ) {
+            val a = it
+            val b = 0
+        }
         initToolbar()
         viewBinding?.run {
             val layoutManager =
                 GridLayoutManager(requireContext(), SPAN_COUNT, GridLayoutManager.VERTICAL, false)
             categoryRv.layoutManager = layoutManager
             categoryRv.adapter = categoryAdapter
-            val callback =
-                SimpleItemTouchHelperCallback(
-                    categoryAdapter
-                )
-            val touchHelper = ItemTouchHelper(callback)
-            touchHelper.attachToRecyclerView(categoryRv)
-            categoryRv.addItemDecoration(
+            viewBinding?.categoryRv?.addItemDecoration(
                 GridSpaceItemDecoration(
                     spanCount = SPAN_COUNT,
-                    spacing = resources.getDimension(R.dimen.recycler_view_category_offset).toInt()
+                    spacing = resources.getDimension(R.dimen.recycler_view_category_offset)
+                        .toInt()
                 )
             )
             categoryRv.addOnItemTouchListener(object : OnItemTouchListener {
@@ -97,7 +108,16 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
         }
         (viewModel as BaseCategoryViewModel<*>).expenseCategories.observe(
             this.viewLifecycleOwner,
-            Observer { categoryAdapter.updateItems(it) }
+            Observer { list ->
+                val sortedList = list.sortedWith(
+                    compareBy(
+                        { it.children.isEmpty() },
+                        { -it.usageCount },
+                        { it.name }
+                    )
+                ).toMutableList()
+                categoryAdapter.updateItems(sortedList)
+            }
         )
     }
 
@@ -141,6 +161,6 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
     }
 
     companion object {
-        private const val SPAN_COUNT = 4
+        const val SPAN_COUNT = 4
     }
 }

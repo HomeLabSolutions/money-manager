@@ -64,7 +64,7 @@
     <string name="category_delete_group_sub_title">Вы действительно хотите удалить категорию \"%1$s\"\?\n\nТак же будут удалены все подкатегории и операции со статьей</string>
 
     <string name="sub_category_delete_title">Удаление подкатегории</string>
-    <string name="sub_category_delete_subtitle">Вы действительно хотите удалить подкатегорию \"%1$s\"\?\n\nТак же будут удалены все операции с этой статьёй</string>
+    <string name="sub_category_delete_subtitle">Вы действительно хотите удалить подкатегорию \"%1$s\"\?\n\nТак же будут удалены все операции с этой статьей</string>
     <string name="sub_category_delete">Удалить</string>
     <string name="sub_category_delete_from_group">Удалить из группы</string>
 </resources>

@@ -5,14 +5,17 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.common.BaseCategoryFragment
 import com.d9tilov.moneymanager.category.data.entities.Category
+import com.d9tilov.moneymanager.category.ui.recycler.SimpleItemTouchHelperCallback
 import com.d9tilov.moneymanager.category.ui.vm.CategoryViewModel
 import com.d9tilov.moneymanager.core.events.OnItemMoveListener
 import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.ui.EditTransactionFragment.Companion.ARG_CATEGORY
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,9 +24,8 @@ class CategoryFragment :
     CategoryNavigator {
 
     private val args by navArgs<CategoryFragmentArgs>()
-    private val transaction by lazy { args.editedTransaction }
-    private val destination by lazy { args.destination }
     private val transactionType by lazy { args.transactionType }
+    private val destination by lazy { args.destination }
     private val sum by lazy { args.sum }
 
     override fun getNavigator() = this
@@ -32,17 +34,16 @@ class CategoryFragment :
 
     override fun openSubCategoryScreen(category: Category) {
         val action = CategoryFragmentDirections.toSubCategoryDest(
-            destination = destination,
-            parentCategory = category,
-            transactionType = transactionType,
-            sum = sum
+            destination,
+            transactionType,
+            category,
+            sum
         )
         findNavController().navigate(action)
     }
 
     override fun openCreateCategoryScreen(category: Category?) {
         val action = CategoryFragmentDirections.toCategoryCreationDest(
-            CategoryDestination.CATEGORY_SCREEN,
             transactionType,
             category
         )
@@ -50,27 +51,17 @@ class CategoryFragment :
     }
 
     override fun openRemoveDialog(category: Category) {
-        val action = CategoryFragmentDirections.toRemoveCategoryDialog(
-            destination,
-            transactionType,
-            category
-        )
+        val action = CategoryFragmentDirections.toRemoveCategoryDialog(category)
         findNavController().navigate(action)
     }
 
     override fun backToEditTransactionScreen(category: Category) {
-        val action = CategoryFragmentDirections.toEditTransactionDest(
-            destination,
-            transactionType,
-            requireNotNull(transaction),
-            category
-        )
-        findNavController().navigate(action)
+        findNavController().previousBackStackEntry?.savedStateHandle?.set(ARG_CATEGORY, category)
+        findNavController().popBackStack()
     }
 
     override fun backToMainScreen(transactionType: TransactionType) {
-        val action = CategoryFragmentDirections.toIncomeExpenseDest(transactionType)
-        findNavController().navigate(action)
+        findNavController().popBackStack()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,8 +72,16 @@ class CategoryFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewBinding?.categoryCreate?.setOnClickListener {
-            val action = CategoryFragmentDirections.toCategoryCreationDest(transactionType = transactionType, destination = destination)
+            val action = CategoryFragmentDirections.toCategoryCreationDest(transactionType)
             findNavController().navigate(action)
+        }
+        if (destination == CategoryDestination.MAIN_SCREEN) {
+            val callback =
+                SimpleItemTouchHelperCallback(
+                    categoryAdapter
+                )
+            val touchHelper = ItemTouchHelper(callback)
+            touchHelper.attachToRecyclerView(viewBinding?.categoryRv)
         }
     }
 
