@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.home.ui
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -10,10 +11,14 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.base.ui.navigator.HomeNavigator
 import com.d9tilov.moneymanager.databinding.ActivityMainBinding
+import com.mfms.common.util.hideKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity<ActivityMainBinding>(), HomeNavigator {
+class MainActivity :
+    BaseActivity<ActivityMainBinding>(),
+    HomeNavigator,
+    DialogInterface.OnDismissListener {
 
     var forceShowKeyboard = true
 
@@ -52,5 +57,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), HomeNavigator {
         if (findNavController(R.id.mainNavGraph).currentDestination?.id == R.id.income_expense_dest) {
             viewBinding.bottomNavigation.visibility = VISIBLE
         }
+    }
+
+    override fun onDismiss(dialog: DialogInterface?) {
+        hideKeyboard()
     }
 }

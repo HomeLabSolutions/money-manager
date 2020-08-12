@@ -6,7 +6,6 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.d9tilov.moneymanager.App
@@ -95,22 +94,15 @@ class CategoryModifyAdapter :
 
     fun updateItems(newCategories: List<Category>) {
         Timber.tag(App.TAG).d("newCategories size : ${newCategories.size}")
-        val sortedCategories = newCategories.sortedWith(
-            compareBy(
-                { it.children.isEmpty() },
-                { -it.usageCount },
-                { it.name }
-            )
-        )
         val diffUtilsCallback =
             CategoryDiffUtil(
                 categories,
-                sortedCategories
+                newCategories
             )
         val diffUtilsResult = DiffUtil.calculateDiff(diffUtilsCallback, false)
-        diffUtilsResult.dispatchUpdatesTo(this)
         categories.clear()
-        categories.addAll(sortedCategories)
+        categories.addAll(newCategories)
+        diffUtilsResult.dispatchUpdatesTo(this)
     }
 
     fun enableEditMode(enable: Boolean) {
@@ -157,15 +149,6 @@ class CategoryModifyAdapter :
                         category.color
                     )
                 )
-                categoryItemSubtitle.text = category.parent?.name
-                val parentColor = ColorUtils.setAlphaComponent(
-                    ContextCompat.getColor(
-                        context,
-                        category.color
-                    ),
-                    240
-                )
-                categoryItemSubtitle.setTextColor(parentColor)
                 val tintDrawable = createTintDrawable(context, category.icon, category.color)
                 GlideApp
                     .with(context)

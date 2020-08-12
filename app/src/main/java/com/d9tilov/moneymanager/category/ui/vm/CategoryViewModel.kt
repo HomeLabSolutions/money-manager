@@ -54,7 +54,7 @@ class CategoryViewModel @ViewModelInject constructor(
                         .observeOn(uiScheduler)
                         .subscribe { navigator?.backToMainScreen(transactionType) }
                 }
-                CategoryDestination.MAIN_SCREEN -> navigator?.openCreateCategoryScreen(category)
+                else -> navigator?.openCreateCategoryScreen(category)
             }
         }
     }

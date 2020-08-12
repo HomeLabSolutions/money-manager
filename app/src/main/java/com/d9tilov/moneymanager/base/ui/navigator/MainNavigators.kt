@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.base.ui.navigator
 
+import androidx.annotation.DrawableRes
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -57,12 +58,11 @@ interface CategoryCreationNavigator : BaseNavigator {
 }
 
 interface CategorySetNavigator : BaseNavigator {
-    fun save(category: Category)
+    fun save(@DrawableRes icon: Int)
 }
 
 interface EditTransactionNavigator : BaseNavigator {
     fun save()
-    fun showRemoveDialog()
 }
 
 interface SubCategoryNavigator : BaseNavigator {

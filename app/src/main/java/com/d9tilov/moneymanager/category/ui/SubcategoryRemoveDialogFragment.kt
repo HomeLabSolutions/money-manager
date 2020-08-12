@@ -8,7 +8,6 @@ import androidx.navigation.fragment.navArgs
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseDialogFragment
 import com.d9tilov.moneymanager.base.ui.navigator.RemoveSubCategoryDialogNavigator
-import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.ui.vm.SubcategoryRemoveViewModel
 import com.d9tilov.moneymanager.databinding.FragmentDialogTripleRemoveBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,8 +19,6 @@ class SubcategoryRemoveDialogFragment :
 
     private val args by navArgs<SubcategoryRemoveDialogFragmentArgs>()
     private val subCategory by lazy { args.subcategory }
-    private val destination by lazy { args.destination }
-    private val transactionType by lazy { args.transactionType }
 
     override val layoutId = R.layout.fragment_dialog_triple_remove
     override fun performDataBinding(view: View) = FragmentDialogTripleRemoveBinding.bind(view)
@@ -50,21 +47,11 @@ class SubcategoryRemoveDialogFragment :
 
     override fun closeDialog() {
         dismiss()
-        if (destination == CategoryDestination.SUB_CATEGORY_SCREEN) {
-            val action = SubcategoryRemoveDialogFragmentDirections.toSubCategoryDest(
-                destination = destination,
-                parentCategory = subCategory.parent!!,
-                transactionType = transactionType
-            )
-            findNavController().navigate(action)
-        }
+        findNavController().popBackStack(R.id.category_creation_dest, true)
     }
 
     override fun closeDialogAndGoToCategory() {
-        val action = SubcategoryRemoveDialogFragmentDirections.toCategoryDest(
-            destination = destination,
-            transactionType = transactionType
-        )
-        findNavController().navigate(action)
+        dismiss()
+        findNavController().popBackStack(R.id.sub_category_dest, true)
     }
 }

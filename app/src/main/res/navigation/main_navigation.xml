@@ -102,11 +102,6 @@
             android:name="transactionType"
             app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
         <argument
-            android:name="edited_transaction"
-            app:argType="com.d9tilov.moneymanager.transaction.domain.entity.Transaction"
-            app:nullable="true"
-            android:defaultValue="@null" />
-        <argument
             android:name="sum"
             android:defaultValue="@null"
             app:argType="java.math.BigDecimal"
@@ -153,11 +148,6 @@
             android:name="transactionType"
             app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
         <argument
-            android:name="edited_transaction"
-            android:defaultValue="@null"
-            app:argType="com.d9tilov.moneymanager.transaction.domain.entity.Transaction"
-            app:nullable="true" />
-        <argument
             android:name="parent_category"
             app:argType="com.d9tilov.moneymanager.category.data.entities.Category" />
         <argument
@@ -185,17 +175,11 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
         <argument
-            android:name="destination"
-            app:argType="com.d9tilov.moneymanager.category.CategoryDestination" />
-        <argument
             android:name="transactionType"
             app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
         <argument
             android:name="edited_transaction"
             app:argType="com.d9tilov.moneymanager.transaction.domain.entity.Transaction" />
-        <argument
-            android:name="category"
-            app:argType="com.d9tilov.moneymanager.category.data.entities.Category" />
     </fragment>
 
     <fragment
@@ -210,41 +194,18 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
-            android:id="@+id/to_category_dest"
-            app:destination="@id/category_dest"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@+id/category_dest"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/to_sub_category_dest"
-            app:destination="@id/sub_category_dest"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@+id/sub_category_dest"
-            app:popUpToInclusive="true" />
-        <action
             android:id="@+id/to_remove_sub_category_dialog"
             app:destination="@id/remove_sub_category_dialog"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@+id/remove_sub_category_dialog"
-            app:popUpToInclusive="true" />
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/to_remove_category_dialog"
             app:destination="@id/remove_category_dialog"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@+id/remove_category_dialog"
-            app:popUpToInclusive="true" />
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
-        <argument
-            android:name="destination"
-            app:argType="com.d9tilov.moneymanager.category.CategoryDestination" />
         <argument
             android:name="transactionType"
             app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
@@ -260,42 +221,13 @@
         android:name="com.d9tilov.moneymanager.category.ui.CategoryIconSetFragment"
         android:label="fragment_title_screen"
         tools:layout="@layout/fragment_category_icon_set">
-        <action
-            android:id="@+id/to_category_creation_dest"
-            app:destination="@id/category_creation_dest"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@+id/category_creation_dest"
-            app:popUpToInclusive="true" />
-
-        <argument
-            android:name="destination"
-            app:argType="com.d9tilov.moneymanager.category.CategoryDestination" />
-        <argument
-            android:name="transactionType"
-            app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
-        <argument
-            android:name="category"
-            app:argType="com.d9tilov.moneymanager.category.data.entities.Category" />
     </fragment>
 
     <dialog
         android:id="@+id/remove_transaction_dialog"
         android:name="com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialogFragment"
         tools:layout="@layout/fragment_dialog_remove">
-        <action
-            android:id="@+id/to_income_expense_dest"
-            app:destination="@id/income_expense_dest"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@+id/income_expense_dest"
-            app:popUpToInclusive="true" />
 
-        <argument
-            android:name="destination"
-            app:argType="com.d9tilov.moneymanager.category.CategoryDestination" />
         <argument
             android:name="transaction"
             app:argType="com.d9tilov.moneymanager.transaction.domain.entity.Transaction" />
@@ -305,14 +237,6 @@
         android:id="@+id/unit_category_to_folder_dialog"
         android:name="com.d9tilov.moneymanager.category.ui.CategoryUnitDialog"
         tools:layout="@layout/fragment_dialog_category_union">
-        <action
-            android:id="@+id/to_income_expense_dest"
-            app:destination="@id/income_expense_dest"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@+id/income_expense_dest"
-            app:popUpToInclusive="true" />
 
         <argument
             android:name="transactionType"
@@ -329,21 +253,7 @@
         android:id="@+id/remove_category_dialog"
         android:name="com.d9tilov.moneymanager.category.ui.CategoryRemoveDialog"
         tools:layout="@layout/fragment_dialog_remove">
-        <action
-            android:id="@+id/to_category_dest"
-            app:destination="@id/category_dest"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@+id/category_dest"
-            app:popUpToInclusive="true" />
 
-        <argument
-            android:name="destination"
-            app:argType="com.d9tilov.moneymanager.category.CategoryDestination" />
-        <argument
-            android:name="transactionType"
-            app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
         <argument
             android:name="category"
             app:argType="com.d9tilov.moneymanager.category.data.entities.Category" />
@@ -353,29 +263,6 @@
         android:id="@+id/remove_sub_category_dialog"
         android:name="com.d9tilov.moneymanager.category.ui.SubcategoryRemoveDialogFragment"
         tools:layout="@layout/fragment_dialog_triple_remove">
-        <action
-            android:id="@+id/to_category_dest"
-            app:destination="@id/category_dest"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@+id/category_dest"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/to_sub_category_dest"
-            app:destination="@id/sub_category_dest"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@+id/sub_category_dest"
-            app:popUpToInclusive="true" />
-
-        <argument
-            android:name="destination"
-            app:argType="com.d9tilov.moneymanager.category.CategoryDestination" />
-        <argument
-            android:name="transactionType"
-            app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
         <argument
             android:name="subcategory"
             app:argType="com.d9tilov.moneymanager.category.data.entities.Category" />

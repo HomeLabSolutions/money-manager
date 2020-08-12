@@ -5,11 +5,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.navigator.SubCategoryNavigator
-import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.common.BaseCategoryFragment
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.subcategory.vm.SubCategoryViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.ui.EditTransactionFragment.Companion.ARG_CATEGORY
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,8 +19,6 @@ class SubCategoryFragment :
 
     private val args by navArgs<SubCategoryFragmentArgs>()
     private val parentCategory by lazy { args.parentCategory }
-    private val transaction by lazy { args.editedTransaction }
-    private val destination by lazy { args.destination }
     private val transactionType by lazy { args.transactionType }
 
     override fun getNavigator() = this
@@ -30,23 +28,19 @@ class SubCategoryFragment :
     override val viewModel by viewModels<SubCategoryViewModel>()
 
     override fun backToEditTransactionScreen(category: Category) {
-        val action = SubCategoryFragmentDirections.toEditTransactionDest(
-            destination,
-            transactionType,
-            requireNotNull(transaction),
+        findNavController().getBackStackEntry(R.id.edit_transaction_dest).savedStateHandle.set(
+            ARG_CATEGORY,
             category
         )
-        findNavController().navigate(action)
+        findNavController().popBackStack(R.id.category_dest, true)
     }
 
     override fun backToMainScreen(transactionType: TransactionType) {
-        val action = SubCategoryFragmentDirections.toIncomeExpenseDest(transactionType)
-        findNavController().navigate(action)
+        findNavController().popBackStack(R.id.category_dest, true)
     }
 
     override fun openCreateCategoryScreen(category: Category?) {
         val action = SubCategoryFragmentDirections.toCategoryCreationDest(
-            CategoryDestination.SUB_CATEGORY_SCREEN,
             transactionType,
             category
         )
@@ -54,11 +48,7 @@ class SubCategoryFragment :
     }
 
     override fun openRemoveDialog(subCategory: Category) {
-        val action = SubCategoryFragmentDirections.toRemoveSubCategoryDialog(
-            destination,
-            transactionType,
-            subCategory
-        )
+        val action = SubCategoryFragmentDirections.toRemoveSubCategoryDialog(subCategory)
         findNavController().navigate(action)
     }
 }

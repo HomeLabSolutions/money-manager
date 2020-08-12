@@ -5,12 +5,14 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.EditTransactionNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
+import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.core.util.DateValidatorPointBackward
 import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
@@ -32,11 +34,11 @@ class EditTransactionFragment : EditTransactionNavigator,
 
     private val args by navArgs<EditTransactionFragmentArgs>()
     private val transaction by lazy { args.editedTransaction }
-    private val category by lazy { args.category }
     private val transactionType by lazy { args.transactionType }
 
     private var toolbar: MaterialToolbar? = null
     private lateinit var date: Date
+    private lateinit var category: Category
 
     override fun performDataBinding(view: View) = FragmentEditTransactionBinding.bind(view)
 
@@ -47,6 +49,17 @@ class EditTransactionFragment : EditTransactionNavigator,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         date = transaction.date
+        category = transaction.category
+        updateIcon()
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Category>(ARG_CATEGORY)?.observe(
+            viewLifecycleOwner
+        ) {
+            category = it
+            updateIcon()
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<Category>(
+                ARG_CATEGORY
+            )
+        }
         viewBinding?.let {
             it.editTransactionSave.setOnClickListener { _ ->
                 viewModel.update(
@@ -80,14 +93,12 @@ class EditTransactionFragment : EditTransactionNavigator,
                 val action =
                     EditTransactionFragmentDirections.toCategoryDest(
                         CategoryDestination.EDIT_TRANSACTION_SCREEN,
-                        transactionType,
-                        transaction
+                        transactionType
                     )
                 findNavController().navigate(action)
             }
             it.editTransactionDelete.setOnClickListener {
                 val action = EditTransactionFragmentDirections.toRemoveTransactionDialog(
-                    CategoryDestination.EDIT_TRANSACTION_SCREEN,
                     transaction
                 )
                 findNavController().navigate(action)
@@ -97,17 +108,22 @@ class EditTransactionFragment : EditTransactionNavigator,
                 TRANSACTION_DATE_FORMAT,
                 Locale.getDefault()
             ).format(transaction.date)
-            val icon = createTintDrawable(
-                requireContext(),
-                category.icon,
-                category.color
-            )
-            icon.setBounds(0, 0, 120, 120)
-            it.editTransactionCategory.setCompoundDrawables(icon, null, null, null)
-            it.editTransactionCategory.text = category.name
         }
         toolbar = viewBinding?.editTransactionToolbarContainer?.toolbar
         initToolbar(toolbar)
+    }
+
+    private fun updateIcon() {
+        val iconDrawable = createTintDrawable(
+            requireContext(),
+            category.icon,
+            category.color
+        )
+        iconDrawable.setBounds(0, 0, 120, 120)
+        viewBinding?.let {
+            it.editTransactionCategory.setCompoundDrawables(iconDrawable, null, null, null)
+            it.editTransactionCategory.text = category.name
+        }
     }
 
     private fun initToolbar(toolbar: Toolbar?) {
@@ -121,11 +137,7 @@ class EditTransactionFragment : EditTransactionNavigator,
         findNavController().popBackStack()
     }
 
-    override fun showRemoveDialog() {
-        val action = EditTransactionFragmentDirections.toRemoveTransactionDialog(
-            CategoryDestination.EDIT_TRANSACTION_SCREEN,
-            transaction
-        )
-        findNavController().navigate(action)
+    companion object {
+        const val ARG_CATEGORY = "category"
     }
 }

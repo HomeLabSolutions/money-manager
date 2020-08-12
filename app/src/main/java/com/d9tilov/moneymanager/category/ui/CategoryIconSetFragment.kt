@@ -6,12 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.CategorySetNavigator
-import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryIconSetAdapter
 import com.d9tilov.moneymanager.category.ui.vm.CategorySetViewModel
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
@@ -25,10 +23,6 @@ class CategoryIconSetFragment :
     BaseFragment<FragmentCategoryIconSetBinding, CategorySetNavigator>(R.layout.fragment_category_icon_set),
     CategorySetNavigator {
 
-    private val args by navArgs<CategoryIconSetFragmentArgs>()
-    private val transactionType by lazy { args.transactionType }
-    private val destination by lazy { args.destination }
-
     private var toolbar: MaterialToolbar? = null
     private lateinit var categoryAdapter: CategoryIconSetAdapter
 
@@ -38,7 +32,6 @@ class CategoryIconSetFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         categoryAdapter = CategoryIconSetAdapter()
         categoryAdapter.itemClickListener = onItemIconClickListener
     }
@@ -74,17 +67,13 @@ class CategoryIconSetFragment :
         toolbar?.title = getString(R.string.title_category_set)
     }
 
-    override fun save(category: Category) {
-        val action =
-            CategoryIconSetFragmentDirections.toCategoryCreationDest(
-                destination,
-                transactionType,
-                category
-            )
-        findNavController().navigate(action)
+    override fun save(icon: Int) {
+        findNavController().previousBackStackEntry?.savedStateHandle?.set(ARG_CATEGORY_ICON_ID, icon)
+        findNavController().popBackStack()
     }
 
     companion object {
         private const val SPAN_COUNT = 4
+        const val ARG_CATEGORY_ICON_ID = "category_icon_id"
     }
 }

@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.base.ui
 
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -40,6 +41,11 @@ abstract class BaseDialogFragment<V : ViewBinding, N : BaseNavigator> :
             viewModel.navigator = getNavigator()
         }
         isCancelable = false
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        (activity as? DialogInterface.OnDismissListener)?.onDismiss(dialog)
     }
 
     override fun onCreateView(
