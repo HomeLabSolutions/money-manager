@@ -41,18 +41,29 @@ class CategoryFragment :
     }
 
     override fun openCreateCategoryScreen(category: Category?) {
-        val action = CategoryFragmentDirections.toCategoryCreationDest(category, CategoryDestination.CATEGORY_SCREEN, transactionType)
+        val action = CategoryFragmentDirections.toCategoryCreationDest(
+            CategoryDestination.CATEGORY_SCREEN,
+            transactionType,
+            category
+        )
         findNavController().navigate(action)
     }
 
     override fun openRemoveDialog(category: Category) {
-        val action = CategoryFragmentDirections.toRemoveCategoryDialog(category, destination, transactionType)
+        val action = CategoryFragmentDirections.toRemoveCategoryDialog(
+            destination,
+            transactionType,
+            category
+        )
         findNavController().navigate(action)
     }
 
     override fun backToEditTransactionScreen(category: Category) {
         val action = CategoryFragmentDirections.toEditTransactionDest(
-            requireNotNull(transaction), category, transactionType, destination
+            destination,
+            transactionType,
+            requireNotNull(transaction),
+            category
         )
         findNavController().navigate(action)
     }
@@ -83,9 +94,9 @@ class CategoryFragment :
             parentPosition: Int
         ) {
             val action = CategoryFragmentDirections.toCreateGroupDialog(
+                transactionType,
                 childItem,
-                parentItem,
-                transactionType
+                parentItem
             )
             findNavController().navigate(action)
             categoryAdapter.enableEditMode(false)
@@ -98,9 +109,9 @@ class CategoryFragment :
             secondItemPosition: Int
         ) {
             val action = CategoryFragmentDirections.toCreateGroupDialog(
+                transactionType,
                 firstItem,
-                secondItem,
-                transactionType
+                secondItem
             )
             findNavController().navigate(action)
             categoryAdapter.enableEditMode(false)

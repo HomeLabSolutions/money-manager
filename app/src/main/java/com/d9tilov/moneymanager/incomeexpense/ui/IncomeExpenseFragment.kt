@@ -3,6 +3,8 @@ package com.d9tilov.moneymanager.incomeexpense.ui
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager.widget.ViewPager
 import com.d9tilov.moneymanager.R
@@ -12,6 +14,7 @@ import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
 import com.d9tilov.moneymanager.databinding.FragmentIncomeExpenseBinding
 import com.d9tilov.moneymanager.incomeexpense.ui.adapter.IncomeExpenseAdapter
 import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialogFragment.Companion.ARGS_UNDO_REMOVE_LAYOUT_ON_DISMISS
 import kotlinx.android.synthetic.main.fragment_income_expense.income_expense_view_pager
 
 class IncomeExpenseFragment :
@@ -21,7 +24,6 @@ class IncomeExpenseFragment :
 
     private val args by navArgs<IncomeExpenseFragmentArgs>()
     private val transactionType by lazy { args.transactionType }
-    private val transactionRemoveDialogDismiss by lazy { args.transactionRemoveDialogDismiss }
 
     private lateinit var demoCollectionPagerAdapter: IncomeExpenseAdapter
     private lateinit var viewBinding: FragmentIncomeExpenseBinding
@@ -30,6 +32,17 @@ class IncomeExpenseFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewBinding = FragmentIncomeExpenseBinding.bind(view)
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
+            ARGS_UNDO_REMOVE_LAYOUT_ON_DISMISS
+        )?.observe(
+            viewLifecycleOwner
+        ) {
+            if (it) {
+                val currentFragment =
+                    demoCollectionPagerAdapter.getRegisteredFragment(currentPage) as OnDialogDismissListener
+                currentFragment.onDismiss()
+            }
+        }
         demoCollectionPagerAdapter =
             IncomeExpenseAdapter(
                 requireContext(),
@@ -59,11 +72,6 @@ class IncomeExpenseFragment :
             } else {
                 0
             }
-        if (transactionRemoveDialogDismiss) {
-            val currentFragment =
-                demoCollectionPagerAdapter.getRegisteredFragment(currentPage) as OnDialogDismissListener
-            currentFragment.onDismiss()
-        }
     }
 
     override fun onOpenKeyboard() {

@@ -76,7 +76,11 @@ class CategoryIconSetFragment :
 
     override fun save(category: Category) {
         val action =
-            CategoryIconSetFragmentDirections.toCategoryCreationDest(category, destination, transactionType)
+            CategoryIconSetFragmentDirections.toCategoryCreationDest(
+                destination,
+                transactionType,
+                category
+            )
         findNavController().navigate(action)
     }
 

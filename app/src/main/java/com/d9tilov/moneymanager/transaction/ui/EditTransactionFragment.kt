@@ -79,14 +79,17 @@ class EditTransactionFragment : EditTransactionNavigator,
             it.editTransactionCategory.setOnClickListener {
                 val action =
                     EditTransactionFragmentDirections.toCategoryDest(
-                        transaction,
                         CategoryDestination.EDIT_TRANSACTION_SCREEN,
-                        transactionType = transactionType
+                        transactionType,
+                        transaction
                     )
                 findNavController().navigate(action)
             }
             it.editTransactionDelete.setOnClickListener {
-                val action = EditTransactionFragmentDirections.toRemoveTransactionDialog(transaction, CategoryDestination.EDIT_TRANSACTION_SCREEN)
+                val action = EditTransactionFragmentDirections.toRemoveTransactionDialog(
+                    CategoryDestination.EDIT_TRANSACTION_SCREEN,
+                    transaction
+                )
                 findNavController().navigate(action)
             }
             it.editTransactionMainSum.setValue(transaction.sum)
@@ -120,8 +123,8 @@ class EditTransactionFragment : EditTransactionNavigator,
 
     override fun showRemoveDialog() {
         val action = EditTransactionFragmentDirections.toRemoveTransactionDialog(
-            transaction,
-            CategoryDestination.EDIT_TRANSACTION_SCREEN
+            CategoryDestination.EDIT_TRANSACTION_SCREEN,
+            transaction
         )
         findNavController().navigate(action)
     }
