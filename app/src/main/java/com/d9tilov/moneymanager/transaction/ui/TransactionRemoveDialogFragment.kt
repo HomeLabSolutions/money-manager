@@ -37,10 +37,9 @@ class TransactionRemoveDialogFragment :
             transactionRemoveButtonConfirm.setOnClickListener { viewModel.remove(transaction) }
             transactionRemoveButtonCancel.setOnClickListener {
                 dismiss()
-                if (destination == CategoryDestination.MAIN_SCREEN) {
-                    val action = TransactionRemoveDialogFragmentDirections.toIncomeExpenseDest()
-                    findNavController().navigate(action)
-                }
+                findNavController().previousBackStackEntry?.savedStateHandle?.set(
+                    ARGS_UNDO_REMOVE_LAYOUT_ON_DISMISS, true
+                )
             }
         }
     }
@@ -56,5 +55,9 @@ class TransactionRemoveDialogFragment :
             val action = TransactionRemoveDialogFragmentDirections.toIncomeExpenseDest()
             findNavController().navigate(action)
         }
+    }
+
+    companion object {
+        const val ARGS_UNDO_REMOVE_LAYOUT_ON_DISMISS = "undo_remove_layout_on_dismiss"
     }
 }

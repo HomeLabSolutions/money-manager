@@ -64,10 +64,10 @@ class ExpenseFragment :
     private val onTransactionClickListener = object : OnItemClickListener<Transaction> {
         override fun onItemClick(item: Transaction, position: Int) {
             val action = IncomeExpenseFragmentDirections.toEditTransactionDest(
-                item,
-                item.category,
+                CategoryDestination.MAIN_SCREEN,
                 TransactionType.EXPENSE,
-                CategoryDestination.MAIN_SCREEN
+                item,
+                item.category
             )
             findNavController().navigate(action)
         }
@@ -188,7 +188,10 @@ class ExpenseFragment :
     }
 
     override fun openRemoveConfirmationDialog(transaction: Transaction) {
-        val action = IncomeExpenseFragmentDirections.toRemoveTransactionDialog(transaction, CategoryDestination.MAIN_SCREEN)
+        val action = IncomeExpenseFragmentDirections.toRemoveTransactionDialog(
+            CategoryDestination.MAIN_SCREEN,
+            transaction
+        )
         findNavController().navigate(action)
     }
 

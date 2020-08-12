@@ -23,7 +23,6 @@ import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryColorAdapter
 import com.d9tilov.moneymanager.category.ui.vm.CategoryCreationViewModel
-import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_DATA_ID
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.util.createTintDrawable
@@ -113,12 +112,12 @@ class CategoryCreationFragment :
                 if (category.id == DEFAULT_DATA_ID) GONE else VISIBLE
             it.categoryCreationIconLayout.setOnClickListener { _ ->
                 val action = CategoryCreationFragmentDirections.toCategorySetDest(
+                    destination,
+                    transactionType,
                     category.copy(
                         name = it.categoryCreationEtName.text.toString(),
                         color = color
-                    ),
-                    transactionType,
-                    destination
+                    )
                 )
                 findNavController().navigate(action)
             }
@@ -145,7 +144,11 @@ class CategoryCreationFragment :
                         category
                     )
                 } else {
-                    CategoryCreationFragmentDirections.toRemoveCategoryDialog(category, CategoryDestination.CATEGORY_CREATION_SCREEN, transactionType)
+                    CategoryCreationFragmentDirections.toRemoveCategoryDialog(
+                        CategoryDestination.CATEGORY_CREATION_SCREEN,
+                        transactionType,
+                        category
+                    )
                 }
                 findNavController().navigate(action)
             }
@@ -192,7 +195,7 @@ class CategoryCreationFragment :
         activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar?.title =
-            getString(if (category.id != DataConstants.DEFAULT_DATA_ID) R.string.title_category_creation else R.string.title_category_creation_create)
+            getString(if (category.id != DEFAULT_DATA_ID) R.string.title_category_creation else R.string.title_category_creation_create)
     }
 
     override fun save() {
