@@ -39,13 +39,14 @@ abstract class BaseDialogFragment<V : ViewBinding, N : BaseNavigator> :
         baseActivity?.let {
             viewModel.navigator = getNavigator()
         }
+        isCancelable = false
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = LayoutInflater.from(requireContext()).inflate(layoutId, container, false)
+    ): View = LayoutInflater.from(requireContext()).inflate(layoutId, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

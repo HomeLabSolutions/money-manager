@@ -5,6 +5,7 @@ import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import androidx.annotation.ColorRes
@@ -22,7 +23,8 @@ import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryColorAdapter
 import com.d9tilov.moneymanager.category.ui.vm.CategoryCreationViewModel
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
+import com.d9tilov.moneymanager.core.constants.DataConstants
+import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_DATA_ID
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.onChange
@@ -107,6 +109,8 @@ class CategoryCreationFragment :
                 )
                 it.categoryCreationSave.isEnabled = text.isNotEmpty()
             }
+            it.categoryCreationDelete.visibility =
+                if (category.id == DEFAULT_DATA_ID) GONE else VISIBLE
             it.categoryCreationIconLayout.setOnClickListener { _ ->
                 val action = CategoryCreationFragmentDirections.toCategorySetDest(
                     category.copy(
@@ -130,13 +134,30 @@ class CategoryCreationFragment :
             it.categoryCreationColor.setOnClickListener { _ ->
                 it.categoryCreationRvColorPicker.visibility = VISIBLE
             }
+            it.categoryCreationDelete.setOnClickListener {
+                if (category.id == DEFAULT_DATA_ID) {
+                    return@setOnClickListener
+                }
+                val action = if (category.parent != null) {
+                    CategoryCreationFragmentDirections.toRemoveSubCategoryDialog(
+                        destination,
+                        transactionType,
+                        category
+                    )
+                } else {
+                    CategoryCreationFragmentDirections.toRemoveCategoryDialog(category, CategoryDestination.CATEGORY_CREATION_SCREEN, transactionType)
+                }
+                findNavController().navigate(action)
+            }
         }
         toolbar = viewBinding?.categoryCreationToolbarContainer?.toolbar
         initToolbar(toolbar)
     }
 
     override fun onStart() {
-        showKeyboard(viewBinding?.categoryCreationEtName)
+        if (category.id == DEFAULT_DATA_ID) {
+            showKeyboard(viewBinding?.categoryCreationEtName)
+        }
         super.onStart()
     }
 
@@ -171,20 +192,20 @@ class CategoryCreationFragment :
         activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar?.title =
-            getString(if (category.id == NO_ID) R.string.title_category_creation else R.string.title_category_creation_create)
+            getString(if (category.id != DataConstants.DEFAULT_DATA_ID) R.string.title_category_creation else R.string.title_category_creation_create)
     }
 
     override fun save() {
-        val action = if (destination == CategoryDestination.CATEGORY_SCREEN) {
-            CategoryCreationFragmentDirections.toCategoryDest(
-                transactionType = transactionType,
-                destination = destination
-            )
-        } else {
+        val action = if (destination == CategoryDestination.SUB_CATEGORY_SCREEN) {
             CategoryCreationFragmentDirections.toSubCategoryDest(
                 transactionType = transactionType,
                 destination = destination,
                 parentCategory = category.parent!!
+            )
+        } else {
+            CategoryCreationFragmentDirections.toCategoryDest(
+                transactionType = transactionType,
+                destination = destination
             )
         }
         findNavController().navigate(action)

@@ -1,7 +1,6 @@
 package com.d9tilov.moneymanager.category.ui.recycler
 
 import android.graphics.Canvas
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -43,10 +42,7 @@ class SimpleItemTouchHelperCallback(
         recyclerView: RecyclerView,
         viewHolder: ViewHolder,
         target: ViewHolder
-    ): Boolean {
-        Log.d("moggot", "onMove: ")
-        return true
-    }
+    ) = true
 
     override fun onSwiped(viewHolder: ViewHolder, direction: Int) {}
 

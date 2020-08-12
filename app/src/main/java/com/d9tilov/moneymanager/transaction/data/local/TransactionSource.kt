@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.transaction.data.local
 
 import androidx.paging.DataSource
+import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionBaseDataModel
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
@@ -20,5 +21,6 @@ interface TransactionSource {
 
     fun update(transaction: TransactionDataModel): Completable
     fun remove(transaction: TransactionDataModel): Completable
+    fun removeAllByCategory(category: Category): Completable
     fun clearAll(): Completable
 }

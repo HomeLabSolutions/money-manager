@@ -31,7 +31,7 @@ class SubCategoryFragment :
 
     override fun backToEditTransactionScreen(category: Category) {
         val action = SubCategoryFragmentDirections.toEditTransactionDest(
-            requireNotNull(transaction), category, transactionType
+            requireNotNull(transaction), category, transactionType, destination
         )
         findNavController().navigate(action)
     }
@@ -42,7 +42,20 @@ class SubCategoryFragment :
     }
 
     override fun openCreateCategoryScreen(category: Category?) {
-        val action = SubCategoryFragmentDirections.toCategoryCreationDest(category, CategoryDestination.SUB_CATEGORY_SCREEN, transactionType)
+        val action = SubCategoryFragmentDirections.toCategoryCreationDest(
+            category,
+            CategoryDestination.SUB_CATEGORY_SCREEN,
+            transactionType
+        )
+        findNavController().navigate(action)
+    }
+
+    override fun openRemoveDialog(subCategory: Category) {
+        val action = SubCategoryFragmentDirections.toRemoveSubCategoryDialog(
+            destination,
+            transactionType,
+            subCategory
+        )
         findNavController().navigate(action)
     }
 }

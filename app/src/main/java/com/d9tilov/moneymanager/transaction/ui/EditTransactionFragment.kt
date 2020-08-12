@@ -34,6 +34,7 @@ class EditTransactionFragment : EditTransactionNavigator,
     private val transaction by lazy { args.editedTransaction }
     private val category by lazy { args.category }
     private val transactionType by lazy { args.transactionType }
+
     private var toolbar: MaterialToolbar? = null
     private lateinit var date: Date
 
@@ -84,6 +85,10 @@ class EditTransactionFragment : EditTransactionNavigator,
                     )
                 findNavController().navigate(action)
             }
+            it.editTransactionDelete.setOnClickListener {
+                val action = EditTransactionFragmentDirections.toRemoveTransactionDialog(transaction, CategoryDestination.EDIT_TRANSACTION_SCREEN)
+                findNavController().navigate(action)
+            }
             it.editTransactionMainSum.setValue(transaction.sum)
             it.editTransactionDate.text = SimpleDateFormat(
                 TRANSACTION_DATE_FORMAT,
@@ -111,5 +116,13 @@ class EditTransactionFragment : EditTransactionNavigator,
 
     override fun save() {
         findNavController().popBackStack()
+    }
+
+    override fun showRemoveDialog() {
+        val action = EditTransactionFragmentDirections.toRemoveTransactionDialog(
+            transaction,
+            CategoryDestination.EDIT_TRANSACTION_SCREEN
+        )
+        findNavController().navigate(action)
     }
 }

@@ -25,7 +25,7 @@ abstract class CategoryDao {
     abstract fun getCategoriesCountByName(uid: String, name: String): Single<Int>
 
     @Query("SELECT * FROM categories WHERE clientId=:uid AND parentId=:id")
-    abstract fun getByParentId(uid: String, id: Long): Maybe<List<CategoryDbModel>>
+    abstract fun getByParentId(uid: String, id: Long): Flowable<List<CategoryDbModel>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun create(category: CategoryDbModel): Single<Long>
@@ -33,6 +33,6 @@ abstract class CategoryDao {
     @Update
     abstract fun update(category: CategoryDbModel): Completable
 
-    @Query("DELETE FROM categories WHERE id=:id")
-    abstract fun delete(id: Long): Completable
+    @Query("DELETE FROM categories WHERE clientId=:uid AND id=:id")
+    abstract fun delete(uid: String, id: Long): Completable
 }

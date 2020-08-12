@@ -25,11 +25,16 @@ class CategoryInteractorImpl(private val categoryRepo: CategoryRepo) :
     override fun getAllCategoriesByType(type: TransactionType): Flowable<List<Category>> =
         categoryRepo.getCategoriesByType(type)
 
-    override fun getChildrenByParent(parentCategory: Category): Single<List<Category>> =
+    override fun getChildrenByParent(parentCategory: Category): Flowable<List<Category>> =
         categoryRepo.getChildrenByParent(parentCategory)
 
     override fun deleteCategory(category: Category): Completable =
         categoryRepo.deleteCategory(category)
+
+    override fun deleteSubCategory(subCategory: Category): Single<Boolean> =
+        categoryRepo.deleteSubcategory(subCategory)
+
+    override fun deleteFromGroup(subCategory: Category): Single<Boolean> = categoryRepo.deleteFromGroup(subCategory)
 
     private fun getAllWithChildrenInSingleList(categories: List<Category>): List<Category> {
         val categoriesAsChild = mutableListOf<Category>()

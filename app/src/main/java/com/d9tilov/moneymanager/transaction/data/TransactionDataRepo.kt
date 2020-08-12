@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.transaction.data
 
+import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.data.local.TransactionSource
@@ -26,6 +27,10 @@ class TransactionDataRepo(private val transactionSource: TransactionSource) : Tr
 
     override fun removeTransaction(transaction: TransactionDataModel): Completable {
         return transactionSource.remove(transaction)
+    }
+
+    override fun removeAllByCategory(category: Category): Completable {
+        return transactionSource.removeAllByCategory(category)
     }
 
     override fun clearAll(): Completable {

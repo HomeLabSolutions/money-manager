@@ -22,13 +22,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), HomeNavigator {
 
         findNavController(R.id.mainNavGraph).addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.category_dest,
-                R.id.sub_category_dest,
-                R.id.category_creation_dest,
-                R.id.category_set_dest,
-                R.id.edit_transaction_dest ->
-                    viewBinding.bottomNavigation.visibility = GONE
-                else -> viewBinding.bottomNavigation.visibility = VISIBLE
+                R.id.income_expense_dest,
+                R.id.chart_dest,
+                R.id.settings_dest ->
+                    viewBinding.bottomNavigation.visibility = VISIBLE
+                else -> viewBinding.bottomNavigation.visibility = GONE
             }
         }
         viewBinding.bottomNavigation.setupWithNavController(

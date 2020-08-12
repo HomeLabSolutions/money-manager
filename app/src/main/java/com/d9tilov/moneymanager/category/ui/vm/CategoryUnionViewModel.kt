@@ -16,6 +16,14 @@ class CategoryUnionViewModel @ViewModelInject constructor(
     @Assisted val savedStateHandle: SavedStateHandle
 ) : BaseViewModel<CategoryUnionDialogNavigator>() {
 
+    fun addToGroup(categoryItem: Category, parentCategory: Category) {
+        categoryInteractor.update(categoryItem.copy(parent = parentCategory))
+            .subscribeOn(ioScheduler)
+            .observeOn(uiScheduler)
+            .subscribe({ navigator?.accept() }, { navigator?.showError(it) })
+            .addTo(compositeDisposable)
+    }
+
     fun createGroup(categoryItem1: Category, categoryItem2: Category, groupedCategory: Category) {
         categoryInteractor.create(groupedCategory)
             .flatMapMaybe { parentId -> categoryInteractor.getCategoryById(parentId) }

@@ -27,7 +27,6 @@ interface StatisticsNavigator : BaseNavigator
 
 interface RemoveTransactionDialogNavigator : BaseNavigator {
     fun remove()
-    fun cancel()
 }
 
 interface CategoryUnionDialogNavigator : BaseNavigator {
@@ -36,9 +35,19 @@ interface CategoryUnionDialogNavigator : BaseNavigator {
     fun cancel()
 }
 
+interface RemoveCategoryDialogNavigator : BaseNavigator {
+    fun closeDialog()
+}
+
+interface RemoveSubCategoryDialogNavigator : BaseNavigator {
+    fun closeDialog()
+    fun closeDialogAndGoToCategory()
+}
+
 interface CategoryNavigator : BaseNavigator {
     fun openSubCategoryScreen(category: Category)
     fun openCreateCategoryScreen(category: Category? = null)
+    fun openRemoveDialog(category: Category)
     fun backToEditTransactionScreen(category: Category)
     fun backToMainScreen(transactionType: TransactionType)
 }
@@ -53,10 +62,12 @@ interface CategorySetNavigator : BaseNavigator {
 
 interface EditTransactionNavigator : BaseNavigator {
     fun save()
+    fun showRemoveDialog()
 }
 
 interface SubCategoryNavigator : BaseNavigator {
     fun backToEditTransactionScreen(category: Category)
     fun backToMainScreen(transactionType: TransactionType)
     fun openCreateCategoryScreen(category: Category? = null)
+    fun openRemoveDialog(subCategory: Category)
 }

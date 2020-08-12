@@ -27,6 +27,9 @@ abstract class TransactionDao {
     @Query("SELECT * FROM transactions WHERE clientId =:uid AND id = :id")
     abstract fun getById(uid: String, id: Long): Flowable<TransactionDbModel>
 
+    @Query("SELECT * FROM transactions WHERE clientId =:uid AND categoryId =:categoryId")
+    abstract fun getByCategoryId(uid: String, categoryId: Long): Flowable<List<TransactionDbModel>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(transaction: TransactionDbModel): Completable
 
@@ -41,6 +44,9 @@ abstract class TransactionDao {
 
     @Query("DELETE FROM transactions WHERE clientId=:clientId AND id=:id")
     abstract fun delete(clientId: String, id: Long): Completable
+
+    @Query("DELETE FROM transactions WHERE rowId in(SELECT rowId from transactions WHERE clientId=:clientId AND categoryId=:categoryId LIMIT 1)")
+    abstract fun deleteByCategoryId(clientId: String, categoryId: Long): Completable
 
     @Query("DELETE FROM transactions WHERE clientId=:clientId AND type=:type AND isDate=1 AND date(:date/1000, 'unixepoch') >= date(date/1000, 'unixepoch', 'start of day') AND date(:date/1000, 'unixepoch') <= date(date/1000, 'unixepoch', 'start of day', '+1 day', '-1 second')")
     abstract fun deleteDate(clientId: String, type: TransactionType, date: Date): Completable

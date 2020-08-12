@@ -49,7 +49,6 @@ class GridSpaceItemDecoration(
                     outRect.top = spacing / 2
                 }
                 outRect.bottom = spacing / 2
-                Log.d("moggot", "pos: $position " + " rect  = " + outRect)
             } else {
                 outRect.left = 0
                 outRect.right = 0

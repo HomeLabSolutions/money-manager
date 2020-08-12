@@ -39,8 +39,8 @@
     <string name="add">Добавить</string>
     <string name="create">Создать</string>
 
-    <string name="remove_transaction_dialog_title">Удаление транзакции</string>
-    <string name="remove_transaction_dialog_subtitle">Вы действительно хотите удалить транзакцию?</string>
+    <string name="delete_transaction_dialog_title">Удаление транзакции</string>
+    <string name="delete_transaction_dialog_subtitle">Вы действительно хотите удалить транзакцию?</string>
 
     <string name="edit_transaction_sum_title">Сумма</string>
     <string name="edit_transaction_description_hint">Описание</string>
@@ -58,4 +58,13 @@
     <string name="category_unit_name_group_hint">Название группы</string>
     <string name="category_unit_empty_name_error">Название группы не может быть пустым</string>
     <string name="category_unit_name_exist_error">Название группы с таким именем уже существует</string>
+
+    <string name="category_delete_title">Удаление категории</string>
+    <string name="category_delete_sub_title">Вы действительно хотите удалить категорию \"%1$s\"\?\n\nТак же будут удалены все операции с этой статьёй</string>
+    <string name="category_delete_group_sub_title">Вы действительно хотите удалить категорию \"%1$s\"\?\n\nТак же будут удалены все подкатегории и операции со статьей</string>
+
+    <string name="sub_category_delete_title">Удаление подкатегории</string>
+    <string name="sub_category_delete_subtitle">Вы действительно хотите удалить подкатегорию \"%1$s\"\?\n\nТак же будут удалены все операции с этой статьёй</string>
+    <string name="sub_category_delete">Удалить</string>
+    <string name="sub_category_delete_from_group">Удалить из группы</string>
 </resources>
