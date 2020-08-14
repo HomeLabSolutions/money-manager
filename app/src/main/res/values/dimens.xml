@@ -24,7 +24,6 @@
     <dimen name="standard_list_item_height">48dp</dimen>
 
     <dimen name="recycler_view_category_offset">8dp</dimen>
-    <dimen name="recycler_view_category_icon_set_offset">12dp</dimen>
     <dimen name="category_item_size">84dp</dimen>
     <dimen name="category_item_icon_size">52dp</dimen>
     <dimen name="category_item_icon_round_size">64dp</dimen>

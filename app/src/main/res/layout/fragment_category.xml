@@ -22,7 +22,7 @@
         android:layout_marginEnd="@dimen/standard_half_right_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/category_create"
+        app:layout_constraintBottom_toTopOf="@+id/category_create"
         android:paddingBottom="@dimen/standard_bottom_margin"
         app:layout_constraintTop_toBottomOf="@+id/category_toolbar_container" />
 

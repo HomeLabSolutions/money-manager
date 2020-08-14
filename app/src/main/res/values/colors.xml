@@ -43,6 +43,7 @@
     <color name="category_light_yellow">#f8ed94</color>
     <color name="category_mint">#aae8a7</color>
     <color name="category_grass_green">#9bd26c</color>
+    <color name="category_green_confirm">#009688</color>
     <color name="category_mud_green">#6e8e76</color>
     <color name="category_lollipop">#66c5bb</color>
     <color name="category_navy_blue">#5842da</color>
@@ -53,7 +54,6 @@
     <color name="category_flower_violet">#7b71b7</color>
     <color name="category_light_violet">#a48eae</color>
     <color name="category_pink">#f8d6d5</color>
-    <color name="category_green_confirm">#009688</color>
 
     <color name="category_all_color">@color/color_midnight_white</color>
     <color name="color_midnight_white">#fdfbfc</color>
