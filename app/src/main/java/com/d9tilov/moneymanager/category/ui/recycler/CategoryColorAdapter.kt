@@ -37,6 +37,7 @@ class CategoryColorAdapter(@ColorRes private var chosenColor: Int?) :
         R.color.category_light_yellow,
         R.color.category_mint,
         R.color.category_grass_green,
+        R.color.category_green_confirm,
         R.color.category_mud_green,
         R.color.category_lollipop,
         R.color.category_navy_blue,
