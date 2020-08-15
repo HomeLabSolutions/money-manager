@@ -33,6 +33,7 @@
 
     <string name="category_all">Все\nстатьи</string>
 
+    <string name="edit">Редактировать</string>
     <string name="delete">Удалить</string>
     <string name="cancel">Отмена</string>
     <string name="save">Сохранить</string>
@@ -59,6 +60,7 @@
     <string name="category_unit_empty_name_error">Название группы не может быть пустым</string>
     <string name="category_unit_name_exist_error">Название группы с таким именем уже существует</string>
 
+    <string name="category_edit_title">Редактирование группы категорий</string>
     <string name="category_delete_title">Удаление категории</string>
     <string name="category_delete_sub_title">Вы действительно хотите удалить категорию \"%1$s\"\?\n\nТак же будут удалены все операции с этой статьёй</string>
     <string name="category_delete_group_sub_title">Вы действительно хотите удалить категорию \"%1$s\"\?\n\nТак же будут удалены все подкатегории и операции со статьей</string>

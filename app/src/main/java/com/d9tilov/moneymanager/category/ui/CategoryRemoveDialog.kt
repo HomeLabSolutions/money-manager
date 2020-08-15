@@ -8,6 +8,7 @@ import androidx.navigation.fragment.navArgs
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseDialogFragment
 import com.d9tilov.moneymanager.base.ui.navigator.RemoveCategoryDialogNavigator
+import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.ui.vm.CategoryRemoveViewModel
 import com.d9tilov.moneymanager.databinding.FragmentDialogRemoveBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,6 +20,7 @@ class CategoryRemoveDialog :
 
     private val args by navArgs<CategoryRemoveDialogArgs>()
     private val category by lazy { args.category }
+    private val destination by lazy { args.destination }
 
     override val layoutId = R.layout.fragment_dialog_remove
     override fun performDataBinding(view: View) = FragmentDialogRemoveBinding.bind(view)
@@ -41,6 +43,10 @@ class CategoryRemoveDialog :
 
     override fun closeDialog() {
         dismiss()
-        findNavController().popBackStack(R.id.category_creation_dest, true)
+        if (destination == CategoryDestination.SUB_CATEGORY_SCREEN) {
+            findNavController().popBackStack(R.id.sub_category_dest, true)
+        } else {
+            findNavController().popBackStack(R.id.category_creation_dest, true)
+        }
     }
 }

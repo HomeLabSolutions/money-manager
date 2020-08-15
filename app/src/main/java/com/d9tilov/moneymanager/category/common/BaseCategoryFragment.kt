@@ -33,8 +33,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
     private val args by navArgs<CategoryFragmentArgs>()
     private val destination by lazy { args.destination }
 
-    private var toolbar: MaterialToolbar? = null
-    protected abstract fun getToolbarTitle(): String
+    protected var toolbar: MaterialToolbar? = null
     protected lateinit var categoryAdapter: CategoryModifyAdapter
 
     override fun performDataBinding(view: View): FragmentCategoryBinding =
@@ -123,7 +122,6 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
 
     private fun initToolbar() {
         toolbar = viewBinding?.categoryToolbarContainer?.toolbar
-        toolbar?.title = getToolbarTitle()
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)

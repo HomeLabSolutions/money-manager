@@ -40,6 +40,12 @@ interface RemoveCategoryDialogNavigator : BaseNavigator {
     fun closeDialog()
 }
 
+interface EditCategoryDialogNavigator : BaseNavigator {
+    fun showError(error: Throwable)
+    fun save()
+    fun closeDialog()
+}
+
 interface RemoveSubCategoryDialogNavigator : BaseNavigator {
     fun closeDialog()
     fun closeDialogAndGoToCategory()

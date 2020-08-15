@@ -29,7 +29,6 @@ class CategoryFragment :
     private val sum by lazy { args.sum }
 
     override fun getNavigator() = this
-    override fun getToolbarTitle() = getString(R.string.title_category)
     override val viewModel by viewModels<CategoryViewModel>()
 
     override fun openSubCategoryScreen(category: Category) {
@@ -51,7 +50,10 @@ class CategoryFragment :
     }
 
     override fun openRemoveDialog(category: Category) {
-        val action = CategoryFragmentDirections.toRemoveCategoryDialog(category)
+        val action = CategoryFragmentDirections.toRemoveCategoryDialog(
+            CategoryDestination.CATEGORY_SCREEN,
+            category
+        )
         findNavController().navigate(action)
     }
 
@@ -71,6 +73,7 @@ class CategoryFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        toolbar?.title = getString(R.string.title_category)
         viewBinding?.categoryCreate?.setOnClickListener {
             val action = CategoryFragmentDirections.toCategoryCreationDest(transactionType)
             findNavController().navigate(action)

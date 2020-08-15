@@ -32,6 +32,7 @@
 
     <string name="category_all">All\nitems</string>
 
+    <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
@@ -59,6 +60,7 @@
     <string name="category_unit_empty_name_error">The name of group could\'t be empty</string>
     <string name="category_unit_name_exist_error">Name of this group already exists</string>
 
+    <string name="category_edit_title">Edit category group</string>
     <string name="category_delete_title">Deleting a category</string>
     <string name="category_delete_sub_title">Do you want to delete the category \"%1$s\"\?\n\nAll operations with this category will also be deleted.</string>
     <string name="category_delete_group_sub_title">Do you want to delete the category \"%1$s\"\?\nAll subcategories will also be deleted.\n\nAll operations with this category will be deleted too.</string>
