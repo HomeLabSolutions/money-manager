@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryCreationNavigator
+import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.CategoryIconSetFragment.Companion.ARG_CATEGORY_ICON_ID
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryColorAdapter
@@ -147,7 +148,7 @@ class CategoryCreationFragment :
                 val action = if (category.parent != null) {
                     CategoryCreationFragmentDirections.toRemoveSubCategoryDialog(category)
                 } else {
-                    CategoryCreationFragmentDirections.toRemoveCategoryDialog(category)
+                    CategoryCreationFragmentDirections.toRemoveCategoryDialog(CategoryDestination.CATEGORY_CREATION_SCREEN, category)
                 }
                 findNavController().navigate(action)
             }

@@ -140,6 +140,19 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpTo="@+id/remove_sub_category_dialog"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/to_remove_category_dialog"
+            app:destination="@id/remove_category_dialog"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <action
+            android:id="@+id/to_edit_category_dialog"
+            app:destination="@id/edit_category_dialog"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
         <argument
             android:name="destination"
@@ -255,6 +268,9 @@
         tools:layout="@layout/fragment_dialog_remove">
 
         <argument
+            android:name="destination"
+            app:argType="com.d9tilov.moneymanager.category.CategoryDestination" />
+        <argument
             android:name="category"
             app:argType="com.d9tilov.moneymanager.category.data.entities.Category" />
     </dialog>
@@ -265,6 +281,15 @@
         tools:layout="@layout/fragment_dialog_triple_remove">
         <argument
             android:name="subcategory"
+            app:argType="com.d9tilov.moneymanager.category.data.entities.Category" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/edit_category_dialog"
+        android:name="com.d9tilov.moneymanager.category.ui.CategoryEditDialog"
+        tools:layout="@layout/fragment_dialog_edit_category">
+        <argument
+            android:name="category"
             app:argType="com.d9tilov.moneymanager.category.data.entities.Category" />
     </dialog>
 </navigation>

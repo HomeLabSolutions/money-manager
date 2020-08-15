@@ -60,7 +60,29 @@ class CategoryLocalSource(
         }
     }
 
-    override fun update(category: Category) = categoryDao.update(categoryMapper.toDbModel(category))
+    override fun update(category: Category): Completable {
+        val currentUserId = preferencesStore.uid
+        return if (currentUserId == null) {
+            Completable.error(WrongUidException())
+        } else {
+            categoryDao.getById(currentUserId, category.id)
+                .flatMapCompletable {
+                    if (it.name == category.name) {
+                        categoryDao.update(categoryMapper.toDbModel(category))
+                    } else {
+                        categoryDao.getCategoriesCountByName(currentUserId, category.name)
+                            .flatMapCompletable { count ->
+                                if (count == 0) {
+                                    categoryDao.update(categoryMapper.toDbModel(category))
+                                } else {
+                                    Completable.error(CategoryExistException("Category with name: ${category.name} has already existed"))
+                                }
+                            }
+                    }
+                }
+        }
+    }
+
     override fun getById(id: Long): Maybe<Category> {
         val currentUserId = preferencesStore.uid
         if (currentUserId == null) {

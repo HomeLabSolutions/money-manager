@@ -18,7 +18,7 @@ import java.math.BigDecimal
 
 class SubCategoryViewModel @ViewModelInject constructor(
     private val transactionInteractor: TransactionInteractor,
-    private val categoryInteractor: CategoryInteractor,
+    categoryInteractor: CategoryInteractor,
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : BaseCategoryViewModel<SubCategoryNavigator>() {
 
