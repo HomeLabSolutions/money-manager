@@ -4,4 +4,4 @@
     android:id="@+id/category_icon"
     android:layout_width="@dimen/category_item_icon_size"
     android:layout_height="@dimen/category_item_icon_size"
-    app:srcCompat="@drawable/ic_category_doctor" />
+    app:srcCompat="@drawable/ic_category_expense_doctor" />

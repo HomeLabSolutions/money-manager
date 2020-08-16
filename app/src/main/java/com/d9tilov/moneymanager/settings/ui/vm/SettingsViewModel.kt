@@ -32,14 +32,6 @@ class SettingsViewModel @ViewModelInject constructor(
             .addTo(compositeDisposable)
     }
 
-    fun backup() {
-        categoryInteractor.createExpenseDefaultCategories()
-            .subscribeOn(ioScheduler)
-            .observeOn(uiScheduler)
-            .subscribe()
-            .addTo(compositeDisposable)
-    }
-
     fun save() {
         settingsInteractor.saveNumber()
     }

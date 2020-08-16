@@ -48,7 +48,7 @@ class CategoryCreationFragment :
         args.category ?: Category(
             type = transactionType,
             name = "",
-            icon = R.drawable.ic_category_food,
+            icon = R.drawable.ic_category_expense_food,
             color = R.color.category_pink
         )
     }

@@ -16,14 +16,14 @@ class CategoryIconSetAdapter :
     var itemClickListener: OnItemClickListener<Int>? = null
 
     private val categoryIconList = listOf(
-        R.drawable.ic_category_cafe to R.color.category_yellow,
-        R.drawable.ic_category_car to R.color.category_light_green,
-        R.drawable.ic_category_doctor to R.color.category_light_blue,
-        R.drawable.ic_category_entertainment to R.color.category_brick_red,
-        R.drawable.ic_category_food to R.color.category_orange,
+        R.drawable.ic_category_expense_cafe to R.color.category_yellow,
+        R.drawable.ic_category_expense_car to R.color.category_light_green,
+        R.drawable.ic_category_expense_doctor to R.color.category_light_blue,
+        R.drawable.ic_category_expense_relax to R.color.category_brick_red,
+        R.drawable.ic_category_expense_food to R.color.category_orange,
         R.drawable.ic_category_internet to R.color.category_mint,
-        R.drawable.ic_category_home to R.color.category_mud_green,
-        R.drawable.ic_category_travels to R.color.category_flower_violet
+        R.drawable.ic_category_expense_home to R.color.category_mud_green,
+        R.drawable.ic_category_expense_travels to R.color.category_flower_violet
     )
 
     init {

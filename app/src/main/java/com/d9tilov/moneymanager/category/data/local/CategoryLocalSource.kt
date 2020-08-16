@@ -32,7 +32,24 @@ class CategoryLocalSource(
         return if (currentUserId == null) {
             Completable.error(WrongUidException())
         } else {
-            val defaultCategories = prepopulateDataManager.createDefaultCategories()
+            val defaultCategories = prepopulateDataManager.createDefaultExpenseCategories()
+            Observable.fromIterable(defaultCategories)
+                .flatMapCompletable {
+                    categoryDao.create(
+                        categoryMapper.toDataModelFromPrePopulate(
+                            it, currentUserId
+                        )
+                    ).ignoreElement()
+                }
+        }
+    }
+
+    override fun createIncomeDefaultCategories(): Completable {
+        val currentUserId = preferencesStore.uid
+        return if (currentUserId == null) {
+            Completable.error(WrongUidException())
+        } else {
+            val defaultCategories = prepopulateDataManager.createDefaultIncomeCategories()
             Observable.fromIterable(defaultCategories)
                 .flatMapCompletable {
                     categoryDao.create(
