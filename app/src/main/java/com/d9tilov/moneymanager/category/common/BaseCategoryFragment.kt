@@ -114,7 +114,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
                         { -it.usageCount },
                         { it.name }
                     )
-                ).toMutableList()
+                )
                 categoryAdapter.updateItems(sortedList)
             }
         )
