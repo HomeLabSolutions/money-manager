@@ -49,4 +49,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:listitem="@layout/item_category" />
+
+    <ViewStub
+        android:id="@+id/expense_transaction_empty_placeholder"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:inflatedId="@+id/inflate"
+        android:layout="@layout/layout_empty_transaction_list_placeholder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/expense_main_sum" />
 </androidx.constraintlayout.widget.ConstraintLayout>

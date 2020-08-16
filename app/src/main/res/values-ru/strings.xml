@@ -40,11 +40,13 @@
     <string name="add">Добавить</string>
     <string name="create">Создать</string>
 
-    <string name="delete_transaction_dialog_title">Удаление транзакции</string>
-    <string name="delete_transaction_dialog_subtitle">Вы действительно хотите удалить транзакцию?</string>
-
-    <string name="edit_transaction_sum_title">Сумма</string>
-    <string name="edit_transaction_description_hint">Описание</string>
+    <string name="transaction_delete_dialog_title">Удаление транзакции</string>
+    <string name="transaction_delete_dialog_subtitle">Вы действительно хотите удалить транзакцию?</string>
+    <string name="transaction_edit_sum_title">Сумма</string>
+    <string name="transaction_edit_description_hint">Описание</string>
+    <string name="transaction_empty_placeholder_expense_title">Добавьте расход</string>
+    <string name="transaction_empty_placeholder_income_title">Добавьте доход</string>
+    <string name="transaction_empty_placeholder_subtitle">Введите сумму и выберите категорию</string>
 
     <string name="date_tomorrow">Завтра</string>
     <string name="date_today">Сегодня</string>
@@ -64,6 +66,8 @@
     <string name="category_delete_title">Удаление категории</string>
     <string name="category_delete_sub_title">Вы действительно хотите удалить категорию \"%1$s\"\?\n\nТак же будут удалены все операции с этой статьёй</string>
     <string name="category_delete_group_sub_title">Вы действительно хотите удалить категорию \"%1$s\"\?\n\nТак же будут удалены все подкатегории и операции со статьей</string>
+    <string name="category_empty_placeholder_title">Список категорий пуст</string>
+    <string name="category_empty_placeholder_subtitle">Добавьте хотя бы одну категорию</string>
 
     <string name="sub_category_delete_title">Удаление подкатегории</string>
     <string name="sub_category_delete_subtitle">Вы действительно хотите удалить подкатегорию \"%1$s\"\?\n\nТак же будут удалены все операции с этой статьей</string>

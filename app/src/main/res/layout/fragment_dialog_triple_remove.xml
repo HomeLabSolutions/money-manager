@@ -18,7 +18,7 @@
         android:paddingEnd="@dimen/standard_right_margin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/delete_transaction_dialog_title" />
+        tools:text="@string/transaction_delete_dialog_title" />
 
     <TextView
         android:id="@+id/triple_remove_dialog_subtitle"
@@ -30,7 +30,7 @@
         android:paddingEnd="@dimen/standard_right_margin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/triple_remove_dialog_title"
-        tools:text="@string/delete_transaction_dialog_subtitle" />
+        tools:text="@string/transaction_delete_dialog_subtitle" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/triple_remove_dialog_button_action1"

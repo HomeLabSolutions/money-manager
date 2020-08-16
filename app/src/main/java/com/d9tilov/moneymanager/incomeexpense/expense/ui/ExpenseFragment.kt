@@ -5,6 +5,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import android.view.ViewStub
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -49,6 +50,15 @@ class ExpenseFragment :
 
     private val categoryAdapter = CategoryAdapter()
     private val transactionAdapter = TransactionAdapter()
+    override fun performDataBinding(view: View): FragmentExpenseBinding =
+        FragmentExpenseBinding.bind(view)
+
+    override fun getNavigator() = this
+    override val viewModel by viewModels<ExpenseViewModel>()
+
+    private var isTransactionDataEmpty = false
+    private lateinit var viewStub: ViewStub
+
     private val onAllCategoriesClickListener = object : OnItemClickListener<Category> {
         override fun onItemClick(item: Category, position: Int) {
             if (item.id == Category.ALL_ITEMS_ID) {
@@ -104,6 +114,9 @@ class ExpenseFragment :
         super.onViewCreated(view, savedInstanceState)
         initCategoryRecyclerView()
         initTransactionsRecyclerView()
+        viewBinding?.let {
+            viewStub = it.root.findViewById(R.id.expense_transaction_empty_placeholder)
+        }
         viewModel.run {
             categories.observe(
                 viewLifecycleOwner,
@@ -121,6 +134,10 @@ class ExpenseFragment :
             transactions.observe(
                 viewLifecycleOwner,
                 Observer {
+                    isTransactionDataEmpty = it.isEmpty()
+                    if (isTransactionDataEmpty && !(activity as MainActivity).forceShowKeyboard) {
+                        viewStub.visibility = VISIBLE
+                    }
                     transactionAdapter.submitList(it)
                 }
             )
@@ -172,11 +189,6 @@ class ExpenseFragment :
         }
     }
 
-    override fun performDataBinding(view: View): FragmentExpenseBinding =
-        FragmentExpenseBinding.bind(view)
-
-    override fun getNavigator() = this
-    override val viewModel by viewModels<ExpenseViewModel>()
     override fun openCategoriesScreen() {
         viewBinding?.let {
             val inputSum = it.expenseMainSum.getValue()
@@ -208,6 +220,7 @@ class ExpenseFragment :
         viewBinding?.run {
             expenseTransactionRvList.visibility = INVISIBLE
             expenseCategoryRvList.visibility = VISIBLE
+            viewStub.visibility = GONE
         }
     }
 
@@ -216,6 +229,9 @@ class ExpenseFragment :
         viewBinding?.run {
             expenseTransactionRvList.visibility = VISIBLE
             expenseCategoryRvList.visibility = GONE
+            if (isTransactionDataEmpty) {
+                viewStub.visibility = VISIBLE
+            }
         }
     }
 

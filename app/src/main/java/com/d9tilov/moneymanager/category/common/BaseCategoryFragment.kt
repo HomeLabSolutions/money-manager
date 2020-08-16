@@ -3,6 +3,8 @@ package com.d9tilov.moneymanager.category.common
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.GONE
+import android.view.ViewStub
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
@@ -11,6 +13,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
+import androidx.recyclerview.widget.RecyclerView.VISIBLE
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.category.CategoryDestination
@@ -35,6 +38,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
 
     protected var toolbar: MaterialToolbar? = null
     protected lateinit var categoryAdapter: CategoryModifyAdapter
+    private lateinit var viewStub: ViewStub
 
     override fun performDataBinding(view: View): FragmentCategoryBinding =
         FragmentCategoryBinding.bind(view)
@@ -57,6 +61,9 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewBinding?.let {
+            viewStub = it.root.findViewById(R.id.category_empty_placeholder)
+        }
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Category>(
             EditTransactionFragment.ARG_CATEGORY
         )?.observe(
@@ -115,6 +122,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
                         { it.name }
                     )
                 )
+                viewStub.visibility = if (list.isEmpty()) VISIBLE else GONE
                 categoryAdapter.updateItems(sortedList)
             }
         )
