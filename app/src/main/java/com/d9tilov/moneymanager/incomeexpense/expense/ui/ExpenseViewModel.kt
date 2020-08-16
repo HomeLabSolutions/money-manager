@@ -134,6 +134,8 @@ class ExpenseViewModel @ViewModelInject constructor(
                     { Timber.tag(App.TAG).d("error = ${it.message}") }
                 )
                 .addTo(compositeDisposable)
+        } else {
+            navigator?.showEmptySumError()
         }
     }
 

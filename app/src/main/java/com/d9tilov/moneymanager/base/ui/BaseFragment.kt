@@ -4,7 +4,9 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
+import androidx.annotation.ColorRes
 import androidx.annotation.LayoutRes
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.viewbinding.ViewBinding
@@ -70,6 +72,18 @@ abstract class BaseFragment<T : ViewBinding, N : BaseNavigator>(@LayoutRes layou
         )
     }
 
+    protected fun showSnackBar(text: String, gravityCenter: Boolean = false) {
+        baseActivity?.let {
+            val backgroundTint = if (snackBarBackgroundTint != 0)
+                ContextCompat.getColor(it, snackBarBackgroundTint) else 0
+            it.showSnackBar(text, backgroundTint, snackBarAnchorView, gravityCenter)
+        }
+    }
+
     private fun showLoading() = baseActivity?.showLoading()
     private fun hideLoading() = baseActivity?.hideLoading()
+
+    @get:ColorRes
+    protected open val snackBarBackgroundTint = 0
+    protected open val snackBarAnchorView: View? = null
 }
