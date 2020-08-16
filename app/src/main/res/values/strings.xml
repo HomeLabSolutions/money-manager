@@ -40,11 +40,13 @@
     <string name="create">Create</string>
     <string name="letter_limit" translatable="false">%1$s/%2$s</string>
 
-    <string name="delete_transaction_dialog_title">Deleting a transaction</string>
-    <string name="delete_transaction_dialog_subtitle">Do you really want to delete the transaction?</string>
-
-    <string name="edit_transaction_sum_title">Sum</string>
-    <string name="edit_transaction_description_hint">Description</string>
+    <string name="transaction_delete_dialog_title">Deleting a transaction</string>
+    <string name="transaction_delete_dialog_subtitle">Do you really want to delete the transaction?</string>
+    <string name="transaction_edit_sum_title">Sum</string>
+    <string name="transaction_edit_description_hint">Description</string>
+    <string name="transaction_empty_placeholder_expense_title">Add expense</string>
+    <string name="transaction_empty_placeholder_income_title">Add income</string>
+    <string name="transaction_empty_placeholder_subtitle">Enter the amount and tap on the category</string>
 
     <string name="date_tomorrow">Tomorrow</string>
     <string name="date_today">Today</string>
@@ -64,6 +66,8 @@
     <string name="category_delete_title">Deleting a category</string>
     <string name="category_delete_sub_title">Do you want to delete the category \"%1$s\"\?\n\nAll operations with this category will also be deleted.</string>
     <string name="category_delete_group_sub_title">Do you want to delete the category \"%1$s\"\?\nAll subcategories will also be deleted.\n\nAll operations with this category will be deleted too.</string>
+    <string name="category_empty_placeholder_title">Category list is empty</string>
+    <string name="category_empty_placeholder_subtitle">Add at least one category</string>
 
     <string name="sub_category_delete_title">Deleting a subcategory</string>
     <string name="sub_category_delete_subtitle">Do you want to delete the subcategory \"%1$s\"\?\n\nAll operations with this category will also be deleted.</string>

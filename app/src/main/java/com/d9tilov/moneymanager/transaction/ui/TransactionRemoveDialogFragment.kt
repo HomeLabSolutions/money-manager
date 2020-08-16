@@ -29,9 +29,9 @@ class TransactionRemoveDialogFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewBinding?.run {
-            transactionRemoveDialogTitle.text = getString(R.string.delete_transaction_dialog_title)
+            transactionRemoveDialogTitle.text = getString(R.string.transaction_delete_dialog_title)
             transactionRemoveDialogSubtitle.text =
-                getString(R.string.delete_transaction_dialog_subtitle)
+                getString(R.string.transaction_delete_dialog_subtitle)
             transactionRemoveButtonConfirm.setOnClickListener { viewModel.remove(transaction) }
             transactionRemoveButtonCancel.setOnClickListener {
                 dismiss()

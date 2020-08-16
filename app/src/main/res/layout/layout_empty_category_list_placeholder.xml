@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/empty_category_placeholder_icon"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_marginBottom="48dp"
+        android:src="@drawable/ic_categories_empty"
+        app:layout_constraintBottom_toTopOf="@+id/empty_category_placeholder_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/empty_category_placeholder_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/standard_left_margin"
+        android:layout_marginEnd="@dimen/standard_right_margin"
+        android:gravity="center"
+        android:text="@string/category_empty_placeholder_title"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        android:textColor="@color/text_primary_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/empty_category_placeholder_subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/standard_left_margin"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="@dimen/standard_right_margin"
+        android:gravity="center"
+        android:text="@string/category_empty_placeholder_subtitle"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        android:textColor="@color/header_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/empty_category_placeholder_title" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
