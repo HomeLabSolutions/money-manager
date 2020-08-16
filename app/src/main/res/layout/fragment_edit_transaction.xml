@@ -60,7 +60,7 @@
                 android:drawablePadding="@dimen/standard_half_left_margin"
                 android:layout_marginEnd="8dp"
                 android:ellipsize="end"
-                app:drawableStartCompat="@drawable/ic_category_food"
+                app:drawableStartCompat="@drawable/ic_category_expense_food"
                 android:gravity="start|center_vertical"
                 android:textAppearance="?attr/textAppearanceSubtitle1"
                 app:layout_constraintEnd_toStartOf="@+id/edit_transaction_date"

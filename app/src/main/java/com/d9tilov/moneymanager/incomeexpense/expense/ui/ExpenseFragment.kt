@@ -228,6 +228,7 @@ class ExpenseFragment :
             expenseTransactionRvList.visibility = INVISIBLE
             expenseCategoryRvList.visibility = VISIBLE
             viewStub.visibility = GONE
+            expenseCategoryRvList.scrollToPosition(0)
         }
     }
 

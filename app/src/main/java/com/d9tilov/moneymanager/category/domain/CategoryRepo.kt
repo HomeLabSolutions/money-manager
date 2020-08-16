@@ -10,6 +10,7 @@ import io.reactivex.Single
 interface CategoryRepo {
 
     fun createExpenseDefaultCategories(): Completable
+    fun createIncomeDefaultCategories(): Completable
     fun create(category: Category): Single<Long>
     fun update(category: Category): Completable
     fun getCategoryById(id: Long): Maybe<Category>

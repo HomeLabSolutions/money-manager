@@ -64,7 +64,6 @@ class SettingsFragment :
                     }
             }
             settingsBackup.setOnClickListener {
-                viewModel.backup()
             }
             settingsSave.setOnClickListener {
                 viewModel.save()

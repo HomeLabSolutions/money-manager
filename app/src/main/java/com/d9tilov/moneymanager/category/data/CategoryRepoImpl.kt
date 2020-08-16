@@ -16,6 +16,9 @@ class CategoryRepoImpl(private val categoryLocalSource: CategorySource) :
     override fun createExpenseDefaultCategories() =
         categoryLocalSource.createExpenseDefaultCategories()
 
+    override fun createIncomeDefaultCategories() =
+        categoryLocalSource.createIncomeDefaultCategories()
+
     override fun create(category: Category) = categoryLocalSource.create(category)
     override fun update(category: Category) = categoryLocalSource.update(category)
 

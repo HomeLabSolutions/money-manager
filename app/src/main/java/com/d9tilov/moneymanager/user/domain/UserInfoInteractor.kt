@@ -17,6 +17,7 @@ class UserInfoInteractor(
     override fun createUserAndDefaultCategories(user: FirebaseUser?): Completable =
         userRepo.createUser(userDomainMapper.toDataModel(user))
             .andThen(categoryRepo.createExpenseDefaultCategories())
+            .andThen(categoryRepo.createIncomeDefaultCategories())
 
     override fun logout() = userRepo.logout()
 }

@@ -1,16 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/transaction_main_content"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="com.d9tilov.moneymanager.home.ui.MainActivity">
+
+    <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
+        android:id="@+id/income_main_sum"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/standard_left_margin"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="@dimen/standard_right_margin"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/background_border"
+        android:padding="4dp"
+        android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Medium"
+        app:enableInput="true"
+        app:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:scaleEnabled="true"
+        app:signTextStyle="?attr/textAppearanceCurrencySignMedium"
+        app:sumTextStyle="?attr/textAppearanceHeadline4" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Income"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/background_sum_border"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="@string/transaction_edit_sum_title"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:textColor="@color/button_normal_color_disable"
+        android:textSize="@dimen/transaction_sum_title_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/income_main_sum"
+        app:layout_constraintEnd_toEndOf="@+id/income_main_sum" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/income_transaction_rv_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/income_category_rv_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/income_main_sum"
+        tools:listitem="@layout/item_transaction"
+        tools:visibility="visible" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/income_category_rv_list"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/standard_half_left_margin"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:listitem="@layout/item_category" />
+
+    <ViewStub
+        android:id="@+id/income_transaction_empty_placeholder"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:inflatedId="@+id/inflate"
+        android:layout="@layout/layout_empty_transaction_list_placeholder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/income_main_sum" />
 </androidx.constraintlayout.widget.ConstraintLayout>

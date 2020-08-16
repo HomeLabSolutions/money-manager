@@ -11,7 +11,6 @@ import io.reactivex.Single
 
 class CategoryInteractorImpl(private val categoryRepo: CategoryRepo) :
     CategoryInteractor {
-    override fun createExpenseDefaultCategories() = categoryRepo.createExpenseDefaultCategories()
     override fun create(category: Category) = categoryRepo.create(category)
     override fun update(category: Category) = categoryRepo.update(category)
 

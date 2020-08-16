@@ -10,7 +10,6 @@ import io.reactivex.Single
 
 interface CategoryInteractor : Interactor {
 
-    fun createExpenseDefaultCategories(): Completable
     fun create(category: Category): Single<Long>
     fun update(category: Category): Completable
     fun getCategoryById(id: Long): Maybe<Category>
