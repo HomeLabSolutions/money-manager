@@ -37,9 +37,9 @@
         android:background="@drawable/background_sum_border"
         android:textColor="@color/button_normal_color_disable"
         android:textSize="@dimen/transaction_sum_title_text_size"
+        android:layout_marginEnd="32dp"
         app:layout_constraintBottom_toTopOf="@+id/expense_main_sum"
-        app:layout_constraintEnd_toEndOf="@+id/expense_main_sum"
-        app:layout_constraintStart_toStartOf="@+id/expense_main_sum" />
+        app:layout_constraintEnd_toEndOf="@+id/expense_main_sum" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/expense_transaction_rv_list"
