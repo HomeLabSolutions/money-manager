@@ -234,6 +234,10 @@
         android:name="com.d9tilov.moneymanager.category.ui.CategoryIconSetFragment"
         android:label="fragment_title_screen"
         tools:layout="@layout/fragment_category_icon_set">
+
+        <argument
+            android:name="transactionType"
+            app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
     </fragment>
 
     <dialog

@@ -70,7 +70,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:inflatedId="@+id/inflate"
-        android:layout="@layout/layout_empty_transaction_list_placeholder"
+        android:layout="@layout/layout_empty_expense_transaction_list_placeholder"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

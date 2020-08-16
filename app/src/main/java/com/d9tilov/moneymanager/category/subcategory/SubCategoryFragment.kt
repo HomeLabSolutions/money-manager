@@ -42,7 +42,7 @@ class SubCategoryFragment :
         ) {
             modifiedParentCategory = it
             toolbar?.title = getString(R.string.title_sub_category, it.name)
-            findNavController().currentBackStackEntry?.savedStateHandle?.remove<Category>(
+            findNavController().previousBackStackEntry?.savedStateHandle?.remove<Category>(
                 SUB_CATEGORY_TITLE
             )
         }

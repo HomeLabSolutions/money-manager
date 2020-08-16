@@ -6,7 +6,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
@@ -63,17 +62,6 @@ class SettingsFragment :
                         updateUI()
                     }
             }
-            settingsBackup.setOnClickListener {
-            }
-            settingsSave.setOnClickListener {
-                viewModel.save()
-                viewModel.restore()
-            }
-            viewModel.restore()
-            viewModel.numberLiveData.observe(
-                viewLifecycleOwner,
-                Observer { settingsNumber.text = it.toString() }
-            )
         }
     }
 

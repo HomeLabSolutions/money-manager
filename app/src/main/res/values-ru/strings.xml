@@ -6,6 +6,8 @@
     <string name="tab_income">Доходы</string>
     <string name="tab_expense">Расходы</string>
 
+    <string name="coming_soon">Скоро будет…</string>
+
     <string name="title_category">Категории</string>
     <string name="title_transaction">Транзакция</string>
     <string name="title_sub_category">Категория: %1$s</string>
@@ -16,7 +18,6 @@
     <string name="settings_login">Войти</string>
     <string name="settings_logout">Выйти</string>
     <string name="settings_app_version">Версия %s</string>
-    <string name="settings_backup">Сделать бэкап</string>
 
     <string name="default_category_expense_food">Еда</string>
     <string name="default_category_expense_cafe">Кафе</string>

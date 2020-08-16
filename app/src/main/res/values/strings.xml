@@ -5,6 +5,8 @@
     <string name="tab_income">Income</string>
     <string name="tab_expense">Expense</string>
 
+    <string name="coming_soon">Coming soon…</string>
+
     <string name="title_category">Categories</string>
     <string name="title_transaction">Transaction</string>
     <string name="title_sub_category">Category: %1$s</string>
@@ -15,7 +17,6 @@
     <string name="settings_login">Login</string>
     <string name="settings_logout">Logout</string>
     <string name="settings_app_version">Version %s</string>
-    <string name="settings_backup">Backup database</string>
 
     <string name="default_category_expense_food">Food</string>
     <string name="default_category_expense_cafe">Cafe</string>

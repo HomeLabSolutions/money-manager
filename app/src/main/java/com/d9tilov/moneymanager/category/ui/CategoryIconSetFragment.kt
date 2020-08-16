@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
@@ -23,6 +24,9 @@ class CategoryIconSetFragment :
     BaseFragment<FragmentCategoryIconSetBinding, CategorySetNavigator>(R.layout.fragment_category_icon_set),
     CategorySetNavigator {
 
+    private val args by navArgs<CategoryIconSetFragmentArgs>()
+    private val transactionType by lazy { args.transactionType }
+
     private var toolbar: MaterialToolbar? = null
     private lateinit var categoryAdapter: CategoryIconSetAdapter
 
@@ -32,7 +36,7 @@ class CategoryIconSetFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        categoryAdapter = CategoryIconSetAdapter()
+        categoryAdapter = CategoryIconSetAdapter(transactionType)
         categoryAdapter.itemClickListener = onItemIconClickListener
     }
 
