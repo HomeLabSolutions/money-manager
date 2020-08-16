@@ -26,6 +26,7 @@
     <string name="default_category_internet">Internet</string>
     <string name="default_category_doctor">Doctor</string>
 
+    <string name="income_expense_empty_sum_error">Enter the amount</string>
     <string name="expense_daily_sum_to_spend_title">you can spend</string>
     <string name="expense_spent_title">spent</string>
     <string name="expense_left_to_title">left ot spent</string>

@@ -55,6 +55,8 @@ class ExpenseFragment :
 
     override fun getNavigator() = this
     override val viewModel by viewModels<ExpenseViewModel>()
+    override val snackBarBackgroundTint = R.color.button_normal_color_disable
+    override val snackBarAnchorView by lazy { viewBinding?.expenseCategoryRvList }
 
     private var isTransactionDataEmpty = false
     private lateinit var viewStub: ViewStub
@@ -71,6 +73,7 @@ class ExpenseFragment :
             }
         }
     }
+
     private val onTransactionClickListener = object : OnItemClickListener<Transaction> {
         override fun onItemClick(item: Transaction, position: Int) {
             val action = IncomeExpenseFragmentDirections.toEditTransactionDest(
@@ -213,6 +216,10 @@ class ExpenseFragment :
             transaction
         )
         findNavController().navigate(action)
+    }
+
+    override fun showEmptySumError() {
+        showSnackBar(getString(R.string.income_expense_empty_sum_error), true)
     }
 
     override fun onOpenKeyboard() {

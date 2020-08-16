@@ -18,6 +18,7 @@ interface IncomeNavigator : BaseNavigator
 interface ExpenseNavigator : BaseNavigator {
     fun openCategoriesScreen()
     fun openRemoveConfirmationDialog(transaction: Transaction)
+    fun showEmptySumError()
 }
 
 interface IncomeExpenseNavigator : BaseNavigator

@@ -7,7 +7,6 @@ import android.view.View.GONE
 import android.view.ViewStub
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
@@ -26,7 +25,6 @@ import com.d9tilov.moneymanager.core.events.OnItemLongClickListener
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.databinding.FragmentCategoryBinding
-import com.d9tilov.moneymanager.transaction.ui.EditTransactionFragment
 import com.google.android.material.appbar.MaterialToolbar
 
 abstract class BaseCategoryFragment<N : BaseNavigator> :
@@ -63,14 +61,6 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
         super.onViewCreated(view, savedInstanceState)
         viewBinding?.let {
             viewStub = it.root.findViewById(R.id.category_empty_placeholder)
-        }
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Category>(
-            EditTransactionFragment.ARG_CATEGORY
-        )?.observe(
-            viewLifecycleOwner
-        ) {
-            val a = it
-            val b = 0
         }
         initToolbar()
         viewBinding?.run {

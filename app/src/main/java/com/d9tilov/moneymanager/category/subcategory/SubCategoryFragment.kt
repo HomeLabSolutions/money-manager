@@ -13,7 +13,6 @@ import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.common.BaseCategoryFragment
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.subcategory.vm.SubCategoryViewModel
-import com.d9tilov.moneymanager.category.ui.CategoryIconSetFragment
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.ui.EditTransactionFragment.Companion.ARG_CATEGORY
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,7 +43,7 @@ class SubCategoryFragment :
             modifiedParentCategory = it
             toolbar?.title = getString(R.string.title_sub_category, it.name)
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<Category>(
-                CategoryIconSetFragment.ARG_CATEGORY_ICON_ID
+                SUB_CATEGORY_TITLE
             )
         }
         viewBinding?.let {
