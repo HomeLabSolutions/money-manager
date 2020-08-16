@@ -66,7 +66,8 @@ class EditTransactionFragment : EditTransactionNavigator,
                     transaction.copy(
                         sum = it.editTransactionMainSum.getValue(),
                         category = category,
-                        date = this.date
+                        date = this.date,
+                        description = it.editTransactionDescription.text.toString()
                     )
                 )
             }
@@ -80,8 +81,8 @@ class EditTransactionFragment : EditTransactionNavigator,
                     )
                     .setSelection(transaction.date.time)
                     .build()
-                picker.addOnPositiveButtonClickListener {
-                    this.date = Date(it)
+                picker.addOnPositiveButtonClickListener { calendarDate ->
+                    this.date = Date(calendarDate)
                     viewBinding?.editTransactionDate?.text = SimpleDateFormat(
                         TRANSACTION_DATE_FORMAT,
                         Locale.getDefault()
@@ -103,6 +104,7 @@ class EditTransactionFragment : EditTransactionNavigator,
                 )
                 findNavController().navigate(action)
             }
+            it.editTransactionDescription.setText(transaction.description)
             it.editTransactionMainSum.setValue(transaction.sum)
             it.editTransactionDate.text = SimpleDateFormat(
                 TRANSACTION_DATE_FORMAT,

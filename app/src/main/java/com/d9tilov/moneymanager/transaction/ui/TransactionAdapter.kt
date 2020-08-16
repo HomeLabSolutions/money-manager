@@ -2,14 +2,15 @@ package com.d9tilov.moneymanager.transaction.ui
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
-import com.d9tilov.moneymanager.core.ui.recyclerview.StickyAdapter
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
+import com.d9tilov.moneymanager.core.ui.recyclerview.StickyAdapter
 import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.formatDate
@@ -116,7 +117,11 @@ class TransactionAdapter :
         fun bind(transaction: Transaction) {
             viewBinding.run {
                 itemTransactionCategory.text = transaction.category.name
-                itemTransactionDescription.text = transaction.description
+                val description = transaction.description
+                if (description.isNotEmpty()) {
+                    itemTransactionDescription.visibility = VISIBLE
+                    itemTransactionDescription.text = transaction.description
+                }
                 itemTransactionSum.setValue(transaction.sum)
                 val drawable = createTintDrawable(
                     context,
