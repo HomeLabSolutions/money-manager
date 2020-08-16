@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
+import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
@@ -121,6 +123,24 @@ class TransactionAdapter :
                 if (description.isNotEmpty()) {
                     itemTransactionDescription.visibility = VISIBLE
                     itemTransactionDescription.text = transaction.description
+                } else {
+                    val constraintSet = ConstraintSet()
+                    constraintSet.clone(viewBinding.root)
+                    constraintSet.connect(
+                        R.id.item_transaction_category,
+                        ConstraintSet.TOP,
+                        R.id.item_transaction_icon,
+                        ConstraintSet.TOP,
+                        0
+                    )
+                    constraintSet.connect(
+                        R.id.item_transaction_category,
+                        ConstraintSet.BOTTOM,
+                        R.id.item_transaction_icon,
+                        ConstraintSet.BOTTOM,
+                        0
+                    )
+                    constraintSet.applyTo(viewBinding.root)
                 }
                 itemTransactionSum.setValue(transaction.sum)
                 val drawable = createTintDrawable(

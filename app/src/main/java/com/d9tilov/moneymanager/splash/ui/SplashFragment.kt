@@ -37,7 +37,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashNavigator>(R.la
         startActivityForResult(
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
-                .setLogo(R.drawable.ic_logo_black)
+                .setLogo(R.drawable.ic_money_manager_logo_white)
                 .setTheme(R.style.Theme_MoneyManager)
                 .setAvailableProviders(providers)
                 .build(),

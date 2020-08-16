@@ -33,6 +33,16 @@ class IncomeExpenseFragment :
 
     private lateinit var demoCollectionPagerAdapter: IncomeExpenseAdapter
     private var currentPage = 0
+    private var isKeyboardShown = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        demoCollectionPagerAdapter =
+            IncomeExpenseAdapter(
+                requireContext(),
+                childFragmentManager
+            )
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,15 +53,13 @@ class IncomeExpenseFragment :
         ) {
             if (it) {
                 val currentFragment =
-                    demoCollectionPagerAdapter.getRegisteredFragment(currentPage) as OnDialogDismissListener
-                currentFragment.onDismiss()
+                    demoCollectionPagerAdapter.getRegisteredFragment(currentPage) as? OnDialogDismissListener
+                currentFragment?.onDismiss()
             }
-        }
-        demoCollectionPagerAdapter =
-            IncomeExpenseAdapter(
-                requireContext(),
-                childFragmentManager
+            findNavController().previousBackStackEntry?.savedStateHandle?.remove<Boolean>(
+                ARG_UNDO_REMOVE_LAYOUT_DISMISS
             )
+        }
         viewBinding?.let {
             it.incomeExpenseViewPager.addOnPageChangeListener(object :
                     ViewPager.OnPageChangeListener {
@@ -67,6 +75,12 @@ class IncomeExpenseFragment :
 
                     override fun onPageSelected(position: Int) {
                         currentPage = position
+                        val currentFragment = getCurrentPagedFragment()
+                        if (isKeyboardShown) {
+                            currentFragment.onOpenKeyboard()
+                        } else {
+                            currentFragment.onCloseKeyboard()
+                        }
                     }
                 })
             it.incomeExpenseTabs.setupWithViewPager(income_expense_view_pager)
@@ -80,15 +94,24 @@ class IncomeExpenseFragment :
         }
     }
 
+    override fun onStop() {
+        isKeyboardShown = false
+        super.onStop()
+    }
+
+    private fun getCurrentPagedFragment(): OnKeyboardVisibleChange {
+        return demoCollectionPagerAdapter.getRegisteredFragment(currentPage) as OnKeyboardVisibleChange
+    }
+
     override fun onOpenKeyboard() {
-        val currentFragment =
-            demoCollectionPagerAdapter.getRegisteredFragment(currentPage) as OnKeyboardVisibleChange
+        val currentFragment = getCurrentPagedFragment()
         currentFragment.onOpenKeyboard()
+        isKeyboardShown = true
     }
 
     override fun onCloseKeyboard() {
-        val currentFragment =
-            demoCollectionPagerAdapter.getRegisteredFragment(currentPage) as OnKeyboardVisibleChange
+        val currentFragment = getCurrentPagedFragment()
         currentFragment.onCloseKeyboard()
+        isKeyboardShown = false
     }
 }

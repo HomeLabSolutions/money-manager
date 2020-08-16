@@ -13,7 +13,11 @@ interface SplashNavigator : BaseNavigator {
     fun openAuthScreen()
 }
 
-interface IncomeNavigator : BaseNavigator
+interface IncomeNavigator : BaseNavigator {
+    fun openCategoriesScreen()
+    fun openRemoveConfirmationDialog(transaction: Transaction)
+    fun showEmptySumError()
+}
 
 interface ExpenseNavigator : BaseNavigator {
     fun openCategoriesScreen()

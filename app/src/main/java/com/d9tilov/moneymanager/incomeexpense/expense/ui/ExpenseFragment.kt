@@ -240,6 +240,7 @@ class ExpenseFragment :
             if (isTransactionDataEmpty) {
                 viewStub.visibility = VISIBLE
             }
+            expenseMainSum.clearFocus()
         }
     }
 

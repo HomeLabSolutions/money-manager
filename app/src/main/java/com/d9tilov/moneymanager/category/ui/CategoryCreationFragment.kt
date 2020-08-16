@@ -31,6 +31,7 @@ import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.databinding.FragmentCreationCategoryBinding
+import com.d9tilov.moneymanager.transaction.TransactionType
 import com.google.android.material.appbar.MaterialToolbar
 import com.mfms.common.util.hideKeyboard
 import com.mfms.common.util.showKeyboard
@@ -44,15 +45,15 @@ class CategoryCreationFragment :
     CategoryCreationNavigator {
 
     private val args by navArgs<CategoryCreationFragmentArgs>()
+    private val transactionType by lazy { args.transactionType }
     private val category by lazy {
         args.category ?: Category(
             type = transactionType,
             name = "",
-            icon = R.drawable.ic_category_expense_food,
+            icon = if (transactionType == TransactionType.EXPENSE) R.drawable.ic_category_expense_food else R.drawable.ic_category_income_business,
             color = R.color.category_pink
         )
     }
-    private val transactionType by lazy { args.transactionType }
 
     @ColorRes
     private var color: Int = 0
@@ -126,7 +127,7 @@ class CategoryCreationFragment :
             it.categoryCreationDelete.visibility =
                 if (category.id == DEFAULT_DATA_ID) GONE else VISIBLE
             it.categoryCreationIconLayout.setOnClickListener { _ ->
-                val action = CategoryCreationFragmentDirections.toCategorySetDest()
+                val action = CategoryCreationFragmentDirections.toCategorySetDest(transactionType)
                 findNavController().navigate(action)
             }
             it.categoryCreationSave.setOnClickListener { _ ->

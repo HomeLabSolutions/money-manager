@@ -23,7 +23,9 @@ class CategoryViewModel @ViewModelInject constructor(
 ) : BaseCategoryViewModel<CategoryNavigator>() {
 
     init {
-        categoryInteractor.getAllCategoriesByType(TransactionType.EXPENSE)
+        val transactionType =
+            savedStateHandle.get<TransactionType>("transactionType") ?: TransactionType.EXPENSE
+        categoryInteractor.getAllCategoriesByType(transactionType)
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
             .subscribe { expenseCategories.value = it }
