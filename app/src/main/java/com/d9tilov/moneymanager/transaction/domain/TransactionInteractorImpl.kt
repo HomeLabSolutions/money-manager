@@ -24,8 +24,15 @@ class TransactionInteractorImpl(
     private val transactionHeaderDomainMapper: TransactionHeaderDomainMapper
 ) : TransactionInteractor {
 
-    override fun addTransaction(transaction: Transaction) =
+    override fun addTransaction(transaction: Transaction): Completable =
         transactionRepo.addTransaction(transactionDomainMapper.toDataModel(transaction))
+            .andThen(
+                categoryInteractor.getCategoryById(transaction.category.id)
+                    .flatMapCompletable {
+                        val count = it.usageCount + 1
+                        categoryInteractor.update(it.copy(usageCount = count))
+                    }
+            )
 
     override fun getTransactionById(id: Long): Flowable<Transaction> {
         return transactionRepo.getTransactionById(id)

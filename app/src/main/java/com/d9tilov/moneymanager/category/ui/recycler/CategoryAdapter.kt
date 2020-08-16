@@ -54,15 +54,10 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>
         holder.bind(categories[position])
     }
 
+    override fun getItemId(position: Int) = categories[position].id
+
     fun updateItems(newCategories: List<Category>) {
         Timber.tag(TAG).d("newCategories size : ${newCategories.size}")
-        val sortedCategories = newCategories.sortedWith(
-            compareBy(
-                { it.children.isEmpty() },
-                { -it.usageCount },
-                { it.name }
-            )
-        )
         val diffUtilsCallback =
             CategoryDiffUtil(
                 categories,
@@ -70,7 +65,7 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>
             )
         val diffUtilsResult = DiffUtil.calculateDiff(diffUtilsCallback, false)
         categories.clear()
-        categories.addAll(sortedCategories)
+        categories.addAll(newCategories)
         diffUtilsResult.dispatchUpdatesTo(this)
     }
 

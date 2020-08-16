@@ -18,9 +18,6 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.callback.SwipeToDeleteCallback
 import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
-import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
-import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
-import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryAdapter
@@ -28,6 +25,9 @@ import com.d9tilov.moneymanager.core.events.OnDialogDismissListener
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
+import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
+import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
+import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
 import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
@@ -107,11 +107,22 @@ class ExpenseFragment :
         viewModel.run {
             categories.observe(
                 viewLifecycleOwner,
-                Observer { categoryAdapter.updateItems(it) }
+                Observer { list ->
+                    val sortedCategories = list.sortedWith(
+                        compareBy(
+                            { it.children.isEmpty() },
+                            { -it.usageCount },
+                            { it.name }
+                        )
+                    )
+                    categoryAdapter.updateItems(sortedCategories)
+                }
             )
             transactions.observe(
                 viewLifecycleOwner,
-                Observer { transactionAdapter.submitList(it) }
+                Observer {
+                    transactionAdapter.submitList(it)
+                }
             )
             addTransactionEvent.observe(
                 viewLifecycleOwner,
