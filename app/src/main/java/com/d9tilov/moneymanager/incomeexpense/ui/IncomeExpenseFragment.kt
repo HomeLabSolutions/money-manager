@@ -17,8 +17,13 @@ import com.d9tilov.moneymanager.incomeexpense.ui.adapter.IncomeExpenseAdapter
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.IncomeExpenseViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialogFragment.Companion.ARG_UNDO_REMOVE_LAYOUT_DISMISS
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_income_expense.income_expense_view_pager
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class IncomeExpenseFragment :
     BaseFragment<FragmentIncomeExpenseBinding, IncomeExpenseNavigator>(R.layout.fragment_income_expense),
     IncomeExpenseNavigator,
@@ -34,6 +39,9 @@ class IncomeExpenseFragment :
     private lateinit var demoCollectionPagerAdapter: IncomeExpenseAdapter
     private var currentPage = 0
     private var isKeyboardShown = false
+
+    @Inject
+    lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +63,9 @@ class IncomeExpenseFragment :
                 val currentFragment =
                     demoCollectionPagerAdapter.getRegisteredFragment(currentPage) as? OnDialogDismissListener
                 currentFragment?.onDismiss()
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM) {
+                    param(FirebaseAnalytics.Param.ITEM_CATEGORY, "undo_delete")
+                }
             }
             findNavController().previousBackStackEntry?.savedStateHandle?.remove<Boolean>(
                 ARG_UNDO_REMOVE_LAYOUT_DISMISS
@@ -62,27 +73,33 @@ class IncomeExpenseFragment :
         }
         viewBinding?.let {
             it.incomeExpenseViewPager.addOnPageChangeListener(object :
-                    ViewPager.OnPageChangeListener {
-                    override fun onPageScrollStateChanged(state: Int) { /* do notjing */
-                    }
+                ViewPager.OnPageChangeListener {
+                override fun onPageScrollStateChanged(state: Int) { /* do notjing */
+                }
 
-                    override fun onPageScrolled(
-                        position: Int,
-                        positionOffset: Float,
-                        positionOffsetPixels: Int
-                    ) { /* do nothing */
-                    }
+                override fun onPageScrolled(
+                    position: Int,
+                    positionOffset: Float,
+                    positionOffsetPixels: Int
+                ) { /* do nothing */
+                }
 
-                    override fun onPageSelected(position: Int) {
-                        currentPage = position
-                        val currentFragment = getCurrentPagedFragment()
-                        if (isKeyboardShown) {
-                            currentFragment.onOpenKeyboard()
-                        } else {
-                            currentFragment.onCloseKeyboard()
-                        }
+                override fun onPageSelected(position: Int) {
+                    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+                        param(
+                            FirebaseAnalytics.Param.ITEM_ID,
+                            if (position == 0) "expense" else "income"
+                        )
                     }
-                })
+                    currentPage = position
+                    val currentFragment = getCurrentPagedFragment()
+                    if (isKeyboardShown) {
+                        currentFragment.onOpenKeyboard()
+                    } else {
+                        currentFragment.onCloseKeyboard()
+                    }
+                }
+            })
             it.incomeExpenseTabs.setupWithViewPager(income_expense_view_pager)
             it.incomeExpenseViewPager.adapter = demoCollectionPagerAdapter
             it.incomeExpenseViewPager.currentItem =

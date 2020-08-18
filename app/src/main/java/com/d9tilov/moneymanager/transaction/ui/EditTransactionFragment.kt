@@ -21,10 +21,13 @@ import com.d9tilov.moneymanager.transaction.ui.vm.EditTransactionViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class EditTransactionFragment : EditTransactionNavigator,
@@ -39,6 +42,7 @@ class EditTransactionFragment : EditTransactionNavigator,
     private var toolbar: MaterialToolbar? = null
     private lateinit var date: Date
     private lateinit var category: Category
+    @Inject lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun performDataBinding(view: View) = FragmentEditTransactionBinding.bind(view)
 
@@ -89,6 +93,10 @@ class EditTransactionFragment : EditTransactionNavigator,
                     ).format(date)
                 }
                 picker.show(parentFragmentManager, picker.tag)
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                    param(FirebaseAnalytics.Param.SCREEN_NAME, "edit_transaction")
+                    param(FirebaseAnalytics.Param.ITEM_ID, "open_calendar")
+                }
             }
             it.editTransactionCategory.setOnClickListener {
                 val action =
@@ -97,12 +105,20 @@ class EditTransactionFragment : EditTransactionNavigator,
                         transactionType
                     )
                 findNavController().navigate(action)
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                    param(FirebaseAnalytics.Param.SCREEN_NAME, "edit_transaction")
+                    param(FirebaseAnalytics.Param.ITEM_ID, "open_category")
+                }
             }
             it.editTransactionDelete.setOnClickListener {
                 val action = EditTransactionFragmentDirections.toRemoveTransactionDialog(
                     transaction
                 )
                 findNavController().navigate(action)
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                    param(FirebaseAnalytics.Param.SCREEN_NAME, "edit_transaction")
+                    param(FirebaseAnalytics.Param.ITEM_ID, "remove")
+                }
             }
             it.editTransactionDescription.setText(transaction.description)
             it.editTransactionMainSum.setValue(transaction.sum)

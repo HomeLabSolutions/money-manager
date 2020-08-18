@@ -9,10 +9,13 @@ import com.d9tilov.moneymanager.core.util.ioScheduler
 import com.d9tilov.moneymanager.core.util.uiScheduler
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import timber.log.Timber
 
 class EditTransactionViewModel @ViewModelInject constructor(
-    private val transactionInteractor: TransactionInteractor
+    private val transactionInteractor: TransactionInteractor,
+    private val firebaseAnalytics: FirebaseAnalytics
 ) : BaseViewModel<EditTransactionNavigator>() {
 
     fun update(transaction: Transaction) {
@@ -20,7 +23,12 @@ class EditTransactionViewModel @ViewModelInject constructor(
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
             .subscribe(
-                { navigator?.save() },
+                {
+                    navigator?.save()
+                    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                        param(FirebaseAnalytics.Param.ITEM_ID, "save_transaction")
+                    }
+                },
                 { Timber.tag(App.TAG).d("Update transaction error: $it") }
             )
             .addTo(compositeDisposable)
