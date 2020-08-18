@@ -34,11 +34,14 @@ import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.mfms.common.util.hideKeyboard
 import com.mfms.common.util.showKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.math.BigDecimal
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class IncomeFragment :
@@ -57,6 +60,9 @@ class IncomeFragment :
     override val snackBarBackgroundTint = R.color.button_normal_color_disable
     override val snackBarAnchorView by lazy { viewBinding?.incomeCategoryRvList }
 
+    @Inject
+    lateinit var firebaseAnalytics: FirebaseAnalytics
+
     private var isTransactionDataEmpty = false
     private lateinit var viewStub: ViewStub
 
@@ -64,8 +70,22 @@ class IncomeFragment :
         override fun onItemClick(item: Category, position: Int) {
             if (item.id == Category.ALL_ITEMS_ID) {
                 viewModel.openAllCategories()
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                    param(FirebaseAnalytics.Param.SCREEN_NAME, "income")
+                    param(FirebaseAnalytics.Param.ITEM_ID, "click_all_categories")
+                }
             } else {
                 viewBinding?.let {
+                    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                        param(FirebaseAnalytics.Param.SCREEN_NAME, "income")
+                        param(FirebaseAnalytics.Param.ITEM_ID, "click_category")
+                        param(
+                            FirebaseAnalytics.Param.METHOD,
+                            if (it.incomeMainSum.getValue()
+                                    .signum() > 0
+                            ) "create_transaction" else "empty_click"
+                        )
+                    }
                     viewModel.saveTransaction(item, it.incomeMainSum.getValue())
                     it.incomeMainSum.setValue(BigDecimal.ZERO)
                 }
@@ -80,11 +100,19 @@ class IncomeFragment :
                 item
             )
             findNavController().navigate(action)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                param(FirebaseAnalytics.Param.SCREEN_NAME, "income")
+                param(FirebaseAnalytics.Param.ITEM_ID, "click_transaction")
+            }
         }
     }
     private val onItemSwipeListener = object : OnItemSwipeListener<Transaction> {
         override fun onItemSwiped(item: Transaction, position: Int) {
             viewModel.deleteTransaction(item)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                param(FirebaseAnalytics.Param.SCREEN_NAME, "income")
+                param(FirebaseAnalytics.Param.ITEM_ID, "swipe_transaction_to_remove")
+            }
         }
     }
 
@@ -132,6 +160,9 @@ class IncomeFragment :
                 if (hasFocus) {
                     it.incomeMainSum.moneyEditText.post {
                         it.incomeMainSum.moneyEditText.setSelection(it.incomeMainSum.moneyEditText.text.toString().length)
+                    }
+                    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                        param(FirebaseAnalytics.Param.ITEM_ID, "click_sum")
                     }
                 }
             }

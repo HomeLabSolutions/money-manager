@@ -33,9 +33,12 @@ import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.databinding.FragmentCreationCategoryBinding
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.mfms.common.util.hideKeyboard
 import com.mfms.common.util.showKeyboard
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CategoryCreationFragment :
@@ -63,6 +66,7 @@ class CategoryCreationFragment :
 
     private var toolbar: MaterialToolbar? = null
     private lateinit var categoryColorAdapter: CategoryColorAdapter
+    @Inject lateinit var firebaseAnalytics:FirebaseAnalytics
 
     override fun performDataBinding(view: View): FragmentCreationCategoryBinding =
         FragmentCreationCategoryBinding.bind(view)
@@ -129,6 +133,10 @@ class CategoryCreationFragment :
             it.categoryCreationIconLayout.setOnClickListener { _ ->
                 val action = CategoryCreationFragmentDirections.toCategorySetDest(transactionType)
                 findNavController().navigate(action)
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                    param(FirebaseAnalytics.Param.SCREEN_NAME, "category_creation")
+                    param(FirebaseAnalytics.Param.ITEM_ID, "open_category_set_screen")
+                }
             }
             it.categoryCreationSave.setOnClickListener { _ ->
                 viewModel.save(
@@ -141,6 +149,10 @@ class CategoryCreationFragment :
             }
             it.categoryCreationColor.setOnClickListener { _ ->
                 it.categoryCreationRvColorPicker.visibility = VISIBLE
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                    param(FirebaseAnalytics.Param.SCREEN_NAME, "category_creation")
+                    param(FirebaseAnalytics.Param.ITEM_ID, "click_choose_color")
+                }
             }
             it.categoryCreationDelete.setOnClickListener {
                 if (category.id == DEFAULT_DATA_ID) {
@@ -152,6 +164,10 @@ class CategoryCreationFragment :
                     CategoryCreationFragmentDirections.toRemoveCategoryDialog(CategoryDestination.CATEGORY_CREATION_SCREEN, category)
                 }
                 findNavController().navigate(action)
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                    param(FirebaseAnalytics.Param.SCREEN_NAME, "category_creation")
+                    param(FirebaseAnalytics.Param.ITEM_ID, "delete_click")
+                }
             }
         }
         toolbar = viewBinding?.categoryCreationToolbarContainer?.toolbar

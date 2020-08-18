@@ -1,7 +1,6 @@
 package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
@@ -38,11 +37,14 @@ import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.mfms.common.util.hideKeyboard
 import com.mfms.common.util.showKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.math.BigDecimal
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ExpenseFragment :
@@ -61,6 +63,9 @@ class ExpenseFragment :
     override val snackBarBackgroundTint = R.color.button_normal_color_disable
     override val snackBarAnchorView by lazy { viewBinding?.expenseCategoryRvList }
 
+    @Inject
+    lateinit var firebaseAnalytics: FirebaseAnalytics
+
     private var isTransactionDataEmpty = false
     private lateinit var viewStub: ViewStub
 
@@ -68,8 +73,22 @@ class ExpenseFragment :
         override fun onItemClick(item: Category, position: Int) {
             if (item.id == Category.ALL_ITEMS_ID) {
                 viewModel.openAllCategories()
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                    param(FirebaseAnalytics.Param.SCREEN_NAME, "expense")
+                    param(FirebaseAnalytics.Param.ITEM_ID, "click_all_categories")
+                }
             } else {
                 viewBinding?.let {
+                    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                        param(FirebaseAnalytics.Param.SCREEN_NAME, "expense")
+                        param(FirebaseAnalytics.Param.ITEM_ID, "click_category")
+                        param(
+                            FirebaseAnalytics.Param.METHOD,
+                            if (it.expenseMainSum.getValue()
+                                    .signum() > 0
+                            ) "create_transaction" else "empty_click"
+                        )
+                    }
                     viewModel.saveTransaction(item, it.expenseMainSum.getValue())
                     it.expenseMainSum.setValue(BigDecimal.ZERO)
                 }
@@ -84,11 +103,19 @@ class ExpenseFragment :
                 item
             )
             findNavController().navigate(action)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                param(FirebaseAnalytics.Param.SCREEN_NAME, "expense")
+                param(FirebaseAnalytics.Param.ITEM_ID, "click_transaction")
+            }
         }
     }
     private val onItemSwipeListener = object : OnItemSwipeListener<Transaction> {
         override fun onItemSwiped(item: Transaction, position: Int) {
             viewModel.deleteTransaction(item)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                param(FirebaseAnalytics.Param.SCREEN_NAME, "expense")
+                param(FirebaseAnalytics.Param.ITEM_ID, "swipe_transaction_to_remove")
+            }
         }
     }
 
@@ -136,6 +163,9 @@ class ExpenseFragment :
                 if (hasFocus) {
                     it.expenseMainSum.moneyEditText.post {
                         it.expenseMainSum.moneyEditText.setSelection(it.expenseMainSum.moneyEditText.text.toString().length)
+                    }
+                    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                        param(FirebaseAnalytics.Param.ITEM_ID, "click_sum")
                     }
                 }
             }

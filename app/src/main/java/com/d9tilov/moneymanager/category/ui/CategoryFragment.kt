@@ -17,7 +17,10 @@ import com.d9tilov.moneymanager.core.events.OnItemMoveListener
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragment.Companion.ARG_TRANSACTION_CREATED
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.ui.EditTransactionFragment.Companion.ARG_CATEGORY
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CategoryFragment :
@@ -31,6 +34,8 @@ class CategoryFragment :
 
     override fun getNavigator() = this
     override val viewModel by viewModels<CategoryViewModel>()
+    @Inject
+    lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun openSubCategoryScreen(category: Category) {
         val action = CategoryFragmentDirections.toSubCategoryDest(
@@ -40,6 +45,10 @@ class CategoryFragment :
             sum
         )
         findNavController().navigate(action)
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+            param(FirebaseAnalytics.Param.SCREEN_NAME, "category")
+            param(FirebaseAnalytics.Param.ITEM_ID, "open_subcategory_screen")
+        }
     }
 
     override fun openCreateCategoryScreen(category: Category?) {
@@ -48,6 +57,10 @@ class CategoryFragment :
             category
         )
         findNavController().navigate(action)
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+            param(FirebaseAnalytics.Param.SCREEN_NAME, "category")
+            param(FirebaseAnalytics.Param.ITEM_ID, "open_creation_screen")
+        }
     }
 
     override fun openRemoveDialog(category: Category) {
@@ -56,6 +69,10 @@ class CategoryFragment :
             category
         )
         findNavController().navigate(action)
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+            param(FirebaseAnalytics.Param.SCREEN_NAME, "category")
+            param(FirebaseAnalytics.Param.ITEM_ID, "open_remove_dialog")
+        }
     }
 
     override fun backToEditTransactionScreen(category: Category) {
@@ -107,6 +124,10 @@ class CategoryFragment :
             )
             findNavController().navigate(action)
             categoryAdapter.enableEditMode(false)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                param(FirebaseAnalytics.Param.SCREEN_NAME, "category")
+                param(FirebaseAnalytics.Param.ITEM_ID, "add_to_folder")
+            }
         }
 
         override fun onItemsUnitToFolder(
@@ -122,6 +143,10 @@ class CategoryFragment :
             )
             findNavController().navigate(action)
             categoryAdapter.enableEditMode(false)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                param(FirebaseAnalytics.Param.SCREEN_NAME, "category")
+                param(FirebaseAnalytics.Param.ITEM_ID, "unit_to_folder")
+            }
         }
     }
 

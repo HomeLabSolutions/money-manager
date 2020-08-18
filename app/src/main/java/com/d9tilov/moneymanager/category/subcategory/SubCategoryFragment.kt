@@ -16,7 +16,10 @@ import com.d9tilov.moneymanager.category.subcategory.vm.SubCategoryViewModel
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragment
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.ui.EditTransactionFragment.Companion.ARG_CATEGORY
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SubCategoryFragment :
@@ -31,6 +34,7 @@ class SubCategoryFragment :
     override val viewModel by viewModels<SubCategoryViewModel>()
 
     private lateinit var modifiedParentCategory: Category
+    @Inject lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -46,6 +50,10 @@ class SubCategoryFragment :
             findNavController().previousBackStackEntry?.savedStateHandle?.remove<Category>(
                 SUB_CATEGORY_TITLE
             )
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                param(FirebaseAnalytics.Param.SCREEN_NAME, "subcategory")
+                param(FirebaseAnalytics.Param.ITEM_ID, "change_name")
+            }
         }
         viewBinding?.let {
             it.categoryGroupEdit.visibility = VISIBLE
@@ -87,11 +95,19 @@ class SubCategoryFragment :
             category
         )
         findNavController().navigate(action)
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+            param(FirebaseAnalytics.Param.SCREEN_NAME, "subcategory")
+            param(FirebaseAnalytics.Param.ITEM_ID, "open_creation_screen")
+        }
     }
 
     override fun openRemoveDialog(subCategory: Category) {
         val action = SubCategoryFragmentDirections.toRemoveSubCategoryDialog(subCategory)
         findNavController().navigate(action)
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+            param(FirebaseAnalytics.Param.SCREEN_NAME, "subcategory")
+            param(FirebaseAnalytics.Param.ITEM_ID, "open_remove_dialog")
+        }
     }
 
     companion object {
