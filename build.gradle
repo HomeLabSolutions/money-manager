@@ -26,22 +26,24 @@ buildscript {
             'converter'         : '2.6.4',
             'lifecycle'         : '2.2.0',
             'navigation'        : '2.3.0',
-            'firebaseAnalytics' : '17.4.4',
-            'firebaseAuth'      : '19.3.2',
-            'firebaseUiAuth'    : '6.2.0',
-            'facebookAuth'      : '5.15.3',
-            'twitter'           : '3.3.0@aar',
-            'googlePlayAuth'    : '18.1.0',
-            'glide'             : '4.11.0',
-            'room'              : '2.2.5',
-            'roomPaging'        : '2.1.2',
+            'firebaseAnalytics' : '17.5.0',
+            'firebaseCrashlytics': '17.2.1',
+            'firebaseAuth': '19.3.2',
+            'firebaseUiAuth': '6.2.0',
+            'facebookAuth': '5.15.3',
+            'twitter': '3.3.0@aar',
+            'googlePlayAuth': '18.1.0',
+            'glide': '4.11.0',
+            'room': '2.2.5',
+            'roomPaging': '2.1.2',
 
-            'stetho'            : '1.5.1',
+            'stetho': '1.5.1',
 
-            'rxJava2'           : '2.2.17',
-            'rxAndroid'         : '2.1.1',
+            'rxJava2': '2.2.17',
+            'rxAndroid': '2.1.1',
 
-            'ktlint'            : '0.37.2'
+            'ktlint': '0.37.2',
+            'firebaseCrashlyticsPlugin': '2.2.0'
     ]
     ext.names = [
             'applicationId': 'com.d9tilov.moneymanager'
@@ -58,6 +60,7 @@ buildscript {
         classpath "com.google.gms:google-services:$versions.googleServices"
         classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:$versions.saveArgs"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$versions.hiltVersion"
+        classpath "com.google.firebase:firebase-crashlytics-gradle:$versions.firebaseCrashlyticsPlugin"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }

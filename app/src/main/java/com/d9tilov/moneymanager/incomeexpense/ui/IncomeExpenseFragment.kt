@@ -114,4 +114,8 @@ class IncomeExpenseFragment :
         currentFragment.onCloseKeyboard()
         isKeyboardShown = false
     }
+
+    companion object {
+        const val ARG_TRANSACTION_CREATED = "transaction_created"
+    }
 }

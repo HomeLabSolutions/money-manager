@@ -14,6 +14,7 @@ import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.ui.recycler.SimpleItemTouchHelperCallback
 import com.d9tilov.moneymanager.category.ui.vm.CategoryViewModel
 import com.d9tilov.moneymanager.core.events.OnItemMoveListener
+import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragment.Companion.ARG_TRANSACTION_CREATED
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.ui.EditTransactionFragment.Companion.ARG_CATEGORY
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,6 +64,10 @@ class CategoryFragment :
     }
 
     override fun backToMainScreen(transactionType: TransactionType) {
+        findNavController().previousBackStackEntry?.savedStateHandle?.set(
+            ARG_TRANSACTION_CREATED,
+            true
+        )
         findNavController().popBackStack()
     }
 
