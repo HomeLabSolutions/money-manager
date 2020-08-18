@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewStub
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -28,6 +29,7 @@ import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
 import com.d9tilov.moneymanager.databinding.FragmentIncomeBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
+import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
@@ -114,8 +116,25 @@ class IncomeFragment :
         super.onViewCreated(view, savedInstanceState)
         initCategoryRecyclerView()
         initTransactionsRecyclerView()
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
+            IncomeExpenseFragment.ARG_TRANSACTION_CREATED
+        )?.observe(viewLifecycleOwner) {
+            if (it) {
+                viewBinding?.incomeMainSum?.setValue(BigDecimal.ZERO)
+            }
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<Boolean>(
+                IncomeExpenseFragment.ARG_TRANSACTION_CREATED
+            )
+        }
         viewBinding?.let {
             viewStub = it.root.findViewById(R.id.income_transaction_empty_placeholder)
+            it.incomeMainSum.moneyEditText.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
+                    it.incomeMainSum.moneyEditText.post {
+                        it.incomeMainSum.moneyEditText.setSelection(it.incomeMainSum.moneyEditText.text.toString().length)
+                    }
+                }
+            }
         }
         viewModel.run {
             categories.observe(

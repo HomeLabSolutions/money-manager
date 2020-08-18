@@ -5,6 +5,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'com.google.firebase.crashlytics'
 
 apply from: '../shared_dependencies.gradle'
 
@@ -111,10 +112,12 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$versions.navigation"
     implementation "androidx.navigation:navigation-ui-ktx:$versions.navigation"
 
-    implementation "com.google.firebase:firebase-analytics:$versions.firebaseAnalytics"
     implementation "com.google.firebase:firebase-auth:$versions.firebaseAuth"
     implementation "com.firebaseui:firebase-ui-auth:$versions.firebaseUiAuth"
     implementation "com.google.android.gms:play-services-auth:$versions.googlePlayAuth"
+
+    implementation "com.google.firebase:firebase-analytics-ktx:$versions.firebaseAnalytics"
+    implementation "com.google.firebase:firebase-crashlytics:$versions.firebaseCrashlytics"
 
     implementation "com.facebook.android:facebook-login:$versions.facebookAuth"
     implementation("com.twitter.sdk.android:twitter:$versions.twitter") {

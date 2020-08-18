@@ -13,6 +13,7 @@ import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.common.BaseCategoryFragment
 import com.d9tilov.moneymanager.category.data.entities.Category
 import com.d9tilov.moneymanager.category.subcategory.vm.SubCategoryViewModel
+import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragment
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.ui.EditTransactionFragment.Companion.ARG_CATEGORY
 import dagger.hilt.android.AndroidEntryPoint
@@ -73,6 +74,10 @@ class SubCategoryFragment :
     }
 
     override fun backToMainScreen(transactionType: TransactionType) {
+        findNavController().getBackStackEntry(R.id.income_expense_dest).savedStateHandle.set(
+            IncomeExpenseFragment.ARG_TRANSACTION_CREATED,
+            true
+        )
         findNavController().popBackStack(R.id.category_dest, true)
     }
 

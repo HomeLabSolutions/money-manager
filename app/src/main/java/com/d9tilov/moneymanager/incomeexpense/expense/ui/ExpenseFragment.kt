@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
@@ -8,6 +9,7 @@ import android.view.View.VISIBLE
 import android.view.ViewStub
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -31,6 +33,7 @@ import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
 import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
+import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragment.Companion.ARG_TRANSACTION_CREATED
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
@@ -117,8 +120,25 @@ class ExpenseFragment :
         super.onViewCreated(view, savedInstanceState)
         initCategoryRecyclerView()
         initTransactionsRecyclerView()
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
+            ARG_TRANSACTION_CREATED
+        )?.observe(viewLifecycleOwner) {
+            if (it) {
+                viewBinding?.expenseMainSum?.setValue(BigDecimal.ZERO)
+            }
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<Boolean>(
+                ARG_TRANSACTION_CREATED
+            )
+        }
         viewBinding?.let {
             viewStub = it.root.findViewById(R.id.expense_transaction_empty_placeholder)
+            it.expenseMainSum.moneyEditText.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
+                    it.expenseMainSum.moneyEditText.post {
+                        it.expenseMainSum.moneyEditText.setSelection(it.expenseMainSum.moneyEditText.text.toString().length)
+                    }
+                }
+            }
         }
         viewModel.run {
             categories.observe(
