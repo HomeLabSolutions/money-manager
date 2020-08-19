@@ -23,6 +23,7 @@ import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryCreationNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entities.Category
+import com.d9tilov.moneymanager.category.exception.CategoryExistException
 import com.d9tilov.moneymanager.category.ui.CategoryIconSetFragment.Companion.ARG_CATEGORY_ICON_ID
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryColorAdapter
 import com.d9tilov.moneymanager.category.ui.vm.CategoryCreationViewModel
@@ -113,20 +114,11 @@ class CategoryCreationFragment :
             it.categoryCreationEtName.setText(category.name)
             updateIcon(category.icon)
             setColorToColorIcon()
-            it.categoryCreationNameLimit.text = getString(
-                R.string.letter_limit,
-                it.categoryCreationEtName.length().toString(),
-                resources.getInteger(R.integer.max_category_name_length).toString()
-            )
             it.categoryCreationSave.isEnabled =
-                it.categoryCreationEtName.length().toString().isNotEmpty()
+                it.categoryCreationEtName.length() > 0
             it.categoryCreationEtName.onChange { text ->
-                it.categoryCreationNameLimit.text = getString(
-                    R.string.letter_limit,
-                    text.length.toString(),
-                    resources.getInteger(R.integer.max_category_name_length).toString()
-                )
                 it.categoryCreationSave.isEnabled = text.isNotEmpty()
+                it.categoryCreationEtNameLayout.error = null
             }
             it.categoryCreationDelete.visibility =
                 if (category.id == DEFAULT_DATA_ID) GONE else VISIBLE
@@ -218,5 +210,12 @@ class CategoryCreationFragment :
 
     override fun save() {
         findNavController().popBackStack()
+    }
+
+    override fun showError(error: Throwable) {
+        if (error is CategoryExistException) {
+            viewBinding?.categoryCreationEtNameLayout?.error =
+                getString(R.string.category_unit_name_exist_error)
+        }
     }
 }

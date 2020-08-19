@@ -33,20 +33,10 @@ class CategoryEditDialog :
         super.onViewCreated(view, savedInstanceState)
         viewBinding?.let {
             it.categoryDialogEditEtName.setText(category.name)
-            it.categoryDialogEditLimit.text = getString(
-                R.string.letter_limit,
-                it.categoryDialogEditEtName.text.length.toString(),
-                resources.getInteger(R.integer.max_category_name_length).toString()
-            )
             it.categoryDialogEditEtName.onChange { text ->
                 val isNameEmpty = text.isEmpty()
                 viewBinding?.categoryEditButtonConfirm?.isEnabled = !isNameEmpty
-                viewBinding?.categoryDialogEditError?.visibility = View.INVISIBLE
-                viewBinding?.categoryDialogEditLimit?.text = getString(
-                    R.string.letter_limit,
-                    text.length.toString(),
-                    resources.getInteger(R.integer.max_category_name_length).toString()
-                )
+                viewBinding?.categoryDialogEditEtNameLayout?.error = null
             }
             it.categoryEditButtonConfirm.setOnClickListener { _ ->
                 viewModel.save(category.copy(name = it.categoryDialogEditEtName.text.toString()))
@@ -62,10 +52,9 @@ class CategoryEditDialog :
 
     override fun showError(error: Throwable) {
         if (error is CategoryExistException) {
-            viewBinding?.categoryDialogEditError?.text =
+            viewBinding?.categoryDialogEditEtNameLayout?.error =
                 getString(R.string.category_unit_name_exist_error)
         }
-        viewBinding?.categoryDialogEditError?.visibility = View.VISIBLE
     }
 
     override fun save() {

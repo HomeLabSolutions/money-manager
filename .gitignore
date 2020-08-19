@@ -7,3 +7,4 @@
 /app/release
 .externalNativeBuild
 .cxx
+private_key.pepk

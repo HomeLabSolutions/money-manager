@@ -3,7 +3,6 @@ package com.d9tilov.moneymanager.category.ui
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
-import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -42,10 +41,9 @@ class CategoryUnitDialog :
 
     override fun showError(error: Throwable) {
         if (error is CategoryExistException) {
-            viewBinding?.categoryDialogUnionError?.text =
+            viewBinding?.categoryDialogUnionEtNameLayout?.error =
                 getString(R.string.category_unit_name_exist_error)
         }
-        viewBinding?.categoryDialogUnionError?.visibility = VISIBLE
     }
 
     override fun cancel() {
@@ -55,11 +53,6 @@ class CategoryUnitDialog :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewBinding?.let {
-            it.categoryDialogUnionLimit.text = getString(
-                R.string.letter_limit,
-                it.categoryDialogUnionEtName.text.length.toString(),
-                resources.getInteger(R.integer.max_category_name_length).toString()
-            )
             it.categoryDialogUnionCancel.setOnClickListener { viewModel.cancel() }
             val firstDrawable =
                 createTintDrawable(requireContext(), firstCategory.icon, firstCategory.color)
@@ -72,8 +65,6 @@ class CategoryUnitDialog :
                     secondCategory.name
                 )
                 it.categoryDialogUnionEtName.visibility = GONE
-                it.categoryDialogUnionLimit.visibility = GONE
-                it.categoryDialogUnionError.visibility = GONE
                 it.categoryDialogUnionConfirm.text = getString(R.string.add)
                 it.categoryDialogCurrentFolder.categoryDialogUnionItem1.setImageDrawable(
                     firstDrawable
@@ -81,7 +72,7 @@ class CategoryUnitDialog :
                 it.categoryDialogCurrentFolder.root.visibility = VISIBLE
             } else {
                 it.categoryDialogUnionConfirm.isEnabled =
-                    it.categoryDialogUnionEtName.text.isNotEmpty()
+                    it.categoryDialogUnionEtName.length() > 0
                 it.categoryDialogUnionSubtitle.text =
                     getString(R.string.category_unit_new_name_subtitle)
                 it.categoryDialogUnionTitle.text = getString(R.string.category_unit_to_group_title)
@@ -112,12 +103,7 @@ class CategoryUnitDialog :
             it.categoryDialogUnionEtName.onChange { text ->
                 val isNameEmpty = text.isEmpty()
                 viewBinding?.categoryDialogUnionConfirm?.isEnabled = !isNameEmpty
-                viewBinding?.categoryDialogUnionError?.visibility = INVISIBLE
-                viewBinding?.categoryDialogUnionLimit?.text = getString(
-                    R.string.letter_limit,
-                    text.length.toString(),
-                    resources.getInteger(R.integer.max_category_name_length).toString()
-                )
+                viewBinding?.categoryDialogUnionEtNameLayout?.error = null
             }
         }
     }
