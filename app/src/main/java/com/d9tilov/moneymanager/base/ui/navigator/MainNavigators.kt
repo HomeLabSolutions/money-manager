@@ -66,6 +66,7 @@ interface CategoryNavigator : BaseNavigator {
 
 interface CategoryCreationNavigator : BaseNavigator {
     fun save()
+    fun showError(error: Throwable)
 }
 
 interface CategorySetNavigator : BaseNavigator {

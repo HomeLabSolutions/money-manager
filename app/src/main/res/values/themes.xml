@@ -99,6 +99,31 @@
     <style name="Theme.MoneyManager.Material.Alert.Dialog" parent="Theme.MaterialComponents.Dialog.Alert">
         <item name="colorSurface">@color/neutral_light_color</item>
         <item name="android:background">@color/primary_color</item>
+        <item name="colorControlNormal">@color/control_normal_color</item>
+        <item name="colorControlActivated">@color/control_activated_color</item>
+        <item name="colorControlHighlight">@color/control_highlight_color</item>
+    </style>
+
+    <style name="TextInputLayoutAppearance" parent="Widget.Design.TextInputLayout">
+        <item name="hintTextAppearance">@style/HintText</item>
+        <item name="errorTextAppearance">@style/ErrorText</item>
+        <item name="counterTextAppearance">@style/CounterText</item>
+        <item name="android:textColor">@color/color_midnight_white</item>
+        <item name="colorControlNormal">?attr/colorControlNormal</item>
+        <item name="colorControlActivated">?attr/colorControlActivated</item>
+        <item name="colorControlHighlight">?attr/colorControlHighlight</item>
+    </style>
+
+    <style name="ErrorText" parent="TextAppearance.MoneyManager.Caption">
+        <item name="android:textColor">@color/accent_color</item>
+    </style>
+
+    <style name="HintText" parent="TextAppearance.MoneyManager.Caption">
+        <item name="android:textColor">@color/edit_text_hint_text_color</item>
+    </style>
+
+    <style name="CounterText" parent="TextAppearance.MoneyManager.Caption">
+        <item name="android:textColor">@color/control_activated_color</item>
     </style>
 
 </resources>

@@ -5,7 +5,7 @@
     <color name="accent_color">#e61628</color>
     <color name="secondary_color">#f99225</color>
     <color name="control_normal_color">#fff</color>
-    <color name="control_activated_color">#e61628</color>
+    <color name="control_activated_color">#CBD4B6</color>
     <color name="control_activated_color_light">#59e61628</color>
     <color name="control_highlight_color">#828F89</color>
     <color name="button_normal_color">#f99225</color>
