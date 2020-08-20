@@ -67,39 +67,36 @@ class IncomeExpenseFragment :
                     param(FirebaseAnalytics.Param.ITEM_CATEGORY, "undo_delete")
                 }
             }
-            findNavController().previousBackStackEntry?.savedStateHandle?.remove<Boolean>(
-                ARG_UNDO_REMOVE_LAYOUT_DISMISS
-            )
         }
         viewBinding?.let {
             it.incomeExpenseViewPager.addOnPageChangeListener(object :
-                ViewPager.OnPageChangeListener {
-                override fun onPageScrollStateChanged(state: Int) { /* do notjing */
-                }
-
-                override fun onPageScrolled(
-                    position: Int,
-                    positionOffset: Float,
-                    positionOffsetPixels: Int
-                ) { /* do nothing */
-                }
-
-                override fun onPageSelected(position: Int) {
-                    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
-                        param(
-                            FirebaseAnalytics.Param.ITEM_ID,
-                            if (position == 0) "expense" else "income"
-                        )
+                    ViewPager.OnPageChangeListener {
+                    override fun onPageScrollStateChanged(state: Int) { /* do notjing */
                     }
-                    currentPage = position
-                    val currentFragment = getCurrentPagedFragment()
-                    if (isKeyboardShown) {
-                        currentFragment.onOpenKeyboard()
-                    } else {
-                        currentFragment.onCloseKeyboard()
+
+                    override fun onPageScrolled(
+                        position: Int,
+                        positionOffset: Float,
+                        positionOffsetPixels: Int
+                    ) { /* do nothing */
                     }
-                }
-            })
+
+                    override fun onPageSelected(position: Int) {
+                        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+                            param(
+                                FirebaseAnalytics.Param.ITEM_ID,
+                                if (position == 0) "expense" else "income"
+                            )
+                        }
+                        currentPage = position
+                        val currentFragment = getCurrentPagedFragment()
+                        if (isKeyboardShown) {
+                            currentFragment.onOpenKeyboard()
+                        } else {
+                            currentFragment.onCloseKeyboard()
+                        }
+                    }
+                })
             it.incomeExpenseTabs.setupWithViewPager(income_expense_view_pager)
             it.incomeExpenseViewPager.adapter = demoCollectionPagerAdapter
             it.incomeExpenseViewPager.currentItem =

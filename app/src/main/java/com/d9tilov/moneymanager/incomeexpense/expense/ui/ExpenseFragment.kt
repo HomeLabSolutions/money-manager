@@ -85,7 +85,7 @@ class ExpenseFragment :
                         param(
                             FirebaseAnalytics.Param.METHOD,
                             if (it.expenseMainSum.getValue()
-                                    .signum() > 0
+                                .signum() > 0
                             ) "create_transaction" else "empty_click"
                         )
                     }

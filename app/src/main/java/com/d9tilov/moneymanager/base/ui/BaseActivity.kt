@@ -78,7 +78,7 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
 
     private fun getCurrentFragment(): Fragment? {
         val navHostFragment =
-            this.supportFragmentManager.findFragmentById(R.id.mainNavGraph)
+            this.supportFragmentManager.findFragmentById(R.id.nav_host_container)
         var currentFragment: Fragment? = null
         navHostFragment?.let {
             currentFragment = it.childFragmentManager.fragments[0]

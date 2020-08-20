@@ -67,7 +67,7 @@ class CategoryCreationFragment :
 
     private var toolbar: MaterialToolbar? = null
     private lateinit var categoryColorAdapter: CategoryColorAdapter
-    @Inject lateinit var firebaseAnalytics:FirebaseAnalytics
+    @Inject lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun performDataBinding(view: View): FragmentCreationCategoryBinding =
         FragmentCreationCategoryBinding.bind(view)
