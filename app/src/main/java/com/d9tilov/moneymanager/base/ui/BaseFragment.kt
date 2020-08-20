@@ -13,8 +13,6 @@ import androidx.viewbinding.ViewBinding
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.core.util.toast
-import com.google.firebase.analytics.FirebaseAnalytics
-import javax.inject.Inject
 
 abstract class BaseFragment<T : ViewBinding, N : BaseNavigator>(@LayoutRes layoutId: Int) :
     Fragment(layoutId) {

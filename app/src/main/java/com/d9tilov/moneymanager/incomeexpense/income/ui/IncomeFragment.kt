@@ -82,7 +82,7 @@ class IncomeFragment :
                         param(
                             FirebaseAnalytics.Param.METHOD,
                             if (it.incomeMainSum.getValue()
-                                    .signum() > 0
+                                .signum() > 0
                             ) "create_transaction" else "empty_click"
                         )
                     }

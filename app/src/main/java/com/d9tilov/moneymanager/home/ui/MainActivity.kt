@@ -4,12 +4,14 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import androidx.navigation.Navigation
+import androidx.lifecycle.LiveData
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.base.ui.navigator.HomeNavigator
+import com.d9tilov.moneymanager.core.util.setupWithNavController
 import com.d9tilov.moneymanager.databinding.ActivityMainBinding
 import com.mfms.common.util.hideKeyboard
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,25 +23,52 @@ class MainActivity :
     DialogInterface.OnDismissListener {
 
     var forceShowKeyboard = true
+    private var currentNavController: LiveData<NavController>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        findNavController(R.id.mainNavGraph).addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.income_expense_dest,
-                R.id.chart_dest,
-                R.id.settings_dest ->
-                    viewBinding.bottomNavigation.visibility = VISIBLE
-                else -> viewBinding.bottomNavigation.visibility = GONE
-            }
-        }
-        viewBinding.bottomNavigation.setupWithNavController(
-            Navigation.findNavController(
-                this,
-                R.id.mainNavGraph
-            )
+        if (savedInstanceState == null) {
+            setupBottomNavigationBar()
+        } // Else, need to wait for onRestoreInstanceState
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        // Now that BottomNavigationBar has restored its instance state
+        // and its selectedItemId, we can proceed with setting up the
+        // BottomNavigationBar with Navigation
+        setupBottomNavigationBar()
+    }
+
+    private fun setupBottomNavigationBar() {
+        val navGraphIds = listOf(R.navigation.home_navigation, R.navigation.chart_navigation, R.navigation.profile_navigation)
+        val controller = viewBinding.bottomNav.setupWithNavController(
+            navGraphIds = navGraphIds,
+            fragmentManager = supportFragmentManager,
+            containerId = R.id.nav_host_container,
+            intent = intent
         )
+        // Whenever the selected controller changes, setup the action bar.
+        controller.observe(
+            this,
+            { navController ->
+                navController.addOnDestinationChangedListener { _, destination, _ ->
+                    when (destination.id) {
+                        R.id.income_expense_dest,
+                        R.id.chart_dest,
+                        R.id.settings_dest ->
+                            viewBinding.bottomNav.visibility = VISIBLE
+                        else -> viewBinding.bottomNav.visibility = GONE
+                    }
+                }
+            }
+        )
+        currentNavController = controller
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return currentNavController?.value?.navigateUp() ?: false
     }
 
     override fun performDataBinding(): ActivityMainBinding {
@@ -48,14 +77,14 @@ class MainActivity :
 
     override fun onOpenKeyboard() {
         super.onOpenKeyboard()
-        viewBinding.bottomNavigation.visibility = GONE
+        viewBinding.bottomNav.visibility = GONE
     }
 
     override fun onCloseKeyboard() {
         super.onCloseKeyboard()
         forceShowKeyboard = false
-        if (findNavController(R.id.mainNavGraph).currentDestination?.id == R.id.income_expense_dest) {
-            viewBinding.bottomNavigation.visibility = VISIBLE
+        if (findNavController(R.id.nav_host_container).currentDestination?.id == R.id.income_expense_dest) {
+            viewBinding.bottomNav.visibility = VISIBLE
         }
     }
 

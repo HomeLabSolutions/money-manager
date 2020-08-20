@@ -36,12 +36,12 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "com.github.bumptech.glide:glide:$versions.glide"
-    kapt "com.github.bumptech.glide:compiler:$versions.glide"
+    implementation "com.github.bumptech.glide:glide:4.11.0"
+    kapt "com.github.bumptech.glide:compiler:4.11.0"
 
-    implementation "androidx.room:room-runtime:${versions.room}"
-    implementation "androidx.room:room-rxjava2:${versions.room}"
+    implementation "androidx.room:room-runtime:2.2.5"
+    implementation "androidx.room:room-rxjava2:2.2.5"
 
-    implementation "androidx.paging:paging-runtime-ktx:${versions.roomPaging}"
-    implementation "androidx.paging:paging-rxjava2-ktx:${versions.roomPaging}"
+    implementation "androidx.paging:paging-runtime-ktx:2.1.2"
+    implementation "androidx.paging:paging-rxjava2-ktx:2.1.2"
 }
