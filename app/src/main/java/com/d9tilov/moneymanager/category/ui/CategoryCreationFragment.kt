@@ -158,7 +158,6 @@ class CategoryCreationFragment :
                     )
                 }
                 findNavController().navigate(action)
-
             }
         }
         toolbar = viewBinding?.categoryCreationToolbarContainer?.toolbar

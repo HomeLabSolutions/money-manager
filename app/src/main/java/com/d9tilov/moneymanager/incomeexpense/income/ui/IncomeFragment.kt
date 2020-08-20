@@ -27,6 +27,7 @@ import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
+import com.d9tilov.moneymanager.core.util.isTablet
 import com.d9tilov.moneymanager.databinding.FragmentIncomeBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragment
@@ -186,7 +187,12 @@ class IncomeFragment :
     private fun initCategoryRecyclerView() {
         viewBinding?.run {
             val layoutManager =
-                GridLayoutManager(requireContext(), SPAN_COUNT, GridLayoutManager.HORIZONTAL, false)
+                GridLayoutManager(
+                    requireContext(),
+                    if (requireContext().isTablet()) TABLET_SPAN_COUNT else SPAN_COUNT,
+                    GridLayoutManager.HORIZONTAL,
+                    false
+                )
             incomeCategoryRvList.layoutManager = layoutManager
             incomeCategoryRvList.adapter = categoryAdapter
             incomeCategoryRvList.addItemDecoration(
@@ -275,5 +281,6 @@ class IncomeFragment :
     companion object {
         fun newInstance() = IncomeFragment()
         private const val SPAN_COUNT = 2
+        private const val TABLET_SPAN_COUNT = 1
     }
 }

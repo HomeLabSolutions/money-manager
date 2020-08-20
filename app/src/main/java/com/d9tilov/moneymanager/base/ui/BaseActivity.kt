@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.base.ui
 
+import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.core.events.OnBackPressed
 import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
@@ -39,6 +41,9 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
         topView = window.decorView.findViewById<View>(android.R.id.content)
         globalLayoutListener = KeyboardGlobalLayoutListener()
         topView.viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
+        if (BuildConfig.DEBUG) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
     }
 
     abstract fun performDataBinding(): T

@@ -36,12 +36,15 @@ class CategoryUnionViewModel @ViewModelInject constructor(
             }
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
-            .subscribe({
-                navigator?.accept()
-                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                    param("create_category", "name: " + groupedCategory.name)
-                }
-            }, { navigator?.showError(it) })
+            .subscribe(
+                {
+                    navigator?.accept()
+                    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                        param("create_category", "name: " + groupedCategory.name)
+                    }
+                },
+                { navigator?.showError(it) }
+            )
             .addTo(compositeDisposable)
     }
 

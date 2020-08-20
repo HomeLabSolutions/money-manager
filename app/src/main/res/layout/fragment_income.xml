@@ -70,6 +70,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:inflatedId="@+id/inflate"
+        android:layout_margin="16dp"
         android:layout="@layout/layout_empty_income_transaction_list_placeholder"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
