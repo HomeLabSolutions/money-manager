@@ -74,21 +74,10 @@ class ExpenseFragment :
             if (item.id == Category.ALL_ITEMS_ID) {
                 viewModel.openAllCategories()
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                    param(FirebaseAnalytics.Param.SCREEN_NAME, "expense")
-                    param(FirebaseAnalytics.Param.ITEM_ID, "click_all_categories")
+                    param(FirebaseAnalytics.Param.ITEM_ID, "click_all_categories_expense")
                 }
             } else {
                 viewBinding?.let {
-                    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                        param(FirebaseAnalytics.Param.SCREEN_NAME, "expense")
-                        param(FirebaseAnalytics.Param.ITEM_ID, "click_category")
-                        param(
-                            FirebaseAnalytics.Param.METHOD,
-                            if (it.expenseMainSum.getValue()
-                                .signum() > 0
-                            ) "create_transaction" else "empty_click"
-                        )
-                    }
                     viewModel.saveTransaction(item, it.expenseMainSum.getValue())
                     it.expenseMainSum.setValue(BigDecimal.ZERO)
                 }
@@ -103,19 +92,11 @@ class ExpenseFragment :
                 item
             )
             findNavController().navigate(action)
-            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                param(FirebaseAnalytics.Param.SCREEN_NAME, "expense")
-                param(FirebaseAnalytics.Param.ITEM_ID, "click_transaction")
-            }
         }
     }
     private val onItemSwipeListener = object : OnItemSwipeListener<Transaction> {
         override fun onItemSwiped(item: Transaction, position: Int) {
             viewModel.deleteTransaction(item)
-            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                param(FirebaseAnalytics.Param.SCREEN_NAME, "expense")
-                param(FirebaseAnalytics.Param.ITEM_ID, "swipe_transaction_to_remove")
-            }
         }
     }
 
@@ -163,9 +144,6 @@ class ExpenseFragment :
                 if (hasFocus) {
                     it.expenseMainSum.moneyEditText.post {
                         it.expenseMainSum.moneyEditText.setSelection(it.expenseMainSum.moneyEditText.text.toString().length)
-                    }
-                    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                        param(FirebaseAnalytics.Param.ITEM_ID, "click_sum")
                     }
                 }
             }

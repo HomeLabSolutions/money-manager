@@ -45,8 +45,7 @@ class CategoryFragment :
             sum
         )
         findNavController().navigate(action)
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-            param(FirebaseAnalytics.Param.SCREEN_NAME, "category")
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
             param(FirebaseAnalytics.Param.ITEM_ID, "open_subcategory_screen")
         }
     }
@@ -57,9 +56,8 @@ class CategoryFragment :
             category
         )
         findNavController().navigate(action)
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-            param(FirebaseAnalytics.Param.SCREEN_NAME, "category")
-            param(FirebaseAnalytics.Param.ITEM_ID, "open_creation_screen")
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+            param(FirebaseAnalytics.Param.ITEM_ID, "open_creation_category_screen")
         }
     }
 
@@ -69,10 +67,6 @@ class CategoryFragment :
             category
         )
         findNavController().navigate(action)
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-            param(FirebaseAnalytics.Param.SCREEN_NAME, "category")
-            param(FirebaseAnalytics.Param.ITEM_ID, "open_remove_dialog")
-        }
     }
 
     override fun backToEditTransactionScreen(category: Category) {
@@ -125,8 +119,10 @@ class CategoryFragment :
             findNavController().navigate(action)
             categoryAdapter.enableEditMode(false)
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                param(FirebaseAnalytics.Param.SCREEN_NAME, "category")
-                param(FirebaseAnalytics.Param.ITEM_ID, "add_to_folder")
+                param(
+                    "category_add_to_folder",
+                    "folder: " + parentItem.name + " child: " + childItem.name
+                )
             }
         }
 
@@ -144,8 +140,10 @@ class CategoryFragment :
             findNavController().navigate(action)
             categoryAdapter.enableEditMode(false)
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                param(FirebaseAnalytics.Param.SCREEN_NAME, "category")
-                param(FirebaseAnalytics.Param.ITEM_ID, "unit_to_folder")
+                param(
+                    "category_unit_to_folder",
+                    "firstItem: " + firstItem.name + " secondItem: " + secondItem.name
+                )
             }
         }
     }

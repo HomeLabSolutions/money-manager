@@ -50,10 +50,6 @@ class SubCategoryFragment :
             findNavController().previousBackStackEntry?.savedStateHandle?.remove<Category>(
                 SUB_CATEGORY_TITLE
             )
-            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                param(FirebaseAnalytics.Param.SCREEN_NAME, "subcategory")
-                param(FirebaseAnalytics.Param.ITEM_ID, "change_name")
-            }
         }
         viewBinding?.let {
             it.categoryGroupEdit.visibility = VISIBLE
@@ -95,19 +91,14 @@ class SubCategoryFragment :
             category
         )
         findNavController().navigate(action)
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-            param(FirebaseAnalytics.Param.SCREEN_NAME, "subcategory")
-            param(FirebaseAnalytics.Param.ITEM_ID, "open_creation_screen")
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+            param(FirebaseAnalytics.Param.ITEM_ID, "open_creation_category_screen")
         }
     }
 
     override fun openRemoveDialog(subCategory: Category) {
         val action = SubCategoryFragmentDirections.toRemoveSubCategoryDialog(subCategory)
         findNavController().navigate(action)
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-            param(FirebaseAnalytics.Param.SCREEN_NAME, "subcategory")
-            param(FirebaseAnalytics.Param.ITEM_ID, "open_remove_dialog")
-        }
     }
 
     companion object {

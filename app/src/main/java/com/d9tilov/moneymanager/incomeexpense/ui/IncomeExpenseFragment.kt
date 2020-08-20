@@ -63,9 +63,6 @@ class IncomeExpenseFragment :
                 val currentFragment =
                     demoCollectionPagerAdapter.getRegisteredFragment(currentPage) as? OnDialogDismissListener
                 currentFragment?.onDismiss()
-                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM) {
-                    param(FirebaseAnalytics.Param.ITEM_CATEGORY, "undo_delete")
-                }
             }
         }
         viewBinding?.let {

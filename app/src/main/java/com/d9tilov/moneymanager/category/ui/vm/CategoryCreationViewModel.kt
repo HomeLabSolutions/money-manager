@@ -12,6 +12,7 @@ import com.d9tilov.moneymanager.core.util.addTo
 import com.d9tilov.moneymanager.core.util.ioScheduler
 import com.d9tilov.moneymanager.core.util.uiScheduler
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 
 class CategoryCreationViewModel @ViewModelInject constructor(
     private val categoryInteractor: CategoryInteractor,
@@ -26,7 +27,12 @@ class CategoryCreationViewModel @ViewModelInject constructor(
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler)
                 .subscribe(
-                    { navigator?.save() },
+                    {
+                        navigator?.save()
+                        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                            param("create_category", "name: " + category.name)
+                        }
+                    },
                     { navigator?.showError(it) }
                 )
                 .addTo(compositeDisposable)

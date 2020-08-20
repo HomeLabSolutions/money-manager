@@ -15,6 +15,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -125,8 +126,7 @@ class CategoryCreationFragment :
             it.categoryCreationIconLayout.setOnClickListener { _ ->
                 val action = CategoryCreationFragmentDirections.toCategorySetDest(transactionType)
                 findNavController().navigate(action)
-                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                    param(FirebaseAnalytics.Param.SCREEN_NAME, "category_creation")
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
                     param(FirebaseAnalytics.Param.ITEM_ID, "open_category_set_screen")
                 }
             }
@@ -142,7 +142,6 @@ class CategoryCreationFragment :
             it.categoryCreationColor.setOnClickListener { _ ->
                 it.categoryCreationRvColorPicker.visibility = VISIBLE
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                    param(FirebaseAnalytics.Param.SCREEN_NAME, "category_creation")
                     param(FirebaseAnalytics.Param.ITEM_ID, "click_choose_color")
                 }
             }
@@ -150,16 +149,16 @@ class CategoryCreationFragment :
                 if (category.id == DEFAULT_DATA_ID) {
                     return@setOnClickListener
                 }
-                val action = if (category.parent != null) {
+                val action: NavDirections = if (category.parent != null) {
                     CategoryCreationFragmentDirections.toRemoveSubCategoryDialog(category)
                 } else {
-                    CategoryCreationFragmentDirections.toRemoveCategoryDialog(CategoryDestination.CATEGORY_CREATION_SCREEN, category)
+                    CategoryCreationFragmentDirections.toRemoveCategoryDialog(
+                        CategoryDestination.CATEGORY_CREATION_SCREEN,
+                        category
+                    )
                 }
                 findNavController().navigate(action)
-                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                    param(FirebaseAnalytics.Param.SCREEN_NAME, "category_creation")
-                    param(FirebaseAnalytics.Param.ITEM_ID, "delete_click")
-                }
+
             }
         }
         toolbar = viewBinding?.categoryCreationToolbarContainer?.toolbar

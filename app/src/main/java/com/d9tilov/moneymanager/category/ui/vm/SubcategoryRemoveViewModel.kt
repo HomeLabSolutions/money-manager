@@ -11,10 +11,13 @@ import com.d9tilov.moneymanager.core.util.addTo
 import com.d9tilov.moneymanager.core.util.ioScheduler
 import com.d9tilov.moneymanager.core.util.uiScheduler
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 
 class SubcategoryRemoveViewModel @ViewModelInject constructor(
     private val categoryInteractor: CategoryInteractor,
     private val transactionInteractor: TransactionInteractor,
+    private val firebaseAnalytics: FirebaseAnalytics,
     @Assisted val savedStateHandle: SavedStateHandle
 ) : BaseViewModel<RemoveSubCategoryDialogNavigator>() {
 
@@ -30,6 +33,9 @@ class SubcategoryRemoveViewModel @ViewModelInject constructor(
                 } else {
                     navigator?.closeDialog()
                 }
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                    param("delete_subcategory", "name: " + subcategory.name)
+                }
             }
             .addTo(compositeDisposable)
     }
@@ -43,6 +49,9 @@ class SubcategoryRemoveViewModel @ViewModelInject constructor(
                     navigator?.closeDialogAndGoToCategory()
                 } else {
                     navigator?.closeDialog()
+                }
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                    param("delete_subcategory_from_group", "name: " + subcategory.name)
                 }
             }
             .addTo(compositeDisposable)
