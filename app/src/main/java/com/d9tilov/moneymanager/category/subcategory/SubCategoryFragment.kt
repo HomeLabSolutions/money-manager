@@ -2,6 +2,7 @@ package com.d9tilov.moneymanager.category.subcategory
 
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
@@ -54,6 +55,7 @@ class SubCategoryFragment :
         viewBinding?.let {
             it.categoryGroupEdit.visibility = VISIBLE
             it.categoryGroupDelete.visibility = VISIBLE
+            it.categoryCreate.visibility = GONE
             it.categoryGroupDelete.setOnClickListener {
                 val action = SubCategoryFragmentDirections.toRemoveCategoryDialog(
                     CategoryDestination.SUB_CATEGORY_SCREEN, modifiedParentCategory
