@@ -26,7 +26,10 @@ class EditTransactionViewModel @ViewModelInject constructor(
                 {
                     navigator?.save()
                     firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                        param(FirebaseAnalytics.Param.ITEM_ID, "save_transaction")
+                        param(
+                            "create_transaction",
+                            "sum: " + transaction.sum + " category: " + transaction.category.name
+                        )
                     }
                 },
                 { Timber.tag(App.TAG).d("Update transaction error: $it") }

@@ -10,9 +10,12 @@ import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.core.util.addTo
 import com.d9tilov.moneymanager.core.util.ioScheduler
 import com.d9tilov.moneymanager.core.util.uiScheduler
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 
 class CategoryUnionViewModel @ViewModelInject constructor(
     private val categoryInteractor: CategoryInteractor,
+    private val firebaseAnalytics: FirebaseAnalytics,
     @Assisted val savedStateHandle: SavedStateHandle
 ) : BaseViewModel<CategoryUnionDialogNavigator>() {
 
@@ -33,7 +36,12 @@ class CategoryUnionViewModel @ViewModelInject constructor(
             }
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
-            .subscribe({ navigator?.accept() }, { navigator?.showError(it) })
+            .subscribe({
+                navigator?.accept()
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                    param("create_category", "name: " + groupedCategory.name)
+                }
+            }, { navigator?.showError(it) })
             .addTo(compositeDisposable)
     }
 

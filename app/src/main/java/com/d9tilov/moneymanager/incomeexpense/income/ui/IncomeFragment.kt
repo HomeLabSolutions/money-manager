@@ -71,21 +71,10 @@ class IncomeFragment :
             if (item.id == Category.ALL_ITEMS_ID) {
                 viewModel.openAllCategories()
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                    param(FirebaseAnalytics.Param.SCREEN_NAME, "income")
-                    param(FirebaseAnalytics.Param.ITEM_ID, "click_all_categories")
+                    param(FirebaseAnalytics.Param.ITEM_ID, "click_all_categories_income")
                 }
             } else {
                 viewBinding?.let {
-                    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                        param(FirebaseAnalytics.Param.SCREEN_NAME, "income")
-                        param(FirebaseAnalytics.Param.ITEM_ID, "click_category")
-                        param(
-                            FirebaseAnalytics.Param.METHOD,
-                            if (it.incomeMainSum.getValue()
-                                .signum() > 0
-                            ) "create_transaction" else "empty_click"
-                        )
-                    }
                     viewModel.saveTransaction(item, it.incomeMainSum.getValue())
                     it.incomeMainSum.setValue(BigDecimal.ZERO)
                 }
@@ -101,18 +90,13 @@ class IncomeFragment :
             )
             findNavController().navigate(action)
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                param(FirebaseAnalytics.Param.SCREEN_NAME, "income")
-                param(FirebaseAnalytics.Param.ITEM_ID, "click_transaction")
+                param(FirebaseAnalytics.Param.ITEM_ID, "click_transaction_income")
             }
         }
     }
     private val onItemSwipeListener = object : OnItemSwipeListener<Transaction> {
         override fun onItemSwiped(item: Transaction, position: Int) {
             viewModel.deleteTransaction(item)
-            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                param(FirebaseAnalytics.Param.SCREEN_NAME, "income")
-                param(FirebaseAnalytics.Param.ITEM_ID, "swipe_transaction_to_remove")
-            }
         }
     }
 
@@ -160,9 +144,6 @@ class IncomeFragment :
                 if (hasFocus) {
                     it.incomeMainSum.moneyEditText.post {
                         it.incomeMainSum.moneyEditText.setSelection(it.incomeMainSum.moneyEditText.text.toString().length)
-                    }
-                    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                        param(FirebaseAnalytics.Param.ITEM_ID, "click_sum")
                     }
                 }
             }

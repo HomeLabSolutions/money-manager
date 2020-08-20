@@ -93,8 +93,7 @@ class EditTransactionFragment : EditTransactionNavigator,
                     ).format(date)
                 }
                 picker.show(parentFragmentManager, picker.tag)
-                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                    param(FirebaseAnalytics.Param.SCREEN_NAME, "edit_transaction")
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
                     param(FirebaseAnalytics.Param.ITEM_ID, "open_calendar")
                 }
             }
@@ -105,9 +104,8 @@ class EditTransactionFragment : EditTransactionNavigator,
                         transactionType
                     )
                 findNavController().navigate(action)
-                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                    param(FirebaseAnalytics.Param.SCREEN_NAME, "edit_transaction")
-                    param(FirebaseAnalytics.Param.ITEM_ID, "open_category")
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+                    param(FirebaseAnalytics.Param.ITEM_ID, "open_category_screen_of_transaction")
                 }
             }
             it.editTransactionDelete.setOnClickListener {
@@ -115,10 +113,6 @@ class EditTransactionFragment : EditTransactionNavigator,
                     transaction
                 )
                 findNavController().navigate(action)
-                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                    param(FirebaseAnalytics.Param.SCREEN_NAME, "edit_transaction")
-                    param(FirebaseAnalytics.Param.ITEM_ID, "remove")
-                }
             }
             it.editTransactionDescription.setText(transaction.description)
             it.editTransactionMainSum.setValue(transaction.sum)
