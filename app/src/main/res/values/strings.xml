@@ -35,7 +35,9 @@
     <string name="default_category_income_part_time_job">Part-time job</string>
 
     <string name="income_expense_empty_sum_error">Enter the amount</string>
-    <string name="expense_daily_sum_to_spend_title">you can spend</string>
+    <string name="expense_daily_sum_to_spend_title">You can spend today:</string>
+    <string name="expense_daily_spent_sum">Expenses today:</string>
+    <string name="expense_monthly_spent_sum">Spent in a month:</string>
     <string name="expense_spent_title">spent</string>
     <string name="expense_left_to_title">left ot spent</string>
 

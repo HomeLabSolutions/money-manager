@@ -1,11 +1,12 @@
 package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
-import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewStub
+import android.view.animation.AccelerateInterpolator
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
@@ -68,7 +69,10 @@ class ExpenseFragment :
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private var isTransactionDataEmpty = false
-    private lateinit var viewStub: ViewStub
+    private var isKeyboardOpen = true
+    private lateinit var emptyViewStub: ViewStub
+    private lateinit var infoViewStub: ViewStub
+    private lateinit var infoInflatedView: View
 
     private val onAllCategoriesClickListener = object : OnItemClickListener<Category> {
         override fun onItemClick(item: Category, position: Int) {
@@ -88,6 +92,9 @@ class ExpenseFragment :
 
     private val onTransactionClickListener = object : OnItemClickListener<Transaction> {
         override fun onItemClick(item: Transaction, position: Int) {
+            if (isKeyboardOpen) {
+                return
+            }
             val action = IncomeExpenseFragmentDirections.toEditTransactionDest(
                 TransactionType.EXPENSE,
                 item
@@ -108,23 +115,6 @@ class ExpenseFragment :
         transactionAdapter.itemClickListener = onTransactionClickListener
     }
 
-    override fun onStart() {
-        super.onStart()
-        if ((activity as MainActivity).forceShowKeyboard) {
-            showKeyboard(viewBinding?.expenseMainSum)
-        } else {
-            viewBinding?.run {
-                expenseTransactionRvList.visibility = VISIBLE
-                expenseCategoryRvList.visibility = GONE
-            }
-        }
-    }
-
-    override fun onStop() {
-        hideKeyboard()
-        super.onStop()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initCategoryRecyclerView()
@@ -140,7 +130,8 @@ class ExpenseFragment :
             )
         }
         viewBinding?.let {
-            viewStub = it.root.findViewById(R.id.expense_transaction_empty_placeholder)
+            emptyViewStub = it.root.findViewById(R.id.expense_transaction_empty_placeholder)
+            infoViewStub = it.root.findViewById(R.id.expense_info)
             it.expenseMainSum.moneyEditText.setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus) {
                     it.expenseMainSum.moneyEditText.post {
@@ -168,7 +159,7 @@ class ExpenseFragment :
                 Observer {
                     isTransactionDataEmpty = it.isEmpty()
                     if (isTransactionDataEmpty && !(activity as MainActivity).forceShowKeyboard) {
-                        viewStub.visibility = VISIBLE
+                        emptyViewStub.visibility = VISIBLE
                     }
                     transactionAdapter.submitList(it)
                 }
@@ -178,6 +169,24 @@ class ExpenseFragment :
                 Observer { hideKeyboard() }
             )
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if ((activity as MainActivity).forceShowKeyboard) {
+            infoInflatedView = infoViewStub.inflate()
+            showKeyboard(viewBinding?.expenseMainSum)
+        } else {
+            viewBinding?.run {
+                expenseTransactionRvList.visibility = VISIBLE
+                expenseCategoryRvList.visibility = GONE
+            }
+        }
+    }
+
+    override fun onStop() {
+        hideKeyboard()
+        super.onStop()
     }
 
     override fun onDismiss() {
@@ -223,6 +232,11 @@ class ExpenseFragment :
                     transactionAdapter.deleteItem(viewHolder.adapterPosition)
                 }
             }).attachToRecyclerView(expenseTransactionRvList)
+            ItemTouchHelper(object : SwipeToDeleteCallback(requireContext()) {
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    transactionAdapter.deleteItem(viewHolder.adapterPosition)
+                }
+            }).attachToRecyclerView(expenseTransactionRvList)
         }
     }
 
@@ -258,29 +272,55 @@ class ExpenseFragment :
 
     override fun onOpenKeyboard() {
         Timber.tag(App.TAG).d("Keyboard shown")
+        isKeyboardOpen = true
         viewBinding?.run {
-            expenseTransactionRvList.visibility = INVISIBLE
-            expenseCategoryRvList.visibility = VISIBLE
-            viewStub.visibility = GONE
+            onKeyboardVisibilityAnimation(true)
+            expenseTransactionRvList.visibility = GONE
+            emptyViewStub.visibility = GONE
+            infoViewStub.visibility = VISIBLE
             expenseCategoryRvList.scrollToPosition(0)
         }
     }
 
     override fun onCloseKeyboard() {
         Timber.tag(App.TAG).d("Kyboard hidden")
+        isKeyboardOpen = false
         viewBinding?.run {
-            expenseTransactionRvList.visibility = VISIBLE
-            expenseCategoryRvList.visibility = GONE
+            onKeyboardVisibilityAnimation(false)
             if (isTransactionDataEmpty) {
-                viewStub.visibility = VISIBLE
+                emptyViewStub.visibility = VISIBLE
             }
             expenseMainSum.clearFocus()
         }
+    }
+
+    private fun onKeyboardVisibilityAnimation(open: Boolean) {
+        if (open) {
+            viewBinding?.expenseCategoryRvList?.visibility = VISIBLE
+        } else {
+            viewBinding?.expenseTransactionRvList?.visibility = VISIBLE
+            viewBinding?.expenseCategoryRvList?.visibility = GONE
+        }
+
+        val alphaAnimationCategories =
+            ObjectAnimator.ofFloat(
+                viewBinding?.expenseCategoryRvList,
+                View.ALPHA,
+                if (open) ALPHA_CAT_MIN else ALPHA_MAX,
+                if (open) ALPHA_MAX else ALPHA_CAT_MIN
+            ).apply {
+                duration = ANIMATION_DURATION_CAT
+                interpolator = AccelerateInterpolator()
+            }
+        alphaAnimationCategories.start()
     }
 
     companion object {
         fun newInstance() = ExpenseFragment()
         private const val SPAN_COUNT = 2
         private const val TABLET_SPAN_COUNT = 1
+        private const val ANIMATION_DURATION_CAT = 400L
+        private const val ALPHA_CAT_MIN = 0f
+        private const val ALPHA_MAX = 1f
     }
 }

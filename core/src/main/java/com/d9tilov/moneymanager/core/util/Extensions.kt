@@ -1,5 +1,7 @@
 package com.d9tilov.moneymanager.core.util
 
+import android.animation.Animator
+import android.animation.ObjectAnimator
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -63,5 +65,22 @@ fun EditText.onChange(cb: (String) -> Unit) {
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+    })
+}
+
+fun ObjectAnimator.onEnd(cb: (Animator?) -> Unit) {
+    this.addListener(object : Animator.AnimatorListener {
+        override fun onAnimationStart(animation: Animator?) {
+        }
+
+        override fun onAnimationEnd(animation: Animator?) {
+            cb(animation)
+        }
+
+        override fun onAnimationCancel(animation: Animator?) {
+        }
+
+        override fun onAnimationRepeat(animation: Animator?) {
+        }
     })
 }

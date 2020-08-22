@@ -1,8 +1,10 @@
 package com.d9tilov.moneymanager.incomeexpense.income.ui
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.View
 import android.view.ViewStub
+import android.view.animation.AccelerateInterpolator
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
@@ -65,6 +67,7 @@ class IncomeFragment :
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private var isTransactionDataEmpty = false
+    private var isKeyboardOpen = true
     private lateinit var viewStub: ViewStub
 
     private val onAllCategoriesClickListener = object : OnItemClickListener<Category> {
@@ -85,6 +88,9 @@ class IncomeFragment :
 
     private val onTransactionClickListener = object : OnItemClickListener<Transaction> {
         override fun onItemClick(item: Transaction, position: Int) {
+            if (isKeyboardOpen) {
+                return
+            }
             val action = IncomeExpenseFragmentDirections.toEditTransactionDest(
                 item.type,
                 item
@@ -106,23 +112,6 @@ class IncomeFragment :
         categoryAdapter.itemClickListener = onAllCategoriesClickListener
         transactionAdapter.itemSwipeListener = onItemSwipeListener
         transactionAdapter.itemClickListener = onTransactionClickListener
-    }
-
-    override fun onStart() {
-        super.onStart()
-        if ((activity as MainActivity).forceShowKeyboard) {
-            showKeyboard(viewBinding?.incomeMainSum)
-        } else {
-            viewBinding?.run {
-                incomeTransactionRvList.visibility = View.VISIBLE
-                incomeCategoryRvList.visibility = View.GONE
-            }
-        }
-    }
-
-    override fun onStop() {
-        hideKeyboard()
-        super.onStop()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -178,6 +167,23 @@ class IncomeFragment :
                 Observer { hideKeyboard() }
             )
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if ((activity as MainActivity).forceShowKeyboard) {
+            showKeyboard(viewBinding?.incomeMainSum)
+        } else {
+            viewBinding?.run {
+                incomeTransactionRvList.visibility = View.VISIBLE
+                incomeCategoryRvList.visibility = View.GONE
+            }
+        }
+    }
+
+    override fun onStop() {
+        hideKeyboard()
+        super.onStop()
     }
 
     override fun onDismiss() {
@@ -258,9 +264,10 @@ class IncomeFragment :
 
     override fun onOpenKeyboard() {
         Timber.tag(App.TAG).d("Keyboard shown")
+        isKeyboardOpen = true
         viewBinding?.run {
-            incomeTransactionRvList.visibility = View.INVISIBLE
-            incomeCategoryRvList.visibility = View.VISIBLE
+            onKeyboardVisibilityAnimation(true)
+            incomeTransactionRvList.visibility = View.GONE
             viewStub.visibility = View.GONE
             incomeCategoryRvList.scrollToPosition(0)
         }
@@ -268,9 +275,9 @@ class IncomeFragment :
 
     override fun onCloseKeyboard() {
         Timber.tag(App.TAG).d("Kyboard hidden")
+        isKeyboardOpen = false
         viewBinding?.run {
-            incomeTransactionRvList.visibility = View.VISIBLE
-            incomeCategoryRvList.visibility = View.GONE
+            onKeyboardVisibilityAnimation(false)
             if (isTransactionDataEmpty) {
                 viewStub.visibility = View.VISIBLE
             }
@@ -278,9 +285,32 @@ class IncomeFragment :
         }
     }
 
+    private fun onKeyboardVisibilityAnimation(open: Boolean) {
+        if (open) {
+            viewBinding?.incomeCategoryRvList?.visibility = View.VISIBLE
+        } else {
+            viewBinding?.incomeTransactionRvList?.visibility = View.VISIBLE
+            viewBinding?.incomeCategoryRvList?.visibility = View.GONE
+        }
+        val alphaAnimationCategories =
+            ObjectAnimator.ofFloat(
+                viewBinding?.incomeCategoryRvList,
+                View.ALPHA,
+                if (open) ALPHA_CAT_MIN else ALPHA_MAX,
+                if (open) ALPHA_MAX else ALPHA_CAT_MIN
+            ).apply {
+                duration = ANIMATION_DURATION_CAT
+                interpolator = AccelerateInterpolator()
+            }
+        alphaAnimationCategories.start()
+    }
+
     companion object {
         fun newInstance() = IncomeFragment()
         private const val SPAN_COUNT = 2
         private const val TABLET_SPAN_COUNT = 1
+        private const val ANIMATION_DURATION_CAT = 400L
+        private const val ALPHA_CAT_MIN = 0f
+        private const val ALPHA_MAX = 1f
     }
 }
