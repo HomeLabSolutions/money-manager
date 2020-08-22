@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.category.ui
 
+import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.GradientDrawable
@@ -139,7 +140,7 @@ class CategoryCreationFragment :
                     )
                 )
             }
-            it.categoryCreationColor.setOnClickListener { _ ->
+            it.categoryCreationColor.root.setOnClickListener { _ ->
                 it.categoryCreationRvColorPicker.visibility = VISIBLE
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
                     param(FirebaseAnalytics.Param.ITEM_ID, "click_choose_color")
@@ -177,15 +178,8 @@ class CategoryCreationFragment :
     }
 
     private fun setColorToColorIcon() {
-        val colorDrawable = ContextCompat.getDrawable(
-            requireContext(),
-            R.drawable.shape_rectange_round_corners
-        ) as GradientDrawable
-        colorDrawable.colorFilter = PorterDuffColorFilter(
-            ContextCompat.getColor(requireContext(), color),
-            PorterDuff.Mode.SRC_ATOP
-        )
-        viewBinding?.categoryCreationColor?.background = colorDrawable
+        viewBinding?.categoryCreationColor?.colorCircle?.backgroundTintList =
+            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), color))
     }
 
     private fun updateIcon(@DrawableRes iconId: Int) {

@@ -33,16 +33,19 @@ class CategoryCreationViewModel @ViewModelInject constructor(
                             param("create_category", "name: " + category.name)
                         }
                     },
-                    { navigator?.showError(it) }
+                    {
+                        navigator?.showError(it)
+                    }
                 )
                 .addTo(compositeDisposable)
         } else {
             categoryInteractor.update(category)
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler)
-                .subscribe {
-                    navigator?.save()
-                }
+                .subscribe(
+                    { navigator?.save() },
+                    { navigator?.showError(it) }
+                )
                 .addTo(compositeDisposable)
         }
     }

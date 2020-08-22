@@ -69,7 +69,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/standard_left_margin"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -91,13 +91,12 @@
                     app:srcCompat="@drawable/ic_arrow_forward" />
             </LinearLayout>
 
-            <View
+            <include
                 android:id="@+id/category_creation_color"
-                android:layout_width="72dp"
-                android:layout_height="32dp"
+                android:layout_width="wrap_content"
+                layout="@layout/item_color_picker"
                 android:layout_marginTop="32dp"
-                android:elevation="2dp"
-                android:background="@drawable/shape_rectange_round_corners"
+                android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="@+id/category_creation_icon_layout"
                 app:layout_constraintTop_toBottomOf="@+id/category_creation_icon_layout" />
 

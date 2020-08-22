@@ -105,26 +105,22 @@
         <item name="colorControlHighlight">@color/control_highlight_color</item>
     </style>
 
-    <style name="TextInputLayoutAppearance" parent="Widget.Design.TextInputLayout">
-        <item name="hintTextAppearance">@style/HintText</item>
+    <style name="TextInputLayoutAppearance" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="errorTextAppearance">@style/ErrorText</item>
-        <item name="counterTextAppearance">@style/CounterText</item>
+        <item name="boxStrokeColor">@color/text_input_box_stroke</item>
+        <item name="android:textColorHint">@color/text_input_box_stroke</item>
+        <item name="hintTextColor">@color/text_input_box_stroke</item>
+        <item name="counterTextColor">@color/text_input_box_stroke</item>
         <item name="android:textColor">@color/color_midnight_white</item>
-        <item name="colorControlNormal">?attr/colorControlNormal</item>
-        <item name="colorControlActivated">?attr/colorControlActivated</item>
-        <item name="colorControlHighlight">?attr/colorControlHighlight</item>
+        <item name="android:theme">@style/textCursor</item>
+    </style>
+
+    <style name="textCursor" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="colorControlActivated">@color/control_activated_color</item>
     </style>
 
     <style name="ErrorText" parent="TextAppearance.MoneyManager.Caption">
         <item name="android:textColor">@color/accent_color</item>
-    </style>
-
-    <style name="HintText" parent="TextAppearance.MoneyManager.Caption">
-        <item name="android:textColor">@color/edit_text_hint_text_color</item>
-    </style>
-
-    <style name="CounterText" parent="TextAppearance.MoneyManager.Caption">
-        <item name="android:textColor">@color/control_activated_color</item>
     </style>
 
 </resources>
