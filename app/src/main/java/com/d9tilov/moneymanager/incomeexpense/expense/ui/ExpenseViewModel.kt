@@ -2,17 +2,15 @@ package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
 import android.os.AsyncTask
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
-import com.d9tilov.moneymanager.core.events.SingleLiveEvent
-import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.core.util.addTo
 import com.d9tilov.moneymanager.core.util.ioScheduler
 import com.d9tilov.moneymanager.core.util.uiScheduler
+import com.d9tilov.moneymanager.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
@@ -29,11 +27,7 @@ import java.util.Date
 class ExpenseViewModel @ViewModelInject constructor(
     private val categoryInteractor: CategoryInteractor,
     private val transactionInteractor: TransactionInteractor
-) : BaseViewModel<ExpenseNavigator>() {
-
-    val categories = MutableLiveData<List<Category>>()
-    val transactions = MutableLiveData<PagedList<BaseTransaction>>()
-    val addTransactionEvent = SingleLiveEvent<Any>()
+) : BaseIncomeExpenseViewModel<ExpenseNavigator>() {
 
     init {
         categoryInteractor.getGroupedCategoriesByType(TransactionType.EXPENSE)
@@ -116,9 +110,7 @@ class ExpenseViewModel @ViewModelInject constructor(
         )
     }
 
-    fun openAllCategories() = navigator?.openCategoriesScreen()
-
-    fun saveTransaction(category: Category, sum: BigDecimal) {
+    override fun saveTransaction(category: Category, sum: BigDecimal) {
         if (sum.signum() > 0) {
             transactionInteractor.addTransaction(
                 Transaction(
@@ -137,9 +129,5 @@ class ExpenseViewModel @ViewModelInject constructor(
         } else {
             navigator?.showEmptySumError()
         }
-    }
-
-    fun deleteTransaction(transaction: Transaction) {
-        navigator?.openRemoveConfirmationDialog(transaction)
     }
 }

@@ -4,7 +4,6 @@ import androidx.annotation.DrawableRes
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.transaction.TransactionType
-import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 
 interface HomeNavigator : BaseNavigator
 
@@ -13,15 +12,12 @@ interface SplashNavigator : BaseNavigator {
     fun openAuthScreen()
 }
 
-interface IncomeNavigator : BaseNavigator {
-    fun openCategoriesScreen()
-    fun openRemoveConfirmationDialog(transaction: Transaction)
-    fun showEmptySumError()
-}
+interface IncomeNavigator : BaseIncomeExpenseNavigator
 
-interface ExpenseNavigator : BaseNavigator {
+interface ExpenseNavigator : BaseIncomeExpenseNavigator
+
+interface BaseIncomeExpenseNavigator : BaseNavigator {
     fun openCategoriesScreen()
-    fun openRemoveConfirmationDialog(transaction: Transaction)
     fun showEmptySumError()
 }
 
