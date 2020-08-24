@@ -2,7 +2,10 @@ package com.d9tilov.moneymanager.incomeexpense.ui
 
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewStub
+import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
@@ -16,6 +19,7 @@ import com.d9tilov.moneymanager.core.events.OnDialogDismissListener
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
+import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
 import com.mfms.common.util.hideKeyboard
@@ -28,7 +32,7 @@ abstract class BaseIncomeExpenseFragment<V : ViewBinding, N : BaseIncomeExpenseN
     protected var isTransactionDataEmpty = false
     protected var isKeyboardOpen = true
 
-    protected lateinit var emptyViewStub: ViewStub
+    protected var emptyViewStub: ViewStub? = null
     override val snackBarBackgroundTint = R.color.button_normal_color_disable
 
     private val onAllCategoriesClickListener = object : OnItemClickListener<Category> {
@@ -55,13 +59,6 @@ abstract class BaseIncomeExpenseFragment<V : ViewBinding, N : BaseIncomeExpenseN
         }
     }
 
-    private fun openRemoveConfirmationDialog(transaction: Transaction) {
-        val action = IncomeExpenseFragmentDirections.toRemoveTransactionDialog(
-            transaction
-        )
-        findNavController().navigate(action)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         categoryAdapter.itemClickListener = onAllCategoriesClickListener
@@ -83,6 +80,33 @@ abstract class BaseIncomeExpenseFragment<V : ViewBinding, N : BaseIncomeExpenseN
                 IncomeExpenseFragment.ARG_TRANSACTION_CREATED
             )
         }
+    }
+
+    protected fun showViewStub(transactionType: TransactionType) {
+        if (emptyViewStub?.parent == null) {
+            emptyViewStub?.visibility = VISIBLE
+        } else {
+            val inflatedStub = emptyViewStub?.inflate()
+            val stubTitle =
+                inflatedStub?.findViewById<TextView>(R.id.empty_transaction_placeholder_title)
+            stubTitle?.text =
+                getString(
+                    if (transactionType == TransactionType.EXPENSE)
+                        R.string.transaction_empty_placeholder_expense_title
+                    else R.string.transaction_empty_placeholder_income_title
+                )
+        }
+    }
+
+    protected fun hideViewStub() {
+        emptyViewStub?.visibility = GONE
+    }
+
+    private fun openRemoveConfirmationDialog(transaction: Transaction) {
+        val action = IncomeExpenseFragmentDirections.toRemoveTransactionDialog(
+            transaction
+        )
+        findNavController().navigate(action)
     }
 
     override fun showEmptySumError() {

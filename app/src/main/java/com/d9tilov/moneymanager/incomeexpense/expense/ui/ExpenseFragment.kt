@@ -85,7 +85,7 @@ class ExpenseFragment :
                 {
                     isTransactionDataEmpty = it.isEmpty()
                     if (isTransactionDataEmpty && !(activity as MainActivity).forceShowKeyboard) {
-                        emptyViewStub.visibility = VISIBLE
+                        showViewStub(TransactionType.EXPENSE)
                     }
                     transactionAdapter.submitList(it)
                 }
@@ -182,7 +182,7 @@ class ExpenseFragment :
         viewBinding?.run {
             onKeyboardVisibilityAnimation(true)
             expenseTransactionRvList.visibility = GONE
-            emptyViewStub.visibility = GONE
+            hideViewStub()
             expenseCategoryRvList.scrollToPosition(0)
         }
     }
@@ -190,12 +190,12 @@ class ExpenseFragment :
     override fun onCloseKeyboard() {
         Timber.tag(App.TAG).d("Keyboard hidden")
         isKeyboardOpen = false
-        viewBinding?.run {
+        viewBinding?.let {
             onKeyboardVisibilityAnimation(false)
             if (isTransactionDataEmpty) {
-                emptyViewStub.visibility = VISIBLE
+                showViewStub(TransactionType.EXPENSE)
             }
-            expenseMainSum.clearFocus()
+            it.expenseMainSum.clearFocus()
         }
     }
 
