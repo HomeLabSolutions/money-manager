@@ -141,8 +141,10 @@ class EditTransactionFragment : EditTransactionNavigator,
     private fun initToolbar(toolbar: Toolbar?) {
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
-        activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar?.title = getString(R.string.title_transaction)
+        activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        activity.supportActionBar?.setDisplayShowHomeEnabled(true)
+        setHasOptionsMenu(true)
     }
 
     override fun save() {
