@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.category.data.entities
+package com.d9tilov.moneymanager.category.data.entity
 
 import android.os.Parcelable
 import androidx.annotation.ColorRes

@@ -6,7 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.d9tilov.moneymanager.base.ui.navigator.SubCategoryNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.common.BaseCategoryViewModel
-import com.d9tilov.moneymanager.category.data.entities.Category
+import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.core.util.addTo
 import com.d9tilov.moneymanager.core.util.ioScheduler

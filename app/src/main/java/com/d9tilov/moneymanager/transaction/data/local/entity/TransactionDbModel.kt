@@ -28,7 +28,7 @@ data class TransactionDbModel(
     @ColumnInfo(name = "type") val type: TransactionType,
     @ColumnInfo(name = "sum") val sum: BigDecimal,
     @ColumnInfo(name = "categoryId") val categoryId: Long,
-    @ColumnInfo(name = "currency") val currency: String?,
+    @ColumnInfo(name = "currency") val currency: String,
     @ColumnInfo(name = "date") val date: Date,
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "qrCode") val qrCode: String?

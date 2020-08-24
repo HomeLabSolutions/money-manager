@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.transaction.data.mapper
 
+import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_DATA_ID
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
 import com.d9tilov.moneymanager.core.mapper.Mapper
@@ -23,7 +24,7 @@ class TransactionDateDataMapper @Inject constructor() :
             type = type,
             sum = BigDecimal.ZERO,
             categoryId = NO_ID,
-            currency = null,
+            currency = DEFAULT_CURRENCY_CODE,
             date = date,
             description = "",
             qrCode = null

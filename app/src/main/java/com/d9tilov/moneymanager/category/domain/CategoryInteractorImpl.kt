@@ -1,8 +1,8 @@
 package com.d9tilov.moneymanager.category.domain
 
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.category.data.entities.Category
-import com.d9tilov.moneymanager.category.data.entities.Category.Companion.ALL_ITEMS_ID
+import com.d9tilov.moneymanager.category.data.entity.Category
+import com.d9tilov.moneymanager.category.data.entity.Category.Companion.ALL_ITEMS_ID
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
 import com.d9tilov.moneymanager.transaction.TransactionType
 import io.reactivex.Completable

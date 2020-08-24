@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "606418510936-4jcm2kuh675d0fdggercsctfbudff4hi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.d9tilov.moneymanager",
+            "certificate_hash": "785cfc8baa30ad33c0bd397e708a0ee873b8f2cf"
+          }
+        },
+        {
           "client_id": "606418510936-3d06ld192mk7di929churjv4bj9b6r0a.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

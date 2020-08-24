@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.category.data.local
 
 import com.d9tilov.moneymanager.base.data.Source
-import com.d9tilov.moneymanager.category.data.entities.Category
+import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.transaction.TransactionType
 import io.reactivex.Completable
 import io.reactivex.Flowable

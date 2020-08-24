@@ -2,7 +2,7 @@ package com.d9tilov.moneymanager.transaction.domain
 
 import androidx.paging.PagedList
 import com.d9tilov.moneymanager.base.domain.Interactor
-import com.d9tilov.moneymanager.category.data.entities.Category
+import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
