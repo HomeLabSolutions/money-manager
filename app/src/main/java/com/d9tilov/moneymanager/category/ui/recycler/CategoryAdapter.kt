@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import androidx.viewbinding.ViewBinding
 import com.d9tilov.moneymanager.App.Companion.TAG
-import com.d9tilov.moneymanager.category.data.entities.Category
+import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.ui.diff.CategoryDiffUtil
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder

@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeNavigator
-import com.d9tilov.moneymanager.category.data.entities.Category
+import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.core.events.SingleLiveEvent
 import com.d9tilov.moneymanager.core.ui.BaseViewModel

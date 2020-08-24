@@ -1,9 +1,6 @@
 package com.d9tilov.moneymanager.category.ui
 
 import android.content.res.ColorStateList
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
@@ -24,7 +21,7 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryCreationNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
-import com.d9tilov.moneymanager.category.data.entities.Category
+import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.exception.CategoryExistException
 import com.d9tilov.moneymanager.category.ui.CategoryIconSetFragment.Companion.ARG_CATEGORY_ICON_ID
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryColorAdapter

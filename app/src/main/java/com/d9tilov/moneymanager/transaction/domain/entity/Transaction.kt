@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.transaction.domain.entity
 
 import android.os.Parcelable
-import com.d9tilov.moneymanager.category.data.entities.Category
+import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -17,7 +17,7 @@ data class Transaction(
     val type: TransactionType,
     val sum: BigDecimal,
     val category: Category,
-    val currency: String? = null,
+    val currencyCode: String = DataConstants.DEFAULT_CURRENCY_CODE,
     val date: Date = Date(),
     val description: String = "",
     val qrCode: String? = null,

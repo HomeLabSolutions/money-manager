@@ -2,8 +2,8 @@ package com.d9tilov.moneymanager.category.data.local.mappers
 
 import android.content.Context
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.entity.PrepopulateCategory
-import com.d9tilov.moneymanager.category.data.entities.Category
-import com.d9tilov.moneymanager.category.data.local.entities.CategoryDbModel
+import com.d9tilov.moneymanager.category.data.entity.Category
+import com.d9tilov.moneymanager.category.data.local.entity.CategoryDbModel
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject

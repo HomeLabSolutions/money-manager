@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.transaction.data.entity
 
+import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_DATA_ID
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -12,7 +13,7 @@ data class TransactionDataModel(
     val type: TransactionType,
     val sum: BigDecimal,
     val categoryId: Long,
-    val currency: String? = null,
+    val currency: String = DEFAULT_CURRENCY_CODE,
     val date: Date = Date(),
     val description: String = "",
     val qrCode: String? = null

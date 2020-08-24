@@ -162,7 +162,7 @@
             app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
         <argument
             android:name="parent_category"
-            app:argType="com.d9tilov.moneymanager.category.data.entities.Category" />
+            app:argType="com.d9tilov.moneymanager.category.data.entity.Category" />
         <argument
             android:name="sum"
             app:argType="java.math.BigDecimal"
@@ -225,7 +225,7 @@
         <argument
             android:name="category"
             android:defaultValue="@null"
-            app:argType="com.d9tilov.moneymanager.category.data.entities.Category"
+            app:argType="com.d9tilov.moneymanager.category.data.entity.Category"
             app:nullable="true" />
     </fragment>
 
@@ -260,10 +260,10 @@
             app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
         <argument
             android:name="firstCategory"
-            app:argType="com.d9tilov.moneymanager.category.data.entities.Category" />
+            app:argType="com.d9tilov.moneymanager.category.data.entity.Category" />
         <argument
             android:name="secondCategory"
-            app:argType="com.d9tilov.moneymanager.category.data.entities.Category" />
+            app:argType="com.d9tilov.moneymanager.category.data.entity.Category" />
     </dialog>
 
     <dialog
@@ -276,7 +276,7 @@
             app:argType="com.d9tilov.moneymanager.category.CategoryDestination" />
         <argument
             android:name="category"
-            app:argType="com.d9tilov.moneymanager.category.data.entities.Category" />
+            app:argType="com.d9tilov.moneymanager.category.data.entity.Category" />
     </dialog>
 
     <dialog
@@ -285,7 +285,7 @@
         tools:layout="@layout/fragment_dialog_triple_remove">
         <argument
             android:name="subcategory"
-            app:argType="com.d9tilov.moneymanager.category.data.entities.Category" />
+            app:argType="com.d9tilov.moneymanager.category.data.entity.Category" />
     </dialog>
 
     <dialog
@@ -294,6 +294,6 @@
         tools:layout="@layout/fragment_dialog_edit_category">
         <argument
             android:name="category"
-            app:argType="com.d9tilov.moneymanager.category.data.entities.Category" />
+            app:argType="com.d9tilov.moneymanager.category.data.entity.Category" />
     </dialog>
 </navigation>

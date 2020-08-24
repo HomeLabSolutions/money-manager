@@ -2,7 +2,7 @@ package com.d9tilov.moneymanager.transaction.domain
 
 import androidx.paging.PagedList
 import androidx.paging.toFlowable
-import com.d9tilov.moneymanager.category.data.entities.Category
+import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.category.exception.CategoryNotFoundException
 import com.d9tilov.moneymanager.transaction.TransactionType

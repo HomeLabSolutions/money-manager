@@ -12,7 +12,7 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.navigator.SubCategoryNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.common.BaseCategoryFragment
-import com.d9tilov.moneymanager.category.data.entities.Category
+import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.subcategory.vm.SubCategoryViewModel
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragment
 import com.d9tilov.moneymanager.transaction.TransactionType

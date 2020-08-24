@@ -9,7 +9,7 @@ import androidx.navigation.fragment.navArgs
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseDialogFragment
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryUnionDialogNavigator
-import com.d9tilov.moneymanager.category.data.entities.Category
+import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.exception.CategoryExistException
 import com.d9tilov.moneymanager.category.ui.vm.CategoryUnionViewModel
 import com.d9tilov.moneymanager.core.util.createTintDrawable

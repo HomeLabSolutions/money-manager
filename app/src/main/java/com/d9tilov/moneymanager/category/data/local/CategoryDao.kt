@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.d9tilov.moneymanager.category.data.local.entities.CategoryDbModel
+import com.d9tilov.moneymanager.category.data.local.entity.CategoryDbModel
 import com.d9tilov.moneymanager.transaction.TransactionType
 import io.reactivex.Completable
 import io.reactivex.Flowable

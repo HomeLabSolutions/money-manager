@@ -53,8 +53,4 @@ abstract class TransactionDao {
 
     @Query("DELETE FROM transactions WHERE clientId=:clientId")
     abstract fun clearAll(clientId: String): Completable
-
-    companion object {
-        const val FAKE_TRANSACTION_ID = -2001L
-    }
 }

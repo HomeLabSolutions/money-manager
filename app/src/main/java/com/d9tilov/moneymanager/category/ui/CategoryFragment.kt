@@ -10,7 +10,7 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.common.BaseCategoryFragment
-import com.d9tilov.moneymanager.category.data.entities.Category
+import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.ui.recycler.SimpleItemTouchHelperCallback
 import com.d9tilov.moneymanager.category.ui.vm.CategoryViewModel
 import com.d9tilov.moneymanager.core.events.OnItemMoveListener

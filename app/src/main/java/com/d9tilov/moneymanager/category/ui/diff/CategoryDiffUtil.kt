@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.category.ui.diff
 
 import androidx.recyclerview.widget.DiffUtil
-import com.d9tilov.moneymanager.category.data.entities.Category
+import com.d9tilov.moneymanager.category.data.entity.Category
 
 class CategoryDiffUtil(
     private val oldCategoryList: List<Category>,

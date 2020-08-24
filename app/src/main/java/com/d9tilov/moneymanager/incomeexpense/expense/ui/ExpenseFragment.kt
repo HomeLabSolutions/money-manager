@@ -22,7 +22,7 @@ import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.callback.SwipeToDeleteCallback
 import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
-import com.d9tilov.moneymanager.category.data.entities.Category
+import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryAdapter
 import com.d9tilov.moneymanager.core.events.OnDialogDismissListener
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
@@ -71,8 +71,8 @@ class ExpenseFragment :
     private var isTransactionDataEmpty = false
     private var isKeyboardOpen = true
     private lateinit var emptyViewStub: ViewStub
-    private lateinit var infoViewStub: ViewStub
-    private lateinit var infoInflatedView: View
+    // private lateinit var infoViewStub: ViewStub
+    // private lateinit var infoInflatedView: View
 
     private val onAllCategoriesClickListener = object : OnItemClickListener<Category> {
         override fun onItemClick(item: Category, position: Int) {
@@ -131,7 +131,7 @@ class ExpenseFragment :
         }
         viewBinding?.let {
             emptyViewStub = it.root.findViewById(R.id.expense_transaction_empty_placeholder)
-            infoViewStub = it.root.findViewById(R.id.expense_info)
+            // infoViewStub = it.root.findViewById(R.id.expense_info)
             it.expenseMainSum.moneyEditText.setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus) {
                     it.expenseMainSum.moneyEditText.post {
@@ -174,7 +174,7 @@ class ExpenseFragment :
     override fun onStart() {
         super.onStart()
         if ((activity as MainActivity).forceShowKeyboard) {
-            infoInflatedView = infoViewStub.inflate()
+            // infoInflatedView = infoViewStub.inflate()
             showKeyboard(viewBinding?.expenseMainSum)
         } else {
             viewBinding?.run {
@@ -277,7 +277,7 @@ class ExpenseFragment :
             onKeyboardVisibilityAnimation(true)
             expenseTransactionRvList.visibility = GONE
             emptyViewStub.visibility = GONE
-            infoViewStub.visibility = VISIBLE
+            // infoViewStub.visibility = VISIBLE
             expenseCategoryRvList.scrollToPosition(0)
         }
     }
