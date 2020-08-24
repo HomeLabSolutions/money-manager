@@ -3,11 +3,8 @@ package com.d9tilov.moneymanager.incomeexpense.income.ui
 import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.View
-import android.view.ViewStub
 import android.view.animation.AccelerateInterpolator
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -16,15 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.callback.SwipeToDeleteCallback
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entity.Category
-import com.d9tilov.moneymanager.category.ui.recycler.CategoryAdapter
-import com.d9tilov.moneymanager.core.events.OnDialogDismissListener
-import com.d9tilov.moneymanager.core.events.OnItemClickListener
-import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
@@ -32,11 +24,9 @@ import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
 import com.d9tilov.moneymanager.core.util.isTablet
 import com.d9tilov.moneymanager.databinding.FragmentIncomeBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
-import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragment
+import com.d9tilov.moneymanager.incomeexpense.ui.BaseIncomeExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
 import com.d9tilov.moneymanager.transaction.TransactionType
-import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
-import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.mfms.common.util.hideKeyboard
@@ -48,88 +38,24 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class IncomeFragment :
-    BaseFragment<FragmentIncomeBinding, IncomeNavigator>(R.layout.fragment_income),
+    BaseIncomeExpenseFragment<FragmentIncomeBinding, IncomeNavigator>(R.layout.fragment_income),
     IncomeNavigator,
-    OnKeyboardVisibleChange,
-    OnDialogDismissListener {
+    OnKeyboardVisibleChange {
 
-    private val categoryAdapter = CategoryAdapter()
-    private val transactionAdapter = TransactionAdapter()
     override fun performDataBinding(view: View): FragmentIncomeBinding =
         FragmentIncomeBinding.bind(view)
 
     override fun getNavigator() = this
     override val viewModel by viewModels<IncomeViewModel>()
-    override val snackBarBackgroundTint = R.color.button_normal_color_disable
     override val snackBarAnchorView by lazy { viewBinding?.incomeCategoryRvList }
 
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
-    private var isTransactionDataEmpty = false
-    private var isKeyboardOpen = true
-    private lateinit var viewStub: ViewStub
-
-    private val onAllCategoriesClickListener = object : OnItemClickListener<Category> {
-        override fun onItemClick(item: Category, position: Int) {
-            if (item.id == Category.ALL_ITEMS_ID) {
-                viewModel.openAllCategories()
-                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                    param(FirebaseAnalytics.Param.ITEM_ID, "click_all_categories_income")
-                }
-            } else {
-                viewBinding?.let {
-                    viewModel.saveTransaction(item, it.incomeMainSum.getValue())
-                    it.incomeMainSum.setValue(BigDecimal.ZERO)
-                }
-            }
-        }
-    }
-
-    private val onTransactionClickListener = object : OnItemClickListener<Transaction> {
-        override fun onItemClick(item: Transaction, position: Int) {
-            if (isKeyboardOpen) {
-                return
-            }
-            val action = IncomeExpenseFragmentDirections.toEditTransactionDest(
-                item.type,
-                item
-            )
-            findNavController().navigate(action)
-            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                param(FirebaseAnalytics.Param.ITEM_ID, "click_transaction_income")
-            }
-        }
-    }
-    private val onItemSwipeListener = object : OnItemSwipeListener<Transaction> {
-        override fun onItemSwiped(item: Transaction, position: Int) {
-            viewModel.deleteTransaction(item)
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        categoryAdapter.itemClickListener = onAllCategoriesClickListener
-        transactionAdapter.itemSwipeListener = onItemSwipeListener
-        transactionAdapter.itemClickListener = onTransactionClickListener
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initCategoryRecyclerView()
-        initTransactionsRecyclerView()
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
-            IncomeExpenseFragment.ARG_TRANSACTION_CREATED
-        )?.observe(viewLifecycleOwner) {
-            if (it) {
-                viewBinding?.incomeMainSum?.setValue(BigDecimal.ZERO)
-            }
-            findNavController().currentBackStackEntry?.savedStateHandle?.remove<Boolean>(
-                IncomeExpenseFragment.ARG_TRANSACTION_CREATED
-            )
-        }
         viewBinding?.let {
-            viewStub = it.root.findViewById(R.id.income_transaction_empty_placeholder)
+            emptyViewStub = it.root.findViewById(R.id.income_transaction_empty_placeholder)
             it.incomeMainSum.moneyEditText.setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus) {
                     it.incomeMainSum.moneyEditText.post {
@@ -141,7 +67,7 @@ class IncomeFragment :
         viewModel.run {
             categories.observe(
                 viewLifecycleOwner,
-                Observer { list ->
+                { list ->
                     val sortedCategories = list.sortedWith(
                         compareBy(
                             { it.children.isEmpty() },
@@ -154,17 +80,20 @@ class IncomeFragment :
             )
             transactions.observe(
                 viewLifecycleOwner,
-                Observer {
+                {
                     isTransactionDataEmpty = it.isEmpty()
                     if (isTransactionDataEmpty && !(activity as MainActivity).forceShowKeyboard) {
-                        viewStub.visibility = View.VISIBLE
+                        emptyViewStub.visibility = View.VISIBLE
                     }
                     transactionAdapter.submitList(it)
                 }
             )
             addTransactionEvent.observe(
                 viewLifecycleOwner,
-                Observer { hideKeyboard() }
+                {
+                    hideKeyboard()
+                    resetMainSum()
+                }
             )
         }
     }
@@ -181,16 +110,7 @@ class IncomeFragment :
         }
     }
 
-    override fun onStop() {
-        hideKeyboard()
-        super.onStop()
-    }
-
-    override fun onDismiss() {
-        transactionAdapter.cancelDeletion()
-    }
-
-    private fun initCategoryRecyclerView() {
+    override fun initCategoryRecyclerView() {
         viewBinding?.run {
             val layoutManager =
                 GridLayoutManager(
@@ -214,7 +134,7 @@ class IncomeFragment :
         }
     }
 
-    private fun initTransactionsRecyclerView() {
+    override fun initTransactionsRecyclerView() {
         viewBinding?.run {
             incomeTransactionRvList.layoutManager =
                 LinearLayoutManager(requireContext())
@@ -233,6 +153,9 @@ class IncomeFragment :
     }
 
     override fun openCategoriesScreen() {
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+            param(FirebaseAnalytics.Param.ITEM_ID, "click_all_categories_income")
+        }
         viewBinding?.let {
             val inputSum = it.incomeMainSum.getValue()
             val action = if (inputSum.signum() > 0) {
@@ -251,35 +174,24 @@ class IncomeFragment :
         }
     }
 
-    override fun openRemoveConfirmationDialog(transaction: Transaction) {
-        val action = IncomeExpenseFragmentDirections.toRemoveTransactionDialog(
-            transaction
-        )
-        findNavController().navigate(action)
-    }
-
-    override fun showEmptySumError() {
-        showSnackBar(getString(R.string.income_expense_empty_sum_error), true)
-    }
-
     override fun onOpenKeyboard() {
         Timber.tag(App.TAG).d("Keyboard shown")
         isKeyboardOpen = true
         viewBinding?.run {
             onKeyboardVisibilityAnimation(true)
             incomeTransactionRvList.visibility = View.GONE
-            viewStub.visibility = View.GONE
+            emptyViewStub.visibility = View.GONE
             incomeCategoryRvList.scrollToPosition(0)
         }
     }
 
     override fun onCloseKeyboard() {
-        Timber.tag(App.TAG).d("Kyboard hidden")
+        Timber.tag(App.TAG).d("Keyboard hidden")
         isKeyboardOpen = false
         viewBinding?.run {
             onKeyboardVisibilityAnimation(false)
             if (isTransactionDataEmpty) {
-                viewStub.visibility = View.VISIBLE
+                emptyViewStub.visibility = View.VISIBLE
             }
             incomeMainSum.clearFocus()
         }
@@ -305,12 +217,17 @@ class IncomeFragment :
         alphaAnimationCategories.start()
     }
 
+    override fun saveTransaction(category: Category) {
+        viewBinding?.let {
+            viewModel.saveTransaction(category, it.incomeMainSum.getValue())
+        }
+    }
+
+    override fun resetMainSum() {
+        viewBinding?.incomeMainSum?.setValue(BigDecimal.ZERO)
+    }
+
     companion object {
         fun newInstance() = IncomeFragment()
-        private const val SPAN_COUNT = 2
-        private const val TABLET_SPAN_COUNT = 1
-        private const val ANIMATION_DURATION_CAT = 400L
-        private const val ALPHA_CAT_MIN = 0f
-        private const val ALPHA_MAX = 1f
     }
 }

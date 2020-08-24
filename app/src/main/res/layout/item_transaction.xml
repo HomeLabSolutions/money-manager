@@ -21,8 +21,12 @@
 
     <TextView
         android:id="@+id/item_transaction_category"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintEnd_toStartOf="@+id/item_transaction_sum"
         android:layout_marginStart="@dimen/standard_left_margin"
         app:layout_constraintBottom_toTopOf="@+id/item_transaction_description"
         android:textAppearance="?attr/textAppearanceBody1"

@@ -5,11 +5,8 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewStub
 import android.view.animation.AccelerateInterpolator
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -18,15 +15,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.callback.SwipeToDeleteCallback
 import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entity.Category
-import com.d9tilov.moneymanager.category.ui.recycler.CategoryAdapter
-import com.d9tilov.moneymanager.core.events.OnDialogDismissListener
-import com.d9tilov.moneymanager.core.events.OnItemClickListener
-import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
@@ -34,11 +26,9 @@ import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
 import com.d9tilov.moneymanager.core.util.isTablet
 import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
-import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragment.Companion.ARG_TRANSACTION_CREATED
+import com.d9tilov.moneymanager.incomeexpense.ui.BaseIncomeExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
 import com.d9tilov.moneymanager.transaction.TransactionType
-import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
-import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.mfms.common.util.hideKeyboard
@@ -50,85 +40,24 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ExpenseFragment :
-    BaseFragment<FragmentExpenseBinding, ExpenseNavigator>(R.layout.fragment_expense),
+    BaseIncomeExpenseFragment<FragmentExpenseBinding, ExpenseNavigator>(R.layout.fragment_expense),
     ExpenseNavigator,
-    OnKeyboardVisibleChange,
-    OnDialogDismissListener {
+    OnKeyboardVisibleChange {
 
-    private val categoryAdapter = CategoryAdapter()
-    private val transactionAdapter = TransactionAdapter()
     override fun performDataBinding(view: View): FragmentExpenseBinding =
         FragmentExpenseBinding.bind(view)
 
     override fun getNavigator() = this
     override val viewModel by viewModels<ExpenseViewModel>()
-    override val snackBarBackgroundTint = R.color.button_normal_color_disable
     override val snackBarAnchorView by lazy { viewBinding?.expenseCategoryRvList }
 
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
-    private var isTransactionDataEmpty = false
-    private var isKeyboardOpen = true
-    private lateinit var emptyViewStub: ViewStub
-    // private lateinit var infoViewStub: ViewStub
-    // private lateinit var infoInflatedView: View
-
-    private val onAllCategoriesClickListener = object : OnItemClickListener<Category> {
-        override fun onItemClick(item: Category, position: Int) {
-            if (item.id == Category.ALL_ITEMS_ID) {
-                viewModel.openAllCategories()
-                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                    param(FirebaseAnalytics.Param.ITEM_ID, "click_all_categories_expense")
-                }
-            } else {
-                viewBinding?.let {
-                    viewModel.saveTransaction(item, it.expenseMainSum.getValue())
-                    it.expenseMainSum.setValue(BigDecimal.ZERO)
-                }
-            }
-        }
-    }
-
-    private val onTransactionClickListener = object : OnItemClickListener<Transaction> {
-        override fun onItemClick(item: Transaction, position: Int) {
-            val action = IncomeExpenseFragmentDirections.toEditTransactionDest(
-                TransactionType.EXPENSE,
-                item
-            )
-            findNavController().navigate(action)
-        }
-    }
-    private val onItemSwipeListener = object : OnItemSwipeListener<Transaction> {
-        override fun onItemSwiped(item: Transaction, position: Int) {
-            viewModel.deleteTransaction(item)
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        categoryAdapter.itemClickListener = onAllCategoriesClickListener
-        transactionAdapter.itemSwipeListener = onItemSwipeListener
-        transactionAdapter.itemClickListener = onTransactionClickListener
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initCategoryRecyclerView()
-        initTransactionsRecyclerView()
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
-            ARG_TRANSACTION_CREATED
-        )?.observe(viewLifecycleOwner) {
-            if (it) {
-                viewBinding?.expenseMainSum?.setValue(BigDecimal.ZERO)
-            }
-            findNavController().currentBackStackEntry?.savedStateHandle?.remove<Boolean>(
-                ARG_TRANSACTION_CREATED
-            )
-        }
         viewBinding?.let {
             emptyViewStub = it.root.findViewById(R.id.expense_transaction_empty_placeholder)
-            // infoViewStub = it.root.findViewById(R.id.expense_info)
             it.expenseMainSum.moneyEditText.setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus) {
                     it.expenseMainSum.moneyEditText.post {
@@ -140,7 +69,7 @@ class ExpenseFragment :
         viewModel.run {
             categories.observe(
                 viewLifecycleOwner,
-                Observer { list ->
+                { list ->
                     val sortedCategories = list.sortedWith(
                         compareBy(
                             { it.children.isEmpty() },
@@ -153,7 +82,7 @@ class ExpenseFragment :
             )
             transactions.observe(
                 viewLifecycleOwner,
-                Observer {
+                {
                     isTransactionDataEmpty = it.isEmpty()
                     if (isTransactionDataEmpty && !(activity as MainActivity).forceShowKeyboard) {
                         emptyViewStub.visibility = VISIBLE
@@ -163,7 +92,10 @@ class ExpenseFragment :
             )
             addTransactionEvent.observe(
                 viewLifecycleOwner,
-                Observer { hideKeyboard() }
+                {
+                    hideKeyboard()
+                    resetMainSum()
+                }
             )
         }
     }
@@ -171,7 +103,6 @@ class ExpenseFragment :
     override fun onStart() {
         super.onStart()
         if ((activity as MainActivity).forceShowKeyboard) {
-            // infoInflatedView = infoViewStub.inflate()
             showKeyboard(viewBinding?.expenseMainSum)
         } else {
             viewBinding?.run {
@@ -181,16 +112,7 @@ class ExpenseFragment :
         }
     }
 
-    override fun onStop() {
-        hideKeyboard()
-        super.onStop()
-    }
-
-    override fun onDismiss() {
-        transactionAdapter.cancelDeletion()
-    }
-
-    private fun initCategoryRecyclerView() {
+    override fun initCategoryRecyclerView() {
         viewBinding?.run {
             val layoutManager =
                 GridLayoutManager(
@@ -214,7 +136,7 @@ class ExpenseFragment :
         }
     }
 
-    private fun initTransactionsRecyclerView() {
+    override fun initTransactionsRecyclerView() {
         viewBinding?.run {
             expenseTransactionRvList.layoutManager =
                 LinearLayoutManager(requireContext())
@@ -229,15 +151,13 @@ class ExpenseFragment :
                     transactionAdapter.deleteItem(viewHolder.adapterPosition)
                 }
             }).attachToRecyclerView(expenseTransactionRvList)
-            ItemTouchHelper(object : SwipeToDeleteCallback(requireContext()) {
-                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    transactionAdapter.deleteItem(viewHolder.adapterPosition)
-                }
-            }).attachToRecyclerView(expenseTransactionRvList)
         }
     }
 
     override fun openCategoriesScreen() {
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+            param(FirebaseAnalytics.Param.ITEM_ID, "click_all_categories_expense")
+        }
         viewBinding?.let {
             val inputSum = it.expenseMainSum.getValue()
             val action = if (inputSum.signum() > 0) {
@@ -256,17 +176,6 @@ class ExpenseFragment :
         }
     }
 
-    override fun openRemoveConfirmationDialog(transaction: Transaction) {
-        val action = IncomeExpenseFragmentDirections.toRemoveTransactionDialog(
-            transaction
-        )
-        findNavController().navigate(action)
-    }
-
-    override fun showEmptySumError() {
-        showSnackBar(getString(R.string.income_expense_empty_sum_error), true)
-    }
-
     override fun onOpenKeyboard() {
         Timber.tag(App.TAG).d("Keyboard shown")
         isKeyboardOpen = true
@@ -274,13 +183,12 @@ class ExpenseFragment :
             onKeyboardVisibilityAnimation(true)
             expenseTransactionRvList.visibility = GONE
             emptyViewStub.visibility = GONE
-            // infoViewStub.visibility = VISIBLE
             expenseCategoryRvList.scrollToPosition(0)
         }
     }
 
     override fun onCloseKeyboard() {
-        Timber.tag(App.TAG).d("Kyboard hidden")
+        Timber.tag(App.TAG).d("Keyboard hidden")
         isKeyboardOpen = false
         viewBinding?.run {
             onKeyboardVisibilityAnimation(false)
@@ -312,12 +220,17 @@ class ExpenseFragment :
         alphaAnimationCategories.start()
     }
 
+    override fun saveTransaction(category: Category) {
+        viewBinding?.let {
+            viewModel.saveTransaction(category, it.expenseMainSum.getValue())
+        }
+    }
+
+    override fun resetMainSum() {
+        viewBinding?.expenseMainSum?.setValue(BigDecimal.ZERO)
+    }
+
     companion object {
         fun newInstance() = ExpenseFragment()
-        private const val SPAN_COUNT = 2
-        private const val TABLET_SPAN_COUNT = 1
-        private const val ANIMATION_DURATION_CAT = 400L
-        private const val ALPHA_CAT_MIN = 0f
-        private const val ALPHA_MAX = 1f
     }
 }
