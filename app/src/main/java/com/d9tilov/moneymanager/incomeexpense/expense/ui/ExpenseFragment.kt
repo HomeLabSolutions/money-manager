@@ -92,9 +92,6 @@ class ExpenseFragment :
 
     private val onTransactionClickListener = object : OnItemClickListener<Transaction> {
         override fun onItemClick(item: Transaction, position: Int) {
-            if (isKeyboardOpen) {
-                return
-            }
             val action = IncomeExpenseFragmentDirections.toEditTransactionDest(
                 TransactionType.EXPENSE,
                 item

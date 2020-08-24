@@ -14,6 +14,7 @@ import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.viewbinding.ViewBinding
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
@@ -78,7 +79,11 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
 
     override fun onBackPressed() {
         val currentFragment = getCurrentFragment()
-        (currentFragment as? OnBackPressed)?.onBackPressed() ?: super.onBackPressed()
+        val backStackCount =
+            this.supportFragmentManager.findFragmentById(R.id.nav_host_container)?.childFragmentManager?.backStackEntryCount
+                ?: 0
+        (currentFragment as? OnBackPressed)?.onBackPressed()
+            ?: if (backStackCount > 0) findNavController(R.id.nav_host_container).popBackStack() else super.onBackPressed()
     }
 
     private fun getCurrentFragment(): Fragment? {
