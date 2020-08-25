@@ -12,6 +12,27 @@ interface SplashNavigator : BaseNavigator {
     fun openAuthScreen()
 }
 
+interface CurrencyNavigator : BaseNavigator {
+    fun goToCommonAmountScreen()
+    fun save()
+    fun skip()
+}
+
+interface CommonAmountNavigator : BaseNavigator {
+    fun goToFixedIncomeScreen()
+    fun back()
+}
+
+interface FixedIncomeNavigator : BaseNavigator {
+    fun goToFixedExpenseScreen()
+    fun back()
+}
+
+interface GoalsNavigator : BaseNavigator {
+    fun goToMainScree()
+    fun back()
+}
+
 interface IncomeNavigator : BaseIncomeExpenseNavigator
 
 interface ExpenseNavigator : BaseIncomeExpenseNavigator

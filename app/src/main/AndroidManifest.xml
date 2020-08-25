@@ -44,11 +44,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".prepopulate.ui.PrepopulateActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MoneyManager.Prepopulate"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name="com.d9tilov.moneymanager.home.ui.MainActivity"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MoneyManager.Home"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
 
         <meta-data
             android:name="com.google.android.backup.api_key"
