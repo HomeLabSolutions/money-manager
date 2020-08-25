@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/prepopulate"
+    app:startDestination="@+id/choose_currency_dest">
+
+    <fragment
+        android:id="@+id/choose_currency_dest"
+        android:name="com.d9tilov.moneymanager.prepopulate.ui.CurrencyFragment"
+        android:label="fragment_title_screen"
+        tools:layout="@layout/fragment_currency">
+    </fragment>
+
+    <fragment
+        android:id="@+id/common_amount_dest"
+        android:name="Fragco"
+        android:label="fragment_title_screen"
+        tools:layout="@layout/fragment_currency">
+    </fragment>
+</navigation>

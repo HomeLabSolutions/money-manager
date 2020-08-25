@@ -83,11 +83,11 @@ class SettingsFragment :
         viewBinding?.settingsAppVersion?.text = BuildConfig.VERSION_NAME
         val currencyUser = viewModel.getCurrentUser()
         if (currencyUser == null) {
-            requireActivity().finish()
             startActivity(
                 Intent(context, SplashActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             )
+            requireActivity().finish()
         } else {
             viewBinding?.run {
                 this.settingsAvatar.visibility = VISIBLE

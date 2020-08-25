@@ -20,8 +20,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashNavigator>(R.la
         AuthUI.IdpConfig.EmailBuilder().build(),
         AuthUI.IdpConfig.PhoneBuilder().build(),
         AuthUI.IdpConfig.GoogleBuilder().build(),
-        AuthUI.IdpConfig.FacebookBuilder().build(),
-        AuthUI.IdpConfig.TwitterBuilder().build()
+        AuthUI.IdpConfig.FacebookBuilder().build()
     )
 
     override fun performDataBinding(view: View) = FragmentSplashBinding.bind(view)
@@ -29,8 +28,8 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashNavigator>(R.la
     override val viewModel by viewModels<SplashViewModel>()
 
     override fun openHomeScreen() {
-        requireActivity().finish()
         startActivity(Intent(requireActivity(), MainActivity::class.java))
+        requireActivity().finish()
     }
 
     override fun openAuthScreen() {
