@@ -76,4 +76,9 @@
     <style name="Widget.MoneyManager.Error" parent="TextAppearance.MoneyManager.Caption">
         <item name="android:textColor">@color/error_color</item>
     </style>
+
+    <style name="Widget.MoneyManager.Button.TextButton.Dialog" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/button_background_dialog_state_selector</item>
+    </style>
+
 </resources>

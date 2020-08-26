@@ -18,11 +18,11 @@ import com.d9tilov.moneymanager.category.ui.recycler.CategoryAdapter
 import com.d9tilov.moneymanager.core.events.OnDialogDismissListener
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
+import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
-import com.mfms.common.util.hideKeyboard
 
 abstract class BaseIncomeExpenseFragment<V : ViewBinding, N : BaseIncomeExpenseNavigator>(@LayoutRes layoutId: Int) :
     BaseFragment<V, N>(layoutId), OnDialogDismissListener, BaseIncomeExpenseNavigator {
