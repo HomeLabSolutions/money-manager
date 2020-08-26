@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:minWidth="300dp"
-    android:theme="@style/Theme.MoneyManager.Material.Alert.Dialog">
+    style="@style/Theme.MoneyManager.Material.Alert.Dialog">
 
     <TextView
         android:id="@+id/category_dialog_union_title"
@@ -24,7 +24,7 @@
 
     <TextView
         android:id="@+id/category_dialog_union_subtitle"
-        style="@style/MaterialAlertDialog.MaterialComponents.Body.Text"
+        style="@style/Theme.MoneyManager.MaterialComponents.Body.Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/standard_left_margin"
@@ -73,10 +73,6 @@
         android:layout_marginStart="@dimen/standard_left_margin"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="@dimen/standard_right_margin"
-        app:counterEnabled="true"
-        app:counterMaxLength="@integer/max_category_name_length"
-        app:errorEnabled="true"
-        app:hintEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/category_dialog_barrier">
@@ -95,7 +91,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/category_dialog_union_cancel"
-        style="?buttonBarNegativeButtonStyle"
+        style="@style/Widget.MoneyManager.Button.TextButton.Dialog"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
@@ -106,7 +102,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/category_dialog_union_confirm"
-        style="?buttonBarPositiveButtonStyle"
+        style="@style/Widget.MoneyManager.Button.TextButton.Dialog"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/standard_right_margin"

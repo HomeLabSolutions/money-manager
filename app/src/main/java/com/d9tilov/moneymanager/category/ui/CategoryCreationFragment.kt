@@ -29,14 +29,14 @@ import com.d9tilov.moneymanager.category.ui.vm.CategoryCreationViewModel
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_DATA_ID
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.util.createTintDrawable
+import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.onChange
+import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentCreationCategoryBinding
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
-import com.mfms.common.util.hideKeyboard
-import com.mfms.common.util.showKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

@@ -23,7 +23,9 @@ import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
+import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.isTablet
+import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.incomeexpense.ui.BaseIncomeExpenseFragment
@@ -31,8 +33,6 @@ import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
-import com.mfms.common.util.hideKeyboard
-import com.mfms.common.util.showKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.math.BigDecimal

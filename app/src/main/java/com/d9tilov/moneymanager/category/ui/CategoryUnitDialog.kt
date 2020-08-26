@@ -14,8 +14,8 @@ import com.d9tilov.moneymanager.category.exception.CategoryExistException
 import com.d9tilov.moneymanager.category.ui.vm.CategoryUnionViewModel
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.onChange
+import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentDialogCategoryUnionBinding
-import com.mfms.common.util.showKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -64,7 +64,7 @@ class CategoryUnitDialog :
                     firstCategory.name,
                     secondCategory.name
                 )
-                it.categoryDialogUnionEtName.visibility = GONE
+                it.categoryDialogUnionEtNameLayout.visibility = GONE
                 it.categoryDialogUnionConfirm.text = getString(R.string.add)
                 it.categoryDialogCurrentFolder.categoryDialogUnionItem1.setImageDrawable(
                     firstDrawable
@@ -119,6 +119,8 @@ class CategoryUnitDialog :
 
     override fun onStart() {
         super.onStart()
-        showKeyboard(viewBinding?.categoryDialogUnionEtName)
+        if (secondCategory.children.isEmpty()) {
+            showKeyboard(viewBinding?.categoryDialogUnionEtName)
+        }
     }
 }

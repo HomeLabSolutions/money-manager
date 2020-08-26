@@ -113,6 +113,10 @@
         <item name="colorControlHighlight">@color/control_highlight_color</item>
     </style>
 
+    <style name="Theme.MoneyManager.MaterialComponents.Body.Text" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
+        <item name="android:textColor">@color/control_highlight_color</item>
+    </style>
+
     <style name="TextInputLayoutAppearance" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="errorTextAppearance">@style/ErrorText</item>
         <item name="boxStrokeColor">@color/text_input_box_stroke</item>
@@ -121,6 +125,10 @@
         <item name="counterTextColor">@color/text_input_box_stroke</item>
         <item name="android:textColor">@color/color_midnight_white</item>
         <item name="android:theme">@style/textCursor</item>
+        <item name="counterEnabled">true</item>
+        <item name="counterMaxLength">@integer/max_category_name_length</item>
+        <item name="errorEnabled">true</item>
+        <item name="hintEnabled">true</item>
     </style>
 
     <style name="textCursor" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">

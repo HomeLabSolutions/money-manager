@@ -11,9 +11,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.base.ui.navigator.HomeNavigator
+import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.setupWithNavController
 import com.d9tilov.moneymanager.databinding.ActivityMainBinding
-import com.mfms.common.util.hideKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="280dp"
     android:layout_height="wrap_content"
-    android:theme="@style/Theme.MoneyManager.Material.Alert.Dialog">
+    style="@style/Theme.MoneyManager.Material.Alert.Dialog">
 
     <TextView
         android:id="@+id/transaction_remove_dialog_title"
@@ -22,7 +22,7 @@
 
     <TextView
         android:id="@+id/transaction_remove_dialog_subtitle"
-        style="@style/MaterialAlertDialog.MaterialComponents.Body.Text"
+        style="@style/Theme.MoneyManager.MaterialComponents.Body.Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/standard_left_margin"
@@ -34,7 +34,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/transaction_remove_button_cancel"
-        style="?buttonBarNegativeButtonStyle"
+        style="@style/Widget.MoneyManager.Button.TextButton.Dialog"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
@@ -45,7 +45,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/transaction_remove_button_confirm"
-        style="?buttonBarPositiveButtonStyle"
+        style="@style/Widget.MoneyManager.Button.TextButton.Dialog"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
