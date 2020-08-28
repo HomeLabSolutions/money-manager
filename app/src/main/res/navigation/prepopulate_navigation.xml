@@ -7,15 +7,63 @@
 
     <fragment
         android:id="@+id/choose_currency_dest"
-        android:name="com.d9tilov.moneymanager.prepopulate.ui.CurrencyFragment"
+        android:name="com.d9tilov.moneymanager.prepopulate.currency.ui.CurrencyFragment"
         android:label="fragment_title_screen"
         tools:layout="@layout/fragment_currency">
+
+        <action
+            android:id="@+id/to_common_amount_dest"
+            app:destination="@id/common_amount_dest"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <fragment
         android:id="@+id/common_amount_dest"
-        android:name="Fragco"
+        android:name="com.d9tilov.moneymanager.prepopulate.amount.ui.CommonAmountFragment"
         android:label="fragment_title_screen"
-        tools:layout="@layout/fragment_currency">
+        tools:layout="@layout/fragment_common_amount">
+
+        <action
+            android:id="@+id/to_fixed_income_dest"
+            app:destination="@id/fixed_income_dest"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
+
+    <fragment
+        android:id="@+id/fixed_income_dest"
+        android:name="com.d9tilov.moneymanager.prepopulate.fixedincome.ui.FragmentFixedIncome"
+        android:label="fragment_title_screen"
+        tools:layout="@layout/fragment_fixed_income">
+
+        <action
+            android:id="@+id/to_fixed_expense_dest"
+            app:destination="@id/fixed_expense_dest"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fixed_expense_dest"
+        android:name="com.d9tilov.moneymanager.prepopulate.fixedexpense.ui.FixedExpenseFragment"
+        android:label="fragment_title_screen"
+        tools:layout="@layout/fragment_fixed_expense">
+
+        <action
+            android:id="@+id/to_goals_dest"
+            app:destination="@id/goals_dest"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/goals_dest"
+        android:name="com.d9tilov.moneymanager.prepopulate.goals.ui.GoalsFragment"
+        android:label="fragment_title_screen"
+        tools:layout="@layout/fragment_goals" />
 </navigation>

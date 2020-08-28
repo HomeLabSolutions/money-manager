@@ -9,29 +9,34 @@ interface HomeNavigator : BaseNavigator
 
 interface SplashNavigator : BaseNavigator {
     fun openHomeScreen()
+    fun openPrepopulate()
     fun openAuthScreen()
+}
+
+interface PrepopulateNavigator : BaseNavigator {
+
+    fun goToFixedIncomeScreen() {}
+    fun goToFixedExpenseScreen() {}
+    fun goToGoalsScreen() {}
+    fun goToMainScreen() {}
+    fun back() {}
 }
 
 interface CurrencyNavigator : BaseNavigator {
     fun goToCommonAmountScreen()
-    fun save()
-    fun skip()
+    fun showError()
 }
 
 interface CommonAmountNavigator : BaseNavigator {
     fun goToFixedIncomeScreen()
-    fun back()
+    fun showError()
 }
 
-interface FixedIncomeNavigator : BaseNavigator {
-    fun goToFixedExpenseScreen()
-    fun back()
-}
+interface FixedIncomeNavigator : BaseNavigator
 
-interface GoalsNavigator : BaseNavigator {
-    fun goToMainScree()
-    fun back()
-}
+interface FixedExpenseNavigator : BaseNavigator
+
+interface GoalsNavigator : BaseNavigator
 
 interface IncomeNavigator : BaseIncomeExpenseNavigator
 

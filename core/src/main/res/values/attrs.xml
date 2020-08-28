@@ -23,4 +23,15 @@
         <attr name="scaleEnabled" format="boolean" />
         <attr name="showComma" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="ProgressLine">
+        <attr name="value" format="string" />
+        <attr name="lineBarWidth" format="dimension" />
+        <attr name="lineProgressColor" format="color" />
+        <attr name="valueTextSize" format="dimension" />
+        <attr name="valueTextColor" format="color" />
+        <attr name="underLineColor" format="color" />
+        <attr name="currentValue" format="integer" />
+        <attr name="maxValue" format="integer" />
+    </declare-styleable>
 </resources>

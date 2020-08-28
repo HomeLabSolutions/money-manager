@@ -11,16 +11,54 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         app:defaultNavHost="true"
+        android:layout_marginBottom="16dp"
+        app:navGraph="@navigation/prepopulate_navigation"
         app:layout_constraintBottom_toTopOf="@+id/prepopulate_next_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <com.d9tilov.moneymanager.core.ui.widget.progress.ProgressLine
+        android:id="@+id/prepopulate_progress"
+        android:layout_width="0dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="@dimen/standard_left_margin"
+        android:layout_marginEnd="@dimen/standard_right_margin"
+        android:layout_marginBottom="16dp"
+        app:underLineColor="@color/control_highlight_color"
+        app:valueTextColor="@color/text_primary_color"
+        app:lineProgressColor="?attr/colorSecondary"
+        app:valueTextSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/prepopulate_back_btn"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/prepopulate_back_btn"
+        android:layout_width="@dimen/button_prepopulate_height"
+        android:layout_height="@dimen/button_prepopulate_height"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/background_rectangle_border_selector"
+        android:src="@drawable/background_arrow_selector"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/prepopulate_next_btn" />
+
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/prepopulate_next_btn"
+        style="@style/Widget.MoneyManager.Button.BottomAction"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="btn"
+        android:layout_height="@dimen/button_prepopulate_height"
+        android:layout_marginEnd="@dimen/standard_right_margin"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/background_rectangle_border_selector"
+        android:drawableEnd="@drawable/ic_arrow_down"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="@string/next"
+        android:drawableTint="@drawable/button_background_prepopulate_text_color_state_selector"
+        android:textColor="@drawable/button_background_prepopulate_text_color_state_selector"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

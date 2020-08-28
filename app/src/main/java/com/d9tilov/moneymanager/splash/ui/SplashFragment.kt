@@ -9,6 +9,7 @@ import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
 import com.d9tilov.moneymanager.databinding.FragmentSplashBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
+import com.d9tilov.moneymanager.prepopulate.ui.PrepopulateActivity
 import com.d9tilov.moneymanager.splash.vm.SplashViewModel
 import com.firebase.ui.auth.AuthUI
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,6 +30,11 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashNavigator>(R.la
 
     override fun openHomeScreen() {
         startActivity(Intent(requireActivity(), MainActivity::class.java))
+        requireActivity().finish()
+    }
+
+    override fun openPrepopulate() {
+        startActivity(Intent(requireContext(), PrepopulateActivity::class.java))
         requireActivity().finish()
     }
 

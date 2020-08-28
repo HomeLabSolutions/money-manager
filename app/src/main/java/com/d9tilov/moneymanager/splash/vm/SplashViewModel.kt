@@ -7,6 +7,7 @@ import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.core.util.addTo
 import com.d9tilov.moneymanager.core.util.ioScheduler
 import com.d9tilov.moneymanager.core.util.uiScheduler
+import com.d9tilov.moneymanager.prepopulate.domain.PrepopulateInteractor
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
@@ -15,6 +16,7 @@ import timber.log.Timber
 
 class SplashViewModel @ViewModelInject constructor(
     private val userInfoInteractor: UserInteractor,
+    private val prepopulateInteractor: PrepopulateInteractor,
     private val firebaseAnalytics: FirebaseAnalytics
 ) : BaseViewModel<SplashNavigator>() {
 
@@ -26,11 +28,27 @@ class SplashViewModel @ViewModelInject constructor(
             navigator?.openAuthScreen()
         } else {
             userInfoInteractor.getCurrentUser()
+                .firstElement()
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler)
+                .doOnSuccess {
+                    if (it.uid != auth.uid) {
+                        auth.signOut()
+                        navigator?.openAuthScreen()
+                    }
+                }
+                .filter { it.uid == auth.uid }
+                .flatMapSingle { prepopulateInteractor.showPrepopulate() }
                 .subscribe(
                     {
-                        if (it.uid == auth.uid) {
+                        if (it) {
+                            navigator?.openPrepopulate()
+                            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+                                param(
+                                    FirebaseAnalytics.Param.ITEM_ID, "prepopulate_screen"
+                                )
+                            }
+                        } else {
                             navigator?.openHomeScreen()
                             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN) {
                                 param(
@@ -38,9 +56,6 @@ class SplashViewModel @ViewModelInject constructor(
                                     auth.currentUser?.email ?: "unknown email"
                                 )
                             }
-                        } else {
-                            auth.signOut()
-                            navigator?.openAuthScreen()
                         }
                     },
                     { Timber.tag(TAG).d("Error while getting user: ${it.message}") }
@@ -51,15 +66,26 @@ class SplashViewModel @ViewModelInject constructor(
 
     fun createUser() {
         userInfoInteractor.createUserAndDefaultCategories(auth.currentUser)
+            .toSingleDefault(true)
+            .flatMap { prepopulateInteractor.showPrepopulate() }
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
-            .subscribe {
-                navigator?.openHomeScreen()
-                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP) {
-                    param(
-                        FirebaseAnalytics.Param.ITEM_ID,
-                        auth.currentUser?.email ?: "unknown email"
-                    )
+            .subscribe { openPrepopulate ->
+                if (openPrepopulate) {
+                    navigator?.openPrepopulate()
+                    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+                        param(
+                            FirebaseAnalytics.Param.ITEM_ID, "prepopulate_screen"
+                        )
+                    }
+                } else {
+                    navigator?.openHomeScreen()
+                    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP) {
+                        param(
+                            FirebaseAnalytics.Param.ITEM_ID,
+                            auth.currentUser?.email ?: "unknown email"
+                        )
+                    }
                 }
             }
             .addTo(compositeDisposable)

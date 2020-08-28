@@ -7,22 +7,16 @@ import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.viewbinding.ViewBinding
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.core.events.OnBackPressed
-import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
 import com.d9tilov.moneymanager.core.util.hideLoadingDialog
 import com.d9tilov.moneymanager.core.util.isNetworkConnected
-import com.d9tilov.moneymanager.core.util.px
 import com.d9tilov.moneymanager.core.util.showLoadingDialog
 import com.google.android.material.snackbar.Snackbar
 
@@ -30,18 +24,12 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
 
     protected lateinit var viewBinding: T
     private var progress: ProgressBar? = null
-    private lateinit var globalLayoutListener: ViewTreeObserver.OnGlobalLayoutListener
-    private lateinit var topView: View
-    private var isKeyboardShown = false
     private val contentLayout: ViewGroup by lazy { findViewById<ViewGroup>(android.R.id.content) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = performDataBinding()
         setContentView(viewBinding.root)
-        topView = window.decorView.findViewById<View>(android.R.id.content)
-        globalLayoutListener = KeyboardGlobalLayoutListener()
-        topView.viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
         if (BuildConfig.DEBUG) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
@@ -72,54 +60,8 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
-        topView.viewTreeObserver.removeOnGlobalLayoutListener(globalLayoutListener)
-        super.onDestroy()
-    }
-
-    override fun onBackPressed() {
-        val currentFragment = getCurrentFragment()
-        val backStackCount =
-            this.supportFragmentManager.findFragmentById(R.id.nav_host_container)?.childFragmentManager?.backStackEntryCount
-                ?: 0
-        (currentFragment as? OnBackPressed)?.onBackPressed()
-            ?: if (backStackCount > 0) findNavController(R.id.nav_host_container).popBackStack() else super.onBackPressed()
-    }
-
-    private fun getCurrentFragment(): Fragment? {
-        val navHostFragment =
-            this.supportFragmentManager.findFragmentById(R.id.nav_host_container)
-        var currentFragment: Fragment? = null
-        navHostFragment?.let {
-            currentFragment = it.childFragmentManager.fragments[0]
-        }
-        return currentFragment
-    }
-
     open fun onOpenKeyboard() {}
     open fun onCloseKeyboard() {}
-
-    inner class KeyboardGlobalLayoutListener : ViewTreeObserver.OnGlobalLayoutListener {
-        override fun onGlobalLayout() {
-            val heightDifference = topView.rootView.height - topView.height
-            val currentFragment = getCurrentFragment()
-            if (heightDifference > 200.px) {
-                if (isKeyboardShown) {
-                    return
-                }
-                isKeyboardShown = true
-                onOpenKeyboard()
-                (currentFragment as? OnKeyboardVisibleChange)?.onOpenKeyboard()
-            } else {
-                if (!isKeyboardShown) {
-                    return
-                }
-                isKeyboardShown = false
-                onCloseKeyboard()
-                (currentFragment as? OnKeyboardVisibleChange)?.onCloseKeyboard()
-            }
-        }
-    }
 
     fun showSnackBar(
         text: String,

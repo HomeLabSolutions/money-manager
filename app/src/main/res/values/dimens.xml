@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <item format="float" name="alpha_disable" type="dimen">0.38</item>
+
     <dimen name="headline1_text_size">84sp</dimen>
     <dimen name="headline4_text_size">35sp</dimen>
     <dimen name="headline6_text_size">18sp</dimen>
@@ -30,9 +33,12 @@
     <dimen name="category_creation_name_text_size">24sp</dimen>
 
     <dimen name="button_height">56dp</dimen>
+    <dimen name="button_prepopulate_height">36dp</dimen>
     <dimen name="transaction_sum_title_text_size">12sp</dimen>
 
     <dimen name="item_color_picker_size_wrapper">48dp</dimen>
     <dimen name="item_color_picker_size">32dp</dimen>
+
+    <dimen name="currency_icon_size">30sp</dimen> //It is a TextView
 
 </resources>
