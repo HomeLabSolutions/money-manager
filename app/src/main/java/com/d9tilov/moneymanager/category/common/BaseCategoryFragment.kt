@@ -6,7 +6,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.ViewStub
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
@@ -40,6 +39,25 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
 
     override fun performDataBinding(view: View): FragmentCategoryBinding =
         FragmentCategoryBinding.bind(view)
+
+    private val onItemClickListener = object : OnItemClickListener<Category> {
+        override fun onItemClick(item: Category, position: Int) {
+            (viewModel as BaseCategoryViewModel<N>).onCategoryClicked(item)
+        }
+    }
+
+    private val onItemLongClickListener = object : OnItemLongClickListener<Category> {
+        override fun onItemLongClick(item: Category, position: Int) {
+            categoryAdapter.enableEditMode(true)
+        }
+    }
+
+    private val onItemRemoveClickListener = object : OnItemClickListener<Category> {
+        override fun onItemClick(item: Category, position: Int) {
+            (viewModel as BaseCategoryViewModel<N>).onCategoryRemoved(item)
+            categoryAdapter.enableEditMode(false)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,7 +122,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
         }
         (viewModel as BaseCategoryViewModel<*>).expenseCategories.observe(
             this.viewLifecycleOwner,
-            Observer { list ->
+            { list ->
                 val sortedList = list.sortedWith(
                     compareBy(
                         { it.children.isEmpty() },
@@ -125,25 +143,6 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity.supportActionBar?.setDisplayShowHomeEnabled(true)
         setHasOptionsMenu(true)
-    }
-
-    private val onItemClickListener = object : OnItemClickListener<Category> {
-        override fun onItemClick(item: Category, position: Int) {
-            (viewModel as BaseCategoryViewModel<N>).onCategoryClicked(item)
-        }
-    }
-
-    private val onItemLongClickListener = object : OnItemLongClickListener<Category> {
-        override fun onItemLongClick(item: Category, position: Int) {
-            categoryAdapter.enableEditMode(true)
-        }
-    }
-
-    private val onItemRemoveClickListener = object : OnItemClickListener<Category> {
-        override fun onItemClick(item: Category, position: Int) {
-            (viewModel as BaseCategoryViewModel<N>).onCategoryRemoved(item)
-            categoryAdapter.enableEditMode(false)
-        }
     }
 
     override fun onBackPressed(): Boolean {

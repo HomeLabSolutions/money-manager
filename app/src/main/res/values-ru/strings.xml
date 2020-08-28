@@ -14,6 +14,9 @@
     <string name="title_category_creation">Категория</string>
     <string name="title_category_set">Доступные иконки</string>
     <string name="title_category_creation_create">Создание категории</string>
+    <string name="title_prepopulate_currency">Выберите валюту</string>
+
+    <string name="toolbar_menu_skip">Пропустить</string>
 
     <string name="settings_login">Войти</string>
     <string name="settings_logout">Выйти</string>
@@ -47,6 +50,8 @@
     <string name="edit">Редактировать</string>
     <string name="delete">Удалить</string>
     <string name="cancel">Отмена</string>
+    <string name="retry">Повторить</string>
+    <string name="next">Далее</string>
     <string name="save">Сохранить</string>
     <string name="add">Добавить</string>
     <string name="create">Создать</string>
@@ -84,4 +89,6 @@
     <string name="sub_category_delete_subtitle">Вы действительно хотите удалить подкатегорию \"%1$s\"\?\n\nТак же будут удалены все операции с этой статьей</string>
     <string name="sub_category_delete">Удалить</string>
     <string name="sub_category_delete_from_group">Удалить из группы</string>
+
+    <string name="error_loading">Ошибка загрузки</string>
 </resources>

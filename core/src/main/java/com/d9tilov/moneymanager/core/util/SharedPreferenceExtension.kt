@@ -53,3 +53,20 @@ fun SharedPreferences.int(
             value: Int
         ) = edit().putInt(key(property), value).apply()
     }
+
+fun SharedPreferences.bool(
+    defaultValue: Boolean = false,
+    key: (KProperty<*>) -> String = KProperty<*>::name
+): ReadWriteProperty<Any, Boolean> =
+    object : ReadWriteProperty<Any, Boolean> {
+        override fun getValue(
+            thisRef: Any,
+            property: KProperty<*>
+        ) = getBoolean(key(property), defaultValue)
+
+        override fun setValue(
+            thisRef: Any,
+            property: KProperty<*>,
+            value: Boolean
+        ) = edit().putBoolean(key(property), value).apply()
+    }

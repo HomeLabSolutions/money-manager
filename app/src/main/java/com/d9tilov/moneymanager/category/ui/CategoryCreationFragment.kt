@@ -9,7 +9,6 @@ import android.view.View.VISIBLE
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
@@ -158,8 +157,7 @@ class CategoryCreationFragment :
                 findNavController().navigate(action)
             }
         }
-        toolbar = viewBinding?.categoryCreationToolbarContainer?.toolbar
-        initToolbar(toolbar)
+        initToolbar()
     }
 
     override fun onStart() {
@@ -189,7 +187,8 @@ class CategoryCreationFragment :
         viewBinding?.categoryCreationIcon?.setImageDrawable(tintIcon)
     }
 
-    private fun initToolbar(toolbar: Toolbar?) {
+    private fun initToolbar() {
+        toolbar = viewBinding?.categoryCreationToolbarContainer?.toolbar
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)

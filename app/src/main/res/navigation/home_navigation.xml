@@ -37,18 +37,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/chart_dest"
-        android:name="com.d9tilov.moneymanager.statistics.ui.StatisticsFragment"
-        android:label="fragment_title_screen"
-        tools:layout="@layout/fragment_statistics" />
-
-    <fragment
-        android:id="@+id/settings_dest"
-        android:name="com.d9tilov.moneymanager.settings.ui.SettingsFragment"
-        android:label="fragment_title_screen"
-        tools:layout="@layout/fragment_settings" />
-
-    <fragment
         android:id="@+id/category_dest"
         android:name="com.d9tilov.moneymanager.category.ui.CategoryFragment"
         android:label="Category">
