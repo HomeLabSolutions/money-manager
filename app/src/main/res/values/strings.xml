@@ -14,6 +14,7 @@
     <string name="title_category_set">Available icons</string>
     <string name="title_category_creation_create">Category creation</string>
     <string name="title_prepopulate_currency">Choose currency</string>
+    <string name="title_prepopulate_budget">Current budget</string>
 
     <string name="toolbar_menu_skip">Skip</string>
 
@@ -89,6 +90,8 @@
     <string name="sub_category_delete_subtitle">Do you want to delete the subcategory \"%1$s\"\?\n\nAll operations with this category will also be deleted.</string>
     <string name="sub_category_delete">Delete</string>
     <string name="sub_category_delete_from_group">Delete from group</string>
+
+    <string name="budget_value_hint">Your current budget</string>
 
     <string name="error_loading">Loading error</string>
 </resources>

@@ -9,8 +9,8 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.databinding.ActivityPrepopulateBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
-import com.d9tilov.moneymanager.prepopulate.amount.ui.CommonAmountFragmentDirections
-import com.d9tilov.moneymanager.prepopulate.currency.ui.CurrencyFragmentDirections
+import com.d9tilov.moneymanager.budget.ui.BudgetAmountFragmentDirections
+import com.d9tilov.moneymanager.currency.ui.CurrencyFragmentDirections
 import com.d9tilov.moneymanager.prepopulate.fixedexpense.ui.FixedExpenseFragmentDirections
 import com.d9tilov.moneymanager.prepopulate.fixedincome.ui.FragmentFixedIncomeDirections
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,6 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
 
     private var backStackEntryCount = 1
+    var controlsClick: ControlsClicked? = null
 
     override fun performDataBinding() = ActivityPrepopulateBinding.inflate(layoutInflater)
 
@@ -38,9 +39,9 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
                 R.id.choose_currency_dest ->
                     action =
                         CurrencyFragmentDirections.toCommonAmountDest()
-                R.id.common_amount_dest ->
+                R.id.budget_amount_dest ->
                     action =
-                        CommonAmountFragmentDirections.toFixedIncomeDest()
+                        BudgetAmountFragmentDirections.toFixedIncomeDest()
                 R.id.fixed_income_dest ->
                     action =
                         FragmentFixedIncomeDirections.toFixedExpenseDest()
@@ -52,10 +53,12 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
                 }
             }
             navController.navigate(action)
+            controlsClick?.onNextClick()
         }
         viewBinding.prepopulateBackBtn.setOnClickListener {
             backStackEntryCount -= 1
             navController.popBackStack()
+            controlsClick?.onBackClick()
         }
         navController.addOnDestinationChangedListener { controller, destination, _ ->
             enableBackButton(destination.id != R.id.choose_currency_dest)
@@ -83,4 +86,9 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
     companion object {
         private const val MAX_SCREEN_AMOUNT = 5
     }
+}
+
+interface ControlsClicked {
+    fun onNextClick() {}
+    fun onBackClick() {}
 }

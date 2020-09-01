@@ -34,7 +34,7 @@ class CategoryModule {
     ): CategorySource = CategoryLocalSource(preferencesStore, categoryMapper, prepopulateDataManager, database)
 
     @Provides
-    fun categoryRepo(categoryLocalSource: CategorySource): CategoryRepo =
+    fun provideCategoryRepo(categoryLocalSource: CategorySource): CategoryRepo =
         CategoryRepoImpl(
             categoryLocalSource
         )

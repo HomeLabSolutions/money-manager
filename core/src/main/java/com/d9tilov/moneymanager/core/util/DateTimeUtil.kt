@@ -92,3 +92,9 @@ fun Date.getEndOfDay(): Date {
     calendar.set(Calendar.MILLISECOND, 999)
     return calendar.time
 }
+
+fun Date.getFirstDayOfMonth(): Date {
+    val c = Calendar.getInstance()
+    c[Calendar.DAY_OF_MONTH] = 1
+    return c.time
+}

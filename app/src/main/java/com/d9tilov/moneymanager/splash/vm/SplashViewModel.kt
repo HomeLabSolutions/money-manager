@@ -3,6 +3,8 @@ package com.d9tilov.moneymanager.splash.vm
 import androidx.hilt.lifecycle.ViewModelInject
 import com.d9tilov.moneymanager.App.Companion.TAG
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
+import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
+import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.core.util.addTo
 import com.d9tilov.moneymanager.core.util.ioScheduler
@@ -16,6 +18,8 @@ import timber.log.Timber
 
 class SplashViewModel @ViewModelInject constructor(
     private val userInfoInteractor: UserInteractor,
+    private val categoryInteractor: CategoryInteractor,
+    private val budgetInteractor: BudgetInteractor,
     private val prepopulateInteractor: PrepopulateInteractor,
     private val firebaseAnalytics: FirebaseAnalytics
 ) : BaseViewModel<SplashNavigator>() {
@@ -65,7 +69,8 @@ class SplashViewModel @ViewModelInject constructor(
     }
 
     fun createUser() {
-        userInfoInteractor.createUserAndDefaultCategories(auth.currentUser)
+        userInfoInteractor.createUser(auth.currentUser)
+            .andThen(categoryInteractor.createDefaultCategories())
             .toSingleDefault(true)
             .flatMap { prepopulateInteractor.showPrepopulate() }
             .subscribeOn(ioScheduler)

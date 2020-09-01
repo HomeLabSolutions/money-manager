@@ -9,6 +9,6 @@ import io.reactivex.Flowable
 interface UserInteractor : Interactor {
 
     fun getCurrentUser(): Flowable<UserProfile>
-    fun createUserAndDefaultCategories(user: FirebaseUser?): Completable
+    fun createUser(user: FirebaseUser?): Completable
     fun logout(): Completable
 }

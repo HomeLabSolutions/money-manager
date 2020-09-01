@@ -48,7 +48,8 @@ class TransactionLocalSource(
                             transactionDao.insert(
                                 transactionDataMapper.toDbModel(
                                     transaction.copy(
-                                        clientId = currentUserId
+                                        clientId = currentUserId,
+                                        currency = preferencesStore.baseCurrencyCode
                                     )
                                 )
                             )
@@ -65,7 +66,8 @@ class TransactionLocalSource(
                                     transactionDao.insert(
                                         transactionDataMapper.toDbModel(
                                             transaction.copy(
-                                                clientId = currentUserId
+                                                clientId = currentUserId,
+                                                currency = preferencesStore.baseCurrencyCode
                                             )
                                         )
                                     )
@@ -85,7 +87,8 @@ class TransactionLocalSource(
             TransactionDateDataModel(
                 clientId = clientId,
                 type = type,
-                date = date.getEndOfDay()
+                date = date.getEndOfDay(),
+                currency = preferencesStore.baseCurrencyCode
             )
         )
     }

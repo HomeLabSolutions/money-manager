@@ -12,6 +12,12 @@ import io.reactivex.Single
 class CategoryInteractorImpl(private val categoryRepo: CategoryRepo) :
     CategoryInteractor {
     override fun create(category: Category) = categoryRepo.create(category)
+
+    override fun createDefaultCategories(): Completable {
+        return categoryRepo.createExpenseDefaultCategories()
+            .andThen(categoryRepo.createIncomeDefaultCategories())
+    }
+
     override fun update(category: Category) = categoryRepo.update(category)
 
     override fun getCategoryById(id: Long) = categoryRepo.getCategoryById(id)

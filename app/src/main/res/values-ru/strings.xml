@@ -15,6 +15,7 @@
     <string name="title_category_set">Доступные иконки</string>
     <string name="title_category_creation_create">Создание категории</string>
     <string name="title_prepopulate_currency">Выберите валюту</string>
+    <string name="title_prepopulate_budget">Текущий бюджет</string>
 
     <string name="toolbar_menu_skip">Пропустить</string>
 
@@ -89,6 +90,8 @@
     <string name="sub_category_delete_subtitle">Вы действительно хотите удалить подкатегорию \"%1$s\"\?\n\nТак же будут удалены все операции с этой статьей</string>
     <string name="sub_category_delete">Удалить</string>
     <string name="sub_category_delete_from_group">Удалить из группы</string>
+
+    <string name="budget_value_hint">Ваш текущий бюджет</string>
 
     <string name="error_loading">Ошибка загрузки</string>
 </resources>

@@ -23,11 +23,11 @@ interface PrepopulateNavigator : BaseNavigator {
 }
 
 interface CurrencyNavigator : BaseNavigator {
-    fun goToCommonAmountScreen()
+    fun skip()
     fun showError()
 }
 
-interface CommonAmountNavigator : BaseNavigator {
+interface BudgetAmountNavigator : BaseNavigator {
     fun goToFixedIncomeScreen()
     fun showError()
 }

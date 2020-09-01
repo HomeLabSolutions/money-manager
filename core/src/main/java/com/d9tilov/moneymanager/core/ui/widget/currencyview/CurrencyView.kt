@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.core.ui.widget.currencyview
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
@@ -14,10 +15,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.widget.TextViewCompat
 import com.d9tilov.moneymanager.core.R
+import com.d9tilov.moneymanager.core.constants.DataConstants
+import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENCE_BASE_CURRENCY
+import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.STORE_NAME
 import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.core.util.getColorFromAttr
 import com.d9tilov.moneymanager.core.util.removeScale
+import com.d9tilov.moneymanager.core.util.string
 import com.d9tilov.moneymanager.core.util.toBigDecimal
+import dagger.hilt.android.AndroidEntryPoint
 import java.math.BigDecimal
 import java.util.Locale
 import kotlin.math.min
@@ -63,9 +69,19 @@ class CurrencyView @JvmOverloads constructor(
     val signTextView: TextView = TextView(context)
     val prefixTextView: TextView = TextView(context)
 
+    private val sharedPreferences: SharedPreferences = context.getSharedPreferences(
+        STORE_NAME,
+        Context.MODE_PRIVATE
+    )
+    private var baseCurrencyCode by sharedPreferences.string(
+        defaultValue = DataConstants.DEFAULT_CURRENCY_CODE,
+        key = { PREFERENCE_BASE_CURRENCY }
+    )
+
     init {
         PLUS_SIGN = context.getString(R.string.plus_sign)
         MINUS_SIGN = context.getString(R.string.minus_sign)
+
         attrs?.let {
             with(getContext().obtainStyledAttributes(it, R.styleable.CurrencyView)) {
                 showUnderline = getBoolean(R.styleable.CurrencyView_showUnderline, false)
@@ -103,11 +119,11 @@ class CurrencyView @JvmOverloads constructor(
                 )
                 signText = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     getString(R.styleable.CurrencyView_signCode)
-                        ?: resources.getString(R.string.ruble_sign)
+                        ?: CurrencyUtils.getCurrencySignBy(baseCurrencyCode)
                 } else {
                     CurrencyUtils.getCurrencySignBy(
                         getString(R.styleable.CurrencyView_signCode)
-                            ?: resources.getString(R.string.ruble_code)
+                            ?: CurrencyUtils.getCurrencySignBy(baseCurrencyCode)
                     )
                 }
                 signTextStyle = getResourceId(
@@ -387,6 +403,5 @@ class CurrencyView @JvmOverloads constructor(
 
         lateinit var PLUS_SIGN: String
         lateinit var MINUS_SIGN: String
-
     }
 }
