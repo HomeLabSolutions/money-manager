@@ -7,23 +7,23 @@
 
     <fragment
         android:id="@+id/choose_currency_dest"
-        android:name="com.d9tilov.moneymanager.prepopulate.currency.ui.CurrencyFragment"
+        android:name="com.d9tilov.moneymanager.currency.ui.CurrencyFragment"
         android:label="fragment_title_screen"
         tools:layout="@layout/fragment_currency">
 
         <action
             android:id="@+id/to_common_amount_dest"
-            app:destination="@id/common_amount_dest"
+            app:destination="@id/budget_amount_dest"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <fragment
-        android:id="@+id/common_amount_dest"
-        android:name="com.d9tilov.moneymanager.prepopulate.amount.ui.CommonAmountFragment"
+        android:id="@+id/budget_amount_dest"
+        android:name="com.d9tilov.moneymanager.budget.ui.BudgetAmountFragment"
         android:label="fragment_title_screen"
-        tools:layout="@layout/fragment_common_amount">
+        tools:layout="@layout/fragment_budget_amount">
 
         <action
             android:id="@+id/to_fixed_income_dest"

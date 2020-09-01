@@ -53,7 +53,6 @@ class UserModule {
     ): UserInteractor =
         UserInfoInteractor(
             userRepo,
-            categoryRepo,
             userDomainMapper
         )
 }

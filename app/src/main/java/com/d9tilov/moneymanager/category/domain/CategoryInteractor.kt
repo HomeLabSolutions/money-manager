@@ -11,6 +11,7 @@ import io.reactivex.Single
 interface CategoryInteractor : Interactor {
 
     fun create(category: Category): Single<Long>
+    fun createDefaultCategories(): Completable
     fun update(category: Category): Completable
     fun getCategoryById(id: Long): Maybe<Category>
     fun getGroupedCategoriesByType(type: TransactionType): Flowable<List<Category>>
