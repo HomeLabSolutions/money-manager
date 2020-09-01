@@ -22,8 +22,7 @@ class CurrencyDataRepo(
     override fun getCurrencies(): Single<List<Currency>> {
         val localSingle = currencySource.getCurrencies().toSingle()
             .map { list ->
-                val a = list.map { it.copy(isBase = it.code == preferencesStore.baseCurrencyCode) }
-                a
+                list.map { it.copy(isBase = it.code == preferencesStore.baseCurrencyCode) }
             }
         val remoteSingle = currencyApi.getCurrencies(preferencesStore.baseCurrencyCode)
             .map { currencyRemoteMapper.toDataModel(it) }

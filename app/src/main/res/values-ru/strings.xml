@@ -14,8 +14,11 @@
     <string name="title_category_creation">Категория</string>
     <string name="title_category_set">Доступные иконки</string>
     <string name="title_category_creation_create">Создание категории</string>
+
     <string name="title_prepopulate_currency">Выберите валюту</string>
     <string name="title_prepopulate_budget">Текущий бюджет</string>
+    <string name="title_prepopulate_fixed_income">Постоянные доходы</string>
+    <string name="title_prepopulate_fixed_expense">Постоянные расходы</string>
 
     <string name="toolbar_menu_skip">Пропустить</string>
 
@@ -92,6 +95,8 @@
     <string name="sub_category_delete_from_group">Удалить из группы</string>
 
     <string name="budget_value_hint">Ваш текущий бюджет</string>
+
+    <string name="fixed_transaction_notify">Уведомлять</string>
 
     <string name="error_loading">Ошибка загрузки</string>
 </resources>

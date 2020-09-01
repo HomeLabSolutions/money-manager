@@ -12,8 +12,8 @@ import com.d9tilov.moneymanager.budget.data.local.BudgetDao
 import com.d9tilov.moneymanager.budget.data.local.entity.BudgetDbModel
 import com.d9tilov.moneymanager.currency.data.local.CurrencyDao
 import com.d9tilov.moneymanager.currency.data.local.entity.CurrencyDbModel
-import com.d9tilov.moneymanager.standing.data.local.StandingDao
-import com.d9tilov.moneymanager.standing.data.local.entity.StandingDbModel
+import com.d9tilov.moneymanager.fixed.data.local.FixedTransactionDao
+import com.d9tilov.moneymanager.fixed.data.local.entity.FixedTransactionDbModel
 import com.d9tilov.moneymanager.transaction.data.local.TransactionDao
 import com.d9tilov.moneymanager.transaction.data.local.entity.TransactionDbModel
 import com.d9tilov.moneymanager.user.data.local.UserDao
@@ -26,7 +26,7 @@ import com.d9tilov.moneymanager.user.data.local.entity.UserDbModel
         TransactionDbModel::class,
         BudgetDbModel::class,
         CurrencyDbModel::class,
-        StandingDbModel::class
+        FixedTransactionDbModel::class
     ],
     version = 1,
     exportSchema = false
@@ -44,5 +44,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun transactionDao(): TransactionDao
     abstract fun budgetDao(): BudgetDao
     abstract fun currencyDao(): CurrencyDao
-    abstract fun standingDao(): StandingDao
+    abstract fun standingDao(): FixedTransactionDao
 }

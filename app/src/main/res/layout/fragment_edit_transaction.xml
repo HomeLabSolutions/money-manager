@@ -44,7 +44,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/edit_transaction_main_sum_title"
                 app:layout_constraintTop_toBottomOf="@+id/edit_transaction_main_sum_title"
-                app:layout_goneMarginEnd="@dimen/standard_right_margin"
                 app:scaleEnabled="true"
                 app:showComma="true"
                 app:signTextStyle="?attr/textAppearanceCurrencySignBig"

@@ -6,7 +6,7 @@ import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.data.local.entity.CategoryDbModel
-import com.d9tilov.moneymanager.category.data.local.mappers.CategoryMapper
+import com.d9tilov.moneymanager.category.data.local.mapper.CategoryMapper
 import com.d9tilov.moneymanager.category.exception.CategoryExistException
 import com.d9tilov.moneymanager.category.exception.NoCategoryParentException
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
