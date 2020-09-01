@@ -1,44 +1,44 @@
-package com.d9tilov.moneymanager.standing.data.local
+package com.d9tilov.moneymanager.fixed.data.local
 
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
-import com.d9tilov.moneymanager.standing.data.entity.StandingData
-import com.d9tilov.moneymanager.standing.data.local.mapper.StandingDataMapper
+import com.d9tilov.moneymanager.fixed.data.entity.FixedTransactionData
+import com.d9tilov.moneymanager.fixed.data.local.mapper.FixedTransactionDataMapper
 import io.reactivex.Completable
 
-class StandingLocalSource(
+class FixedTransactionLocalSource(
     private val preferencesStore: PreferencesStore,
     appDatabase: AppDatabase,
-    private val standingDataMapper: StandingDataMapper
-) : StandingSource {
+    private val fixedTransactionDataMapper: FixedTransactionDataMapper
+) : FixedTransactionSource {
 
     private val standingDao = appDatabase.standingDao()
 
-    override fun insert(standingData: StandingData): Completable {
+    override fun insert(fixedTransactionData: FixedTransactionData): Completable {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
             Completable.error(WrongUidException())
         } else {
-            standingDao.insert(standingDataMapper.toDbModel(standingData))
+            standingDao.insert(fixedTransactionDataMapper.toDbModel(fixedTransactionData))
         }
     }
 
-    override fun update(standingData: StandingData): Completable {
+    override fun update(fixedTransactionData: FixedTransactionData): Completable {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
             Completable.error(WrongUidException())
         } else {
-            standingDao.update(standingDataMapper.toDbModel(standingData))
+            standingDao.update(fixedTransactionDataMapper.toDbModel(fixedTransactionData))
         }
     }
 
-    override fun delete(standingData: StandingData): Completable {
+    override fun delete(fixedTransactionData: FixedTransactionData): Completable {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
             Completable.error(WrongUidException())
         } else {
-            standingDao.delete(standingDataMapper.toDbModel(standingData))
+            standingDao.delete(fixedTransactionDataMapper.toDbModel(fixedTransactionData))
         }
     }
 }

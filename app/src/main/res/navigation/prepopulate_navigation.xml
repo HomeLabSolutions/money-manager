@@ -14,9 +14,10 @@
         <action
             android:id="@+id/to_common_amount_dest"
             app:destination="@id/budget_amount_dest"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:exitAnim="@anim/slide_up_exit"
+            app:enterAnim="@anim/slide_up_enter"
+            app:popEnterAnim="@anim/slide_down_enter"
+            app:popExitAnim="@anim/slide_down_exit" />
     </fragment>
 
     <fragment
@@ -28,9 +29,10 @@
         <action
             android:id="@+id/to_fixed_income_dest"
             app:destination="@id/fixed_income_dest"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:exitAnim="@anim/slide_up_exit"
+            app:enterAnim="@anim/slide_up_enter"
+            app:popEnterAnim="@anim/slide_down_enter"
+            app:popExitAnim="@anim/slide_down_exit" />
     </fragment>
 
     <fragment
@@ -42,9 +44,10 @@
         <action
             android:id="@+id/to_fixed_expense_dest"
             app:destination="@id/fixed_expense_dest"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:exitAnim="@anim/slide_up_exit"
+            app:enterAnim="@anim/slide_up_enter"
+            app:popEnterAnim="@anim/slide_down_enter"
+            app:popExitAnim="@anim/slide_down_exit" />
     </fragment>
 
     <fragment
@@ -56,9 +59,10 @@
         <action
             android:id="@+id/to_goals_dest"
             app:destination="@id/goals_dest"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:exitAnim="@anim/slide_up_exit"
+            app:enterAnim="@anim/slide_up_enter"
+            app:popEnterAnim="@anim/slide_down_enter"
+            app:popExitAnim="@anim/slide_down_exit" />
     </fragment>
 
     <fragment

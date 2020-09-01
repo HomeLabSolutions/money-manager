@@ -59,19 +59,15 @@ class CurrencyViewModel @ViewModelInject constructor(
             .filter { it == 0 }
             .flatMapCompletable {
                 budgetInteractor.create(
-                    createBudget()
+                    BudgetData(
+                        sum = BigDecimal.ZERO,
+                        fiscalDay = Date().getFirstDayOfMonth()
+                    )
                 )
             }
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
             .subscribe { navigator?.skip() }
             .addTo(compositeDisposable)
-    }
-
-    private fun createBudget(): BudgetData {
-        return BudgetData(
-            sum = BigDecimal.ZERO,
-            fiscalDay = Date().getFirstDayOfMonth()
-        )
     }
 }

@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.standing.data.local.entity
+package com.d9tilov.moneymanager.fixed.data.local.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -10,7 +10,7 @@ import java.math.BigDecimal
 import java.util.Date
 
 @Entity(
-    tableName = "standing",
+    tableName = "fixed",
     foreignKeys = [
         ForeignKey(
             entity = UserDbModel::class,
@@ -20,7 +20,7 @@ import java.util.Date
         )
     ]
 )
-data class StandingDbModel(
+data class FixedTransactionDbModel(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "clientId", index = true) val clientId: String,
@@ -31,6 +31,5 @@ data class StandingDbModel(
     @ColumnInfo(name = "createdDate") val createdDate: Date,
     @ColumnInfo(name = "expireDate") val expireDate: Date,
     @ColumnInfo(name = "description") val description: String,
-    @ColumnInfo(name = "pushEnable") val pushEnable: Boolean,
-    @ColumnInfo(name = "autoAdded") val autoAdded: Boolean
+    @ColumnInfo(name = "pushEnable") val pushEnable: Boolean
 )

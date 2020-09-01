@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.category.data.local.mappers
+package com.d9tilov.moneymanager.category.data.local.mapper
 
 import android.content.Context
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.entity.PrepopulateCategory

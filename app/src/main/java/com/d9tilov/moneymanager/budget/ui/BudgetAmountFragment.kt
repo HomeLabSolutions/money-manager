@@ -30,11 +30,6 @@ class BudgetAmountFragment :
 
     override val viewModel by viewModels<BudgetAmountViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (activity as PrepopulateActivity).controlsClick = this
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
@@ -48,7 +43,13 @@ class BudgetAmountFragment :
 
     override fun onStart() {
         super.onStart()
+        (activity as PrepopulateActivity).controlsClick = this
         showKeyboard(viewBinding?.commonBudgetAmount?.moneyEditText)
+    }
+
+    override fun onStop() {
+        (activity as PrepopulateActivity).controlsClick = null
+        super.onStop()
     }
 
     private fun initToolbar() {

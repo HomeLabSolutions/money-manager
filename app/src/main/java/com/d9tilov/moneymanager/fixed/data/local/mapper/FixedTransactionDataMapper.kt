@@ -1,15 +1,15 @@
-package com.d9tilov.moneymanager.standing.data.local.mapper
+package com.d9tilov.moneymanager.fixed.data.local.mapper
 
 import com.d9tilov.moneymanager.core.mapper.Mapper
-import com.d9tilov.moneymanager.standing.data.entity.StandingData
-import com.d9tilov.moneymanager.standing.data.local.entity.StandingDbModel
+import com.d9tilov.moneymanager.fixed.data.entity.FixedTransactionData
+import com.d9tilov.moneymanager.fixed.data.local.entity.FixedTransactionDbModel
 import javax.inject.Inject
 
-class StandingDataMapper @Inject constructor() : Mapper<StandingDbModel, StandingData> {
+class FixedTransactionDataMapper @Inject constructor() : Mapper<FixedTransactionDbModel, FixedTransactionData> {
 
-    override fun toDataModel(model: StandingDbModel): StandingData =
+    override fun toDataModel(model: FixedTransactionDbModel): FixedTransactionData =
         with(model) {
-            StandingData(
+            FixedTransactionData(
                 id,
                 clientId,
                 currency,
@@ -19,14 +19,13 @@ class StandingDataMapper @Inject constructor() : Mapper<StandingDbModel, Standin
                 createdDate,
                 expireDate,
                 description,
-                pushEnable,
-                autoAdded
+                pushEnable
             )
         }
 
-    override fun toDbModel(model: StandingData): StandingDbModel =
+    override fun toDbModel(model: FixedTransactionData): FixedTransactionDbModel =
         with(model) {
-            StandingDbModel(
+            FixedTransactionDbModel(
                 id,
                 clientId,
                 currencyCode,
@@ -36,8 +35,7 @@ class StandingDataMapper @Inject constructor() : Mapper<StandingDbModel, Standin
                 createdDate,
                 expireDate,
                 description,
-                pushEnable,
-                autoAdded
+                pushEnable
             )
         }
 }

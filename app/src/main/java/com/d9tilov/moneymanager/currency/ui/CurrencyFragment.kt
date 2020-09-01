@@ -19,6 +19,7 @@ import com.d9tilov.moneymanager.currency.data.entity.Currency
 import com.d9tilov.moneymanager.currency.vm.CurrencyViewModel
 import com.d9tilov.moneymanager.databinding.FragmentCurrencyBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
+import com.d9tilov.moneymanager.prepopulate.ui.ControlsClicked
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -29,7 +30,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class CurrencyFragment :
     BaseFragment<FragmentCurrencyBinding, CurrencyNavigator>(R.layout.fragment_currency),
-    CurrencyNavigator {
+    CurrencyNavigator,
+    ControlsClicked {
 
     private var toolbar: MaterialToolbar? = null
     private var snackBar: Snackbar? = null
