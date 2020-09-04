@@ -16,7 +16,9 @@
 
     <string name="title_prepopulate_currency">Choose currency</string>
     <string name="title_prepopulate_budget">Current budget</string>
+    <string name="title_prepopulate_fixed_incomes">Fixed incomes</string>
     <string name="title_prepopulate_fixed_income">Fixed income</string>
+    <string name="title_prepopulate_fixed_expenses">Fixed expenses</string>
     <string name="title_prepopulate_fixed_expense">Fixed expense</string>
 
     <string name="toolbar_menu_skip">Skip</string>
@@ -65,7 +67,9 @@
     <string name="transaction_edit_sum_title">Amount</string>
     <string name="transaction_edit_description_hint">Description</string>
     <string name="transaction_empty_placeholder_expense_title">Add expense</string>
+    <string name="transaction_empty_placeholder_fixed_expense_title">Add fixed expense</string>
     <string name="transaction_empty_placeholder_income_title">Add income</string>
+    <string name="transaction_empty_placeholder_fixed_income_title">Add fixed income</string>
     <string name="transaction_empty_placeholder_subtitle">Enter the amount and tap on the category</string>
 
     <string name="date_tomorrow">Tomorrow</string>
@@ -97,6 +101,26 @@
     <string name="budget_value_hint">Your current budget</string>
 
     <string name="fixed_transaction_notify">Notify</string>
+    <string name="fixed_transaction_choose_category">Choose category</string>
+    <string name="fixed_transaction_repeat_title">Repeat every</string>
+    <string name="fixed_transaction_repeat_starts_title">Starting from</string>
+    <string name="fixed_transaction_repeat_monday">M</string>
+    <string name="fixed_transaction_repeat_tuesday">T</string>
+    <string name="fixed_transaction_repeat_wednesday">W</string>
+    <string name="fixed_transaction_repeat_thursday">T</string>
+    <string name="fixed_transaction_repeat_friday">F</string>
+    <string name="fixed_transaction_repeat_saturday">S</string>
+    <string name="fixed_transaction_repeat_sunday">S</string>
+    <string name="fixed_transaction_repeat_period_day">every day</string>
+    <string name="fixed_transaction_repeat_period_week">repeat on:\n%1$s</string>
+    <string name="fixed_transaction_repeat_period_month">every month\non the %1$sth</string>
+    <string name="fixed_transaction_repeat_period_year">every year\n%1$s</string>
+    <string-array name="fixed_transaction_repeat_list">
+        <item>Day</item>
+        <item>Week</item>
+        <item>Month</item>
+        <item>Year</item>
+    </string-array>
 
     <string name="error_loading">Loading error</string>
 </resources>

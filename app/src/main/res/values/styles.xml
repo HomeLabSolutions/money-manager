@@ -52,6 +52,10 @@
         <item name="iconTint">@drawable/button_icon_background</item>
     </style>
 
+    <style name="Widget.MoneyManager.Button.BottomAction.Selected" parent="Widget.MoneyManager.Button.BottomAction">
+        <item name="android:background">@drawable/button_background_state_enable_selector</item>
+    </style>
+
     <style name="Widget.MoneyManager.EditText.Description" parent="Widget.AppCompat.EditText">
         <item name="android:textAppearance">?attr/textAppearanceBody1</item>
         <item name="android:textColor">@color/color_midnight_white</item>
@@ -79,6 +83,11 @@
 
     <style name="Widget.MoneyManager.Button.TextButton.Dialog" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/button_background_dialog_state_selector</item>
+    </style>
+
+    <style name="Widget.MoneyManager.CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:textColor">@color/button_normal_color_start</item>
+        <item name="android:buttonTint">@color/button_normal_color_start</item>
     </style>
 
 </resources>

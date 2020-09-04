@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.d9tilov.moneymanager.period.PeriodType
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.user.data.local.entity.UserDbModel
 import java.math.BigDecimal
@@ -29,7 +30,9 @@ data class FixedTransactionDbModel(
     @ColumnInfo(name = "sum") val sum: BigDecimal,
     @ColumnInfo(name = "categoryId") val categoryId: Long,
     @ColumnInfo(name = "createdDate") val createdDate: Date,
-    @ColumnInfo(name = "expireDate") val expireDate: Date,
+    @ColumnInfo(name = "startDate") val startDate: Date,
+    @ColumnInfo(name = "periodType") val periodType: PeriodType,
+    @ColumnInfo(name = "dayOfWeek") val dayOfWeek: Int,
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "pushEnable") val pushEnable: Boolean
 )

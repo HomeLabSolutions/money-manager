@@ -41,20 +41,24 @@ class SubCategoryViewModel @ViewModelInject constructor(
             CategoryDestination.EDIT_TRANSACTION_SCREEN -> navigator?.backToEditTransactionScreen(
                 category
             )
-            CategoryDestination.MAIN_WITH_SUM_SCREEN -> {
-                val inputSum = requireNotNull(savedStateHandle.get<BigDecimal>("sum"))
-                val transactionType =
-                    requireNotNull(savedStateHandle.get<TransactionType>("transactionType"))
-                transactionInteractor.addTransaction(
-                    Transaction(
-                        type = transactionType,
-                        sum = inputSum,
-                        category = category
+            CategoryDestination.MAIN_WITH_SUM_SCREEN, CategoryDestination.PREPOPULATE_SCREEN -> {
+                val inputSum = savedStateHandle.get<BigDecimal>("sum")
+                if (inputSum == null) {
+                    navigator?.backToFixedTransactionCreationScreen(category)
+                } else {
+                    val transactionType =
+                        requireNotNull(savedStateHandle.get<TransactionType>("transactionType"))
+                    transactionInteractor.addTransaction(
+                        Transaction(
+                            type = transactionType,
+                            sum = inputSum,
+                            category = category
+                        )
                     )
-                )
-                    .subscribeOn(ioScheduler)
-                    .observeOn(uiScheduler)
-                    .subscribe { navigator?.backToMainScreen(transactionType) }
+                        .subscribeOn(ioScheduler)
+                        .observeOn(uiScheduler)
+                        .subscribe { navigator?.backToMainScreen(transactionType) }
+                }
             }
             else -> navigator?.openCreateCategoryScreen(category)
         }

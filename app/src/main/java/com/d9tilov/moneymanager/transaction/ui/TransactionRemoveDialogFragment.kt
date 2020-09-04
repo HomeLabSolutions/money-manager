@@ -20,6 +20,7 @@ class TransactionRemoveDialogFragment :
 
     private val args by navArgs<TransactionRemoveDialogFragmentArgs>()
     private val transaction by lazy { args.transaction }
+    private val fixedTransaction by lazy { args.fixedTransaction }
 
     override val layoutId = R.layout.fragment_dialog_remove
     override fun performDataBinding(view: View) = FragmentDialogRemoveBinding.bind(view)
@@ -32,10 +33,16 @@ class TransactionRemoveDialogFragment :
             transactionRemoveDialogTitle.text = getString(R.string.transaction_delete_dialog_title)
             transactionRemoveDialogSubtitle.text =
                 getString(R.string.transaction_delete_dialog_subtitle)
-            transactionRemoveButtonConfirm.setOnClickListener { viewModel.remove(transaction) }
+            transactionRemoveButtonConfirm.setOnClickListener {
+                transaction?.let { viewModel.removeTransaction(it) }
+                fixedTransaction?.let { viewModel.removeFixedTransaction(it) }
+            }
             transactionRemoveButtonCancel.setOnClickListener {
                 dismiss()
-                findNavController().previousBackStackEntry?.savedStateHandle?.set(ARG_UNDO_REMOVE_LAYOUT_DISMISS, true)
+                findNavController().previousBackStackEntry?.savedStateHandle?.set(
+                    ARG_UNDO_REMOVE_LAYOUT_DISMISS,
+                    true
+                )
             }
         }
     }

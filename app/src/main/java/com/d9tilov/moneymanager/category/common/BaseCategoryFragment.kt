@@ -31,7 +31,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
     OnBackPressed {
 
     private val args by navArgs<CategoryFragmentArgs>()
-    private val destination by lazy { args.destination }
+    protected val destination by lazy { args.destination }
 
     protected var toolbar: MaterialToolbar? = null
     protected lateinit var categoryAdapter: CategoryModifyAdapter
@@ -64,7 +64,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
         categoryAdapter =
             CategoryModifyAdapter()
         categoryAdapter.itemClickListener = onItemClickListener
-        if (destination == CategoryDestination.MAIN_SCREEN) {
+        if (destination == CategoryDestination.MAIN_SCREEN || destination == CategoryDestination.PREPOPULATE_SCREEN) {
             categoryAdapter.itemLongClickListener = onItemLongClickListener
             categoryAdapter.itemRemoveClickListener = onItemRemoveClickListener
         }
@@ -157,5 +157,6 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
 
     companion object {
         const val SPAN_COUNT = 4
+        const val ARG_CATEGORY = "category"
     }
 }

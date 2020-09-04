@@ -36,7 +36,7 @@
         android:paddingEnd="8dp"
         android:text="@string/transaction_edit_sum_title"
         android:textAppearance="?attr/textAppearanceCaption"
-        android:textColor="@color/button_normal_color_disable"
+        android:textColor="@color/button_normal_color_dark"
         android:textSize="@dimen/transaction_sum_title_text_size"
         app:layout_constraintBottom_toTopOf="@+id/income_main_sum"
         app:layout_constraintStart_toStartOf="@+id/income_main_sum" />

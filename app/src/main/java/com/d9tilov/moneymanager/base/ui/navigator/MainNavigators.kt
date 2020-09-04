@@ -33,6 +33,9 @@ interface BudgetAmountNavigator : BaseNavigator {
 }
 
 interface FixedIncomeNavigator : BaseNavigator
+interface FixedCreatedNavigator : BaseNavigator {
+    fun back()
+}
 
 interface FixedExpenseNavigator : BaseNavigator
 
@@ -83,6 +86,7 @@ interface CategoryNavigator : BaseNavigator {
     fun openCreateCategoryScreen(category: Category? = null)
     fun openRemoveDialog(category: Category)
     fun backToEditTransactionScreen(category: Category)
+    fun backToFixedTransactionCreationScreen(category: Category)
     fun backToMainScreen(transactionType: TransactionType)
 }
 
@@ -103,5 +107,6 @@ interface SubCategoryNavigator : BaseNavigator {
     fun backToEditTransactionScreen(category: Category)
     fun backToMainScreen(transactionType: TransactionType)
     fun openCreateCategoryScreen(category: Category? = null)
+    fun backToFixedTransactionCreationScreen(category: Category)
     fun openRemoveDialog(subCategory: Category)
 }

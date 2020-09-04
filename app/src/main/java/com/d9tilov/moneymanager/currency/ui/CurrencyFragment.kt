@@ -2,8 +2,11 @@ package com.d9tilov.moneymanager.currency.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -82,6 +85,24 @@ class CurrencyFragment :
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.prepopulate_menu, menu)
+        setMenuTextColor(menu)
+    }
+
+    private fun setMenuTextColor(menu: Menu) {
+        val item: MenuItem = menu.findItem(R.id.action_skip)
+        val s = SpannableString(getString(R.string.toolbar_menu_skip))
+        s.setSpan(
+            ForegroundColorSpan(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.control_activated_color
+                )
+            ),
+            0,
+            s.length,
+            0
+        )
+        item.title = s
     }
 
     private fun initToolbar() {

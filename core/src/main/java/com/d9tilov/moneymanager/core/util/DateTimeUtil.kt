@@ -10,6 +10,7 @@ import kotlin.math.abs
 private const val DAY_OF_WEEK_DATE_FORMAT = "EE. d MMMM"
 const val RECENT_DATE_FORMAT = "dd.MM.yyyy"
 const val TRANSACTION_DATE_FORMAT = "dd MMMM yyyy"
+const val TRANSACTION_DATE_FORMAT_DAY_MONTH = "dd MMMM"
 
 fun formatMinSec(time: Long): String {
     val seconds = (time / 1000).toInt()
@@ -97,4 +98,10 @@ fun Date.getFirstDayOfMonth(): Date {
     val c = Calendar.getInstance()
     c[Calendar.DAY_OF_MONTH] = 1
     return c.time
+}
+
+fun Date.getDayOfWeek(): Int {
+    val cal = Calendar.getInstance()
+    cal.time = this
+    return cal[Calendar.DAY_OF_WEEK]
 }

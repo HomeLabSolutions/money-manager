@@ -30,17 +30,35 @@
         <item name="textAppearanceCaption">@style/TextAppearance.MoneyManager.Caption</item>
         <item name="textAppearanceOverline">@style/TextAppearance.MoneyManager.Overline</item>
         <item name="appBarLayoutStyle">@style/Widget.MoneyManager.AppBarLayout</item>
+        <item name="checkboxStyle">@style/Widget.MoneyManager.CheckBox</item>
         <item name="bottomNavigationStyle">@style/Widget.MoneyManager.BottomNavigationStyle</item>
         <item name="tabStyle">@style/Widget.MoneyManager.TabLayout</item>
-        <item name="moneyManagerBottomActionButtonStyle">@style/Widget.MoneyManager.Button.BottomAction</item>
+        <item name="moneyManagerBottomActionButtonStyle">
+            @style/Widget.MoneyManager.Button.BottomAction
+        </item>
+        <item name="moneyManagerBottomActionButtonSelectedStyle">
+            @style/Widget.MoneyManager.Button.BottomAction.Selected
+        </item>
+        <item name="textAppearanceCurrencyValueBig">
+            @style/TextAppearance.MoneyManager.CurrencyValue.Big
+        </item>
         <item name="textAppearanceCurrencySignBig">
             @style/TextAppearance.MoneyManager.CurrencySign.Big
+        </item>
+        <item name="textAppearanceCurrencyValueMedium">
+            @style/TextAppearance.MoneyManager.CurrencyValue.Medium
         </item>
         <item name="textAppearanceCurrencySignMedium">
             @style/TextAppearance.MoneyManager.CurrencySign.Medium
         </item>
+        <item name="textAppearanceCurrencyValueSmall">
+            @style/TextAppearance.MoneyManager.CurrencyValue.Small
+        </item>
         <item name="textAppearanceCurrencySignSmall">
             @style/TextAppearance.MoneyManager.CurrencySign.Small
+        </item>
+        <item name="textAppearanceCurrencyValueExtraSmall">
+            @style/TextAppearance.MoneyManager.Overline
         </item>
         <item name="textAppearanceCurrencySignExtraSmall">
             @style/TextAppearance.MoneyManager.Overline

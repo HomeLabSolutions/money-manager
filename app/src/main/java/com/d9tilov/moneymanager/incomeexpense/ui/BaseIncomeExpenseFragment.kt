@@ -5,6 +5,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewStub
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.lifecycle.observe
@@ -18,7 +19,9 @@ import com.d9tilov.moneymanager.category.ui.recycler.CategoryAdapter
 import com.d9tilov.moneymanager.core.events.OnDialogDismissListener
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
+import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
 import com.d9tilov.moneymanager.core.util.hideKeyboard
+import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
@@ -27,6 +30,7 @@ import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
 abstract class BaseIncomeExpenseFragment<V : ViewBinding, N : BaseIncomeExpenseNavigator>(@LayoutRes layoutId: Int) :
     BaseFragment<V, N>(layoutId), OnDialogDismissListener, BaseIncomeExpenseNavigator {
 
+    protected open lateinit var mainSum: CurrencyView
     protected val categoryAdapter = CategoryAdapter()
     protected val transactionAdapter = TransactionAdapter()
     protected var isTransactionDataEmpty = false
@@ -95,6 +99,14 @@ abstract class BaseIncomeExpenseFragment<V : ViewBinding, N : BaseIncomeExpenseN
                         R.string.transaction_empty_placeholder_expense_title
                     else R.string.transaction_empty_placeholder_income_title
                 )
+            val stubSubtitle =
+                inflatedStub?.findViewById<TextView>(R.id.empty_transaction_placeholder_subtitle)
+            stubSubtitle?.visibility = VISIBLE
+            val addTransaction =
+                inflatedStub?.findViewById<ImageView>(R.id.empty_transaction_placeholder_add)
+            addTransaction?.setOnClickListener {
+                showKeyboard(mainSum.moneyEditText)
+            }
         }
     }
 

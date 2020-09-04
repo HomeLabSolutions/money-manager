@@ -161,7 +161,7 @@ class CategoryModifyAdapter :
             viewBinding.categoryItemRemove.visibility = if (enable) VISIBLE else GONE
             val animation = AnimationUtils.loadAnimation(
                 context,
-                R.anim.animation_shake
+                R.anim.animation_shake_infitite
             )
             if (enable) {
                 viewBinding.root.startAnimation(animation)

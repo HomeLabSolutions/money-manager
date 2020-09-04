@@ -104,7 +104,7 @@ class CurrencyView @JvmOverloads constructor(
                     DEFAULT_VALUE
                 )
                 currencyGravity = getInt(R.styleable.CurrencyView_gravity, Gravity.START)
-                sum = getString(R.styleable.CurrencyView_sum)?.toBigDecimal() ?: BigDecimal.ZERO
+                sum = getString(R.styleable.CurrencyView_sum)?.toBigDecimal ?: BigDecimal.ZERO
                 initSum()
 
                 prefixText = getString(R.styleable.CurrencyView_prefixText) ?: ""

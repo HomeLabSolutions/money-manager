@@ -12,6 +12,7 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.EditTransactionNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
+import com.d9tilov.moneymanager.category.common.BaseCategoryFragment.Companion.ARG_CATEGORY
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.util.DateValidatorPointBackward
 import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT
@@ -135,6 +136,7 @@ class EditTransactionFragment : EditTransactionNavigator,
         viewBinding?.let {
             it.editTransactionCategory.setCompoundDrawables(iconDrawable, null, null, null)
             it.editTransactionCategory.text = category.name
+            it.editTransactionCategory.setTextColor(category.color)
         }
     }
 
@@ -149,9 +151,5 @@ class EditTransactionFragment : EditTransactionNavigator,
 
     override fun save() {
         findNavController().popBackStack()
-    }
-
-    companion object {
-        const val ARG_CATEGORY = "category"
     }
 }

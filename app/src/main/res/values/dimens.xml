@@ -14,9 +14,9 @@
     <dimen name="caption_text_size">14sp</dimen>
     <dimen name="overline_text_size">12sp</dimen>
 
-    <dimen name="currency_sign_big_text_size">50sp</dimen>
-    <dimen name="currency_sign_medium_text_size">30sp</dimen>
-    <dimen name="currency_sign_small_text_size">18sp</dimen>
+    <dimen name="currency_big_text_size">50sp</dimen>
+    <dimen name="currency_medium_text_size">30sp</dimen>
+    <dimen name="currency_small_text_size">18sp</dimen>
 
     <dimen name="standard_top_margin">16dp</dimen>
     <dimen name="standard_bottom_margin">16dp</dimen>
@@ -27,8 +27,9 @@
     <dimen name="standard_list_item_height">48dp</dimen>
 
     <dimen name="recycler_view_category_offset">8dp</dimen>
+    <dimen name="recycler_view_fixed_category_margin">16dp</dimen>
     <dimen name="category_item_size">84dp</dimen>
-    <dimen name="category_item_icon_size">52dp</dimen>
+    <dimen name="category_item_icon_size">48dp</dimen>
     <dimen name="category_item_icon_round_size">64dp</dimen>
     <dimen name="category_creation_name_text_size">24sp</dimen>
 
@@ -38,6 +39,7 @@
 
     <dimen name="item_color_picker_size_wrapper">48dp</dimen>
     <dimen name="item_color_picker_size">32dp</dimen>
+    <dimen name="item_weekday_size">36dp</dimen>
 
     <dimen name="currency_icon_size">30sp</dimen> //It is a TextView
 

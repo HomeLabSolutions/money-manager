@@ -17,7 +17,9 @@ class FixedTransactionDataMapper @Inject constructor() : Mapper<FixedTransaction
                 sum,
                 categoryId,
                 createdDate,
-                expireDate,
+                startDate,
+                periodType,
+                dayOfWeek,
                 description,
                 pushEnable
             )
@@ -33,7 +35,9 @@ class FixedTransactionDataMapper @Inject constructor() : Mapper<FixedTransaction
                 sum,
                 categoryId,
                 createdDate,
-                expireDate,
+                startDate,
+                periodType,
+                dayOfWeek,
                 description,
                 pushEnable
             )

@@ -235,7 +235,15 @@
 
         <argument
             android:name="transaction"
+            android:defaultValue="@null"
+            app:nullable="true"
             app:argType="com.d9tilov.moneymanager.transaction.domain.entity.Transaction" />
+
+        <argument
+            android:name="fixed_transaction"
+            android:defaultValue="@null"
+            app:argType="com.d9tilov.moneymanager.fixed.domain.entity.FixedTransaction"
+            app:nullable="true" />
     </dialog>
 
     <dialog

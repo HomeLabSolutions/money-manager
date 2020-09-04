@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
@@ -14,9 +15,9 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.ui.recycler.SimpleItemTouchHelperCallback
 import com.d9tilov.moneymanager.category.ui.vm.CategoryViewModel
 import com.d9tilov.moneymanager.core.events.OnItemMoveListener
+import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragment.Companion.ARG_TRANSACTION_CREATED
 import com.d9tilov.moneymanager.transaction.TransactionType
-import com.d9tilov.moneymanager.transaction.ui.EditTransactionFragment.Companion.ARG_CATEGORY
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,7 +30,6 @@ class CategoryFragment :
 
     private val args by navArgs<CategoryFragmentArgs>()
     private val transactionType by lazy { args.transactionType }
-    private val destination by lazy { args.destination }
     private val sum by lazy { args.sum }
 
     override fun getNavigator() = this
@@ -74,6 +74,11 @@ class CategoryFragment :
         findNavController().popBackStack()
     }
 
+    override fun backToFixedTransactionCreationScreen(category: Category) {
+        findNavController().previousBackStackEntry?.savedStateHandle?.set(ARG_CATEGORY, category)
+        findNavController().popBackStack()
+    }
+
     override fun backToMainScreen(transactionType: TransactionType) {
         findNavController().previousBackStackEntry?.savedStateHandle?.set(
             ARG_TRANSACTION_CREATED,
@@ -94,7 +99,7 @@ class CategoryFragment :
             val action = CategoryFragmentDirections.toCategoryCreationDest(transactionType)
             findNavController().navigate(action)
         }
-        if (destination == CategoryDestination.MAIN_SCREEN) {
+        if (destination == CategoryDestination.MAIN_SCREEN || destination == CategoryDestination.PREPOPULATE_SCREEN) {
             val callback =
                 SimpleItemTouchHelperCallback(
                     categoryAdapter
@@ -102,6 +107,12 @@ class CategoryFragment :
             val touchHelper = ItemTouchHelper(callback)
             touchHelper.attachToRecyclerView(viewBinding?.categoryRv)
         }
+        (viewBinding?.categoryRv?.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+    }
+
+    override fun onStart() {
+        super.onStart()
+        hideKeyboard()
     }
 
     private val onItemMoveListener = object : OnItemMoveListener<Category> {
