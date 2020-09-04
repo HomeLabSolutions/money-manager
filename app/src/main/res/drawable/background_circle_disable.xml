@@ -1,0 +1,7 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@color/week_circle_background_disable" />
+    <size
+        android:width="@dimen/item_weekday_size"
+        android:height="@dimen/item_weekday_size" />
+</shape>

@@ -17,8 +17,10 @@
 
     <string name="title_prepopulate_currency">Выберите валюту</string>
     <string name="title_prepopulate_budget">Текущий бюджет</string>
-    <string name="title_prepopulate_fixed_income">Постоянные доходы</string>
-    <string name="title_prepopulate_fixed_expense">Постоянные расходы</string>
+    <string name="title_prepopulate_fixed_incomes">Постоянные доходы</string>
+    <string name="title_prepopulate_fixed_income">Постоянный доход</string>
+    <string name="title_prepopulate_fixed_expenses">Постоянные расходы</string>
+    <string name="title_prepopulate_fixed_expense">Постоянный расход</string>
 
     <string name="toolbar_menu_skip">Пропустить</string>
 
@@ -65,7 +67,9 @@
     <string name="transaction_edit_sum_title">Сумма</string>
     <string name="transaction_edit_description_hint">Описание</string>
     <string name="transaction_empty_placeholder_expense_title">Добавьте расход</string>
+    <string name="transaction_empty_placeholder_fixed_expense_title">Добавьте постоянный расход</string>
     <string name="transaction_empty_placeholder_income_title">Добавьте доход</string>
+    <string name="transaction_empty_placeholder_fixed_income_title">Добавьте постоянный доход</string>
     <string name="transaction_empty_placeholder_subtitle">Введите сумму и выберите категорию</string>
 
     <string name="date_tomorrow">Завтра</string>
@@ -97,6 +101,26 @@
     <string name="budget_value_hint">Ваш текущий бюджет</string>
 
     <string name="fixed_transaction_notify">Уведомлять</string>
+    <string name="fixed_transaction_choose_category">Выберите категорию</string>
+    <string name="fixed_transaction_repeat_title">Повторять раз в</string>
+    <string name="fixed_transaction_repeat_starts_title">Начиная с</string>
+    <string name="fixed_transaction_repeat_monday">пн</string>
+    <string name="fixed_transaction_repeat_tuesday">вт</string>
+    <string name="fixed_transaction_repeat_wednesday">ср</string>
+    <string name="fixed_transaction_repeat_thursday">чт</string>
+    <string name="fixed_transaction_repeat_friday">пт</string>
+    <string name="fixed_transaction_repeat_saturday">сб</string>
+    <string name="fixed_transaction_repeat_sunday">вс</string>
+    <string name="fixed_transaction_repeat_period_day">каждый день</string>
+    <string name="fixed_transaction_repeat_period_week">повторять в:\n%1$s</string>
+    <string name="fixed_transaction_repeat_period_month">%1$sго числа\nкаждого месяца</string>
+    <string name="fixed_transaction_repeat_period_year">каждый год\n%1$s</string>
+    <string-array name="fixed_transaction_repeat_list">
+        <item>День</item>
+        <item>Неделю</item>
+        <item>Месяц</item>
+        <item>Год</item>
+    </string-array>
 
     <string name="error_loading">Ошибка загрузки</string>
 </resources>

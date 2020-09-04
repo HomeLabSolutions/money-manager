@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
@@ -119,6 +120,12 @@ class TransactionAdapter :
         fun bind(transaction: Transaction) {
             viewBinding.run {
                 itemTransactionCategory.text = transaction.category.name
+                itemTransactionCategory.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        transaction.category.color
+                    )
+                )
                 val description = transaction.description
                 if (description.isNotEmpty()) {
                     itemTransactionDescription.visibility = VISIBLE

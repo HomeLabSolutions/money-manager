@@ -83,7 +83,7 @@
                     android:layout_height="32dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="8dp"
-                    app:tint="@color/control_highlight_color"
+                    app:tint="?attr/colorControlActivated"
                     app:srcCompat="@drawable/ic_arrow_forward" />
             </LinearLayout>
 

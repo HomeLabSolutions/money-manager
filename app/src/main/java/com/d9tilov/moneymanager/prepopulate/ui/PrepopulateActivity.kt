@@ -3,22 +3,35 @@ package com.d9tilov.moneymanager.prepopulate.ui
 import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.NavHostFragment
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseActivity
-import com.d9tilov.moneymanager.databinding.ActivityPrepopulateBinding
-import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.budget.ui.BudgetAmountFragmentDirections
 import com.d9tilov.moneymanager.currency.ui.CurrencyFragmentDirections
-import com.d9tilov.moneymanager.prepopulate.fixedexpense.ui.FixedExpenseFragmentDirections
-import com.d9tilov.moneymanager.prepopulate.fixedincome.ui.FragmentFixedIncomeDirections
+import com.d9tilov.moneymanager.databinding.ActivityPrepopulateBinding
+import com.d9tilov.moneymanager.fixed.ui.FixedExpenseFragmentDirections
+import com.d9tilov.moneymanager.fixed.ui.FixedIncomeFragmentDirections
+import com.d9tilov.moneymanager.home.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
 
-    private var backStackEntryCount = 1
+    private val fullScreenDestinationSet =
+        setOf(
+            R.id.fixed_created_transaction_dest,
+            R.id.category_dest,
+            R.id.edit_category_dialog,
+            R.id.remove_sub_category_dialog,
+            R.id.remove_category_dialog,
+            R.id.unit_category_to_folder_dialog,
+            R.id.category_set_dest,
+            R.id.category_creation_dest,
+            R.id.sub_category_dest
+        )
     var controlsClick: ControlsClicked? = null
 
     override fun performDataBinding() = ActivityPrepopulateBinding.inflate(layoutInflater)
@@ -28,41 +41,51 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.prepopulate_nav_host_container) as NavHostFragment
         val navController = navHostFragment.navController
-        viewBinding.prepopulateProgress.setProgress(
-            backStackEntryCount,
-            MAX_SCREEN_AMOUNT
-        )
+        navController.addOnDestinationChangedListener { controller, destination, _ ->
+            setControlsVisibility(if (fullScreenDestinationSet.contains(destination.id)) GONE else VISIBLE)
+            enableBackButton(destination.id != R.id.choose_currency_dest)
+            updateProgress(navController.backStack.size)
+        }
         viewBinding.prepopulateNextBtn.setOnClickListener {
             val action: NavDirections
-            backStackEntryCount += 1
             when (navController.currentDestination?.id) {
-                R.id.choose_currency_dest ->
+                R.id.choose_currency_dest -> {
                     action =
                         CurrencyFragmentDirections.toCommonAmountDest()
-                R.id.budget_amount_dest ->
+                    navController.navigate(action)
+                }
+                R.id.budget_amount_dest -> {
                     action =
                         BudgetAmountFragmentDirections.toFixedIncomeDest()
-                R.id.fixed_income_dest ->
+                    navController.navigate(action)
+                }
+                R.id.fixed_income_dest -> {
                     action =
-                        FragmentFixedIncomeDirections.toFixedExpenseDest()
-                R.id.fixed_expense_dest -> action = FixedExpenseFragmentDirections.toGoalsDest()
-                else -> {
+                        FixedIncomeFragmentDirections.toFixedExpenseDest()
+                    navController.navigate(action)
+                }
+                R.id.fixed_expense_dest -> {
                     action = FixedExpenseFragmentDirections.toGoalsDest()
+                    navController.navigate(action)
+                }
+                else -> {
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 }
             }
-            navController.navigate(action)
             controlsClick?.onNextClick()
         }
         viewBinding.prepopulateBackBtn.setOnClickListener {
-            backStackEntryCount -= 1
             navController.popBackStack()
             controlsClick?.onBackClick()
         }
-        navController.addOnDestinationChangedListener { controller, destination, _ ->
-            enableBackButton(destination.id != R.id.choose_currency_dest)
-            updateProgress()
+    }
+
+    private fun setControlsVisibility(visibility: Int) {
+        viewBinding.run {
+            prepopulateBackBtn.visibility = visibility
+            prepopulateNextBtn.visibility = visibility
+            prepopulateProgress.visibility = visibility
         }
     }
 
@@ -75,10 +98,10 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
             if (enable) 1f else disableValue
     }
 
-    private fun updateProgress() {
+    private fun updateProgress(progress: Int) {
         (supportFragmentManager.findFragmentById(R.id.prepopulate_nav_host_container) as NavHostFragment).childFragmentManager.backStackEntryCount
         viewBinding.prepopulateProgress.setProgress(
-            backStackEntryCount,
+            progress - 1,
             MAX_SCREEN_AMOUNT
         )
     }

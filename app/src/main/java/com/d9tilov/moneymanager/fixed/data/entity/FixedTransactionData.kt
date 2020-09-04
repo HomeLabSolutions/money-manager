@@ -2,6 +2,8 @@ package com.d9tilov.moneymanager.fixed.data.entity
 
 import android.os.Parcelable
 import com.d9tilov.moneymanager.core.constants.DataConstants
+import com.d9tilov.moneymanager.core.util.getDayOfWeek
+import com.d9tilov.moneymanager.period.PeriodType
 import com.d9tilov.moneymanager.transaction.TransactionType
 import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
@@ -16,7 +18,9 @@ data class FixedTransactionData(
     val sum: BigDecimal,
     val categoryId: Long,
     val createdDate: Date = Date(),
-    val expireDate: Date,
+    val startDate: Date,
+    val periodType: PeriodType,
+    val dayOfWeek: Int = Date().getDayOfWeek(),
     val description: String,
     val pushEnable: Boolean = true
 ) : Parcelable

@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.recyclerview.widget.SnapHelper
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.R
@@ -64,6 +63,7 @@ class IncomeFragment :
                     }
                 }
             }
+            mainSum = it.incomeMainSum
         }
         viewModel.run {
             categories.observe(
@@ -150,7 +150,6 @@ class IncomeFragment :
                     transactionAdapter.deleteItem(viewHolder.adapterPosition)
                 }
             }).attachToRecyclerView(incomeTransactionRvList)
-            (incomeCategoryRvList.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         }
     }
 

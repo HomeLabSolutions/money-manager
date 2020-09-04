@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.prepopulate.fixedexpense.vm
+package com.d9tilov.moneymanager.fixed.vm
 
 import androidx.hilt.lifecycle.ViewModelInject
 import com.d9tilov.moneymanager.base.ui.navigator.FixedExpenseNavigator

@@ -57,11 +57,7 @@ class TransactionInteractorImpl(
     }
 
     override fun getTransactionsByType(type: TransactionType): Flowable<PagedList<BaseTransaction>> {
-        val categoryType = when (type) {
-            TransactionType.INCOME -> TransactionType.INCOME
-            TransactionType.EXPENSE -> TransactionType.EXPENSE
-        }
-        return categoryInteractor.getGroupedCategoriesByType(categoryType)
+        return categoryInteractor.getGroupedCategoriesByType(type)
             .switchMap { categoryList ->
                 transactionRepo.getTransactionsByType(transactionType = type)
                     .map { item ->

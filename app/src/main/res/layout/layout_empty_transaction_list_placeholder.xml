@@ -43,7 +43,20 @@
         android:textColor="@color/header_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintTop_toBottomOf="@+id/empty_transaction_placeholder_title" />
+
+    <ImageView
+        android:id="@+id/empty_transaction_placeholder_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/empty_transaction_placeholder_subtitle"
+        app:tint="?attr/colorSecondary" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
