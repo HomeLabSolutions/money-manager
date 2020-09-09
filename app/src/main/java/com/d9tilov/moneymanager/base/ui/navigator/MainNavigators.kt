@@ -32,12 +32,14 @@ interface BudgetAmountNavigator : BaseNavigator {
     fun showError()
 }
 
-interface FixedIncomeNavigator : BaseNavigator
 interface FixedCreatedNavigator : BaseNavigator {
     fun back()
 }
 
-interface FixedExpenseNavigator : BaseNavigator
+interface BaseFixedIncomeExpenseNavigator : BaseNavigator
+
+interface FixedExpenseNavigator : BaseFixedIncomeExpenseNavigator
+interface FixedIncomeNavigator : BaseFixedIncomeExpenseNavigator
 
 interface GoalsNavigator : BaseNavigator
 
