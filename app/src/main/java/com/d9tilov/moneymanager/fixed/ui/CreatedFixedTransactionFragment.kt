@@ -168,7 +168,7 @@ class CreatedFixedTransactionFragment :
             it.createdFixedTransactionCategoryLayout.setOnClickListener {
                 val action = CreatedFixedTransactionFragmentDirections.toFixedCategoryDest(
                     destination = CategoryDestination.PREPOPULATE_SCREEN,
-                    transactionType = TransactionType.INCOME
+                    transactionType = transactionType
                 )
                 findNavController().navigate(action)
             }
