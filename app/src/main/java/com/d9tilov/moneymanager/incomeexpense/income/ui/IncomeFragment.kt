@@ -54,16 +54,16 @@ class IncomeFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding?.let {
-            emptyViewStub = it.root.findViewById(R.id.income_transaction_empty_placeholder)
-            it.incomeMainSum.moneyEditText.setOnFocusChangeListener { _, hasFocus ->
+        viewBinding?.run {
+            emptyViewStub = root.findViewById(R.id.income_transaction_empty_placeholder)
+            incomeMainSum.moneyEditText.setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus) {
-                    it.incomeMainSum.moneyEditText.post {
-                        it.incomeMainSum.moneyEditText.setSelection(it.incomeMainSum.moneyEditText.text.toString().length)
+                    incomeMainSum.moneyEditText.post {
+                        incomeMainSum.moneyEditText.setSelection(incomeMainSum.moneyEditText.text.toString().length)
                     }
                 }
             }
-            mainSum = it.incomeMainSum
+            mainSum = incomeMainSum
         }
         viewModel.run {
             categories.observe(
@@ -157,8 +157,8 @@ class IncomeFragment :
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
             param(FirebaseAnalytics.Param.ITEM_ID, "click_all_categories_income")
         }
-        viewBinding?.let {
-            val inputSum = it.incomeMainSum.getValue()
+        viewBinding?.run {
+            val inputSum = incomeMainSum.getValue()
             val action = if (inputSum.signum() > 0) {
                 IncomeExpenseFragmentDirections.toCategoryDest(
                     destination = CategoryDestination.MAIN_WITH_SUM_SCREEN,
@@ -189,12 +189,12 @@ class IncomeFragment :
     override fun onCloseKeyboard() {
         Timber.tag(App.TAG).d("Keyboard hidden")
         isKeyboardOpen = false
-        viewBinding?.let {
+        viewBinding?.run {
             onKeyboardVisibilityAnimation(false)
             if (isTransactionDataEmpty) {
                 showViewStub(TransactionType.INCOME)
             }
-            it.incomeMainSum.clearFocus()
+            incomeMainSum.clearFocus()
         }
     }
 
@@ -219,13 +219,11 @@ class IncomeFragment :
     }
 
     override fun saveTransaction(category: Category) {
-        viewBinding?.let {
-            viewModel.saveTransaction(category, it.incomeMainSum.getValue())
-        }
+        viewBinding?.run { viewModel.saveTransaction(category, incomeMainSum.getValue()) }
     }
 
     override fun resetMainSum() {
-        viewBinding?.incomeMainSum?.setValue(BigDecimal.ZERO)
+        viewBinding?.run { incomeMainSum.setValue(BigDecimal.ZERO) }
     }
 
     companion object {

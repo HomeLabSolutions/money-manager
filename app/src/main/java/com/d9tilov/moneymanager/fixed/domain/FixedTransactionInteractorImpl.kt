@@ -15,7 +15,7 @@ class FixedTransactionInteractorImpl(
     FixedTransactionInteractor {
 
     override fun insert(fixedTransactionData: FixedTransaction) =
-        fixedTransactionRepo.insert(fixedTransactionDomainMapper.toDataModel(fixedTransactionData))
+        fixedTransactionRepo.insert(fixedTransactionDomainMapper.toData(fixedTransactionData))
 
     override fun getAll(type: TransactionType): Flowable<List<FixedTransaction>> {
         return categoryInteractor.getGroupedCategoriesByType(type)
@@ -37,8 +37,8 @@ class FixedTransactionInteractorImpl(
     }
 
     override fun update(fixedTransactionData: FixedTransaction) =
-        fixedTransactionRepo.update(fixedTransactionDomainMapper.toDataModel(fixedTransactionData))
+        fixedTransactionRepo.update(fixedTransactionDomainMapper.toData(fixedTransactionData))
 
     override fun delete(fixedTransactionData: FixedTransaction) =
-        fixedTransactionRepo.delete(fixedTransactionDomainMapper.toDataModel(fixedTransactionData))
+        fixedTransactionRepo.delete(fixedTransactionDomainMapper.toData(fixedTransactionData))
 }

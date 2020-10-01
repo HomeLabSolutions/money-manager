@@ -82,8 +82,8 @@ class CategoryCreationFragment :
     private val onItemColorClickListener = object : OnItemClickListener<Int> {
         override fun onItemClick(item: Int, position: Int) {
             color = item
-            viewBinding?.let {
-                it.categoryCreationRvColorPicker.visibility = INVISIBLE
+            viewBinding?.run {
+                categoryCreationRvColorPicker.visibility = INVISIBLE
                 updateIcon(icon)
                 setColorToColorIcon()
             }
@@ -103,46 +103,46 @@ class CategoryCreationFragment :
             )
         }
         color = category.color
-        viewBinding?.let {
+        viewBinding?.run {
             val colorLayoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            it.categoryCreationRvColorPicker.layoutManager = colorLayoutManager
-            it.categoryCreationRvColorPicker.adapter = categoryColorAdapter
-            it.categoryCreationRvColorPicker.scrollToPosition(categoryColorAdapter.getSelectedPosition())
-            it.categoryCreationEtName.setText(category.name)
+            categoryCreationRvColorPicker.layoutManager = colorLayoutManager
+            categoryCreationRvColorPicker.adapter = categoryColorAdapter
+            categoryCreationRvColorPicker.scrollToPosition(categoryColorAdapter.getSelectedPosition())
+            categoryCreationEtName.setText(category.name)
             updateIcon(category.icon)
             setColorToColorIcon()
-            it.categoryCreationSave.isEnabled =
-                it.categoryCreationEtName.length() > 0
-            it.categoryCreationEtName.onChange { text ->
-                it.categoryCreationSave.isEnabled = text.isNotEmpty()
-                it.categoryCreationEtNameLayout.error = null
+            categoryCreationSave.isEnabled =
+                categoryCreationEtName.length() > 0
+            categoryCreationEtName.onChange { text ->
+                categoryCreationSave.isEnabled = text.isNotEmpty()
+                categoryCreationEtNameLayout.error = null
             }
-            it.categoryCreationDelete.visibility =
+            categoryCreationDelete.visibility =
                 if (category.id == DEFAULT_DATA_ID) GONE else VISIBLE
-            it.categoryCreationIconLayout.setOnClickListener { _ ->
+            categoryCreationIconLayout.setOnClickListener { _ ->
                 val action = CategoryCreationFragmentDirections.toCategorySetDest(transactionType)
                 findNavController().navigate(action)
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
                     param(FirebaseAnalytics.Param.ITEM_ID, "open_category_set_screen")
                 }
             }
-            it.categoryCreationSave.setOnClickListener { _ ->
+            categoryCreationSave.setOnClickListener { _ ->
                 viewModel.save(
                     category.copy(
-                        name = it.categoryCreationEtName.text.toString(),
+                        name = categoryCreationEtName.text.toString(),
                         color = color,
                         icon = icon
                     )
                 )
             }
-            it.categoryCreationColor.root.setOnClickListener { _ ->
-                it.categoryCreationRvColorPicker.visibility = VISIBLE
+            categoryCreationColor.root.setOnClickListener { _ ->
+                categoryCreationRvColorPicker.visibility = VISIBLE
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
                     param(FirebaseAnalytics.Param.ITEM_ID, "click_choose_color")
                 }
             }
-            it.categoryCreationDelete.setOnClickListener {
+            categoryCreationDelete.setOnClickListener {
                 if (category.id == DEFAULT_DATA_ID) {
                     return@setOnClickListener
                 }

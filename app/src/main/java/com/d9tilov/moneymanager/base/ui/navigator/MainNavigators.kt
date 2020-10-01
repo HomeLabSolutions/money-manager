@@ -42,6 +42,13 @@ interface FixedExpenseNavigator : BaseFixedIncomeExpenseNavigator
 interface FixedIncomeNavigator : BaseFixedIncomeExpenseNavigator
 
 interface GoalsNavigator : BaseNavigator
+interface CreatedGoalNavigator : BaseNavigator {
+    fun back()
+}
+
+interface RemoveGoalNavigator : BaseNavigator {
+    fun closeDialog()
+}
 
 interface IncomeNavigator : BaseIncomeExpenseNavigator
 

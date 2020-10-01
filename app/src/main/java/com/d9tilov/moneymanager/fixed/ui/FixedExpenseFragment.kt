@@ -30,12 +30,12 @@ class FixedExpenseFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding?.let {
-            toolbar = it.fixedExpenseToolbarContainer.toolbar
-            it.fixedExpenseRvList.adapter = fixedTransactionAdapter
+        viewBinding?.run {
+            toolbar = fixedExpenseToolbarContainer.toolbar
+            fixedExpenseRvList.adapter = fixedTransactionAdapter
             val layoutManager = LinearLayoutManager(requireContext())
-            it.fixedExpenseRvList.layoutManager = layoutManager
-            it.fixedExpenseRvList.addItemDecoration(
+            fixedExpenseRvList.layoutManager = layoutManager
+            fixedExpenseRvList.addItemDecoration(
                 MarginItemDecoration(
                     resources.getDimension(R.dimen.recycler_view_fixed_category_margin).toInt()
                 )
@@ -44,18 +44,18 @@ class FixedExpenseFragment :
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     fixedTransactionAdapter.deleteItem(viewHolder.adapterPosition)
                 }
-            }).attachToRecyclerView(it.fixedExpenseRvList)
+            }).attachToRecyclerView(fixedExpenseRvList)
         }
         emptyViewStub = viewBinding?.root?.findViewById(R.id.fixed_expense_empty_placeholder)
         viewModel.fixedExpenseTransactionList.observe(
             this.viewLifecycleOwner,
             {
                 if (it.isEmpty()) {
-                    viewBinding?.fixedExpenseRvList?.visibility = GONE
+                    viewBinding?.run { fixedExpenseRvList.visibility = GONE }
                     showViewStub(TransactionType.EXPENSE)
                 } else {
                     hideViewStub()
-                    viewBinding?.fixedExpenseRvList?.visibility = VISIBLE
+                    viewBinding?.run { fixedExpenseRvList.visibility = VISIBLE }
                     fixedTransactionAdapter.updateItems(it)
                 }
             }

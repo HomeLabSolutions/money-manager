@@ -56,16 +56,16 @@ class ExpenseFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding?.let {
-            emptyViewStub = it.root.findViewById(R.id.expense_transaction_empty_placeholder)
-            it.expenseMainSum.moneyEditText.setOnFocusChangeListener { _, hasFocus ->
+        viewBinding?.run {
+            emptyViewStub = root.findViewById(R.id.expense_transaction_empty_placeholder)
+            expenseMainSum.moneyEditText.setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus) {
-                    it.expenseMainSum.moneyEditText.post {
-                        it.expenseMainSum.moneyEditText.setSelection(it.expenseMainSum.moneyEditText.text.toString().length)
+                    expenseMainSum.moneyEditText.post {
+                        expenseMainSum.moneyEditText.setSelection(expenseMainSum.moneyEditText.text.toString().length)
                     }
                 }
             }
-            mainSum = it.expenseMainSum
+            mainSum = expenseMainSum
         }
         viewModel.run {
             categories.observe(
@@ -159,8 +159,8 @@ class ExpenseFragment :
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
             param(FirebaseAnalytics.Param.ITEM_ID, "click_all_categories_expense")
         }
-        viewBinding?.let {
-            val inputSum = it.expenseMainSum.getValue()
+        viewBinding?.run {
+            val inputSum = expenseMainSum.getValue()
             val action = if (inputSum.signum() > 0) {
                 IncomeExpenseFragmentDirections.toCategoryDest(
                     destination = CategoryDestination.MAIN_WITH_SUM_SCREEN,
@@ -191,23 +191,24 @@ class ExpenseFragment :
     override fun onCloseKeyboard() {
         Timber.tag(App.TAG).d("Keyboard hidden")
         isKeyboardOpen = false
-        viewBinding?.let {
+        viewBinding?.run {
             onKeyboardVisibilityAnimation(false)
             if (isTransactionDataEmpty) {
                 showViewStub(TransactionType.EXPENSE)
             }
-            it.expenseMainSum.clearFocus()
+            expenseMainSum.clearFocus()
         }
     }
 
     private fun onKeyboardVisibilityAnimation(open: Boolean) {
-        if (open) {
-            viewBinding?.expenseCategoryRvList?.visibility = VISIBLE
-        } else {
-            viewBinding?.expenseTransactionRvList?.visibility = VISIBLE
-            viewBinding?.expenseCategoryRvList?.visibility = GONE
+        viewBinding?.run {
+            if (open) {
+                expenseCategoryRvList.visibility = VISIBLE
+            } else {
+                expenseTransactionRvList.visibility = VISIBLE
+                expenseCategoryRvList.visibility = GONE
+            }
         }
-
         val alphaAnimationCategories =
             ObjectAnimator.ofFloat(
                 viewBinding?.expenseCategoryRvList,
@@ -222,13 +223,13 @@ class ExpenseFragment :
     }
 
     override fun saveTransaction(category: Category) {
-        viewBinding?.let {
-            viewModel.saveTransaction(category, it.expenseMainSum.getValue())
+        viewBinding?.run {
+            viewModel.saveTransaction(category, expenseMainSum.getValue())
         }
     }
 
     override fun resetMainSum() {
-        viewBinding?.expenseMainSum?.setValue(BigDecimal.ZERO)
+        viewBinding?.run { expenseMainSum.setValue(BigDecimal.ZERO) }
     }
 
     companion object {

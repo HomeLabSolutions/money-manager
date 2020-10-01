@@ -14,11 +14,11 @@ import com.d9tilov.moneymanager.transaction.ui.vm.RemoveTransactionViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class TransactionRemoveDialogFragment :
+class TransactionRemoveDialog :
     BaseDialogFragment<FragmentDialogRemoveBinding, RemoveTransactionDialogNavigator>(),
     RemoveTransactionDialogNavigator {
 
-    private val args by navArgs<TransactionRemoveDialogFragmentArgs>()
+    private val args by navArgs<TransactionRemoveDialogArgs>()
     private val transaction by lazy { args.transaction }
     private val fixedTransaction by lazy { args.fixedTransaction }
 
@@ -30,14 +30,14 @@ class TransactionRemoveDialogFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewBinding?.run {
-            transactionRemoveDialogTitle.text = getString(R.string.transaction_delete_dialog_title)
-            transactionRemoveDialogSubtitle.text =
+            removeDialogTitle.text = getString(R.string.transaction_delete_dialog_title)
+            removeDialogSubtitle.text =
                 getString(R.string.transaction_delete_dialog_subtitle)
-            transactionRemoveButtonConfirm.setOnClickListener {
+            removeButtonConfirm.setOnClickListener {
                 transaction?.let { viewModel.removeTransaction(it) }
                 fixedTransaction?.let { viewModel.removeFixedTransaction(it) }
             }
-            transactionRemoveButtonCancel.setOnClickListener {
+            removeButtonCancel.setOnClickListener {
                 dismiss()
                 findNavController().previousBackStackEntry?.savedStateHandle?.set(
                     ARG_UNDO_REMOVE_LAYOUT_DISMISS,

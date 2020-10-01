@@ -31,17 +31,17 @@ class CategoryEditDialog :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding?.let {
-            it.categoryDialogEditEtName.setText(category.name)
-            it.categoryDialogEditEtName.onChange { text ->
+        viewBinding?.run {
+            categoryDialogEditEtName.setText(category.name)
+            categoryDialogEditEtName.onChange { text ->
                 val isNameEmpty = text.isEmpty()
                 viewBinding?.categoryEditButtonConfirm?.isEnabled = !isNameEmpty
                 viewBinding?.categoryDialogEditEtNameLayout?.error = null
             }
-            it.categoryEditButtonConfirm.setOnClickListener { _ ->
-                viewModel.save(category.copy(name = it.categoryDialogEditEtName.text.toString()))
+            categoryEditButtonConfirm.setOnClickListener { _ ->
+                viewModel.save(category.copy(name = categoryDialogEditEtName.text.toString()))
             }
-            it.categoryEditButtonCancel.setOnClickListener { dismiss() }
+            categoryEditButtonCancel.setOnClickListener { dismiss() }
         }
     }
 

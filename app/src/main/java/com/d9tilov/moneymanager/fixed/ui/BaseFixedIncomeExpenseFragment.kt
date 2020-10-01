@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
@@ -21,7 +22,7 @@ import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.fixed.domain.entity.FixedTransaction
 import com.d9tilov.moneymanager.fixed.vm.BaseFixedIncomeExpenseViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
-import com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialogFragment
+import com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialog
 import com.google.android.material.appbar.MaterialToolbar
 
 abstract class BaseFixedIncomeExpenseFragment<V : ViewBinding, N : BaseFixedIncomeExpenseNavigator>(
@@ -81,7 +82,7 @@ abstract class BaseFixedIncomeExpenseFragment<V : ViewBinding, N : BaseFixedInco
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
-            TransactionRemoveDialogFragment.ARG_UNDO_REMOVE_LAYOUT_DISMISS
+            TransactionRemoveDialog.ARG_UNDO_REMOVE_LAYOUT_DISMISS
         )?.observe(
             viewLifecycleOwner
         ) {
@@ -127,20 +128,37 @@ abstract class BaseFixedIncomeExpenseFragment<V : ViewBinding, N : BaseFixedInco
             emptyViewStub?.visibility = View.VISIBLE
         } else {
             val inflatedStub = emptyViewStub?.inflate()
+            val stubIcon =
+                inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_icon)
+            stubIcon?.setImageDrawable(
+                ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.ic_wallet_empty
+                )
+            )
             val stubTitle =
-                inflatedStub?.findViewById<TextView>(R.id.empty_transaction_placeholder_title)
+                inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_title)
             stubTitle?.text =
                 getString(
                     if (transactionType == TransactionType.INCOME)
                         R.string.transaction_empty_placeholder_fixed_income_title else
                         R.string.transaction_empty_placeholder_fixed_expense_title
                 )
+            val stubSubTitle =
+                inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_subtitle)
+            stubSubTitle?.visibility = View.VISIBLE
+            stubSubTitle?.text = getString(R.string.transaction_empty_placeholder_subtitle)
             val addExpense =
-                inflatedStub?.findViewById<ImageView>(R.id.empty_transaction_placeholder_add)
+                inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_add)
+            addExpense?.visibility = View.VISIBLE
             addExpense?.setOnClickListener {
                 openCreatedScreen(transactionType)
             }
         }
+    }
+
+    protected fun hideViewStub() {
+        emptyViewStub?.visibility = View.GONE
     }
 
     private fun openCreatedScreen(transactionType: TransactionType) {
@@ -150,9 +168,5 @@ abstract class BaseFixedIncomeExpenseFragment<V : ViewBinding, N : BaseFixedInco
             FixedExpenseFragmentDirections.toCreateFixedTransactionDest(TransactionType.EXPENSE)
         }
         findNavController().navigate(action)
-    }
-
-    protected fun hideViewStub() {
-        emptyViewStub?.visibility = View.GONE
     }
 }

@@ -30,12 +30,12 @@ class FixedIncomeFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding?.let {
-            toolbar = it.fixedIncomeToolbarContainer.toolbar
-            it.fixedIncomeRvList.adapter = fixedTransactionAdapter
+        viewBinding?.run {
+            toolbar = fixedIncomeToolbarContainer.toolbar
+            fixedIncomeRvList.adapter = fixedTransactionAdapter
             val layoutManager = LinearLayoutManager(requireContext())
-            it.fixedIncomeRvList.layoutManager = layoutManager
-            it.fixedIncomeRvList.addItemDecoration(
+            fixedIncomeRvList.layoutManager = layoutManager
+            fixedIncomeRvList.addItemDecoration(
                 MarginItemDecoration(
                     resources.getDimension(R.dimen.recycler_view_fixed_category_margin).toInt()
                 )
@@ -44,7 +44,7 @@ class FixedIncomeFragment :
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     fixedTransactionAdapter.deleteItem(viewHolder.adapterPosition)
                 }
-            }).attachToRecyclerView(it.fixedIncomeRvList)
+            }).attachToRecyclerView(fixedIncomeRvList)
         }
         emptyViewStub = viewBinding?.root?.findViewById(R.id.fixed_income_empty_placeholder)
         viewModel.fixedIncomeTransactionList.observe(

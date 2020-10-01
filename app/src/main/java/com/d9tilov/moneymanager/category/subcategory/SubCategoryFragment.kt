@@ -52,23 +52,23 @@ class SubCategoryFragment :
                 SUB_CATEGORY_TITLE
             )
         }
-        viewBinding?.let {
-            it.categoryGroupEdit.visibility = VISIBLE
-            it.categoryGroupDelete.visibility = VISIBLE
-            it.categoryCreate.visibility = GONE
-            it.categoryGroupDelete.setOnClickListener {
+        viewBinding?.run {
+            categoryGroupEdit.visibility = VISIBLE
+            categoryGroupDelete.visibility = VISIBLE
+            categoryCreate.visibility = GONE
+            categoryGroupDelete.setOnClickListener {
                 val action = SubCategoryFragmentDirections.toRemoveCategoryDialog(
                     CategoryDestination.SUB_CATEGORY_SCREEN, modifiedParentCategory
                 )
                 findNavController().navigate(action)
             }
-            it.categoryGroupEdit.setOnClickListener {
+            categoryGroupEdit.setOnClickListener {
                 val action = SubCategoryFragmentDirections.toEditCategoryDialog(
                     modifiedParentCategory
                 )
                 findNavController().navigate(action)
             }
-            (it.categoryRv.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+            (categoryRv.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         }
     }
 

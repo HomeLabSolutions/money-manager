@@ -18,7 +18,7 @@ import java.util.Date
 class BudgetAmountViewModel @ViewModelInject constructor(private val budgetInteractor: BudgetInteractor) :
     BaseViewModel<BudgetAmountNavigator>() {
 
-    var amount = MutableLiveData<BigDecimal>()
+    val amount by lazy { MutableLiveData<BigDecimal>() }
     private lateinit var budget: BudgetData
 
     init {

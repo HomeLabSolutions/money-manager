@@ -16,7 +16,7 @@ import com.d9tilov.moneymanager.databinding.FragmentIncomeExpenseBinding
 import com.d9tilov.moneymanager.incomeexpense.ui.adapter.IncomeExpenseAdapter
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.IncomeExpenseViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
-import com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialogFragment.Companion.ARG_UNDO_REMOVE_LAYOUT_DISMISS
+import com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialog.Companion.ARG_UNDO_REMOVE_LAYOUT_DISMISS
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,8 +65,8 @@ class IncomeExpenseFragment :
                 currentFragment?.onDismiss()
             }
         }
-        viewBinding?.let {
-            it.incomeExpenseViewPager.addOnPageChangeListener(object :
+        viewBinding?.run {
+            incomeExpenseViewPager.addOnPageChangeListener(object :
                     ViewPager.OnPageChangeListener {
                     override fun onPageScrollStateChanged(state: Int) { /* do notjing */
                     }
@@ -81,9 +81,9 @@ class IncomeExpenseFragment :
                     override fun onPageSelected(position: Int) {
                         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
                             param(
-                                FirebaseAnalytics.Param.ITEM_ID,
-                                if (position == 0) "expense" else "income"
-                            )
+        FirebaseAnalytics.Param.ITEM_ID,
+        if (position == 0) "expense" else "income"
+    )
                         }
                         currentPage = position
                         val currentFragment = getCurrentPagedFragment()
@@ -94,9 +94,9 @@ class IncomeExpenseFragment :
                         }
                     }
                 })
-            it.incomeExpenseTabs.setupWithViewPager(income_expense_view_pager)
-            it.incomeExpenseViewPager.adapter = incomeExpenseAdapter
-            it.incomeExpenseViewPager.currentItem =
+            incomeExpenseTabs.setupWithViewPager(income_expense_view_pager)
+            incomeExpenseViewPager.adapter = incomeExpenseAdapter
+            incomeExpenseViewPager.currentItem =
                 if (transactionType == TransactionType.INCOME) {
                     1
                 } else {

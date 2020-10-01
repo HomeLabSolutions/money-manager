@@ -14,13 +14,13 @@
     <string name="title_category_creation">Категория</string>
     <string name="title_category_set">Доступные иконки</string>
     <string name="title_category_creation_create">Создание категории</string>
-
     <string name="title_prepopulate_currency">Выберите валюту</string>
     <string name="title_prepopulate_budget">Текущий бюджет</string>
     <string name="title_prepopulate_fixed_incomes">Постоянные доходы</string>
     <string name="title_prepopulate_fixed_income">Постоянный доход</string>
     <string name="title_prepopulate_fixed_expenses">Постоянные расходы</string>
     <string name="title_prepopulate_fixed_expense">Постоянный расход</string>
+    <string name="title_goal">Цель</string>
 
     <string name="toolbar_menu_skip">Пропустить</string>
 
@@ -121,6 +121,14 @@
         <item>Месяц</item>
         <item>Год</item>
     </string-array>
+
+    <string name="goals_accumulated">Накоплено</string>
+    <string name="goals_empty_placeholder_title">Добавьте цели</string>
+    <string name="goals_empty_placeholder_subtitle">Добавьте цель, на которую хотите накопить</string>
+    <string name="goals_target_name_hint">Название цели</string>
+    <string name="goals_description_hint">Описание цели</string>
+    <string name="goals_remove_dialog_title">Удаление цели</string>
+    <string name="goals_remove_dialog_subtitle">Вы действительно хотите удалить цель?</string>
 
     <string name="error_loading">Ошибка загрузки</string>
 </resources>

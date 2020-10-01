@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Rect
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
@@ -16,24 +17,33 @@ class ProgressLine @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
+    private var showPercent = false
+
     private var barWidth = 24f
     private var valueTextSize = 24f
+    private var percentTextSize = 20f
     private var layoutHeight = 0
     private var layoutWidth = 0
 
     private var progressColor = Color.GREEN
     private var valueTextColor = Color.GREEN
+    private var percentTextColor = Color.WHITE
     private var underLineColor = Color.GRAY
 
     private val valueTextPaint = TextPaint()
+    private val percentTextPaint = TextPaint()
     private val progressLinePaint = Paint()
     private val underLinePaint = Paint()
 
     private val defaultPaddingLeft = 30
     private val defaultPaddingRight = 30
+    private val percentPaddingRight = 16
 
     private var valueText: String = ""
+    private var percentText: String = ""
     private var valueTextWidth: Float = 0.toFloat()
+    private var percentTextWidth: Float = 0.toFloat()
+    private var percentTextHeight: Float = 0.toFloat()
 
     private var currentValue: Int = 0
     private var maxValue: Int = 100
@@ -48,16 +58,21 @@ class ProgressLine @JvmOverloads constructor(
                     valueText = getString(R.styleable.ProgressLine_value) ?: ""
 
                 barWidth = getDimension(R.styleable.ProgressLine_lineBarWidth, barWidth)
+                showPercent = getBoolean(R.styleable.ProgressLine_showPercent, showPercent)
                 progressColor =
                     getColor(R.styleable.ProgressLine_lineProgressColor, progressColor)
                 valueTextSize =
                     getDimension(R.styleable.ProgressLine_valueTextSize, valueTextSize)
+                percentTextSize =
+                    getDimension(R.styleable.ProgressLine_percentTextSize, percentTextSize)
                 currentValue = getInt(R.styleable.ProgressLine_currentValue, currentValue)
                 maxValue = getInt(R.styleable.ProgressLine_maxValue, maxValue)
                 percentage = currentValue.toBigDecimal().divide(maxValue.toBigDecimal())
                     .multiply(100.toBigDecimal()).toInt()
                 underLineColor = getColor(R.styleable.ProgressLine_underLineColor, underLineColor)
                 valueTextColor = getColor(R.styleable.ProgressLine_valueTextColor, valueTextColor)
+                percentTextColor =
+                    getColor(R.styleable.ProgressLine_percentTextColor, percentTextColor)
                 calculateBarScale()
                 recycle()
                 invalidate()
@@ -82,6 +97,9 @@ class ProgressLine @JvmOverloads constructor(
         valueTextPaint.color = valueTextColor
         valueTextPaint.flags = Paint.ANTI_ALIAS_FLAG
 
+        percentTextPaint.color = percentTextColor
+        percentTextPaint.flags = Paint.ANTI_ALIAS_FLAG
+
         progressLinePaint.color = progressColor
         progressLinePaint.isAntiAlias = true
         progressLinePaint.style = Paint.Style.FILL
@@ -98,7 +116,12 @@ class ProgressLine @JvmOverloads constructor(
 
     private fun setupBounds() {
         valueTextPaint.textSize = valueTextSize
+        percentTextPaint.textSize = percentTextSize
         valueTextWidth = valueTextPaint.measureText(valueText)
+        percentTextWidth = percentTextPaint.measureText(percentText)
+        val bounds = Rect()
+        percentTextPaint.getTextBounds(percentText, 0, percentText.length, bounds)
+        percentTextHeight = bounds.height().toFloat()
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -131,10 +154,21 @@ class ProgressLine @JvmOverloads constructor(
             (this.height / 3).toFloat(),
             valueTextPaint
         )
+        if (showPercent) {
+            canvas.drawText(
+                percentText,
+                endXp - percentTextWidth - percentPaddingRight,
+                (this.height / 2 + barWidth / 2 + percentTextHeight / 2),
+                percentTextPaint
+            )
+        }
     }
 
     fun setProgress(currentValue: Int, maxValue: Int) {
         valueText = "$currentValue/$maxValue"
+        percentText =
+            currentValue.toBigDecimal().divide(maxValue.toBigDecimal()).multiply(100.toBigDecimal())
+                .toString()
         val diff =
             currentValue.toBigDecimal().divide(maxValue.toBigDecimal()).multiply(100.toBigDecimal())
                 .toInt() - percentage

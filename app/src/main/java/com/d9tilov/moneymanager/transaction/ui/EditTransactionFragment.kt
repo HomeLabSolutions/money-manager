@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
@@ -56,7 +57,9 @@ class EditTransactionFragment : EditTransactionNavigator,
         date = transaction.date
         category = transaction.category
         updateIcon()
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Category>(ARG_CATEGORY)?.observe(
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Category>(
+            ARG_CATEGORY
+        )?.observe(
             viewLifecycleOwner
         ) {
             category = it
@@ -65,18 +68,18 @@ class EditTransactionFragment : EditTransactionNavigator,
                 ARG_CATEGORY
             )
         }
-        viewBinding?.let {
-            it.editTransactionSave.setOnClickListener { _ ->
+        viewBinding?.run {
+            editTransactionSave.setOnClickListener { _ ->
                 viewModel.update(
                     transaction.copy(
-                        sum = it.editTransactionMainSum.getValue(),
+                        sum = editTransactionMainSum.getValue(),
                         category = category,
-                        date = this.date,
-                        description = it.editTransactionDescription.text.toString()
+                        date = date,
+                        description = editTransactionDescription.text.toString()
                     )
                 )
             }
-            it.editTransactionDate.setOnClickListener {
+            editTransactionDate.setOnClickListener {
                 val picker = MaterialDatePicker.Builder.datePicker()
                     .setCalendarConstraints(
                         CalendarConstraints.Builder()
@@ -87,7 +90,7 @@ class EditTransactionFragment : EditTransactionNavigator,
                     .setSelection(transaction.date.time)
                     .build()
                 picker.addOnPositiveButtonClickListener { calendarDate ->
-                    this.date = Date(calendarDate)
+                    date = Date(calendarDate)
                     viewBinding?.editTransactionDate?.text = SimpleDateFormat(
                         TRANSACTION_DATE_FORMAT,
                         Locale.getDefault()
@@ -98,7 +101,7 @@ class EditTransactionFragment : EditTransactionNavigator,
                     param(FirebaseAnalytics.Param.ITEM_ID, "open_calendar")
                 }
             }
-            it.editTransactionCategory.setOnClickListener {
+            editTransactionCategory.setOnClickListener {
                 val action =
                     EditTransactionFragmentDirections.toCategoryDest(
                         CategoryDestination.EDIT_TRANSACTION_SCREEN,
@@ -109,15 +112,15 @@ class EditTransactionFragment : EditTransactionNavigator,
                     param(FirebaseAnalytics.Param.ITEM_ID, "open_category_screen_of_transaction")
                 }
             }
-            it.editTransactionDelete.setOnClickListener {
+            editTransactionDelete.setOnClickListener {
                 val action = EditTransactionFragmentDirections.toRemoveTransactionDialog(
                     transaction
                 )
                 findNavController().navigate(action)
             }
-            it.editTransactionDescription.setText(transaction.description)
-            it.editTransactionMainSum.setValue(transaction.sum)
-            it.editTransactionDate.text = SimpleDateFormat(
+            editTransactionDescription.setText(transaction.description)
+            editTransactionMainSum.setValue(transaction.sum)
+            editTransactionDate.text = SimpleDateFormat(
                 TRANSACTION_DATE_FORMAT,
                 Locale.getDefault()
             ).format(transaction.date)
@@ -133,10 +136,15 @@ class EditTransactionFragment : EditTransactionNavigator,
             category.color
         )
         iconDrawable.setBounds(0, 0, 120, 120)
-        viewBinding?.let {
-            it.editTransactionCategory.setCompoundDrawables(iconDrawable, null, null, null)
-            it.editTransactionCategory.text = category.name
-            it.editTransactionCategory.setTextColor(category.color)
+        viewBinding?.run {
+            editTransactionCategory.setCompoundDrawables(iconDrawable, null, null, null)
+            editTransactionCategory.text = category.name
+            editTransactionCategory.setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    category.color
+                )
+            )
         }
     }
 

@@ -1,12 +1,14 @@
 package com.d9tilov.moneymanager.fixed.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.collection.arrayMapOf
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
@@ -25,7 +27,7 @@ import com.d9tilov.moneymanager.core.util.getDayOfWeek
 import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.core.util.toBigDecimal
-import com.d9tilov.moneymanager.databinding.FragmentCreatedFixedTransactionBinding
+import com.d9tilov.moneymanager.databinding.FragmentCreationFixedTransactionBinding
 import com.d9tilov.moneymanager.fixed.vm.CreatedFixedTransactionViewModel
 import com.d9tilov.moneymanager.period.PeriodType
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -40,14 +42,14 @@ import java.util.Date
 import java.util.Locale
 
 @AndroidEntryPoint
-class CreatedFixedTransactionFragment :
-    BaseFragment<FragmentCreatedFixedTransactionBinding, FixedCreatedNavigator>(R.layout.fragment_created_fixed_transaction),
+class FixedTransactionCreationFragment :
+    BaseFragment<FragmentCreationFixedTransactionBinding, FixedCreatedNavigator>(R.layout.fragment_creation_fixed_transaction),
     FixedCreatedNavigator {
 
-    private val args by navArgs<CreatedFixedTransactionFragmentArgs>()
+    private val args by navArgs<FixedTransactionCreationFragmentArgs>()
     private val transactionType by lazy { args.transactionType }
     private val fixedTransaction by lazy { args.fixedTransaction }
-    private val spinnerPeriodMap = mapOf(
+    private val spinnerPeriodMap = arrayMapOf(
         PeriodType.DAY to 0,
         PeriodType.WEEK to 1,
         PeriodType.MONTH to 2,
@@ -56,7 +58,7 @@ class CreatedFixedTransactionFragment :
 
     private var toolbar: MaterialToolbar? = null
 
-    override fun performDataBinding(view: View) = FragmentCreatedFixedTransactionBinding.bind(view)
+    override fun performDataBinding(view: View) = FragmentCreationFixedTransactionBinding.bind(view)
 
     override fun getNavigator() = this
 
@@ -96,39 +98,37 @@ class CreatedFixedTransactionFragment :
             )
         }
         viewModel.category.observe(this.viewLifecycleOwner, { updateSaveButtonState() })
-        viewBinding?.let {
-            it.createdFixedTransactionCategoryArrow.visibility =
+        viewBinding?.run {
+            createdFixedTransactionCategoryArrow.visibility =
                 if (fixedTransaction == null) VISIBLE else GONE
-            it.createdFixedTransactionDelete.visibility =
+            createdFixedTransactionDelete.visibility =
                 if (fixedTransaction == null) GONE else VISIBLE
             updateSaveButtonState()
-            it.createdFixedTransactionMainSum.setValue(viewModel.sum.value ?: BigDecimal.ZERO)
-            it.createdFixedTransactionMainSum.moneyEditText.onChange { sum ->
+            createdFixedTransactionMainSum.setValue(viewModel.sum.value ?: BigDecimal.ZERO)
+            createdFixedTransactionMainSum.moneyEditText.onChange { sum ->
                 if (sum.isEmpty()) {
                     viewModel.sum.value = BigDecimal.ZERO
                 } else {
                     viewModel.sum.value = sum.toBigDecimal
                 }
-                run {
-                    updateSaveButtonState()
-                }
+                updateSaveButtonState()
             }
-            it.createdFixedTransactionDescription.onChange { description ->
+            createdFixedTransactionDescription.onChange { description ->
                 viewModel.description.value = description
             }
-            it.createdFixedTransactionRepeatCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
+            createdFixedTransactionRepeatCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
                 viewModel.pushEnabled.value = isChecked
             }
-            it.createdFixedTransactionRepeatSpinner.setSelection(
-                spinnerPeriodMap.getValue(viewModel.periodType.value ?: PeriodType.MONTH)
+            createdFixedTransactionRepeatSpinner.setSelection(
+                spinnerPeriodMap.getValue(fixedTransaction?.let { it.periodType } ?: PeriodType.MONTH)
             )
-            it.createdFixedTransactionDescription.setText(viewModel.description.value)
-            it.createdFixedTransactionRepeatCheckbox.isChecked = viewModel.pushEnabled.value ?: true
-            it.createdFixedTransactionRepeatStartsDate.text = SimpleDateFormat(
+            createdFixedTransactionDescription.setText(viewModel.description.value)
+            createdFixedTransactionRepeatCheckbox.isChecked = viewModel.pushEnabled.value ?: true
+            createdFixedTransactionRepeatStartsDate.text = SimpleDateFormat(
                 TRANSACTION_DATE_FORMAT,
                 Locale.getDefault()
             ).format(viewModel.startDate.value ?: Date())
-            it.createdFixedTransactionRepeatSpinner.onItemSelectedListener =
+            createdFixedTransactionRepeatSpinner.onItemSelectedListener =
                 object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(
                         parent: AdapterView<*>?,
@@ -137,7 +137,7 @@ class CreatedFixedTransactionFragment :
                         id: Long
                     ) {
                         viewModel.periodType.value = getSelectedPeriodType(position)
-                        it.createdFixedTransactionWeekSelector.visibility =
+                        createdFixedTransactionWeekSelector.visibility =
                             if (getSelectedPeriodType(position) == PeriodType.WEEK) VISIBLE else GONE
                         if (getSelectedPeriodType(position) == PeriodType.WEEK) {
                             setAllDays()
@@ -146,7 +146,7 @@ class CreatedFixedTransactionFragment :
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                 }
-            it.createdFixedTransactionRepeatStartsDate.setOnClickListener {
+            createdFixedTransactionRepeatStartsDate.setOnClickListener {
                 val picker = MaterialDatePicker.Builder.datePicker()
                     .setCalendarConstraints(
                         CalendarConstraints.Builder()
@@ -165,39 +165,39 @@ class CreatedFixedTransactionFragment :
                 }
                 picker.show(parentFragmentManager, picker.tag)
             }
-            it.createdFixedTransactionCategoryLayout.setOnClickListener {
-                val action = CreatedFixedTransactionFragmentDirections.toFixedCategoryDest(
+            createdFixedTransactionCategoryLayout.setOnClickListener {
+                val action = FixedTransactionCreationFragmentDirections.toFixedCategoryDest(
                     destination = CategoryDestination.PREPOPULATE_SCREEN,
                     transactionType = transactionType
                 )
                 findNavController().navigate(action)
             }
-            it.createdFixedTransactionSave.setOnClickListener { view ->
+            createdFixedTransactionSave.setOnClickListener { view ->
                 if (view.isSelected) {
                     viewModel.save()
                 } else {
                     shakeError()
                 }
             }
-            it.createdFixedTransactionSunday.setOnClickListener { _ ->
+            createdFixedTransactionSunday.setOnClickListener { _ ->
                 setWeekdaySelected(Calendar.SUNDAY)
             }
-            it.createdFixedTransactionMonday.setOnClickListener { _ ->
+            createdFixedTransactionMonday.setOnClickListener { _ ->
                 setWeekdaySelected(Calendar.MONDAY)
             }
-            it.createdFixedTransactionTuesday.setOnClickListener { _ ->
+            createdFixedTransactionTuesday.setOnClickListener { _ ->
                 setWeekdaySelected(Calendar.TUESDAY)
             }
-            it.createdFixedTransactionWednesday.setOnClickListener { _ ->
+            createdFixedTransactionWednesday.setOnClickListener { _ ->
                 setWeekdaySelected(Calendar.WEDNESDAY)
             }
-            it.createdFixedTransactionThursday.setOnClickListener { _ ->
+            createdFixedTransactionThursday.setOnClickListener { _ ->
                 setWeekdaySelected(Calendar.THURSDAY)
             }
-            it.createdFixedTransactionFriday.setOnClickListener { _ ->
+            createdFixedTransactionFriday.setOnClickListener { _ ->
                 setWeekdaySelected(Calendar.FRIDAY)
             }
-            it.createdFixedTransactionSaturday.setOnClickListener { _ ->
+            createdFixedTransactionSaturday.setOnClickListener { _ ->
                 setWeekdaySelected(Calendar.SATURDAY)
             }
         }
@@ -228,15 +228,15 @@ class CreatedFixedTransactionFragment :
                 byteAsDay or (1 shl byteToShift)
             }
         }
-        viewBinding?.let {
+        viewBinding?.run {
             val view = when (day) {
-                Calendar.SUNDAY -> it.createdFixedTransactionSunday
-                Calendar.MONDAY -> it.createdFixedTransactionMonday
-                Calendar.TUESDAY -> it.createdFixedTransactionTuesday
-                Calendar.WEDNESDAY -> it.createdFixedTransactionWednesday
-                Calendar.THURSDAY -> it.createdFixedTransactionThursday
-                Calendar.FRIDAY -> it.createdFixedTransactionFriday
-                Calendar.SATURDAY -> it.createdFixedTransactionSaturday
+                Calendar.SUNDAY -> createdFixedTransactionSunday
+                Calendar.MONDAY -> createdFixedTransactionMonday
+                Calendar.TUESDAY -> createdFixedTransactionTuesday
+                Calendar.WEDNESDAY -> createdFixedTransactionWednesday
+                Calendar.THURSDAY -> createdFixedTransactionThursday
+                Calendar.FRIDAY -> createdFixedTransactionFriday
+                Calendar.SATURDAY -> createdFixedTransactionSaturday
                 else -> throw IllegalArgumentException("Unknown day of week: $day")
             }
             view.isSelected = if (changeSelection) !isSelected else isSelected
@@ -278,15 +278,15 @@ class CreatedFixedTransactionFragment :
                 category.color
             )
             iconDrawable.setBounds(0, 0, 120, 120)
-            viewBinding?.let {
-                it.createdFixedTransactionCategory.setCompoundDrawables(
+            viewBinding?.run {
+                createdFixedTransactionCategory.setCompoundDrawables(
                     iconDrawable,
                     null,
                     null,
                     null
                 )
-                it.createdFixedTransactionCategory.text = category.name
-                it.createdFixedTransactionCategory.setTextColor(
+                createdFixedTransactionCategory.text = category.name
+                createdFixedTransactionCategory.setTextColor(
                     ContextCompat.getColor(
                         requireContext(),
                         category.color
@@ -323,8 +323,8 @@ class CreatedFixedTransactionFragment :
         activity.setSupportActionBar(toolbar)
         toolbar?.title =
             getString(
-                if (transactionType == TransactionType.INCOME) R.string.title_prepopulate_fixed_incomes
-                else R.string.title_prepopulate_fixed_expenses
+                if (transactionType == TransactionType.INCOME) R.string.title_prepopulate_fixed_income
+                else R.string.title_prepopulate_fixed_expense
             )
         activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)

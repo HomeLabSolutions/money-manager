@@ -2,6 +2,7 @@ package com.d9tilov.moneymanager.prepopulate.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -30,7 +31,8 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
             R.id.unit_category_to_folder_dialog,
             R.id.category_set_dest,
             R.id.category_creation_dest,
-            R.id.sub_category_dest
+            R.id.sub_category_dest,
+            R.id.goal_creation_dest
         )
     var controlsClick: ControlsClicked? = null
 

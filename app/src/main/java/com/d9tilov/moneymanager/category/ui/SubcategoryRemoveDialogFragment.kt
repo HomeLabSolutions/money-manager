@@ -27,21 +27,21 @@ class SubcategoryRemoveDialogFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding?.let {
-            it.tripleRemoveDialogButtonAction1.text = getString(R.string.sub_category_delete)
-            it.tripleRemoveDialogButtonAction2.text =
+        viewBinding?.run {
+            tripleRemoveDialogButtonAction1.text = getString(R.string.sub_category_delete)
+            tripleRemoveDialogButtonAction2.text =
                 getString(R.string.sub_category_delete_from_group)
-            it.tripleRemoveDialogButtonCancel.text = getString(R.string.cancel)
-            it.tripleRemoveDialogTitle.text = getString(R.string.sub_category_delete_title)
-            it.tripleRemoveDialogSubtitle.text =
+            tripleRemoveDialogButtonCancel.text = getString(R.string.cancel)
+            tripleRemoveDialogTitle.text = getString(R.string.sub_category_delete_title)
+            tripleRemoveDialogSubtitle.text =
                 getString(R.string.sub_category_delete_subtitle, subCategory.name)
-            it.tripleRemoveDialogButtonAction1.setOnClickListener { viewModel.remove(subCategory) }
-            it.tripleRemoveDialogButtonAction2.setOnClickListener {
+            tripleRemoveDialogButtonAction1.setOnClickListener { viewModel.remove(subCategory) }
+            tripleRemoveDialogButtonAction2.setOnClickListener {
                 viewModel.removeFromGroup(
                     subCategory
                 )
             }
-            it.tripleRemoveDialogButtonCancel.setOnClickListener { dismiss() }
+            tripleRemoveDialogButtonCancel.setOnClickListener { dismiss() }
         }
     }
 

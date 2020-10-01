@@ -74,7 +74,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:inflatedId="@+id/inflate"
-        android:layout="@layout/layout_empty_category_list_placeholder"
+        android:layout="@layout/layout_empty_list_placeholder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/category_toolbar_container"

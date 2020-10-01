@@ -13,13 +13,13 @@
     <string name="title_category_creation">Category</string>
     <string name="title_category_set">Available icons</string>
     <string name="title_category_creation_create">Category creation</string>
-
     <string name="title_prepopulate_currency">Choose currency</string>
     <string name="title_prepopulate_budget">Current budget</string>
     <string name="title_prepopulate_fixed_incomes">Fixed incomes</string>
     <string name="title_prepopulate_fixed_income">Fixed income</string>
     <string name="title_prepopulate_fixed_expenses">Fixed expenses</string>
     <string name="title_prepopulate_fixed_expense">Fixed expense</string>
+    <string name="title_goal">Goal</string>
 
     <string name="toolbar_menu_skip">Skip</string>
 
@@ -121,6 +121,14 @@
         <item>Month</item>
         <item>Year</item>
     </string-array>
+
+    <string name="goals_accumulated">Accumulated</string>
+    <string name="goals_empty_placeholder_title">Add goals</string>
+    <string name="goals_empty_placeholder_subtitle">Add the goal for which you want to accumulate</string>
+    <string name="goals_target_name_hint">Goal name</string>
+    <string name="goals_description_hint">Goal description</string>
+    <string name="goals_remove_dialog_title">Deleting a goal</string>
+    <string name="goals_remove_dialog_subtitle">Do you really want to delete the goal?</string>
 
     <string name="error_loading">Loading error</string>
 </resources>
