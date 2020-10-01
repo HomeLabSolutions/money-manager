@@ -21,6 +21,7 @@ import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
+import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.isTablet
 import com.d9tilov.moneymanager.core.util.showKeyboard
@@ -38,23 +39,22 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class IncomeFragment :
-    BaseIncomeExpenseFragment<FragmentIncomeBinding, IncomeNavigator>(R.layout.fragment_income),
+    BaseIncomeExpenseFragment<IncomeNavigator>(R.layout.fragment_income),
     IncomeNavigator,
     OnKeyboardVisibleChange {
 
-    override fun performDataBinding(view: View): FragmentIncomeBinding =
-        FragmentIncomeBinding.bind(view)
+    private val viewBinding by viewBinding(FragmentIncomeBinding::bind)
 
     override fun getNavigator() = this
     override val viewModel by viewModels<IncomeViewModel>()
-    override val snackBarAnchorView by lazy { viewBinding?.incomeCategoryRvList }
+    override val snackBarAnchorView by lazy { viewBinding.incomeCategoryRvList }
 
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding?.run {
+        viewBinding.run {
             emptyViewStub = root.findViewById(R.id.income_transaction_empty_placeholder)
             incomeMainSum.moneyEditText.setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus) {
@@ -102,9 +102,9 @@ class IncomeFragment :
     override fun onStart() {
         super.onStart()
         if ((activity as MainActivity).forceShowKeyboard) {
-            showKeyboard(viewBinding?.incomeMainSum)
+            showKeyboard(viewBinding.incomeMainSum)
         } else {
-            viewBinding?.run {
+            viewBinding.run {
                 incomeTransactionRvList.visibility = View.VISIBLE
                 incomeCategoryRvList.visibility = View.GONE
             }
@@ -112,7 +112,7 @@ class IncomeFragment :
     }
 
     override fun initCategoryRecyclerView() {
-        viewBinding?.run {
+        viewBinding.run {
             val layoutManager =
                 GridLayoutManager(
                     requireContext(),
@@ -136,7 +136,7 @@ class IncomeFragment :
     }
 
     override fun initTransactionsRecyclerView() {
-        viewBinding?.run {
+        viewBinding.run {
             incomeTransactionRvList.layoutManager =
                 LinearLayoutManager(requireContext())
             incomeTransactionRvList.adapter = transactionAdapter
@@ -157,7 +157,7 @@ class IncomeFragment :
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
             param(FirebaseAnalytics.Param.ITEM_ID, "click_all_categories_income")
         }
-        viewBinding?.run {
+        viewBinding.run {
             val inputSum = incomeMainSum.getValue()
             val action = if (inputSum.signum() > 0) {
                 IncomeExpenseFragmentDirections.toCategoryDest(
@@ -178,7 +178,7 @@ class IncomeFragment :
     override fun onOpenKeyboard() {
         Timber.tag(App.TAG).d("Keyboard shown")
         isKeyboardOpen = true
-        viewBinding?.run {
+        viewBinding.run {
             onKeyboardVisibilityAnimation(true)
             incomeTransactionRvList.visibility = View.GONE
             hideViewStub()
@@ -189,7 +189,7 @@ class IncomeFragment :
     override fun onCloseKeyboard() {
         Timber.tag(App.TAG).d("Keyboard hidden")
         isKeyboardOpen = false
-        viewBinding?.run {
+        viewBinding.run {
             onKeyboardVisibilityAnimation(false)
             if (isTransactionDataEmpty) {
                 showViewStub(TransactionType.INCOME)
@@ -200,14 +200,14 @@ class IncomeFragment :
 
     private fun onKeyboardVisibilityAnimation(open: Boolean) {
         if (open) {
-            viewBinding?.incomeCategoryRvList?.visibility = View.VISIBLE
+            viewBinding.incomeCategoryRvList.visibility = View.VISIBLE
         } else {
-            viewBinding?.incomeTransactionRvList?.visibility = View.VISIBLE
-            viewBinding?.incomeCategoryRvList?.visibility = View.GONE
+            viewBinding.incomeTransactionRvList.visibility = View.VISIBLE
+            viewBinding.incomeCategoryRvList.visibility = View.GONE
         }
         val alphaAnimationCategories =
             ObjectAnimator.ofFloat(
-                viewBinding?.incomeCategoryRvList,
+                viewBinding.incomeCategoryRvList,
                 View.ALPHA,
                 if (open) ALPHA_CAT_MIN else ALPHA_MAX,
                 if (open) ALPHA_MAX else ALPHA_CAT_MIN
@@ -219,11 +219,11 @@ class IncomeFragment :
     }
 
     override fun saveTransaction(category: Category) {
-        viewBinding?.run { viewModel.saveTransaction(category, incomeMainSum.getValue()) }
+        viewModel.saveTransaction(category, viewBinding.incomeMainSum.getValue())
     }
 
     override fun resetMainSum() {
-        viewBinding?.run { incomeMainSum.setValue(BigDecimal.ZERO) }
+        viewBinding.incomeMainSum.setValue(BigDecimal.ZERO)
     }
 
     companion object {

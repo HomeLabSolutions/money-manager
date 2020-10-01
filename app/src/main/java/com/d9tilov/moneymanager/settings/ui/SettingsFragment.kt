@@ -11,6 +11,7 @@ import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
+import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.databinding.FragmentSettingsBinding
 import com.d9tilov.moneymanager.settings.ui.vm.SettingsViewModel
@@ -24,13 +25,11 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SettingsFragment :
-    BaseFragment<FragmentSettingsBinding, SettingsNavigator>(R.layout.fragment_settings),
+    BaseFragment<SettingsNavigator>(R.layout.fragment_settings),
     SettingsNavigator {
 
     private lateinit var googleSignInClient: GoogleSignInClient
-
-    override fun performDataBinding(view: View): FragmentSettingsBinding =
-        FragmentSettingsBinding.bind(view)
+    private val viewBinding by viewBinding(FragmentSettingsBinding::bind)
 
     override fun getNavigator() = this
     override val viewModel by viewModels<SettingsViewModel>()
@@ -48,7 +47,7 @@ class SettingsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         updateUI()
-        viewBinding?.run {
+        viewBinding.run {
             settingsLogin.setOnClickListener {
                 val signInIntent = googleSignInClient.signInIntent
                 startActivityForResult(
@@ -79,8 +78,7 @@ class SettingsFragment :
     }
 
     private fun updateUI() {
-
-        viewBinding?.settingsAppVersion?.text = BuildConfig.VERSION_NAME
+        viewBinding.settingsAppVersion.text = BuildConfig.VERSION_NAME
         val currencyUser = viewModel.getCurrentUser()
         if (currencyUser == null) {
             startActivity(
@@ -89,7 +87,7 @@ class SettingsFragment :
             )
             requireActivity().finish()
         } else {
-            viewBinding?.run {
+            viewBinding.run {
                 this.settingsAvatar.visibility = VISIBLE
                 settingsName.visibility = VISIBLE
                 settingsName.text = currencyUser.displayName

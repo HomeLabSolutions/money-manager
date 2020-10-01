@@ -11,7 +11,6 @@ import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
-import androidx.viewbinding.ViewBinding
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.BaseIncomeExpenseNavigator
@@ -28,8 +27,8 @@ import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
 
-abstract class BaseIncomeExpenseFragment<V : ViewBinding, N : BaseIncomeExpenseNavigator>(@LayoutRes layoutId: Int) :
-    BaseFragment<V, N>(layoutId), OnDialogDismissListener, BaseIncomeExpenseNavigator {
+abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@LayoutRes layoutId: Int) :
+    BaseFragment<N>(layoutId), OnDialogDismissListener, BaseIncomeExpenseNavigator {
 
     protected open lateinit var mainSum: CurrencyView
     protected val categoryAdapter = CategoryAdapter()

@@ -9,22 +9,18 @@ import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.lifecycle.Observer
-import androidx.viewbinding.ViewBinding
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.core.util.toast
 
-abstract class BaseDialogFragment<V : ViewBinding, N : BaseNavigator> :
+abstract class BaseDialogFragment<N : BaseNavigator> :
     AppCompatDialogFragment() {
 
     @get:LayoutRes
     protected abstract val layoutId: Int
-    abstract fun performDataBinding(view: View): V
     abstract fun getNavigator(): N
 
     protected abstract val viewModel: BaseViewModel<N>
-    protected var viewBinding: V? = null
 
     private var baseActivity: BaseActivity<*>? = null
 
@@ -56,7 +52,6 @@ abstract class BaseDialogFragment<V : ViewBinding, N : BaseNavigator> :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding = performDataBinding(view)
         initObservers()
     }
 
@@ -64,15 +59,11 @@ abstract class BaseDialogFragment<V : ViewBinding, N : BaseNavigator> :
     protected open fun initObservers() {
         viewModel.msg.observe(
             this.viewLifecycleOwner,
-            Observer { event ->
-                requireContext().toast(event)
-            }
+            { requireContext().toast(it) }
         )
         viewModel.loading.observe(
             this.viewLifecycleOwner,
-            Observer { show ->
-                if (show) showLoading() else hideLoading()
-            }
+            { if (it) showLoading() else hideLoading() }
         )
     }
 

@@ -17,6 +17,7 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.CurrencyNavigator
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
+import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.currency.data.entity.Currency
 import com.d9tilov.moneymanager.currency.vm.CurrencyViewModel
@@ -32,15 +33,15 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class CurrencyFragment :
-    BaseFragment<FragmentCurrencyBinding, CurrencyNavigator>(R.layout.fragment_currency),
+    BaseFragment<CurrencyNavigator>(R.layout.fragment_currency),
     CurrencyNavigator,
     ControlsClicked {
 
+    private val viewBinding by viewBinding(FragmentCurrencyBinding::bind)
     private var toolbar: MaterialToolbar? = null
     private var snackBar: Snackbar? = null
     private lateinit var currencyAdapter: CurrencyAdapter
     override val viewModel by viewModels<CurrencyViewModel>()
-    override fun performDataBinding(view: View) = FragmentCurrencyBinding.bind(view)
     override fun getNavigator(): CurrencyNavigator = this
 
     private val onItemClickListener = object : OnItemClickListener<Currency> {
@@ -67,13 +68,13 @@ class CurrencyFragment :
                 val sortedList = list.sortedBy { it.code }
                 currencyAdapter.updateItems(sortedList)
                 val checkedIndex = sortedList.indexOfFirst { it.isBase }
-                viewBinding?.currencyRv?.scrollToPosition(checkedIndex)
+                viewBinding.currencyRv.scrollToPosition(checkedIndex)
             }
         )
-        viewBinding?.currencyRv?.adapter = currencyAdapter
+        viewBinding.currencyRv.adapter = currencyAdapter
         val layoutManager = LinearLayoutManager(requireContext())
-        viewBinding?.currencyRv?.layoutManager = layoutManager
-        (viewBinding?.currencyRv?.itemAnimator as SimpleItemAnimator).supportsChangeAnimations =
+        viewBinding.currencyRv.layoutManager = layoutManager
+        (viewBinding.currencyRv.itemAnimator as SimpleItemAnimator).supportsChangeAnimations =
             false
     }
 
@@ -106,7 +107,7 @@ class CurrencyFragment :
     }
 
     private fun initToolbar() {
-        toolbar = viewBinding?.currencyToolbarContainer?.toolbar
+        toolbar = viewBinding.currencyToolbarContainer.toolbar
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         toolbar?.title = getString(R.string.title_prepopulate_currency)

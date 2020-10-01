@@ -8,23 +8,22 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.BudgetAmountNavigator
 import com.d9tilov.moneymanager.budget.vm.BudgetAmountViewModel
+import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentBudgetAmountBinding
 import com.d9tilov.moneymanager.prepopulate.ui.ControlsClicked
 import com.d9tilov.moneymanager.prepopulate.ui.PrepopulateActivity
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
-import java.math.BigDecimal
 
 @AndroidEntryPoint
 class BudgetAmountFragment :
-    BaseFragment<FragmentBudgetAmountBinding, BudgetAmountNavigator>(R.layout.fragment_budget_amount),
+    BaseFragment<BudgetAmountNavigator>(R.layout.fragment_budget_amount),
     BudgetAmountNavigator,
     ControlsClicked {
 
+    private val viewBinding by viewBinding(FragmentBudgetAmountBinding::bind)
     private var toolbar: MaterialToolbar? = null
-
-    override fun performDataBinding(view: View) = FragmentBudgetAmountBinding.bind(view)
 
     override fun getNavigator() = this
 
@@ -36,7 +35,7 @@ class BudgetAmountFragment :
         viewModel.amount.observe(
             this.viewLifecycleOwner,
             {
-                viewBinding?.commonBudgetAmount?.setValue(it)
+                viewBinding.commonBudgetAmount.setValue(it)
             }
         )
     }
@@ -44,7 +43,7 @@ class BudgetAmountFragment :
     override fun onStart() {
         super.onStart()
         (activity as PrepopulateActivity).controlsClick = this
-        showKeyboard(viewBinding?.commonBudgetAmount?.moneyEditText)
+        showKeyboard(viewBinding.commonBudgetAmount.moneyEditText)
     }
 
     override fun onStop() {
@@ -53,7 +52,7 @@ class BudgetAmountFragment :
     }
 
     private fun initToolbar() {
-        toolbar = viewBinding?.commonBudgetToolbarContainer?.toolbar
+        toolbar = viewBinding.commonBudgetToolbarContainer.toolbar
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         toolbar?.title = getString(R.string.title_prepopulate_budget)
@@ -69,6 +68,6 @@ class BudgetAmountFragment :
     }
 
     override fun onNextClick() {
-        viewModel.saveBudgetAmount(viewBinding?.commonBudgetAmount?.getValue() ?: BigDecimal.ZERO)
+        viewModel.saveBudgetAmount(viewBinding.commonBudgetAmount.getValue())
     }
 }

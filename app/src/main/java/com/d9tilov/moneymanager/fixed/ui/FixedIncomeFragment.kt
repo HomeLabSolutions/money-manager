@@ -5,7 +5,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +12,7 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.callback.SwipeToDeleteCallback
 import com.d9tilov.moneymanager.base.ui.navigator.FixedIncomeNavigator
 import com.d9tilov.moneymanager.core.ui.recyclerview.MarginItemDecoration
+import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.databinding.FragmentFixedIncomeBinding
 import com.d9tilov.moneymanager.fixed.vm.FixedIncomeViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -20,17 +20,17 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FixedIncomeFragment :
-    BaseFixedIncomeExpenseFragment<FragmentFixedIncomeBinding, FixedIncomeNavigator>(R.layout.fragment_fixed_income),
+    BaseFixedIncomeExpenseFragment<FixedIncomeNavigator>(R.layout.fragment_fixed_income),
     FixedIncomeNavigator {
 
+    private val viewBinding by viewBinding(FragmentFixedIncomeBinding::bind)
     override val transactionType = TransactionType.INCOME
-    override fun performDataBinding(view: View) = FragmentFixedIncomeBinding.bind(view)
     override fun getNavigator() = this
     override val viewModel by viewModels<FixedIncomeViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding?.run {
+        viewBinding.run {
             toolbar = fixedIncomeToolbarContainer.toolbar
             fixedIncomeRvList.adapter = fixedTransactionAdapter
             val layoutManager = LinearLayoutManager(requireContext())
@@ -46,16 +46,16 @@ class FixedIncomeFragment :
                 }
             }).attachToRecyclerView(fixedIncomeRvList)
         }
-        emptyViewStub = viewBinding?.root?.findViewById(R.id.fixed_income_empty_placeholder)
+        emptyViewStub = viewBinding.root.findViewById(R.id.fixed_income_empty_placeholder)
         viewModel.fixedIncomeTransactionList.observe(
             this.viewLifecycleOwner,
             {
                 if (it.isEmpty()) {
-                    viewBinding?.fixedIncomeRvList?.visibility = GONE
+                    viewBinding.fixedIncomeRvList.visibility = GONE
                     showViewStub(TransactionType.INCOME)
                 } else {
                     hideViewStub()
-                    viewBinding?.fixedIncomeRvList?.visibility = VISIBLE
+                    viewBinding.fixedIncomeRvList.visibility = VISIBLE
                     fixedTransactionAdapter.updateItems(it)
                 }
             }

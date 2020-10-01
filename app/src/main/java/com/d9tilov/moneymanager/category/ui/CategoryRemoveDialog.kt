@@ -10,26 +10,27 @@ import com.d9tilov.moneymanager.base.ui.BaseDialogFragment
 import com.d9tilov.moneymanager.base.ui.navigator.RemoveCategoryDialogNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.ui.vm.CategoryRemoveViewModel
+import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.databinding.FragmentDialogRemoveBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class CategoryRemoveDialog :
-    BaseDialogFragment<FragmentDialogRemoveBinding, RemoveCategoryDialogNavigator>(),
+    BaseDialogFragment<RemoveCategoryDialogNavigator>(),
     RemoveCategoryDialogNavigator {
 
     private val args by navArgs<CategoryRemoveDialogArgs>()
     private val category by lazy { args.category }
     private val destination by lazy { args.destination }
+    private val viewBinding by viewBinding(FragmentDialogRemoveBinding::bind)
 
     override val layoutId = R.layout.fragment_dialog_remove
-    override fun performDataBinding(view: View) = FragmentDialogRemoveBinding.bind(view)
     override fun getNavigator() = this
     override val viewModel by viewModels<CategoryRemoveViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding?.run {
+        viewBinding.run {
             removeDialogTitle.text = getString(R.string.category_delete_title)
             removeDialogSubtitle.text =
                 getString(

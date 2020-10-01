@@ -26,22 +26,21 @@ import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemLongClickListener
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
+import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.databinding.FragmentCategoryBinding
 import com.google.android.material.appbar.MaterialToolbar
 
 abstract class BaseCategoryFragment<N : BaseNavigator> :
-    BaseFragment<FragmentCategoryBinding, N>(R.layout.fragment_category),
+    BaseFragment<N>(R.layout.fragment_category),
     OnBackPressed {
 
     private val args by navArgs<CategoryFragmentArgs>()
     protected val destination by lazy { args.destination }
 
+    protected val viewBinding by viewBinding(FragmentCategoryBinding::bind)
     protected var toolbar: MaterialToolbar? = null
     protected lateinit var categoryAdapter: CategoryModifyAdapter
     private lateinit var viewStub: ViewStub
-
-    override fun performDataBinding(view: View): FragmentCategoryBinding =
-        FragmentCategoryBinding.bind(view)
 
     private val onItemClickListener = object : OnItemClickListener<Category> {
         override fun onItemClick(item: Category, position: Int) {
@@ -80,14 +79,14 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding?.run { viewStub = root.findViewById(R.id.category_empty_placeholder) }
+        viewStub = viewBinding.root.findViewById(R.id.category_empty_placeholder)
         initToolbar()
-        viewBinding?.run {
+        viewBinding.run {
             val layoutManager =
                 GridLayoutManager(requireContext(), SPAN_COUNT, GridLayoutManager.VERTICAL, false)
             categoryRv.layoutManager = layoutManager
             categoryRv.adapter = categoryAdapter
-            viewBinding?.categoryRv?.addItemDecoration(
+            categoryRv.addItemDecoration(
                 GridSpaceItemDecoration(
                     spanCount = SPAN_COUNT,
                     spacing = resources.getDimension(R.dimen.recycler_view_category_offset)
@@ -142,7 +141,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
     }
 
     private fun initToolbar() {
-        toolbar = viewBinding?.categoryToolbarContainer?.toolbar
+        toolbar = viewBinding.categoryToolbarContainer.toolbar
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)

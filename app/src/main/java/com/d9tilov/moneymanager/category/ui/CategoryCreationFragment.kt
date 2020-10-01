@@ -27,6 +27,7 @@ import com.d9tilov.moneymanager.category.ui.recycler.CategoryColorAdapter
 import com.d9tilov.moneymanager.category.ui.vm.CategoryCreationViewModel
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_DATA_ID
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
+import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.onChange
@@ -41,7 +42,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class CategoryCreationFragment :
-    BaseFragment<FragmentCreationCategoryBinding, CategoryCreationNavigator>(
+    BaseFragment<CategoryCreationNavigator>(
         R.layout.fragment_creation_category
     ),
     CategoryCreationNavigator {
@@ -56,6 +57,7 @@ class CategoryCreationFragment :
             color = R.color.category_pink
         )
     }
+    private val viewBinding by viewBinding(FragmentCreationCategoryBinding::bind)
 
     @ColorRes
     private var color: Int = 0
@@ -66,9 +68,6 @@ class CategoryCreationFragment :
     private var toolbar: MaterialToolbar? = null
     private lateinit var categoryColorAdapter: CategoryColorAdapter
     @Inject lateinit var firebaseAnalytics: FirebaseAnalytics
-
-    override fun performDataBinding(view: View): FragmentCreationCategoryBinding =
-        FragmentCreationCategoryBinding.bind(view)
 
     override fun getNavigator() = this
     override val viewModel by viewModels<CategoryCreationViewModel>()
@@ -82,7 +81,7 @@ class CategoryCreationFragment :
     private val onItemColorClickListener = object : OnItemClickListener<Int> {
         override fun onItemClick(item: Int, position: Int) {
             color = item
-            viewBinding?.run {
+            viewBinding.run {
                 categoryCreationRvColorPicker.visibility = INVISIBLE
                 updateIcon(icon)
                 setColorToColorIcon()
@@ -103,7 +102,7 @@ class CategoryCreationFragment :
             )
         }
         color = category.color
-        viewBinding?.run {
+        viewBinding.run {
             val colorLayoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             categoryCreationRvColorPicker.layoutManager = colorLayoutManager
@@ -162,7 +161,7 @@ class CategoryCreationFragment :
 
     override fun onStart() {
         if (category.id == DEFAULT_DATA_ID) {
-            showKeyboard(viewBinding?.categoryCreationEtName)
+            showKeyboard(viewBinding.categoryCreationEtName)
         }
         super.onStart()
     }
@@ -173,7 +172,7 @@ class CategoryCreationFragment :
     }
 
     private fun setColorToColorIcon() {
-        viewBinding?.categoryCreationColor?.colorCircle?.backgroundTintList =
+        viewBinding.categoryCreationColor.colorCircle.backgroundTintList =
             ColorStateList.valueOf(ContextCompat.getColor(requireContext(), color))
     }
 
@@ -184,11 +183,11 @@ class CategoryCreationFragment :
             icon,
             color
         )
-        viewBinding?.categoryCreationIcon?.setImageDrawable(tintIcon)
+        viewBinding.categoryCreationIcon.setImageDrawable(tintIcon)
     }
 
     private fun initToolbar() {
-        toolbar = viewBinding?.categoryCreationToolbarContainer?.toolbar
+        toolbar = viewBinding.categoryCreationToolbarContainer?.toolbar
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -202,7 +201,7 @@ class CategoryCreationFragment :
 
     override fun showError(error: Throwable) {
         if (error is CategoryExistException) {
-            viewBinding?.categoryCreationEtNameLayout?.error =
+            viewBinding.categoryCreationEtNameLayout.error =
                 getString(R.string.category_unit_name_exist_error)
         }
     }

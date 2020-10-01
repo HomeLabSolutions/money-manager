@@ -52,7 +52,7 @@ class SubCategoryFragment :
                 SUB_CATEGORY_TITLE
             )
         }
-        viewBinding?.run {
+        viewBinding.run {
             categoryGroupEdit.visibility = VISIBLE
             categoryGroupDelete.visibility = VISIBLE
             categoryCreate.visibility = GONE

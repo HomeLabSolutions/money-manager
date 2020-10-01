@@ -15,22 +15,23 @@ import com.d9tilov.moneymanager.category.ui.recycler.CategoryIconSetAdapter
 import com.d9tilov.moneymanager.category.ui.vm.CategorySetViewModel
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
+import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.databinding.FragmentCategoryIconSetBinding
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class CategoryIconSetFragment :
-    BaseFragment<FragmentCategoryIconSetBinding, CategorySetNavigator>(R.layout.fragment_category_icon_set),
+    BaseFragment<CategorySetNavigator>(R.layout.fragment_category_icon_set),
     CategorySetNavigator {
 
     private val args by navArgs<CategoryIconSetFragmentArgs>()
     private val transactionType by lazy { args.transactionType }
+    private val viewBinding by viewBinding(FragmentCategoryIconSetBinding::bind)
 
     private var toolbar: MaterialToolbar? = null
     private lateinit var categoryAdapter: CategoryIconSetAdapter
 
-    override fun performDataBinding(view: View) = FragmentCategoryIconSetBinding.bind(view)
     override fun getNavigator() = this
     override val viewModel by viewModels<CategorySetViewModel>()
 
@@ -48,7 +49,7 @@ class CategoryIconSetFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding?.run {
+        viewBinding.run {
             val layoutManager =
                 GridLayoutManager(
                     requireContext(),
@@ -63,7 +64,7 @@ class CategoryIconSetFragment :
                 )
             )
         }
-        toolbar = viewBinding?.categorySetToolbarContainer?.toolbar
+        toolbar = viewBinding.categorySetToolbarContainer.toolbar
         initToolbar(toolbar)
     }
 

@@ -15,6 +15,7 @@ import com.d9tilov.moneymanager.base.ui.navigator.EditTransactionNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.common.BaseCategoryFragment.Companion.ARG_CATEGORY
 import com.d9tilov.moneymanager.category.data.entity.Category
+import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.DateValidatorPointBackward
 import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
@@ -33,7 +34,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class EditTransactionFragment : EditTransactionNavigator,
-    BaseFragment<FragmentEditTransactionBinding, EditTransactionNavigator>(
+    BaseFragment<EditTransactionNavigator>(
         R.layout.fragment_edit_transaction
     ) {
 
@@ -41,12 +42,14 @@ class EditTransactionFragment : EditTransactionNavigator,
     private val transaction by lazy { args.editedTransaction }
     private val transactionType by lazy { args.transactionType }
 
+    private val viewBinding by viewBinding(FragmentEditTransactionBinding::bind)
+
     private var toolbar: MaterialToolbar? = null
     private lateinit var date: Date
     private lateinit var category: Category
-    @Inject lateinit var firebaseAnalytics: FirebaseAnalytics
 
-    override fun performDataBinding(view: View) = FragmentEditTransactionBinding.bind(view)
+    @Inject
+    lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun getNavigator() = this
 
@@ -68,7 +71,7 @@ class EditTransactionFragment : EditTransactionNavigator,
                 ARG_CATEGORY
             )
         }
-        viewBinding?.run {
+        viewBinding.run {
             editTransactionSave.setOnClickListener { _ ->
                 viewModel.update(
                     transaction.copy(
@@ -91,7 +94,7 @@ class EditTransactionFragment : EditTransactionNavigator,
                     .build()
                 picker.addOnPositiveButtonClickListener { calendarDate ->
                     date = Date(calendarDate)
-                    viewBinding?.editTransactionDate?.text = SimpleDateFormat(
+                    viewBinding.editTransactionDate.text = SimpleDateFormat(
                         TRANSACTION_DATE_FORMAT,
                         Locale.getDefault()
                     ).format(date)
@@ -125,7 +128,7 @@ class EditTransactionFragment : EditTransactionNavigator,
                 Locale.getDefault()
             ).format(transaction.date)
         }
-        toolbar = viewBinding?.editTransactionToolbarContainer?.toolbar
+        toolbar = viewBinding.editTransactionToolbarContainer.toolbar
         initToolbar(toolbar)
     }
 
@@ -136,7 +139,7 @@ class EditTransactionFragment : EditTransactionNavigator,
             category.color
         )
         iconDrawable.setBounds(0, 0, 120, 120)
-        viewBinding?.run {
+        viewBinding.run {
             editTransactionCategory.setCompoundDrawables(iconDrawable, null, null, null)
             editTransactionCategory.text = category.name
             editTransactionCategory.setTextColor(

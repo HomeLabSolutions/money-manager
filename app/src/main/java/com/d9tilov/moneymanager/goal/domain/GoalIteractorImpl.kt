@@ -33,7 +33,8 @@ class GoalIteractorImpl(
                     goalList.add(newGoal)
                 }
                 goalList
-            })
+            }
+        )
     }
 
     override fun update(goal: Goal): Completable = goalRepo.update(goalDomainMapper.toData(goal))
