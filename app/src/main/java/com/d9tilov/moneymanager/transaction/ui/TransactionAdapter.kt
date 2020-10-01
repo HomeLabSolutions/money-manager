@@ -2,7 +2,6 @@ package com.d9tilov.moneymanager.transaction.ui
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
@@ -18,6 +17,7 @@ import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.formatDate
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
+import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.ItemTransactionBinding
 import com.d9tilov.moneymanager.databinding.ItemTransactionHeaderBinding
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
@@ -128,7 +128,7 @@ class TransactionAdapter :
                 )
                 val description = transaction.description
                 if (description.isNotEmpty()) {
-                    itemTransactionDescription.visibility = VISIBLE
+                    itemTransactionDescription.show()
                     itemTransactionDescription.text = transaction.description
                 } else {
                     val constraintSet = ConstraintSet()

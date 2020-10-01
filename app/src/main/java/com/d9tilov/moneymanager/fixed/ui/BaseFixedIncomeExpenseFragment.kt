@@ -17,6 +17,7 @@ import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.BaseFixedIncomeExpenseNavigator
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
+import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.fixed.domain.entity.FixedTransaction
 import com.d9tilov.moneymanager.fixed.vm.BaseFixedIncomeExpenseViewModel
@@ -157,7 +158,7 @@ abstract class BaseFixedIncomeExpenseFragment<N : BaseFixedIncomeExpenseNavigato
     }
 
     protected fun hideViewStub() {
-        emptyViewStub?.visibility = View.GONE
+        emptyViewStub?.gone()
     }
 
     private fun openCreatedScreen(transactionType: TransactionType) {

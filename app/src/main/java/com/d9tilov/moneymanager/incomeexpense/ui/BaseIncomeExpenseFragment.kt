@@ -2,8 +2,6 @@ package com.d9tilov.moneymanager.incomeexpense.ui
 
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewStub
 import android.widget.ImageView
 import android.widget.TextView
@@ -20,7 +18,9 @@ import com.d9tilov.moneymanager.core.events.OnDialogDismissListener
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
+import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
+import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -88,7 +88,7 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
 
     protected fun showViewStub(transactionType: TransactionType) {
         if (emptyViewStub?.parent == null) {
-            emptyViewStub?.visibility = VISIBLE
+            emptyViewStub?.show()
         } else {
             val inflatedStub = emptyViewStub?.inflate()
             val stubIcon =
@@ -109,7 +109,7 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
                 )
             val stubSubTitle =
                 inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_subtitle)
-            stubSubTitle?.visibility = VISIBLE
+            stubSubTitle?.show()
             stubSubTitle?.text = getString(R.string.transaction_empty_placeholder_subtitle)
             val addTransaction =
                 inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_add)
@@ -120,7 +120,7 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
     }
 
     protected fun hideViewStub() {
-        emptyViewStub?.visibility = GONE
+        emptyViewStub?.gone()
     }
 
     private fun openRemoveConfirmationDialog(transaction: Transaction) {

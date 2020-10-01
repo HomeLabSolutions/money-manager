@@ -1,8 +1,6 @@
 package com.d9tilov.moneymanager.currency.ui
 
 import android.view.LayoutInflater
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -10,8 +8,10 @@ import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.CurrencyUtils
-import com.d9tilov.moneymanager.databinding.ItemCurrencyBinding
+import com.d9tilov.moneymanager.core.util.gone
+import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.currency.data.entity.Currency
+import com.d9tilov.moneymanager.databinding.ItemCurrencyBinding
 import timber.log.Timber
 
 class CurrencyAdapter : RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>() {
@@ -80,7 +80,11 @@ class CurrencyAdapter : RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>
                 itemCurrencyIcon.text = CurrencyUtils.getCurrencyIcon(currency.code)
                 itemCurrencyTitle.text = CurrencyUtils.getCurrencyFullName(currency.code)
                 itemCurrencySubtitle.text = currency.code
-                itemCurrencyCheck.visibility = if (currency.isBase) VISIBLE else GONE
+                if (currency.isBase) {
+                    itemCurrencyCheck.show()
+                } else {
+                    itemCurrencyCheck.gone()
+                }
             }
         }
     }

@@ -3,22 +3,21 @@ package com.d9tilov.moneymanager.home.ui
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewTreeObserver
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.ui.setupWithNavController
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.base.ui.navigator.HomeNavigator
 import com.d9tilov.moneymanager.core.events.OnBackPressed
 import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
+import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.px
 import com.d9tilov.moneymanager.core.util.setupWithNavController
+import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -70,8 +69,8 @@ class MainActivity :
                         R.id.income_expense_dest,
                         R.id.chart_dest,
                         R.id.settings_dest ->
-                            viewBinding.bottomNav.visibility = VISIBLE
-                        else -> viewBinding.bottomNav.visibility = GONE
+                            viewBinding.bottomNav.show()
+                        else -> viewBinding.bottomNav.gone()
                     }
                 }
             }
@@ -89,14 +88,14 @@ class MainActivity :
 
     override fun onOpenKeyboard() {
         super.onOpenKeyboard()
-        viewBinding.bottomNav.visibility = GONE
+        viewBinding.bottomNav.gone()
     }
 
     override fun onCloseKeyboard() {
         super.onCloseKeyboard()
         forceShowKeyboard = false
         if (findNavController(R.id.nav_host_container).currentDestination?.id == R.id.income_expense_dest) {
-            viewBinding.bottomNav.visibility = VISIBLE
+            viewBinding.bottomNav.show()
         }
     }
 

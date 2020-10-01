@@ -1,8 +1,6 @@
 package com.d9tilov.moneymanager.category.ui.recycler
 
 import android.view.LayoutInflater
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
@@ -19,6 +17,8 @@ import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemTouchHelperCallback
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
+import com.d9tilov.moneymanager.core.util.gone
+import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.ItemCategoryBinding
 import timber.log.Timber
 
@@ -158,7 +158,11 @@ class CategoryModifyAdapter :
         }
 
         fun dispatchEditMode(enable: Boolean) {
-            viewBinding.categoryItemRemove.visibility = if (enable) VISIBLE else GONE
+            if (enable) {
+                viewBinding.categoryItemRemove.show()
+            } else {
+                viewBinding.categoryItemRemove.gone()
+            }
             val animation = AnimationUtils.loadAnimation(
                 context,
                 R.anim.animation_shake_infitite

@@ -3,9 +3,6 @@ package com.d9tilov.moneymanager.category.ui
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
@@ -29,8 +26,11 @@ import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_D
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.createTintDrawable
+import com.d9tilov.moneymanager.core.util.gone
+import com.d9tilov.moneymanager.core.util.hide
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.onChange
+import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentCreationCategoryBinding
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -82,7 +82,7 @@ class CategoryCreationFragment :
         override fun onItemClick(item: Int, position: Int) {
             color = item
             viewBinding.run {
-                categoryCreationRvColorPicker.visibility = INVISIBLE
+                categoryCreationRvColorPicker.hide()
                 updateIcon(icon)
                 setColorToColorIcon()
             }
@@ -117,8 +117,11 @@ class CategoryCreationFragment :
                 categoryCreationSave.isEnabled = text.isNotEmpty()
                 categoryCreationEtNameLayout.error = null
             }
-            categoryCreationDelete.visibility =
-                if (category.id == DEFAULT_DATA_ID) GONE else VISIBLE
+            if (category.id == DEFAULT_DATA_ID) {
+                categoryCreationDelete.gone()
+            } else {
+                categoryCreationDelete.show()
+            }
             categoryCreationIconLayout.setOnClickListener { _ ->
                 val action = CategoryCreationFragmentDirections.toCategorySetDest(transactionType)
                 findNavController().navigate(action)
@@ -136,7 +139,7 @@ class CategoryCreationFragment :
                 )
             }
             categoryCreationColor.root.setOnClickListener { _ ->
-                categoryCreationRvColorPicker.visibility = VISIBLE
+                categoryCreationRvColorPicker.show()
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
                     param(FirebaseAnalytics.Param.ITEM_ID, "click_choose_color")
                 }

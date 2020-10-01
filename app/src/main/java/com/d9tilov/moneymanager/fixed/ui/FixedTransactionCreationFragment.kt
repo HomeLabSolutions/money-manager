@@ -2,8 +2,6 @@ package com.d9tilov.moneymanager.fixed.ui
 
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
@@ -24,7 +22,9 @@ import com.d9tilov.moneymanager.core.util.DateValidatorPointBackward
 import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.getDayOfWeek
+import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.onChange
+import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.core.util.toBigDecimal
 import com.d9tilov.moneymanager.databinding.FragmentCreationFixedTransactionBinding
@@ -71,7 +71,7 @@ class FixedTransactionCreationFragment :
                 category.value = category.value ?: it?.category
                 periodType.value = periodType.value ?: it?.periodType
                     ?: getSelectedPeriodType(
-                        viewBinding.createdFixedTransactionRepeatSpinner.selectedItemPosition ?: 0
+                        viewBinding.createdFixedTransactionRepeatSpinner.selectedItemPosition
                     )
                 startDate.value = startDate.value ?: it?.startDate ?: Date()
                 description.value = description.value ?: it?.description ?: ""
@@ -97,10 +97,13 @@ class FixedTransactionCreationFragment :
         }
         viewModel.category.observe(this.viewLifecycleOwner, { updateSaveButtonState() })
         viewBinding.run {
-            createdFixedTransactionCategoryArrow.visibility =
-                if (fixedTransaction == null) VISIBLE else GONE
-            createdFixedTransactionDelete.visibility =
-                if (fixedTransaction == null) GONE else VISIBLE
+            if (fixedTransaction == null) {
+                createdFixedTransactionCategoryArrow.show()
+                createdFixedTransactionDelete.gone()
+            } else {
+                createdFixedTransactionCategoryArrow.gone()
+                createdFixedTransactionDelete.show()
+            }
             updateSaveButtonState()
             createdFixedTransactionMainSum.setValue(viewModel.sum.value ?: BigDecimal.ZERO)
             createdFixedTransactionMainSum.moneyEditText.onChange { sum ->
@@ -135,8 +138,11 @@ class FixedTransactionCreationFragment :
                         id: Long
                     ) {
                         viewModel.periodType.value = getSelectedPeriodType(position)
-                        createdFixedTransactionWeekSelector.visibility =
-                            if (getSelectedPeriodType(position) == PeriodType.WEEK) VISIBLE else GONE
+                        if (getSelectedPeriodType(position) == PeriodType.WEEK) {
+                            createdFixedTransactionWeekSelector.show()
+                        } else {
+                            createdFixedTransactionWeekSelector.gone()
+                        }
                         if (getSelectedPeriodType(position) == PeriodType.WEEK) {
                             setAllDays()
                         }
