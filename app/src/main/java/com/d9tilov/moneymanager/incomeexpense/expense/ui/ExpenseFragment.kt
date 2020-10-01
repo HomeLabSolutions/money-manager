@@ -3,8 +3,6 @@ package com.d9tilov.moneymanager.incomeexpense.expense.ui
 import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.animation.AccelerateInterpolator
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -24,8 +22,10 @@ import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
+import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.isTablet
+import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
@@ -107,8 +107,8 @@ class ExpenseFragment :
             showKeyboard(viewBinding.expenseMainSum)
         } else {
             viewBinding.run {
-                expenseTransactionRvList.visibility = VISIBLE
-                expenseCategoryRvList.visibility = GONE
+                expenseTransactionRvList.show()
+                expenseCategoryRvList.gone()
             }
         }
     }
@@ -182,7 +182,7 @@ class ExpenseFragment :
         isKeyboardOpen = true
         viewBinding.run {
             onKeyboardVisibilityAnimation(true)
-            expenseTransactionRvList.visibility = GONE
+            expenseTransactionRvList.gone()
             hideViewStub()
             expenseCategoryRvList.scrollToPosition(0)
         }
@@ -203,10 +203,10 @@ class ExpenseFragment :
     private fun onKeyboardVisibilityAnimation(open: Boolean) {
         viewBinding.run {
             if (open) {
-                expenseCategoryRvList.visibility = VISIBLE
+                expenseCategoryRvList.show()
             } else {
-                expenseTransactionRvList.visibility = VISIBLE
-                expenseCategoryRvList.visibility = GONE
+                expenseTransactionRvList.show()
+                expenseCategoryRvList.gone()
             }
         }
         val alphaAnimationCategories =

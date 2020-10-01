@@ -2,8 +2,6 @@ package com.d9tilov.moneymanager.category.subcategory
 
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
@@ -15,6 +13,8 @@ import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.common.BaseCategoryFragment
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.subcategory.vm.SubCategoryViewModel
+import com.d9tilov.moneymanager.core.util.gone
+import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragment
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -53,9 +53,9 @@ class SubCategoryFragment :
             )
         }
         viewBinding.run {
-            categoryGroupEdit.visibility = VISIBLE
-            categoryGroupDelete.visibility = VISIBLE
-            categoryCreate.visibility = GONE
+            categoryGroupEdit.show()
+            categoryGroupDelete.show()
+            categoryCreate.gone()
             categoryGroupDelete.setOnClickListener {
                 val action = SubCategoryFragmentDirections.toRemoveCategoryDialog(
                     CategoryDestination.SUB_CATEGORY_SCREEN, modifiedParentCategory

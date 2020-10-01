@@ -2,8 +2,6 @@ package com.d9tilov.moneymanager.fixed.ui
 
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -14,6 +12,8 @@ import com.d9tilov.moneymanager.base.ui.callback.SwipeToDeleteCallback
 import com.d9tilov.moneymanager.base.ui.navigator.FixedExpenseNavigator
 import com.d9tilov.moneymanager.core.ui.recyclerview.MarginItemDecoration
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
+import com.d9tilov.moneymanager.core.util.gone
+import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentFixedExpenseBinding
 import com.d9tilov.moneymanager.fixed.vm.FixedExpenseViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -52,11 +52,11 @@ class FixedExpenseFragment :
             this.viewLifecycleOwner,
             {
                 if (it.isEmpty()) {
-                    viewBinding.fixedExpenseRvList.visibility = GONE
+                    viewBinding.fixedExpenseRvList.gone()
                     showViewStub(TransactionType.EXPENSE)
                 } else {
                     hideViewStub()
-                    viewBinding.fixedExpenseRvList.visibility = VISIBLE
+                    viewBinding.fixedExpenseRvList.show()
                     fixedTransactionAdapter.updateItems(it)
                 }
             }

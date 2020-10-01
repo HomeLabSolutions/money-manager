@@ -2,8 +2,6 @@ package com.d9tilov.moneymanager.category.ui
 
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.d9tilov.moneymanager.R
@@ -14,7 +12,9 @@ import com.d9tilov.moneymanager.category.exception.CategoryExistException
 import com.d9tilov.moneymanager.category.ui.vm.CategoryUnionViewModel
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.createTintDrawable
+import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.onChange
+import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentDialogCategoryUnionBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,12 +64,12 @@ class CategoryUnitDialog :
                     firstCategory.name,
                     secondCategory.name
                 )
-                categoryDialogUnionEtNameLayout.visibility = GONE
+                categoryDialogUnionEtNameLayout.gone()
                 categoryDialogUnionConfirm.text = getString(R.string.add)
                 categoryDialogCurrentFolder.categoryDialogUnionItem1.setImageDrawable(
                     firstDrawable
                 )
-                categoryDialogCurrentFolder.root.visibility = VISIBLE
+                categoryDialogCurrentFolder.root.show()
             } else {
                 categoryDialogUnionConfirm.isEnabled =
                     categoryDialogUnionEtName.length() > 0
@@ -83,7 +83,7 @@ class CategoryUnitDialog :
                     secondDrawable
                 )
                 categoryDialogUnionConfirm.text = getString(R.string.save)
-                categoryDialogUnionFolder.root.visibility = VISIBLE
+                categoryDialogUnionFolder.root.show()
             }
             categoryDialogUnionConfirm.setOnClickListener {
                 if (secondCategory.children.isEmpty() && viewBinding.categoryDialogUnionEtName.text.toString()

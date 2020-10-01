@@ -3,8 +3,6 @@ package com.d9tilov.moneymanager.settings.ui
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import com.d9tilov.moneymanager.BuildConfig
@@ -13,6 +11,8 @@ import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
+import com.d9tilov.moneymanager.core.util.gone
+import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentSettingsBinding
 import com.d9tilov.moneymanager.settings.ui.vm.SettingsViewModel
 import com.d9tilov.moneymanager.splash.ui.SplashActivity
@@ -88,16 +88,16 @@ class SettingsFragment :
             requireActivity().finish()
         } else {
             viewBinding.run {
-                this.settingsAvatar.visibility = VISIBLE
-                settingsName.visibility = VISIBLE
+                this.settingsAvatar.show()
+                settingsName.show()
                 settingsName.text = currencyUser.displayName
                 GlideApp
                     .with(this@SettingsFragment)
                     .load(viewModel.getCurrentUser()?.photoUrl)
                     .centerCrop()
                     .into(settingsAvatar)
-                settingsLogin.visibility = GONE
-                settingsLogout.visibility = VISIBLE
+                settingsLogin.gone()
+                settingsLogout.show()
             }
         }
     }

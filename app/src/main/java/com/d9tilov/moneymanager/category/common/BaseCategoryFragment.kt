@@ -3,7 +3,6 @@ package com.d9tilov.moneymanager.category.common
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
-import android.view.View.GONE
 import android.view.ViewStub
 import android.widget.ImageView
 import android.widget.TextView
@@ -14,7 +13,6 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
-import androidx.recyclerview.widget.RecyclerView.VISIBLE
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.category.CategoryDestination
@@ -27,6 +25,8 @@ import com.d9tilov.moneymanager.core.events.OnItemLongClickListener
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
+import com.d9tilov.moneymanager.core.util.gone
+import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentCategoryBinding
 import com.google.android.material.appbar.MaterialToolbar
 
@@ -151,7 +151,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
 
     private fun showViewStub() {
         if (viewStub.parent == null) {
-            viewStub.visibility = VISIBLE
+            viewStub.show()
         } else {
             val inflatedStub = viewStub.inflate()
             val stubIcon =
@@ -168,16 +168,16 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
                 getString(R.string.category_empty_placeholder_title)
             val stubSubTitle =
                 inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_subtitle)
-            stubSubTitle?.visibility = VISIBLE
+            stubSubTitle?.show()
             stubSubTitle?.text = getString(R.string.category_empty_placeholder_subtitle)
             val addButton =
                 inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_add)
-            addButton?.visibility = GONE
+            addButton?.gone()
         }
     }
 
     private fun hideViewStub() {
-        viewStub.visibility = GONE
+        viewStub.gone()
     }
 
     override fun onBackPressed(): Boolean {

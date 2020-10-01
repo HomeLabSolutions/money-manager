@@ -23,7 +23,9 @@ import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.ui.recyclerview.MarginItemDecoration
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
+import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
+import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentGoalsBinding
 import com.d9tilov.moneymanager.goal.domain.entity.Goal
 import com.d9tilov.moneymanager.goal.ui.dialog.GoalRemoveDialog.Companion.ARG_UNDO_REMOVE_LAYOUT_DISMISS
@@ -104,11 +106,11 @@ class GoalsFragment :
             this.viewLifecycleOwner,
             {
                 if (it.isEmpty()) {
-                    viewBinding.goalsRvList.visibility = View.GONE
+                    viewBinding.goalsRvList.gone()
                     showViewStub()
                 } else {
                     hideViewStub()
-                    viewBinding.goalsRvList.visibility = View.VISIBLE
+                    viewBinding.goalsRvList.show()
                     goalAdapter.updateItems(it)
                 }
             }

@@ -3,13 +3,13 @@ package com.d9tilov.moneymanager.prepopulate.ui
 import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.NavHostFragment
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.budget.ui.BudgetAmountFragmentDirections
+import com.d9tilov.moneymanager.core.util.gone
+import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.currency.ui.CurrencyFragmentDirections
 import com.d9tilov.moneymanager.databinding.ActivityPrepopulateBinding
 import com.d9tilov.moneymanager.fixed.ui.FixedExpenseFragmentDirections
@@ -43,7 +43,7 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
             supportFragmentManager.findFragmentById(R.id.prepopulate_nav_host_container) as NavHostFragment
         val navController = navHostFragment.navController
         navController.addOnDestinationChangedListener { controller, destination, _ ->
-            setControlsVisibility(if (fullScreenDestinationSet.contains(destination.id)) GONE else VISIBLE)
+            setControlsVisibility(!fullScreenDestinationSet.contains(destination.id))
             enableBackButton(destination.id != R.id.choose_currency_dest)
             updateProgress(navController.backStack.size)
         }
@@ -82,11 +82,17 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
         }
     }
 
-    private fun setControlsVisibility(visibility: Int) {
+    private fun setControlsVisibility(visible: Boolean) {
         viewBinding.run {
-            prepopulateBackBtn.visibility = visibility
-            prepopulateNextBtn.visibility = visibility
-            prepopulateProgress.visibility = visibility
+            if (visible) {
+                prepopulateBackBtn.show()
+                prepopulateNextBtn.show()
+                prepopulateProgress.show()
+            } else {
+                prepopulateBackBtn.gone()
+                prepopulateNextBtn.gone()
+                prepopulateProgress.gone()
+            }
         }
     }
 
