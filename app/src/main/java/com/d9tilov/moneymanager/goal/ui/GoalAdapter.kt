@@ -8,7 +8,6 @@ import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.databinding.ItemGoalBinding
-import com.d9tilov.moneymanager.goal.data.entity.GoalData
 import com.d9tilov.moneymanager.goal.domain.entity.Goal
 import com.d9tilov.moneymanager.goal.ui.diff.GoalDiffUtil
 
@@ -71,9 +70,7 @@ class GoalAdapter : RecyclerView.Adapter<GoalAdapter.GoalViewHolder>() {
         BaseViewHolder(viewBinding) {
 
         fun bind(goal: Goal) {
-            viewBinding.run {
-                itemGoalTitle.text = goal.name
-            }
+            viewBinding.itemGoalTitle.text = goal.name
         }
     }
 }

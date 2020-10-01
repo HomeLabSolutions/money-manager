@@ -9,20 +9,17 @@ import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.viewbinding.ViewBinding
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.core.util.toast
 
-abstract class BaseFragment<T : ViewBinding, N : BaseNavigator>(@LayoutRes layoutId: Int) :
+abstract class BaseFragment<N : BaseNavigator>(@LayoutRes layoutId: Int) :
     Fragment(layoutId) {
 
-    abstract fun performDataBinding(view: View): T
     abstract fun getNavigator(): N
 
     private var baseActivity: BaseActivity<*>? = null
     protected abstract val viewModel: BaseViewModel<N>
-    protected var viewBinding: T? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -40,16 +37,10 @@ abstract class BaseFragment<T : ViewBinding, N : BaseNavigator>(@LayoutRes layou
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding = performDataBinding(view)
         initObservers()
     }
 
     fun isNetworkConnected() = baseActivity?.isNetworkEnabled()
-
-    override fun onDestroyView() {
-        viewBinding = null
-        super.onDestroyView()
-    }
 
     override fun onDetach() {
         baseActivity = null

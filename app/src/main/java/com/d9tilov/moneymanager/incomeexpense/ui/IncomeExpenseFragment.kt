@@ -12,6 +12,7 @@ import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeExpenseNavigator
 import com.d9tilov.moneymanager.core.events.OnDialogDismissListener
 import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
+import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.databinding.FragmentIncomeExpenseBinding
 import com.d9tilov.moneymanager.incomeexpense.ui.adapter.IncomeExpenseAdapter
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.IncomeExpenseViewModel
@@ -25,14 +26,14 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class IncomeExpenseFragment :
-    BaseFragment<FragmentIncomeExpenseBinding, IncomeExpenseNavigator>(R.layout.fragment_income_expense),
+    BaseFragment<IncomeExpenseNavigator>(R.layout.fragment_income_expense),
     IncomeExpenseNavigator,
     OnKeyboardVisibleChange {
 
     private val args by navArgs<IncomeExpenseFragmentArgs>()
     private val transactionType by lazy { args.transactionType }
+    private val viewBinding by viewBinding(FragmentIncomeExpenseBinding::bind)
 
-    override fun performDataBinding(view: View) = FragmentIncomeExpenseBinding.bind(view)
     override fun getNavigator() = this
     override val viewModel by viewModels<IncomeExpenseViewModel>()
 
@@ -65,7 +66,7 @@ class IncomeExpenseFragment :
                 currentFragment?.onDismiss()
             }
         }
-        viewBinding?.run {
+        viewBinding.run {
             incomeExpenseViewPager.addOnPageChangeListener(object :
                     ViewPager.OnPageChangeListener {
                     override fun onPageScrollStateChanged(state: Int) { /* do notjing */
@@ -81,9 +82,9 @@ class IncomeExpenseFragment :
                     override fun onPageSelected(position: Int) {
                         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
                             param(
-        FirebaseAnalytics.Param.ITEM_ID,
-        if (position == 0) "expense" else "income"
-    )
+                                FirebaseAnalytics.Param.ITEM_ID,
+                                if (position == 0) "expense" else "income"
+                            )
                         }
                         currentPage = position
                         val currentFragment = getCurrentPagedFragment()

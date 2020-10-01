@@ -10,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.CreatedGoalNavigator
+import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentCreationGoalBinding
@@ -19,15 +20,13 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class GoalCreationFragment :
-    BaseFragment<FragmentCreationGoalBinding, CreatedGoalNavigator>(R.layout.fragment_creation_goal),
+    BaseFragment<CreatedGoalNavigator>(R.layout.fragment_creation_goal),
     CreatedGoalNavigator {
 
     private val args by navArgs<GoalCreationFragmentArgs>()
     private val goal by lazy { args.goal }
-
+    private val viewBinding by viewBinding(FragmentCreationGoalBinding::bind)
     private var toolbar: MaterialToolbar? = null
-
-    override fun performDataBinding(view: View) = FragmentCreationGoalBinding.bind(view)
 
     override fun getNavigator() = this
 
@@ -37,13 +36,13 @@ class GoalCreationFragment :
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         goal?.run {
-            viewBinding?.run {
+            viewBinding.run {
                 createdGoalName.setText(name)
                 createdGoalSum.setValue(targetSum)
                 createdGoalDescription.setText(description)
             }
         }
-        viewBinding?.run {
+        viewBinding.run {
             createdGoalName.onChange { updateSaveButtonState() }
             createdGoalSum.moneyEditText.onChange { updateSaveButtonState() }
             createdGoalSave.setOnClickListener {
@@ -65,7 +64,7 @@ class GoalCreationFragment :
             context,
             R.anim.animation_shake
         )
-        viewBinding?.run {
+        viewBinding.run {
             if (createdGoalName.text?.isEmpty() == true) {
                 createdGoalNameLayout.startAnimation(animation)
             } else if (createdGoalSum.getValue().signum() == 0) {
@@ -75,7 +74,7 @@ class GoalCreationFragment :
     }
 
     private fun initToolbar() {
-        toolbar = viewBinding?.createdGoalToolbarContainer?.toolbar
+        toolbar = viewBinding.createdGoalToolbarContainer.toolbar
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         toolbar?.title = getString(R.string.title_goal)
@@ -87,14 +86,14 @@ class GoalCreationFragment :
 
     override fun onStart() {
         super.onStart()
-        viewBinding?.run { showKeyboard(createdGoalName) }
+        showKeyboard(viewBinding.createdGoalName)
     }
 
     private fun updateSaveButtonState() {
-        viewBinding?.run {
+        viewBinding.run {
             createdGoalSave.isSelected =
                 createdGoalSum.getValue().signum() > 0 &&
-                    createdGoalName.text?.isNotEmpty() == true
+                createdGoalName.text?.isNotEmpty() == true
         }
     }
 

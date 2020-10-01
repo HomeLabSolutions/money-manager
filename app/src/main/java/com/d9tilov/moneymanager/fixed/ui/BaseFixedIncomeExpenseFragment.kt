@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
-import androidx.viewbinding.ViewBinding
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.BaseFixedIncomeExpenseNavigator
@@ -25,10 +24,10 @@ import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialog
 import com.google.android.material.appbar.MaterialToolbar
 
-abstract class BaseFixedIncomeExpenseFragment<V : ViewBinding, N : BaseFixedIncomeExpenseNavigator>(
+abstract class BaseFixedIncomeExpenseFragment<N : BaseFixedIncomeExpenseNavigator>(
     @LayoutRes layoutId: Int
 ) :
-    BaseFragment<V, N>(layoutId), BaseFixedIncomeExpenseNavigator {
+    BaseFragment<N>(layoutId), BaseFixedIncomeExpenseNavigator {
 
     protected val fixedTransactionAdapter: FixedTransactionAdapter = FixedTransactionAdapter()
     protected abstract val transactionType: TransactionType

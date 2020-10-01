@@ -11,6 +11,7 @@ import com.d9tilov.moneymanager.base.ui.navigator.EditCategoryDialogNavigator
 import com.d9tilov.moneymanager.category.exception.CategoryExistException
 import com.d9tilov.moneymanager.category.subcategory.SubCategoryFragment.Companion.SUB_CATEGORY_TITLE
 import com.d9tilov.moneymanager.category.ui.vm.CategoryGroupEditViewModel
+import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentDialogEditCategoryBinding
@@ -18,20 +19,20 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class CategoryEditDialog :
-    BaseDialogFragment<FragmentDialogEditCategoryBinding, EditCategoryDialogNavigator>(),
+    BaseDialogFragment<EditCategoryDialogNavigator>(),
     EditCategoryDialogNavigator {
 
     private val args by navArgs<CategoryEditDialogArgs>()
     private val category by lazy { args.category }
+    private val viewBinding by viewBinding(FragmentDialogEditCategoryBinding::bind)
 
     override val layoutId = R.layout.fragment_dialog_edit_category
-    override fun performDataBinding(view: View) = FragmentDialogEditCategoryBinding.bind(view)
     override fun getNavigator() = this
     override val viewModel by viewModels<CategoryGroupEditViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding?.run {
+        viewBinding.run {
             categoryDialogEditEtName.setText(category.name)
             categoryDialogEditEtName.onChange { text ->
                 val isNameEmpty = text.isEmpty()

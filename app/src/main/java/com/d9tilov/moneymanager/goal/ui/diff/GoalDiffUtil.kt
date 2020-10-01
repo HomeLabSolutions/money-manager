@@ -1,7 +1,6 @@
 package com.d9tilov.moneymanager.goal.ui.diff
 
 import androidx.recyclerview.widget.DiffUtil
-import com.d9tilov.moneymanager.goal.data.entity.GoalData
 import com.d9tilov.moneymanager.goal.domain.entity.Goal
 
 class GoalDiffUtil(

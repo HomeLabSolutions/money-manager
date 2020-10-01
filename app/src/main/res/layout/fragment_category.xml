@@ -68,7 +68,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-
     <ViewStub
         android:id="@+id/category_empty_placeholder"
         android:layout_width="0dp"

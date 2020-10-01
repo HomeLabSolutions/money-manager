@@ -1,7 +1,6 @@
 package com.d9tilov.moneymanager.fixed.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -20,6 +19,7 @@ import com.d9tilov.moneymanager.base.ui.navigator.FixedCreatedNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.common.BaseCategoryFragment.Companion.ARG_CATEGORY
 import com.d9tilov.moneymanager.category.data.entity.Category
+import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.DateValidatorPointBackward
 import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
@@ -43,7 +43,7 @@ import java.util.Locale
 
 @AndroidEntryPoint
 class FixedTransactionCreationFragment :
-    BaseFragment<FragmentCreationFixedTransactionBinding, FixedCreatedNavigator>(R.layout.fragment_creation_fixed_transaction),
+    BaseFragment<FixedCreatedNavigator>(R.layout.fragment_creation_fixed_transaction),
     FixedCreatedNavigator {
 
     private val args by navArgs<FixedTransactionCreationFragmentArgs>()
@@ -55,10 +55,8 @@ class FixedTransactionCreationFragment :
         PeriodType.MONTH to 2,
         PeriodType.YEAR to 3
     )
-
+    private val viewBinding by viewBinding(FragmentCreationFixedTransactionBinding::bind)
     private var toolbar: MaterialToolbar? = null
-
-    override fun performDataBinding(view: View) = FragmentCreationFixedTransactionBinding.bind(view)
 
     override fun getNavigator() = this
 
@@ -73,7 +71,7 @@ class FixedTransactionCreationFragment :
                 category.value = category.value ?: it?.category
                 periodType.value = periodType.value ?: it?.periodType
                     ?: getSelectedPeriodType(
-                        viewBinding?.createdFixedTransactionRepeatSpinner?.selectedItemPosition ?: 0
+                        viewBinding.createdFixedTransactionRepeatSpinner.selectedItemPosition ?: 0
                     )
                 startDate.value = startDate.value ?: it?.startDate ?: Date()
                 description.value = description.value ?: it?.description ?: ""
@@ -98,7 +96,7 @@ class FixedTransactionCreationFragment :
             )
         }
         viewModel.category.observe(this.viewLifecycleOwner, { updateSaveButtonState() })
-        viewBinding?.run {
+        viewBinding.run {
             createdFixedTransactionCategoryArrow.visibility =
                 if (fixedTransaction == null) VISIBLE else GONE
             createdFixedTransactionDelete.visibility =
@@ -158,7 +156,7 @@ class FixedTransactionCreationFragment :
                     .build()
                 picker.addOnPositiveButtonClickListener { calendarDate ->
                     viewModel.startDate.value = Date(calendarDate)
-                    viewBinding?.createdFixedTransactionRepeatStartsDate?.text = SimpleDateFormat(
+                    viewBinding.createdFixedTransactionRepeatStartsDate.text = SimpleDateFormat(
                         TRANSACTION_DATE_FORMAT,
                         Locale.getDefault()
                     ).format(viewModel.startDate.value ?: Date())
@@ -209,11 +207,11 @@ class FixedTransactionCreationFragment :
             R.anim.animation_shake
         )
         if (viewModel.sum.value?.signum() == 0) {
-            viewBinding?.createdFixedTransactionMainSum?.startAnimation(animation)
+            viewBinding.createdFixedTransactionMainSum.startAnimation(animation)
         } else if (viewModel.category.value == null) {
-            viewBinding?.createdFixedTransactionCategoryLayout?.startAnimation(animation)
+            viewBinding.createdFixedTransactionCategoryLayout.startAnimation(animation)
         } else if (viewModel.periodType.value == PeriodType.WEEK && viewModel.weekDaysSelected.value == 0) {
-            viewBinding?.createdFixedTransactionWeekSelector?.startAnimation(animation)
+            viewBinding.createdFixedTransactionWeekSelector.startAnimation(animation)
         }
     }
 
@@ -228,7 +226,7 @@ class FixedTransactionCreationFragment :
                 byteAsDay or (1 shl byteToShift)
             }
         }
-        viewBinding?.run {
+        viewBinding.run {
             val view = when (day) {
                 Calendar.SUNDAY -> createdFixedTransactionSunday
                 Calendar.MONDAY -> createdFixedTransactionMonday
@@ -261,7 +259,7 @@ class FixedTransactionCreationFragment :
     }
 
     private fun updateSaveButtonState() {
-        viewBinding?.createdFixedTransactionSave?.isSelected =
+        viewBinding.createdFixedTransactionSave.isSelected =
             viewModel.sum.value?.signum() ?: BigDecimal.ZERO.signum() > 0 &&
             viewModel.category.value != null &&
             (
@@ -278,7 +276,7 @@ class FixedTransactionCreationFragment :
                 category.color
             )
             iconDrawable.setBounds(0, 0, 120, 120)
-            viewBinding?.run {
+            viewBinding.run {
                 createdFixedTransactionCategory.setCompoundDrawables(
                     iconDrawable,
                     null,
@@ -295,7 +293,7 @@ class FixedTransactionCreationFragment :
             }
         }
         if (viewModel.category.value == null) {
-            viewBinding?.createdFixedTransactionCategory?.text =
+            viewBinding.createdFixedTransactionCategory.text =
                 getString(R.string.fixed_transaction_choose_category)
         }
     }
@@ -313,12 +311,12 @@ class FixedTransactionCreationFragment :
     override fun onStart() {
         super.onStart()
         if (fixedTransaction == null) {
-            showKeyboard(viewBinding?.createdFixedTransactionMainSum?.moneyEditText)
+            showKeyboard(viewBinding.createdFixedTransactionMainSum.moneyEditText)
         }
     }
 
     private fun initToolbar() {
-        toolbar = viewBinding?.createdFixedTransactionToolbarContainer?.toolbar
+        toolbar = viewBinding.createdFixedTransactionToolbarContainer.toolbar
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         toolbar?.title =

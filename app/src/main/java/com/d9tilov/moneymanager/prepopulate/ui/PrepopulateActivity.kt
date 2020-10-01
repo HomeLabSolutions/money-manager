@@ -2,7 +2,6 @@ package com.d9tilov.moneymanager.prepopulate.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.View.GONE
 import android.view.View.VISIBLE

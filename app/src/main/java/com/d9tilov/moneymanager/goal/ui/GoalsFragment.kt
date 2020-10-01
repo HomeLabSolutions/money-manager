@@ -22,6 +22,7 @@ import com.d9tilov.moneymanager.base.ui.navigator.GoalsNavigator
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.ui.recyclerview.MarginItemDecoration
+import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentGoalsBinding
 import com.d9tilov.moneymanager.goal.domain.entity.Goal
@@ -32,12 +33,13 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class GoalsFragment :
-    BaseFragment<FragmentGoalsBinding, GoalsNavigator>(R.layout.fragment_goals),
+    BaseFragment<GoalsNavigator>(R.layout.fragment_goals),
     GoalsNavigator {
 
     private var toolbar: MaterialToolbar? = null
     private var emptyViewStub: ViewStub? = null
     private val goalAdapter: GoalAdapter = GoalAdapter()
+    private val viewBinding by viewBinding(FragmentGoalsBinding::bind)
 
     private val onItemClickListener = object : OnItemClickListener<Goal> {
         override fun onItemClick(item: Goal, position: Int) {
@@ -55,9 +57,6 @@ class GoalsFragment :
         val action = GoalsFragmentDirections.toRemoveGoalDialog(goal)
         findNavController().navigate(action)
     }
-
-    override fun performDataBinding(view: View) = FragmentGoalsBinding.bind(view)
-
     override fun getNavigator() = this
 
     override val viewModel by viewModels<GoalsViewModel>()
@@ -71,8 +70,8 @@ class GoalsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        emptyViewStub = viewBinding?.root?.findViewById(R.id.goals_empty_placeholder)
-        viewBinding?.run {
+        emptyViewStub = viewBinding.root.findViewById(R.id.goals_empty_placeholder)
+        viewBinding.run {
             goalsRvList.adapter = goalAdapter
             val layoutManager = LinearLayoutManager(requireContext())
             goalsRvList.layoutManager = layoutManager
@@ -98,20 +97,22 @@ class GoalsFragment :
         }
         viewModel.amount.observe(
             this.viewLifecycleOwner,
-            { viewBinding?.run { goalsAmount.setValue(it) } })
-        viewBinding?.run {
-            toolbar = goalsToolbarContainer.toolbar
-        }
-        viewModel.goals.observe(this.viewLifecycleOwner, {
-            if (it.isEmpty()) {
-                viewBinding?.run { goalsRvList.visibility = View.GONE }
-                showViewStub()
-            } else {
-                hideViewStub()
-                viewBinding?.run { goalsRvList.visibility = View.VISIBLE }
-                goalAdapter.updateItems(it)
+            { viewBinding.goalsAmount.setValue(it) }
+        )
+        toolbar = viewBinding.goalsToolbarContainer.toolbar
+        viewModel.goals.observe(
+            this.viewLifecycleOwner,
+            {
+                if (it.isEmpty()) {
+                    viewBinding.goalsRvList.visibility = View.GONE
+                    showViewStub()
+                } else {
+                    hideViewStub()
+                    viewBinding.goalsRvList.visibility = View.VISIBLE
+                    goalAdapter.updateItems(it)
+                }
             }
-        })
+        )
     }
 
     override fun onStart() {
@@ -120,7 +121,7 @@ class GoalsFragment :
     }
 
     private fun initToolbar() {
-        toolbar = viewBinding?.run { goalsToolbarContainer.toolbar }
+        toolbar = viewBinding.goalsToolbarContainer.toolbar
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         toolbar?.title = getString(R.string.title_goal)

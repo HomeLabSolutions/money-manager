@@ -13,6 +13,7 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.callback.SwipeToDeleteCallback
 import com.d9tilov.moneymanager.base.ui.navigator.FixedExpenseNavigator
 import com.d9tilov.moneymanager.core.ui.recyclerview.MarginItemDecoration
+import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.databinding.FragmentFixedExpenseBinding
 import com.d9tilov.moneymanager.fixed.vm.FixedExpenseViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -20,17 +21,17 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FixedExpenseFragment :
-    BaseFixedIncomeExpenseFragment<FragmentFixedExpenseBinding, FixedExpenseNavigator>(R.layout.fragment_fixed_expense),
+    BaseFixedIncomeExpenseFragment<FixedExpenseNavigator>(R.layout.fragment_fixed_expense),
     FixedExpenseNavigator {
 
+    private val viewBinding by viewBinding(FragmentFixedExpenseBinding::bind)
     override val transactionType = TransactionType.EXPENSE
-    override fun performDataBinding(view: View) = FragmentFixedExpenseBinding.bind(view)
     override fun getNavigator() = this
     override val viewModel by viewModels<FixedExpenseViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding?.run {
+        viewBinding.run {
             toolbar = fixedExpenseToolbarContainer.toolbar
             fixedExpenseRvList.adapter = fixedTransactionAdapter
             val layoutManager = LinearLayoutManager(requireContext())
@@ -46,16 +47,16 @@ class FixedExpenseFragment :
                 }
             }).attachToRecyclerView(fixedExpenseRvList)
         }
-        emptyViewStub = viewBinding?.root?.findViewById(R.id.fixed_expense_empty_placeholder)
+        emptyViewStub = viewBinding.root.findViewById(R.id.fixed_expense_empty_placeholder)
         viewModel.fixedExpenseTransactionList.observe(
             this.viewLifecycleOwner,
             {
                 if (it.isEmpty()) {
-                    viewBinding?.run { fixedExpenseRvList.visibility = GONE }
+                    viewBinding.fixedExpenseRvList.visibility = GONE
                     showViewStub(TransactionType.EXPENSE)
                 } else {
                     hideViewStub()
-                    viewBinding?.run { fixedExpenseRvList.visibility = VISIBLE }
+                    viewBinding.fixedExpenseRvList.visibility = VISIBLE
                     fixedTransactionAdapter.updateItems(it)
                 }
             }

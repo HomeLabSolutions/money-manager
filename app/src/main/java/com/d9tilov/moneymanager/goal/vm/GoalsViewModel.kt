@@ -11,7 +11,6 @@ import com.d9tilov.moneymanager.core.util.addTo
 import com.d9tilov.moneymanager.core.util.getFirstDayOfMonth
 import com.d9tilov.moneymanager.core.util.ioScheduler
 import com.d9tilov.moneymanager.core.util.uiScheduler
-import com.d9tilov.moneymanager.goal.data.entity.GoalData
 import com.d9tilov.moneymanager.goal.domain.GoalInteractor
 import com.d9tilov.moneymanager.goal.domain.entity.Goal
 import io.reactivex.Single
