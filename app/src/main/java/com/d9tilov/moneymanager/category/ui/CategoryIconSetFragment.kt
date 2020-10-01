@@ -48,12 +48,15 @@ class CategoryIconSetFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding?.let {
+        viewBinding?.run {
             val layoutManager =
-                GridLayoutManager(requireContext(), SPAN_COUNT, GridLayoutManager.VERTICAL, false)
-            it.categorySetRvCategory.layoutManager = layoutManager
-            it.categorySetRvCategory.adapter = categoryAdapter
-            it.categorySetRvCategory.addItemDecoration(
+                GridLayoutManager(
+                    requireContext(),
+                    SPAN_COUNT, GridLayoutManager.VERTICAL, false
+                )
+            categorySetRvCategory.layoutManager = layoutManager
+            categorySetRvCategory.adapter = categoryAdapter
+            categorySetRvCategory.addItemDecoration(
                 GridSpaceItemDecoration(
                     spanCount = SPAN_COUNT,
                     spacing = resources.getDimension(R.dimen.recycler_view_category_offset).toInt()

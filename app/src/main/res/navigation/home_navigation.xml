@@ -230,7 +230,7 @@
 
     <dialog
         android:id="@+id/remove_transaction_dialog"
-        android:name="com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialogFragment"
+        android:name="com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialog"
         tools:layout="@layout/fragment_dialog_remove">
 
         <argument

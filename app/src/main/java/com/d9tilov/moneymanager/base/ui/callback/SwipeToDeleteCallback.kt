@@ -22,7 +22,7 @@ import java.util.Locale
 abstract class SwipeToDeleteCallback(context: Context) :
     ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
-    private val deleteIcon = ContextCompat.getDrawable(context, R.drawable.ic_delete)
+    private val deleteIcon = ContextCompat.getDrawable(context, R.drawable.ic_delete_swipe)
     private var intrinsicWidth = deleteIcon?.intrinsicWidth ?: 0
     private var intrinsicHeight = deleteIcon?.intrinsicHeight ?: 0
     private val background = ColorDrawable()

@@ -52,42 +52,42 @@ class CategoryUnitDialog :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding?.let {
-            it.categoryDialogUnionCancel.setOnClickListener { viewModel.cancel() }
+        viewBinding?.run {
+            categoryDialogUnionCancel.setOnClickListener { viewModel.cancel() }
             val firstDrawable =
                 createTintDrawable(requireContext(), firstCategory.icon, firstCategory.color)
-            it.categoryDialogUnionFolder.categoryDialogUnionItem1.setImageDrawable(firstDrawable)
+            categoryDialogUnionFolder.categoryDialogUnionItem1.setImageDrawable(firstDrawable)
             if (secondCategory.children.isNotEmpty()) {
-                it.categoryDialogUnionTitle.text = getString(R.string.category_add_to_group_title)
-                it.categoryDialogUnionSubtitle.text = getString(
+                categoryDialogUnionTitle.text = getString(R.string.category_add_to_group_title)
+                categoryDialogUnionSubtitle.text = getString(
                     R.string.category_unit_to_group_subtitle,
                     firstCategory.name,
                     secondCategory.name
                 )
-                it.categoryDialogUnionEtNameLayout.visibility = GONE
-                it.categoryDialogUnionConfirm.text = getString(R.string.add)
-                it.categoryDialogCurrentFolder.categoryDialogUnionItem1.setImageDrawable(
+                categoryDialogUnionEtNameLayout.visibility = GONE
+                categoryDialogUnionConfirm.text = getString(R.string.add)
+                categoryDialogCurrentFolder.categoryDialogUnionItem1.setImageDrawable(
                     firstDrawable
                 )
-                it.categoryDialogCurrentFolder.root.visibility = VISIBLE
+                categoryDialogCurrentFolder.root.visibility = VISIBLE
             } else {
-                it.categoryDialogUnionConfirm.isEnabled =
-                    it.categoryDialogUnionEtName.length() > 0
-                it.categoryDialogUnionSubtitle.text =
+                categoryDialogUnionConfirm.isEnabled =
+                    categoryDialogUnionEtName.length() > 0
+                categoryDialogUnionSubtitle.text =
                     getString(R.string.category_unit_new_name_subtitle)
-                it.categoryDialogUnionTitle.text = getString(R.string.category_unit_to_group_title)
-                it.categoryDialogUnionFolder.categoryDialogUnionItem1.setImageDrawable(firstDrawable)
+                categoryDialogUnionTitle.text = getString(R.string.category_unit_to_group_title)
+                categoryDialogUnionFolder.categoryDialogUnionItem1.setImageDrawable(firstDrawable)
                 val secondDrawable =
                     createTintDrawable(requireContext(), secondCategory.icon, secondCategory.color)
-                it.categoryDialogUnionFolder.categoryDialogUnionItem2.setImageDrawable(
+                categoryDialogUnionFolder.categoryDialogUnionItem2.setImageDrawable(
                     secondDrawable
                 )
-                it.categoryDialogUnionConfirm.text = getString(R.string.save)
-                it.categoryDialogUnionFolder.root.visibility = VISIBLE
+                categoryDialogUnionConfirm.text = getString(R.string.save)
+                categoryDialogUnionFolder.root.visibility = VISIBLE
             }
-            it.categoryDialogUnionConfirm.setOnClickListener {
+            categoryDialogUnionConfirm.setOnClickListener {
                 if (secondCategory.children.isEmpty() && viewBinding?.categoryDialogUnionEtName?.text.toString()
-                    .isEmpty()
+                        .isEmpty()
                 ) {
                     showError(IllegalArgumentException())
                 } else if (secondCategory.children.isNotEmpty()) {
@@ -100,7 +100,7 @@ class CategoryUnitDialog :
                     )
                 }
             }
-            it.categoryDialogUnionEtName.onChange { text ->
+            categoryDialogUnionEtName.onChange { text ->
                 val isNameEmpty = text.isEmpty()
                 viewBinding?.categoryDialogUnionConfirm?.isEnabled = !isNameEmpty
                 viewBinding?.categoryDialogUnionEtNameLayout?.error = null

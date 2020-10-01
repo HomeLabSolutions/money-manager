@@ -8,6 +8,7 @@ import android.view.ViewStub
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.LayoutRes
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
@@ -91,19 +92,28 @@ abstract class BaseIncomeExpenseFragment<V : ViewBinding, N : BaseIncomeExpenseN
             emptyViewStub?.visibility = VISIBLE
         } else {
             val inflatedStub = emptyViewStub?.inflate()
+            val stubIcon =
+                inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_icon)
+            stubIcon?.setImageDrawable(
+                ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.ic_wallet_empty
+                )
+            )
             val stubTitle =
-                inflatedStub?.findViewById<TextView>(R.id.empty_transaction_placeholder_title)
+                inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_title)
             stubTitle?.text =
                 getString(
                     if (transactionType == TransactionType.EXPENSE)
                         R.string.transaction_empty_placeholder_expense_title
                     else R.string.transaction_empty_placeholder_income_title
                 )
-            val stubSubtitle =
-                inflatedStub?.findViewById<TextView>(R.id.empty_transaction_placeholder_subtitle)
-            stubSubtitle?.visibility = VISIBLE
+            val stubSubTitle =
+                inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_subtitle)
+            stubSubTitle?.visibility = VISIBLE
+            stubSubTitle?.text = getString(R.string.transaction_empty_placeholder_subtitle)
             val addTransaction =
-                inflatedStub?.findViewById<ImageView>(R.id.empty_transaction_placeholder_add)
+                inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_add)
             addTransaction?.setOnClickListener {
                 showKeyboard(mainSum.moneyEditText)
             }

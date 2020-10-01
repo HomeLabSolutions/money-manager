@@ -5,7 +5,10 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.View.GONE
 import android.view.ViewStub
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
@@ -77,9 +80,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding?.let {
-            viewStub = it.root.findViewById(R.id.category_empty_placeholder)
-        }
+        viewBinding?.run { viewStub = root.findViewById(R.id.category_empty_placeholder) }
         initToolbar()
         viewBinding?.run {
             val layoutManager =
@@ -130,7 +131,11 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
                         { it.name }
                     )
                 )
-                viewStub.visibility = if (list.isEmpty()) VISIBLE else GONE
+                if (list.isEmpty()) {
+                    showViewStub()
+                } else {
+                    hideViewStub()
+                }
                 categoryAdapter.updateItems(sortedList)
             }
         )
@@ -143,6 +148,37 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity.supportActionBar?.setDisplayShowHomeEnabled(true)
         setHasOptionsMenu(true)
+    }
+
+    private fun showViewStub() {
+        if (viewStub.parent == null) {
+            viewStub.visibility = VISIBLE
+        } else {
+            val inflatedStub = viewStub.inflate()
+            val stubIcon =
+                inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_icon)
+            stubIcon?.setImageDrawable(
+                ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.ic_categories_empty
+                )
+            )
+            val stubTitle =
+                inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_title)
+            stubTitle?.text =
+                getString(R.string.category_empty_placeholder_title)
+            val stubSubTitle =
+                inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_subtitle)
+            stubSubTitle?.visibility = VISIBLE
+            stubSubTitle?.text = getString(R.string.category_empty_placeholder_subtitle)
+            val addButton =
+                inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_add)
+            addButton?.visibility = GONE
+        }
+    }
+
+    private fun hideViewStub() {
+        viewStub.visibility = GONE
     }
 
     override fun onBackPressed(): Boolean {

@@ -29,15 +29,15 @@ class CategoryRemoveDialog :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding?.let {
-            it.transactionRemoveDialogTitle.text = getString(R.string.category_delete_title)
-            it.transactionRemoveDialogSubtitle.text =
+        viewBinding?.run {
+            removeDialogTitle.text = getString(R.string.category_delete_title)
+            removeDialogSubtitle.text =
                 getString(
                     if (category.children.isEmpty()) R.string.category_delete_sub_title else R.string.category_delete_group_sub_title,
                     category.name
                 )
-            it.transactionRemoveButtonConfirm.setOnClickListener { viewModel.remove(category) }
-            it.transactionRemoveButtonCancel.setOnClickListener { dismiss() }
+            removeButtonConfirm.setOnClickListener { viewModel.remove(category) }
+            removeButtonCancel.setOnClickListener { dismiss() }
         }
     }
 

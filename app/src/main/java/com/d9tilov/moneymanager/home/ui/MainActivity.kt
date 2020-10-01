@@ -2,6 +2,7 @@ package com.d9tilov.moneymanager.home.ui
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE

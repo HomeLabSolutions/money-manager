@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class FixedTransactionDomainMapper @Inject constructor() {
 
-    fun toDataModel(fixedTransaction: FixedTransaction) =
+    fun toData(fixedTransaction: FixedTransaction) =
         with(fixedTransaction) {
             FixedTransactionData(
                 id,

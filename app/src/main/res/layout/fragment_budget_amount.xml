@@ -35,7 +35,7 @@
         app:layout_constraintStart_toStartOf="@+id/common_budget_amount_title"
         app:layout_constraintTop_toBottomOf="@+id/common_budget_amount_title"
         app:scaleEnabled="true"
-        app:showComma="true"
+        app:showComma="false"
         app:signTextStyle="?attr/textAppearanceCurrencySignBig"
         app:sum="5000"
         app:sumTextStyle="?attr/textAppearanceHeadline1" />

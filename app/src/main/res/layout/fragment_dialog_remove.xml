@@ -7,7 +7,7 @@
     style="@style/Theme.MoneyManager.Material.Alert.Dialog">
 
     <TextView
-        android:id="@+id/transaction_remove_dialog_title"
+        android:id="@+id/remove_dialog_title"
         style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
         android:textColor="@color/secondary_color"
         android:layout_width="0dp"
@@ -21,7 +21,7 @@
         tools:text="@string/transaction_delete_dialog_title" />
 
     <TextView
-        android:id="@+id/transaction_remove_dialog_subtitle"
+        android:id="@+id/remove_dialog_subtitle"
         style="@style/Theme.MoneyManager.MaterialComponents.Body.Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -29,22 +29,22 @@
         android:paddingTop="16dp"
         android:paddingEnd="@dimen/standard_right_margin"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/transaction_remove_dialog_title"
+        app:layout_constraintTop_toBottomOf="@+id/remove_dialog_title"
         tools:text="@string/transaction_delete_dialog_subtitle" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/transaction_remove_button_cancel"
+        android:id="@+id/remove_button_cancel"
         style="@style/Widget.MoneyManager.Button.TextButton.Dialog"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:layout_marginEnd="8dp"
         android:text="@string/cancel"
-        app:layout_constraintEnd_toStartOf="@+id/transaction_remove_button_confirm"
-        app:layout_constraintTop_toBottomOf="@+id/transaction_remove_dialog_subtitle" />
+        app:layout_constraintEnd_toStartOf="@+id/remove_button_confirm"
+        app:layout_constraintTop_toBottomOf="@+id/remove_dialog_subtitle" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/transaction_remove_button_confirm"
+        android:id="@+id/remove_button_confirm"
         style="@style/Widget.MoneyManager.Button.TextButton.Dialog"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -52,5 +52,5 @@
         android:layout_marginEnd="8dp"
         android:text="@string/delete"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/transaction_remove_dialog_subtitle" />
+        app:layout_constraintTop_toBottomOf="@+id/remove_dialog_subtitle" />
 </androidx.constraintlayout.widget.ConstraintLayout>
