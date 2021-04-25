@@ -3,6 +3,7 @@ package com.d9tilov.moneymanager.fixed.ui
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,9 +49,9 @@ class FixedExpenseFragment :
             }).attachToRecyclerView(fixedExpenseRvList)
         }
         emptyViewStub = viewBinding.root.findViewById(R.id.fixed_expense_empty_placeholder)
-        viewModel.fixedExpenseTransactionList.observe(
+        viewModel.getFixedExpenseTransactionList().observe(
             this.viewLifecycleOwner,
-            {
+            Observer {
                 if (it.isEmpty()) {
                     viewBinding.fixedExpenseRvList.gone()
                     showViewStub(TransactionType.EXPENSE)

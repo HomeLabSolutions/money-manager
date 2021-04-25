@@ -49,15 +49,13 @@ abstract class BaseFragment<N : BaseNavigator>(@LayoutRes layoutId: Int) :
 
     @CallSuper
     protected open fun initObservers() {
-        viewModel.msg.observe(
-            this.viewLifecycleOwner,
-            Observer { event ->
+        viewModel.getMsg().observe(
+            this.viewLifecycleOwner, { event ->
                 requireContext().toast(event)
             }
         )
-        viewModel.loading.observe(
-            this.viewLifecycleOwner,
-            Observer { show ->
+        viewModel.getLoading().observe(
+            this.viewLifecycleOwner, { show ->
                 if (show) showLoading() else hideLoading()
             }
         )

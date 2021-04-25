@@ -57,11 +57,11 @@ abstract class BaseDialogFragment<N : BaseNavigator> :
 
     @CallSuper
     protected open fun initObservers() {
-        viewModel.msg.observe(
+        viewModel.getMsg().observe(
             this.viewLifecycleOwner,
             { requireContext().toast(it) }
         )
-        viewModel.loading.observe(
+        viewModel.getLoading().observe(
             this.viewLifecycleOwner,
             { if (it) showLoading() else hideLoading() }
         )

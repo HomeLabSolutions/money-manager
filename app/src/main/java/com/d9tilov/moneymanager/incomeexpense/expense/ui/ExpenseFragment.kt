@@ -68,7 +68,7 @@ class ExpenseFragment :
             mainSum = expenseMainSum
         }
         viewModel.run {
-            categories.observe(
+            getCategories().observe(
                 viewLifecycleOwner,
                 { list ->
                     val sortedCategories = list.sortedWith(
@@ -81,7 +81,7 @@ class ExpenseFragment :
                     categoryAdapter.updateItems(sortedCategories)
                 }
             )
-            transactions.observe(
+            getTransactions().observe(
                 viewLifecycleOwner,
                 {
                     isTransactionDataEmpty = it.isEmpty()
@@ -91,7 +91,7 @@ class ExpenseFragment :
                     transactionAdapter.submitList(it)
                 }
             )
-            addTransactionEvent.observe(
+            getTransactionEvent().observe(
                 viewLifecycleOwner,
                 {
                     hideKeyboard()

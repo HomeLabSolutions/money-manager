@@ -62,7 +62,7 @@ class CurrencyFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        viewModel.currencies.observe(
+        viewModel.getCurrencies().observe(
             this.viewLifecycleOwner,
             { list ->
                 val sortedList = list.sortedBy { it.code }

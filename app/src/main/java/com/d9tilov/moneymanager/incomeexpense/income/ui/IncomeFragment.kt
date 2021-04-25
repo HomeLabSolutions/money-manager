@@ -66,7 +66,7 @@ class IncomeFragment :
             mainSum = incomeMainSum
         }
         viewModel.run {
-            categories.observe(
+            getCategories().observe(
                 viewLifecycleOwner,
                 { list ->
                     val sortedCategories = list.sortedWith(
@@ -79,9 +79,8 @@ class IncomeFragment :
                     categoryAdapter.updateItems(sortedCategories)
                 }
             )
-            transactions.observe(
-                viewLifecycleOwner,
-                {
+            getTransactions().observe(
+                viewLifecycleOwner, {
                     isTransactionDataEmpty = it.isEmpty()
                     if (isTransactionDataEmpty && !(activity as MainActivity).forceShowKeyboard) {
                         showViewStub(TransactionType.INCOME)
@@ -89,9 +88,8 @@ class IncomeFragment :
                     transactionAdapter.submitList(it)
                 }
             )
-            addTransactionEvent.observe(
-                viewLifecycleOwner,
-                {
+            getTransactionEvent().observe(
+                viewLifecycleOwner, {
                     hideKeyboard()
                     resetMainSum()
                 }
