@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.budget.vm
 
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.room.EmptyResultSetException
 import com.d9tilov.moneymanager.base.ui.navigator.BudgetAmountNavigator
@@ -18,7 +19,7 @@ import java.util.Date
 class BudgetAmountViewModel @ViewModelInject constructor(private val budgetInteractor: BudgetInteractor) :
     BaseViewModel<BudgetAmountNavigator>() {
 
-    val amount by lazy { MutableLiveData<BigDecimal>() }
+    private val amount by lazy { MutableLiveData<BigDecimal>() }
     private lateinit var budget: BudgetData
 
     init {
@@ -57,4 +58,6 @@ class BudgetAmountViewModel @ViewModelInject constructor(private val budgetInter
             .subscribe { this.amount.value = sum }
             .addTo(compositeDisposable)
     }
+
+    fun getAmount(): LiveData<BigDecimal> = amount
 }

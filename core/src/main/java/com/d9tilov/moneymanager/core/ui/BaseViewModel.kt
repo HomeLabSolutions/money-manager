@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.core.ui
 
 import androidx.annotation.StringRes
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.d9tilov.moneymanager.core.AndroidDisposable
@@ -13,8 +14,8 @@ abstract class BaseViewModel<T : BaseNavigator> : ViewModel() {
             field = value
             field?.let { onNavigatorAttached() }
         }
-    val msg = MutableLiveData<Int>()
-    val loading = MutableLiveData<Boolean>()
+    private val msg = MutableLiveData<Int>()
+    private val loading = MutableLiveData<Boolean>()
     protected val compositeDisposable = AndroidDisposable()
     protected val retryManager = NetworkRetryManager()
 
@@ -41,6 +42,9 @@ abstract class BaseViewModel<T : BaseNavigator> : ViewModel() {
     }
 
     protected open fun onNavigatorAttached() {}
+
+    fun getMsg():LiveData<Int> = msg
+    fun getLoading():LiveData<Boolean> = loading
 
     override fun onCleared() {
         compositeDisposable.dispose()

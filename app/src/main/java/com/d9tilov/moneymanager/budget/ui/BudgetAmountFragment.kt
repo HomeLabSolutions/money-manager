@@ -32,7 +32,7 @@ class BudgetAmountFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        viewModel.amount.observe(
+        viewModel.getAmount().observe(
             this.viewLifecycleOwner,
             {
                 viewBinding.commonBudgetAmount.setValue(it)

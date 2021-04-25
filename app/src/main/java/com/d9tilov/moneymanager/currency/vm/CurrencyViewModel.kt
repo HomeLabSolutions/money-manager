@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.currency.vm
 
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.d9tilov.moneymanager.base.ui.navigator.CurrencyNavigator
 import com.d9tilov.moneymanager.budget.data.entity.BudgetData
@@ -21,7 +22,7 @@ class CurrencyViewModel @ViewModelInject constructor(
 ) :
     BaseViewModel<CurrencyNavigator>() {
 
-    val currencies = MutableLiveData<List<Currency>>()
+    private val currencies = MutableLiveData<List<Currency>>()
 
     init {
         loadCurrencies()
@@ -70,4 +71,6 @@ class CurrencyViewModel @ViewModelInject constructor(
             .subscribe { navigator?.skip() }
             .addTo(compositeDisposable)
     }
+
+    fun getCurrencies(): LiveData<List<Currency>> = currencies
 }

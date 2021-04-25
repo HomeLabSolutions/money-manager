@@ -19,7 +19,7 @@ import java.util.Date
 
 class GoalsViewModel @ViewModelInject constructor(
     private val budgetInteractor: BudgetInteractor,
-    private val goalInteractor: GoalInteractor
+    goalInteractor: GoalInteractor
 ) :
     BaseViewModel<GoalsNavigator>() {
 
@@ -35,8 +35,8 @@ class GoalsViewModel @ViewModelInject constructor(
                         fiscalDay = Date().getFirstDayOfMonth()
                     )
                     budgetInteractor.create(budgetData).toSingleDefault(budgetData)
-                        .doOnSuccess { budgetData ->
-                            amount.postValue(budgetData.sum)
+                        .doOnSuccess { data ->
+                            amount.postValue(data.sum)
                         }
                 } else {
                     Single.error(it)

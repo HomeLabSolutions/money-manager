@@ -47,7 +47,7 @@ class FixedIncomeFragment :
             }).attachToRecyclerView(fixedIncomeRvList)
         }
         emptyViewStub = viewBinding.root.findViewById(R.id.fixed_income_empty_placeholder)
-        viewModel.fixedIncomeTransactionList.observe(
+        viewModel.getFixedIncomeTransactionList().observe(
             this.viewLifecycleOwner,
             {
                 if (it.isEmpty()) {

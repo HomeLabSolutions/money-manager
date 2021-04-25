@@ -10,6 +10,7 @@ import com.d9tilov.moneymanager.user.domain.UserInteractor
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 class SettingsViewModel @ViewModelInject constructor(
     private val userInfoInteractor: UserInteractor,
@@ -18,7 +19,7 @@ class SettingsViewModel @ViewModelInject constructor(
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    fun getCurrentUser() = auth.currentUser
+    fun getCurrentUser(): FirebaseUser? = auth.currentUser
 
     fun logout() {
         userInfoInteractor.logout()
