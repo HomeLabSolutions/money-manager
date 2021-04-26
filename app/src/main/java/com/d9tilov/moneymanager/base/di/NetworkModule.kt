@@ -67,6 +67,6 @@ class NetworkModule {
     companion object {
         private const val READ_TIMEOUT = 15L
         private const val WRITE_TIMEOUT = 15L
-        const val BASE_URL = "https://api.exchangeratesapi.io/"
+        const val BASE_URL = "https://v6.exchangerate-api.com/v6/"
     }
 }

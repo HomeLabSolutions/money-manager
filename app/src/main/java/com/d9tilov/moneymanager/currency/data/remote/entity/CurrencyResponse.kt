@@ -7,7 +7,7 @@ import java.math.BigDecimal
 typealias CurrencyRateMap = MutableMap<String, BigDecimal>
 
 data class CurrencyResponse(
-    @SerializedName("base") @Expose val base: String,
-    @SerializedName("date") @Expose val date: String,
-    @SerializedName("rates") @Expose val rates: CurrencyRateMap
+    @SerializedName("base_code") @Expose val base: String,
+    @SerializedName("time_last_update_unix") @Expose val date: String,
+    @SerializedName("conversion_rates") @Expose val rates: CurrencyRateMap
 )

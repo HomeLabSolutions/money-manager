@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -91,18 +90,18 @@ class GoalsFragment :
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
             ARG_UNDO_REMOVE_LAYOUT_DISMISS
         )?.observe(
-            viewLifecycleOwner
-        ) {
-            if (it) {
-                goalAdapter.cancelDeletion()
+            viewLifecycleOwner,
+            {
+                if (it) {
+                    goalAdapter.cancelDeletion()
+                }
             }
-        }
-        viewModel.amount.observe(
-            this.viewLifecycleOwner,
-            { viewBinding.goalsAmount.setValue(it) }
+        )
+        viewModel.getAmount().observe(
+            this.viewLifecycleOwner, { viewBinding.goalsAmount.setValue(it) }
         )
         toolbar = viewBinding.goalsToolbarContainer.toolbar
-        viewModel.goals.observe(
+        viewModel.getGoals().observe(
             this.viewLifecycleOwner,
             {
                 if (it.isEmpty()) {

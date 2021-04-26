@@ -8,3 +8,4 @@
 .externalNativeBuild
 .cxx
 private_key.pepk
+keystore.properties

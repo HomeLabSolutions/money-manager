@@ -35,9 +35,7 @@ class CurrencyViewModel @ViewModelInject constructor(
             .observeOn(uiScheduler)
             .doOnError { navigator?.showError() }
             .retryWhen { it.flatMap { retryManager.observeRetries() } }
-            .subscribe { list ->
-                currencies.value = list
-            }
+            .subscribe { list -> currencies.value = list }
             .addTo(compositeDisposable)
     }
 

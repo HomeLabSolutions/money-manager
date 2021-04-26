@@ -80,7 +80,8 @@ class IncomeFragment :
                 }
             )
             getTransactions().observe(
-                viewLifecycleOwner, {
+                viewLifecycleOwner,
+                {
                     isTransactionDataEmpty = it.isEmpty()
                     if (isTransactionDataEmpty && !(activity as MainActivity).forceShowKeyboard) {
                         showViewStub(TransactionType.INCOME)
@@ -89,7 +90,8 @@ class IncomeFragment :
                 }
             )
             getTransactionEvent().observe(
-                viewLifecycleOwner, {
+                viewLifecycleOwner,
+                {
                     hideKeyboard()
                     resetMainSum()
                 }
