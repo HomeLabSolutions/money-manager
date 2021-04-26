@@ -8,7 +8,6 @@ import androidx.annotation.ColorRes
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.core.util.toast
@@ -50,14 +49,12 @@ abstract class BaseFragment<N : BaseNavigator>(@LayoutRes layoutId: Int) :
     @CallSuper
     protected open fun initObservers() {
         viewModel.getMsg().observe(
-            this.viewLifecycleOwner, { event ->
-                requireContext().toast(event)
-            }
+            this.viewLifecycleOwner,
+            { event -> requireContext().toast(event) }
         )
         viewModel.getLoading().observe(
-            this.viewLifecycleOwner, { show ->
-                if (show) showLoading() else hideLoading()
-            }
+            this.viewLifecycleOwner,
+            { show -> if (show) showLoading() else hideLoading() }
         )
     }
 

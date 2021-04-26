@@ -78,10 +78,10 @@ class StickyHeaderItemDecorator<T>(private val adapter: StickyAdapter<T, Recycle
         }
         viewOverlappedByHeader?.let {
             if (preOverlappedPosition != overlappedHeaderPosition && shouldMoveHeader(it)) {
-                updateStickyHeader(topChildPosition, overlappedByHeaderPosition)
+                updateStickyHeader(topChildPosition)
                 moveHeader(c, it)
             } else {
-                updateStickyHeader(topChildPosition, RecyclerView.NO_POSITION)
+                updateStickyHeader(topChildPosition)
                 drawHeader(c)
             }
         }
@@ -94,7 +94,7 @@ class StickyHeaderItemDecorator<T>(private val adapter: StickyAdapter<T, Recycle
         return viewOverlappedByHeader.top >= 0 && dy <= 0
     }
 
-    private fun updateStickyHeader(topChildPosition: Int, contactChildPosition: Int) {
+    private fun updateStickyHeader(topChildPosition: Int) {
         val headerPositionForItem = adapter.getHeaderPositionForItem(topChildPosition)
         if (headerPositionForItem != currentStickyPosition && headerPositionForItem != RecyclerView.NO_POSITION) {
             adapter.onBindHeaderViewHolder(currentStickyHolder, headerPositionForItem)

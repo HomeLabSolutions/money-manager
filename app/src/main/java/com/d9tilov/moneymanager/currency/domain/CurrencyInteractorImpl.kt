@@ -6,9 +6,7 @@ class CurrencyInteractorImpl(
     private val currencyRepo: CurrencyRepo
 ) : CurrencyInteractor {
 
-    override fun getCurrencies() =
-        currencyRepo.getCurrencies()
+    override fun getCurrencies() = currencyRepo.getCurrencies()
 
-    override fun updateBaseCurrency(currency: Currency) =
-        currencyRepo.updateBaseCurrency(currency)
+    override fun updateBaseCurrency(currency: Currency) = currencyRepo.updateBaseCurrency(currency)
 }

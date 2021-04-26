@@ -42,10 +42,13 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.prepopulate_nav_host_container) as NavHostFragment
         val navController = navHostFragment.navController
+        updateProgress(0)
         navController.addOnDestinationChangedListener { controller, destination, _ ->
             setControlsVisibility(!fullScreenDestinationSet.contains(destination.id))
             enableBackButton(destination.id != R.id.choose_currency_dest)
-            updateProgress(navController.backStack.size)
+        }
+        navHostFragment.childFragmentManager.addOnBackStackChangedListener {
+            updateProgress(navHostFragment.childFragmentManager.backStackEntryCount)
         }
         viewBinding.prepopulateNextBtn.setOnClickListener {
             val action: NavDirections
@@ -106,9 +109,8 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
     }
 
     private fun updateProgress(progress: Int) {
-        (supportFragmentManager.findFragmentById(R.id.prepopulate_nav_host_container) as NavHostFragment).childFragmentManager.backStackEntryCount
         viewBinding.prepopulateProgress.setProgress(
-            progress - 1,
+            progress + 1,
             MAX_SCREEN_AMOUNT
         )
     }

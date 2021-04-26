@@ -8,6 +8,8 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -18,6 +20,7 @@ import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.CurrencyNavigator
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
+import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.currency.data.entity.Currency
 import com.d9tilov.moneymanager.currency.vm.CurrencyViewModel
@@ -62,10 +65,12 @@ class CurrencyFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
+        viewBinding.currencyProgress.visibility = VISIBLE
         viewModel.getCurrencies().observe(
             this.viewLifecycleOwner,
             { list ->
-                val sortedList = list.sortedBy { it.code }
+                viewBinding.currencyProgress.visibility = GONE
+                val sortedList = list.sortedBy { CurrencyUtils.getCurrencyFullName(it.code) }
                 currencyAdapter.updateItems(sortedList)
                 val checkedIndex = sortedList.indexOfFirst { it.isBase }
                 viewBinding.currencyRv.scrollToPosition(checkedIndex)
@@ -133,6 +138,7 @@ class CurrencyFragment :
     }
 
     override fun showError() {
+        viewBinding.currencyProgress.visibility = GONE
         snackBar?.setActionTextColor(
             ContextCompat.getColor(
                 requireContext(),

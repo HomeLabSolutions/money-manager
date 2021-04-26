@@ -19,11 +19,15 @@
 
     <TextView
         android:id="@+id/item_currency_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/standard_left_margin"
         android:textColor="@color/color_midnight_white"
         android:textAppearance="?attr/textAppearanceBody2"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintEnd_toStartOf="@+id/item_currency_check"
         app:layout_constraintBottom_toTopOf="@+id/item_currency_subtitle"
         app:layout_constraintStart_toEndOf="@+id/item_currency_icon"
         app:layout_constraintTop_toTopOf="parent"

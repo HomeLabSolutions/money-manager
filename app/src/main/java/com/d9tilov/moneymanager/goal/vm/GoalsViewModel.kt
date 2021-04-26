@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.goal.vm
 
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.room.EmptyResultSetException
 import com.d9tilov.moneymanager.base.ui.navigator.GoalsNavigator
@@ -23,8 +24,8 @@ class GoalsViewModel @ViewModelInject constructor(
 ) :
     BaseViewModel<GoalsNavigator>() {
 
-    val amount by lazy { MutableLiveData<BigDecimal>() }
-    val goals by lazy { MutableLiveData<List<Goal>>() }
+    private val amount = MutableLiveData<BigDecimal>()
+    private val goals = MutableLiveData<List<Goal>>()
 
     init {
         budgetInteractor.get()
@@ -53,4 +54,7 @@ class GoalsViewModel @ViewModelInject constructor(
             .subscribe({ goals.value = it }, {})
             .addTo(compositeDisposable)
     }
+
+    fun getAmount(): LiveData<BigDecimal> = amount
+    fun getGoals(): LiveData<List<Goal>> = goals
 }
