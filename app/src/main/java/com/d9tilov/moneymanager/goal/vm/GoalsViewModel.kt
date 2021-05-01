@@ -21,8 +21,7 @@ import java.util.Date
 class GoalsViewModel @ViewModelInject constructor(
     private val budgetInteractor: BudgetInteractor,
     goalInteractor: GoalInteractor
-) :
-    BaseViewModel<GoalsNavigator>() {
+) : BaseViewModel<GoalsNavigator>() {
 
     private val amount = MutableLiveData<BigDecimal>()
     private val goals = MutableLiveData<List<Goal>>()

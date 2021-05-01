@@ -27,7 +27,13 @@ class CreatedGoalViewModel @ViewModelInject constructor(
                 .subscribe { navigator?.back() }
                 .addTo(compositeDisposable)
         } else {
-            goalInteractor.update(goal)
+            goalInteractor.update(
+                goal.copy(
+                    name = name,
+                    targetSum = sum,
+                    description = description
+                )
+            )
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler)
                 .subscribe { navigator?.back() }

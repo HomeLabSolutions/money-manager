@@ -67,4 +67,10 @@
     <color name="edit_text_hint_text_color">#59ffffff</color>
     <color name="button_disable_text_color">#59ffffff</color>
 
+    <color name="goal_title_text_color">#A6A4A4</color>
+    <color name="goal_active_progress_line_color">#B8959D</color>
+    <color name="goal_default_progress_line_color">#F2E8EA</color>
+    <color name="goal_percent_text_color">#7A4C56</color>
+    <color name="goal_value_text_color">#DBC4C9</color>
+
 </resources>

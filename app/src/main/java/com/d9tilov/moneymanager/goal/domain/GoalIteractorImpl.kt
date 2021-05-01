@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.goal.domain
 
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
+import com.d9tilov.moneymanager.core.util.divideBy
 import com.d9tilov.moneymanager.goal.domain.entity.Goal
 import com.d9tilov.moneymanager.goal.domain.mapper.GoalDomainMapper
 import io.reactivex.Completable
@@ -20,15 +21,12 @@ class GoalIteractorImpl(
             goalRepo.getAll(),
             { budget, list ->
                 val goalList = mutableListOf<Goal>()
-                var targetSumAmount = BigDecimal.ZERO
                 for (goal in list) {
-                    targetSumAmount += goal.targetSum
-                }
-                if (targetSumAmount.signum() == 0) {
-                    return@combineLatest goalList
-                }
-                for (goal in list) {
-                    val currentSum = goal.targetSum.divide(targetSumAmount).multiply(budget.sum)
+
+                    var currentSum = budget.sum
+                    if (budget.sum >= goal.targetSum) {
+                        currentSum = goal.targetSum
+                    }
                     val newGoal = goalDomainMapper.toDomain(goal, currentSum)
                     goalList.add(newGoal)
                 }

@@ -6,5 +6,6 @@
     <string name="usd_code">USD</string>
     <string name="usd_sign">$</string>
     <string name="plus_sign">+</string>
+    <string name="percent_sign">%</string>
     <string name="minus_sign">-</string>
 </resources>
