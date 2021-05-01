@@ -12,7 +12,7 @@ data class GoalData(
     val clientId: String = DataConstants.NO_ID.toString(),
     val currencyCode: String = DataConstants.DEFAULT_CURRENCY_CODE,
     val name: String,
-    val targetSum: BigDecimal,
+    val targetSum: BigDecimal = BigDecimal.ZERO,
     val createdDate: Date = Date(),
     val description: String = ""
 ) : Parcelable

@@ -12,7 +12,7 @@ data class BudgetData(
     val id: Long = DataConstants.DEFAULT_DATA_ID,
     val clientId: String = DataConstants.NO_ID.toString(),
     val currencyCode: String = DEFAULT_CURRENCY_CODE,
-    val sum: BigDecimal,
+    val sum: BigDecimal = BigDecimal.ZERO,
     val createdDate: Date = Date(),
     val fiscalDay: Date
 ) : Parcelable

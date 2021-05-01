@@ -6,10 +6,13 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
+import android.os.Handler
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
 import com.d9tilov.moneymanager.core.R
+import com.d9tilov.moneymanager.core.util.divideBy
+import java.math.BigDecimal.ROUND_UP
 
 class ProgressLine @JvmOverloads constructor(
     context: Context,
@@ -67,7 +70,7 @@ class ProgressLine @JvmOverloads constructor(
                     getDimension(R.styleable.ProgressLine_percentTextSize, percentTextSize)
                 currentValue = getInt(R.styleable.ProgressLine_currentValue, currentValue)
                 maxValue = getInt(R.styleable.ProgressLine_maxValue, maxValue)
-                percentage = currentValue.toBigDecimal().divide(maxValue.toBigDecimal())
+                percentage = currentValue.toBigDecimal().divideBy(maxValue.toBigDecimal())
                     .multiply(100.toBigDecimal()).toInt()
                 underLineColor = getColor(R.styleable.ProgressLine_underLineColor, underLineColor)
                 valueTextColor = getColor(R.styleable.ProgressLine_valueTextColor, valueTextColor)
@@ -157,20 +160,27 @@ class ProgressLine @JvmOverloads constructor(
         if (showPercent) {
             canvas.drawText(
                 percentText,
-                endXp - percentTextWidth - percentPaddingRight,
+                endXu - percentTextWidth - percentPaddingRight,
                 (this.height / 2 + barWidth / 2 + percentTextHeight / 2),
                 percentTextPaint
             )
         }
     }
 
-    fun setProgress(currentValue: Int, maxValue: Int) {
-        valueText = "$currentValue/$maxValue"
+    fun setProgress(
+        currentValue: Int,
+        maxValue: Int,
+        postfix: String = "",
+        delayAnimDuration: Long = 0L
+    ) {
+        valueText = "$currentValue$postfix / $maxValue$postfix"
         percentText =
-            currentValue.toBigDecimal().divide(maxValue.toBigDecimal()).multiply(100.toBigDecimal())
-                .toString()
+            currentValue.toBigDecimal().divideBy(maxValue.toBigDecimal())
+                .multiply(100.toBigDecimal()).setScale(ROUND_UP)
+                .toString() + context.getString(R.string.percent_sign)
         val diff =
-            currentValue.toBigDecimal().divide(maxValue.toBigDecimal()).multiply(100.toBigDecimal())
+            currentValue.toBigDecimal().divideBy(maxValue.toBigDecimal())
+                .multiply(100.toBigDecimal())
                 .toInt() - percentage
         ValueAnimator()
         val valueAnimator = ValueAnimator
@@ -183,7 +193,7 @@ class ProgressLine @JvmOverloads constructor(
             calculateBarScale()
             invalidate()
         }
-        valueAnimator.start()
+        Handler().postDelayed({ valueAnimator.start() }, delayAnimDuration)
     }
 
     companion object {
