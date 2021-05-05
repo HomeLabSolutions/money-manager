@@ -13,6 +13,7 @@ import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.mapper.TransactionDomainMapper
 import com.d9tilov.moneymanager.transaction.domain.mapper.TransactionHeaderDomainMapper
 import com.d9tilov.moneymanager.transaction.domain.paging.PagingConfig
+import com.d9tilov.moneymanager.user.domain.UserInteractor
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
@@ -20,19 +21,28 @@ import io.reactivex.Maybe
 class TransactionInteractorImpl(
     private val transactionRepo: TransactionRepo,
     private val categoryInteractor: CategoryInteractor,
+    private val userInteractor: UserInteractor,
     private val transactionDomainMapper: TransactionDomainMapper,
     private val transactionHeaderDomainMapper: TransactionHeaderDomainMapper
 ) : TransactionInteractor {
 
     override fun addTransaction(transaction: Transaction): Completable =
-        transactionRepo.addTransaction(transactionDomainMapper.toDataModel(transaction))
-            .andThen(
-                categoryInteractor.getCategoryById(transaction.category.id)
-                    .flatMapCompletable {
-                        val count = it.usageCount + 1
-                        categoryInteractor.update(it.copy(usageCount = count))
-                    }
+        userInteractor.getCurrentUser().firstOrError().flatMapCompletable {
+            transactionRepo.addTransaction(
+                transactionDomainMapper.toDataModel(
+                    transaction.copy(
+                        currencyCode = it.currencyCode
+                    )
+                )
             )
+                .andThen(
+                    categoryInteractor.getCategoryById(transaction.category.id)
+                        .flatMapCompletable {
+                            val count = it.usageCount + 1
+                            categoryInteractor.update(it.copy(usageCount = count))
+                        }
+                )
+        }
 
     override fun getTransactionById(id: Long): Flowable<Transaction> {
         return transactionRepo.getTransactionById(id)

@@ -131,4 +131,12 @@
     <string name="goals_remove_dialog_subtitle">Вы действительно хотите удалить цель?</string>
 
     <string name="error_loading">Ошибка загрузки</string>
+
+    <string name="backup">Сделать backup</string>
+    <string name="backup_info">Последняя копия: %1$s</string>
+    <string name="backup_empty">Резервная копия еще не создавалась</string>
+    <string name="backup_succeeded">Резервное копирование выполнено успешно</string>
+    <string name="backup_error">Ошибка резервного копирования</string>
+    <string name="restore_succeeded">Данные успешно востановлены</string>
+    <string name="restore_error">Ошибка при восстановлении данных</string>
 </resources>

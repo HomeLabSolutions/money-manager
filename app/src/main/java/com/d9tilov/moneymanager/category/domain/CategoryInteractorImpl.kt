@@ -39,7 +39,8 @@ class CategoryInteractorImpl(private val categoryRepo: CategoryRepo) :
     override fun deleteSubCategory(subCategory: Category): Single<Boolean> =
         categoryRepo.deleteSubcategory(subCategory)
 
-    override fun deleteFromGroup(subCategory: Category): Single<Boolean> = categoryRepo.deleteFromGroup(subCategory)
+    override fun deleteFromGroup(subCategory: Category): Single<Boolean> =
+        categoryRepo.deleteFromGroup(subCategory)
 
     private fun getAllWithChildrenInSingleList(categories: List<Category>): List<Category> {
         val categoriesAsChild = mutableListOf<Category>()

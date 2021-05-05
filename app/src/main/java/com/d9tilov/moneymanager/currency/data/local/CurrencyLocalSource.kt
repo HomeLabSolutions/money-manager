@@ -1,14 +1,12 @@
 package com.d9tilov.moneymanager.currency.data.local
 
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
-import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.currency.data.entity.Currency
 import com.d9tilov.moneymanager.currency.data.local.mapper.CurrencyLocalMapper
 import io.reactivex.Completable
 import io.reactivex.Observable
 
 class CurrencyLocalSource(
-    private val preferencesStore: PreferencesStore,
     private val currencyLocalMapper: CurrencyLocalMapper,
     appDatabase: AppDatabase
 ) : CurrencySource {
@@ -24,7 +22,6 @@ class CurrencyLocalSource(
         .map { list ->
             list.map {
                 currencyLocalMapper.toDataModel(it)
-                    .copy(isBase = it.code == preferencesStore.baseCurrencyCode)
             }
         }
 }

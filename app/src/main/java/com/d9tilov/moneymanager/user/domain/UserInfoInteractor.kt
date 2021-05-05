@@ -5,15 +5,23 @@ import com.d9tilov.moneymanager.user.domain.mapper.UserDomainMapper
 import com.google.firebase.auth.FirebaseUser
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Single
 
 class UserInfoInteractor(
     private val userRepo: UserRepo,
-    private val userDomainMapper: UserDomainMapper
+    private val userDomainMapper: UserDomainMapper,
 ) : UserInteractor {
 
     override fun getCurrentUser(): Flowable<UserProfile> = userRepo.getUser()
-    override fun createUser(user: FirebaseUser?): Completable =
-        userRepo.createUser(userDomainMapper.toDataModel(user))
+    override fun createUser(user: FirebaseUser?): Single<UserProfile> {
+        val newUser = userDomainMapper.toDataModel(user)
+        return userRepo.createUser(newUser).toSingleDefault(newUser)
+    }
+
+    override fun updateUser(userProfile: UserProfile): Completable =
+        userRepo.updateUser(userProfile)
+
+    override fun backup(): Completable = userRepo.backup()
 
     override fun logout() = userRepo.logout()
 }

@@ -1,6 +1,6 @@
 package com.d9tilov.moneymanager.core.util
 
-import java.util.*
+import java.util.Currency
 
 object CurrencyUtils {
     private const val ASCII_OFFSET = 0x41
@@ -15,5 +15,4 @@ object CurrencyUtils {
         val secondChar = Character.codePointAt(code, 1) - ASCII_OFFSET + UNICODE_FLAG_OFFSET
         return String(Character.toChars(firstChar)) + String(Character.toChars(secondChar))
     }
-
 }

@@ -11,6 +11,7 @@ import com.d9tilov.moneymanager.goal.domain.GoalInteractor
 import com.d9tilov.moneymanager.goal.domain.GoalIteractorImpl
 import com.d9tilov.moneymanager.goal.domain.GoalRepo
 import com.d9tilov.moneymanager.goal.domain.mapper.GoalDomainMapper
+import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,6 +42,8 @@ class GoalModule {
     fun provideGoalInteractor(
         goalRepo: GoalRepo,
         budgetInteractor: BudgetInteractor,
+        userInteractor: UserInteractor,
         goalDomainMapper: GoalDomainMapper
-    ): GoalInteractor = GoalIteractorImpl(goalRepo, budgetInteractor, goalDomainMapper)
+    ): GoalInteractor =
+        GoalIteractorImpl(goalRepo, budgetInteractor, userInteractor, goalDomainMapper)
 }

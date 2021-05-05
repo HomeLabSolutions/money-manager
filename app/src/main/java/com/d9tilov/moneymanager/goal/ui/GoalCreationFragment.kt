@@ -93,7 +93,7 @@ class GoalCreationFragment :
         viewBinding.run {
             createdGoalSave.isSelected =
                 createdGoalSum.getValue().signum() > 0 &&
-                createdGoalName.text?.isNotEmpty() == true
+                    createdGoalName.text?.isNotEmpty() == true
         }
     }
 

@@ -14,12 +14,14 @@ import com.d9tilov.moneymanager.core.util.ioScheduler
 import com.d9tilov.moneymanager.core.util.uiScheduler
 import com.d9tilov.moneymanager.goal.domain.GoalInteractor
 import com.d9tilov.moneymanager.goal.domain.entity.Goal
+import com.d9tilov.moneymanager.user.domain.UserInteractor
 import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.Date
 
 class GoalsViewModel @ViewModelInject constructor(
     private val budgetInteractor: BudgetInteractor,
+    private val userInteractor: UserInteractor,
     goalInteractor: GoalInteractor
 ) : BaseViewModel<GoalsNavigator>() {
 
@@ -51,6 +53,16 @@ class GoalsViewModel @ViewModelInject constructor(
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
             .subscribe({ goals.value = it }, {})
+            .addTo(compositeDisposable)
+    }
+
+    fun savePrepopulateStatus() {
+        userInteractor.getCurrentUser()
+            .firstOrError()
+            .flatMapCompletable { userInteractor.updateUser(it.copy(showPrepopulate = false)) }
+            .subscribeOn(ioScheduler)
+            .observeOn(uiScheduler)
+            .subscribe()
             .addTo(compositeDisposable)
     }
 

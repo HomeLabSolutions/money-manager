@@ -48,8 +48,7 @@ class TransactionLocalSource(
                             transactionDao.insert(
                                 transactionDataMapper.toDbModel(
                                     transaction.copy(
-                                        clientId = currentUserId,
-                                        currency = preferencesStore.baseCurrencyCode
+                                        clientId = currentUserId
                                     )
                                 )
                             )
@@ -59,15 +58,15 @@ class TransactionLocalSource(
                                 createDateItem(
                                     currentUserId,
                                     transaction.type,
-                                    transaction.date
+                                    transaction.date,
+                                    transaction.currency
                                 )
                             )
                                 .andThen(
                                     transactionDao.insert(
                                         transactionDataMapper.toDbModel(
                                             transaction.copy(
-                                                clientId = currentUserId,
-                                                currency = preferencesStore.baseCurrencyCode
+                                                clientId = currentUserId
                                             )
                                         )
                                     )
@@ -81,14 +80,15 @@ class TransactionLocalSource(
     private fun createDateItem(
         clientId: String,
         type: TransactionType,
-        date: Date
+        date: Date,
+        currency: String
     ): TransactionDbModel {
         return transactionDateDataMapper.toDbModel(
             TransactionDateDataModel(
                 clientId = clientId,
                 type = type,
                 date = date.getEndOfDay(),
-                currency = preferencesStore.baseCurrencyCode
+                currency = currency
             )
         )
     }
@@ -167,7 +167,8 @@ class TransactionLocalSource(
                                             createDateItem(
                                                 currentUserId,
                                                 transaction.type,
-                                                transaction.date
+                                                transaction.date,
+                                                transaction.currency
                                             )
                                         ).andThen(
                                             transactionDao.update(

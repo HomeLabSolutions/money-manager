@@ -83,6 +83,17 @@ android {
     configurations {
         ktlint
     }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+    }
 }
 
 task ktlint(type: JavaExec, group: "verification") {
@@ -108,7 +119,7 @@ dependencies {
     implementation project(':core')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.31"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.32"
 
     implementation "com.google.firebase:firebase-auth:20.0.4"
     implementation "com.firebaseui:firebase-ui-auth:6.2.0"
@@ -116,6 +127,7 @@ dependencies {
 
     implementation "com.google.firebase:firebase-analytics-ktx:18.0.3"
     implementation "com.google.firebase:firebase-crashlytics:17.4.1"
+    implementation "com.google.firebase:firebase-storage-ktx:19.2.2"
 
     implementation "com.facebook.android:facebook-login:5.15.3"
     implementation("com.twitter.sdk.android:twitter:3.3.0") {
@@ -139,4 +151,14 @@ dependencies {
     kapt "androidx.room:room-compiler:2.3.0"
 
     ktlint "com.pinterest:ktlint:0.37.2"
+
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
+    implementation 'com.google.android.gms:play-services-drive:17.0.0'
+    implementation 'com.google.http-client:google-http-client-gson:1.26.0'
+    implementation('com.google.api-client:google-api-client-android:1.26.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    implementation('com.google.apis:google-api-services-drive:v3-rev136-1.25.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
 }

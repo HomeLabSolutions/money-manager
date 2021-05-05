@@ -10,14 +10,14 @@ import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
-import com.d9tilov.moneymanager.currency.data.entity.Currency
+import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.databinding.ItemCurrencyBinding
 import timber.log.Timber
 
 class CurrencyAdapter : RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>() {
 
-    private val currencies: MutableList<Currency> = mutableListOf()
-    var itemClickListener: OnItemClickListener<Currency>? = null
+    private val currencies: MutableList<DomainCurrency> = mutableListOf()
+    var itemClickListener: OnItemClickListener<DomainCurrency>? = null
 
     init {
         setHasStableIds(true)
@@ -46,7 +46,7 @@ class CurrencyAdapter : RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>
 
     override fun getItemCount() = currencies.size
 
-    fun updateItems(newCategories: List<Currency>) {
+    fun updateItems(newCategories: List<DomainCurrency>) {
         Timber.tag(App.TAG).d("newCurrencies size : ${newCategories.size}")
         val diffUtilsCallback =
             CurrencyDiffUtil(
@@ -75,7 +75,7 @@ class CurrencyAdapter : RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>
     class CurrencyViewHolder(private val viewBinding: ItemCurrencyBinding) :
         BaseViewHolder(viewBinding) {
 
-        fun bind(currency: Currency) {
+        fun bind(currency: DomainCurrency) {
             viewBinding.run {
                 itemCurrencyIcon.text = CurrencyUtils.getCurrencyIcon(currency.code)
                 itemCurrencyTitle.text = CurrencyUtils.getCurrencyFullName(currency.code)

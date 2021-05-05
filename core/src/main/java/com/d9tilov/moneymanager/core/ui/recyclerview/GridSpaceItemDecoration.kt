@@ -1,7 +1,6 @@
 package com.d9tilov.moneymanager.core.ui.recyclerview
 
 import android.graphics.Rect
-import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.recyclerview.widget.RecyclerView

@@ -17,8 +17,8 @@ import java.text.DecimalFormat
 val <T> T.exhaustive: T
     get() = this
 
-fun Disposable.addTo(androidDisposable: AndroidDisposable): Disposable
-    = apply { androidDisposable.add(this) }
+fun Disposable.addTo(androidDisposable: AndroidDisposable): Disposable =
+    apply { androidDisposable.add(this) }
 
 val String?.toBigDecimal: BigDecimal
     get() {

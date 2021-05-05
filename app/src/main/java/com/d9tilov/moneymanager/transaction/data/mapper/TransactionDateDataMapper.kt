@@ -12,7 +12,13 @@ class TransactionDateDataMapper @Inject constructor() :
     Mapper<TransactionDbModel, TransactionDateDataModel> {
 
     override fun toDataModel(model: TransactionDbModel) = with(model) {
-        TransactionDateDataModel(id = id, clientId = clientId, type = type, date = date, currency = currency)
+        TransactionDateDataModel(
+            id = id,
+            clientId = clientId,
+            type = type,
+            date = date,
+            currency = currency
+        )
     }
 
     override fun toDbModel(model: TransactionDateDataModel) = with(model) {

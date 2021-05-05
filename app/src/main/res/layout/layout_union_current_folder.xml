@@ -23,21 +23,21 @@
             android:layout_height="wrap_content"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            app:tint="@color/color_midnight_white"
             app:layout_constraintBottom_toBottomOf="@+id/category_dialog_union_item1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/category_dialog_union_item1"
-            app:srcCompat="@drawable/ic_arrow_right" />
+            app:srcCompat="@drawable/ic_arrow_right"
+            app:tint="@color/color_midnight_white" />
 
         <ImageView
             android:id="@+id/category_dialog_union_folder"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            app:tint="@color/color_midnight_white"
             app:layout_constraintStart_toEndOf="@+id/category_dialog_union_arrow_right"
             app:layout_constraintTop_toTopOf="@+id/category_dialog_union_item1"
-            app:srcCompat="@drawable/ic_category_folder" />
+            app:srcCompat="@drawable/ic_category_folder"
+            app:tint="@color/color_midnight_white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

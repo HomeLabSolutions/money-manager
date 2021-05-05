@@ -10,7 +10,6 @@ class SingleLiveEvent<T> : MutableLiveData<T>() {
 
     private val mPending: AtomicBoolean = AtomicBoolean(false)
 
-
     override fun observe(owner: LifecycleOwner, observer: Observer<in T>) {
         if (hasActiveObservers()) {
             Timber.tag(TAG)

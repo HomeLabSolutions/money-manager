@@ -23,7 +23,7 @@ class UserDomainMapper @Inject constructor() {
                     uid = uid,
                     displayedName = displayName,
                     firstName = parsedFirstName,
-                    lastName = parsedSecondName
+                    lastName = parsedSecondName,
                 )
             }
         } ?: return UserProfile(

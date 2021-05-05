@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ItemDragAndDropCallback extends ItemTouchHelper.SimpleCallback {
 
     private final RecyclerView recyclerView;
+    // An item will be dropped into this folder
+    private View folder;
 
     public ItemDragAndDropCallback(RecyclerView recyclerView) {
         // Choose drag and swipe directions
@@ -33,9 +35,6 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.SimpleCallback {
         // You can react for swiping items here
         // Do nothing in your case
     }
-
-    // An item will be dropped into this folder
-    private View folder;
 
     @Override
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {

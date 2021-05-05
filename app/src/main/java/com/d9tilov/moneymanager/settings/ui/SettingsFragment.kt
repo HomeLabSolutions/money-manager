@@ -10,6 +10,7 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
+import com.d9tilov.moneymanager.core.util.getBackupDate
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
@@ -63,6 +64,16 @@ class SettingsFragment :
                         updateUI()
                     }
             }
+            settingsBackup.setOnClickListener {
+                viewModel.backup()
+            }
+            viewModel.getBackupLastDate().observe(viewLifecycleOwner, {
+                if (it == 0L) {
+                    settingsBackupInfo.setText(R.string.backup_empty)
+                } else {
+                    settingsBackupInfo.text = getString(R.string.backup_info, it.getBackupDate())
+                }
+            })
         }
     }
 

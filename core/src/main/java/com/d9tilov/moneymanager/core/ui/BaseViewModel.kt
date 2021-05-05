@@ -43,8 +43,8 @@ abstract class BaseViewModel<T : BaseNavigator> : ViewModel() {
 
     protected open fun onNavigatorAttached() {}
 
-    fun getMsg():LiveData<Int> = msg
-    fun getLoading():LiveData<Boolean> = loading
+    fun getMsg(): LiveData<Int> = msg
+    fun getLoading(): LiveData<Boolean> = loading
 
     override fun onCleared() {
         compositeDisposable.dispose()

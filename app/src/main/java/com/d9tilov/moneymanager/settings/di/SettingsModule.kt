@@ -5,8 +5,8 @@ import com.d9tilov.moneymanager.settings.data.SettingsDataRepo
 import com.d9tilov.moneymanager.settings.data.local.SettingsLocalSource
 import com.d9tilov.moneymanager.settings.data.local.SettingsSource
 import com.d9tilov.moneymanager.settings.domain.SettingsInteractor
-import com.d9tilov.moneymanager.settings.domain.SettingsRepo
 import com.d9tilov.moneymanager.settings.domain.SettingsInteractorImpl
+import com.d9tilov.moneymanager.settings.domain.SettingsRepo
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

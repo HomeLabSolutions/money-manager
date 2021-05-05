@@ -22,5 +22,4 @@ class MoneyManagerGlideModule : AppGlideModule() {
     }
 
     override fun isManifestParsingEnabled() = false
-
 }

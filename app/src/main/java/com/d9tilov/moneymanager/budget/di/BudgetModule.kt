@@ -9,6 +9,7 @@ import com.d9tilov.moneymanager.budget.data.local.mapper.BudgetMapper
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractorImpl
 import com.d9tilov.moneymanager.budget.domain.BudgetRepo
+import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,8 +21,11 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 class BudgetModule {
 
     @Provides
-    fun provideBudgetInteractor(budgetRepo: BudgetRepo): BudgetInteractor =
-        BudgetInteractorImpl(budgetRepo)
+    fun provideBudgetInteractor(
+        budgetRepo: BudgetRepo,
+        userInteractor: UserInteractor
+    ): BudgetInteractor =
+        BudgetInteractorImpl(budgetRepo, userInteractor)
 
     @Provides
     @ActivityRetainedScoped

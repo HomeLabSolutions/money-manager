@@ -13,6 +13,7 @@ fun SharedPreferences.string(
             thisRef: Any,
             property: KProperty<*>
         ) = getString(key(property), defaultValue) ?: defaultValue
+
         override fun setValue(
             thisRef: Any,
             property: KProperty<*>,

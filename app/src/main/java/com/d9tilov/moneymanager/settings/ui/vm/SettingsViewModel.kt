@@ -1,6 +1,9 @@
 package com.d9tilov.moneymanager.settings.ui.vm
 
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.core.util.addTo
@@ -18,8 +21,18 @@ class SettingsViewModel @ViewModelInject constructor(
 ) : BaseViewModel<SettingsNavigator>() {
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val backupLastDate = MutableLiveData<Long>()
 
     fun getCurrentUser(): FirebaseUser? = auth.currentUser
+
+    init {
+        userInfoInteractor.getCurrentUser()
+            .map { it.backupData }
+            .subscribeOn(ioScheduler)
+            .observeOn(uiScheduler)
+            .subscribe { backupLastDate.value = it.lastBackupTimestamp }
+            .addTo(compositeDisposable)
+    }
 
     fun logout() {
         userInfoInteractor.logout()
@@ -32,4 +45,15 @@ class SettingsViewModel @ViewModelInject constructor(
             }
             .addTo(compositeDisposable)
     }
+
+    fun backup() {
+        userInfoInteractor.backup()
+            .subscribeOn(ioScheduler)
+            .observeOn(uiScheduler)
+            .subscribe({ setMessage(R.string.backup_succeeded) },
+                { setMessage(R.string.backup_error) })
+            .addTo(compositeDisposable)
+    }
+
+    fun getBackupLastDate(): LiveData<Long> = backupLastDate
 }

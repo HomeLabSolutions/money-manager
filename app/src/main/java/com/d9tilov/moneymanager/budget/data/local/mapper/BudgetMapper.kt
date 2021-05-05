@@ -1,8 +1,8 @@
 package com.d9tilov.moneymanager.budget.data.local.mapper
 
-import com.d9tilov.moneymanager.core.mapper.Mapper
 import com.d9tilov.moneymanager.budget.data.entity.BudgetData
 import com.d9tilov.moneymanager.budget.data.local.entity.BudgetDbModel
+import com.d9tilov.moneymanager.core.mapper.Mapper
 import javax.inject.Inject
 
 class BudgetMapper @Inject constructor() : Mapper<BudgetDbModel, BudgetData> {

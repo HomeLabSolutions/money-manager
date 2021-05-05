@@ -22,11 +22,10 @@ import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.core.util.hideKeyboard
-import com.d9tilov.moneymanager.currency.data.entity.Currency
+import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.vm.CurrencyViewModel
 import com.d9tilov.moneymanager.databinding.FragmentCurrencyBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
-import com.d9tilov.moneymanager.prepopulate.ui.ControlsClicked
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -37,8 +36,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class CurrencyFragment :
     BaseFragment<CurrencyNavigator>(R.layout.fragment_currency),
-    CurrencyNavigator,
-    ControlsClicked {
+    CurrencyNavigator {
 
     private val viewBinding by viewBinding(FragmentCurrencyBinding::bind)
     private var toolbar: MaterialToolbar? = null
@@ -47,8 +45,8 @@ class CurrencyFragment :
     override val viewModel by viewModels<CurrencyViewModel>()
     override fun getNavigator(): CurrencyNavigator = this
 
-    private val onItemClickListener = object : OnItemClickListener<Currency> {
-        override fun onItemClick(item: Currency, position: Int) {
+    private val onItemClickListener = object : OnItemClickListener<DomainCurrency> {
+        override fun onItemClick(item: DomainCurrency, position: Int) {
             viewModel.updateBaseCurrency(item)
         }
     }

@@ -59,7 +59,7 @@ class BudgetAmountFragment :
         activity.setSupportActionBar(toolbar)
     }
 
-    override fun goToFixedIncomeScreen() {
+    override fun goToPeriodicIncomeScreen() {
         TODO("Not yet implemented")
     }
 
