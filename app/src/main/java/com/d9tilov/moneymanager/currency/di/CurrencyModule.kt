@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.currency.di
 
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
+import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.currency.data.CurrencyDataRepo
 import com.d9tilov.moneymanager.currency.data.local.CurrencyLocalSource
 import com.d9tilov.moneymanager.currency.data.local.CurrencySource
@@ -32,11 +33,12 @@ class CurrencyModule {
     @Provides
     @ActivityRetainedScoped
     fun provideCurrencyRepo(
+        preferencesStore: PreferencesStore,
         currencySource: CurrencySource,
         currencyRemoteMapper: CurrencyRemoteMapper,
         retrofit: Retrofit
     ): CurrencyRepo =
-        CurrencyDataRepo(currencySource, currencyRemoteMapper, retrofit)
+        CurrencyDataRepo(preferencesStore, currencySource, currencyRemoteMapper, retrofit)
 
     @Provides
     @ActivityRetainedScoped

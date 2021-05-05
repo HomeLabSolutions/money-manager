@@ -13,8 +13,8 @@ class GoalIteractorImpl(
     private val userInteractor: UserInteractor,
     private val goalDomainMapper: GoalDomainMapper
 ) : GoalInteractor {
-    override fun insert(goal: Goal): Completable = userInteractor.getCurrentUser().firstOrError()
-        .flatMapCompletable { goalRepo.insert(goalDomainMapper.toData(goal.copy(currencyCode = it.currencyCode))) }
+    override fun insert(goal: Goal): Completable = userInteractor.getCurrency()
+        .flatMapCompletable { goalRepo.insert(goalDomainMapper.toData(goal.copy(currencyCode = it))) }
 
     override fun getAll(): Flowable<List<Goal>> {
         return Flowable.combineLatest(

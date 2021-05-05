@@ -27,12 +27,10 @@ class TransactionInteractorImpl(
 ) : TransactionInteractor {
 
     override fun addTransaction(transaction: Transaction): Completable =
-        userInteractor.getCurrentUser().firstOrError().flatMapCompletable {
+        userInteractor.getCurrency().flatMapCompletable {
             transactionRepo.addTransaction(
                 transactionDomainMapper.toDataModel(
-                    transaction.copy(
-                        currencyCode = it.currencyCode
-                    )
+                    transaction.copy(currencyCode = it)
                 )
             )
                 .andThen(

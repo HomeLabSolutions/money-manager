@@ -13,13 +13,12 @@ class CurrencyInteractorImpl(
     private val domainMapper: CurrencyDomainMapper
 ) : CurrencyInteractor {
 
-    override fun getCurrencies(): Single<List<DomainCurrency>> = userInteractor.getCurrentUser()
-        .firstOrError()
-        .flatMap { user ->
-            currencyRepo.getCurrencies(user.currencyCode)
-                .flatMap {
-                    Observable.fromIterable(it)
-                        .map { domainMapper.toDomain(it, user.currencyCode == it.code) }
+    override fun getCurrencies(): Single<List<DomainCurrency>> = userInteractor.getCurrency()
+        .flatMap { currency ->
+            currencyRepo.getCurrencies(currency)
+                .flatMap { list ->
+                    Observable.fromIterable(list)
+                        .map { domainMapper.toDomain(it, currency == it.code) }
                         .toList()
                 }
         }
@@ -27,4 +26,5 @@ class CurrencyInteractorImpl(
     override fun updateBaseCurrency(currency: DomainCurrency): Completable =
         userInteractor.getCurrentUser().firstOrError()
             .flatMapCompletable { userInteractor.updateUser(it.copy(currencyCode = currency.code)) }
+            .andThen(currencyRepo.updateBaseCurrency(domainMapper.toDataModel(currency)))
 }

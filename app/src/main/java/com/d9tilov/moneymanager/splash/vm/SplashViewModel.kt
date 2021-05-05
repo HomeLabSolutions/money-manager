@@ -70,8 +70,7 @@ class SplashViewModel @ViewModelInject constructor(
         userInfoInteractor.createUser(auth.currentUser)
             .flatMapCompletable { categoryInteractor.createDefaultCategories() }
             .toSingleDefault(true)
-            .flatMap { userInfoInteractor.getCurrentUser().firstOrError() }
-            .map { it.showPrepopulate }
+            .flatMap { userInfoInteractor.showPrepopulate() }
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
             .subscribe({ openPrepopulate ->
