@@ -35,10 +35,6 @@ class TransactionAdapter :
     var itemClickListener: OnItemClickListener<Transaction>? = null
     private var removedItemPosition: Int = 0
 
-    init {
-        setHasStableIds(true)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val viewHolder: RecyclerView.ViewHolder
         if (viewType == ITEM) {
@@ -62,8 +58,6 @@ class TransactionAdapter :
         }
         return viewHolder
     }
-
-    override fun getItemId(position: Int) = getItem(position).hashCode().toLong()
 
     override fun getItemViewType(position: Int): Int {
         if (getItem(position) is Transaction) {

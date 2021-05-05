@@ -8,5 +8,4 @@ interface CurrencyRepo {
 
     fun getCurrencies(baseCurrency: String): Single<List<Currency>>
     fun updateBaseCurrency(currency: Currency): Completable
-
 }

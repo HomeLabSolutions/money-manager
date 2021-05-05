@@ -1,8 +1,7 @@
 package com.d9tilov.moneymanager.incomeexpense.income.ui
 
-import android.os.AsyncTask
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.paging.PagedList
+import androidx.paging.PagingData
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeNavigator
 import com.d9tilov.moneymanager.category.data.entity.Category
@@ -16,9 +15,6 @@ import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionHeader
-import com.d9tilov.moneymanager.transaction.domain.paging.ListDataSource
-import com.d9tilov.moneymanager.transaction.domain.paging.PagingConfig
-import com.d9tilov.moneymanager.transaction.domain.paging.UiThreadExecutor
 import timber.log.Timber
 import java.math.BigDecimal
 
@@ -61,12 +57,8 @@ class IncomeViewModel @ViewModelInject constructor(
             .addTo(compositeDisposable)
     }
 
-    private fun convert(list: List<BaseTransaction>): PagedList<BaseTransaction> {
-        return PagedList.Builder(ListDataSource(list), PagingConfig.createConfig())
-            .setNotifyExecutor(UiThreadExecutor())
-            .setFetchExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-            .build()
-    }
+    private fun convert(list: List<BaseTransaction>): PagingData<BaseTransaction> =
+        PagingData.from(list)
 
     override fun saveTransaction(category: Category, sum: BigDecimal) {
         if (sum.signum() > 0) {

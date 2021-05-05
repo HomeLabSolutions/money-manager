@@ -69,8 +69,7 @@ class PeriodicTransactionCreationFragment :
             viewModel.run {
                 sum.value = sum.value ?: it?.sum ?: BigDecimal.ZERO
                 category.value = category.value ?: it?.category
-                periodType.value = periodType.value ?: it?.periodType
-                    ?: getSelectedPeriodType(
+                periodType.value = periodType.value ?: it?.periodType ?: getSelectedPeriodType(
                     viewBinding.createdPeriodicTransactionRepeatSpinner.selectedItemPosition
                 )
                 startDate.value = startDate.value ?: it?.startDate ?: Date()
@@ -121,8 +120,7 @@ class PeriodicTransactionCreationFragment :
                 viewModel.pushEnabled.value = isChecked
             }
             createdPeriodicTransactionRepeatSpinner.setSelection(
-                spinnerPeriodMap.getValue(fixedTransaction?.let { it.periodType }
-                    ?: PeriodType.MONTH)
+                spinnerPeriodMap.getValue(fixedTransaction?.periodType ?: PeriodType.MONTH)
             )
             createdPeriodicTransactionDescription.setText(viewModel.description.value)
             createdPeriodicTransactionRepeatCheckbox.isChecked = viewModel.pushEnabled.value ?: true
@@ -267,12 +265,7 @@ class PeriodicTransactionCreationFragment :
 
     private fun updateSaveButtonState() {
         viewBinding.createdPeriodicTransactionSave.isSelected =
-            viewModel.sum.value?.signum() ?: BigDecimal.ZERO.signum() > 0 &&
-                viewModel.category.value != null &&
-                (
-                    viewModel.periodType.value != PeriodType.WEEK ||
-                        (viewModel.periodType.value == PeriodType.WEEK && viewModel.weekDaysSelected.value != 0)
-                    )
+            viewModel.sum.value?.signum() ?: BigDecimal.ZERO.signum() > 0 && viewModel.category.value != null && (viewModel.periodType.value != PeriodType.WEEK || (viewModel.periodType.value == PeriodType.WEEK && viewModel.weekDaysSelected.value != 0))
     }
 
     private fun updateIcon() {

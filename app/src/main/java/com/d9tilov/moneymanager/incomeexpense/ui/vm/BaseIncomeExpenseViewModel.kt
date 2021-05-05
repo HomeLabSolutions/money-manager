@@ -3,6 +3,7 @@ package com.d9tilov.moneymanager.incomeexpense.ui.vm
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
+import androidx.paging.PagingData
 import com.d9tilov.moneymanager.base.ui.navigator.BaseIncomeExpenseNavigator
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.events.SingleLiveEvent
@@ -13,7 +14,7 @@ import java.math.BigDecimal
 abstract class BaseIncomeExpenseViewModel<T : BaseIncomeExpenseNavigator> : BaseViewModel<T>() {
 
     protected val categories = MutableLiveData<List<Category>>()
-    protected val transactions = MutableLiveData<PagedList<BaseTransaction>>()
+    protected val transactions = MutableLiveData<PagingData<BaseTransaction>>()
     protected val addTransactionEvent = SingleLiveEvent<Any>()
 
     abstract fun saveTransaction(category: Category, sum: BigDecimal)
@@ -22,6 +23,6 @@ abstract class BaseIncomeExpenseViewModel<T : BaseIncomeExpenseNavigator> : Base
     }
 
     fun getCategories(): LiveData<List<Category>> = categories
-    fun getTransactions(): LiveData<PagedList<BaseTransaction>> = transactions
+    fun getTransactions(): LiveData<PagingData<BaseTransaction>> = transactions
     fun getTransactionEvent(): LiveData<Any> = addTransactionEvent
 }
