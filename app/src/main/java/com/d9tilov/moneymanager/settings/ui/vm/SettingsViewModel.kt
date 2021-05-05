@@ -49,8 +49,10 @@ class SettingsViewModel @ViewModelInject constructor(
         userInfoInteractor.backup()
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
-            .subscribe({ setMessage(R.string.backup_succeeded) },
-                { setMessage(R.string.backup_error) })
+            .subscribe(
+                { setMessage(R.string.backup_succeeded) },
+                { setMessage(R.string.backup_error) }
+            )
             .addTo(compositeDisposable)
     }
 

@@ -92,8 +92,7 @@ class GoalCreationFragment :
     private fun updateSaveButtonState() {
         viewBinding.run {
             createdGoalSave.isSelected =
-                createdGoalSum.getValue().signum() > 0 &&
-                    createdGoalName.text?.isNotEmpty() == true
+                createdGoalSum.getValue().signum() > 0 && createdGoalName.text?.isNotEmpty() == true
         }
     }
 

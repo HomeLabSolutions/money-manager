@@ -73,24 +73,27 @@ class SplashViewModel @ViewModelInject constructor(
             .flatMap { userInfoInteractor.showPrepopulate() }
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
-            .subscribe({ openPrepopulate ->
-                if (openPrepopulate) {
-                    navigator?.openPrepopulate()
-                    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
-                        param(
-                            FirebaseAnalytics.Param.ITEM_ID, "prepopulate_screen"
-                        )
+            .subscribe(
+                { openPrepopulate ->
+                    if (openPrepopulate) {
+                        navigator?.openPrepopulate()
+                        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+                            param(
+                                FirebaseAnalytics.Param.ITEM_ID, "prepopulate_screen"
+                            )
+                        }
+                    } else {
+                        navigator?.openHomeScreen()
+                        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP) {
+                            param(
+                                FirebaseAnalytics.Param.ITEM_ID,
+                                auth.currentUser?.email ?: "unknown email"
+                            )
+                        }
                     }
-                } else {
-                    navigator?.openHomeScreen()
-                    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP) {
-                        param(
-                            FirebaseAnalytics.Param.ITEM_ID,
-                            auth.currentUser?.email ?: "unknown email"
-                        )
-                    }
-                }
-            }, { Timber.tag(TAG).d(it) })
+                },
+                { Timber.tag(TAG).d(it) }
+            )
             .addTo(compositeDisposable)
     }
 }

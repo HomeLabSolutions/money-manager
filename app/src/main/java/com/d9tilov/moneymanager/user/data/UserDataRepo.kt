@@ -16,7 +16,7 @@ class UserDataRepo(
     override fun getCurrency(): Single<String> = userLocalSource.getCurrency()
     override fun getBackupData(): Flowable<BackupData> = userLocalSource.getBackupData()
 
-    override fun showPrepopulate(): Single<Boolean>  = userLocalSource.showPrepopulate()
+    override fun showPrepopulate(): Single<Boolean> = userLocalSource.showPrepopulate()
 
     override fun createUser(entity: UserProfile): Completable =
         userLocalSource.createUserOrRestore(entity)

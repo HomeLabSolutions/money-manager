@@ -58,7 +58,7 @@ class ItemSnapHelper : LinearSnapHelper() {
         return out
     }
 
-    override fun createScroller(layoutManager: RecyclerView.LayoutManager?): RecyclerView.SmoothScroller? {
+    override fun createScroller(layoutManager: RecyclerView.LayoutManager): RecyclerView.SmoothScroller? {
         if (layoutManager !is RecyclerView.SmoothScroller.ScrollVectorProvider)
             return super.createScroller(layoutManager)
         val context = context ?: return null

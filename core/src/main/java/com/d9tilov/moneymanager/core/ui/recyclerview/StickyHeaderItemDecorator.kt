@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 
-class StickyHeaderItemDecorator<T>(private val adapter: StickyAdapter<T, RecyclerView.ViewHolder, RecyclerView.ViewHolder>) :
+class StickyHeaderItemDecorator<T : Any>(private val adapter: StickyAdapter<T, RecyclerView.ViewHolder, RecyclerView.ViewHolder>) :
     ItemDecoration() {
     private var currentStickyPosition = RecyclerView.NO_POSITION
     private var recyclerView: RecyclerView? = null

@@ -46,7 +46,7 @@ class BackupManager(private val context: Context) {
                     val myInputs: InputStream = FileInputStream(localFile.path)
                     val buffer = ByteArray(1024)
                     var length: Int
-                    val myOutput = FileOutputStream(output.path);
+                    val myOutput = FileOutputStream(output.path)
                     while (myInputs.read(buffer).also { length = it } > 0) {
                         myOutput.write(buffer, 0, length)
                     }

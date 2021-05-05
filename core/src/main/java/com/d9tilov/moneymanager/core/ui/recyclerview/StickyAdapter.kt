@@ -1,14 +1,13 @@
 package com.d9tilov.moneymanager.core.ui.recyclerview
 
 import android.view.ViewGroup
-import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class StickyAdapter<T, SVH : RecyclerView.ViewHolder, VH : RecyclerView.ViewHolder>(
+abstract class StickyAdapter<T : Any, SVH : RecyclerView.ViewHolder, VH : RecyclerView.ViewHolder>(
     diffCallback: DiffUtil.ItemCallback<T>
-) : PagedListAdapter<T, VH>(diffCallback) {
+) : PagingDataAdapter<T, VH>(diffCallback) {
     /**
      * This method gets called by [StickyHeaderItemDecorator] to fetch
      * the position of the header item in the adapter that is used for

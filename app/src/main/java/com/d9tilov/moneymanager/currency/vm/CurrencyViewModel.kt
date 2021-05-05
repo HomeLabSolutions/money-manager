@@ -66,9 +66,11 @@ class CurrencyViewModel @ViewModelInject constructor(
                     )
                 )
             }
-            .andThen(userInteractor.getCurrentUser()
-                .firstOrError()
-                .flatMapCompletable { userInteractor.updateUser(it.copy(showPrepopulate = false)) })
+            .andThen(
+                userInteractor.getCurrentUser()
+                    .firstOrError()
+                    .flatMapCompletable { userInteractor.updateUser(it.copy(showPrepopulate = false)) }
+            )
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
             .subscribe { navigator?.skip() }

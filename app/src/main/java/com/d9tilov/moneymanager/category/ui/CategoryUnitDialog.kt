@@ -86,8 +86,8 @@ class CategoryUnitDialog :
                 categoryDialogUnionFolder.root.show()
             }
             categoryDialogUnionConfirm.setOnClickListener {
-                if (secondCategory.children.isEmpty() && viewBinding.categoryDialogUnionEtName.text.toString()
-                        .isEmpty()
+                if (secondCategory.children.isEmpty() &&
+                    viewBinding.categoryDialogUnionEtName.text.toString().isEmpty()
                 ) {
                     showError(IllegalArgumentException())
                 } else if (secondCategory.children.isNotEmpty()) {

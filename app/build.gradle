@@ -144,21 +144,11 @@ dependencies {
     implementation "com.facebook.stetho:stetho:1.5.1"
     implementation "com.facebook.stetho:stetho-okhttp3:1.5.1"
 
-    implementation "androidx.paging:paging-runtime-ktx:2.1.2"
-    implementation "androidx.paging:paging-rxjava2-ktx:2.1.2"
+    implementation "androidx.paging:paging-runtime-ktx:3.0.0"
+    implementation "androidx.paging:paging-rxjava2-ktx:3.0.0"
     implementation "androidx.room:room-runtime:2.3.0"
     implementation "androidx.room:room-rxjava2:2.3.0"
     kapt "androidx.room:room-compiler:2.3.0"
 
     ktlint "com.pinterest:ktlint:0.37.2"
-
-    implementation 'com.google.android.gms:play-services-auth:19.0.0'
-    implementation 'com.google.android.gms:play-services-drive:17.0.0'
-    implementation 'com.google.http-client:google-http-client-gson:1.26.0'
-    implementation('com.google.api-client:google-api-client-android:1.26.0') {
-        exclude group: 'org.apache.httpcomponents'
-    }
-    implementation('com.google.apis:google-api-services-drive:v3-rev136-1.25.0') {
-        exclude group: 'org.apache.httpcomponents'
-    }
 }

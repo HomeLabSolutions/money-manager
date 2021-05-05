@@ -67,8 +67,7 @@ class IncomeExpenseFragment :
             }
         }
         viewBinding.run {
-            incomeExpenseViewPager.addOnPageChangeListener(object :
-                ViewPager.OnPageChangeListener {
+            incomeExpenseViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                 override fun onPageScrollStateChanged(state: Int) { /* do notjing */
                 }
 

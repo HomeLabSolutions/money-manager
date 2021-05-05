@@ -1,8 +1,7 @@
 package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
-import android.os.AsyncTask
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.paging.PagedList
+import androidx.paging.PagingData
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
 import com.d9tilov.moneymanager.category.data.entity.Category
@@ -16,13 +15,8 @@ import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionHeader
-import com.d9tilov.moneymanager.transaction.domain.paging.ListDataSource
-import com.d9tilov.moneymanager.transaction.domain.paging.PagingConfig
-import com.d9tilov.moneymanager.transaction.domain.paging.UiThreadExecutor
-import io.reactivex.Observable
 import timber.log.Timber
 import java.math.BigDecimal
-import java.util.Date
 
 class ExpenseViewModel @ViewModelInject constructor(
     private val categoryInteractor: CategoryInteractor,
@@ -63,52 +57,48 @@ class ExpenseViewModel @ViewModelInject constructor(
             .addTo(compositeDisposable)
     }
 
-    private fun convert(list: List<BaseTransaction>): PagedList<BaseTransaction> {
-        return PagedList.Builder(ListDataSource(list), PagingConfig.createConfig())
-            .setNotifyExecutor(UiThreadExecutor())
-            .setFetchExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-            .build()
-    }
+    private fun convert(list: List<BaseTransaction>): PagingData<BaseTransaction> =
+        PagingData.from(list)
 
-    fun generateData() {
-        val numbers = IntArray(6) { it + 1 }.toList()
-        Observable.fromIterable(numbers)
-            .flatMapCompletable {
-                categoryInteractor.getCategoryById((3..8).random().toLong())
-                    .flatMapCompletable { category ->
-                        transactionInteractor.addTransaction(
-                            createTransaction(
-                                category,
-                                it
-                            )
-                        )
-                    }
-            }
-            .subscribeOn(ioScheduler)
-            .observeOn(uiScheduler)
-            .subscribe {}
-            .addTo(compositeDisposable)
-    }
+    // fun generateData() {
+    //     val numbers = IntArray(6) { it + 1 }.toList()
+    //     Observable.fromIterable(numbers)
+    //         .flatMapCompletable {
+    //             categoryInteractor.getCategoryById((3..8).random().toLong())
+    //                 .flatMapCompletable { category ->
+    //                     transactionInteractor.addTransaction(
+    //                         createTransaction(
+    //                             category,
+    //                             it
+    //                         )
+    //                     )
+    //                 }
+    //         }
+    //         .subscribeOn(ioScheduler)
+    //         .observeOn(uiScheduler)
+    //         .subscribe {}
+    //         .addTo(compositeDisposable)
+    // }
+    //
+    // fun clearData() {
+    //     transactionInteractor.clearAll()
+    //         .subscribeOn(ioScheduler)
+    //         .observeOn(uiScheduler)
+    //         .subscribe()
+    //         .addTo(compositeDisposable)
+    // }
 
-    fun clearData() {
-        transactionInteractor.clearAll()
-            .subscribeOn(ioScheduler)
-            .observeOn(uiScheduler)
-            .subscribe()
-            .addTo(compositeDisposable)
-    }
-
-    private fun createTransaction(category: Category, number: Int): Transaction {
-        val d = Date()
-        val rand = (number..number + 1).random()
-        val dateBefore = Date(d.time - rand * 24 * 3600 * 1000)
-        return Transaction(
-            type = TransactionType.EXPENSE,
-            sum = number.toBigDecimal(),
-            date = dateBefore,
-            category = category
-        )
-    }
+    // private fun createTransaction(category: Category, number: Int): Transaction {
+    //     val d = Date()
+    //     val rand = (number..number + 1).random()
+    //     val dateBefore = Date(d.time - rand * 24 * 3600 * 1000)
+    //     return Transaction(
+    //         type = TransactionType.EXPENSE,
+    //         sum = number.toBigDecimal(),
+    //         date = dateBefore,
+    //         category = category
+    //     )
+    // }
 
     override fun saveTransaction(category: Category, sum: BigDecimal) {
         if (sum.signum() > 0) {

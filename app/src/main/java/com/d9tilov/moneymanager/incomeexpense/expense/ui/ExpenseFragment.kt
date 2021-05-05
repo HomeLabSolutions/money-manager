@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,6 +37,7 @@ import com.d9tilov.moneymanager.transaction.TransactionType
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
 import java.math.BigDecimal
 import javax.inject.Inject
@@ -84,11 +87,20 @@ class ExpenseFragment :
             getTransactions().observe(
                 viewLifecycleOwner,
                 {
-                    isTransactionDataEmpty = it.isEmpty()
-                    if (isTransactionDataEmpty && !(activity as MainActivity).forceShowKeyboard) {
-                        showViewStub(TransactionType.EXPENSE)
+                    lifecycleScope.launchWhenCreated {
+                        transactionAdapter.submitData(it)
+                        transactionAdapter.loadStateFlow.collectLatest { loadStates ->
+                            isTransactionDataEmpty =
+                                loadStates.source.refresh is LoadState.NotLoading &&
+                                    loadStates.append.endOfPaginationReached &&
+                                    transactionAdapter.itemCount == 0
+                            if (isTransactionDataEmpty && !(activity as MainActivity).forceShowKeyboard) {
+                                showViewStub(TransactionType.EXPENSE)
+                            } else {
+                                hideViewStub()
+                            }
+                        }
                     }
-                    transactionAdapter.submitList(it)
                 }
             )
             getTransactionEvent().observe(
