@@ -9,13 +9,13 @@
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:defaultNavHost="true"
         android:layout_marginBottom="16dp"
-        app:navGraph="@navigation/prepopulate_navigation"
+        app:defaultNavHost="true"
         app:layout_constraintBottom_toTopOf="@+id/prepopulate_next_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/prepopulate_navigation" />
 
     <com.d9tilov.moneymanager.core.ui.widget.progress.ProgressLine
         android:id="@+id/prepopulate_progress"
@@ -24,13 +24,13 @@
         android:layout_marginStart="@dimen/standard_left_margin"
         android:layout_marginEnd="@dimen/standard_right_margin"
         android:layout_marginBottom="16dp"
-        app:underLineColor="@color/control_highlight_color"
-        app:valueTextColor="@color/text_primary_color"
-        app:lineProgressColor="?attr/colorSecondary"
-        app:valueTextSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/prepopulate_back_btn"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:lineProgressColor="?attr/colorSecondary"
+        app:underLineColor="@color/control_highlight_color"
+        app:valueTextColor="@color/text_primary_color"
+        app:valueTextSize="12sp" />
 
     <ImageView
         android:id="@+id/prepopulate_back_btn"
@@ -55,9 +55,9 @@
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:text="@string/next"
-        app:drawableTint="@drawable/button_background_prepopulate_text_color_state_selector"
         android:textColor="@drawable/button_background_prepopulate_text_color_state_selector"
         android:textSize="12sp"
+        app:drawableTint="@drawable/button_background_prepopulate_text_color_state_selector"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

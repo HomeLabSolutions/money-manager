@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <item format="float" name="alpha_disable" type="dimen">0.38</item>
+    <item name="alpha_disable" format="float" type="dimen">0.38</item>
 
     <dimen name="headline1_text_size">84sp</dimen>
     <dimen name="headline4_text_size">35sp</dimen>
@@ -41,7 +41,8 @@
     <dimen name="item_color_picker_size">32dp</dimen>
     <dimen name="item_weekday_size">36dp</dimen>
 
-    <dimen name="currency_icon_size">30sp</dimen> //It is a TextView
+    <dimen name="currency_icon_size">30sp</dimen>
+    //It is a TextView
     <dimen name="goal_progress_line_bar_width">16dp</dimen>
     <dimen name="goal_progress_percent_text_size">10sp</dimen>
     <dimen name="goal_value_text_size">12sp</dimen>

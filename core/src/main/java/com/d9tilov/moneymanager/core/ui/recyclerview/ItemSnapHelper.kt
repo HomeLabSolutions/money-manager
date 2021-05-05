@@ -35,7 +35,10 @@ class ItemSnapHelper : LinearSnapHelper() {
     override fun findSnapView(layoutManager: RecyclerView.LayoutManager?): View? =
         findFirstView(layoutManager, helper(layoutManager))
 
-    override fun calculateDistanceToFinalSnap(layoutManager: RecyclerView.LayoutManager, targetView: View): IntArray {
+    override fun calculateDistanceToFinalSnap(
+        layoutManager: RecyclerView.LayoutManager,
+        targetView: View
+    ): IntArray {
         val out = IntArray(2)
         out[0] = distanceToStart(targetView, helper(layoutManager))
         return out
@@ -60,7 +63,11 @@ class ItemSnapHelper : LinearSnapHelper() {
             return super.createScroller(layoutManager)
         val context = context ?: return null
         return object : LinearSmoothScroller(context) {
-            override fun onTargetFound(targetView: View, state: RecyclerView.State, action: Action) {
+            override fun onTargetFound(
+                targetView: View,
+                state: RecyclerView.State,
+                action: Action
+            ) {
                 val snapDistance = calculateDistanceToFinalSnap(layoutManager, targetView)
                 val dx = snapDistance[0]
                 val dy = snapDistance[1]
@@ -80,7 +87,10 @@ class ItemSnapHelper : LinearSnapHelper() {
         return childStart - containerStart
     }
 
-    private fun findFirstView(layoutManager: RecyclerView.LayoutManager?, helper: OrientationHelper): View? {
+    private fun findFirstView(
+        layoutManager: RecyclerView.LayoutManager?,
+        helper: OrientationHelper
+    ): View? {
         if (layoutManager == null) return null
 
         val childCount = layoutManager.childCount

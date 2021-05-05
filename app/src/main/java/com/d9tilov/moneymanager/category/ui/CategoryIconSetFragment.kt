@@ -76,7 +76,10 @@ class CategoryIconSetFragment :
     }
 
     override fun save(icon: Int) {
-        findNavController().previousBackStackEntry?.savedStateHandle?.set(ARG_CATEGORY_ICON_ID, icon)
+        findNavController().previousBackStackEntry?.savedStateHandle?.set(
+            ARG_CATEGORY_ICON_ID,
+            icon
+        )
         findNavController().popBackStack()
     }
 

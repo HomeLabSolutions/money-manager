@@ -45,5 +45,7 @@ public inline fun <T : ViewBinding> Fragment.viewBinding(
     crossinline vbFactory: (View) -> T,
     @IdRes viewBindingRootId: Int
 ): ViewBindingProperty<Fragment, T> {
-    return viewBinding(vbFactory) { fragment: Fragment -> fragment.requireView().findViewById(viewBindingRootId) }
+    return viewBinding(vbFactory) { fragment: Fragment ->
+        fragment.requireView().findViewById(viewBindingRootId)
+    }
 }

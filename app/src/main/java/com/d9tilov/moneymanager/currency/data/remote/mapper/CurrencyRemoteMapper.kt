@@ -11,7 +11,7 @@ class CurrencyRemoteMapper @Inject constructor() : Mapper<CurrencyResponse, List
         with(model) {
             val currencyRateList = mutableSetOf<Currency>()
             for ((key, value) in rates) {
-                val item = Currency(code = key, value = value, isBase = key == base)
+                val item = Currency(code = key, value = value)
                 currencyRateList.add(item)
             }
             currencyRateList.toList()

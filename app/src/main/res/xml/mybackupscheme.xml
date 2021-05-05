@@ -2,7 +2,7 @@
 <full-backup-content>
     <include
         domain="database"
-        path="money-manager-db"/>
+        path="money-manager-db" />
     <include
         domain="sharedpref"
         path="." />

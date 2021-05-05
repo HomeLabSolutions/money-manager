@@ -44,7 +44,7 @@ class CategoryViewModel @ViewModelInject constructor(
                 CategoryDestination.MAIN_WITH_SUM_SCREEN, CategoryDestination.PREPOPULATE_SCREEN -> {
                     val inputSum = savedStateHandle.get<BigDecimal>("sum")
                     if (inputSum == null) {
-                        navigator?.backToFixedTransactionCreationScreen(category)
+                        navigator?.backToPeriodicTransactionCreationScreen(category)
                     } else {
                         val transactionType =
                             requireNotNull(savedStateHandle.get<TransactionType>("transactionType"))

@@ -7,8 +7,8 @@ import com.d9tilov.moneymanager.category.data.CategoryRepoImpl
 import com.d9tilov.moneymanager.category.data.local.CategoryLocalSource
 import com.d9tilov.moneymanager.category.data.local.CategorySource
 import com.d9tilov.moneymanager.category.data.local.mapper.CategoryMapper
-import com.d9tilov.moneymanager.category.domain.CategoryInteractorImpl
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
+import com.d9tilov.moneymanager.category.domain.CategoryInteractorImpl
 import com.d9tilov.moneymanager.category.domain.CategoryRepo
 import dagger.Module
 import dagger.Provides
@@ -29,7 +29,8 @@ class CategoryModule {
         categoryMapper: CategoryMapper,
         prepopulateDataManager: PrepopulateDataManager,
         database: AppDatabase
-    ): CategorySource = CategoryLocalSource(preferencesStore, categoryMapper, prepopulateDataManager, database)
+    ): CategorySource =
+        CategoryLocalSource(preferencesStore, categoryMapper, prepopulateDataManager, database)
 
     @Provides
     fun provideCategoryRepo(categoryLocalSource: CategorySource): CategoryRepo =

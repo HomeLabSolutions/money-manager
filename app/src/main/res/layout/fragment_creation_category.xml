@@ -83,16 +83,16 @@
                     android:layout_height="32dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="8dp"
-                    app:tint="?attr/colorControlActivated"
-                    app:srcCompat="@drawable/ic_arrow_forward" />
+                    app:srcCompat="@drawable/ic_arrow_forward"
+                    app:tint="?attr/colorControlActivated" />
             </LinearLayout>
 
             <include
                 android:id="@+id/category_creation_color"
-                android:layout_width="wrap_content"
                 layout="@layout/item_color_picker"
-                android:layout_marginTop="32dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
                 app:layout_constraintStart_toStartOf="@+id/category_creation_icon_layout"
                 app:layout_constraintTop_toBottomOf="@+id/category_creation_icon_layout" />
 
@@ -102,8 +102,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="280dp"
-                android:text="@string/delete"
                 android:padding="8dp"
+                android:text="@string/delete"
                 android:textAppearance="?attr/textAppearanceBody1"
                 android:textColor="?attr/colorAccent"
                 android:visibility="gone"

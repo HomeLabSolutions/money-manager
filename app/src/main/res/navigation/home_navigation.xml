@@ -153,9 +153,9 @@
             app:argType="com.d9tilov.moneymanager.category.data.entity.Category" />
         <argument
             android:name="sum"
+            android:defaultValue="@null"
             app:argType="java.math.BigDecimal"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
     </fragment>
 
     <fragment
@@ -236,13 +236,13 @@
         <argument
             android:name="transaction"
             android:defaultValue="@null"
-            app:nullable="true"
-            app:argType="com.d9tilov.moneymanager.transaction.domain.entity.Transaction" />
+            app:argType="com.d9tilov.moneymanager.transaction.domain.entity.Transaction"
+            app:nullable="true" />
 
         <argument
-            android:name="fixed_transaction"
+            android:name="periodic_transaction"
             android:defaultValue="@null"
-            app:argType="com.d9tilov.moneymanager.fixed.domain.entity.FixedTransaction"
+            app:argType="com.d9tilov.moneymanager.periodic.domain.entity.PeriodicTransaction"
             app:nullable="true" />
     </dialog>
 

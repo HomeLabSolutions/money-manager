@@ -24,8 +24,7 @@ class GoalLocalSource(
             goalDao.insert(
                 goalDataMapper.toDbModel(
                     goalData.copy(
-                        clientId = currentUserId,
-                        currencyCode = preferencesStore.baseCurrencyCode
+                        clientId = currentUserId
                     )
                 )
             )

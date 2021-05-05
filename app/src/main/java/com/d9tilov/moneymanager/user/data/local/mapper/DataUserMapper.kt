@@ -14,7 +14,10 @@ class DataUserMapper @Inject constructor() : Mapper<UserDbModel, UserProfile> {
                 displayedName = "$firstName $lastName",
                 firstName = firstName,
                 lastName = lastName,
-                budgetDayCreation = budgetDayCreation
+                budgetDayCreation = budgetDayCreation,
+                currencyCode = currencyCode,
+                showPrepopulate = showPrepopulate,
+                backupData = backupData
             )
         }
 
@@ -24,7 +27,10 @@ class DataUserMapper @Inject constructor() : Mapper<UserDbModel, UserProfile> {
                 uid = uid,
                 firstName = firstName,
                 lastName = lastName,
-                budgetDayCreation = budgetDayCreation
+                budgetDayCreation = budgetDayCreation,
+                currencyCode = currencyCode,
+                showPrepopulate = showPrepopulate,
+                backupData = backupData
             )
         }
 }

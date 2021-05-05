@@ -1,11 +1,11 @@
 package com.d9tilov.moneymanager.currency.ui
 
 import androidx.recyclerview.widget.DiffUtil
-import com.d9tilov.moneymanager.currency.data.entity.Currency
+import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 
 class CurrencyDiffUtil(
-    private val oldCurrenciesList: List<Currency>,
-    private val newCurrenciesList: List<Currency>
+    private val oldCurrenciesList: List<DomainCurrency>,
+    private val newCurrenciesList: List<DomainCurrency>
 ) : DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {

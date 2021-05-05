@@ -24,8 +24,7 @@ class BudgetLocalSource(
             budgetDao.insert(
                 budgetMapper.toDbModel(
                     budgetData.copy(
-                        clientId = currentUserId,
-                        currencyCode = preferencesStore.baseCurrencyCode
+                        clientId = currentUserId
                     )
                 )
             )

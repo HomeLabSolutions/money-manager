@@ -2,25 +2,25 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Theme.MoneyManager.Material.Alert.Dialog"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minWidth="300dp"
-    style="@style/Theme.MoneyManager.Material.Alert.Dialog">
+    android:minWidth="300dp">
 
     <TextView
         android:id="@+id/category_dialog_union_title"
         style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
-        android:textColor="@color/secondary_color"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="start"
         android:paddingStart="@dimen/standard_left_margin"
         android:paddingTop="16dp"
         android:paddingEnd="@dimen/standard_right_margin"
-        tools:text="@string/category_unit_to_group_title"
+        android:textColor="@color/secondary_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/category_unit_to_group_title" />
 
     <TextView
         android:id="@+id/category_dialog_union_subtitle"
@@ -30,18 +30,18 @@
         android:paddingStart="@dimen/standard_left_margin"
         android:paddingTop="8dp"
         android:paddingEnd="@dimen/standard_right_margin"
-        tools:text="@string/category_unit_new_name_subtitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/category_dialog_union_title" />
+        app:layout_constraintTop_toBottomOf="@+id/category_dialog_union_title"
+        tools:text="@string/category_unit_new_name_subtitle" />
 
     <include
         android:id="@+id/category_dialog_union_folder"
         layout="@layout/layout_union_new_folder"
-        android:layout_height="wrap_content"
         android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
         android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/category_dialog_union_subtitle"
         tools:visibility="visible" />
@@ -106,8 +106,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/standard_right_margin"
-        app:layout_constraintTop_toTopOf="@+id/category_dialog_union_cancel"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/category_dialog_union_cancel"
         tools:text="@string/save" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,10 +2,10 @@
 
 buildscript {
     ext.versions = [
-            'minSdk'            : 21,
-            'targetSdk'         : 29,
-            'compileSdk'        : 29,
-            'buildTools'        : '29.0.3'
+            'minSdk'    : 21,
+            'targetSdk' : 29,
+            'compileSdk': 29,
+            'buildTools': '29.0.3'
     ]
     ext.names = [
             'applicationId': 'com.d9tilov.moneymanager'

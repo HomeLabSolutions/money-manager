@@ -21,7 +21,7 @@ class TransactionRemoveDialog :
 
     private val args by navArgs<TransactionRemoveDialogArgs>()
     private val transaction by lazy { args.transaction }
-    private val fixedTransaction by lazy { args.fixedTransaction }
+    private val fixedTransaction by lazy { args.periodicTransaction }
     private val viewBinding by viewBinding(FragmentDialogRemoveBinding::bind)
 
     override val layoutId = R.layout.fragment_dialog_remove

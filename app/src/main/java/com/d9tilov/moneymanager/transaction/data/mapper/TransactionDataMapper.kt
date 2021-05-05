@@ -5,7 +5,8 @@ import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.data.local.entity.TransactionDbModel
 import javax.inject.Inject
 
-class TransactionDataMapper @Inject constructor() : Mapper<TransactionDbModel, TransactionDataModel> {
+class TransactionDataMapper @Inject constructor() :
+    Mapper<TransactionDbModel, TransactionDataModel> {
     override fun toDataModel(model: TransactionDbModel): TransactionDataModel =
         with(model) {
             TransactionDataModel(

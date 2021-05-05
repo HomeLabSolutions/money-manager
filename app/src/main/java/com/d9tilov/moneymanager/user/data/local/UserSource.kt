@@ -7,8 +7,9 @@ import io.reactivex.Flowable
 
 interface UserSource : Source {
 
-    fun createCurrentUser(userProfile: UserProfile): Completable
+    fun createUserOrRestore(userProfile: UserProfile): Completable
     fun updateCurrentUser(userProfile: UserProfile): Completable
     fun getCurrentUser(): Flowable<UserProfile>
+    fun backupUser(): Completable
     fun deleteUser(): Completable
 }

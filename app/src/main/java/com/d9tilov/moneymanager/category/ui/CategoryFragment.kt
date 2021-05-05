@@ -34,6 +34,7 @@ class CategoryFragment :
 
     override fun getNavigator() = this
     override val viewModel by viewModels<CategoryViewModel>()
+
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
@@ -74,7 +75,7 @@ class CategoryFragment :
         findNavController().popBackStack()
     }
 
-    override fun backToFixedTransactionCreationScreen(category: Category) {
+    override fun backToPeriodicTransactionCreationScreen(category: Category) {
         findNavController().previousBackStackEntry?.savedStateHandle?.set(ARG_CATEGORY, category)
         findNavController().popBackStack()
     }

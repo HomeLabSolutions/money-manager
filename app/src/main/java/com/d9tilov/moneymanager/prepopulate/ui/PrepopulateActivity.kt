@@ -12,9 +12,9 @@ import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.currency.ui.CurrencyFragmentDirections
 import com.d9tilov.moneymanager.databinding.ActivityPrepopulateBinding
-import com.d9tilov.moneymanager.fixed.ui.FixedExpenseFragmentDirections
-import com.d9tilov.moneymanager.fixed.ui.FixedIncomeFragmentDirections
 import com.d9tilov.moneymanager.home.ui.MainActivity
+import com.d9tilov.moneymanager.periodic.ui.PeriodicExpenseFragmentDirections
+import com.d9tilov.moneymanager.periodic.ui.PeriodicIncomeFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,7 +22,7 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
 
     private val fullScreenDestinationSet =
         setOf(
-            R.id.fixed_created_transaction_dest,
+            R.id.periodic_created_transaction_dest,
             R.id.category_dest,
             R.id.edit_category_dialog,
             R.id.remove_sub_category_dialog,
@@ -54,22 +54,19 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
             val action: NavDirections
             when (navController.currentDestination?.id) {
                 R.id.choose_currency_dest -> {
-                    action =
-                        CurrencyFragmentDirections.toCommonAmountDest()
+                    action = CurrencyFragmentDirections.toCommonAmountDest()
                     navController.navigate(action)
                 }
                 R.id.budget_amount_dest -> {
-                    action =
-                        BudgetAmountFragmentDirections.toFixedIncomeDest()
+                    action = BudgetAmountFragmentDirections.toPeriodicIncomeDest()
                     navController.navigate(action)
                 }
-                R.id.fixed_income_dest -> {
-                    action =
-                        FixedIncomeFragmentDirections.toFixedExpenseDest()
+                R.id.periodic_income_dest -> {
+                    action = PeriodicIncomeFragmentDirections.toPeriodicExpenseDest()
                     navController.navigate(action)
                 }
-                R.id.fixed_expense_dest -> {
-                    action = FixedExpenseFragmentDirections.toGoalsDest()
+                R.id.periodic_expense_dest -> {
+                    action = PeriodicExpenseFragmentDirections.toGoalsDest()
                     navController.navigate(action)
                 }
                 else -> {

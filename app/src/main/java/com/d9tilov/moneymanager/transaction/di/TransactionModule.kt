@@ -10,10 +10,11 @@ import com.d9tilov.moneymanager.transaction.data.local.TransactionSource
 import com.d9tilov.moneymanager.transaction.data.mapper.TransactionDataMapper
 import com.d9tilov.moneymanager.transaction.data.mapper.TransactionDateDataMapper
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
-import com.d9tilov.moneymanager.transaction.domain.TransactionRepo
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractorImpl
+import com.d9tilov.moneymanager.transaction.domain.TransactionRepo
 import com.d9tilov.moneymanager.transaction.domain.mapper.TransactionDomainMapper
 import com.d9tilov.moneymanager.transaction.domain.mapper.TransactionHeaderDomainMapper
+import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,11 +53,13 @@ class TransactionModule {
     fun provideTransactionInteractor(
         transactionRepo: TransactionRepo,
         categoryInteractor: CategoryInteractor,
+        userInteractor: UserInteractor,
         transactionDomainMapper: TransactionDomainMapper,
         transactionHeaderDomainMapper: TransactionHeaderDomainMapper
     ): TransactionInteractor = TransactionInteractorImpl(
         transactionRepo,
         categoryInteractor,
+        userInteractor,
         transactionDomainMapper,
         transactionHeaderDomainMapper
     )

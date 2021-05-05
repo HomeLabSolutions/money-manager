@@ -68,33 +68,33 @@ class IncomeExpenseFragment :
         }
         viewBinding.run {
             incomeExpenseViewPager.addOnPageChangeListener(object :
-                    ViewPager.OnPageChangeListener {
-                    override fun onPageScrollStateChanged(state: Int) { /* do notjing */
-                    }
+                ViewPager.OnPageChangeListener {
+                override fun onPageScrollStateChanged(state: Int) { /* do notjing */
+                }
 
-                    override fun onPageScrolled(
-                        position: Int,
-                        positionOffset: Float,
-                        positionOffsetPixels: Int
-                    ) { /* do nothing */
-                    }
+                override fun onPageScrolled(
+                    position: Int,
+                    positionOffset: Float,
+                    positionOffsetPixels: Int
+                ) { /* do nothing */
+                }
 
-                    override fun onPageSelected(position: Int) {
-                        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
-                            param(
-                                FirebaseAnalytics.Param.ITEM_ID,
-                                if (position == 0) "expense" else "income"
-                            )
-                        }
-                        currentPage = position
-                        val currentFragment = getCurrentPagedFragment()
-                        if (isKeyboardShown) {
-                            currentFragment.onOpenKeyboard()
-                        } else {
-                            currentFragment.onCloseKeyboard()
-                        }
+                override fun onPageSelected(position: Int) {
+                    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+                        param(
+                            FirebaseAnalytics.Param.ITEM_ID,
+                            if (position == 0) "expense" else "income"
+                        )
                     }
-                })
+                    currentPage = position
+                    val currentFragment = getCurrentPagedFragment()
+                    if (isKeyboardShown) {
+                        currentFragment.onOpenKeyboard()
+                    } else {
+                        currentFragment.onCloseKeyboard()
+                    }
+                }
+            })
             incomeExpenseTabs.setupWithViewPager(income_expense_view_pager)
             incomeExpenseViewPager.adapter = incomeExpenseAdapter
             incomeExpenseViewPager.currentItem =

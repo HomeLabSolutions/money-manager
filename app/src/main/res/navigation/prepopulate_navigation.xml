@@ -14,8 +14,8 @@
         <action
             android:id="@+id/to_common_amount_dest"
             app:destination="@id/budget_amount_dest"
-            app:exitAnim="@anim/slide_up_exit"
             app:enterAnim="@anim/slide_up_enter"
+            app:exitAnim="@anim/slide_up_exit"
             app:popEnterAnim="@anim/slide_down_enter"
             app:popExitAnim="@anim/slide_down_exit" />
     </fragment>
@@ -27,31 +27,31 @@
         tools:layout="@layout/fragment_budget_amount">
 
         <action
-            android:id="@+id/to_fixed_income_dest"
-            app:destination="@id/fixed_income_dest"
-            app:exitAnim="@anim/slide_up_exit"
+            android:id="@+id/to_periodic_income_dest"
+            app:destination="@id/periodic_income_dest"
             app:enterAnim="@anim/slide_up_enter"
+            app:exitAnim="@anim/slide_up_exit"
             app:popEnterAnim="@anim/slide_down_enter"
             app:popExitAnim="@anim/slide_down_exit" />
     </fragment>
 
     <fragment
-        android:id="@+id/fixed_income_dest"
-        android:name="com.d9tilov.moneymanager.fixed.ui.FixedIncomeFragment"
+        android:id="@+id/periodic_income_dest"
+        android:name="com.d9tilov.moneymanager.periodic.ui.PeriodicIncomeFragment"
         android:label="fragment_title_screen"
-        tools:layout="@layout/fragment_fixed_income">
+        tools:layout="@layout/fragment_periodic_income">
 
         <action
-            android:id="@+id/to_fixed_expense_dest"
-            app:destination="@id/fixed_expense_dest"
-            app:exitAnim="@anim/slide_up_exit"
+            android:id="@+id/to_periodic_expense_dest"
+            app:destination="@id/periodic_expense_dest"
             app:enterAnim="@anim/slide_up_enter"
+            app:exitAnim="@anim/slide_up_exit"
             app:popEnterAnim="@anim/slide_down_enter"
             app:popExitAnim="@anim/slide_down_exit" />
 
         <action
-            android:id="@+id/to_create_fixed_transaction_dest"
-            app:destination="@id/fixed_created_transaction_dest"
+            android:id="@+id/to_create_periodic_transaction_dest"
+            app:destination="@id/periodic_created_transaction_dest"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
@@ -67,22 +67,22 @@
     </fragment>
 
     <fragment
-        android:id="@+id/fixed_expense_dest"
-        android:name="com.d9tilov.moneymanager.fixed.ui.FixedExpenseFragment"
+        android:id="@+id/periodic_expense_dest"
+        android:name="com.d9tilov.moneymanager.periodic.ui.PeriodicExpenseFragment"
         android:label="fragment_title_screen"
-        tools:layout="@layout/fragment_fixed_expense">
+        tools:layout="@layout/fragment_periodic_expense">
 
         <action
             android:id="@+id/to_goals_dest"
             app:destination="@id/goals_dest"
-            app:exitAnim="@anim/slide_up_exit"
             app:enterAnim="@anim/slide_up_enter"
+            app:exitAnim="@anim/slide_up_exit"
             app:popEnterAnim="@anim/slide_down_enter"
             app:popExitAnim="@anim/slide_down_exit" />
 
         <action
-            android:id="@+id/to_create_fixed_transaction_dest"
-            app:destination="@id/fixed_created_transaction_dest"
+            android:id="@+id/to_create_periodic_transaction_dest"
+            app:destination="@id/periodic_created_transaction_dest"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
@@ -97,10 +97,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/fixed_created_transaction_dest"
-        android:name="com.d9tilov.moneymanager.fixed.ui.FixedTransactionCreationFragment"
+        android:id="@+id/periodic_created_transaction_dest"
+        android:name="com.d9tilov.moneymanager.periodic.ui.PeriodicTransactionCreationFragment"
         android:label="fragment_title_screen"
-        tools:layout="@layout/fragment_creation_fixed_transaction">
+        tools:layout="@layout/fragment_creation_periodic_transaction">
 
         <action
             android:id="@+id/to_fixed_category_dest"
@@ -114,9 +114,9 @@
             android:name="transactionType"
             app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
         <argument
-            android:name="fixed_transaction"
+            android:name="periodic_transaction"
             android:defaultValue="@null"
-            app:argType="com.d9tilov.moneymanager.fixed.domain.entity.FixedTransaction"
+            app:argType="com.d9tilov.moneymanager.periodic.domain.entity.PeriodicTransaction"
             app:nullable="true" />
     </fragment>
 
@@ -352,13 +352,13 @@
         <argument
             android:name="transaction"
             android:defaultValue="@null"
-            app:nullable="true"
-            app:argType="com.d9tilov.moneymanager.transaction.domain.entity.Transaction" />
+            app:argType="com.d9tilov.moneymanager.transaction.domain.entity.Transaction"
+            app:nullable="true" />
 
         <argument
-            android:name="fixed_transaction"
+            android:name="periodic_transaction"
             android:defaultValue="@null"
-            app:argType="com.d9tilov.moneymanager.fixed.domain.entity.FixedTransaction"
+            app:argType="com.d9tilov.moneymanager.periodic.domain.entity.PeriodicTransaction"
             app:nullable="true" />
     </dialog>
 

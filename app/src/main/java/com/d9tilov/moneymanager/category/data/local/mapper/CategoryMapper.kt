@@ -37,8 +37,10 @@ class CategoryMapper @Inject constructor(@ApplicationContext private val context
 
     fun toDataParentModel(model: CategoryDbModel) =
         with(model) {
-            val iconResId = context.resources.getIdentifier(iconName, "drawable", context.packageName)
-            val colorResId = context.resources.getIdentifier(colorName, "color", context.packageName)
+            val iconResId =
+                context.resources.getIdentifier(iconName, "drawable", context.packageName)
+            val colorResId =
+                context.resources.getIdentifier(colorName, "color", context.packageName)
             Category(
                 id = id,
                 clientId = uid,

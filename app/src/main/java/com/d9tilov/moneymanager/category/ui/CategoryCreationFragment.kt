@@ -67,7 +67,8 @@ class CategoryCreationFragment :
 
     private var toolbar: MaterialToolbar? = null
     private lateinit var categoryColorAdapter: CategoryColorAdapter
-    @Inject lateinit var firebaseAnalytics: FirebaseAnalytics
+    @Inject
+    lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun getNavigator() = this
     override val viewModel by viewModels<CategoryCreationViewModel>()

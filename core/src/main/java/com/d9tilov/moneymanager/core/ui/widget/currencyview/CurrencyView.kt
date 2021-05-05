@@ -23,7 +23,6 @@ import com.d9tilov.moneymanager.core.util.getColorFromAttr
 import com.d9tilov.moneymanager.core.util.removeScale
 import com.d9tilov.moneymanager.core.util.string
 import com.d9tilov.moneymanager.core.util.toBigDecimal
-import dagger.hilt.android.AndroidEntryPoint
 import java.math.BigDecimal
 import java.util.Locale
 import kotlin.math.min

@@ -131,4 +131,12 @@
     <string name="goals_remove_dialog_subtitle">Do you really want to delete the goal?</string>
 
     <string name="error_loading">Loading error</string>
+
+    <string name="backup">Make backup</string>
+    <string name="backup_info">Last backup: %1$s</string>
+    <string name="backup_empty">Backup hasn\'t been created yet</string>
+    <string name="backup_succeeded">Backup succeeded</string>
+    <string name="backup_error">Backup error</string>
+    <string name="restore_succeeded">Restore succeeded</string>
+    <string name="restore_error">Restore error</string>
 </resources>

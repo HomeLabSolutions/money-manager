@@ -47,9 +47,9 @@
         android:layout_height="wrap_content"
         android:inflatedId="@+id/inflate"
         android:layout="@layout/layout_expense_info"
+        app:layout_constraintBottom_toTopOf="@+id/expense_category_rv_list"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/expense_category_rv_list"
         app:layout_constraintTop_toBottomOf="@+id/expense_main_sum" />
 
     <androidx.recyclerview.widget.RecyclerView

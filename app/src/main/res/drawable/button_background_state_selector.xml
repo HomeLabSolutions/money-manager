@@ -1,4 +1,4 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_enabled="false" android:drawable="@drawable/button_gradient_disable"/>
-    <item android:state_enabled="true" android:drawable="@drawable/button_gradient"/> <!-- idle state -->
+    <item android:drawable="@drawable/button_gradient_disable" android:state_enabled="false" />
+    <item android:drawable="@drawable/button_gradient" android:state_enabled="true" /> <!-- idle state -->
 </selector>

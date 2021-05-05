@@ -11,16 +11,13 @@ class UserDataRepo(
 ) : UserRepo {
 
     override fun getUser(): Flowable<UserProfile> = userLocalSource.getCurrentUser()
-    override fun createUser(entity: UserProfile): Completable {
-        return userLocalSource.createCurrentUser(entity)
-    }
+    override fun createUser(entity: UserProfile): Completable =
+        userLocalSource.createUserOrRestore(entity)
 
-    override fun updateUser(entity: UserProfile): Completable {
-//        preferencesStore.budgetCreated = entity.budgetDayCreation != 0L
-        return userLocalSource.updateCurrentUser(entity)
-    }
+    override fun updateUser(entity: UserProfile): Completable =
+        userLocalSource.updateCurrentUser(entity)
 
-    override fun logout(): Completable {
-        return userLocalSource.deleteUser()
-    }
+    override fun backup(): Completable = userLocalSource.backupUser()
+
+    override fun logout(): Completable = Completable.complete()
 }

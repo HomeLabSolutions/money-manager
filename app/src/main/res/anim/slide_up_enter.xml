@@ -5,8 +5,8 @@
         android:fromYDelta="100%"
         android:toYDelta="0%" />
     <alpha
-        android:interpolator="@android:anim/linear_interpolator"
         android:duration="@android:integer/config_shortAnimTime"
         android:fromAlpha="0.0"
-        android:toAlpha="1.0"/>
+        android:interpolator="@android:anim/linear_interpolator"
+        android:toAlpha="1.0" />
 </set>

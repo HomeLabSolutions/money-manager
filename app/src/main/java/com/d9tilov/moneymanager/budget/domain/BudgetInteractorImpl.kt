@@ -1,10 +1,16 @@
 package com.d9tilov.moneymanager.budget.domain
 
 import com.d9tilov.moneymanager.budget.data.entity.BudgetData
+import com.d9tilov.moneymanager.user.domain.UserInteractor
 
-class BudgetInteractorImpl(private val budgetRepo: BudgetRepo) : BudgetInteractor {
+class BudgetInteractorImpl(
+    private val budgetRepo: BudgetRepo,
+    private val userInteractor: UserInteractor
+) : BudgetInteractor {
 
-    override fun create(budgetData: BudgetData) = budgetRepo.insert(budgetData)
+    override fun create(budgetData: BudgetData) = userInteractor.getCurrentUser().firstOrError()
+        .flatMapCompletable { budgetRepo.insert(budgetData.copy(currencyCode = it.currencyCode)) }
+
     override fun get() = budgetRepo.get()
     override fun getCount() = budgetRepo.getCount()
 

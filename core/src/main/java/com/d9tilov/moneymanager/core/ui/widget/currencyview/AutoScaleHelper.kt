@@ -27,7 +27,6 @@ class AutoScaleHelper(
             helper.setEnabled()
             return helper
         }
-
     }
 
     private val prefixTextView: TextView = currencyView.prefixTextView
@@ -100,9 +99,9 @@ class AutoScaleHelper(
         valuePaint.textSize = size
         signPaint.textSize = size
         if ((prefixPaint.measureText(prefixTextView.text, 0, prefixTextView.text.length)
-                    + valuePaint.measureText(text, 0, text.length)
-                    + currencyView.marginBetweenSign
-                    + signPaint.measureText(signText, 0, signText.length)) > targetWidth
+                + valuePaint.measureText(text, 0, text.length)
+                + currencyView.marginBetweenSign
+                + signPaint.measureText(signText, 0, signText.length)) > targetWidth
         ) {
             size = getAutoScaleTextSize(
                 prefixText, text, signText, targetWidth.toFloat(), 0f, high,
@@ -176,9 +175,9 @@ class AutoScaleHelper(
 
         val maxLineWidth =
             prefixPaint.measureText(prefixText, 0, prefixText.length) +
-                    valuePaint.measureText(valueText, 0, valueText.length) +
-                    currencyView.marginBetweenSign +
-                    signPaint.measureText(signText, 0, signText.length)
+                valuePaint.measureText(valueText, 0, valueText.length) +
+                currencyView.marginBetweenSign +
+                signPaint.measureText(signText, 0, signText.length)
         return when {
             high - low < PRECISION -> {
                 low

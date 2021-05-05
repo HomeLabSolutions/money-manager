@@ -15,8 +15,8 @@ interface SplashNavigator : BaseNavigator {
 
 interface PrepopulateNavigator : BaseNavigator {
 
-    fun goToFixedIncomeScreen() {}
-    fun goToFixedExpenseScreen() {}
+    fun goToPeriodicIncomeScreen() {}
+    fun goToPeriodicExpenseScreen() {}
     fun goToGoalsScreen() {}
     fun goToMainScreen() {}
     fun back() {}
@@ -28,7 +28,7 @@ interface CurrencyNavigator : BaseNavigator {
 }
 
 interface BudgetAmountNavigator : BaseNavigator {
-    fun goToFixedIncomeScreen()
+    fun goToPeriodicIncomeScreen()
     fun showError()
 }
 
@@ -36,10 +36,10 @@ interface FixedCreatedNavigator : BaseNavigator {
     fun back()
 }
 
-interface BaseFixedIncomeExpenseNavigator : BaseNavigator
+interface BasePeriodicIncomeExpenseNavigator : BaseNavigator
 
-interface FixedExpenseNavigator : BaseFixedIncomeExpenseNavigator
-interface FixedIncomeNavigator : BaseFixedIncomeExpenseNavigator
+interface PeriodicExpenseNavigator : BasePeriodicIncomeExpenseNavigator
+interface PeriodicIncomeNavigator : BasePeriodicIncomeExpenseNavigator
 
 interface GoalsNavigator : BaseNavigator
 interface CreatedGoalNavigator : BaseNavigator {
@@ -95,7 +95,7 @@ interface CategoryNavigator : BaseNavigator {
     fun openCreateCategoryScreen(category: Category? = null)
     fun openRemoveDialog(category: Category)
     fun backToEditTransactionScreen(category: Category)
-    fun backToFixedTransactionCreationScreen(category: Category)
+    fun backToPeriodicTransactionCreationScreen(category: Category)
     fun backToMainScreen(transactionType: TransactionType)
 }
 

@@ -1,19 +1,20 @@
 package com.d9tilov.moneymanager.goal.domain
 
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
-import com.d9tilov.moneymanager.core.util.divideBy
 import com.d9tilov.moneymanager.goal.domain.entity.Goal
 import com.d9tilov.moneymanager.goal.domain.mapper.GoalDomainMapper
+import com.d9tilov.moneymanager.user.domain.UserInteractor
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import java.math.BigDecimal
 
 class GoalIteractorImpl(
     private val goalRepo: GoalRepo,
     private val budgetInteractor: BudgetInteractor,
+    private val userInteractor: UserInteractor,
     private val goalDomainMapper: GoalDomainMapper
 ) : GoalInteractor {
-    override fun insert(goal: Goal): Completable = goalRepo.insert(goalDomainMapper.toData(goal))
+    override fun insert(goal: Goal): Completable = userInteractor.getCurrentUser().firstOrError()
+        .flatMapCompletable { goalRepo.insert(goalDomainMapper.toData(goal.copy(currencyCode = it.currencyCode))) }
 
     override fun getAll(): Flowable<List<Goal>> {
         return Flowable.combineLatest(

@@ -2,20 +2,20 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Theme.MoneyManager.Material.Alert.Dialog"
     android:layout_width="280dp"
-    android:layout_height="wrap_content"
-    style="@style/Theme.MoneyManager.Material.Alert.Dialog">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/triple_remove_dialog_title"
         style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
-        android:textColor="@color/secondary_color"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="start"
         android:paddingStart="@dimen/standard_left_margin"
         android:paddingTop="16dp"
         android:paddingEnd="@dimen/standard_right_margin"
+        android:textColor="@color/secondary_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/transaction_delete_dialog_title" />

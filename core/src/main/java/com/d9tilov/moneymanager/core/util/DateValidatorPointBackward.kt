@@ -5,7 +5,7 @@ import android.os.Parcelable
 import androidx.annotation.NonNull
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.CalendarConstraints.DateValidator
-import java.util.*
+import java.util.Date
 
 class DateValidatorPointBackward private constructor(private val point: Long) : DateValidator {
     override fun isValid(date: Long): Boolean {

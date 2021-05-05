@@ -11,6 +11,7 @@ private const val DAY_OF_WEEK_DATE_FORMAT = "EE. d MMMM"
 const val RECENT_DATE_FORMAT = "dd.MM.yyyy"
 const val TRANSACTION_DATE_FORMAT = "dd MMMM yyyy"
 const val TRANSACTION_DATE_FORMAT_DAY_MONTH = "dd MMMM"
+const val BACKUP_DATE = "dd.MM.yyyy hh:mm"
 
 fun formatMinSec(time: Long): String {
     val seconds = (time / 1000).toInt()
@@ -52,8 +53,8 @@ fun Date.isSameDay(otherDate: Date): Boolean {
  */
 fun Calendar.isSameDay(otherCal: Calendar): Boolean {
     return get(Calendar.ERA) == otherCal.get(Calendar.ERA) &&
-            get(Calendar.YEAR) == otherCal.get(Calendar.YEAR) &&
-            get(Calendar.DAY_OF_YEAR) == otherCal.get(Calendar.DAY_OF_YEAR)
+        get(Calendar.YEAR) == otherCal.get(Calendar.YEAR) &&
+        get(Calendar.DAY_OF_YEAR) == otherCal.get(Calendar.DAY_OF_YEAR)
 }
 
 /**
@@ -104,4 +105,8 @@ fun Date.getDayOfWeek(): Int {
     val cal = Calendar.getInstance()
     cal.time = this
     return cal[Calendar.DAY_OF_WEEK]
+}
+
+fun Long.getBackupDate(): String {
+    return SimpleDateFormat(BACKUP_DATE, Locale.getDefault()).format(Date(this))
 }

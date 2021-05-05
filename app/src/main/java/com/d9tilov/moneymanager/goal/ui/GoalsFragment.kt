@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,13 +29,16 @@ import com.d9tilov.moneymanager.databinding.FragmentGoalsBinding
 import com.d9tilov.moneymanager.goal.domain.entity.Goal
 import com.d9tilov.moneymanager.goal.ui.dialog.GoalRemoveDialog.Companion.ARG_UNDO_REMOVE_LAYOUT_DISMISS
 import com.d9tilov.moneymanager.goal.vm.GoalsViewModel
+import com.d9tilov.moneymanager.prepopulate.ui.ControlsClicked
+import com.d9tilov.moneymanager.prepopulate.ui.PrepopulateActivity
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class GoalsFragment :
     BaseFragment<GoalsNavigator>(R.layout.fragment_goals),
-    GoalsNavigator {
+    GoalsNavigator,
+    ControlsClicked {
 
     private var toolbar: MaterialToolbar? = null
     private var emptyViewStub: ViewStub? = null
@@ -59,6 +61,7 @@ class GoalsFragment :
         val action = GoalsFragmentDirections.toRemoveGoalDialog(goal)
         findNavController().navigate(action)
     }
+
     override fun getNavigator() = this
 
     override val viewModel by viewModels<GoalsViewModel>()
@@ -119,6 +122,7 @@ class GoalsFragment :
 
     override fun onStart() {
         super.onStart()
+        (activity as PrepopulateActivity).controlsClick = this
         hideKeyboard()
     }
 
@@ -183,5 +187,9 @@ class GoalsFragment :
         inflater.inflate(R.menu.prepopulate_menu, menu)
         menu.findItem(R.id.action_skip).isVisible = false
         menu.findItem(R.id.action_add).isVisible = true
+    }
+
+    override fun onNextClick() {
+        viewModel.savePrepopulateStatus()
     }
 }
