@@ -26,8 +26,7 @@ class SettingsViewModel @ViewModelInject constructor(
     fun getCurrentUser(): FirebaseUser? = auth.currentUser
 
     init {
-        userInfoInteractor.getCurrentUser()
-            .map { it.backupData }
+        userInfoInteractor.getBackupData()
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
             .subscribe { backupLastDate.value = it.lastBackupTimestamp }

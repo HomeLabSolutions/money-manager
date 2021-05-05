@@ -2,6 +2,7 @@ package com.d9tilov.moneymanager.user.data.entity
 
 import com.d9tilov.moneymanager.backup.BackupData
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
+import com.d9tilov.moneymanager.core.constants.DataConstants
 
 data class UserProfile(
     val uid: String,
@@ -9,7 +10,7 @@ data class UserProfile(
     val firstName: String?,
     val lastName: String?,
     val budgetDayCreation: Long = 0L,
-    val currencyCode: String = "USD",
+    val currencyCode: String = DataConstants.DEFAULT_CURRENCY_CODE,
     val showPrepopulate: Boolean = true,
     val backupData: BackupData = BackupData(0, AppDatabase.VERSION_NUMBER)
 )

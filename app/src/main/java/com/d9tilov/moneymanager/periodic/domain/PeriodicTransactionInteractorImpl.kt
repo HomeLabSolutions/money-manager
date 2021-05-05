@@ -17,13 +17,14 @@ class PeriodicTransactionInteractorImpl(
     PeriodicTransactionInteractor {
 
     override fun insert(periodicTransactionData: PeriodicTransaction) =
-        userInteractor.getCurrentUser().firstOrError().flatMapCompletable {
-            periodicTransactionRepo.insert(
-                periodicTransactionDomainMapper.toData(
-                    periodicTransactionData.copy(currencyCode = it.currencyCode)
+        userInteractor.getCurrency()
+            .flatMapCompletable {
+                periodicTransactionRepo.insert(
+                    periodicTransactionDomainMapper.toData(
+                        periodicTransactionData.copy(currencyCode = it)
+                    )
                 )
-            )
-        }
+            }
 
     override fun getAll(type: TransactionType): Flowable<List<PeriodicTransaction>> {
         return categoryInteractor.getGroupedCategoriesByType(type)

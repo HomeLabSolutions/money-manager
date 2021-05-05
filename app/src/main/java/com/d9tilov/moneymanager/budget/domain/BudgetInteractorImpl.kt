@@ -8,8 +8,8 @@ class BudgetInteractorImpl(
     private val userInteractor: UserInteractor
 ) : BudgetInteractor {
 
-    override fun create(budgetData: BudgetData) = userInteractor.getCurrentUser().firstOrError()
-        .flatMapCompletable { budgetRepo.insert(budgetData.copy(currencyCode = it.currencyCode)) }
+    override fun create(budgetData: BudgetData) = userInteractor.getCurrency()
+        .flatMapCompletable { budgetRepo.insert(budgetData.copy(currencyCode = it)) }
 
     override fun get() = budgetRepo.get()
     override fun getCount() = budgetRepo.getCount()
