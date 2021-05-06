@@ -17,6 +17,7 @@ import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionHeader
 import timber.log.Timber
 import java.math.BigDecimal
+import java.util.concurrent.TimeUnit
 
 class IncomeViewModel @ViewModelInject constructor(
     categoryInteractor: CategoryInteractor,
@@ -31,6 +32,7 @@ class IncomeViewModel @ViewModelInject constructor(
             .addTo(compositeDisposable)
 
         transactionInteractor.getTransactionsByType(TransactionType.INCOME)
+            .throttleFirst(THROTTLE_TIMEOUT, TimeUnit.MILLISECONDS)
             .map {
                 val newList = mutableListOf<BaseTransaction>()
                 var itemPosition = -1
