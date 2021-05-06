@@ -7,6 +7,7 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
+import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 
 class StickyHeaderItemDecorator<T : Any>(private val adapter: StickyAdapter<T, RecyclerView.ViewHolder, RecyclerView.ViewHolder>) :
     ItemDecoration() {
@@ -64,6 +65,9 @@ class StickyHeaderItemDecorator<T : Any>(private val adapter: StickyAdapter<T, R
         val overlappedByHeaderPosition =
             viewOverlappedByHeader?.let { parent.getChildAdapterPosition(viewOverlappedByHeader) }
                 ?: 0
+        if (overlappedByHeaderPosition == NO_POSITION) {
+            return
+        }
         val overlappedHeaderPosition: Int
         val preOverlappedPosition: Int
         if (overlappedByHeaderPosition > 0) {

@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
+import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.toast
 
 abstract class BaseFragment<N : BaseNavigator>(@LayoutRes layoutId: Int) :
@@ -37,6 +38,11 @@ abstract class BaseFragment<N : BaseNavigator>(@LayoutRes layoutId: Int) :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObservers()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        hideKeyboard()
     }
 
     fun isNetworkConnected() = baseActivity?.isNetworkEnabled()

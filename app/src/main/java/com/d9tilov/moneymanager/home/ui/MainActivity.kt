@@ -169,6 +169,6 @@ class MainActivity :
     companion object {
         private const val ALPHA_BAR_MIN = 0f
         private const val ALPHA_BAR_MAX = 1f
-        private const val ANIMATION_DURATION_BAR = 800L
+        private const val ANIMATION_DURATION_BAR = 500L
     }
 }

@@ -2,7 +2,6 @@ package com.d9tilov.moneymanager.incomeexpense.ui.vm
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.paging.PagedList
 import androidx.paging.PagingData
 import com.d9tilov.moneymanager.base.ui.navigator.BaseIncomeExpenseNavigator
 import com.d9tilov.moneymanager.category.data.entity.Category
@@ -25,4 +24,8 @@ abstract class BaseIncomeExpenseViewModel<T : BaseIncomeExpenseNavigator> : Base
     fun getCategories(): LiveData<List<Category>> = categories
     fun getTransactions(): LiveData<PagingData<BaseTransaction>> = transactions
     fun getTransactionEvent(): LiveData<Any> = addTransactionEvent
+
+    companion object {
+        const val THROTTLE_TIMEOUT = 300L
+    }
 }

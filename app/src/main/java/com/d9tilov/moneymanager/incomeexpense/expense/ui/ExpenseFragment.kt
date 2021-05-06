@@ -37,7 +37,9 @@ import com.d9tilov.moneymanager.transaction.TransactionType
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.math.BigDecimal
 import javax.inject.Inject
@@ -87,19 +89,22 @@ class ExpenseFragment :
             getTransactions().observe(
                 viewLifecycleOwner,
                 {
-                    lifecycleScope.launchWhenCreated {
-                        transactionAdapter.submitData(it)
-                        transactionAdapter.loadStateFlow.collectLatest { loadStates ->
-                            isTransactionDataEmpty =
-                                loadStates.source.refresh is LoadState.NotLoading &&
-                                    loadStates.append.endOfPaginationReached &&
-                                    transactionAdapter.itemCount == 0
-                            if (isTransactionDataEmpty && !(activity as MainActivity).forceShowKeyboard) {
-                                showViewStub(TransactionType.EXPENSE)
-                            } else {
-                                hideViewStub()
+                    transactionAdapter.submitData(lifecycle, it)
+                    lifecycleScope.launch {
+                        transactionAdapter
+                            .loadStateFlow
+                            .distinctUntilChanged()
+                            .collect { loadStates ->
+                                isTransactionDataEmpty =
+                                    loadStates.source.refresh is LoadState.NotLoading &&
+                                        loadStates.append.endOfPaginationReached &&
+                                        transactionAdapter.itemCount == 0
+                                if (isTransactionDataEmpty && !(activity as MainActivity).forceShowKeyboard) {
+                                    showViewStub(TransactionType.EXPENSE)
+                                } else {
+                                    hideViewStub()
+                                }
                             }
-                        }
                     }
                 }
             )
@@ -153,14 +158,11 @@ class ExpenseFragment :
             expenseTransactionRvList.layoutManager =
                 LinearLayoutManager(requireContext())
             expenseTransactionRvList.adapter = transactionAdapter
-            val itemDecoration =
-                StickyHeaderItemDecorator(
-                    transactionAdapter
-                )
+            val itemDecoration = StickyHeaderItemDecorator(transactionAdapter)
             itemDecoration.attachToRecyclerView(expenseTransactionRvList)
             ItemTouchHelper(object : SwipeToDeleteCallback(requireContext()) {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    transactionAdapter.deleteItem(viewHolder.adapterPosition)
+                    transactionAdapter.deleteItem(viewHolder.bindingAdapterPosition)
                 }
             }).attachToRecyclerView(expenseTransactionRvList)
         }

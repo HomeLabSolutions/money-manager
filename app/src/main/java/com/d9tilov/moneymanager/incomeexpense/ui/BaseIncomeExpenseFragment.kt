@@ -7,7 +7,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
@@ -22,6 +21,7 @@ import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
+import com.d9tilov.moneymanager.core.util.toast
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
@@ -31,8 +31,8 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
     BaseFragment<N>(layoutId), OnDialogDismissListener, BaseIncomeExpenseNavigator {
 
     protected open lateinit var mainSum: CurrencyView
-    protected val categoryAdapter = CategoryAdapter()
-    protected val transactionAdapter = TransactionAdapter()
+    protected val categoryAdapter by lazy { CategoryAdapter() }
+    protected val transactionAdapter by lazy { TransactionAdapter() }
     protected var isTransactionDataEmpty = false
     protected var isKeyboardOpen = true
 
@@ -131,7 +131,7 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
     }
 
     override fun showEmptySumError() {
-        showSnackBar(getString(R.string.income_expense_empty_sum_error), true)
+        requireContext().toast(R.string.income_expense_empty_sum_error)
     }
 
     override fun onStop() {
@@ -151,8 +151,8 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
     companion object {
         const val SPAN_COUNT = 2
         const val TABLET_SPAN_COUNT = 1
-        const val ANIMATION_DURATION_CAT = 400L
-        const val ANIMATION_DURATION_TRANSACTION = 800L
+        const val ANIMATION_DURATION_CAT = 300L
+        const val ANIMATION_DURATION_TRANSACTION = 300L
         const val ALPHA_CAT_MIN = 0f
         const val ALPHA_MAX = 1f
     }

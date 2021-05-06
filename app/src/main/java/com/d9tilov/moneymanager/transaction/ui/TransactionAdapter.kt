@@ -42,7 +42,7 @@ class TransactionAdapter :
                 ItemTransactionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             viewHolder = TransactionViewHolder(viewBinding)
             viewBinding.root.setOnClickListener {
-                val adapterPosition = viewHolder.getAdapterPosition()
+                val adapterPosition = viewHolder.bindingAdapterPosition
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     val item = getItem(adapterPosition) as Transaction
                     itemClickListener?.onItemClick(item, adapterPosition)

@@ -38,6 +38,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.math.BigDecimal
 import javax.inject.Inject
@@ -87,8 +88,8 @@ class IncomeFragment :
             getTransactions().observe(
                 viewLifecycleOwner,
                 {
-                    lifecycleScope.launchWhenCreated {
-                        transactionAdapter.submitData(it)
+                    transactionAdapter.submitData(lifecycle, it)
+                    lifecycleScope.launch {
                         transactionAdapter.loadStateFlow.collectLatest { loadStates ->
                             isTransactionDataEmpty =
                                 loadStates.source.refresh is LoadState.NotLoading &&
@@ -161,7 +162,7 @@ class IncomeFragment :
             itemDecoration.attachToRecyclerView(incomeTransactionRvList)
             ItemTouchHelper(object : SwipeToDeleteCallback(requireContext()) {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    transactionAdapter.deleteItem(viewHolder.adapterPosition)
+                    transactionAdapter.deleteItem(viewHolder.bindingAdapterPosition)
                 }
             }).attachToRecyclerView(incomeTransactionRvList)
         }

@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.d9tilov.moneymanager.R
@@ -19,6 +18,7 @@ import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.DateValidatorPointBackward
 import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
+import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentEditTransactionBinding
 import com.d9tilov.moneymanager.transaction.ui.vm.EditTransactionViewModel
 import com.google.android.material.appbar.MaterialToolbar
@@ -130,6 +130,11 @@ class EditTransactionFragment : EditTransactionNavigator,
         }
         toolbar = viewBinding.editTransactionToolbarContainer.toolbar
         initToolbar(toolbar)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        showKeyboard(viewBinding.editTransactionMainSum.moneyEditText)
     }
 
     private fun updateIcon() {
