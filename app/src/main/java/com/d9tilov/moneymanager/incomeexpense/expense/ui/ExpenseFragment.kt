@@ -116,7 +116,7 @@ class ExpenseFragment :
     override fun onStart() {
         super.onStart()
         if ((activity as MainActivity).forceShowKeyboard) {
-            showKeyboard(viewBinding.expenseMainSum)
+            showKeyboard(viewBinding.expenseMainSum.moneyEditText)
         } else {
             viewBinding.run {
                 expenseTransactionRvList.show()
@@ -143,8 +143,7 @@ class ExpenseFragment :
                     layoutManager.orientation
                 )
             )
-            val snapHelper: SnapHelper =
-                ItemSnapHelper()
+            val snapHelper: SnapHelper = ItemSnapHelper()
             snapHelper.attachToRecyclerView(expenseCategoryRvList)
         }
     }
@@ -231,7 +230,18 @@ class ExpenseFragment :
                 duration = ANIMATION_DURATION_CAT
                 interpolator = AccelerateInterpolator()
             }
+        val alphaAnimationTransactions =
+            ObjectAnimator.ofFloat(
+                viewBinding.expenseTransactionRvList,
+                View.ALPHA,
+                if (open) ALPHA_MAX else ALPHA_CAT_MIN,
+                if (open) ALPHA_CAT_MIN else ALPHA_MAX
+            ).apply {
+                duration = ANIMATION_DURATION_TRANSACTION
+                interpolator = AccelerateInterpolator()
+            }
         alphaAnimationCategories.start()
+        alphaAnimationTransactions.start()
     }
 
     override fun saveTransaction(category: Category) {

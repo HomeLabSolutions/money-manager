@@ -18,6 +18,7 @@ import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
+import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.periodic.domain.entity.PeriodicTransaction
 import com.d9tilov.moneymanager.periodic.vm.BasePeriodicIncomeExpenseViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -125,7 +126,7 @@ abstract class BasePeriodicIncomeExpenseFragment<N : BasePeriodicIncomeExpenseNa
 
     protected fun showViewStub(transactionType: TransactionType) {
         if (emptyViewStub?.parent == null) {
-            emptyViewStub?.visibility = View.VISIBLE
+            emptyViewStub?.show()
         } else {
             val inflatedStub = emptyViewStub?.inflate()
             val stubIcon =
@@ -146,11 +147,11 @@ abstract class BasePeriodicIncomeExpenseFragment<N : BasePeriodicIncomeExpenseNa
                 )
             val stubSubTitle =
                 inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_subtitle)
-            stubSubTitle?.visibility = View.VISIBLE
+            stubSubTitle?.show()
             stubSubTitle?.text = getString(R.string.transaction_empty_placeholder_subtitle)
             val addExpense =
                 inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_add)
-            addExpense?.visibility = View.VISIBLE
+            addExpense?.show()
             addExpense?.setOnClickListener {
                 openCreatedScreen(transactionType)
             }

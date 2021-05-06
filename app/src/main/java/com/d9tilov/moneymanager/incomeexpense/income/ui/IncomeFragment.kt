@@ -24,8 +24,10 @@ import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
+import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.isTablet
+import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentIncomeBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
@@ -35,10 +37,7 @@ import com.d9tilov.moneymanager.transaction.TransactionType
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.math.BigDecimal
 import javax.inject.Inject
@@ -120,8 +119,8 @@ class IncomeFragment :
             showKeyboard(viewBinding.incomeMainSum)
         } else {
             viewBinding.run {
-                incomeTransactionRvList.visibility = View.VISIBLE
-                incomeCategoryRvList.visibility = View.GONE
+                incomeTransactionRvList.show()
+                incomeCategoryRvList.gone()
             }
         }
     }
@@ -195,7 +194,7 @@ class IncomeFragment :
         isKeyboardOpen = true
         viewBinding.run {
             onKeyboardVisibilityAnimation(true)
-            incomeTransactionRvList.visibility = View.GONE
+            incomeTransactionRvList.gone()
             hideViewStub()
             incomeCategoryRvList.scrollToPosition(0)
         }
@@ -215,10 +214,10 @@ class IncomeFragment :
 
     private fun onKeyboardVisibilityAnimation(open: Boolean) {
         if (open) {
-            viewBinding.incomeCategoryRvList.visibility = View.VISIBLE
+            viewBinding.incomeCategoryRvList.show()
         } else {
-            viewBinding.incomeTransactionRvList.visibility = View.VISIBLE
-            viewBinding.incomeCategoryRvList.visibility = View.GONE
+            viewBinding.incomeTransactionRvList.show()
+            viewBinding.incomeCategoryRvList.gone()
         }
         val alphaAnimationCategories =
             ObjectAnimator.ofFloat(
@@ -230,6 +229,17 @@ class IncomeFragment :
                 duration = ANIMATION_DURATION_CAT
                 interpolator = AccelerateInterpolator()
             }
+        val alphaAnimationTransactions =
+            ObjectAnimator.ofFloat(
+                viewBinding.incomeCategoryRvList,
+                View.ALPHA,
+                if (open) ALPHA_MAX else ALPHA_CAT_MIN,
+                if (open) ALPHA_CAT_MIN else ALPHA_MAX
+            ).apply {
+                duration = ANIMATION_DURATION_TRANSACTION
+                interpolator = AccelerateInterpolator()
+            }
+        alphaAnimationTransactions.start()
         alphaAnimationCategories.start()
     }
 
