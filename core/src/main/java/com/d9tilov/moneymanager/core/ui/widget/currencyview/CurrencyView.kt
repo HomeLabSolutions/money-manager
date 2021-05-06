@@ -10,7 +10,6 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.MotionEvent
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.widget.TextViewCompat
@@ -20,6 +19,7 @@ import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENC
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.STORE_NAME
 import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.core.util.getColorFromAttr
+import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.removeScale
 import com.d9tilov.moneymanager.core.util.string
 import com.d9tilov.moneymanager.core.util.toBigDecimal
@@ -214,7 +214,7 @@ class CurrencyView @JvmOverloads constructor(
                 setTextColor(signTextColor)
             }
             if (!showSign) {
-                visibility = View.GONE
+                gone()
             }
             text = signText
             gravity = currencyGravity

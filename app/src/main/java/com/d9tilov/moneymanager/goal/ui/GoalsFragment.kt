@@ -151,7 +151,7 @@ class GoalsFragment :
 
     private fun showViewStub() {
         if (emptyViewStub?.parent == null) {
-            emptyViewStub?.visibility = View.VISIBLE
+            emptyViewStub?.show()
         } else {
             val inflatedStub = emptyViewStub?.inflate()
             val stubIcon =
@@ -167,11 +167,11 @@ class GoalsFragment :
             stubTitle?.text = getString(R.string.goals_empty_placeholder_title)
             val stubSubTitle =
                 inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_subtitle)
-            stubSubTitle?.visibility = View.VISIBLE
+            stubSubTitle?.show()
             stubSubTitle?.text = getString(R.string.goals_empty_placeholder_subtitle)
             val addButton =
                 inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_add)
-            addButton?.visibility = View.VISIBLE
+            addButton?.show()
             addButton?.setOnClickListener {
                 openCreationGoalScreen()
             }
@@ -179,7 +179,7 @@ class GoalsFragment :
     }
 
     private fun hideViewStub() {
-        emptyViewStub?.visibility = View.GONE
+        emptyViewStub?.gone()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

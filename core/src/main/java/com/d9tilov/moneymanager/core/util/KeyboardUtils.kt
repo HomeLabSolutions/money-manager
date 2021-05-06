@@ -6,8 +6,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 
-private const val SHOW_KEYBOARD_DELAY = 400L
-
 fun Activity.showKeyboard(view: View?) {
     view?.let { showSoftKeyboard(it) }
 }
@@ -17,11 +15,10 @@ fun Fragment.showKeyboard(view: View?) {
 }
 
 fun Context.showSoftKeyboard(view: View) {
-    view.requestFocus()
-    view.postDelayed({
+    if (view.requestFocus()) {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
-    }, SHOW_KEYBOARD_DELAY)
+    }
 }
 
 fun Activity.hideKeyboard() {

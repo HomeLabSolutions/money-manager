@@ -8,8 +8,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -21,7 +19,9 @@ import com.d9tilov.moneymanager.base.ui.navigator.CurrencyNavigator
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.CurrencyUtils
+import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
+import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.vm.CurrencyViewModel
 import com.d9tilov.moneymanager.databinding.FragmentCurrencyBinding
@@ -63,11 +63,11 @@ class CurrencyFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        viewBinding.currencyProgress.visibility = VISIBLE
+        viewBinding.currencyProgress.show()
         viewModel.getCurrencies().observe(
             this.viewLifecycleOwner,
             { list ->
-                viewBinding.currencyProgress.visibility = GONE
+                viewBinding.currencyProgress.gone()
                 val sortedList = list.sortedBy { CurrencyUtils.getCurrencyFullName(it.code) }
                 currencyAdapter.updateItems(sortedList)
                 val checkedIndex = sortedList.indexOfFirst { it.isBase }
@@ -136,7 +136,7 @@ class CurrencyFragment :
     }
 
     override fun showError() {
-        viewBinding.currencyProgress.visibility = GONE
+        viewBinding.currencyProgress.gone()
         snackBar?.setActionTextColor(
             ContextCompat.getColor(
                 requireContext(),

@@ -46,6 +46,7 @@ class MoneyEditText @JvmOverloads constructor(
         maxLines = 1
         initFormatter()
         includeFontPadding = false
+        requestFocus()
     }
 
     private fun initInputFilter() {

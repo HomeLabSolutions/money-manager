@@ -1,9 +1,11 @@
 package com.d9tilov.moneymanager.home.ui
 
+import android.animation.ObjectAnimator
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver
+import android.view.animation.AccelerateInterpolator
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
@@ -99,7 +101,18 @@ class MainActivity :
         super.onCloseKeyboard()
         forceShowKeyboard = false
         if (findNavController(R.id.nav_host_container).currentDestination?.id == R.id.income_expense_dest) {
+            val bottomBarAnimationAppear =
+                ObjectAnimator.ofFloat(
+                    viewBinding.bottomNav,
+                    View.ALPHA,
+                    ALPHA_BAR_MIN,
+                    ALPHA_BAR_MAX
+                ).apply {
+                    duration = ANIMATION_DURATION_BAR
+                    interpolator = AccelerateInterpolator()
+                }
             viewBinding.bottomNav.show()
+            bottomBarAnimationAppear.start()
         }
     }
 
@@ -151,5 +164,11 @@ class MainActivity :
                 (currentFragment as? OnKeyboardVisibleChange)?.onCloseKeyboard()
             }
         }
+    }
+
+    companion object {
+        private const val ALPHA_BAR_MIN = 0f
+        private const val ALPHA_BAR_MAX = 1f
+        private const val ANIMATION_DURATION_BAR = 800L
     }
 }
