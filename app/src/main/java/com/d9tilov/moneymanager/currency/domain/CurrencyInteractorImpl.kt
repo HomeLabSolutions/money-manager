@@ -3,9 +3,7 @@ package com.d9tilov.moneymanager.currency.domain
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.domain.mapper.CurrencyDomainMapper
 import com.d9tilov.moneymanager.user.domain.UserInteractor
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.map
 
 class CurrencyInteractorImpl(
     private val currencyRepo: CurrencyRepo,
@@ -13,18 +11,16 @@ class CurrencyInteractorImpl(
     private val domainMapper: CurrencyDomainMapper
 ) : CurrencyInteractor {
 
-    override fun getCurrencies(): Single<List<DomainCurrency>> = userInteractor.getCurrency()
-        .flatMap { currency ->
-            currencyRepo.getCurrencies(currency)
-                .flatMap { list ->
-                    Observable.fromIterable(list)
-                        .map { domainMapper.toDomain(it, currency == it.code) }
-                        .toList()
-                }
-        }
+    override suspend fun getCurrencies(): List<DomainCurrency> {
+        val baseCurrency = userInteractor.getCurrency()
+        return currencyRepo.getCurrencies(baseCurrency)
+            .map { domainMapper.toDomain(it, baseCurrency == it.code) }
+    }
 
-    override fun updateBaseCurrency(currency: DomainCurrency): Completable =
-        userInteractor.getCurrentUser().firstOrError()
-            .flatMapCompletable { userInteractor.updateUser(it.copy(currencyCode = currency.code)) }
-            .andThen(currencyRepo.updateBaseCurrency(domainMapper.toDataModel(currency)))
+    override suspend fun updateBaseCurrency(currency: DomainCurrency) {
+        userInteractor.getCurrentUser().map {
+            userInteractor.updateUser(it.copy(currencyCode = currency.code))
+            currencyRepo.updateBaseCurrency(domainMapper.toDataModel(currency))
+        }
+    }
 }

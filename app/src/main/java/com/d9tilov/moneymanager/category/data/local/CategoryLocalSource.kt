@@ -2,6 +2,7 @@ package com.d9tilov.moneymanager.category.data.local
 
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.PrepopulateDataManager
+import com.d9tilov.moneymanager.base.data.local.exceptions.WrongIdException
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.category.data.entity.Category
@@ -11,12 +12,9 @@ import com.d9tilov.moneymanager.category.exception.CategoryExistException
 import com.d9tilov.moneymanager.category.exception.NoCategoryParentException
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
 import com.d9tilov.moneymanager.transaction.TransactionType
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Maybe
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.functions.Function3
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 
 class CategoryLocalSource(
     private val preferencesStore: PreferencesStore,
@@ -27,103 +25,86 @@ class CategoryLocalSource(
 
     private val categoryDao = database.categoryDao()
 
-    override fun createExpenseDefaultCategories(): Completable {
-        val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            Completable.error(WrongUidException())
-        } else {
-            val defaultCategories = prepopulateDataManager.createDefaultExpenseCategories()
-            Observable.fromIterable(defaultCategories)
-                .flatMapCompletable {
-                    categoryDao.create(
-                        categoryMapper.toDataModelFromPrePopulate(
-                            it, currentUserId
-                        )
-                    ).ignoreElement()
-                }
-        }
-    }
-
-    override fun createIncomeDefaultCategories(): Completable {
-        val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            Completable.error(WrongUidException())
-        } else {
-            val defaultCategories = prepopulateDataManager.createDefaultIncomeCategories()
-            Observable.fromIterable(defaultCategories)
-                .flatMapCompletable {
-                    categoryDao.create(
-                        categoryMapper.toDataModelFromPrePopulate(
-                            it, currentUserId
-                        )
-                    ).ignoreElement()
-                }
-        }
-    }
-
-    override fun create(category: Category): Single<Long> {
-        val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            Single.error(WrongUidException())
-        } else {
-            categoryDao.getCategoriesCountByName(currentUserId, category.name)
-                .flatMap { count ->
-                    if (count == 0) {
-                        categoryDao.create(categoryMapper.toDbModel(category.copy(clientId = currentUserId)))
-                    } else {
-                        Single.error(CategoryExistException("Category with name: ${category.name} has already existed"))
-                    }
-                }
-        }
-    }
-
-    override fun update(category: Category): Completable {
-        val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            Completable.error(WrongUidException())
-        } else {
-            categoryDao.getById(currentUserId, category.id)
-                .flatMapCompletable {
-                    if (it.name == category.name) {
-                        categoryDao.update(categoryMapper.toDbModel(category))
-                    } else {
-                        categoryDao.getCategoriesCountByName(currentUserId, category.name)
-                            .flatMapCompletable { count ->
-                                if (count == 0) {
-                                    categoryDao.update(categoryMapper.toDbModel(category))
-                                } else {
-                                    Completable.error(CategoryExistException("Category with name: ${category.name} has already existed"))
-                                }
-                            }
-                    }
-                }
-        }
-    }
-
-    override fun getById(id: Long): Maybe<Category> {
+    override suspend fun createExpenseDefaultCategories() {
         val currentUserId = preferencesStore.uid
         if (currentUserId == null) {
-            return Maybe.error(WrongUidException())
+            throw WrongUidException()
         } else {
-            val currentFlowable = categoryDao.getById(currentUserId, id)
-            val parentFlowable = currentFlowable
-                .flatMap { model ->
-                    categoryDao.getById(currentUserId, model.parentId)
-                        .defaultIfEmpty(createDummyModel())
-                }
-            val childrenFlowable = getByParentId(id)
-                .defaultIfEmpty(emptyList()).firstElement()
-            return Maybe.zip(
-                currentFlowable, parentFlowable, childrenFlowable,
-                Function3 { current, parent, children ->
-                    val category = categoryMapper.toDataModel(
-                        current,
-                        if (parent.id == NO_ID) null else parent
+            val defaultCategories = prepopulateDataManager.createDefaultExpenseCategories()
+            defaultCategories.forEach {
+                categoryDao.create(
+                    categoryMapper.toDataModelFromPrePopulate(
+                        it, currentUserId
                     )
-                    category.copy(children = children)
-                    category
+                )
+            }
+        }
+    }
+
+    override suspend fun createIncomeDefaultCategories() {
+        val currentUserId = preferencesStore.uid
+        if (currentUserId == null) {
+            throw WrongUidException()
+        } else {
+            val defaultCategories = prepopulateDataManager.createDefaultIncomeCategories()
+            defaultCategories.forEach {
+                categoryDao.create(
+                    categoryMapper.toDataModelFromPrePopulate(
+                        it, currentUserId
+                    )
+                )
+            }
+        }
+    }
+
+    override suspend fun create(category: Category): Long {
+        val currentUserId = preferencesStore.uid
+        return if (currentUserId == null) {
+            throw WrongUidException()
+        } else {
+            val count = categoryDao.getCategoriesCountByName(currentUserId, category.name)
+            if (count == 0) {
+                categoryDao.create(categoryMapper.toDbModel(category.copy(clientId = currentUserId)))
+            } else {
+                throw CategoryExistException("Category with name: ${category.name} has already existed")
+            }
+        }
+    }
+
+    override suspend fun update(category: Category) {
+        val currentUserId = preferencesStore.uid
+        if (currentUserId == null) {
+            throw WrongUidException()
+        } else {
+            val categoryById =
+                categoryDao.getById(currentUserId, category.id) ?: throw WrongIdException()
+            if (categoryById.name == category.name) {
+                categoryDao.update(categoryMapper.toDbModel(category))
+            } else {
+                val count = categoryDao.getCategoriesCountByName(currentUserId, category.name)
+                if (count == 0) {
+                    categoryDao.update(categoryMapper.toDbModel(category))
+                } else {
+                    throw CategoryExistException("Category with name: ${category.name} has already existed")
                 }
+            }
+        }
+    }
+
+    override suspend fun getById(id: Long): Category {
+        val currentUserId = preferencesStore.uid
+        if (currentUserId == null) {
+            throw WrongUidException()
+        } else {
+            val category = categoryDao.getById(currentUserId, id) ?: throw WrongIdException()
+            val parentCategory =
+                categoryDao.getById(currentUserId, category.parentId) ?: createDummyModel()
+            val childrenCategories = getByParentId(id).toList().flatten()
+            val newCategory: Category = categoryMapper.toDataModel(
+                category,
+                if (parentCategory.id == NO_ID) null else parentCategory
             )
+            return newCategory.copy(children = childrenCategories)
         }
     }
 
@@ -138,21 +119,20 @@ class CategoryLocalSource(
         0
     )
 
-    override fun getByParentId(id: Long): Flowable<List<Category>> {
+    override fun getByParentId(id: Long): Flow<List<Category>> {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
-            Flowable.error(WrongUidException())
+            throw WrongUidException()
         } else {
-            categoryDao.getByParentId(currentUserId, id).map { list: List<CategoryDbModel> ->
-                list.map { categoryMapper.toDataParentModel(it) }
-            }
+            categoryDao.getByParentId(currentUserId, id)
+                .map { it.map { item -> categoryMapper.toDataParentModel(item) } }
         }
     }
 
-    override fun getCategoriesByType(type: TransactionType): Flowable<List<Category>> {
+    override fun getCategoriesByType(type: TransactionType): Flow<List<Category>> {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
-            Flowable.error(WrongUidException())
+            throw WrongUidException()
         } else {
             categoryDao.getAllByType(currentUserId, type)
                 .map { groupChildrenWithParent(it) }
@@ -183,77 +163,62 @@ class CategoryLocalSource(
         return categories
     }
 
-    override fun delete(category: Category): Completable {
+    override suspend fun delete(category: Category) {
         val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            Completable.error(WrongUidException())
+        if (currentUserId == null) {
+            throw WrongUidException()
         } else {
-            categoryDao.delete(currentUserId, category.id).andThen(
-                Observable.fromIterable(category.children)
-                    .flatMapCompletable { child -> categoryDao.delete(currentUserId, child.id) }
-            )
+            categoryDao.delete(currentUserId, category.id)
+            category.children.forEach { categoryDao.delete(currentUserId, it.id) }
         }
     }
 
-    override fun deleteSubcategory(subCategory: Category): Single<Boolean> {
+    override suspend fun deleteSubcategory(subCategory: Category): Boolean {
         val currentUserId = preferencesStore.uid
         return when {
             currentUserId == null -> {
-                Single.error(WrongUidException())
+                throw WrongUidException()
             }
-            subCategory.parent == null -> {
-                Single.error(NoCategoryParentException("Subcategory $subCategory has not parent"))
-            }
+            subCategory.parent == null -> throw NoCategoryParentException("Subcategory $subCategory has not parent")
             else -> {
-                categoryDao.delete(currentUserId, subCategory.id).toSingleDefault(false)
-                    .flatMapMaybe {
-                        categoryDao.getByParentId(
-                            currentUserId,
-                            subCategory.parent.id
-                        ).firstElement()
-                    }
-                    .flatMapSingle { list ->
-                        if (list.isEmpty()) {
-                            categoryDao.delete(
-                                currentUserId,
-                                subCategory.parent.id
-                            ).toSingleDefault(true)
-                        } else {
-                            Single.fromCallable { false }
-                        }
-                    }
+                categoryDao.delete(currentUserId, subCategory.id)
+                val list = categoryDao.getByParentId(
+                    currentUserId,
+                    subCategory.parent.id
+                ).toList().flatten()
+                if (list.isEmpty()) {
+                    categoryDao.delete(
+                        currentUserId,
+                        subCategory.parent.id
+                    )
+                }
+                list.isEmpty()
             }
         }
     }
 
-    override fun deleteFromGroup(subCategory: Category): Single<Boolean> {
+    override suspend fun deleteFromGroup(subCategory: Category): Boolean {
         val currentUserId = preferencesStore.uid
         return when {
             currentUserId == null -> {
-                Single.error(WrongUidException())
+                throw WrongUidException()
             }
             subCategory.parent == null -> {
-                Single.error(NoCategoryParentException("Subcategory $subCategory has not parent"))
+                throw NoCategoryParentException("Subcategory $subCategory has not parent")
             }
             else -> {
                 categoryDao.update(categoryMapper.toDbModel(subCategory.copy(parent = null)))
-                    .toSingleDefault(false)
-                    .flatMapMaybe {
-                        categoryDao.getByParentId(
-                            currentUserId,
-                            subCategory.parent.id
-                        ).firstElement()
-                    }
-                    .flatMapSingle { list ->
-                        if (list.isEmpty()) {
-                            categoryDao.delete(
-                                currentUserId,
-                                subCategory.parent.id
-                            ).toSingleDefault(true)
-                        } else {
-                            Single.fromCallable { false }
-                        }
-                    }
+                val list = categoryDao.getByParentId(
+                    currentUserId,
+                    subCategory.parent.id
+                ).toList().flatten()
+                if (list.isEmpty()) {
+                    categoryDao.delete(
+                        currentUserId,
+                        subCategory.parent.id
+                    )
+                }
+                list.isEmpty()
             }
         }
     }

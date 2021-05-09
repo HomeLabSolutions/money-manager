@@ -5,41 +5,41 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.data.entity.Category.Companion.ALL_ITEMS_ID
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
 import com.d9tilov.moneymanager.transaction.TransactionType
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class CategoryInteractorImpl(private val categoryRepo: CategoryRepo) :
     CategoryInteractor {
-    override fun create(category: Category) = categoryRepo.create(category)
 
-    override fun createDefaultCategories(): Completable {
-        return categoryRepo.createExpenseDefaultCategories()
-            .andThen(categoryRepo.createIncomeDefaultCategories())
+    override suspend fun create(category: Category) = categoryRepo.create(category)
+
+    override suspend fun createDefaultCategories() {
+        categoryRepo.createExpenseDefaultCategories()
+        categoryRepo.createIncomeDefaultCategories()
     }
 
-    override fun update(category: Category) = categoryRepo.update(category)
+    override suspend fun update(category: Category) = categoryRepo.update(category)
 
-    override fun getCategoryById(id: Long) = categoryRepo.getCategoryById(id)
+    override suspend fun getCategoryById(id: Long) = categoryRepo.getCategoryById(id)
 
-    override fun getGroupedCategoriesByType(type: TransactionType): Flowable<List<Category>> {
-        return categoryRepo.getCategoriesByType(type)
-            .map { getAllWithChildrenInSingleList(it) }
+    override fun getGroupedCategoriesByType(type: TransactionType): Flow<List<Category>> {
+        return categoryRepo.getCategoriesByType(type).map { getAllWithChildrenInSingleList(it) }
     }
 
-    override fun getAllCategoriesByType(type: TransactionType): Flowable<List<Category>> =
+    override fun getAllCategoriesByType(type: TransactionType): Flow<List<Category>> =
         categoryRepo.getCategoriesByType(type)
 
-    override fun getChildrenByParent(parentCategory: Category): Flowable<List<Category>> =
+    override fun getChildrenByParent(parentCategory: Category): Flow<List<Category>> =
         categoryRepo.getChildrenByParent(parentCategory)
 
-    override fun deleteCategory(category: Category): Completable =
+    override suspend fun deleteCategory(category: Category) {
         categoryRepo.deleteCategory(category)
+    }
 
-    override fun deleteSubCategory(subCategory: Category): Single<Boolean> =
+    override suspend fun deleteSubCategory(subCategory: Category): Boolean =
         categoryRepo.deleteSubcategory(subCategory)
 
-    override fun deleteFromGroup(subCategory: Category): Single<Boolean> =
+    override suspend fun deleteFromGroup(subCategory: Category): Boolean =
         categoryRepo.deleteFromGroup(subCategory)
 
     private fun getAllWithChildrenInSingleList(categories: List<Category>): List<Category> {

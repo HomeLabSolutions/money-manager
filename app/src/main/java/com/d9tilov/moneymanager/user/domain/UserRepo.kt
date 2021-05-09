@@ -2,17 +2,14 @@ package com.d9tilov.moneymanager.user.domain
 
 import com.d9tilov.moneymanager.backup.BackupData
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
 
 interface UserRepo {
-    fun getUser(): Flowable<UserProfile>
-    fun getCurrency(): Single<String>
-    fun getBackupData(): Flowable<BackupData>
-    fun showPrepopulate(): Single<Boolean>
-    fun createUser(entity: UserProfile): Completable
-    fun updateUser(entity: UserProfile): Completable
-    fun backup(): Completable
-    fun logout(): Completable
+    fun getUser(): Flow<UserProfile>
+    suspend fun getCurrency(): String
+    fun getBackupData(): Flow<BackupData>
+    suspend fun showPrepopulate(): Boolean
+    suspend fun createUser(entity: UserProfile): UserProfile
+    suspend fun updateUser(entity: UserProfile)
+    suspend fun backup()
 }

@@ -35,6 +35,7 @@ class SubCategoryFragment :
     override val viewModel by viewModels<SubCategoryViewModel>()
 
     private lateinit var modifiedParentCategory: Category
+
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
@@ -100,10 +101,10 @@ class SubCategoryFragment :
         }
     }
 
-    override fun backToFixedTransactionCreationScreen(category: Category) {
+    override fun backToRegularTransactionCreationScreen(category: Category) {
         findNavController().getBackStackEntry(
             if (destination == CategoryDestination.PREPOPULATE_SCREEN)
-                R.id.periodic_created_transaction_dest else
+                R.id.regular_created_transaction_dest else
                 R.id.edit_transaction_dest
         ).savedStateHandle.set(
             ARG_CATEGORY,

@@ -38,6 +38,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -73,7 +74,7 @@ class ExpenseFragment :
             mainSum = expenseMainSum
         }
         viewModel.run {
-            getCategories().observe(
+            categories.observe(
                 viewLifecycleOwner,
                 { list ->
                     val sortedCategories = list.sortedWith(
@@ -86,28 +87,23 @@ class ExpenseFragment :
                     categoryAdapter.updateItems(sortedCategories)
                 }
             )
-            getTransactions().observe(
-                viewLifecycleOwner,
-                {
-                    transactionAdapter.submitData(lifecycle, it)
-                    lifecycleScope.launch {
-                        transactionAdapter
-                            .loadStateFlow
-                            .distinctUntilChanged()
-                            .collect { loadStates ->
-                                isTransactionDataEmpty =
-                                    loadStates.source.refresh is LoadState.NotLoading &&
-                                        loadStates.append.endOfPaginationReached &&
-                                        transactionAdapter.itemCount == 0
-                                if (isTransactionDataEmpty && !(activity as MainActivity).forceShowKeyboard) {
-                                    showViewStub(TransactionType.EXPENSE)
-                                } else {
-                                    hideViewStub()
-                                }
-                            }
-                    }
+            lifecycleScope.launch {
+                transactions.distinctUntilChanged().collectLatest {
+                    transactionAdapter.submitData(it)
                 }
-            )
+                transactionAdapter
+                    .loadStateFlow
+                    .distinctUntilChanged()
+                    .collect { loadStates ->
+                        isTransactionDataEmpty =
+                            loadStates.source.refresh is LoadState.NotLoading && loadStates.append.endOfPaginationReached && transactionAdapter.itemCount == 0
+                        if (isTransactionDataEmpty && !(activity as MainActivity).forceShowKeyboard) {
+                            showViewStub(TransactionType.EXPENSE)
+                        } else {
+                            hideViewStub()
+                        }
+                    }
+            }
             getTransactionEvent().observe(
                 viewLifecycleOwner,
                 {

@@ -35,7 +35,7 @@ class BudgetAmountFragment :
         viewModel.getAmount().observe(
             this.viewLifecycleOwner,
             {
-                viewBinding.commonBudgetAmount.setValue(it)
+                viewBinding.commonBudgetAmount.setValue(it.sum)
             }
         )
     }
@@ -59,7 +59,7 @@ class BudgetAmountFragment :
         activity.setSupportActionBar(toolbar)
     }
 
-    override fun goToPeriodicIncomeScreen() {
+    override fun goToRegularIncomeScreen() {
         TODO("Not yet implemented")
     }
 

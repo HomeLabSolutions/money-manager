@@ -3,61 +3,43 @@ package com.d9tilov.moneymanager.budget.vm
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.room.EmptyResultSetException
+import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.BudgetAmountNavigator
 import com.d9tilov.moneymanager.budget.data.entity.BudgetData
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
-import com.d9tilov.moneymanager.core.util.addTo
 import com.d9tilov.moneymanager.core.util.getFirstDayOfMonth
-import com.d9tilov.moneymanager.core.util.ioScheduler
-import com.d9tilov.moneymanager.core.util.uiScheduler
-import io.reactivex.Single
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.util.Date
 
 class BudgetAmountViewModel @ViewModelInject constructor(private val budgetInteractor: BudgetInteractor) :
     BaseViewModel<BudgetAmountNavigator>() {
 
-    private val amount by lazy { MutableLiveData<BigDecimal>() }
-    private lateinit var budget: BudgetData
+    private val budgetData by lazy { MutableLiveData<BudgetData>() }
 
     init {
-        budgetInteractor.get()
-            .onErrorResumeNext {
-                if (it is EmptyResultSetException) {
-                    val budgetData = BudgetData(
-                        sum = BigDecimal.ZERO,
-                        fiscalDay = Date().getFirstDayOfMonth()
-                    )
-                    budgetInteractor.create(budgetData).toSingleDefault(budgetData)
-                        .doOnSuccess {
-                            amount.postValue(it.sum)
-                            this.budget = it
-                        }
-                } else {
-                    Single.error(it)
-                }
+        viewModelScope.launch {
+            val count = budgetInteractor.getCount()
+            val budget: BudgetData
+            if (count == 0) {
+                budget = BudgetData(
+                    sum = BigDecimal.ZERO,
+                    fiscalDay = Date().getFirstDayOfMonth()
+                )
+                budgetInteractor.create(budget)
+            } else {
+                budget = budgetInteractor.get()
             }
-            .subscribeOn(ioScheduler)
-            .observeOn(uiScheduler)
-            .subscribe(
-                { budget ->
-                    amount.value = budget.sum
-                    this.budget = budget
-                },
-                {}
-            )
-            .addTo(compositeDisposable)
+            budgetData.value = budget
+        }
     }
 
-    fun saveBudgetAmount(sum: BigDecimal) {
-        budgetInteractor.update(budget.copy(sum = sum))
-            .subscribeOn(ioScheduler)
-            .observeOn(uiScheduler)
-            .subscribe { this.amount.value = sum }
-            .addTo(compositeDisposable)
+    fun saveBudgetAmount(sum: BigDecimal) = viewModelScope.launch {
+        val newBudget = budgetInteractor.get().copy(sum = sum)
+        budgetInteractor.update(newBudget)
+        budgetData.value = newBudget
     }
 
-    fun getAmount(): LiveData<BigDecimal> = amount
+    fun getAmount(): LiveData<BudgetData> = budgetData
 }

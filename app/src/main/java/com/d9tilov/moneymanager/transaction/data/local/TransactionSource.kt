@@ -1,26 +1,25 @@
 package com.d9tilov.moneymanager.transaction.data.local
 
-import androidx.paging.DataSource
+import androidx.paging.PagingData
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionBaseDataModel
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
-import io.reactivex.Completable
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
 import java.util.Date
 
 interface TransactionSource {
 
-    fun insert(transaction: TransactionDataModel): Completable
-    fun getById(id: Long): Flowable<TransactionDataModel>
+    suspend fun insert(transaction: TransactionDataModel)
+    fun getById(id: Long): Flow<TransactionDataModel>
     fun getAllByType(
         from: Date,
         to: Date,
         transactionType: TransactionType
-    ): DataSource.Factory<Int, TransactionBaseDataModel>
+    ): Flow<PagingData<TransactionBaseDataModel>>
 
-    fun update(transaction: TransactionDataModel): Completable
-    fun remove(transaction: TransactionDataModel): Completable
-    fun removeAllByCategory(category: Category): Completable
-    fun clearAll(): Completable
+    suspend fun update(transaction: TransactionDataModel)
+    suspend fun remove(transaction: TransactionDataModel)
+    suspend fun removeAllByCategory(category: Category)
+    suspend fun clearAll()
 }

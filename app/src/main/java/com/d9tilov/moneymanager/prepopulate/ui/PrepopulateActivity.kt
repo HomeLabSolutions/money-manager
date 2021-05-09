@@ -13,8 +13,8 @@ import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.currency.ui.CurrencyFragmentDirections
 import com.d9tilov.moneymanager.databinding.ActivityPrepopulateBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
-import com.d9tilov.moneymanager.periodic.ui.PeriodicExpenseFragmentDirections
-import com.d9tilov.moneymanager.periodic.ui.PeriodicIncomeFragmentDirections
+import com.d9tilov.moneymanager.regular.ui.RegularExpenseFragmentDirections
+import com.d9tilov.moneymanager.regular.ui.RegularIncomeFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,7 +22,7 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
 
     private val fullScreenDestinationSet =
         setOf(
-            R.id.periodic_created_transaction_dest,
+            R.id.regular_created_transaction_dest,
             R.id.category_dest,
             R.id.edit_category_dialog,
             R.id.remove_sub_category_dialog,
@@ -58,15 +58,15 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
                     navController.navigate(action)
                 }
                 R.id.budget_amount_dest -> {
-                    action = BudgetAmountFragmentDirections.toPeriodicIncomeDest()
+                    action = BudgetAmountFragmentDirections.toRegularIncomeDest()
                     navController.navigate(action)
                 }
-                R.id.periodic_income_dest -> {
-                    action = PeriodicIncomeFragmentDirections.toPeriodicExpenseDest()
+                R.id.regular_income_dest -> {
+                    action = RegularIncomeFragmentDirections.toRegularExpenseDest()
                     navController.navigate(action)
                 }
-                R.id.periodic_expense_dest -> {
-                    action = PeriodicExpenseFragmentDirections.toGoalsDest()
+                R.id.regular_expense_dest -> {
+                    action = RegularExpenseFragmentDirections.toGoalsDest()
                     navController.navigate(action)
                 }
                 else -> {

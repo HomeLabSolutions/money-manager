@@ -5,16 +5,16 @@ import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.data.local.TransactionSource
 import com.d9tilov.moneymanager.transaction.domain.TransactionRepo
-import io.reactivex.Completable
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
 import java.util.Date
 
 class TransactionDataRepo(private val transactionSource: TransactionSource) : TransactionRepo {
 
-    override fun addTransaction(transaction: TransactionDataModel) =
+    override suspend fun addTransaction(transaction: TransactionDataModel) {
         transactionSource.insert(transaction)
+    }
 
-    override fun getTransactionById(id: Long): Flowable<TransactionDataModel> =
+    override fun getTransactionById(id: Long): Flow<TransactionDataModel> =
         transactionSource.getById(id)
 
     override fun getTransactionsByType(
@@ -23,17 +23,18 @@ class TransactionDataRepo(private val transactionSource: TransactionSource) : Tr
         transactionType: TransactionType
     ) = transactionSource.getAllByType(from, to, transactionType)
 
-    override fun update(transaction: TransactionDataModel) = transactionSource.update(transaction)
+    override suspend fun update(transaction: TransactionDataModel) =
+        transactionSource.update(transaction)
 
-    override fun removeTransaction(transaction: TransactionDataModel): Completable {
-        return transactionSource.remove(transaction)
+    override suspend fun removeTransaction(transaction: TransactionDataModel) {
+        transactionSource.remove(transaction)
     }
 
-    override fun removeAllByCategory(category: Category): Completable {
-        return transactionSource.removeAllByCategory(category)
+    override suspend fun removeAllByCategory(category: Category) {
+        transactionSource.removeAllByCategory(category)
     }
 
-    override fun clearAll(): Completable {
-        return transactionSource.clearAll()
+    override suspend fun clearAll() {
+        transactionSource.clearAll()
     }
 }

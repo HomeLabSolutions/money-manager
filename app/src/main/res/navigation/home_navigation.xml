@@ -240,9 +240,9 @@
             app:nullable="true" />
 
         <argument
-            android:name="periodic_transaction"
+            android:name="regular_transaction"
             android:defaultValue="@null"
-            app:argType="com.d9tilov.moneymanager.periodic.domain.entity.PeriodicTransaction"
+            app:argType="com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction"
             app:nullable="true" />
     </dialog>
 

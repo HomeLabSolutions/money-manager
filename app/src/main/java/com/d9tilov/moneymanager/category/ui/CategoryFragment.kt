@@ -75,7 +75,7 @@ class CategoryFragment :
         findNavController().popBackStack()
     }
 
-    override fun backToPeriodicTransactionCreationScreen(category: Category) {
+    override fun backToRegularTransactionCreationScreen(category: Category) {
         findNavController().previousBackStackEntry?.savedStateHandle?.set(ARG_CATEGORY, category)
         findNavController().popBackStack()
     }

@@ -72,9 +72,9 @@
         android:layout_margin="16dp"
         android:inflatedId="@+id/inflate"
         android:layout="@layout/layout_empty_list_placeholder"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/income_main_sum" />
 </androidx.constraintlayout.widget.ConstraintLayout>

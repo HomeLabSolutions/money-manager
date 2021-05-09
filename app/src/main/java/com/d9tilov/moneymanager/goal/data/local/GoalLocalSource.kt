@@ -5,8 +5,8 @@ import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.goal.data.entity.GoalData
 import com.d9tilov.moneymanager.goal.data.local.mapper.GoalDataMapper
-import io.reactivex.Completable
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class GoalLocalSource(
     private val preferencesStore: PreferencesStore,
@@ -16,10 +16,10 @@ class GoalLocalSource(
 
     private val goalDao = appDatabase.goalDao()
 
-    override fun insert(goalData: GoalData): Completable {
+    override suspend fun insert(goalData: GoalData) {
         val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            Completable.error(WrongUidException())
+        if (currentUserId == null) {
+            throw WrongUidException()
         } else {
             goalDao.insert(
                 goalDataMapper.toDbModel(
@@ -31,29 +31,31 @@ class GoalLocalSource(
         }
     }
 
-    override fun getAll(): Flowable<List<GoalData>> {
+    override fun getAll(): Flow<List<GoalData>> {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
-            Flowable.error(WrongUidException())
+            throw WrongUidException()
         } else {
             goalDao.getAll(currentUserId)
-                .map { list -> list.map { goalDataMapper.toDataModel(it) } }
+                .map { list ->
+                    list.map { goalDataMapper.toDataModel(it) }
+                }
         }
     }
 
-    override fun update(goalData: GoalData): Completable {
+    override suspend fun update(goalData: GoalData) {
         val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            Completable.error(WrongUidException())
+        if (currentUserId == null) {
+            throw WrongUidException()
         } else {
             goalDao.update(goalDataMapper.toDbModel(goalData))
         }
     }
 
-    override fun delete(goalData: GoalData): Completable {
+    override suspend fun delete(goalData: GoalData) {
         val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            Completable.error(WrongUidException())
+        if (currentUserId == null) {
+            throw WrongUidException()
         } else {
             goalDao.delete(goalDataMapper.toDbModel(goalData))
         }

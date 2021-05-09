@@ -67,14 +67,14 @@ class SettingsFragment :
             settingsBackup.setOnClickListener {
                 viewModel.backup()
             }
-            viewModel.getBackupLastDate().observe(
+            viewModel.backupData.observe(
                 viewLifecycleOwner,
                 {
-                    if (it == 0L) {
+                    if (it.lastBackupTimestamp == 0L) {
                         settingsBackupInfo.setText(R.string.backup_empty)
                     } else {
                         settingsBackupInfo.text =
-                            getString(R.string.backup_info, it.getBackupDate())
+                            getString(R.string.backup_info, it.lastBackupTimestamp.getBackupDate())
                     }
                 }
             )

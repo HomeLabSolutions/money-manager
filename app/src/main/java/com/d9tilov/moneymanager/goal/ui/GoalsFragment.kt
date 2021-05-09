@@ -76,13 +76,14 @@ class GoalsFragment :
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         emptyViewStub = viewBinding.root.findViewById(R.id.goals_empty_placeholder)
+        toolbar = viewBinding.goalsToolbarContainer.toolbar
         viewBinding.run {
             goalsRvList.adapter = goalAdapter
             val layoutManager = LinearLayoutManager(requireContext())
             goalsRvList.layoutManager = layoutManager
             goalsRvList.addItemDecoration(
                 MarginItemDecoration(
-                    resources.getDimension(R.dimen.recycler_view_fixed_category_margin).toInt()
+                    resources.getDimension(R.dimen.recycler_view_regular_category_margin).toInt()
                 )
             )
             ItemTouchHelper(object : SwipeToDeleteCallback(requireContext()) {
@@ -104,8 +105,7 @@ class GoalsFragment :
         viewModel.getAmount().observe(
             this.viewLifecycleOwner, { viewBinding.goalsAmount.setValue(it) }
         )
-        toolbar = viewBinding.goalsToolbarContainer.toolbar
-        viewModel.getGoals().observe(
+        viewModel.goals.observe(
             this.viewLifecycleOwner,
             {
                 if (it.isEmpty()) {

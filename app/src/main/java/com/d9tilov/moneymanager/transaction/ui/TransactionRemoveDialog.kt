@@ -21,7 +21,7 @@ class TransactionRemoveDialog :
 
     private val args by navArgs<TransactionRemoveDialogArgs>()
     private val transaction by lazy { args.transaction }
-    private val fixedTransaction by lazy { args.periodicTransaction }
+    private val regularTransaction by lazy { args.regularTransaction }
     private val viewBinding by viewBinding(FragmentDialogRemoveBinding::bind)
 
     override val layoutId = R.layout.fragment_dialog_remove
@@ -36,7 +36,7 @@ class TransactionRemoveDialog :
                 getString(R.string.transaction_delete_dialog_subtitle)
             removeButtonConfirm.setOnClickListener {
                 transaction?.let { viewModel.removeTransaction(it) }
-                fixedTransaction?.let { viewModel.removeFixedTransaction(it) }
+                regularTransaction?.let { viewModel.removeRegularTransaction(it) }
             }
             removeButtonCancel.setOnClickListener {
                 dismiss()

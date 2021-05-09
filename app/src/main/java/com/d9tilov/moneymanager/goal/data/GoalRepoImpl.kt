@@ -3,16 +3,21 @@ package com.d9tilov.moneymanager.goal.data
 import com.d9tilov.moneymanager.goal.data.entity.GoalData
 import com.d9tilov.moneymanager.goal.data.local.GoalSource
 import com.d9tilov.moneymanager.goal.domain.GoalRepo
-import io.reactivex.Completable
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
 
 class GoalRepoImpl(private val goalSource: GoalSource) : GoalRepo {
 
-    override fun insert(goalData: GoalData) = goalSource.insert(goalData)
+    override suspend fun insert(goalData: GoalData) {
+        goalSource.insert(goalData)
+    }
 
-    override fun getAll(): Flowable<List<GoalData>> = goalSource.getAll()
+    override fun getAll(): Flow<List<GoalData>> = goalSource.getAll()
 
-    override fun update(goalData: GoalData): Completable = goalSource.update(goalData)
+    override suspend fun update(goalData: GoalData) {
+        goalSource.update(goalData)
+    }
 
-    override fun delete(goalData: GoalData): Completable = goalSource.delete(goalData)
+    override suspend fun delete(goalData: GoalData) {
+        goalSource.delete(goalData)
+    }
 }

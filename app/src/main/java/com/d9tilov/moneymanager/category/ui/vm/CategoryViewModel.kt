@@ -3,17 +3,17 @@ package com.d9tilov.moneymanager.category.ui.vm
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.common.BaseCategoryViewModel
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
-import com.d9tilov.moneymanager.core.util.addTo
-import com.d9tilov.moneymanager.core.util.ioScheduler
-import com.d9tilov.moneymanager.core.util.uiScheduler
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 class CategoryViewModel @ViewModelInject constructor(
@@ -25,11 +25,9 @@ class CategoryViewModel @ViewModelInject constructor(
     init {
         val transactionType =
             savedStateHandle.get<TransactionType>("transactionType") ?: TransactionType.EXPENSE
-        categoryInteractor.getAllCategoriesByType(transactionType)
-            .subscribeOn(ioScheduler)
-            .observeOn(uiScheduler)
-            .subscribe { expenseCategories.value = it }
-            .addTo(compositeDisposable)
+        viewModelScope.launch {
+            categories = categoryInteractor.getAllCategoriesByType(transactionType).asLiveData()
+        }
     }
 
     override fun onCategoryClicked(category: Category) {
@@ -44,20 +42,20 @@ class CategoryViewModel @ViewModelInject constructor(
                 CategoryDestination.MAIN_WITH_SUM_SCREEN, CategoryDestination.PREPOPULATE_SCREEN -> {
                     val inputSum = savedStateHandle.get<BigDecimal>("sum")
                     if (inputSum == null) {
-                        navigator?.backToPeriodicTransactionCreationScreen(category)
+                        navigator?.backToRegularTransactionCreationScreen(category)
                     } else {
-                        val transactionType =
-                            requireNotNull(savedStateHandle.get<TransactionType>("transactionType"))
-                        transactionInteractor.addTransaction(
-                            Transaction(
-                                type = transactionType,
-                                sum = inputSum,
-                                category = category
+                        viewModelScope.launch {
+                            val transactionType =
+                                requireNotNull(savedStateHandle.get<TransactionType>("transactionType"))
+                            transactionInteractor.addTransaction(
+                                Transaction(
+                                    type = transactionType,
+                                    sum = inputSum,
+                                    category = category
+                                )
                             )
-                        )
-                            .subscribeOn(ioScheduler)
-                            .observeOn(uiScheduler)
-                            .subscribe { navigator?.backToMainScreen(transactionType) }
+                            navigator?.backToMainScreen(transactionType)
+                        }
                     }
                 }
                 else -> navigator?.openCreateCategoryScreen(category)
@@ -70,10 +68,6 @@ class CategoryViewModel @ViewModelInject constructor(
     }
 
     override fun update(name: String) {
-        categoryInteractor.update(expenseCategories.value!![0].copy(name = name))
-            .subscribeOn(ioScheduler)
-            .observeOn(uiScheduler)
-            .subscribe()
-            .addTo(compositeDisposable)
+        viewModelScope.launch { categoryInteractor.update(categories.value!![0].copy(name = name)) }
     }
 }

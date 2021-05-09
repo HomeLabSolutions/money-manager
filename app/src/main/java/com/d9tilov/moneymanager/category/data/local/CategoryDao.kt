@@ -7,32 +7,29 @@ import androidx.room.Query
 import androidx.room.Update
 import com.d9tilov.moneymanager.category.data.local.entity.CategoryDbModel
 import com.d9tilov.moneymanager.transaction.TransactionType
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Maybe
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
 
 @Dao
-abstract class CategoryDao {
+interface CategoryDao {
 
     @Query("SELECT * FROM categories WHERE clientId=:uid AND type=:type")
-    abstract fun getAllByType(uid: String, type: TransactionType): Flowable<List<CategoryDbModel>>
+    fun getAllByType(uid: String, type: TransactionType): Flow<List<CategoryDbModel>>
 
     @Query("SELECT * FROM categories WHERE clientId=:uid AND id=:id")
-    abstract fun getById(uid: String, id: Long): Maybe<CategoryDbModel>
+    suspend fun getById(uid: String, id: Long): CategoryDbModel?
 
     @Query("SELECT COUNT(*) FROM categories WHERE clientId=:uid AND name=:name")
-    abstract fun getCategoriesCountByName(uid: String, name: String): Single<Int>
+    suspend fun getCategoriesCountByName(uid: String, name: String): Int
 
     @Query("SELECT * FROM categories WHERE clientId=:uid AND parentId=:id")
-    abstract fun getByParentId(uid: String, id: Long): Flowable<List<CategoryDbModel>>
+    fun getByParentId(uid: String, id: Long): Flow<List<CategoryDbModel>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun create(category: CategoryDbModel): Single<Long>
+    suspend fun create(category: CategoryDbModel): Long
 
     @Update
-    abstract fun update(category: CategoryDbModel): Completable
+    suspend fun update(category: CategoryDbModel)
 
     @Query("DELETE FROM categories WHERE clientId=:uid AND id=:id")
-    abstract fun delete(uid: String, id: Long): Completable
+    suspend fun delete(uid: String, id: Long)
 }

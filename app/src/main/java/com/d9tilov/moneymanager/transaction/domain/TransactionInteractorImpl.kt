@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.transaction.domain
 
-import androidx.paging.PagedList
-import androidx.paging.toFlowable
+import androidx.paging.PagingData
+import androidx.paging.map
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.category.exception.CategoryNotFoundException
@@ -12,11 +12,10 @@ import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.mapper.TransactionDomainMapper
 import com.d9tilov.moneymanager.transaction.domain.mapper.TransactionHeaderDomainMapper
-import com.d9tilov.moneymanager.transaction.domain.paging.PagingConfig
 import com.d9tilov.moneymanager.user.domain.UserInteractor
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Maybe
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.map
 
 class TransactionInteractorImpl(
     private val transactionRepo: TransactionRepo,
@@ -26,77 +25,70 @@ class TransactionInteractorImpl(
     private val transactionHeaderDomainMapper: TransactionHeaderDomainMapper
 ) : TransactionInteractor {
 
-    override fun addTransaction(transaction: Transaction): Completable =
-        userInteractor.getCurrency().flatMapCompletable {
-            transactionRepo.addTransaction(
-                transactionDomainMapper.toDataModel(
-                    transaction.copy(currencyCode = it)
-                )
+    override suspend fun addTransaction(transaction: Transaction) {
+        val currencyCode = userInteractor.getCurrency()
+        transactionRepo.addTransaction(
+            transactionDomainMapper.toDataModel(
+                transaction.copy(currencyCode = currencyCode)
             )
-                .andThen(
-                    categoryInteractor.getCategoryById(transaction.category.id)
-                        .flatMapCompletable {
-                            val count = it.usageCount + 1
-                            categoryInteractor.update(it.copy(usageCount = count))
-                        }
-                )
-        }
+        )
+        val category = categoryInteractor.getCategoryById(transaction.category.id)
+        val count = category.usageCount + 1
+        categoryInteractor.update(category.copy(usageCount = count))
+    }
 
-    override fun getTransactionById(id: Long): Flowable<Transaction> {
+    override fun getTransactionById(id: Long): Flow<Transaction> {
         return transactionRepo.getTransactionById(id)
-            .flatMapMaybe { transactionDataModel ->
-                categoryInteractor.getCategoryById(transactionDataModel.categoryId)
-                    .flatMap {
-                        Maybe.fromCallable {
-                            Transaction(
-                                transactionDataModel.id,
-                                transactionDataModel.clientId,
-                                transactionDataModel.type,
-                                transactionDataModel.sum,
-                                it,
-                                transactionDataModel.currency,
-                                transactionDataModel.date,
-                                transactionDataModel.description,
-                                transactionDataModel.qrCode
-                            )
-                        }
-                    }
+            .map { transactionDataModel ->
+                val category = categoryInteractor.getCategoryById(transactionDataModel.categoryId)
+                Transaction(
+                    transactionDataModel.id,
+                    transactionDataModel.clientId,
+                    transactionDataModel.type,
+                    transactionDataModel.sum,
+                    category,
+                    transactionDataModel.currency,
+                    transactionDataModel.date,
+                    transactionDataModel.description,
+                    transactionDataModel.qrCode
+                )
             }
     }
 
-    override fun getTransactionsByType(type: TransactionType): Flowable<PagedList<BaseTransaction>> {
+    override fun getTransactionsByType(type: TransactionType): Flow<PagingData<BaseTransaction>> {
         return categoryInteractor.getGroupedCategoriesByType(type)
-            .switchMap { categoryList ->
+            .flatMapMerge { categoryList ->
                 transactionRepo.getTransactionsByType(transactionType = type)
-                    .map { item ->
-                        if (item is TransactionDateDataModel) {
-                            return@map transactionHeaderDomainMapper.toDomain(item)
-                        }
-                        if (item is TransactionDataModel) {
-                            val category =
-                                categoryList.find { item.categoryId == it.id }
-                                    ?: throw CategoryNotFoundException("Not found category with id: ${item.categoryId}")
-                            transactionDomainMapper.toDomain(item, category)
-                        } else {
-                            throw IllegalStateException("Unknown TransactionDataItem implementation")
+                    .map {
+                        it.map { item ->
+                            if (item is TransactionDateDataModel) {
+                                transactionHeaderDomainMapper.toDomain(item)
+                            }
+                            if (item is TransactionDataModel) {
+                                val category =
+                                    categoryList.find { item.categoryId == it.id }
+                                        ?: throw CategoryNotFoundException("Not found category with id: ${item.categoryId}")
+                                transactionDomainMapper.toDomain(item, category)
+                            } else {
+                                throw IllegalStateException("Unknown TransactionDataItem implementation: $item")
+                            }
                         }
                     }
-                    .toFlowable(PagingConfig.createConfig())
             }
     }
 
-    override fun update(transaction: Transaction) =
+    override suspend fun update(transaction: Transaction) =
         transactionRepo.update(transactionDomainMapper.toDataModel(transaction))
 
-    override fun removeTransaction(transaction: Transaction): Completable {
-        return transactionRepo.removeTransaction(transactionDomainMapper.toDataModel(transaction))
+    override suspend fun removeTransaction(transaction: Transaction) {
+        transactionRepo.removeTransaction(transactionDomainMapper.toDataModel(transaction))
     }
 
-    override fun removeAllByCategory(category: Category): Completable {
-        return transactionRepo.removeAllByCategory(category)
+    override suspend fun removeAllByCategory(category: Category) {
+        transactionRepo.removeAllByCategory(category)
     }
 
-    override fun clearAll(): Completable {
-        return transactionRepo.clearAll()
+    override suspend fun clearAll() {
+        transactionRepo.clearAll()
     }
 }

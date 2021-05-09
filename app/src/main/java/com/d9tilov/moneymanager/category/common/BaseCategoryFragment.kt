@@ -120,7 +120,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
                 }
             })
         }
-        (viewModel as BaseCategoryViewModel<*>).getExpenseCategories().observe(
+        (viewModel as BaseCategoryViewModel<*>).categories.observe(
             this.viewLifecycleOwner,
             { list ->
                 val sortedList = list.sortedWith(

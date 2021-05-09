@@ -3,6 +3,8 @@ package com.d9tilov.moneymanager.user.data.local
 import android.content.Context
 import com.d9tilov.moneymanager.backup.BackupData
 import com.d9tilov.moneymanager.backup.BackupManager
+import com.d9tilov.moneymanager.base.data.Resource
+import com.d9tilov.moneymanager.base.data.Status
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.exceptions.NetworkException
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
@@ -10,9 +12,10 @@ import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.core.util.isNetworkConnected
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.data.local.mapper.DataUserMapper
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import java.util.Calendar
 
 class UserLocalSource(
@@ -25,84 +28,78 @@ class UserLocalSource(
 
     private val userDao: UserDao = database.userDao()
 
-    override fun createUserOrRestore(userProfile: UserProfile): Completable {
+    override suspend fun createUserOrRestore(userProfile: UserProfile): UserProfile {
         preferencesStore.uid = userProfile.uid
-        return backupManager.restoreDb(userProfile.uid)
-            .onErrorResumeNext { userDao.insert(dataUserMapper.toDbModel(userProfile)) }
+        val result: Resource<Nothing> = backupManager.restoreDb(userProfile.uid)
+        if (result.status == Status.ERROR) {
+            userDao.insert(dataUserMapper.toDbModel(userProfile))
+        }
+        return dataUserMapper.toDataModel(userDao.getById(userProfile.uid).first())
     }
 
-    override fun updateCurrentUser(userProfile: UserProfile) =
-        userDao.update(dataUserMapper.toDbModel(userProfile))
+    override suspend fun updateCurrentUser(userProfile: UserProfile) {
+        userDao.update(dataUserMapper.toDbModel(userProfile).copy())
+    }
 
-    override fun showPrepopulate(): Single<Boolean> {
+    override suspend fun showPrepopulate(): Boolean {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
-            Single.error(WrongUidException())
+            throw WrongUidException()
         } else {
-            return userDao.showPrepopulate(currentUserId)
+            userDao.showPrepopulate(currentUserId)
         }
     }
 
-    override fun getBackupData(): Flowable<BackupData> {
+    override fun getBackupData(): Flow<BackupData> {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
-            Flowable.error(WrongUidException())
+            throw WrongUidException()
         } else {
-            return userDao.getBackupData(currentUserId)
+            userDao.getBackupData(currentUserId)
         }
     }
 
-    override fun getCurrentUser(): Flowable<UserProfile> {
+    override fun getCurrentUser(): Flow<UserProfile> {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
-            Flowable.error(WrongUidException())
+            throw WrongUidException()
         } else {
-            return userDao.getById(currentUserId).map { dataUserMapper.toDataModel(it) }
+            userDao.getById(currentUserId).map { dataUserMapper.toDataModel(it) }
         }
     }
 
-    override fun getCurrency(): Single<String> {
+    override suspend fun getCurrency(): String {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
-            Single.error(WrongUidException())
+            throw WrongUidException()
         } else {
             userDao.getCurrency(currentUserId)
         }
     }
 
-    override fun backupUser(): Completable {
+    override suspend fun backupUser() {
         val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            Completable.error(WrongUidException())
+        if (currentUserId == null) {
+            throw WrongUidException()
         } else {
-            userDao.getById(currentUserId)
-                .firstOrError()
-                .flatMap {
-                    if (isNetworkConnected(context)) {
-                        return@flatMap Single.fromCallable { it }
-                    } else {
-                        return@flatMap Single.error(NetworkException())
-                    }
+            userDao.getById(currentUserId).collectLatest {
+                if (isNetworkConnected(context)) {
+                    userDao.update(it.copy(backupData = BackupData(Calendar.getInstance().timeInMillis)))
+                    backupManager.backupDb(currentUserId)
+                } else {
+                    throw NetworkException()
                 }
-                .flatMapCompletable {
-                    userDao.update(
-                        it.copy(
-                            backupData = BackupData(
-                                Calendar.getInstance().timeInMillis
-                            )
-                        )
-                    ).andThen(backupManager.backupDb(currentUserId))
-                }
+            }
         }
     }
 
-    override fun deleteUser(): Completable {
+    override suspend fun deleteUser() {
         val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            Completable.error(WrongUidException())
+        if (currentUserId == null) {
+            throw WrongUidException()
         } else {
-            return userDao.delete(currentUserId)
-                .doOnComplete { preferencesStore.clearAllData() }
+            userDao.delete(currentUserId)
+            preferencesStore.clearAllData()
         }
     }
 }
