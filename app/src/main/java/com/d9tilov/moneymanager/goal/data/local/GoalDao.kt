@@ -7,23 +7,22 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.d9tilov.moneymanager.goal.data.local.entity.GoalDbModel
-import io.reactivex.Completable
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
 
 @Dao
-abstract class GoalDao {
+interface GoalDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(goal: GoalDbModel): Completable
+    suspend fun insert(goal: GoalDbModel)
 
     @Query("SELECT * FROM goal WHERE clientId=:uid")
-    abstract fun getAll(
+    fun getAll(
         uid: String
-    ): Flowable<List<GoalDbModel>>
+    ): Flow<List<GoalDbModel>>
 
     @Update
-    abstract fun update(goal: GoalDbModel): Completable
+    suspend fun update(goal: GoalDbModel)
 
     @Delete
-    abstract fun delete(goal: GoalDbModel): Completable
+    suspend fun delete(goal: GoalDbModel)
 }

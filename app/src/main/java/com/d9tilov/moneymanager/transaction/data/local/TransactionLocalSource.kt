@@ -1,6 +1,9 @@
 package com.d9tilov.moneymanager.transaction.data.local
 
-import androidx.paging.DataSource
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.map
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
@@ -15,9 +18,11 @@ import com.d9tilov.moneymanager.transaction.data.local.entity.TransactionDbModel
 import com.d9tilov.moneymanager.transaction.data.mapper.TransactionDataMapper
 import com.d9tilov.moneymanager.transaction.data.mapper.TransactionDateDataMapper
 import com.d9tilov.moneymanager.transaction.exception.TransactionCreateException
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Observable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import java.util.Date
 
 class TransactionLocalSource(
@@ -29,51 +34,47 @@ class TransactionLocalSource(
 
     private val transactionDao: TransactionDao = appDatabase.transactionDao()
 
-    override fun insert(transaction: TransactionDataModel): Completable {
+    override suspend fun insert(transaction: TransactionDataModel) {
         val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            Completable.error(WrongUidException())
+        if (currentUserId == null) {
+            throw WrongUidException()
         } else {
-            transactionDao.getDateItemsCountInDay(
+            val count = transactionDao.getDateItemsCountInDay(
                 currentUserId,
                 transaction.type,
                 transaction.date
             )
-                .flatMapCompletable {
-                    when {
-                        it > 1 -> {
-                            Completable.error(TransactionCreateException("Can't create transaction. DataBase contains more than one date item in day period"))
-                        }
-                        it > 0 -> {
-                            transactionDao.insert(
-                                transactionDataMapper.toDbModel(
-                                    transaction.copy(
-                                        clientId = currentUserId
-                                    )
-                                )
-                            )
-                        }
-                        else -> {
-                            transactionDao.insert(
-                                createDateItem(
-                                    currentUserId,
-                                    transaction.type,
-                                    transaction.date,
-                                    transaction.currency
-                                )
-                            )
-                                .andThen(
-                                    transactionDao.insert(
-                                        transactionDataMapper.toDbModel(
-                                            transaction.copy(
-                                                clientId = currentUserId
-                                            )
-                                        )
-                                    )
-                                )
-                        }
-                    }
+            when {
+                count > 1 -> {
+                    throw TransactionCreateException("Can't create transaction. DataBase contains more than one date item in day period")
                 }
+                count == 1 -> {
+                    transactionDao.insert(
+                        transactionDataMapper.toDbModel(
+                            transaction.copy(
+                                clientId = currentUserId
+                            )
+                        )
+                    )
+                }
+                else -> {
+                    transactionDao.insert(
+                        createDateItem(
+                            currentUserId,
+                            transaction.type,
+                            transaction.date,
+                            transaction.currency
+                        )
+                    )
+                    transactionDao.insert(
+                        transactionDataMapper.toDbModel(
+                            transaction.copy(
+                                clientId = currentUserId
+                            )
+                        )
+                    )
+                }
+            }
         }
     }
 
@@ -93,10 +94,10 @@ class TransactionLocalSource(
         )
     }
 
-    override fun getById(id: Long): Flowable<TransactionDataModel> {
+    override fun getById(id: Long): Flow<TransactionDataModel> {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
-            Flowable.error(WrongUidException())
+            throw WrongUidException()
         } else {
             transactionDao.getById(currentUserId, id).map { transactionDataMapper.toDataModel(it) }
         }
@@ -106,174 +107,182 @@ class TransactionLocalSource(
         from: Date,
         to: Date,
         transactionType: TransactionType
-    ): DataSource.Factory<Int, TransactionBaseDataModel> {
+    ): Flow<PagingData<TransactionBaseDataModel>> {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
             throw WrongUidException()
         } else {
-            transactionDao.getAllByType(currentUserId, from, to, transactionType)
-                .map { transactionDbModel ->
-                    if (transactionDbModel.isDate) {
-                        transactionDateDataMapper.toDataModel(transactionDbModel)
-                    } else {
-                        transactionDataMapper.toDataModel(transactionDbModel)
+            Pager(
+                config = PagingConfig(
+                    PAGE_SIZE,
+                    INITIAL_PAGE_SIZE,
+                    false
+                )
+            ) { transactionDao.getAllByType(currentUserId, from, to, transactionType) }.flow
+                .map { value ->
+                    value.map {
+                        if (it.isDate) {
+                            transactionDateDataMapper.toDataModel(it)
+                        } else {
+                            transactionDataMapper.toDataModel(it)
+                        }
                     }
                 }
         }
     }
 
-    override fun update(transaction: TransactionDataModel): Completable {
+    override suspend fun update(transaction: TransactionDataModel) {
         val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            Completable.error(WrongUidException())
+        if (currentUserId == null) {
+            throw WrongUidException()
         } else {
             transactionDao.getById(currentUserId, transaction.id)
-                .firstOrError()
-                .flatMapCompletable { oldTransaction ->
-                    if (oldTransaction.date.isSameDay(transaction.date)) {
-                        transactionDao.update(transactionDataMapper.toDbModel(transaction))
-                    } else {
-                        val itemsCountOldTransactionDateSingle = transactionDao.getItemsCountInDay(
-                            currentUserId,
-                            oldTransaction.type,
-                            oldTransaction.date
-                        )
-                        val itemsCountNewTransactionDateSingle = transactionDao.getItemsCountInDay(
-                            currentUserId,
-                            transaction.type,
-                            transaction.date
-                        )
-                        itemsCountOldTransactionDateSingle.flatMapCompletable { count ->
-                            when (count) {
-                                0 -> {
-                                    Completable.error(IllegalArgumentException("Date count must be more than 0"))
+                .map { oldTransaction ->
+                    {
+                        GlobalScope.launch(Dispatchers.IO) {
+                            if (oldTransaction.date.isSameDay(transaction.date)) {
+                                transactionDao.update(
+                                    transactionDataMapper.toDbModel(
+                                        transaction
+                                    )
+                                )
+                            } else {
+                                val itemsCountOldTransactionDate =
+                                    transactionDao.getItemsCountInDay(
+                                        currentUserId,
+                                        oldTransaction.type,
+                                        oldTransaction.date
+                                    )
+                                if (itemsCountOldTransactionDate == 0) {
+                                    throw IllegalArgumentException("Date count must be more than 0")
                                 }
-                                1 -> {
+                                if (itemsCountOldTransactionDate == 1) {
                                     transactionDao.deleteDate(
                                         currentUserId,
                                         oldTransaction.type,
                                         oldTransaction.date
                                     )
                                 }
-                                else -> {
-                                    Completable.complete()
+                                val itemsCountNewTransactionDate =
+                                    transactionDao.getItemsCountInDay(
+                                        currentUserId,
+                                        transaction.type,
+                                        transaction.date
+                                    )
+                                if (itemsCountNewTransactionDate == 0) {
+                                    transactionDao.insert(
+                                        createDateItem(
+                                            currentUserId,
+                                            transaction.type,
+                                            transaction.date,
+                                            transaction.currency
+                                        )
+                                    )
+                                    transactionDao.update(
+                                        transactionDataMapper.toDbModel(transaction)
+                                    )
+                                } else {
+                                    transactionDao.update(
+                                        transactionDataMapper.toDbModel(transaction)
+                                    )
                                 }
                             }
                         }
-                            .andThen(
-                                itemsCountNewTransactionDateSingle.flatMapCompletable { count ->
-                                    if (count == 0) {
-                                        transactionDao.insert(
-                                            createDateItem(
-                                                currentUserId,
-                                                transaction.type,
-                                                transaction.date,
-                                                transaction.currency
-                                            )
-                                        ).andThen(
-                                            transactionDao.update(
-                                                transactionDataMapper.toDbModel(transaction)
-                                            )
-                                        )
-                                    } else {
-                                        transactionDao.update(
-                                            transactionDataMapper.toDbModel(transaction)
-                                        )
-                                    }
-                                }
-                            )
                     }
                 }
         }
     }
 
-    override fun remove(transaction: TransactionDataModel): Completable {
+    override suspend fun remove(transaction: TransactionDataModel) {
         val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            Completable.error(WrongUidException())
+        if (currentUserId == null) {
+            throw WrongUidException()
         } else {
-            transactionDao.getItemsCountInDay(
+            val count = transactionDao.getItemsCountInDay(
                 currentUserId,
                 transaction.type,
                 transaction.date
-            ).flatMapCompletable {
-                when {
-                    it > 1 -> {
-                        transactionDao.delete(
-                            currentUserId,
-                            transactionDataMapper.toDbModel(transaction).id
-                        )
-                    }
-                    it == 1 -> {
-                        transactionDao.delete(
-                            currentUserId,
-                            transactionDataMapper.toDbModel(transaction).id
-                        ).andThen(
-                            transactionDao.deleteDate(
-                                currentUserId,
-                                transaction.type,
-                                transaction.date
-                            )
-                        )
-                    }
-                    else -> {
-                        Completable.error(TransactionCreateException("Can't create transaction. DataBase contains zero date item in day period"))
-                    }
+            )
+            when {
+                count > 1 -> {
+                    transactionDao.delete(
+                        currentUserId,
+                        transactionDataMapper.toDbModel(transaction).id
+                    )
+                }
+                count == 1 -> {
+                    transactionDao.delete(
+                        currentUserId,
+                        transactionDataMapper.toDbModel(transaction).id
+                    )
+                    transactionDao.deleteDate(
+                        currentUserId,
+                        transaction.type,
+                        transaction.date
+                    )
+                }
+                else -> {
+                    throw TransactionCreateException("Can't create transaction. DataBase contains zero date item in day period")
                 }
             }
         }
     }
 
-    override fun removeAllByCategory(category: Category): Completable {
+    override suspend fun removeAllByCategory(category: Category) {
         val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            Completable.error(WrongUidException())
+        if (currentUserId == null) {
+            throw WrongUidException()
         } else {
             transactionDao.getByCategoryId(currentUserId, category.id)
-                .firstOrError()
-                .flatMapCompletable {
-                    Observable.fromIterable(it)
-                        .flatMapCompletable { transaction ->
-                            transactionDao.getItemsCountInDay(
-                                currentUserId,
-                                transaction.type,
-                                transaction.date
-                            ).flatMapCompletable {
+                .map { list ->
+                    {
+                        GlobalScope.launch(Dispatchers.IO) {
+                            for (transaction in list) {
+                                val count = transactionDao.getItemsCountInDay(
+                                    currentUserId,
+                                    transaction.type,
+                                    transaction.date
+                                )
                                 when {
-                                    it > 1 -> {
+                                    count > 1 -> {
                                         transactionDao.deleteByCategoryId(
                                             currentUserId,
                                             category.id
                                         )
                                     }
-                                    it == 1 -> {
+                                    count == 1 -> {
                                         transactionDao.deleteByCategoryId(
                                             currentUserId,
                                             category.id
-                                        ).andThen(
-                                            transactionDao.deleteDate(
-                                                currentUserId,
-                                                transaction.type,
-                                                transaction.date
-                                            )
+                                        )
+                                        transactionDao.deleteDate(
+                                            currentUserId,
+                                            transaction.type,
+                                            transaction.date
                                         )
                                     }
                                     else -> {
-                                        Completable.error(TransactionCreateException("Can't create transaction. DataBase contains zero date item in day period"))
+                                        throw TransactionCreateException("Can't create transaction. DataBase contains zero date item in day period")
                                     }
                                 }
                             }
                         }
+                    }
                 }
         }
     }
 
-    override fun clearAll(): Completable {
+    override suspend fun clearAll() {
         val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            Completable.error(WrongUidException())
+        if (currentUserId == null) {
+            throw WrongUidException()
         } else {
             transactionDao.clearAll(currentUserId)
         }
+    }
+
+    companion object {
+        private const val PAGE_SIZE = 30
+        private const val INITIAL_PAGE_SIZE = 3 * PAGE_SIZE
     }
 }

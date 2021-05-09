@@ -67,6 +67,7 @@ class CategoryCreationFragment :
 
     private var toolbar: MaterialToolbar? = null
     private lateinit var categoryColorAdapter: CategoryColorAdapter
+
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
 

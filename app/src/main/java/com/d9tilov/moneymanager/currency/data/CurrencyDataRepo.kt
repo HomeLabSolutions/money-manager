@@ -6,8 +6,6 @@ import com.d9tilov.moneymanager.currency.data.local.CurrencySource
 import com.d9tilov.moneymanager.currency.data.remote.CurrencyApi
 import com.d9tilov.moneymanager.currency.data.remote.mapper.CurrencyRemoteMapper
 import com.d9tilov.moneymanager.currency.domain.CurrencyRepo
-import io.reactivex.Completable
-import io.reactivex.Single
 import retrofit2.Retrofit
 
 class CurrencyDataRepo(
@@ -19,16 +17,18 @@ class CurrencyDataRepo(
 
     private val currencyApi = retrofit.create(CurrencyApi::class.java)
 
-    override fun getCurrencies(baseCurrency: String): Single<List<Currency>> {
-        val localSingle = currencySource.getCurrencies().toSingle()
-        val remoteSingle = currencyApi.getCurrencies(baseCurrency)
-            .map { currencyRemoteMapper.toDataModel(it) }
-            .flatMap { currencySource.saveCurrencies(it).toSingleDefault(it) }
-        return Single.concat(localSingle, remoteSingle)
-            .filter { it.isNotEmpty() }
-            .firstOrError()
+    override suspend fun getCurrencies(baseCurrency: String): List<Currency> {
+        val currencies = currencySource.getCurrencies()
+        if (currencies.isEmpty()) {
+            val remoteCurrencyList =
+                currencyRemoteMapper.toDataModel(currencyApi.getCurrencies(preferencesStore.baseCurrencyCode))
+            currencySource.saveCurrencies(remoteCurrencyList)
+            return remoteCurrencyList
+        }
+        return currencies
     }
 
-    override fun updateBaseCurrency(currency: Currency): Completable =
-        Completable.fromAction { preferencesStore.baseCurrencyCode = currency.code }
+    override suspend fun updateBaseCurrency(currency: Currency) {
+        preferencesStore.baseCurrencyCode = currency.code
+    }
 }

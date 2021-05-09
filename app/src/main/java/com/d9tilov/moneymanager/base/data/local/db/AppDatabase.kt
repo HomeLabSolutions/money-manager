@@ -16,8 +16,8 @@ import com.d9tilov.moneymanager.currency.data.local.CurrencyDao
 import com.d9tilov.moneymanager.currency.data.local.entity.CurrencyDbModel
 import com.d9tilov.moneymanager.goal.data.local.GoalDao
 import com.d9tilov.moneymanager.goal.data.local.entity.GoalDbModel
-import com.d9tilov.moneymanager.periodic.data.local.PeriodicTransactionDao
-import com.d9tilov.moneymanager.periodic.data.local.entity.PeriodicTransactionDbModel
+import com.d9tilov.moneymanager.regular.data.local.RegularTransactionDao
+import com.d9tilov.moneymanager.regular.data.local.entity.RegularTransactionDbModel
 import com.d9tilov.moneymanager.transaction.data.local.TransactionDao
 import com.d9tilov.moneymanager.transaction.data.local.entity.TransactionDbModel
 import com.d9tilov.moneymanager.user.data.local.UserDao
@@ -30,7 +30,7 @@ import com.d9tilov.moneymanager.user.data.local.entity.UserDbModel
         TransactionDbModel::class,
         BudgetDbModel::class,
         CurrencyDbModel::class,
-        PeriodicTransactionDbModel::class,
+        RegularTransactionDbModel::class,
         GoalDbModel::class
     ],
     version = VERSION_NUMBER,
@@ -50,7 +50,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun transactionDao(): TransactionDao
     abstract fun budgetDao(): BudgetDao
     abstract fun currencyDao(): CurrencyDao
-    abstract fun periodicTransactionDao(): PeriodicTransactionDao
+    abstract fun regularTransactionDao(): RegularTransactionDao
     abstract fun goalDao(): GoalDao
 
     companion object {

@@ -3,17 +3,17 @@ package com.d9tilov.moneymanager.currency.vm
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.CurrencyNavigator
 import com.d9tilov.moneymanager.budget.data.entity.BudgetData
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
-import com.d9tilov.moneymanager.core.util.addTo
 import com.d9tilov.moneymanager.core.util.getFirstDayOfMonth
-import com.d9tilov.moneymanager.core.util.ioScheduler
-import com.d9tilov.moneymanager.core.util.uiScheduler
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.user.domain.UserInteractor
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.util.Date
 
@@ -31,50 +31,44 @@ class CurrencyViewModel @ViewModelInject constructor(
     }
 
     private fun loadCurrencies() {
-        currencyInteractor.getCurrencies()
-            .toObservable()
-            .subscribeOn(ioScheduler)
-            .observeOn(uiScheduler)
-            .doOnError { navigator?.showError() }
-            .retryWhen { it.flatMap { retryManager.observeRetries() } }
-            .subscribe { list -> currencies.value = list }
-            .addTo(compositeDisposable)
+        viewModelScope.launch {
+            currencies.value = currencyInteractor.getCurrencies()
+        }
+        //
+        // TODO: make retry
+        // currencyInteractor.getCurrencies()
+        //     .toObservable()
+        //     .subscribeOn(ioScheduler)
+        //     .observeOn(uiScheduler)
+        //     .doOnError { navigator?.showError() }
+        //     .retryWhen { it.flatMap { retryManager.observeRetries() } }
+        //     .subscribe { list -> currencies.value = list }
+        //     .addTo(compositeDisposable)
     }
 
-    fun updateBaseCurrency(currency: DomainCurrency) {
+    fun updateBaseCurrency(currency: DomainCurrency) = viewModelScope.launch {
         currencyInteractor.updateBaseCurrency(currency)
-            .subscribeOn(ioScheduler)
-            .observeOn(uiScheduler)
-            .subscribe {
-                val newCurrencyList = mutableListOf<DomainCurrency>()
-                for (item in currencies.value ?: emptyList()) {
-                    newCurrencyList.add(item.copy(isBase = item.code == currency.code))
-                }
-                currencies.value = newCurrencyList
-            }
-            .addTo(compositeDisposable)
+        val newCurrencyList = mutableListOf<DomainCurrency>()
+        for (item in currencies.value ?: emptyList()) {
+            newCurrencyList.add(item.copy(isBase = item.code == currency.code))
+        }
+        currencies.value = newCurrencyList
     }
 
-    fun skip() {
-        budgetInteractor.getCount()
-            .filter { it == 0 }
-            .flatMapCompletable {
-                budgetInteractor.create(
-                    BudgetData(
-                        sum = BigDecimal.ZERO,
-                        fiscalDay = Date().getFirstDayOfMonth()
-                    )
+    fun skip() = viewModelScope.launch {
+        val count = budgetInteractor.getCount()
+        if (count == 0) {
+            budgetInteractor.create(
+                BudgetData(
+                    sum = BigDecimal.ZERO,
+                    fiscalDay = Date().getFirstDayOfMonth()
                 )
-            }
-            .andThen(
-                userInteractor.getCurrentUser()
-                    .firstOrError()
-                    .flatMapCompletable { userInteractor.updateUser(it.copy(showPrepopulate = false)) }
             )
-            .subscribeOn(ioScheduler)
-            .observeOn(uiScheduler)
-            .subscribe { navigator?.skip() }
-            .addTo(compositeDisposable)
+            userInteractor.getCurrentUser().map {
+                userInteractor.updateUser(it.copy(showPrepopulate = false))
+            }
+            navigator?.skip()
+        }
     }
 
     fun getCurrencies(): LiveData<List<DomainCurrency>> = currencies

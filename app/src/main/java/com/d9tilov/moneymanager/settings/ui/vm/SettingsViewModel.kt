@@ -2,18 +2,19 @@ package com.d9tilov.moneymanager.settings.ui.vm
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.R
+import com.d9tilov.moneymanager.backup.BackupData
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
-import com.d9tilov.moneymanager.core.util.addTo
-import com.d9tilov.moneymanager.core.util.ioScheduler
-import com.d9tilov.moneymanager.core.util.uiScheduler
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.launch
 
 class SettingsViewModel @ViewModelInject constructor(
     private val userInfoInteractor: UserInteractor,
@@ -21,40 +22,27 @@ class SettingsViewModel @ViewModelInject constructor(
 ) : BaseViewModel<SettingsNavigator>() {
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private val backupLastDate = MutableLiveData<Long>()
+    lateinit var backupData: LiveData<BackupData>
+    private val settingsExceptionHandler = CoroutineExceptionHandler { _, _ ->
+        setMessage(R.string.backup_error)
+    }
 
     fun getCurrentUser(): FirebaseUser? = auth.currentUser
 
     init {
-        userInfoInteractor.getBackupData()
-            .subscribeOn(ioScheduler)
-            .observeOn(uiScheduler)
-            .subscribe { backupLastDate.value = it.lastBackupTimestamp }
-            .addTo(compositeDisposable)
+        viewModelScope.launch {
+            backupData = userInfoInteractor.getBackupData().asLiveData()
+        }
     }
 
-    fun logout() {
-        userInfoInteractor.logout()
-            .subscribeOn(ioScheduler)
-            .observeOn(uiScheduler)
-            .subscribe {
-                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN) {
-                    param(FirebaseAnalytics.Param.ITEM_CATEGORY, "logout")
-                }
-            }
-            .addTo(compositeDisposable)
+    fun logout() = viewModelScope.launch {
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN) {
+            param(FirebaseAnalytics.Param.ITEM_CATEGORY, "logout")
+        }
     }
 
-    fun backup() {
+    fun backup() = viewModelScope.launch(settingsExceptionHandler) {
         userInfoInteractor.backup()
-            .subscribeOn(ioScheduler)
-            .observeOn(uiScheduler)
-            .subscribe(
-                { setMessage(R.string.backup_succeeded) },
-                { setMessage(R.string.backup_error) }
-            )
-            .addTo(compositeDisposable)
+        setMessage(R.string.backup_succeeded)
     }
-
-    fun getBackupLastDate(): LiveData<Long> = backupLastDate
 }

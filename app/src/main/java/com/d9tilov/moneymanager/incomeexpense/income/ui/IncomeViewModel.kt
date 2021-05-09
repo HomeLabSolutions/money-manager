@@ -1,83 +1,77 @@
 package com.d9tilov.moneymanager.incomeexpense.income.ui
 
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import com.d9tilov.moneymanager.App
+import androidx.paging.cachedIn
+import androidx.paging.map
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeNavigator
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
-import com.d9tilov.moneymanager.core.util.addTo
-import com.d9tilov.moneymanager.core.util.ioScheduler
-import com.d9tilov.moneymanager.core.util.uiScheduler
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionHeader
-import timber.log.Timber
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
-import java.util.concurrent.TimeUnit
 
 class IncomeViewModel @ViewModelInject constructor(
     categoryInteractor: CategoryInteractor,
     private val transactionInteractor: TransactionInteractor
 ) : BaseIncomeExpenseViewModel<IncomeNavigator>() {
 
-    init {
-        categoryInteractor.getGroupedCategoriesByType(TransactionType.INCOME)
-            .subscribeOn(ioScheduler)
-            .observeOn(uiScheduler)
-            .subscribe { categories.value = it }
-            .addTo(compositeDisposable)
+    private var itemPosition = -1
+    private var itemHeaderPosition = itemPosition
+    lateinit var transactions: Flow<PagingData<BaseTransaction>>
 
-        transactionInteractor.getTransactionsByType(TransactionType.INCOME)
-            .throttleFirst(THROTTLE_TIMEOUT, TimeUnit.MILLISECONDS)
-            .map {
-                val newList = mutableListOf<BaseTransaction>()
-                var itemPosition = -1
-                var itemHeaderPosition = itemPosition
-                for (item in it) {
-                    if (item is TransactionHeader) {
-                        itemPosition++
-                        itemHeaderPosition = itemPosition
-                        newList.add(item.copy(headerPosition = itemHeaderPosition))
+    init {
+        viewModelScope.launch {
+            categories =
+                categoryInteractor.getGroupedCategoriesByType(TransactionType.INCOME).asLiveData()
+            transactions =
+                transactionInteractor.getTransactionsByType(TransactionType.INCOME)
+                    .map {
+                        it.map { item ->
+                            var newItem: BaseTransaction = item
+                            if (item is TransactionHeader) {
+                                itemPosition++
+                                itemHeaderPosition = itemPosition
+                                newItem = item.copy(headerPosition = itemHeaderPosition)
+                            }
+                            if (item is Transaction) {
+                                itemPosition++
+                                newItem = item.copy(headerPosition = itemHeaderPosition)
+                            }
+                            newItem
+                        }
                     }
-                    if (item is Transaction) {
-                        itemPosition++
-                        newList.add(item.copy(headerPosition = itemHeaderPosition))
-                    }
-                }
-                convert(newList)
-            }
-            .subscribeOn(ioScheduler)
-            .observeOn(uiScheduler)
-            .subscribe(
-                { transactions.value = it },
-                { Timber.tag(App.TAG).d("Error while getting transaction list: $it") }
-            )
-            .addTo(compositeDisposable)
+                    .cachedIn(viewModelScope)
+            resetPositions()
+        }
     }
 
-    private fun convert(list: List<BaseTransaction>): PagingData<BaseTransaction> =
-        PagingData.from(list)
+    private fun resetPositions() {
+        itemPosition = -1
+        itemHeaderPosition = itemPosition
+    }
 
     override fun saveTransaction(category: Category, sum: BigDecimal) {
         if (sum.signum() > 0) {
-            transactionInteractor.addTransaction(
-                Transaction(
-                    type = TransactionType.INCOME,
-                    sum = sum,
-                    category = category
+            viewModelScope.launch {
+                transactionInteractor.addTransaction(
+                    Transaction(
+                        type = TransactionType.INCOME,
+                        sum = sum,
+                        category = category
+                    )
                 )
-            )
-                .subscribeOn(ioScheduler)
-                .observeOn(uiScheduler)
-                .subscribe(
-                    { addTransactionEvent.call() },
-                    { Timber.tag(App.TAG).d("error = ${it.message}") }
-                )
-                .addTo(compositeDisposable)
+                addTransactionEvent.call()
+            }
         } else {
             navigator?.showEmptySumError()
         }

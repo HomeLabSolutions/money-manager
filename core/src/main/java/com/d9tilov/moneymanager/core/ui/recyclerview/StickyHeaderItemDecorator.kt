@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 
 class StickyHeaderItemDecorator<T : Any>(private val adapter: StickyAdapter<T, RecyclerView.ViewHolder, RecyclerView.ViewHolder>) :
     ItemDecoration() {
-    private var currentStickyPosition = RecyclerView.NO_POSITION
+    private var currentStickyPosition = NO_POSITION
     private var recyclerView: RecyclerView? = null
     private lateinit var currentStickyHolder: RecyclerView.ViewHolder
     private var lastViewOverlappedByHeader: View? = null
@@ -40,7 +40,7 @@ class StickyHeaderItemDecorator<T : Any>(private val adapter: StickyAdapter<T, R
     override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         super.onDrawOver(c, parent, state)
         val layoutManager = parent.layoutManager ?: return
-        var topChildPosition = RecyclerView.NO_POSITION
+        var topChildPosition = NO_POSITION
         if (layoutManager is LinearLayoutManager) {
             topChildPosition = layoutManager.findFirstVisibleItemPosition()
         } else {
@@ -49,7 +49,7 @@ class StickyHeaderItemDecorator<T : Any>(private val adapter: StickyAdapter<T, R
                 topChildPosition = parent.getChildAdapterPosition(topChild)
             }
         }
-        if (topChildPosition == RecyclerView.NO_POSITION) {
+        if (topChildPosition == NO_POSITION) {
             return
         }
         var viewOverlappedByHeader: View? =
@@ -77,7 +77,7 @@ class StickyHeaderItemDecorator<T : Any>(private val adapter: StickyAdapter<T, R
             preOverlappedPosition = adapter.getHeaderPositionForItem(topChildPosition)
             overlappedHeaderPosition = preOverlappedPosition
         }
-        if (preOverlappedPosition == RecyclerView.NO_POSITION) {
+        if (preOverlappedPosition == NO_POSITION) {
             return
         }
         viewOverlappedByHeader?.let {
@@ -100,10 +100,10 @@ class StickyHeaderItemDecorator<T : Any>(private val adapter: StickyAdapter<T, R
 
     private fun updateStickyHeader(topChildPosition: Int) {
         val headerPositionForItem = adapter.getHeaderPositionForItem(topChildPosition)
-        if (headerPositionForItem != currentStickyPosition && headerPositionForItem != RecyclerView.NO_POSITION) {
+        if (headerPositionForItem != currentStickyPosition && headerPositionForItem != NO_POSITION) {
             adapter.onBindHeaderViewHolder(currentStickyHolder, headerPositionForItem)
             currentStickyPosition = headerPositionForItem
-        } else if (headerPositionForItem != RecyclerView.NO_POSITION) {
+        } else if (headerPositionForItem != NO_POSITION) {
             adapter.onBindHeaderViewHolder(currentStickyHolder, headerPositionForItem)
         }
     }

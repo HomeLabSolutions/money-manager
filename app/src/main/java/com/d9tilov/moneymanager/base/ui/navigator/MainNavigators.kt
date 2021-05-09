@@ -15,8 +15,8 @@ interface SplashNavigator : BaseNavigator {
 
 interface PrepopulateNavigator : BaseNavigator {
 
-    fun goToPeriodicIncomeScreen() {}
-    fun goToPeriodicExpenseScreen() {}
+    fun goToRegularIncomeScreen() {}
+    fun goToRegularExpenseScreen() {}
     fun goToGoalsScreen() {}
     fun goToMainScreen() {}
     fun back() {}
@@ -28,18 +28,18 @@ interface CurrencyNavigator : BaseNavigator {
 }
 
 interface BudgetAmountNavigator : BaseNavigator {
-    fun goToPeriodicIncomeScreen()
+    fun goToRegularIncomeScreen()
     fun showError()
 }
 
-interface FixedCreatedNavigator : BaseNavigator {
+interface RegularTransactionCreatedNavigator : BaseNavigator {
     fun back()
 }
 
-interface BasePeriodicIncomeExpenseNavigator : BaseNavigator
+interface BaseRegularIncomeExpenseNavigator : BaseNavigator
 
-interface PeriodicExpenseNavigator : BasePeriodicIncomeExpenseNavigator
-interface PeriodicIncomeNavigator : BasePeriodicIncomeExpenseNavigator
+interface RegularExpenseNavigator : BaseRegularIncomeExpenseNavigator
+interface RegularIncomeNavigator : BaseRegularIncomeExpenseNavigator
 
 interface GoalsNavigator : BaseNavigator
 interface CreatedGoalNavigator : BaseNavigator {
@@ -95,7 +95,7 @@ interface CategoryNavigator : BaseNavigator {
     fun openCreateCategoryScreen(category: Category? = null)
     fun openRemoveDialog(category: Category)
     fun backToEditTransactionScreen(category: Category)
-    fun backToPeriodicTransactionCreationScreen(category: Category)
+    fun backToRegularTransactionCreationScreen(category: Category)
     fun backToMainScreen(transactionType: TransactionType)
 }
 
@@ -116,6 +116,6 @@ interface SubCategoryNavigator : BaseNavigator {
     fun backToEditTransactionScreen(category: Category)
     fun backToMainScreen(transactionType: TransactionType)
     fun openCreateCategoryScreen(category: Category? = null)
-    fun backToFixedTransactionCreationScreen(category: Category)
+    fun backToRegularTransactionCreationScreen(category: Category)
     fun openRemoveDialog(subCategory: Category)
 }

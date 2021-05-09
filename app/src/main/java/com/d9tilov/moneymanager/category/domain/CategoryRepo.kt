@@ -2,21 +2,18 @@ package com.d9tilov.moneymanager.category.domain
 
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.transaction.TransactionType
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Maybe
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
 
 interface CategoryRepo {
 
-    fun createExpenseDefaultCategories(): Completable
-    fun createIncomeDefaultCategories(): Completable
-    fun create(category: Category): Single<Long>
-    fun update(category: Category): Completable
-    fun getCategoryById(id: Long): Maybe<Category>
-    fun getCategoriesByType(type: TransactionType): Flowable<List<Category>>
-    fun getChildrenByParent(parentCategory: Category): Flowable<List<Category>>
-    fun deleteCategory(category: Category): Completable
-    fun deleteSubcategory(subCategory: Category): Single<Boolean>
-    fun deleteFromGroup(subCategory: Category): Single<Boolean>
+    suspend fun createExpenseDefaultCategories()
+    suspend fun createIncomeDefaultCategories()
+    suspend fun create(category: Category): Long
+    suspend fun update(category: Category)
+    suspend fun getCategoryById(id: Long): Category
+    fun getCategoriesByType(type: TransactionType): Flow<List<Category>>
+    fun getChildrenByParent(parentCategory: Category): Flow<List<Category>>
+    suspend fun deleteCategory(category: Category)
+    suspend fun deleteSubcategory(subCategory: Category): Boolean
+    suspend fun deleteFromGroup(subCategory: Category): Boolean
 }

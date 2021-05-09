@@ -7,24 +7,22 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.d9tilov.moneymanager.budget.data.local.entity.BudgetDbModel
-import io.reactivex.Completable
-import io.reactivex.Single
 
 @Dao
-abstract class BudgetDao {
+interface BudgetDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(budget: BudgetDbModel): Completable
+    suspend fun insert(budget: BudgetDbModel)
 
     @Query("SELECT * FROM budget WHERE clientId=:uid")
-    abstract fun get(uid: String): Single<BudgetDbModel>
+    suspend fun get(uid: String): BudgetDbModel
 
     @Query("SELECT COUNT(*)  FROM budget WHERE clientId=:uid")
-    abstract fun getCount(uid: String): Single<Int>
+    suspend fun getCount(uid: String): Int
 
     @Update
-    abstract fun update(budget: BudgetDbModel): Completable
+    suspend fun update(budget: BudgetDbModel)
 
     @Delete
-    abstract fun delete(budget: BudgetDbModel): Completable
+    suspend fun delete(budget: BudgetDbModel)
 }

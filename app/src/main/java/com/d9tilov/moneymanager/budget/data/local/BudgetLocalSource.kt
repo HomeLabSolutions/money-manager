@@ -5,8 +5,6 @@ import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.budget.data.entity.BudgetData
 import com.d9tilov.moneymanager.budget.data.local.mapper.BudgetMapper
-import io.reactivex.Completable
-import io.reactivex.Single
 
 class BudgetLocalSource(
     private val preferencesStore: PreferencesStore,
@@ -16,10 +14,10 @@ class BudgetLocalSource(
 
     private val budgetDao = appDatabase.budgetDao()
 
-    override fun insert(budgetData: BudgetData): Completable {
+    override suspend fun insert(budgetData: BudgetData) {
         val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            Completable.error(WrongUidException())
+        if (currentUserId == null) {
+            throw WrongUidException()
         } else {
             budgetDao.insert(
                 budgetMapper.toDbModel(
@@ -31,37 +29,38 @@ class BudgetLocalSource(
         }
     }
 
-    override fun get(): Single<BudgetData> {
+    override suspend fun get(): BudgetData {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
-            Single.error(WrongUidException())
+            throw WrongUidException()
         } else {
-            budgetDao.get(currentUserId).map { budgetMapper.toDataModel(it) }
+            val budgetDbModel = budgetDao.get(currentUserId)
+            budgetMapper.toDataModel(budgetDbModel)
         }
     }
 
-    override fun getCount(): Single<Int> {
+    override suspend fun getCount(): Int {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
-            Single.error(WrongUidException())
+            throw WrongUidException()
         } else {
             budgetDao.getCount(currentUserId)
         }
     }
 
-    override fun update(budgetData: BudgetData): Completable {
+    override suspend fun update(budgetData: BudgetData) {
         val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            Completable.error(WrongUidException())
+        if (currentUserId == null) {
+            throw WrongUidException()
         } else {
-            budgetDao.update(budgetMapper.toDbModel(budgetData))
+            budgetDao.update(budgetMapper.toDbModel(budgetData).copy(clientId = currentUserId))
         }
     }
 
-    override fun delete(budgetData: BudgetData): Completable {
+    override suspend fun delete(budgetData: BudgetData) {
         val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            Completable.error(WrongUidException())
+        if (currentUserId == null) {
+            throw WrongUidException()
         } else {
             budgetDao.delete(budgetMapper.toDbModel(budgetData))
         }

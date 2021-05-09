@@ -1,21 +1,20 @@
 package com.d9tilov.moneymanager.transaction.domain
 
-import androidx.paging.PagedList
+import androidx.paging.PagingData
 import com.d9tilov.moneymanager.base.domain.Interactor
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
-import io.reactivex.Completable
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
 
 interface TransactionInteractor : Interactor {
 
-    fun addTransaction(transaction: Transaction): Completable
-    fun getTransactionById(id: Long): Flowable<Transaction>
-    fun getTransactionsByType(type: TransactionType): Flowable<PagedList<BaseTransaction>>
-    fun update(transaction: Transaction): Completable
-    fun removeTransaction(transaction: Transaction): Completable
-    fun removeAllByCategory(category: Category): Completable
-    fun clearAll(): Completable
+    suspend fun addTransaction(transaction: Transaction)
+    fun getTransactionById(id: Long): Flow<Transaction>
+    fun getTransactionsByType(type: TransactionType): Flow<PagingData<BaseTransaction>>
+    suspend fun update(transaction: Transaction)
+    suspend fun removeTransaction(transaction: Transaction)
+    suspend fun removeAllByCategory(category: Category)
+    suspend fun clearAll()
 }
