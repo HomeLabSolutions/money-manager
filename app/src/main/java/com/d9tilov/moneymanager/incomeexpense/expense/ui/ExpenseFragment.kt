@@ -38,7 +38,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.math.BigDecimal
@@ -95,13 +94,15 @@ class ExpenseFragment :
             )
         }
         lifecycleScope.launch {
-            viewModel.transactions
-                .collectLatest { transactionAdapter.submitData(it) }
+            viewModel.transactions.collectLatest {
+                transactionAdapter.submitData(
+                    it
+                )
+            }
         }
         lifecycleScope.launch {
             transactionAdapter
                 .loadStateFlow
-                .distinctUntilChanged()
                 .collectLatest { loadStates ->
                     isTransactionDataEmpty =
                         loadStates.source.refresh is LoadState.NotLoading && loadStates.append.endOfPaginationReached && transactionAdapter.itemCount == 0
@@ -212,12 +213,24 @@ class ExpenseFragment :
     private fun onKeyboardVisibilityAnimation(open: Boolean) {
         viewBinding.run {
             if (open) {
-                expenseCategoryRvList.show()
+                val shownCategories = expenseCategoryRvList.show()
+                if (shownCategories) {
+                    animateCategories(open)
+                }
             } else {
-                expenseTransactionRvList.show()
-                expenseCategoryRvList.gone()
+                val shownTransactions = expenseTransactionRvList.show()
+                if (shownTransactions) {
+                    animateTransactions(open)
+                }
+                val goneCategories = expenseCategoryRvList.gone()
+                if (goneCategories) {
+                    animateCategories(open)
+                }
             }
         }
+    }
+
+    private fun animateCategories(open: Boolean) {
         val alphaAnimationCategories =
             ObjectAnimator.ofFloat(
                 viewBinding.expenseCategoryRvList,
@@ -228,6 +241,10 @@ class ExpenseFragment :
                 duration = ANIMATION_DURATION_CAT
                 interpolator = AccelerateInterpolator()
             }
+        alphaAnimationCategories.start()
+    }
+
+    private fun animateTransactions(open: Boolean) {
         val alphaAnimationTransactions =
             ObjectAnimator.ofFloat(
                 viewBinding.expenseTransactionRvList,
@@ -238,7 +255,6 @@ class ExpenseFragment :
                 duration = ANIMATION_DURATION_TRANSACTION
                 interpolator = AccelerateInterpolator()
             }
-        alphaAnimationCategories.start()
         alphaAnimationTransactions.start()
     }
 

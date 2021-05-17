@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.transaction.data.local
 
+import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -8,6 +9,7 @@ import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.category.data.entity.Category
+import com.d9tilov.moneymanager.core.util.getBackupDate
 import com.d9tilov.moneymanager.core.util.getEndOfDay
 import com.d9tilov.moneymanager.core.util.isSameDay
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -116,8 +118,7 @@ class TransactionLocalSource(
             Pager(
                 config = PagingConfig(
                     PAGE_SIZE,
-                    INITIAL_PAGE_SIZE,
-                    false
+                    enablePlaceholders = false
                 )
             ) { transactionDao.getAllByType(currentUserId, from, to, transactionType) }.flow
                 .map { value ->
@@ -277,7 +278,6 @@ class TransactionLocalSource(
     }
 
     companion object {
-        private const val PAGE_SIZE = 30
-        private const val INITIAL_PAGE_SIZE = 3 * PAGE_SIZE
+        private const val PAGE_SIZE = 10
     }
 }
