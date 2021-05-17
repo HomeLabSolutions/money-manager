@@ -13,10 +13,9 @@ import com.d9tilov.moneymanager.core.util.isNetworkConnected
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.data.local.mapper.DataUserMapper
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import java.util.Calendar
+import java.util.Date
 
 class UserLocalSource(
     private val context: Context,
@@ -82,13 +81,12 @@ class UserLocalSource(
         if (currentUserId == null) {
             throw WrongUidException()
         } else {
-            userDao.getById(currentUserId).collectLatest {
-                if (isNetworkConnected(context)) {
-                    userDao.update(it.copy(backupData = BackupData(Calendar.getInstance().timeInMillis)))
-                    backupManager.backupDb(currentUserId)
-                } else {
-                    throw NetworkException()
-                }
+            val user = userDao.getById(currentUserId).first()
+            if (isNetworkConnected(context)) {
+                userDao.update(user.copy(backupData = BackupData(Date().time)))
+                backupManager.backupDb(currentUserId)
+            } else {
+                throw NetworkException()
             }
         }
     }

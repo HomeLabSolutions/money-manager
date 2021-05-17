@@ -30,11 +30,10 @@ class SubCategoryFragment :
     private val args by navArgs<SubCategoryFragmentArgs>()
     private val parentCategory by lazy { args.parentCategory }
     private val transactionType by lazy { args.transactionType }
+    private lateinit var modifiedParentCategory: Category
 
     override fun getNavigator() = this
     override val viewModel by viewModels<SubCategoryViewModel>()
-
-    private lateinit var modifiedParentCategory: Category
 
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics

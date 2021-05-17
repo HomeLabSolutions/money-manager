@@ -1,7 +1,5 @@
 package com.d9tilov.moneymanager.category.subcategory.vm
 
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -13,10 +11,12 @@ import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class SubCategoryViewModel @ViewModelInject constructor(
+class SubCategoryViewModel @AssistedInject constructor(
     private val transactionInteractor: TransactionInteractor,
     categoryInteractor: CategoryInteractor,
     @Assisted private val savedStateHandle: SavedStateHandle

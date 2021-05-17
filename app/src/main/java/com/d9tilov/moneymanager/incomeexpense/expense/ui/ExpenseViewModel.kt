@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -15,13 +14,16 @@ import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionHeader
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import javax.inject.Inject
 
-class ExpenseViewModel @ViewModelInject constructor(
-    private val categoryInteractor: CategoryInteractor,
+@HiltViewModel
+class ExpenseViewModel @Inject constructor(
+    categoryInteractor: CategoryInteractor,
     private val transactionInteractor: TransactionInteractor
 ) : BaseIncomeExpenseViewModel<ExpenseNavigator>() {
 

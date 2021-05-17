@@ -1,17 +1,17 @@
 package com.d9tilov.moneymanager.goal.vm
 
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.CreatedGoalNavigator
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.goal.domain.GoalInteractor
 import com.d9tilov.moneymanager.goal.domain.entity.Goal
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class CreatedGoalViewModel @ViewModelInject constructor(
+class CreatedGoalViewModel @AssistedInject constructor(
     private val goalInteractor: GoalInteractor,
     @Assisted val savedStateHandle: SavedStateHandle
 ) : BaseViewModel<CreatedGoalNavigator>() {

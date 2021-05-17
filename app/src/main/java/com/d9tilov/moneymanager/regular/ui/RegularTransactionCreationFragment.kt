@@ -58,7 +58,6 @@ class RegularTransactionCreationFragment :
     private var toolbar: MaterialToolbar? = null
 
     override fun getNavigator() = this
-
     override val viewModel by viewModels<CreatedRegularTransactionViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -1,8 +1,5 @@
 package com.d9tilov.moneymanager.category.ui.vm
 
-import android.util.Log
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryUnionDialogNavigator
@@ -11,10 +8,12 @@ import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 
-class CategoryUnionViewModel @ViewModelInject constructor(
+class CategoryUnionViewModel @AssistedInject constructor(
     private val categoryInteractor: CategoryInteractor,
     private val firebaseAnalytics: FirebaseAnalytics,
     @Assisted val savedStateHandle: SavedStateHandle
@@ -32,15 +31,10 @@ class CategoryUnionViewModel @ViewModelInject constructor(
 
     fun createGroup(categoryItem1: Category, categoryItem2: Category, groupedCategory: Category) =
         viewModelScope.launch(saveCategoryExceptionHandler) {
-            Log.d("moggot", "launch")
             val parentId = categoryInteractor.create(groupedCategory)
-            Log.d("moggot", "parentId: " + parentId)
             val category = categoryInteractor.getCategoryById(parentId)
-            Log.d("moggot", "category: " + category)
             categoryInteractor.update(categoryItem1.copy(parent = category))
-            Log.d("moggot", "update1")
             categoryInteractor.update(categoryItem2.copy(parent = category))
-            Log.d("moggot", "update2")
             navigator?.accept()
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
                 param("create_category", "name: " + groupedCategory.name)

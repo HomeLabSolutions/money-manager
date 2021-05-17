@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.settings.ui.vm
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -13,10 +12,13 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SettingsViewModel @ViewModelInject constructor(
+@HiltViewModel
+class SettingsViewModel @Inject constructor(
     private val userInfoInteractor: UserInteractor,
     private val firebaseAnalytics: FirebaseAnalytics
 ) : BaseViewModel<SettingsNavigator>() {
@@ -38,8 +40,8 @@ class SettingsViewModel @ViewModelInject constructor(
         }
     }
 
-    fun backup() = viewModelScope.launch(settingsExceptionHandler) {
-        userInfoInteractor.backup()
+    fun backup() {
+        viewModelScope.launch(settingsExceptionHandler) { userInfoInteractor.backup() }
         setMessage(R.string.backup_succeeded)
     }
 }

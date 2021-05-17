@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.currency.vm
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.CurrencyNavigator
@@ -11,18 +10,20 @@ import com.d9tilov.moneymanager.core.util.getFirstDayOfMonth
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.user.domain.UserInteractor
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.util.Date
+import javax.inject.Inject
 
-class CurrencyViewModel @ViewModelInject constructor(
+@HiltViewModel
+class CurrencyViewModel @Inject constructor(
     private val currencyInteractor: CurrencyInteractor,
     private val userInteractor: UserInteractor,
     private val budgetInteractor: BudgetInteractor
-) :
-    BaseViewModel<CurrencyNavigator>() {
+) : BaseViewModel<CurrencyNavigator>() {
 
     val currencies = currencyInteractor.getCurrencies().distinctUntilChanged().asLiveData()
 

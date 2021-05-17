@@ -28,7 +28,6 @@ class CategoryIconSetFragment :
     private val args by navArgs<CategoryIconSetFragmentArgs>()
     private val transactionType by lazy { args.transactionType }
     private val viewBinding by viewBinding(FragmentCategoryIconSetBinding::bind)
-
     private var toolbar: MaterialToolbar? = null
     private lateinit var categoryAdapter: CategoryIconSetAdapter
 
