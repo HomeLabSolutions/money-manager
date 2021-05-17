@@ -19,11 +19,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import java.util.Calendar
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
 class ExpenseViewModel @Inject constructor(
-    categoryInteractor: CategoryInteractor,
+    private val categoryInteractor: CategoryInteractor,
     private val transactionInteractor: TransactionInteractor
 ) : BaseIncomeExpenseViewModel<ExpenseNavigator>() {
 
@@ -56,38 +58,23 @@ class ExpenseViewModel @Inject constructor(
         }
     }
 
-    // fun generateData() {
-    //     val numbers = IntArray(6) { it + 1 }.toList()
-    //     Observable.fromIterable(numbers)
-    //         .flatMapCompletable {
-    //             categoryInteractor.getCategoryById((3..8).random().toLong())
-    //                 .flatMapCompletable { category ->
-    //                     transactionInteractor.addTransaction(
-    //                         createTransaction(
-    //                             category,
-    //                             it
-    //                         )
-    //                     )
-    //                 }
-    //         }
-    //         .subscribeOn(ioScheduler)
-    //         .observeOn(uiScheduler)
-    //         .subscribe {}
-    //         .addTo(compositeDisposable)
+    // fun generateData() = viewModelScope.launch {
+    //     val numbers = IntArray(100) { it + 1 }.toList()
+    //     for (i in numbers) {
+    //         val category = categoryInteractor.getCategoryById((7..11).random().toLong())
+    //         transactionInteractor.addTransaction(
+    //             createTransaction(
+    //                 category,
+    //                 i
+    //             )
+    //         )
+    //     }
     // }
     //
-    // fun clearData() {
-    //     transactionInteractor.clearAll()
-    //         .subscribeOn(ioScheduler)
-    //         .observeOn(uiScheduler)
-    //         .subscribe()
-    //         .addTo(compositeDisposable)
-    // }
-
     // private fun createTransaction(category: Category, number: Int): Transaction {
-    //     val d = Date()
+    //     val d = Calendar.getInstance().timeInMillis
     //     val rand = (number..number + 1).random()
-    //     val dateBefore = Date(d.time - rand * 24 * 3600 * 1000)
+    //     val dateBefore = Date(d - rand * 24 * 3600 * 100)
     //     return Transaction(
     //         type = TransactionType.EXPENSE,
     //         sum = number.toBigDecimal(),

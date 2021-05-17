@@ -118,7 +118,7 @@ class IncomeFragment :
     override fun onStart() {
         super.onStart()
         if ((activity as MainActivity).forceShowKeyboard) {
-            showKeyboard(viewBinding.incomeMainSum)
+            showKeyboard(viewBinding.incomeMainSum.moneyEditText)
         } else {
             viewBinding.run {
                 incomeTransactionRvList.show()
@@ -145,8 +145,7 @@ class IncomeFragment :
                     layoutManager.orientation
                 )
             )
-            val snapHelper: SnapHelper =
-                ItemSnapHelper()
+            val snapHelper: SnapHelper = ItemSnapHelper()
             snapHelper.attachToRecyclerView(incomeCategoryRvList)
         }
     }
@@ -215,12 +214,26 @@ class IncomeFragment :
     }
 
     private fun onKeyboardVisibilityAnimation(open: Boolean) {
-        if (open) {
-            viewBinding.incomeCategoryRvList.show()
-        } else {
-            viewBinding.incomeTransactionRvList.show()
-            viewBinding.incomeCategoryRvList.gone()
+        viewBinding.run {
+            if (open) {
+                val shownCategories = incomeCategoryRvList.show()
+                if (shownCategories) {
+                    animateCategories(open)
+                }
+            } else {
+                val shownTransactions = incomeTransactionRvList.show()
+                if (shownTransactions) {
+                    animateTransactions(open)
+                }
+                val goneCategories = incomeCategoryRvList.gone()
+                if (goneCategories) {
+                    animateCategories(open)
+                }
+            }
         }
+    }
+
+    private fun animateCategories(open: Boolean) {
         val alphaAnimationCategories =
             ObjectAnimator.ofFloat(
                 viewBinding.incomeCategoryRvList,
@@ -231,9 +244,13 @@ class IncomeFragment :
                 duration = ANIMATION_DURATION_CAT
                 interpolator = AccelerateInterpolator()
             }
+        alphaAnimationCategories.start()
+    }
+
+    private fun animateTransactions(open: Boolean) {
         val alphaAnimationTransactions =
             ObjectAnimator.ofFloat(
-                viewBinding.incomeCategoryRvList,
+                viewBinding.incomeTransactionRvList,
                 View.ALPHA,
                 if (open) ALPHA_MAX else ALPHA_CAT_MIN,
                 if (open) ALPHA_CAT_MIN else ALPHA_MAX
@@ -242,7 +259,6 @@ class IncomeFragment :
                 interpolator = AccelerateInterpolator()
             }
         alphaAnimationTransactions.start()
-        alphaAnimationCategories.start()
     }
 
     override fun saveTransaction(category: Category) {

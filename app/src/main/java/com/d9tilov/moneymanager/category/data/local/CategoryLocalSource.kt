@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.category.data.local
 
-import android.util.Log
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.PrepopulateDataManager
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongIdException

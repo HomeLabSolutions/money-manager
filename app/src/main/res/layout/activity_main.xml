@@ -18,6 +18,7 @@
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:itemHorizontalTranslationEnabled="true"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_navigation_menu" />

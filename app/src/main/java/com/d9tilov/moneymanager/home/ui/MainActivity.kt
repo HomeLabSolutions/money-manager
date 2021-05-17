@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.animation.AccelerateInterpolator
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
@@ -34,6 +35,8 @@ class MainActivity :
     private lateinit var topView: View
     private var isKeyboardShown = false
     private lateinit var globalLayoutListener: ViewTreeObserver.OnGlobalLayoutListener
+    private val bottomMenuSet =
+        setOf(R.id.income_expense_dest, R.id.chart_dest, R.id.settings_dest)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,8 +77,11 @@ class MainActivity :
                     when (destination.id) {
                         R.id.income_expense_dest,
                         R.id.chart_dest,
-                        R.id.settings_dest ->
-                            viewBinding.bottomNav.show()
+                        R.id.settings_dest -> {
+                            if (!isKeyboardShown) {
+                                showBottomBarWithAnimation()
+                            }
+                        }
                         else -> viewBinding.bottomNav.gone()
                     }
                 }
@@ -100,20 +106,6 @@ class MainActivity :
     override fun onCloseKeyboard() {
         super.onCloseKeyboard()
         forceShowKeyboard = false
-        if (findNavController(R.id.nav_host_container).currentDestination?.id == R.id.income_expense_dest) {
-            val bottomBarAnimationAppear =
-                ObjectAnimator.ofFloat(
-                    viewBinding.bottomNav,
-                    View.ALPHA,
-                    ALPHA_BAR_MIN,
-                    ALPHA_BAR_MAX
-                ).apply {
-                    duration = ANIMATION_DURATION_BAR
-                    interpolator = AccelerateInterpolator()
-                }
-            viewBinding.bottomNav.show()
-            bottomBarAnimationAppear.start()
-        }
     }
 
     override fun onDismiss(dialog: DialogInterface?) {
@@ -162,8 +154,30 @@ class MainActivity :
                 isKeyboardShown = false
                 onCloseKeyboard()
                 (currentFragment as? OnKeyboardVisibleChange)?.onCloseKeyboard()
+                val curDest = findNavController(R.id.nav_host_container).currentDestination?.id
+                if (bottomMenuSet.contains(curDest)) {
+                    showBottomBarWithAnimation()
+                }
             }
         }
+    }
+
+    private fun showBottomBarWithAnimation() {
+        if (viewBinding.bottomNav.isVisible) {
+            return
+        }
+        val bottomBarAnimationAppear =
+            ObjectAnimator.ofFloat(
+                viewBinding.bottomNav,
+                View.ALPHA,
+                ALPHA_BAR_MIN,
+                ALPHA_BAR_MAX
+            ).apply {
+                duration = ANIMATION_DURATION_BAR
+                interpolator = AccelerateInterpolator()
+            }
+        viewBinding.bottomNav.show()
+        bottomBarAnimationAppear.start()
     }
 
     companion object {

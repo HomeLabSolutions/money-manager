@@ -2,6 +2,7 @@ package com.d9tilov.moneymanager.incomeexpense.ui
 
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewStub
 import android.widget.ImageView
 import android.widget.TextView
@@ -17,7 +18,6 @@ import com.d9tilov.moneymanager.core.events.OnDialogDismissListener
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
-import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
@@ -120,7 +120,8 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
     }
 
     protected fun hideViewStub() {
-        emptyViewStub?.gone()
+        emptyViewStub?.visibility =
+            GONE //don't use gone() extension!!! isVisible and isShown not worked
     }
 
     private fun openRemoveConfirmationDialog(transaction: Transaction) {
