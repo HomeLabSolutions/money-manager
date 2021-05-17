@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.period
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 sealed class PeriodType(open val name: String) : Parcelable {
 

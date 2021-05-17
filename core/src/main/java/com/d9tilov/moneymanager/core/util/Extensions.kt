@@ -6,19 +6,14 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.widget.EditText
-import com.d9tilov.moneymanager.core.AndroidDisposable
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DECIMAL_SEPARATOR
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DEFAULT_DECIMAL_SEPARATOR
-import io.reactivex.disposables.Disposable
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
 val <T> T.exhaustive: T
     get() = this
-
-fun Disposable.addTo(androidDisposable: AndroidDisposable): Disposable =
-    apply { androidDisposable.add(this) }
 
 val String?.toBigDecimal: BigDecimal
     get() {

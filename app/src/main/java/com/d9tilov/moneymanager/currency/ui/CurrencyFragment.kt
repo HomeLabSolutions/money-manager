@@ -143,7 +143,6 @@ class CurrencyFragment :
                 R.color.button_normal_color_start
             )
         )
-        snackBar?.setAction(getString(R.string.retry)) { viewModel.retryCall() }?.show()
         snackBar?.view?.setBackgroundColor(
             ContextCompat.getColor(
                 requireContext(),

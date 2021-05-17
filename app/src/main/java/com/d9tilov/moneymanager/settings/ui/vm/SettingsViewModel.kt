@@ -31,8 +31,10 @@ class SettingsViewModel @ViewModelInject constructor(
 
     fun logout() {
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN) {
-            param(FirebaseAnalytics.Param.ITEM_CATEGORY, "logout")
-
+            param(
+                FirebaseAnalytics.Param.ITEM_CATEGORY,
+                "logout"
+            )
         }
     }
 

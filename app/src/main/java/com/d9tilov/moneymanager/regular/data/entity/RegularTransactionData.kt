@@ -5,7 +5,7 @@ import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.util.getDayOfWeek
 import com.d9tilov.moneymanager.period.PeriodType
 import com.d9tilov.moneymanager.transaction.TransactionType
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.util.Date
 

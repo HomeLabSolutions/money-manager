@@ -2,7 +2,7 @@ package com.d9tilov.moneymanager.goal.data.entity
 
 import android.os.Parcelable
 import com.d9tilov.moneymanager.core.constants.DataConstants
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.util.Date
 

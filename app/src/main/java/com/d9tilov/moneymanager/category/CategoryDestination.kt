@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.category
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 sealed class CategoryDestination(open val name: String) : Parcelable {
 

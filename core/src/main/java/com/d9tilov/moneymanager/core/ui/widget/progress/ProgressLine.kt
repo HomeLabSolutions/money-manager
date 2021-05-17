@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.os.Handler
+import android.os.Looper
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
@@ -182,7 +183,6 @@ class ProgressLine @JvmOverloads constructor(
             currentValue.toBigDecimal().divideBy(maxValue.toBigDecimal())
                 .multiply(100.toBigDecimal())
                 .toInt() - percentage
-        ValueAnimator()
         val valueAnimator = ValueAnimator
             .ofInt(percentage, percentage + diff)
             .setDuration(ANIMATION_DURATION)
@@ -193,7 +193,7 @@ class ProgressLine @JvmOverloads constructor(
             calculateBarScale()
             invalidate()
         }
-        Handler().postDelayed({ valueAnimator.start() }, delayAnimDuration)
+        Handler(Looper.myLooper()!!).postDelayed({ valueAnimator.start() }, delayAnimDuration)
     }
 
     companion object {

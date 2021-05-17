@@ -6,7 +6,7 @@ import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction.Companion.ITEM
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.util.Date
 

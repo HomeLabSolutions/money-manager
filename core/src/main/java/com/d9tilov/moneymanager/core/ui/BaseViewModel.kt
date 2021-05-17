@@ -4,8 +4,6 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.d9tilov.moneymanager.core.AndroidDisposable
-import com.d9tilov.moneymanager.core.network.NetworkRetryManager
 
 abstract class BaseViewModel<T : BaseNavigator> : ViewModel() {
 
@@ -16,12 +14,6 @@ abstract class BaseViewModel<T : BaseNavigator> : ViewModel() {
         }
     private val msg = MutableLiveData<Int>()
     private val loading = MutableLiveData<Boolean>()
-    protected val compositeDisposable = AndroidDisposable()
-    protected val retryManager = NetworkRetryManager()
-
-    fun retryCall() {
-        retryManager.retry()
-    }
 
     // Post in background thread
     fun postMessage(@StringRes message: Int) {
@@ -46,8 +38,4 @@ abstract class BaseViewModel<T : BaseNavigator> : ViewModel() {
     fun getMsg(): LiveData<Int> = msg
     fun getLoading(): LiveData<Boolean> = loading
 
-    override fun onCleared() {
-        compositeDisposable.dispose()
-        super.onCleared()
-    }
 }
