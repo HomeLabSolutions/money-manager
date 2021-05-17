@@ -1,7 +1,5 @@
 package com.d9tilov.moneymanager.regular.vm
 
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -12,15 +10,16 @@ import com.d9tilov.moneymanager.period.PeriodType
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.transaction.TransactionType
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.util.Date
 
-class CreatedRegularTransactionViewModel @ViewModelInject constructor(
+class CreatedRegularTransactionViewModel @AssistedInject constructor(
     private val regularTransactionInteractor: RegularTransactionInteractor,
     @Assisted val savedStateHandle: SavedStateHandle
-) :
-    BaseViewModel<RegularTransactionCreatedNavigator>() {
+) : BaseViewModel<RegularTransactionCreatedNavigator>() {
 
     var sum = MutableLiveData<BigDecimal>()
     var category = MutableLiveData<Category?>()

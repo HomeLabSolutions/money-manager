@@ -1,7 +1,5 @@
 package com.d9tilov.moneymanager.category.ui.vm
 
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryCreationNavigator
@@ -11,10 +9,12 @@ import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_D
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 
-class CategoryCreationViewModel @ViewModelInject constructor(
+class CategoryCreationViewModel @AssistedInject constructor(
     private val categoryInteractor: CategoryInteractor,
     @Assisted val savedStateHandle: SavedStateHandle,
     private val firebaseAnalytics: FirebaseAnalytics

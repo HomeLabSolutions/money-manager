@@ -24,6 +24,7 @@ class SubcategoryRemoveDialogFragment :
 
     override val layoutId = R.layout.fragment_dialog_triple_remove
     override fun getNavigator() = this
+
     override val viewModel by viewModels<SubcategoryRemoveViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

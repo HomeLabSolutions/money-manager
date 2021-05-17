@@ -1,7 +1,5 @@
 package com.d9tilov.moneymanager.category.ui.vm
 
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.RemoveSubCategoryDialogNavigator
@@ -11,9 +9,11 @@ import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
 
-class SubcategoryRemoveViewModel @ViewModelInject constructor(
+class SubcategoryRemoveViewModel @AssistedInject constructor(
     private val categoryInteractor: CategoryInteractor,
     private val transactionInteractor: TransactionInteractor,
     private val firebaseAnalytics: FirebaseAnalytics,

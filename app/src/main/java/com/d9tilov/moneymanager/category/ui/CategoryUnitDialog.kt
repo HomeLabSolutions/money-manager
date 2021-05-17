@@ -31,7 +31,6 @@ class CategoryUnitDialog :
     private val viewBinding by viewBinding(FragmentDialogCategoryUnionBinding::bind)
 
     override val layoutId = R.layout.fragment_dialog_category_union
-
     override fun getNavigator() = this
     override val viewModel by viewModels<CategoryUnionViewModel>()
 

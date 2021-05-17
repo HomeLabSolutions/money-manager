@@ -33,6 +33,7 @@ class CategoryFragment :
     private val sum by lazy { args.sum }
 
     override fun getNavigator() = this
+
     override val viewModel by viewModels<CategoryViewModel>()
 
     @Inject

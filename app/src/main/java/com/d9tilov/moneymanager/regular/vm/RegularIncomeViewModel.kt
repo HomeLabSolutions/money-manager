@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.regular.vm
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -8,9 +7,12 @@ import com.d9tilov.moneymanager.base.ui.navigator.RegularIncomeNavigator
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.transaction.TransactionType
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RegularIncomeViewModel @ViewModelInject constructor(private val regularTransactionInteractor: RegularTransactionInteractor) :
+@HiltViewModel
+class RegularIncomeViewModel @Inject constructor(private val regularTransactionInteractor: RegularTransactionInteractor) :
     BaseRegularIncomeExpenseViewModel<RegularIncomeNavigator>() {
 
     lateinit var regularIncomeTransactionList: LiveData<List<RegularTransaction>>

@@ -64,7 +64,6 @@ class CategoryLocalSource(
             throw WrongUidException()
         } else {
             val count = categoryDao.getCategoriesCountByName(currentUserId, category.name)
-            Log.d("moggot", "create count: " + count)
             if (count == 0) {
                 categoryDao.create(categoryMapper.toDbModel(category.copy(clientId = currentUserId)))
             } else {

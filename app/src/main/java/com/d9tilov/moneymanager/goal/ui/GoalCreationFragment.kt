@@ -29,7 +29,6 @@ class GoalCreationFragment :
     private var toolbar: MaterialToolbar? = null
 
     override fun getNavigator() = this
-
     override val viewModel by viewModels<CreatedGoalViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

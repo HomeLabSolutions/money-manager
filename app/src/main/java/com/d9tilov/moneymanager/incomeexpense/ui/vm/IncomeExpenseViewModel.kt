@@ -1,8 +1,9 @@
 package com.d9tilov.moneymanager.incomeexpense.ui.vm
 
-import androidx.hilt.lifecycle.ViewModelInject
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeExpenseNavigator
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class IncomeExpenseViewModel @ViewModelInject constructor() :
-    BaseViewModel<IncomeExpenseNavigator>()
+@HiltViewModel
+class IncomeExpenseViewModel @Inject constructor() : BaseViewModel<IncomeExpenseNavigator>()
