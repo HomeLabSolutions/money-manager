@@ -13,8 +13,8 @@ android {
         targetSdkVersion versions.targetSdk
     }
 
-    viewBinding {
-        enabled true
+    buildFeatures {
+        viewBinding true
     }
 
     buildTypes {
@@ -40,8 +40,6 @@ dependencies {
     kapt "com.github.bumptech.glide:compiler:4.12.0"
 
     implementation "androidx.room:room-runtime:2.3.0"
-    implementation "androidx.room:room-rxjava2:2.3.0"
 
     implementation "androidx.paging:paging-runtime-ktx:3.0.0"
-    implementation "androidx.paging:paging-rxjava2-ktx:3.0.0"
 }

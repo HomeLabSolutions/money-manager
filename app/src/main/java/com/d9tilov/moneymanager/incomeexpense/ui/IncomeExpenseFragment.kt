@@ -20,7 +20,6 @@ import com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialog.Companion
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_income_expense.income_expense_view_pager
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -93,7 +92,7 @@ class IncomeExpenseFragment :
                     }
                 }
             })
-            incomeExpenseTabs.setupWithViewPager(income_expense_view_pager)
+            incomeExpenseTabs.setupWithViewPager(viewBinding.incomeExpenseViewPager)
             incomeExpenseViewPager.adapter = incomeExpenseAdapter
             incomeExpenseViewPager.currentItem =
                 if (transactionType == TransactionType.INCOME) {

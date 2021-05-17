@@ -17,10 +17,5 @@ class CurrencyLocalSource(
     }
 
     override fun getCurrencies() = currencyDao.getAll()
-        .map {
-            it.map { item ->
-                currencyLocalMapper.toDataModel(item)
-
-            }
-        }
+        .map { it.map { item -> currencyLocalMapper.toDataModel(item) } }
 }

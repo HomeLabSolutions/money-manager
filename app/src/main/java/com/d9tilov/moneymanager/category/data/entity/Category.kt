@@ -6,7 +6,7 @@ import androidx.annotation.DrawableRes
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_DATA_ID
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
 import com.d9tilov.moneymanager.transaction.TransactionType
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Category(

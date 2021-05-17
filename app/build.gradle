@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply plugin: 'dagger.hilt.android.plugin'
@@ -64,8 +64,8 @@ android {
         }
     }
 
-    viewBinding {
-        enabled = true
+    buildFeatures {
+        viewBinding true
     }
     dataBinding {
         enabled = true
@@ -119,15 +119,15 @@ dependencies {
     implementation project(':core')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.32"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.0"
 
-    implementation "com.google.firebase:firebase-auth:20.0.4"
+    implementation "com.google.firebase:firebase-auth:21.0.0"
     implementation "com.firebaseui:firebase-ui-auth:6.2.0"
     implementation "com.google.android.gms:play-services-auth:19.0.0"
 
-    implementation "com.google.firebase:firebase-analytics-ktx:18.0.3"
-    implementation "com.google.firebase:firebase-crashlytics:17.4.1"
-    implementation "com.google.firebase:firebase-storage-ktx:19.2.2"
+    implementation "com.google.firebase:firebase-analytics-ktx:19.0.0"
+    implementation "com.google.firebase:firebase-crashlytics:18.0.0"
+    implementation "com.google.firebase:firebase-storage-ktx:20.0.0"
 
     implementation "com.facebook.android:facebook-login:5.15.3"
     implementation("com.twitter.sdk.android:twitter:3.3.0") {
@@ -145,9 +145,7 @@ dependencies {
     implementation "com.facebook.stetho:stetho-okhttp3:1.5.1"
 
     implementation "androidx.paging:paging-runtime-ktx:3.0.0"
-    implementation "androidx.paging:paging-rxjava2-ktx:3.0.0"
     implementation "androidx.room:room-runtime:2.3.0"
-    implementation "androidx.room:room-rxjava2:2.3.0"
     implementation 'androidx.room:room-ktx:2.3.0'
     kapt "androidx.room:room-compiler:2.3.0"
 
