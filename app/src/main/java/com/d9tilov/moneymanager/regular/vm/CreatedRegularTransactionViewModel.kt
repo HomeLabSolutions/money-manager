@@ -30,37 +30,39 @@ class CreatedRegularTransactionViewModel @ViewModelInject constructor(
     var pushEnabled = MutableLiveData<Boolean>()
     var weekDaysSelected = MutableLiveData<Int>()
 
-    fun save() = viewModelScope.launch {
+    fun save() {
         val transactionType =
             requireNotNull(savedStateHandle.get<TransactionType>("transactionType"))
         val regularTransaction = savedStateHandle.get<RegularTransaction>("regular_transaction")
-        if (regularTransaction == null) {
-            regularTransactionInteractor.insert(
-                RegularTransaction(
-                    type = transactionType,
-                    sum = sum.value!!,
-                    category = category.value!!,
-                    startDate = startDate.value!!,
-                    periodType = periodType.value!!,
-                    description = description.value!!,
-                    pushEnable = pushEnabled.value!!,
-                    dayOfWeek = if (periodType.value != PeriodType.WEEK) 0 else weekDaysSelected.value!!
+        viewModelScope.launch {
+            if (regularTransaction == null) {
+                regularTransactionInteractor.insert(
+                    RegularTransaction(
+                        type = transactionType,
+                        sum = sum.value!!,
+                        category = category.value!!,
+                        startDate = startDate.value!!,
+                        periodType = periodType.value!!,
+                        description = description.value!!,
+                        pushEnable = pushEnabled.value!!,
+                        dayOfWeek = if (periodType.value != PeriodType.WEEK) 0 else weekDaysSelected.value!!
+                    )
                 )
-            )
-        } else {
-            regularTransactionInteractor.update(
-                regularTransaction.copy(
-                    type = transactionType,
-                    sum = sum.value!!,
-                    category = category.value!!,
-                    startDate = startDate.value!!,
-                    periodType = periodType.value!!,
-                    description = description.value!!,
-                    pushEnable = pushEnabled.value!!,
-                    dayOfWeek = if (periodType.value != PeriodType.WEEK) 0 else weekDaysSelected.value!!
+            } else {
+                regularTransactionInteractor.update(
+                    regularTransaction.copy(
+                        type = transactionType,
+                        sum = sum.value!!,
+                        category = category.value!!,
+                        startDate = startDate.value!!,
+                        periodType = periodType.value!!,
+                        description = description.value!!,
+                        pushEnable = pushEnabled.value!!,
+                        dayOfWeek = if (periodType.value != PeriodType.WEEK) 0 else weekDaysSelected.value!!
+                    )
                 )
-            )
+            }
+            navigator?.back()
         }
-        navigator?.back()
     }
 }

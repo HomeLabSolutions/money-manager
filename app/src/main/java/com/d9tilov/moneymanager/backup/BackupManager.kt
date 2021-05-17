@@ -2,7 +2,7 @@ package com.d9tilov.moneymanager.backup
 
 import android.content.Context
 import android.net.Uri
-import com.d9tilov.moneymanager.base.data.Resource
+import com.d9tilov.moneymanager.base.data.Result
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DATABASE_NAME
 import com.google.firebase.ktx.Firebase
@@ -16,22 +16,22 @@ import kotlin.coroutines.suspendCoroutine
 
 class BackupManager(private val context: Context) {
 
-    suspend fun backupDb(uid: String): Resource<Nothing> = suspendCoroutine { continuation ->
+    suspend fun backupDb(uid: String): Result<Nothing> = suspendCoroutine { continuation ->
         if (uid.isEmpty()) {
-            continuation.resume(Resource.error(WrongUidException()))
+            continuation.resume(Result.error(WrongUidException()))
         }
         val file = context.getDatabasePath(DATABASE_NAME)
         val parentPath = "$uid/$DATABASE_NAME"
         val fileRef = Firebase.storage.reference.child(parentPath)
         val uploadTask = fileRef.putFile(Uri.fromFile(file))
         uploadTask
-            .addOnSuccessListener { continuation.resume(Resource.success()) }
-            .addOnFailureListener { continuation.resume(Resource.error(it)) }
+            .addOnSuccessListener { continuation.resume(Result.success()) }
+            .addOnFailureListener { continuation.resume(Result.error(it)) }
     }
 
-    suspend fun restoreDb(uid: String) = suspendCoroutine<Resource<Nothing>> { continuation ->
+    suspend fun restoreDb(uid: String) = suspendCoroutine<Result<Nothing>> { continuation ->
         if (uid.isEmpty()) {
-            continuation.resume(Resource.error(WrongUidException()))
+            continuation.resume(Result.error(WrongUidException()))
         }
         val parentPath = "$uid/$DATABASE_NAME"
         val fileRef = Firebase.storage.reference.child(parentPath)
@@ -48,9 +48,9 @@ class BackupManager(private val context: Context) {
             myOutput.flush()
             myOutput.close()
             myInputs.close()
-            continuation.resume(Resource.success())
+            continuation.resume(Result.success())
         }.addOnFailureListener {
-            continuation.resume(Resource.error(it))
+            continuation.resume(Result.error(it))
         }
     }
 }

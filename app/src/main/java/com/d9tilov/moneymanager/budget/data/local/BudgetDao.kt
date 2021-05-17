@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.d9tilov.moneymanager.budget.data.local.entity.BudgetDbModel
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BudgetDao {
@@ -15,10 +16,7 @@ interface BudgetDao {
     suspend fun insert(budget: BudgetDbModel)
 
     @Query("SELECT * FROM budget WHERE clientId=:uid")
-    suspend fun get(uid: String): BudgetDbModel
-
-    @Query("SELECT COUNT(*)  FROM budget WHERE clientId=:uid")
-    suspend fun getCount(uid: String): Int
+    fun get(uid: String): Flow<BudgetDbModel?>
 
     @Update
     suspend fun update(budget: BudgetDbModel)

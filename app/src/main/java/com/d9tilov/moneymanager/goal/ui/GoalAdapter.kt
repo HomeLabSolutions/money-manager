@@ -29,7 +29,7 @@ class GoalAdapter : RecyclerView.Adapter<GoalAdapter.GoalViewHolder>() {
         val viewHolder =
             GoalViewHolder(viewBinding)
         viewBinding.root.setOnClickListener {
-            val adapterPosition = viewHolder.adapterPosition
+            val adapterPosition = viewHolder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 itemClickListener?.onItemClick(goals[adapterPosition], adapterPosition)
             }

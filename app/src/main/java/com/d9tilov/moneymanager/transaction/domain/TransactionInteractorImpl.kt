@@ -14,7 +14,7 @@ import com.d9tilov.moneymanager.transaction.domain.mapper.TransactionDomainMappe
 import com.d9tilov.moneymanager.transaction.domain.mapper.TransactionHeaderDomainMapper
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.map
 
 class TransactionInteractorImpl(
@@ -57,20 +57,23 @@ class TransactionInteractorImpl(
 
     override fun getTransactionsByType(type: TransactionType): Flow<PagingData<BaseTransaction>> {
         return categoryInteractor.getGroupedCategoriesByType(type)
-            .flatMapMerge { categoryList ->
+            .flatMapConcat { categoryList ->
                 transactionRepo.getTransactionsByType(transactionType = type)
                     .map {
                         it.map { item ->
-                            if (item is TransactionDateDataModel) {
-                                transactionHeaderDomainMapper.toDomain(item)
-                            }
-                            if (item is TransactionDataModel) {
-                                val category =
-                                    categoryList.find { item.categoryId == it.id }
-                                        ?: throw CategoryNotFoundException("Not found category with id: ${item.categoryId}")
-                                transactionDomainMapper.toDomain(item, category)
-                            } else {
-                                throw IllegalStateException("Unknown TransactionDataItem implementation: $item")
+                            when (item) {
+                                is TransactionDateDataModel -> {
+                                    transactionHeaderDomainMapper.toDomain(item)
+                                }
+                                is TransactionDataModel -> {
+                                    val category =
+                                        categoryList.find { item.categoryId == it.id }
+                                            ?: throw CategoryNotFoundException("Not found category with id: ${item.categoryId}")
+                                    transactionDomainMapper.toDomain(item, category)
+                                }
+                                else -> {
+                                    throw IllegalStateException("Unknown TransactionDataItem implementation: $item")
+                                }
                             }
                         }
                     }

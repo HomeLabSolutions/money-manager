@@ -73,7 +73,7 @@ class CategoryColorAdapter(@ColorRes private var chosenColor: Int?) :
         )
         val viewHolder = CategoryColorViewHolder(viewBinding)
         viewBinding.root.setOnClickListener {
-            val adapterPosition = viewHolder.adapterPosition
+            val adapterPosition = viewHolder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 notifyItemChanged(
                     selectedPosition,

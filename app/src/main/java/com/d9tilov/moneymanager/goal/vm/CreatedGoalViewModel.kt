@@ -16,21 +16,19 @@ class CreatedGoalViewModel @ViewModelInject constructor(
     @Assisted val savedStateHandle: SavedStateHandle
 ) : BaseViewModel<CreatedGoalNavigator>() {
 
-    fun save(name: String, sum: BigDecimal, description: String = "") {
-        viewModelScope.launch {
-            val goal = savedStateHandle.get<Goal>("goal")
-            if (goal == null) {
-                goalInteractor.insert(Goal(name = name, targetSum = sum, description = description))
-            } else {
-                goalInteractor.update(
-                    goal.copy(
-                        name = name,
-                        targetSum = sum,
-                        description = description
-                    )
+    fun save(name: String, sum: BigDecimal, description: String = "") = viewModelScope.launch {
+        val goal = savedStateHandle.get<Goal>("goal")
+        if (goal == null) {
+            goalInteractor.insert(Goal(name = name, targetSum = sum, description = description))
+        } else {
+            goalInteractor.update(
+                goal.copy(
+                    name = name,
+                    targetSum = sum,
+                    description = description
                 )
-            }
-            navigator?.back()
+            )
         }
+        navigator?.back()
     }
 }

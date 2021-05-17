@@ -53,25 +53,23 @@ class SplashViewModel @ViewModelInject constructor(
         }
     }
 
-    fun createUser() {
-        viewModelScope.launch {
-            val user = userInfoInteractor.createUser(auth.currentUser)
-            categoryInteractor.createDefaultCategories()
-            if (user.showPrepopulate) {
-                navigator?.openPrepopulate()
-                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
-                    param(
-                        FirebaseAnalytics.Param.ITEM_ID, "prepopulate_screen"
-                    )
-                }
-            } else {
-                navigator?.openHomeScreen()
-                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP) {
-                    param(
-                        FirebaseAnalytics.Param.ITEM_ID,
-                        auth.currentUser?.email ?: "unknown email"
-                    )
-                }
+    fun createUser() = viewModelScope.launch {
+        val user = userInfoInteractor.createUser(auth.currentUser)
+        categoryInteractor.createDefaultCategories()
+        if (user.showPrepopulate) {
+            navigator?.openPrepopulate()
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+                param(
+                    FirebaseAnalytics.Param.ITEM_ID, "prepopulate_screen"
+                )
+            }
+        } else {
+            navigator?.openHomeScreen()
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP) {
+                param(
+                    FirebaseAnalytics.Param.ITEM_ID,
+                    auth.currentUser?.email ?: "unknown email"
+                )
             }
         }
     }

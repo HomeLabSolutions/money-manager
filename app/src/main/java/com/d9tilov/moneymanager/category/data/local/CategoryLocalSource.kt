@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.category.data.local
 
+import android.util.Log
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.PrepopulateDataManager
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongIdException
@@ -13,8 +14,8 @@ import com.d9tilov.moneymanager.category.exception.NoCategoryParentException
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
 import com.d9tilov.moneymanager.transaction.TransactionType
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
 
 class CategoryLocalSource(
     private val preferencesStore: PreferencesStore,
@@ -63,6 +64,7 @@ class CategoryLocalSource(
             throw WrongUidException()
         } else {
             val count = categoryDao.getCategoriesCountByName(currentUserId, category.name)
+            Log.d("moggot", "create count: " + count)
             if (count == 0) {
                 categoryDao.create(categoryMapper.toDbModel(category.copy(clientId = currentUserId)))
             } else {
@@ -99,7 +101,7 @@ class CategoryLocalSource(
             val category = categoryDao.getById(currentUserId, id) ?: throw WrongIdException()
             val parentCategory =
                 categoryDao.getById(currentUserId, category.parentId) ?: createDummyModel()
-            val childrenCategories = getByParentId(id).toList().flatten()
+            val childrenCategories = getByParentId(id).first()
             val newCategory: Category = categoryMapper.toDataModel(
                 category,
                 if (parentCategory.id == NO_ID) null else parentCategory
@@ -185,7 +187,7 @@ class CategoryLocalSource(
                 val list = categoryDao.getByParentId(
                     currentUserId,
                     subCategory.parent.id
-                ).toList().flatten()
+                ).first()
                 if (list.isEmpty()) {
                     categoryDao.delete(
                         currentUserId,
@@ -211,7 +213,7 @@ class CategoryLocalSource(
                 val list = categoryDao.getByParentId(
                     currentUserId,
                     subCategory.parent.id
-                ).toList().flatten()
+                ).first()
                 if (list.isEmpty()) {
                     categoryDao.delete(
                         currentUserId,

@@ -5,6 +5,7 @@ import com.d9tilov.moneymanager.goal.domain.entity.Goal
 import com.d9tilov.moneymanager.goal.domain.mapper.GoalDomainMapper
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
 class GoalIteractorImpl(
@@ -20,18 +21,19 @@ class GoalIteractorImpl(
     }
 
     override fun getAll(): Flow<List<Goal>> {
-        return goalRepo.getAll().map {
-            val budget = budgetInteractor.get()
-            val goalList = mutableListOf<Goal>()
-            for (goal in it) {
-                var currentSum = budget.sum
-                if (budget.sum >= goal.targetSum) {
-                    currentSum = goal.targetSum
+        return goalRepo.getAll().flatMapLatest { goals ->
+            budgetInteractor.get().map {
+                val goalList = mutableListOf<Goal>()
+                for (goal in goals) {
+                    var currentSum = it.sum
+                    if (it.sum >= goal.targetSum) {
+                        currentSum = goal.targetSum
+                    }
+                    val newGoal = goalDomainMapper.toDomain(goal, currentSum)
+                    goalList.add(newGoal)
                 }
-                val newGoal = goalDomainMapper.toDomain(goal, currentSum)
-                goalList.add(newGoal)
+                goalList
             }
-            goalList
         }
     }
 

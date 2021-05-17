@@ -64,7 +64,7 @@ class CurrencyFragment :
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         viewBinding.currencyProgress.show()
-        viewModel.getCurrencies().observe(
+        viewModel.currencies.observe(
             this.viewLifecycleOwner,
             { list ->
                 viewBinding.currencyProgress.gone()

@@ -3,7 +3,7 @@ package com.d9tilov.moneymanager.user.data.local
 import android.content.Context
 import com.d9tilov.moneymanager.backup.BackupData
 import com.d9tilov.moneymanager.backup.BackupManager
-import com.d9tilov.moneymanager.base.data.Resource
+import com.d9tilov.moneymanager.base.data.Result
 import com.d9tilov.moneymanager.base.data.Status
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.exceptions.NetworkException
@@ -30,7 +30,7 @@ class UserLocalSource(
 
     override suspend fun createUserOrRestore(userProfile: UserProfile): UserProfile {
         preferencesStore.uid = userProfile.uid
-        val result: Resource<Nothing> = backupManager.restoreDb(userProfile.uid)
+        val result: Result<Nothing> = backupManager.restoreDb(userProfile.uid)
         if (result.status == Status.ERROR) {
             userDao.insert(dataUserMapper.toDbModel(userProfile))
         }

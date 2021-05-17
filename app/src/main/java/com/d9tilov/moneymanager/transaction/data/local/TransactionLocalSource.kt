@@ -21,6 +21,7 @@ import com.d9tilov.moneymanager.transaction.exception.TransactionCreateException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -136,60 +137,54 @@ class TransactionLocalSource(
         if (currentUserId == null) {
             throw WrongUidException()
         } else {
-            transactionDao.getById(currentUserId, transaction.id)
-                .map { oldTransaction ->
-                    {
-                        GlobalScope.launch(Dispatchers.IO) {
-                            if (oldTransaction.date.isSameDay(transaction.date)) {
-                                transactionDao.update(
-                                    transactionDataMapper.toDbModel(
-                                        transaction
-                                    )
-                                )
-                            } else {
-                                val itemsCountOldTransactionDate =
-                                    transactionDao.getItemsCountInDay(
-                                        currentUserId,
-                                        oldTransaction.type,
-                                        oldTransaction.date
-                                    )
-                                if (itemsCountOldTransactionDate == 0) {
-                                    throw IllegalArgumentException("Date count must be more than 0")
-                                }
-                                if (itemsCountOldTransactionDate == 1) {
-                                    transactionDao.deleteDate(
-                                        currentUserId,
-                                        oldTransaction.type,
-                                        oldTransaction.date
-                                    )
-                                }
-                                val itemsCountNewTransactionDate =
-                                    transactionDao.getItemsCountInDay(
-                                        currentUserId,
-                                        transaction.type,
-                                        transaction.date
-                                    )
-                                if (itemsCountNewTransactionDate == 0) {
-                                    transactionDao.insert(
-                                        createDateItem(
-                                            currentUserId,
-                                            transaction.type,
-                                            transaction.date,
-                                            transaction.currency
-                                        )
-                                    )
-                                    transactionDao.update(
-                                        transactionDataMapper.toDbModel(transaction)
-                                    )
-                                } else {
-                                    transactionDao.update(
-                                        transactionDataMapper.toDbModel(transaction)
-                                    )
-                                }
-                            }
-                        }
-                    }
+            val oldTransaction = transactionDao.getById(currentUserId, transaction.id).first()
+            if (oldTransaction.date.isSameDay(transaction.date)) {
+                transactionDao.update(
+                    transactionDataMapper.toDbModel(
+                        transaction
+                    )
+                )
+            } else {
+                val itemsCountOldTransactionDate =
+                    transactionDao.getItemsCountInDay(
+                        currentUserId,
+                        oldTransaction.type,
+                        oldTransaction.date
+                    )
+                if (itemsCountOldTransactionDate == 0) {
+                    throw IllegalArgumentException("Date count must be more than 0")
                 }
+                if (itemsCountOldTransactionDate == 1) {
+                    transactionDao.deleteDate(
+                        currentUserId,
+                        oldTransaction.type,
+                        oldTransaction.date
+                    )
+                }
+                val itemsCountNewTransactionDate =
+                    transactionDao.getItemsCountInDay(
+                        currentUserId,
+                        transaction.type,
+                        transaction.date
+                    )
+                if (itemsCountNewTransactionDate == 0) {
+                    transactionDao.insert(
+                        createDateItem(
+                            currentUserId,
+                            transaction.type,
+                            transaction.date,
+                            transaction.currency
+                        )
+                    )
+                    transactionDao.update(
+                        transactionDataMapper.toDbModel(transaction)
+                    )
+                } else {
+                    transactionDao.update(
+                        transactionDataMapper.toDbModel(transaction)
+                    )
+                }
+            }
         }
     }
 

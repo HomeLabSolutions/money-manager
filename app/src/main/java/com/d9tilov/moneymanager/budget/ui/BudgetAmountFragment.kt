@@ -9,6 +9,7 @@ import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.BudgetAmountNavigator
 import com.d9tilov.moneymanager.budget.vm.BudgetAmountViewModel
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
+import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentBudgetAmountBinding
 import com.d9tilov.moneymanager.prepopulate.ui.ControlsClicked
@@ -32,7 +33,7 @@ class BudgetAmountFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        viewModel.getAmount().observe(
+        viewModel.budgetData.observe(
             this.viewLifecycleOwner,
             {
                 viewBinding.commonBudgetAmount.setValue(it.sum)
@@ -47,8 +48,9 @@ class BudgetAmountFragment :
     }
 
     override fun onStop() {
-        (activity as PrepopulateActivity).controlsClick = null
         super.onStop()
+        (activity as PrepopulateActivity).controlsClick = null
+        hideKeyboard()
     }
 
     private fun initToolbar() {

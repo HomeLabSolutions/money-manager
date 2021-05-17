@@ -5,6 +5,11 @@ import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.budget.data.entity.BudgetData
 import com.d9tilov.moneymanager.budget.data.local.mapper.BudgetMapper
+import com.d9tilov.moneymanager.core.util.getFirstDayOfMonth
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import java.math.BigDecimal
+import java.util.Date
 
 class BudgetLocalSource(
     private val preferencesStore: PreferencesStore,
@@ -29,22 +34,27 @@ class BudgetLocalSource(
         }
     }
 
-    override suspend fun get(): BudgetData {
+    override fun get(): Flow<BudgetData> {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
             throw WrongUidException()
         } else {
-            val budgetDbModel = budgetDao.get(currentUserId)
-            budgetMapper.toDataModel(budgetDbModel)
-        }
-    }
-
-    override suspend fun getCount(): Int {
-        val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            throw WrongUidException()
-        } else {
-            budgetDao.getCount(currentUserId)
+            budgetDao.get(currentUserId)
+                .map {
+                    if (it == null) {
+                        val data = BudgetData(
+                            clientId = currentUserId,
+                            currencyCode = preferencesStore.baseCurrencyCode,
+                            sum = BigDecimal.ZERO,
+                            createdDate = Date(),
+                            fiscalDay = Date().getFirstDayOfMonth()
+                        )
+                        insert(data)
+                        data
+                    } else {
+                        budgetMapper.toDataModel(it)
+                    }
+                }
         }
     }
 

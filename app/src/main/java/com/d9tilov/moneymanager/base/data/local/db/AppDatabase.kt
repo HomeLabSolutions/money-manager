@@ -54,6 +54,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun goalDao(): GoalDao
 
     companion object {
-        const val VERSION_NUMBER = 1
+        const val VERSION_NUMBER = 2
     }
 }

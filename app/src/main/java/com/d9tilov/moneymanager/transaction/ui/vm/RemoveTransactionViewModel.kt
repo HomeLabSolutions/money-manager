@@ -20,8 +20,9 @@ class RemoveTransactionViewModel @ViewModelInject constructor(
         navigator?.remove()
     }
 
-    fun removeRegularTransaction(regularTransaction: RegularTransaction) = viewModelScope.launch {
-        regularTransactionInteractor.delete(regularTransaction)
-        navigator?.remove()
-    }
+    fun removeRegularTransaction(regularTransaction: RegularTransaction) =
+        viewModelScope.launch {
+            regularTransactionInteractor.delete(regularTransaction)
+            navigator?.remove()
+        }
 }

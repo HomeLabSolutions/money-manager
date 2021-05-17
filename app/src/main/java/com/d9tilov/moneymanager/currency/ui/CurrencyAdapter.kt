@@ -31,7 +31,7 @@ class CurrencyAdapter : RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>
             ItemCurrencyBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val viewHolder = CurrencyViewHolder(viewBinding)
         viewBinding.root.setOnClickListener {
-            val adapterPosition = viewHolder.adapterPosition
+            val adapterPosition = viewHolder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 itemClickListener?.onItemClick(currencies[adapterPosition], adapterPosition)
                 check(adapterPosition)

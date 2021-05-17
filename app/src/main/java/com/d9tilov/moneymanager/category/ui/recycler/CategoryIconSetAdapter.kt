@@ -49,7 +49,7 @@ class CategoryIconSetAdapter(private val transactionType: TransactionType) :
         )
         val viewHolder = CategoryIconViewHolder(viewBinding)
         viewBinding.root.setOnClickListener {
-            val adapterPosition = viewHolder.adapterPosition
+            val adapterPosition = viewHolder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 itemClickListener?.onItemClick(
                     if (transactionType == TransactionType.EXPENSE)
