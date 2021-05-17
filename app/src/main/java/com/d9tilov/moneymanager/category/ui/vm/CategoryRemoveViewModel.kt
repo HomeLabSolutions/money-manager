@@ -20,7 +20,7 @@ class CategoryRemoveViewModel @ViewModelInject constructor(
     fun remove(category: Category) = viewModelScope.launch {
         transactionInteractor.removeAllByCategory(category)
         category.children.forEach { transactionInteractor.removeAllByCategory(it) }
-        transactionInteractor.removeAllByCategory(category)
+        categoryInteractor.deleteCategory(category)
         navigator?.closeDialog()
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
             param("delete_category", "name: " + category.name)

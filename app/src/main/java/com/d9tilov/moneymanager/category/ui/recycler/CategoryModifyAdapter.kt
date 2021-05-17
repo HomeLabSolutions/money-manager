@@ -46,13 +46,13 @@ class CategoryModifyAdapter :
                 viewBinding
             )
         viewBinding.root.setOnClickListener {
-            val adapterPosition = viewHolder.adapterPosition
+            val adapterPosition = viewHolder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 itemClickListener?.onItemClick(categories[adapterPosition], adapterPosition)
             }
         }
         viewBinding.root.setOnLongClickListener {
-            val adapterPosition = viewHolder.adapterPosition
+            val adapterPosition = viewHolder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION && !editModeEnable) {
                 itemLongClickListener?.onItemLongClick(categories[adapterPosition])
                 return@setOnLongClickListener true
@@ -60,7 +60,7 @@ class CategoryModifyAdapter :
             return@setOnLongClickListener false
         }
         viewBinding.categoryItemRemove.setOnClickListener {
-            val adapterPosition = viewHolder.adapterPosition
+            val adapterPosition = viewHolder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 itemRemoveClickListener?.onItemClick(categories[adapterPosition], adapterPosition)
             }

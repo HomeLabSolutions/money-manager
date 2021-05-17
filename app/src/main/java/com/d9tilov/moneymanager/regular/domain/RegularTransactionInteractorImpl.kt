@@ -7,7 +7,7 @@ import com.d9tilov.moneymanager.regular.domain.mapper.RegularTransactionDomainMa
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.map
 
 class RegularTransactionInteractorImpl(
@@ -28,7 +28,7 @@ class RegularTransactionInteractorImpl(
 
     override fun getAll(type: TransactionType): Flow<List<RegularTransaction>> {
         return categoryInteractor.getGroupedCategoriesByType(type)
-            .flatMapMerge { categoryList ->
+            .flatMapConcat { categoryList ->
                 regularTransactionRepo.getAll(type).map { list ->
                     val newList = mutableListOf<RegularTransaction>()
                     for (item in list) {

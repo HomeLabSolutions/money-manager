@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.d9tilov.moneymanager.currency.data.local.entity.CurrencyDbModel
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CurrencyDao {
@@ -17,5 +18,5 @@ interface CurrencyDao {
     suspend fun update(currency: CurrencyDbModel)
 
     @Query("SELECT * FROM currency")
-    suspend fun getAll(): List<CurrencyDbModel>
+    fun getAll(): Flow<List<CurrencyDbModel>>
 }

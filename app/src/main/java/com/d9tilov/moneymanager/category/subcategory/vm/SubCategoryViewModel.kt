@@ -2,7 +2,6 @@ package com.d9tilov.moneymanager.category.subcategory.vm
 
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -23,15 +22,13 @@ class SubCategoryViewModel @ViewModelInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : BaseCategoryViewModel<SubCategoryNavigator>() {
 
-    lateinit var expenseCategories: LiveData<List<Category>>
-
     init {
         val parentCategory = savedStateHandle.get<Category>("parent_category")
         if (parentCategory == null || parentCategory.children.isEmpty()) {
             throw IllegalArgumentException("Parent category mustn't have at least one child")
         }
         viewModelScope.launch {
-            expenseCategories = categoryInteractor.getChildrenByParent(parentCategory).asLiveData()
+            categories = categoryInteractor.getChildrenByParent(parentCategory).asLiveData()
         }
     }
 

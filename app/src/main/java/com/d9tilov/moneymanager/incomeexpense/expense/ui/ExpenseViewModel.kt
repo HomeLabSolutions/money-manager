@@ -25,17 +25,17 @@ class ExpenseViewModel @ViewModelInject constructor(
     private val transactionInteractor: TransactionInteractor
 ) : BaseIncomeExpenseViewModel<ExpenseNavigator>() {
 
-    private var itemPosition = -1
-    private var itemHeaderPosition = itemPosition
     lateinit var transactions: Flow<PagingData<BaseTransaction>>
 
     init {
+        categories =
+            categoryInteractor.getGroupedCategoriesByType(TransactionType.EXPENSE).asLiveData()
         viewModelScope.launch {
-            categories =
-                categoryInteractor.getGroupedCategoriesByType(TransactionType.EXPENSE).asLiveData()
             transactions =
                 transactionInteractor.getTransactionsByType(TransactionType.EXPENSE)
                     .map {
+                        var itemPosition = -1
+                        var itemHeaderPosition = itemPosition
                         it.map { item ->
                             var newItem: BaseTransaction = item
                             if (item is TransactionHeader) {
@@ -51,13 +51,7 @@ class ExpenseViewModel @ViewModelInject constructor(
                         }
                     }
                     .cachedIn(viewModelScope)
-            resetPositions()
         }
-    }
-
-    private fun resetPositions() {
-        itemPosition = -1
-        itemHeaderPosition = itemPosition
     }
 
     // fun generateData() {

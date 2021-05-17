@@ -21,23 +21,18 @@ class SettingsViewModel @ViewModelInject constructor(
     private val firebaseAnalytics: FirebaseAnalytics
 ) : BaseViewModel<SettingsNavigator>() {
 
+    val backupData: LiveData<BackupData> = userInfoInteractor.getBackupData().asLiveData()
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-    lateinit var backupData: LiveData<BackupData>
     private val settingsExceptionHandler = CoroutineExceptionHandler { _, _ ->
         setMessage(R.string.backup_error)
     }
 
     fun getCurrentUser(): FirebaseUser? = auth.currentUser
 
-    init {
-        viewModelScope.launch {
-            backupData = userInfoInteractor.getBackupData().asLiveData()
-        }
-    }
-
-    fun logout() = viewModelScope.launch {
+    fun logout() {
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN) {
             param(FirebaseAnalytics.Param.ITEM_CATEGORY, "logout")
+
         }
     }
 

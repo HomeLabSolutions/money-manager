@@ -40,7 +40,7 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>
                 viewBinding
             )
         viewBinding.root.setOnClickListener {
-            val adapterPosition = viewHolder.adapterPosition
+            val adapterPosition = viewHolder.bindingAdapterPosition
             if (adapterPosition != NO_POSITION) {
                 itemClickListener?.onItemClick(categories[adapterPosition], adapterPosition)
             }

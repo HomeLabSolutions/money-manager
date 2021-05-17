@@ -96,7 +96,7 @@ class SimpleItemTouchHelperCallback(
         super.onSelectedChanged(viewHolder, actionState)
 
         if (viewHolder != null) {
-            draggedItemPosition = viewHolder.adapterPosition
+            draggedItemPosition = viewHolder.bindingAdapterPosition
         }
         if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
 

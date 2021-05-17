@@ -37,7 +37,6 @@ import com.d9tilov.moneymanager.transaction.TransactionType
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -87,23 +86,6 @@ class ExpenseFragment :
                     categoryAdapter.updateItems(sortedCategories)
                 }
             )
-            lifecycleScope.launch {
-                transactions.distinctUntilChanged().collectLatest {
-                    transactionAdapter.submitData(it)
-                }
-                transactionAdapter
-                    .loadStateFlow
-                    .distinctUntilChanged()
-                    .collect { loadStates ->
-                        isTransactionDataEmpty =
-                            loadStates.source.refresh is LoadState.NotLoading && loadStates.append.endOfPaginationReached && transactionAdapter.itemCount == 0
-                        if (isTransactionDataEmpty && !(activity as MainActivity).forceShowKeyboard) {
-                            showViewStub(TransactionType.EXPENSE)
-                        } else {
-                            hideViewStub()
-                        }
-                    }
-            }
             getTransactionEvent().observe(
                 viewLifecycleOwner,
                 {
@@ -111,6 +93,24 @@ class ExpenseFragment :
                     resetMainSum()
                 }
             )
+        }
+        lifecycleScope.launch {
+            viewModel.transactions
+                .collectLatest { transactionAdapter.submitData(it) }
+        }
+        lifecycleScope.launch {
+            transactionAdapter
+                .loadStateFlow
+                .distinctUntilChanged()
+                .collectLatest { loadStates ->
+                    isTransactionDataEmpty =
+                        loadStates.source.refresh is LoadState.NotLoading && loadStates.append.endOfPaginationReached && transactionAdapter.itemCount == 0
+                    if (isTransactionDataEmpty && !(activity as MainActivity).forceShowKeyboard) {
+                        showViewStub(TransactionType.EXPENSE)
+                    } else {
+                        hideViewStub()
+                    }
+                }
         }
     }
 
@@ -244,6 +244,7 @@ class ExpenseFragment :
 
     override fun saveTransaction(category: Category) {
         viewModel.saveTransaction(category, viewBinding.expenseMainSum.getValue())
+        isTransactionDataEmpty = false
     }
 
     override fun resetMainSum() {

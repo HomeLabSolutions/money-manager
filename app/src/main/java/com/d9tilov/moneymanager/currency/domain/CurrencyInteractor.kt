@@ -1,9 +1,10 @@
 package com.d9tilov.moneymanager.currency.domain
 
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
+import kotlinx.coroutines.flow.Flow
 
 interface CurrencyInteractor {
 
-    suspend fun getCurrencies(): List<DomainCurrency>
+    fun getCurrencies(): Flow<List<DomainCurrency>>
     suspend fun updateBaseCurrency(currency: DomainCurrency)
 }

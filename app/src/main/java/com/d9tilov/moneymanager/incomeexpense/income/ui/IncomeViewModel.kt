@@ -25,8 +25,6 @@ class IncomeViewModel @ViewModelInject constructor(
     private val transactionInteractor: TransactionInteractor
 ) : BaseIncomeExpenseViewModel<IncomeNavigator>() {
 
-    private var itemPosition = -1
-    private var itemHeaderPosition = itemPosition
     lateinit var transactions: Flow<PagingData<BaseTransaction>>
 
     init {
@@ -36,6 +34,8 @@ class IncomeViewModel @ViewModelInject constructor(
             transactions =
                 transactionInteractor.getTransactionsByType(TransactionType.INCOME)
                     .map {
+                        var itemPosition = -1
+                        var itemHeaderPosition = itemPosition
                         it.map { item ->
                             var newItem: BaseTransaction = item
                             if (item is TransactionHeader) {
@@ -51,13 +51,7 @@ class IncomeViewModel @ViewModelInject constructor(
                         }
                     }
                     .cachedIn(viewModelScope)
-            resetPositions()
         }
-    }
-
-    private fun resetPositions() {
-        itemPosition = -1
-        itemHeaderPosition = itemPosition
     }
 
     override fun saveTransaction(category: Category, sum: BigDecimal) {

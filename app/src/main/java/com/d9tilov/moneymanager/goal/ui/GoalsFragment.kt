@@ -88,7 +88,7 @@ class GoalsFragment :
             )
             ItemTouchHelper(object : SwipeToDeleteCallback(requireContext()) {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    goalAdapter.deleteItem(viewHolder.adapterPosition)
+                    goalAdapter.deleteItem(viewHolder.bindingAdapterPosition)
                 }
             }).attachToRecyclerView(goalsRvList)
         }
@@ -102,8 +102,8 @@ class GoalsFragment :
                 }
             }
         )
-        viewModel.getAmount().observe(
-            this.viewLifecycleOwner, { viewBinding.goalsAmount.setValue(it) }
+        viewModel.budget.observe(
+            this.viewLifecycleOwner, { viewBinding.goalsAmount.setValue(it.sum) }
         )
         viewModel.goals.observe(
             this.viewLifecycleOwner,
@@ -124,6 +124,11 @@ class GoalsFragment :
         super.onStart()
         (activity as PrepopulateActivity).controlsClick = this
         hideKeyboard()
+    }
+
+    override fun onStop() {
+        (activity as PrepopulateActivity).controlsClick = this
+        super.onStop()
     }
 
     private fun initToolbar() {
