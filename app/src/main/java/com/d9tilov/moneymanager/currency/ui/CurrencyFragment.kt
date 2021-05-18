@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.d9tilov.moneymanager.R
+import com.d9tilov.moneymanager.base.data.Status
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.CurrencyNavigator
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
@@ -40,7 +41,6 @@ class CurrencyFragment :
 
     private val viewBinding by viewBinding(FragmentCurrencyBinding::bind)
     private var toolbar: MaterialToolbar? = null
-    private var snackBar: Snackbar? = null
     private lateinit var currencyAdapter: CurrencyAdapter
     override val viewModel by viewModels<CurrencyViewModel>()
     override fun getNavigator(): CurrencyNavigator = this
@@ -63,15 +63,26 @@ class CurrencyFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        viewBinding.currencyProgress.show()
-        viewModel.currencies.observe(
+        viewModel.currencies().observe(
             this.viewLifecycleOwner,
-            { list ->
-                viewBinding.currencyProgress.gone()
-                val sortedList = list.sortedBy { CurrencyUtils.getCurrencyFullName(it.code) }
-                currencyAdapter.updateItems(sortedList)
-                val checkedIndex = sortedList.indexOfFirst { it.isBase }
-                viewBinding.currencyRv.scrollToPosition(checkedIndex)
+            { result ->
+                when (result.status) {
+                    Status.SUCCESS -> {
+                        result.data?.let { data ->
+                            val sortedList =
+                                data.sortedBy { CurrencyUtils.getCurrencyFullName(it.code) }
+                            currencyAdapter.updateItems(sortedList)
+                            val checkedIndex = sortedList.indexOfFirst { it.isBase }
+                            viewBinding.currencyRv.scrollToPosition(checkedIndex)
+                        }
+                        viewBinding.currencyProgress.gone()
+                    }
+                    Status.ERROR -> {
+                        showError()
+                        viewBinding.currencyProgress.gone()
+                    }
+                    Status.LOADING -> viewBinding.currencyProgress.show()
+                }
             }
         )
         viewBinding.currencyRv.adapter = currencyAdapter
@@ -136,18 +147,26 @@ class CurrencyFragment :
     }
 
     override fun showError() {
-        viewBinding.currencyProgress.gone()
-        snackBar?.setActionTextColor(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.button_normal_color_start
+        val snackBar = Snackbar
+            .make(
+                viewBinding.currencyParentLayout,
+                getString(R.string.currency_error),
+                Snackbar.LENGTH_INDEFINITE
             )
-        )
-        snackBar?.view?.setBackgroundColor(
+        snackBar.view.setBackgroundColor(
             ContextCompat.getColor(
                 requireContext(),
                 R.color.button_normal_color_end
             )
         )
+        snackBar
+            .setActionTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.button_normal_color_start
+                )
+            )
+            .setAction(getString(R.string.retry)) { viewModel.getCurrencies() }
+            .show()
     }
 }

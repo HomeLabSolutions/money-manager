@@ -11,7 +11,10 @@ class UserInfoInteractor(
     private val userDomainMapper: UserDomainMapper,
 ) : UserInteractor {
 
-    override fun getCurrentUser(): Flow<UserProfile> = userRepo.getUser()
+    override fun getCurrentUser(): Flow<UserProfile> {
+        return userRepo.getUser()
+    }
+
     override suspend fun getCurrency(): String = userRepo.getCurrency()
     override fun getBackupData(): Flow<BackupData> = userRepo.getBackupData()
 

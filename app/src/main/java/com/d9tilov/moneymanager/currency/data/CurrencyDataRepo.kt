@@ -22,8 +22,8 @@ class CurrencyDataRepo(
     override fun getCurrencies(baseCurrency: String): Flow<List<Currency>> {
         return currencySource.getCurrencies().map {
             if (it.isEmpty()) {
-                val remoteCurrencyList =
-                    currencyRemoteMapper.toDataModel(currencyApi.getCurrencies(preferencesStore.baseCurrencyCode))
+                val currencies = currencyApi.getCurrencies(preferencesStore.baseCurrencyCode)
+                val remoteCurrencyList = currencyRemoteMapper.toDataModel(currencies)
                 currencySource.saveCurrencies(remoteCurrencyList)
             }
             it

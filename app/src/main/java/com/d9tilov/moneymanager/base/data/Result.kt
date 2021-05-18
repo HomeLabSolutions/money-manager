@@ -8,11 +8,11 @@ data class Result<out T>(val status: Status, val data: T? = null, val message: S
             return Result(Status.SUCCESS, data, null)
         }
 
-        fun <T> error(exception: Exception, data: T? = null): Result<T> {
+        fun <T> error(exception: Throwable, data: T? = null): Result<T> {
             return Result(Status.ERROR, data, exception.message)
         }
 
-        fun <T> loading(data: T?): Result<T> {
+        fun <T> loading(data: T? = null): Result<T> {
             return Result(Status.LOADING, data, null)
         }
     }

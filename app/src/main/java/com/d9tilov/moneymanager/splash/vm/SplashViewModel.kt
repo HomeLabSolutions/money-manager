@@ -9,6 +9,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,17 +29,22 @@ class SplashViewModel @Inject constructor(
             navigator?.openAuthScreen()
         } else {
             viewModelScope.launch {
-                userInfoInteractor.getCurrentUser().collectLatest {
-                    if (it.uid != auth.uid) {
+                userInfoInteractor.getCurrentUser()
+                    .catch {
                         auth.signOut()
                         navigator?.openAuthScreen()
-                    } else {
-                        if (it.showPrepopulate) {
-                            navigator?.openPrepopulate()
-                            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
-                                param(
-                                    FirebaseAnalytics.Param.ITEM_ID, "prepopulate_screen"
-                                )
+                    }
+                    .collectLatest {
+                        if (it.uid != auth.uid) {
+                            auth.signOut()
+                            navigator?.openAuthScreen()
+                        } else {
+                            if (it.showPrepopulate) {
+                                navigator?.openPrepopulate()
+                                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+                                    param(
+                                        FirebaseAnalytics.Param.ITEM_ID, "prepopulate_screen"
+                                    )
                             }
                         } else {
                             navigator?.openHomeScreen()
