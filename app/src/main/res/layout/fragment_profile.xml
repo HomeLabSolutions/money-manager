@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/settings_avatar"
+        android:id="@+id/profile_avatar"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="48dp"
@@ -16,7 +16,7 @@
         tools:srcCompat="@drawable/ic_person" />
 
     <TextView
-        android:id="@+id/settings_name"
+        android:id="@+id/profile_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/standard_half_left_margin"
@@ -24,25 +24,25 @@
         android:layout_marginEnd="@dimen/standard_right_margin"
         android:textAppearance="?attr/textAppearanceHeadline6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/settings_avatar"
-        app:layout_constraintTop_toTopOf="@+id/settings_avatar"
+        app:layout_constraintStart_toEndOf="@+id/profile_avatar"
+        app:layout_constraintTop_toTopOf="@+id/profile_avatar"
         tools:text="@tools:sample/first_names" />
 
     <TextView
-        android:id="@+id/settings_logout"
+        android:id="@+id/profile_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="100dp"
-        android:text="@string/settings_logout"
+        android:text="@string/profile_logout"
         android:textAppearance="?attr/textAppearanceBody1"
         android:textColor="@color/error_color"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/settings_app_version"
+        app:layout_constraintBottom_toTopOf="@+id/profile_app_version"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/settings_app_version"
+        android:id="@+id/profile_app_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -53,7 +53,7 @@
         tools:text="Version 1.0.0" />
 
     <TextView
-        android:id="@+id/settings_backup"
+        android:id="@+id/profile_backup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/backup"
@@ -65,13 +65,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/settings_backup_info"
+        android:id="@+id/profile_backup_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_backup"
+        app:layout_constraintTop_toBottomOf="@+id/profile_backup"
         tools:text="Last backup was " />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

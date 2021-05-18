@@ -2,11 +2,11 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/settings"
-    app:startDestination="@+id/settings_dest">
+    android:id="@+id/profile"
+    app:startDestination="@+id/profile_dest">
     <fragment
-        android:id="@+id/settings_dest"
-        android:name="com.d9tilov.moneymanager.settings.ui.SettingsFragment"
+        android:id="@+id/profile_dest"
+        android:name="com.d9tilov.moneymanager.profile.ui.ProfileFragment"
         android:label="fragment_title_screen"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_profile" />
 </navigation>

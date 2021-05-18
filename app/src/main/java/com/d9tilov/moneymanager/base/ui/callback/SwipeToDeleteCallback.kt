@@ -122,15 +122,15 @@ abstract class SwipeToDeleteCallback(context: Context) :
             deleteIconRight.toInt(),
             deleteIconBottom
         )
-        deleteIcon?.draw(c)
-
-        c.drawText(
-            text,
-            textLeft,
-            textTop,
-            textPaint
-        )
-
+        if (dX < -(TEXT_RIGHT_MARGIN + textWidth + MARGIN_BETWEEN_TEXT_AND_ICON + intrinsicWidth)) {
+            deleteIcon?.draw(c)
+            c.drawText(
+                text,
+                textLeft,
+                textTop,
+                textPaint
+            )
+        }
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
     }
 
