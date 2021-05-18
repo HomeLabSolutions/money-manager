@@ -11,8 +11,12 @@ fun View.gone(): Boolean {
     return false
 }
 
-fun View.hide() {
-    visibility = View.INVISIBLE
+fun View.hide(): Boolean {
+    if (isVisible) {
+        visibility = View.INVISIBLE
+        return true
+    }
+    return false
 }
 
 fun View.show(): Boolean {
