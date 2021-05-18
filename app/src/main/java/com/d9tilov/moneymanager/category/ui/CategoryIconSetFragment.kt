@@ -19,6 +19,7 @@ import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.databinding.FragmentCategoryIconSetBinding
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CategoryIconSetFragment :
@@ -32,7 +33,16 @@ class CategoryIconSetFragment :
     private lateinit var categoryAdapter: CategoryIconSetAdapter
 
     override fun getNavigator() = this
-    override val viewModel by viewModels<CategorySetViewModel>()
+    override val viewModel by viewModels<CategorySetViewModel> {
+        CategorySetViewModel.provideFactory(
+            categorySetViewModelFactory,
+            this,
+            arguments
+        )
+    }
+
+    @Inject
+    lateinit var categorySetViewModelFactory: CategorySetViewModel.CategorySetViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -72,7 +72,16 @@ class CategoryCreationFragment :
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun getNavigator() = this
-    override val viewModel by viewModels<CategoryCreationViewModel>()
+    override val viewModel by viewModels<CategoryCreationViewModel> {
+        CategoryCreationViewModel.provideFactory(
+            categoryCreationViewModelFactory,
+            this,
+            arguments
+        )
+    }
+
+    @Inject
+    lateinit var categoryCreationViewModelFactory: CategoryCreationViewModel.CategoryCreationViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
