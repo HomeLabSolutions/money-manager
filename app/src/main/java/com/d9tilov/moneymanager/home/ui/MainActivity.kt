@@ -36,7 +36,7 @@ class MainActivity :
     private var isKeyboardShown = false
     private lateinit var globalLayoutListener: ViewTreeObserver.OnGlobalLayoutListener
     private val bottomMenuSet =
-        setOf(R.id.income_expense_dest, R.id.chart_dest, R.id.settings_dest)
+        setOf(R.id.income_expense_dest, R.id.chart_dest, R.id.profile_dest)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +77,7 @@ class MainActivity :
                     when (destination.id) {
                         R.id.income_expense_dest,
                         R.id.chart_dest,
-                        R.id.settings_dest -> {
+                        R.id.profile_dest -> {
                             if (!isKeyboardShown) {
                                 showBottomBarWithAnimation()
                             }

@@ -1,7 +1,7 @@
 <resources>
     <string name="bottom_menu_income_expense">Income/Expense</string>
     <string name="bottom_menu_chart">Chart</string>
-    <string name="bottom_menu_settings">Settings</string>
+    <string name="bottom_menu_profile">Profile</string>
     <string name="tab_income">Income</string>
     <string name="tab_expense">Expense</string>
 
@@ -23,7 +23,7 @@
 
     <string name="toolbar_menu_skip">Skip</string>
 
-    <string name="settings_logout">Logout</string>
+    <string name="profile_logout">Logout</string>
 
     <string name="currency_error">Failed to get currency list</string>
 

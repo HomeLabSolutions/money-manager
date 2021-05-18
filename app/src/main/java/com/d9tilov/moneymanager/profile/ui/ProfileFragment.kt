@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.settings.ui
+package com.d9tilov.moneymanager.profile.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,13 +8,13 @@ import androidx.fragment.app.viewModels
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
-import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
+import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.getBackupDate
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.core.util.show
-import com.d9tilov.moneymanager.databinding.FragmentSettingsBinding
-import com.d9tilov.moneymanager.settings.ui.vm.SettingsViewModel
+import com.d9tilov.moneymanager.databinding.FragmentProfileBinding
+import com.d9tilov.moneymanager.profile.ui.vm.ProfileViewModel
 import com.d9tilov.moneymanager.splash.ui.SplashActivity
 import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -23,15 +23,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SettingsFragment :
-    BaseFragment<SettingsNavigator>(R.layout.fragment_settings),
-    SettingsNavigator {
+class ProfileFragment :
+    BaseFragment<ProfileNavigator>(R.layout.fragment_profile),
+    ProfileNavigator {
 
     private lateinit var googleSignInClient: GoogleSignInClient
-    private val viewBinding by viewBinding(FragmentSettingsBinding::bind)
+    private val viewBinding by viewBinding(FragmentProfileBinding::bind)
 
     override fun getNavigator() = this
-    override val viewModel by viewModels<SettingsViewModel>()
+    override val viewModel by viewModels<ProfileViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +47,7 @@ class SettingsFragment :
         super.onViewCreated(view, savedInstanceState)
         updateUI()
         viewBinding.run {
-            settingsLogout.setOnClickListener {
+            profileLogout.setOnClickListener {
                 AuthUI.getInstance()
                     .signOut(requireContext())
                     .addOnCompleteListener {
@@ -55,16 +55,16 @@ class SettingsFragment :
                         updateUI()
                     }
             }
-            settingsBackup.setOnClickListener {
+            profileBackup.setOnClickListener {
                 viewModel.backup()
             }
             viewModel.backupData.observe(
                 viewLifecycleOwner,
                 {
                     if (it.lastBackupTimestamp == 0L) {
-                        settingsBackupInfo.setText(R.string.backup_empty)
+                        profileBackupInfo.setText(R.string.backup_empty)
                     } else {
-                        settingsBackupInfo.text =
+                        profileBackupInfo.text =
                             getString(R.string.backup_info, it.lastBackupTimestamp.getBackupDate())
                     }
                 }
@@ -73,7 +73,7 @@ class SettingsFragment :
     }
 
     private fun updateUI() {
-        viewBinding.settingsAppVersion.text = BuildConfig.VERSION_NAME
+        viewBinding.profileAppVersion.text = BuildConfig.VERSION_NAME
         val currencyUser = viewModel.getCurrentUser()
         if (currencyUser == null) {
             startActivity(
@@ -83,15 +83,15 @@ class SettingsFragment :
             requireActivity().finish()
         } else {
             viewBinding.run {
-                this.settingsAvatar.show()
-                settingsName.show()
-                settingsName.text = currencyUser.displayName
+                this.profileAvatar.show()
+                profileName.show()
+                profileName.text = currencyUser.displayName
                 GlideApp
-                    .with(this@SettingsFragment)
+                    .with(this@ProfileFragment)
                     .load(viewModel.getCurrentUser()?.photoUrl)
                     .centerCrop()
-                    .into(settingsAvatar)
-                settingsLogout.show()
+                    .into(profileAvatar)
+                profileLogout.show()
             }
         }
     }

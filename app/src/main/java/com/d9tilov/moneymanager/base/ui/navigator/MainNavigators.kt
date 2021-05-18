@@ -52,7 +52,7 @@ interface BaseIncomeExpenseNavigator : BaseNavigator {
 
 interface IncomeExpenseNavigator : BaseNavigator
 
-interface SettingsNavigator : BaseNavigator
+interface ProfileNavigator : BaseNavigator
 
 interface StatisticsNavigator : BaseNavigator
 

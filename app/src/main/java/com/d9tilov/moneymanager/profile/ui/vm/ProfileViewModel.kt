@@ -1,11 +1,11 @@
-package com.d9tilov.moneymanager.settings.ui.vm
+package com.d9tilov.moneymanager.profile.ui.vm
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.backup.BackupData
-import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
+import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -18,14 +18,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor(
+class ProfileViewModel @Inject constructor(
     private val userInfoInteractor: UserInteractor,
     private val firebaseAnalytics: FirebaseAnalytics
-) : BaseViewModel<SettingsNavigator>() {
+) : BaseViewModel<ProfileNavigator>() {
 
     val backupData: LiveData<BackupData> = userInfoInteractor.getBackupData().asLiveData()
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private val settingsExceptionHandler = CoroutineExceptionHandler { _, _ ->
+    private val profileExceptionHandler = CoroutineExceptionHandler { _, _ ->
         setMessage(R.string.backup_error)
     }
 
@@ -41,7 +41,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun backup() {
-        viewModelScope.launch(settingsExceptionHandler) { userInfoInteractor.backup() }
+        viewModelScope.launch(profileExceptionHandler) { userInfoInteractor.backup() }
         setMessage(R.string.backup_succeeded)
     }
 }
