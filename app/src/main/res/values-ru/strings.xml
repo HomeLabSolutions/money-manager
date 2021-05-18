@@ -26,6 +26,8 @@
 
     <string name="settings_logout">Выйти</string>
 
+    <string name="currency_error">Не удалось получить список валют</string>
+
     <string name="default_category_expense_food">Еда</string>
     <string name="default_category_expense_cafe">Кафе</string>
     <string name="default_category_expense_products">Продукты</string>
@@ -65,11 +67,10 @@
     <string name="transaction_empty_placeholder_regular_income_title">Добавьте постоянный доход</string>
     <string name="transaction_empty_placeholder_subtitle">Введите сумму и выберите категорию</string>
 
-    <string name="date_tomorrow">Завтра</string>
-
     <string name="category_name_title">Название категории</string>
     <string name="category_name_hint">Введите название</string>
     <string name="category_unit_to_group_title">Объединение в группу</string>
+    <string name="category_add_to_group_title">Добавление в группу</string>
     <string name="category_unit_to_group_subtitle">Добавить категорию \"%1$s\"\ в группу \"%2$s\"\?</string>
     <string name="category_unit_new_name_subtitle">Введите название новой группы категорий</string>
     <string name="category_unit_name_group_hint">Название группы</string>

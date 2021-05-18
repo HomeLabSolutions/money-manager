@@ -25,6 +25,8 @@
 
     <string name="settings_logout">Logout</string>
 
+    <string name="currency_error">Failed to get currency list</string>
+
     <string name="default_category_expense_food">Food</string>
     <string name="default_category_expense_cafe">Cafe</string>
     <string name="default_category_expense_products">Products</string>
