@@ -62,20 +62,3 @@ fun EditText.onChange(cb: (String) -> Unit) {
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
     })
 }
-
-fun ObjectAnimator.onEnd(cb: (Animator?) -> Unit) {
-    this.addListener(object : Animator.AnimatorListener {
-        override fun onAnimationStart(animation: Animator?) {
-        }
-
-        override fun onAnimationEnd(animation: Animator?) {
-            cb(animation)
-        }
-
-        override fun onAnimationCancel(animation: Animator?) {
-        }
-
-        override fun onAnimationRepeat(animation: Animator?) {
-        }
-    })
-}

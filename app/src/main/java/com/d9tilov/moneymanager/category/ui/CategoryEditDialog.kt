@@ -36,10 +36,10 @@ class CategoryEditDialog :
             categoryDialogEditEtName.setText(category.name)
             categoryDialogEditEtName.onChange { text ->
                 val isNameEmpty = text.isEmpty()
-                viewBinding?.categoryEditButtonConfirm?.isEnabled = !isNameEmpty
-                viewBinding?.categoryDialogEditEtNameLayout?.error = null
+                viewBinding.categoryEditButtonConfirm.isEnabled = !isNameEmpty
+                viewBinding.categoryDialogEditEtNameLayout.error = null
             }
-            categoryEditButtonConfirm.setOnClickListener { _ ->
+            categoryEditButtonConfirm.setOnClickListener {
                 viewModel.save(category.copy(name = categoryDialogEditEtName.text.toString()))
             }
             categoryEditButtonCancel.setOnClickListener { dismiss() }
@@ -48,12 +48,12 @@ class CategoryEditDialog :
 
     override fun onStart() {
         super.onStart()
-        showKeyboard(viewBinding?.categoryDialogEditEtName)
+        showKeyboard(viewBinding.categoryDialogEditEtName)
     }
 
     override fun showError(error: Throwable) {
         if (error is CategoryExistException) {
-            viewBinding?.categoryDialogEditEtNameLayout?.error =
+            viewBinding.categoryDialogEditEtNameLayout.error =
                 getString(R.string.category_unit_name_exist_error)
         }
     }
@@ -61,7 +61,7 @@ class CategoryEditDialog :
     override fun save() {
         findNavController().previousBackStackEntry?.savedStateHandle?.set(
             SUB_CATEGORY_TITLE,
-            category.copy(name = viewBinding?.categoryDialogEditEtName?.text.toString())
+            category.copy(name = viewBinding.categoryDialogEditEtName.text.toString())
         )
         dismiss()
     }

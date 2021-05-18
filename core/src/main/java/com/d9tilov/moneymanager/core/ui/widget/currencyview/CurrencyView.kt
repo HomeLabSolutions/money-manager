@@ -359,7 +359,7 @@ class CurrencyView @JvmOverloads constructor(
     }
 
     fun setValue(value: BigDecimal) {
-        moneyEditText.setText(value.toString())
+        moneyEditText.setText(String.format(Locale.getDefault(), value.toString(), null))
     }
 
     fun getValue(): BigDecimal {
@@ -376,7 +376,7 @@ class CurrencyView @JvmOverloads constructor(
         moneyEditText.removeTextChangedListener(textWatcher)
     }
 
-    override fun onSaveInstanceState(): Parcelable? {
+    override fun onSaveInstanceState(): Parcelable {
         val bundle = Bundle()
         bundle.putParcelable(SUPER_STATE_KEY, super.onSaveInstanceState())
         bundle.putString(SPARSE_STATE_KEY, moneyEditText.text.toString())

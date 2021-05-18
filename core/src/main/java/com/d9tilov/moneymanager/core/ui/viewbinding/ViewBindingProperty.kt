@@ -10,7 +10,7 @@ import com.d9tilov.moneymanager.core.util.checkIsMainThread
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-public abstract class ViewBindingProperty<in R : Any, T : ViewBinding>(
+abstract class ViewBindingProperty<in R : Any, T : ViewBinding>(
     private val viewBinder: (R) -> T
 ) : ReadOnlyProperty<R, T> {
 
@@ -21,7 +21,7 @@ public abstract class ViewBindingProperty<in R : Any, T : ViewBinding>(
     protected abstract fun getLifecycleOwner(thisRef: R): LifecycleOwner
 
     @MainThread
-    public override fun getValue(thisRef: R, property: KProperty<*>): T {
+    override fun getValue(thisRef: R, property: KProperty<*>): T {
         checkIsMainThread()
         viewBinding?.let { vb ->
             check(this.thisRef != null && thisRef === this.thisRef) {
@@ -36,7 +36,7 @@ public abstract class ViewBindingProperty<in R : Any, T : ViewBinding>(
     }
 
     @MainThread
-    public fun clear() {
+    fun clear() {
         checkIsMainThread()
 
         val thisRef = thisRef ?: return

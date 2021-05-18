@@ -20,7 +20,7 @@ class CurrencyDiffUtil(
         return newCurrenciesList.size
     }
 
-    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
+    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any {
         return newCurrenciesList[newItemPosition].value
     }
 

@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
-import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,7 +51,7 @@ class CurrencyViewModel @Inject constructor(
         budgetInteractor.create(
             BudgetData(
                 sum = BigDecimal.ZERO,
-                fiscalDay = Date().getFirstDayOfMonth()
+                fiscalDay = getFirstDayOfMonth()
             )
         )
         val user = userInteractor.getCurrentUser().first()
