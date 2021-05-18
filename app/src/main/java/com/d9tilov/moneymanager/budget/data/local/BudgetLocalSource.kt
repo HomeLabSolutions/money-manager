@@ -47,7 +47,7 @@ class BudgetLocalSource(
                             currencyCode = preferencesStore.baseCurrencyCode,
                             sum = BigDecimal.ZERO,
                             createdDate = Date(),
-                            fiscalDay = Date().getFirstDayOfMonth()
+                            fiscalDay = getFirstDayOfMonth()
                         )
                         insert(data)
                         data

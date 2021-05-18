@@ -30,21 +30,3 @@ interface AddressableActivity {
     val className: String
 }
 
-/**
- * All addressable activities.
- *
- * Can contain intent extra names or functions associated with the activity creation.
- */
-object Activities {
-
-    /**
-     * AuthActivity
-     */
-    object Auth : AddressableActivity {
-        override val className = "$PACKAGE_NAME.auth.ui.AuthActivity"
-    }
-
-    object Home : AddressableActivity {
-        override val className = "$PACKAGE_NAME.home"
-    }
-}

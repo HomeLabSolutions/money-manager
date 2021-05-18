@@ -124,14 +124,14 @@ class CategoryCreationFragment :
             } else {
                 categoryCreationDelete.show()
             }
-            categoryCreationIconLayout.setOnClickListener { _ ->
+            categoryCreationIconLayout.setOnClickListener {
                 val action = CategoryCreationFragmentDirections.toCategorySetDest(transactionType)
                 findNavController().navigate(action)
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
                     param(FirebaseAnalytics.Param.ITEM_ID, "open_category_set_screen")
                 }
             }
-            categoryCreationSave.setOnClickListener { _ ->
+            categoryCreationSave.setOnClickListener {
                 viewModel.save(
                     category.copy(
                         name = categoryCreationEtName.text.toString(),
@@ -140,7 +140,7 @@ class CategoryCreationFragment :
                     )
                 )
             }
-            categoryCreationColor.root.setOnClickListener { _ ->
+            categoryCreationColor.root.setOnClickListener {
                 categoryCreationRvColorPicker.show()
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
                     param(FirebaseAnalytics.Param.ITEM_ID, "click_choose_color")

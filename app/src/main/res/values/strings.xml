@@ -23,9 +23,7 @@
 
     <string name="toolbar_menu_skip">Skip</string>
 
-    <string name="settings_login">Login</string>
     <string name="settings_logout">Logout</string>
-    <string name="settings_app_version">Version %s</string>
 
     <string name="default_category_expense_food">Food</string>
     <string name="default_category_expense_cafe">Cafe</string>
@@ -44,11 +42,6 @@
     <string name="default_category_income_part_time_job">Part-time job</string>
 
     <string name="income_expense_empty_sum_error">Enter the amount</string>
-    <string name="expense_daily_sum_to_spend_title">You can spend today:</string>
-    <string name="expense_daily_spent_sum">Expenses today:</string>
-    <string name="expense_monthly_spent_sum">Spent in a month:</string>
-    <string name="expense_spent_title">spent</string>
-    <string name="expense_left_to_title">left ot spent</string>
 
     <string name="category_all">All\nitems</string>
 
@@ -60,7 +53,6 @@
     <string name="save">Save</string>
     <string name="add">Add</string>
     <string name="create">Create</string>
-    <string name="letter_limit" translatable="false">%1$s/%2$s</string>
 
     <string name="transaction_delete_dialog_title">Deleting a transaction</string>
     <string name="transaction_delete_dialog_subtitle">Do you really want to delete the transaction?</string>
@@ -72,10 +64,6 @@
     <string name="transaction_empty_placeholder_regular_income_title">Add regular income</string>
     <string name="transaction_empty_placeholder_subtitle">Enter the amount and tap on the category</string>
 
-    <string name="date_tomorrow">Tomorrow</string>
-    <string name="date_today">Today</string>
-    <string name="date_yesterday">Yesterday</string>
-
     <string name="category_name_title">Category name</string>
     <string name="category_name_hint">Enter name</string>
     <string name="category_unit_to_group_title">Grouping</string>
@@ -83,7 +71,6 @@
     <string name="category_unit_new_name_subtitle">Enter name of new group</string>
     <string name="category_unit_to_group_subtitle">Add category \"%1$s\"\ to group %2$s?</string>
     <string name="category_unit_name_group_hint">Name of group</string>
-    <string name="category_unit_empty_name_error">The name of group could\'t be empty</string>
     <string name="category_unit_name_exist_error">Name of this group already exists</string>
 
     <string name="category_edit_title">Edit category group</string>
@@ -97,8 +84,6 @@
     <string name="sub_category_delete_subtitle">Do you want to delete the subcategory \"%1$s\"\?\n\nAll operations with this category will also be deleted.</string>
     <string name="sub_category_delete">Delete</string>
     <string name="sub_category_delete_from_group">Delete from group</string>
-
-    <string name="budget_value_hint">Your current budget</string>
 
     <string name="regular_transaction_notify">Notify</string>
     <string name="regular_transaction_choose_category">Choose category</string>
@@ -130,13 +115,9 @@
     <string name="goals_remove_dialog_title">Deleting a goal</string>
     <string name="goals_remove_dialog_subtitle">Do you really want to delete the goal?</string>
 
-    <string name="error_loading">Loading error</string>
-
     <string name="backup">Make backup</string>
     <string name="backup_info">Last backup: %1$s</string>
     <string name="backup_empty">Backup hasn\'t been created yet</string>
     <string name="backup_succeeded">Backup succeeded</string>
     <string name="backup_error">Backup error</string>
-    <string name="restore_succeeded">Restore succeeded</string>
-    <string name="restore_error">Restore error</string>
 </resources>

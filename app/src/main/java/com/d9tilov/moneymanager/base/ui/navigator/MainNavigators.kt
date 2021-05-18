@@ -13,15 +13,6 @@ interface SplashNavigator : BaseNavigator {
     fun openAuthScreen()
 }
 
-interface PrepopulateNavigator : BaseNavigator {
-
-    fun goToRegularIncomeScreen() {}
-    fun goToRegularExpenseScreen() {}
-    fun goToGoalsScreen() {}
-    fun goToMainScreen() {}
-    fun back() {}
-}
-
 interface CurrencyNavigator : BaseNavigator {
     fun skip()
     fun showError()

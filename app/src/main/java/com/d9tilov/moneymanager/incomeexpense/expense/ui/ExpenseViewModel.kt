@@ -19,13 +19,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
-import java.util.Calendar
-import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
 class ExpenseViewModel @Inject constructor(
-    private val categoryInteractor: CategoryInteractor,
+    categoryInteractor: CategoryInteractor,
     private val transactionInteractor: TransactionInteractor
 ) : BaseIncomeExpenseViewModel<ExpenseNavigator>() {
 

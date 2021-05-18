@@ -72,7 +72,7 @@ class EditTransactionFragment : EditTransactionNavigator,
             )
         }
         viewBinding.run {
-            editTransactionSave.setOnClickListener { _ ->
+            editTransactionSave.setOnClickListener {
                 viewModel.update(
                     transaction.copy(
                         sum = editTransactionMainSum.getValue(),

@@ -58,8 +58,6 @@ class CategoryColorAdapter(@ColorRes private var chosenColor: Int?) :
         selectedPosition = categoryColorList.indexOf(chosenColor!!)
     }
 
-    fun getSelectedColor() = categoryColorList[selectedPosition]
-
     fun getSelectedPosition() = selectedPosition
 
     override fun onCreateViewHolder(

@@ -180,25 +180,25 @@ class RegularTransactionCreationFragment :
                     shakeError()
                 }
             }
-            createdRegularTransactionSunday.setOnClickListener { _ ->
+            createdRegularTransactionSunday.setOnClickListener {
                 setWeekdaySelected(Calendar.SUNDAY)
             }
-            createdRegularTransactionMonday.setOnClickListener { _ ->
+            createdRegularTransactionMonday.setOnClickListener {
                 setWeekdaySelected(Calendar.MONDAY)
             }
-            createdRegularTransactionTuesday.setOnClickListener { _ ->
+            createdRegularTransactionTuesday.setOnClickListener {
                 setWeekdaySelected(Calendar.TUESDAY)
             }
-            createdRegularTransactionWednesday.setOnClickListener { _ ->
+            createdRegularTransactionWednesday.setOnClickListener {
                 setWeekdaySelected(Calendar.WEDNESDAY)
             }
-            createdRegularTransactionThursday.setOnClickListener { _ ->
+            createdRegularTransactionThursday.setOnClickListener {
                 setWeekdaySelected(Calendar.THURSDAY)
             }
-            createdRegularTransactionFriday.setOnClickListener { _ ->
+            createdRegularTransactionFriday.setOnClickListener {
                 setWeekdaySelected(Calendar.FRIDAY)
             }
-            createdRegularTransactionSaturday.setOnClickListener { _ ->
+            createdRegularTransactionSaturday.setOnClickListener {
                 setWeekdaySelected(Calendar.SATURDAY)
             }
         }
