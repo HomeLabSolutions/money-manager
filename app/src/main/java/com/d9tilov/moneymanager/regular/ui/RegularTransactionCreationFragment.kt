@@ -39,6 +39,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class RegularTransactionCreationFragment :
@@ -58,7 +59,16 @@ class RegularTransactionCreationFragment :
     private var toolbar: MaterialToolbar? = null
 
     override fun getNavigator() = this
-    override val viewModel by viewModels<CreatedRegularTransactionViewModel>()
+    override val viewModel by viewModels<CreatedRegularTransactionViewModel> {
+        CreatedRegularTransactionViewModel.provideFactory(
+            createdRegularTransactionViewModelFactory,
+            this,
+            arguments
+        )
+    }
+
+    @Inject
+    lateinit var createdRegularTransactionViewModelFactory: CreatedRegularTransactionViewModel.CreatedRegularTransactionViewModelFactory
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -12,6 +12,7 @@ import com.d9tilov.moneymanager.category.ui.vm.SubcategoryRemoveViewModel
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.databinding.FragmentDialogTripleRemoveBinding
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SubcategoryRemoveDialogFragment :
@@ -25,7 +26,16 @@ class SubcategoryRemoveDialogFragment :
     override val layoutId = R.layout.fragment_dialog_triple_remove
     override fun getNavigator() = this
 
-    override val viewModel by viewModels<SubcategoryRemoveViewModel>()
+    override val viewModel by viewModels<SubcategoryRemoveViewModel> {
+        SubcategoryRemoveViewModel.provideFactory(
+            subcategoryRemoveViewModelFactory,
+            this,
+            arguments
+        )
+    }
+
+    @Inject
+    lateinit var subcategoryRemoveViewModelFactory: SubcategoryRemoveViewModel.SubcategoryRemoveViewModelFactory
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

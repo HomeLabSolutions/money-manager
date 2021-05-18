@@ -33,10 +33,19 @@ class SubCategoryFragment :
     private lateinit var modifiedParentCategory: Category
 
     override fun getNavigator() = this
-    override val viewModel by viewModels<SubCategoryViewModel>()
+    override val viewModel by viewModels<SubCategoryViewModel> {
+        SubCategoryViewModel.provideFactory(
+            subCategoryViewModelFactory,
+            this,
+            arguments
+        )
+    }
 
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
+
+    @Inject
+    lateinit var subCategoryViewModelFactory: SubCategoryViewModel.SubCategoryViewModelFactory
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

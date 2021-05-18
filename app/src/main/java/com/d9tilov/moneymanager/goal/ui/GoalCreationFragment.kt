@@ -17,6 +17,7 @@ import com.d9tilov.moneymanager.databinding.FragmentCreationGoalBinding
 import com.d9tilov.moneymanager.goal.vm.CreatedGoalViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class GoalCreationFragment :
@@ -29,7 +30,16 @@ class GoalCreationFragment :
     private var toolbar: MaterialToolbar? = null
 
     override fun getNavigator() = this
-    override val viewModel by viewModels<CreatedGoalViewModel>()
+    override val viewModel by viewModels<CreatedGoalViewModel> {
+        CreatedGoalViewModel.provideFactory(
+            createdGoalViewModelFactory,
+            this,
+            arguments
+        )
+    }
+
+    @Inject
+    lateinit var createdGoalViewModelFactory: CreatedGoalViewModel.CreatedGoalViewModelFactory
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

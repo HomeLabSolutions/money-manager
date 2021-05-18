@@ -33,11 +33,19 @@ class CategoryFragment :
     private val sum by lazy { args.sum }
 
     override fun getNavigator() = this
-
-    override val viewModel by viewModels<CategoryViewModel>()
+    override val viewModel by viewModels<CategoryViewModel> {
+        CategoryViewModel.provideFactory(
+            categoryViewModelFactory,
+            this,
+            arguments
+        )
+    }
 
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
+
+    @Inject
+    lateinit var categoryViewModelFactory: CategoryViewModel.CategoryViewModelFactory
 
     override fun openSubCategoryScreen(category: Category) {
         val action = CategoryFragmentDirections.toSubCategoryDest(
