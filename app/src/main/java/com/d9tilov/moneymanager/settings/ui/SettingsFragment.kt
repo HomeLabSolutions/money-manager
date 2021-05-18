@@ -12,7 +12,6 @@ import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.getBackupDate
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
-import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentSettingsBinding
 import com.d9tilov.moneymanager.settings.ui.vm.SettingsViewModel
@@ -21,7 +20,6 @@ import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -49,13 +47,6 @@ class SettingsFragment :
         super.onViewCreated(view, savedInstanceState)
         updateUI()
         viewBinding.run {
-            settingsLogin.setOnClickListener {
-                val signInIntent = googleSignInClient.signInIntent
-                startActivityForResult(
-                    signInIntent,
-                    RC_SIGN_IN
-                )
-            }
             settingsLogout.setOnClickListener {
                 AuthUI.getInstance()
                     .signOut(requireContext())
@@ -81,17 +72,6 @@ class SettingsFragment :
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_SIGN_IN) {
-            try {
-                updateUI()
-            } catch (e: ApiException) {
-                updateUI()
-            }
-        }
-    }
-
     private fun updateUI() {
         viewBinding.settingsAppVersion.text = BuildConfig.VERSION_NAME
         val currencyUser = viewModel.getCurrentUser()
@@ -111,13 +91,8 @@ class SettingsFragment :
                     .load(viewModel.getCurrentUser()?.photoUrl)
                     .centerCrop()
                     .into(settingsAvatar)
-                settingsLogin.gone()
                 settingsLogout.show()
             }
         }
-    }
-
-    companion object {
-        private const val RC_SIGN_IN = 9001
     }
 }
