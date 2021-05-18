@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.splash.ui
 
-import android.app.Activity
 import android.content.Intent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
@@ -36,26 +36,15 @@ class SplashFragment : BaseFragment<SplashNavigator>(R.layout.fragment_splash), 
     }
 
     override fun openAuthScreen() {
-        startActivityForResult(
+        val startForResult =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { viewModel.createUser() }
+        startForResult.launch(
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setLogo(R.drawable.ic_money_manager_logo_white)
                 .setTheme(R.style.Theme_MoneyManager)
                 .setAvailableProviders(providers)
-                .build(),
-            RC_SIGN_IN
+                .build()
         )
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == RC_SIGN_IN && resultCode == Activity.RESULT_OK) {
-            viewModel.createUser()
-        }
-    }
-
-    companion object {
-        private const val RC_SIGN_IN = 123
     }
 }
