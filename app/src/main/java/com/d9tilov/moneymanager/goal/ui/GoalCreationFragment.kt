@@ -51,6 +51,7 @@ class GoalCreationFragment :
                 createdGoalDescription.setText(description)
             }
         }
+        updateSaveButtonState()
         viewBinding.run {
             createdGoalName.onChange { updateSaveButtonState() }
             createdGoalSum.moneyEditText.onChange { updateSaveButtonState() }
@@ -95,7 +96,7 @@ class GoalCreationFragment :
 
     override fun onStart() {
         super.onStart()
-        showKeyboard(viewBinding.createdGoalName)
+        showKeyboard(viewBinding.createdGoalSum.moneyEditText)
     }
 
     private fun updateSaveButtonState() {

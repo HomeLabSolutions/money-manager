@@ -5,16 +5,22 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
+import com.d9tilov.moneymanager.budget.BudgetDestination
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
-import com.d9tilov.moneymanager.core.util.getBackupDate
+import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.core.util.show
+import com.d9tilov.moneymanager.core.util.toBudgetCreatedDate
+import com.d9tilov.moneymanager.currency.CurrencyDestination
 import com.d9tilov.moneymanager.databinding.FragmentProfileBinding
+import com.d9tilov.moneymanager.goal.GoalDestination
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileViewModel
+import com.d9tilov.moneymanager.regular.RegularTransactionDestination
 import com.d9tilov.moneymanager.splash.ui.SplashActivity
 import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -55,17 +61,99 @@ class ProfileFragment :
                         updateUI()
                     }
             }
-            profileBackup.setOnClickListener {
-                viewModel.backup()
+            profileCurrency.profileCurrencyLayout.setOnClickListener {
+                val action =
+                    ProfileFragmentDirections.toCurrencyDest(CurrencyDestination.PROFILE_SCREEN)
+                findNavController().navigate(action)
             }
-            viewModel.backupData.observe(
+            profileBudget.profileBudgetLayout.setOnClickListener {
+                val action =
+                    ProfileFragmentDirections.toBudgetDest(BudgetDestination.PROFILE_SCREEN)
+                findNavController().navigate(action)
+            }
+            profileRegularIncomes.profileRegularIncomesLayout.setOnClickListener {
+                val action = ProfileFragmentDirections.toRegularIncomesDest(
+                    RegularTransactionDestination.PROFILE_SCREEN
+                )
+                findNavController().navigate(action)
+            }
+            profileRegularExpenses.profileRegularExpensesLayout.setOnClickListener {
+                val action =
+                    ProfileFragmentDirections.toRegularExpensesDest(RegularTransactionDestination.PROFILE_SCREEN)
+                findNavController().navigate(action)
+            }
+            profileGoals.profileGoalsLayout.setOnClickListener {
+                val action = ProfileFragmentDirections.toGoalsDest(GoalDestination.PROFILE_SCREEN)
+                findNavController().navigate(action)
+            }
+            profileSettings.profileSettingsLayout.setOnClickListener {
+                val action = ProfileFragmentDirections.toSettingsDest()
+                findNavController().navigate(action)
+            }
+            profileSettings.profileSettingsLayout.setOnClickListener {
+                val action = ProfileFragmentDirections.toSettingsDest()
+                findNavController().navigate(action)
+            }
+            viewModel.userData.observe(
                 viewLifecycleOwner,
                 {
-                    if (it.lastBackupTimestamp == 0L) {
-                        profileBackupInfo.setText(R.string.backup_empty)
-                    } else {
-                        profileBackupInfo.text =
-                            getString(R.string.backup_info, it.lastBackupTimestamp.getBackupDate())
+                    val currencyCode = it.currencyCode
+                    val icon = CurrencyUtils.getCurrencyIcon(currencyCode)
+                    val currencyTitle = CurrencyUtils.getCurrencySignBy(currencyCode)
+                    viewBinding.profileCurrency.profileItemCurrencyIcon.text = icon
+                    viewBinding.profileCurrency.profileItemCurrencySign.text = currencyTitle
+                }
+            )
+            viewModel.budget.observe(
+                viewLifecycleOwner,
+                {
+                    viewBinding.profileBudget.profileItemBudgetValue.setValue(it.sum)
+                    viewBinding.profileBudget.profileItemBudgetCreatedDate.text =
+                        getString(
+                            R.string.budget_date_created,
+                            it.createdDate.toBudgetCreatedDate()
+                        )
+                }
+            )
+            viewModel.regularIncomes.observe(
+                viewLifecycleOwner,
+                { list ->
+                    val incomes = list.joinToString(separator = ",") { it.category.name }
+                    when (incomes.isEmpty()) {
+                        true ->
+                            viewBinding.profileRegularIncomes.profileItemRegularIncomeTitle.text =
+                                getString(R.string.profile_item_regular_incomes_title_empty)
+                        false ->
+                            viewBinding.profileRegularIncomes.profileItemRegularIncomeTitle.text =
+                                getString(R.string.profile_item_regular_incomes_title, incomes)
+                    }
+                }
+            )
+            viewModel.regularExpenses.observe(
+                viewLifecycleOwner,
+                { list ->
+                    val expenses = list.joinToString(separator = ",") { it.category.name }
+                    when (expenses.isEmpty()) {
+                        true ->
+                            viewBinding.profileRegularExpenses.profileItemRegularExpenseTitle.text =
+                                getString(R.string.profile_item_regular_expenses_title_empty)
+                        false ->
+                            viewBinding.profileRegularExpenses.profileItemRegularExpenseTitle.text =
+                                getString(R.string.profile_item_regular_expenses_title, expenses)
+                    }
+                }
+            )
+            viewModel.goals.observe(
+                viewLifecycleOwner,
+                { list ->
+                    val goals = list.joinToString(separator = ",") { it.name }
+                    when (goals.isEmpty()) {
+                        true ->
+                            viewBinding.profileGoals.profileItemGoalTitle.text =
+                                getString(R.string.profile_item_goals_title_empty)
+                        false ->
+                            viewBinding.profileGoals.profileItemGoalTitle.text =
+                                getString(R.string.profile_item_goals_title, goals)
                     }
                 }
             )

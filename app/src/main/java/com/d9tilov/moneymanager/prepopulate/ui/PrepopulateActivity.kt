@@ -7,12 +7,15 @@ import androidx.navigation.NavDirections
 import androidx.navigation.fragment.NavHostFragment
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseActivity
+import com.d9tilov.moneymanager.budget.BudgetDestination
 import com.d9tilov.moneymanager.budget.ui.BudgetAmountFragmentDirections
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.currency.ui.CurrencyFragmentDirections
 import com.d9tilov.moneymanager.databinding.ActivityPrepopulateBinding
+import com.d9tilov.moneymanager.goal.GoalDestination
 import com.d9tilov.moneymanager.home.ui.MainActivity
+import com.d9tilov.moneymanager.regular.RegularTransactionDestination
 import com.d9tilov.moneymanager.regular.ui.RegularExpenseFragmentDirections
 import com.d9tilov.moneymanager.regular.ui.RegularIncomeFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,19 +57,25 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
             val action: NavDirections
             when (navController.currentDestination?.id) {
                 R.id.choose_currency_dest -> {
-                    action = CurrencyFragmentDirections.toCommonAmountDest()
+                    action =
+                        CurrencyFragmentDirections.toCommonAmountDest(BudgetDestination.PREPOPULATE_SCREEN)
                     navController.navigate(action)
                 }
                 R.id.budget_amount_dest -> {
-                    action = BudgetAmountFragmentDirections.toRegularIncomeDest()
+                    action = BudgetAmountFragmentDirections.toRegularIncomeDest(
+                        RegularTransactionDestination.PREPOPULATE_SCREEN
+                    )
                     navController.navigate(action)
                 }
                 R.id.regular_income_dest -> {
-                    action = RegularIncomeFragmentDirections.toRegularExpenseDest()
+                    action = RegularIncomeFragmentDirections.toRegularExpenseDest(
+                        RegularTransactionDestination.PREPOPULATE_SCREEN
+                    )
                     navController.navigate(action)
                 }
                 R.id.regular_expense_dest -> {
-                    action = RegularExpenseFragmentDirections.toGoalsDest()
+                    action =
+                        RegularExpenseFragmentDirections.toGoalsDest(GoalDestination.PREPOPULATE_SCREEN)
                     navController.navigate(action)
                 }
                 else -> {

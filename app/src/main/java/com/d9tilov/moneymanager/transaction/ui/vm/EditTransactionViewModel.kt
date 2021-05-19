@@ -8,6 +8,7 @@ import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,14 +18,16 @@ class EditTransactionViewModel @Inject constructor(
     private val firebaseAnalytics: FirebaseAnalytics
 ) : BaseViewModel<EditTransactionNavigator>() {
 
-    fun update(transaction: Transaction) = viewModelScope.launch {
-        transactionInteractor.update(transaction)
-        navigator?.save()
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-            param(
-                "create_transaction",
-                "sum: " + transaction.sum + " category: " + transaction.category.name
-            )
+    fun update(transaction: Transaction) {
+        viewModelScope.launch(Dispatchers.IO) {
+            transactionInteractor.update(transaction)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                param(
+                    "create_transaction",
+                    "sum: " + transaction.sum + " category: " + transaction.category.name
+                )
+            }
         }
+        navigator?.save()
     }
 }

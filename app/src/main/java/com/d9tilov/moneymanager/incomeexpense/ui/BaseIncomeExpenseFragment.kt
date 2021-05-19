@@ -120,8 +120,8 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
     }
 
     protected fun hideViewStub() {
-        emptyViewStub?.visibility =
-            GONE //don't use gone() extension!!! isVisible and isShown not worked
+        /*don't use gone() extension!!! isVisible and isShown not worked*/
+        emptyViewStub?.visibility = GONE
     }
 
     private fun openRemoveConfirmationDialog(transaction: Transaction) {

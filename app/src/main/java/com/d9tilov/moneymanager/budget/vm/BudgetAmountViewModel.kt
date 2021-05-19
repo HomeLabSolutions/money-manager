@@ -6,7 +6,9 @@ import com.d9tilov.moneymanager.base.ui.navigator.BudgetAmountNavigator
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import javax.inject.Inject
@@ -17,7 +19,7 @@ class BudgetAmountViewModel @Inject constructor(private val budgetInteractor: Bu
 
     val budgetData = budgetInteractor.get().asLiveData()
 
-    fun saveBudgetAmount(sum: BigDecimal) = viewModelScope.launch {
-        budgetInteractor.get().collect { budgetInteractor.update(it.copy(sum = sum)) }
+    fun saveBudgetAmount(sum: BigDecimal) = viewModelScope.launch(Dispatchers.IO) {
+        budgetInteractor.get().map { budgetInteractor.update(it.copy(sum = sum)) }.collect()
     }
 }

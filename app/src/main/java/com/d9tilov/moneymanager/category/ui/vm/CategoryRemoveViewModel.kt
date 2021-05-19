@@ -9,6 +9,7 @@ import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,10 +20,12 @@ class CategoryRemoveViewModel @Inject constructor(
     private val firebaseAnalytics: FirebaseAnalytics
 ) : BaseViewModel<RemoveCategoryDialogNavigator>() {
 
-    fun remove(category: Category) = viewModelScope.launch {
-        transactionInteractor.removeAllByCategory(category)
-        category.children.forEach { transactionInteractor.removeAllByCategory(it) }
-        categoryInteractor.deleteCategory(category)
+    fun remove(category: Category) {
+        viewModelScope.launch(Dispatchers.IO) {
+            transactionInteractor.removeAllByCategory(category)
+            category.children.forEach { transactionInteractor.removeAllByCategory(it) }
+            categoryInteractor.deleteCategory(category)
+        }
         navigator?.closeDialog()
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
             param("delete_category", "name: " + category.name)

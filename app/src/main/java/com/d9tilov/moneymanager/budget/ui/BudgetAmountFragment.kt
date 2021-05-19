@@ -4,12 +4,16 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.BudgetAmountNavigator
+import com.d9tilov.moneymanager.budget.BudgetDestination
 import com.d9tilov.moneymanager.budget.vm.BudgetAmountViewModel
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.hideKeyboard
+import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentBudgetAmountBinding
 import com.d9tilov.moneymanager.prepopulate.ui.ControlsClicked
@@ -23,6 +27,9 @@ class BudgetAmountFragment :
     BudgetAmountNavigator,
     ControlsClicked {
 
+    private val args by navArgs<BudgetAmountFragmentArgs>()
+    private val destination by lazy { args.destination }
+
     private val viewBinding by viewBinding(FragmentBudgetAmountBinding::bind)
     private var toolbar: MaterialToolbar? = null
 
@@ -33,6 +40,16 @@ class BudgetAmountFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
+        if (destination == BudgetDestination.PROFILE_SCREEN) {
+            viewBinding.createdBudgetSave.run {
+                show()
+                isSelected = true
+                setOnClickListener {
+                    viewModel.saveBudgetAmount(viewBinding.commonBudgetAmount.getValue())
+                    findNavController().popBackStack()
+                }
+            }
+        }
         viewModel.budgetData.observe(
             this.viewLifecycleOwner,
             {
@@ -43,13 +60,17 @@ class BudgetAmountFragment :
 
     override fun onStart() {
         super.onStart()
-        (activity as PrepopulateActivity).controlsClick = this
+        if (activity is PrepopulateActivity) {
+            (activity as PrepopulateActivity).controlsClick = this
+        }
         showKeyboard(viewBinding.commonBudgetAmount.moneyEditText)
     }
 
     override fun onStop() {
         super.onStop()
-        (activity as PrepopulateActivity).controlsClick = null
+        if (activity is PrepopulateActivity) {
+            (activity as PrepopulateActivity).controlsClick = null
+        }
         hideKeyboard()
     }
 
@@ -59,6 +80,9 @@ class BudgetAmountFragment :
         activity.setSupportActionBar(toolbar)
         toolbar?.title = getString(R.string.title_prepopulate_budget)
         activity.setSupportActionBar(toolbar)
+        if (destination == BudgetDestination.PROFILE_SCREEN) {
+            activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
     }
 
     override fun goToRegularIncomeScreen() {

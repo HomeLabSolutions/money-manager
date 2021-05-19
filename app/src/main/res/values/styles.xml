@@ -90,4 +90,9 @@
         <item name="android:buttonTint">@color/button_normal_color_start</item>
     </style>
 
+    <style name="Widget.MoneyManager.TextView.ProfileItem" parent="Widget.AppCompat.TextView">
+        <item name="android:textAppearance">?attr/textAppearanceBody1</item>
+        <item name="android:textColor">@color/text_primary_color</item>
+        <item name="android:textSize">@dimen/profile_item_text_size</item>
+    </style>
 </resources>

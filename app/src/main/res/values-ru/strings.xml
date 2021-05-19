@@ -20,7 +20,8 @@
     <string name="title_prepopulate_regular_income">Постоянный доход</string>
     <string name="title_prepopulate_regular_expenses">Постоянные расходы</string>
     <string name="title_prepopulate_regular_expense">Постоянный расход</string>
-    <string name="title_goal">Цель</string>
+    <string name="title_goal">Цели</string>
+    <string name="title_settings">Настройки</string>
 
     <string name="toolbar_menu_skip">Пропустить</string>
 
@@ -117,10 +118,23 @@
     <string name="goals_description_hint">Описание цели</string>
     <string name="goals_remove_dialog_title">Удаление цели</string>
     <string name="goals_remove_dialog_subtitle">Вы действительно хотите удалить цель?</string>
+    <string name="goals_sum_title">Стоимость цели</string>
 
     <string name="backup">Сделать backup</string>
     <string name="backup_info">Последняя копия: %1$s</string>
     <string name="backup_empty">Резервная копия еще не создавалась</string>
     <string name="backup_succeeded">Резервное копирование выполнено успешно</string>
     <string name="backup_error">Ошибка резервного копирования</string>
+
+    <string name="profile_item_currency_title">Валюта: </string>
+    <string name="profile_item_budget_title">Бюджет: </string>
+    <string name="profile_item_regular_incomes_title">Постоянные доходы: %1$s</string>
+    <string name="profile_item_regular_incomes_title_empty">Постоянные доходы</string>
+    <string name="profile_item_regular_expenses_title">Постоянные расходы: %1$s</string>
+    <string name="profile_item_regular_expenses_title_empty">Постоянные расходы</string>
+    <string name="profile_item_goals_title">Цели: %1$s</string>
+    <string name="profile_item_goals_title_empty">Цели</string>
+    <string name="profile_item_settings_title">Настройки</string>
+
+    <string name="budget_date_created">Создан: %1$s</string>
 </resources>

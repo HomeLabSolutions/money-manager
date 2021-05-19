@@ -16,7 +16,6 @@ import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.BaseRegularIncomeExpenseNavigator
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
-import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
@@ -27,11 +26,11 @@ import com.google.android.material.appbar.MaterialToolbar
 
 abstract class BaseRegularIncomeExpenseFragment<N : BaseRegularIncomeExpenseNavigator>(
     @LayoutRes layoutId: Int
-) :
-    BaseFragment<N>(layoutId), BaseRegularIncomeExpenseNavigator {
+) : BaseFragment<N>(layoutId), BaseRegularIncomeExpenseNavigator {
 
     protected val regularTransactionAdapter: RegularTransactionAdapter = RegularTransactionAdapter()
     protected abstract val transactionType: TransactionType
+    protected abstract fun showBackButton(): Boolean
     protected var toolbar: MaterialToolbar? = null
     protected var emptyViewStub: ViewStub? = null
 
@@ -113,6 +112,9 @@ abstract class BaseRegularIncomeExpenseFragment<N : BaseRegularIncomeExpenseNavi
             getString(if (transactionType == TransactionType.INCOME) R.string.title_prepopulate_regular_incomes else R.string.title_prepopulate_regular_expenses)
         activity.setSupportActionBar(toolbar)
         setHasOptionsMenu(true)
+        if (showBackButton()) {
+            activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
         toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.action_add -> {
@@ -159,7 +161,8 @@ abstract class BaseRegularIncomeExpenseFragment<N : BaseRegularIncomeExpenseNavi
     }
 
     protected fun hideViewStub() {
-        emptyViewStub?.gone()
+        /* don't use gone() */
+        emptyViewStub?.visibility = View.GONE
     }
 
     private fun openCreatedScreen(transactionType: TransactionType) {

@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent">
 
     <include
@@ -39,4 +40,16 @@
         app:signTextStyle="?attr/textAppearanceCurrencySignBig"
         app:sum="5000"
         app:sumTextStyle="?attr/textAppearanceHeadline1" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/created_budget_save"
+        style="?attr/moneyManagerBottomActionButtonSelectedStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:text="@string/save"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

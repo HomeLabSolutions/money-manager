@@ -18,6 +18,7 @@ import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
@@ -47,9 +48,9 @@ class SubCategoryViewModel @AssistedInject constructor(
                 if (inputSum == null) {
                     navigator?.backToRegularTransactionCreationScreen(category)
                 } else {
-                    viewModelScope.launch {
-                        val transactionType =
-                            requireNotNull(savedStateHandle.get<TransactionType>("transactionType"))
+                    val transactionType =
+                        requireNotNull(savedStateHandle.get<TransactionType>("transactionType"))
+                    viewModelScope.launch(Dispatchers.IO) {
                         transactionInteractor.addTransaction(
                             Transaction(
                                 type = transactionType,
@@ -57,8 +58,8 @@ class SubCategoryViewModel @AssistedInject constructor(
                                 category = category
                             )
                         )
-                        navigator?.backToMainScreen(transactionType)
                     }
+                    navigator?.backToMainScreen(transactionType)
                 }
             }
             else -> navigator?.openCreateCategoryScreen(category)

@@ -21,6 +21,34 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <TextView
+                android:id="@+id/created_goal_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/standard_left_margin"
+                android:layout_marginTop="16dp"
+                android:text="@string/goals_sum_title"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textColor="@color/text_primary_color_dark"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
+                android:id="@+id/created_goal_sum"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/standard_right_margin"
+                android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Big"
+                app:enableInput="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/created_goal_title"
+                app:layout_constraintTop_toBottomOf="@+id/created_goal_title"
+                app:scaleEnabled="true"
+                app:showComma="false"
+                app:signTextStyle="?attr/textAppearanceCurrencySignBig"
+                app:sum="5000"
+                app:sumTextStyle="?attr/textAppearanceHeadline1" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/created_goal_name_layout"
                 style="@style/TextInputLayoutAppearance"
@@ -32,7 +60,7 @@
                 app:counterEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/created_goal_sum">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/created_goal_name"
@@ -45,23 +73,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
-                android:id="@+id/created_goal_sum"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/standard_left_margin"
-                android:layout_marginEnd="@dimen/standard_right_margin"
-                android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Medium"
-                app:enableInput="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/created_goal_name_layout"
-                app:scaleEnabled="true"
-                app:showComma="true"
-                app:signTextStyle="?attr/textAppearanceCurrencySignMedium"
-                app:sum="5000"
-                app:sumTextStyle="?attr/textAppearanceCurrencyValueMedium" />
-
             <ImageView
                 android:id="@+id/created_goal_delimiter"
                 android:layout_width="0dp"
@@ -73,7 +84,7 @@
                 android:src="@drawable/dotted_shape"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/created_goal_sum" />
+                app:layout_constraintTop_toBottomOf="@+id/created_goal_name_layout" />
 
             <EditText
                 android:id="@+id/created_goal_description"

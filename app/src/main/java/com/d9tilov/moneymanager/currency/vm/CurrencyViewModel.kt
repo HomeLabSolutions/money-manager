@@ -13,9 +13,12 @@ import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import javax.inject.Inject
@@ -33,7 +36,7 @@ class CurrencyViewModel @Inject constructor(
         getCurrencies()
     }
 
-    fun updateBaseCurrency(currency: DomainCurrency) = viewModelScope.launch {
+    fun updateBaseCurrency(currency: DomainCurrency) = viewModelScope.launch(Dispatchers.IO) {
         currencyInteractor.updateBaseCurrency(currency)
         val newCurrencyList = mutableListOf<DomainCurrency>()
         for (item in currencies.value?.data ?: emptyList()) {
@@ -41,23 +44,27 @@ class CurrencyViewModel @Inject constructor(
         }
     }
 
-    fun skip() = viewModelScope.launch {
-        budgetInteractor.create(
-            BudgetData(
-                sum = BigDecimal.ZERO,
-                fiscalDay = getFirstDayOfMonth()
+    fun skip() {
+        viewModelScope.launch(Dispatchers.IO) {
+            budgetInteractor.create(
+                BudgetData(
+                    sum = BigDecimal.ZERO,
+                    fiscalDay = getFirstDayOfMonth()
+                )
             )
-        )
-        val user = userInteractor.getCurrentUser().first()
-        userInteractor.updateUser(user.copy(showPrepopulate = false))
+            val user = userInteractor.getCurrentUser().first()
+            userInteractor.updateUser(user.copy(showPrepopulate = false))
+        }
         navigator?.skip()
     }
 
     fun getCurrencies() =
         viewModelScope.launch {
+            delay(300)
             currencies.value = Result.loading()
             currencyInteractor.getCurrencies()
                 .catch { currencies.postValue(Result.error(it)) }
+                .flowOn(Dispatchers.IO)
                 .collect { currencies.value = Result.success(it) }
         }
 
