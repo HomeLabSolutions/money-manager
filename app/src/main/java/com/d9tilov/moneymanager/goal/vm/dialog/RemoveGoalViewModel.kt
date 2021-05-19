@@ -6,6 +6,7 @@ import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.goal.domain.GoalInteractor
 import com.d9tilov.moneymanager.goal.domain.entity.Goal
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -14,8 +15,10 @@ class RemoveGoalViewModel @Inject constructor(
     private val goalInteractor: GoalInteractor
 ) : BaseViewModel<RemoveGoalNavigator>() {
 
-    fun remove(goal: Goal) = viewModelScope.launch {
-        goalInteractor.delete(goal)
+    fun remove(goal: Goal) {
+        viewModelScope.launch(Dispatchers.IO) {
+            goalInteractor.delete(goal)
+        }
         navigator?.closeDialog()
     }
 }

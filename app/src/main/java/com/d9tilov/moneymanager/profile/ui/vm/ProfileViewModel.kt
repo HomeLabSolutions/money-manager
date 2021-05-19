@@ -2,32 +2,41 @@ package com.d9tilov.moneymanager.profile.ui.vm
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
-import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.backup.BackupData
 import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
+import com.d9tilov.moneymanager.budget.data.entity.BudgetData
+import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
+import com.d9tilov.moneymanager.goal.domain.GoalInteractor
+import com.d9tilov.moneymanager.goal.domain.entity.Goal
+import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
+import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
+import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val userInfoInteractor: UserInteractor,
+    budgetInteractor: BudgetInteractor,
+    regularTransactionInteractor: RegularTransactionInteractor,
+    goalInteractor: GoalInteractor,
     private val firebaseAnalytics: FirebaseAnalytics
 ) : BaseViewModel<ProfileNavigator>() {
 
-    val backupData: LiveData<BackupData> = userInfoInteractor.getBackupData().asLiveData()
+    val userData: LiveData<UserProfile> = userInfoInteractor.getCurrentUser().asLiveData()
+    val budget: LiveData<BudgetData> = budgetInteractor.get().asLiveData()
+    val regularIncomes: LiveData<List<RegularTransaction>> =
+        regularTransactionInteractor.getAll(TransactionType.INCOME).asLiveData()
+    val regularExpenses: LiveData<List<RegularTransaction>> =
+        regularTransactionInteractor.getAll(TransactionType.EXPENSE).asLiveData()
+    val goals: LiveData<List<Goal>> = goalInteractor.getAll().asLiveData()
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private val profileExceptionHandler = CoroutineExceptionHandler { _, _ ->
-        setMessage(R.string.backup_error)
-    }
 
     fun getCurrentUser(): FirebaseUser? = auth.currentUser
 
@@ -38,10 +47,5 @@ class ProfileViewModel @Inject constructor(
                 "logout"
             )
         }
-    }
-
-    fun backup() {
-        viewModelScope.launch(profileExceptionHandler) { userInfoInteractor.backup() }
-        setMessage(R.string.backup_succeeded)
     }
 }

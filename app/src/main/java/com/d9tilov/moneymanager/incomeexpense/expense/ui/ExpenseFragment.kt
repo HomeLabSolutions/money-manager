@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.base.ui.callback.SwipeToDeleteCallback
 import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entity.Category
@@ -35,6 +34,7 @@ import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.incomeexpense.ui.BaseIncomeExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
 import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.ui.callback.TransactionSwipeToDeleteCallback
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
@@ -116,8 +116,7 @@ class ExpenseFragment :
                     }
                 }
         }
-        viewBinding.expenseTransactionRvList.addOnScrollListener(object :
-            RecyclerView.OnScrollListener() {
+        viewBinding.expenseTransactionRvList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             private val fab = viewBinding.expenseTransactionBtnAdd
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (dy > 0 || dy < 0 && fab.isShown) {
@@ -183,7 +182,7 @@ class ExpenseFragment :
             expenseTransactionRvList.adapter = transactionAdapter
             val itemDecoration = StickyHeaderItemDecorator(transactionAdapter)
             itemDecoration.attachToRecyclerView(expenseTransactionRvList)
-            ItemTouchHelper(object : SwipeToDeleteCallback(requireContext()) {
+            ItemTouchHelper(object : TransactionSwipeToDeleteCallback(requireContext()) {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     transactionAdapter.deleteItem(viewHolder.bindingAdapterPosition)
                 }

@@ -40,12 +40,18 @@
     <dimen name="item_color_picker_size">32dp</dimen>
     <dimen name="item_weekday_size">36dp</dimen>
 
-    <dimen name="currency_icon_size">30sp</dimen>
     //It is a TextView
+    <dimen name="currency_icon_size">30sp</dimen>
     <dimen name="goal_progress_line_bar_width">16dp</dimen>
     <dimen name="goal_progress_percent_text_size">10sp</dimen>
     <dimen name="goal_value_text_size">12sp</dimen>
 
+    // for floating button
     <dimen name="design_fab_image_size" tools:override="true">56dp</dimen>
+
+    <dimen name="profile_item_height">64dp</dimen>
+    <dimen name="profile_item_text_size">18sp</dimen>
+
+    <dimen name="budget_created_date">12sp</dimen>
 
 </resources>

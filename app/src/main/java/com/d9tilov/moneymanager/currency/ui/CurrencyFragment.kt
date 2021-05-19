@@ -11,6 +11,8 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.d9tilov.moneymanager.R
@@ -23,6 +25,7 @@ import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.show
+import com.d9tilov.moneymanager.currency.CurrencyDestination
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.vm.CurrencyViewModel
 import com.d9tilov.moneymanager.databinding.FragmentCurrencyBinding
@@ -39,6 +42,9 @@ class CurrencyFragment :
     BaseFragment<CurrencyNavigator>(R.layout.fragment_currency),
     CurrencyNavigator {
 
+    private val args by navArgs<CurrencyFragmentArgs>()
+    private val destination by lazy { args.destination }
+
     private val viewBinding by viewBinding(FragmentCurrencyBinding::bind)
     private var toolbar: MaterialToolbar? = null
     private lateinit var currencyAdapter: CurrencyAdapter
@@ -48,6 +54,9 @@ class CurrencyFragment :
     private val onItemClickListener = object : OnItemClickListener<DomainCurrency> {
         override fun onItemClick(item: DomainCurrency, position: Int) {
             viewModel.updateBaseCurrency(item)
+            if (destination == CurrencyDestination.PROFILE_SCREEN) {
+                findNavController().popBackStack()
+            }
         }
     }
 
@@ -99,8 +108,10 @@ class CurrencyFragment :
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.prepopulate_menu, menu)
-        setMenuTextColor(menu)
+        if (destination == null) {
+            inflater.inflate(R.menu.prepopulate_menu, menu)
+            setMenuTextColor(menu)
+        }
     }
 
     private fun setMenuTextColor(menu: Menu) {
@@ -127,6 +138,9 @@ class CurrencyFragment :
         toolbar?.title = getString(R.string.title_prepopulate_currency)
         activity.setSupportActionBar(toolbar)
         setHasOptionsMenu(true)
+        if (destination == CurrencyDestination.PROFILE_SCREEN) {
+            activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
         toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.action_skip -> {

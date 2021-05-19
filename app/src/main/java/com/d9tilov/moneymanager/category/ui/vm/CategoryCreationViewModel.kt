@@ -40,7 +40,6 @@ class CategoryCreationViewModel @AssistedInject constructor(
         } else {
             categoryInteractor.update(category)
             navigator?.save()
-
         }
     }
 

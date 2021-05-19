@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.savedstate.SavedStateRegistryOwner
 import com.d9tilov.moneymanager.base.ui.navigator.RegularTransactionCreatedNavigator
 import com.d9tilov.moneymanager.category.data.entity.Category
-import com.d9tilov.moneymanager.category.ui.vm.CategoryUnionViewModel
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.period.PeriodType
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
@@ -18,6 +17,7 @@ import com.d9tilov.moneymanager.transaction.TransactionType
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.util.Date
@@ -39,7 +39,7 @@ class CreatedRegularTransactionViewModel @AssistedInject constructor(
         val transactionType =
             requireNotNull(savedStateHandle.get<TransactionType>("transactionType"))
         val regularTransaction = savedStateHandle.get<RegularTransaction>("regular_transaction")
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             if (regularTransaction == null) {
                 regularTransactionInteractor.insert(
                     RegularTransaction(
@@ -67,13 +67,13 @@ class CreatedRegularTransactionViewModel @AssistedInject constructor(
                     )
                 )
             }
-            navigator?.back()
         }
+        navigator?.back()
     }
 
     @AssistedFactory
     interface CreatedRegularTransactionViewModelFactory {
-        fun create(handle: SavedStateHandle): CategoryUnionViewModel
+        fun create(handle: SavedStateHandle): CreatedRegularTransactionViewModel
     }
 
     companion object {

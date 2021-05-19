@@ -15,6 +15,7 @@ import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionHeader
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -32,7 +33,7 @@ class ExpenseViewModel @Inject constructor(
     init {
         categories =
             categoryInteractor.getGroupedCategoriesByType(TransactionType.EXPENSE).asLiveData()
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             transactions =
                 transactionInteractor.getTransactionsByType(TransactionType.EXPENSE)
                     .map {
@@ -83,7 +84,7 @@ class ExpenseViewModel @Inject constructor(
 
     override fun saveTransaction(category: Category, sum: BigDecimal) {
         if (sum.signum() > 0) {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 transactionInteractor.addTransaction(
                     Transaction(
                         type = TransactionType.EXPENSE,

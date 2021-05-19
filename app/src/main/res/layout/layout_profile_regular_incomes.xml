@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/profile_item_height"
+    android:gravity="center_vertical"
+    android:id="@+id/profile_regular_incomes_layout"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/profile_item_regular_income_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:src="@drawable/ic_regular_income" />
+
+    <TextView
+        android:id="@+id/profile_item_regular_income_title"
+        style="@style/Widget.MoneyManager.TextView.ProfileItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:text="@string/profile_item_regular_incomes_title" />
+
+</LinearLayout>

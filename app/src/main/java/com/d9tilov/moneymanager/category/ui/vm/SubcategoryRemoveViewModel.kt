@@ -16,6 +16,7 @@ import com.google.firebase.analytics.ktx.logEvent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SubcategoryRemoveViewModel @AssistedInject constructor(
@@ -25,7 +26,7 @@ class SubcategoryRemoveViewModel @AssistedInject constructor(
     @Assisted val savedStateHandle: SavedStateHandle
 ) : BaseViewModel<RemoveSubCategoryDialogNavigator>() {
 
-    fun remove(subcategory: Category) = viewModelScope.launch {
+    fun remove(subcategory: Category) = viewModelScope.launch(Dispatchers.IO) {
         transactionInteractor.removeAllByCategory(subcategory)
         val parentRemoved = categoryInteractor.deleteSubCategory(subcategory)
         if (parentRemoved) {
@@ -38,7 +39,7 @@ class SubcategoryRemoveViewModel @AssistedInject constructor(
         }
     }
 
-    fun removeFromGroup(subcategory: Category) = viewModelScope.launch {
+    fun removeFromGroup(subcategory: Category) = viewModelScope.launch(Dispatchers.IO) {
         val parentRemoved = categoryInteractor.deleteFromGroup(subcategory)
         if (parentRemoved) {
             navigator?.closeDialogAndGoToCategory()

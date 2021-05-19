@@ -9,8 +9,10 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,6 +32,7 @@ class SplashViewModel @Inject constructor(
         } else {
             viewModelScope.launch {
                 userInfoInteractor.getCurrentUser()
+                    .flowOn(Dispatchers.IO)
                     .catch {
                         auth.signOut()
                         navigator?.openAuthScreen()
@@ -45,23 +48,23 @@ class SplashViewModel @Inject constructor(
                                     param(
                                         FirebaseAnalytics.Param.ITEM_ID, "prepopulate_screen"
                                     )
-                            }
-                        } else {
-                            navigator?.openHomeScreen()
-                            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN) {
-                                param(
-                                    FirebaseAnalytics.Param.ITEM_ID,
-                                    auth.currentUser?.email ?: "unknown email"
-                                )
+                                }
+                            } else {
+                                navigator?.openHomeScreen()
+                                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN) {
+                                    param(
+                                        FirebaseAnalytics.Param.ITEM_ID,
+                                        auth.currentUser?.email ?: "unknown email"
+                                    )
+                                }
                             }
                         }
                     }
-                }
             }
         }
     }
 
-    fun createUser() = viewModelScope.launch {
+    fun createUser() = viewModelScope.launch(Dispatchers.IO) {
         val user = userInfoInteractor.createUser(auth.currentUser)
         categoryInteractor.createDefaultCategories()
         if (user.showPrepopulate) {

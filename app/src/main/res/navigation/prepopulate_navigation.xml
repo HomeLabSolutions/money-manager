@@ -18,6 +18,12 @@
             app:exitAnim="@anim/slide_up_exit"
             app:popEnterAnim="@anim/slide_down_enter"
             app:popExitAnim="@anim/slide_down_exit" />
+
+        <argument
+            android:name="destination"
+            android:defaultValue="@null"
+            app:argType="com.d9tilov.moneymanager.currency.CurrencyDestination"
+            app:nullable="true"/>
     </fragment>
 
     <fragment
@@ -33,6 +39,10 @@
             app:exitAnim="@anim/slide_up_exit"
             app:popEnterAnim="@anim/slide_down_enter"
             app:popExitAnim="@anim/slide_down_exit" />
+
+        <argument
+            android:name="destination"
+            app:argType="com.d9tilov.moneymanager.budget.BudgetDestination"/>
     </fragment>
 
     <fragment
@@ -64,6 +74,10 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
+        <argument
+            android:name="destination"
+            app:argType="com.d9tilov.moneymanager.regular.RegularTransactionDestination"/>
+
     </fragment>
 
     <fragment
@@ -94,6 +108,10 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <argument
+            android:name="destination"
+            app:argType="com.d9tilov.moneymanager.regular.RegularTransactionDestination"/>
     </fragment>
 
     <fragment
@@ -280,6 +298,10 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <argument
+            android:name="destination"
+            app:argType="com.d9tilov.moneymanager.goal.GoalDestination"/>
 
     </fragment>
 

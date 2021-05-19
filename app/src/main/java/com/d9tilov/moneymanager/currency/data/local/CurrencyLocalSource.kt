@@ -3,6 +3,7 @@ package com.d9tilov.moneymanager.currency.data.local
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.currency.data.entity.Currency
 import com.d9tilov.moneymanager.currency.data.local.mapper.CurrencyLocalMapper
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class CurrencyLocalSource(
@@ -16,6 +17,8 @@ class CurrencyLocalSource(
         currencies.forEach { currencyDao.insert(currencyLocalMapper.toDbModel(it)) }
     }
 
-    override fun getCurrencies() = currencyDao.getAll()
-        .map { it.map { item -> currencyLocalMapper.toDataModel(item) } }
+    override fun getCurrencies(): Flow<List<Currency>> {
+        return currencyDao.getAll()
+            .map { it.map { item -> currencyLocalMapper.toDataModel(item) } }
+    }
 }

@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +27,7 @@ import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentGoalsBinding
+import com.d9tilov.moneymanager.goal.GoalDestination
 import com.d9tilov.moneymanager.goal.domain.entity.Goal
 import com.d9tilov.moneymanager.goal.ui.dialog.GoalRemoveDialog.Companion.ARG_UNDO_REMOVE_LAYOUT_DISMISS
 import com.d9tilov.moneymanager.goal.vm.GoalsViewModel
@@ -39,6 +41,9 @@ class GoalsFragment :
     BaseFragment<GoalsNavigator>(R.layout.fragment_goals),
     GoalsNavigator,
     ControlsClicked {
+
+    private val args by navArgs<GoalsFragmentArgs>()
+    private val destination by lazy { args.destination }
 
     private var toolbar: MaterialToolbar? = null
     private var emptyViewStub: ViewStub? = null
@@ -76,7 +81,6 @@ class GoalsFragment :
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         emptyViewStub = viewBinding.root.findViewById(R.id.goals_empty_placeholder)
-        toolbar = viewBinding.goalsToolbarContainer.toolbar
         viewBinding.run {
             goalsRvList.adapter = goalAdapter
             val layoutManager = LinearLayoutManager(requireContext())
@@ -122,12 +126,16 @@ class GoalsFragment :
 
     override fun onStart() {
         super.onStart()
-        (activity as PrepopulateActivity).controlsClick = this
+        if (activity is PrepopulateActivity) {
+            (activity as PrepopulateActivity).controlsClick = this
+        }
         hideKeyboard()
     }
 
     override fun onStop() {
-        (activity as PrepopulateActivity).controlsClick = this
+        if (activity is PrepopulateActivity) {
+            (activity as PrepopulateActivity).controlsClick = this
+        }
         super.onStop()
     }
 
@@ -136,8 +144,10 @@ class GoalsFragment :
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         toolbar?.title = getString(R.string.title_goal)
-        activity.setSupportActionBar(toolbar)
         setHasOptionsMenu(true)
+        if (destination == GoalDestination.PROFILE_SCREEN) {
+            activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
         toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.action_add -> {
@@ -164,7 +174,7 @@ class GoalsFragment :
             stubIcon?.setImageDrawable(
                 ContextCompat.getDrawable(
                     requireContext(),
-                    R.drawable.ic_goal
+                    R.drawable.ic_goal_placeholder
                 )
             )
             val stubTitle =
@@ -184,7 +194,7 @@ class GoalsFragment :
     }
 
     private fun hideViewStub() {
-        emptyViewStub?.gone()
+        emptyViewStub?.visibility = View.GONE
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -110,3 +110,5 @@ interface SubCategoryNavigator : BaseNavigator {
     fun backToRegularTransactionCreationScreen(category: Category)
     fun openRemoveDialog(subCategory: Category)
 }
+
+interface SettingsNavigator : BaseNavigator

@@ -15,6 +15,7 @@ import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionHeader
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -30,7 +31,7 @@ class IncomeViewModel @Inject constructor(
     lateinit var transactions: Flow<PagingData<BaseTransaction>>
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             categories =
                 categoryInteractor.getGroupedCategoriesByType(TransactionType.INCOME).asLiveData()
             transactions =
@@ -58,7 +59,7 @@ class IncomeViewModel @Inject constructor(
 
     override fun saveTransaction(category: Category, sum: BigDecimal) {
         if (sum.signum() > 0) {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 transactionInteractor.addTransaction(
                     Transaction(
                         type = TransactionType.INCOME,

@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.core.util.getColorFromAttr
 import com.d9tilov.moneymanager.core.util.px
-import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import java.util.Locale
 
 abstract class SwipeToDeleteCallback(context: Context) :
@@ -48,14 +47,6 @@ abstract class SwipeToDeleteCallback(context: Context) :
         textPaint.color = context.getColorFromAttr(R.attr.colorOnPrimary)
         textPaint.textSize = textView.textSize
         textPaint.typeface = textView.typeface
-    }
-
-    override fun getMovementFlags(
-        recyclerView: RecyclerView,
-        viewHolder: RecyclerView.ViewHolder
-    ): Int {
-        if (viewHolder.itemViewType == BaseTransaction.HEADER) return 0
-        return super.getMovementFlags(recyclerView, viewHolder)
     }
 
     override fun onMove(

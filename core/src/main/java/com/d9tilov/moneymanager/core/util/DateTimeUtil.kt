@@ -96,6 +96,10 @@ fun Date.getDayOfWeek(): Int {
     return cal[Calendar.DAY_OF_WEEK]
 }
 
-fun Long.getBackupDate(): String {
+fun Long.toBackupDate(): String {
     return SimpleDateFormat(BACKUP_DATE, Locale.getDefault()).format(Date(this))
+}
+
+fun Date.toBudgetCreatedDate(): String {
+    return SimpleDateFormat(RECENT_DATE_FORMAT, Locale.getDefault()).format(this.time)
 }

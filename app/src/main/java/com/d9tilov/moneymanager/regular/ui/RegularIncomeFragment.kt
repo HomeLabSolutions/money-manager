@@ -3,6 +3,7 @@ package com.d9tilov.moneymanager.regular.ui
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +15,7 @@ import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentRegularIncomeBinding
+import com.d9tilov.moneymanager.regular.RegularTransactionDestination
 import com.d9tilov.moneymanager.regular.vm.RegularIncomeViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,6 +24,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class RegularIncomeFragment :
     BaseRegularIncomeExpenseFragment<RegularIncomeNavigator>(R.layout.fragment_regular_income),
     RegularIncomeNavigator {
+
+    private val args by navArgs<RegularIncomeFragmentArgs>()
+    private val destination by lazy { args.destination }
 
     private val viewBinding by viewBinding(FragmentRegularIncomeBinding::bind)
     override val transactionType = TransactionType.INCOME
@@ -61,4 +66,6 @@ class RegularIncomeFragment :
             }
         )
     }
+
+    override fun showBackButton() = destination == RegularTransactionDestination.PROFILE_SCREEN
 }
