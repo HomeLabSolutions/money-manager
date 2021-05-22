@@ -54,6 +54,7 @@ class SplashFragment : BaseFragment<SplashNavigator>(R.layout.fragment_splash), 
                 .setLogo(R.drawable.ic_money_manager_logo_white)
                 .setTheme(R.style.Theme_MoneyManager)
                 .setAvailableProviders(providers)
+                .setIsSmartLockEnabled(false)
                 .build()
         )
     }

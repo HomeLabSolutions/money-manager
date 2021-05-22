@@ -14,12 +14,10 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.InputStream
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class BackupManager (private val context: Context, private val preferencesStore: PreferencesStore) {
+class BackupManager(private val context: Context, private val preferencesStore: PreferencesStore) {
 
     suspend fun backupDb(): Result<Nothing> = suspendCoroutine { continuation ->
         Timber.tag(App.TAG).d("Backup start")

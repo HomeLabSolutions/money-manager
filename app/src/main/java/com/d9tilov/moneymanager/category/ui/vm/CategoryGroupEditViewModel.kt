@@ -14,8 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CategoryGroupEditViewModel @Inject constructor(
     private val categoryInteractor: CategoryInteractor
-) :
-    BaseViewModel<EditCategoryDialogNavigator>() {
+) : BaseViewModel<EditCategoryDialogNavigator>() {
 
     private val saveCategoryExceptionHandler = CoroutineExceptionHandler { _, exception ->
         navigator?.showError(exception)

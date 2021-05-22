@@ -28,5 +28,5 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideBackupManager(@ApplicationContext  context: Context, preferencesStore: PreferencesStore): BackupManager = BackupManager(context, preferencesStore)
+    fun provideBackupManager(@ApplicationContext context: Context, preferencesStore: PreferencesStore): BackupManager = BackupManager(context, preferencesStore)
 }

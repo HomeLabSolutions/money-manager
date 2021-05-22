@@ -81,6 +81,10 @@ interface RemoveSubCategoryDialogNavigator : BaseNavigator {
     fun closeDialogAndGoToCategory()
 }
 
+interface LogoutDialogNavigator : BaseNavigator {
+    fun logout()
+}
+
 interface CategoryNavigator : BaseNavigator {
     fun openSubCategoryScreen(category: Category)
     fun openCreateCategoryScreen(category: Category? = null)

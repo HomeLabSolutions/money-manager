@@ -37,6 +37,13 @@ class MainActivity :
     private lateinit var globalLayoutListener: ViewTreeObserver.OnGlobalLayoutListener
     private val bottomMenuSet =
         setOf(R.id.income_expense_dest, R.id.chart_dest, R.id.profile_dest)
+    private val setOfShownBottomBar = setOf(
+        R.id.income_expense_dest,
+        R.id.chart_dest,
+        R.id.profile_dest,
+        R.id.logout_dialog,
+        R.id.remove_transaction_dialog
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,15 +81,12 @@ class MainActivity :
             this,
             { navController ->
                 navController.addOnDestinationChangedListener { _, destination, _ ->
-                    when (destination.id) {
-                        R.id.income_expense_dest,
-                        R.id.chart_dest,
-                        R.id.profile_dest -> {
-                            if (!isKeyboardShown) {
-                                showBottomBarWithAnimation()
-                            }
+                    if (setOfShownBottomBar.contains(destination.id)) {
+                        if (!isKeyboardShown) {
+                            showBottomBarWithAnimation()
                         }
-                        else -> viewBinding.bottomNav.gone()
+                    } else {
+                        viewBinding.bottomNav.gone()
                     }
                 }
             }
