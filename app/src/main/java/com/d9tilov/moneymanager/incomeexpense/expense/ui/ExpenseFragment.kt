@@ -213,7 +213,6 @@ class ExpenseFragment :
     }
 
     override fun onOpenKeyboard() {
-        Timber.tag(App.TAG).d("Keyboard shown")
         isKeyboardOpen = true
         viewBinding.run {
             onKeyboardVisibilityAnimation(true)

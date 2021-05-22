@@ -5,6 +5,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.d9tilov.moneymanager.backup.BackupManager
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
+import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DATABASE_NAME
 import dagger.Module
 import dagger.Provides
@@ -26,5 +27,6 @@ class DatabaseModule {
     }
 
     @Provides
-    fun provideBackupManager(context: Context): BackupManager = BackupManager(context)
+    @Singleton
+    fun provideBackupManager(@ApplicationContext  context: Context, preferencesStore: PreferencesStore): BackupManager = BackupManager(context, preferencesStore)
 }

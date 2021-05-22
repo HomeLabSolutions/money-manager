@@ -93,7 +93,6 @@ class CategoryModifyAdapter :
     override fun getItemId(position: Int) = categories[position].id
 
     fun updateItems(newCategories: List<Category>) {
-        Timber.tag(App.TAG).d("newCategories size : ${newCategories.size}")
         val diffUtilsCallback =
             CategoryDiffUtil(
                 categories,

@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
+import com.d9tilov.moneymanager.backup.PeriodicBackupWorker
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
 import com.d9tilov.moneymanager.budget.BudgetDestination
@@ -58,6 +59,7 @@ class ProfileFragment :
                     .signOut(requireContext())
                     .addOnCompleteListener {
                         viewModel.logout()
+                        PeriodicBackupWorker.stopPeriodicJob(requireContext())
                         updateUI()
                     }
             }
@@ -94,7 +96,7 @@ class ProfileFragment :
                 val action = ProfileFragmentDirections.toSettingsDest()
                 findNavController().navigate(action)
             }
-            viewModel.userData.observe(
+            viewModel.userData().observe(
                 viewLifecycleOwner,
                 {
                     val currencyCode = it.currencyCode
@@ -104,7 +106,7 @@ class ProfileFragment :
                     viewBinding.profileCurrency.profileItemCurrencySign.text = currencyTitle
                 }
             )
-            viewModel.budget.observe(
+            viewModel.budget().observe(
                 viewLifecycleOwner,
                 {
                     viewBinding.profileBudget.profileItemBudgetValue.setValue(it.sum)
@@ -115,7 +117,7 @@ class ProfileFragment :
                         )
                 }
             )
-            viewModel.regularIncomes.observe(
+            viewModel.regularIncomes().observe(
                 viewLifecycleOwner,
                 { list ->
                     val incomes = list.joinToString(separator = ",") { it.category.name }
@@ -129,7 +131,7 @@ class ProfileFragment :
                     }
                 }
             )
-            viewModel.regularExpenses.observe(
+            viewModel.regularExpenses().observe(
                 viewLifecycleOwner,
                 { list ->
                     val expenses = list.joinToString(separator = ",") { it.category.name }
@@ -143,7 +145,7 @@ class ProfileFragment :
                     }
                 }
             )
-            viewModel.goals.observe(
+            viewModel.goals().observe(
                 viewLifecycleOwner,
                 { list ->
                     val goals = list.joinToString(separator = ",") { it.name }

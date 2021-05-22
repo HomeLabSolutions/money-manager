@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.CurrencyUtils
@@ -12,7 +11,6 @@ import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.databinding.ItemCurrencyBinding
-import timber.log.Timber
 
 class CurrencyAdapter : RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>() {
 
@@ -47,7 +45,6 @@ class CurrencyAdapter : RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>
     override fun getItemCount() = currencies.size
 
     fun updateItems(newCategories: List<DomainCurrency>) {
-        Timber.tag(App.TAG).d("newCurrencies size : ${newCategories.size}")
         val diffUtilsCallback =
             CurrencyDiffUtil(
                 currencies,

@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.user.domain
 
 import com.d9tilov.moneymanager.backup.BackupData
+import com.d9tilov.moneymanager.base.data.Result
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.domain.mapper.UserDomainMapper
 import com.google.firebase.auth.FirebaseUser
@@ -27,7 +28,9 @@ class UserInfoInteractor(
         userRepo.updateUser(userProfile)
     }
 
-    override suspend fun backup() {
-        userRepo.backup()
+    override suspend fun backup(): Result<Nothing> = userRepo.backup()
+
+    override suspend fun deleteUser() {
+        userRepo.deleteUser()
     }
 }

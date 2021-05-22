@@ -17,6 +17,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CategoryCreationViewModel @AssistedInject constructor(
@@ -29,16 +30,17 @@ class CategoryCreationViewModel @AssistedInject constructor(
         navigator?.showError(exception)
     }
 
-    fun save(category: Category) = viewModelScope.launch(saveCategoryExceptionHandler) {
+    fun save(category: Category) {
         val receivedCategory = savedStateHandle.get<Category>("category")
-        if (receivedCategory == null || receivedCategory.id == DEFAULT_DATA_ID) {
-            categoryInteractor.create(category)
-            navigator?.save()
-            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                param("create_category", "name: " + category.name)
+        viewModelScope.launch(Dispatchers.IO + saveCategoryExceptionHandler) {
+            if (receivedCategory == null || receivedCategory.id == DEFAULT_DATA_ID) {
+                categoryInteractor.create(category)
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                    param("create_category", "name: " + category.name)
+                }
+            } else {
+                categoryInteractor.update(category)
             }
-        } else {
-            categoryInteractor.update(category)
             navigator?.save()
         }
     }

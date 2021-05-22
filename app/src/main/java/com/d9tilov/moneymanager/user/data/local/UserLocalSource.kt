@@ -29,7 +29,7 @@ class UserLocalSource(
 
     override suspend fun createUserOrRestore(userProfile: UserProfile): UserProfile {
         preferencesStore.uid = userProfile.uid
-        val result: Result<Nothing> = backupManager.restoreDb(userProfile.uid)
+        val result: Result<Nothing> = backupManager.restoreDb()
         if (result.status == Status.ERROR) {
             userDao.insert(dataUserMapper.toDbModel(userProfile))
         }
@@ -76,17 +76,17 @@ class UserLocalSource(
         }
     }
 
-    override suspend fun backupUser() {
+    override suspend fun backupUser(): Result<Nothing> {
         val currentUserId = preferencesStore.uid
-        if (currentUserId == null) {
-            throw WrongUidException()
+        return if (currentUserId == null) {
+            Result.error(WrongUidException())
         } else {
             val user = userDao.getById(currentUserId).first()
             if (isNetworkConnected(context)) {
                 userDao.update(user.copy(backupData = BackupData(Date().time)))
-                backupManager.backupDb(currentUserId)
+                backupManager.backupDb()
             } else {
-                throw NetworkException()
+                Result.error(NetworkException())
             }
         }
     }
