@@ -16,6 +16,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CategoryUnionViewModel @AssistedInject constructor(
@@ -28,23 +29,25 @@ class CategoryUnionViewModel @AssistedInject constructor(
         navigator?.showError(exception)
     }
 
-    fun addToGroup(categoryItem: Category, parentCategory: Category) =
-        viewModelScope.launch(saveCategoryExceptionHandler) {
+    fun addToGroup(categoryItem: Category, parentCategory: Category) {
+        viewModelScope.launch(Dispatchers.IO + saveCategoryExceptionHandler) {
             categoryInteractor.update(categoryItem.copy(parent = parentCategory))
-            navigator?.accept()
         }
+        navigator?.accept()
+    }
 
-    fun createGroup(categoryItem1: Category, categoryItem2: Category, groupedCategory: Category) =
-        viewModelScope.launch(saveCategoryExceptionHandler) {
+    fun createGroup(categoryItem1: Category, categoryItem2: Category, groupedCategory: Category) {
+        viewModelScope.launch(Dispatchers.IO + saveCategoryExceptionHandler) {
             val parentId = categoryInteractor.create(groupedCategory)
             val category = categoryInteractor.getCategoryById(parentId)
             categoryInteractor.update(categoryItem1.copy(parent = category))
             categoryInteractor.update(categoryItem2.copy(parent = category))
-            navigator?.accept()
-            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                param("create_category", "name: " + groupedCategory.name)
-            }
         }
+        navigator?.accept()
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+            param("create_category", "name: " + groupedCategory.name)
+        }
+    }
 
     fun cancel() {
         navigator?.cancel()

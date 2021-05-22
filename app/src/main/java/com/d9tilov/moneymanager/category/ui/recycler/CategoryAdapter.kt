@@ -57,7 +57,6 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>
     override fun getItemId(position: Int) = categories[position].id
 
     fun updateItems(newCategories: List<Category>) {
-        Timber.tag(TAG).d("newCategories size : ${newCategories.size}")
         val diffUtilsCallback =
             CategoryDiffUtil(
                 categories,

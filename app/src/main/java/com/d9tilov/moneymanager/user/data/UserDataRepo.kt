@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.user.data
 
 import com.d9tilov.moneymanager.backup.BackupData
+import com.d9tilov.moneymanager.base.data.Result
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.data.local.UserSource
 import com.d9tilov.moneymanager.user.domain.UserRepo
@@ -23,7 +24,9 @@ class UserDataRepo(
         userLocalSource.updateCurrentUser(entity)
     }
 
-    override suspend fun backup() {
-        userLocalSource.backupUser()
+    override suspend fun backup(): Result<Nothing> = userLocalSource.backupUser()
+
+    override suspend fun deleteUser() {
+        userLocalSource.deleteUser()
     }
 }

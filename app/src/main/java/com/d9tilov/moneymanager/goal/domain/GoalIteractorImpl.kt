@@ -22,18 +22,19 @@ class GoalIteractorImpl(
 
     override fun getAll(): Flow<List<Goal>> {
         return goalRepo.getAll().flatMapLatest { goals ->
-            budgetInteractor.get().map {
-                val goalList = mutableListOf<Goal>()
-                for (goal in goals) {
-                    var currentSum = it.sum
-                    if (it.sum >= goal.targetSum) {
-                        currentSum = goal.targetSum
+            budgetInteractor.get()
+                .map {
+                    val goalList = mutableListOf<Goal>()
+                    for (goal in goals) {
+                        var currentSum = it.sum
+                        if (it.sum >= goal.targetSum) {
+                            currentSum = goal.targetSum
+                        }
+                        val newGoal = goalDomainMapper.toDomain(goal, currentSum)
+                        goalList.add(newGoal)
                     }
-                    val newGoal = goalDomainMapper.toDomain(goal, currentSum)
-                    goalList.add(newGoal)
+                    goalList
                 }
-                goalList
-            }
         }
     }
 

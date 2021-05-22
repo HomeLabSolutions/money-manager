@@ -5,16 +5,22 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
+import androidx.hilt.work.HiltWorkerFactory
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
+import androidx.work.Configuration
 import com.facebook.appevents.AppEventsLogger
 import com.facebook.stetho.Stetho
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import timber.log.Timber.DebugTree
+import javax.inject.Inject
 
 @HiltAndroidApp
-class App : MultiDexApplication() {
+class App : MultiDexApplication(), Configuration.Provider {
+
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
 
     override fun attachBaseContext(base: Context) {
         MultiDex.install(this)
@@ -36,6 +42,12 @@ class App : MultiDexApplication() {
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
         }
+    }
+
+    override fun getWorkManagerConfiguration(): Configuration {
+        return Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build();
     }
 
     companion object {

@@ -14,7 +14,7 @@ import com.d9tilov.moneymanager.user.data.local.entity.UserDbModel
             entity = UserDbModel::class,
             parentColumns = ["uid"],
             childColumns = ["clientId"],
-            onDelete = ForeignKey.CASCADE
+            onDelete = ForeignKey.CASCADE,
         )
     ]
 )
