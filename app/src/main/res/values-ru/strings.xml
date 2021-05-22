@@ -51,6 +51,7 @@
 
     <string name="edit">Редактировать</string>
     <string name="delete">Удалить</string>
+    <string name="exit">Выйти</string>
     <string name="cancel">Отмена</string>
     <string name="retry">Повторить</string>
     <string name="next">Далее</string>
@@ -137,4 +138,7 @@
     <string name="profile_item_settings_title">Настройки</string>
 
     <string name="budget_date_created">Создан: %1$s</string>
+
+    <string name="logout_dialog_title">Выход</string>
+    <string name="logout_dialog_subtitle">Вы действительно хотите выйти?</string>
 </resources>

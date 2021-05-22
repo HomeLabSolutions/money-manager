@@ -6,7 +6,6 @@ import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.ui.diff.CategoryDiffUtil
@@ -20,7 +19,6 @@ import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.ItemCategoryBinding
-import timber.log.Timber
 
 class CategoryModifyAdapter :
     RecyclerView.Adapter<CategoryModifyAdapter.ModifyCategoryViewHolder>(),

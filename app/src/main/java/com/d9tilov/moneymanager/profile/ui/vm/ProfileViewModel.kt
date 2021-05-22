@@ -14,8 +14,6 @@ import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.domain.UserInteractor
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,8 +29,7 @@ class ProfileViewModel @Inject constructor(
     private val userInfoInteractor: UserInteractor,
     budgetInteractor: BudgetInteractor,
     regularTransactionInteractor: RegularTransactionInteractor,
-    goalInteractor: GoalInteractor,
-    private val firebaseAnalytics: FirebaseAnalytics
+    goalInteractor: GoalInteractor
 ) : BaseViewModel<ProfileNavigator>() {
 
     private val userData = MutableLiveData<UserProfile>()
@@ -74,15 +71,8 @@ class ProfileViewModel @Inject constructor(
 
     fun getCurrentUser(): FirebaseUser? = auth.currentUser
 
-    fun logout() {
+    fun cancelAllJobs() {
         job.cancel()
-        viewModelScope.launch(Dispatchers.IO) { userInfoInteractor.deleteUser() }
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN) {
-            param(
-                FirebaseAnalytics.Param.ITEM_CATEGORY,
-                "logout"
-            )
-        }
     }
 
     fun userData(): LiveData<UserProfile> = userData

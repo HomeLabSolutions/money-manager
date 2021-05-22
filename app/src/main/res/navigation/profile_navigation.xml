@@ -57,6 +57,14 @@
             app:exitAnim="@anim/slide_right_exit"
             app:popEnterAnim="@anim/slide_left_enter"
             app:popExitAnim="@anim/slide_left_exit" />
+
+        <action
+            android:id="@+id/to_logout_dialog_dest"
+            app:destination="@id/logout_dialog"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit" />
     </fragment>
 
     <fragment
@@ -433,6 +441,11 @@
             app:argType="com.d9tilov.moneymanager.goal.domain.entity.Goal" />
 
     </dialog>
+
+    <dialog
+        android:id="@+id/logout_dialog"
+        android:name="com.d9tilov.moneymanager.profile.ui.LogoutDialog"
+        tools:layout="@layout/fragment_dialog_logout" />
 
     <fragment
         android:id="@+id/settings_dest"

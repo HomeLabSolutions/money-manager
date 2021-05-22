@@ -8,7 +8,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.backup.PeriodicBackupWorker
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
 import com.d9tilov.moneymanager.budget.BudgetDestination
@@ -20,10 +19,10 @@ import com.d9tilov.moneymanager.core.util.toBudgetCreatedDate
 import com.d9tilov.moneymanager.currency.CurrencyDestination
 import com.d9tilov.moneymanager.databinding.FragmentProfileBinding
 import com.d9tilov.moneymanager.goal.GoalDestination
+import com.d9tilov.moneymanager.profile.ui.LogoutDialog.Companion.ARG_LOGOUT_CANCEL_JOB
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileViewModel
 import com.d9tilov.moneymanager.regular.RegularTransactionDestination
 import com.d9tilov.moneymanager.splash.ui.SplashActivity
-import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -53,15 +52,20 @@ class ProfileFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         updateUI()
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
+            ARG_LOGOUT_CANCEL_JOB
+        )?.observe(
+            viewLifecycleOwner,
+            {
+                if (it) {
+                    viewModel.cancelAllJobs()
+                }
+            }
+        )
         viewBinding.run {
             profileLogout.setOnClickListener {
-                AuthUI.getInstance()
-                    .signOut(requireContext())
-                    .addOnCompleteListener {
-                        viewModel.logout()
-                        PeriodicBackupWorker.stopPeriodicJob(requireContext())
-                        updateUI()
-                    }
+                val action = ProfileFragmentDirections.toLogoutDialogDest()
+                findNavController().navigate(action)
             }
             profileCurrency.profileCurrencyLayout.setOnClickListener {
                 val action =
