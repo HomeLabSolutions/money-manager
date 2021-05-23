@@ -120,11 +120,14 @@
     <string name="goals_remove_dialog_subtitle">Do you really want to delete the goal?</string>
     <string name="goals_sum_title">Price of goal</string>
 
-    <string name="backup">Make backup</string>
-    <string name="backup_info">Last backup: %1$s</string>
-    <string name="backup_empty">Backup hasn\'t been created yet</string>
-    <string name="backup_succeeded">Backup succeeded</string>
-    <string name="backup_error">Backup error</string>
+    <string name="settings_backup">Make backup</string>
+    <string name="settings_backup_info">Last backup: %1$s</string>
+    <string name="settings_backup_empty">Backup hasn\'t been created yet</string>
+    <string name="settings_backup_succeeded">Backup succeeded</string>
+    <string name="settings_backup_error">Backup error</string>
+    <string name="settings_start_period_day_title">Start of period:</string>
+    <string name="settings_start_period_day_postfix">day of month</string>
+    <string name="settings_start_period_day_error">The day should be in interval from 1 to 31</string>
 
     <string name="profile_item_currency_title">Currency: </string>
     <string name="profile_item_budget_title">Budget: </string>

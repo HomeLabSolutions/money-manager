@@ -32,9 +32,11 @@ class MainActivity :
     DialogInterface.OnDismissListener {
 
     var forceShowKeyboard = true
+        private set
     private var currentNavController: LiveData<NavController>? = null
     private lateinit var topView: View
-    private var isKeyboardShown = false
+    var isKeyboardShown = false
+        private set
     private lateinit var globalLayoutListener: ViewTreeObserver.OnGlobalLayoutListener
     private val bottomMenuSet =
         setOf(R.id.income_expense_dest, R.id.chart_dest, R.id.profile_dest)

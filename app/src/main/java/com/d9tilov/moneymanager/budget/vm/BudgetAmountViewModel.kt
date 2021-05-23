@@ -7,7 +7,6 @@ import com.d9tilov.moneymanager.base.ui.navigator.BudgetAmountNavigator
 import com.d9tilov.moneymanager.budget.data.entity.BudgetData
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
-import com.d9tilov.moneymanager.core.util.getFirstDayOfMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -27,8 +26,7 @@ class BudgetAmountViewModel @Inject constructor(private val budgetInteractor: Bu
             budgetInteractor.create(
                 BudgetData(
                     sum = BigDecimal.ZERO,
-                    createdDate = Date(),
-                    fiscalDay = getFirstDayOfMonth()
+                    createdDate = Date()
                 )
             )
         }
