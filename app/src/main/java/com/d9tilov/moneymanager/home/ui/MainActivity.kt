@@ -12,6 +12,7 @@ import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.d9tilov.moneymanager.R
+import com.d9tilov.moneymanager.backup.PeriodicBackupWorker
 import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.base.ui.navigator.HomeNavigator
 import com.d9tilov.moneymanager.core.events.OnBackPressed
@@ -54,6 +55,7 @@ class MainActivity :
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         } // Else, need to wait for onRestoreInstanceState
+        PeriodicBackupWorker.startPeriodicJob(this)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {

@@ -2,10 +2,8 @@ package com.d9tilov.moneymanager.backup
 
 import android.content.Context
 import androidx.hilt.work.HiltWorker
-import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
@@ -42,16 +40,11 @@ class PeriodicBackupWorker @AssistedInject constructor(
 
         fun startPeriodicJob(context: Context) {
             Timber.tag(App.TAG).d("Start periodic job")
-            val constraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build()
-
             val recurringWork = PeriodicWorkRequest
                 .Builder(
                     PeriodicBackupWorker::class.java,
                     PERIOD_WORK_IN_HOURS, TimeUnit.HOURS
                 )
-                .setConstraints(constraints)
                 .addTag(LOGIN_WORK_TAG)
                 .build()
 
