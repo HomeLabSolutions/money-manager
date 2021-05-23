@@ -1,11 +1,9 @@
 package com.d9tilov.moneymanager.splash.ui
 
 import android.content.Intent
-import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.backup.PeriodicBackupWorker
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
 import com.d9tilov.moneymanager.home.ui.MainActivity
@@ -24,11 +22,6 @@ class SplashFragment : BaseFragment<SplashNavigator>(R.layout.fragment_splash), 
         AuthUI.IdpConfig.FacebookBuilder().build()
     )
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        PeriodicBackupWorker.startPeriodicJob(requireContext())
-    }
-
     override fun getNavigator() = this
     override val viewModel by viewModels<SplashViewModel>()
 
@@ -46,7 +39,6 @@ class SplashFragment : BaseFragment<SplashNavigator>(R.layout.fragment_splash), 
         val startForResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 viewModel.createUser()
-                PeriodicBackupWorker.startPeriodicJob(requireContext())
             }
         startForResult.launch(
             AuthUI.getInstance()
