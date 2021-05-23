@@ -14,5 +14,4 @@ data class BudgetData(
     val currencyCode: String = DEFAULT_CURRENCY_CODE,
     val sum: BigDecimal = BigDecimal.ZERO,
     val createdDate: Date = Date(),
-    val fiscalDay: Date
 ) : Parcelable

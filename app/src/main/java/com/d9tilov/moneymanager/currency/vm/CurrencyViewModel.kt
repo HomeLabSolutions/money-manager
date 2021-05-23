@@ -8,7 +8,6 @@ import com.d9tilov.moneymanager.base.ui.navigator.CurrencyNavigator
 import com.d9tilov.moneymanager.budget.data.entity.BudgetData
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
-import com.d9tilov.moneymanager.core.util.getFirstDayOfMonth
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.user.domain.UserInteractor
@@ -47,10 +46,7 @@ class CurrencyViewModel @Inject constructor(
     fun skip() {
         viewModelScope.launch(Dispatchers.IO) {
             budgetInteractor.create(
-                BudgetData(
-                    sum = BigDecimal.ZERO,
-                    fiscalDay = getFirstDayOfMonth()
-                )
+                BudgetData(sum = BigDecimal.ZERO)
             )
             val user = userInteractor.getCurrentUser().first()
             userInteractor.updateUser(user.copy(showPrepopulate = false))

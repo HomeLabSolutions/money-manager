@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.goal.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
@@ -112,6 +113,7 @@ class GoalsFragment :
         viewModel.goals.observe(
             this.viewLifecycleOwner,
             {
+                Log.d("moggot", "onViewCreated: ")
                 if (it.isEmpty()) {
                     viewBinding.goalsRvList.gone()
                     showViewStub()

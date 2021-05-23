@@ -16,7 +16,8 @@ class DataUserMapper @Inject constructor() : Mapper<UserDbModel, UserProfile> {
                 lastName = lastName,
                 currencyCode = currencyCode,
                 showPrepopulate = showPrepopulate,
-                backupData = backupData
+                backupData = backupData,
+                fiscalDay = fiscalDay
             )
         }
 
@@ -28,7 +29,8 @@ class DataUserMapper @Inject constructor() : Mapper<UserDbModel, UserProfile> {
                 lastName = lastName,
                 currencyCode = currencyCode,
                 showPrepopulate = showPrepopulate,
-                backupData = backupData
+                backupData = backupData,
+                fiscalDay = fiscalDay
             )
         }
 }

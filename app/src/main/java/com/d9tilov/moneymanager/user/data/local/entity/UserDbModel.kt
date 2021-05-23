@@ -14,4 +14,5 @@ data class UserDbModel(
     @ColumnInfo(name = "currencyCode") val currencyCode: String,
     @ColumnInfo(name = "showPrepopulate") val showPrepopulate: Boolean,
     @ColumnInfo(name = "backupData") val backupData: BackupData,
+    @ColumnInfo(name = "fiscalDay") val fiscalDay: Int
 )
