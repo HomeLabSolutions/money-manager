@@ -14,6 +14,7 @@ class BudgetMapper @Inject constructor() : Mapper<BudgetDbModel, BudgetData> {
                 clientId,
                 currency,
                 sum,
+                saveSum,
                 createdDate
             )
         }
@@ -25,6 +26,7 @@ class BudgetMapper @Inject constructor() : Mapper<BudgetDbModel, BudgetData> {
                 clientId,
                 currencyCode,
                 sum,
+                saveSum,
                 createdDate
             )
         }

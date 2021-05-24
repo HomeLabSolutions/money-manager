@@ -10,8 +10,7 @@ import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.util.Date
@@ -33,6 +32,7 @@ class BudgetAmountViewModel @Inject constructor(private val budgetInteractor: Bu
     }.asLiveData()
 
     fun saveBudgetAmount(sum: BigDecimal) = viewModelScope.launch(Dispatchers.IO) {
-        budgetInteractor.get().map { budgetInteractor.update(it.copy(sum = sum)) }.collect()
+        val budget = budgetInteractor.get().first()
+        budgetInteractor.update(budget.copy(sum = sum))
     }
 }
