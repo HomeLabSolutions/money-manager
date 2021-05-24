@@ -1,7 +1,6 @@
 package com.d9tilov.moneymanager.goal.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
@@ -11,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -22,10 +22,13 @@ import com.d9tilov.moneymanager.base.ui.callback.SwipeToDeleteCallback
 import com.d9tilov.moneymanager.base.ui.navigator.GoalsNavigator
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
+import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
 import com.d9tilov.moneymanager.core.ui.recyclerview.MarginItemDecoration
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
+import com.d9tilov.moneymanager.core.util.debounce
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
+import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentGoalsBinding
 import com.d9tilov.moneymanager.goal.GoalDestination
@@ -41,7 +44,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class GoalsFragment :
     BaseFragment<GoalsNavigator>(R.layout.fragment_goals),
     GoalsNavigator,
-    ControlsClicked {
+    ControlsClicked,
+    OnKeyboardVisibleChange {
 
     private val args by navArgs<GoalsFragmentArgs>()
     private val destination by lazy { args.destination }
@@ -50,6 +54,10 @@ class GoalsFragment :
     private var emptyViewStub: ViewStub? = null
     private val goalAdapter: GoalAdapter = GoalAdapter()
     private val viewBinding by viewBinding(FragmentGoalsBinding::bind)
+    private var showViewStub = false
+
+    override fun getNavigator() = this
+    override val viewModel by viewModels<GoalsViewModel>()
 
     private val onItemClickListener = object : OnItemClickListener<Goal> {
         override fun onItemClick(item: Goal, position: Int) {
@@ -67,10 +75,6 @@ class GoalsFragment :
         val action = GoalsFragmentDirections.toRemoveGoalDialog(goal)
         findNavController().navigate(action)
     }
-
-    override fun getNavigator() = this
-
-    override val viewModel by viewModels<GoalsViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,6 +100,12 @@ class GoalsFragment :
                     goalAdapter.deleteItem(viewHolder.bindingAdapterPosition)
                 }
             }).attachToRecyclerView(goalsRvList)
+            goalsSumPerPeriod.moneyEditText.clearFocus()
+            goalsSumPerPeriod.moneyEditText.onChange(
+                debounce(DEBOUNCE, viewModel.viewModelScope) {
+                    viewModel.insertSaveSum(goalsSumPerPeriod.getValue())
+                }
+            )
         }
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
             ARG_UNDO_REMOVE_LAYOUT_DISMISS
@@ -108,12 +118,17 @@ class GoalsFragment :
             }
         )
         viewModel.budget.observe(
-            this.viewLifecycleOwner, { viewBinding.goalsAmount.setValue(it.sum) }
+            this.viewLifecycleOwner,
+            {
+                viewBinding.run {
+                    goalsAmount.setValue(it.sum)
+                    goalsSumPerPeriod.setValue(it.saveSum)
+                }
+            }
         )
         viewModel.goals.observe(
             this.viewLifecycleOwner,
             {
-                Log.d("moggot", "onViewCreated: ")
                 if (it.isEmpty()) {
                     viewBinding.goalsRvList.gone()
                     showViewStub()
@@ -122,6 +137,7 @@ class GoalsFragment :
                     viewBinding.goalsRvList.show()
                     goalAdapter.updateItems(it)
                 }
+                showViewStub = it.isEmpty()
             }
         )
     }
@@ -208,5 +224,20 @@ class GoalsFragment :
 
     override fun onNextClick() {
         viewModel.savePrepopulateStatus()
+    }
+
+    override fun onOpenKeyboard() {
+        hideViewStub()
+    }
+
+    override fun onCloseKeyboard() {
+        if (showViewStub) {
+            showViewStub()
+        }
+        viewBinding.goalsSumPerPeriod.moneyEditText.clearFocus()
+    }
+
+    companion object {
+        private const val DEBOUNCE = 300L
     }
 }

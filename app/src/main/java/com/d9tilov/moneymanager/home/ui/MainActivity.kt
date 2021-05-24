@@ -4,10 +4,8 @@ import android.animation.ObjectAnimator
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
-import android.view.ViewTreeObserver
 import android.view.animation.AccelerateInterpolator
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -16,10 +14,8 @@ import com.d9tilov.moneymanager.backup.PeriodicBackupWorker
 import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.base.ui.navigator.HomeNavigator
 import com.d9tilov.moneymanager.core.events.OnBackPressed
-import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
-import com.d9tilov.moneymanager.core.util.px
 import com.d9tilov.moneymanager.core.util.setupWithNavController
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.ActivityMainBinding
@@ -31,13 +27,7 @@ class MainActivity :
     HomeNavigator,
     DialogInterface.OnDismissListener {
 
-    var forceShowKeyboard = true
-        private set
     private var currentNavController: LiveData<NavController>? = null
-    private lateinit var topView: View
-    var isKeyboardShown = false
-        private set
-    private lateinit var globalLayoutListener: ViewTreeObserver.OnGlobalLayoutListener
     private val bottomMenuSet =
         setOf(R.id.income_expense_dest, R.id.chart_dest, R.id.profile_dest)
     private val setOfShownBottomBar = setOf(
@@ -48,12 +38,10 @@ class MainActivity :
         R.id.remove_transaction_dialog
     )
 
+    override val navHostFragmentId = R.id.nav_host_container
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        topView = window.decorView.findViewById<View>(android.R.id.content)
-        globalLayoutListener = KeyboardGlobalLayoutListener()
-        topView.viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         } // Else, need to wait for onRestoreInstanceState
@@ -111,11 +99,6 @@ class MainActivity :
         viewBinding.bottomNav.gone()
     }
 
-    override fun onCloseKeyboard() {
-        super.onCloseKeyboard()
-        forceShowKeyboard = false
-    }
-
     override fun onDismiss(dialog: DialogInterface?) {
         hideKeyboard()
     }
@@ -129,44 +112,11 @@ class MainActivity :
             ?: if (backStackCount > 0) findNavController(R.id.nav_host_container).popBackStack() else super.onBackPressed()
     }
 
-    private fun getCurrentFragment(): Fragment? {
-        val navHostFragment =
-            this.supportFragmentManager.findFragmentById(R.id.nav_host_container)
-        var currentFragment: Fragment? = null
-        navHostFragment?.let {
-            currentFragment = it.childFragmentManager.fragments[0]
-        }
-        return currentFragment
-    }
-
-    override fun onDestroy() {
-        topView.viewTreeObserver.removeOnGlobalLayoutListener(globalLayoutListener)
-        super.onDestroy()
-    }
-
-    inner class KeyboardGlobalLayoutListener : ViewTreeObserver.OnGlobalLayoutListener {
-        override fun onGlobalLayout() {
-            val heightDifference = topView.rootView.height - topView.height
-            val currentFragment = getCurrentFragment()
-            if (heightDifference > 200.px) {
-                if (isKeyboardShown) {
-                    return
-                }
-                isKeyboardShown = true
-                onOpenKeyboard()
-                (currentFragment as? OnKeyboardVisibleChange)?.onOpenKeyboard()
-            } else {
-                if (!isKeyboardShown) {
-                    return
-                }
-                isKeyboardShown = false
-                onCloseKeyboard()
-                (currentFragment as? OnKeyboardVisibleChange)?.onCloseKeyboard()
-                val curDest = findNavController(R.id.nav_host_container).currentDestination?.id
-                if (bottomMenuSet.contains(curDest)) {
-                    showBottomBarWithAnimation()
-                }
-            }
+    override fun onCloseKeyboard() {
+        super.onCloseKeyboard()
+        val curDest = findNavController(R.id.nav_host_container).currentDestination?.id
+        if (bottomMenuSet.contains(curDest)) {
+            showBottomBarWithAnimation()
         }
     }
 

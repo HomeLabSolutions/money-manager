@@ -8,6 +8,8 @@
     <attr name="textAppearanceCurrencySignSmall" format="reference" />
     <attr name="textAppearanceCurrencyValueExtraSmall" format="reference" />
     <attr name="textAppearanceCurrencySignExtraSmall" format="reference" />
+    <attr name="textAppearanceGoalValueMedium" format="reference" />
+    <attr name="textAppearanceGoalSignMedium" format="reference" />
     <attr name="moneyManagerBottomActionButtonStyle" format="reference" />
     <attr name="moneyManagerBottomActionButtonSelectedStyle" format="reference" />
 </resources>

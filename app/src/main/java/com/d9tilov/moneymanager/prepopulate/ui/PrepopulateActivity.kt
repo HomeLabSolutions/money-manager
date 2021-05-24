@@ -124,6 +124,8 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
     companion object {
         private const val MAX_SCREEN_AMOUNT = 5
     }
+
+    override val navHostFragmentId = R.id.prepopulate_nav_host_container
 }
 
 interface ControlsClicked {

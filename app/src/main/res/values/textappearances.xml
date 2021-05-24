@@ -75,6 +75,13 @@
         <item name="android:textSize">@dimen/currency_small_text_size</item>
     </style>
 
+    <style name="TextAppearance.MoneyManager.GoalValue.Medium" parent="TextAppearance.MoneyManager.Caption">
+        <item name="android:textSize">@dimen/goal_period_save_value_text_size</item>
+    </style>
+    <style name="TextAppearance.MoneyManager.GoalSign.Medium" parent="TextAppearance.MoneyManager.Caption">
+        <item name="android:textSize">@dimen/goal_period_save_sign_text_size</item>
+    </style>
+
     <style name="TextAppearance.MoneyManager.Tab" parent="TextAppearance.MoneyManager.H6">
         <item name="android:textAllCaps">true</item>
     </style>

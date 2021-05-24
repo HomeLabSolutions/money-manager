@@ -21,7 +21,7 @@
         android:layout_marginStart="@dimen/standard_left_margin"
         android:layout_marginTop="16dp"
         android:text="@string/goals_accumulated"
-        android:textAppearance="?attr/textAppearanceHeadline6"
+        android:textAppearance="?attr/textAppearanceHeadline5"
         android:textColor="@color/text_primary_color_dark"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/goals_toolbar_container" />
@@ -36,9 +36,33 @@
         app:layout_constraintStart_toStartOf="@+id/goals_main_sum_title"
         app:layout_constraintTop_toBottomOf="@+id/goals_main_sum_title"
         app:scaleEnabled="true"
-        app:signTextStyle="?attr/textAppearanceCurrencySignBig"
-        app:sum="5000"
-        app:sumTextStyle="?attr/textAppearanceHeadline1" />
+        app:sum="5000" />
+
+    <TextView
+        android:id="@+id/goals_sum_per_period_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/goals_sum_per_period_title"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:textColor="@color/tertiary_color"
+        app:layout_constraintStart_toStartOf="@+id/goals_main_sum_title"
+        app:layout_constraintTop_toBottomOf="@+id/goals_amount" />
+
+    <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
+        android:id="@+id/goals_sum_per_period"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/standard_right_margin"
+        android:theme="@style/ThemeOverlay.MoneyManager.Goals.Medium"
+        app:enableInput="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/goals_sum_per_period_title"
+        app:layout_constraintTop_toBottomOf="@+id/goals_sum_per_period_title"
+        app:scaleEnabled="true"
+        app:signTextStyle="?attr/textAppearanceGoalSignMedium"
+        app:sum="300"
+        app:sumTextStyle="?attr/textAppearanceGoalValueMedium" />
 
     <ImageView
         android:id="@+id/goals_delimiter"
@@ -51,7 +75,7 @@
         android:src="@drawable/dotted_shape"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/goals_amount" />
+        app:layout_constraintTop_toBottomOf="@+id/goals_sum_per_period" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/goals_rv_list"
@@ -72,10 +96,10 @@
         android:layout_height="0dp"
         android:layout_margin="16dp"
         android:inflatedId="@+id/inflate"
-        android:layout="@layout/layout_empty_list_placeholder"
+        android:layout="@layout/layout_empty_list_goals_placeholder"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/goals_amount" />
+        app:layout_constraintTop_toBottomOf="@+id/goals_delimiter" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

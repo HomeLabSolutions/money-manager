@@ -11,6 +11,7 @@ import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -21,7 +22,7 @@ class SettingsViewModel @Inject constructor(
     private val userInteractor: UserInteractor,
 ) : BaseViewModel<SettingsNavigator>() {
 
-    val userData: LiveData<UserProfile> = userInteractor.getCurrentUser().asLiveData()
+    val userData: LiveData<UserProfile> = userInteractor.getCurrentUser().distinctUntilChanged().asLiveData()
 
     fun backup() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -39,9 +40,7 @@ class SettingsViewModel @Inject constructor(
     fun changeFiscalDay(day: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             val user = userInteractor.getCurrentUser().first()
-            if (user.fiscalDay != day) {
-                userInteractor.updateUser(user.copy(fiscalDay = day))
-            }
+            userInteractor.updateUser(user.copy(fiscalDay = day))
         }
     }
 }
