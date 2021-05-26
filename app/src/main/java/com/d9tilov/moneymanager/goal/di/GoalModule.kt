@@ -6,7 +6,6 @@ import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.goal.data.GoalRepoImpl
 import com.d9tilov.moneymanager.goal.data.local.GoalLocalSource
 import com.d9tilov.moneymanager.goal.data.local.GoalSource
-import com.d9tilov.moneymanager.goal.data.local.mapper.GoalDataMapper
 import com.d9tilov.moneymanager.goal.domain.GoalInteractor
 import com.d9tilov.moneymanager.goal.domain.GoalIteractorImpl
 import com.d9tilov.moneymanager.goal.domain.GoalRepo
@@ -27,9 +26,7 @@ class GoalModule {
     fun provideGoalSource(
         preferencesStore: PreferencesStore,
         appDatabase: AppDatabase,
-        goalDataMapper: GoalDataMapper,
-    ): GoalSource =
-        GoalLocalSource(preferencesStore, appDatabase, goalDataMapper)
+    ): GoalSource = GoalLocalSource(preferencesStore, appDatabase.goalDao())
 
     @Provides
     @ActivityRetainedScoped

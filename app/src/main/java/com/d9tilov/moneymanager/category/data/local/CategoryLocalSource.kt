@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.category.data.local
 
-import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.PrepopulateDataManager
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongIdException
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
@@ -20,10 +19,8 @@ class CategoryLocalSource(
     private val preferencesStore: PreferencesStore,
     private val categoryMapper: CategoryMapper,
     private val prepopulateDataManager: PrepopulateDataManager,
-    database: AppDatabase
+    private val categoryDao: CategoryDao
 ) : CategorySource {
-
-    private val categoryDao = database.categoryDao()
 
     override suspend fun createExpenseDefaultCategories() {
         val currentUserId = preferencesStore.uid

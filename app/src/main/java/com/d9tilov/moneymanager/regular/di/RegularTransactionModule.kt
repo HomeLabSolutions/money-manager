@@ -6,7 +6,6 @@ import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.regular.data.RegularTransactionDataRepo
 import com.d9tilov.moneymanager.regular.data.local.RegularTransactionLocalSource
 import com.d9tilov.moneymanager.regular.data.local.RegularTransactionSource
-import com.d9tilov.moneymanager.regular.data.local.mapper.RegularTransactionDataMapper
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractorImpl
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionRepo
@@ -26,10 +25,9 @@ class RegularTransactionModule {
     @ActivityRetainedScoped
     fun provideRegularTransactionSource(
         preferencesStore: PreferencesStore,
-        appDatabase: AppDatabase,
-        regularTransactionDataMapper: RegularTransactionDataMapper,
+        appDatabase: AppDatabase
     ): RegularTransactionSource =
-        RegularTransactionLocalSource(preferencesStore, appDatabase, regularTransactionDataMapper)
+        RegularTransactionLocalSource(preferencesStore, appDatabase.regularTransactionDao())
 
     @Provides
     @ActivityRetainedScoped

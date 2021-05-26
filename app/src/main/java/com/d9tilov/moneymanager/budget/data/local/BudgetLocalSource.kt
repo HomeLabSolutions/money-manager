@@ -1,34 +1,25 @@
 package com.d9tilov.moneymanager.budget.data.local
 
-import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.exceptions.EmptyDbDataException
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.budget.data.entity.BudgetData
-import com.d9tilov.moneymanager.budget.data.local.mapper.BudgetMapper
+import com.d9tilov.moneymanager.budget.data.local.mapper.toDataModel
+import com.d9tilov.moneymanager.budget.data.local.mapper.toDbModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class BudgetLocalSource(
     private val preferencesStore: PreferencesStore,
-    appDatabase: AppDatabase,
-    private val budgetMapper: BudgetMapper
+    private val budgetDao: BudgetDao
 ) : BudgetSource {
-
-    private val budgetDao = appDatabase.budgetDao()
 
     override suspend fun insert(budgetData: BudgetData) {
         val currentUserId = preferencesStore.uid
         if (currentUserId == null) {
             throw WrongUidException()
         } else {
-            budgetDao.insert(
-                budgetMapper.toDbModel(
-                    budgetData.copy(
-                        clientId = currentUserId
-                    )
-                )
-            )
+            budgetDao.insert(budgetData.copy(clientId = currentUserId).toDbModel())
         }
     }
 
@@ -38,11 +29,7 @@ class BudgetLocalSource(
             throw WrongUidException()
         } else {
             budgetDao.get(currentUserId).map {
-                if (it == null) {
-                    throw EmptyDbDataException("Budget doesn't exists")
-                } else {
-                    budgetMapper.toDataModel(it)
-                }
+                it?.toDataModel() ?: throw EmptyDbDataException("Budget doesn't exists")
             }
         }
     }
@@ -52,7 +39,7 @@ class BudgetLocalSource(
         if (currentUserId == null) {
             throw WrongUidException()
         } else {
-            budgetDao.update(budgetMapper.toDbModel(budgetData).copy(clientId = currentUserId))
+            budgetDao.update(budgetData.toDbModel().copy(clientId = currentUserId))
         }
     }
 
@@ -61,7 +48,7 @@ class BudgetLocalSource(
         if (currentUserId == null) {
             throw WrongUidException()
         } else {
-            budgetDao.delete(budgetMapper.toDbModel(budgetData))
+            budgetDao.delete(budgetData.toDbModel())
         }
     }
 }

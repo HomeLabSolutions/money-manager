@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.d9tilov.moneymanager.R
+import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.callback.SwipeToDeleteCallback
 import com.d9tilov.moneymanager.base.ui.navigator.GoalsNavigator
@@ -35,6 +36,7 @@ import com.d9tilov.moneymanager.goal.GoalDestination
 import com.d9tilov.moneymanager.goal.domain.entity.Goal
 import com.d9tilov.moneymanager.goal.ui.dialog.GoalRemoveDialog.Companion.ARG_UNDO_REMOVE_LAYOUT_DISMISS
 import com.d9tilov.moneymanager.goal.vm.GoalsViewModel
+import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.prepopulate.ui.ControlsClicked
 import com.d9tilov.moneymanager.prepopulate.ui.PrepopulateActivity
 import com.google.android.material.appbar.MaterialToolbar
@@ -183,6 +185,9 @@ class GoalsFragment :
     }
 
     private fun showViewStub() {
+        if ((activity as BaseActivity<*>).isKeyboardShown) {
+            return
+        }
         if (emptyViewStub?.parent == null) {
             emptyViewStub?.show()
         } else {

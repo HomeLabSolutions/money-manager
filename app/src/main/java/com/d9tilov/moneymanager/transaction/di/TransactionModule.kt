@@ -7,8 +7,6 @@ import com.d9tilov.moneymanager.transaction.data.TransactionDataRepo
 import com.d9tilov.moneymanager.transaction.data.local.TransactionDao
 import com.d9tilov.moneymanager.transaction.data.local.TransactionLocalSource
 import com.d9tilov.moneymanager.transaction.data.local.TransactionSource
-import com.d9tilov.moneymanager.transaction.data.mapper.TransactionDataMapper
-import com.d9tilov.moneymanager.transaction.data.mapper.TransactionDateDataMapper
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractorImpl
 import com.d9tilov.moneymanager.transaction.domain.TransactionRepo
@@ -36,13 +34,9 @@ class TransactionModule {
     fun provideTransactionLocalSource(
         preferencesStore: PreferencesStore,
         appDatabase: AppDatabase,
-        transactionDataMapper: TransactionDataMapper,
-        transactionDateDataMapper: TransactionDateDataMapper
     ): TransactionSource = TransactionLocalSource(
         preferencesStore,
-        appDatabase,
-        transactionDataMapper,
-        transactionDateDataMapper
+        appDatabase.transactionDao()
     )
 
     @Provides
