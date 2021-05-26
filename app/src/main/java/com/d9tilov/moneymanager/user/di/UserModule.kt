@@ -8,7 +8,6 @@ import com.d9tilov.moneymanager.user.data.UserDataRepo
 import com.d9tilov.moneymanager.user.data.local.UserDao
 import com.d9tilov.moneymanager.user.data.local.UserLocalSource
 import com.d9tilov.moneymanager.user.data.local.UserSource
-import com.d9tilov.moneymanager.user.data.local.mapper.DataUserMapper
 import com.d9tilov.moneymanager.user.domain.UserInfoInteractor
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import com.d9tilov.moneymanager.user.domain.UserRepo
@@ -35,10 +34,9 @@ class UserModule {
         context: Context,
         preferenceStore: PreferencesStore,
         appDatabase: AppDatabase,
-        dataUserMapper: DataUserMapper,
         backupManager: BackupManager
     ): UserSource =
-        UserLocalSource(context, preferenceStore, appDatabase, dataUserMapper, backupManager)
+        UserLocalSource(context, preferenceStore, appDatabase.userDao(), backupManager)
 
     @Provides
     @Singleton

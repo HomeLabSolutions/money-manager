@@ -1,33 +1,24 @@
 package com.d9tilov.moneymanager.goal.data.local
 
-import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.goal.data.entity.GoalData
-import com.d9tilov.moneymanager.goal.data.local.mapper.GoalDataMapper
+import com.d9tilov.moneymanager.goal.data.local.mapper.toDataModel
+import com.d9tilov.moneymanager.goal.data.local.mapper.toDbModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class GoalLocalSource(
     private val preferencesStore: PreferencesStore,
-    appDatabase: AppDatabase,
-    private val goalDataMapper: GoalDataMapper
+    private val goalDao: GoalDao
 ) : GoalSource {
-
-    private val goalDao = appDatabase.goalDao()
 
     override suspend fun insert(goalData: GoalData) {
         val currentUserId = preferencesStore.uid
         if (currentUserId == null) {
             throw WrongUidException()
         } else {
-            goalDao.insert(
-                goalDataMapper.toDbModel(
-                    goalData.copy(
-                        clientId = currentUserId
-                    )
-                )
-            )
+            goalDao.insert(goalData.copy(clientId = currentUserId).toDbModel())
         }
     }
 
@@ -37,9 +28,7 @@ class GoalLocalSource(
             throw WrongUidException()
         } else {
             goalDao.getAll(currentUserId)
-                .map { list ->
-                    list.map { goalDataMapper.toDataModel(it) }
-                }
+                .map { list -> list.map { it.toDataModel() } }
         }
     }
 
@@ -48,7 +37,7 @@ class GoalLocalSource(
         if (currentUserId == null) {
             throw WrongUidException()
         } else {
-            goalDao.update(goalDataMapper.toDbModel(goalData))
+            goalDao.update(goalData.toDbModel())
         }
     }
 
@@ -57,7 +46,7 @@ class GoalLocalSource(
         if (currentUserId == null) {
             throw WrongUidException()
         } else {
-            goalDao.delete(goalDataMapper.toDbModel(goalData))
+            goalDao.delete(goalData.toDbModel())
         }
     }
 }

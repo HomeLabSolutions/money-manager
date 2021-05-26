@@ -5,7 +5,6 @@ import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.budget.data.BudgetDataRepo
 import com.d9tilov.moneymanager.budget.data.local.BudgetLocalSource
 import com.d9tilov.moneymanager.budget.data.local.BudgetSource
-import com.d9tilov.moneymanager.budget.data.local.mapper.BudgetMapper
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractorImpl
 import com.d9tilov.moneymanager.budget.domain.BudgetRepo
@@ -31,9 +30,8 @@ class BudgetModule {
     @ActivityRetainedScoped
     fun provideBudgetLocalSource(
         preferencesStore: PreferencesStore,
-        database: AppDatabase,
-        budgetMapper: BudgetMapper
-    ): BudgetSource = BudgetLocalSource(preferencesStore, database, budgetMapper)
+        database: AppDatabase
+    ): BudgetSource = BudgetLocalSource(preferencesStore, database.budgetDao())
 
     @Provides
     fun provideBudgetRepo(budgetSource: BudgetSource): BudgetRepo =

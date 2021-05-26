@@ -5,8 +5,7 @@ import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.currency.data.CurrencyDataRepo
 import com.d9tilov.moneymanager.currency.data.local.CurrencyLocalSource
 import com.d9tilov.moneymanager.currency.data.local.CurrencySource
-import com.d9tilov.moneymanager.currency.data.local.mapper.CurrencyLocalMapper
-import com.d9tilov.moneymanager.currency.data.remote.mapper.CurrencyRemoteMapper
+import com.d9tilov.moneymanager.currency.data.remote.CurrencyApi
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractorImpl
 import com.d9tilov.moneymanager.currency.domain.CurrencyRepo
@@ -26,19 +25,17 @@ class CurrencyModule {
     @Provides
     @ActivityRetainedScoped
     fun provideCurrencySource(
-        currencyLocalMapper: CurrencyLocalMapper,
         appDatabase: AppDatabase
-    ): CurrencySource = CurrencyLocalSource(currencyLocalMapper, appDatabase)
+    ): CurrencySource = CurrencyLocalSource(appDatabase.currencyDao())
 
     @Provides
     @ActivityRetainedScoped
     fun provideCurrencyRepo(
         preferencesStore: PreferencesStore,
         currencySource: CurrencySource,
-        currencyRemoteMapper: CurrencyRemoteMapper,
         retrofit: Retrofit
     ): CurrencyRepo =
-        CurrencyDataRepo(preferencesStore, currencySource, currencyRemoteMapper, retrofit)
+        CurrencyDataRepo(preferencesStore, currencySource, retrofit.create(CurrencyApi::class.java))
 
     @Provides
     @ActivityRetainedScoped

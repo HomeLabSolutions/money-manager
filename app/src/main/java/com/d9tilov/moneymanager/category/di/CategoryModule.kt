@@ -30,7 +30,12 @@ class CategoryModule {
         prepopulateDataManager: PrepopulateDataManager,
         database: AppDatabase
     ): CategorySource =
-        CategoryLocalSource(preferencesStore, categoryMapper, prepopulateDataManager, database)
+        CategoryLocalSource(
+            preferencesStore,
+            categoryMapper,
+            prepopulateDataManager,
+            database.categoryDao()
+        )
 
     @Provides
     fun provideCategoryRepo(categoryLocalSource: CategorySource): CategoryRepo =

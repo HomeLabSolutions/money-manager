@@ -4,7 +4,6 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.category.data.entity.Category
@@ -15,8 +14,9 @@ import com.d9tilov.moneymanager.transaction.data.entity.TransactionBaseDataModel
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDateDataModel
 import com.d9tilov.moneymanager.transaction.data.local.entity.TransactionDbModel
-import com.d9tilov.moneymanager.transaction.data.mapper.TransactionDataMapper
-import com.d9tilov.moneymanager.transaction.data.mapper.TransactionDateDataMapper
+import com.d9tilov.moneymanager.transaction.data.mapper.toDataDateModel
+import com.d9tilov.moneymanager.transaction.data.mapper.toDataModel
+import com.d9tilov.moneymanager.transaction.data.mapper.toDbModel
 import com.d9tilov.moneymanager.transaction.exception.TransactionCreateException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -28,12 +28,8 @@ import java.util.Date
 
 class TransactionLocalSource(
     private val preferencesStore: PreferencesStore,
-    appDatabase: AppDatabase,
-    private val transactionDataMapper: TransactionDataMapper,
-    private val transactionDateDataMapper: TransactionDateDataMapper
+    private val transactionDao: TransactionDao
 ) : TransactionSource {
-
-    private val transactionDao: TransactionDao = appDatabase.transactionDao()
 
     override suspend fun insert(transaction: TransactionDataModel) {
         val currentUserId = preferencesStore.uid
@@ -51,11 +47,9 @@ class TransactionLocalSource(
                 }
                 count == 1 -> {
                     transactionDao.insert(
-                        transactionDataMapper.toDbModel(
-                            transaction.copy(
-                                clientId = currentUserId
-                            )
-                        )
+                        transaction.copy(
+                            clientId = currentUserId
+                        ).toDbModel()
                     )
                 }
                 else -> {
@@ -68,11 +62,7 @@ class TransactionLocalSource(
                         )
                     )
                     transactionDao.insert(
-                        transactionDataMapper.toDbModel(
-                            transaction.copy(
-                                clientId = currentUserId
-                            )
-                        )
+                        transaction.copy(clientId = currentUserId).toDbModel()
                     )
                 }
             }
@@ -85,14 +75,12 @@ class TransactionLocalSource(
         date: Date,
         currency: String
     ): TransactionDbModel {
-        return transactionDateDataMapper.toDbModel(
-            TransactionDateDataModel(
-                clientId = clientId,
-                type = type,
-                date = date.getEndOfDay(),
-                currency = currency
-            )
-        )
+        return TransactionDateDataModel(
+            clientId = clientId,
+            type = type,
+            date = date.getEndOfDay(),
+            currency = currency
+        ).toDbModel()
     }
 
     override fun getById(id: Long): Flow<TransactionDataModel> {
@@ -100,7 +88,7 @@ class TransactionLocalSource(
         return if (currentUserId == null) {
             throw WrongUidException()
         } else {
-            transactionDao.getById(currentUserId, id).map { transactionDataMapper.toDataModel(it) }
+            transactionDao.getById(currentUserId, id).map { it.toDataModel() }
         }
     }
 
@@ -121,10 +109,9 @@ class TransactionLocalSource(
             ) { transactionDao.getAllByType(currentUserId, from, to, transactionType) }.flow
                 .map { value ->
                     value.map {
-                        if (it.isDate) {
-                            transactionDateDataMapper.toDataModel(it)
-                        } else {
-                            transactionDataMapper.toDataModel(it)
+                        when (it.isDate) {
+                            true -> it.toDataDateModel()
+                            false -> it.toDataModel()
                         }
                     }
                 }
@@ -138,11 +125,7 @@ class TransactionLocalSource(
         } else {
             val oldTransaction = transactionDao.getById(currentUserId, transaction.id).first()
             if (oldTransaction.date.isSameDay(transaction.date)) {
-                transactionDao.update(
-                    transactionDataMapper.toDbModel(
-                        transaction
-                    )
-                )
+                transactionDao.update(transaction.toDbModel())
             } else {
                 val itemsCountOldTransactionDate =
                     transactionDao.getItemsCountInDay(
@@ -175,13 +158,9 @@ class TransactionLocalSource(
                             transaction.currency
                         )
                     )
-                    transactionDao.update(
-                        transactionDataMapper.toDbModel(transaction)
-                    )
+                    transaction.toDbModel()
                 } else {
-                    transactionDao.update(
-                        transactionDataMapper.toDbModel(transaction)
-                    )
+                    transaction.toDbModel()
                 }
             }
         }
@@ -201,13 +180,13 @@ class TransactionLocalSource(
                 count > 1 -> {
                     transactionDao.delete(
                         currentUserId,
-                        transactionDataMapper.toDbModel(transaction).id
+                        transaction.toDbModel().id
                     )
                 }
                 count == 1 -> {
                     transactionDao.delete(
                         currentUserId,
-                        transactionDataMapper.toDbModel(transaction).id
+                        transaction.toDbModel().id
                     )
                     transactionDao.deleteDate(
                         currentUserId,

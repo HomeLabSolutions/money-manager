@@ -5,13 +5,13 @@ import com.d9tilov.moneymanager.backup.BackupData
 import com.d9tilov.moneymanager.backup.BackupManager
 import com.d9tilov.moneymanager.base.data.Result
 import com.d9tilov.moneymanager.base.data.Status
-import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.exceptions.NetworkException
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.core.util.isNetworkConnected
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
-import com.d9tilov.moneymanager.user.data.local.mapper.DataUserMapper
+import com.d9tilov.moneymanager.user.data.local.mapper.toDataModel
+import com.d9tilov.moneymanager.user.data.local.mapper.toDbModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -20,24 +20,21 @@ import java.util.Date
 class UserLocalSource(
     private val context: Context,
     private val preferencesStore: PreferencesStore,
-    database: AppDatabase,
-    private val dataUserMapper: DataUserMapper,
+    private val userDao: UserDao,
     private val backupManager: BackupManager
 ) : UserSource {
-
-    private val userDao: UserDao = database.userDao()
 
     override suspend fun createUserOrRestore(userProfile: UserProfile): UserProfile {
         preferencesStore.uid = userProfile.uid
         val result: Result<Nothing> = backupManager.restoreDb()
         if (result.status == Status.ERROR) {
-            userDao.insert(dataUserMapper.toDbModel(userProfile))
+            userDao.insert(userProfile.toDbModel())
         }
-        return dataUserMapper.toDataModel(userDao.getById(userProfile.uid).first())
+        return userDao.getById(userProfile.uid).first().toDataModel()
     }
 
     override suspend fun updateCurrentUser(userProfile: UserProfile) {
-        userDao.update(dataUserMapper.toDbModel(userProfile).copy())
+        userDao.update(userProfile.toDbModel().copy())
     }
 
     override suspend fun showPrepopulate(): Boolean {
@@ -63,7 +60,7 @@ class UserLocalSource(
         return if (currentUserId == null) {
             throw WrongUidException()
         } else {
-            userDao.getById(currentUserId).map { dataUserMapper.toDataModel(it) }
+            userDao.getById(currentUserId).map { it.toDataModel() }
         }
     }
 
