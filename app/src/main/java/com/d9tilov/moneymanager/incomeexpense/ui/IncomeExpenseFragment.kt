@@ -7,6 +7,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager.widget.ViewPager
 import com.d9tilov.moneymanager.R
+import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeExpenseNavigator
 import com.d9tilov.moneymanager.core.events.OnDialogDismissListener
@@ -37,7 +38,6 @@ class IncomeExpenseFragment :
 
     private lateinit var incomeExpenseAdapter: IncomeExpenseAdapter
     private var currentPage = 0
-    private var isKeyboardShown = false
 
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -85,7 +85,7 @@ class IncomeExpenseFragment :
                     }
                     currentPage = position
                     val currentFragment = getCurrentPagedFragment()
-                    if (isKeyboardShown) {
+                    if ((activity as BaseActivity<*>).isKeyboardShown) {
                         currentFragment.onOpenKeyboard()
                     } else {
                         currentFragment.onCloseKeyboard()
@@ -103,11 +103,6 @@ class IncomeExpenseFragment :
         }
     }
 
-    override fun onStop() {
-        isKeyboardShown = false
-        super.onStop()
-    }
-
     private fun getCurrentPagedFragment(): OnKeyboardVisibleChange {
         return incomeExpenseAdapter.getRegisteredFragment(currentPage) as OnKeyboardVisibleChange
     }
@@ -115,13 +110,11 @@ class IncomeExpenseFragment :
     override fun onOpenKeyboard() {
         val currentFragment = getCurrentPagedFragment()
         currentFragment.onOpenKeyboard()
-        isKeyboardShown = true
     }
 
     override fun onCloseKeyboard() {
         val currentFragment = getCurrentPagedFragment()
         currentFragment.onCloseKeyboard()
-        isKeyboardShown = false
     }
 
     companion object {

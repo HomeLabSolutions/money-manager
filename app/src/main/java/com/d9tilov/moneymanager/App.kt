@@ -1,12 +1,10 @@
 package com.d9tilov.moneymanager
 
-import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
 import androidx.hilt.work.HiltWorkerFactory
-import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import androidx.work.Configuration
 import com.facebook.appevents.AppEventsLogger
@@ -21,11 +19,6 @@ class App : MultiDexApplication(), Configuration.Provider {
 
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
-
-    override fun attachBaseContext(base: Context) {
-        MultiDex.install(this)
-        super.attachBaseContext(base)
-    }
 
     override fun onCreate() {
         super.onCreate()

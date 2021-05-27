@@ -24,6 +24,9 @@ interface UserDao {
     @Query("SELECT backupData FROM Users WHERE uid = :id")
     fun getBackupData(id: String): Flow<BackupData>
 
+    @Query("SELECT fiscalDay FROM Users WHERE uid = :id")
+    fun getFiscalDay(id: String): Int
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(user: UserDbModel)
 

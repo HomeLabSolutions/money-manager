@@ -11,6 +11,7 @@ interface UserSource : Source {
     suspend fun createUserOrRestore(userProfile: UserProfile): UserProfile
     suspend fun updateCurrentUser(userProfile: UserProfile)
     suspend fun showPrepopulate(): Boolean
+    suspend fun getFiscalDay(): Int
     fun getBackupData(): Flow<BackupData>
     fun getCurrentUser(): Flow<UserProfile>
     suspend fun getCurrency(): String

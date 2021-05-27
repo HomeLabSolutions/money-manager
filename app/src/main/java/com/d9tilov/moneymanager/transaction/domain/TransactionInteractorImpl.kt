@@ -5,33 +5,31 @@ import androidx.paging.map
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.category.exception.CategoryNotFoundException
+import com.d9tilov.moneymanager.core.util.getStartDateOfFiscalDayAndCurrent
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDateDataModel
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
-import com.d9tilov.moneymanager.transaction.domain.mapper.TransactionDomainMapper
-import com.d9tilov.moneymanager.transaction.domain.mapper.TransactionHeaderDomainMapper
+import com.d9tilov.moneymanager.transaction.domain.mapper.toDataModel
+import com.d9tilov.moneymanager.transaction.domain.mapper.toDomainModel
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import java.math.BigDecimal
+import java.util.Date
 
 class TransactionInteractorImpl(
     private val transactionRepo: TransactionRepo,
     private val categoryInteractor: CategoryInteractor,
-    private val userInteractor: UserInteractor,
-    private val transactionDomainMapper: TransactionDomainMapper,
-    private val transactionHeaderDomainMapper: TransactionHeaderDomainMapper
+    private val userInteractor: UserInteractor
 ) : TransactionInteractor {
 
     override suspend fun addTransaction(transaction: Transaction) {
         val currencyCode = userInteractor.getCurrency()
-        transactionRepo.addTransaction(
-            transactionDomainMapper.toDataModel(
-                transaction.copy(currencyCode = currencyCode)
-            )
-        )
+        transactionRepo.addTransaction(transaction.copy(currencyCode = currencyCode).toDataModel())
         val category = categoryInteractor.getCategoryById(transaction.category.id)
         val count = category.usageCount + 1
         categoryInteractor.update(category.copy(usageCount = count))
@@ -63,13 +61,13 @@ class TransactionInteractorImpl(
                         it.map { item ->
                             when (item) {
                                 is TransactionDateDataModel -> {
-                                    transactionHeaderDomainMapper.toDomain(item)
+                                    item.toDomainModel()
                                 }
                                 is TransactionDataModel -> {
                                     val category =
-                                        categoryList.find { item.categoryId == it.id }
+                                        categoryList.find { listItem -> item.categoryId == listItem.id }
                                             ?: throw CategoryNotFoundException("Not found category with id: ${item.categoryId}")
-                                    transactionDomainMapper.toDomain(item, category)
+                                    item.toDomainModel(category)
                                 }
                                 else -> {
                                     throw IllegalStateException("Unknown TransactionDataItem implementation: $item")
@@ -80,11 +78,57 @@ class TransactionInteractorImpl(
             }
     }
 
+    override fun getTransactionsByTypeWithoutDates(
+        from: Date,
+        to: Date,
+        type: TransactionType
+    ): Flow<List<Transaction>> =
+        categoryInteractor.getGroupedCategoriesByType(type)
+            .map { categoryList ->
+                val categoryMap = mutableMapOf<Long, Category>()
+                categoryList.forEach { categoryMap[it.id] = it }
+                categoryMap
+            }
+            .flatMapConcat { categoryMap ->
+                transactionRepo.getTransactionsByTypeWithoutDate(from, to, type)
+                    .map { transactions ->
+                        transactions.map { transaction ->
+                            val category = categoryMap[transaction.categoryId]
+                                ?: throw CategoryNotFoundException("Not found category with id: ${transaction.categoryId}")
+                            transaction.toDomainModel(category)
+                        }
+                    }
+            }
+
+    override fun getSumSpentInFiscalPeriod(): Flow<BigDecimal> {
+        return flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
+            val endDate = Date()
+            val startDate = endDate.getStartDateOfFiscalDayAndCurrent(fiscalDay)
+            transactionRepo.getTransactionsByTypeWithoutDate(
+                startDate,
+                endDate,
+                TransactionType.EXPENSE
+            ).map { list -> list.sumOf { it.sum } }
+        }
+    }
+
+    override fun getSumEarnedInFiscalPeriod(): Flow<BigDecimal> {
+        return flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
+            val endDate = Date()
+            val startDate = endDate.getStartDateOfFiscalDayAndCurrent(fiscalDay)
+            transactionRepo.getTransactionsByTypeWithoutDate(
+                startDate,
+                endDate,
+                TransactionType.INCOME
+            ).map { list -> list.sumOf { it.sum } }
+        }
+    }
+
     override suspend fun update(transaction: Transaction) =
-        transactionRepo.update(transactionDomainMapper.toDataModel(transaction))
+        transactionRepo.update(transaction.toDataModel())
 
     override suspend fun removeTransaction(transaction: Transaction) {
-        transactionRepo.removeTransaction(transactionDomainMapper.toDataModel(transaction))
+        transactionRepo.removeTransaction(transaction.toDataModel())
     }
 
     override suspend fun removeAllByCategory(category: Category) {

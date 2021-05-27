@@ -17,6 +17,7 @@ import com.d9tilov.moneymanager.transaction.domain.entity.TransactionHeader
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -29,6 +30,8 @@ class IncomeViewModel @Inject constructor(
 ) : BaseIncomeExpenseViewModel<IncomeNavigator>() {
 
     lateinit var transactions: Flow<PagingData<BaseTransaction>>
+    val earnedInPeriod = transactionInteractor.getSumEarnedInFiscalPeriod()
+        .flowOn(Dispatchers.IO).asLiveData()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -67,8 +70,8 @@ class IncomeViewModel @Inject constructor(
                         category = category
                     )
                 )
-                addTransactionEvent.call()
             }
+            addTransactionEvent.call()
         } else {
             navigator?.showEmptySumError()
         }

@@ -46,6 +46,15 @@ class UserLocalSource(
         }
     }
 
+    override suspend fun getFiscalDay(): Int {
+        val currentUserId = preferencesStore.uid
+        return if (currentUserId == null) {
+            throw WrongUidException()
+        } else {
+            userDao.getFiscalDay(currentUserId)
+        }
+    }
+
     override fun getBackupData(): Flow<BackupData> {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {

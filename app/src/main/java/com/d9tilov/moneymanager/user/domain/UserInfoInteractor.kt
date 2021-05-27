@@ -20,6 +20,7 @@ class UserInfoInteractor(
     override fun getBackupData(): Flow<BackupData> = userRepo.getBackupData()
 
     override suspend fun showPrepopulate(): Boolean = userRepo.showPrepopulate()
+    override suspend fun getFiscalDay(): Int = userRepo.getFiscalDay()
 
     override suspend fun createUser(user: FirebaseUser?): UserProfile =
         userRepo.createUser(userDomainMapper.toDataModel(user))

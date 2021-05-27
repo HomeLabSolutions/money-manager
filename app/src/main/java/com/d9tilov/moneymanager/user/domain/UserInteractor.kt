@@ -10,9 +10,10 @@ import kotlinx.coroutines.flow.Flow
 interface UserInteractor : Interactor {
 
     fun getCurrentUser(): Flow<UserProfile>
-    suspend fun getCurrency(): String
     fun getBackupData(): Flow<BackupData>
+    suspend fun getCurrency(): String
     suspend fun showPrepopulate(): Boolean
+    suspend fun getFiscalDay(): Int
     suspend fun createUser(user: FirebaseUser?): UserProfile
     suspend fun updateUser(userProfile: UserProfile)
     suspend fun backup(): Result<Nothing>

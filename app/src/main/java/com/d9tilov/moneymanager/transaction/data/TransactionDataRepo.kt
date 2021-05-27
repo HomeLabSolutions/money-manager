@@ -23,6 +23,13 @@ class TransactionDataRepo(private val transactionSource: TransactionSource) : Tr
         transactionType: TransactionType
     ) = transactionSource.getAllByType(from, to, transactionType)
 
+    override fun getTransactionsByTypeWithoutDate(
+        from: Date,
+        to: Date,
+        transactionType: TransactionType
+    ): Flow<List<TransactionDataModel>> =
+        transactionSource.getAllByTypeWithoutDates(from, to, transactionType)
+
     override suspend fun update(transaction: TransactionDataModel) =
         transactionSource.update(transaction)
 
