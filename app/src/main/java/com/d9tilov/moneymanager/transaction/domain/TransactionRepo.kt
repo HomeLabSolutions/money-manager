@@ -2,6 +2,7 @@ package com.d9tilov.moneymanager.transaction.domain
 
 import androidx.paging.PagingData
 import com.d9tilov.moneymanager.category.data.entity.Category
+import com.d9tilov.moneymanager.core.util.getEndOfDay
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionBaseDataModel
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
@@ -14,9 +15,15 @@ interface TransactionRepo {
     fun getTransactionById(id: Long): Flow<TransactionDataModel>
     fun getTransactionsByType(
         from: Date = Date(0),
-        to: Date = Date(),
+        to: Date = Date().getEndOfDay(),
         transactionType: TransactionType
     ): Flow<PagingData<TransactionBaseDataModel>>
+
+    fun getTransactionsByTypeWithoutDate(
+        from: Date = Date(0),
+        to: Date = Date().getEndOfDay(),
+        transactionType: TransactionType
+    ): Flow<List<TransactionDataModel>>
 
     suspend fun update(transaction: TransactionDataModel)
     suspend fun removeTransaction(transaction: TransactionDataModel)

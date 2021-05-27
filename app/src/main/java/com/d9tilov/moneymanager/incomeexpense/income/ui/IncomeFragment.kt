@@ -1,9 +1,7 @@
 package com.d9tilov.moneymanager.incomeexpense.income.ui
 
-import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.View
-import android.view.animation.AccelerateInterpolator
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -57,13 +55,29 @@ class IncomeFragment :
     override val viewModel by viewModels<IncomeViewModel>()
     override val snackBarAnchorView by lazy { viewBinding.incomeCategoryRvList }
 
+    private val categoryGroup = mutableListOf<View>()
+    private val transactionGroup = mutableListOf<View>()
+
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mergeLayoutBinding = LayoutIncomeInputFieldBinding.bind(viewBinding.root)
+        categoryGroup.run {
+            add(viewBinding.incomeCategoryRvList)
+            add(viewBinding.incomeInfoLayout)
+            add(viewBinding.incomeMainSum)
+            add(viewBinding.incomeMainSumTitle)
+        }
+        transactionGroup.run {
+            add(viewBinding.incomeTransactionBtnAdd)
+            add(viewBinding.incomeTransactionRvList)
+        }
+        categoryGroup.forEach { it.gone() }
+        transactionGroup.forEach { it.gone() }
         emptyViewStub = viewBinding.root.findViewById(R.id.income_transaction_empty_placeholder)
+        mainSum = viewBinding.incomeMainSum
         mergeLayoutBinding.run {
             incomeMainSum.moneyEditText.setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus) {
@@ -71,7 +85,6 @@ class IncomeFragment :
                         incomeMainSum.moneyEditText.setSelection(incomeMainSum.moneyEditText.text.toString().length)
                     }
                 }
-                mainSum = incomeMainSum
             }
         }
         viewModel.run {
@@ -116,6 +129,14 @@ class IncomeFragment :
                     }
                 }
         }
+        lifecycleScope.launch {
+            viewModel.earnedInPeriod.observe(
+                viewLifecycleOwner,
+                {
+                    viewBinding.incomePeriodInfoValue.setValue(it)
+                }
+            )
+        }
         viewBinding.incomeTransactionRvList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             private val fab = viewBinding.incomeTransactionBtnAdd
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -132,9 +153,6 @@ class IncomeFragment :
             }
         })
         viewBinding.incomeTransactionBtnAdd.setOnClickListener {
-            viewBinding.incomeTransactionRvList.gone()
-            viewBinding.incomeTransactionBtnAdd.gone()
-            changeInputFieldVisibility(true)
             mergeLayoutBinding.incomeMainSum.moneyEditText.requestFocus()
             showKeyboard(mergeLayoutBinding.incomeMainSum.moneyEditText)
         }
@@ -145,10 +163,7 @@ class IncomeFragment :
         if ((activity as MainActivity).forceShowKeyboard) {
             showKeyboard(mergeLayoutBinding.incomeMainSum.moneyEditText)
         } else {
-            viewBinding.incomeCategoryRvList.gone()
-            changeInputFieldVisibility(false)
-            viewBinding.incomeTransactionRvList.show()
-            viewBinding.incomeTransactionBtnAdd.show()
+            crossfade(false)
         }
     }
 
@@ -215,9 +230,7 @@ class IncomeFragment :
     override fun onOpenKeyboard() {
         isKeyboardOpen = true
         viewBinding.run {
-            onKeyboardVisibilityAnimation(true)
-            incomeTransactionRvList.gone()
-            incomeTransactionBtnAdd.gone()
+            crossfade(true)
             hideViewStub()
             incomeCategoryRvList.scrollToPosition(0)
         }
@@ -227,7 +240,7 @@ class IncomeFragment :
         Timber.tag(App.TAG).d("Keyboard hidden")
         isKeyboardOpen = false
         viewBinding.run {
-            onKeyboardVisibilityAnimation(false)
+            crossfade(false)
             if (isTransactionDataEmpty) {
                 showViewStub(TransactionType.INCOME)
             }
@@ -235,87 +248,20 @@ class IncomeFragment :
         }
     }
 
-    private fun onKeyboardVisibilityAnimation(open: Boolean) {
-        viewBinding.run {
-            if (open) {
-                val shownCategories = incomeCategoryRvList.show()
-                if (shownCategories) {
-                    animateCategories(open)
-                }
-                val showInputField = changeInputFieldVisibility(true)
-                if (showInputField) {
-                    animateInputField(open)
-                }
-            } else {
-                changeInputFieldVisibility(false)
-                val shownTransactions = incomeTransactionRvList.show()
-                if (shownTransactions) {
-                    animateTransactions(open)
-                }
-                incomeTransactionBtnAdd.show()
-                val goneCategories = incomeCategoryRvList.gone()
-                if (goneCategories) {
-                    animateCategories(open)
-                }
+    private fun crossfade(openKeyboard: Boolean) {
+        val hiddenGroup = if (openKeyboard) transactionGroup else categoryGroup
+        val shownGroup = if (openKeyboard) categoryGroup else transactionGroup
+        shownGroup.forEach {
+            it.apply {
+                alpha = 0f
+                show()
+                animate()
+                    .alpha(1f)
+                    .setDuration(ANIMATION_DURATION)
+                    .setListener(null)
             }
         }
-    }
-
-    private fun changeInputFieldVisibility(isVisible: Boolean): Boolean {
-        return mergeLayoutBinding.run {
-            when (isVisible) {
-                true -> {
-                    incomeMainSum.show()
-                    return@run incomeMainSumTitle.show()
-                }
-                false -> {
-                    incomeMainSum.gone()
-                    return@run incomeMainSumTitle.gone()
-                }
-            }
-        }
-    }
-
-    private fun animateCategories(open: Boolean) {
-        val alphaAnimationCategories =
-            ObjectAnimator.ofFloat(
-                viewBinding.incomeCategoryRvList,
-                View.ALPHA,
-                if (open) ALPHA_CAT_MIN else ALPHA_MAX,
-                if (open) ALPHA_MAX else ALPHA_CAT_MIN
-            ).apply {
-                duration = ANIMATION_DURATION_CAT
-                interpolator = AccelerateInterpolator()
-            }
-        alphaAnimationCategories.start()
-    }
-
-    private fun animateInputField(open: Boolean) {
-        val alphaAnimationInputField =
-            ObjectAnimator.ofFloat(
-                mergeLayoutBinding.root,
-                View.ALPHA,
-                if (open) ALPHA_CAT_MIN else ALPHA_MAX,
-                if (open) ALPHA_MAX else ALPHA_CAT_MIN
-            ).apply {
-                duration = ANIMATION_DURATION_CAT
-                interpolator = AccelerateInterpolator()
-            }
-        alphaAnimationInputField.start()
-    }
-
-    private fun animateTransactions(open: Boolean) {
-        val alphaAnimationTransactions =
-            ObjectAnimator.ofFloat(
-                viewBinding.incomeTransactionRvList,
-                View.ALPHA,
-                if (open) ALPHA_MAX else ALPHA_CAT_MIN,
-                if (open) ALPHA_CAT_MIN else ALPHA_MAX
-            ).apply {
-                duration = ANIMATION_DURATION_TRANSACTION
-                interpolator = AccelerateInterpolator()
-            }
-        alphaAnimationTransactions.start()
+        hiddenGroup.forEach { it.gone() }
     }
 
     override fun saveTransaction(category: Category) {

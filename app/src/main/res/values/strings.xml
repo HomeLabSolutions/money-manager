@@ -76,6 +76,9 @@
     <string name="category_unit_to_group_subtitle">Add category \"%1$s\"\ to group %2$s?</string>
     <string name="category_unit_name_group_hint">Name of group</string>
     <string name="category_unit_name_exist_error">Name of this group already exists</string>
+    <string name="category_expense_info_today_title">you can spend today:</string>
+    <string name="category_expense_info_period_title">was spent in period:</string>
+    <string name="category_income_info_period_title">was earned in period:</string>
 
     <string name="category_edit_title">Edit category group</string>
     <string name="category_delete_title">Deleting a category</string>

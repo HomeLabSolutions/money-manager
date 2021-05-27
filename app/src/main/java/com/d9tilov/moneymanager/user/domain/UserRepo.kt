@@ -7,9 +7,10 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserRepo {
     fun getUser(): Flow<UserProfile>
-    suspend fun getCurrency(): String
     fun getBackupData(): Flow<BackupData>
+    suspend fun getCurrency(): String
     suspend fun showPrepopulate(): Boolean
+    suspend fun getFiscalDay(): Int
     suspend fun createUser(entity: UserProfile): UserProfile
     suspend fun updateUser(entity: UserProfile)
     suspend fun backup(): Result<Nothing>

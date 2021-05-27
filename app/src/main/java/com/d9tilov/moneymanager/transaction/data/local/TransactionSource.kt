@@ -17,7 +17,11 @@ interface TransactionSource {
         to: Date,
         transactionType: TransactionType
     ): Flow<PagingData<TransactionBaseDataModel>>
-
+    fun getAllByTypeWithoutDates(
+        from: Date,
+        to: Date,
+        transactionType: TransactionType
+    ): Flow<List<TransactionDataModel>>
     suspend fun update(transaction: TransactionDataModel)
     suspend fun remove(transaction: TransactionDataModel)
     suspend fun removeAllByCategory(category: Category)

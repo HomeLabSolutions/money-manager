@@ -8,6 +8,7 @@ import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.util.getEndOfDay
+import com.d9tilov.moneymanager.core.util.getStartOfDay
 import com.d9tilov.moneymanager.core.util.isSameDay
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionBaseDataModel
@@ -106,7 +107,14 @@ class TransactionLocalSource(
                     PAGE_SIZE,
                     enablePlaceholders = false
                 )
-            ) { transactionDao.getAllByType(currentUserId, from, to, transactionType) }.flow
+            ) {
+                transactionDao.getAllByType(
+                    currentUserId,
+                    from.getEndOfDay(),
+                    to.getEndOfDay(),
+                    transactionType
+                )
+            }.flow
                 .map { value ->
                     value.map {
                         when (it.isDate) {
@@ -115,6 +123,25 @@ class TransactionLocalSource(
                         }
                     }
                 }
+        }
+    }
+
+    override fun getAllByTypeWithoutDates(
+        from: Date,
+        to: Date,
+        transactionType: TransactionType
+    ): Flow<List<TransactionDataModel>> {
+        val currentUserId = preferencesStore.uid
+        return if (currentUserId == null) {
+            throw WrongUidException()
+        } else {
+            transactionDao.getAllByTypeInPeriod(
+                currentUserId,
+                from.getStartOfDay(),
+                to.getEndOfDay(),
+                transactionType
+            )
+                .map { it.map { item -> item.toDataModel() } }
         }
     }
 
@@ -140,7 +167,8 @@ class TransactionLocalSource(
                     transactionDao.deleteDate(
                         currentUserId,
                         oldTransaction.type,
-                        oldTransaction.date
+                        oldTransaction.date.getStartOfDay(),
+                        oldTransaction.date.getEndOfDay()
                     )
                 }
                 val itemsCountNewTransactionDate =
@@ -158,10 +186,8 @@ class TransactionLocalSource(
                             transaction.currency
                         )
                     )
-                    transaction.toDbModel()
-                } else {
-                    transaction.toDbModel()
                 }
+                transactionDao.update(transaction.toDbModel())
             }
         }
     }
@@ -184,15 +210,18 @@ class TransactionLocalSource(
                     )
                 }
                 count == 1 -> {
-                    transactionDao.delete(
-                        currentUserId,
-                        transaction.toDbModel().id
-                    )
-                    transactionDao.deleteDate(
-                        currentUserId,
-                        transaction.type,
-                        transaction.date
-                    )
+                    GlobalScope.launch {
+                        transactionDao.delete(
+                            currentUserId,
+                            transaction.toDbModel().id
+                        )
+                        transactionDao.deleteDate(
+                            currentUserId,
+                            transaction.type,
+                            transaction.date.getStartOfDay(),
+                            transaction.date.getEndOfDay()
+                        )
+                    }
                 }
                 else -> {
                     throw TransactionCreateException("Can't create transaction. DataBase contains zero date item in day period")
@@ -231,7 +260,8 @@ class TransactionLocalSource(
                                         transactionDao.deleteDate(
                                             currentUserId,
                                             transaction.type,
-                                            transaction.date
+                                            transaction.date.getStartOfDay(),
+                                            transaction.date.getEndOfDay()
                                         )
                                     }
                                     else -> {

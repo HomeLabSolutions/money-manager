@@ -152,9 +152,8 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
     companion object {
         const val SPAN_COUNT = 2
         const val TABLET_SPAN_COUNT = 1
-        const val ANIMATION_DURATION_CAT = 300L
-        const val ANIMATION_DURATION_TRANSACTION = 300L
-        const val ALPHA_CAT_MIN = 0f
+        const val ANIMATION_DURATION = 300L
+        const val ALPHA_MIN = 0f
         const val ALPHA_MAX = 1f
     }
 }

@@ -84,6 +84,31 @@ fun Date.getEndOfDay(): Date {
     return calendar.time
 }
 
+fun Date.getStartDateOfFiscalDayAndCurrent(fiscalDay: Int): Date {
+    val c = Calendar.getInstance()
+    val dayOfMonth = c.get(Calendar.DAY_OF_MONTH)
+    val curDate = Date()
+    val fiscalDate: Date
+    when {
+        dayOfMonth == fiscalDay -> fiscalDate = curDate
+        dayOfMonth > fiscalDay -> {
+            c.add(Calendar.DATE, (fiscalDay - dayOfMonth))
+            fiscalDate = c.time
+        }
+        else -> {
+            c.add(Calendar.MONTH, -1)
+            val daysCountInMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH)
+            if (fiscalDay > dayOfMonth) {
+                c.set(Calendar.DAY_OF_MONTH, daysCountInMonth)
+            } else {
+                c.set(Calendar.DAY_OF_MONTH, fiscalDay)
+            }
+            fiscalDate = c.time
+        }
+    }
+    return fiscalDate.getStartOfDay()
+}
+
 fun getFirstDayOfMonth(): Date {
     val c = Calendar.getInstance()
     c[Calendar.DAY_OF_MONTH] = 1

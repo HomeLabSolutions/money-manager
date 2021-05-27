@@ -15,6 +15,7 @@ import com.d9tilov.moneymanager.core.util.debounce
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.show
+import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.core.util.toBackupDate
 import com.d9tilov.moneymanager.databinding.FragmentSettingsBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
@@ -36,25 +37,29 @@ class SettingsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        viewBinding.settingsBackup.setOnClickListener {
-            viewModel.backup()
-        }
-        viewBinding.settingsDayOfMonthEdit.onChange(
-            debounce(DEBOUNCE, viewModel.viewModelScope) {
-                run {
-                    if ((requireActivity() as MainActivity).isKeyboardShown) {
-                        viewBinding.settingsDayOfMonthEdit.requestFocus()
-                        viewBinding.settingsDayOfMonthEdit.setSelection(it.length)
-                    }
-                    if (it.isEmpty() || !it.isDigitsOnly() || it.toInt() > 31 || it.toInt() < 1) {
-                        viewBinding.settingsDayOfMonthError.show()
-                    } else {
-                        viewModel.changeFiscalDay(it.toInt())
-                        viewBinding.settingsDayOfMonthError.gone()
+        viewBinding.run {
+            settingsBackup.setOnClickListener { viewModel.backup() }
+            settingsDayOfMonthPostfix.setOnClickListener {
+                viewBinding.settingsDayOfMonthEdit.requestFocus()
+                showKeyboard(viewBinding.settingsDayOfMonthEdit)
+            }
+            settingsDayOfMonthEdit.onChange(
+                debounce(DEBOUNCE, viewModel.viewModelScope) {
+                    run {
+                        if ((requireActivity() as MainActivity).isKeyboardShown) {
+                            viewBinding.settingsDayOfMonthEdit.requestFocus()
+                            viewBinding.settingsDayOfMonthEdit.setSelection(it.length)
+                        }
+                        if (it.isEmpty() || !it.isDigitsOnly() || it.toInt() > 31 || it.toInt() < 1) {
+                            viewBinding.settingsDayOfMonthError.show()
+                        } else {
+                            viewModel.changeFiscalDay(it.toInt())
+                            viewBinding.settingsDayOfMonthError.gone()
+                        }
                     }
                 }
-            }
-        )
+            )
+        }
         viewModel.userData.observe(
             viewLifecycleOwner,
             {

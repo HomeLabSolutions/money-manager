@@ -16,6 +16,7 @@ class UserDataRepo(
     override fun getBackupData(): Flow<BackupData> = userLocalSource.getBackupData()
 
     override suspend fun showPrepopulate(): Boolean = userLocalSource.showPrepopulate()
+    override suspend fun getFiscalDay(): Int = userLocalSource.getFiscalDay()
 
     override suspend fun createUser(entity: UserProfile): UserProfile =
         userLocalSource.createUserOrRestore(entity)

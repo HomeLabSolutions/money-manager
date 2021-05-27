@@ -28,6 +28,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
@@ -73,11 +74,19 @@ class EditTransactionFragment : EditTransactionNavigator,
         }
         viewBinding.run {
             editTransactionSave.setOnClickListener {
+                val c = Calendar.getInstance()
+                c.time = date
+                val transactionCalendar = Calendar.getInstance()
+                transactionCalendar.time = transaction.date
+                c.set(Calendar.HOUR_OF_DAY, transactionCalendar.get(Calendar.HOUR_OF_DAY))
+                c.set(Calendar.MINUTE, transactionCalendar.get(Calendar.MINUTE))
+                c.set(Calendar.SECOND, transactionCalendar.get(Calendar.SECOND))
+                c.set(Calendar.MILLISECOND, transactionCalendar.get(Calendar.MILLISECOND))
                 viewModel.update(
                     transaction.copy(
                         sum = editTransactionMainSum.getValue(),
                         category = category,
-                        date = date,
+                        date = c.time,
                         description = editTransactionDescription.text.toString()
                     )
                 )

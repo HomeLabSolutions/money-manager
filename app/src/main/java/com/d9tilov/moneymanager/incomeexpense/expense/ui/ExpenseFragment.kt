@@ -1,9 +1,7 @@
 package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
-import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.View
-import android.view.animation.AccelerateInterpolator
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -29,7 +27,6 @@ import com.d9tilov.moneymanager.core.util.isTablet
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
-import com.d9tilov.moneymanager.databinding.LayoutExpenseInputFieldBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.incomeexpense.ui.BaseIncomeExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
@@ -51,27 +48,39 @@ class ExpenseFragment :
     OnKeyboardVisibleChange {
 
     private val viewBinding by viewBinding(FragmentExpenseBinding::bind)
-    private lateinit var mergeLayoutBinding: LayoutExpenseInputFieldBinding
 
     override fun getNavigator() = this
     override val viewModel by viewModels<ExpenseViewModel>()
     override val snackBarAnchorView by lazy { viewBinding.expenseCategoryRvList }
+    private val categoryGroup = mutableListOf<View>()
+    private val transactionGroup = mutableListOf<View>()
 
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mergeLayoutBinding = LayoutExpenseInputFieldBinding.bind(viewBinding.root)
         emptyViewStub = viewBinding.root.findViewById(R.id.expense_transaction_empty_placeholder)
-        mergeLayoutBinding.run {
+        categoryGroup.run {
+            add(viewBinding.expenseCategoryRvList)
+            add(viewBinding.expenseInfoLayout)
+            add(viewBinding.expenseMainSumTitle)
+            add(viewBinding.expenseMainSum)
+        }
+        transactionGroup.run {
+            add(viewBinding.expenseTransactionBtnAdd)
+            add(viewBinding.expenseTransactionRvList)
+        }
+        categoryGroup.forEach { it.gone() }
+        transactionGroup.forEach { it.gone() }
+        mainSum = viewBinding.expenseMainSum
+        viewBinding.run {
             expenseMainSum.moneyEditText.setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus) {
                     expenseMainSum.moneyEditText.post {
                         expenseMainSum.moneyEditText.setSelection(expenseMainSum.moneyEditText.text.toString().length)
                     }
                 }
-                mainSum = expenseMainSum
             }
         }
         viewModel.run {
@@ -116,6 +125,14 @@ class ExpenseFragment :
                     }
                 }
         }
+        lifecycleScope.launch {
+            viewModel.spentInPeriod.observe(
+                viewLifecycleOwner,
+                {
+                    viewBinding.expensePeriodInfoValue.setValue(it)
+                }
+            )
+        }
         viewBinding.expenseTransactionRvList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             private val fab = viewBinding.expenseTransactionBtnAdd
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -132,23 +149,17 @@ class ExpenseFragment :
             }
         })
         viewBinding.expenseTransactionBtnAdd.setOnClickListener {
-            viewBinding.expenseTransactionRvList.gone()
-            viewBinding.expenseTransactionBtnAdd.gone()
-            changeInputFieldVisibility(true)
-            mergeLayoutBinding.expenseMainSum.moneyEditText.requestFocus()
-            showKeyboard(mergeLayoutBinding.expenseMainSum.moneyEditText)
+            viewBinding.expenseMainSum.moneyEditText.requestFocus()
+            showKeyboard(viewBinding.expenseMainSum.moneyEditText)
         }
     }
 
     override fun onStart() {
         super.onStart()
         if ((activity as MainActivity).forceShowKeyboard) {
-            showKeyboard(mergeLayoutBinding.expenseMainSum.moneyEditText)
+            showKeyboard(viewBinding.expenseMainSum.moneyEditText)
         } else {
-            viewBinding.expenseCategoryRvList.gone()
-            changeInputFieldVisibility(false)
-            viewBinding.expenseTransactionRvList.show()
-            viewBinding.expenseTransactionBtnAdd.show()
+            crossfade(false)
         }
     }
 
@@ -195,7 +206,7 @@ class ExpenseFragment :
             param(FirebaseAnalytics.Param.ITEM_ID, "click_all_categories_expense")
         }
         viewBinding.run {
-            val inputSum = mergeLayoutBinding.expenseMainSum.getValue()
+            val inputSum = viewBinding.expenseMainSum.getValue()
             val action = if (inputSum.signum() > 0) {
                 IncomeExpenseFragmentDirections.toCategoryDest(
                     destination = CategoryDestination.MAIN_WITH_SUM_SCREEN,
@@ -215,11 +226,9 @@ class ExpenseFragment :
     override fun onOpenKeyboard() {
         isKeyboardOpen = true
         viewBinding.run {
-            onKeyboardVisibilityAnimation(true)
-            expenseTransactionRvList.gone()
-            expenseTransactionBtnAdd.gone()
+            crossfade(true)
             hideViewStub()
-            expenseCategoryRvList.scrollToPosition(0)
+            viewBinding.expenseCategoryRvList.scrollToPosition(0)
         }
     }
 
@@ -227,107 +236,40 @@ class ExpenseFragment :
         Timber.tag(App.TAG).d("Keyboard hidden")
         isKeyboardOpen = false
         viewBinding.run {
-            onKeyboardVisibilityAnimation(false)
+            crossfade(false)
             if (isTransactionDataEmpty) {
                 showViewStub(TransactionType.EXPENSE)
             }
-            mergeLayoutBinding.expenseMainSum.clearFocus()
+            viewBinding.expenseMainSum.clearFocus()
         }
     }
 
-    private fun onKeyboardVisibilityAnimation(open: Boolean) {
-        viewBinding.run {
-            if (open) {
-                val shownCategories = expenseCategoryRvList.show()
-                if (shownCategories) {
-                    animateCategories(open)
-                }
-                val showInputField = changeInputFieldVisibility(true)
-                if (showInputField) {
-                    animateInputField(open)
-                }
-            } else {
-                changeInputFieldVisibility(false)
-                val shownTransactions = expenseTransactionRvList.show()
-                if (shownTransactions) {
-                    animateTransactions(open)
-                }
-                expenseTransactionBtnAdd.show()
-                val goneCategories = expenseCategoryRvList.gone()
-                if (goneCategories) {
-                    animateCategories(open)
-                }
+    private fun crossfade(openKeyboard: Boolean) {
+        val hiddenGroup = if (openKeyboard) transactionGroup else categoryGroup
+        val shownGroup = if (openKeyboard) categoryGroup else transactionGroup
+        shownGroup.forEach {
+            it.apply {
+                alpha = 0f
+                show()
+                animate()
+                    .alpha(1f)
+                    .setDuration(ANIMATION_DURATION)
+                    .setListener(null)
             }
         }
-    }
-
-    private fun changeInputFieldVisibility(isVisible: Boolean): Boolean {
-        return mergeLayoutBinding.run {
-            when (isVisible) {
-                true -> {
-                    expenseMainSum.show()
-                    return@run expenseMainSumTitle.show()
-                }
-                false -> {
-                    expenseMainSum.gone()
-                    return@run expenseMainSumTitle.gone()
-                }
-            }
-        }
-    }
-
-    private fun animateCategories(open: Boolean) {
-        val alphaAnimationCategories =
-            ObjectAnimator.ofFloat(
-                viewBinding.expenseCategoryRvList,
-                View.ALPHA,
-                if (open) ALPHA_CAT_MIN else ALPHA_MAX,
-                if (open) ALPHA_MAX else ALPHA_CAT_MIN
-            ).apply {
-                duration = ANIMATION_DURATION_CAT
-                interpolator = AccelerateInterpolator()
-            }
-        alphaAnimationCategories.start()
-    }
-
-    private fun animateInputField(open: Boolean) {
-        val alphaAnimationInputField =
-            ObjectAnimator.ofFloat(
-                mergeLayoutBinding.root,
-                View.ALPHA,
-                if (open) ALPHA_CAT_MIN else ALPHA_MAX,
-                if (open) ALPHA_MAX else ALPHA_CAT_MIN
-            ).apply {
-                duration = ANIMATION_DURATION_CAT
-                interpolator = AccelerateInterpolator()
-            }
-        alphaAnimationInputField.start()
-    }
-
-    private fun animateTransactions(open: Boolean) {
-        val alphaAnimationTransactions =
-            ObjectAnimator.ofFloat(
-                viewBinding.expenseTransactionRvList,
-                View.ALPHA,
-                if (open) ALPHA_MAX else ALPHA_CAT_MIN,
-                if (open) ALPHA_CAT_MIN else ALPHA_MAX
-            ).apply {
-                duration = ANIMATION_DURATION_TRANSACTION
-                interpolator = AccelerateInterpolator()
-            }
-        alphaAnimationTransactions.start()
+        hiddenGroup.forEach { it.gone() }
     }
 
     override fun saveTransaction(category: Category) {
         viewModel.saveTransaction(
             category,
-            mergeLayoutBinding.expenseMainSum.getValue()
+            viewBinding.expenseMainSum.getValue()
         )
         isTransactionDataEmpty = false
     }
 
     override fun resetMainSum() {
-        mergeLayoutBinding.expenseMainSum.setValue(BigDecimal.ZERO)
+        viewBinding.expenseMainSum.setValue(BigDecimal.ZERO)
     }
 
     companion object {
