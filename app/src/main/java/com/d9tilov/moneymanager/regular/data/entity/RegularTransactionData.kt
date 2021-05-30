@@ -13,14 +13,15 @@ import java.util.Date
 data class RegularTransactionData(
     val id: Long = DataConstants.DEFAULT_DATA_ID,
     val clientId: String = DataConstants.NO_ID.toString(),
-    val currencyCode: String,
     val type: TransactionType,
     val sum: BigDecimal,
     val categoryId: Long,
+    val currencyCode: String,
     val createdDate: Date = Date(),
     val startDate: Date,
     val periodType: PeriodType,
     val dayOfWeek: Int = Date().getDayOfWeek(),
     val description: String,
-    val pushEnable: Boolean = true
+    val pushEnable: Boolean = true,
+    val autoAdd: Boolean = false
 ) : Parcelable

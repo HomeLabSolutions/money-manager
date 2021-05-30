@@ -93,6 +93,7 @@
     <string name="sub_category_delete_from_group">Delete from group</string>
 
     <string name="regular_transaction_notify">Notify</string>
+    <string name="regular_transaction_auto_add">Auto add</string>
     <string name="regular_transaction_choose_category">Choose category</string>
     <string name="regular_transaction_repeat_title">Repeat every</string>
     <string name="regular_transaction_repeat_starts_title">Starting from</string>

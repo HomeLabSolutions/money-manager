@@ -271,6 +271,17 @@
                 app:layout_constraintStart_toStartOf="@+id/created_regular_transaction_repeat_icon"
                 app:layout_constraintTop_toBottomOf="@+id/created_regular_transaction_repeat_starts_title" />
 
+            <CheckBox
+                android:id="@+id/created_regular_transaction_auto_add_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="0dp"
+                android:text="@string/regular_transaction_auto_add"
+                app:layout_constraintStart_toStartOf="@+id/created_regular_transaction_repeat_checkbox"
+                app:layout_constraintTop_toBottomOf="@+id/created_regular_transaction_repeat_checkbox" />
+
             <ImageView
                 android:id="@+id/created_regular_transaction_delimiter"
                 android:layout_width="0dp"
@@ -282,7 +293,7 @@
                 android:src="@drawable/dotted_shape"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/created_regular_transaction_repeat_checkbox" />
+                app:layout_constraintTop_toBottomOf="@+id/created_regular_transaction_auto_add_checkbox" />
 
             <EditText
                 android:id="@+id/created_regular_transaction_description"

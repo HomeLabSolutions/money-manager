@@ -3,7 +3,8 @@ package com.d9tilov.moneymanager.regular.domain
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.category.exception.CategoryNotFoundException
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
-import com.d9tilov.moneymanager.regular.domain.mapper.RegularTransactionDomainMapper
+import com.d9tilov.moneymanager.regular.domain.mapper.toData
+import com.d9tilov.moneymanager.regular.domain.mapper.toDomain
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import kotlinx.coroutines.flow.Flow
@@ -13,16 +14,13 @@ import kotlinx.coroutines.flow.map
 class RegularTransactionInteractorImpl(
     private val regularTransactionRepo: RegularTransactionRepo,
     private val categoryInteractor: CategoryInteractor,
-    private val userInteractor: UserInteractor,
-    private val regularTransactionDomainMapper: RegularTransactionDomainMapper
+    private val userInteractor: UserInteractor
 ) : RegularTransactionInteractor {
 
     override suspend fun insert(regularTransactionData: RegularTransaction) {
         val currency = userInteractor.getCurrency()
         regularTransactionRepo.insert(
-            regularTransactionDomainMapper.toData(
-                regularTransactionData.copy(currencyCode = currency)
-            )
+            regularTransactionData.copy(currencyCode = currency).toData()
         )
     }
 
@@ -35,8 +33,7 @@ class RegularTransactionInteractorImpl(
                         val category =
                             categoryList.find { item.categoryId == it.id }
                                 ?: throw CategoryNotFoundException("Not found category with id: ${item.categoryId}")
-                        val regularTransaction =
-                            regularTransactionDomainMapper.toDomain(item, category)
+                        val regularTransaction = item.toDomain(category)
                         newList.add(regularTransaction)
                     }
                     newList
@@ -45,18 +42,10 @@ class RegularTransactionInteractorImpl(
     }
 
     override suspend fun update(regularTransactionData: RegularTransaction) {
-        regularTransactionRepo.update(
-            regularTransactionDomainMapper.toData(
-                regularTransactionData
-            )
-        )
+        regularTransactionRepo.update(regularTransactionData.toData())
     }
 
     override suspend fun delete(regularTransactionData: RegularTransaction) {
-        regularTransactionRepo.delete(
-            regularTransactionDomainMapper.toData(
-                regularTransactionData
-            )
-        )
+        regularTransactionRepo.delete(regularTransactionData.toData())
     }
 }

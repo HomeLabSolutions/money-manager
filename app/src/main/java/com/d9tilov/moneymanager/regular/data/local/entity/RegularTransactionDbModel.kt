@@ -25,14 +25,15 @@ data class RegularTransactionDbModel(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "clientId", index = true) val clientId: String,
-    @ColumnInfo(name = "currency") val currency: String,
     @ColumnInfo(name = "type") val type: TransactionType,
     @ColumnInfo(name = "sum") val sum: BigDecimal,
     @ColumnInfo(name = "categoryId") val categoryId: Long,
+    @ColumnInfo(name = "currency") val currency: String,
     @ColumnInfo(name = "createdDate") val createdDate: Date,
     @ColumnInfo(name = "startDate") val startDate: Date,
     @ColumnInfo(name = "periodType") val periodType: PeriodType,
     @ColumnInfo(name = "dayOfWeek") val dayOfWeek: Int,
     @ColumnInfo(name = "description") val description: String,
-    @ColumnInfo(name = "pushEnable") val pushEnable: Boolean
+    @ColumnInfo(name = "pushEnable") val pushEnable: Boolean,
+    @ColumnInfo(name = "autoAdd") val autoAdd: Boolean
 )

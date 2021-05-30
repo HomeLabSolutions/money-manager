@@ -83,6 +83,7 @@ class RegularTransactionCreationFragment :
                 startDate.value = startDate.value ?: it?.startDate ?: Date()
                 description.value = description.value ?: it?.description ?: ""
                 pushEnabled.value = pushEnabled.value ?: it?.pushEnable ?: true
+                autoAdd.value = autoAdd.value ?: it?.autoAdd ?: false
                 weekDaysSelected.value =
                     weekDaysSelected.value ?: it?.dayOfWeek ?: Date().getDayOfWeek()
                 if (weekDaysSelected.value == 0) {
@@ -127,11 +128,15 @@ class RegularTransactionCreationFragment :
             createdRegularTransactionRepeatCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
                 viewModel.pushEnabled.value = isChecked
             }
+            createdRegularTransactionAutoAddCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
+                viewModel.autoAdd.value = isChecked
+            }
             createdRegularTransactionRepeatSpinner.setSelection(
                 spinnerPeriodMap.getValue(regularTransaction?.periodType ?: PeriodType.MONTH)
             )
             createdRegularTransactionDescription.setText(viewModel.description.value)
             createdRegularTransactionRepeatCheckbox.isChecked = viewModel.pushEnabled.value ?: true
+            createdRegularTransactionAutoAddCheckbox.isChecked = viewModel.autoAdd.value ?: false
             createdRegularTransactionRepeatStartsDate.text = SimpleDateFormat(
                 TRANSACTION_DATE_FORMAT,
                 Locale.getDefault()
