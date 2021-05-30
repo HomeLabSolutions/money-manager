@@ -94,6 +94,7 @@
     <string name="sub_category_delete_from_group">Удалить из группы</string>
 
     <string name="regular_transaction_notify">Уведомлять</string>
+    <string name="regular_transaction_auto_add">Добавлять\nавтоматически</string>
     <string name="regular_transaction_choose_category">Выберите категорию</string>
     <string name="regular_transaction_repeat_title">Повторять раз в</string>
     <string name="regular_transaction_repeat_starts_title">Начиная с</string>

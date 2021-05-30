@@ -23,5 +23,6 @@ data class RegularTransaction(
     val periodType: PeriodType = PeriodType.MONTH,
     val dayOfWeek: Int = Date().getDayOfWeek(),
     val description: String,
-    val pushEnable: Boolean = true
+    val pushEnable: Boolean = true,
+    val autoAdd: Boolean = false
 ) : Parcelable

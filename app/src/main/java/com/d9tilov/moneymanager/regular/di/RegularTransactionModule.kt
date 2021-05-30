@@ -9,7 +9,6 @@ import com.d9tilov.moneymanager.regular.data.local.RegularTransactionSource
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractorImpl
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionRepo
-import com.d9tilov.moneymanager.regular.domain.mapper.RegularTransactionDomainMapper
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.Module
 import dagger.Provides
@@ -41,11 +40,9 @@ class RegularTransactionModule {
         regularTransactionRepo: RegularTransactionRepo,
         categoryInteractor: CategoryInteractor,
         userInteractor: UserInteractor,
-        regularTransactionDomainMapper: RegularTransactionDomainMapper
     ): RegularTransactionInteractor = RegularTransactionInteractorImpl(
         regularTransactionRepo,
         categoryInteractor,
-        userInteractor,
-        regularTransactionDomainMapper
+        userInteractor
     )
 }

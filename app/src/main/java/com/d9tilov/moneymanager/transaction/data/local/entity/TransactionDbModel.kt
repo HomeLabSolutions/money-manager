@@ -24,12 +24,12 @@ data class TransactionDbModel(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "clientId", index = true) val clientId: String,
-    @ColumnInfo(name = "isDate") val isDate: Boolean,
     @ColumnInfo(name = "type") val type: TransactionType,
     @ColumnInfo(name = "sum") val sum: BigDecimal,
     @ColumnInfo(name = "categoryId") val categoryId: Long,
     @ColumnInfo(name = "currency") val currency: String,
     @ColumnInfo(name = "date") val date: Date,
     @ColumnInfo(name = "description") val description: String,
-    @ColumnInfo(name = "qrCode") val qrCode: String?
+    @ColumnInfo(name = "qrCode") val qrCode: String?,
+    @ColumnInfo(name = "isDate") val isDate: Boolean,
 )

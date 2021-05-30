@@ -19,12 +19,12 @@ fun TransactionDataModel.toDbModel(): TransactionDbModel =
     TransactionDbModel(
         id,
         clientId,
-        false,
         type,
         sum,
         categoryId,
         currency,
         date,
         description,
-        qrCode
+        qrCode,
+        false,
     )

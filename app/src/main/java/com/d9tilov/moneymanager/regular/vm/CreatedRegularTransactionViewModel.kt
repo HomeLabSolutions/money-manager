@@ -33,6 +33,7 @@ class CreatedRegularTransactionViewModel @AssistedInject constructor(
     var startDate = MutableLiveData<Date>()
     var description = MutableLiveData<String>()
     var pushEnabled = MutableLiveData<Boolean>()
+    var autoAdd = MutableLiveData<Boolean>()
     var weekDaysSelected = MutableLiveData<Int>()
 
     fun save() {
@@ -50,6 +51,7 @@ class CreatedRegularTransactionViewModel @AssistedInject constructor(
                         periodType = periodType.value!!,
                         description = description.value!!,
                         pushEnable = pushEnabled.value!!,
+                        autoAdd = autoAdd.value!!,
                         dayOfWeek = if (periodType.value != PeriodType.WEEK) 0 else weekDaysSelected.value!!
                     )
                 )
@@ -63,6 +65,7 @@ class CreatedRegularTransactionViewModel @AssistedInject constructor(
                         periodType = periodType.value!!,
                         description = description.value!!,
                         pushEnable = pushEnabled.value!!,
+                        autoAdd = autoAdd.value!!,
                         dayOfWeek = if (periodType.value != PeriodType.WEEK) 0 else weekDaysSelected.value!!
                     )
                 )

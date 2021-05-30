@@ -7,30 +7,32 @@ fun RegularTransactionDbModel.toDataModel(): RegularTransactionData =
     RegularTransactionData(
         id,
         clientId,
-        currency,
         type,
         sum,
         categoryId,
+        currency,
         createdDate,
         startDate,
         periodType,
         dayOfWeek,
         description,
-        pushEnable
+        pushEnable,
+        autoAdd
     )
 
 fun RegularTransactionData.toDbModel(): RegularTransactionDbModel =
     RegularTransactionDbModel(
         id,
         clientId,
-        currencyCode,
         type,
         sum,
         categoryId,
+        currencyCode,
         createdDate,
         startDate,
         periodType,
         dayOfWeek,
         description,
-        pushEnable
+        pushEnable,
+        autoAdd
     )
