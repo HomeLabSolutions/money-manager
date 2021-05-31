@@ -16,20 +16,17 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 class UserModule {
 
     @Provides
-    @Singleton
     fun provideUserDao(appDatabase: AppDatabase): UserDao {
         return appDatabase.userDao()
     }
 
     @Provides
-    @Singleton
     fun provideUserLocalSource(
         context: Context,
         preferenceStore: PreferencesStore,
@@ -39,7 +36,6 @@ class UserModule {
         UserLocalSource(context, preferenceStore, appDatabase.userDao(), backupManager)
 
     @Provides
-    @Singleton
     fun userRepo(
         userLocalSource: UserSource
     ): UserRepo = UserDataRepo(
@@ -47,7 +43,6 @@ class UserModule {
     )
 
     @Provides
-    @Singleton
     fun provideUserInfoInteractor(
         userRepo: UserRepo,
         userDomainMapper: UserDomainMapper

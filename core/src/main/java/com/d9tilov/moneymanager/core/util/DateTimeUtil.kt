@@ -84,7 +84,7 @@ fun Date.getEndOfDay(): Date {
     return calendar.time
 }
 
-fun Date.getStartDateOfFiscalDayAndCurrent(fiscalDay: Int): Date {
+fun Date.getStartDateOfFiscalPeriod(fiscalDay: Int): Date {
     val c = Calendar.getInstance()
     val dayOfMonth = c.get(Calendar.DAY_OF_MONTH)
     val curDate = Date()

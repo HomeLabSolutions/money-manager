@@ -149,4 +149,11 @@
 
     <string name="logout_dialog_title">Выход</string>
     <string name="logout_dialog_subtitle">Вы действительно хотите выйти?</string>
+
+    <string name="notification_income_title">Постоянный доход</string>
+    <string name="notification_expense_title">Постоянный расход</string>
+    <string name="notification_action_income_title">Добавить в доходы</string>
+    <string name="notification_action_expense_title">Добавить в расходы</string>
+    <string name="notification_channel_income_name">Постоянные доходы</string>
+    <string name="notification_channel_expense_name">Постоянные расходы</string>
 </resources>

@@ -22,7 +22,7 @@ interface TransactionDao {
         type: TransactionType
     ): PagingSource<Int, TransactionDbModel>
 
-    @Query("SELECT * FROM transactions WHERE clientId=:clientId AND type = :type AND isDate=0 AND date >= :from AND date <= :to")
+    @Query("SELECT * FROM transactions WHERE clientId=:clientId AND type = :type AND isDate=0 AND isRegular=0 AND date >= :from AND date <= :to")
     fun getAllByTypeInPeriod(
         clientId: String,
         from: Date,

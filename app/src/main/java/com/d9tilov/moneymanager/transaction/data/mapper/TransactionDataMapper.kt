@@ -12,7 +12,8 @@ fun TransactionDbModel.toDataModel(): TransactionDataModel = TransactionDataMode
     currency,
     date,
     description,
-    qrCode
+    qrCode,
+    isRegular
 )
 
 fun TransactionDataModel.toDbModel(): TransactionDbModel =
@@ -27,4 +28,5 @@ fun TransactionDataModel.toDbModel(): TransactionDbModel =
         description,
         qrCode,
         false,
+        isRegular
     )

@@ -22,6 +22,9 @@ interface RegularTransactionDao {
         transactionType: TransactionType
     ): Flow<List<RegularTransactionDbModel>>
 
+    @Query("SELECT * FROM regularTransaction WHERE clientId=:uid AND id=:id")
+    suspend fun getById(uid: String, id: Long): RegularTransactionDbModel
+
     @Update
     suspend fun update(budget: RegularTransactionDbModel)
 

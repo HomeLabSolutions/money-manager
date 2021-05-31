@@ -7,8 +7,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface RegularTransactionSource : Source {
 
-    suspend fun insert(regularTransactionData: RegularTransactionData)
     fun getAll(type: TransactionType): Flow<List<RegularTransactionData>>
+    suspend fun getById(id: Long): RegularTransactionData
+    suspend fun insert(regularTransactionData: RegularTransactionData)
     suspend fun update(regularTransactionData: RegularTransactionData)
     suspend fun delete(regularTransactionData: RegularTransactionData)
 }

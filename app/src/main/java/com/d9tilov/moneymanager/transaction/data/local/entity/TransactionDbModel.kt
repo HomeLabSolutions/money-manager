@@ -32,4 +32,5 @@ data class TransactionDbModel(
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "qrCode") val qrCode: String?,
     @ColumnInfo(name = "isDate") val isDate: Boolean,
+    @ColumnInfo(name = "isRegular") val isRegular: Boolean
 )
