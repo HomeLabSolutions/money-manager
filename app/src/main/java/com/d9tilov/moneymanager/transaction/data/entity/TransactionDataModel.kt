@@ -15,5 +15,6 @@ data class TransactionDataModel(
     val currency: String,
     val date: Date = Date(),
     val description: String = "",
-    val qrCode: String? = null
+    val qrCode: String? = null,
+    val isRegular: Boolean
 ) : TransactionBaseDataModel

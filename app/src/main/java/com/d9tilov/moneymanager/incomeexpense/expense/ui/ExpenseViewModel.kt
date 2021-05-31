@@ -9,6 +9,7 @@ import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
+import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
@@ -19,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import javax.inject.Inject
@@ -26,12 +28,16 @@ import javax.inject.Inject
 @HiltViewModel
 class ExpenseViewModel @Inject constructor(
     categoryInteractor: CategoryInteractor,
-    private val transactionInteractor: TransactionInteractor
+    private val transactionInteractor: TransactionInteractor,
+    private val regularTransactionInteractor: RegularTransactionInteractor
 ) : BaseIncomeExpenseViewModel<ExpenseNavigator>() {
 
     lateinit var transactions: Flow<PagingData<BaseTransaction>>
     val spentInPeriod = transactionInteractor.getSumSpentInFiscalPeriod()
         .flowOn(Dispatchers.IO).asLiveData()
+    val regularTransactions = regularTransactionInteractor.getAll(TransactionType.INCOME)
+        .zip(regularTransactionInteractor.getAll(TransactionType.EXPENSE)) { income, expense -> income + expense }
+        .asLiveData()
 
     init {
         categories =

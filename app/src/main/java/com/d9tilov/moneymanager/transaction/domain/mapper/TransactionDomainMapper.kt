@@ -5,8 +5,8 @@ import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 
 fun Transaction.toDataModel(): TransactionDataModel = TransactionDataModel(
-    id, clientId, type, sum, category.id, currencyCode, date, description, qrCode
+    id, clientId, type, sum, category.id, currencyCode, date, description, qrCode, isRegular
 )
 
 fun TransactionDataModel.toDomainModel(category: Category): Transaction =
-    Transaction(id, clientId, type, sum, category, currency, date, description, qrCode)
+    Transaction(id, clientId, type, sum, category, currency, date, description, qrCode, isRegular)

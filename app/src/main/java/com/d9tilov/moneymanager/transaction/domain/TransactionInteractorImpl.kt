@@ -5,7 +5,7 @@ import androidx.paging.map
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.category.exception.CategoryNotFoundException
-import com.d9tilov.moneymanager.core.util.getStartDateOfFiscalDayAndCurrent
+import com.d9tilov.moneymanager.core.util.getStartDateOfFiscalPeriod
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDateDataModel
@@ -103,7 +103,7 @@ class TransactionInteractorImpl(
     override fun getSumSpentInFiscalPeriod(): Flow<BigDecimal> {
         return flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
             val endDate = Date()
-            val startDate = endDate.getStartDateOfFiscalDayAndCurrent(fiscalDay)
+            val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
             transactionRepo.getTransactionsByTypeWithoutDate(
                 startDate,
                 endDate,
@@ -115,7 +115,7 @@ class TransactionInteractorImpl(
     override fun getSumEarnedInFiscalPeriod(): Flow<BigDecimal> {
         return flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
             val endDate = Date()
-            val startDate = endDate.getStartDateOfFiscalDayAndCurrent(fiscalDay)
+            val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
             transactionRepo.getTransactionsByTypeWithoutDate(
                 startDate,
                 endDate,

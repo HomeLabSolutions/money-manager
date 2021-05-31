@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
-import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
@@ -38,7 +37,6 @@ import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -237,7 +235,6 @@ class IncomeFragment :
     }
 
     override fun onCloseKeyboard() {
-        Timber.tag(App.TAG).d("Keyboard hidden")
         isKeyboardOpen = false
         viewBinding.run {
             crossfade(false)

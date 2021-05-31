@@ -41,6 +41,12 @@ class RegularTransactionInteractorImpl(
             }
     }
 
+    override suspend fun getById(id: Long): RegularTransaction {
+        val categoryId = regularTransactionRepo.getById(id).categoryId
+        val category = categoryInteractor.getCategoryById(categoryId)
+        return regularTransactionRepo.getById(id).toDomain(category)
+    }
+
     override suspend fun update(regularTransactionData: RegularTransaction) {
         regularTransactionRepo.update(regularTransactionData.toData())
     }

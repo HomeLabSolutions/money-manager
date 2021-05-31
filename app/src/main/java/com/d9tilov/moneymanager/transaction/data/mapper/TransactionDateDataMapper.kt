@@ -25,5 +25,6 @@ fun TransactionDateDataModel.toDbModel() =
         currency = currency,
         date = date,
         description = "",
-        qrCode = null
+        qrCode = null,
+        isRegular = false
     )

@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
-import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
@@ -30,6 +29,7 @@ import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.incomeexpense.ui.BaseIncomeExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
+import com.d9tilov.moneymanager.regular.PeriodicTransactionWorker
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.ui.callback.TransactionSwipeToDeleteCallback
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -37,7 +37,6 @@ import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -105,6 +104,14 @@ class ExpenseFragment :
                 }
             )
         }
+        viewModel.regularTransactions.observe(
+            viewLifecycleOwner,
+            {
+                for (transaction in it) {
+                    PeriodicTransactionWorker.startPeriodicJob(requireContext(), transaction)
+                }
+            }
+        )
         lifecycleScope.launch {
             viewModel.transactions.collectLatest {
                 transactionAdapter.submitData(
@@ -233,7 +240,6 @@ class ExpenseFragment :
     }
 
     override fun onCloseKeyboard() {
-        Timber.tag(App.TAG).d("Keyboard hidden")
         isKeyboardOpen = false
         viewBinding.run {
             crossfade(false)

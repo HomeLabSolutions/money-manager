@@ -33,6 +33,15 @@ class RegularTransactionLocalSource(
         }
     }
 
+    override suspend fun getById(id: Long): RegularTransactionData {
+        val currentUserId = preferencesStore.uid
+        return if (currentUserId == null) {
+            throw WrongUidException()
+        } else {
+            standingDao.getById(currentUserId, id).toDataModel()
+        }
+    }
+
     override suspend fun update(regularTransactionData: RegularTransactionData) {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {

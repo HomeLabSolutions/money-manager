@@ -17,7 +17,6 @@ import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.common.BaseCategoryFragment.Companion.ARG_CATEGORY
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
-import com.d9tilov.moneymanager.core.util.DateValidatorPointBackward
 import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.getDayOfWeek
@@ -31,7 +30,6 @@ import com.d9tilov.moneymanager.period.PeriodType
 import com.d9tilov.moneymanager.regular.vm.CreatedRegularTransactionViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import java.math.BigDecimal
@@ -164,12 +162,6 @@ class RegularTransactionCreationFragment :
                 }
             createdRegularTransactionRepeatStartsDate.setOnClickListener {
                 val picker = MaterialDatePicker.Builder.datePicker()
-                    .setCalendarConstraints(
-                        CalendarConstraints.Builder()
-                            .setEnd(Date().time)
-                            .setValidator(DateValidatorPointBackward.now())
-                            .build()
-                    )
                     .setSelection(viewModel.startDate.value?.time ?: Date().time)
                     .build()
                 picker.addOnPositiveButtonClickListener { calendarDate ->

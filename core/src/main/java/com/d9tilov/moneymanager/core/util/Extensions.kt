@@ -1,7 +1,5 @@
 package com.d9tilov.moneymanager.core.util
 
-import android.animation.Animator
-import android.animation.ObjectAnimator
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -81,3 +79,6 @@ fun <T> debounce(
         }
     }
 }
+
+fun Long.toModInt(): Int = (this % Int.MAX_VALUE).toInt()
+

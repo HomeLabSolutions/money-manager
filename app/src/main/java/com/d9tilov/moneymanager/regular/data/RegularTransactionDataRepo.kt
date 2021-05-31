@@ -12,6 +12,7 @@ class RegularTransactionDataRepo(private val regularTransactionSource: RegularTr
         regularTransactionSource.insert(regularTransactionData)
 
     override fun getAll(type: TransactionType) = regularTransactionSource.getAll(type)
+    override suspend fun getById(id: Long): RegularTransactionData = regularTransactionSource.getById(id)
 
     override suspend fun update(regularTransactionData: RegularTransactionData) =
         regularTransactionSource.update(regularTransactionData)

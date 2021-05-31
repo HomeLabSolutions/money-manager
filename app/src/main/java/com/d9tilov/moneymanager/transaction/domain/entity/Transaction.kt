@@ -21,6 +21,7 @@ data class Transaction(
     val date: Date = Date(),
     val description: String = "",
     val qrCode: String? = null,
+    val isRegular: Boolean = false,
     override val headerPosition: Int = 0
 ) : BaseTransaction, Parcelable {
     override val itemType: Int
