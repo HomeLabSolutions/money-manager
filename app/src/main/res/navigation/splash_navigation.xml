@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/splash_navigation"
+    app:startDestination="@+id/splash_dest">
+
+    <fragment
+        android:id="@+id/splash_dest"
+        android:name="com.d9tilov.moneymanager.splash.ui.SplashFragment"
+        android:label="splash_fragment"
+        tools:layout="@layout/fragment_splash" />
+
+</navigation>
