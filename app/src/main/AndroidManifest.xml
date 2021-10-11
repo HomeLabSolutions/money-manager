@@ -17,6 +17,7 @@
 
         <activity
             android:name="com.facebook.FacebookActivity"
+            android:exported="false"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
         <activity
@@ -35,7 +36,8 @@
 
         <activity
             android:name="com.d9tilov.moneymanager.splash.ui.SplashActivity"
-            android:theme="@style/Theme.Splash">
+            android:theme="@style/Theme.Splash"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,12 +48,14 @@
             android:name=".prepopulate.ui.PrepopulateActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MoneyManager.Prepopulate"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false"/>
         <activity
             android:name="com.d9tilov.moneymanager.home.ui.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MoneyManager.Home"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false"/>
 
         <meta-data
             android:name="com.google.android.backup.api_key"
@@ -60,6 +64,7 @@
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
             tools:node="remove">
         </provider>
 
