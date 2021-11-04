@@ -10,5 +10,6 @@ data class CurrencyDbModel(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "code") val code: String,
+    @ColumnInfo(name = "symbol") val symbol: String,
     @ColumnInfo(name = "value") val value: BigDecimal
 )

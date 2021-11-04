@@ -23,6 +23,10 @@ class PreferencesStore @Inject constructor(@ApplicationContext context: Context)
         defaultValue = DataConstants.DEFAULT_CURRENCY_CODE,
         key = { DataConstants.PREFERENCE_BASE_CURRENCY }
     )
+    var baseCurrencySymbol by sharedPreferences.string(
+        defaultValue = DataConstants.DEFAULT_CURRENCY_SYMBOL,
+        key = { DataConstants.PREFERENCE_BASE_CURRENCY_SYMBOL }
+    )
 
     fun clearAllData() {
         val prefs: Map<String, *> = sharedPreferences.all

@@ -6,5 +6,6 @@ import java.math.BigDecimal
 data class Currency(
     val id: Long = DataConstants.DEFAULT_DATA_ID,
     val code: String,
+    val symbol: String,
     val value: BigDecimal
 )

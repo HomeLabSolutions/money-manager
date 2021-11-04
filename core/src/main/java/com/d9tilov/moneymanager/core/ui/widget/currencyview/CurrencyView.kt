@@ -15,6 +15,7 @@ import androidx.core.widget.TextViewCompat
 import com.d9tilov.moneymanager.core.R
 import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENCE_BASE_CURRENCY
+import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENCE_BASE_CURRENCY_SYMBOL
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.STORE_NAME
 import com.d9tilov.moneymanager.core.util.*
 import java.math.BigDecimal
@@ -66,9 +67,9 @@ class CurrencyView @JvmOverloads constructor(
         STORE_NAME,
         Context.MODE_PRIVATE
     )
-    private var baseCurrencyCode by sharedPreferences.string(
-        defaultValue = DataConstants.DEFAULT_CURRENCY_CODE,
-        key = { PREFERENCE_BASE_CURRENCY }
+    private var baseCurrencySymbol by sharedPreferences.string(
+        defaultValue = DataConstants.DEFAULT_CURRENCY_SYMBOL,
+        key = { PREFERENCE_BASE_CURRENCY_SYMBOL }
     )
 
     init {
@@ -110,10 +111,9 @@ class CurrencyView @JvmOverloads constructor(
                     R.styleable.CurrencyView_signTextColor,
                     DEFAULT_VALUE
                 )
+
                 signText =
-                    getString(R.styleable.CurrencyView_signCode) ?: CurrencyUtils.getCurrencySignBy(
-                        baseCurrencyCode
-                    )
+                    getString(R.styleable.CurrencyView_signCode) ?: baseCurrencySymbol
                 signTextStyle = getResourceId(
                     R.styleable.CurrencyView_signTextStyle,
                     DEFAULT_VALUE
