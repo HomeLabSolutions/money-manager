@@ -6,6 +6,7 @@ import java.math.BigDecimal
 data class DomainCurrency(
     val id: Long = DataConstants.DEFAULT_DATA_ID,
     val code: String,
+    val symbol: String,
     val value: BigDecimal,
     val isBase: Boolean = false
 )

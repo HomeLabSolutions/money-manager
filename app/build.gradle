@@ -150,5 +150,7 @@ dependencies {
     implementation "androidx.work:work-runtime-ktx:2.7.0"
     implementation "androidx.hilt:hilt-work:1.0.0"
 
+    implementation 'com.beust:klaxon:5.5'
+
     ktlint "com.pinterest:ktlint:0.37.2"
 }
