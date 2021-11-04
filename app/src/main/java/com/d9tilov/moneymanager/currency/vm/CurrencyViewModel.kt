@@ -41,6 +41,7 @@ class CurrencyViewModel @Inject constructor(
         for (item in currencies.value?.data ?: emptyList()) {
             newCurrencyList.add(item.copy(isBase = item.code == currency.code))
         }
+        currencies.postValue(Result.success(newCurrencyList))
     }
 
     fun skip() {

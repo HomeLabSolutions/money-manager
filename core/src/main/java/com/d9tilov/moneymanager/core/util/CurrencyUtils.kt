@@ -1,6 +1,6 @@
 package com.d9tilov.moneymanager.core.util
 
-import java.util.Currency
+import java.util.*
 
 object CurrencyUtils {
     private const val ASCII_OFFSET = 0x41
@@ -8,7 +8,8 @@ object CurrencyUtils {
 
     fun getCurrencyFullName(code: String): String = Currency.getInstance(code).displayName
 
-    fun getCurrencySignBy(code: String): String = Currency.getInstance(code).symbol
+    fun getCurrencySignBy(code: String): String =
+        Currency.getInstance(code).getSymbol(Locale.getDefault())
 
     fun getCurrencyIcon(code: String): String {
         val firstChar = Character.codePointAt(code, 0) - ASCII_OFFSET + UNICODE_FLAG_OFFSET
