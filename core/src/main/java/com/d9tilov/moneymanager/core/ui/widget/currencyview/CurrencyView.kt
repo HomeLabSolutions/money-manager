@@ -2,7 +2,6 @@ package com.d9tilov.moneymanager.core.ui.widget.currencyview
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.TextWatcher
@@ -17,14 +16,9 @@ import com.d9tilov.moneymanager.core.R
 import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENCE_BASE_CURRENCY
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.STORE_NAME
-import com.d9tilov.moneymanager.core.util.CurrencyUtils
-import com.d9tilov.moneymanager.core.util.getColorFromAttr
-import com.d9tilov.moneymanager.core.util.gone
-import com.d9tilov.moneymanager.core.util.removeScale
-import com.d9tilov.moneymanager.core.util.string
-import com.d9tilov.moneymanager.core.util.toBigDecimal
+import com.d9tilov.moneymanager.core.util.*
 import java.math.BigDecimal
-import java.util.Locale
+import java.util.*
 import kotlin.math.min
 
 class CurrencyView @JvmOverloads constructor(
@@ -116,15 +110,10 @@ class CurrencyView @JvmOverloads constructor(
                     R.styleable.CurrencyView_signTextColor,
                     DEFAULT_VALUE
                 )
-                signText = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    getString(R.styleable.CurrencyView_signCode)
-                        ?: CurrencyUtils.getCurrencySignBy(baseCurrencyCode)
-                } else {
-                    CurrencyUtils.getCurrencySignBy(
-                        getString(R.styleable.CurrencyView_signCode)
-                            ?: CurrencyUtils.getCurrencySignBy(baseCurrencyCode)
+                signText =
+                    getString(R.styleable.CurrencyView_signCode) ?: CurrencyUtils.getCurrencySignBy(
+                        baseCurrencyCode
                     )
-                }
                 signTextStyle = getResourceId(
                     R.styleable.CurrencyView_signTextStyle,
                     DEFAULT_VALUE
@@ -359,7 +348,7 @@ class CurrencyView @JvmOverloads constructor(
     }
 
     fun setValue(value: BigDecimal) {
-        moneyEditText.setText(String.format(Locale.getDefault(), value.toString(), null))
+        this.sum = value
     }
 
     fun getValue(): BigDecimal {

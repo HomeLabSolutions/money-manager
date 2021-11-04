@@ -20,6 +20,7 @@ import com.d9tilov.moneymanager.prepopulate.ui.ControlsClicked
 import com.d9tilov.moneymanager.prepopulate.ui.PrepopulateActivity
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
+import java.math.BigDecimal
 
 @AndroidEntryPoint
 class BudgetAmountFragment :
@@ -54,6 +55,11 @@ class BudgetAmountFragment :
             this.viewLifecycleOwner,
             {
                 viewBinding.commonBudgetAmount.setValue(it.sum)
+                if (it.sum.compareTo(BigDecimal.ZERO) == 0) {
+                    viewBinding.commonBudgetAmount.moneyEditText.setSelection(1)
+                } else {
+                    viewBinding.commonBudgetAmount.moneyEditText.setSelection(viewBinding.commonBudgetAmount.moneyEditText.length())
+                }
             }
         )
     }
