@@ -144,6 +144,9 @@
     <string name="profile_item_goals_title">Цели: %1$s</string>
     <string name="profile_item_goals_title_empty">Цели</string>
     <string name="profile_item_settings_title">Настройки</string>
+    <string name="profile_item_current_currency_title">текущий</string>
+    <string name="profile_item_main_currency_title">основной</string>
+    <string name="profile_item_main_currency_error">Вы не можете изменить основную валюту</string>
 
     <string name="budget_date_created">Создан: %1$s</string>
 

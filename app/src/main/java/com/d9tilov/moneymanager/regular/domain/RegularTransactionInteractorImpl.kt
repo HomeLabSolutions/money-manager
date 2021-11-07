@@ -18,7 +18,7 @@ class RegularTransactionInteractorImpl(
 ) : RegularTransactionInteractor {
 
     override suspend fun insert(regularTransactionData: RegularTransaction) {
-        val currency = userInteractor.getCurrency()
+        val currency = userInteractor.getMainCurrency()
         regularTransactionRepo.insert(
             regularTransactionData.copy(currencyCode = currency).toData()
         )

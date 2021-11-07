@@ -143,7 +143,7 @@ class TransactionAdapter :
                     )
                     constraintSet.applyTo(viewBinding.root)
                 }
-                itemTransactionSum.setValue(transaction.sum)
+                itemTransactionSum.setValue(transaction.sum, transaction.currencyCode)
                 val drawable = createTintDrawable(
                     context,
                     transaction.category.icon,

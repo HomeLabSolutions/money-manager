@@ -14,12 +14,16 @@ import android.widget.TextView
 import androidx.core.widget.TextViewCompat
 import com.d9tilov.moneymanager.core.R
 import com.d9tilov.moneymanager.core.constants.DataConstants
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENCE_BASE_CURRENCY
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENCE_BASE_CURRENCY_SYMBOL
+import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENCE_CURRENT_CURRENCY_SYMBOL
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.STORE_NAME
-import com.d9tilov.moneymanager.core.util.*
+import com.d9tilov.moneymanager.core.util.CurrencyUtils.getSymbolByCode
+import com.d9tilov.moneymanager.core.util.getColorFromAttr
+import com.d9tilov.moneymanager.core.util.gone
+import com.d9tilov.moneymanager.core.util.removeScale
+import com.d9tilov.moneymanager.core.util.string
+import com.d9tilov.moneymanager.core.util.toBigDecimal
 import java.math.BigDecimal
-import java.util.*
+import java.util.Locale
 import kotlin.math.min
 
 class CurrencyView @JvmOverloads constructor(
@@ -38,7 +42,6 @@ class CurrencyView @JvmOverloads constructor(
         DEFAULT_VALUE
     private var signTextSize = resources.getDimensionPixelSize(R.dimen.currency_sign_text_size)
     private var sumTextSize = resources.getDimensionPixelSize(R.dimen.currency_sum_text_size)
-    private var signText = ""
     private var currencyGravity = Gravity.START
     private var showUnderline = false
     private var showSign = true
@@ -51,7 +54,13 @@ class CurrencyView @JvmOverloads constructor(
         set(value) {
             moneyEditText.setText(formatInputSum(value))
         }
-    var prefixText = ""
+
+    private var signText = ""
+        set(value) {
+            signTextView.text = value
+            field = value
+        }
+    private var prefixText = ""
         set(value) {
             field = value
             prefixTextView.text = value
@@ -69,7 +78,7 @@ class CurrencyView @JvmOverloads constructor(
     )
     private var baseCurrencySymbol by sharedPreferences.string(
         defaultValue = DataConstants.DEFAULT_CURRENCY_SYMBOL,
-        key = { PREFERENCE_BASE_CURRENCY_SYMBOL }
+        key = { PREFERENCE_CURRENT_CURRENCY_SYMBOL }
     )
 
     init {
@@ -347,8 +356,9 @@ class CurrencyView @JvmOverloads constructor(
         }
     }
 
-    fun setValue(value: BigDecimal) {
+    fun setValue(value: BigDecimal, currencyCode: String = baseCurrencySymbol) {
         this.sum = value
+        this.signText = getSymbolByCode(currencyCode)
     }
 
     fun getValue(): BigDecimal {

@@ -24,8 +24,8 @@ class NetworkModule {
         OkHttpClient.Builder()
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
             .connectTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
-            .addInterceptor(interceptor)
             .addNetworkInterceptor(StethoInterceptor())
+            .addInterceptor(interceptor)
             .build()
 
     @Provides

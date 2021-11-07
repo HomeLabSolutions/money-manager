@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface CurrencyRepo {
 
     fun getCurrencies(baseCurrency: String): Flow<List<Currency>>
-    suspend fun updateBaseCurrency(currency: Currency)
+    suspend fun updateCurrentCurrency(currency: Currency)
 }

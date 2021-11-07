@@ -131,7 +131,7 @@ class EditTransactionFragment : EditTransactionNavigator,
                 findNavController().navigate(action)
             }
             editTransactionDescription.setText(transaction.description)
-            editTransactionMainSum.setValue(transaction.sum)
+            editTransactionMainSum.setValue(transaction.sum, transaction.currencyCode)
             editTransactionDate.text = SimpleDateFormat(
                 TRANSACTION_DATE_FORMAT,
                 Locale.getDefault()

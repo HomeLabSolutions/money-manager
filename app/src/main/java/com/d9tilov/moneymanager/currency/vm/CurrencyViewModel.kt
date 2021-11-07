@@ -35,8 +35,8 @@ class CurrencyViewModel @Inject constructor(
         getCurrencies()
     }
 
-    fun updateBaseCurrency(currency: DomainCurrency) = viewModelScope.launch(Dispatchers.IO) {
-        currencyInteractor.updateBaseCurrency(currency)
+    fun updateCurrentCurrency(currency: DomainCurrency) = viewModelScope.launch(Dispatchers.IO) {
+        currencyInteractor.updateCurrentCurrency(currency)
         val newCurrencyList = mutableListOf<DomainCurrency>()
         for (item in currencies.value?.data ?: emptyList()) {
             newCurrencyList.add(item.copy(isBase = item.code == currency.code))
