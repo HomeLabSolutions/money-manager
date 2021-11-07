@@ -16,7 +16,9 @@ class UserInfoInteractor(
         return userRepo.getUser()
     }
 
-    override suspend fun getCurrency(): String = userRepo.getCurrency()
+    override suspend fun getMainCurrency(): String = userRepo.getMainCurrency()
+    override suspend fun getCurrentCurrency(): String = userRepo.getCurrentCurrency()
+
     override fun getBackupData(): Flow<BackupData> = userRepo.getBackupData()
 
     override suspend fun showPrepopulate(): Boolean = userRepo.showPrepopulate()

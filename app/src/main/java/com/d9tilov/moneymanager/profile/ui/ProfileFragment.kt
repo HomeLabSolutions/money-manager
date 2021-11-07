@@ -16,6 +16,7 @@ import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.toBudgetCreatedDate
+import com.d9tilov.moneymanager.core.util.toast
 import com.d9tilov.moneymanager.currency.CurrencyDestination
 import com.d9tilov.moneymanager.databinding.FragmentProfileBinding
 import com.d9tilov.moneymanager.goal.GoalDestination
@@ -67,10 +68,13 @@ class ProfileFragment :
                 val action = ProfileFragmentDirections.toLogoutDialogDest()
                 findNavController().navigate(action)
             }
-            profileCurrency.profileCurrencyLayout.setOnClickListener {
+            profileCurrency.profileItemCurrentCurrencyLayout.setOnClickListener {
                 val action =
-                    ProfileFragmentDirections.toCurrencyDest(CurrencyDestination.PROFILE_SCREEN)
+                    ProfileFragmentDirections.toCurrencyDest(CurrencyDestination.PROFILE_SCREEN_CURRENT)
                 findNavController().navigate(action)
+            }
+            profileCurrency.profileItemMainCurrencyLayout.setOnClickListener {
+                requireContext().toast(R.string.profile_item_main_currency_error)
             }
             profileBudget.profileBudgetLayout.setOnClickListener {
                 val action =
@@ -102,12 +106,21 @@ class ProfileFragment :
             }
             viewModel.userData().observe(
                 viewLifecycleOwner,
-                {
-                    val currencyCode = it.currencyCode
-                    val icon = CurrencyUtils.getCurrencyIcon(currencyCode)
-                    val currencyTitle = CurrencyUtils.getCurrencySignBy(currencyCode)
-                    viewBinding.profileCurrency.profileItemCurrencyIcon.text = icon
-                    viewBinding.profileCurrency.profileItemCurrencySign.text = currencyTitle
+                { profile ->
+                    profile.mainCurrencyCode.run {
+                        val icon = CurrencyUtils.getCurrencyIcon(this)
+                        val currencyTitle = CurrencyUtils.getCurrencySignBy(this)
+                        viewBinding.profileCurrency.profileItemMainCurrencyIcon.text = icon
+                        viewBinding.profileCurrency.profileItemMainCurrencySign.text =
+                            currencyTitle
+                    }
+                    profile.currentCurrencyCode.run {
+                        val icon = CurrencyUtils.getCurrencyIcon(this)
+                        val currencyTitle = CurrencyUtils.getCurrencySignBy(this)
+                        viewBinding.profileCurrency.profileItemCurrentCurrencyIcon.text = icon
+                        viewBinding.profileCurrency.profileItemCurrentCurrencySign.text =
+                            currencyTitle
+                    }
                 }
             )
             viewModel.budget().observe(

@@ -2,6 +2,7 @@ package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -113,10 +114,8 @@ class ExpenseFragment :
             }
         )
         lifecycleScope.launch {
-            viewModel.transactions.collectLatest {
-                transactionAdapter.submitData(
-                    it
-                )
+            viewModel.transactions.collectLatest { data ->
+                transactionAdapter.submitData(data)
             }
         }
         lifecycleScope.launch {
@@ -185,7 +184,7 @@ class ExpenseFragment :
                 GridSpaceItemDecoration(
                     SPAN_COUNT,
                     resources.getDimension(R.dimen.recycler_view_category_offset).toInt(),
-                    layoutManager.orientation
+                    HORIZONTAL
                 )
             )
             val snapHelper: SnapHelper = ItemSnapHelper()

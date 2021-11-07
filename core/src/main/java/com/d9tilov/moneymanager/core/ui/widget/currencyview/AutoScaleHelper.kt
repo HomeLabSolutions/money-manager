@@ -88,10 +88,9 @@ class AutoScaleHelper(
         val methodSign: TransformationMethod? = signTextView.transformationMethod
         signText = methodSign?.getTransformation(signText, signTextView) ?: signText
         val context = valueTextView.context
-        val displayMetrics: DisplayMetrics
         var size = maxTextSize
         val high = size
-        displayMetrics = context.resources.displayMetrics
+        val displayMetrics: DisplayMetrics = context.resources.displayMetrics
         valuePaint.set(valueTextView.paint)
         signPaint.set(signTextView.paint)
         prefixPaint.set(prefixTextView.paint)

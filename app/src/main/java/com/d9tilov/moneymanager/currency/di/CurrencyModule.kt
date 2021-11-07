@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.currency.di
 
-import android.content.Context
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.currency.data.CurrencyDataRepo
@@ -32,12 +31,11 @@ class CurrencyModule {
     @Provides
     @ActivityRetainedScoped
     fun provideCurrencyRepo(
-        context: Context,
         preferencesStore: PreferencesStore,
         currencySource: CurrencySource,
         retrofit: Retrofit
     ): CurrencyRepo =
-        CurrencyDataRepo(context, preferencesStore, currencySource, retrofit.create(CurrencyApi::class.java))
+        CurrencyDataRepo(preferencesStore, currencySource, retrofit.create(CurrencyApi::class.java))
 
     @Provides
     @ActivityRetainedScoped

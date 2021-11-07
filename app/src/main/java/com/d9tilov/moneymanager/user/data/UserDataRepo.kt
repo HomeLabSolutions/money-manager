@@ -12,7 +12,8 @@ class UserDataRepo(
 ) : UserRepo {
 
     override fun getUser(): Flow<UserProfile> = userLocalSource.getCurrentUser()
-    override suspend fun getCurrency(): String = userLocalSource.getCurrency()
+    override suspend fun getMainCurrency(): String = userLocalSource.getMainCurrency()
+    override suspend fun getCurrentCurrency(): String = userLocalSource.getCurrentCurrency()
     override fun getBackupData(): Flow<BackupData> = userLocalSource.getBackupData()
 
     override suspend fun showPrepopulate(): Boolean = userLocalSource.showPrepopulate()

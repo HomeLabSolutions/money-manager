@@ -143,6 +143,9 @@
     <string name="profile_item_goals_title">Goals: %1$s</string>
     <string name="profile_item_goals_title_empty">Goals</string>
     <string name="profile_item_settings_title">Settings</string>
+    <string name="profile_item_current_currency_title">current</string>
+    <string name="profile_item_main_currency_title">main</string>
+    <string name="profile_item_main_currency_error">You can\'t change main currency</string>
 
     <string name="budget_date_created">Created: %1$s</string>
 

@@ -28,7 +28,7 @@ class TransactionInteractorImpl(
 ) : TransactionInteractor {
 
     override suspend fun addTransaction(transaction: Transaction) {
-        val currencyCode = userInteractor.getCurrency()
+        val currencyCode = userInteractor.getCurrentCurrency()
         transactionRepo.addTransaction(transaction.copy(currencyCode = currencyCode).toDataModel())
         val category = categoryInteractor.getCategoryById(transaction.category.id)
         val count = category.usageCount + 1

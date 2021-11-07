@@ -16,7 +16,7 @@ class GoalIteractorImpl(
 ) : GoalInteractor {
 
     override suspend fun insert(goal: Goal) {
-        val currency = userInteractor.getCurrency()
+        val currency = userInteractor.getMainCurrency()
         goalRepo.insert(goalDomainMapper.toData(goal.copy(currencyCode = currency)))
     }
 

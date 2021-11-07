@@ -11,7 +11,7 @@ class BudgetInteractorImpl(
 
     override suspend fun create(budgetData: BudgetData) {
         val user = userInteractor.getCurrentUser().first()
-        budgetRepo.insert(budgetData.copy(currencyCode = user.currencyCode))
+        budgetRepo.insert(budgetData.copy(currencyCode = user.mainCurrencyCode))
     }
 
     override fun get() = budgetRepo.get()

@@ -43,19 +43,23 @@ class CurrencyFragment :
     CurrencyNavigator {
 
     private val args by navArgs<CurrencyFragmentArgs>()
-    private val destination by lazy { args.destination }
+    private val destination: CurrencyDestination? by lazy { args.destination }
 
     private val viewBinding by viewBinding(FragmentCurrencyBinding::bind)
     private var toolbar: MaterialToolbar? = null
-    private lateinit var currencyAdapter: CurrencyAdapter
+    private val currencyAdapter: CurrencyAdapter by lazy { CurrencyAdapter() }
     override val viewModel by viewModels<CurrencyViewModel>()
     override fun getNavigator(): CurrencyNavigator = this
 
     private val onItemClickListener = object : OnItemClickListener<DomainCurrency> {
         override fun onItemClick(item: DomainCurrency, position: Int) {
-            viewModel.updateBaseCurrency(item)
-            if (destination == CurrencyDestination.PROFILE_SCREEN) {
-                findNavController().popBackStack()
+            when (destination ?: CurrencyDestination.PREPOPULATE_SCREEN) {
+                CurrencyDestination.PREPOPULATE_SCREEN ->
+                    viewModel.updateCurrentCurrency(item)
+                CurrencyDestination.PROFILE_SCREEN_CURRENT -> {
+                    viewModel.updateCurrentCurrency(item)
+                    findNavController().popBackStack()
+                }
             }
         }
     }
@@ -65,7 +69,6 @@ class CurrencyFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        currencyAdapter = CurrencyAdapter()
         currencyAdapter.itemClickListener = onItemClickListener
     }
 
@@ -138,7 +141,7 @@ class CurrencyFragment :
         toolbar?.title = getString(R.string.title_prepopulate_currency)
         activity.setSupportActionBar(toolbar)
         setHasOptionsMenu(true)
-        if (destination == CurrencyDestination.PROFILE_SCREEN) {
+        if (destination != CurrencyDestination.PREPOPULATE_SCREEN) {
             activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         toolbar?.setOnMenuItemClickListener {
