@@ -7,5 +7,10 @@ data class Currency(
     val id: Long = DataConstants.DEFAULT_DATA_ID,
     val code: String,
     val symbol: String,
-    val value: BigDecimal
+    val value: BigDecimal,
+    /**
+     * @true - if exists transaction with this currency, otherwise - @false
+     */
+    val used: Boolean,
+    val lastUpdateTime: Long
 )

@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.currency.domain
 
+import com.d9tilov.moneymanager.currency.data.entity.Currency
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.domain.mapper.CurrencyDomainMapper
 import com.d9tilov.moneymanager.user.domain.UserInteractor
@@ -29,6 +30,11 @@ class CurrencyInteractorImpl(
                     }
             }
     }
+
+    override suspend fun getCurrencyByCode(code: String): Currency =
+        currencyRepo.getCurrencyByCode(code)
+
+    override suspend fun updateCurrency(currency: Currency) = currencyRepo.updateCurrency(currency)
 
     override suspend fun updateCurrentCurrency(currency: DomainCurrency) {
         val user = userInteractor.getCurrentUser().first()

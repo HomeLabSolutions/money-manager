@@ -8,5 +8,7 @@ data class DomainCurrency(
     val code: String,
     val symbol: String,
     val value: BigDecimal,
-    val isBase: Boolean = false
+    val isBase: Boolean = false,
+    val used: Boolean,
+    val lastTimeUpdate: Long
 )

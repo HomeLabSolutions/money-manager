@@ -145,6 +145,25 @@ class TransactionLocalSource(
         }
     }
 
+    override fun getByCategory(category: Category): Flow<List<TransactionDataModel>> {
+        val currentUserId = preferencesStore.uid
+        return if (currentUserId == null) {
+            throw WrongUidException()
+        } else {
+            transactionDao.getByCategoryId(currentUserId, category.id)
+                .map { list -> list.map { item -> item.toDataModel() } }
+        }
+    }
+
+    override suspend fun getCountByCurrencyCode(code: String): Int {
+        val currentUserId = preferencesStore.uid
+        return if (currentUserId == null) {
+            throw WrongUidException()
+        } else {
+            transactionDao.getCountByCurrencyCode(code, currentUserId)
+        }
+    }
+
     override suspend fun update(transaction: TransactionDataModel) {
         val currentUserId = preferencesStore.uid
         if (currentUserId == null) {

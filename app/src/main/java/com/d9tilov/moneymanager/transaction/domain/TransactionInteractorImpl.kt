@@ -6,6 +6,7 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.category.exception.CategoryNotFoundException
 import com.d9tilov.moneymanager.core.util.getStartDateOfFiscalPeriod
+import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDateDataModel
@@ -15,6 +16,7 @@ import com.d9tilov.moneymanager.transaction.domain.mapper.toDataModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDomainModel
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -24,7 +26,8 @@ import java.util.Date
 class TransactionInteractorImpl(
     private val transactionRepo: TransactionRepo,
     private val categoryInteractor: CategoryInteractor,
-    private val userInteractor: UserInteractor
+    private val userInteractor: UserInteractor,
+    private val currencyInteractor: CurrencyInteractor
 ) : TransactionInteractor {
 
     override suspend fun addTransaction(transaction: Transaction) {
@@ -129,10 +132,26 @@ class TransactionInteractorImpl(
 
     override suspend fun removeTransaction(transaction: Transaction) {
         transactionRepo.removeTransaction(transaction.toDataModel())
+        val countByCode = transactionRepo.getCountByCurrencyCode(transaction.currencyCode)
+        if (countByCode == 0) {
+            val currency = currencyInteractor.getCurrencyByCode(transaction.currencyCode)
+            currencyInteractor.updateCurrency(currency.copy(used = false))
+        }
     }
 
     override suspend fun removeAllByCategory(category: Category) {
-        transactionRepo.removeAllByCategory(category)
+        transactionRepo.getByCategory(category).collect { list ->
+            val currencySet = mutableSetOf<String>()
+            list.forEach { transaction: TransactionDataModel -> currencySet.add(transaction.currency) }
+            transactionRepo.removeAllByCategory(category)
+            for (item in currencySet) {
+                val countByCode = transactionRepo.getCountByCurrencyCode(item)
+                if (countByCode == 0) {
+                    val currency = currencyInteractor.getCurrencyByCode(item)
+                    currencyInteractor.updateCurrency(currency.copy(used = false))
+                }
+            }
+        }
     }
 
     override suspend fun clearAll() {

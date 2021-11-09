@@ -25,6 +25,8 @@ interface TransactionRepo {
         transactionType: TransactionType
     ): Flow<List<TransactionDataModel>>
 
+    fun getByCategory(category: Category): Flow<List<TransactionDataModel>>
+    suspend fun getCountByCurrencyCode(code: String): Int
     suspend fun update(transaction: TransactionDataModel)
     suspend fun removeTransaction(transaction: TransactionDataModel)
     suspend fun removeAllByCategory(category: Category)
