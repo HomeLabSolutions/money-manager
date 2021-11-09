@@ -5,6 +5,7 @@ import com.d9tilov.moneymanager.currency.data.entity.Currency
 import com.d9tilov.moneymanager.currency.data.local.CurrencySource
 import com.d9tilov.moneymanager.currency.data.remote.CurrencyApi
 import com.d9tilov.moneymanager.currency.data.remote.mapper.toDataModel
+import com.d9tilov.moneymanager.currency.data.remote.mapper.toDataModelValues
 import com.d9tilov.moneymanager.currency.domain.CurrencyRepo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -26,7 +27,29 @@ class CurrencyDataRepo(
         }
     }
 
+    override suspend fun getCurrencyByCode(code: String): Currency = currencySource.getCurrencyByCode(code)
+
+    override suspend fun updateCurrencies(baseCurrency: String) {
+        currencySource.getCurrencies().map { list ->
+            val currencies = currencyApi.getCurrencies(baseCurrency)
+            val remoteCurrencyList = if (list.isEmpty()) {
+                currencies.toDataModel()
+            } else {
+                currencies.toDataModelValues(list)
+            }
+            currencySource.saveCurrencies(remoteCurrencyList)
+        }
+    }
+
+    override suspend fun updateCurrency(currency: Currency) = currencySource.update(currency)
+
     override suspend fun updateCurrentCurrency(currency: Currency) {
         preferencesStore.saveCurrentCurrency(currency)
+        currencySource.update(currency.copy(used = true))
     }
+
+    override suspend fun isUsed(baseCurrency: String): Boolean = currencySource.isUsed(baseCurrency)
+
+    override suspend fun hasAlreadyUpdatedToday(baseCurrency: String): Boolean =
+        currencySource.hasAlreadyUpdatedToday(baseCurrency)
 }

@@ -30,6 +30,12 @@ class TransactionDataRepo(private val transactionSource: TransactionSource) : Tr
     ): Flow<List<TransactionDataModel>> =
         transactionSource.getAllByTypeWithoutDates(from, to, transactionType)
 
+    override fun getByCategory(category: Category): Flow<List<TransactionDataModel>> =
+        transactionSource.getByCategory(category)
+
+    override suspend fun getCountByCurrencyCode(code: String): Int =
+        transactionSource.getCountByCurrencyCode(code)
+
     override suspend fun update(transaction: TransactionDataModel) =
         transactionSource.update(transaction)
 

@@ -49,6 +49,9 @@ interface TransactionDao {
     @Query("SELECT count(*) FROM transactions WHERE clientId=:uid AND type=:type AND isDate=0 AND date(:date/1000, 'unixepoch') >= date(date/1000, 'unixepoch', 'start of day') AND date(:date/1000, 'unixepoch') <= date(date/1000, 'unixepoch', 'start of day', '+1 day', '-1 second')")
     suspend fun getItemsCountInDay(uid: String, type: TransactionType, date: Date): Int
 
+    @Query("SELECT count(*) FROM transactions WHERE clientId=:uid AND currency=:code")
+    suspend fun getCountByCurrencyCode(uid: String, code: String): Int
+
     @Update
     suspend fun update(transaction: TransactionDbModel)
 
