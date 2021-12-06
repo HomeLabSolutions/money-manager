@@ -37,8 +37,14 @@ class CurrencyInteractorImpl(
     override suspend fun updateCurrency(currency: Currency) = currencyRepo.updateCurrency(currency)
 
     override suspend fun updateCurrentCurrency(currency: DomainCurrency) {
+        currencyRepo.updateCurrentCurrency(domainMapper.toDataModel(currency))
         val user = userInteractor.getCurrentUser().first()
         userInteractor.updateUser(user.copy(currentCurrencyCode = currency.code))
-        currencyRepo.updateCurrentCurrency(domainMapper.toDataModel(currency))
+    }
+
+    override suspend fun updateMainCurrency(currency: DomainCurrency) {
+        currencyRepo.updateMainCurrency(domainMapper.toDataModel(currency))
+        val user = userInteractor.getCurrentUser().first()
+        userInteractor.updateUser(user.copy(mainCurrencyCode = currency.code))
     }
 }

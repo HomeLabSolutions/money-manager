@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.splash.ui
 
 import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import com.d9tilov.moneymanager.R
@@ -24,6 +25,10 @@ class SplashFragment : BaseFragment<SplashNavigator>(R.layout.fragment_splash), 
 
     override fun getNavigator() = this
     override val viewModel by viewModels<SplashViewModel>()
+    private val startForResult: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            viewModel.createUser()
+        }
 
     override fun openHomeScreen() {
         startActivity(Intent(requireActivity(), MainActivity::class.java))
@@ -36,10 +41,6 @@ class SplashFragment : BaseFragment<SplashNavigator>(R.layout.fragment_splash), 
     }
 
     override fun openAuthScreen() {
-        val startForResult =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                viewModel.createUser()
-            }
         startForResult.launch(
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
