@@ -10,6 +10,7 @@ interface CurrencyRepo {
     suspend fun updateCurrencies(baseCurrency: String)
     suspend fun updateCurrency(currency: Currency)
     suspend fun updateCurrentCurrency(currency: Currency)
+    suspend fun updateMainCurrency(currency: Currency)
     suspend fun isUsed(baseCurrency: String): Boolean
     suspend fun hasAlreadyUpdatedToday(baseCurrency: String): Boolean
 }

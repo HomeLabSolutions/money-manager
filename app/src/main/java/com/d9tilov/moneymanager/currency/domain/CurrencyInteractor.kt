@@ -10,4 +10,5 @@ interface CurrencyInteractor {
     suspend fun getCurrencyByCode(code: String): Currency
     suspend fun updateCurrency(currency: Currency)
     suspend fun updateCurrentCurrency(currency: DomainCurrency)
+    suspend fun updateMainCurrency(currency: DomainCurrency)
 }

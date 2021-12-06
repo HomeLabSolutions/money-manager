@@ -32,10 +32,13 @@ class TransactionInteractorImpl(
 
     override suspend fun addTransaction(transaction: Transaction) {
         val currencyCode = userInteractor.getCurrentCurrency()
-        transactionRepo.addTransaction(transaction.copy(currencyCode = currencyCode).toDataModel())
+        val newTransaction = transaction.copy(currencyCode = currencyCode).toDataModel()
+        transactionRepo.addTransaction(newTransaction)
         val category = categoryInteractor.getCategoryById(transaction.category.id)
         val count = category.usageCount + 1
         categoryInteractor.update(category.copy(usageCount = count))
+        val currency = currencyInteractor.getCurrencyByCode(currencyCode)
+        currencyInteractor.updateCurrency(currency.copy(used = true))
     }
 
     override fun getTransactionById(id: Long): Flow<Transaction> {

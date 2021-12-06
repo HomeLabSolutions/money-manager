@@ -45,7 +45,10 @@ class CurrencyDataRepo(
 
     override suspend fun updateCurrentCurrency(currency: Currency) {
         preferencesStore.saveCurrentCurrency(currency)
-        currencySource.update(currency.copy(used = true))
+    }
+
+    override suspend fun updateMainCurrency(currency: Currency) {
+        preferencesStore.saveMainCurrency(currency)
     }
 
     override suspend fun isUsed(baseCurrency: String): Boolean = currencySource.isUsed(baseCurrency)

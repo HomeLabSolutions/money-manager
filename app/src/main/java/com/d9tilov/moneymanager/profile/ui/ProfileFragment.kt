@@ -74,7 +74,9 @@ class ProfileFragment :
                 findNavController().navigate(action)
             }
             profileCurrency.profileItemMainCurrencyLayout.setOnClickListener {
-                requireContext().toast(R.string.profile_item_main_currency_error)
+                val action =
+                    ProfileFragmentDirections.toCurrencyDest(CurrencyDestination.PROFILE_SCREEN_MAIN)
+                findNavController().navigate(action)
             }
             profileBudget.profileBudgetLayout.setOnClickListener {
                 val action =

@@ -34,6 +34,11 @@ class PreferencesStore @Inject constructor(@ApplicationContext context: Context)
         currentCurrencySymbol = currency.symbol
     }
 
+    fun saveMainCurrency(currency: Currency) {
+        mainCurrencyCode = currency.code
+        mainCurrencySymbol = currency.symbol
+    }
+
     private var currentCurrencyCode by sharedPreferences.string(
         defaultValue = DataConstants.DEFAULT_CURRENCY_CODE,
         key = { DataConstants.PREFERENCE_CURRENT_CURRENCY }
@@ -41,6 +46,15 @@ class PreferencesStore @Inject constructor(@ApplicationContext context: Context)
     private var currentCurrencySymbol by sharedPreferences.string(
         defaultValue = DataConstants.DEFAULT_CURRENCY_SYMBOL,
         key = { DataConstants.PREFERENCE_CURRENT_CURRENCY_SYMBOL }
+    )
+
+    private var mainCurrencyCode by sharedPreferences.string(
+        defaultValue = DataConstants.DEFAULT_CURRENCY_CODE,
+        key = { DataConstants.PREFERENCE_MAIN_CURRENCY }
+    )
+    private var mainCurrencySymbol by sharedPreferences.string(
+        defaultValue = DataConstants.DEFAULT_CURRENCY_SYMBOL,
+        key = { DataConstants.PREFERENCE_MAIN_CURRENCY_SYMBOL }
     )
 
     fun clearAllData() {
