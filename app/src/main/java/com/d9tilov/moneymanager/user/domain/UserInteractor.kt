@@ -11,7 +11,6 @@ interface UserInteractor : Interactor {
 
     fun getCurrentUser(): Flow<UserProfile>
     fun getBackupData(): Flow<BackupData>
-    suspend fun getMainCurrency(): String
     suspend fun getCurrentCurrency(): String
     suspend fun showPrepopulate(): Boolean
     suspend fun getFiscalDay(): Int

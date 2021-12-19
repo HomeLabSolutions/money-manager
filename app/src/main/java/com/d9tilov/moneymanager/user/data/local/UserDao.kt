@@ -15,9 +15,6 @@ interface UserDao {
     @Query("SELECT * FROM Users WHERE uid = :id")
     fun getById(id: String): Flow<UserDbModel>
 
-    @Query("SELECT mainCurrencyCode FROM Users WHERE uid = :id")
-    suspend fun getMainCurrency(id: String): String
-
     @Query("SELECT currentCurrencyCode FROM Users WHERE uid = :id")
     suspend fun getCurrentCurrency(id: String): String
 

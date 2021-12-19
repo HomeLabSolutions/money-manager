@@ -6,6 +6,7 @@ import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 fun RegularTransaction.toCommon(): Transaction = Transaction(
     type = type,
     sum = sum,
+    usdSum = usdSum,
     category = category,
     currencyCode = currencyCode,
     description = description,

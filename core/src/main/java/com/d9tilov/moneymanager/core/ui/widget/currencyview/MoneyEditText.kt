@@ -125,10 +125,6 @@ class MoneyEditText @JvmOverloads constructor(
             val st = StringTokenizer(userInput)
             val afterDot = st.nextToken(DECIMAL_SEPARATOR)
             var decimalPart = extractDigits(afterDot)
-            decimalPart = if (decimalPart.length > DECIMAL_LENGTH) decimalPart.substring(
-                0,
-                DECIMAL_LENGTH
-            ) else decimalPart
             val result = "$ZERO$DECIMAL_SEPARATOR$decimalPart"
             setText(result)
             setSelection(2)
@@ -162,12 +158,7 @@ class MoneyEditText @JvmOverloads constructor(
                 .append(DECIMAL_SEPARATOR)
             if (wholeText.size > 1) {
                 val decimalPart = wholeText[1]
-                sbResult.append(
-                    if (decimalPart.length > DECIMAL_LENGTH) decimalPart.substring(
-                        0,
-                        DECIMAL_LENGTH
-                    ) else decimalPart
-                )
+                sbResult.append(decimalPart)
             }
         } else {
             // без дробной части

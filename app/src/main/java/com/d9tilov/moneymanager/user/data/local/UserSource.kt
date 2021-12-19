@@ -14,7 +14,6 @@ interface UserSource : Source {
     suspend fun getFiscalDay(): Int
     fun getBackupData(): Flow<BackupData>
     fun getCurrentUser(): Flow<UserProfile>
-    suspend fun getMainCurrency(): String
     suspend fun getCurrentCurrency(): String
     suspend fun backupUser(): Result<Nothing>
     suspend fun deleteUser()

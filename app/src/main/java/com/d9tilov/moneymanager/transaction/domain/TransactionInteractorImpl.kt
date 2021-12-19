@@ -7,6 +7,7 @@ import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.category.exception.CategoryNotFoundException
 import com.d9tilov.moneymanager.core.util.getStartDateOfFiscalPeriod
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
+import com.d9tilov.moneymanager.exchanger.domain.ExchangeInteractor
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDateDataModel
@@ -27,12 +28,14 @@ class TransactionInteractorImpl(
     private val transactionRepo: TransactionRepo,
     private val categoryInteractor: CategoryInteractor,
     private val userInteractor: UserInteractor,
-    private val currencyInteractor: CurrencyInteractor
+    private val currencyInteractor: CurrencyInteractor,
+    private val exchangeInteractor: ExchangeInteractor
 ) : TransactionInteractor {
 
     override suspend fun addTransaction(transaction: Transaction) {
         val currencyCode = userInteractor.getCurrentCurrency()
-        val newTransaction = transaction.copy(currencyCode = currencyCode).toDataModel()
+        val usdSumValue = exchangeInteractor.toUsd(transaction.sum, currencyCode)
+        val newTransaction = transaction.copy(currencyCode = currencyCode, usdSum = usdSumValue).toDataModel()
         transactionRepo.addTransaction(newTransaction)
         val category = categoryInteractor.getCategoryById(transaction.category.id)
         val count = category.usageCount + 1
@@ -49,9 +52,10 @@ class TransactionInteractorImpl(
                     transactionDataModel.id,
                     transactionDataModel.clientId,
                     transactionDataModel.type,
-                    transactionDataModel.sum,
                     category,
                     transactionDataModel.currency,
+                    transactionDataModel.sum,
+                    transactionDataModel.usdSum,
                     transactionDataModel.date,
                     transactionDataModel.description,
                     transactionDataModel.qrCode
@@ -66,9 +70,7 @@ class TransactionInteractorImpl(
                     .map {
                         it.map { item ->
                             when (item) {
-                                is TransactionDateDataModel -> {
-                                    item.toDomainModel()
-                                }
+                                is TransactionDateDataModel -> item.toDomainModel()
                                 is TransactionDataModel -> {
                                     val category =
                                         categoryList.find { listItem -> item.categoryId == listItem.id }

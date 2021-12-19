@@ -19,7 +19,7 @@ class CurrencyInteractorImpl(
     override fun getCurrencies(): Flow<List<DomainCurrency>> {
         return flow { emit(userInteractor.getCurrentCurrency()) }
             .flatMapConcat { baseCurrency ->
-                currencyRepo.getCurrencies(baseCurrency)
+                currencyRepo.getCurrencies()
                     .map { list ->
                         list.map { item ->
                             domainMapper.toDomain(
@@ -31,8 +31,14 @@ class CurrencyInteractorImpl(
             }
     }
 
+    override suspend fun getCurrentCurrencyCode(): String = userInteractor.getCurrentCurrency()
+
     override suspend fun getCurrencyByCode(code: String): Currency =
         currencyRepo.getCurrencyByCode(code)
+
+    override suspend fun updateCurrencyRates() {
+        currencyRepo.updateCurrencies()
+    }
 
     override suspend fun updateCurrency(currency: Currency) = currencyRepo.updateCurrency(currency)
 
@@ -40,11 +46,5 @@ class CurrencyInteractorImpl(
         currencyRepo.updateCurrentCurrency(domainMapper.toDataModel(currency))
         val user = userInteractor.getCurrentUser().first()
         userInteractor.updateUser(user.copy(currentCurrencyCode = currency.code))
-    }
-
-    override suspend fun updateMainCurrency(currency: DomainCurrency) {
-        currencyRepo.updateMainCurrency(domainMapper.toDataModel(currency))
-        val user = userInteractor.getCurrentUser().first()
-        userInteractor.updateUser(user.copy(mainCurrencyCode = currency.code))
     }
 }

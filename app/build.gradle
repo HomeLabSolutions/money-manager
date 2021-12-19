@@ -119,14 +119,14 @@ dependencies {
     implementation project(':core')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.31"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0"
 
     implementation "com.google.firebase:firebase-auth:21.0.1"
     implementation "com.firebaseui:firebase-ui-auth:6.2.0"
-    implementation "com.google.android.gms:play-services-auth:19.2.0"
+    implementation "com.google.android.gms:play-services-auth:20.0.0"
 
-    implementation "com.google.firebase:firebase-analytics-ktx:20.0.0"
-    implementation "com.google.firebase:firebase-crashlytics:18.2.4"
+    implementation "com.google.firebase:firebase-analytics-ktx:20.0.2"
+    implementation "com.google.firebase:firebase-crashlytics:18.2.6"
     implementation "com.google.firebase:firebase-storage-ktx:20.0.0"
 
     implementation "com.facebook.android:facebook-login:5.15.3"
@@ -142,12 +142,13 @@ dependencies {
     implementation "com.facebook.stetho:stetho:1.5.1"
     implementation "com.facebook.stetho:stetho-okhttp3:1.5.1"
 
-    implementation "androidx.paging:paging-runtime-ktx:3.0.1"
-    implementation "androidx.room:room-runtime:2.3.0"
-    implementation "androidx.room:room-ktx:2.3.0"
-    kapt "androidx.room:room-compiler:2.3.0"
+    implementation "androidx.paging:paging-runtime-ktx:3.1.0"
+    implementation "androidx.room:room-runtime:2.4.0"
+    implementation "androidx.room:room-ktx:2.4.0"
+    implementation "androidx.room:room-paging:2.4.0"
+    kapt "androidx.room:room-compiler:2.4.0"
 
-    implementation "androidx.work:work-runtime-ktx:2.7.0"
+    implementation "androidx.work:work-runtime-ktx:2.7.1"
     implementation "androidx.hilt:hilt-work:1.0.0"
 
     implementation 'com.beust:klaxon:5.5'

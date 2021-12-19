@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.incomeexpense.income.ui
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -29,36 +30,32 @@ class IncomeViewModel @Inject constructor(
     private val transactionInteractor: TransactionInteractor
 ) : BaseIncomeExpenseViewModel<IncomeNavigator>() {
 
-    lateinit var transactions: Flow<PagingData<BaseTransaction>>
     val earnedInPeriod = transactionInteractor.getSumEarnedInFiscalPeriod()
         .flowOn(Dispatchers.IO).asLiveData()
 
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            categories =
-                categoryInteractor.getGroupedCategoriesByType(TransactionType.INCOME).asLiveData()
-            transactions =
-                transactionInteractor.getTransactionsByType(TransactionType.INCOME)
-                    .map {
-                        var itemPosition = -1
-                        var itemHeaderPosition = itemPosition
-                        it.map { item ->
-                            var newItem: BaseTransaction = item
-                            if (item is TransactionHeader) {
-                                itemPosition++
-                                itemHeaderPosition = itemPosition
-                                newItem = item.copy(headerPosition = itemHeaderPosition)
-                            }
-                            if (item is Transaction) {
-                                itemPosition++
-                                newItem = item.copy(headerPosition = itemHeaderPosition)
-                            }
-                            newItem
-                        }
+    override val categories: LiveData<List<Category>> =
+        categoryInteractor.getGroupedCategoriesByType(TransactionType.INCOME).asLiveData()
+
+    override val transactions: Flow<PagingData<BaseTransaction>> =
+        transactionInteractor.getTransactionsByType(TransactionType.INCOME)
+            .map {
+                var itemPosition = -1
+                var itemHeaderPosition = itemPosition
+                it.map { item ->
+                    var newItem: BaseTransaction = item
+                    if (item is TransactionHeader) {
+                        itemPosition++
+                        itemHeaderPosition = itemPosition
+                        newItem = item.copy(headerPosition = itemHeaderPosition)
                     }
-                    .cachedIn(viewModelScope)
-        }
-    }
+                    if (item is Transaction) {
+                        itemPosition++
+                        newItem = item.copy(headerPosition = itemHeaderPosition)
+                    }
+                    newItem
+                }
+            }
+            .cachedIn(viewModelScope)
 
     override fun saveTransaction(category: Category, sum: BigDecimal) {
         if (sum.signum() > 0) {

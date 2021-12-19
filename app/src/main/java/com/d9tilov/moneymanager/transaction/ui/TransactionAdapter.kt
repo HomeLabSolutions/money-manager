@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
 import com.d9tilov.moneymanager.R
+import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
@@ -17,6 +18,7 @@ import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.formatDate
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
+import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.ItemTransactionBinding
 import com.d9tilov.moneymanager.databinding.ItemTransactionHeaderBinding
@@ -144,6 +146,15 @@ class TransactionAdapter :
                     constraintSet.applyTo(viewBinding.root)
                 }
                 itemTransactionSum.setValue(transaction.sum, transaction.currencyCode)
+                itemTransactionUsdSum.setValue(
+                    transaction.usdSum,
+                    DataConstants.DEFAULT_CURRENCY_CODE
+                )
+                if (transaction.currencyCode != DataConstants.DEFAULT_CURRENCY_CODE) {
+                    itemTransactionUsdSum.show()
+                } else {
+                    itemTransactionUsdSum.gone()
+                }
                 val drawable = createTintDrawable(
                     context,
                     transaction.category.icon,

@@ -23,6 +23,7 @@
     <color name="switch_thumb_normal_color">#f99225</color>
     <color name="text_normal_color">#f99225</color>
     <color name="text_primary_color">#b6be9a</color>
+    <color name="text_primary_transparent_color">#80b6be9a</color>
     <color name="text_primary_color_disable">#59b6be9a</color>
     <color name="text_primary_color_dark">#7eb13f</color>
     <color name="text_highlight_color">#e61628</color>

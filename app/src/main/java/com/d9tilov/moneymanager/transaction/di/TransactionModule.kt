@@ -4,6 +4,7 @@ import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
+import com.d9tilov.moneymanager.exchanger.domain.ExchangeInteractor
 import com.d9tilov.moneymanager.transaction.data.TransactionDataRepo
 import com.d9tilov.moneymanager.transaction.data.local.TransactionDao
 import com.d9tilov.moneymanager.transaction.data.local.TransactionLocalSource
@@ -44,11 +45,13 @@ class TransactionModule {
         transactionRepo: TransactionRepo,
         categoryInteractor: CategoryInteractor,
         userInteractor: UserInteractor,
-        currencyInteractor: CurrencyInteractor
+        currencyInteractor: CurrencyInteractor,
+        exchangeInteractor: ExchangeInteractor
     ): TransactionInteractor = TransactionInteractorImpl(
         transactionRepo,
         categoryInteractor,
         userInteractor,
-        currencyInteractor
+        currencyInteractor,
+        exchangeInteractor
     )
 }

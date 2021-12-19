@@ -11,7 +11,6 @@ data class UserDbModel(
     @PrimaryKey @ColumnInfo(name = "uid") var uid: String,
     @ColumnInfo(name = "firstName") val firstName: String?,
     @ColumnInfo(name = "lastName") val lastName: String?,
-    @ColumnInfo(name = "mainCurrencyCode") val mainCurrencyCode: String,
     @ColumnInfo(name = "currentCurrencyCode") val currentCurrencyCode: String,
     @ColumnInfo(name = "showPrepopulate") val showPrepopulate: Boolean,
     @ColumnInfo(name = "backupData") val backupData: BackupData,

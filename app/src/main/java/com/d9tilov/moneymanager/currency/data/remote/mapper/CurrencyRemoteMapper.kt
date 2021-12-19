@@ -25,7 +25,7 @@ fun CurrencyResponse.toDataModelValues(list: List<Currency>): List<Currency> {
     list.forEach { currency ->
         val newCurrency = currency.copy(
             value = rates[currency.code]?.toBigDecimal() ?: BigDecimal.ZERO,
-            lastUpdateTime = date
+            lastUpdateTime = date * 1000L
         )
         newList.add(newCurrency)
     }

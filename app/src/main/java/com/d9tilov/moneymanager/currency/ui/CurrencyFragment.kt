@@ -56,14 +56,9 @@ class CurrencyFragment :
             when (destination ?: CurrencyDestination.PREPOPULATE_SCREEN) {
                 CurrencyDestination.PREPOPULATE_SCREEN -> {
                     viewModel.updateCurrentCurrency(item)
-                    viewModel.updateMainCurrency(item)
                 }
                 CurrencyDestination.PROFILE_SCREEN_CURRENT -> {
                     viewModel.updateCurrentCurrency(item)
-                    findNavController().popBackStack()
-                }
-                CurrencyDestination.PROFILE_SCREEN_MAIN -> {
-                    viewModel.updateMainCurrency(item)
                     findNavController().popBackStack()
                 }
             }

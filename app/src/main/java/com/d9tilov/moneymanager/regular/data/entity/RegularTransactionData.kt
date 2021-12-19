@@ -15,6 +15,7 @@ data class RegularTransactionData(
     val clientId: String = DataConstants.NO_ID.toString(),
     val type: TransactionType,
     val sum: BigDecimal,
+    val usdSum: BigDecimal,
     val categoryId: Long,
     val currencyCode: String,
     val createdDate: Date = Date(),

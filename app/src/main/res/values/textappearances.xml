@@ -56,7 +56,7 @@
     </style>
 
     <style name="TextAppearance.MoneyManager.CurrencySign.Big" parent="TextAppearance.MoneyManager.Subtitle2">
-        <item name="android:textSize">@dimen/currency_big_text_size</item>
+        <item name="android:textSize">@dimen/currency_sign_big_text_size</item>
     </style>
 
     <style name="TextAppearance.MoneyManager.CurrencyValue.Medium" parent="TextAppearance.MoneyManager.Subtitle2">
@@ -64,7 +64,7 @@
     </style>
 
     <style name="TextAppearance.MoneyManager.CurrencySign.Medium" parent="TextAppearance.MoneyManager.Subtitle2">
-        <item name="android:textSize">@dimen/currency_medium_text_size</item>
+        <item name="android:textSize">@dimen/currency_sign_medium_text_size</item>
     </style>
 
     <style name="TextAppearance.MoneyManager.CurrencyValue.Small" parent="TextAppearance.MoneyManager.Subtitle2">
@@ -72,7 +72,15 @@
     </style>
 
     <style name="TextAppearance.MoneyManager.CurrencySign.Small" parent="TextAppearance.MoneyManager.Subtitle2">
-        <item name="android:textSize">@dimen/currency_small_text_size</item>
+        <item name="android:textSize">@dimen/currency_sign_small_text_size</item>
+    </style>
+
+    <style name="TextAppearance.MoneyManager.CurrencyValue.ExtraSmall" parent="TextAppearance.MoneyManager.Subtitle2">
+        <item name="android:textSize">@dimen/currency_extra_small_text_size</item>
+    </style>
+
+    <style name="TextAppearance.MoneyManager.CurrencySign.ExtraSmall" parent="TextAppearance.MoneyManager.Subtitle2">
+        <item name="android:textSize">@dimen/currency_sign_extra_small_text_size</item>
     </style>
 
     <style name="TextAppearance.MoneyManager.GoalValue.Medium" parent="TextAppearance.MoneyManager.Caption">
