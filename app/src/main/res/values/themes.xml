@@ -121,6 +121,11 @@
         <item name="android:textColorSecondary">@color/text_primary_color</item>
     </style>
 
+    <style name="ThemeOverlay.MoneyManager.CurrencyView.Small.Transparent" parent="">
+        <item name="android:textColorPrimary">@color/text_primary_transparent_color</item>
+        <item name="android:textColorSecondary">@color/text_primary_transparent_color</item>
+    </style>
+
     <style name="ThemeOverlay.MoneyManager.Goals.Medium" parent="">
         <item name="android:textColorPrimary">@color/text_primary_color</item>
         <item name="android:textColorSecondary">@color/text_primary_color</item>

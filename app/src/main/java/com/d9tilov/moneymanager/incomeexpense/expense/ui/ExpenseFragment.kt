@@ -16,6 +16,7 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entity.Category
+import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
@@ -132,9 +133,20 @@ class ExpenseFragment :
         lifecycleScope.launch {
             viewModel.spentInPeriod.observe(
                 viewLifecycleOwner,
-                {
-                    viewBinding.expensePeriodInfoValue.setValue(it)
+                { sum ->
+                    if (sum.signum() == 0) {
+                        viewBinding.expensePeriodInfoUsdValue.gone()
+                        viewBinding.expensePeriodInfoApproxSign.gone()
+                    } else
+                        viewBinding.expensePeriodInfoUsdValue.setValue(
+                            sum,
+                            DataConstants.DEFAULT_CURRENCY_CODE
+                        )
                 }
+            )
+            viewModel.spentInPeriodApprox.observe(
+                viewLifecycleOwner,
+                { sum -> viewBinding.expensePeriodInfoApproxSum.setValue(sum) }
             )
         }
         viewBinding.expenseTransactionRvList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -163,7 +175,7 @@ class ExpenseFragment :
         if ((activity as MainActivity).forceShowKeyboard) {
             showKeyboard(viewBinding.expenseMainSum.moneyEditText)
         } else {
-            crossfade(false)
+            crossFade(false)
         }
     }
 
@@ -202,6 +214,7 @@ class ExpenseFragment :
                     transactionAdapter.deleteItem(viewHolder.bindingAdapterPosition)
                 }
             }).attachToRecyclerView(expenseTransactionRvList)
+            // промаргивание после обновления элемента из-за функции crossFade
         }
     }
 
@@ -230,7 +243,7 @@ class ExpenseFragment :
     override fun onOpenKeyboard() {
         isKeyboardOpen = true
         viewBinding.run {
-            crossfade(true)
+            crossFade(true)
             hideViewStub()
             viewBinding.expenseCategoryRvList.scrollToPosition(0)
         }
@@ -239,7 +252,7 @@ class ExpenseFragment :
     override fun onCloseKeyboard() {
         isKeyboardOpen = false
         viewBinding.run {
-            crossfade(false)
+            crossFade(false)
             if (isTransactionDataEmpty) {
                 showViewStub(TransactionType.EXPENSE)
             }
@@ -247,7 +260,7 @@ class ExpenseFragment :
         }
     }
 
-    private fun crossfade(openKeyboard: Boolean) {
+    private fun crossFade(openKeyboard: Boolean) {
         val hiddenGroup = if (openKeyboard) transactionGroup else categoryGroup
         val shownGroup = if (openKeyboard) categoryGroup else transactionGroup
         shownGroup.forEach {

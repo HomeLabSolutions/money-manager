@@ -37,6 +37,10 @@ class ExpenseViewModel @Inject constructor(
     private val transactionInteractor: TransactionInteractor
 ) : BaseIncomeExpenseViewModel<ExpenseNavigator>() {
 
+    private val updateCurrencyExceptionHandler = CoroutineExceptionHandler { _, exception ->
+        Timber.d("Unable to update currency: $exception")
+    }
+
     override val transactions: Flow<PagingData<BaseTransaction>> =
         transactionInteractor.getTransactionsByType(TransactionType.EXPENSE)
             .map {
@@ -57,17 +61,15 @@ class ExpenseViewModel @Inject constructor(
                 }
             }
             .cachedIn(viewModelScope).flowOn(Dispatchers.IO)
-    val spentInPeriod = transactionInteractor.getSumSpentInFiscalPeriod()
-        .flowOn(Dispatchers.IO).asLiveData()
+    val spentInPeriod = transactionInteractor.getSumSpentInFiscalPeriodInUsd()
+        .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler).asLiveData()
+    val spentInPeriodApprox = transactionInteractor.getApproxSumSpentInFiscalPeriodCurrentCurrency()
+        .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler).asLiveData()
     val regularTransactions = regularTransactionInteractor.getAll(TransactionType.INCOME)
         .zip(regularTransactionInteractor.getAll(TransactionType.EXPENSE)) { income, expense -> income + expense }
         .asLiveData()
     override val categories: LiveData<List<Category>> =
         categoryInteractor.getGroupedCategoriesByType(TransactionType.EXPENSE).asLiveData()
-
-    private val updateCurrencyExceptionHandler = CoroutineExceptionHandler { _, exception ->
-        Timber.d("Unable to update currency: $exception")
-    }
 
     init {
         viewModelScope.launch(Dispatchers.IO + updateCurrencyExceptionHandler) { currencyInteractor.updateCurrencyRates() }

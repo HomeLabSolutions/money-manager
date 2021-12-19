@@ -37,7 +37,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/profile_item_budget_title"
         app:layout_constraintTop_toTopOf="parent"
-        app:showComma="true"
+        app:showDecimalPart="true"
         app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
         app:sumTextStyle="?attr/textAppearanceCurrencyValueSmall"
         tools:sumText="15000" />

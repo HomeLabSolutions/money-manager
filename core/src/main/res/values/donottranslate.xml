@@ -8,4 +8,5 @@
     <string name="plus_sign">+</string>
     <string name="percent_sign">%</string>
     <string name="minus_sign">-</string>
+    <string name="approx_sign">≈</string>
 </resources>

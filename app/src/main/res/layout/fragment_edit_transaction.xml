@@ -45,7 +45,7 @@
                 app:layout_constraintStart_toStartOf="@+id/edit_transaction_main_sum_title"
                 app:layout_constraintTop_toBottomOf="@+id/edit_transaction_main_sum_title"
                 app:scaleEnabled="true"
-                app:showComma="true"
+                app:showDecimalPart="true"
                 app:signTextStyle="?attr/textAppearanceCurrencySignBig"
                 app:sum="5000"
                 app:sumTextStyle="?attr/textAppearanceHeadline1" />

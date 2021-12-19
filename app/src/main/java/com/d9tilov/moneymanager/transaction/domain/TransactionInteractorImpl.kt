@@ -5,6 +5,7 @@ import androidx.paging.map
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.category.exception.CategoryNotFoundException
+import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.util.getStartDateOfFiscalPeriod
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.exchanger.domain.ExchangeInteractor
@@ -108,7 +109,7 @@ class TransactionInteractorImpl(
                     }
             }
 
-    override fun getSumSpentInFiscalPeriod(): Flow<BigDecimal> {
+    override fun getSumSpentInFiscalPeriodInUsd(): Flow<BigDecimal> {
         return flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
             val endDate = Date()
             val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
@@ -116,7 +117,35 @@ class TransactionInteractorImpl(
                 startDate,
                 endDate,
                 TransactionType.EXPENSE
-            ).map { list -> list.sumOf { it.sum } }
+            ).map { list ->
+                val currentCurrency = userInteractor.getCurrentCurrency()
+                val currencies = mutableSetOf<String>()
+                list.forEach { tr -> currencies.add(tr.currency) }
+                if (currencies.size == 1 || currentCurrency == DataConstants.DEFAULT_CURRENCY_CODE) BigDecimal.ZERO
+                else list.sumOf { it.usdSum }
+            }
+        }
+    }
+
+    override fun getApproxSumSpentInFiscalPeriodCurrentCurrency(): Flow<BigDecimal> {
+        return flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
+            val endDate = Date()
+            val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
+            transactionRepo.getTransactionsByTypeWithoutDate(
+                startDate,
+                endDate,
+                TransactionType.EXPENSE
+            ).map { list ->
+                val currentCurrency = userInteractor.getCurrentCurrency()
+                list.sumOf { tr ->
+                    if (tr.currency == currentCurrency) {
+                        tr.sum
+                    } else {
+                        val trCurrency = currencyInteractor.getCurrencyByCode(currentCurrency)
+                        trCurrency.value.multiply(tr.usdSum)
+                    }
+                }
+            }
         }
     }
 
