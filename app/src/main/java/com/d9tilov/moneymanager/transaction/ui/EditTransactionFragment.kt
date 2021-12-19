@@ -19,7 +19,11 @@ import com.d9tilov.moneymanager.core.util.DateValidatorPointBackward
 import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.showKeyboard
+import com.d9tilov.moneymanager.currency.CurrencyDestination
+import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
+import com.d9tilov.moneymanager.currency.ui.CurrencyFragment.Companion.ARG_CURRENCY
 import com.d9tilov.moneymanager.databinding.FragmentEditTransactionBinding
+import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.ui.vm.EditTransactionViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.datepicker.CalendarConstraints
@@ -46,8 +50,7 @@ class EditTransactionFragment : EditTransactionNavigator,
     private val viewBinding by viewBinding(FragmentEditTransactionBinding::bind)
 
     private var toolbar: MaterialToolbar? = null
-    private lateinit var date: Date
-    private lateinit var category: Category
+    private var localTransaction: Transaction? = null
 
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -58,24 +61,34 @@ class EditTransactionFragment : EditTransactionNavigator,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        date = transaction.date
-        category = transaction.category
+        localTransaction = transaction
         updateIcon()
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Category>(
             ARG_CATEGORY
         )?.observe(
             viewLifecycleOwner
         ) {
-            category = it
+            localTransaction = localTransaction?.copy(category = it)
             updateIcon()
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<Category>(
                 ARG_CATEGORY
             )
         }
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<DomainCurrency>(
+            ARG_CURRENCY
+        )?.observe(
+            viewLifecycleOwner
+        ) {
+            localTransaction = localTransaction?.copy(currencyCode = it.code)
+            updateCurrency()
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<DomainCurrency>(
+                ARG_CURRENCY
+            )
+        }
         viewBinding.run {
             editTransactionSave.setOnClickListener {
                 val c = Calendar.getInstance()
-                c.time = date
+                c.time = localTransaction?.date ?: Date()
                 val transactionCalendar = Calendar.getInstance()
                 transactionCalendar.time = transaction.date
                 c.set(Calendar.HOUR_OF_DAY, transactionCalendar.get(Calendar.HOUR_OF_DAY))
@@ -83,12 +96,11 @@ class EditTransactionFragment : EditTransactionNavigator,
                 c.set(Calendar.SECOND, transactionCalendar.get(Calendar.SECOND))
                 c.set(Calendar.MILLISECOND, transactionCalendar.get(Calendar.MILLISECOND))
                 viewModel.update(
-                    transaction.copy(
+                    localTransaction?.copy(
                         sum = editTransactionMainSum.getValue(),
-                        category = category,
                         date = c.time,
                         description = editTransactionDescription.text.toString()
-                    )
+                    ) ?: transaction
                 )
             }
             editTransactionDate.setOnClickListener {
@@ -102,7 +114,8 @@ class EditTransactionFragment : EditTransactionNavigator,
                     .setSelection(transaction.date.time)
                     .build()
                 picker.addOnPositiveButtonClickListener { calendarDate ->
-                    date = Date(calendarDate)
+                    val date = Date(calendarDate)
+                    localTransaction = localTransaction?.copy(date = date)
                     viewBinding.editTransactionDate.text = SimpleDateFormat(
                         TRANSACTION_DATE_FORMAT,
                         Locale.getDefault()
@@ -125,9 +138,13 @@ class EditTransactionFragment : EditTransactionNavigator,
                 }
             }
             editTransactionDelete.setOnClickListener {
-                val action = EditTransactionFragmentDirections.toRemoveTransactionDialog(
-                    transaction
-                )
+                val action =
+                    EditTransactionFragmentDirections.toRemoveTransactionDialog(transaction)
+                findNavController().navigate(action)
+            }
+            editTransactionMainSum.addOnCurrencyClickListener {
+                val action =
+                    EditTransactionFragmentDirections.toCurrencyDest(CurrencyDestination.EDIT_TRANSACTION_SCREEN)
                 findNavController().navigate(action)
             }
             editTransactionDescription.setText(transaction.description)
@@ -149,19 +166,25 @@ class EditTransactionFragment : EditTransactionNavigator,
     private fun updateIcon() {
         val iconDrawable = createTintDrawable(
             requireContext(),
-            category.icon,
-            category.color
+            localTransaction?.category?.icon ?: transaction.category.icon,
+            localTransaction?.category?.color ?: transaction.category.icon
         )
         iconDrawable.setBounds(0, 0, 120, 120)
         viewBinding.run {
             editTransactionCategory.setCompoundDrawables(iconDrawable, null, null, null)
-            editTransactionCategory.text = category.name
+            editTransactionCategory.text = localTransaction?.category?.name
             editTransactionCategory.setTextColor(
                 ContextCompat.getColor(
                     requireContext(),
-                    category.color
+                    localTransaction?.category?.color ?: transaction.category.color
                 )
             )
+        }
+    }
+
+    private fun updateCurrency() {
+        localTransaction?.let {
+            viewBinding.editTransactionMainSum.setValue(it.sum, it.currencyCode)
         }
     }
 

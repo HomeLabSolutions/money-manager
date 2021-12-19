@@ -132,8 +132,10 @@ class TransactionInteractorImpl(
         }
     }
 
-    override suspend fun update(transaction: Transaction) =
-        transactionRepo.update(transaction.toDataModel())
+    override suspend fun update(transaction: Transaction) {
+        val usdSumValue = exchangeInteractor.toUsd(transaction.sum, transaction.currencyCode)
+        transactionRepo.update(transaction.toDataModel().copy(usdSum = usdSumValue))
+    }
 
     override suspend fun removeTransaction(transaction: Transaction) {
         transactionRepo.removeTransaction(transaction.toDataModel())

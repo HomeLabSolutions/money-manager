@@ -175,6 +175,13 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
+        <action
+            android:id="@+id/to_currency_dest"
+            app:destination="@id/currency_dest"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
         <argument
             android:name="transactionType"
             app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
@@ -226,6 +233,28 @@
         <argument
             android:name="transactionType"
             app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/currency_dest"
+        android:name="com.d9tilov.moneymanager.currency.ui.CurrencyFragment"
+        android:label="fragment_title_currency"
+        tools:layout="@layout/fragment_currency">
+
+        <action
+            android:id="@+id/to_edit_transaction_dest"
+            app:destination="@id/edit_transaction_dest"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@+id/edit_transaction_dest"
+            app:popUpToInclusive="true" />
+
+        <argument
+            android:name="destination"
+            android:defaultValue="@null"
+            app:argType="com.d9tilov.moneymanager.currency.CurrencyDestination"
+            app:nullable="true" />
     </fragment>
 
     <dialog

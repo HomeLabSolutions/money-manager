@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/choose_currency_dest"
         android:name="com.d9tilov.moneymanager.currency.ui.CurrencyFragment"
-        android:label="fragment_title_screen"
+        android:label="fragment_prepopulate_currency_screen"
         tools:layout="@layout/fragment_currency">
 
         <action

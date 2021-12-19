@@ -73,11 +73,47 @@
         android:label="fragment_title_currency"
         tools:layout="@layout/fragment_currency">
 
+        <action
+            android:id="@+id/to_edit_transaction_dest"
+            app:destination="@id/edit_transaction_dest"
+            app:enterAnim="@anim/slide_up_enter"
+            app:exitAnim="@anim/slide_up_exit"
+            app:popEnterAnim="@anim/slide_down_enter"
+            app:popExitAnim="@anim/slide_down_exit" />
+
+        <action
+            android:id="@+id/to_common_amount_dest"
+            app:destination="@id/budget_amount_dest"
+            app:enterAnim="@anim/slide_up_enter"
+            app:exitAnim="@anim/slide_up_exit"
+            app:popEnterAnim="@anim/slide_down_enter"
+            app:popExitAnim="@anim/slide_down_exit" />
+
         <argument
             android:name="destination"
             android:defaultValue="@null"
             app:argType="com.d9tilov.moneymanager.currency.CurrencyDestination"
             app:nullable="true" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/budget_amount_dest"
+        android:name="com.d9tilov.moneymanager.budget.ui.BudgetAmountFragment"
+        android:label="fragment_title_screen"
+        tools:layout="@layout/fragment_budget_amount">
+
+        <action
+            android:id="@+id/to_regular_income_dest"
+            app:destination="@id/regular_income_dest"
+            app:enterAnim="@anim/slide_up_enter"
+            app:exitAnim="@anim/slide_up_exit"
+            app:popEnterAnim="@anim/slide_down_enter"
+            app:popExitAnim="@anim/slide_down_exit" />
+
+        <argument
+            android:name="destination"
+            app:argType="com.d9tilov.moneymanager.budget.BudgetDestination"/>
     </fragment>
 
     <fragment
@@ -364,7 +400,6 @@
             app:nullable="true" />
 
     </fragment>
-
 
     <dialog
         android:id="@+id/unit_category_to_folder_dialog"
