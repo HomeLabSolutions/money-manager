@@ -21,7 +21,8 @@
         <attr name="showSignBeforeValue" format="boolean" />
         <attr name="enableInput" format="boolean" />
         <attr name="scaleEnabled" format="boolean" />
-        <attr name="showComma" format="boolean" />
+        <attr name="showDecimalPart" format="boolean" />
+        <attr name="showShortDecimalPart" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="ProgressLine">

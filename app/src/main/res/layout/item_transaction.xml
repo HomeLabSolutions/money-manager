@@ -57,7 +57,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="4dp"
-        app:showComma="true"
+        app:showDecimalPart="true"
         app:layout_constraintBottom_toTopOf="@+id/item_transaction_usd_sum"
         app:layout_constraintVertical_chainStyle="spread"
         app:signTextStyle="?attr/textAppearanceCurrencySignMedium"
@@ -76,7 +76,7 @@
         app:layout_constraintEnd_toEndOf="@+id/item_transaction_sum"
         app:layout_constraintTop_toBottomOf="@+id/item_transaction_sum"
         app:layout_constraintVertical_chainStyle="spread"
-        app:showComma="true"
+        app:showDecimalPart="true"
         app:signTextStyle="?attr/textAppearanceCurrencySignExtraSmall"
         app:sumTextStyle="?attr/textAppearanceCurrencyValueExtraSmall"
         tools:sumText="15000" />
