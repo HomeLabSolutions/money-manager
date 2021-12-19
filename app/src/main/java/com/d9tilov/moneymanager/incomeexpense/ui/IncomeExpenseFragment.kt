@@ -118,6 +118,6 @@ class IncomeExpenseFragment :
     }
 
     companion object {
-        const val ARG_TRANSACTION_CREATED = "transaction_created"
+        const val ARG_TRANSACTION_CREATED = "arg_transaction_created"
     }
 }

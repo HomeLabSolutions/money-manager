@@ -192,6 +192,6 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
 
     companion object {
         const val SPAN_COUNT = 4
-        const val ARG_CATEGORY = "category"
+        const val ARG_CATEGORY = "arg_category"
     }
 }

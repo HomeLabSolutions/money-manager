@@ -49,6 +49,6 @@ class GoalRemoveDialog :
     }
 
     companion object {
-        const val ARG_UNDO_REMOVE_LAYOUT_DISMISS = "undo_remove_layout_dismiss"
+        const val ARG_UNDO_REMOVE_LAYOUT_DISMISS = "arg_undo_remove_layout_dismiss"
     }
 }

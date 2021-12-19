@@ -54,6 +54,6 @@ class LogoutDialog :
     }
 
     companion object {
-        const val ARG_LOGOUT_CANCEL_JOB = "logout_cancel_job"
+        const val ARG_LOGOUT_CANCEL_JOB = "arg_logout_cancel_job"
     }
 }

@@ -5,10 +5,10 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.widget.TextViewCompat
@@ -380,6 +380,10 @@ class CurrencyView @JvmOverloads constructor(
             newState = bundle.getParcelable(SUPER_STATE_KEY)
         }
         super.onRestoreInstanceState(newState)
+    }
+
+    fun addOnCurrencyClickListener(listener: (view: View) -> Unit) {
+        signTextView.setOnClickListener { listener.invoke(it) }
     }
 
     companion object {

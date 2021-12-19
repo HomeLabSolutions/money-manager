@@ -94,6 +94,6 @@ class CategoryIconSetFragment :
 
     companion object {
         private const val SPAN_COUNT = 4
-        const val ARG_CATEGORY_ICON_ID = "category_icon_id"
+        const val ARG_CATEGORY_ICON_ID = "arg_category_icon_id"
     }
 }
