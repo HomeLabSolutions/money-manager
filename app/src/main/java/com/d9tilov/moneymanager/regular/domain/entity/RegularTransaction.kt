@@ -17,6 +17,7 @@ data class RegularTransaction(
     val currencyCode: String = DataConstants.DEFAULT_CURRENCY_CODE,
     val type: TransactionType,
     val sum: BigDecimal = BigDecimal.ZERO,
+    val usdSum: BigDecimal = BigDecimal.ZERO,
     val category: Category,
     val createdDate: Date = Date(),
     val startDate: Date = Date(),

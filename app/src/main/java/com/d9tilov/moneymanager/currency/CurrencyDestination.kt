@@ -8,7 +8,6 @@ sealed class CurrencyDestination(open val name: String) : Parcelable {
     companion object {
         private const val FROM_PREPOPULATE_SCREEN = "prepopulate"
         private const val FROM_PROFILE_SCREEN_CURRENT = "profile_current"
-        private const val FROM_PROFILE_SCREEN_MAIN = "profile_main"
     }
 
     @Parcelize
@@ -16,8 +15,4 @@ sealed class CurrencyDestination(open val name: String) : Parcelable {
 
     @Parcelize
     object PROFILE_SCREEN_CURRENT : CurrencyDestination(FROM_PROFILE_SCREEN_CURRENT)
-
-    @Parcelize
-    object PROFILE_SCREEN_MAIN : CurrencyDestination(FROM_PROFILE_SCREEN_MAIN)
-
 }

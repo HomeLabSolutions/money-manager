@@ -47,14 +47,6 @@ fun Calendar.isSameDay(otherCal: Calendar): Boolean {
 }
 
 /**
- * Checks if a date is today.
- * @return true if the date is today.
- */
-fun Date.isToday(): Boolean {
-    return isSameDay(Calendar.getInstance().time)
-}
-
-/**
  * Checks if a calendar date is today.
  * @return true if cal date is today
  */

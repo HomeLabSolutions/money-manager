@@ -58,10 +58,10 @@
             @style/TextAppearance.MoneyManager.CurrencySign.Small
         </item>
         <item name="textAppearanceCurrencyValueExtraSmall">
-            @style/TextAppearance.MoneyManager.Overline
+            @style/TextAppearance.MoneyManager.CurrencyValue.ExtraSmall
         </item>
         <item name="textAppearanceCurrencySignExtraSmall">
-            @style/TextAppearance.MoneyManager.Overline
+            @style/TextAppearance.MoneyManager.CurrencySign.ExtraSmall
         </item>
         <item name="textAppearanceGoalValueMedium">
             @style/TextAppearance.MoneyManager.GoalValue.Medium
@@ -109,6 +109,11 @@
     <style name="ThemeOverlay.MoneyManager.CurrencyView.Medium" parent="">
         <item name="android:textColorPrimary">@color/text_primary_color</item>
         <item name="android:textColorSecondary">@color/text_primary_color</item>
+    </style>
+
+    <style name="ThemeOverlay.MoneyManager.CurrencyView.Medium.Transparent" parent="">
+        <item name="android:textColorPrimary">@color/text_primary_transparent_color</item>
+        <item name="android:textColorSecondary">@color/text_primary_transparent_color</item>
     </style>
 
     <style name="ThemeOverlay.MoneyManager.CurrencyView.Small" parent="">

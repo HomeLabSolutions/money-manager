@@ -73,15 +73,6 @@ class UserLocalSource(
         }
     }
 
-    override suspend fun getMainCurrency(): String {
-        val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            throw WrongUidException()
-        } else {
-            userDao.getMainCurrency(currentUserId)
-        }
-    }
-
     override suspend fun getCurrentCurrency(): String {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {

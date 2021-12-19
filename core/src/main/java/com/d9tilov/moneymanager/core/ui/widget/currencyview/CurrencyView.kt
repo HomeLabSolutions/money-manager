@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Parcelable
-import android.text.TextWatcher
 import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.MotionEvent
@@ -44,7 +44,7 @@ class CurrencyView @JvmOverloads constructor(
     private var sumTextSize = resources.getDimensionPixelSize(R.dimen.currency_sum_text_size)
     private var currencyGravity = Gravity.START
     private var showUnderline = false
-    private var showSign = true
+    private var showCurrencySign = true
     private var showSignBeforeValue = false
     private var enableInput = false
     private var showCurrencyComma = false
@@ -88,7 +88,7 @@ class CurrencyView @JvmOverloads constructor(
         attrs?.let {
             with(getContext().obtainStyledAttributes(it, R.styleable.CurrencyView)) {
                 showUnderline = getBoolean(R.styleable.CurrencyView_showUnderline, false)
-                showSign = getBoolean(R.styleable.CurrencyView_showSign, true)
+                showCurrencySign = getBoolean(R.styleable.CurrencyView_showSign, true)
                 showSignBeforeValue =
                     getBoolean(R.styleable.CurrencyView_showSignBeforeValue, false)
                 enableInput = getBoolean(R.styleable.CurrencyView_enableInput, false)
@@ -141,8 +141,7 @@ class CurrencyView @JvmOverloads constructor(
         }
     }
 
-    private fun formatInputSum(value: BigDecimal): String {
-        return if (showCurrencyComma) {
+    private fun formatInputSum(value: BigDecimal): String = if (showCurrencyComma) {
             String.format(Locale.getDefault(), value.removeScale.toString())
         } else {
             String.format(
@@ -150,7 +149,6 @@ class CurrencyView @JvmOverloads constructor(
                 value.setScale(0, BigDecimal.ROUND_HALF_UP).toString()
             )
         }
-    }
 
     private fun initPrefix() {
         with(prefixTextView) {
@@ -211,7 +209,7 @@ class CurrencyView @JvmOverloads constructor(
             } else {
                 setTextColor(signTextColor)
             }
-            if (!showSign) {
+            if (!showCurrencySign) {
                 gone()
             }
             text = signText
@@ -226,7 +224,7 @@ class CurrencyView @JvmOverloads constructor(
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         measureChild(prefixTextView, widthMeasureSpec, heightMeasureSpec)
         measureChild(moneyEditText, widthMeasureSpec, heightMeasureSpec)
-        if (showSign) {
+        if (showCurrencySign) {
             measureChild(signTextView, widthMeasureSpec, heightMeasureSpec)
         }
         val prefixTextViewWidth = prefixTextView.measuredWidth
@@ -288,7 +286,7 @@ class CurrencyView @JvmOverloads constructor(
                     paddingLeft + prefixTextViewWidth + signTextViewWidth,
                     centerY + prefixBaseLineMargin + halfValueSize - valueBaseLineMargin
                 )
-                if (showSign) {
+                if (showCurrencySign) {
                     signTextView.layout(
                         paddingLeft + (if (showSignBeforeValue) 0 else (valueEditTextWidth + marginBetweenSign)),
                         centerY + signBaseLineMargin + halfValueSize - valueBaseLineMargin - signTextViewHeight,
@@ -310,7 +308,7 @@ class CurrencyView @JvmOverloads constructor(
                     (wholeLength - paddingLeft - paddingRight) / 2 - valueEditTextWidth / 2 + valueEditTextWidth,
                     centerY - halfValueSize + valueEditTextHeight
                 )
-                if (showSign) {
+                if (showCurrencySign) {
                     signTextView.layout(
                         if (showSignBeforeValue) (wholeLength - paddingLeft - paddingRight) / 2 - valueEditTextWidth / 2 - marginBetweenSign - signTextViewWidth - prefixTextViewWidth
                         else ((wholeLength - paddingLeft - paddingRight) / 2 - valueEditTextWidth / 2 + valueEditTextWidth + marginBetweenSign),
@@ -328,7 +326,7 @@ class CurrencyView @JvmOverloads constructor(
                 )
             }
             Gravity.END -> {
-                if (showSign) {
+                if (showCurrencySign) {
                     signTextView.layout(
                         if (showSignBeforeValue) right - left - paddingRight - valueEditTextWidth - marginBetweenSign - signTextViewWidth - prefixTextViewWidth
                         else right - left - paddingRight - signTextViewWidth,
@@ -366,14 +364,6 @@ class CurrencyView @JvmOverloads constructor(
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent?) = !enableInput
-
-    fun addTextChangedListener(textWatcher: TextWatcher) {
-        moneyEditText.addTextChangedListener(textWatcher)
-    }
-
-    fun removeTextChangedListener(textWatcher: TextWatcher) {
-        moneyEditText.removeTextChangedListener(textWatcher)
-    }
 
     override fun onSaveInstanceState(): Parcelable {
         val bundle = Bundle()

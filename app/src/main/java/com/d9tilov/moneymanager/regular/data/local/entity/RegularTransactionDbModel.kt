@@ -27,6 +27,7 @@ data class RegularTransactionDbModel(
     @ColumnInfo(name = "clientId", index = true) val clientId: String,
     @ColumnInfo(name = "type") val type: TransactionType,
     @ColumnInfo(name = "sum") val sum: BigDecimal,
+    @ColumnInfo(name = "usdSum") val usdSum: BigDecimal,
     @ColumnInfo(name = "categoryId") val categoryId: Long,
     @ColumnInfo(name = "currency") val currency: String,
     @ColumnInfo(name = "createdDate") val createdDate: Date,

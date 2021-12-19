@@ -114,9 +114,7 @@ class ExpenseFragment :
             }
         )
         lifecycleScope.launch {
-            viewModel.transactions.collectLatest { data ->
-                transactionAdapter.submitData(data)
-            }
+            viewModel.transactions.collectLatest { data -> transactionAdapter.submitData(data) }
         }
         lifecycleScope.launch {
             transactionAdapter

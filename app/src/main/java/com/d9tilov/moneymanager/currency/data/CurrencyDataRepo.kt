@@ -8,6 +8,7 @@ import com.d9tilov.moneymanager.currency.data.remote.mapper.toDataModel
 import com.d9tilov.moneymanager.currency.data.remote.mapper.toDataModelValues
 import com.d9tilov.moneymanager.currency.domain.CurrencyRepo
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 class CurrencyDataRepo(
@@ -16,10 +17,10 @@ class CurrencyDataRepo(
     private val currencyApi: CurrencyApi
 ) : CurrencyRepo {
 
-    override fun getCurrencies(baseCurrency: String): Flow<List<Currency>> {
+    override fun getCurrencies(): Flow<List<Currency>> {
         return currencySource.getCurrencies().map { list ->
             if (list.isEmpty()) {
-                val currencies = currencyApi.getCurrencies(baseCurrency)
+                val currencies = currencyApi.getCurrencies()
                 val remoteCurrencyList = currencies.toDataModel()
                 currencySource.saveCurrencies(remoteCurrencyList)
             }
@@ -27,28 +28,25 @@ class CurrencyDataRepo(
         }
     }
 
-    override suspend fun getCurrencyByCode(code: String): Currency = currencySource.getCurrencyByCode(code)
+    override suspend fun getCurrencyByCode(code: String): Currency =
+        currencySource.getCurrencyByCode(code)
 
-    override suspend fun updateCurrencies(baseCurrency: String) {
+    override suspend fun updateCurrencies() {
         currencySource.getCurrencies().map { list ->
-            val currencies = currencyApi.getCurrencies(baseCurrency)
+            val currencies = currencyApi.getCurrencies()
             val remoteCurrencyList = if (list.isEmpty()) {
                 currencies.toDataModel()
             } else {
                 currencies.toDataModelValues(list)
             }
             currencySource.saveCurrencies(remoteCurrencyList)
-        }
+        }.first()
     }
 
     override suspend fun updateCurrency(currency: Currency) = currencySource.update(currency)
 
     override suspend fun updateCurrentCurrency(currency: Currency) {
         preferencesStore.saveCurrentCurrency(currency)
-    }
-
-    override suspend fun updateMainCurrency(currency: Currency) {
-        preferencesStore.saveMainCurrency(currency)
     }
 
     override suspend fun isUsed(baseCurrency: String): Boolean = currencySource.isUsed(baseCurrency)

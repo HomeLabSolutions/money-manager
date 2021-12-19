@@ -46,13 +46,22 @@ val BigDecimal?.removeScale: BigDecimal
         if (this == null || this == BigDecimal.ZERO) {
             return BigDecimal.ZERO
         }
-        var result = setScale(2, RoundingMode.HALF_UP).stripTrailingZeros()
+        val decimalPart = remainder(BigDecimal.ONE).toString().removePrefix("0.")
+        val scale = calculateScale(decimalPart)
+        var result = setScale(scale, RoundingMode.HALF_UP).stripTrailingZeros()
         if (result.scale() < 0) {
             result = result.setScale(0)
         }
-
         return result
     }
+
+private fun calculateScale(decimalPart: String): Int {
+    val countZeroes = decimalPart.indexOfFirst { it != '0' }
+    if (countZeroes == -1) {
+        return 0
+    }
+    return countZeroes + 2
+}
 
 fun EditText.onChange(cb: (String) -> Unit) {
     this.addTextChangedListener(object : TextWatcher {

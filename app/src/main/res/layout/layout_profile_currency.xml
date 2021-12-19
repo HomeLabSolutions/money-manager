@@ -1,48 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/profile_item_height"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:gravity="center|start"
+    android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/profile_item_currency_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="24dp"
         android:src="@drawable/ic_currency_icon" />
 
     <TextView
         android:id="@+id/profile_item_currency_title"
-        app:layout_constraintBottom_toBottomOf="@+id/profile_item_currency_icon"
-        app:layout_constraintStart_toEndOf="@+id/profile_item_currency_icon"
-        app:layout_constraintTop_toTopOf="@+id/profile_item_currency_icon"
         style="@style/Widget.MoneyManager.TextView.ProfileItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="@string/profile_item_currency_title" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/profile_item_current_currency_layout"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/profile_item_height"
-        android:layout_marginStart="4dp"
-        android:padding="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/profile_item_currency_title"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/profile_item_current_currency_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/profile_item_current_currency_sign"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/profile_item_current_currency_sign"
             tools:text="icon" />
 
         <TextView
@@ -51,79 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/profile_item_current_currency_title"
-            app:layout_constraintStart_toEndOf="@+id/profile_item_current_currency_icon"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="spread_inside"
             tools:text="@string/usd_sign" />
 
-        <TextView
-            android:id="@+id/profile_item_current_currency_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/profile_item_current_currency_title"
-            android:textSize="@dimen/budget_created_date"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile_item_current_currency_sign"
-            app:layout_constraintVertical_chainStyle="spread_inside" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ImageView
-        android:id="@+id/profile_item_main_currency_arrow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:src="@drawable/ic_arrow_right"
-        app:layout_constraintBottom_toBottomOf="@+id/profile_item_currency_icon"
-        app:layout_constraintStart_toEndOf="@+id/profile_item_current_currency_layout"
-        app:layout_constraintTop_toTopOf="@+id/profile_item_currency_icon"
-        app:tint="@color/secondary_color"
-        tools:text="@string/usd_sign" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/profile_item_main_currency_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/profile_item_height"
-        android:padding="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/profile_item_main_currency_arrow"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/profile_item_main_currency_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/profile_item_main_currency_sign"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/profile_item_main_currency_sign"
-            tools:text="icon" />
-
-        <TextView
-            android:id="@+id/profile_item_main_currency_sign"
-            style="@style/Widget.MoneyManager.TextView.ProfileItem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/profile_item_main_currency_title"
-            app:layout_constraintStart_toEndOf="@+id/profile_item_main_currency_icon"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="spread_inside"
-            tools:text="@string/usd_sign" />
-
-        <TextView
-            android:id="@+id/profile_item_main_currency_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/profile_item_main_currency_title"
-            android:textSize="@dimen/budget_created_date"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile_item_main_currency_sign"
-            app:layout_constraintVertical_chainStyle="spread_inside" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.appcompat.widget.LinearLayoutCompat>
