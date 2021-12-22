@@ -15,6 +15,7 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entity.Category
+import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
@@ -107,13 +108,7 @@ class IncomeFragment :
                 }
             )
         }
-        lifecycleScope.launch {
-            viewModel.transactions.collectLatest {
-                transactionAdapter.submitData(
-                    it
-                )
-            }
-        }
+        lifecycleScope.launch { viewModel.transactions.collectLatest { transactionAdapter.submitData(it) } }
         lifecycleScope.launch {
             transactionAdapter
                 .loadStateFlow
@@ -130,9 +125,20 @@ class IncomeFragment :
         lifecycleScope.launch {
             viewModel.earnedInPeriod.observe(
                 viewLifecycleOwner,
-                {
-                    viewBinding.incomePeriodInfoValue.setValue(it)
+                { sum ->
+                    if (sum.signum() == 0) {
+                        viewBinding.incomePeriodInfoUsdValue.gone()
+                        viewBinding.incomePeriodInfoApproxSign.gone()
+                    } else
+                        viewBinding.incomePeriodInfoUsdValue.setValue(
+                            sum,
+                            DataConstants.DEFAULT_CURRENCY_CODE
+                        )
                 }
+            )
+            viewModel.earnedInPeriodApprox.observe(
+                viewLifecycleOwner,
+                { sum -> viewBinding.incomePeriodInfoApproxSum.setValue(sum) }
             )
         }
         viewBinding.incomeTransactionRvList.addOnScrollListener(object : RecyclerView.OnScrollListener() {

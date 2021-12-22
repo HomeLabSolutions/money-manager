@@ -61,9 +61,9 @@ class ExpenseViewModel @Inject constructor(
                 }
             }
             .cachedIn(viewModelScope).flowOn(Dispatchers.IO)
-    val spentInPeriod = transactionInteractor.getSumSpentInFiscalPeriodInUsd()
+    val spentInPeriod = transactionInteractor.getSumInFiscalPeriodInUsd(TransactionType.EXPENSE)
         .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler).asLiveData()
-    val spentInPeriodApprox = transactionInteractor.getApproxSumSpentInFiscalPeriodCurrentCurrency()
+    val spentInPeriodApprox = transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.EXPENSE)
         .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler).asLiveData()
     val regularTransactions = regularTransactionInteractor.getAll(TransactionType.INCOME)
         .zip(regularTransactionInteractor.getAll(TransactionType.EXPENSE)) { income, expense -> income + expense }
