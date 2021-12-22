@@ -148,7 +148,7 @@ class CurrencyView @JvmOverloads constructor(
         when {
             showShortDecimalPart -> String.format(
                 Locale.getDefault(),
-                value.setScale(DECIMAL_LENGTH, BigDecimal.ROUND_HALF_UP).toString()
+                value.setScale(DECIMAL_LENGTH, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toString()
             )
             showDecimalPart -> String.format(Locale.getDefault(), value.removeScale.toString())
             else -> {
