@@ -80,17 +80,12 @@ class CategoryUnitDialog :
                 )
                 categoryDialogCurrentFolder.root.show()
             } else {
-                categoryDialogUnionConfirm.isEnabled =
-                    categoryDialogUnionEtName.length() > 0
-                categoryDialogUnionSubtitle.text =
-                    getString(R.string.category_unit_new_name_subtitle)
+                categoryDialogUnionConfirm.isEnabled = categoryDialogUnionEtName.length() > 0
+                categoryDialogUnionSubtitle.text = getString(R.string.category_unit_new_name_subtitle)
                 categoryDialogUnionTitle.text = getString(R.string.category_unit_to_group_title)
                 categoryDialogUnionFolder.categoryDialogUnionItem1.setImageDrawable(firstDrawable)
-                val secondDrawable =
-                    createTintDrawable(requireContext(), secondCategory.icon, secondCategory.color)
-                categoryDialogUnionFolder.categoryDialogUnionItem2.setImageDrawable(
-                    secondDrawable
-                )
+                val secondDrawable = createTintDrawable(requireContext(), secondCategory.icon, secondCategory.color)
+                categoryDialogUnionFolder.categoryDialogUnionItem2.setImageDrawable(secondDrawable)
                 categoryDialogUnionConfirm.text = getString(R.string.save)
                 categoryDialogUnionFolder.root.show()
             }

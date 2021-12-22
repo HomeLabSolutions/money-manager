@@ -19,12 +19,9 @@ import com.d9tilov.moneymanager.transaction.data.mapper.toDataDateModel
 import com.d9tilov.moneymanager.transaction.data.mapper.toDataModel
 import com.d9tilov.moneymanager.transaction.data.mapper.toDbModel
 import com.d9tilov.moneymanager.transaction.exception.TransactionCreateException
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import java.util.Date
 
 class TransactionLocalSource(
@@ -222,74 +219,61 @@ class TransactionLocalSource(
                 transaction.date
             )
             when {
-                count > 1 -> {
+                count > 1 -> transactionDao.delete(
+                    currentUserId,
+                    transaction.toDbModel().id
+                )
+                count == 1 -> {
                     transactionDao.delete(
                         currentUserId,
                         transaction.toDbModel().id
                     )
+                    transactionDao.deleteDate(
+                        currentUserId,
+                        transaction.type,
+                        transaction.date.getStartOfDay(),
+                        transaction.date.getEndOfDay()
+                    )
                 }
-                count == 1 -> {
-                    GlobalScope.launch {
-                        transactionDao.delete(
-                            currentUserId,
-                            transaction.toDbModel().id
-                        )
-                        transactionDao.deleteDate(
-                            currentUserId,
-                            transaction.type,
-                            transaction.date.getStartOfDay(),
-                            transaction.date.getEndOfDay()
-                        )
-                    }
-                }
-                else -> {
-                    throw TransactionCreateException("Can't create transaction. DataBase contains zero date item in day period")
-                }
+                else -> throw TransactionCreateException("Can't create transaction. DataBase contains zero date item in day period")
             }
         }
     }
 
-    override suspend fun removeAllByCategory(category: Category) {
+    override fun removeAllByCategory(category: Category): Flow<Int> {
         val currentUserId = preferencesStore.uid
-        if (currentUserId == null) {
+        return if (currentUserId == null) {
             throw WrongUidException()
         } else {
             transactionDao.getByCategoryId(currentUserId, category.id)
                 .map { list ->
-                    {
-                        GlobalScope.launch(Dispatchers.IO) {
-                            for (transaction in list) {
-                                val count = transactionDao.getItemsCountInDay(
+                    for (transaction in list) {
+                        val count = transactionDao.getItemsCountInDay(
+                            currentUserId,
+                            transaction.type,
+                            transaction.date
+                        )
+                        when {
+                            count > 1 -> transactionDao.deleteByCategoryId(
+                                currentUserId,
+                                category.id
+                            )
+                            count == 1 -> {
+                                transactionDao.deleteByCategoryId(
+                                    currentUserId,
+                                    category.id
+                                )
+                                transactionDao.deleteDate(
                                     currentUserId,
                                     transaction.type,
-                                    transaction.date
+                                    transaction.date.getStartOfDay(),
+                                    transaction.date.getEndOfDay()
                                 )
-                                when {
-                                    count > 1 -> {
-                                        transactionDao.deleteByCategoryId(
-                                            currentUserId,
-                                            category.id
-                                        )
-                                    }
-                                    count == 1 -> {
-                                        transactionDao.deleteByCategoryId(
-                                            currentUserId,
-                                            category.id
-                                        )
-                                        transactionDao.deleteDate(
-                                            currentUserId,
-                                            transaction.type,
-                                            transaction.date.getStartOfDay(),
-                                            transaction.date.getEndOfDay()
-                                        )
-                                    }
-                                    else -> {
-                                        throw TransactionCreateException("Can't create transaction. DataBase contains zero date item in day period")
-                                    }
-                                }
                             }
+                            else -> throw TransactionCreateException("Can't create transaction. DataBase contains zero date item in day period")
                         }
                     }
+                    list.size
                 }
         }
     }

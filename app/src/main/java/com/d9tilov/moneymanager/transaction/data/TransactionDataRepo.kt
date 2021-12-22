@@ -43,9 +43,7 @@ class TransactionDataRepo(private val transactionSource: TransactionSource) : Tr
         transactionSource.remove(transaction)
     }
 
-    override suspend fun removeAllByCategory(category: Category) {
-        transactionSource.removeAllByCategory(category)
-    }
+    override fun removeAllByCategory(category: Category) = transactionSource.removeAllByCategory(category)
 
     override suspend fun clearAll() {
         transactionSource.clearAll()

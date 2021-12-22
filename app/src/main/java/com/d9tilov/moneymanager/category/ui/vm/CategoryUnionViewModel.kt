@@ -18,6 +18,7 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CategoryUnionViewModel @AssistedInject constructor(
     private val categoryInteractor: CategoryInteractor,
@@ -42,8 +43,8 @@ class CategoryUnionViewModel @AssistedInject constructor(
             val category = categoryInteractor.getCategoryById(parentId)
             categoryInteractor.update(categoryItem1.copy(parent = category))
             categoryInteractor.update(categoryItem2.copy(parent = category))
+            withContext(Dispatchers.Main) { navigator?.accept() }
         }
-        navigator?.accept()
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
             param("create_category", "name: " + groupedCategory.name)
         }

@@ -26,6 +26,6 @@ interface TransactionInteractor : Interactor {
     fun getSumEarnedInFiscalPeriod(): Flow<BigDecimal>
     suspend fun update(transaction: Transaction)
     suspend fun removeTransaction(transaction: Transaction)
-    suspend fun removeAllByCategory(category: Category)
+    fun removeAllByCategory(category: Category): Flow<Int>
     suspend fun clearAll()
 }

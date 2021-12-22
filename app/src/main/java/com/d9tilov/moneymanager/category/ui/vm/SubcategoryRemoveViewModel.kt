@@ -17,7 +17,9 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SubcategoryRemoveViewModel @AssistedInject constructor(
     private val categoryInteractor: CategoryInteractor,
@@ -27,24 +29,29 @@ class SubcategoryRemoveViewModel @AssistedInject constructor(
 ) : BaseViewModel<RemoveSubCategoryDialogNavigator>() {
 
     fun remove(subcategory: Category) = viewModelScope.launch(Dispatchers.IO) {
-        transactionInteractor.removeAllByCategory(subcategory)
-        val parentRemoved = categoryInteractor.deleteSubCategory(subcategory)
-        if (parentRemoved) {
-            navigator?.closeDialogAndGoToCategory()
-        } else {
-            navigator?.closeDialog()
-        }
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-            param("delete_subcategory", "name: " + subcategory.name)
+        transactionInteractor.removeAllByCategory(subcategory).collect {
+            val parentRemoved = categoryInteractor.deleteSubCategory(subcategory)
+            withContext(Dispatchers.Main) {
+                if (parentRemoved) {
+                    navigator?.closeDialogAndGoToCategory()
+                } else {
+                    navigator?.closeDialog()
+                }
+            }
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                param("delete_subcategory", "name: " + subcategory.name)
+            }
         }
     }
 
     fun removeFromGroup(subcategory: Category) = viewModelScope.launch(Dispatchers.IO) {
         val parentRemoved = categoryInteractor.deleteFromGroup(subcategory)
-        if (parentRemoved) {
-            navigator?.closeDialogAndGoToCategory()
-        } else {
-            navigator?.closeDialog()
+        withContext(Dispatchers.Main) {
+            if (parentRemoved) {
+                navigator?.closeDialogAndGoToCategory()
+            } else {
+                navigator?.closeDialog()
+            }
         }
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
             param("delete_subcategory_from_group", "name: " + subcategory.name)

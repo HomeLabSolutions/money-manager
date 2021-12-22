@@ -28,6 +28,6 @@ interface TransactionSource {
     suspend fun getCountByCurrencyCode(code: String): Int
     suspend fun update(transaction: TransactionDataModel)
     suspend fun remove(transaction: TransactionDataModel)
-    suspend fun removeAllByCategory(category: Category)
+    fun removeAllByCategory(category: Category): Flow<Int>
     suspend fun clearAll()
 }
