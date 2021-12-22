@@ -81,7 +81,7 @@
     <string name="category_income_info_period_title">was earned in period:</string>
 
     <string name="category_edit_title">Edit category group</string>
-    <string name="category_delete_title">Deleting a category</string>
+    <string name="category_delete_title">Remove category?</string>
     <string name="category_delete_sub_title">Do you want to delete the category \"%1$s\"\?\n\nAll operations with this category will also be deleted.</string>
     <string name="category_delete_group_sub_title">Do you want to delete the category \"%1$s\"\?\nAll subcategories will also be deleted.\n\nAll operations with this category will be deleted too.</string>
     <string name="category_empty_placeholder_title">Category list is empty</string>

@@ -48,11 +48,7 @@ class SubcategoryRemoveDialogFragment :
             tripleRemoveDialogSubtitle.text =
                 getString(R.string.sub_category_delete_subtitle, subCategory.name)
             tripleRemoveDialogButtonAction1.setOnClickListener { viewModel.remove(subCategory) }
-            tripleRemoveDialogButtonAction2.setOnClickListener {
-                viewModel.removeFromGroup(
-                    subCategory
-                )
-            }
+            tripleRemoveDialogButtonAction2.setOnClickListener { viewModel.removeFromGroup(subCategory) }
             tripleRemoveDialogButtonCancel.setOnClickListener { dismiss() }
         }
     }

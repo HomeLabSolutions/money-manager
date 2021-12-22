@@ -10,6 +10,11 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,11 +27,11 @@ class CategoryRemoveViewModel @Inject constructor(
 
     fun remove(category: Category) {
         viewModelScope.launch(Dispatchers.IO) {
-            transactionInteractor.removeAllByCategory(category)
-            category.children.forEach { transactionInteractor.removeAllByCategory(it) }
-            categoryInteractor.deleteCategory(category)
+            transactionInteractor.removeAllByCategory(category).map {
+                category.children.map { async { transactionInteractor.removeAllByCategory(it).first() } }.awaitAll()
+                categoryInteractor.deleteCategory(category)
+            }.collect { navigator?.closeDialog() }
         }
-        navigator?.closeDialog()
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
             param("delete_category", "name: " + category.name)
         }
