@@ -144,20 +144,21 @@ class CurrencyView @JvmOverloads constructor(
         }
     }
 
-    private fun formatInputSum(value: BigDecimal): String =
-        when {
+    private fun formatInputSum(value: BigDecimal): String {
+        if (value.signum() == 0) return "0"
+        return when {
             showShortDecimalPart -> String.format(
                 Locale.getDefault(),
-                value.setScale(DECIMAL_LENGTH, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toString()
+                value.setScale(DECIMAL_LENGTH, BigDecimal.ROUND_HALF_UP).stripTrailingZeros()
+                    .toString()
             )
             showDecimalPart -> String.format(Locale.getDefault(), value.removeScale.toString())
-            else -> {
-                String.format(
-                    Locale.getDefault(),
-                    value.setScale(0, BigDecimal.ROUND_HALF_UP).toString()
-                )
-            }
+            else -> String.format(
+                Locale.getDefault(),
+                value.setScale(0, BigDecimal.ROUND_HALF_UP).toString()
+            )
         }
+    }
 
     private fun initPrefix() {
         with(prefixTextView) {

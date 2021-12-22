@@ -16,11 +16,13 @@ import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionHeader
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -30,8 +32,14 @@ class IncomeViewModel @Inject constructor(
     private val transactionInteractor: TransactionInteractor
 ) : BaseIncomeExpenseViewModel<IncomeNavigator>() {
 
-    val earnedInPeriod = transactionInteractor.getSumEarnedInFiscalPeriod()
-        .flowOn(Dispatchers.IO).asLiveData()
+    private val updateCurrencyExceptionHandler = CoroutineExceptionHandler { _, exception ->
+        Timber.d("Unable to update currency: $exception")
+    }
+
+    val earnedInPeriod = transactionInteractor.getSumInFiscalPeriodInUsd(TransactionType.INCOME)
+        .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler).asLiveData()
+    val earnedInPeriodApprox = transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.INCOME)
+        .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler).asLiveData()
 
     override val categories: LiveData<List<Category>> =
         categoryInteractor.getGroupedCategoriesByType(TransactionType.INCOME).asLiveData()

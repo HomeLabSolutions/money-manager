@@ -56,15 +56,14 @@
 
         <TextView
             android:id="@+id/expense_today_info_title"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="@string/category_expense_info_today_title"
             android:textAppearance="?attr/textAppearanceCaption"
             app:layout_constraintBottom_toTopOf="@+id/expense_period_info_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
             android:id="@+id/expense_today_info_value"
@@ -76,14 +75,14 @@
             app:layout_constraintBottom_toBottomOf="@+id/expense_today_info_title"
             app:layout_constraintStart_toEndOf="@+id/expense_today_info_title"
             app:layout_constraintTop_toTopOf="@+id/expense_today_info_title"
-            app:showDecimalPart="true"
+            app:showShortDecimalPart="true"
             app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
             app:sum="1000"
             app:sumTextStyle="?attr/textAppearanceCurrencyValueSmall" />
 
         <TextView
             android:id="@+id/expense_period_info_title"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="@string/category_expense_info_period_title"

@@ -107,14 +107,14 @@ class TransactionInteractorImpl(
                     }
             }
 
-    override fun getSumSpentInFiscalPeriodInUsd(): Flow<BigDecimal> {
+    override fun getSumInFiscalPeriodInUsd(type: TransactionType): Flow<BigDecimal> {
         return flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
             val endDate = Date()
             val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
             transactionRepo.getTransactionsByTypeWithoutDate(
                 startDate,
                 endDate,
-                TransactionType.EXPENSE
+                type
             ).map { list ->
                 val currentCurrency = userInteractor.getCurrentCurrency()
                 val currencies = mutableSetOf<String>()
@@ -125,14 +125,14 @@ class TransactionInteractorImpl(
         }
     }
 
-    override fun getApproxSumSpentInFiscalPeriodCurrentCurrency(): Flow<BigDecimal> {
+    override fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<BigDecimal> {
         return flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
             val endDate = Date()
             val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
             transactionRepo.getTransactionsByTypeWithoutDate(
                 startDate,
                 endDate,
-                TransactionType.EXPENSE
+                type
             ).map { list ->
                 val currentCurrency = userInteractor.getCurrentCurrency()
                 list.sumOf { tr ->
@@ -144,18 +144,6 @@ class TransactionInteractorImpl(
                     }
                 }
             }
-        }
-    }
-
-    override fun getSumEarnedInFiscalPeriod(): Flow<BigDecimal> {
-        return flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
-            val endDate = Date()
-            val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
-            transactionRepo.getTransactionsByTypeWithoutDate(
-                startDate,
-                endDate,
-                TransactionType.INCOME
-            ).map { list -> list.sumOf { it.sum } }
         }
     }
 
