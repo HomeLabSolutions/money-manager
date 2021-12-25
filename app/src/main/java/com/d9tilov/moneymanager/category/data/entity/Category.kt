@@ -10,17 +10,28 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Category(
-    val id: Long = DEFAULT_DATA_ID,
-    val clientId: String = NO_ID.toString(),
-    val parent: Category? = null,
-    val children: List<Category> = emptyList(),
+    val id: Long,
+    val clientId: String,
+    val parent: Category?,
+    val children: List<Category>,
     val type: TransactionType,
     val name: String,
     @DrawableRes val icon: Int,
     @ColorRes val color: Int,
-    val usageCount: Int = 0
+    val usageCount: Int
 ) : Parcelable {
     companion object {
         const val ALL_ITEMS_ID = -555L
+        val EMPTY = Category(
+            id = DEFAULT_DATA_ID,
+            clientId = NO_ID.toString(),
+            parent = null,
+            children = emptyList(),
+            type = TransactionType.EXPENSE,
+            name = "",
+            icon = 0,
+            color = 0,
+            usageCount = 0
+        )
     }
 }

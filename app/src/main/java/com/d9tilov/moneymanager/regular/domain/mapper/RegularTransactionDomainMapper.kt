@@ -17,7 +17,7 @@ fun RegularTransaction.toData(): RegularTransactionData = RegularTransactionData
     periodType,
     dayOfWeek,
     description,
-    pushEnable,
+    pushEnabled,
     autoAdd
 )
 

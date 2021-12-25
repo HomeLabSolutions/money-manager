@@ -14,6 +14,7 @@ class ExchangeInteractorImpl(private val currencyInteractor: CurrencyInteractor)
         currencyCode: String
     ): BigDecimal {
         val mainCurrencyCode = currencyInteractor.getCurrentCurrencyCode()
+        if (currencyCode == mainCurrencyCode) return amount
         val mainCurrency = currencyInteractor.getCurrencyByCode(mainCurrencyCode)
         val currentCurrency = currencyInteractor.getCurrencyByCode(currencyCode)
         val c = Calendar.getInstance()

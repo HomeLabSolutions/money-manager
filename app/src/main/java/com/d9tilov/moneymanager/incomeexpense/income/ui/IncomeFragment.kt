@@ -108,7 +108,10 @@ class IncomeFragment :
                 }
             )
         }
-        lifecycleScope.launch { viewModel.transactions.collectLatest { transactionAdapter.submitData(it) } }
+        lifecycleScope.launch {
+            viewModel.transactions.collectLatest { transactionAdapter.submitData(it) }
+            viewBinding.incomeTransactionRvList.scrollToPosition(0)
+        }
         lifecycleScope.launch {
             transactionAdapter
                 .loadStateFlow

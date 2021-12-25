@@ -14,7 +14,7 @@ class CategoryMapper @Inject constructor(@ApplicationContext private val context
         val iconResId = context.resources.getIdentifier(iconName, "drawable", context.packageName)
         val colorResId = context.resources.getIdentifier(colorName, "color", context.packageName)
         parentModel?.let {
-            Category(
+            Category.EMPTY.copy(
                 id = id,
                 clientId = uid,
                 name = name,
@@ -24,7 +24,7 @@ class CategoryMapper @Inject constructor(@ApplicationContext private val context
                 color = colorResId,
                 usageCount = usageCount
             )
-        } ?: Category(
+        } ?: Category.EMPTY.copy(
             id = id,
             clientId = uid,
             name = name,
@@ -41,7 +41,7 @@ class CategoryMapper @Inject constructor(@ApplicationContext private val context
                 context.resources.getIdentifier(iconName, "drawable", context.packageName)
             val colorResId =
                 context.resources.getIdentifier(colorName, "color", context.packageName)
-            Category(
+            Category.EMPTY.copy(
                 id = id,
                 clientId = uid,
                 name = name,

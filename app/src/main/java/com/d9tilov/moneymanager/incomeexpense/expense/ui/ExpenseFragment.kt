@@ -115,7 +115,10 @@ class ExpenseFragment :
             }
         )
         lifecycleScope.launch {
-            viewModel.transactions.collectLatest { data -> transactionAdapter.submitData(data) }
+            viewModel.transactions.collectLatest { data ->
+                transactionAdapter.submitData(data)
+                viewBinding.expenseTransactionRvList.scrollToPosition(0)
+            }
         }
         lifecycleScope.launch {
             transactionAdapter
@@ -146,7 +149,11 @@ class ExpenseFragment :
             )
             viewModel.spentInPeriodApprox.observe(
                 viewLifecycleOwner,
-                { sum -> viewBinding.expensePeriodInfoApproxSum.setValue(sum) }
+                viewBinding.expensePeriodInfoApproxSum::setValue
+            )
+            viewModel.ableToSpendToday.observe(
+                viewLifecycleOwner,
+                viewBinding.expenseTodayInfoValue::setValue
             )
         }
         viewBinding.expenseTransactionRvList.addOnScrollListener(object : RecyclerView.OnScrollListener() {

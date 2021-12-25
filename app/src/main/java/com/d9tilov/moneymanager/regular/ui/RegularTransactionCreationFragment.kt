@@ -19,7 +19,6 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
-import com.d9tilov.moneymanager.core.util.getDayOfWeek
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.show
@@ -27,6 +26,7 @@ import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.core.util.toBigDecimal
 import com.d9tilov.moneymanager.databinding.FragmentCreationRegularTransactionBinding
 import com.d9tilov.moneymanager.period.PeriodType
+import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.regular.vm.CreatedRegularTransactionViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.google.android.material.appbar.MaterialToolbar
@@ -46,7 +46,7 @@ class RegularTransactionCreationFragment :
 
     private val args by navArgs<RegularTransactionCreationFragmentArgs>()
     private val transactionType by lazy { args.transactionType }
-    private val regularTransaction by lazy { args.regularTransaction }
+    private val regularTransaction by lazy { args.regularTransaction ?: RegularTransaction.EMPTY.copy(type = transactionType) }
     private val spinnerPeriodMap = arrayMapOf(
         PeriodType.DAY to 0,
         PeriodType.WEEK to 1,
@@ -55,6 +55,7 @@ class RegularTransactionCreationFragment :
     )
     private val viewBinding by viewBinding(FragmentCreationRegularTransactionBinding::bind)
     private var toolbar: MaterialToolbar? = null
+    private var localTransaction: RegularTransaction? = null
 
     override fun getNavigator() = this
     override val viewModel by viewModels<CreatedRegularTransactionViewModel> {
@@ -70,40 +71,23 @@ class RegularTransactionCreationFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        localTransaction = regularTransaction
         initToolbar()
-        regularTransaction.let {
-            viewModel.run {
-                sum.value = sum.value ?: it?.sum ?: BigDecimal.ZERO
-                category.value = category.value ?: it?.category
-                periodType.value = periodType.value ?: it?.periodType ?: getSelectedPeriodType(
-                    viewBinding.createdRegularTransactionRepeatSpinner.selectedItemPosition
-                )
-                startDate.value = startDate.value ?: it?.startDate ?: Date()
-                description.value = description.value ?: it?.description ?: ""
-                pushEnabled.value = pushEnabled.value ?: it?.pushEnable ?: true
-                autoAdd.value = autoAdd.value ?: it?.autoAdd ?: false
-                weekDaysSelected.value =
-                    weekDaysSelected.value ?: it?.dayOfWeek ?: Date().getDayOfWeek()
-                if (weekDaysSelected.value == 0) {
-                    weekDaysSelected.value = Date().getDayOfWeek()
-                }
-            }
-        }
         updateIcon()
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Category>(
             ARG_CATEGORY
         )?.observe(
             viewLifecycleOwner
-        ) {
-            viewModel.category.value = it
+        ) { category ->
+            localTransaction = localTransaction?.copy(category = category)
             updateIcon()
+            updateSaveButtonState()
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<Category>(
                 ARG_CATEGORY
             )
         }
-        viewModel.category.observe(this.viewLifecycleOwner, { updateSaveButtonState() })
         viewBinding.run {
-            if (regularTransaction == null) {
+            if (localTransaction?.isValid() == false) {
                 createdRegularTransactionCategoryArrow.show()
                 createdRegularTransactionDelete.gone()
             } else {
@@ -111,34 +95,27 @@ class RegularTransactionCreationFragment :
                 createdRegularTransactionDelete.show()
             }
             updateSaveButtonState()
-            createdRegularTransactionMainSum.setValue(viewModel.sum.value ?: BigDecimal.ZERO)
+            createdRegularTransactionMainSum.setValue(localTransaction?.sum ?: BigDecimal.ZERO)
             createdRegularTransactionMainSum.moneyEditText.onChange { sum ->
-                if (sum.isEmpty()) {
-                    viewModel.sum.value = BigDecimal.ZERO
-                } else {
-                    viewModel.sum.value = sum.toBigDecimal
-                }
+                localTransaction =
+                    localTransaction?.copy(sum = if (sum.isEmpty()) BigDecimal.ZERO else sum.toBigDecimal)
                 updateSaveButtonState()
             }
             createdRegularTransactionDescription.onChange { description ->
-                viewModel.description.value = description
+                localTransaction = localTransaction?.copy(description = description)
             }
-            createdRegularTransactionRepeatCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
-                viewModel.pushEnabled.value = isChecked
-            }
-            createdRegularTransactionAutoAddCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
-                viewModel.autoAdd.value = isChecked
+            createdRegularTransactionNotifyCheckbox.setOnCheckedChangeListener { _, isChecked ->
+                localTransaction = localTransaction?.copy(pushEnabled = isChecked)
             }
             createdRegularTransactionRepeatSpinner.setSelection(
-                spinnerPeriodMap.getValue(regularTransaction?.periodType ?: PeriodType.MONTH)
+                spinnerPeriodMap.getValue(regularTransaction.periodType)
             )
-            createdRegularTransactionDescription.setText(viewModel.description.value)
-            createdRegularTransactionRepeatCheckbox.isChecked = viewModel.pushEnabled.value ?: true
-            createdRegularTransactionAutoAddCheckbox.isChecked = viewModel.autoAdd.value ?: false
+            createdRegularTransactionDescription.setText(localTransaction?.description)
+            createdRegularTransactionNotifyCheckbox.isChecked = localTransaction?.pushEnabled ?: true
             createdRegularTransactionRepeatStartsDate.text = SimpleDateFormat(
                 TRANSACTION_DATE_FORMAT,
                 Locale.getDefault()
-            ).format(viewModel.startDate.value ?: Date())
+            ).format(localTransaction?.startDate ?: Date())
             createdRegularTransactionRepeatSpinner.onItemSelectedListener =
                 object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(
@@ -147,7 +124,8 @@ class RegularTransactionCreationFragment :
                         position: Int,
                         id: Long
                     ) {
-                        viewModel.periodType.value = getSelectedPeriodType(position)
+                        localTransaction =
+                            localTransaction?.copy(periodType = getSelectedPeriodType(position))
                         if (getSelectedPeriodType(position) == PeriodType.WEEK) {
                             createdRegularTransactionWeekSelector.show()
                         } else {
@@ -162,14 +140,14 @@ class RegularTransactionCreationFragment :
                 }
             createdRegularTransactionRepeatStartsDate.setOnClickListener {
                 val picker = MaterialDatePicker.Builder.datePicker()
-                    .setSelection(viewModel.startDate.value?.time ?: Date().time)
+                    .setSelection(localTransaction?.startDate?.time ?: Date().time)
                     .build()
                 picker.addOnPositiveButtonClickListener { calendarDate ->
-                    viewModel.startDate.value = Date(calendarDate)
+                    localTransaction = localTransaction?.copy(startDate = Date(calendarDate))
                     viewBinding.createdRegularTransactionRepeatStartsDate.text = SimpleDateFormat(
                         TRANSACTION_DATE_FORMAT,
                         Locale.getDefault()
-                    ).format(viewModel.startDate.value ?: Date())
+                    ).format(localTransaction?.startDate ?: Date())
                 }
                 picker.show(parentFragmentManager, picker.tag)
             }
@@ -182,32 +160,18 @@ class RegularTransactionCreationFragment :
             }
             createdRegularTransactionSave.setOnClickListener { view ->
                 if (view.isSelected) {
-                    viewModel.save()
+                    viewModel.saveOrUpdate(localTransaction!!)
                 } else {
                     shakeError()
                 }
             }
-            createdRegularTransactionSunday.setOnClickListener {
-                setWeekdaySelected(Calendar.SUNDAY)
-            }
-            createdRegularTransactionMonday.setOnClickListener {
-                setWeekdaySelected(Calendar.MONDAY)
-            }
-            createdRegularTransactionTuesday.setOnClickListener {
-                setWeekdaySelected(Calendar.TUESDAY)
-            }
-            createdRegularTransactionWednesday.setOnClickListener {
-                setWeekdaySelected(Calendar.WEDNESDAY)
-            }
-            createdRegularTransactionThursday.setOnClickListener {
-                setWeekdaySelected(Calendar.THURSDAY)
-            }
-            createdRegularTransactionFriday.setOnClickListener {
-                setWeekdaySelected(Calendar.FRIDAY)
-            }
-            createdRegularTransactionSaturday.setOnClickListener {
-                setWeekdaySelected(Calendar.SATURDAY)
-            }
+            createdRegularTransactionSunday.setOnClickListener { setWeekdaySelected(Calendar.SUNDAY) }
+            createdRegularTransactionMonday.setOnClickListener { setWeekdaySelected(Calendar.MONDAY) }
+            createdRegularTransactionTuesday.setOnClickListener { setWeekdaySelected(Calendar.TUESDAY) }
+            createdRegularTransactionWednesday.setOnClickListener { setWeekdaySelected(Calendar.WEDNESDAY) }
+            createdRegularTransactionThursday.setOnClickListener { setWeekdaySelected(Calendar.THURSDAY) }
+            createdRegularTransactionFriday.setOnClickListener { setWeekdaySelected(Calendar.FRIDAY) }
+            createdRegularTransactionSaturday.setOnClickListener { setWeekdaySelected(Calendar.SATURDAY) }
         }
     }
 
@@ -216,25 +180,25 @@ class RegularTransactionCreationFragment :
             context,
             R.anim.animation_shake
         )
-        if (viewModel.sum.value?.signum() == 0) {
+        if (localTransaction?.sum?.signum() == 0) {
             viewBinding.createdRegularTransactionMainSum.startAnimation(animation)
-        } else if (viewModel.category.value == null) {
+        } else if (localTransaction?.category == Category.EMPTY) {
             viewBinding.createdRegularTransactionCategoryLayout.startAnimation(animation)
-        } else if (viewModel.periodType.value == PeriodType.WEEK && viewModel.weekDaysSelected.value == 0) {
+        } else if (localTransaction?.periodType == PeriodType.WEEK && localTransaction?.dayOfWeek == 0) {
             viewBinding.createdRegularTransactionWeekSelector.startAnimation(animation)
         }
     }
 
     private fun setWeekdaySelected(day: Int, changeSelection: Boolean = true) {
-        val byteAsDay = viewModel.weekDaysSelected.value ?: 0b0000000
+        val byteAsDay = localTransaction?.dayOfWeek ?: 0b0000000
         val byteToShift = day - 1
         val isSelected = (byteAsDay shr byteToShift) and 1 == 1
         if (changeSelection) {
-            viewModel.weekDaysSelected.value = if (isSelected) {
-                byteAsDay and (1 shl byteToShift).inv()
-            } else {
-                byteAsDay or (1 shl byteToShift)
-            }
+            localTransaction = localTransaction?.copy(
+                dayOfWeek =
+                    if (isSelected) byteAsDay and (1 shl byteToShift).inv()
+                    else byteAsDay or (1 shl byteToShift)
+            )
         }
         viewBinding.run {
             val view = when (day) {
@@ -270,34 +234,28 @@ class RegularTransactionCreationFragment :
 
     private fun updateSaveButtonState() {
         viewBinding.createdRegularTransactionSave.isSelected =
-            viewModel.sum.value?.signum() ?: BigDecimal.ZERO.signum() > 0 && viewModel.category.value != null && (viewModel.periodType.value != PeriodType.WEEK || (viewModel.periodType.value == PeriodType.WEEK && viewModel.weekDaysSelected.value != 0))
+            localTransaction?.let { it.sum.signum() > 0 && it.category != Category.EMPTY && (it.periodType != PeriodType.WEEK || (it.periodType == PeriodType.WEEK && it.dayOfWeek != 0)) } ?: false
     }
 
     private fun updateIcon() {
-        viewModel.category.value?.let { category ->
-            val iconDrawable = createTintDrawable(
-                requireContext(),
-                category.icon,
-                category.color
-            )
-            iconDrawable.setBounds(0, 0, 120, 120)
-            viewBinding.run {
-                createdRegularTransactionCategory.setCompoundDrawables(
-                    iconDrawable,
-                    null,
-                    null,
-                    null
-                )
-                createdRegularTransactionCategory.text = category.name
-                createdRegularTransactionCategory.setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        category.color
+        if (localTransaction?.category != Category.EMPTY) {
+            localTransaction?.category?.let {
+                val iconDrawable = createTintDrawable(requireContext(), it.icon, it.color)
+                iconDrawable.setBounds(0, 0, 120, 120)
+                viewBinding.run {
+                    createdRegularTransactionCategory.setCompoundDrawables(
+                        iconDrawable,
+                        null,
+                        null,
+                        null
                     )
-                )
+                    createdRegularTransactionCategory.text = it.name
+                    createdRegularTransactionCategory.setTextColor(
+                        ContextCompat.getColor(requireContext(), it.color)
+                    )
+                }
             }
-        }
-        if (viewModel.category.value == null) {
+        } else {
             viewBinding.createdRegularTransactionCategory.text =
                 getString(R.string.regular_transaction_choose_category)
         }
@@ -315,9 +273,7 @@ class RegularTransactionCreationFragment :
 
     override fun onStart() {
         super.onStart()
-        if (regularTransaction == null) {
-            showKeyboard(viewBinding.createdRegularTransactionMainSum.moneyEditText)
-        }
+        showKeyboard(viewBinding.createdRegularTransactionMainSum.moneyEditText)
     }
 
     private fun initToolbar() {
@@ -335,8 +291,7 @@ class RegularTransactionCreationFragment :
         setHasOptionsMenu(true)
         toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.action_add -> {
-                }
+                R.id.action_add -> {}
                 else -> throw IllegalArgumentException("Unknown menu item with id: ${it.itemId}")
             }
             return@setOnMenuItemClickListener false

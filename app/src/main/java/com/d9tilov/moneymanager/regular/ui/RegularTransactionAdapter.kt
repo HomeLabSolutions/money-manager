@@ -101,7 +101,7 @@ class RegularTransactionAdapter :
 
         fun bind(regularTransaction: RegularTransaction) {
             viewBinding.run {
-                itemRegularTransactionSum.setValue(regularTransaction.sum)
+                itemRegularTransactionSum.setValue(regularTransaction.sum, regularTransaction.currencyCode)
                 itemRegularTransactionCategoryName.text = regularTransaction.category.name
                 itemRegularTransactionCategoryName.setTextColor(
                     ContextCompat.getColor(
@@ -119,7 +119,7 @@ class RegularTransactionAdapter :
                     .load(drawable)
                     .into(itemRegularTransactionIcon)
                 itemRegularTransactionDescription.text = regularTransaction.description
-                itemRegularTransactionNotify.isChecked = regularTransaction.pushEnable
+                itemRegularTransactionNotify.isChecked = regularTransaction.pushEnabled
                 itemRegularTransactionDate.text = when (regularTransaction.periodType) {
                     PeriodType.DAY -> context.getString(R.string.regular_transaction_repeat_period_day)
                     PeriodType.WEEK -> context.getString(

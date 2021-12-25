@@ -9,6 +9,7 @@ import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.util.getStartDateOfFiscalPeriod
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.exchanger.domain.ExchangeInteractor
+import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDateDataModel
@@ -18,6 +19,7 @@ import com.d9tilov.moneymanager.transaction.domain.mapper.toDataModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDomainModel
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
@@ -27,6 +29,7 @@ import java.util.Date
 
 class TransactionInteractorImpl(
     private val transactionRepo: TransactionRepo,
+    private val regularTransactionInteractor: RegularTransactionInteractor,
     private val categoryInteractor: CategoryInteractor,
     private val userInteractor: UserInteractor,
     private val currencyInteractor: CurrencyInteractor,
@@ -106,6 +109,25 @@ class TransactionInteractorImpl(
                         }
                     }
             }
+
+    override fun ableToSpendToday(): Flow<BigDecimal> {
+        return regularTransactionInteractor.getAll(TransactionType.INCOME)
+            .combine(regularTransactionInteractor.getAll(TransactionType.EXPENSE)) { incomes, expenses ->
+                incomes.sumOf {
+                    exchangeInteractor.convertToMainCurrency(
+                        it.sum,
+                        it.currencyCode
+                    )
+                }.minus(
+                    expenses.sumOf {
+                        exchangeInteractor.convertToMainCurrency(
+                            it.sum,
+                            it.currencyCode
+                        )
+                    }
+                )
+            }
+    }
 
     override fun getSumInFiscalPeriodInUsd(type: TransactionType): Flow<BigDecimal> {
         return flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->

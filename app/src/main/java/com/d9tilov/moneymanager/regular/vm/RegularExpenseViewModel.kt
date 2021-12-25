@@ -22,7 +22,7 @@ class RegularExpenseViewModel @Inject constructor(
 
     override fun onCheckClicked(regularTransaction: RegularTransaction) {
         viewModelScope.launch(Dispatchers.IO) {
-            regularTransactionInteractor.update(regularTransaction.copy(pushEnable = !regularTransaction.pushEnable))
+            regularTransactionInteractor.update(regularTransaction.copy(pushEnabled = !regularTransaction.pushEnabled))
         }
     }
 }
