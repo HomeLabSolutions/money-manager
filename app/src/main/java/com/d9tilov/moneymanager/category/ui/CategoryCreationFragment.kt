@@ -49,7 +49,7 @@ class CategoryCreationFragment :
     private val args by navArgs<CategoryCreationFragmentArgs>()
     private val transactionType by lazy { args.transactionType }
     private val category by lazy {
-        args.category ?: Category(
+        args.category ?: Category.EMPTY.copy(
             type = transactionType,
             name = "",
             icon = if (transactionType == TransactionType.EXPENSE) R.drawable.ic_category_expense_food else R.drawable.ic_category_income_business,
@@ -200,7 +200,7 @@ class CategoryCreationFragment :
     }
 
     private fun initToolbar() {
-        toolbar = viewBinding.categoryCreationToolbarContainer?.toolbar
+        toolbar = viewBinding.categoryCreationToolbarContainer.toolbar
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)

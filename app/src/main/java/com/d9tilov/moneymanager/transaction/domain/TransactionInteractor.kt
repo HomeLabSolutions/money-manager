@@ -21,6 +21,7 @@ interface TransactionInteractor : Interactor {
         type: TransactionType
     ): Flow<List<Transaction>>
 
+    fun ableToSpendToday(): Flow<BigDecimal>
     fun getSumInFiscalPeriodInUsd(type: TransactionType): Flow<BigDecimal>
     fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<BigDecimal>
     suspend fun update(transaction: Transaction)

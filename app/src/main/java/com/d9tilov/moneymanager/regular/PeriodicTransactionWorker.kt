@@ -41,7 +41,7 @@ class PeriodicTransactionWorker @AssistedInject constructor(
             if (regularTransaction.autoAdd) {
                 transactionInteractor.addTransaction(commonTransaction)
             }
-            if (regularTransaction.pushEnable) {
+            if (regularTransaction.pushEnabled) {
                 notificationBuilder.fireNotification(commonTransaction, regularTransaction.id)
             }
             Result.success()

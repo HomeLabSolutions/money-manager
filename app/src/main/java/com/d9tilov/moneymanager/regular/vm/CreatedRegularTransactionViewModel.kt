@@ -2,78 +2,34 @@ package com.d9tilov.moneymanager.regular.vm
 
 import android.os.Bundle
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.savedstate.SavedStateRegistryOwner
 import com.d9tilov.moneymanager.base.ui.navigator.RegularTransactionCreatedNavigator
-import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
-import com.d9tilov.moneymanager.period.PeriodType
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
-import com.d9tilov.moneymanager.transaction.TransactionType
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
-import java.util.Date
+import kotlinx.coroutines.withContext
 
 class CreatedRegularTransactionViewModel @AssistedInject constructor(
     private val regularTransactionInteractor: RegularTransactionInteractor,
     @Assisted val savedStateHandle: SavedStateHandle
 ) : BaseViewModel<RegularTransactionCreatedNavigator>() {
 
-    var sum = MutableLiveData<BigDecimal>()
-    var category = MutableLiveData<Category?>()
-    var periodType = MutableLiveData<PeriodType>()
-    var startDate = MutableLiveData<Date>()
-    var description = MutableLiveData<String>()
-    var pushEnabled = MutableLiveData<Boolean>()
-    var autoAdd = MutableLiveData<Boolean>()
-    var weekDaysSelected = MutableLiveData<Int>()
-
-    fun save() {
-        val transactionType =
-            requireNotNull(savedStateHandle.get<TransactionType>("transactionType"))
-        val regularTransaction = savedStateHandle.get<RegularTransaction>("regular_transaction")
+    fun saveOrUpdate(transaction: RegularTransaction) {
         viewModelScope.launch(Dispatchers.IO) {
-            if (regularTransaction == null) {
-                regularTransactionInteractor.insert(
-                    RegularTransaction(
-                        type = transactionType,
-                        sum = sum.value!!,
-                        category = category.value!!,
-                        startDate = startDate.value!!,
-                        periodType = periodType.value!!,
-                        description = description.value!!,
-                        pushEnable = pushEnabled.value!!,
-                        autoAdd = autoAdd.value!!,
-                        dayOfWeek = if (periodType.value != PeriodType.WEEK) 0 else weekDaysSelected.value!!
-                    )
-                )
-            } else {
-                regularTransactionInteractor.update(
-                    regularTransaction.copy(
-                        type = transactionType,
-                        sum = sum.value!!,
-                        category = category.value!!,
-                        startDate = startDate.value!!,
-                        periodType = periodType.value!!,
-                        description = description.value!!,
-                        pushEnable = pushEnabled.value!!,
-                        autoAdd = autoAdd.value!!,
-                        dayOfWeek = if (periodType.value != PeriodType.WEEK) 0 else weekDaysSelected.value!!
-                    )
-                )
-            }
+            regularTransactionInteractor.insert(transaction)
+            withContext(Dispatchers.Main) { navigator?.back() }
         }
-        navigator?.back()
     }
 
+    //                        dayOfWeek = if (_periodType.value != PeriodType.WEEK) 0 else _weekDaysSelected.value!!
     @AssistedFactory
     interface CreatedRegularTransactionViewModelFactory {
         fun create(handle: SavedStateHandle): CreatedRegularTransactionViewModel

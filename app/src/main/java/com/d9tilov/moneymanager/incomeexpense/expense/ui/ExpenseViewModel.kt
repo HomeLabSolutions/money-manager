@@ -61,6 +61,8 @@ class ExpenseViewModel @Inject constructor(
                 }
             }
             .cachedIn(viewModelScope).flowOn(Dispatchers.IO)
+    val ableToSpendToday = transactionInteractor.ableToSpendToday()
+        .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler).asLiveData()
     val spentInPeriod = transactionInteractor.getSumInFiscalPeriodInUsd(TransactionType.EXPENSE)
         .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler).asLiveData()
     val spentInPeriodApprox = transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.EXPENSE)
