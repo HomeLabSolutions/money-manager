@@ -27,7 +27,7 @@ class CategoryCreationViewModel @AssistedInject constructor(
 ) : BaseViewModel<CategoryCreationNavigator>() {
 
     private val saveCategoryExceptionHandler = CoroutineExceptionHandler { _, exception ->
-        navigator?.showError(exception)
+        viewModelScope.launch(Dispatchers.Main) { navigator?.showError(exception) }
     }
 
     fun save(category: Category) {

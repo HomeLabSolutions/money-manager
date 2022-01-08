@@ -17,7 +17,7 @@ class CategoryGroupEditViewModel @Inject constructor(
 ) : BaseViewModel<EditCategoryDialogNavigator>() {
 
     private val saveCategoryExceptionHandler = CoroutineExceptionHandler { _, exception ->
-        navigator?.showError(exception)
+        viewModelScope.launch(Dispatchers.Main) { navigator?.showError(exception) }
     }
 
     fun save(category: Category) {
