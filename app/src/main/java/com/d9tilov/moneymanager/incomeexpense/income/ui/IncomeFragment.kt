@@ -37,7 +37,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -108,11 +107,11 @@ class IncomeFragment :
                 }
             )
         }
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenStarted {
             viewModel.transactions.collectLatest { transactionAdapter.submitData(it) }
             viewBinding.incomeTransactionRvList.scrollToPosition(0)
         }
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenStarted {
             transactionAdapter
                 .loadStateFlow
                 .collectLatest { loadStates ->
@@ -125,7 +124,7 @@ class IncomeFragment :
                     }
                 }
         }
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenStarted {
             viewModel.earnedInPeriod.observe(
                 viewLifecycleOwner,
                 { sum ->
