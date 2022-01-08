@@ -40,7 +40,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.BigDecimal.ROUND_HALF_UP
 import javax.inject.Inject
@@ -117,13 +116,13 @@ class ExpenseFragment :
                 }
             }
         )
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenStarted {
             viewModel.transactions.collectLatest { data ->
                 transactionAdapter.submitData(data)
                 viewBinding.expenseTransactionRvList.scrollToPosition(0)
             }
         }
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenStarted {
             transactionAdapter
                 .loadStateFlow
                 .collectLatest { loadStates ->

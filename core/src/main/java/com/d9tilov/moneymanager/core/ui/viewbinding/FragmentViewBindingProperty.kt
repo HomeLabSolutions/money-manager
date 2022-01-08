@@ -31,7 +31,7 @@ inline fun <F : Fragment, T : ViewBinding> viewBinding(
     crossinline vbFactory: (View) -> T,
     crossinline viewProvider: (F) -> View = Fragment::requireView
 ): ViewBindingProperty<F, T> {
-    return viewBinding() { fragment: F -> vbFactory(viewProvider(fragment)) }
+    return viewBinding { fragment: F -> vbFactory(viewProvider(fragment)) }
 }
 
 /**
