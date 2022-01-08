@@ -144,7 +144,7 @@ class EditTransactionFragment : EditTransactionNavigator,
             }
             editTransactionMainSum.addOnCurrencyClickListener {
                 val action =
-                    EditTransactionFragmentDirections.toCurrencyDest(CurrencyDestination.EDIT_TRANSACTION_SCREEN)
+                    EditTransactionFragmentDirections.toCurrencyDest(CurrencyDestination.EDIT_TRANSACTION_SCREEN, localTransaction?.currencyCode)
                 findNavController().navigate(action)
             }
             editTransactionDescription.setText(transaction.description)

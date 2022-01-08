@@ -11,24 +11,23 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
-import dagger.hilt.android.scopes.ActivityRetainedScoped
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 class ProfileModule {
 
     @Provides
-    @ActivityRetainedScoped
+
     fun profileLocalSource(preferencesStore: PreferencesStore): ProfileSource =
         ProfileLocalSource(preferencesStore)
 
     @Provides
-    @ActivityRetainedScoped
+
     fun profileRepo(): ProfileRepo =
         ProfileDataRepo()
 
     @Provides
-    @ActivityRetainedScoped
+
     fun provideProfileInteractor(profileRepo: ProfileRepo): ProfileInteractor =
         ProfileInteractorImpl(profileRepo)
 }

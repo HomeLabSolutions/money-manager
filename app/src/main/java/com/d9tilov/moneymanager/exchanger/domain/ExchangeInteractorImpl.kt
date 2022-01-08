@@ -21,7 +21,7 @@ class ExchangeInteractorImpl(private val currencyInteractor: CurrencyInteractor)
         c.timeInMillis = mainCurrency.lastUpdateTime
         val mainAbsoluteAmount = mainCurrency.value
         val currentAbsoluteAmount = currentCurrency.value
-        return amount.multiply(mainAbsoluteAmount.divide(currentAbsoluteAmount))
+        return amount.multiply(mainAbsoluteAmount.divideBy(currentAbsoluteAmount))
     }
 
     override suspend fun toUsd(amount: BigDecimal, currencyCode: String): BigDecimal {

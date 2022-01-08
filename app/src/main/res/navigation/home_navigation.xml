@@ -255,6 +255,12 @@
             android:defaultValue="@null"
             app:argType="com.d9tilov.moneymanager.currency.CurrencyDestination"
             app:nullable="true" />
+
+        <argument
+            android:name="currencyCode"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 
     <dialog
