@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.MotionEvent
@@ -34,14 +33,10 @@ class CurrencyView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ViewGroup(context, attrs, defStyleAttr) {
 
-    private var sumTextStyle =
-        DEFAULT_VALUE
-    private var sumTextColor =
-        DEFAULT_VALUE
-    private var signTextStyle =
-        DEFAULT_VALUE
-    private var signTextColor =
-        DEFAULT_VALUE
+    private var sumTextStyle = DEFAULT_VALUE
+    private var sumTextColor = DEFAULT_VALUE
+    private var signTextStyle = DEFAULT_VALUE
+    private var signTextColor = DEFAULT_VALUE
     private var signTextSize = resources.getDimensionPixelSize(R.dimen.currency_sign_text_size)
     private var sumTextSize = resources.getDimensionPixelSize(R.dimen.currency_sum_text_size)
     private var currencyGravity = Gravity.START
@@ -54,10 +49,7 @@ class CurrencyView @JvmOverloads constructor(
     private var scaleEnable = enableInput
 
     private var sum: BigDecimal = BigDecimal.ZERO
-        set(value) {
-            moneyEditText.setText(formatInputSum(value))
-        }
-
+        set(value) = moneyEditText.setText(formatInputSum(value))
     private var signText = ""
         set(value) {
             signTextView.text = value
@@ -92,51 +84,28 @@ class CurrencyView @JvmOverloads constructor(
             with(getContext().obtainStyledAttributes(it, R.styleable.CurrencyView)) {
                 showUnderline = getBoolean(R.styleable.CurrencyView_showUnderline, false)
                 showCurrencySign = getBoolean(R.styleable.CurrencyView_showSign, true)
-                showSignBeforeValue =
-                    getBoolean(R.styleable.CurrencyView_showSignBeforeValue, false)
+                showSignBeforeValue = getBoolean(R.styleable.CurrencyView_showSignBeforeValue, false)
                 enableInput = getBoolean(R.styleable.CurrencyView_enableInput, false)
                 scaleEnable = getBoolean(R.styleable.CurrencyView_scaleEnabled, false)
                 showDecimalPart = getBoolean(R.styleable.CurrencyView_showDecimalPart, false)
                 showShortDecimalPart = getBoolean(R.styleable.CurrencyView_showShortDecimalPart, false)
-                sumTextSize = getDimensionPixelSize(
-                    R.styleable.CurrencyView_sumTextSize,
-                    resources.getDimensionPixelSize(R.dimen.currency_sum_text_size)
-                )
-                sumTextColor = getColor(
-                    R.styleable.CurrencyView_sumTextColor,
-                    DEFAULT_VALUE
-                )
-                sumTextStyle = getResourceId(
-                    R.styleable.CurrencyView_sumTextStyle,
-                    DEFAULT_VALUE
-                )
+                sumTextSize = getDimensionPixelSize(R.styleable.CurrencyView_sumTextSize, resources.getDimensionPixelSize(R.dimen.currency_sum_text_size))
+                sumTextColor = getColor(R.styleable.CurrencyView_sumTextColor, DEFAULT_VALUE)
+                sumTextStyle = getResourceId(R.styleable.CurrencyView_sumTextStyle, DEFAULT_VALUE)
                 currencyGravity = getInt(R.styleable.CurrencyView_gravity, Gravity.START)
                 sum = getString(R.styleable.CurrencyView_sum)?.toBigDecimal ?: BigDecimal.ZERO
                 initSum()
 
                 prefixText = getString(R.styleable.CurrencyView_prefixText) ?: ""
                 initPrefix()
-                signTextSize = getDimensionPixelSize(
-                    R.styleable.CurrencyView_signTextSize,
-                    resources.getDimensionPixelSize(R.dimen.currency_sign_text_size)
-                )
-                signTextColor = getColor(
-                    R.styleable.CurrencyView_signTextColor,
-                    DEFAULT_VALUE
-                )
+                signTextSize = getDimensionPixelSize(R.styleable.CurrencyView_signTextSize, resources.getDimensionPixelSize(R.dimen.currency_sign_text_size))
+                signTextColor = getColor(R.styleable.CurrencyView_signTextColor, DEFAULT_VALUE)
 
-                signText =
-                    getString(R.styleable.CurrencyView_signCode) ?: baseCurrencySymbol
-                signTextStyle = getResourceId(
-                    R.styleable.CurrencyView_signTextStyle,
-                    DEFAULT_VALUE
-                )
+                signText = getString(R.styleable.CurrencyView_signCode) ?: baseCurrencySymbol
+                signTextStyle = getResourceId(R.styleable.CurrencyView_signTextStyle, DEFAULT_VALUE)
                 initSign()
 
-                marginBetweenSign = getDimensionPixelSize(
-                    R.styleable.CurrencyView_marginBetweenSign,
-                    resources.getDimensionPixelSize(R.dimen.currency_margin_between_sign)
-                )
+                marginBetweenSign = getDimensionPixelSize(R.styleable.CurrencyView_marginBetweenSign, resources.getDimensionPixelSize(R.dimen.currency_margin_between_sign))
                 recycle()
             }
         }
@@ -148,16 +117,17 @@ class CurrencyView @JvmOverloads constructor(
     private fun formatInputSum(value: BigDecimal): String {
         if (value.signum() == 0) return "0"
         return when {
-            showShortDecimalPart -> String.format(
-                Locale.getDefault(),
-                value.setScale(DECIMAL_LENGTH, BigDecimal.ROUND_HALF_UP).stripTrailingZeros()
-                    .toString()
-            )
+            showShortDecimalPart -> {
+                if (value.scale() == 0) {
+                    String.format(Locale.getDefault(), value.toString())
+                } else {
+                    String.format(Locale.getDefault(), value.setScale(DECIMAL_LENGTH, BigDecimal.ROUND_HALF_UP)
+                            .stripTrailingZeros()
+                            .toString())
+                }
+            }
             showDecimalPart -> String.format(Locale.getDefault(), value.removeScale.toString())
-            else -> String.format(
-                Locale.getDefault(),
-                value.setScale(0, BigDecimal.ROUND_HALF_UP).toString()
-            )
+            else -> String.format(Locale.getDefault(), value.setScale(0, BigDecimal.ROUND_HALF_UP).toString())
         }
     }
 
@@ -368,6 +338,11 @@ class CurrencyView @JvmOverloads constructor(
     fun setValue(value: BigDecimal, currencyCode: String = baseCurrencySymbol) {
         this.sum = value
         this.signText = getSymbolByCode(currencyCode)
+    }
+
+    fun setColor(color:Int) {
+        moneyEditText.setTextColor(color)
+        signTextView.setTextColor(color)
     }
 
     fun getValue(): BigDecimal {

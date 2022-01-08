@@ -39,7 +39,7 @@ class PeriodicBackupWorker @AssistedInject constructor(
         private const val PERIOD_WORK_IN_HOURS = 20L
 
         fun startPeriodicJob(context: Context) {
-            Timber.tag(App.TAG).d("Start periodic job")
+            Timber.tag(App.TAG).d("Start backup periodic job")
             val recurringWork = PeriodicWorkRequest
                 .Builder(
                     PeriodicBackupWorker::class.java,

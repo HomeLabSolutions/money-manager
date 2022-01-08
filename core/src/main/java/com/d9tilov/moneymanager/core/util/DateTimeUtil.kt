@@ -80,25 +80,49 @@ fun Date.getStartDateOfFiscalPeriod(fiscalDay: Int): Date {
     val c = Calendar.getInstance()
     val dayOfMonth = c.get(Calendar.DAY_OF_MONTH)
     val curDate = Date()
-    val fiscalDate: Date
-    when {
-        dayOfMonth == fiscalDay -> fiscalDate = curDate
+    val fiscalDate: Date = when {
+        dayOfMonth == fiscalDay -> curDate
         dayOfMonth > fiscalDay -> {
-            c.add(Calendar.DATE, (fiscalDay - dayOfMonth))
-            fiscalDate = c.time
+            c.set(Calendar.DAY_OF_MONTH, fiscalDay)
+            c.time
         }
         else -> {
+            c.set(Calendar.DAY_OF_MONTH, fiscalDay)
             c.add(Calendar.MONTH, -1)
-            val daysCountInMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH)
-            if (fiscalDay > dayOfMonth) {
-                c.set(Calendar.DAY_OF_MONTH, daysCountInMonth)
-            } else {
-                c.set(Calendar.DAY_OF_MONTH, fiscalDay)
-            }
-            fiscalDate = c.time
+            c.time
         }
     }
     return fiscalDate.getStartOfDay()
+}
+
+fun Date.getEndDateOfFiscalPeriod(fiscalDay: Int): Date {
+    val c = Calendar.getInstance()
+    val dayOfMonth = c.get(Calendar.DAY_OF_MONTH)
+    val curDate = Date()
+    val fiscalDate: Date = when {
+        dayOfMonth == fiscalDay -> {
+            c.add(Calendar.MONTH, 1)
+            c.time
+        }
+        dayOfMonth > fiscalDay -> {
+            c.set(Calendar.DAY_OF_MONTH, fiscalDay)
+            c.add(Calendar.MONTH, 1)
+            c.time
+        }
+        else -> {
+            c.set(Calendar.DAY_OF_MONTH, fiscalDay)
+            c.time
+        }
+    }
+    return fiscalDate.getStartOfDay()
+}
+
+fun Date.countDaysRemainingNexFiscalDate(fiscalDay: Int): Long {
+    val curDate = Date().getEndOfDay().time
+    val endDateOfFiscalPeriod = getEndDateOfFiscalPeriod(fiscalDay).getStartOfDay().time
+
+    val diffDays = abs(endDateOfFiscalPeriod - curDate) / DateUtils.DAY_IN_MILLIS
+    return diffDays + 1
 }
 
 fun getFirstDayOfMonth(): Date {

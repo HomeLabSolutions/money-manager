@@ -44,6 +44,7 @@ class CurrencyFragment :
 
     private val args by navArgs<CurrencyFragmentArgs>()
     private val destination: CurrencyDestination? by lazy { args.destination }
+    private val currencyCode: String? by lazy { args.currencyCode }
 
     private val viewBinding by viewBinding(FragmentCurrencyBinding::bind)
     private var toolbar: MaterialToolbar? = null
@@ -89,8 +90,11 @@ class CurrencyFragment :
                 when (result.status) {
                     Status.SUCCESS -> {
                         result.data?.let { data ->
-                            val sortedList =
-                                data.sortedBy { CurrencyUtils.getCurrencyFullName(it.code) }
+                            val sortedList = data.sortedBy { CurrencyUtils.getCurrencyFullName(it.code) }.map { currency ->
+                                if (currencyCode != null) {
+                                    currency.copy(isBase = (currencyCode == currency.code))
+                                } else currency
+                            }
                             currencyAdapter.updateItems(sortedList)
                             val checkedIndex = sortedList.indexOfFirst { it.isBase }
                             viewBinding.currencyRv.scrollToPosition(checkedIndex)
