@@ -27,7 +27,7 @@ class CategoryUnionViewModel @AssistedInject constructor(
 ) : BaseViewModel<CategoryUnionDialogNavigator>() {
 
     private val saveCategoryExceptionHandler = CoroutineExceptionHandler { _, exception ->
-        navigator?.showError(exception)
+        viewModelScope.launch(Dispatchers.Main) { navigator?.showError(exception) }
     }
 
     fun addToGroup(categoryItem: Category, parentCategory: Category) {
