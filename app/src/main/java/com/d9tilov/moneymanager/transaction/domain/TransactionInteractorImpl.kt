@@ -51,8 +51,6 @@ class TransactionInteractorImpl(
         val category = categoryInteractor.getCategoryById(transaction.category.id)
         val count = category.usageCount + 1
         categoryInteractor.update(category.copy(usageCount = count))
-        val currency = currencyInteractor.getCurrencyByCode(currencyCode)
-        currencyInteractor.updateCurrency(currency.copy(used = true))
     }
 
     override fun getTransactionById(id: Long): Flow<Transaction> {
@@ -222,7 +220,8 @@ class TransactionInteractorImpl(
                 val currentCurrency = userInteractor.getCurrentCurrency()
                 val currencies = mutableSetOf<String>()
                 list.forEach { tr -> currencies.add(tr.currency) }
-                if (currencies.size == 1 || currentCurrency == DataConstants.DEFAULT_CURRENCY_CODE) BigDecimal.ZERO
+                val currencyCode = userInteractor.getCurrentCurrency()
+                if ((currencies.size == 1 && currencies.contains(currencyCode)) || currentCurrency == DataConstants.DEFAULT_CURRENCY_CODE) BigDecimal.ZERO
                 else list.sumOf { it.usdSum }
             }
         }
@@ -257,24 +256,10 @@ class TransactionInteractorImpl(
 
     override suspend fun removeTransaction(transaction: Transaction) {
         transactionRepo.removeTransaction(transaction.toDataModel())
-        val countByCode = transactionRepo.getCountByCurrencyCode(transaction.currencyCode)
-        if (countByCode == 0) {
-            val currency = currencyInteractor.getCurrencyByCode(transaction.currencyCode)
-            currencyInteractor.updateCurrency(currency.copy(used = false))
-        }
     }
 
     override fun removeAllByCategory(category: Category): Flow<Int> {
-        return transactionRepo.getByCategory(category).flatMapConcat { list ->
-            val currencySet = mutableSetOf<String>()
-            list.forEach { transaction: TransactionDataModel -> currencySet.add(transaction.currency) }
-            for (item in currencySet) {
-                val countByCode = transactionRepo.getCountByCurrencyCode(item)
-                if (countByCode == 0) {
-                    val currency = currencyInteractor.getCurrencyByCode(item)
-                    currencyInteractor.updateCurrency(currency.copy(used = false))
-                }
-            }
+        return transactionRepo.getByCategory(category).flatMapConcat {
             transactionRepo.removeAllByCategory(category)
         }
     }

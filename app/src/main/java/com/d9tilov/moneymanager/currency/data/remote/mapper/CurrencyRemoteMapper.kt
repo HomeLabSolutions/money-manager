@@ -12,7 +12,6 @@ fun CurrencyResponse.toDataModel(): List<Currency> {
             code = key,
             value = value.toBigDecimal(),
             symbol = getSymbolByCode(key),
-            used = false,
             lastUpdateTime = date
         )
         currencyRateList.add(item)
