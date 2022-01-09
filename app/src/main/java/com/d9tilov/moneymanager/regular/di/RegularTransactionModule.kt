@@ -4,7 +4,7 @@ import android.content.Context
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
-import com.d9tilov.moneymanager.exchanger.domain.ExchangeInteractor
+import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.regular.data.RegularTransactionDataRepo
 import com.d9tilov.moneymanager.regular.data.local.RegularTransactionLocalSource
 import com.d9tilov.moneymanager.regular.data.local.RegularTransactionSource
@@ -37,12 +37,12 @@ class RegularTransactionModule {
     @Provides
     fun provideRegularTransactionInteractor(
         regularTransactionRepo: RegularTransactionRepo,
-        exchangeInteractor: ExchangeInteractor,
+        currencyInteractor: CurrencyInteractor,
         categoryInteractor: CategoryInteractor,
         userInteractor: UserInteractor,
     ): RegularTransactionInteractor = RegularTransactionInteractorImpl(
         regularTransactionRepo,
-        exchangeInteractor,
+        currencyInteractor,
         categoryInteractor,
         userInteractor
     )

@@ -26,7 +26,6 @@ class BudgetModule {
         BudgetInteractorImpl(budgetRepo, userInteractor)
 
     @Provides
-
     fun provideBudgetLocalSource(
         preferencesStore: PreferencesStore,
         database: AppDatabase
