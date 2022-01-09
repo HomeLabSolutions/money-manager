@@ -2,6 +2,7 @@ package com.d9tilov.moneymanager.currency.di
 
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
+import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.currency.data.CurrencyDataRepo
 import com.d9tilov.moneymanager.currency.data.local.CurrencyLocalSource
 import com.d9tilov.moneymanager.currency.data.local.CurrencySource
@@ -38,6 +39,7 @@ class CurrencyModule {
     fun provideCurrencyInteractor(
         currencyRepo: CurrencyRepo,
         userInteractor: UserInteractor,
-        domainMapper: CurrencyDomainMapper
-    ): CurrencyInteractor = CurrencyInteractorImpl(currencyRepo, userInteractor, domainMapper)
+        domainMapper: CurrencyDomainMapper,
+        budgetInteractor: BudgetInteractor
+    ): CurrencyInteractor = CurrencyInteractorImpl(currencyRepo, userInteractor, domainMapper, budgetInteractor)
 }

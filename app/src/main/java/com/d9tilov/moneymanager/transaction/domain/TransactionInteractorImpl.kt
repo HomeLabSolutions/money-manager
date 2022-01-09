@@ -13,7 +13,6 @@ import com.d9tilov.moneymanager.core.util.getEndOfDay
 import com.d9tilov.moneymanager.core.util.getStartDateOfFiscalPeriod
 import com.d9tilov.moneymanager.core.util.getStartOfDay
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
-import com.d9tilov.moneymanager.exchanger.domain.ExchangeInteractor
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
@@ -39,13 +38,12 @@ class TransactionInteractorImpl(
     private val categoryInteractor: CategoryInteractor,
     private val userInteractor: UserInteractor,
     private val currencyInteractor: CurrencyInteractor,
-    private val exchangeInteractor: ExchangeInteractor,
     private val budgetInteractor: BudgetInteractor
 ) : TransactionInteractor {
 
     override suspend fun addTransaction(transaction: Transaction) {
         val currencyCode = userInteractor.getCurrentCurrency()
-        val usdSumValue = exchangeInteractor.toUsd(transaction.sum, currencyCode)
+        val usdSumValue = currencyInteractor.toUsd(transaction.sum, currencyCode)
         val newTransaction = transaction.copy(currencyCode = currencyCode, usdSum = usdSumValue).toDataModel()
         transactionRepo.addTransaction(newTransaction)
         val category = categoryInteractor.getCategoryById(transaction.category.id)
@@ -119,7 +117,7 @@ class TransactionInteractorImpl(
         val regularIncomeSumFlow =
             regularTransactionInteractor.getAll(TransactionType.INCOME).map { incomes ->
                 incomes.sumOf {
-                    exchangeInteractor.convertToMainCurrency(
+                    currencyInteractor.convertToMainCurrency(
                         it.sum,
                         it.currencyCode
                     )
@@ -128,7 +126,7 @@ class TransactionInteractorImpl(
         val regularExpenseSumFlow =
             regularTransactionInteractor.getAll(TransactionType.EXPENSE).map { expenses ->
                 expenses.sumOf {
-                    exchangeInteractor.convertToMainCurrency(
+                    currencyInteractor.convertToMainCurrency(
                         it.sum,
                         it.currencyCode
                     )
@@ -143,7 +141,7 @@ class TransactionInteractorImpl(
                 TransactionType.INCOME
             ).map { list ->
                 list.sumOf {
-                    exchangeInteractor.convertToMainCurrency(
+                    currencyInteractor.convertToMainCurrency(
                         it.sum,
                         it.currency
                     )
@@ -162,7 +160,7 @@ class TransactionInteractorImpl(
                 TransactionType.EXPENSE
             ).map { list ->
                 list.sumOf {
-                    exchangeInteractor.convertToMainCurrency(
+                    currencyInteractor.convertToMainCurrency(
                         it.sum,
                         it.currency
                     )
@@ -182,7 +180,7 @@ class TransactionInteractorImpl(
             TransactionType.EXPENSE
         ).map { list ->
             list.sumOf {
-                exchangeInteractor.convertToMainCurrency(
+                currencyInteractor.convertToMainCurrency(
                     it.sum,
                     it.currency
                 )
@@ -250,7 +248,7 @@ class TransactionInteractorImpl(
     }
 
     override suspend fun update(transaction: Transaction) {
-        val usdSumValue = exchangeInteractor.toUsd(transaction.sum, transaction.currencyCode)
+        val usdSumValue = currencyInteractor.toUsd(transaction.sum, transaction.currencyCode)
         transactionRepo.update(transaction.toDataModel().copy(usdSum = usdSumValue))
     }
 
