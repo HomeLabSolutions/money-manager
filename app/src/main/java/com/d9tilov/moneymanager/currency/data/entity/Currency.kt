@@ -8,9 +8,5 @@ data class Currency(
     val code: String,
     val symbol: String,
     val value: BigDecimal,
-    /**
-     * @true - if exists transaction with this currency, otherwise - @false
-     */
-    val used: Boolean,
     val lastUpdateTime: Long
 )

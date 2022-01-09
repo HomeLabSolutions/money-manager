@@ -12,6 +12,5 @@ data class DomainCurrency(
     val symbol: String,
     val value: BigDecimal,
     val isBase: Boolean = false,
-    val used: Boolean,
     val lastTimeUpdate: Long
 ) : Parcelable

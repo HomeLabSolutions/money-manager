@@ -12,6 +12,5 @@ data class CurrencyDbModel(
     @ColumnInfo(name = "code") val code: String,
     @ColumnInfo(name = "symbol") val symbol: String,
     @ColumnInfo(name = "value") val value: BigDecimal,
-    @ColumnInfo(name = "used") val used: Boolean,
     @ColumnInfo(name = "lastUpdateTime") val lastUpdateTime: Long
 )
