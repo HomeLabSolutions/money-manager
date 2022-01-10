@@ -193,8 +193,6 @@ class ExpenseFragment :
         super.onStart()
         if ((activity as MainActivity).forceShowKeyboard) {
             showKeyboard(viewBinding.expenseMainSum.moneyEditText)
-        } else {
-            crossFade(false)
         }
     }
 
