@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.base.ui.BaseFragment
@@ -18,6 +18,7 @@ import com.d9tilov.moneymanager.incomeexpense.ui.adapter.IncomeExpenseAdapter
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.IncomeExpenseViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialog.Companion.ARG_UNDO_REMOVE_LAYOUT_DISMISS
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,15 +45,12 @@ class IncomeExpenseFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        incomeExpenseAdapter =
-            IncomeExpenseAdapter(
-                requireContext(),
-                childFragmentManager
-            )
+        incomeExpenseAdapter = IncomeExpenseAdapter(childFragmentManager, lifecycle)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewBinding.incomeExpenseViewPager.adapter = incomeExpenseAdapter
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
             ARG_UNDO_REMOVE_LAYOUT_DISMISS
         )?.observe(
@@ -65,18 +63,10 @@ class IncomeExpenseFragment :
             }
         }
         viewBinding.run {
-            incomeExpenseViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-                override fun onPageScrollStateChanged(state: Int) { /* do notjing */
-                }
-
-                override fun onPageScrolled(
-                    position: Int,
-                    positionOffset: Float,
-                    positionOffsetPixels: Int
-                ) { /* do nothing */
-                }
-
+            incomeExpenseViewPager.registerOnPageChangeCallback(object :
+                ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
                     firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
                         param(
                             FirebaseAnalytics.Param.ITEM_ID,
@@ -92,15 +82,24 @@ class IncomeExpenseFragment :
                     }
                 }
             })
-            incomeExpenseTabs.setupWithViewPager(viewBinding.incomeExpenseViewPager)
-            incomeExpenseViewPager.adapter = incomeExpenseAdapter
-            incomeExpenseViewPager.currentItem =
-                if (transactionType == TransactionType.INCOME) {
-                    1
-                } else {
-                    0
+
+            TabLayoutMediator(
+                viewBinding.incomeExpenseTabLayout,
+                viewBinding.incomeExpenseViewPager
+            ) { tab, position ->
+                tab.text = when (position) {
+                    0 -> requireContext().getString(R.string.tab_expense)
+                    else -> requireContext().getString(R.string.tab_income)
                 }
+            }.attach()
+            incomeExpenseViewPager.currentItem =
+                (if (transactionType == TransactionType.INCOME) 1 else 0)
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewBinding.incomeExpenseViewPager.adapter = null
     }
 
     private fun getCurrentPagedFragment(): OnKeyboardVisibleChange {
