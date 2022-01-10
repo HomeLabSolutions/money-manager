@@ -168,8 +168,6 @@ class IncomeFragment :
         super.onStart()
         if ((activity as MainActivity).forceShowKeyboard) {
             showKeyboard(mergeLayoutBinding.incomeMainSum.moneyEditText)
-        } else {
-            crossfade(false)
         }
     }
 

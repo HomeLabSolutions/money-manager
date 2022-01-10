@@ -153,8 +153,9 @@ class GoalsFragment :
 
     override fun onStop() {
         if (activity is PrepopulateActivity) {
-            (activity as PrepopulateActivity).controlsClick = this
+            (activity as PrepopulateActivity).controlsClick = null
         }
+        hideKeyboard()
         super.onStop()
     }
 
@@ -169,9 +170,7 @@ class GoalsFragment :
         }
         toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.action_add -> {
-                    openCreationGoalScreen()
-                }
+                R.id.action_add -> openCreationGoalScreen()
                 else -> throw IllegalArgumentException("Unknown menu item with id: ${it.itemId}")
             }
             return@setOnMenuItemClickListener false
@@ -184,9 +183,7 @@ class GoalsFragment :
     }
 
     private fun showViewStub() {
-        if ((activity as BaseActivity<*>).isKeyboardShown) {
-            return
-        }
+        if ((activity as BaseActivity<*>).isKeyboardShown) return
         if (emptyViewStub?.parent == null) {
             emptyViewStub?.show()
         } else {
@@ -199,15 +196,12 @@ class GoalsFragment :
                     R.drawable.ic_goal_placeholder
                 )
             )
-            val stubTitle =
-                inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_title)
+            val stubTitle = inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_title)
             stubTitle?.text = getString(R.string.goals_empty_placeholder_title)
-            val stubSubTitle =
-                inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_subtitle)
+            val stubSubTitle = inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_subtitle)
             stubSubTitle?.show()
             stubSubTitle?.text = getString(R.string.goals_empty_placeholder_subtitle)
-            val addButton =
-                inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_add)
+            val addButton = inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_add)
             addButton?.show()
             addButton?.setOnClickListener {
                 openCreationGoalScreen()
