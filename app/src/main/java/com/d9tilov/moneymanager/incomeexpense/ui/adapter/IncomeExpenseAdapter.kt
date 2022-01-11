@@ -3,13 +3,11 @@ package com.d9tilov.moneymanager.incomeexpense.ui.adapter
 import android.util.SparseArray
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.d9tilov.moneymanager.incomeexpense.expense.ui.ExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.income.ui.IncomeFragment
 
-class IncomeExpenseAdapter(fm: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fm, lifecycle) {
+class IncomeExpenseAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
 
     private val registeredFragments = SparseArray<Fragment>()
 
@@ -32,6 +30,8 @@ class IncomeExpenseAdapter(fm: FragmentManager, lifecycle: Lifecycle) : Fragment
             }
         }
     }
+
+    fun isAdapterReady() = registeredFragments.size() == TAB_COUNT
 
     companion object {
         private const val TAB_COUNT = 2
