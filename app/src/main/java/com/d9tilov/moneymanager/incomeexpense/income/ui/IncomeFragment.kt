@@ -2,6 +2,7 @@ package com.d9tilov.moneymanager.incomeexpense.income.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -24,10 +25,7 @@ import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.isTablet
-import com.d9tilov.moneymanager.core.util.show
-import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentIncomeBinding
-import com.d9tilov.moneymanager.databinding.LayoutIncomeInputFieldBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.incomeexpense.ui.BaseIncomeExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
@@ -47,7 +45,6 @@ class IncomeFragment :
     OnKeyboardVisibleChange {
 
     private val viewBinding by viewBinding(FragmentIncomeBinding::bind)
-    private lateinit var mergeLayoutBinding: LayoutIncomeInputFieldBinding
 
     override fun getNavigator() = this
     override val viewModel by viewModels<IncomeViewModel>()
@@ -59,32 +56,18 @@ class IncomeFragment :
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        mergeLayoutBinding = LayoutIncomeInputFieldBinding.bind(viewBinding.root)
-        categoryGroup.run {
-            add(viewBinding.incomeCategoryRvList)
-            add(viewBinding.incomeInfoLayout)
-            add(viewBinding.incomeMainSum)
-            add(viewBinding.incomeMainSumTitle)
-        }
-        transactionGroup.run {
-            add(viewBinding.incomeTransactionBtnAdd)
-            add(viewBinding.incomeTransactionRvList)
-        }
-        categoryGroup.forEach { it.gone() }
-        transactionGroup.forEach { it.gone() }
+    override fun initViews() {
         emptyViewStub = viewBinding.root.findViewById(R.id.income_transaction_empty_placeholder)
         mainSum = viewBinding.incomeMainSum
-        mergeLayoutBinding.run {
-            incomeMainSum.moneyEditText.setOnFocusChangeListener { _, hasFocus ->
-                if (hasFocus) {
-                    incomeMainSum.moneyEditText.post {
-                        incomeMainSum.moneyEditText.setSelection(incomeMainSum.moneyEditText.text.toString().length)
-                    }
-                }
-            }
-        }
+        mainSumTitle = viewBinding.incomeMainSumTitle
+        categoryRvList = viewBinding.incomeCategoryRvList
+        transactionRvList = viewBinding.incomeTransactionRvList
+        infoLayout = viewBinding.incomeInfoLayout
+        transactionBtnAdd = viewBinding.incomeTransactionBtnAdd
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel.run {
             categories.observe(
                 viewLifecycleOwner,
@@ -143,32 +126,6 @@ class IncomeFragment :
                 { sum -> viewBinding.incomePeriodInfoApproxSum.setValue(sum) }
             )
         }
-        viewBinding.incomeTransactionRvList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            private val fab = viewBinding.incomeTransactionBtnAdd
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0 || dy < 0 && fab.isShown) {
-                    fab.hide()
-                }
-            }
-
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    fab.show()
-                }
-                super.onScrollStateChanged(recyclerView, newState)
-            }
-        })
-        viewBinding.incomeTransactionBtnAdd.setOnClickListener {
-            mergeLayoutBinding.incomeMainSum.moneyEditText.requestFocus()
-            showKeyboard(mergeLayoutBinding.incomeMainSum.moneyEditText)
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        if ((activity as MainActivity).forceShowKeyboard) {
-            showKeyboard(mergeLayoutBinding.incomeMainSum.moneyEditText)
-        }
     }
 
     override fun initCategoryRecyclerView() {
@@ -186,7 +143,7 @@ class IncomeFragment :
                 GridSpaceItemDecoration(
                     SPAN_COUNT,
                     resources.getDimension(R.dimen.recycler_view_category_offset).toInt(),
-                    layoutManager.orientation
+                    HORIZONTAL
                 )
             )
             val snapHelper: SnapHelper = ItemSnapHelper()
@@ -214,7 +171,7 @@ class IncomeFragment :
             param(FirebaseAnalytics.Param.ITEM_ID, "click_all_categories_income")
         }
         viewBinding.run {
-            val inputSum = mergeLayoutBinding.incomeMainSum.getValue()
+            val inputSum = viewBinding.incomeMainSum.getValue()
             val action = if (inputSum.signum() > 0) {
                 IncomeExpenseFragmentDirections.toCategoryDest(
                     destination = CategoryDestination.MAIN_WITH_SUM_SCREEN,
@@ -232,52 +189,26 @@ class IncomeFragment :
     }
 
     override fun onOpenKeyboard() {
-        isKeyboardOpen = true
-        viewBinding.run {
-            crossfade(true)
-            hideViewStub()
-            incomeCategoryRvList.scrollToPosition(0)
-        }
+        onOpenKeyboardBase()
     }
 
     override fun onCloseKeyboard() {
-        isKeyboardOpen = false
-        viewBinding.run {
-            crossfade(false)
-            if (isTransactionDataEmpty) {
-                showViewStub(TransactionType.INCOME)
-            }
-            mergeLayoutBinding.incomeMainSum.clearFocus()
-        }
-    }
-
-    private fun crossfade(openKeyboard: Boolean) {
-        val hiddenGroup = if (openKeyboard) transactionGroup else categoryGroup
-        val shownGroup = if (openKeyboard) categoryGroup else transactionGroup
-        shownGroup.forEach {
-            it.apply {
-                alpha = 0f
-                show()
-                animate()
-                    .alpha(1f)
-                    .setDuration(ANIMATION_DURATION)
-                    .setListener(null)
-            }
-        }
-        hiddenGroup.forEach { it.gone() }
+        onCloseKeyboardBase()
     }
 
     override fun saveTransaction(category: Category) {
         viewModel.saveTransaction(
             category,
-            mergeLayoutBinding.incomeMainSum.getValue()
+            viewBinding.incomeMainSum.getValue()
         )
         isTransactionDataEmpty = false
     }
 
     override fun resetMainSum() {
-        mergeLayoutBinding.incomeMainSum.setValue(BigDecimal.ZERO)
+        viewBinding.incomeMainSum.setValue(BigDecimal.ZERO)
     }
+
+    override fun getType() = TransactionType.INCOME
 
     companion object {
         fun newInstance() = IncomeFragment()
