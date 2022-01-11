@@ -45,7 +45,7 @@ class IncomeExpenseFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        incomeExpenseAdapter = IncomeExpenseAdapter(childFragmentManager, lifecycle)
+        incomeExpenseAdapter = IncomeExpenseAdapter(requireActivity())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,6 +67,7 @@ class IncomeExpenseFragment :
                 ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
+                    if (!incomeExpenseAdapter.isAdapterReady()) return
                     firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
                         param(
                             FirebaseAnalytics.Param.ITEM_ID,
@@ -95,11 +96,6 @@ class IncomeExpenseFragment :
             incomeExpenseViewPager.currentItem =
                 (if (transactionType == TransactionType.INCOME) 1 else 0)
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        viewBinding.incomeExpenseViewPager.adapter = null
     }
 
     private fun getCurrentPagedFragment(): OnKeyboardVisibleChange {
