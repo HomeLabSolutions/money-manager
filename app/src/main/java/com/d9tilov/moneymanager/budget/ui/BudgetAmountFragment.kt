@@ -12,7 +12,6 @@ import com.d9tilov.moneymanager.base.ui.navigator.BudgetAmountNavigator
 import com.d9tilov.moneymanager.budget.BudgetDestination
 import com.d9tilov.moneymanager.budget.vm.BudgetAmountViewModel
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
-import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentBudgetAmountBinding
@@ -77,7 +76,6 @@ class BudgetAmountFragment :
         if (activity is PrepopulateActivity) {
             (activity as PrepopulateActivity).controlsClick = null
         }
-        hideKeyboard()
     }
 
     private fun initToolbar() {

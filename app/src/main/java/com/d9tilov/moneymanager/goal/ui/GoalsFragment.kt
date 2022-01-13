@@ -155,7 +155,6 @@ class GoalsFragment :
         if (activity is PrepopulateActivity) {
             (activity as PrepopulateActivity).controlsClick = null
         }
-        hideKeyboard()
         super.onStop()
     }
 

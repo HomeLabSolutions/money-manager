@@ -1,8 +1,10 @@
 package com.d9tilov.moneymanager.base.ui
 
 import android.content.pm.ActivityInfo
+import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
@@ -20,7 +22,6 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
 import com.d9tilov.moneymanager.core.util.hideLoadingDialog
 import com.d9tilov.moneymanager.core.util.isNetworkConnected
-import com.d9tilov.moneymanager.core.util.px
 import com.d9tilov.moneymanager.core.util.showLoadingDialog
 import com.google.android.material.snackbar.Snackbar
 
@@ -29,7 +30,7 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
     protected open val navHostFragmentId: Int = -1
     protected lateinit var viewBinding: T
     private lateinit var globalLayoutListener: ViewTreeObserver.OnGlobalLayoutListener
-    private lateinit var topView: View
+    private val rect: Rect = Rect()
     private var progress: ProgressBar? = null
     private val contentLayout: ViewGroup by lazy { findViewById<ViewGroup>(android.R.id.content) }
     var isKeyboardShown = false
@@ -40,18 +41,21 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = performDataBinding()
-        topView = window.decorView.findViewById<View>(android.R.id.content)
         globalLayoutListener = KeyboardGlobalLayoutListener()
-        topView.viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
         setContentView(viewBinding.root)
         if (BuildConfig.DEBUG) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        topView.viewTreeObserver.removeOnGlobalLayoutListener(globalLayoutListener)
+    override fun onResume() {
+        super.onResume()
+        contentLayout.viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        contentLayout.viewTreeObserver.removeOnGlobalLayoutListener(globalLayoutListener)
     }
 
     abstract fun performDataBinding(): T
@@ -81,23 +85,33 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
 
     inner class KeyboardGlobalLayoutListener : ViewTreeObserver.OnGlobalLayoutListener {
         override fun onGlobalLayout() {
-            val heightDifference = topView.rootView.height - topView.height
-            val currentFragment = getCurrentFragment()
-            if (heightDifference > 200.px) {
-                if (isKeyboardShown) {
-                    return
-                }
-                isKeyboardShown = true
-                onOpenKeyboard()
-                (currentFragment as? OnKeyboardVisibleChange)?.onOpenKeyboard()
-            } else {
-                if (!isKeyboardShown) {
-                    return
-                }
-                isKeyboardShown = false
-                onCloseKeyboard()
-                (currentFragment as? OnKeyboardVisibleChange)?.onCloseKeyboard()
+            val estimatedKeyboardHeight = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                EstimatedKeyboardDP.toFloat(), contentLayout.resources.displayMetrics
+            ).toInt()
+            contentLayout.getWindowVisibleDisplayFrame(rect)
+            val heightDiff: Int = contentLayout.rootView.height - (rect.bottom - rect.top)
+            val isShown = heightDiff >= estimatedKeyboardHeight
+            handleShowingKeyboard(isShown)
+        }
+    }
+
+    private fun handleShowingKeyboard(isShown: Boolean) {
+        val currentFragment = getCurrentFragment()
+        if (isShown) {
+            if (isKeyboardShown) {
+                return
             }
+            isKeyboardShown = true
+            onOpenKeyboard()
+            (currentFragment as? OnKeyboardVisibleChange)?.onOpenKeyboard()
+        } else {
+            if (!isKeyboardShown) {
+                return
+            }
+            isKeyboardShown = false
+            onCloseKeyboard()
+            (currentFragment as? OnKeyboardVisibleChange)?.onCloseKeyboard()
         }
     }
 
@@ -144,5 +158,8 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
         init {
             AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         }
+
+        private const val defaultKeyboardHeightDP = 100
+        private const val EstimatedKeyboardDP: Int = defaultKeyboardHeightDP + 48
     }
 }

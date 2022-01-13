@@ -212,5 +212,7 @@ class IncomeFragment :
 
     companion object {
         fun newInstance() = IncomeFragment()
+
+        const val FRAGMENT_ID = 1L
     }
 }

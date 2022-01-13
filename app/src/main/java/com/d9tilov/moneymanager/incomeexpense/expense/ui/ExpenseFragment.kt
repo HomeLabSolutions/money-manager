@@ -236,5 +236,7 @@ class ExpenseFragment :
 
     companion object {
         fun newInstance() = ExpenseFragment()
+
+        const val FRAGMENT_ID = 0L
     }
 }

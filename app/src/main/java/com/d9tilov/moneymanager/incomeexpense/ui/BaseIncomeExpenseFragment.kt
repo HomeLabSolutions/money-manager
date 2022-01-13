@@ -21,7 +21,6 @@ import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
 import com.d9tilov.moneymanager.core.util.gone
-import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.core.util.toast
@@ -134,7 +133,7 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
         }
     }
 
-    protected fun crossFade(openKeyboard: Boolean) {
+    private fun showInfoAndCategories(openKeyboard: Boolean) {
         val hiddenGroup = if (openKeyboard) transactionGroup else categoryGroup
         val shownGroup = if (openKeyboard) categoryGroup else transactionGroup
         shownGroup.forEach {
@@ -152,14 +151,14 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
 
     protected fun onOpenKeyboardBase() {
         isKeyboardOpen = true
-        crossFade(true)
+        showInfoAndCategories(true)
         hideViewStub()
         categoryRvList.scrollToPosition(0)
     }
 
     protected fun onCloseKeyboardBase() {
         isKeyboardOpen = false
-        crossFade(false)
+        showInfoAndCategories(false)
         if (isTransactionDataEmpty) {
             showViewStub(TransactionType.EXPENSE)
         }
@@ -217,14 +216,11 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
 
     override fun onStart() {
         super.onStart()
-        if ((activity as MainActivity).forceShowKeyboard) {
+        if ((activity as MainActivity).isKeyboardShown) {
+            showInfoAndCategories(true)
+        } else {
             showKeyboard(mainSum.moneyEditText)
         }
-    }
-
-    override fun onStop() {
-        hideKeyboard()
-        super.onStop()
     }
 
     override fun onDismiss() {
