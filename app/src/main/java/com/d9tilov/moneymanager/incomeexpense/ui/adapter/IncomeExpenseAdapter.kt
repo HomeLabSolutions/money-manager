@@ -1,39 +1,30 @@
 package com.d9tilov.moneymanager.incomeexpense.ui.adapter
 
-import android.util.SparseArray
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.d9tilov.moneymanager.incomeexpense.expense.ui.ExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.income.ui.IncomeFragment
 
-class IncomeExpenseAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
+class IncomeExpenseAdapter(fa: FragmentManager, lifecycle: Lifecycle) :
+    FragmentStateAdapter(fa, lifecycle) {
 
-    private val registeredFragments = SparseArray<Fragment>()
-
-    fun getRegisteredFragment(position: Int): Fragment {
-        return registeredFragments[position]
-    }
+    override fun getItemId(position: Int): Long =
+        when (position) {
+            0 -> ExpenseFragment.FRAGMENT_ID
+            else -> IncomeFragment.FRAGMENT_ID
+        }
 
     override fun getItemCount(): Int = TAB_COUNT
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> {
-                val fragment = ExpenseFragment.newInstance()
-                registeredFragments.put(position, fragment)
-                fragment
-            }
-            else -> {
-                val fragment = IncomeFragment.newInstance()
-                registeredFragments.put(position, fragment)
-                fragment
-            }
+            0 -> ExpenseFragment.newInstance()
+            else -> IncomeFragment.newInstance()
         }
     }
 
-    fun isAdapterReady() = registeredFragments.size() == TAB_COUNT
-
     companion object {
-        private const val TAB_COUNT = 2
+        const val TAB_COUNT = 2
     }
 }

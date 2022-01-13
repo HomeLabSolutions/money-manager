@@ -27,7 +27,6 @@ import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hide
-import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
@@ -177,11 +176,6 @@ class CategoryCreationFragment :
             showKeyboard(viewBinding.categoryCreationEtName)
         }
         super.onStart()
-    }
-
-    override fun onStop() {
-        hideKeyboard()
-        super.onStop()
     }
 
     private fun setColorToColorIcon() {
