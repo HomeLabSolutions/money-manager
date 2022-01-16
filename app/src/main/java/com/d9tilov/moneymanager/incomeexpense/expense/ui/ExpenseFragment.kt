@@ -24,7 +24,6 @@ import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DECIMAL_LENGTH
 import com.d9tilov.moneymanager.core.util.gone
-import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.isTablet
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
@@ -84,13 +83,6 @@ class ExpenseFragment :
                     categoryAdapter.updateItems(sortedCategories)
                 }
             )
-            getTransactionEvent().observe(
-                viewLifecycleOwner,
-                {
-                    resetMainSum()
-                    showInfoAndCategories(false)
-                }
-            )
         }
         viewModel.regularTransactions.observe(
             viewLifecycleOwner,
@@ -103,7 +95,9 @@ class ExpenseFragment :
         lifecycleScope.launchWhenStarted {
             viewModel.transactions.collectLatest { data ->
                 transactionAdapter.submitData(data)
-                viewBinding.expenseTransactionLayoutInclude.expenseTransactionRvList.scrollToPosition(0)
+                viewBinding.expenseTransactionLayoutInclude.expenseTransactionRvList.scrollToPosition(
+                    0
+                )
             }
         }
         lifecycleScope.launchWhenStarted {
@@ -114,7 +108,7 @@ class ExpenseFragment :
                         loadStates.source.refresh is LoadState.NotLoading && loadStates.append.endOfPaginationReached && transactionAdapter.itemCount == 0
                     if (isDataEmpty == isTransactionDataEmpty) return@collectLatest
                     isTransactionDataEmpty = isDataEmpty
-                    if (isTransactionDataEmpty) showViewStub(TransactionType.EXPENSE)
+                    if (isTransactionDataEmpty) showViewStub()
                     else hideViewStub()
                 }
         }
@@ -217,6 +211,9 @@ class ExpenseFragment :
             mainSum.getValue()
         )
         isTransactionDataEmpty = false
+        hideViewStub()
+        resetMainSum()
+        showInfoAndCategories(false)
     }
 
     override fun resetMainSum() {

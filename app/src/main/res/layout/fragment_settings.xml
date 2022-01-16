@@ -31,9 +31,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:background="@null"
         android:inputType="number"
         android:maxLength="2"
+        app:layout_constraintTop_toTopOf="@+id/settings_day_of_month_title"
         app:layout_constraintBottom_toBottomOf="@+id/settings_day_of_month_title"
         app:layout_constraintStart_toEndOf="@+id/settings_day_of_month_title"
         tools:text="20" />
@@ -45,7 +45,7 @@
         android:layout_marginStart="8dp"
         android:text="@string/settings_start_period_day_postfix"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/settings_day_of_month_edit"
+        app:layout_constraintBottom_toBottomOf="@+id/settings_day_of_month_title"
         app:layout_constraintStart_toEndOf="@+id/settings_day_of_month_edit" />
 
     <TextView
@@ -56,6 +56,7 @@
         android:textAppearance="?attr/textAppearanceCaption"
         android:textColor="@color/error_color"
         android:textSize="12sp"
+        android:layout_marginTop="8dp"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="@+id/settings_day_of_month_title"
         app:layout_constraintTop_toBottomOf="@+id/settings_day_of_month_title"
