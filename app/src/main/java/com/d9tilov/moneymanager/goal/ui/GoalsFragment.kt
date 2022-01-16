@@ -149,10 +149,10 @@ class GoalsFragment :
     }
 
     override fun onStop() {
+        super.onStop()
         if (activity is PrepopulateActivity) {
             (activity as PrepopulateActivity).controlsClick = null
         }
-        super.onStop()
     }
 
     private fun initToolbar() {

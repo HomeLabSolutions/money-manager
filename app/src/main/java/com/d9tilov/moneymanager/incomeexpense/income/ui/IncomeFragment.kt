@@ -78,13 +78,6 @@ class IncomeFragment :
                     categoryAdapter.updateItems(sortedCategories)
                 }
             )
-            getTransactionEvent().observe(
-                viewLifecycleOwner,
-                {
-                    resetMainSum()
-                    showInfoAndCategories(false)
-                }
-            )
         }
         lifecycleScope.launchWhenStarted {
             viewModel.transactions.collectLatest { transactionAdapter.submitData(it) }
@@ -98,7 +91,7 @@ class IncomeFragment :
                         loadStates.source.refresh is LoadState.NotLoading && loadStates.append.endOfPaginationReached && transactionAdapter.itemCount == 0
                     if (isDataEmpty == isTransactionDataEmpty) return@collectLatest
                     isTransactionDataEmpty = isDataEmpty
-                    if (isTransactionDataEmpty) showViewStub(TransactionType.INCOME)
+                    if (isTransactionDataEmpty) showViewStub()
                     else hideViewStub()
                 }
         }
@@ -189,6 +182,9 @@ class IncomeFragment :
             viewBinding.incomeInfoLayoutInclude.incomeMainSum.getValue()
         )
         isTransactionDataEmpty = false
+        hideViewStub()
+        resetMainSum()
+        showInfoAndCategories(false)
     }
 
     override fun resetMainSum() {

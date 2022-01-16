@@ -33,7 +33,7 @@ class MainActivity :
         R.id.chart_dest,
         R.id.profile_dest,
         R.id.logout_dialog,
-        R.id.remove_transaction_dialog
+        R.id.remove_transaction_dialog,
     )
 
     override val navHostFragmentId = R.id.nav_host_container

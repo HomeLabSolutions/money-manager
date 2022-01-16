@@ -21,6 +21,4 @@ abstract class BaseIncomeExpenseViewModel<T : BaseIncomeExpenseNavigator> : Base
     fun openAllCategories() {
         navigator?.openCategoriesScreen()
     }
-
-    fun getTransactionEvent(): LiveData<Any> = addTransactionEvent
 }

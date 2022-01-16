@@ -8,7 +8,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -185,7 +184,6 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
             categoryAdapter.enableEditMode(false)
             false
         } else {
-            findNavController().popBackStack()
             true
         }
     }

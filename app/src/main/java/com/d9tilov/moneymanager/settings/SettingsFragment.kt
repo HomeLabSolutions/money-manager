@@ -43,7 +43,6 @@ class SettingsFragment :
             settingsDayOfMonthEdit.onChange(
                 debounce(DEBOUNCE, viewModel.viewModelScope) {
                     run {
-                        viewBinding.settingsDayOfMonthEdit.requestFocus()
                         viewBinding.settingsDayOfMonthEdit.setSelection(it.length)
                         if (it.isEmpty() || !it.isDigitsOnly() || it.toInt() > 31 || it.toInt() < 1) {
                             viewBinding.settingsDayOfMonthError.show()
@@ -54,7 +53,6 @@ class SettingsFragment :
                     }
                 }
             )
-            settingsDayOfMonthEdit.setOnFocusChangeListener { view, _ -> showKeyboard(view) }
         }
         viewModel.userData.observe(
             viewLifecycleOwner,

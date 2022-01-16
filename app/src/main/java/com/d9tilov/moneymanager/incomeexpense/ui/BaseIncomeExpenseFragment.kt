@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.incomeexpense.ui
 
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import android.view.View.GONE
 import android.view.ViewStub
@@ -11,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.BaseIncomeExpenseNavigator
@@ -134,7 +136,19 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
                 }
             }
         }
-        showInfoAndCategories(true)
+        // need for work horizontal scroll of categories rv and viewpager
+        categoryRvList.addOnItemTouchListener(object : OnItemTouchListener {
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                when (e.action) {
+                    MotionEvent.ACTION_MOVE -> rv.parent.requestDisallowInterceptTouchEvent(true)
+                }
+                return false
+            }
+
+            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+        })
+        showInfoAndCategories(isKeyboardOpen)
     }
 
     private fun handlePinStr(str: String?) {
@@ -165,7 +179,7 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
         if (openKeyboard) {
             hideViewStub()
         } else {
-            if (isTransactionDataEmpty) showViewStub(getType())
+            if (isTransactionDataEmpty) showViewStub()
         }
         shownGroup.apply {
             alpha = 0f
@@ -178,7 +192,7 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
         hiddenGroup.gone()
     }
 
-    protected fun showViewStub(transactionType: TransactionType) {
+    protected fun showViewStub() {
         if (isKeyboardOpen) return
         if (emptyViewStub.parent == null) {
             emptyViewStub.show()
@@ -192,7 +206,7 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
             val stubTitle = inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_title)
             stubTitle?.text =
                 getString(
-                    if (transactionType == TransactionType.EXPENSE)
+                    if (getType() == TransactionType.EXPENSE)
                         R.string.transaction_empty_placeholder_expense_title
                     else R.string.transaction_empty_placeholder_income_title
                 )

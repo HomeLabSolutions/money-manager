@@ -26,7 +26,6 @@ import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.gone
-import com.d9tilov.moneymanager.core.util.hide
 import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
@@ -91,7 +90,7 @@ class CategoryCreationFragment :
         override fun onItemClick(item: Int, position: Int) {
             color = item
             viewBinding.run {
-                categoryCreationRvColorPicker.hide()
+                categoryCreationRvColorPicker.gone()
                 updateIcon(icon)
                 setColorToColorIcon()
             }
