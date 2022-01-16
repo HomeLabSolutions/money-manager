@@ -183,10 +183,10 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
     override fun onBackPressed(): Boolean {
         return if (categoryAdapter.editModeEnable) {
             categoryAdapter.enableEditMode(false)
-            true
+            false
         } else {
             findNavController().popBackStack()
-            false
+            true
         }
     }
 

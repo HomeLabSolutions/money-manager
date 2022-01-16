@@ -105,11 +105,12 @@ class MainActivity :
 
     override fun onBackPressed() {
         val currentFragment = getCurrentFragment()
+        val interceptBack = (currentFragment as? OnBackPressed)?.onBackPressed() ?: true
+        if (!interceptBack) return
         val backStackCount =
             this.supportFragmentManager.findFragmentById(R.id.nav_host_container)?.childFragmentManager?.backStackEntryCount
                 ?: 0
-        (currentFragment as? OnBackPressed)?.onBackPressed()
-            ?: if (backStackCount > 0) findNavController(R.id.nav_host_container).popBackStack() else super.onBackPressed()
+        if (backStackCount > 0) findNavController(R.id.nav_host_container).popBackStack() else super.onBackPressed()
     }
 
     override fun onCloseKeyboard() {

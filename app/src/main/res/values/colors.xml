@@ -74,4 +74,9 @@
     <color name="goal_percent_text_color">#7A4C56</color>
     <color name="goal_value_text_color">#DBC4C9</color>
 
+    <color name="keyboard_pin_color">#597A4C56</color>
+    <color name="keyboard_pin_color_pressed">#7A4C56</color>
+
+    <color name="info_background">#32FFBD78</color>
+
 </resources>

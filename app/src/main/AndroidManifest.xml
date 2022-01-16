@@ -55,7 +55,7 @@
             android:name="com.d9tilov.moneymanager.home.ui.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MoneyManager.Home"
-            android:windowSoftInputMode="adjustResize"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
             android:exported="false"/>
 
         <meta-data

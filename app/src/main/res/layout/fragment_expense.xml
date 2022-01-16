@@ -7,140 +7,16 @@
     android:layout_height="match_parent"
     tools:context="com.d9tilov.moneymanager.home.ui.MainActivity">
 
-    <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
-        android:id="@+id/expense_main_sum"
+    <include
+        android:id="@+id/expense_info_layout_include"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/standard_left_margin"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="@dimen/standard_right_margin"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/background_round_border"
-        android:padding="4dp"
-        android:visibility="gone"
-        android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Medium"
-        app:enableInput="true"
-        app:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
+        layout="@layout/layout_expense_info"
+        android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:scaleEnabled="true"
-        app:signTextStyle="?attr/textAppearanceCurrencySignMedium"
-        app:sumTextStyle="?attr/textAppearanceHeadline4" />
-
-    <TextView
-        android:id="@+id/expense_main_sum_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:background="@drawable/background_sum_border"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:text="@string/transaction_edit_sum_title"
-        android:visibility="gone"
-        android:textAppearance="?attr/textAppearanceCaption"
-        android:textColor="@color/button_normal_color_dark"
-        android:textSize="@dimen/transaction_sum_title_text_size"
-        app:layout_constraintBottom_toTopOf="@+id/expense_main_sum"
-        app:layout_constraintEnd_toEndOf="@+id/expense_main_sum" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/expense_info_layout"
-        android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/expense_category_rv_list"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/expense_main_sum">
-
-        <TextView
-            android:id="@+id/expense_today_info_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="@string/category_expense_info_today_title"
-            android:textAppearance="?attr/textAppearanceCaption"
-            app:layout_constraintBottom_toTopOf="@+id/expense_period_info_title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
-            android:id="@+id/expense_today_info_value"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="8dp"
-            android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Small"
-            app:layout_constraintBottom_toBottomOf="@+id/expense_today_info_title"
-            app:layout_constraintStart_toEndOf="@+id/expense_today_info_title"
-            app:layout_constraintTop_toTopOf="@+id/expense_today_info_title"
-            app:showShortDecimalPart="true"
-            app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
-            app:sum="1000"
-            app:sumTextStyle="?attr/textAppearanceCurrencyValueSmall" />
-
-        <TextView
-            android:id="@+id/expense_period_info_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="@string/category_expense_info_period_title"
-            android:textAppearance="?attr/textAppearanceCaption"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/expense_today_info_title"
-            app:layout_constraintTop_toBottomOf="@+id/expense_today_info_title"
-            app:layout_constraintVertical_chainStyle="packed" />
-
-        <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
-            android:id="@+id/expense_period_info_usd_value"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Small"
-            app:layout_constraintBottom_toBottomOf="@+id/expense_period_info_title"
-            app:layout_constraintStart_toEndOf="@+id/expense_period_info_title"
-            app:layout_constraintTop_toTopOf="@+id/expense_period_info_title"
-            app:showShortDecimalPart="true"
-            app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
-            app:sum="1000"
-            app:sumTextStyle="?attr/textAppearanceCurrencyValueSmall" />
-
-        <TextView
-            android:id="@+id/expense_period_info_approx_sign"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:text="@string/approx_sign"
-            app:layout_constraintBottom_toBottomOf="@+id/expense_period_info_usd_value"
-            app:layout_constraintStart_toEndOf="@+id/expense_period_info_usd_value"
-            app:layout_constraintTop_toTopOf="@+id/expense_period_info_usd_value" />
-
-        <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
-            android:id="@+id/expense_period_info_approx_sum"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Small.Transparent"
-            app:layout_constraintBottom_toBottomOf="@+id/expense_period_info_approx_sign"
-            app:layout_constraintStart_toEndOf="@+id/expense_period_info_approx_sign"
-            app:layout_constraintTop_toTopOf="@+id/expense_period_info_approx_sign"
-            app:showShortDecimalPart="true"
-            app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
-            app:sum="1000"
-            app:sumTextStyle="?attr/textAppearanceCurrencyValueSmall" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/expense_category_rv_list"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/standard_half_left_margin"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/item_category" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/expense_transaction_rv_list"
@@ -148,7 +24,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/expense_category_rv_list"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
