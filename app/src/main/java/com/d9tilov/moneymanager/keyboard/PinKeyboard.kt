@@ -8,11 +8,8 @@ class PinKeyboard @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null
 ) : TableLayout(context, attrs) {
-    private var clickPinButton: ClickPinButton? = null
 
-    fun setClickPinButton(click: ClickPinButton) {
-        clickPinButton = click
-    }
+    var clickPinButton: ClickPinButton? = null
 
     fun fireClickPinButton(button: PinButton?) {
         clickPinButton?.onPinClick(button)

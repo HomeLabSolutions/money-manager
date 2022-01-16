@@ -18,17 +18,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/expense_transaction_rv_list"
+    <include
+        android:id="@+id/expense_transaction_layout_include"
         android:layout_width="0dp"
+        layout="@layout/layout_expense_transactions"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:visibility="invisible"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/item_transaction" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ViewStub
         android:id="@+id/expense_transaction_empty_placeholder"
@@ -42,16 +41,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/expense_transaction_btn_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:foreground="@drawable/floating_drawable"
-        android:visibility="gone"
-        app:fabSize="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

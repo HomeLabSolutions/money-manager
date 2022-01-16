@@ -22,10 +22,8 @@ import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.gone
-import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.isTablet
 import com.d9tilov.moneymanager.databinding.FragmentIncomeBinding
-import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.incomeexpense.ui.BaseIncomeExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -57,9 +55,11 @@ class IncomeFragment :
         btnHideKeyboard = viewBinding.incomeInfoLayoutInclude.incomeKeyboardLayout.btnHideKeyboard
         mainSumTitle = viewBinding.incomeInfoLayoutInclude.incomeMainSumTitle
         categoryRvList = viewBinding.incomeInfoLayoutInclude.incomeCategoryRvList
-        transactionRvList = viewBinding.incomeTransactionRvList
+        transactionRvList = viewBinding.incomeTransactionLayoutInclude.incomeTransactionRvList
+        transactionBtnAdd = viewBinding.incomeTransactionLayoutInclude.incomeTransactionBtnAdd
+        pinKeyboard = viewBinding.incomeInfoLayoutInclude.incomeKeyboardLayout.pinKeyboard
         infoLayout = viewBinding.incomeInfoLayoutInclude.root
-        transactionBtnAdd = viewBinding.incomeTransactionBtnAdd
+        transactionsLayout = viewBinding.incomeTransactionLayoutInclude.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -81,26 +81,25 @@ class IncomeFragment :
             getTransactionEvent().observe(
                 viewLifecycleOwner,
                 {
-                    hideKeyboard()
                     resetMainSum()
+                    showInfoAndCategories(false)
                 }
             )
         }
         lifecycleScope.launchWhenStarted {
             viewModel.transactions.collectLatest { transactionAdapter.submitData(it) }
-            viewBinding.incomeTransactionRvList.scrollToPosition(0)
+            viewBinding.incomeTransactionLayoutInclude.incomeTransactionRvList.scrollToPosition(0)
         }
         lifecycleScope.launchWhenStarted {
             transactionAdapter
                 .loadStateFlow
                 .collectLatest { loadStates ->
-                    isTransactionDataEmpty =
+                    val isDataEmpty =
                         loadStates.source.refresh is LoadState.NotLoading && loadStates.append.endOfPaginationReached && transactionAdapter.itemCount == 0
-                    if (isTransactionDataEmpty && !(activity as MainActivity).forceShowKeyboard) {
-                        showViewStub(TransactionType.INCOME)
-                    } else {
-                        hideViewStub()
-                    }
+                    if (isDataEmpty == isTransactionDataEmpty) return@collectLatest
+                    isTransactionDataEmpty = isDataEmpty
+                    if (isTransactionDataEmpty) showViewStub(TransactionType.INCOME)
+                    else hideViewStub()
                 }
         }
         lifecycleScope.launchWhenStarted {
@@ -148,7 +147,7 @@ class IncomeFragment :
     }
 
     override fun initTransactionsRecyclerView() {
-        viewBinding.run {
+        viewBinding.incomeTransactionLayoutInclude.run {
             incomeTransactionRvList.layoutManager =
                 LinearLayoutManager(requireContext())
             incomeTransactionRvList.adapter = transactionAdapter

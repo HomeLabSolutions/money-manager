@@ -28,7 +28,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class IncomeExpenseFragment :
     BaseFragment<IncomeExpenseNavigator>(R.layout.fragment_income_expense),
-    IncomeExpenseNavigator, OnBackPressed {
+    IncomeExpenseNavigator,
+    OnBackPressed {
 
     private val args by navArgs<IncomeExpenseFragmentArgs>()
     private val transactionType by lazy { args.transactionType }
