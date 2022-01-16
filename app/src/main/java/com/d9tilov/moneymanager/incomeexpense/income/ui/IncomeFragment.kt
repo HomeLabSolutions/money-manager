@@ -17,7 +17,6 @@ import com.d9tilov.moneymanager.base.ui.navigator.IncomeNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.constants.DataConstants
-import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
@@ -41,28 +40,25 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class IncomeFragment :
     BaseIncomeExpenseFragment<IncomeNavigator>(R.layout.fragment_income),
-    IncomeNavigator,
-    OnKeyboardVisibleChange {
+    IncomeNavigator {
 
     private val viewBinding by viewBinding(FragmentIncomeBinding::bind)
 
     override fun getNavigator() = this
     override val viewModel by viewModels<IncomeViewModel>()
-    override val snackBarAnchorView by lazy { viewBinding.incomeCategoryRvList }
-
-    private val categoryGroup = mutableListOf<View>()
-    private val transactionGroup = mutableListOf<View>()
+    override val snackBarAnchorView by lazy { viewBinding.incomeInfoLayoutInclude.incomeCategoryRvList }
 
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun initViews() {
         emptyViewStub = viewBinding.root.findViewById(R.id.income_transaction_empty_placeholder)
-        mainSum = viewBinding.incomeMainSum
-        mainSumTitle = viewBinding.incomeMainSumTitle
-        categoryRvList = viewBinding.incomeCategoryRvList
+        mainSum = viewBinding.incomeInfoLayoutInclude.incomeMainSum
+        btnHideKeyboard = viewBinding.incomeInfoLayoutInclude.incomeKeyboardLayout.btnHideKeyboard
+        mainSumTitle = viewBinding.incomeInfoLayoutInclude.incomeMainSumTitle
+        categoryRvList = viewBinding.incomeInfoLayoutInclude.incomeCategoryRvList
         transactionRvList = viewBinding.incomeTransactionRvList
-        infoLayout = viewBinding.incomeInfoLayout
+        infoLayout = viewBinding.incomeInfoLayoutInclude.root
         transactionBtnAdd = viewBinding.incomeTransactionBtnAdd
     }
 
@@ -112,10 +108,10 @@ class IncomeFragment :
                 viewLifecycleOwner,
                 { sum ->
                     if (sum.signum() == 0) {
-                        viewBinding.incomePeriodInfoUsdValue.gone()
-                        viewBinding.incomePeriodInfoApproxSign.gone()
+                        viewBinding.incomeInfoLayoutInclude.incomePeriodInfoUsdValue.gone()
+                        viewBinding.incomeInfoLayoutInclude.incomePeriodInfoApproxSign.gone()
                     } else
-                        viewBinding.incomePeriodInfoUsdValue.setValue(
+                        viewBinding.incomeInfoLayoutInclude.incomePeriodInfoUsdValue.setValue(
                             sum,
                             DataConstants.DEFAULT_CURRENCY_CODE
                         )
@@ -123,13 +119,13 @@ class IncomeFragment :
             )
             viewModel.earnedInPeriodApprox.observe(
                 viewLifecycleOwner,
-                { sum -> viewBinding.incomePeriodInfoApproxSum.setValue(sum) }
+                { sum -> viewBinding.incomeInfoLayoutInclude.incomePeriodInfoApproxSum.setValue(sum) }
             )
         }
     }
 
     override fun initCategoryRecyclerView() {
-        viewBinding.run {
+        viewBinding.incomeInfoLayoutInclude.run {
             val layoutManager =
                 GridLayoutManager(
                     requireContext(),
@@ -171,7 +167,7 @@ class IncomeFragment :
             param(FirebaseAnalytics.Param.ITEM_ID, "click_all_categories_income")
         }
         viewBinding.run {
-            val inputSum = viewBinding.incomeMainSum.getValue()
+            val inputSum = viewBinding.incomeInfoLayoutInclude.incomeMainSum.getValue()
             val action = if (inputSum.signum() > 0) {
                 IncomeExpenseFragmentDirections.toCategoryDest(
                     destination = CategoryDestination.MAIN_WITH_SUM_SCREEN,
@@ -188,24 +184,16 @@ class IncomeFragment :
         }
     }
 
-    override fun onOpenKeyboard() {
-        onOpenKeyboardBase()
-    }
-
-    override fun onCloseKeyboard() {
-        onCloseKeyboardBase()
-    }
-
     override fun saveTransaction(category: Category) {
         viewModel.saveTransaction(
             category,
-            viewBinding.incomeMainSum.getValue()
+            viewBinding.incomeInfoLayoutInclude.incomeMainSum.getValue()
         )
         isTransactionDataEmpty = false
     }
 
     override fun resetMainSum() {
-        viewBinding.incomeMainSum.setValue(BigDecimal.ZERO)
+        viewBinding.incomeInfoLayoutInclude.incomeMainSum.setValue(BigDecimal.ZERO)
     }
 
     override fun getType() = TransactionType.INCOME

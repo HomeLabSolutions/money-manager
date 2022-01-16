@@ -16,6 +16,7 @@ import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.BaseIncomeExpenseNavigator
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryAdapter
+import com.d9tilov.moneymanager.core.events.OnBackPressed
 import com.d9tilov.moneymanager.core.events.OnDialogDismissListener
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
@@ -24,7 +25,6 @@ import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.core.util.toast
-import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
@@ -32,7 +32,7 @@ import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@LayoutRes layoutId: Int) :
-    BaseFragment<N>(layoutId), OnDialogDismissListener, BaseIncomeExpenseNavigator {
+    BaseFragment<N>(layoutId), OnDialogDismissListener, BaseIncomeExpenseNavigator, OnBackPressed {
 
     protected val categoryAdapter by lazy { CategoryAdapter() }
     protected val transactionAdapter by lazy { TransactionAdapter() }
@@ -100,6 +100,7 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
                 }
             }
         }
+        btnHideKeyboard.setOnClickListener { showInfoAndCategories(false) }
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
             IncomeExpenseFragment.ARG_TRANSACTION_CREATED
         )?.observe(viewLifecycleOwner) {
@@ -127,15 +128,19 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
                 }
             }
         )
-        transactionBtnAdd.setOnClickListener {
-            mainSum.moneyEditText.requestFocus()
-            showKeyboard(mainSum.moneyEditText)
-        }
+        transactionBtnAdd.setOnClickListener { showInfoAndCategories(true) }
+        showInfoAndCategories(true)
     }
 
     private fun showInfoAndCategories(openKeyboard: Boolean) {
+        isKeyboardOpen = openKeyboard
         val hiddenGroup = if (openKeyboard) transactionGroup else categoryGroup
         val shownGroup = if (openKeyboard) categoryGroup else transactionGroup
+        if (openKeyboard) {
+            hideViewStub()
+        } else {
+            if (isTransactionDataEmpty) showViewStub(getType())
+        }
         shownGroup.forEach {
             it.apply {
                 alpha = 0f
@@ -147,22 +152,6 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
             }
         }
         hiddenGroup.forEach { it.gone() }
-    }
-
-    protected fun onOpenKeyboardBase() {
-        isKeyboardOpen = true
-        showInfoAndCategories(true)
-        hideViewStub()
-        categoryRvList.scrollToPosition(0)
-    }
-
-    protected fun onCloseKeyboardBase() {
-        isKeyboardOpen = false
-        showInfoAndCategories(false)
-        if (isTransactionDataEmpty) {
-            showViewStub(TransactionType.EXPENSE)
-        }
-        mainSum.clearFocus()
     }
 
     protected fun showViewStub(transactionType: TransactionType) {
@@ -214,17 +203,17 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
         requireContext().toast(R.string.income_expense_empty_sum_error)
     }
 
-    override fun onStart() {
-        super.onStart()
-        if ((activity as MainActivity).isKeyboardShown) {
-            showInfoAndCategories(true)
-        } else {
-            showKeyboard(mainSum.moneyEditText)
-        }
-    }
-
     override fun onDismiss() {
         transactionAdapter.cancelDeletion()
+    }
+
+    override fun onBackPressed(): Boolean  {
+        return if (isKeyboardOpen) {
+            showInfoAndCategories(false)
+            false
+        } else {
+            true
+        }
     }
 
     protected open lateinit var emptyViewStub: ViewStub
@@ -234,6 +223,7 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
     protected open lateinit var transactionRvList: RecyclerView
     protected open lateinit var infoLayout: ConstraintLayout
     protected open lateinit var transactionBtnAdd: FloatingActionButton
+    protected open lateinit var btnHideKeyboard: ImageView
     protected abstract fun getType(): TransactionType
     protected abstract fun initViews()
     protected abstract fun initCategoryRecyclerView()

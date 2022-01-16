@@ -46,8 +46,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ExpenseFragment :
     BaseIncomeExpenseFragment<ExpenseNavigator>(R.layout.fragment_expense),
-    ExpenseNavigator,
-    OnKeyboardVisibleChange {
+    ExpenseNavigator {
 
     private val viewBinding by viewBinding(FragmentExpenseBinding::bind)
 
@@ -60,11 +59,12 @@ class ExpenseFragment :
 
     override fun initViews() {
         emptyViewStub = viewBinding.root.findViewById(R.id.expense_transaction_empty_placeholder)
-        mainSum = viewBinding.expenseMainSum
-        mainSumTitle = viewBinding.expenseMainSumTitle
-        categoryRvList = viewBinding.expenseCategoryRvList
+        mainSum = viewBinding.expenseInfoLayoutInclude.expenseMainSum
+        btnHideKeyboard = viewBinding.expenseInfoLayoutInclude.expenseKeyboardLayout.btnHideKeyboard
+        mainSumTitle = viewBinding.expenseInfoLayoutInclude.expenseMainSumTitle
+        categoryRvList = viewBinding.expenseInfoLayoutInclude.expenseCategoryRvList
         transactionRvList = viewBinding.expenseTransactionRvList
-        infoLayout = viewBinding.expenseInfoLayout
+        infoLayout = viewBinding.expenseInfoLayoutInclude.root
         transactionBtnAdd = viewBinding.expenseTransactionBtnAdd
     }
 
@@ -123,12 +123,12 @@ class ExpenseFragment :
             viewLifecycleOwner,
             { sum ->
                 if (sum.signum() == 0) {
-                    viewBinding.expensePeriodInfoUsdValue.gone()
-                    viewBinding.expensePeriodInfoApproxSign.gone()
+                    viewBinding.expenseInfoLayoutInclude.expensePeriodInfoUsdValue.gone()
+                    viewBinding.expenseInfoLayoutInclude.expensePeriodInfoApproxSign.gone()
                 } else {
-                    viewBinding.expensePeriodInfoUsdValue.show()
-                    viewBinding.expensePeriodInfoApproxSign.show()
-                    viewBinding.expensePeriodInfoUsdValue.setValue(
+                    viewBinding.expenseInfoLayoutInclude.expensePeriodInfoUsdValue.show()
+                    viewBinding.expenseInfoLayoutInclude.expensePeriodInfoApproxSign.show()
+                    viewBinding.expenseInfoLayoutInclude.expensePeriodInfoUsdValue.setValue(
                         sum,
                         DataConstants.DEFAULT_CURRENCY_CODE
                     )
@@ -137,13 +137,13 @@ class ExpenseFragment :
         )
         viewModel.spentInPeriodApprox.observe(
             viewLifecycleOwner,
-            viewBinding.expensePeriodInfoApproxSum::setValue
+            viewBinding.expenseInfoLayoutInclude.expensePeriodInfoApproxSum::setValue
         )
         viewModel.ableToSpendToday.observe(
             viewLifecycleOwner,
             { sum ->
-                viewBinding.expenseTodayInfoValue.setValue(sum)
-                viewBinding.expenseTodayInfoValue.setColor(
+                viewBinding.expenseInfoLayoutInclude.expenseTodayInfoValue.setValue(sum)
+                viewBinding.expenseInfoLayoutInclude.expenseTodayInfoValue.setColor(
                     if (sum.setScale(DECIMAL_LENGTH, ROUND_HALF_UP).signum() > 0)
                         ContextCompat.getColor(requireContext(), R.color.success_color) else
                         ContextCompat.getColor(requireContext(), R.color.error_color)
@@ -153,7 +153,7 @@ class ExpenseFragment :
     }
 
     override fun initCategoryRecyclerView() {
-        viewBinding.run {
+        viewBinding.expenseInfoLayoutInclude.run {
             val layoutManager =
                 GridLayoutManager(
                     requireContext(),
@@ -210,14 +210,6 @@ class ExpenseFragment :
             }
             findNavController().navigate(action)
         }
-    }
-
-    override fun onOpenKeyboard() {
-        onOpenKeyboardBase()
-    }
-
-    override fun onCloseKeyboard() {
-        onCloseKeyboardBase()
     }
 
     override fun saveTransaction(category: Category) {

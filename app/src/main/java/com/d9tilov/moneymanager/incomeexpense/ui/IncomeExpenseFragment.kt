@@ -4,19 +4,21 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeExpenseNavigator
-import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
+import com.d9tilov.moneymanager.core.events.OnBackPressed
+import com.d9tilov.moneymanager.core.events.OnDialogDismissListener
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.databinding.FragmentIncomeExpenseBinding
 import com.d9tilov.moneymanager.incomeexpense.ui.adapter.IncomeExpenseAdapter
 import com.d9tilov.moneymanager.incomeexpense.ui.adapter.IncomeExpenseAdapter.Companion.TAB_COUNT
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.IncomeExpenseViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialog
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
@@ -26,8 +28,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class IncomeExpenseFragment :
     BaseFragment<IncomeExpenseNavigator>(R.layout.fragment_income_expense),
-    IncomeExpenseNavigator,
-    OnKeyboardVisibleChange {
+    IncomeExpenseNavigator, OnBackPressed {
 
     private val args by navArgs<IncomeExpenseFragmentArgs>()
     private val transactionType by lazy { args.transactionType }
@@ -37,7 +38,7 @@ class IncomeExpenseFragment :
     override val viewModel by viewModels<IncomeExpenseViewModel>()
 
     private lateinit var incomeExpenseAdapter: IncomeExpenseAdapter
-    private var currentPage = 0
+    private var pageIndex = 0
 
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -51,20 +52,12 @@ class IncomeExpenseFragment :
                 .registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                     override fun onPageSelected(position: Int) {
                         super.onPageSelected(position)
+                        pageIndex = position
                         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
                             param(
                                 FirebaseAnalytics.Param.ITEM_ID,
                                 if (position == 0) "expense" else "income"
                             )
-                        }
-                        currentPage = position
-
-                        if (countFragmentsInViewPager() != TAB_COUNT) return
-                        val currentFragment = getCurrentPagedFragment()
-                        if ((activity as BaseActivity<*>).isKeyboardShown) {
-                            currentFragment?.onOpenKeyboard()
-                        } else {
-                            currentFragment?.onCloseKeyboard()
                         }
                     }
                 })
@@ -81,9 +74,21 @@ class IncomeExpenseFragment :
             incomeExpenseViewPager.currentItem =
                 (if (transactionType == TransactionType.INCOME) 1 else 0)
         }
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
+            TransactionRemoveDialog.ARG_UNDO_REMOVE_LAYOUT_DISMISS
+        )?.observe(
+            viewLifecycleOwner
+        ) {
+            if (it) {
+                val fragments = getFragmentsInViewPager()
+                for (fragment in fragments) {
+                    (fragment as? OnDialogDismissListener)?.onDismiss()
+                }
+            }
+        }
     }
 
-    private fun countFragmentsInViewPager(): Int {
+    private fun getFragmentsInViewPager(): List<Fragment> {
         val fragments = mutableListOf<Fragment>()
         for (i in 0 until TAB_COUNT) {
             val fragment = childFragmentManager.findFragmentByTag(
@@ -91,21 +96,13 @@ class IncomeExpenseFragment :
             )
             fragment?.let { fragments.add(it) }
         }
-        return fragments.size
+        return fragments
     }
 
-    override fun onOpenKeyboard() {
-        getCurrentPagedFragment()?.onOpenKeyboard()
+    override fun onBackPressed(): Boolean {
+        val fragment = getFragmentsInViewPager().getOrNull(pageIndex)
+        return (fragment as? OnBackPressed)?.onBackPressed() ?: true
     }
-
-    override fun onCloseKeyboard() {
-        getCurrentPagedFragment()?.onCloseKeyboard()
-    }
-
-    private fun getCurrentPagedFragment(): OnKeyboardVisibleChange? =
-        childFragmentManager.findFragmentByTag(
-            "f" + viewBinding.incomeExpenseViewPager.adapter?.getItemId(currentPage)
-        ) as? OnKeyboardVisibleChange
 
     companion object {
         const val ARG_TRANSACTION_CREATED = "arg_transaction_created"
