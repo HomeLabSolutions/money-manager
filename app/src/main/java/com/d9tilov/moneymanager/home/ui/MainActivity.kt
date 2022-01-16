@@ -28,8 +28,6 @@ class MainActivity :
     DialogInterface.OnDismissListener {
 
     private var currentNavController: LiveData<NavController>? = null
-    private val bottomMenuSet =
-        setOf(R.id.income_expense_dest, R.id.chart_dest, R.id.profile_dest)
     private val setOfShownBottomBar = setOf(
         R.id.income_expense_dest,
         R.id.chart_dest,
@@ -74,9 +72,7 @@ class MainActivity :
             { navController ->
                 navController.addOnDestinationChangedListener { _, destination, _ ->
                     if (setOfShownBottomBar.contains(destination.id)) {
-                        if (!isKeyboardShown) {
-                            showBottomBarWithAnimation()
-                        }
+                        showBottomBarWithAnimation()
                     } else {
                         viewBinding.bottomNav.gone()
                     }
@@ -94,11 +90,6 @@ class MainActivity :
         return ActivityMainBinding.inflate(layoutInflater)
     }
 
-    override fun onOpenKeyboard() {
-        super.onOpenKeyboard()
-        viewBinding.bottomNav.gone()
-    }
-
     override fun onDismiss(dialog: DialogInterface?) {
         hideKeyboard()
     }
@@ -111,14 +102,6 @@ class MainActivity :
             this.supportFragmentManager.findFragmentById(R.id.nav_host_container)?.childFragmentManager?.backStackEntryCount
                 ?: 0
         if (backStackCount > 0) findNavController(R.id.nav_host_container).popBackStack() else super.onBackPressed()
-    }
-
-    override fun onCloseKeyboard() {
-        super.onCloseKeyboard()
-        val curDest = findNavController(R.id.nav_host_container).currentDestination?.id
-        if (bottomMenuSet.contains(curDest)) {
-            showBottomBarWithAnimation()
-        }
     }
 
     private fun showBottomBarWithAnimation() {
