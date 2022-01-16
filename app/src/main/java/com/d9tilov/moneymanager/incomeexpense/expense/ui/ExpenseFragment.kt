@@ -18,7 +18,6 @@ import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.constants.DataConstants
-import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
@@ -29,7 +28,6 @@ import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.isTablet
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
-import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.incomeexpense.ui.BaseIncomeExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
 import com.d9tilov.moneymanager.regular.PeriodicTransactionWorker
@@ -63,9 +61,11 @@ class ExpenseFragment :
         btnHideKeyboard = viewBinding.expenseInfoLayoutInclude.expenseKeyboardLayout.btnHideKeyboard
         mainSumTitle = viewBinding.expenseInfoLayoutInclude.expenseMainSumTitle
         categoryRvList = viewBinding.expenseInfoLayoutInclude.expenseCategoryRvList
-        transactionRvList = viewBinding.expenseTransactionRvList
+        transactionRvList = viewBinding.expenseTransactionLayoutInclude.expenseTransactionRvList
+        transactionBtnAdd = viewBinding.expenseTransactionLayoutInclude.expenseTransactionBtnAdd
         infoLayout = viewBinding.expenseInfoLayoutInclude.root
-        transactionBtnAdd = viewBinding.expenseTransactionBtnAdd
+        transactionsLayout = viewBinding.expenseTransactionLayoutInclude.root
+        pinKeyboard = viewBinding.expenseInfoLayoutInclude.expenseKeyboardLayout.pinKeyboard
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -87,8 +87,8 @@ class ExpenseFragment :
             getTransactionEvent().observe(
                 viewLifecycleOwner,
                 {
-                    hideKeyboard()
                     resetMainSum()
+                    showInfoAndCategories(false)
                 }
             )
         }
@@ -103,20 +103,19 @@ class ExpenseFragment :
         lifecycleScope.launchWhenStarted {
             viewModel.transactions.collectLatest { data ->
                 transactionAdapter.submitData(data)
-                viewBinding.expenseTransactionRvList.scrollToPosition(0)
+                viewBinding.expenseTransactionLayoutInclude.expenseTransactionRvList.scrollToPosition(0)
             }
         }
         lifecycleScope.launchWhenStarted {
             transactionAdapter
                 .loadStateFlow
                 .collectLatest { loadStates ->
-                    isTransactionDataEmpty =
+                    val isDataEmpty =
                         loadStates.source.refresh is LoadState.NotLoading && loadStates.append.endOfPaginationReached && transactionAdapter.itemCount == 0
-                    if (isTransactionDataEmpty && !(activity as MainActivity).forceShowKeyboard) {
-                        showViewStub(TransactionType.EXPENSE)
-                    } else {
-                        hideViewStub()
-                    }
+                    if (isDataEmpty == isTransactionDataEmpty) return@collectLatest
+                    isTransactionDataEmpty = isDataEmpty
+                    if (isTransactionDataEmpty) showViewStub(TransactionType.EXPENSE)
+                    else hideViewStub()
                 }
         }
         viewModel.spentInPeriod.observe(
@@ -176,7 +175,7 @@ class ExpenseFragment :
     }
 
     override fun initTransactionsRecyclerView() {
-        viewBinding.run {
+        viewBinding.expenseTransactionLayoutInclude.run {
             expenseTransactionRvList.layoutManager = LinearLayoutManager(requireContext())
             expenseTransactionRvList.adapter = transactionAdapter
             val itemDecoration = StickyHeaderItemDecorator(transactionAdapter)

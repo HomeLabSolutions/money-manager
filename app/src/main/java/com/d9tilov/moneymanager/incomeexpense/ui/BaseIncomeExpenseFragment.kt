@@ -23,9 +23,10 @@ import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
-import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.core.util.toast
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
+import com.d9tilov.moneymanager.keyboard.PinButton
+import com.d9tilov.moneymanager.keyboard.PinKeyboard
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
@@ -38,8 +39,6 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
     protected val transactionAdapter by lazy { TransactionAdapter() }
     protected var isTransactionDataEmpty = false
     private var isKeyboardOpen = true
-    private val categoryGroup = mutableListOf<View>()
-    private val transactionGroup = mutableListOf<View>()
 
     override val snackBarBackgroundTint = R.color.button_normal_color_disable
 
@@ -81,18 +80,6 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
         initViews()
         initCategoryRecyclerView()
         initTransactionsRecyclerView()
-        categoryGroup.run {
-            add(categoryRvList)
-            add(mainSum)
-            add(mainSumTitle)
-            add(infoLayout)
-        }
-        transactionGroup.run {
-            add(transactionBtnAdd)
-            add(transactionRvList)
-        }
-        categoryGroup.forEach { it.gone() }
-        transactionGroup.forEach { it.gone() }
         mainSum.moneyEditText.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 mainSum.moneyEditText.post {
@@ -129,32 +116,70 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
             }
         )
         transactionBtnAdd.setOnClickListener { showInfoAndCategories(true) }
+        pinKeyboard.clickPinButton = object : PinKeyboard.ClickPinButton {
+            override fun onPinClick(button: PinButton?) {
+                when (button?.id) {
+                    R.id.keyboard_pin_0 -> handlePinStr(getString(R.string._0))
+                    R.id.keyboard_pin_1 -> handlePinStr(getString(R.string._1))
+                    R.id.keyboard_pin_2 -> handlePinStr(getString(R.string._2))
+                    R.id.keyboard_pin_3 -> handlePinStr(getString(R.string._3))
+                    R.id.keyboard_pin_4 -> handlePinStr(getString(R.string._4))
+                    R.id.keyboard_pin_5 -> handlePinStr(getString(R.string._5))
+                    R.id.keyboard_pin_6 -> handlePinStr(getString(R.string._6))
+                    R.id.keyboard_pin_7 -> handlePinStr(getString(R.string._7))
+                    R.id.keyboard_pin_8 -> handlePinStr(getString(R.string._8))
+                    R.id.keyboard_pin_9 -> handlePinStr(getString(R.string._9))
+                    R.id.keyboard_pin_dot -> handlePinStr(getString(R.string._dot))
+                    else -> handlePinStr(null)
+                }
+            }
+        }
         showInfoAndCategories(true)
     }
 
-    private fun showInfoAndCategories(openKeyboard: Boolean) {
+    private fun handlePinStr(str: String?) {
+        val dot = getString(R.string._dot)
+        val zero = getString(R.string._0)
+        var input = mainSum.moneyEditText.text.toString()
+        when (str) {
+            dot -> {
+                if (input.contains(dot)) return
+                if (input.isEmpty() || input[input.length - 1].toString() == dot) return
+                else input = input.plus(str)
+            }
+            zero -> {
+                if (input.length == 1 && input[0].toString() == zero) return
+                else input = input.plus(str)
+            }
+            null -> if (input.isNotEmpty()) input = input.removeRange(input.length - 1, input.length)
+            else -> input = input.plus(str)
+        }
+        if (input.isEmpty()) input = getString(R.string._0)
+        mainSum.moneyEditText.setText(input)
+    }
+
+    protected fun showInfoAndCategories(openKeyboard: Boolean) {
         isKeyboardOpen = openKeyboard
-        val hiddenGroup = if (openKeyboard) transactionGroup else categoryGroup
-        val shownGroup = if (openKeyboard) categoryGroup else transactionGroup
+        val hiddenGroup = if (openKeyboard) transactionsLayout else infoLayout
+        val shownGroup = if (openKeyboard) infoLayout else transactionsLayout
         if (openKeyboard) {
             hideViewStub()
         } else {
             if (isTransactionDataEmpty) showViewStub(getType())
         }
-        shownGroup.forEach {
-            it.apply {
-                alpha = 0f
-                show()
-                animate()
-                    .alpha(1f)
-                    .setDuration(ANIMATION_DURATION)
-                    .setListener(null)
-            }
+        shownGroup.apply {
+            alpha = 0f
+            show()
+            animate()
+                .alpha(1f)
+                .setDuration(ANIMATION_DURATION)
+                .setListener(null)
         }
-        hiddenGroup.forEach { it.gone() }
+        hiddenGroup.gone()
     }
 
     protected fun showViewStub(transactionType: TransactionType) {
+        if (isKeyboardOpen) return
         if (emptyViewStub.parent == null) {
             emptyViewStub.show()
         } else {
@@ -162,28 +187,20 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
             val stubIcon =
                 inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_icon)
             stubIcon?.setImageDrawable(
-                ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.ic_wallet_empty
-                )
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_wallet_empty)
             )
-            val stubTitle =
-                inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_title)
+            val stubTitle = inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_title)
             stubTitle?.text =
                 getString(
                     if (transactionType == TransactionType.EXPENSE)
                         R.string.transaction_empty_placeholder_expense_title
                     else R.string.transaction_empty_placeholder_income_title
                 )
-            val stubSubTitle =
-                inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_subtitle)
+            val stubSubTitle = inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_subtitle)
             stubSubTitle?.show()
             stubSubTitle?.text = getString(R.string.transaction_empty_placeholder_subtitle)
-            val addTransaction =
-                inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_add)
-            addTransaction?.setOnClickListener {
-                showKeyboard(mainSum.moneyEditText)
-            }
+            val addTransaction = inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_add)
+            addTransaction?.setOnClickListener { showInfoAndCategories(true) }
         }
     }
 
@@ -207,7 +224,7 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
         transactionAdapter.cancelDeletion()
     }
 
-    override fun onBackPressed(): Boolean  {
+    override fun onBackPressed(): Boolean {
         return if (isKeyboardOpen) {
             showInfoAndCategories(false)
             false
@@ -221,9 +238,11 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
     protected open lateinit var mainSumTitle: TextView
     protected open lateinit var categoryRvList: RecyclerView
     protected open lateinit var transactionRvList: RecyclerView
-    protected open lateinit var infoLayout: ConstraintLayout
     protected open lateinit var transactionBtnAdd: FloatingActionButton
     protected open lateinit var btnHideKeyboard: ImageView
+    protected open lateinit var infoLayout: ConstraintLayout
+    protected open lateinit var transactionsLayout: ConstraintLayout
+    protected open lateinit var pinKeyboard: PinKeyboard
     protected abstract fun getType(): TransactionType
     protected abstract fun initViews()
     protected abstract fun initCategoryRecyclerView()
