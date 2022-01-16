@@ -17,13 +17,11 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.callback.SwipeToDeleteCallback
 import com.d9tilov.moneymanager.base.ui.navigator.GoalsNavigator
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
-import com.d9tilov.moneymanager.core.events.OnKeyboardVisibleChange
 import com.d9tilov.moneymanager.core.ui.recyclerview.MarginItemDecoration
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.debounce
@@ -45,8 +43,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class GoalsFragment :
     BaseFragment<GoalsNavigator>(R.layout.fragment_goals),
     GoalsNavigator,
-    ControlsClicked,
-    OnKeyboardVisibleChange {
+    ControlsClicked {
 
     private val args by navArgs<GoalsFragmentArgs>()
     private val destination by lazy { args.destination }
@@ -182,7 +179,6 @@ class GoalsFragment :
     }
 
     private fun showViewStub() {
-        if ((activity as BaseActivity<*>).isKeyboardShown) return
         if (emptyViewStub?.parent == null) {
             emptyViewStub?.show()
         } else {
@@ -221,17 +217,6 @@ class GoalsFragment :
 
     override fun onNextClick() {
         viewModel.savePrepopulateStatus()
-    }
-
-    override fun onOpenKeyboard() {
-        hideViewStub()
-    }
-
-    override fun onCloseKeyboard() {
-        if (showViewStub) {
-            showViewStub()
-        }
-        viewBinding.goalsSumPerPeriod.moneyEditText.clearFocus()
     }
 
     companion object {
