@@ -77,7 +77,8 @@
     <string name="category_unit_new_name_subtitle">Введите название новой группы категорий</string>
     <string name="category_unit_name_group_hint">Название группы</string>
     <string name="category_unit_name_exist_error">Название группы с таким именем уже существует</string>
-    <string name="category_expense_info_today_title">сегодня можно потратить:</string>
+    <string name="category_expense_info_can_spend_today_title">сегодня можно потратить:</string>
+    <string name="category_expense_info_today_title">потрачено сегодня:</string>
     <string name="category_expense_info_period_title">потрачено за период:</string>
     <string name="category_income_info_period_title">заработано за период:</string>
 
