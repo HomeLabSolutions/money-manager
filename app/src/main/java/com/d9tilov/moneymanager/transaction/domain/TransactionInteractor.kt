@@ -23,7 +23,9 @@ interface TransactionInteractor : Interactor {
 
     fun ableToSpendToday(): Flow<BigDecimal>
     fun getSumInFiscalPeriodInUsd(type: TransactionType): Flow<BigDecimal>
+    fun getSumTodayInUsd(type: TransactionType): Flow<BigDecimal>
     fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<BigDecimal>
+    fun getApproxSumTodayCurrentCurrency(type: TransactionType): Flow<BigDecimal>
     suspend fun update(transaction: Transaction)
     suspend fun removeTransaction(transaction: Transaction)
     fun removeAllByCategory(category: Category): Flow<Int>

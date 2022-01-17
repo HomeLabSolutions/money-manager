@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
 import androidx.core.content.ContextCompat
@@ -131,6 +132,26 @@ class ExpenseFragment :
         viewModel.spentInPeriodApprox.observe(
             viewLifecycleOwner,
             viewBinding.expenseInfoLayoutInclude.expensePeriodInfoApproxSum::setValue
+        )
+        viewModel.spentToday.observe(
+            viewLifecycleOwner,
+            { sum ->
+                if (sum.signum() == 0) {
+                    viewBinding.expenseInfoLayoutInclude.expenseTodayInfoUsdValue.gone()
+                    viewBinding.expenseInfoLayoutInclude.expenseTodayInfoApproxSign.gone()
+                } else {
+                    viewBinding.expenseInfoLayoutInclude.expenseTodayInfoUsdValue.show()
+                    viewBinding.expenseInfoLayoutInclude.expenseTodayInfoApproxSign.show()
+                    viewBinding.expenseInfoLayoutInclude.expenseTodayInfoUsdValue.setValue(
+                        sum,
+                        DataConstants.DEFAULT_CURRENCY_CODE
+                    )
+                }
+            }
+        )
+        viewModel.spentTodayApprox.observe(
+            viewLifecycleOwner,
+            viewBinding.expenseInfoLayoutInclude.expenseTodayInfoApproxSum::setValue
         )
         viewModel.ableToSpendToday.observe(
             viewLifecycleOwner,
