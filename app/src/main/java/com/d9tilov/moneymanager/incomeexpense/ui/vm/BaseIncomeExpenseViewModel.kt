@@ -18,7 +18,6 @@ abstract class BaseIncomeExpenseViewModel<T : BaseIncomeExpenseNavigator> : Base
     abstract val transactions: Flow<PagingData<BaseTransaction>>
     abstract fun saveTransaction(category: Category, sum: BigDecimal)
 
-    fun openAllCategories() {
-        navigator?.openCategoriesScreen()
-    }
+    fun openAllCategories() { navigator?.openCategoriesScreen() }
+    fun getTransactionEvent(): LiveData<Any> = addTransactionEvent
 }
