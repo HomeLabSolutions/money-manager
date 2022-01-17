@@ -1,7 +1,6 @@
 package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
 import androidx.core.content.ContextCompat
@@ -164,6 +163,14 @@ class ExpenseFragment :
                 )
             }
         )
+        viewModel.getTransactionEvent().observe(
+            viewLifecycleOwner, {
+                isTransactionDataEmpty = false
+                hideViewStub()
+                resetMainSum()
+                showInfoAndCategories(false)
+            }
+        )
     }
 
     override fun initCategoryRecyclerView() {
@@ -227,14 +234,7 @@ class ExpenseFragment :
     }
 
     override fun saveTransaction(category: Category) {
-        viewModel.saveTransaction(
-            category,
-            mainSum.getValue()
-        )
-        isTransactionDataEmpty = false
-        hideViewStub()
-        resetMainSum()
-        showInfoAndCategories(false)
+        viewModel.saveTransaction(category, mainSum.getValue())
     }
 
     override fun resetMainSum() {

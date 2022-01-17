@@ -114,6 +114,14 @@ class IncomeFragment :
                 { sum -> viewBinding.incomeInfoLayoutInclude.incomePeriodInfoApproxSum.setValue(sum) }
             )
         }
+        viewModel.getTransactionEvent().observe(
+            viewLifecycleOwner, {
+                isTransactionDataEmpty = false
+                hideViewStub()
+                resetMainSum()
+                showInfoAndCategories(false)
+            }
+        )
     }
 
     override fun initCategoryRecyclerView() {
@@ -181,10 +189,6 @@ class IncomeFragment :
             category,
             viewBinding.incomeInfoLayoutInclude.incomeMainSum.getValue()
         )
-        isTransactionDataEmpty = false
-        hideViewStub()
-        resetMainSum()
-        showInfoAndCategories(false)
     }
 
     override fun resetMainSum() {
