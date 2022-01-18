@@ -9,12 +9,14 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.d9tilov.moneymanager.App
+import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.period.PeriodType
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.regular.domain.mapper.toCommon
 import com.d9tilov.moneymanager.regular.ui.notification.TransactionNotificationBuilder
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
+import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import timber.log.Timber
@@ -26,6 +28,7 @@ class PeriodicTransactionWorker @AssistedInject constructor(
     @Assisted workerParameters: WorkerParameters,
     private val regularTransactionInteractor: RegularTransactionInteractor,
     private val transactionInteractor: TransactionInteractor,
+    private val currencyInteractor: CurrencyInteractor,
     private val notificationBuilder: TransactionNotificationBuilder
 ) : CoroutineWorker(context, workerParameters) {
 
@@ -37,7 +40,8 @@ class PeriodicTransactionWorker @AssistedInject constructor(
             Result.failure()
         } else {
             val regularTransaction = regularTransactionInteractor.getById(id)
-            val commonTransaction = regularTransaction.toCommon()
+            val sumInUsd = currencyInteractor.toUsd(regularTransaction.sum, regularTransaction.currencyCode)
+            val commonTransaction = regularTransaction.toCommon(sumInUsd)
             if (regularTransaction.autoAdd) {
                 transactionInteractor.addTransaction(commonTransaction)
             }

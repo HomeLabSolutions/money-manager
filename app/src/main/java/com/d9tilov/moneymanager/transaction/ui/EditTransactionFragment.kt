@@ -59,9 +59,13 @@ class EditTransactionFragment : EditTransactionNavigator,
 
     override val viewModel by viewModels<EditTransactionViewModel>()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        localTransaction = transaction
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        localTransaction = transaction
         updateIcon()
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Category>(
             ARG_CATEGORY

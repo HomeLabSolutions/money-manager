@@ -62,6 +62,7 @@ class CurrencyInteractorImpl(
 
     override suspend fun toUsd(amount: BigDecimal, currencyCode: String): BigDecimal {
         val mainCurrencyCode = DataConstants.DEFAULT_CURRENCY_CODE
+        if (currencyCode == mainCurrencyCode) return amount
         val mainCurrency = getCurrencyByCode(mainCurrencyCode)
         val currentCurrency = getCurrencyByCode(currencyCode)
         val c = Calendar.getInstance()
