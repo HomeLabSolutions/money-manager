@@ -121,9 +121,10 @@ class CurrencyView @JvmOverloads constructor(
                 if (value.scale() == 0) {
                     String.format(Locale.getDefault(), value.toString())
                 } else {
-                    String.format(Locale.getDefault(), value.setScale(DECIMAL_LENGTH, BigDecimal.ROUND_HALF_UP)
-                            .stripTrailingZeros()
-                            .toString())
+                    String.format(
+                        Locale.getDefault(),
+                        value.setScale(DECIMAL_LENGTH, BigDecimal.ROUND_HALF_UP).toString()
+                    )
                 }
             }
             showDecimalPart -> String.format(Locale.getDefault(), value.removeScale.toString())

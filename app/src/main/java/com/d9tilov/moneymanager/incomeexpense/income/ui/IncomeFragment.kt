@@ -115,7 +115,8 @@ class IncomeFragment :
             )
         }
         viewModel.getTransactionEvent().observe(
-            viewLifecycleOwner, {
+            viewLifecycleOwner,
+            {
                 isTransactionDataEmpty = false
                 hideViewStub()
                 resetMainSum()

@@ -98,7 +98,6 @@ fun Date.getStartDateOfFiscalPeriod(fiscalDay: Int): Date {
 fun Date.getEndDateOfFiscalPeriod(fiscalDay: Int): Date {
     val c = Calendar.getInstance()
     val dayOfMonth = c.get(Calendar.DAY_OF_MONTH)
-    val curDate = Date()
     val fiscalDate: Date = when {
         dayOfMonth == fiscalDay -> {
             c.add(Calendar.MONTH, 1)
