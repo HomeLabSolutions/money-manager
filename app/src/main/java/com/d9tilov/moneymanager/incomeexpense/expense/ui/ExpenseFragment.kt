@@ -164,7 +164,8 @@ class ExpenseFragment :
             }
         )
         viewModel.getTransactionEvent().observe(
-            viewLifecycleOwner, {
+            viewLifecycleOwner,
+            {
                 isTransactionDataEmpty = false
                 hideViewStub()
                 resetMainSum()

@@ -12,5 +12,5 @@ data class UserProfile(
     val currentCurrencyCode: String = DataConstants.DEFAULT_CURRENCY_CODE,
     val showPrepopulate: Boolean = true,
     val backupData: BackupData = BackupData(0, AppDatabase.VERSION_NUMBER),
-    val fiscalDay: Int = 1
+    val fiscalDay: Int
 )
