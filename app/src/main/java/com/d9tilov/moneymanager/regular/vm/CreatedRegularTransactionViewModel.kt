@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.savedstate.SavedStateRegistryOwner
 import com.d9tilov.moneymanager.base.ui.navigator.RegularTransactionCreatedNavigator
@@ -14,6 +15,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -21,6 +23,9 @@ class CreatedRegularTransactionViewModel @AssistedInject constructor(
     private val regularTransactionInteractor: RegularTransactionInteractor,
     @Assisted val savedStateHandle: SavedStateHandle
 ) : BaseViewModel<RegularTransactionCreatedNavigator>() {
+
+    val defaultTransaction = regularTransactionInteractor.createDefault()
+        .flowOn(Dispatchers.Main).asLiveData()
 
     fun saveOrUpdate(transaction: RegularTransaction) {
         viewModelScope.launch(Dispatchers.IO) {

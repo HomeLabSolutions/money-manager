@@ -2,11 +2,12 @@ package com.d9tilov.moneymanager.regular.domain.mapper
 
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
+import java.math.BigDecimal
 
-fun RegularTransaction.toCommon(): Transaction = Transaction(
+fun RegularTransaction.toCommon(sumInUsd: BigDecimal): Transaction = Transaction(
     type = type,
     sum = sum,
-    usdSum = usdSum,
+    usdSum = sumInUsd,
     category = category,
     currencyCode = currencyCode,
     description = description,

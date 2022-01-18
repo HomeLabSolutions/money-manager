@@ -116,21 +116,11 @@ class TransactionInteractorImpl(
     override fun ableToSpendToday(): Flow<BigDecimal> {
         val regularIncomeSumFlow =
             regularTransactionInteractor.getAll(TransactionType.INCOME).map { incomes ->
-                incomes.sumOf {
-                    currencyInteractor.convertToMainCurrency(
-                        it.sum,
-                        it.currencyCode
-                    )
-                }
+                incomes.sumOf { currencyInteractor.convertToMainCurrency(it.sum, it.currencyCode) }
             }
         val regularExpenseSumFlow =
             regularTransactionInteractor.getAll(TransactionType.EXPENSE).map { expenses ->
-                expenses.sumOf {
-                    currencyInteractor.convertToMainCurrency(
-                        it.sum,
-                        it.currencyCode
-                    )
-                }
+                expenses.sumOf { currencyInteractor.convertToMainCurrency(it.sum, it.currencyCode) }
             }
         val incomesFlow = flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
             val endDate = Date().getEndOfDay()
@@ -140,12 +130,7 @@ class TransactionInteractorImpl(
                 endDate,
                 TransactionType.INCOME
             ).map { list ->
-                list.sumOf {
-                    currencyInteractor.convertToMainCurrency(
-                        it.sum,
-                        it.currency
-                    )
-                }
+                list.sumOf { currencyInteractor.convertToMainCurrency(it.sum, it.currency) }
             }
         }
         val expenseFlow = flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->

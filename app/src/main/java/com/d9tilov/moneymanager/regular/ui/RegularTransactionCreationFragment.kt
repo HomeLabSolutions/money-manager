@@ -24,6 +24,9 @@ import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.core.util.toBigDecimal
+import com.d9tilov.moneymanager.currency.CurrencyDestination
+import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
+import com.d9tilov.moneymanager.currency.ui.CurrencyFragment
 import com.d9tilov.moneymanager.databinding.FragmentCreationRegularTransactionBinding
 import com.d9tilov.moneymanager.period.PeriodType
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
@@ -46,7 +49,7 @@ class RegularTransactionCreationFragment :
 
     private val args by navArgs<RegularTransactionCreationFragmentArgs>()
     private val transactionType by lazy { args.transactionType }
-    private val regularTransaction by lazy { args.regularTransaction ?: RegularTransaction.EMPTY.copy(type = transactionType) }
+    private val regularTransaction by lazy { args.regularTransaction }
     private val spinnerPeriodMap = arrayMapOf(
         PeriodType.DAY to 0,
         PeriodType.WEEK to 1,
@@ -71,36 +74,27 @@ class RegularTransactionCreationFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        localTransaction = regularTransaction
-        initToolbar()
-        updateIcon()
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Category>(
             ARG_CATEGORY
         )?.observe(
             viewLifecycleOwner
         ) { category ->
             localTransaction = localTransaction?.copy(category = category)
-            updateIcon()
-            updateSaveButtonState()
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<Category>(
                 ARG_CATEGORY
             )
         }
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<DomainCurrency>(
+            CurrencyFragment.ARG_CURRENCY
+        )?.observe(
+            viewLifecycleOwner
+        ) {
+            localTransaction = localTransaction?.copy(currencyCode = it.code)
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<DomainCurrency>(
+                CurrencyFragment.ARG_CURRENCY
+            )
+        }
         viewBinding.run {
-            if (localTransaction?.isValid() == false) {
-                createdRegularTransactionCategoryArrow.show()
-                createdRegularTransactionDelete.gone()
-            } else {
-                createdRegularTransactionCategoryArrow.gone()
-                createdRegularTransactionDelete.show()
-            }
-            updateSaveButtonState()
-            createdRegularTransactionMainSum.setValue(localTransaction?.sum ?: BigDecimal.ZERO)
-            createdRegularTransactionMainSum.moneyEditText.onChange { sum ->
-                localTransaction =
-                    localTransaction?.copy(sum = if (sum.isEmpty()) BigDecimal.ZERO else sum.toBigDecimal)
-                updateSaveButtonState()
-            }
             createdRegularTransactionDescription.onChange { description ->
                 localTransaction = localTransaction?.copy(description = description)
             }
@@ -108,14 +102,13 @@ class RegularTransactionCreationFragment :
                 localTransaction = localTransaction?.copy(pushEnabled = isChecked)
             }
             createdRegularTransactionRepeatSpinner.setSelection(
-                spinnerPeriodMap.getValue(regularTransaction.periodType)
+                spinnerPeriodMap.getValue(localTransaction?.periodType ?: PeriodType.MONTH)
             )
-            createdRegularTransactionDescription.setText(localTransaction?.description)
-            createdRegularTransactionNotifyCheckbox.isChecked = localTransaction?.pushEnabled ?: true
-            createdRegularTransactionRepeatStartsDate.text = SimpleDateFormat(
-                TRANSACTION_DATE_FORMAT,
-                Locale.getDefault()
-            ).format(localTransaction?.startDate ?: Date())
+            createdRegularTransactionMainSum.moneyEditText.onChange { sum ->
+                localTransaction =
+                    localTransaction?.copy(sum = if (sum.isEmpty()) BigDecimal.ZERO else sum.toBigDecimal)
+                updateSaveButtonState()
+            }
             createdRegularTransactionRepeatSpinner.onItemSelectedListener =
                 object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(
@@ -172,6 +165,53 @@ class RegularTransactionCreationFragment :
             createdRegularTransactionThursday.setOnClickListener { setWeekdaySelected(Calendar.THURSDAY) }
             createdRegularTransactionFriday.setOnClickListener { setWeekdaySelected(Calendar.FRIDAY) }
             createdRegularTransactionSaturday.setOnClickListener { setWeekdaySelected(Calendar.SATURDAY) }
+            createdRegularTransactionMainSum.addOnCurrencyClickListener {
+                val action =
+                    RegularTransactionCreationFragmentDirections.toCurrencyDest(
+                        CurrencyDestination.EDIT_REGULAR_TRANSACTION_SCREEN,
+                        localTransaction?.currencyCode
+                    )
+                findNavController().navigate(action)
+            }
+        }
+        viewModel.defaultTransaction.observe(viewLifecycleOwner, {
+            if (localTransaction == null) localTransaction =
+                regularTransaction ?: it
+            localTransaction = localTransaction!!.copy(type = transactionType)
+            initUi()
+        })
+    }
+
+    private fun initUi() {
+        if (localTransaction == null) return
+        initToolbar()
+        updateCategoryIcon()
+        updateCurrency()
+        updateSaveButtonState()
+        viewBinding.run {
+            if (!localTransaction!!.isValid()) {
+                createdRegularTransactionCategoryArrow.show()
+                createdRegularTransactionDelete.gone()
+            } else {
+                createdRegularTransactionCategoryArrow.gone()
+                createdRegularTransactionDelete.show()
+            }
+            createdRegularTransactionMainSum.setValue(
+                localTransaction!!.sum,
+                localTransaction!!.currencyCode
+            )
+            createdRegularTransactionDescription.setText(localTransaction!!.description)
+            createdRegularTransactionNotifyCheckbox.isChecked = localTransaction!!.pushEnabled
+            createdRegularTransactionRepeatStartsDate.text = SimpleDateFormat(
+                TRANSACTION_DATE_FORMAT,
+                Locale.getDefault()
+            ).format(localTransaction!!.startDate)
+        }
+    }
+
+    private fun updateCurrency() {
+        localTransaction?.let {
+            viewBinding.createdRegularTransactionMainSum.setValue(it.sum, it.currencyCode)
         }
     }
 
@@ -237,7 +277,7 @@ class RegularTransactionCreationFragment :
             localTransaction?.let { it.sum.signum() > 0 && it.category != Category.EMPTY && (it.periodType != PeriodType.WEEK || (it.periodType == PeriodType.WEEK && it.dayOfWeek != 0)) } ?: false
     }
 
-    private fun updateIcon() {
+    private fun updateCategoryIcon() {
         if (localTransaction?.category != Category.EMPTY) {
             localTransaction?.category?.let {
                 val iconDrawable = createTintDrawable(requireContext(), it.icon, it.color)

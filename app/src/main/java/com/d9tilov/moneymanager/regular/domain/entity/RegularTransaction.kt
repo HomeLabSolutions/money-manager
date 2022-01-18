@@ -3,6 +3,7 @@ package com.d9tilov.moneymanager.regular.domain.entity
 import android.os.Parcelable
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.constants.DataConstants
+import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_DATA_ID
 import com.d9tilov.moneymanager.period.PeriodType
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -17,7 +18,6 @@ data class RegularTransaction(
     val currencyCode: String,
     val type: TransactionType,
     val sum: BigDecimal,
-    val usdSum: BigDecimal,
     val category: Category,
     val createdDate: Date,
     val startDate: Date,
@@ -32,10 +32,9 @@ data class RegularTransaction(
         val EMPTY = RegularTransaction(
             id = DEFAULT_DATA_ID,
             clientId = DataConstants.NO_ID.toString(),
-            currencyCode = DataConstants.DEFAULT_CURRENCY_CODE,
+            currencyCode = DEFAULT_CURRENCY_CODE,
             type = TransactionType.EXPENSE,
             sum = BigDecimal.ZERO,
-            usdSum = BigDecimal.ZERO,
             category = Category.EMPTY,
             createdDate = Date(),
             startDate = Date(),

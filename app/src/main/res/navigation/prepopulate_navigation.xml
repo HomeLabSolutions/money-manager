@@ -134,6 +134,14 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/fade_out" />
 
+        <action
+            android:id="@+id/to_currency_dest"
+            app:destination="@id/choose_currency_dest"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit" />
+
         <argument
             android:name="transactionType"
             app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />

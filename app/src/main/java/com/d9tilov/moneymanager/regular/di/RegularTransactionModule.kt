@@ -37,14 +37,12 @@ class RegularTransactionModule {
     @Provides
     fun provideRegularTransactionInteractor(
         regularTransactionRepo: RegularTransactionRepo,
-        currencyInteractor: CurrencyInteractor,
-        categoryInteractor: CategoryInteractor,
         userInteractor: UserInteractor,
+        categoryInteractor: CategoryInteractor
     ): RegularTransactionInteractor = RegularTransactionInteractorImpl(
         regularTransactionRepo,
-        currencyInteractor,
-        categoryInteractor,
-        userInteractor
+        userInteractor,
+        categoryInteractor
     )
 
     @Provides

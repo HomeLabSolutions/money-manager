@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface RegularTransactionInteractor {
 
+    fun createDefault(): Flow<RegularTransaction>
     fun getAll(type: TransactionType): Flow<List<RegularTransaction>>
     suspend fun getById(id: Long): RegularTransaction
     suspend fun insert(regularTransactionData: RegularTransaction)
