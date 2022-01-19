@@ -17,7 +17,6 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entity.Category
-import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
@@ -116,15 +115,9 @@ class ExpenseFragment :
             viewLifecycleOwner,
             { sum ->
                 if (sum.signum() == 0) {
-                    viewBinding.expenseInfoLayoutInclude.expensePeriodInfoUsdValue.gone()
                     viewBinding.expenseInfoLayoutInclude.expensePeriodInfoApproxSign.gone()
                 } else {
-                    viewBinding.expenseInfoLayoutInclude.expensePeriodInfoUsdValue.show()
                     viewBinding.expenseInfoLayoutInclude.expensePeriodInfoApproxSign.show()
-                    viewBinding.expenseInfoLayoutInclude.expensePeriodInfoUsdValue.setValue(
-                        sum,
-                        DataConstants.DEFAULT_CURRENCY_CODE
-                    )
                 }
             }
         )
@@ -136,15 +129,9 @@ class ExpenseFragment :
             viewLifecycleOwner,
             { sum ->
                 if (sum.signum() == 0) {
-                    viewBinding.expenseInfoLayoutInclude.expenseTodayInfoUsdValue.gone()
                     viewBinding.expenseInfoLayoutInclude.expenseTodayInfoApproxSign.gone()
                 } else {
-                    viewBinding.expenseInfoLayoutInclude.expenseTodayInfoUsdValue.show()
                     viewBinding.expenseInfoLayoutInclude.expenseTodayInfoApproxSign.show()
-                    viewBinding.expenseInfoLayoutInclude.expenseTodayInfoUsdValue.setValue(
-                        sum,
-                        DataConstants.DEFAULT_CURRENCY_CODE
-                    )
                 }
             }
         )
