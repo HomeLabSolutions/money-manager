@@ -23,14 +23,6 @@
             android:theme="@style/ThemeOverlay.MoneyManager.Toolbar"
             tools:title="Title">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:visibility="gone"
-                tools:visibility="visible" />
-
         </com.google.android.material.appbar.MaterialToolbar>
 
     </com.google.android.material.appbar.AppBarLayout>

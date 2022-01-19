@@ -23,7 +23,6 @@ import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.core.util.gone
-import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.currency.CurrencyDestination
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
@@ -46,6 +45,7 @@ class CurrencyFragment :
     private val destination: CurrencyDestination? by lazy { args.destination }
     private val currencyCode: String? by lazy { args.currencyCode }
 
+    private var menu: Menu? = null
     private val viewBinding by viewBinding(FragmentCurrencyBinding::bind)
     private var toolbar: MaterialToolbar? = null
     private val currencyAdapter: CurrencyAdapter by lazy { CurrencyAdapter() }
@@ -87,14 +87,18 @@ class CurrencyFragment :
         viewModel.currencies().observe(
             this.viewLifecycleOwner,
             { result ->
+                val menuItem = menu?.findItem(R.id.action_skip)
                 when (result.status) {
                     Status.SUCCESS -> {
+                        menuItem?.isEnabled = true
                         result.data?.let { data ->
-                            val sortedList = data.sortedBy { CurrencyUtils.getCurrencyFullName(it.code) }.map { currency ->
-                                if (currencyCode != null) {
-                                    currency.copy(isBase = (currencyCode == currency.code))
-                                } else currency
-                            }
+                            val sortedList =
+                                data.sortedBy { CurrencyUtils.getCurrencyFullName(it.code) }
+                                    .map { currency ->
+                                        if (currencyCode != null) {
+                                            currency.copy(isBase = (currencyCode == currency.code))
+                                        } else currency
+                                    }
                             currencyAdapter.updateItems(sortedList)
                             val checkedIndex = sortedList.indexOfFirst { it.isBase }
                             viewBinding.currencyRv.scrollToPosition(checkedIndex)
@@ -102,10 +106,14 @@ class CurrencyFragment :
                         viewBinding.currencyProgress.gone()
                     }
                     Status.ERROR -> {
+                        menuItem?.isEnabled = true
                         showError()
                         viewBinding.currencyProgress.gone()
                     }
-                    Status.LOADING -> viewBinding.currencyProgress.show()
+                    Status.LOADING -> {
+                        menuItem?.isEnabled = false
+                        viewBinding.currencyProgress.show()
+                    }
                 }
             }
         )
@@ -116,14 +124,10 @@ class CurrencyFragment :
             false
     }
 
-    override fun onStart() {
-        super.onStart()
-        hideKeyboard()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         if (destination == null) {
+            this.menu = menu
             inflater.inflate(R.menu.prepopulate_menu, menu)
             setMenuTextColor(menu)
         }
@@ -149,12 +153,15 @@ class CurrencyFragment :
     private fun initToolbar() {
         toolbar = viewBinding.currencyToolbarContainer.toolbar
         val activity = activity as AppCompatActivity
-        activity.setSupportActionBar(toolbar)
         toolbar?.title = getString(R.string.title_prepopulate_currency)
         activity.setSupportActionBar(toolbar)
         setHasOptionsMenu(true)
-        if (destination != CurrencyDestination.PREPOPULATE_SCREEN) {
+        if (destination != null) {
             activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            activity.supportActionBar?.setHomeButtonEnabled(true)
+        } else {
+            activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            activity.supportActionBar?.setHomeButtonEnabled(false)
         }
         toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {
