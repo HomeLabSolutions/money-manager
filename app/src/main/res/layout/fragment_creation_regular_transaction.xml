@@ -265,8 +265,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:paddingStart="20dp"
-                android:paddingEnd="0dp"
                 android:text="@string/regular_transaction_notify"
                 app:layout_constraintStart_toStartOf="@+id/created_regular_transaction_repeat_icon"
                 app:layout_constraintTop_toBottomOf="@+id/created_regular_transaction_repeat_starts_title" />

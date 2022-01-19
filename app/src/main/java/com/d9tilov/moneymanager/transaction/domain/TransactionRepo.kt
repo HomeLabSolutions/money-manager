@@ -22,7 +22,8 @@ interface TransactionRepo {
     fun getTransactionsByTypeWithoutDate(
         from: Date = Date(0),
         to: Date = Date().getEndOfDay(),
-        transactionType: TransactionType
+        transactionType: TransactionType,
+        onlyInStatistics: Boolean = false
     ): Flow<List<TransactionDataModel>>
 
     fun getByCategory(category: Category): Flow<List<TransactionDataModel>>

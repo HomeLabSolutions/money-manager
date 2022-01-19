@@ -174,12 +174,14 @@ class RegularTransactionCreationFragment :
                 findNavController().navigate(action)
             }
         }
-        viewModel.defaultTransaction.observe(viewLifecycleOwner, {
-            if (localTransaction == null) localTransaction =
-                regularTransaction ?: it
-            localTransaction = localTransaction!!.copy(type = transactionType)
-            initUi()
-        })
+        viewModel.defaultTransaction.observe(
+            viewLifecycleOwner,
+            {
+                if (localTransaction == null) localTransaction = regularTransaction ?: it
+                localTransaction = localTransaction!!.copy(type = transactionType)
+                initUi()
+            }
+        )
     }
 
     private fun initUi() {

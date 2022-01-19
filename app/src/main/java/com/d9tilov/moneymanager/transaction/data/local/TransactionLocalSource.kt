@@ -126,7 +126,8 @@ class TransactionLocalSource(
     override fun getAllByTypeWithoutDates(
         from: Date,
         to: Date,
-        transactionType: TransactionType
+        transactionType: TransactionType,
+        onlyInStatistics: Boolean
     ): Flow<List<TransactionDataModel>> {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
@@ -138,7 +139,10 @@ class TransactionLocalSource(
                 to.getEndOfDay(),
                 transactionType
             )
-                .map { it.map { item -> item.toDataModel() } }
+                .map { list ->
+                    list.map { item -> item.toDataModel() }
+                        .filter { if (onlyInStatistics) it.inStatistics else true }
+                }
         }
     }
 
