@@ -26,9 +26,10 @@ class TransactionDataRepo(private val transactionSource: TransactionSource) : Tr
     override fun getTransactionsByTypeWithoutDate(
         from: Date,
         to: Date,
-        transactionType: TransactionType
+        transactionType: TransactionType,
+        onlyInStatistics: Boolean
     ): Flow<List<TransactionDataModel>> =
-        transactionSource.getAllByTypeWithoutDates(from, to, transactionType)
+        transactionSource.getAllByTypeWithoutDates(from, to, transactionType, onlyInStatistics)
 
     override fun getByCategory(category: Category): Flow<List<TransactionDataModel>> =
         transactionSource.getByCategory(category)

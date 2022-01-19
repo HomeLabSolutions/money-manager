@@ -50,7 +50,6 @@ class RegularTransactionInteractorImpl(
         return regularTransactionRepo.getById(id).toDomain(category)
     }
 
-
     override suspend fun update(regularTransactionData: RegularTransaction) {
         regularTransactionRepo.update(regularTransactionData.toData())
     }

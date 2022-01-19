@@ -21,7 +21,8 @@ interface TransactionSource {
     fun getAllByTypeWithoutDates(
         from: Date,
         to: Date,
-        transactionType: TransactionType
+        transactionType: TransactionType,
+        onlyInStatistics: Boolean
     ): Flow<List<TransactionDataModel>>
 
     fun getByCategory(category: Category): Flow<List<TransactionDataModel>>

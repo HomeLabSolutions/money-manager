@@ -16,7 +16,6 @@ import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.regular.domain.mapper.toCommon
 import com.d9tilov.moneymanager.regular.ui.notification.TransactionNotificationBuilder
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
-import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import timber.log.Timber

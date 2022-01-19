@@ -63,6 +63,7 @@
     <string name="transaction_delete_dialog_subtitle">Вы действительно хотите удалить транзакцию?</string>
     <string name="transaction_edit_sum_title">Сумма</string>
     <string name="transaction_edit_description_hint">Описание</string>
+    <string name="transaction_edit_in_statistics">В статистике</string>
     <string name="transaction_empty_placeholder_expense_title">Добавьте расход</string>
     <string name="transaction_empty_placeholder_regular_expense_title">Добавьте постоянный расход</string>
     <string name="transaction_empty_placeholder_income_title">Добавьте доход</string>

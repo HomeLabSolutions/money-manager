@@ -62,6 +62,7 @@
     <string name="transaction_delete_dialog_subtitle">Do you really want to delete the transaction?</string>
     <string name="transaction_edit_sum_title">Amount</string>
     <string name="transaction_edit_description_hint">Description</string>
+    <string name="transaction_edit_in_statistics">In statistics</string>
     <string name="transaction_empty_placeholder_expense_title">Add expense</string>
     <string name="transaction_empty_placeholder_regular_expense_title">Add regular expense</string>
     <string name="transaction_empty_placeholder_income_title">Add income</string>

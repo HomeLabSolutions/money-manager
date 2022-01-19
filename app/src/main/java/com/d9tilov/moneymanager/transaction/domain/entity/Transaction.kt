@@ -23,6 +23,7 @@ data class Transaction(
     val description: String = "",
     val qrCode: String? = null,
     val isRegular: Boolean = false,
+    val inStatistics: Boolean = true,
     override val headerPosition: Int = 0
 ) : BaseTransaction, Parcelable {
     override val itemType: Int

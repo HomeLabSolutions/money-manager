@@ -14,7 +14,8 @@ fun TransactionDbModel.toDataModel(): TransactionDataModel = TransactionDataMode
     date,
     description,
     qrCode,
-    isRegular
+    isRegular,
+    inStatistics
 )
 
 fun TransactionDataModel.toDbModel(): TransactionDbModel =
@@ -30,5 +31,6 @@ fun TransactionDataModel.toDbModel(): TransactionDbModel =
         description,
         qrCode,
         false,
-        isRegular
+        isRegular,
+        inStatistics
     )

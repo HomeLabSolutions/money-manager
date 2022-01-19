@@ -80,6 +80,15 @@
                 app:layout_constraintTop_toTopOf="@+id/edit_transaction_category"
                 tools:text="27.04.2020" />
 
+            <CheckBox
+                android:id="@+id/edit_transaction_in_statistics_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/transaction_edit_in_statistics"
+                app:layout_constraintStart_toStartOf="@+id/edit_transaction_category"
+                app:layout_constraintTop_toBottomOf="@+id/edit_transaction_category" />
+
             <ImageView
                 android:id="@+id/edit_transaction_delimiter"
                 android:layout_width="0dp"
@@ -91,7 +100,7 @@
                 android:src="@drawable/dotted_shape"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edit_transaction_category" />
+                app:layout_constraintTop_toBottomOf="@+id/edit_transaction_in_statistics_checkbox" />
 
             <EditText
                 android:id="@+id/edit_transaction_description"

@@ -128,7 +128,8 @@ class TransactionInteractorImpl(
             transactionRepo.getTransactionsByTypeWithoutDate(
                 startDate,
                 endDate,
-                TransactionType.INCOME
+                TransactionType.INCOME,
+                true
             ).map { list ->
                 list.sumOf { currencyInteractor.convertToMainCurrency(it.sum, it.currency) }
             }
@@ -142,7 +143,8 @@ class TransactionInteractorImpl(
             transactionRepo.getTransactionsByTypeWithoutDate(
                 startDate,
                 endDateMinusDay,
-                TransactionType.EXPENSE
+                TransactionType.EXPENSE,
+                true
             ).map { list ->
                 list.sumOf {
                     currencyInteractor.convertToMainCurrency(
@@ -162,7 +164,8 @@ class TransactionInteractorImpl(
         val expensesPerCurrentDayFlow = transactionRepo.getTransactionsByTypeWithoutDate(
             Date().getStartOfDay(),
             Date().getEndOfDay(),
-            TransactionType.EXPENSE
+            TransactionType.EXPENSE,
+            true
         ).map { list ->
             list.sumOf {
                 currencyInteractor.convertToMainCurrency(
@@ -198,7 +201,8 @@ class TransactionInteractorImpl(
             transactionRepo.getTransactionsByTypeWithoutDate(
                 startDate,
                 endDate,
-                type
+                type,
+                true
             ).map { list ->
                 val currentCurrency = userInteractor.getCurrentCurrency()
                 val currencies = mutableSetOf<String>()
@@ -214,7 +218,8 @@ class TransactionInteractorImpl(
         transactionRepo.getTransactionsByTypeWithoutDate(
             Date().getStartOfDay(),
             Date().getEndOfDay(),
-            type
+            type,
+            true
         ).map { list ->
             val currentCurrency = userInteractor.getCurrentCurrency()
             val currencies = mutableSetOf<String>()
@@ -231,7 +236,8 @@ class TransactionInteractorImpl(
             transactionRepo.getTransactionsByTypeWithoutDate(
                 startDate,
                 endDate,
-                type
+                type,
+                true
             ).map { list ->
                 val currentCurrency = userInteractor.getCurrentCurrency()
                 list.sumOf { tr ->
@@ -250,7 +256,8 @@ class TransactionInteractorImpl(
         transactionRepo.getTransactionsByTypeWithoutDate(
             Date().getStartOfDay(),
             Date().getEndOfDay(),
-            type
+            type,
+            true
         ).map { list ->
             val currentCurrency = userInteractor.getCurrentCurrency()
             list.sumOf { tr ->

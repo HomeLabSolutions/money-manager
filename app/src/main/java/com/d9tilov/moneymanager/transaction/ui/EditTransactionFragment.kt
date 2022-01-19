@@ -67,6 +67,7 @@ class EditTransactionFragment : EditTransactionNavigator,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         updateIcon()
+        updateInStatistics()
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Category>(
             ARG_CATEGORY
         )?.observe(
@@ -148,7 +149,10 @@ class EditTransactionFragment : EditTransactionNavigator,
             }
             editTransactionMainSum.addOnCurrencyClickListener {
                 val action =
-                    EditTransactionFragmentDirections.toCurrencyDest(CurrencyDestination.EDIT_TRANSACTION_SCREEN, localTransaction?.currencyCode)
+                    EditTransactionFragmentDirections.toCurrencyDest(
+                        CurrencyDestination.EDIT_TRANSACTION_SCREEN,
+                        localTransaction?.currencyCode
+                    )
                 findNavController().navigate(action)
             }
             editTransactionDescription.setText(transaction.description)
@@ -157,6 +161,9 @@ class EditTransactionFragment : EditTransactionNavigator,
                 TRANSACTION_DATE_FORMAT,
                 Locale.getDefault()
             ).format(transaction.date)
+            editTransactionInStatisticsCheckbox.setOnCheckedChangeListener { _, isChecked ->
+                localTransaction = localTransaction?.copy(inStatistics = isChecked)
+            }
         }
         toolbar = viewBinding.editTransactionToolbarContainer.toolbar
         initToolbar(toolbar)
@@ -165,6 +172,10 @@ class EditTransactionFragment : EditTransactionNavigator,
     override fun onStart() {
         super.onStart()
         showKeyboard(viewBinding.editTransactionMainSum.moneyEditText)
+    }
+
+    private fun updateInStatistics() {
+        viewBinding.editTransactionInStatisticsCheckbox.isChecked = localTransaction!!.inStatistics
     }
 
     private fun updateIcon() {
