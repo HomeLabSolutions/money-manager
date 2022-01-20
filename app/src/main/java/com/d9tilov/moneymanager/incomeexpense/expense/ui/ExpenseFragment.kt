@@ -96,7 +96,7 @@ class ExpenseFragment :
             viewBinding.expenseTransactionLayoutInclude
                 .expenseTransactionRvList
                 .scrollToPosition(0)
-            }
+        }
         viewModel.spentInPeriod.observe(
             viewLifecycleOwner,
             { sum ->

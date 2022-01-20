@@ -42,5 +42,6 @@ class SettingsViewModel @Inject constructor(
             val user = userInteractor.getCurrentUser().first()
             userInteractor.updateUser(user.copy(fiscalDay = day))
         }
+        navigator?.save()
     }
 }
