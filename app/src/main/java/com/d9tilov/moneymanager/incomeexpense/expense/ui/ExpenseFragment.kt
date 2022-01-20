@@ -92,13 +92,11 @@ class ExpenseFragment :
             }
         )
         lifecycleScope.launch {
-            viewModel.transactions.collectLatest { data ->
-                transactionAdapter.submitData(data)
-                viewBinding.expenseTransactionLayoutInclude
-                    .expenseTransactionRvList
-                    .scrollToPosition(0)
+            viewModel.transactions.collectLatest { data -> transactionAdapter.submitData(data) }
+            viewBinding.expenseTransactionLayoutInclude
+                .expenseTransactionRvList
+                .scrollToPosition(0)
             }
-        }
         viewModel.spentInPeriod.observe(
             viewLifecycleOwner,
             { sum ->
