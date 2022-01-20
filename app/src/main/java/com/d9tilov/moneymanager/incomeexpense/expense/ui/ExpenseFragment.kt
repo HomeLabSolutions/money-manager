@@ -7,7 +7,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,6 +34,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.BigDecimal.ROUND_HALF_UP
 import javax.inject.Inject
@@ -91,25 +91,13 @@ class ExpenseFragment :
                 }
             }
         )
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launch {
             viewModel.transactions.collectLatest { data ->
                 transactionAdapter.submitData(data)
-                viewBinding.expenseTransactionLayoutInclude.expenseTransactionRvList.scrollToPosition(
-                    0
-                )
+                viewBinding.expenseTransactionLayoutInclude
+                    .expenseTransactionRvList
+                    .scrollToPosition(0)
             }
-        }
-        lifecycleScope.launchWhenStarted {
-            transactionAdapter
-                .loadStateFlow
-                .collectLatest { loadStates ->
-                    val isDataEmpty =
-                        loadStates.source.refresh is LoadState.NotLoading && loadStates.append.endOfPaginationReached && transactionAdapter.itemCount == 0
-                    if (isDataEmpty == isTransactionDataEmpty) return@collectLatest
-                    isTransactionDataEmpty = isDataEmpty
-                    if (isTransactionDataEmpty) showViewStub()
-                    else hideViewStub()
-                }
         }
         viewModel.spentInPeriod.observe(
             viewLifecycleOwner,
@@ -154,9 +142,10 @@ class ExpenseFragment :
             viewLifecycleOwner,
             {
                 isTransactionDataEmpty = false
+                isKeyboardOpen = false
                 hideViewStub()
                 resetMainSum()
-                showInfoAndCategories(false)
+                showInfoAndCategories()
             }
         )
     }

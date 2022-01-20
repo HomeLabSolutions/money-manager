@@ -10,7 +10,9 @@ import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import com.d9tilov.moneymanager.R
@@ -33,6 +35,8 @@ import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@LayoutRes layoutId: Int) :
     BaseFragment<N>(layoutId), OnDialogDismissListener, BaseIncomeExpenseNavigator, OnBackPressed {
@@ -40,7 +44,7 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
     protected val categoryAdapter by lazy { CategoryAdapter() }
     protected val transactionAdapter by lazy { TransactionAdapter() }
     protected var isTransactionDataEmpty = false
-    private var isKeyboardOpen = true
+    protected var isKeyboardOpen = true
 
     override val snackBarBackgroundTint = R.color.button_normal_color_disable
 
@@ -82,14 +86,10 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
         initViews()
         initCategoryRecyclerView()
         initTransactionsRecyclerView()
-        mainSum.moneyEditText.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                mainSum.moneyEditText.post {
-                    mainSum.moneyEditText.setSelection(mainSum.moneyEditText.text.toString().length)
-                }
-            }
+        btnHideKeyboard.setOnClickListener {
+            isKeyboardOpen = false
+            showInfoAndCategories()
         }
-        btnHideKeyboard.setOnClickListener { showInfoAndCategories(false) }
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
             IncomeExpenseFragment.ARG_TRANSACTION_CREATED
         )?.observe(viewLifecycleOwner) {
@@ -100,24 +100,33 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
                 IncomeExpenseFragment.ARG_TRANSACTION_CREATED
             )
         }
+        lifecycleScope.launch {
+            transactionAdapter
+                .loadStateFlow
+                .collect { loadStates ->
+                    val isDataEmpty =
+                        loadStates.source.refresh is LoadState.NotLoading && loadStates.append.endOfPaginationReached && transactionAdapter.itemCount == 0
+                    isTransactionDataEmpty = isDataEmpty
+                    if (isTransactionDataEmpty) showViewStub() else hideViewStub()
+                }
+        }
         transactionRvList.addOnScrollListener(
             object : RecyclerView.OnScrollListener() {
                 private val fab = transactionBtnAdd
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    if (dy > 0 || dy < 0 && fab.isShown) {
-                        fab.hide()
-                    }
+                    if (dy > 0 || dy < 0 && fab.isShown) fab.hide()
                 }
 
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        fab.show()
-                    }
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) fab.show()
                     super.onScrollStateChanged(recyclerView, newState)
                 }
             }
         )
-        transactionBtnAdd.setOnClickListener { showInfoAndCategories(true) }
+        transactionBtnAdd.setOnClickListener {
+            isKeyboardOpen = true
+            showInfoAndCategories()
+        }
         pinKeyboard.clickPinButton = object : PinKeyboard.ClickPinButton {
             override fun onPinClick(button: PinButton?) {
                 when (button?.id) {
@@ -148,7 +157,7 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
             override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
             override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
         })
-        showInfoAndCategories(isKeyboardOpen)
+        showInfoAndCategories()
     }
 
     private fun handlePinStr(str: String?) {
@@ -165,18 +174,18 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
                 if (input.length == 1 && input[0].toString() == zero) return
                 else input = input.plus(str)
             }
-            null -> if (input.isNotEmpty()) input = input.removeRange(input.length - 1, input.length)
+            null ->
+                if (input.isNotEmpty()) input = input.removeRange(input.length - 1, input.length)
             else -> input = input.plus(str)
         }
         if (input.isEmpty()) input = getString(R.string._0)
         mainSum.moneyEditText.setText(input)
     }
 
-    protected fun showInfoAndCategories(openKeyboard: Boolean) {
-        isKeyboardOpen = openKeyboard
-        val hiddenGroup = if (openKeyboard) transactionsLayout else infoLayout
-        val shownGroup = if (openKeyboard) infoLayout else transactionsLayout
-        if (openKeyboard) {
+    protected fun showInfoAndCategories() {
+        val hiddenGroup = if (isKeyboardOpen) transactionsLayout else infoLayout
+        val shownGroup = if (isKeyboardOpen) infoLayout else transactionsLayout
+        if (isKeyboardOpen) {
             hideViewStub()
         } else {
             if (isTransactionDataEmpty) showViewStub()
@@ -192,7 +201,7 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
         hiddenGroup.gone()
     }
 
-    protected fun showViewStub() {
+    private fun showViewStub() {
         if (isKeyboardOpen) return
         if (emptyViewStub.parent == null) {
             emptyViewStub.show()
@@ -214,7 +223,10 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
             stubSubTitle?.show()
             stubSubTitle?.text = getString(R.string.transaction_empty_placeholder_subtitle)
             val addTransaction = inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_add)
-            addTransaction?.setOnClickListener { showInfoAndCategories(true) }
+            addTransaction?.setOnClickListener {
+                isKeyboardOpen = true
+                showInfoAndCategories()
+            }
         }
     }
 
@@ -240,7 +252,8 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
 
     override fun onBackPressed(): Boolean {
         return if (isKeyboardOpen) {
-            showInfoAndCategories(false)
+            isKeyboardOpen = false
+            showInfoAndCategories()
             false
         } else {
             true

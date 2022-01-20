@@ -6,7 +6,6 @@ import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,6 +31,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -79,23 +79,15 @@ class IncomeFragment :
                 }
             )
         }
-        lifecycleScope.launchWhenStarted {
-            viewModel.transactions.collectLatest { transactionAdapter.submitData(it) }
-            viewBinding.incomeTransactionLayoutInclude.incomeTransactionRvList.scrollToPosition(0)
+        lifecycleScope.launch {
+            viewModel.transactions.collectLatest {
+                transactionAdapter.submitData(it)
+                viewBinding.incomeTransactionLayoutInclude
+                    .incomeTransactionRvList
+                    .scrollToPosition(0)
+            }
         }
-        lifecycleScope.launchWhenStarted {
-            transactionAdapter
-                .loadStateFlow
-                .collectLatest { loadStates ->
-                    val isDataEmpty =
-                        loadStates.source.refresh is LoadState.NotLoading && loadStates.append.endOfPaginationReached && transactionAdapter.itemCount == 0
-                    if (isDataEmpty == isTransactionDataEmpty) return@collectLatest
-                    isTransactionDataEmpty = isDataEmpty
-                    if (isTransactionDataEmpty) showViewStub()
-                    else hideViewStub()
-                }
-        }
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launch {
             viewModel.earnedInPeriod.observe(
                 viewLifecycleOwner,
                 { sum ->
@@ -118,9 +110,10 @@ class IncomeFragment :
             viewLifecycleOwner,
             {
                 isTransactionDataEmpty = false
+                isKeyboardOpen = false
                 hideViewStub()
                 resetMainSum()
-                showInfoAndCategories(false)
+                showInfoAndCategories()
             }
         )
     }
