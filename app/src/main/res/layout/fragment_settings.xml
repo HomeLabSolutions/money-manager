@@ -1,60 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <include
         android:id="@+id/settings_toolbar_container"
         layout="@layout/common_toolbar"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/settings_day_of_month_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/settings_start_period_day_title"
-        android:textAppearance="?attr/textAppearanceHeadline6"
-        android:textColor="@color/control_activated_color"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_toolbar_container" />
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/edit_transaction_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    <EditText
-        android:id="@+id/settings_day_of_month_edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:inputType="number"
-        android:maxLength="2"
-        app:layout_constraintTop_toTopOf="@+id/settings_day_of_month_title"
-        app:layout_constraintBottom_toBottomOf="@+id/settings_day_of_month_title"
-        app:layout_constraintStart_toEndOf="@+id/settings_day_of_month_title"
-        tools:text="20" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/settings_day_of_month_postfix"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="@string/settings_start_period_day_postfix"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/settings_day_of_month_title"
-        app:layout_constraintStart_toEndOf="@+id/settings_day_of_month_edit" />
+            <TextView
+                android:id="@+id/settings_day_of_month_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:text="@string/settings_start_period_day_title"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textColor="@color/control_activated_color"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/settings_day_of_month_error"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/settings_start_period_day_error"
-        android:textAppearance="?attr/textAppearanceCaption"
-        android:textColor="@color/error_color"
+            <EditText
+                android:id="@+id/settings_day_of_month_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:inputType="number"
+                android:maxLength="2"
+                app:layout_constraintBottom_toBottomOf="@+id/settings_day_of_month_title"
+                app:layout_constraintStart_toEndOf="@+id/settings_day_of_month_title"
+                app:layout_constraintTop_toTopOf="@+id/settings_day_of_month_title"
+                tools:text="20" />
+
+            <TextView
+                android:id="@+id/settings_day_of_month_postfix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/settings_start_period_day_postfix"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/settings_day_of_month_title"
+                app:layout_constraintStart_toEndOf="@+id/settings_day_of_month_edit" />
+
+            <TextView
+                android:id="@+id/settings_day_of_month_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_start_period_day_error"
+                android:textAppearance="?attr/textAppearanceCaption"
+                android:textColor="@color/error_color"
         android:textSize="12sp"
         android:layout_marginTop="8dp"
         android:visibility="gone"
@@ -74,12 +85,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settings_day_of_month_title" />
 
-    <TextView
-        android:id="@+id/settings_backup_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/settings_backup"
-        app:layout_constraintTop_toBottomOf="@+id/settings_backup"
-        tools:text="Last backup was " />
+            <TextView
+                android:id="@+id/settings_backup_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@+id/settings_backup"
+                app:layout_constraintTop_toBottomOf="@+id/settings_backup"
+                tools:text="Last backup was " />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/settings_save"
+        style="?attr/moneyManagerBottomActionButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:text="@string/save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</LinearLayout>

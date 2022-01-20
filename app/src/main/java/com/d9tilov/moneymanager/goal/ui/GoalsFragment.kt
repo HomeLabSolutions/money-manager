@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -24,10 +23,8 @@ import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.ui.recyclerview.MarginItemDecoration
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
-import com.d9tilov.moneymanager.core.util.debounce
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
-import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentGoalsBinding
 import com.d9tilov.moneymanager.goal.GoalDestination
@@ -99,22 +96,11 @@ class GoalsFragment :
                 }
             }).attachToRecyclerView(goalsRvList)
             goalsSumPerPeriod.moneyEditText.clearFocus()
-            goalsSumPerPeriod.moneyEditText.onChange(
-                debounce(DEBOUNCE, viewModel.viewModelScope) {
-                    viewModel.insertSaveSum(goalsSumPerPeriod.getValue())
-                }
-            )
+            goalsSave.setOnClickListener { viewModel.insertSaveSum(goalsSumPerPeriod.getValue()) }
         }
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
             ARG_UNDO_REMOVE_LAYOUT_DISMISS
-        )?.observe(
-            viewLifecycleOwner,
-            {
-                if (it) {
-                    goalAdapter.cancelDeletion()
-                }
-            }
-        )
+        )?.observe(viewLifecycleOwner, { if (it) goalAdapter.cancelDeletion() })
         viewModel.budget.observe(
             this.viewLifecycleOwner,
             {
@@ -219,7 +205,7 @@ class GoalsFragment :
         viewModel.savePrepopulateStatus()
     }
 
-    companion object {
-        private const val DEBOUNCE = 300L
+    override fun save() {
+        findNavController().popBackStack()
     }
 }

@@ -32,7 +32,9 @@ interface BaseRegularIncomeExpenseNavigator : BaseNavigator
 interface RegularExpenseNavigator : BaseRegularIncomeExpenseNavigator
 interface RegularIncomeNavigator : BaseRegularIncomeExpenseNavigator
 
-interface GoalsNavigator : BaseNavigator
+interface GoalsNavigator : BaseNavigator {
+    fun save()
+}
 interface CreatedGoalNavigator : BaseNavigator {
     fun back()
 }
@@ -115,4 +117,6 @@ interface SubCategoryNavigator : BaseNavigator {
     fun openRemoveDialog(subCategory: Category)
 }
 
-interface SettingsNavigator : BaseNavigator
+interface SettingsNavigator : BaseNavigator {
+    fun save()
+}

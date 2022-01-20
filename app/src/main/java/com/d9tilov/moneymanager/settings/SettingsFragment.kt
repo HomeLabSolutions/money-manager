@@ -5,7 +5,8 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.isDigitsOnly
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
@@ -37,22 +38,27 @@ class SettingsFragment :
         viewBinding.run {
             settingsBackup.setOnClickListener { viewModel.backup() }
             settingsDayOfMonthPostfix.setOnClickListener {
-                viewBinding.settingsDayOfMonthEdit.requestFocus()
-                showKeyboard(viewBinding.settingsDayOfMonthEdit)
+                settingsDayOfMonthEdit.requestFocus()
+                showKeyboard(settingsDayOfMonthEdit)
             }
             settingsDayOfMonthEdit.onChange(
-                debounce(DEBOUNCE, viewModel.viewModelScope) {
-                    run {
-                        viewBinding.settingsDayOfMonthEdit.setSelection(it.length)
-                        if (it.isEmpty() || !it.isDigitsOnly() || it.toInt() > 31 || it.toInt() < 1) {
-                            viewBinding.settingsDayOfMonthError.show()
-                        } else {
-                            viewModel.changeFiscalDay(it.toInt())
-                            viewBinding.settingsDayOfMonthError.gone()
-                        }
+                debounce(DEBOUNCE, lifecycleScope) {
+                    settingsDayOfMonthEdit.setSelection(it.length)
+                    val isError =
+                        it.isEmpty() || !it.isDigitsOnly() || it.toInt() > 31 || it.toInt() < 1
+                    if (isError) {
+                        settingsDayOfMonthError.show()
+                    } else {
+                        settingsDayOfMonthError.gone()
                     }
+                    settingsSave.isEnabled = !isError
                 }
             )
+            settingsSave.setOnClickListener {
+                viewModel.changeFiscalDay(
+                    settingsDayOfMonthEdit.text.toString().toInt()
+                )
+            }
         }
         viewModel.userData.observe(
             viewLifecycleOwner,
@@ -79,6 +85,10 @@ class SettingsFragment :
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity.supportActionBar?.setDisplayShowHomeEnabled(true)
         setHasOptionsMenu(true)
+    }
+
+    override fun save() {
+        findNavController().popBackStack()
     }
 
     companion object {

@@ -30,8 +30,11 @@ class GoalsViewModel @Inject constructor(
         userInteractor.updateUser(user.copy(showPrepopulate = false))
     }
 
-    fun insertSaveSum(sum: BigDecimal) = viewModelScope.launch(Dispatchers.IO) {
-        val budget = budgetInteractor.get().first()
-        budgetInteractor.update(budget.copy(saveSum = sum))
+    fun insertSaveSum(sum: BigDecimal) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val budget = budgetInteractor.get().first()
+            budgetInteractor.update(budget.copy(saveSum = sum))
+        }
+        navigator?.save()
     }
 }
