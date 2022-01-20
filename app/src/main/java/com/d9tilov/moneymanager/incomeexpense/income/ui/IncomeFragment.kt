@@ -80,12 +80,10 @@ class IncomeFragment :
             )
         }
         lifecycleScope.launch {
-            viewModel.transactions.collectLatest {
-                transactionAdapter.submitData(it)
-                viewBinding.incomeTransactionLayoutInclude
-                    .incomeTransactionRvList
-                    .scrollToPosition(0)
-            }
+            viewModel.transactions.collectLatest { transactionAdapter.submitData(it) }
+            viewBinding.incomeTransactionLayoutInclude
+                .incomeTransactionRvList
+                .scrollToPosition(0)
         }
         lifecycleScope.launch {
             viewModel.earnedInPeriod.observe(
