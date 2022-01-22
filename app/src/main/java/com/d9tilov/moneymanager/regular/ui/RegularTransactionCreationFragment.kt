@@ -143,7 +143,7 @@ class RegularTransactionCreationFragment :
                     viewBinding.createdRegularTransactionRepeatStartsDate.text = SimpleDateFormat(
                         TRANSACTION_DATE_FORMAT,
                         Locale.getDefault()
-                    ).format(Date(localTransaction?.startDate?.toMillis()?:Calendar.getInstance().timeInMillis))
+                    ).format(Date(localTransaction?.startDate?.toMillis() ?: Calendar.getInstance().timeInMillis))
                 }
                 picker.show(parentFragmentManager, picker.tag)
             }
@@ -178,13 +178,12 @@ class RegularTransactionCreationFragment :
             }
         }
         viewModel.defaultTransaction.observe(
-            viewLifecycleOwner,
-            {
-                if (localTransaction == null) localTransaction = regularTransaction ?: it
-                localTransaction = localTransaction!!.copy(type = transactionType)
-                initUi()
-            }
-        )
+            viewLifecycleOwner
+        ) {
+            if (localTransaction == null) localTransaction = regularTransaction ?: it
+            localTransaction = localTransaction!!.copy(type = transactionType)
+            initUi()
+        }
     }
 
     private fun initUi() {

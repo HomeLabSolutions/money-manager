@@ -24,6 +24,7 @@ import com.d9tilov.moneymanager.core.util.isTablet
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentIncomeBinding
 import com.d9tilov.moneymanager.incomeexpense.ui.BaseIncomeExpenseFragment
+import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.ui.callback.TransactionSwipeToDeleteCallback
@@ -52,12 +53,10 @@ class IncomeFragment :
     override fun initViews() {
         emptyViewStub = viewBinding.root.findViewById(R.id.income_transaction_empty_placeholder)
         mainSum = viewBinding.incomeInfoLayoutInclude.incomeMainSum
-        btnHideKeyboard = viewBinding.incomeInfoLayoutInclude.incomeKeyboardLayout.btnHideKeyboard
         mainSumTitle = viewBinding.incomeInfoLayoutInclude.incomeMainSumTitle
         categoryRvList = viewBinding.incomeInfoLayoutInclude.incomeCategoryRvList
         transactionRvList = viewBinding.incomeTransactionLayoutInclude.incomeTransactionRvList
         transactionBtnAdd = viewBinding.incomeTransactionLayoutInclude.incomeTransactionBtnAdd
-        pinKeyboard = viewBinding.incomeInfoLayoutInclude.incomeKeyboardLayout.pinKeyboard
         infoLayout = viewBinding.incomeInfoLayoutInclude.root
         transactionsLayout = viewBinding.incomeTransactionLayoutInclude.root
     }
@@ -65,19 +64,16 @@ class IncomeFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.run {
-            categories.observe(
-                viewLifecycleOwner,
-                { list ->
-                    val sortedCategories = list.sortedWith(
-                        compareBy(
-                            { it.children.isEmpty() },
-                            { -it.usageCount },
-                            { it.name }
-                        )
+            categories.observe(viewLifecycleOwner) { list ->
+                val sortedCategories = list.sortedWith(
+                    compareBy(
+                        { it.children.isEmpty() },
+                        { -it.usageCount },
+                        { it.name }
                     )
-                    categoryAdapter.updateItems(sortedCategories)
-                }
-            )
+                )
+                categoryAdapter.updateItems(sortedCategories)
+            }
         }
         lifecycleScope.launch {
             viewModel.transactions.collectLatest { transactionAdapter.submitData(it) }
@@ -87,29 +83,25 @@ class IncomeFragment :
         }
         lifecycleScope.launch {
             viewModel.earnedInPeriod.observe(
-                viewLifecycleOwner,
-                { sum ->
-                    if (sum.signum() == 0) {
-                        viewBinding.incomeInfoLayoutInclude.incomePeriodInfoApproxSign.gone()
-                    } else
-                        viewBinding.incomeInfoLayoutInclude.incomePeriodInfoApproxSign.show()
-                }
-            )
+                viewLifecycleOwner
+            ) { sum ->
+                if (sum.signum() == 0) {
+                    viewBinding.incomeInfoLayoutInclude.incomePeriodInfoApproxSign.gone()
+                } else
+                    viewBinding.incomeInfoLayoutInclude.incomePeriodInfoApproxSign.show()
+            }
             viewModel.earnedInPeriodApprox.observe(
-                viewLifecycleOwner,
-                { sum -> viewBinding.incomeInfoLayoutInclude.incomePeriodInfoApproxSum.setValue(sum) }
-            )
+                viewLifecycleOwner
+            ) { sum -> viewBinding.incomeInfoLayoutInclude.incomePeriodInfoApproxSum.setValue(sum) }
         }
         viewModel.getTransactionEvent().observe(
-            viewLifecycleOwner,
-            {
-                isTransactionDataEmpty = false
-                isKeyboardOpen = false
-                hideViewStub()
-                resetMainSum()
-                showInfoAndCategories()
-            }
-        )
+            viewLifecycleOwner
+        ) {
+            isTransactionDataEmpty = false
+            hideViewStub()
+            resetMainSum()
+            (requireParentFragment() as IncomeExpenseFragment).closeKeyboard()
+        }
     }
 
     override fun initCategoryRecyclerView() {

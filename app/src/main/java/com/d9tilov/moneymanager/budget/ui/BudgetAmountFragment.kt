@@ -51,16 +51,15 @@ class BudgetAmountFragment :
             }
         }
         viewModel.budgetData.observe(
-            this.viewLifecycleOwner,
-            {
-                viewBinding.commonBudgetAmount.setValue(it.sum)
-                if (it.sum.compareTo(BigDecimal.ZERO) == 0) {
-                    viewBinding.commonBudgetAmount.moneyEditText.setSelection(1)
-                } else {
-                    viewBinding.commonBudgetAmount.moneyEditText.setSelection(viewBinding.commonBudgetAmount.moneyEditText.length())
-                }
+            this.viewLifecycleOwner
+        ) {
+            viewBinding.commonBudgetAmount.setValue(it.sum)
+            if (it.sum.compareTo(BigDecimal.ZERO) == 0) {
+                viewBinding.commonBudgetAmount.moneyEditText.setSelection(1)
+            } else {
+                viewBinding.commonBudgetAmount.moneyEditText.setSelection(viewBinding.commonBudgetAmount.moneyEditText.length())
             }
-        )
+        }
     }
 
     override fun onStart() {

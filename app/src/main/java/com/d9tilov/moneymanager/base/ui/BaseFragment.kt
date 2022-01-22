@@ -55,13 +55,11 @@ abstract class BaseFragment<N : BaseNavigator>(@LayoutRes layoutId: Int) :
     @CallSuper
     protected open fun initObservers() {
         viewModel.getMsg().observe(
-            this.viewLifecycleOwner,
-            { event -> requireContext().toast(event) }
-        )
+            this.viewLifecycleOwner
+        ) { event -> requireContext().toast(event) }
         viewModel.getLoading().observe(
-            this.viewLifecycleOwner,
-            { show -> if (show) showLoading() else hideLoading() }
-        )
+            this.viewLifecycleOwner
+        ) { show -> if (show) showLoading() else hideLoading() }
     }
 
     protected fun showSnackBar(text: String, gravityCenter: Boolean = false) {

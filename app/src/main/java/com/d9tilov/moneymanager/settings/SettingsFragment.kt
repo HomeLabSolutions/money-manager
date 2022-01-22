@@ -61,20 +61,19 @@ class SettingsFragment :
             }
         }
         viewModel.userData.observe(
-            viewLifecycleOwner,
-            {
-                viewBinding.settingsDayOfMonthEdit.setText(it.fiscalDay.toString())
-                if (it.backupData.lastBackupTimestamp == 0L) {
-                    viewBinding.settingsBackupInfo.setText(R.string.settings_backup_empty)
-                } else {
-                    viewBinding.settingsBackupInfo.text =
-                        getString(
-                            R.string.settings_backup_info,
-                            it.backupData.lastBackupTimestamp.toBackupDate()
-                        )
-                }
+            viewLifecycleOwner
+        ) {
+            viewBinding.settingsDayOfMonthEdit.setText(it.fiscalDay.toString())
+            if (it.backupData.lastBackupTimestamp == 0L) {
+                viewBinding.settingsBackupInfo.setText(R.string.settings_backup_empty)
+            } else {
+                viewBinding.settingsBackupInfo.text =
+                    getString(
+                        R.string.settings_backup_info,
+                        it.backupData.lastBackupTimestamp.toBackupDate()
+                    )
             }
-        )
+        }
     }
 
     private fun initToolbar() {

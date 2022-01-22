@@ -53,18 +53,17 @@ class RegularIncomeFragment :
         }
         emptyViewStub = viewBinding.root.findViewById(R.id.regular_income_empty_placeholder)
         viewModel.regularIncomeTransactionList.observe(
-            this.viewLifecycleOwner,
-            {
-                if (it.isEmpty()) {
-                    viewBinding.regularIncomeRvList.gone()
-                    showViewStub(TransactionType.INCOME)
-                } else {
-                    hideViewStub()
-                    viewBinding.regularIncomeRvList.show()
-                    regularTransactionAdapter.updateItems(it)
-                }
+            this.viewLifecycleOwner
+        ) {
+            if (it.isEmpty()) {
+                viewBinding.regularIncomeRvList.gone()
+                showViewStub(TransactionType.INCOME)
+            } else {
+                hideViewStub()
+                viewBinding.regularIncomeRvList.show()
+                regularTransactionAdapter.updateItems(it)
             }
-        )
+        }
     }
 
     override fun showBackButton() = destination == RegularTransactionDestination.PROFILE_SCREEN

@@ -117,23 +117,22 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
             })
         }
         (viewModel as BaseCategoryViewModel<*>).categories.observe(
-            this.viewLifecycleOwner,
-            { list ->
-                val sortedList = list.sortedWith(
-                    compareBy(
-                        { it.children.isEmpty() },
-                        { -it.usageCount },
-                        { it.name }
-                    )
+            this.viewLifecycleOwner
+        ) { list ->
+            val sortedList = list.sortedWith(
+                compareBy(
+                    { it.children.isEmpty() },
+                    { -it.usageCount },
+                    { it.name }
                 )
-                if (list.isEmpty()) {
-                    showViewStub()
-                } else {
-                    hideViewStub()
-                }
-                categoryAdapter.updateItems(sortedList)
+            )
+            if (list.isEmpty()) {
+                showViewStub()
+            } else {
+                hideViewStub()
             }
-        )
+            categoryAdapter.updateItems(sortedList)
+        }
     }
 
     private fun initToolbar() {
