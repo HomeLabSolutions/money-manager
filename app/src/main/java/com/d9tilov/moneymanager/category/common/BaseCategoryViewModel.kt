@@ -11,5 +11,4 @@ abstract class BaseCategoryViewModel<T : BaseNavigator> : BaseViewModel<T>() {
 
     abstract fun onCategoryClicked(category: Category)
     abstract fun onCategoryRemoved(category: Category)
-    abstract fun update(name: String)
 }

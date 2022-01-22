@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.d9tilov.moneymanager.R
@@ -17,7 +16,6 @@ import com.d9tilov.moneymanager.category.ui.vm.CategoryViewModel
 import com.d9tilov.moneymanager.core.events.OnItemMoveListener
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragment.Companion.ARG_TRANSACTION_CREATED
-import com.d9tilov.moneymanager.transaction.TransactionType
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,10 +25,6 @@ import javax.inject.Inject
 class CategoryFragment :
     BaseCategoryFragment<CategoryNavigator>(),
     CategoryNavigator {
-
-    private val args by navArgs<CategoryFragmentArgs>()
-    private val transactionType by lazy { args.transactionType }
-    private val sum by lazy { args.sum }
 
     override fun getNavigator() = this
     override val viewModel by viewModels<CategoryViewModel> {
@@ -51,8 +45,7 @@ class CategoryFragment :
         val action = CategoryFragmentDirections.toSubCategoryDest(
             destination,
             transactionType,
-            category,
-            sum
+            category
         )
         findNavController().navigate(action)
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
@@ -84,15 +77,10 @@ class CategoryFragment :
         findNavController().popBackStack()
     }
 
-    override fun backToRegularTransactionCreationScreen(category: Category) {
-        findNavController().previousBackStackEntry?.savedStateHandle?.set(ARG_CATEGORY, category)
-        findNavController().popBackStack()
-    }
-
-    override fun backToMainScreen(transactionType: TransactionType) {
+    override fun backToMainScreen(category: Category) {
         findNavController().previousBackStackEntry?.savedStateHandle?.set(
             ARG_TRANSACTION_CREATED,
-            true
+            category
         )
         findNavController().popBackStack()
     }
@@ -109,14 +97,9 @@ class CategoryFragment :
             val action = CategoryFragmentDirections.toCategoryCreationDest(transactionType)
             findNavController().navigate(action)
         }
-        if (destination == CategoryDestination.MAIN_SCREEN || destination == CategoryDestination.PREPOPULATE_SCREEN) {
-            val callback =
-                SimpleItemTouchHelperCallback(
-                    categoryAdapter
-                )
-            val touchHelper = ItemTouchHelper(callback)
-            touchHelper.attachToRecyclerView(viewBinding.categoryRv)
-        }
+        val callback = SimpleItemTouchHelperCallback(categoryAdapter)
+        val touchHelper = ItemTouchHelper(callback)
+        touchHelper.attachToRecyclerView(viewBinding.categoryRv)
         (viewBinding.categoryRv.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
     }
 

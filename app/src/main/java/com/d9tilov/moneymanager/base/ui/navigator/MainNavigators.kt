@@ -3,7 +3,6 @@ package com.d9tilov.moneymanager.base.ui.navigator
 import androidx.annotation.DrawableRes
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
-import com.d9tilov.moneymanager.transaction.TransactionType
 
 interface HomeNavigator : BaseNavigator
 
@@ -92,8 +91,7 @@ interface CategoryNavigator : BaseNavigator {
     fun openCreateCategoryScreen(category: Category? = null)
     fun openRemoveDialog(category: Category)
     fun backToEditTransactionScreen(category: Category)
-    fun backToRegularTransactionCreationScreen(category: Category)
-    fun backToMainScreen(transactionType: TransactionType)
+    fun backToMainScreen(category: Category)
 }
 
 interface CategoryCreationNavigator : BaseNavigator {
@@ -111,9 +109,8 @@ interface EditTransactionNavigator : BaseNavigator {
 
 interface SubCategoryNavigator : BaseNavigator {
     fun backToEditTransactionScreen(category: Category)
-    fun backToMainScreen(transactionType: TransactionType)
+    fun backToMainScreen(category: Category)
     fun openCreateCategoryScreen(category: Category? = null)
-    fun backToRegularTransactionCreationScreen(category: Category)
     fun openRemoveDialog(subCategory: Category)
 }
 

@@ -146,7 +146,7 @@ class RegularTransactionCreationFragment :
             }
             createdRegularTransactionCategoryLayout.setOnClickListener {
                 val action = RegularTransactionCreationFragmentDirections.toFixedCategoryDest(
-                    destination = CategoryDestination.PREPOPULATE_SCREEN,
+                    destination = CategoryDestination.EDIT_TRANSACTION_SCREEN,
                     transactionType = transactionType
                 )
                 findNavController().navigate(action)

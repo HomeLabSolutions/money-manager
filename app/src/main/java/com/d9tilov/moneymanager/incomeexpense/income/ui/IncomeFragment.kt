@@ -163,7 +163,6 @@ class IncomeFragment :
             val action = if (inputSum.signum() > 0) {
                 IncomeExpenseFragmentDirections.toCategoryDest(
                     destination = CategoryDestination.MAIN_WITH_SUM_SCREEN,
-                    sum = inputSum,
                     transactionType = TransactionType.INCOME
                 )
             } else {
@@ -177,14 +176,13 @@ class IncomeFragment :
     }
 
     override fun saveTransaction(category: Category) {
-        viewModel.saveTransaction(
-            category,
-            viewBinding.incomeInfoLayoutInclude.incomeMainSum.getValue()
-        )
+        if (category.type == TransactionType.INCOME) {
+            viewModel.saveTransaction(category, mainSum.getValue())
+        }
     }
 
     override fun resetMainSum() {
-        viewBinding.incomeInfoLayoutInclude.incomeMainSum.setValue(BigDecimal.ZERO)
+        mainSum.setValue(BigDecimal.ZERO)
     }
 
     override fun getType() = TransactionType.INCOME
