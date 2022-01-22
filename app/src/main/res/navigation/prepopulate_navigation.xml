@@ -191,12 +191,6 @@
         <argument
             android:name="transactionType"
             app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
-
-        <argument
-            android:name="sum"
-            android:defaultValue="@null"
-            app:argType="java.math.BigDecimal"
-            app:nullable="true" />
     </fragment>
 
     <fragment
@@ -241,11 +235,6 @@
         <argument
             android:name="parent_category"
             app:argType="com.d9tilov.moneymanager.category.data.entity.Category" />
-        <argument
-            android:name="sum"
-            android:defaultValue="@null"
-            app:argType="java.math.BigDecimal"
-            app:nullable="true" />
     </fragment>
 
     <fragment

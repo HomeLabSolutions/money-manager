@@ -6,7 +6,6 @@ import kotlinx.parcelize.Parcelize
 sealed class CategoryDestination(open val name: String) : Parcelable {
 
     companion object {
-        const val FROM_PREPOPULATE_SCREEN = "prepopulate"
         const val FROM_MAIN_SCREEN = "main"
         const val FROM_MAIN_WITH_SUM_SCREEN = "main_with_sum"
         const val FROM_EDIT_TRANSACTION_SCREEN = "edit_transaction"
@@ -14,9 +13,6 @@ sealed class CategoryDestination(open val name: String) : Parcelable {
         const val FROM_CATEGORY_SCREEN = "category"
         const val FROM_SUB_CATEGORY_SCREEN = "sub_category"
     }
-
-    @Parcelize
-    object PREPOPULATE_SCREEN : CategoryDestination(FROM_PREPOPULATE_SCREEN)
 
     @Parcelize
     object MAIN_SCREEN : CategoryDestination(FROM_MAIN_SCREEN)

@@ -3,7 +3,6 @@ package com.d9tilov.moneymanager.category.subcategory
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -16,7 +15,6 @@ import com.d9tilov.moneymanager.category.subcategory.vm.SubCategoryViewModel
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragment
-import com.d9tilov.moneymanager.transaction.TransactionType
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,7 +27,6 @@ class SubCategoryFragment :
 
     private val args by navArgs<SubCategoryFragmentArgs>()
     private val parentCategory by lazy { args.parentCategory }
-    private val transactionType by lazy { args.transactionType }
     private lateinit var modifiedParentCategory: Category
 
     override fun getNavigator() = this
@@ -90,10 +87,10 @@ class SubCategoryFragment :
         findNavController().popBackStack(R.id.category_dest, true)
     }
 
-    override fun backToMainScreen(transactionType: TransactionType) {
+    override fun backToMainScreen(category: Category) {
         findNavController().getBackStackEntry(R.id.income_expense_dest).savedStateHandle.set(
             IncomeExpenseFragment.ARG_TRANSACTION_CREATED,
-            true
+            category
         )
         findNavController().popBackStack(R.id.category_dest, true)
     }
@@ -107,18 +104,6 @@ class SubCategoryFragment :
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
             param(FirebaseAnalytics.Param.ITEM_ID, "open_creation_category_screen")
         }
-    }
-
-    override fun backToRegularTransactionCreationScreen(category: Category) {
-        findNavController().getBackStackEntry(
-            if (destination == CategoryDestination.PREPOPULATE_SCREEN)
-                R.id.regular_created_transaction_dest else
-                R.id.edit_transaction_dest
-        ).savedStateHandle.set(
-            ARG_CATEGORY,
-            category
-        )
-        findNavController().popBackStack(R.id.category_dest, true)
     }
 
     override fun openRemoveDialog(subCategory: Category) {

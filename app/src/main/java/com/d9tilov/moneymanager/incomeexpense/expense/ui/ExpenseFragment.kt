@@ -195,7 +195,6 @@ class ExpenseFragment :
             val action = if (inputSum.signum() > 0) {
                 IncomeExpenseFragmentDirections.toCategoryDest(
                     destination = CategoryDestination.MAIN_WITH_SUM_SCREEN,
-                    sum = inputSum,
                     transactionType = TransactionType.EXPENSE
                 )
             } else {
@@ -209,7 +208,9 @@ class ExpenseFragment :
     }
 
     override fun saveTransaction(category: Category) {
-        viewModel.saveTransaction(category, mainSum.getValue())
+        if (category.type == TransactionType.EXPENSE) {
+            viewModel.saveTransaction(category, mainSum.getValue())
+        }
     }
 
     override fun resetMainSum() {

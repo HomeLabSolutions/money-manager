@@ -90,13 +90,11 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
             isKeyboardOpen = false
             showInfoAndCategories()
         }
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Category>(
             IncomeExpenseFragment.ARG_TRANSACTION_CREATED
         )?.observe(viewLifecycleOwner) {
-            if (it) {
-                resetMainSum()
-            }
-            findNavController().currentBackStackEntry?.savedStateHandle?.remove<Boolean>(
+            saveTransaction(it)
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<Category>(
                 IncomeExpenseFragment.ARG_TRANSACTION_CREATED
             )
         }

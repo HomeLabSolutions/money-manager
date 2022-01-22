@@ -5,7 +5,6 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
@@ -17,7 +16,6 @@ import com.d9tilov.moneymanager.databinding.FragmentIncomeExpenseBinding
 import com.d9tilov.moneymanager.incomeexpense.ui.adapter.IncomeExpenseAdapter
 import com.d9tilov.moneymanager.incomeexpense.ui.adapter.IncomeExpenseAdapter.Companion.TAB_COUNT
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.IncomeExpenseViewModel
-import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialog
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -31,8 +29,6 @@ class IncomeExpenseFragment :
     IncomeExpenseNavigator,
     OnBackPressed {
 
-    private val args by navArgs<IncomeExpenseFragmentArgs>()
-    private val transactionType by lazy { args.transactionType }
     private val viewBinding by viewBinding(FragmentIncomeExpenseBinding::bind)
 
     override fun getNavigator() = this
@@ -72,8 +68,6 @@ class IncomeExpenseFragment :
                     else -> requireContext().getString(R.string.tab_income)
                 }
             }.attach()
-            incomeExpenseViewPager.currentItem =
-                (if (transactionType == TransactionType.INCOME) 1 else 0)
         }
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
             TransactionRemoveDialog.ARG_UNDO_REMOVE_LAYOUT_DISMISS

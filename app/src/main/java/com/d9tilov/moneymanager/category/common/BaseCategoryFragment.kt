@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
-import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.ui.CategoryFragmentArgs
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryModifyAdapter
@@ -35,6 +34,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
 
     private val args by navArgs<CategoryFragmentArgs>()
     protected val destination by lazy { args.destination }
+    protected val transactionType by lazy { args.transactionType }
 
     protected val viewBinding by viewBinding(FragmentCategoryBinding::bind)
     protected var toolbar: MaterialToolbar? = null
@@ -62,13 +62,10 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        categoryAdapter =
-            CategoryModifyAdapter()
+        categoryAdapter = CategoryModifyAdapter()
         categoryAdapter.itemClickListener = onItemClickListener
-        if (destination == CategoryDestination.MAIN_SCREEN || destination == CategoryDestination.PREPOPULATE_SCREEN) {
-            categoryAdapter.itemLongClickListener = onItemLongClickListener
-            categoryAdapter.itemRemoveClickListener = onItemRemoveClickListener
-        }
+        categoryAdapter.itemLongClickListener = onItemLongClickListener
+        categoryAdapter.itemRemoveClickListener = onItemRemoveClickListener
     }
 
     override fun onStop() {
