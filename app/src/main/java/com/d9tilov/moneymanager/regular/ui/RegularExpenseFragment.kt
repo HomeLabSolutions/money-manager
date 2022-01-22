@@ -53,18 +53,17 @@ class RegularExpenseFragment :
         }
         emptyViewStub = viewBinding.root.findViewById(R.id.regular_expense_empty_placeholder)
         viewModel.regularExpenseTransactionList.observe(
-            this.viewLifecycleOwner,
-            {
-                if (it.isEmpty()) {
-                    viewBinding.regularExpenseRvList.gone()
-                    showViewStub(TransactionType.EXPENSE)
-                } else {
-                    hideViewStub()
-                    viewBinding.regularExpenseRvList.show()
-                    regularTransactionAdapter.updateItems(it)
-                }
+            this.viewLifecycleOwner
+        ) {
+            if (it.isEmpty()) {
+                viewBinding.regularExpenseRvList.gone()
+                showViewStub(TransactionType.EXPENSE)
+            } else {
+                hideViewStub()
+                viewBinding.regularExpenseRvList.show()
+                regularTransactionAdapter.updateItems(it)
             }
-        )
+        }
     }
 
     override fun showBackButton() = destination == RegularTransactionDestination.PROFILE_SCREEN

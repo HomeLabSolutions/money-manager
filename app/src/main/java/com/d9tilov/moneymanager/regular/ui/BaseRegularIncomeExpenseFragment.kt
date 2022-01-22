@@ -83,13 +83,8 @@ abstract class BaseRegularIncomeExpenseFragment<N : BaseRegularIncomeExpenseNavi
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
             TransactionRemoveDialog.ARG_UNDO_REMOVE_LAYOUT_DISMISS
         )?.observe(
-            viewLifecycleOwner,
-            {
-                if (it) {
-                    regularTransactionAdapter.cancelDeletion()
-                }
-            }
-        )
+            viewLifecycleOwner
+        ) { if (it) regularTransactionAdapter.cancelDeletion() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

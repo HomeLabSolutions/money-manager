@@ -55,13 +55,9 @@ class ProfileFragment :
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
             ARG_LOGOUT_CANCEL_JOB
         )?.observe(
-            viewLifecycleOwner,
-            {
-                if (it) {
-                    viewModel.cancelAllJobs()
-                }
-            }
-        )
+            viewLifecycleOwner
+        ) { if (it) viewModel.cancelAllJobs() }
+
         viewBinding.run {
             profileLogout.setOnClickListener {
                 val action = ProfileFragmentDirections.toLogoutDialogDest()
@@ -101,70 +97,61 @@ class ProfileFragment :
                 findNavController().navigate(action)
             }
             viewModel.userData().observe(
-                viewLifecycleOwner,
-                { profile ->
-                    profile.currentCurrencyCode.run {
-                        val icon = CurrencyUtils.getCurrencyIcon(this)
-                        val currencyTitle = CurrencyUtils.getCurrencySignBy(this)
-                        viewBinding.profileCurrency.profileItemCurrentCurrencyIcon.text = icon
-                        viewBinding.profileCurrency.profileItemCurrentCurrencySign.text =
-                            currencyTitle
-                    }
+                viewLifecycleOwner
+            ) { profile ->
+                profile.currentCurrencyCode.run {
+                    val icon = CurrencyUtils.getCurrencyIcon(this)
+                    val currencyTitle = CurrencyUtils.getCurrencySignBy(this)
+                    viewBinding.profileCurrency.profileItemCurrentCurrencyIcon.text = icon
+                    viewBinding.profileCurrency.profileItemCurrentCurrencySign.text = currencyTitle
                 }
-            )
+            }
             viewModel.budget().observe(
-                viewLifecycleOwner,
-                {
-                    viewBinding.profileBudget.profileItemBudgetValue.setValue(it.sum)
-                    viewBinding.profileBudget.profileItemBudgetCreatedDate.text =
-                        getString(
-                            R.string.budget_date_created,
-                            it.createdDate.toBudgetCreatedDate()
-                        )
-                }
-            )
+                viewLifecycleOwner
+            ) {
+                viewBinding.profileBudget.profileItemBudgetValue.setValue(it.sum)
+                viewBinding.profileBudget.profileItemBudgetCreatedDate.text =
+                    getString(R.string.budget_date_created, it.createdDate.toBudgetCreatedDate())
+            }
             viewModel.regularIncomes().observe(
-                viewLifecycleOwner,
-                { list ->
-                    val incomes = list.joinToString(separator = ",") { it.category.name }
-                    when (incomes.isEmpty()) {
-                        true ->
-                            viewBinding.profileRegularIncomes.profileItemRegularIncomeTitle.text =
-                                getString(R.string.profile_item_regular_incomes_title_empty)
-                        false ->
-                            viewBinding.profileRegularIncomes.profileItemRegularIncomeTitle.text =
-                                getString(R.string.profile_item_regular_incomes_title, incomes)
-                    }
+                viewLifecycleOwner
+            ) { list ->
+                val incomes = list.joinToString(separator = ",") { it.category.name }
+                when (incomes.isEmpty()) {
+                    true ->
+                        viewBinding.profileRegularIncomes.profileItemRegularIncomeTitle.text =
+                            getString(R.string.profile_item_regular_incomes_title_empty)
+                    false ->
+                        viewBinding.profileRegularIncomes.profileItemRegularIncomeTitle.text =
+                            getString(R.string.profile_item_regular_incomes_title, incomes)
                 }
-            )
+            }
             viewModel.regularExpenses().observe(
-                viewLifecycleOwner,
-                { list ->
-                    val expenses = list.joinToString(separator = ",") { it.category.name }
-                    when (expenses.isEmpty()) {
-                        true ->
-                            viewBinding.profileRegularExpenses.profileItemRegularExpenseTitle.text =
-                                getString(R.string.profile_item_regular_expenses_title_empty)
-                        false ->
-                            viewBinding.profileRegularExpenses.profileItemRegularExpenseTitle.text =
-                                getString(R.string.profile_item_regular_expenses_title, expenses)
-                    }
+                viewLifecycleOwner
+            ) { list ->
+                val expenses = list.joinToString(separator = ",") { it.category.name }
+                when (expenses.isEmpty()) {
+                    true ->
+                        viewBinding.profileRegularExpenses.profileItemRegularExpenseTitle.text =
+                            getString(R.string.profile_item_regular_expenses_title_empty)
+                    false ->
+                        viewBinding.profileRegularExpenses.profileItemRegularExpenseTitle.text =
+                            getString(R.string.profile_item_regular_expenses_title, expenses)
                 }
-            )
+            }
             viewModel.goals().observe(
-                viewLifecycleOwner,
-                { list ->
-                    val goals = list.joinToString(separator = ",") { it.name }
-                    when (goals.isEmpty()) {
-                        true ->
-                            viewBinding.profileGoals.profileItemGoalTitle.text =
-                                getString(R.string.profile_item_goals_title_empty)
-                        false ->
-                            viewBinding.profileGoals.profileItemGoalTitle.text =
-                                getString(R.string.profile_item_goals_title, goals)
-                    }
+                viewLifecycleOwner
+            ) { list ->
+                val goals = list.joinToString(separator = ",") { it.name }
+                when (goals.isEmpty()) {
+                    true ->
+                        viewBinding.profileGoals.profileItemGoalTitle.text =
+                            getString(R.string.profile_item_goals_title_empty)
+                    false ->
+                        viewBinding.profileGoals.profileItemGoalTitle.text =
+                            getString(R.string.profile_item_goals_title, goals)
                 }
-            )
+            }
         }
     }
 

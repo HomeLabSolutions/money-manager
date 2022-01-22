@@ -85,38 +85,37 @@ class CurrencyFragment :
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         viewModel.currencies().observe(
-            this.viewLifecycleOwner,
-            { result ->
-                val menuItem = menu?.findItem(R.id.action_skip)
-                when (result.status) {
-                    Status.SUCCESS -> {
-                        menuItem?.isEnabled = true
-                        result.data?.let { data ->
-                            val sortedList =
-                                data.sortedBy { CurrencyUtils.getCurrencyFullName(it.code) }
-                                    .map { currency ->
-                                        if (currencyCode != null) {
-                                            currency.copy(isBase = (currencyCode == currency.code))
-                                        } else currency
-                                    }
-                            currencyAdapter.updateItems(sortedList)
-                            val checkedIndex = sortedList.indexOfFirst { it.isBase }
-                            viewBinding.currencyRv.scrollToPosition(checkedIndex)
-                        }
-                        viewBinding.currencyProgress.gone()
+            this.viewLifecycleOwner
+        ) { result ->
+            val menuItem = menu?.findItem(R.id.action_skip)
+            when (result.status) {
+                Status.SUCCESS -> {
+                    menuItem?.isEnabled = true
+                    result.data?.let { data ->
+                        val sortedList =
+                            data.sortedBy { CurrencyUtils.getCurrencyFullName(it.code) }
+                                .map { currency ->
+                                    if (currencyCode != null) {
+                                        currency.copy(isBase = (currencyCode == currency.code))
+                                    } else currency
+                                }
+                        currencyAdapter.updateItems(sortedList)
+                        val checkedIndex = sortedList.indexOfFirst { it.isBase }
+                        viewBinding.currencyRv.scrollToPosition(checkedIndex)
                     }
-                    Status.ERROR -> {
-                        menuItem?.isEnabled = true
-                        showError()
-                        viewBinding.currencyProgress.gone()
-                    }
-                    Status.LOADING -> {
-                        menuItem?.isEnabled = false
-                        viewBinding.currencyProgress.show()
-                    }
+                    viewBinding.currencyProgress.gone()
+                }
+                Status.ERROR -> {
+                    menuItem?.isEnabled = true
+                    showError()
+                    viewBinding.currencyProgress.gone()
+                }
+                Status.LOADING -> {
+                    menuItem?.isEnabled = false
+                    viewBinding.currencyProgress.show()
                 }
             }
-        )
+        }
         viewBinding.currencyRv.adapter = currencyAdapter
         val layoutManager = LinearLayoutManager(requireContext())
         viewBinding.currencyRv.layoutManager = layoutManager
