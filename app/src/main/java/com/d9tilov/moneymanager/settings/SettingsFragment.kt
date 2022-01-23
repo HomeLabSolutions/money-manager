@@ -36,7 +36,7 @@ class SettingsFragment :
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         viewBinding.run {
-            settingsBackup.setOnClickListener { viewModel.backup() }
+            settingsRefresh.setOnClickListener { viewModel.backup() }
             settingsDayOfMonthPostfix.setOnClickListener {
                 settingsDayOfMonthEdit.requestFocus()
                 showKeyboard(settingsDayOfMonthEdit)

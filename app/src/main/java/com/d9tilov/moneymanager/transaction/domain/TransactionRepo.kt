@@ -2,26 +2,30 @@ package com.d9tilov.moneymanager.transaction.domain
 
 import androidx.paging.PagingData
 import com.d9tilov.moneymanager.category.data.entity.Category
+import com.d9tilov.moneymanager.core.util.currentDateTime
 import com.d9tilov.moneymanager.core.util.getEndOfDay
+import com.d9tilov.moneymanager.core.util.getStartOfDay
+import com.d9tilov.moneymanager.core.util.toLocal
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionBaseDataModel
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import kotlinx.coroutines.flow.Flow
-import java.util.Date
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
 
 interface TransactionRepo {
 
     suspend fun addTransaction(transaction: TransactionDataModel)
     fun getTransactionById(id: Long): Flow<TransactionDataModel>
     fun getTransactionsByType(
-        from: Date = Date(0),
-        to: Date = Date().getEndOfDay(),
+        from: LocalDateTime = Instant.fromEpochMilliseconds(0).toLocal(),
+        to: LocalDateTime = currentDateTime().getStartOfDay(),
         transactionType: TransactionType
     ): Flow<PagingData<TransactionBaseDataModel>>
 
     fun getTransactionsByTypeWithoutDate(
-        from: Date = Date(0),
-        to: Date = Date().getEndOfDay(),
+        from: LocalDateTime = Instant.fromEpochMilliseconds(0).toLocal(),
+        to: LocalDateTime = currentDateTime().getEndOfDay(),
         transactionType: TransactionType,
         onlyInStatistics: Boolean = false
     ): Flow<List<TransactionDataModel>>

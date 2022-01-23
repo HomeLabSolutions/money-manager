@@ -1,19 +1,19 @@
 package com.d9tilov.moneymanager.base.data.local.db.converters
 
 import androidx.room.TypeConverter
-import java.util.Date
+import com.d9tilov.moneymanager.core.util.toLocal
+import com.d9tilov.moneymanager.core.util.toMillis
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
 
 object DateConverter {
 
     @TypeConverter
     @JvmStatic
-    fun fromDateToLong(value: Date): Long {
-        return value.time
-    }
+    fun toOffsetDateTime(value: Long): LocalDateTime =
+        Instant.fromEpochMilliseconds(value).toLocal()
 
     @TypeConverter
     @JvmStatic
-    fun fromLongToDate(value: Long): Date {
-        return Date(value)
-    }
+    fun fromOffsetDateTime(date: LocalDateTime): Long = date.toMillis()
 }

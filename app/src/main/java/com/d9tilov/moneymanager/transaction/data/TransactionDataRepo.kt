@@ -6,7 +6,7 @@ import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.data.local.TransactionSource
 import com.d9tilov.moneymanager.transaction.domain.TransactionRepo
 import kotlinx.coroutines.flow.Flow
-import java.util.Date
+import kotlinx.datetime.LocalDateTime
 
 class TransactionDataRepo(private val transactionSource: TransactionSource) : TransactionRepo {
 
@@ -18,14 +18,14 @@ class TransactionDataRepo(private val transactionSource: TransactionSource) : Tr
         transactionSource.getById(id)
 
     override fun getTransactionsByType(
-        from: Date,
-        to: Date,
+        from: LocalDateTime,
+        to: LocalDateTime,
         transactionType: TransactionType
     ) = transactionSource.getAllByType(from, to, transactionType)
 
     override fun getTransactionsByTypeWithoutDate(
-        from: Date,
-        to: Date,
+        from: LocalDateTime,
+        to: LocalDateTime,
         transactionType: TransactionType,
         onlyInStatistics: Boolean
     ): Flow<List<TransactionDataModel>> =

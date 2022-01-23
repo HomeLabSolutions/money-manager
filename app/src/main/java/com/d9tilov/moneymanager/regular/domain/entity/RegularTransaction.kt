@@ -5,11 +5,13 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_DATA_ID
+import com.d9tilov.moneymanager.core.util.currentDateTime
 import com.d9tilov.moneymanager.period.PeriodType
 import com.d9tilov.moneymanager.transaction.TransactionType
+import kotlinx.datetime.LocalDateTime
 import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 import java.math.BigDecimal
-import java.util.Date
 
 @Parcelize
 data class RegularTransaction(
@@ -19,8 +21,8 @@ data class RegularTransaction(
     val type: TransactionType,
     val sum: BigDecimal,
     val category: Category,
-    val createdDate: Date,
-    val startDate: Date,
+    val createdDate: @RawValue LocalDateTime,
+    val startDate: @RawValue LocalDateTime,
     val periodType: PeriodType,
     val dayOfWeek: Int,
     val description: String,
@@ -36,8 +38,8 @@ data class RegularTransaction(
             type = TransactionType.EXPENSE,
             sum = BigDecimal.ZERO,
             category = Category.EMPTY,
-            createdDate = Date(),
-            startDate = Date(),
+            createdDate = currentDateTime(),
+            startDate = currentDateTime(),
             periodType = PeriodType.MONTH,
             dayOfWeek = 0b0000000,
             description = "",

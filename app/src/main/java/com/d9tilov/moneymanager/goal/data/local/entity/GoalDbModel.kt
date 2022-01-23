@@ -5,8 +5,8 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.d9tilov.moneymanager.user.data.local.entity.UserDbModel
+import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
-import java.util.Date
 
 @Entity(
     tableName = "goal",
@@ -26,6 +26,6 @@ data class GoalDbModel(
     @ColumnInfo(name = "currency") val currency: String,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "targetSum") val targetSum: BigDecimal,
-    @ColumnInfo(name = "createdDate") val createdDate: Date,
+    @ColumnInfo(name = "createdDate") val createdDate: LocalDateTime,
     @ColumnInfo(name = "description") val description: String
 )

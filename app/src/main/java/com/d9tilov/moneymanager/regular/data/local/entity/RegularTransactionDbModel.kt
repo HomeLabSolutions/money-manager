@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 import com.d9tilov.moneymanager.period.PeriodType
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.user.data.local.entity.UserDbModel
+import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
-import java.util.Date
 
 @Entity(
     tableName = "regularTransaction",
@@ -29,8 +29,8 @@ data class RegularTransactionDbModel(
     @ColumnInfo(name = "sum") val sum: BigDecimal,
     @ColumnInfo(name = "categoryId") val categoryId: Long,
     @ColumnInfo(name = "currency") val currency: String,
-    @ColumnInfo(name = "createdDate") val createdDate: Date,
-    @ColumnInfo(name = "startDate") val startDate: Date,
+    @ColumnInfo(name = "createdDate") val createdDate: LocalDateTime,
+    @ColumnInfo(name = "startDate") val startDate: LocalDateTime,
     @ColumnInfo(name = "periodType") val periodType: PeriodType,
     @ColumnInfo(name = "dayOfWeek") val dayOfWeek: Int,
     @ColumnInfo(name = "description") val description: String,

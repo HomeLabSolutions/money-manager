@@ -126,7 +126,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-auth:20.0.1"
 
     implementation "com.google.firebase:firebase-analytics-ktx:20.0.2"
-    implementation "com.google.firebase:firebase-crashlytics:18.2.6"
+    implementation "com.google.firebase:firebase-crashlytics:18.2.7"
     implementation "com.google.firebase:firebase-storage-ktx:20.0.0"
 
     implementation "com.facebook.android:facebook-login:5.15.3"

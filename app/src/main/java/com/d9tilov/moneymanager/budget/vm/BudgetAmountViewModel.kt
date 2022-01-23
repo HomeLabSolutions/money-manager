@@ -7,13 +7,13 @@ import com.d9tilov.moneymanager.base.ui.navigator.BudgetAmountNavigator
 import com.d9tilov.moneymanager.budget.data.entity.BudgetData
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
+import com.d9tilov.moneymanager.core.util.currentDateTime
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
-import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,7 +25,7 @@ class BudgetAmountViewModel @Inject constructor(private val budgetInteractor: Bu
             budgetInteractor.create(
                 BudgetData(
                     sum = BigDecimal.ZERO,
-                    createdDate = Date()
+                    createdDate = currentDateTime()
                 )
             )
         }

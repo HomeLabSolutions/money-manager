@@ -7,7 +7,8 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.category.exception.CategoryNotFoundException
 import com.d9tilov.moneymanager.core.constants.DataConstants
-import com.d9tilov.moneymanager.core.util.countDaysRemainingNexFiscalDate
+import com.d9tilov.moneymanager.core.util.countDaysRemainingNextFiscalDate
+import com.d9tilov.moneymanager.core.util.currentDateTime
 import com.d9tilov.moneymanager.core.util.divideBy
 import com.d9tilov.moneymanager.core.util.getEndOfDay
 import com.d9tilov.moneymanager.core.util.getStartDateOfFiscalPeriod
@@ -28,9 +29,11 @@ import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.atTime
+import kotlinx.datetime.minus
 import java.math.BigDecimal
-import java.util.Calendar
-import java.util.Date
 
 class TransactionInteractorImpl(
     private val transactionRepo: TransactionRepo,
@@ -92,8 +95,8 @@ class TransactionInteractorImpl(
     }
 
     override fun getTransactionsByTypeWithoutDates(
-        from: Date,
-        to: Date,
+        from: LocalDateTime,
+        to: LocalDateTime,
         type: TransactionType
     ): Flow<List<Transaction>> =
         categoryInteractor.getGroupedCategoriesByType(type)
@@ -123,7 +126,7 @@ class TransactionInteractorImpl(
                 expenses.sumOf { currencyInteractor.convertToMainCurrency(it.sum, it.currencyCode) }
             }
         val incomesFlow = flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
-            val endDate = Date().getEndOfDay()
+            val endDate = currentDateTime().getEndOfDay()
             val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
             transactionRepo.getTransactionsByTypeWithoutDate(
                 startDate,
@@ -135,10 +138,9 @@ class TransactionInteractorImpl(
             }
         }
         val expenseFlow = flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
-            val c = Calendar.getInstance()
-            val endDate = c.time
-            c.add(Calendar.DATE, -1)
-            val endDateMinusDay = c.time.getEndOfDay()
+            val endDate = currentDateTime()
+            val endDateMinusDay =
+                endDate.date.minus(1, DateTimeUnit.DAY).atTime(0, 0, 0, 0).getEndOfDay()
             val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
             transactionRepo.getTransactionsByTypeWithoutDate(
                 startDate,
@@ -158,21 +160,16 @@ class TransactionInteractorImpl(
         val savedSumPerPeriodFlow = budgetInteractor.get().map { it.saveSum }
         val countDaysSinceFiscalDateFlow: Flow<BigDecimal> =
             flow { emit(userInteractor.getFiscalDay()) }.map { fiscalDay ->
-                Date().countDaysRemainingNexFiscalDate(fiscalDay).toBigDecimal()
+                currentDateTime().countDaysRemainingNextFiscalDate(fiscalDay).toBigDecimal()
             }
 
         val expensesPerCurrentDayFlow = transactionRepo.getTransactionsByTypeWithoutDate(
-            Date().getStartOfDay(),
-            Date().getEndOfDay(),
+            currentDateTime().getStartOfDay(),
+            currentDateTime().getEndOfDay(),
             TransactionType.EXPENSE,
             true
         ).map { list ->
-            list.sumOf {
-                currencyInteractor.convertToMainCurrency(
-                    it.sum,
-                    it.currency
-                )
-            }
+            list.sumOf { currencyInteractor.convertToMainCurrency(it.sum, it.currency) }
         }
 
         val numeratorFlow = combine(
@@ -196,7 +193,7 @@ class TransactionInteractorImpl(
 
     override fun getSumInFiscalPeriodInUsd(type: TransactionType): Flow<BigDecimal> {
         return flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
-            val endDate = Date()
+            val endDate = currentDateTime()
             val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
             transactionRepo.getTransactionsByTypeWithoutDate(
                 startDate,
@@ -216,8 +213,8 @@ class TransactionInteractorImpl(
 
     override fun getSumTodayInUsd(type: TransactionType): Flow<BigDecimal> =
         transactionRepo.getTransactionsByTypeWithoutDate(
-            Date().getStartOfDay(),
-            Date().getEndOfDay(),
+            currentDateTime().getStartOfDay(),
+            currentDateTime().getEndOfDay(),
             type,
             true
         ).map { list ->
@@ -231,7 +228,7 @@ class TransactionInteractorImpl(
 
     override fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<BigDecimal> {
         return flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
-            val endDate = Date()
+            val endDate = currentDateTime()
             val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
             transactionRepo.getTransactionsByTypeWithoutDate(
                 startDate,
@@ -254,8 +251,8 @@ class TransactionInteractorImpl(
 
     override fun getApproxSumTodayCurrentCurrency(type: TransactionType): Flow<BigDecimal> =
         transactionRepo.getTransactionsByTypeWithoutDate(
-            Date().getStartOfDay(),
-            Date().getEndOfDay(),
+            currentDateTime().getStartOfDay(),
+            currentDateTime().getEndOfDay(),
             type,
             true
         ).map { list ->

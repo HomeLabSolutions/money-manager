@@ -37,4 +37,6 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:2.3.5"
 
     implementation 'androidx.multidex:multidex:2.0.1'
+
+    implementation "org.jetbrains.kotlinx:kotlinx-datetime:0.3.2"
 }

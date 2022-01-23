@@ -2,12 +2,14 @@ package com.d9tilov.moneymanager.regular.data.entity
 
 import android.os.Parcelable
 import com.d9tilov.moneymanager.core.constants.DataConstants
-import com.d9tilov.moneymanager.core.util.getDayOfWeek
+import com.d9tilov.moneymanager.core.util.currentDateTime
 import com.d9tilov.moneymanager.period.PeriodType
 import com.d9tilov.moneymanager.transaction.TransactionType
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.isoDayNumber
 import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 import java.math.BigDecimal
-import java.util.Date
 
 @Parcelize
 data class RegularTransactionData(
@@ -17,10 +19,10 @@ data class RegularTransactionData(
     val sum: BigDecimal,
     val categoryId: Long,
     val currencyCode: String,
-    val createdDate: Date = Date(),
-    val startDate: Date,
+    val createdDate: @RawValue LocalDateTime = currentDateTime(),
+    val startDate: @RawValue LocalDateTime,
     val periodType: PeriodType,
-    val dayOfWeek: Int = Date().getDayOfWeek(),
+    val dayOfWeek: Int = currentDateTime().dayOfWeek.isoDayNumber,
     val description: String,
     val pushEnable: Boolean = true,
     val autoAdd: Boolean = false

@@ -25,7 +25,7 @@
         android:id="@+id/profile_item_current_currency_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="8dp"
         android:orientation="horizontal">
 
         <TextView

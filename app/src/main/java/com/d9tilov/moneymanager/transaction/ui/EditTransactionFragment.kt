@@ -18,7 +18,10 @@ import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.DateValidatorPointBackward
 import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
+import com.d9tilov.moneymanager.core.util.currentDateTime
 import com.d9tilov.moneymanager.core.util.showKeyboard
+import com.d9tilov.moneymanager.core.util.toLocalDateTime
+import com.d9tilov.moneymanager.core.util.toMillis
 import com.d9tilov.moneymanager.currency.CurrencyDestination
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.ui.CurrencyFragment.Companion.ARG_CURRENCY
@@ -32,7 +35,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
@@ -92,18 +94,10 @@ class EditTransactionFragment : EditTransactionNavigator,
         }
         viewBinding.run {
             editTransactionSave.setOnClickListener {
-                val c = Calendar.getInstance()
-                c.time = localTransaction?.date ?: Date()
-                val transactionCalendar = Calendar.getInstance()
-                transactionCalendar.time = transaction.date
-                c.set(Calendar.HOUR_OF_DAY, transactionCalendar.get(Calendar.HOUR_OF_DAY))
-                c.set(Calendar.MINUTE, transactionCalendar.get(Calendar.MINUTE))
-                c.set(Calendar.SECOND, transactionCalendar.get(Calendar.SECOND))
-                c.set(Calendar.MILLISECOND, transactionCalendar.get(Calendar.MILLISECOND))
                 viewModel.update(
                     localTransaction?.copy(
                         sum = editTransactionMainSum.getValue(),
-                        date = c.time,
+                        date = localTransaction?.date ?: currentDateTime(),
                         description = editTransactionDescription.text.toString()
                     ) ?: transaction
                 )
@@ -112,19 +106,19 @@ class EditTransactionFragment : EditTransactionNavigator,
                 val picker = MaterialDatePicker.Builder.datePicker()
                     .setCalendarConstraints(
                         CalendarConstraints.Builder()
-                            .setEnd(Date().time)
+                            .setEnd(currentDateTime().toMillis())
                             .setValidator(DateValidatorPointBackward.now())
                             .build()
                     )
-                    .setSelection(transaction.date.time)
+                    .setSelection(transaction.date.toMillis())
                     .build()
                 picker.addOnPositiveButtonClickListener { calendarDate ->
-                    val date = Date(calendarDate)
+                    val date = calendarDate.toLocalDateTime()
                     localTransaction = localTransaction?.copy(date = date)
                     viewBinding.editTransactionDate.text = SimpleDateFormat(
                         TRANSACTION_DATE_FORMAT,
                         Locale.getDefault()
-                    ).format(date)
+                    ).format(Date(calendarDate.toLocalDateTime().toMillis()))
                 }
                 picker.show(parentFragmentManager, picker.tag)
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
@@ -160,7 +154,7 @@ class EditTransactionFragment : EditTransactionNavigator,
             editTransactionDate.text = SimpleDateFormat(
                 TRANSACTION_DATE_FORMAT,
                 Locale.getDefault()
-            ).format(transaction.date)
+            ).format(Date(transaction.date.toMillis()))
             editTransactionInStatisticsCheckbox.setOnCheckedChangeListener { _, isChecked ->
                 localTransaction = localTransaction?.copy(inStatistics = isChecked)
             }
