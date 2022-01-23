@@ -19,11 +19,14 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
+import com.d9tilov.moneymanager.core.util.currentDateTime
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.core.util.toBigDecimal
+import com.d9tilov.moneymanager.core.util.toLocalDateTime
+import com.d9tilov.moneymanager.core.util.toMillis
 import com.d9tilov.moneymanager.currency.CurrencyDestination
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.ui.CurrencyFragment
@@ -133,14 +136,14 @@ class RegularTransactionCreationFragment :
                 }
             createdRegularTransactionRepeatStartsDate.setOnClickListener {
                 val picker = MaterialDatePicker.Builder.datePicker()
-                    .setSelection(localTransaction?.startDate?.time ?: Date().time)
+                    .setSelection(localTransaction?.startDate?.toMillis() ?: currentDateTime().toMillis())
                     .build()
                 picker.addOnPositiveButtonClickListener { calendarDate ->
-                    localTransaction = localTransaction?.copy(startDate = Date(calendarDate))
+                    localTransaction = localTransaction?.copy(startDate = calendarDate.toLocalDateTime())
                     viewBinding.createdRegularTransactionRepeatStartsDate.text = SimpleDateFormat(
                         TRANSACTION_DATE_FORMAT,
                         Locale.getDefault()
-                    ).format(localTransaction?.startDate ?: Date())
+                    ).format(Date(localTransaction?.startDate?.toMillis()?:Calendar.getInstance().timeInMillis))
                 }
                 picker.show(parentFragmentManager, picker.tag)
             }
@@ -204,10 +207,11 @@ class RegularTransactionCreationFragment :
             )
             createdRegularTransactionDescription.setText(localTransaction!!.description)
             createdRegularTransactionNotifyCheckbox.isChecked = localTransaction!!.pushEnabled
+
             createdRegularTransactionRepeatStartsDate.text = SimpleDateFormat(
                 TRANSACTION_DATE_FORMAT,
                 Locale.getDefault()
-            ).format(localTransaction!!.startDate)
+            ).format(Date(localTransaction!!.startDate.toMillis()))
         }
     }
 

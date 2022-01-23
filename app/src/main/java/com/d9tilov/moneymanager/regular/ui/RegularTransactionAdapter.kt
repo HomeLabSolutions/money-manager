@@ -12,12 +12,13 @@ import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT_DAY_MONTH
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
+import com.d9tilov.moneymanager.core.util.toMillis
 import com.d9tilov.moneymanager.databinding.ItemRegularTransactionBinding
 import com.d9tilov.moneymanager.period.PeriodType
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.regular.ui.diff.RegularTransactionDiffUtil
 import java.text.SimpleDateFormat
-import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 class RegularTransactionAdapter :
@@ -127,11 +128,10 @@ class RegularTransactionAdapter :
                         getWeekDays(regularTransaction.dayOfWeek)
                     )
                     PeriodType.MONTH -> {
-                        val calendar = Calendar.getInstance()
-                        calendar.time = regularTransaction.startDate
-                        val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+                        val dayOfMonth = regularTransaction.startDate.dayOfMonth
                         context.getString(
-                            R.string.regular_transaction_repeat_period_month, dayOfMonth.toString()
+                            R.string.regular_transaction_repeat_period_month,
+                            dayOfMonth.toString()
                         )
                     }
                     PeriodType.YEAR -> context.getString(
@@ -139,7 +139,7 @@ class RegularTransactionAdapter :
                         SimpleDateFormat(
                             TRANSACTION_DATE_FORMAT_DAY_MONTH,
                             Locale.getDefault()
-                        ).format(regularTransaction.startDate)
+                        ).format(Date(regularTransaction.startDate.toMillis()))
                     )
                 }
             }

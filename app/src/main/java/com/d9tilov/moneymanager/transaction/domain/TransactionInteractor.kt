@@ -7,8 +7,8 @@ import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import kotlinx.coroutines.flow.Flow
+import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
-import java.util.Date
 
 interface TransactionInteractor : Interactor {
 
@@ -16,8 +16,8 @@ interface TransactionInteractor : Interactor {
     fun getTransactionById(id: Long): Flow<Transaction>
     fun getTransactionsByType(type: TransactionType): Flow<PagingData<BaseTransaction>>
     fun getTransactionsByTypeWithoutDates(
-        from: Date,
-        to: Date,
+        from: LocalDateTime,
+        to: LocalDateTime,
         type: TransactionType
     ): Flow<List<Transaction>>
 

@@ -8,14 +8,15 @@ import com.d9tilov.moneymanager.base.data.Status
 import com.d9tilov.moneymanager.base.data.local.exceptions.NetworkException
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
+import com.d9tilov.moneymanager.core.util.currentDateTime
 import com.d9tilov.moneymanager.core.util.isNetworkConnected
+import com.d9tilov.moneymanager.core.util.toMillis
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.data.local.mapper.toDataModel
 import com.d9tilov.moneymanager.user.data.local.mapper.toDbModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import java.util.Date
 
 class UserLocalSource(
     private val context: Context,
@@ -89,7 +90,7 @@ class UserLocalSource(
         } else {
             val user = userDao.getById(currentUserId).first()
             if (isNetworkConnected(context)) {
-                userDao.update(user.copy(backupData = BackupData(Date().time)))
+                userDao.update(user.copy(backupData = BackupData(currentDateTime().toMillis())))
                 backupManager.backupDb()
             } else {
                 Result.error(NetworkException())

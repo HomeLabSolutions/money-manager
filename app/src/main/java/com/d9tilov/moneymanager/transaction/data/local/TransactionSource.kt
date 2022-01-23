@@ -6,21 +6,21 @@ import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionBaseDataModel
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import kotlinx.coroutines.flow.Flow
-import java.util.Date
+import kotlinx.datetime.LocalDateTime
 
 interface TransactionSource {
 
     suspend fun insert(transaction: TransactionDataModel)
     fun getById(id: Long): Flow<TransactionDataModel>
     fun getAllByType(
-        from: Date,
-        to: Date,
+        from: LocalDateTime,
+        to: LocalDateTime,
         transactionType: TransactionType
     ): Flow<PagingData<TransactionBaseDataModel>>
 
     fun getAllByTypeWithoutDates(
-        from: Date,
-        to: Date,
+        from: LocalDateTime,
+        to: LocalDateTime,
         transactionType: TransactionType,
         onlyInStatistics: Boolean
     ): Flow<List<TransactionDataModel>>

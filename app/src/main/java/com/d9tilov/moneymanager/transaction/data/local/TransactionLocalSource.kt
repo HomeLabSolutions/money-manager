@@ -22,7 +22,7 @@ import com.d9tilov.moneymanager.transaction.exception.TransactionCreateException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import java.util.Date
+import kotlinx.datetime.LocalDateTime
 
 class TransactionLocalSource(
     private val preferencesStore: PreferencesStore,
@@ -37,19 +37,13 @@ class TransactionLocalSource(
             val count = transactionDao.getDateItemsCountInDay(
                 currentUserId,
                 transaction.type,
-                transaction.date
+                transaction.date.getStartOfDay(),
+                transaction.date.getEndOfDay()
             )
             when {
-                count > 1 -> {
-                    throw TransactionCreateException("Can't create transaction. DataBase contains more than one date item in day period")
-                }
-                count == 1 -> {
-                    transactionDao.insert(
-                        transaction.copy(
-                            clientId = currentUserId
-                        ).toDbModel()
-                    )
-                }
+                count > 1 -> throw TransactionCreateException("Can't create transaction. DataBase contains more than one date item in day period")
+                count == 1 ->
+                    transactionDao.insert(transaction.copy(clientId = currentUserId).toDbModel())
                 else -> {
                     transactionDao.insert(
                         createDateItem(
@@ -59,9 +53,7 @@ class TransactionLocalSource(
                             transaction.currency
                         )
                     )
-                    transactionDao.insert(
-                        transaction.copy(clientId = currentUserId).toDbModel()
-                    )
+                    transactionDao.insert(transaction.copy(clientId = currentUserId).toDbModel())
                 }
             }
         }
@@ -70,7 +62,7 @@ class TransactionLocalSource(
     private fun createDateItem(
         clientId: String,
         type: TransactionType,
-        date: Date,
+        date: LocalDateTime,
         currency: String
     ): TransactionDbModel {
         return TransactionDateDataModel(
@@ -91,20 +83,15 @@ class TransactionLocalSource(
     }
 
     override fun getAllByType(
-        from: Date,
-        to: Date,
+        from: LocalDateTime,
+        to: LocalDateTime,
         transactionType: TransactionType
     ): Flow<PagingData<TransactionBaseDataModel>> {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
             throw WrongUidException()
         } else {
-            Pager(
-                config = PagingConfig(
-                    PAGE_SIZE,
-                    enablePlaceholders = false
-                )
-            ) {
+            Pager(config = PagingConfig(PAGE_SIZE, enablePlaceholders = false)) {
                 transactionDao.getAllByType(
                     currentUserId,
                     from.getEndOfDay(),
@@ -124,8 +111,8 @@ class TransactionLocalSource(
     }
 
     override fun getAllByTypeWithoutDates(
-        from: Date,
-        to: Date,
+        from: LocalDateTime,
+        to: LocalDateTime,
         transactionType: TransactionType,
         onlyInStatistics: Boolean
     ): Flow<List<TransactionDataModel>> {
@@ -178,7 +165,8 @@ class TransactionLocalSource(
                     transactionDao.getItemsCountInDay(
                         currentUserId,
                         oldTransaction.type,
-                        oldTransaction.date
+                        oldTransaction.date.getStartOfDay(),
+                        oldTransaction.date.getEndOfDay()
                     )
                 if (itemsCountOldTransactionDate == 0) {
                     throw IllegalArgumentException("Date count must be more than 0")
@@ -195,7 +183,8 @@ class TransactionLocalSource(
                     transactionDao.getItemsCountInDay(
                         currentUserId,
                         transaction.type,
-                        transaction.date
+                        transaction.date.getStartOfDay(),
+                        transaction.date.getEndOfDay()
                     )
                 if (itemsCountNewTransactionDate == 0) {
                     transactionDao.insert(
@@ -220,7 +209,8 @@ class TransactionLocalSource(
             val count = transactionDao.getItemsCountInDay(
                 currentUserId,
                 transaction.type,
-                transaction.date
+                transaction.date.getStartOfDay(),
+                transaction.date.getEndOfDay()
             )
             when {
                 count > 1 -> transactionDao.delete(
@@ -255,7 +245,8 @@ class TransactionLocalSource(
                         val count = transactionDao.getItemsCountInDay(
                             currentUserId,
                             transaction.type,
-                            transaction.date
+                            transaction.date.getStartOfDay(),
+                            transaction.date.getEndOfDay()
                         )
                         when {
                             count > 1 -> transactionDao.deleteByCategoryId(

@@ -9,6 +9,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.d9tilov.moneymanager.App
+import com.d9tilov.moneymanager.core.util.toMillis
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.period.PeriodType
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
@@ -86,33 +87,25 @@ class PeriodicTransactionWorker @AssistedInject constructor(
                     }
                 }
                 PeriodType.MONTH -> {
-                    val c = Calendar.getInstance()
-                    c.time = regularTransaction.startDate
-                    val dayOfMonth = c.get(Calendar.DAY_OF_MONTH)
-                    val monthlyBuilder =
-                        PeriodicWorkRequest.Builder(
-                            PeriodicTransactionWorker::class.java,
-                            30 * 24 * 3600 * 1000L, TimeUnit.MILLISECONDS
+                    val monthlyBuilder = PeriodicWorkRequest.Builder(
+                        PeriodicTransactionWorker::class.java,
+                        30 * 24 * 3600 * 1000L, TimeUnit.MILLISECONDS
+                    )
+                        .setInitialDelay(
+                            getInitialMonthDelayInMillis(regularTransaction.startDate.dayOfMonth),
+                            TimeUnit.MILLISECONDS
                         )
-                            .setInitialDelay(
-                                getInitialMonthDelayInMillis(dayOfMonth),
-                                TimeUnit.MILLISECONDS
-                            )
                     listOfBuilders.add(monthlyBuilder)
                 }
                 PeriodType.YEAR -> {
-                    val c = Calendar.getInstance()
-                    c.time = regularTransaction.startDate
-                    val dayOfYear = c.get(Calendar.DAY_OF_YEAR)
-                    val monthlyBuilder =
-                        PeriodicWorkRequest.Builder(
-                            PeriodicTransactionWorker::class.java,
-                            365 * 24 * 3600 * 1000L, TimeUnit.MILLISECONDS
+                    val monthlyBuilder = PeriodicWorkRequest.Builder(
+                        PeriodicTransactionWorker::class.java,
+                        365 * 24 * 3600 * 1000L, TimeUnit.MILLISECONDS
+                    )
+                        .setInitialDelay(
+                            getInitialYearDelayInMillis(regularTransaction.startDate.dayOfYear),
+                            TimeUnit.MILLISECONDS
                         )
-                            .setInitialDelay(
-                                getInitialYearDelayInMillis(dayOfYear),
-                                TimeUnit.MILLISECONDS
-                            )
                     listOfBuilders.add(monthlyBuilder)
                 }
             }
@@ -190,6 +183,6 @@ class PeriodicTransactionWorker @AssistedInject constructor(
         }
 
         private fun createTag(regularTransaction: RegularTransaction): String =
-            regularTransaction.id.toString() + DELIMITER + regularTransaction.periodType.name + DELIMITER + regularTransaction.startDate.time + DELIMITER + regularTransaction.dayOfWeek
+            regularTransaction.id.toString() + DELIMITER + regularTransaction.periodType.name + DELIMITER + regularTransaction.startDate.toMillis() + DELIMITER + regularTransaction.dayOfWeek
     }
 }

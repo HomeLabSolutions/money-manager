@@ -6,8 +6,8 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.user.data.local.entity.UserDbModel
+import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
-import java.util.Date
 
 @Entity(
     tableName = "transactions",
@@ -29,7 +29,7 @@ data class TransactionDbModel(
     @ColumnInfo(name = "currency") val currency: String,
     @ColumnInfo(name = "sum") val sum: BigDecimal,
     @ColumnInfo(name = "usd_sum") val usdSum: BigDecimal,
-    @ColumnInfo(name = "date") val date: Date,
+    @ColumnInfo(name = "date") val date: LocalDateTime,
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "qrCode") val qrCode: String?,
     @ColumnInfo(name = "isDate") val isDate: Boolean,

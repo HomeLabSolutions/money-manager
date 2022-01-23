@@ -2,9 +2,11 @@ package com.d9tilov.moneymanager.goal.domain.entity
 
 import android.os.Parcelable
 import com.d9tilov.moneymanager.core.constants.DataConstants
+import com.d9tilov.moneymanager.core.util.currentDateTime
+import kotlinx.datetime.LocalDateTime
 import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 import java.math.BigDecimal
-import java.util.Date
 
 @Parcelize
 data class Goal(
@@ -14,6 +16,6 @@ data class Goal(
     val name: String,
     val targetSum: BigDecimal,
     val currentSum: BigDecimal = BigDecimal.ZERO,
-    val createdDate: Date = Date(),
+    val createdDate: @RawValue LocalDateTime = currentDateTime(),
     val description: String = ""
 ) : Parcelable

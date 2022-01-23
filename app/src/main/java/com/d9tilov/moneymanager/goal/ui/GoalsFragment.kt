@@ -82,6 +82,9 @@ class GoalsFragment :
         initToolbar()
         emptyViewStub = viewBinding.root.findViewById(R.id.goals_empty_placeholder)
         viewBinding.run {
+            if (destination != GoalDestination.PREPOPULATE_SCREEN) {
+                goalsSave.show()
+            }
             goalsRvList.adapter = goalAdapter
             val layoutManager = LinearLayoutManager(requireContext())
             goalsRvList.layoutManager = layoutManager
