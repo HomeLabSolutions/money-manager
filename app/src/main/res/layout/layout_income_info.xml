@@ -57,30 +57,15 @@
         app:layout_constraintStart_toStartOf="@+id/income_main_sum"
         app:layout_constraintTop_toBottomOf="@+id/income_main_sum" />
 
-    <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
-        android:id="@+id/income_period_info_usd_value"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="8dp"
-        android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Small"
-        app:layout_constraintBottom_toBottomOf="@+id/income_period_info_title"
-        app:layout_constraintStart_toEndOf="@+id/income_period_info_title"
-        app:layout_constraintTop_toTopOf="@+id/income_period_info_title"
-        app:showShortDecimalPart="true"
-        app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
-        app:sum="1000"
-        app:sumTextStyle="?attr/textAppearanceCurrencyValueSmall" />
-
     <TextView
         android:id="@+id/income_period_info_approx_sign"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:text="@string/approx_sign"
-        app:layout_constraintBottom_toBottomOf="@+id/income_period_info_usd_value"
-        app:layout_constraintStart_toEndOf="@+id/income_period_info_usd_value"
-        app:layout_constraintTop_toTopOf="@+id/income_period_info_usd_value" />
+        app:layout_constraintBottom_toBottomOf="@+id/income_period_info_title"
+        app:layout_constraintStart_toEndOf="@+id/income_period_info_title"
+        app:layout_constraintTop_toTopOf="@+id/income_period_info_title" />
 
     <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
         android:id="@+id/income_period_info_approx_sum"
