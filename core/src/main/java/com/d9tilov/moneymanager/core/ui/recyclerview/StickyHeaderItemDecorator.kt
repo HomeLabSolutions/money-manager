@@ -13,28 +13,28 @@ class StickyHeaderItemDecorator<T : Any>(private val adapter: StickyAdapter<T, R
     ItemDecoration() {
     private var currentStickyPosition = NO_POSITION
     private var recyclerView: RecyclerView? = null
-    private lateinit var currentStickyHolder: RecyclerView.ViewHolder
+    private var currentStickyHolder: RecyclerView.ViewHolder? = null
     private var lastViewOverlappedByHeader: View? = null
 
     fun attachToRecyclerView(recyclerView: RecyclerView?) {
         if (this.recyclerView === recyclerView) {
-            return // nothing to do
+            return
         }
-        recyclerView?.let { destroyCallbacks(it) }
         this.recyclerView = recyclerView
+        destroyCallbacks(recyclerView)
+        setupCallbacks()
         if (recyclerView != null) {
             currentStickyHolder = adapter.onCreateHeaderViewHolder(recyclerView)
-            fixLayoutSize()
-            setupCallbacks()
         }
+        fixLayoutSize()
     }
 
     private fun setupCallbacks() {
         recyclerView?.addItemDecoration(this)
     }
 
-    private fun destroyCallbacks(recyclerView: RecyclerView) {
-        recyclerView.removeItemDecoration(this)
+    private fun destroyCallbacks(recyclerView: RecyclerView?) {
+        recyclerView?.removeItemDecoration(this)
     }
 
     override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
@@ -53,7 +53,10 @@ class StickyHeaderItemDecorator<T : Any>(private val adapter: StickyAdapter<T, R
             return
         }
         var viewOverlappedByHeader: View? =
-            getChildInContact(parent, currentStickyHolder.itemView.bottom)
+            if (currentStickyHolder == null) null else getChildInContact(
+                parent,
+                currentStickyHolder!!.itemView.bottom
+            )
         if (viewOverlappedByHeader == null) {
             viewOverlappedByHeader = if (lastViewOverlappedByHeader != null) {
                 lastViewOverlappedByHeader
@@ -81,11 +84,10 @@ class StickyHeaderItemDecorator<T : Any>(private val adapter: StickyAdapter<T, R
             return
         }
         viewOverlappedByHeader?.let {
+            updateStickyHeader(topChildPosition)
             if (preOverlappedPosition != overlappedHeaderPosition && shouldMoveHeader(it)) {
-                updateStickyHeader(topChildPosition)
                 moveHeader(c, it)
             } else {
-                updateStickyHeader(topChildPosition)
                 drawHeader(c)
             }
         }
@@ -99,26 +101,27 @@ class StickyHeaderItemDecorator<T : Any>(private val adapter: StickyAdapter<T, R
     }
 
     private fun updateStickyHeader(topChildPosition: Int) {
+        if (currentStickyHolder == null) return
         val headerPositionForItem = adapter.getHeaderPositionForItem(topChildPosition)
+        adapter.onBindHeaderViewHolder(currentStickyHolder!!, headerPositionForItem)
         if (headerPositionForItem != currentStickyPosition && headerPositionForItem != NO_POSITION) {
-            adapter.onBindHeaderViewHolder(currentStickyHolder, headerPositionForItem)
             currentStickyPosition = headerPositionForItem
-        } else if (headerPositionForItem != NO_POSITION) {
-            adapter.onBindHeaderViewHolder(currentStickyHolder, headerPositionForItem)
         }
     }
 
     private fun drawHeader(c: Canvas) {
+        if (currentStickyHolder == null) return
         c.save()
         c.translate(0f, 0f)
-        currentStickyHolder.itemView.draw(c)
+        currentStickyHolder!!.itemView.draw(c)
         c.restore()
     }
 
     private fun moveHeader(c: Canvas, nextHeader: View) {
+        if (currentStickyHolder == null) return
         c.save()
         c.translate(0f, nextHeader.top - nextHeader.height.toFloat())
-        currentStickyHolder.itemView.draw(c)
+        currentStickyHolder!!.itemView.draw(c)
         c.restore()
     }
 
@@ -143,6 +146,7 @@ class StickyHeaderItemDecorator<T : Any>(private val adapter: StickyAdapter<T, R
                 .addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
                     override fun onGlobalLayout() {
                         viewTreeObserver.removeOnGlobalLayoutListener(this)
+                        if (currentStickyHolder == null) return
                         // Specs for parent (RecyclerView)
                         val widthSpec: Int = View.MeasureSpec.makeMeasureSpec(
                             width,
@@ -157,18 +161,18 @@ class StickyHeaderItemDecorator<T : Any>(private val adapter: StickyAdapter<T, R
                         val childWidthSpec = ViewGroup.getChildMeasureSpec(
                             widthSpec,
                             paddingLeft + paddingRight,
-                            currentStickyHolder.itemView.layoutParams.width
+                            currentStickyHolder!!.itemView.layoutParams.width
                         )
                         val childHeightSpec = ViewGroup.getChildMeasureSpec(
                             heightSpec,
                             paddingTop + paddingBottom,
-                            currentStickyHolder.itemView.layoutParams.height
+                            currentStickyHolder!!.itemView.layoutParams.height
                         )
-                        currentStickyHolder.itemView.measure(childWidthSpec, childHeightSpec)
-                        currentStickyHolder.itemView.layout(
+                        currentStickyHolder!!.itemView.measure(childWidthSpec, childHeightSpec)
+                        currentStickyHolder!!.itemView.layout(
                             0, 0,
-                            currentStickyHolder.itemView.measuredWidth,
-                            currentStickyHolder.itemView.measuredHeight
+                            currentStickyHolder!!.itemView.measuredWidth,
+                            currentStickyHolder!!.itemView.measuredHeight
                         )
                     }
                 })

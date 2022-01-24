@@ -18,12 +18,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Should be invisible. Need to stick header for the first time-->
     <include
         android:id="@+id/expense_transaction_layout_include"
         android:layout_width="0dp"
         layout="@layout/layout_expense_transactions"
         android:layout_height="0dp"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
