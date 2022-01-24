@@ -15,13 +15,13 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entity.Category
-import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.isTablet
+import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentIncomeBinding
 import com.d9tilov.moneymanager.incomeexpense.ui.BaseIncomeExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
@@ -90,13 +90,9 @@ class IncomeFragment :
                 viewLifecycleOwner,
                 { sum ->
                     if (sum.signum() == 0) {
-                        viewBinding.incomeInfoLayoutInclude.incomePeriodInfoUsdValue.gone()
                         viewBinding.incomeInfoLayoutInclude.incomePeriodInfoApproxSign.gone()
                     } else
-                        viewBinding.incomeInfoLayoutInclude.incomePeriodInfoUsdValue.setValue(
-                            sum,
-                            DataConstants.DEFAULT_CURRENCY_CODE
-                        )
+                        viewBinding.incomeInfoLayoutInclude.incomePeriodInfoApproxSign.show()
                 }
             )
             viewModel.earnedInPeriodApprox.observe(
