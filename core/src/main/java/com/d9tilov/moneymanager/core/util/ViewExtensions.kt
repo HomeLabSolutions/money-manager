@@ -1,28 +1,21 @@
 package com.d9tilov.moneymanager.core.util
 
 import android.view.View
+import androidx.core.view.isGone
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 
-fun View.gone(): Boolean {
-    if (isVisible) {
-        visibility = View.GONE
-        return true
-    }
-    return false
+fun View.gone() {
+    if (isGone) return
+    visibility = View.GONE
 }
 
-fun View.hide(): Boolean {
-    if (isVisible) {
-        visibility = View.INVISIBLE
-        return true
-    }
-    return false
+fun View.hide() {
+    if (isInvisible) return
+    visibility = View.INVISIBLE
 }
 
-fun View.show(): Boolean {
-    if (!isVisible) {
-        visibility = View.VISIBLE
-        return true
-    }
-    return false
+fun View.show() {
+    if (isVisible) return
+    visibility = View.VISIBLE
 }

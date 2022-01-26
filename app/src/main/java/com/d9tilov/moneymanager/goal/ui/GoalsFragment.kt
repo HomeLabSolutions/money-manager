@@ -103,30 +103,28 @@ class GoalsFragment :
         }
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
             ARG_UNDO_REMOVE_LAYOUT_DISMISS
-        )?.observe(viewLifecycleOwner, { if (it) goalAdapter.cancelDeletion() })
+        )?.observe(viewLifecycleOwner) { if (it) goalAdapter.cancelDeletion() }
         viewModel.budget.observe(
-            this.viewLifecycleOwner,
-            {
-                viewBinding.run {
-                    goalsAmount.setValue(it.sum)
-                    goalsSumPerPeriod.setValue(it.saveSum)
-                }
+            this.viewLifecycleOwner
+        ) {
+            viewBinding.run {
+                goalsAmount.setValue(it.sum)
+                goalsSumPerPeriod.setValue(it.saveSum)
             }
-        )
+        }
         viewModel.goals.observe(
-            this.viewLifecycleOwner,
-            {
-                if (it.isEmpty()) {
-                    viewBinding.goalsRvList.gone()
-                    showViewStub()
-                } else {
-                    hideViewStub()
-                    viewBinding.goalsRvList.show()
-                    goalAdapter.updateItems(it)
-                }
-                showViewStub = it.isEmpty()
+            this.viewLifecycleOwner
+        ) {
+            if (it.isEmpty()) {
+                viewBinding.goalsRvList.gone()
+                showViewStub()
+            } else {
+                hideViewStub()
+                viewBinding.goalsRvList.show()
+                goalAdapter.updateItems(it)
             }
-        )
+            showViewStub = it.isEmpty()
+        }
     }
 
     override fun onStart() {

@@ -30,7 +30,7 @@
         android:id="@+id/income_main_sum_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
         android:background="@drawable/background_sum_border"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
@@ -39,7 +39,7 @@
         android:textColor="@color/button_normal_color_dark"
         android:textSize="@dimen/transaction_sum_title_text_size"
         app:layout_constraintBottom_toTopOf="@+id/income_main_sum"
-        app:layout_constraintEnd_toEndOf="@+id/income_main_sum" />
+        app:layout_constraintStart_toStartOf="@+id/income_main_sum" />
 
     <TextView
         android:id="@+id/income_period_info_title"
@@ -87,18 +87,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/standard_half_left_margin"
         android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/income_keyboard_layout"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:listitem="@layout/item_category" />
-
-    <include
-        android:id="@+id/income_keyboard_layout"
-        layout="@layout/keyboard_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

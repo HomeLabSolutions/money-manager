@@ -68,17 +68,16 @@ class MainActivity :
         )
         // Whenever the selected controller changes, setup the action bar.
         controller.observe(
-            this,
-            { navController ->
-                navController.addOnDestinationChangedListener { _, destination, _ ->
-                    if (setOfShownBottomBar.contains(destination.id)) {
-                        showBottomBarWithAnimation()
-                    } else {
-                        viewBinding.bottomNav.gone()
-                    }
+            this
+        ) { navController ->
+            navController.addOnDestinationChangedListener { _, destination, _ ->
+                if (setOfShownBottomBar.contains(destination.id)) {
+                    showBottomBarWithAnimation()
+                } else {
+                    viewBinding.bottomNav.gone()
                 }
             }
-        )
+        }
         currentNavController = controller
     }
 

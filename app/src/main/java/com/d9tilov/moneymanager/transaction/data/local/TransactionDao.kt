@@ -48,7 +48,7 @@ interface TransactionDao {
     ): Int
 
     @Query("SELECT count(*) FROM transactions WHERE clientId=:uid AND type=:type AND isDate=0 AND date >= :from AND date <= :to")
-    suspend fun getItemsCountInDay(uid: String, type: TransactionType,  from: LocalDateTime, to: LocalDateTime): Int
+    suspend fun getItemsCountInDay(uid: String, type: TransactionType, from: LocalDateTime, to: LocalDateTime): Int
 
     @Query("SELECT count(*) FROM transactions WHERE clientId=:uid AND currency=:code")
     suspend fun getCountByCurrencyCode(uid: String, code: String): Int

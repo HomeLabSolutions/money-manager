@@ -58,13 +58,11 @@ abstract class BaseDialogFragment<N : BaseNavigator> :
     @CallSuper
     protected open fun initObservers() {
         viewModel.getMsg().observe(
-            this.viewLifecycleOwner,
-            { requireContext().toast(it) }
-        )
+            this.viewLifecycleOwner
+        ) { requireContext().toast(it) }
         viewModel.getLoading().observe(
-            this.viewLifecycleOwner,
-            { if (it) showLoading() else hideLoading() }
-        )
+            this.viewLifecycleOwner
+        ) { if (it) showLoading() else hideLoading() }
     }
 
     private fun showLoading() = baseActivity?.showLoading()
