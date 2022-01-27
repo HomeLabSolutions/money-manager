@@ -24,11 +24,10 @@ import com.d9tilov.moneymanager.category.ui.recycler.CategoryAdapter
 import com.d9tilov.moneymanager.core.events.OnDialogDismissListener
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
-import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
+import com.d9tilov.moneymanager.core.util.showWithAnimation
 import com.d9tilov.moneymanager.core.util.toast
-import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragment.Companion.ANIMATION_DURATION
 import com.d9tilov.moneymanager.incomeexpense.ui.listeners.OnIncomeExpenseListener
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -37,6 +36,7 @@ import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 
 abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@LayoutRes layoutId: Int) :
     BaseFragment<N>(layoutId),
@@ -135,28 +135,6 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
         })
     }
 
-    override fun onHandleInput(str: String?) {
-        val dot = getString(R.string._dot)
-        val zero = getString(R.string._0)
-        var input = mainSum.moneyEditText.text.toString()
-        when (str) {
-            dot -> {
-                if (input.contains(dot)) return
-                if (input.isEmpty() || input[input.length - 1].toString() == dot) return
-                else input = input.plus(str)
-            }
-            zero -> {
-                if (input.length == 1 && input[0].toString() == zero) return
-                else input = input.plus(str)
-            }
-            null ->
-                if (input.isNotEmpty()) input = input.removeRange(input.length - 1, input.length)
-            else -> input = input.plus(str)
-        }
-        if (input.isEmpty()) input = getString(R.string._0)
-        mainSum.moneyEditText.setText(input)
-    }
-
     private fun showViewStub() {
         if ((requireParentFragment() as IncomeExpenseFragment).isKeyboardOpened()) return
         if (emptyViewStub.parent == null) {
@@ -206,27 +184,22 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
     override fun onKeyboardShown(show: Boolean) {
         val hiddenGroup = if (show) transactionsLayout else infoLayout
         val shownGroup = if (show) infoLayout else transactionsLayout
+        hiddenGroup.gone()
         if (show) {
             hideViewStub()
         } else {
             if (isTransactionDataEmpty) showViewStub()
         }
-        if (!shownGroup.isVisible) {
-            shownGroup.apply {
-                alpha = 0f
-                show()
-                animate()
-                    .alpha(1f)
-                    .setDuration(ANIMATION_DURATION)
-                    .setListener(null)
-            }
-        }
-        hiddenGroup.gone()
+        if (!shownGroup.isVisible) shownGroup.showWithAnimation()
+    }
+
+    protected fun getSum(): BigDecimal = (requireParentFragment() as IncomeExpenseFragment).getSum()
+
+    protected fun resetMainSum() {
+        (requireParentFragment() as IncomeExpenseFragment).resetSum()
     }
 
     protected open lateinit var emptyViewStub: ViewStub
-    protected open lateinit var mainSum: CurrencyView
-    protected open lateinit var mainSumTitle: TextView
     protected open lateinit var categoryRvList: RecyclerView
     protected open lateinit var transactionRvList: RecyclerView
     protected open lateinit var transactionBtnAdd: FloatingActionButton
@@ -237,7 +210,6 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
     protected abstract fun initCategoryRecyclerView()
     protected abstract fun initTransactionsRecyclerView()
     protected abstract fun saveTransaction(category: Category)
-    protected abstract fun resetMainSum()
 
     companion object {
         const val SPAN_COUNT = 2

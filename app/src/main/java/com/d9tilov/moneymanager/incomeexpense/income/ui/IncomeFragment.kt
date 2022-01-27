@@ -33,7 +33,6 @@ import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -52,8 +51,6 @@ class IncomeFragment :
 
     override fun initViews() {
         emptyViewStub = viewBinding.root.findViewById(R.id.income_transaction_empty_placeholder)
-        mainSum = viewBinding.incomeInfoLayoutInclude.incomeMainSum
-        mainSumTitle = viewBinding.incomeInfoLayoutInclude.incomeMainSumTitle
         categoryRvList = viewBinding.incomeInfoLayoutInclude.incomeCategoryRvList
         transactionRvList = viewBinding.incomeTransactionLayoutInclude.incomeTransactionRvList
         transactionBtnAdd = viewBinding.incomeTransactionLayoutInclude.incomeTransactionBtnAdd
@@ -147,7 +144,7 @@ class IncomeFragment :
             param(FirebaseAnalytics.Param.ITEM_ID, "click_all_categories_income")
         }
         viewBinding.run {
-            val inputSum = viewBinding.incomeInfoLayoutInclude.incomeMainSum.getValue()
+            val inputSum = getSum()
             val action = if (inputSum.signum() > 0) {
                 IncomeExpenseFragmentDirections.toCategoryDest(
                     destination = CategoryDestination.MAIN_WITH_SUM_SCREEN,
@@ -165,12 +162,8 @@ class IncomeFragment :
 
     override fun saveTransaction(category: Category) {
         if (category.type == TransactionType.INCOME) {
-            viewModel.saveTransaction(category, mainSum.getValue())
+            viewModel.saveTransaction(category, getSum())
         }
-    }
-
-    override fun resetMainSum() {
-        mainSum.setValue(BigDecimal.ZERO)
     }
 
     override fun getType() = TransactionType.INCOME

@@ -36,7 +36,6 @@ import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
 import java.math.BigDecimal.ROUND_HALF_UP
 import javax.inject.Inject
 
@@ -56,8 +55,6 @@ class ExpenseFragment :
 
     override fun initViews() {
         emptyViewStub = viewBinding.root.findViewById(R.id.expense_transaction_empty_placeholder)
-        mainSum = viewBinding.expenseInfoLayoutInclude.expenseMainSum
-        mainSumTitle = viewBinding.expenseInfoLayoutInclude.expenseMainSumTitle
         categoryRvList = viewBinding.expenseInfoLayoutInclude.expenseCategoryRvList
         transactionRvList = viewBinding.expenseTransactionLayoutInclude.expenseTransactionRvList
         transactionBtnAdd = viewBinding.expenseTransactionLayoutInclude.expenseTransactionBtnAdd
@@ -183,7 +180,7 @@ class ExpenseFragment :
             param(FirebaseAnalytics.Param.ITEM_ID, "click_all_categories_expense")
         }
         viewBinding.run {
-            val inputSum = mainSum.getValue()
+            val inputSum = getSum()
             val action = if (inputSum.signum() > 0) {
                 IncomeExpenseFragmentDirections.toCategoryDest(
                     destination = CategoryDestination.MAIN_WITH_SUM_SCREEN,
@@ -201,12 +198,8 @@ class ExpenseFragment :
 
     override fun saveTransaction(category: Category) {
         if (category.type == TransactionType.EXPENSE) {
-            viewModel.saveTransaction(category, mainSum.getValue())
+            viewModel.saveTransaction(category, getSum())
         }
-    }
-
-    override fun resetMainSum() {
-        mainSum.setValue(BigDecimal.ZERO)
     }
 
     override fun getType() = TransactionType.EXPENSE

@@ -5,42 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
-        android:id="@+id/income_main_sum"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/standard_left_margin"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="@dimen/standard_right_margin"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/background_round_border"
-        android:padding="4dp"
-        android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Medium"
-        app:enableInput="false"
-        app:gravity="center"
-        app:showDecimalPart="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:scaleEnabled="true"
-        app:signTextStyle="?attr/textAppearanceCurrencySignMedium"
-        app:sumTextStyle="?attr/textAppearanceHeadline4" />
-
-    <TextView
-        android:id="@+id/income_main_sum_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:background="@drawable/background_sum_border"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:text="@string/transaction_edit_sum_title"
-        android:textAppearance="?attr/textAppearanceCaption"
-        android:textColor="@color/button_normal_color_dark"
-        android:textSize="@dimen/transaction_sum_title_text_size"
-        app:layout_constraintBottom_toTopOf="@+id/income_main_sum"
-        app:layout_constraintStart_toStartOf="@+id/income_main_sum" />
-
     <TextView
         android:id="@+id/income_period_info_title"
         android:layout_width="wrap_content"
@@ -48,14 +12,15 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/background_round_fill"
         android:paddingStart="8dp"
+        android:layout_marginStart="@dimen/standard_left_margin"
         android:paddingTop="4dp"
         android:paddingEnd="8dp"
         android:paddingBottom="4dp"
         android:text="@string/category_income_info_period_title"
         android:textAppearance="?attr/textAppearanceCaption"
         app:layout_constraintBottom_toTopOf="@id/income_category_rv_list"
-        app:layout_constraintStart_toStartOf="@+id/income_main_sum"
-        app:layout_constraintTop_toBottomOf="@+id/income_main_sum" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/income_period_info_approx_sign"

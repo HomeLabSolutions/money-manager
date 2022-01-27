@@ -14,7 +14,8 @@ import com.d9tilov.moneymanager.core.events.OnBackPressed
 import com.d9tilov.moneymanager.core.events.OnDialogDismissListener
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.gone
-import com.d9tilov.moneymanager.core.util.show
+import com.d9tilov.moneymanager.core.util.hideWithAnimation
+import com.d9tilov.moneymanager.core.util.showWithAnimation
 import com.d9tilov.moneymanager.databinding.FragmentIncomeExpenseBinding
 import com.d9tilov.moneymanager.incomeexpense.ui.adapter.IncomeExpenseAdapter
 import com.d9tilov.moneymanager.incomeexpense.ui.adapter.IncomeExpenseAdapter.Companion.TAB_COUNT
@@ -27,6 +28,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
+import java.math.BigDecimal
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -43,6 +45,7 @@ class IncomeExpenseFragment :
     private lateinit var incomeExpenseAdapter: IncomeExpenseAdapter
     private var pageIndex = -1
     private var isKeyboardOpen = true
+    private val commonGroup = mutableListOf<View>()
 
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -51,6 +54,8 @@ class IncomeExpenseFragment :
         super.onViewCreated(view, savedInstanceState)
         incomeExpenseAdapter = IncomeExpenseAdapter(childFragmentManager, lifecycle)
         viewBinding.run {
+            commonGroup.add(incomeExpenseMainSum)
+            commonGroup.add(incomeExpenseKeyboardLayout.root)
             incomeExpenseViewPager.adapter = incomeExpenseAdapter
             incomeExpenseViewPager.offscreenPageLimit = 2
             incomeExpenseViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -79,20 +84,19 @@ class IncomeExpenseFragment :
             }
             incomeExpenseKeyboardLayout.pinKeyboard.clickPinButton = object : PinKeyboard.ClickPinButton {
                 override fun onPinClick(button: PinButton?) {
-                    val fragment = (getCurrentFragment() as? OnIncomeExpenseListener)
                     when (button?.id) {
-                        R.id.keyboard_pin_0 -> fragment?.onHandleInput(getString(R.string._0))
-                        R.id.keyboard_pin_1 -> fragment?.onHandleInput(getString(R.string._1))
-                        R.id.keyboard_pin_2 -> fragment?.onHandleInput(getString(R.string._2))
-                        R.id.keyboard_pin_3 -> fragment?.onHandleInput(getString(R.string._3))
-                        R.id.keyboard_pin_4 -> fragment?.onHandleInput(getString(R.string._4))
-                        R.id.keyboard_pin_5 -> fragment?.onHandleInput(getString(R.string._5))
-                        R.id.keyboard_pin_6 -> fragment?.onHandleInput(getString(R.string._6))
-                        R.id.keyboard_pin_7 -> fragment?.onHandleInput(getString(R.string._7))
-                        R.id.keyboard_pin_8 -> fragment?.onHandleInput(getString(R.string._8))
-                        R.id.keyboard_pin_9 -> fragment?.onHandleInput(getString(R.string._9))
-                        R.id.keyboard_pin_dot -> fragment?.onHandleInput(getString(R.string._dot))
-                        else -> fragment?.onHandleInput(null)
+                        R.id.keyboard_pin_0 -> onHandleInput(getString(R.string._0))
+                        R.id.keyboard_pin_1 -> onHandleInput(getString(R.string._1))
+                        R.id.keyboard_pin_2 -> onHandleInput(getString(R.string._2))
+                        R.id.keyboard_pin_3 -> onHandleInput(getString(R.string._3))
+                        R.id.keyboard_pin_4 -> onHandleInput(getString(R.string._4))
+                        R.id.keyboard_pin_5 -> onHandleInput(getString(R.string._5))
+                        R.id.keyboard_pin_6 -> onHandleInput(getString(R.string._6))
+                        R.id.keyboard_pin_7 -> onHandleInput(getString(R.string._7))
+                        R.id.keyboard_pin_8 -> onHandleInput(getString(R.string._8))
+                        R.id.keyboard_pin_9 -> onHandleInput(getString(R.string._9))
+                        R.id.keyboard_pin_dot -> onHandleInput(getString(R.string._dot))
+                        else -> onHandleInput(null)
                     }
                 }
             }
@@ -107,17 +111,41 @@ class IncomeExpenseFragment :
         }
     }
 
+    private fun onHandleInput(str: String?) {
+        val dot = getString(R.string._dot)
+        val zero = getString(R.string._0)
+        var input = viewBinding.incomeExpenseMainSum.moneyEditText.text.toString()
+        when (str) {
+            dot -> {
+                if (input.contains(dot)) return
+                if (input.isEmpty() || input[input.length - 1].toString() == dot) return
+                else input = input.plus(str)
+            }
+            zero -> {
+                if (input.length == 1 && input[0].toString() == zero) return
+                else input = input.plus(str)
+            }
+            null ->
+                if (input.isNotEmpty()) input = input.removeRange(input.length - 1, input.length)
+            else -> input = input.plus(str)
+        }
+        if (input.isEmpty()) input = getString(R.string._0)
+        viewBinding.incomeExpenseMainSum.moneyEditText.setText(input)
+    }
+
     fun openKeyboard() {
         isKeyboardOpen = true
-        if (!viewBinding.incomeExpenseKeyboardLayout.root.isVisible) {
-            viewBinding.incomeExpenseKeyboardLayout.root.apply {
-                alpha = 0f
-                show()
-                animate()
-                    .alpha(1f)
-                    .setDuration(ANIMATION_DURATION)
-                    .setListener(null)
+        viewBinding.run {
+            if (pageIndex == 0) {
+                incomeExpenseMainSumTitleRight.showWithAnimation()
+                incomeExpenseMainSumTitleLeft.hideWithAnimation()
+            } else {
+                incomeExpenseMainSumTitleLeft.showWithAnimation()
+                incomeExpenseMainSumTitleRight.hideWithAnimation()
             }
+        }
+        if (commonGroup.isNotEmpty() && !commonGroup[0].isVisible) {
+            commonGroup.forEach { it.showWithAnimation() }
         }
         for (fragment in getFragmentsInViewPager()) {
             (fragment as? OnIncomeExpenseListener)?.onKeyboardShown(true)
@@ -126,13 +154,21 @@ class IncomeExpenseFragment :
 
     fun closeKeyboard() {
         isKeyboardOpen = false
-        viewBinding.incomeExpenseKeyboardLayout.root.gone()
+        commonGroup.forEach { it.gone() }
+        viewBinding.incomeExpenseMainSumTitleLeft.gone()
+        viewBinding.incomeExpenseMainSumTitleRight.gone()
         for (fragment in getFragmentsInViewPager()) {
             (fragment as? OnIncomeExpenseListener)?.onKeyboardShown(false)
         }
     }
 
     fun isKeyboardOpened(): Boolean = isKeyboardOpen
+
+    fun getSum(): BigDecimal = viewBinding.incomeExpenseMainSum.getValue()
+
+    fun resetSum() {
+        viewBinding.incomeExpenseMainSum.setValue(BigDecimal.ZERO)
+    }
 
     private fun getFragmentsInViewPager(): List<Fragment> {
         val fragments = mutableListOf<Fragment>()
@@ -145,8 +181,6 @@ class IncomeExpenseFragment :
         return fragments
     }
 
-    private fun getCurrentFragment(): Fragment? = getFragmentsInViewPager().getOrNull(pageIndex)
-
     override fun onBackPressed(): Boolean {
         return if (isKeyboardOpen) {
             closeKeyboard()
@@ -158,6 +192,5 @@ class IncomeExpenseFragment :
 
     companion object {
         const val ARG_TRANSACTION_CREATED = "arg_transaction_created"
-        const val ANIMATION_DURATION = 300L
     }
 }
