@@ -10,4 +10,20 @@ data class TransactionHeader(
 ) : BaseTransaction {
     override val itemType: Int
         get() = HEADER
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is TransactionHeader) return false
+
+        if (date != other.date) return false
+        if (currency != other.currency) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = date.hashCode()
+        result = 31 * result + currency.hashCode()
+        return result
+    }
 }

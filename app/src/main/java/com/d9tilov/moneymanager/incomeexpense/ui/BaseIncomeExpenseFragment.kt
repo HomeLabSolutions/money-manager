@@ -214,5 +214,6 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
     companion object {
         const val SPAN_COUNT = 2
         const val TABLET_SPAN_COUNT = 1
+        const val SCROLL_DELAY = 600L
     }
 }

@@ -21,7 +21,6 @@ import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
-import com.d9tilov.moneymanager.core.util.ANIMATION_DURATION
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.isTablet
 import com.d9tilov.moneymanager.core.util.show
@@ -78,11 +77,10 @@ class IncomeFragment :
         lifecycleScope.launch {
             viewModel.transactions.collectLatest {
                 transactionAdapter.submitData(it)
-                Handler(Looper.getMainLooper()).postDelayed({
-                    viewBinding.incomeTransactionLayoutInclude
-                        .incomeTransactionRvList
-                        .smoothScrollToPosition(0)
-                }, ANIMATION_DURATION)
+                Handler(Looper.getMainLooper()).postDelayed(
+                    { transactionRvList.smoothScrollToPosition(0) },
+                    SCROLL_DELAY
+                )
             }
         }
         lifecycleScope.launch {
