@@ -91,8 +91,8 @@ class ExpenseViewModel @Inject constructor(
                         category = category
                     )
                 )
+                viewModelScope.launch(Dispatchers.Main) { addTransactionEvent.call() }
             }
-            addTransactionEvent.call()
         } else {
             navigator?.showEmptySumError()
         }
