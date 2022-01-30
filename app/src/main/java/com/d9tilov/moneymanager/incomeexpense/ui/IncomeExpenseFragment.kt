@@ -54,8 +54,10 @@ class IncomeExpenseFragment :
         super.onViewCreated(view, savedInstanceState)
         incomeExpenseAdapter = IncomeExpenseAdapter(childFragmentManager, lifecycle)
         viewBinding.run {
-            commonGroup.add(incomeExpenseMainSum)
-            commonGroup.add(incomeExpenseKeyboardLayout.root)
+            if (commonGroup.isEmpty()) {
+                commonGroup.add(incomeExpenseMainSum)
+                commonGroup.add(incomeExpenseKeyboardLayout.root)
+            }
             incomeExpenseViewPager.adapter = incomeExpenseAdapter
             incomeExpenseViewPager.offscreenPageLimit = 2
             incomeExpenseViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -188,6 +190,11 @@ class IncomeExpenseFragment :
         } else {
             true
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        commonGroup.clear()
     }
 
     companion object {
