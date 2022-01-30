@@ -1,6 +1,8 @@
 package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
 import androidx.core.content.ContextCompat
@@ -21,6 +23,7 @@ import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DECIMAL_LENGTH
+import com.d9tilov.moneymanager.core.util.ANIMATION_DURATION
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.isTablet
 import com.d9tilov.moneymanager.core.util.show
@@ -86,10 +89,12 @@ class ExpenseFragment :
             }
         }
         lifecycleScope.launch {
-            viewModel.transactions.collectLatest { data -> transactionAdapter.submitData(data) }
-            viewBinding.expenseTransactionLayoutInclude
-                .expenseTransactionRvList
-                .scrollToPosition(0)
+            viewModel.transactions.collectLatest { data -> transactionAdapter.submitData(data)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    viewBinding.expenseTransactionLayoutInclude
+                        .expenseTransactionRvList
+                        .smoothScrollToPosition(0)
+                }, ANIMATION_DURATION)}
         }
         viewModel.spentInPeriod.observe(
             viewLifecycleOwner

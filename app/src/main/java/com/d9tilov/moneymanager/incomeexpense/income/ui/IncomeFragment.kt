@@ -1,6 +1,8 @@
 package com.d9tilov.moneymanager.incomeexpense.income.ui
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
 import androidx.fragment.app.viewModels
@@ -19,6 +21,7 @@ import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
+import com.d9tilov.moneymanager.core.util.ANIMATION_DURATION
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.isTablet
 import com.d9tilov.moneymanager.core.util.show
@@ -44,7 +47,7 @@ class IncomeFragment :
 
     override fun getNavigator() = this
     override val viewModel by viewModels<IncomeViewModel>()
-    override val snackBarAnchorView by lazy { viewBinding.incomeInfoLayoutInclude.incomeCategoryRvList }
+    override val snackBarAnchorView by lazy { categoryRvList }
 
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -73,10 +76,14 @@ class IncomeFragment :
             }
         }
         lifecycleScope.launch {
-            viewModel.transactions.collectLatest { transactionAdapter.submitData(it) }
-            viewBinding.incomeTransactionLayoutInclude
-                .incomeTransactionRvList
-                .scrollToPosition(0)
+            viewModel.transactions.collectLatest {
+                transactionAdapter.submitData(it)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    viewBinding.incomeTransactionLayoutInclude
+                        .incomeTransactionRvList
+                        .smoothScrollToPosition(0)
+                }, ANIMATION_DURATION)
+            }
         }
         lifecycleScope.launch {
             viewModel.earnedInPeriod.observe(
