@@ -66,7 +66,7 @@ fun LocalDateTime.getEndOfDay(): LocalDateTime =
     this.date.atStartOfDayIn(TimeZone.currentSystemDefault()).toLocal().date.atTime(23, 59, 59, 999)
 
 fun LocalDateTime.isSameDay(date: LocalDateTime): Boolean {
-    return this == date
+    return this.year == date.year && this.dayOfYear == date.dayOfYear
 }
 
 fun LocalDateTime.getStartDateOfFiscalPeriod(fiscalDay: Int): LocalDateTime {

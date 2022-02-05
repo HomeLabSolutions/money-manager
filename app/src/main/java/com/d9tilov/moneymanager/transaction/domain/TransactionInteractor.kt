@@ -4,7 +4,6 @@ import androidx.paging.PagingData
 import com.d9tilov.moneymanager.base.domain.Interactor
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.transaction.TransactionType
-import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
@@ -14,7 +13,7 @@ interface TransactionInteractor : Interactor {
 
     suspend fun addTransaction(transaction: Transaction)
     fun getTransactionById(id: Long): Flow<Transaction>
-    fun getTransactionsByType(type: TransactionType): Flow<PagingData<BaseTransaction>>
+    fun getTransactionsByType(type: TransactionType): Flow<PagingData<Transaction>>
     fun getTransactionsByTypeWithoutDates(
         from: LocalDateTime,
         to: LocalDateTime,

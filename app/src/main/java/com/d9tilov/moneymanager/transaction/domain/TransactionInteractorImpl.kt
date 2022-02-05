@@ -16,9 +16,6 @@ import com.d9tilov.moneymanager.core.util.getStartOfDay
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
 import com.d9tilov.moneymanager.transaction.TransactionType
-import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
-import com.d9tilov.moneymanager.transaction.data.entity.TransactionDateDataModel
-import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDataModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDomainModel
@@ -73,22 +70,16 @@ class TransactionInteractorImpl(
             }
     }
 
-    override fun getTransactionsByType(type: TransactionType): Flow<PagingData<BaseTransaction>> {
+    override fun getTransactionsByType(type: TransactionType): Flow<PagingData<Transaction>> {
         return categoryInteractor.getGroupedCategoriesByType(type)
             .flatMapLatest { categoryList ->
                 transactionRepo.getTransactionsByType(transactionType = type)
                     .map {
                         it.map { item ->
-                            when (item) {
-                                is TransactionDateDataModel -> item.toDomainModel()
-                                is TransactionDataModel -> {
-                                    val category =
-                                        categoryList.find { listItem -> item.categoryId == listItem.id }
-                                            ?: throw CategoryNotFoundException("Not found category with id: ${item.categoryId}")
-                                    item.toDomainModel(category)
-                                }
-                                else -> throw IllegalStateException("Unknown TransactionDataItem implementation: $item")
-                            }
+                            val category =
+                                categoryList.find { listItem -> item.categoryId == listItem.id }
+                                    ?: throw CategoryNotFoundException("Not found category with id: ${item.categoryId}")
+                            item.toDomainModel(category)
                         }
                     }
             }

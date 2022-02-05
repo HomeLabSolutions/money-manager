@@ -7,7 +7,6 @@ import com.d9tilov.moneymanager.core.util.getEndOfDay
 import com.d9tilov.moneymanager.core.util.getStartOfDay
 import com.d9tilov.moneymanager.core.util.toLocal
 import com.d9tilov.moneymanager.transaction.TransactionType
-import com.d9tilov.moneymanager.transaction.data.entity.TransactionBaseDataModel
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Instant
@@ -21,7 +20,7 @@ interface TransactionRepo {
         from: LocalDateTime = Instant.fromEpochMilliseconds(0).toLocal(),
         to: LocalDateTime = currentDateTime().getStartOfDay(),
         transactionType: TransactionType
-    ): Flow<PagingData<TransactionBaseDataModel>>
+    ): Flow<PagingData<TransactionDataModel>>
 
     fun getTransactionsByTypeWithoutDate(
         from: LocalDateTime = Instant.fromEpochMilliseconds(0).toLocal(),

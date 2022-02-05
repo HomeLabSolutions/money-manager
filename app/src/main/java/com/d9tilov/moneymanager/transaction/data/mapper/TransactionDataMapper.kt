@@ -30,7 +30,6 @@ fun TransactionDataModel.toDbModel(): TransactionDbModel =
         date,
         description,
         qrCode,
-        false,
         isRegular,
         inStatistics
     )

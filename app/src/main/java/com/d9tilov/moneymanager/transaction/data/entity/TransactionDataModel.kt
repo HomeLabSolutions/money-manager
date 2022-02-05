@@ -20,4 +20,4 @@ data class TransactionDataModel(
     val qrCode: String? = null,
     val isRegular: Boolean,
     val inStatistics: Boolean
-) : TransactionBaseDataModel
+)

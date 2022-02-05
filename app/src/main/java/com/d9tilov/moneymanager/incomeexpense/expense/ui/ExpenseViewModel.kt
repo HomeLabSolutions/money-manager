@@ -5,10 +5,13 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.insertSeparators
 import androidx.paging.map
 import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
+import com.d9tilov.moneymanager.core.util.getEndOfDay
+import com.d9tilov.moneymanager.core.util.isSameDay
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
@@ -44,10 +47,30 @@ class ExpenseViewModel @Inject constructor(
 
     override val transactions: Flow<PagingData<BaseTransaction>> =
         transactionInteractor.getTransactionsByType(TransactionType.EXPENSE)
-            .map {
+            .map { pagingData ->
                 var itemPosition = -1
                 var itemHeaderPosition = itemPosition
-                it.map { item ->
+                pagingData.insertSeparators { before: Transaction?, after: Transaction? ->
+                    if (before == null && after == null) {
+                        null
+                    } else if (before != null && after == null) {
+                        null
+                    } else if (before == null && after != null) {
+                        val header = TransactionHeader(
+                            after.date.getEndOfDay(),
+                            after.currencyCode
+                        )
+                        header
+                    } else if (before != null && after != null && before.date.isSameDay(after.date)) {
+                        null
+                    } else if (before != null && after != null && !before.date.isSameDay(after.date)) {
+                        val header = TransactionHeader(
+                            after.date.getEndOfDay(),
+                            after.currencyCode,
+                        )
+                        header
+                    } else null
+                }.map { item: BaseTransaction ->
                     var newItem: BaseTransaction = item
                     if (item is TransactionHeader) {
                         itemPosition++
@@ -93,8 +116,8 @@ class ExpenseViewModel @Inject constructor(
                             category = category
                         )
                     )
-                    addTransactionEvent.call()
                 }
+                addTransactionEvent.call()
             } else {
                 navigator?.showEmptySumError()
             }

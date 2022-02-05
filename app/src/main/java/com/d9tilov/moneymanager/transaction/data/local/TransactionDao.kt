@@ -22,7 +22,7 @@ interface TransactionDao {
         type: TransactionType
     ): PagingSource<Int, TransactionDbModel>
 
-    @Query("SELECT * FROM transactions WHERE clientId=:clientId AND type = :type AND isDate=0 AND isRegular=0 AND date >= :from AND date <= :to")
+    @Query("SELECT * FROM transactions WHERE clientId=:clientId AND type = :type AND isRegular=0 AND date >= :from AND date <= :to")
     fun getAllByTypeInPeriod(
         clientId: String,
         from: LocalDateTime,
@@ -39,15 +39,7 @@ interface TransactionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(transaction: TransactionDbModel)
 
-    @Query("SELECT count(*) FROM transactions WHERE clientId=:uid AND type=:type AND isDate=1 AND date >= :from AND date <= :to")
-    suspend fun getDateItemsCountInDay(
-        uid: String,
-        type: TransactionType,
-        from: LocalDateTime,
-        to: LocalDateTime
-    ): Int
-
-    @Query("SELECT count(*) FROM transactions WHERE clientId=:uid AND type=:type AND isDate=0 AND date >= :from AND date <= :to")
+    @Query("SELECT count(*) FROM transactions WHERE clientId=:uid AND type=:type AND date >= :from AND date <= :to")
     suspend fun getItemsCountInDay(uid: String, type: TransactionType, from: LocalDateTime, to: LocalDateTime): Int
 
     @Query("SELECT count(*) FROM transactions WHERE clientId=:uid AND currency=:code")
@@ -61,9 +53,6 @@ interface TransactionDao {
 
     @Query("DELETE FROM transactions WHERE rowId in(SELECT rowId from transactions WHERE clientId=:clientId AND categoryId=:categoryId LIMIT 1)")
     suspend fun deleteByCategoryId(clientId: String, categoryId: Long)
-
-    @Query("DELETE FROM transactions WHERE clientId=:clientId AND type=:type AND isDate=1 AND date >= :from AND date <= :to")
-    suspend fun deleteDate(clientId: String, type: TransactionType, from: LocalDateTime, to: LocalDateTime)
 
     @Query("DELETE FROM transactions WHERE clientId=:clientId")
     suspend fun clearAll(clientId: String)
