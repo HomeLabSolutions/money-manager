@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.math.BigDecimal
 import javax.inject.Inject
@@ -82,19 +83,21 @@ class ExpenseViewModel @Inject constructor(
     }
 
     override fun saveTransaction(category: Category, sum: BigDecimal) {
-        if (sum.signum() > 0) {
-            viewModelScope.launch(Dispatchers.IO) {
-                transactionInteractor.addTransaction(
-                    Transaction(
-                        type = TransactionType.EXPENSE,
-                        sum = sum,
-                        category = category
+        viewModelScope.launch(Dispatchers.Main) {
+            if (sum.signum() > 0) {
+                withContext(Dispatchers.IO) {
+                    transactionInteractor.addTransaction(
+                        Transaction(
+                            type = TransactionType.EXPENSE,
+                            sum = sum,
+                            category = category
+                        )
                     )
-                )
-                viewModelScope.launch(Dispatchers.Main) { addTransactionEvent.call() }
+                    addTransactionEvent.call()
+                }
+            } else {
+                navigator?.showEmptySumError()
             }
-        } else {
-            navigator?.showEmptySumError()
         }
     }
 

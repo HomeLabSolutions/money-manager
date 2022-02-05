@@ -12,12 +12,15 @@ import java.math.BigDecimal
 
 abstract class BaseIncomeExpenseViewModel<T : BaseIncomeExpenseNavigator> : BaseViewModel<T>() {
 
-    protected val addTransactionEvent = SingleLiveEvent<Any>()
+    protected val addTransactionEvent = SingleLiveEvent<Void>()
 
     abstract val categories: LiveData<List<Category>>
     abstract val transactions: Flow<PagingData<BaseTransaction>>
     abstract fun saveTransaction(category: Category, sum: BigDecimal)
 
-    fun openAllCategories() { navigator?.openCategoriesScreen() }
-    fun getTransactionEvent(): LiveData<Any> = addTransactionEvent
+    fun openAllCategories() {
+        navigator?.openCategoriesScreen()
+    }
+
+    fun addTransactionEvent(): LiveData<Void> = addTransactionEvent
 }

@@ -1,8 +1,6 @@
 package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
 import androidx.core.content.ContextCompat
@@ -28,7 +26,6 @@ import com.d9tilov.moneymanager.core.util.isTablet
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
 import com.d9tilov.moneymanager.incomeexpense.ui.BaseIncomeExpenseFragment
-import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
 import com.d9tilov.moneymanager.regular.PeriodicTransactionWorker
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -88,13 +85,7 @@ class ExpenseFragment :
             }
         }
         lifecycleScope.launch {
-            viewModel.transactions.collectLatest {
-                transactionAdapter.submitData(it)
-                Handler(Looper.getMainLooper()).postDelayed(
-                    { transactionRvList.smoothScrollToPosition(0) },
-                    SCROLL_DELAY
-                )
-            }
+            viewModel.transactions.collectLatest { transactionAdapter.submitData(it) }
         }
         viewModel.spentInPeriod.observe(
             viewLifecycleOwner
@@ -131,14 +122,6 @@ class ExpenseFragment :
                     ContextCompat.getColor(requireContext(), R.color.success_color) else
                     ContextCompat.getColor(requireContext(), R.color.error_color)
             )
-        }
-        viewModel.getTransactionEvent().observe(
-            viewLifecycleOwner
-        ) {
-            isTransactionDataEmpty = false
-            hideViewStub()
-            resetMainSum()
-            (requireParentFragment() as IncomeExpenseFragment).closeKeyboard()
         }
     }
 

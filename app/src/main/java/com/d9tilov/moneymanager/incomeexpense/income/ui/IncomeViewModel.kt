@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.math.BigDecimal
 import javax.inject.Inject
@@ -38,8 +39,9 @@ class IncomeViewModel @Inject constructor(
 
     val earnedInPeriod = transactionInteractor.getSumInFiscalPeriodInUsd(TransactionType.INCOME)
         .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler).asLiveData()
-    val earnedInPeriodApprox = transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.INCOME)
-        .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler).asLiveData()
+    val earnedInPeriodApprox =
+        transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.INCOME)
+            .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler).asLiveData()
 
     override val categories: LiveData<List<Category>> =
         categoryInteractor.getGroupedCategoriesByType(TransactionType.INCOME).asLiveData()
@@ -66,19 +68,21 @@ class IncomeViewModel @Inject constructor(
             .cachedIn(viewModelScope)
 
     override fun saveTransaction(category: Category, sum: BigDecimal) {
-        if (sum.signum() > 0) {
-            viewModelScope.launch(Dispatchers.IO) {
-                transactionInteractor.addTransaction(
-                    Transaction(
-                        type = TransactionType.INCOME,
-                        sum = sum,
-                        category = category
+        viewModelScope.launch(Dispatchers.Main) {
+            if (sum.signum() > 0) {
+                withContext(Dispatchers.IO) {
+                    transactionInteractor.addTransaction(
+                        Transaction(
+                            type = TransactionType.INCOME,
+                            sum = sum,
+                            category = category
+                        )
                     )
-                )
-                viewModelScope.launch(Dispatchers.Main) { addTransactionEvent.call() }
+                }
+                addTransactionEvent.call()
+            } else {
+                navigator?.showEmptySumError()
             }
-        } else {
-            navigator?.showEmptySumError()
         }
     }
 }

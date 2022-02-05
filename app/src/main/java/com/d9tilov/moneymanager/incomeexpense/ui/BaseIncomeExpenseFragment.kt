@@ -96,6 +96,15 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
                 IncomeExpenseFragment.ARG_TRANSACTION_CREATED
             )
         }
+        (viewModel as BaseIncomeExpenseViewModel<N>).addTransactionEvent().observe(
+            viewLifecycleOwner
+        ) {
+            isTransactionDataEmpty = false
+            hideViewStub()
+            resetMainSum()
+            (requireParentFragment() as IncomeExpenseFragment).closeKeyboard()
+            transactionRvList.scrollToPosition(0)
+        }
         lifecycleScope.launch {
             transactionAdapter
                 .loadStateFlow
@@ -214,6 +223,5 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
     companion object {
         const val SPAN_COUNT = 2
         const val TABLET_SPAN_COUNT = 1
-        const val SCROLL_DELAY = 600L
     }
 }

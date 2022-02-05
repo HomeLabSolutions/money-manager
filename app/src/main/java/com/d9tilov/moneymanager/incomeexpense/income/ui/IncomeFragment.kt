@@ -1,8 +1,6 @@
 package com.d9tilov.moneymanager.incomeexpense.income.ui
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
 import androidx.fragment.app.viewModels
@@ -26,7 +24,6 @@ import com.d9tilov.moneymanager.core.util.isTablet
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentIncomeBinding
 import com.d9tilov.moneymanager.incomeexpense.ui.BaseIncomeExpenseFragment
-import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.ui.callback.TransactionSwipeToDeleteCallback
@@ -75,13 +72,7 @@ class IncomeFragment :
             }
         }
         lifecycleScope.launch {
-            viewModel.transactions.collectLatest {
-                transactionAdapter.submitData(it)
-                Handler(Looper.getMainLooper()).postDelayed(
-                    { transactionRvList.smoothScrollToPosition(0) },
-                    SCROLL_DELAY
-                )
-            }
+            viewModel.transactions.collectLatest { transactionAdapter.submitData(it) }
         }
         lifecycleScope.launch {
             viewModel.earnedInPeriod.observe(
@@ -95,14 +86,6 @@ class IncomeFragment :
             viewModel.earnedInPeriodApprox.observe(
                 viewLifecycleOwner
             ) { sum -> viewBinding.incomeInfoLayoutInclude.incomePeriodInfoApproxSum.setValue(sum) }
-        }
-        viewModel.getTransactionEvent().observe(
-            viewLifecycleOwner
-        ) {
-            isTransactionDataEmpty = false
-            hideViewStub()
-            resetMainSum()
-            (requireParentFragment() as IncomeExpenseFragment).closeKeyboard()
         }
     }
 
