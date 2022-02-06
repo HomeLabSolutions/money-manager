@@ -3,9 +3,11 @@ package com.d9tilov.moneymanager.incomeexpense.income.ui
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -114,11 +116,19 @@ class IncomeFragment :
 
     override fun initTransactionsRecyclerView() {
         viewBinding.incomeTransactionLayoutInclude.run {
-            incomeTransactionRvList.layoutManager =
-                LinearLayoutManager(requireContext())
+            val layoutManager = LinearLayoutManager(requireContext())
+            incomeTransactionRvList.layoutManager = layoutManager
+            incomeTransactionRvList.layoutManager = layoutManager
             incomeTransactionRvList.adapter = transactionAdapter
             val itemDecoration = StickyHeaderItemDecorator(transactionAdapter)
             itemDecoration.attachToRecyclerView(incomeTransactionRvList)
+            val dividerItemDecoration = DividerItemDecoration(
+                incomeTransactionRvList.context,
+                layoutManager.orientation
+            )
+            val dividerDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.rv_divider)
+            dividerDrawable?.let { dividerItemDecoration.setDrawable(it) }
+            incomeTransactionRvList.addItemDecoration(dividerItemDecoration)
             ItemTouchHelper(object : TransactionSwipeToDeleteCallback(requireContext()) {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     transactionAdapter.deleteItem(viewHolder.bindingAdapterPosition)

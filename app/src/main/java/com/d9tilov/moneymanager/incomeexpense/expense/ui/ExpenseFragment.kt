@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -150,10 +151,18 @@ class ExpenseFragment :
 
     override fun initTransactionsRecyclerView() {
         viewBinding.expenseTransactionLayoutInclude.run {
-            expenseTransactionRvList.layoutManager = LinearLayoutManager(requireContext())
+            val layoutManager = LinearLayoutManager(requireContext())
+            expenseTransactionRvList.layoutManager = layoutManager
             expenseTransactionRvList.adapter = transactionAdapter
             val itemDecoration = StickyHeaderItemDecorator(transactionAdapter)
             itemDecoration.attachToRecyclerView(expenseTransactionRvList)
+            val dividerItemDecoration = DividerItemDecoration(
+                expenseTransactionRvList.context,
+                layoutManager.orientation
+            )
+            val dividerDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.rv_divider)
+            dividerDrawable?.let { dividerItemDecoration.setDrawable(it) }
+            expenseTransactionRvList.addItemDecoration(dividerItemDecoration)
             ItemTouchHelper(object : TransactionSwipeToDeleteCallback(requireContext()) {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     transactionAdapter.deleteItem(viewHolder.bindingAdapterPosition)

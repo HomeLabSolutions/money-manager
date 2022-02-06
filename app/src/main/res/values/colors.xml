@@ -35,6 +35,8 @@
     <color name="error_color">#8F3D43</color>
     <color name="success_color">#00894d</color>
 
+    <color name="transaction_divider_color">#3d3d3d</color>
+
     <color name="category_white">#ffffff</color>
     <color name="category_black">#000000</color>
     <color name="category_red">#ff3333</color>
