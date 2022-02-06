@@ -203,6 +203,7 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
     }
 
     protected fun getSum(): BigDecimal = (requireParentFragment() as IncomeExpenseFragment).getSum()
+    protected fun getCurrencyCode(): String = (requireParentFragment() as IncomeExpenseFragment).getCurrencyCode()
 
     protected fun resetMainSum() {
         (requireParentFragment() as IncomeExpenseFragment).resetSum()

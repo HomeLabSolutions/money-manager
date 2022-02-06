@@ -49,7 +49,7 @@ class IncomeViewModel @Inject constructor(
     override val categories: LiveData<List<Category>> =
         categoryInteractor.getGroupedCategoriesByType(TransactionType.INCOME).asLiveData()
 
-    override fun saveTransaction(category: Category, sum: BigDecimal) {
+    override fun saveTransaction(category: Category, sum: BigDecimal, currencyCode: String) {
         viewModelScope.launch(Dispatchers.Main) {
             if (sum.signum() > 0) {
                 withContext(Dispatchers.IO) {
@@ -57,7 +57,8 @@ class IncomeViewModel @Inject constructor(
                         Transaction(
                             type = TransactionType.INCOME,
                             sum = sum,
-                            category = category
+                            category = category,
+                            currencyCode = currencyCode
                         )
                     )
                 }

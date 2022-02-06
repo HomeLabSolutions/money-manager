@@ -105,7 +105,7 @@ class ExpenseViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO + updateCurrencyExceptionHandler) { currencyInteractor.updateCurrencyRates() }
     }
 
-    override fun saveTransaction(category: Category, sum: BigDecimal) {
+    override fun saveTransaction(category: Category, sum: BigDecimal, currencyCode: String) {
         viewModelScope.launch(Dispatchers.Main) {
             if (sum.signum() > 0) {
                 withContext(Dispatchers.IO) {
@@ -113,7 +113,8 @@ class ExpenseViewModel @Inject constructor(
                         Transaction(
                             type = TransactionType.EXPENSE,
                             sum = sum,
-                            category = category
+                            category = category,
+                            currencyCode = currencyCode
                         )
                     )
                 }

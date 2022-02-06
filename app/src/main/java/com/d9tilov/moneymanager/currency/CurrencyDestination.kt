@@ -10,6 +10,7 @@ sealed class CurrencyDestination(open val name: String) : Parcelable {
         private const val FROM_PROFILE_SCREEN_CURRENT = "profile_current"
         private const val FROM_EDIT_TRANSACTION_SCREEN = "edit_transaction"
         private const val FROM_EDIT_REGULAR_TRANSACTION_SCREEN = "edit_regular_transaction"
+        private const val FROM_INCOME_EXPENSE_SCREEN = "income_expense"
     }
 
     @Parcelize
@@ -23,4 +24,7 @@ sealed class CurrencyDestination(open val name: String) : Parcelable {
 
     @Parcelize
     object EDIT_REGULAR_TRANSACTION_SCREEN : CurrencyDestination(FROM_EDIT_REGULAR_TRANSACTION_SCREEN)
+
+    @Parcelize
+    object INCOME_EXPENSE_SCREEN : CurrencyDestination(FROM_INCOME_EXPENSE_SCREEN)
 }

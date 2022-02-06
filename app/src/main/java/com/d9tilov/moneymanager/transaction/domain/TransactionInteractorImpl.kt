@@ -42,7 +42,7 @@ class TransactionInteractorImpl(
 ) : TransactionInteractor {
 
     override suspend fun addTransaction(transaction: Transaction) {
-        val currencyCode = userInteractor.getCurrentCurrency()
+        val currencyCode = transaction.currencyCode
         val usdSumValue = currencyInteractor.toUsd(transaction.sum, currencyCode)
         val newTransaction = transaction.copy(currencyCode = currencyCode, usdSum = usdSumValue).toDataModel()
         transactionRepo.addTransaction(newTransaction)

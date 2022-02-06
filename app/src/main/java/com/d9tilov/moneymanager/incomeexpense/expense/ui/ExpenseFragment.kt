@@ -195,7 +195,7 @@ class ExpenseFragment :
 
     override fun saveTransaction(category: Category) {
         if (category.type == TransactionType.EXPENSE) {
-            viewModel.saveTransaction(category, getSum())
+            viewModel.saveTransaction(category, getSum(), getCurrencyCode())
         }
     }
 

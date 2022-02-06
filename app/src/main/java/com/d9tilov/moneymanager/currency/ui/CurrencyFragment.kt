@@ -62,7 +62,9 @@ class CurrencyFragment :
                     viewModel.updateCurrentCurrency(item)
                     findNavController().popBackStack()
                 }
-                CurrencyDestination.EDIT_TRANSACTION_SCREEN, CurrencyDestination.EDIT_REGULAR_TRANSACTION_SCREEN -> {
+                CurrencyDestination.EDIT_TRANSACTION_SCREEN,
+                CurrencyDestination.EDIT_REGULAR_TRANSACTION_SCREEN,
+                CurrencyDestination.INCOME_EXPENSE_SCREEN -> {
                     findNavController().previousBackStackEntry?.savedStateHandle?.set(
                         ARG_CURRENCY,
                         item

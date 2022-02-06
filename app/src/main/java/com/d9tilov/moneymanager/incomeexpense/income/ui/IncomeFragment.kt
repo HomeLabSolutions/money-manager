@@ -160,7 +160,7 @@ class IncomeFragment :
 
     override fun saveTransaction(category: Category) {
         if (category.type == TransactionType.INCOME) {
-            viewModel.saveTransaction(category, getSum())
+            viewModel.saveTransaction(category, getSum(), getCurrencyCode())
         }
     }
 

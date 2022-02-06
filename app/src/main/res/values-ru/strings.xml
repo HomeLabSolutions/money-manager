@@ -45,7 +45,7 @@
     <string name="default_category_income_sale">Продажи</string>
     <string name="default_category_income_part_time_job">Подработка</string>
 
-    <string name="income_expense_empty_sum_error">Введите сумму</string>
+    <string name="income_expense_empty_sum_error">Сумма слишком маленькая</string>
 
     <string name="category_all">Все\nстатьи</string>
 

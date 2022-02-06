@@ -16,6 +16,9 @@ import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideWithAnimation
 import com.d9tilov.moneymanager.core.util.showWithAnimation
+import com.d9tilov.moneymanager.currency.CurrencyDestination
+import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
+import com.d9tilov.moneymanager.currency.ui.CurrencyFragment
 import com.d9tilov.moneymanager.databinding.FragmentIncomeExpenseBinding
 import com.d9tilov.moneymanager.incomeexpense.ui.adapter.IncomeExpenseAdapter
 import com.d9tilov.moneymanager.incomeexpense.ui.adapter.IncomeExpenseAdapter.Companion.TAB_COUNT
@@ -102,6 +105,27 @@ class IncomeExpenseFragment :
                     }
                 }
             }
+            incomeExpenseMainSum.setOnClickListener {
+                val action =
+                    IncomeExpenseFragmentDirections.toCurrencyDest(
+                        CurrencyDestination.INCOME_EXPENSE_SCREEN,
+                        incomeExpenseMainSum.getCurrencyCode()
+                    )
+                findNavController().navigate(action)
+            }
+        }
+        viewModel.getCurrencyCode().observe(
+            viewLifecycleOwner
+        ) { viewBinding.incomeExpenseMainSum.setCurrencyCode(it) }
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<DomainCurrency>(
+            CurrencyFragment.ARG_CURRENCY
+        )?.observe(
+            viewLifecycleOwner
+        ) {
+            viewModel.setCurrencyCode(it.code)
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<DomainCurrency>(
+                CurrencyFragment.ARG_CURRENCY
+            )
         }
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
             TransactionRemoveDialog.ARG_UNDO_REMOVE_LAYOUT_DISMISS
@@ -167,9 +191,12 @@ class IncomeExpenseFragment :
     fun isKeyboardOpened(): Boolean = isKeyboardOpen
 
     fun getSum(): BigDecimal = viewBinding.incomeExpenseMainSum.getValue()
+    fun getCurrencyCode(): String = viewBinding.incomeExpenseMainSum.getCurrencyCode()
 
     fun resetSum() {
         viewBinding.incomeExpenseMainSum.setValue(BigDecimal.ZERO)
+        viewModel.setDefaultCurrencyCode()
+        onHandleInput("")
     }
 
     private fun getFragmentsInViewPager(): List<Fragment> {

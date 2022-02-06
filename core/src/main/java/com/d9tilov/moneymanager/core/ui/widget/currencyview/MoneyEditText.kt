@@ -7,7 +7,6 @@ import android.text.Spanned
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
 import com.d9tilov.moneymanager.core.R
-import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DECIMAL_LENGTH
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DECIMAL_SEPARATOR
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DEFAULT_DECIMAL_SEPARATOR
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.FORMAT_STRING

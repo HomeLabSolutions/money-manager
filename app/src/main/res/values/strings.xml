@@ -44,7 +44,7 @@
     <string name="default_category_income_sale">Sale</string>
     <string name="default_category_income_part_time_job">Part-time job</string>
 
-    <string name="income_expense_empty_sum_error">Enter the amount</string>
+    <string name="income_expense_empty_sum_error">The amount is too small</string>
 
     <string name="category_all">All\nitems</string>
 

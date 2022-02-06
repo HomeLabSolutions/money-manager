@@ -11,9 +11,11 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.setPadding
 import androidx.core.widget.TextViewCompat
 import com.d9tilov.moneymanager.core.R
 import com.d9tilov.moneymanager.core.constants.DataConstants
+import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENCE_CURRENT_CURRENCY_SYMBOL
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.STORE_NAME
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DECIMAL_LENGTH
@@ -52,9 +54,10 @@ class CurrencyView @JvmOverloads constructor(
         set(value) = moneyEditText.setText(formatInputSum(value))
     private var signText = ""
         set(value) {
-            signTextView.text = value
             field = value
+            signTextView.text = value
         }
+    private var currencyCode = DEFAULT_CURRENCY_CODE
     private var prefixText = ""
         set(value) {
             field = value
@@ -147,7 +150,7 @@ class CurrencyView @JvmOverloads constructor(
             gravity = currencyGravity
             text = prefixText
             includeFontPadding = false
-            setPadding(0, 0, 0, 0)
+            setPadding(0)
             addView(this)
         }
     }
@@ -174,7 +177,7 @@ class CurrencyView @JvmOverloads constructor(
             isEnabled = enableInput
             isFocusable = enableInput
             includeFontPadding = false
-            setPadding(0, 0, 0, 0)
+            setPadding(0)
             addView(this)
         }
     }
@@ -197,7 +200,7 @@ class CurrencyView @JvmOverloads constructor(
             text = signText
             gravity = currencyGravity
             includeFontPadding = false
-            setPadding(0, 0, 0, 0)
+            setPadding(0)
             addView(this)
         }
     }
@@ -339,16 +342,22 @@ class CurrencyView @JvmOverloads constructor(
     fun setValue(value: BigDecimal, currencyCode: String = baseCurrencySymbol) {
         this.sum = value
         this.signText = getSymbolByCode(currencyCode)
+        this.currencyCode = currencyCode
     }
 
-    fun setColor(color:Int) {
+    fun setCurrencyCode(currencyCode: String = baseCurrencySymbol) {
+        this.signText = getSymbolByCode(currencyCode)
+        this.currencyCode = currencyCode
+    }
+
+    fun setColor(color: Int) {
         moneyEditText.setTextColor(color)
         signTextView.setTextColor(color)
     }
 
-    fun getValue(): BigDecimal {
-        return moneyEditText.text.toString().toBigDecimal
-    }
+    fun getValue(): BigDecimal = moneyEditText.text.toString().toBigDecimal
+
+    fun getCurrencyCode(): String = currencyCode
 
     override fun onInterceptTouchEvent(ev: MotionEvent?) = !enableInput
 
