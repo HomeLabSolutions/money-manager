@@ -11,8 +11,10 @@ import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.atTime
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.minus
+import kotlinx.datetime.offsetAt
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
+import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toLocalDateTime
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -43,27 +45,34 @@ fun LocalDateTime.toBudgetCreatedDate(): String {
     return SimpleDateFormat(RECENT_DATE_FORMAT, Locale.getDefault()).format(Date(this.toMillis()))
 }
 
-fun currentDateTime(): LocalDateTime = Clock.System.now().toLocal()
-fun currentDate(): LocalDate = Clock.System.now().toLocal().date
+fun currentDateTime(): LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+fun currentDate(): LocalDate = currentDateTime().date
+fun LocalDateTime.toUTC(): LocalDateTime = Instant.fromEpochMilliseconds(this.toMillis()).toLocalDateTime(
+    TimeZone.UTC)
+fun Instant.toLocal() = this.toLocalDateTime(TimeZone.currentSystemDefault())
 
-fun Instant.toLocal(): LocalDateTime = this.toLocalDateTime(TimeZone.currentSystemDefault())
 fun LocalDateTime.toMillis(): Long =
     this.toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
 
-fun Long.toLocalDateTime(): LocalDateTime = Instant.fromEpochMilliseconds(this).toLocal()
-fun Long.toLocalDate(): LocalDate = Instant.fromEpochMilliseconds(this).toLocal().date
+fun Long.toLocalDateTime(): LocalDateTime = Instant.fromEpochMilliseconds(this).toLocalDateTime(TimeZone.currentSystemDefault())
+fun Long.fromUTCToLocalDateTime(): LocalDateTime {
+    val timeZone = TimeZone.currentSystemDefault()
+    val newMillis = this + timeZone.offsetAt(Instant.fromEpochMilliseconds(this)).totalSeconds * 1000L
+    return Instant.fromEpochMilliseconds(newMillis).toLocal()
+}
+fun Long.toLocalDate(): LocalDate = Instant.fromEpochMilliseconds(this).toLocalDateTime(TimeZone.currentSystemDefault()).date
 
 fun LocalDate.getStartOfDay(): LocalDateTime =
-    atStartOfDayIn(TimeZone.currentSystemDefault()).toLocal()
+    atStartOfDayIn(TimeZone.currentSystemDefault()).toLocalDateTime(TimeZone.currentSystemDefault())
 
 fun LocalDateTime.getStartOfDay(): LocalDateTime =
-    this.date.atStartOfDayIn(TimeZone.currentSystemDefault()).toLocal()
+    this.date.atStartOfDayIn(TimeZone.currentSystemDefault()).toLocalDateTime(TimeZone.currentSystemDefault())
 
 fun LocalDate.getEndOfDay(): LocalDateTime =
-    this.atStartOfDayIn(TimeZone.currentSystemDefault()).toLocal().date.atTime(23, 59, 59, 999)
+    this.atStartOfDayIn(TimeZone.currentSystemDefault()).toLocalDateTime(TimeZone.currentSystemDefault()).date.atTime(23, 59, 59, 999)
 
 fun LocalDateTime.getEndOfDay(): LocalDateTime =
-    this.date.atStartOfDayIn(TimeZone.currentSystemDefault()).toLocal().date.atTime(23, 59, 59, 999)
+    this.date.atStartOfDayIn(TimeZone.currentSystemDefault()).toLocalDateTime(TimeZone.currentSystemDefault()).date.atTime(23, 59, 59, 999)
 
 fun LocalDateTime.isSameDay(date: LocalDateTime): Boolean {
     return this.year == date.year && this.dayOfYear == date.dayOfYear

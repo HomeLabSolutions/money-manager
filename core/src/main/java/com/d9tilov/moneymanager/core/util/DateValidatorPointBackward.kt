@@ -49,7 +49,7 @@ class DateValidatorPointBackward private constructor(private val point: Long) : 
          */
         @NonNull
         fun now(): DateValidatorPointBackward {
-            return before(currentDateTime().toMillis())
+            return before(currentDateTime().getEndOfDay().toMillis())
         }
 
         /** Part of [android.os.Parcelable] requirements. Do not use.  */

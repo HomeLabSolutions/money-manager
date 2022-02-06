@@ -22,6 +22,7 @@ import com.d9tilov.moneymanager.core.util.currentDateTime
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.core.util.toLocalDateTime
 import com.d9tilov.moneymanager.core.util.toMillis
+import com.d9tilov.moneymanager.core.util.toUTC
 import com.d9tilov.moneymanager.currency.CurrencyDestination
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.ui.CurrencyFragment.Companion.ARG_CURRENCY
@@ -34,9 +35,12 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.datetime.Clock
+import kotlinx.datetime.toLocalDateTime
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -103,6 +107,8 @@ class EditTransactionFragment : EditTransactionNavigator,
                 )
             }
             editTransactionDate.setOnClickListener {
+                val timezone = TimeZone.getDefault()
+                val time = transaction.date.toMillis()
                 val picker = MaterialDatePicker.Builder.datePicker()
                     .setCalendarConstraints(
                         CalendarConstraints.Builder()
@@ -110,7 +116,7 @@ class EditTransactionFragment : EditTransactionNavigator,
                             .setValidator(DateValidatorPointBackward.now())
                             .build()
                     )
-                    .setSelection(transaction.date.toMillis())
+                    .setSelection(time + timezone.getOffset(time))
                     .build()
                 picker.addOnPositiveButtonClickListener { calendarDate ->
                     val date = calendarDate.toLocalDateTime()
