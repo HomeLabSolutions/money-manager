@@ -28,7 +28,6 @@ import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
 import com.d9tilov.moneymanager.incomeexpense.ui.BaseIncomeExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
-import com.d9tilov.moneymanager.regular.PeriodicTransactionWorker
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.ui.callback.TransactionSwipeToDeleteCallback
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -76,13 +75,6 @@ class ExpenseFragment :
                     )
                 )
                 categoryAdapter.updateItems(sortedCategories)
-            }
-        }
-        viewModel.regularTransactions.observe(
-            viewLifecycleOwner
-        ) {
-            for (transaction in it) {
-                PeriodicTransactionWorker.startPeriodicJob(requireContext(), transaction)
             }
         }
         lifecycleScope.launch {

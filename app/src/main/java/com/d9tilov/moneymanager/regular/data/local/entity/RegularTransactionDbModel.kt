@@ -30,7 +30,7 @@ data class RegularTransactionDbModel(
     @ColumnInfo(name = "categoryId") val categoryId: Long,
     @ColumnInfo(name = "currency") val currency: String,
     @ColumnInfo(name = "createdDate") val createdDate: LocalDateTime,
-    @ColumnInfo(name = "startDate") val startDate: LocalDateTime,
+    @ColumnInfo(name = "nextExecutionDate") val nextExecutionDate: LocalDateTime,
     @ColumnInfo(name = "periodType") val periodType: PeriodType,
     @ColumnInfo(name = "dayOfWeek") val dayOfWeek: Int,
     @ColumnInfo(name = "description") val description: String,

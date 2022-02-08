@@ -5,7 +5,6 @@ import com.d9tilov.moneymanager.period.PeriodType
 import com.d9tilov.moneymanager.period.PeriodType.Companion.DAY_NAME
 import com.d9tilov.moneymanager.period.PeriodType.Companion.MONTH_NAME
 import com.d9tilov.moneymanager.period.PeriodType.Companion.WEEK_NAME
-import com.d9tilov.moneymanager.period.PeriodType.Companion.YEAR_NAME
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.TransactionType.Companion.EXPENSE_TRANSACTION_NAME
 import com.d9tilov.moneymanager.transaction.TransactionType.Companion.INCOME_TRANSACTION_NAME
@@ -38,7 +37,6 @@ object ModelTypeConverter {
     @JvmStatic
     fun toPeriodType(value: String): PeriodType {
         return when (value) {
-            YEAR_NAME -> PeriodType.YEAR
             MONTH_NAME -> PeriodType.MONTH
             WEEK_NAME -> PeriodType.WEEK
             DAY_NAME -> PeriodType.DAY

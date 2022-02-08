@@ -36,7 +36,7 @@ class PeriodicBackupWorker @AssistedInject constructor(
 
     companion object {
         private const val LOGIN_WORK_TAG = "periodic_backup"
-        private const val PERIOD_WORK_IN_HOURS = 20L
+        private const val PERIOD_WORK_IN_HOURS = 24L
 
         fun startPeriodicJob(context: Context) {
             Timber.tag(App.TAG).d("Start backup periodic job")

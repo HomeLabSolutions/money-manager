@@ -12,38 +12,27 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.core.util.getEndOfDay
 import com.d9tilov.moneymanager.core.util.isSameDay
-import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
-import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionHeader
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.math.BigDecimal
 import javax.inject.Inject
 
 @HiltViewModel
 class ExpenseViewModel @Inject constructor(
     categoryInteractor: CategoryInteractor,
-    regularTransactionInteractor: RegularTransactionInteractor,
-    private val currencyInteractor: CurrencyInteractor,
     private val transactionInteractor: TransactionInteractor
 ) : BaseIncomeExpenseViewModel<ExpenseNavigator>() {
-
-    private val updateCurrencyExceptionHandler = CoroutineExceptionHandler { _, exception ->
-        Timber.d("Unable to update currency: $exception")
-    }
 
     override val transactions: Flow<PagingData<BaseTransaction>> =
         transactionInteractor.getTransactionsByType(TransactionType.EXPENSE)
@@ -86,24 +75,17 @@ class ExpenseViewModel @Inject constructor(
             }
             .cachedIn(viewModelScope).flowOn(Dispatchers.IO)
     val ableToSpendToday = transactionInteractor.ableToSpendToday()
-        .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler).asLiveData()
+        .flowOn(Dispatchers.IO).asLiveData()
     val spentToday = transactionInteractor.getSumTodayInUsd(TransactionType.EXPENSE)
-        .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler).asLiveData()
+        .flowOn(Dispatchers.IO).asLiveData()
     val spentInPeriod = transactionInteractor.getSumInFiscalPeriodInUsd(TransactionType.EXPENSE)
-        .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler).asLiveData()
+        .flowOn(Dispatchers.IO).asLiveData()
     val spentTodayApprox = transactionInteractor.getApproxSumTodayCurrentCurrency(TransactionType.EXPENSE)
-        .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler).asLiveData()
+        .flowOn(Dispatchers.IO).asLiveData()
     val spentInPeriodApprox = transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.EXPENSE)
-        .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler).asLiveData()
-    val regularTransactions = regularTransactionInteractor.getAll(TransactionType.INCOME)
-        .zip(regularTransactionInteractor.getAll(TransactionType.EXPENSE)) { income, expense -> income + expense }
-        .asLiveData()
+        .flowOn(Dispatchers.IO).asLiveData()
     override val categories: LiveData<List<Category>> =
         categoryInteractor.getGroupedCategoriesByType(TransactionType.EXPENSE).asLiveData()
-
-    init {
-        viewModelScope.launch(Dispatchers.IO + updateCurrencyExceptionHandler) { currencyInteractor.updateCurrencyRates() }
-    }
 
     override fun saveTransaction(category: Category, sum: BigDecimal, currencyCode: String) {
         viewModelScope.launch(Dispatchers.Main) {

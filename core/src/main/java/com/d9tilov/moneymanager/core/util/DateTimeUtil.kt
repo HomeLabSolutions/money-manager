@@ -7,14 +7,12 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.atTime
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.minus
 import kotlinx.datetime.offsetAt
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
-import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toLocalDateTime
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -62,17 +60,13 @@ fun Long.fromUTCToLocalDateTime(): LocalDateTime {
 }
 fun Long.toLocalDate(): LocalDate = Instant.fromEpochMilliseconds(this).toLocalDateTime(TimeZone.currentSystemDefault()).date
 
-fun LocalDate.getStartOfDay(): LocalDateTime =
-    atStartOfDayIn(TimeZone.currentSystemDefault()).toLocalDateTime(TimeZone.currentSystemDefault())
+fun LocalDate.getStartOfDay(): LocalDateTime = atTime(0, 0, 0, 0)
 
-fun LocalDateTime.getStartOfDay(): LocalDateTime =
-    this.date.atStartOfDayIn(TimeZone.currentSystemDefault()).toLocalDateTime(TimeZone.currentSystemDefault())
+fun LocalDateTime.getStartOfDay(): LocalDateTime = date.atTime(0, 0, 0, 0)
 
-fun LocalDate.getEndOfDay(): LocalDateTime =
-    this.atStartOfDayIn(TimeZone.currentSystemDefault()).toLocalDateTime(TimeZone.currentSystemDefault()).date.atTime(23, 59, 59, 999)
+fun LocalDate.getEndOfDay(): LocalDateTime = atTime(23, 59, 59, 999)
 
-fun LocalDateTime.getEndOfDay(): LocalDateTime =
-    this.date.atStartOfDayIn(TimeZone.currentSystemDefault()).toLocalDateTime(TimeZone.currentSystemDefault()).date.atTime(23, 59, 59, 999)
+fun LocalDateTime.getEndOfDay(): LocalDateTime = date.atTime(23, 59, 59, 999)
 
 fun LocalDateTime.isSameDay(date: LocalDateTime): Boolean {
     return this.year == date.year && this.dayOfYear == date.dayOfYear
@@ -102,7 +96,8 @@ fun LocalDateTime.getEndDateOfFiscalPeriod(fiscalDay: Int): LocalDateTime {
 }
 
 fun LocalDateTime.countDaysRemainingNextFiscalDate(fiscalDay: Int): Int {
-    val fiscalDateTime = LocalDate(this.year, this.month, fiscalDay).plus(1, DateTimeUnit.MONTH)
-    return this.date.daysUntil(fiscalDateTime)
+    val fiscalDate = LocalDate(this.year, this.month, fiscalDay)
+    return if (this.date < fiscalDate) this.date.daysUntil(fiscalDate)
+    else this.date.daysUntil(fiscalDate.plus(1, DateTimeUnit.MONTH))
 }
 

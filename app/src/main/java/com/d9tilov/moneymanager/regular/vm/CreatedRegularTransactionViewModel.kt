@@ -34,7 +34,6 @@ class CreatedRegularTransactionViewModel @AssistedInject constructor(
         }
     }
 
-    //                        dayOfWeek = if (_periodType.value != PeriodType.WEEK) 0 else _weekDaysSelected.value!!
     @AssistedFactory
     interface CreatedRegularTransactionViewModelFactory {
         fun create(handle: SavedStateHandle): CreatedRegularTransactionViewModel

@@ -22,11 +22,12 @@ interface TransactionRepo {
         transactionType: TransactionType
     ): Flow<PagingData<TransactionDataModel>>
 
-    fun getTransactionsByTypeWithoutDate(
+    fun getTransactionsByTypeInPeriod(
         from: LocalDateTime = Instant.fromEpochMilliseconds(0).toLocal(),
         to: LocalDateTime = currentDateTime().getEndOfDay(),
         transactionType: TransactionType,
-        onlyInStatistics: Boolean = false
+        onlyInStatistics: Boolean = true,
+        withRegular: Boolean = true
     ): Flow<List<TransactionDataModel>>
 
     fun getByCategory(category: Category): Flow<List<TransactionDataModel>>

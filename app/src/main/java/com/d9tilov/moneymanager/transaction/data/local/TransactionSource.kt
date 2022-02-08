@@ -11,17 +11,18 @@ interface TransactionSource {
 
     suspend fun insert(transaction: TransactionDataModel)
     fun getById(id: Long): Flow<TransactionDataModel>
-    fun getAllByType(
+    fun getAllByTypePaging(
         from: LocalDateTime,
         to: LocalDateTime,
         transactionType: TransactionType
     ): Flow<PagingData<TransactionDataModel>>
 
-    fun getAllByTypeWithoutDates(
+    fun getAllByTypeInPeriod(
         from: LocalDateTime,
         to: LocalDateTime,
         transactionType: TransactionType,
-        onlyInStatistics: Boolean
+        onlyInStatistics: Boolean,
+        withRegular: Boolean
     ): Flow<List<TransactionDataModel>>
 
     fun getByCategory(category: Category): Flow<List<TransactionDataModel>>

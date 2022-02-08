@@ -97,17 +97,6 @@ class PeriodicTransactionWorker @AssistedInject constructor(
                         )
                     listOfBuilders.add(monthlyBuilder)
                 }
-                PeriodType.YEAR -> {
-                    val monthlyBuilder = PeriodicWorkRequest.Builder(
-                        PeriodicTransactionWorker::class.java,
-                        365 * 24 * 3600 * 1000L, TimeUnit.MILLISECONDS
-                    )
-                        .setInitialDelay(
-                            getInitialYearDelayInMillis(regularTransaction.startDate.dayOfYear),
-                            TimeUnit.MILLISECONDS
-                        )
-                    listOfBuilders.add(monthlyBuilder)
-                }
             }
             for (build in listOfBuilders) {
                 val tag = createTag(regularTransaction)

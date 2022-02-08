@@ -99,23 +99,29 @@
     <string name="regular_transaction_auto_add">Добавлять\nавтоматически</string>
     <string name="regular_transaction_choose_category">Выберите категорию</string>
     <string name="regular_transaction_repeat_title">Повторять раз в</string>
-    <string name="regular_transaction_repeat_starts_title">Начиная с</string>
-    <string name="regular_transaction_repeat_monday">пн</string>
-    <string name="regular_transaction_repeat_tuesday">вт</string>
-    <string name="regular_transaction_repeat_wednesday">ср</string>
-    <string name="regular_transaction_repeat_thursday">чт</string>
-    <string name="regular_transaction_repeat_friday">пт</string>
-    <string name="regular_transaction_repeat_saturday">сб</string>
-    <string name="regular_transaction_repeat_sunday">вс</string>
+    <string name="regular_transaction_repeat_next_date_title">Выполнится</string>
+    <string name="regular_transaction_repeat_monday_short">Пн</string>
+    <string name="regular_transaction_repeat_monday">понедельник</string>
+    <string name="regular_transaction_repeat_tuesday_short">Вт</string>
+    <string name="regular_transaction_repeat_tuesday">вторник</string>
+    <string name="regular_transaction_repeat_wednesday_short">Ср</string>
+    <string name="regular_transaction_repeat_wednesday">среда</string>
+    <string name="regular_transaction_repeat_thursday_short">Чт</string>
+    <string name="regular_transaction_repeat_thursday">четверг</string>
+    <string name="regular_transaction_repeat_friday_short">Пт</string>
+    <string name="regular_transaction_repeat_friday">пятница</string>
+    <string name="regular_transaction_repeat_saturday_short">Сб</string>
+    <string name="regular_transaction_repeat_saturday">суббота</string>
+    <string name="regular_transaction_repeat_sunday_short">Вс</string>
+    <string name="regular_transaction_repeat_sunday">воскресенье</string>
     <string name="regular_transaction_repeat_period_day">каждый день</string>
-    <string name="regular_transaction_repeat_period_week">повторять в:\n%1$s</string>
+    <string name="regular_transaction_repeat_period_week">повторять в: %1$s</string>
     <string name="regular_transaction_repeat_period_month">%1$sго числа\nкаждого месяца</string>
     <string name="regular_transaction_repeat_period_year">каждый год\n%1$s</string>
     <string-array name="regular_transaction_repeat_list">
         <item>День</item>
         <item>Неделю</item>
         <item>Месяц</item>
-        <item>Год</item>
     </string-array>
 
     <string name="goals_accumulated">Накоплено</string>

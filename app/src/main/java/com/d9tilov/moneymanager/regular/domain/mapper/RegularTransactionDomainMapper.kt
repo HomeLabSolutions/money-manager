@@ -29,7 +29,7 @@ fun RegularTransactionData.toDomain(category: Category): RegularTransaction =
         sum,
         category,
         createdDate,
-        startDate,
+        nextExecutionDate,
         periodType,
         dayOfWeek,
         description,

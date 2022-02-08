@@ -19,12 +19,16 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
+import com.d9tilov.moneymanager.core.util.currentDate
 import com.d9tilov.moneymanager.core.util.currentDateTime
+import com.d9tilov.moneymanager.core.util.getStartOfDay
 import com.d9tilov.moneymanager.core.util.gone
+import com.d9tilov.moneymanager.core.util.hide
 import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.core.util.toBigDecimal
+import com.d9tilov.moneymanager.core.util.toLocalDate
 import com.d9tilov.moneymanager.core.util.toLocalDateTime
 import com.d9tilov.moneymanager.core.util.toMillis
 import com.d9tilov.moneymanager.currency.CurrencyDestination
@@ -36,13 +40,18 @@ import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.regular.vm.CreatedRegularTransactionViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.plus
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -56,8 +65,7 @@ class RegularTransactionCreationFragment :
     private val spinnerPeriodMap = arrayMapOf(
         PeriodType.DAY to 0,
         PeriodType.WEEK to 1,
-        PeriodType.MONTH to 2,
-        PeriodType.YEAR to 3
+        PeriodType.MONTH to 2
     )
     private val viewBinding by viewBinding(FragmentCreationRegularTransactionBinding::bind)
     private var toolbar: MaterialToolbar? = null
@@ -104,9 +112,6 @@ class RegularTransactionCreationFragment :
             createdRegularTransactionNotifyCheckbox.setOnCheckedChangeListener { _, isChecked ->
                 localTransaction = localTransaction?.copy(pushEnabled = isChecked)
             }
-            createdRegularTransactionRepeatSpinner.setSelection(
-                spinnerPeriodMap.getValue(localTransaction?.periodType ?: PeriodType.MONTH)
-            )
             createdRegularTransactionMainSum.moneyEditText.onChange { sum ->
                 localTransaction =
                     localTransaction?.copy(sum = if (sum.isEmpty()) BigDecimal.ZERO else sum.toBigDecimal)
@@ -120,30 +125,64 @@ class RegularTransactionCreationFragment :
                         position: Int,
                         id: Long
                     ) {
+                        val periodType = getSelectedPeriodType(position)
                         localTransaction =
-                            localTransaction?.copy(periodType = getSelectedPeriodType(position))
-                        if (getSelectedPeriodType(position) == PeriodType.WEEK) {
-                            createdRegularTransactionWeekSelector.show()
-                        } else {
-                            createdRegularTransactionWeekSelector.gone()
-                        }
-                        if (getSelectedPeriodType(position) == PeriodType.WEEK) {
-                            setAllDays()
+                            localTransaction?.copy(periodType = periodType)
+                        when (periodType) {
+                            PeriodType.DAY -> {
+                                createdRegularTransactionWeekSelector.gone()
+                                createdRegularTransactionRepeatStartsDate.hide()
+                                createdRegularTransactionRepeatStartsTitle.hide()
+                                localTransaction = localTransaction?.copy(
+                                    startDate = currentDate().plus(1, DateTimeUnit.DAY)
+                                        .getStartOfDay()
+                                )
+                            }
+                            PeriodType.WEEK -> {
+                                createdRegularTransactionWeekSelector.show()
+                                createdRegularTransactionRepeatStartsDate.hide()
+                                createdRegularTransactionRepeatStartsTitle.hide()
+                            }
+                            PeriodType.MONTH -> {
+                                createdRegularTransactionWeekSelector.gone()
+                                createdRegularTransactionRepeatStartsDate.show()
+                                createdRegularTransactionRepeatStartsTitle.show()
+                            }
                         }
                     }
-
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                 }
             createdRegularTransactionRepeatStartsDate.setOnClickListener {
+                val timezone = TimeZone.getDefault()
+                val time = localTransaction?.startDate?.toMillis() ?: currentDateTime().toMillis()
+                val offsetTime = time + timezone.getOffset(time)
+                val offsetDateTime =
+                    offsetTime.toLocalDate().plus(1, DateTimeUnit.DAY).getStartOfDay()
                 val picker = MaterialDatePicker.Builder.datePicker()
-                    .setSelection(localTransaction?.startDate?.toMillis() ?: currentDateTime().toMillis())
+                    .setCalendarConstraints(
+                        CalendarConstraints.Builder()
+                            .setStart(
+                                currentDateTime().date.plus(1, DateTimeUnit.DAY).getStartOfDay()
+                                    .toMillis()
+                            )
+                            .setValidator(DateValidatorPointForward.from(offsetTime))
+                            .build()
+                    )
+                    .setSelection(offsetDateTime.toMillis())
                     .build()
                 picker.addOnPositiveButtonClickListener { calendarDate ->
-                    localTransaction = localTransaction?.copy(startDate = calendarDate.toLocalDateTime())
+                    localTransaction = localTransaction?.copy(
+                        startDate = calendarDate.toLocalDateTime().getStartOfDay()
+                    )
                     viewBinding.createdRegularTransactionRepeatStartsDate.text = SimpleDateFormat(
                         TRANSACTION_DATE_FORMAT,
                         Locale.getDefault()
-                    ).format(Date(localTransaction?.startDate?.toMillis() ?: Calendar.getInstance().timeInMillis))
+                    ).format(
+                        Date(
+                            localTransaction?.startDate?.toMillis()
+                                ?: Calendar.getInstance().timeInMillis
+                        )
+                    )
                 }
                 picker.show(parentFragmentManager, picker.tag)
             }
@@ -161,13 +200,13 @@ class RegularTransactionCreationFragment :
                     shakeError()
                 }
             }
-            createdRegularTransactionSunday.setOnClickListener { setWeekdaySelected(Calendar.SUNDAY) }
-            createdRegularTransactionMonday.setOnClickListener { setWeekdaySelected(Calendar.MONDAY) }
-            createdRegularTransactionTuesday.setOnClickListener { setWeekdaySelected(Calendar.TUESDAY) }
-            createdRegularTransactionWednesday.setOnClickListener { setWeekdaySelected(Calendar.WEDNESDAY) }
-            createdRegularTransactionThursday.setOnClickListener { setWeekdaySelected(Calendar.THURSDAY) }
-            createdRegularTransactionFriday.setOnClickListener { setWeekdaySelected(Calendar.FRIDAY) }
-            createdRegularTransactionSaturday.setOnClickListener { setWeekdaySelected(Calendar.SATURDAY) }
+            createdRegularTransactionMonday.setOnClickListener { setWeekdaySelected(0) }
+            createdRegularTransactionTuesday.setOnClickListener { setWeekdaySelected(1) }
+            createdRegularTransactionWednesday.setOnClickListener { setWeekdaySelected(2) }
+            createdRegularTransactionThursday.setOnClickListener { setWeekdaySelected(3) }
+            createdRegularTransactionFriday.setOnClickListener { setWeekdaySelected(4) }
+            createdRegularTransactionSaturday.setOnClickListener { setWeekdaySelected(5) }
+            createdRegularTransactionSunday.setOnClickListener { setWeekdaySelected(6) }
             createdRegularTransactionMainSum.addOnCurrencyClickListener {
                 val action =
                     RegularTransactionCreationFragmentDirections.toCurrencyDest(
@@ -211,6 +250,14 @@ class RegularTransactionCreationFragment :
                 TRANSACTION_DATE_FORMAT,
                 Locale.getDefault()
             ).format(Date(localTransaction!!.startDate.toMillis()))
+            createdRegularTransactionRepeatSpinner.setSelection(
+                spinnerPeriodMap.getValue(localTransaction?.periodType ?: PeriodType.MONTH)
+            )
+            for ((key, value) in spinnerPeriodMap) {
+                if (value == createdRegularTransactionRepeatSpinner.selectedItemPosition && key == PeriodType.WEEK) {
+                    setWeekdaySelected(localTransaction?.dayOfWeek ?: 0)
+                }
+            }
         }
     }
 
@@ -234,52 +281,45 @@ class RegularTransactionCreationFragment :
         }
     }
 
-    private fun setWeekdaySelected(day: Int, changeSelection: Boolean = true) {
-        val byteAsDay = localTransaction?.dayOfWeek ?: 0b0000000
-        val byteToShift = day - 1
-        val isSelected = (byteAsDay shr byteToShift) and 1 == 1
-        if (changeSelection) {
-            localTransaction = localTransaction?.copy(
-                dayOfWeek =
-                    if (isSelected) byteAsDay and (1 shl byteToShift).inv()
-                    else byteAsDay or (1 shl byteToShift)
-            )
-        }
-        viewBinding.run {
-            val view = when (day) {
-                Calendar.SUNDAY -> createdRegularTransactionSunday
-                Calendar.MONDAY -> createdRegularTransactionMonday
-                Calendar.TUESDAY -> createdRegularTransactionTuesday
-                Calendar.WEDNESDAY -> createdRegularTransactionWednesday
-                Calendar.THURSDAY -> createdRegularTransactionThursday
-                Calendar.FRIDAY -> createdRegularTransactionFriday
-                Calendar.SATURDAY -> createdRegularTransactionSaturday
-                else -> throw IllegalArgumentException("Unknown day of week: $day")
-            }
-            view.isSelected = if (changeSelection) !isSelected else isSelected
-            view.setTextColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    if (if (changeSelection) !isSelected else isSelected) R.color.primary_color else R.color.control_activated_color
+    private fun setWeekdaySelected(day: Int) {
+        for (i in 0..6) {
+            viewBinding.run {
+                val view = when (i) {
+                    0 -> createdRegularTransactionMonday
+                    1 -> createdRegularTransactionTuesday
+                    2 -> createdRegularTransactionWednesday
+                    3 -> createdRegularTransactionThursday
+                    4 -> createdRegularTransactionFriday
+                    5 -> createdRegularTransactionSaturday
+                    6 -> createdRegularTransactionSunday
+                    else -> throw IllegalArgumentException("Unknown day of week: $day")
+                }
+                view.isSelected = i == day
+                view.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        if (view.isSelected) R.color.primary_color else R.color.control_activated_color
+                    )
                 )
-            )
+            }
         }
+        val curDayOfWeek = currentDate().dayOfWeek.ordinal
+        val diffDays = if (day < curDayOfWeek) {
+            7 - curDayOfWeek + day
+        } else {
+            var diffDays = day - curDayOfWeek
+            if (diffDays == 0) diffDays = 7
+            diffDays
+        }
+        val nextExecDay = currentDate().plus(diffDays, DateTimeUnit.DAY).getStartOfDay()
+        localTransaction = localTransaction?.copy(dayOfWeek = day, startDate = nextExecDay)
         updateSaveButtonState()
     }
 
-    private fun setAllDays() {
-        setWeekdaySelected(Calendar.SUNDAY, false)
-        setWeekdaySelected(Calendar.MONDAY, false)
-        setWeekdaySelected(Calendar.TUESDAY, false)
-        setWeekdaySelected(Calendar.WEDNESDAY, false)
-        setWeekdaySelected(Calendar.THURSDAY, false)
-        setWeekdaySelected(Calendar.FRIDAY, false)
-        setWeekdaySelected(Calendar.SATURDAY, false)
-    }
-
     private fun updateSaveButtonState() {
-        viewBinding.createdRegularTransactionSave.isSelected =
-            localTransaction?.let { it.sum.signum() > 0 && it.category != Category.EMPTY && (it.periodType != PeriodType.WEEK || (it.periodType == PeriodType.WEEK && it.dayOfWeek != 0)) } ?: false
+        viewBinding.createdRegularTransactionSave.isSelected = localTransaction?.let {
+            it.sum.signum() > 0 && it.category != Category.EMPTY
+        } ?: false
     }
 
     private fun updateCategoryIcon() {
@@ -311,7 +351,6 @@ class RegularTransactionCreationFragment :
             0 -> PeriodType.DAY
             1 -> PeriodType.WEEK
             2 -> PeriodType.MONTH
-            3 -> PeriodType.YEAR
             else -> throw IllegalArgumentException("Unknown periodType at position: $position")
         }
     }

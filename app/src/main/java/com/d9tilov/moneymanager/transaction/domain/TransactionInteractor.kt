@@ -6,7 +6,6 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import kotlinx.coroutines.flow.Flow
-import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
 
 interface TransactionInteractor : Interactor {
@@ -14,17 +13,12 @@ interface TransactionInteractor : Interactor {
     suspend fun addTransaction(transaction: Transaction)
     fun getTransactionById(id: Long): Flow<Transaction>
     fun getTransactionsByType(type: TransactionType): Flow<PagingData<Transaction>>
-    fun getTransactionsByTypeWithoutDates(
-        from: LocalDateTime,
-        to: LocalDateTime,
-        type: TransactionType
-    ): Flow<List<Transaction>>
-
     fun ableToSpendToday(): Flow<BigDecimal>
     fun getSumInFiscalPeriodInUsd(type: TransactionType): Flow<BigDecimal>
     fun getSumTodayInUsd(type: TransactionType): Flow<BigDecimal>
     fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<BigDecimal>
     fun getApproxSumTodayCurrentCurrency(type: TransactionType): Flow<BigDecimal>
+    suspend fun executeRegularIfNeeded()
     suspend fun update(transaction: Transaction)
     suspend fun removeTransaction(transaction: Transaction)
     fun removeAllByCategory(category: Category): Flow<Int>

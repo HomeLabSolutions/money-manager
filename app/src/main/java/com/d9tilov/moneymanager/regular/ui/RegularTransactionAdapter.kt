@@ -9,17 +9,12 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
-import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT_DAY_MONTH
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
-import com.d9tilov.moneymanager.core.util.toMillis
 import com.d9tilov.moneymanager.databinding.ItemRegularTransactionBinding
 import com.d9tilov.moneymanager.period.PeriodType
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.regular.ui.diff.RegularTransactionDiffUtil
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class RegularTransactionAdapter :
     RecyclerView.Adapter<RegularTransactionAdapter.RegularTransactionViewHolder>() {
@@ -125,7 +120,7 @@ class RegularTransactionAdapter :
                     PeriodType.DAY -> context.getString(R.string.regular_transaction_repeat_period_day)
                     PeriodType.WEEK -> context.getString(
                         R.string.regular_transaction_repeat_period_week,
-                        getWeekDays(regularTransaction.dayOfWeek)
+                        getWeekDayString(regularTransaction.dayOfWeek)
                     )
                     PeriodType.MONTH -> {
                         val dayOfMonth = regularTransaction.startDate.dayOfMonth
@@ -134,35 +129,19 @@ class RegularTransactionAdapter :
                             dayOfMonth.toString()
                         )
                     }
-                    PeriodType.YEAR -> context.getString(
-                        R.string.regular_transaction_repeat_period_year,
-                        SimpleDateFormat(
-                            TRANSACTION_DATE_FORMAT_DAY_MONTH,
-                            Locale.getDefault()
-                        ).format(Date(regularTransaction.startDate.toMillis()))
-                    )
                 }
             }
         }
 
-        private fun getWeekDays(days: Int): String {
-            val weekDays = mutableListOf<String>()
-            for (i in 0..6) {
-                if ((days shr i) and 1 == 1) {
-                    val dayOfWeek = when (i) {
-                        0 -> context.getString(R.string.regular_transaction_repeat_sunday)
-                        1 -> context.getString(R.string.regular_transaction_repeat_monday)
-                        2 -> context.getString(R.string.regular_transaction_repeat_tuesday)
-                        3 -> context.getString(R.string.regular_transaction_repeat_wednesday)
-                        4 -> context.getString(R.string.regular_transaction_repeat_thursday)
-                        5 -> context.getString(R.string.regular_transaction_repeat_friday)
-                        6 -> context.getString(R.string.regular_transaction_repeat_saturday)
-                        else -> throw IllegalArgumentException("Unknown day of week: $i")
-                    }
-                    weekDays.add(dayOfWeek)
-                }
-            }
-            return weekDays.joinToString(separator = ", ")
+        private fun getWeekDayString(day: Int) = when (day) {
+            0 -> context.getString(R.string.regular_transaction_repeat_monday)
+            1 -> context.getString(R.string.regular_transaction_repeat_tuesday)
+            2 -> context.getString(R.string.regular_transaction_repeat_wednesday)
+            3 -> context.getString(R.string.regular_transaction_repeat_thursday)
+            4 -> context.getString(R.string.regular_transaction_repeat_friday)
+            5 -> context.getString(R.string.regular_transaction_repeat_saturday)
+            6 -> context.getString(R.string.regular_transaction_repeat_sunday)
+            else -> throw IllegalArgumentException("Unknown day of week: $day")
         }
     }
 }

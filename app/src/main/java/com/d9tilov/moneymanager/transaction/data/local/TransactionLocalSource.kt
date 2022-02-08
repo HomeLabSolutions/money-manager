@@ -42,7 +42,7 @@ class TransactionLocalSource(
         }
     }
 
-    override fun getAllByType(
+    override fun getAllByTypePaging(
         from: LocalDateTime,
         to: LocalDateTime,
         transactionType: TransactionType
@@ -62,11 +62,12 @@ class TransactionLocalSource(
         }
     }
 
-    override fun getAllByTypeWithoutDates(
+    override fun getAllByTypeInPeriod(
         from: LocalDateTime,
         to: LocalDateTime,
         transactionType: TransactionType,
-        onlyInStatistics: Boolean
+        onlyInStatistics: Boolean,
+        withRegular: Boolean
     ): Flow<List<TransactionDataModel>> {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
@@ -81,6 +82,7 @@ class TransactionLocalSource(
                 .map { list ->
                     list.map { item -> item.toDataModel() }
                         .filter { if (onlyInStatistics) it.inStatistics else true }
+                        .filter { if (!withRegular) !it.isRegular else true }
                 }
         }
     }

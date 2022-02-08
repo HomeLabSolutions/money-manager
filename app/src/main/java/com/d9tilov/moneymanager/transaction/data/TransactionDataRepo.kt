@@ -21,15 +21,16 @@ class TransactionDataRepo(private val transactionSource: TransactionSource) : Tr
         from: LocalDateTime,
         to: LocalDateTime,
         transactionType: TransactionType
-    ) = transactionSource.getAllByType(from, to, transactionType)
+    ) = transactionSource.getAllByTypePaging(from, to, transactionType)
 
-    override fun getTransactionsByTypeWithoutDate(
+    override fun getTransactionsByTypeInPeriod(
         from: LocalDateTime,
         to: LocalDateTime,
         transactionType: TransactionType,
-        onlyInStatistics: Boolean
+        onlyInStatistics: Boolean,
+        withRegular: Boolean
     ): Flow<List<TransactionDataModel>> =
-        transactionSource.getAllByTypeWithoutDates(from, to, transactionType, onlyInStatistics)
+        transactionSource.getAllByTypeInPeriod(from, to, transactionType, onlyInStatistics, withRegular)
 
     override fun getByCategory(category: Category): Flow<List<TransactionDataModel>> =
         transactionSource.getByCategory(category)
