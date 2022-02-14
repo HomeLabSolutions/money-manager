@@ -132,7 +132,7 @@
     <string name="goals_remove_dialog_title">Удаление цели</string>
     <string name="goals_remove_dialog_subtitle">Вы действительно хотите удалить цель?</string>
     <string name="goals_sum_title">Стоимость цели</string>
-    <string name="goals_sum_per_period_title">Откладывать каждый месяц по:</string>
+    <string name="goals_sum_per_period_title">Откладывать каждый месяц</string>
 
     <string name="settings_backup">Сделать backup</string>
     <string name="settings_backup_info">Последняя копия: %1$s</string>

@@ -99,7 +99,7 @@ class GoalsFragment :
                 }
             }).attachToRecyclerView(goalsRvList)
             goalsSumPerPeriod.moneyEditText.clearFocus()
-            goalsSave.setOnClickListener { viewModel.insertSaveSum(goalsSumPerPeriod.getValue()) }
+            goalsSave.setOnClickListener { viewModel.insertSavedSum(goalsSumPerPeriod.getValue()) }
         }
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
             ARG_UNDO_REMOVE_LAYOUT_DISMISS
@@ -203,7 +203,7 @@ class GoalsFragment :
     }
 
     override fun onNextClick() {
-        viewModel.savePrepopulateStatus()
+        viewModel.savePrepopulateStatusAndSavedSum(viewBinding.goalsSumPerPeriod.getValue())
     }
 
     override fun save() {

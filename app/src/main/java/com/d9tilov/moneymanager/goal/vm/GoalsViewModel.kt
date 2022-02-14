@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -25,16 +26,18 @@ class GoalsViewModel @Inject constructor(
     val budget = budgetInteractor.get().distinctUntilChanged().asLiveData()
     val goals = goalInteractor.getAll().asLiveData()
 
-    fun savePrepopulateStatus() = viewModelScope.launch(Dispatchers.IO) {
+    fun savePrepopulateStatusAndSavedSum(sum: BigDecimal) = viewModelScope.launch(Dispatchers.IO) {
         val user = userInteractor.getCurrentUser().first()
         userInteractor.updateUser(user.copy(showPrepopulate = false))
+        val budget = budgetInteractor.get().first()
+        budgetInteractor.update(budget.copy(saveSum = sum))
     }
 
-    fun insertSaveSum(sum: BigDecimal) {
+    fun insertSavedSum(sum: BigDecimal) {
         viewModelScope.launch(Dispatchers.IO) {
             val budget = budgetInteractor.get().first()
             budgetInteractor.update(budget.copy(saveSum = sum))
+            withContext(Dispatchers.Main) { navigator?.save() }
         }
-        navigator?.save()
     }
 }

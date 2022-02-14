@@ -131,7 +131,7 @@
     <string name="goals_remove_dialog_title">Deleting a goal</string>
     <string name="goals_remove_dialog_subtitle">Do you really want to delete the goal?</string>
     <string name="goals_sum_title">Price of goal</string>
-    <string name="goals_sum_per_period_title">Save every month:</string>
+    <string name="goals_sum_per_period_title">Save every month</string>
 
     <string name="settings_backup">Make backup</string>
     <string name="settings_backup_info">Last backup: %1$s</string>
