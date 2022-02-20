@@ -12,9 +12,7 @@ fun RegularTransactionDbModel.toDataModel(): RegularTransactionData =
         categoryId,
         currency,
         createdDate,
-        nextExecutionDate,
-        periodType,
-        dayOfWeek,
+        executionPeriod,
         description,
         pushEnable,
         autoAdd
@@ -29,9 +27,7 @@ fun RegularTransactionData.toDbModel(): RegularTransactionDbModel =
         categoryId,
         currencyCode,
         createdDate,
-        nextExecutionDate,
-        periodType,
-        dayOfWeek,
+        executionPeriod,
         description,
         pushEnable,
         autoAdd

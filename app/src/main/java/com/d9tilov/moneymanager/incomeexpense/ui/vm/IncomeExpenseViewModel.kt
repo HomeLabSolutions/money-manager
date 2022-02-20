@@ -7,6 +7,7 @@ import com.d9tilov.moneymanager.base.ui.navigator.IncomeExpenseNavigator
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
+import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,6 +34,10 @@ class IncomeExpenseViewModel @Inject constructor(
         viewModelScope.launch { currencyCodeStr.value = userInteractor.getCurrentCurrency() }
         viewModelScope.launch(Dispatchers.IO + updateCurrencyExceptionHandler) {
             currencyInteractor.updateCurrencyRates()
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            transactionInteractor.executeRegularIfNeeded(TransactionType.INCOME)
+            transactionInteractor.executeRegularIfNeeded(TransactionType.EXPENSE)
         }
     }
 

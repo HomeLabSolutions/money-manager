@@ -12,9 +12,7 @@ fun RegularTransaction.toData(): RegularTransactionData = RegularTransactionData
     category.id,
     currencyCode,
     createdDate,
-    startDate,
-    periodType,
-    dayOfWeek,
+    executionPeriod,
     description,
     pushEnabled,
     autoAdd
@@ -29,9 +27,7 @@ fun RegularTransactionData.toDomain(category: Category): RegularTransaction =
         sum,
         category,
         createdDate,
-        nextExecutionDate,
-        periodType,
-        dayOfWeek,
+        executionPeriod,
         description,
         pushEnable,
         autoAdd

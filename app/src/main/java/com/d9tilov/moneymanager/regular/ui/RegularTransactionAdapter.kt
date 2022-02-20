@@ -12,7 +12,8 @@ import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.databinding.ItemRegularTransactionBinding
-import com.d9tilov.moneymanager.period.PeriodType
+import com.d9tilov.moneymanager.regular.domain.entity.ExecutionPeriod
+import com.d9tilov.moneymanager.regular.domain.entity.PeriodType
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.regular.ui.diff.RegularTransactionDiffUtil
 
@@ -116,20 +117,22 @@ class RegularTransactionAdapter :
                     .into(itemRegularTransactionIcon)
                 itemRegularTransactionDescription.text = regularTransaction.description
                 itemRegularTransactionNotify.isChecked = regularTransaction.pushEnabled
-                itemRegularTransactionDate.text = when (regularTransaction.periodType) {
-                    PeriodType.DAY -> context.getString(R.string.regular_transaction_repeat_period_day)
-                    PeriodType.WEEK -> context.getString(
-                        R.string.regular_transaction_repeat_period_week,
-                        getWeekDayString(regularTransaction.dayOfWeek)
-                    )
-                    PeriodType.MONTH -> {
-                        val dayOfMonth = regularTransaction.startDate.dayOfMonth
-                        context.getString(
-                            R.string.regular_transaction_repeat_period_month,
-                            dayOfMonth.toString()
+                itemRegularTransactionDate.text =
+                    when (regularTransaction.executionPeriod.periodType) {
+                        PeriodType.DAY -> context.getString(R.string.regular_transaction_repeat_period_day)
+                        PeriodType.WEEK -> context.getString(
+                            R.string.regular_transaction_repeat_period_week,
+                            getWeekDayString((regularTransaction.executionPeriod as ExecutionPeriod.EveryWeek).dayOfWeek)
                         )
+                        PeriodType.MONTH -> {
+                            val dayOfMonth =
+                                (regularTransaction.executionPeriod as ExecutionPeriod.EveryMonth).dayOfMonth
+                            context.getString(
+                                R.string.regular_transaction_repeat_period_month,
+                                dayOfMonth.toString()
+                            )
+                        }
                     }
-                }
             }
         }
 

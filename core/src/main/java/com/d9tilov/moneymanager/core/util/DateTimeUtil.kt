@@ -72,6 +72,10 @@ fun LocalDateTime.isSameDay(date: LocalDateTime): Boolean {
     return this.year == date.year && this.dayOfYear == date.dayOfYear
 }
 
+fun LocalDate.isSameDay(date: LocalDate): Boolean {
+    return this.year == date.year && this.dayOfYear == date.dayOfYear
+}
+
 fun LocalDateTime.getStartDateOfFiscalPeriod(fiscalDay: Int): LocalDateTime {
     val c = Calendar.getInstance()
     val dayOfMonth = c.get(Calendar.DAY_OF_MONTH)

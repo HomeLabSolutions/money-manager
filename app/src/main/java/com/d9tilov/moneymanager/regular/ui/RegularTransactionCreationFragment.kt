@@ -17,7 +17,6 @@ import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.common.BaseCategoryFragment.Companion.ARG_CATEGORY
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
-import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.currentDate
 import com.d9tilov.moneymanager.core.util.currentDateTime
@@ -28,30 +27,18 @@ import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.core.util.toBigDecimal
-import com.d9tilov.moneymanager.core.util.toLocalDate
-import com.d9tilov.moneymanager.core.util.toLocalDateTime
-import com.d9tilov.moneymanager.core.util.toMillis
 import com.d9tilov.moneymanager.currency.CurrencyDestination
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.ui.CurrencyFragment
 import com.d9tilov.moneymanager.databinding.FragmentCreationRegularTransactionBinding
-import com.d9tilov.moneymanager.period.PeriodType
+import com.d9tilov.moneymanager.regular.domain.entity.ExecutionPeriod
+import com.d9tilov.moneymanager.regular.domain.entity.PeriodType
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.regular.vm.CreatedRegularTransactionViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.DateValidatorPointForward
-import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.plus
 import java.math.BigDecimal
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -105,6 +92,23 @@ class RegularTransactionCreationFragment :
                 CurrencyFragment.ARG_CURRENCY
             )
         }
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Int>(
+            ARG_DAY_OF_MONTH
+        )?.observe(
+            viewLifecycleOwner
+        ) { dayOfMonth ->
+            localTransaction = localTransaction?.copy(
+                executionPeriod = ExecutionPeriod.EveryMonth(
+                    dayOfMonth,
+                    currentDateTime()
+                )
+            )
+            viewBinding.createdRegularTransactionRepeatStartsDate.text =
+                getString(R.string.regular_transaction_repeat_period_month_2, dayOfMonth.toString())
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<Int>(
+                ARG_DAY_OF_MONTH
+            )
+        }
         viewBinding.run {
             createdRegularTransactionDescription.onChange { description ->
                 localTransaction = localTransaction?.copy(description = description)
@@ -125,70 +129,57 @@ class RegularTransactionCreationFragment :
                         position: Int,
                         id: Long
                     ) {
-                        val periodType = getSelectedPeriodType(position)
-                        localTransaction =
-                            localTransaction?.copy(periodType = periodType)
-                        when (periodType) {
+                        when (getSelectedPeriodType(position)) {
                             PeriodType.DAY -> {
                                 createdRegularTransactionWeekSelector.gone()
                                 createdRegularTransactionRepeatStartsDate.hide()
                                 createdRegularTransactionRepeatStartsTitle.hide()
                                 localTransaction = localTransaction?.copy(
-                                    startDate = currentDate().plus(1, DateTimeUnit.DAY)
-                                        .getStartOfDay()
+                                    executionPeriod = ExecutionPeriod.EveryDay(currentDate().getStartOfDay())
                                 )
                             }
                             PeriodType.WEEK -> {
                                 createdRegularTransactionWeekSelector.show()
                                 createdRegularTransactionRepeatStartsDate.hide()
                                 createdRegularTransactionRepeatStartsTitle.hide()
+                                setWeekdaySelected(
+                                    (localTransaction?.executionPeriod as? ExecutionPeriod.EveryWeek)?.dayOfWeek
+                                        ?: currentDate().dayOfWeek.ordinal
+                                )
                             }
                             PeriodType.MONTH -> {
                                 createdRegularTransactionWeekSelector.gone()
                                 createdRegularTransactionRepeatStartsDate.show()
                                 createdRegularTransactionRepeatStartsTitle.show()
+                                if (localTransaction?.executionPeriod !is ExecutionPeriod.EveryMonth) {
+                                    localTransaction = localTransaction?.copy(
+                                        executionPeriod = ExecutionPeriod.EveryMonth(
+                                            currentDate().dayOfMonth,
+                                            currentDate().getStartOfDay()
+                                        )
+                                    )
+                                }
+                                viewBinding.createdRegularTransactionRepeatStartsDate.text =
+                                    getString(
+                                        R.string.regular_transaction_repeat_period_month_2,
+                                        (localTransaction?.executionPeriod as? ExecutionPeriod.EveryMonth)?.dayOfMonth
+                                            ?: currentDate().dayOfMonth.toString()
+                                    )
                             }
                         }
                     }
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                 }
             createdRegularTransactionRepeatStartsDate.setOnClickListener {
-                val timezone = TimeZone.getDefault()
-                val time = localTransaction?.startDate?.toMillis() ?: currentDateTime().toMillis()
-                val offsetTime = time + timezone.getOffset(time)
-                val offsetDateTime =
-                    offsetTime.toLocalDate().plus(1, DateTimeUnit.DAY).getStartOfDay()
-                val picker = MaterialDatePicker.Builder.datePicker()
-                    .setCalendarConstraints(
-                        CalendarConstraints.Builder()
-                            .setStart(
-                                currentDateTime().date.plus(1, DateTimeUnit.DAY).getStartOfDay()
-                                    .toMillis()
-                            )
-                            .setValidator(DateValidatorPointForward.from(offsetTime))
-                            .build()
-                    )
-                    .setSelection(offsetDateTime.toMillis())
-                    .build()
-                picker.addOnPositiveButtonClickListener { calendarDate ->
-                    localTransaction = localTransaction?.copy(
-                        startDate = calendarDate.toLocalDateTime().getStartOfDay()
-                    )
-                    viewBinding.createdRegularTransactionRepeatStartsDate.text = SimpleDateFormat(
-                        TRANSACTION_DATE_FORMAT,
-                        Locale.getDefault()
-                    ).format(
-                        Date(
-                            localTransaction?.startDate?.toMillis()
-                                ?: Calendar.getInstance().timeInMillis
-                        )
-                    )
-                }
-                picker.show(parentFragmentManager, picker.tag)
+                val action = RegularTransactionCreationFragmentDirections.toDayOfMonthDest(
+                    (localTransaction?.executionPeriod as? ExecutionPeriod.EveryMonth)?.dayOfMonth
+                        ?: 1
+                )
+                findNavController().navigate(action)
             }
             createdRegularTransactionCategoryLayout.setOnClickListener {
                 val action = RegularTransactionCreationFragmentDirections.toFixedCategoryDest(
-                    destination = CategoryDestination.EDIT_TRANSACTION_SCREEN,
+                    destination = CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN,
                     transactionType = transactionType
                 )
                 findNavController().navigate(action)
@@ -246,18 +237,16 @@ class RegularTransactionCreationFragment :
             createdRegularTransactionDescription.setText(localTransaction!!.description)
             createdRegularTransactionNotifyCheckbox.isChecked = localTransaction!!.pushEnabled
 
-            createdRegularTransactionRepeatStartsDate.text = SimpleDateFormat(
-                TRANSACTION_DATE_FORMAT,
-                Locale.getDefault()
-            ).format(Date(localTransaction!!.startDate.toMillis()))
+            viewBinding.createdRegularTransactionRepeatStartsDate.text =
+                getString(
+                    R.string.regular_transaction_repeat_period_month_2,
+                    (localTransaction?.executionPeriod as? ExecutionPeriod.EveryMonth)?.dayOfMonth.toString()
+                )
             createdRegularTransactionRepeatSpinner.setSelection(
-                spinnerPeriodMap.getValue(localTransaction?.periodType ?: PeriodType.MONTH)
+                spinnerPeriodMap.getValue(
+                    localTransaction?.executionPeriod?.periodType ?: PeriodType.MONTH
+                )
             )
-            for ((key, value) in spinnerPeriodMap) {
-                if (value == createdRegularTransactionRepeatSpinner.selectedItemPosition && key == PeriodType.WEEK) {
-                    setWeekdaySelected(localTransaction?.dayOfWeek ?: 0)
-                }
-            }
         }
     }
 
@@ -276,7 +265,7 @@ class RegularTransactionCreationFragment :
             viewBinding.createdRegularTransactionMainSum.startAnimation(animation)
         } else if (localTransaction?.category == Category.EMPTY) {
             viewBinding.createdRegularTransactionCategoryLayout.startAnimation(animation)
-        } else if (localTransaction?.periodType == PeriodType.WEEK && localTransaction?.dayOfWeek == 0) {
+        } else if (localTransaction?.executionPeriod?.periodType == PeriodType.WEEK && (localTransaction?.executionPeriod as ExecutionPeriod.EveryWeek).dayOfWeek == 0) {
             viewBinding.createdRegularTransactionWeekSelector.startAnimation(animation)
         }
     }
@@ -303,16 +292,13 @@ class RegularTransactionCreationFragment :
                 )
             }
         }
-        val curDayOfWeek = currentDate().dayOfWeek.ordinal
-        val diffDays = if (day < curDayOfWeek) {
-            7 - curDayOfWeek + day
-        } else {
-            var diffDays = day - curDayOfWeek
-            if (diffDays == 0) diffDays = 7
-            diffDays
-        }
-        val nextExecDay = currentDate().plus(diffDays, DateTimeUnit.DAY).getStartOfDay()
-        localTransaction = localTransaction?.copy(dayOfWeek = day, startDate = nextExecDay)
+        localTransaction =
+            localTransaction?.copy(
+                executionPeriod = ExecutionPeriod.EveryWeek(
+                    day,
+                    currentDateTime().getStartOfDay()
+                )
+            )
         updateSaveButtonState()
     }
 
@@ -384,5 +370,9 @@ class RegularTransactionCreationFragment :
 
     override fun back() {
         findNavController().popBackStack()
+    }
+
+    companion object {
+        const val ARG_DAY_OF_MONTH = "arg_day_of_month"
     }
 }

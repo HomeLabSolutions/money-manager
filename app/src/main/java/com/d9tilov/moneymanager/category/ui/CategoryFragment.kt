@@ -77,6 +77,11 @@ class CategoryFragment :
         findNavController().popBackStack()
     }
 
+    override fun backToEditRegularTransactionScreen(category: Category) {
+        findNavController().previousBackStackEntry?.savedStateHandle?.set(ARG_CATEGORY, category)
+        findNavController().popBackStack()
+    }
+
     override fun backToMainScreen(category: Category) {
         findNavController().previousBackStackEntry?.savedStateHandle?.set(
             ARG_TRANSACTION_CREATED,

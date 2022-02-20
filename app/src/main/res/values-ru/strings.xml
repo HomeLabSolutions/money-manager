@@ -99,7 +99,7 @@
     <string name="regular_transaction_auto_add">Добавлять\nавтоматически</string>
     <string name="regular_transaction_choose_category">Выберите категорию</string>
     <string name="regular_transaction_repeat_title">Повторять раз в</string>
-    <string name="regular_transaction_repeat_next_date_title">Выполнится</string>
+    <string name="regular_transaction_repeat_next_date_title">С</string>
     <string name="regular_transaction_repeat_monday_short">Пн</string>
     <string name="regular_transaction_repeat_monday">понедельник</string>
     <string name="regular_transaction_repeat_tuesday_short">Вт</string>
@@ -117,6 +117,7 @@
     <string name="regular_transaction_repeat_period_day">каждый день</string>
     <string name="regular_transaction_repeat_period_week">повторять в: %1$s</string>
     <string name="regular_transaction_repeat_period_month">%1$sго числа\nкаждого месяца</string>
+    <string name="regular_transaction_repeat_period_month_2">%1$sго числа каждого месяца</string>
     <string name="regular_transaction_repeat_period_year">каждый год\n%1$s</string>
     <string-array name="regular_transaction_repeat_list">
         <item>День</item>
@@ -167,4 +168,7 @@
     <string name="notification_action_expense_title">Добавить в расходы</string>
     <string name="notification_channel_income_name">Постоянные доходы</string>
     <string name="notification_channel_expense_name">Постоянные расходы</string>
+
+
+    <string name="day_of_month_title">Выберите день месяца</string>
 </resources>

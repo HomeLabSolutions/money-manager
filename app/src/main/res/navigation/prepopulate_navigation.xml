@@ -142,6 +142,14 @@
             app:popEnterAnim="@anim/slide_left_enter"
             app:popExitAnim="@anim/slide_left_exit" />
 
+        <action
+            android:id="@+id/to_day_of_month_dest"
+            app:destination="@id/day_of_month_dialog"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit" />
+
         <argument
             android:name="transactionType"
             app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
@@ -395,6 +403,18 @@
         <argument
             android:name="goal"
             app:argType="com.d9tilov.moneymanager.goal.domain.entity.Goal" />
+
+    </dialog>
+
+    <dialog
+        android:id="@+id/day_of_month_dialog"
+        android:name="com.d9tilov.moneymanager.regular.ui.DayOfMonthDialog"
+        tools:layout="@layout/fragment_dialog_day_of_month">
+
+        <argument
+            android:name="day_of_month"
+            android:defaultValue="1"
+            app:argType="integer" />
 
     </dialog>
 </navigation>

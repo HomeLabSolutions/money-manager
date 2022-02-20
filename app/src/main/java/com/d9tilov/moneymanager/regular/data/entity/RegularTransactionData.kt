@@ -2,9 +2,8 @@ package com.d9tilov.moneymanager.regular.data.entity
 
 import android.os.Parcelable
 import com.d9tilov.moneymanager.core.constants.DataConstants
-import com.d9tilov.moneymanager.core.util.currentDate
 import com.d9tilov.moneymanager.core.util.currentDateTime
-import com.d9tilov.moneymanager.period.PeriodType
+import com.d9tilov.moneymanager.regular.domain.entity.ExecutionPeriod
 import com.d9tilov.moneymanager.transaction.TransactionType
 import kotlinx.datetime.LocalDateTime
 import kotlinx.parcelize.Parcelize
@@ -20,9 +19,7 @@ data class RegularTransactionData(
     val categoryId: Long,
     val currencyCode: String,
     val createdDate: @RawValue LocalDateTime = currentDateTime(),
-    val nextExecutionDate: @RawValue LocalDateTime,
-    val periodType: PeriodType,
-    val dayOfWeek: Int = currentDate().dayOfWeek.ordinal,
+    val executionPeriod: ExecutionPeriod,
     val description: String,
     val pushEnable: Boolean = true,
     val autoAdd: Boolean = false

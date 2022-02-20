@@ -77,6 +77,8 @@ interface EditCategoryDialogNavigator : BaseNavigator {
     fun closeDialog()
 }
 
+interface DayOfMonthDialogNavigator : BaseNavigator
+
 interface RemoveSubCategoryDialogNavigator : BaseNavigator {
     fun closeDialog()
     fun closeDialogAndGoToCategory()
@@ -91,6 +93,7 @@ interface CategoryNavigator : BaseNavigator {
     fun openCreateCategoryScreen(category: Category? = null)
     fun openRemoveDialog(category: Category)
     fun backToEditTransactionScreen(category: Category)
+    fun backToEditRegularTransactionScreen(category: Category)
     fun backToMainScreen(category: Category)
 }
 
@@ -109,6 +112,7 @@ interface EditTransactionNavigator : BaseNavigator {
 
 interface SubCategoryNavigator : BaseNavigator {
     fun backToEditTransactionScreen(category: Category)
+    fun backToEditRegularTransactionScreen(category: Category)
     fun backToMainScreen(category: Category)
     fun openCreateCategoryScreen(category: Category? = null)
     fun openRemoveDialog(subCategory: Category)

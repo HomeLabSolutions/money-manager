@@ -11,8 +11,9 @@ import androidx.work.workDataOf
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.core.util.toMillis
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
-import com.d9tilov.moneymanager.period.PeriodType
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
+import com.d9tilov.moneymanager.regular.domain.entity.ExecutionPeriod
+import com.d9tilov.moneymanager.regular.domain.entity.PeriodType
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.regular.domain.mapper.toCommon
 import com.d9tilov.moneymanager.regular.ui.notification.TransactionNotificationBuilder
@@ -64,7 +65,7 @@ class PeriodicTransactionWorker @AssistedInject constructor(
             Timber.tag(App.TAG).d("Start periodic transaction job")
 
             val listOfBuilders = mutableListOf<PeriodicWorkRequest.Builder>()
-            when (regularTransaction.periodType) {
+            when (regularTransaction.executionPeriod.periodType) {
                 PeriodType.DAY -> {
                     val dailyBuilder = PeriodicWorkRequest.Builder(
                         PeriodicTransactionWorker::class.java,
@@ -73,7 +74,8 @@ class PeriodicTransactionWorker @AssistedInject constructor(
                     listOfBuilders.add(dailyBuilder)
                 }
                 PeriodType.WEEK -> {
-                    val weekDays = getDaysOfWeek(regularTransaction.dayOfWeek)
+                    val weekDays =
+                        getDaysOfWeek((regularTransaction.executionPeriod as ExecutionPeriod.EveryWeek).dayOfWeek)
                     for (day in weekDays) {
                         val weekBuilder =
                             PeriodicWorkRequest.Builder(
@@ -92,7 +94,7 @@ class PeriodicTransactionWorker @AssistedInject constructor(
                         30 * 24 * 3600 * 1000L, TimeUnit.MILLISECONDS
                     )
                         .setInitialDelay(
-                            getInitialMonthDelayInMillis(regularTransaction.startDate.dayOfMonth),
+                            getInitialMonthDelayInMillis((regularTransaction.executionPeriod as ExecutionPeriod.EveryMonth).dayOfMonth),
                             TimeUnit.MILLISECONDS
                         )
                     listOfBuilders.add(monthlyBuilder)
@@ -172,6 +174,6 @@ class PeriodicTransactionWorker @AssistedInject constructor(
         }
 
         private fun createTag(regularTransaction: RegularTransaction): String =
-            regularTransaction.id.toString() + DELIMITER + regularTransaction.periodType.name + DELIMITER + regularTransaction.startDate.toMillis() + DELIMITER + regularTransaction.dayOfWeek
+            regularTransaction.id.toString() + DELIMITER + regularTransaction.executionPeriod.periodType.name + DELIMITER + regularTransaction.executionPeriod.periodType + DELIMITER + regularTransaction.executionPeriod.lastExecutionDateTime.toMillis() + DELIMITER
     }
 }

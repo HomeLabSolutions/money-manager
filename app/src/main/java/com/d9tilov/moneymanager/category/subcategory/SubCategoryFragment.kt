@@ -87,6 +87,14 @@ class SubCategoryFragment :
         findNavController().popBackStack(R.id.category_dest, true)
     }
 
+    override fun backToEditRegularTransactionScreen(category: Category) {
+        findNavController().getBackStackEntry(R.id.regular_created_transaction_dest).savedStateHandle.set(
+            ARG_CATEGORY,
+            category
+        )
+        findNavController().popBackStack(R.id.category_dest, true)
+    }
+
     override fun backToMainScreen(category: Category) {
         findNavController().getBackStackEntry(R.id.income_expense_dest).savedStateHandle.set(
             IncomeExpenseFragment.ARG_TRANSACTION_CREATED,

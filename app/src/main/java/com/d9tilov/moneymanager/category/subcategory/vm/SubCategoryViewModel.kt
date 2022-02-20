@@ -10,6 +10,7 @@ import androidx.savedstate.SavedStateRegistryOwner
 import com.d9tilov.moneymanager.base.ui.navigator.SubCategoryNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.CategoryDestination.EDIT_TRANSACTION_SCREEN
+import com.d9tilov.moneymanager.category.CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN
 import com.d9tilov.moneymanager.category.CategoryDestination.MAIN_WITH_SUM_SCREEN
 import com.d9tilov.moneymanager.category.common.BaseCategoryViewModel
 import com.d9tilov.moneymanager.category.data.entity.Category
@@ -37,6 +38,7 @@ class SubCategoryViewModel @AssistedInject constructor(
     override fun onCategoryClicked(category: Category) {
         when (savedStateHandle.get<CategoryDestination>("destination")) {
             EDIT_TRANSACTION_SCREEN -> navigator?.backToEditTransactionScreen(category)
+            EDIT_REGULAR_TRANSACTION_SCREEN -> navigator?.backToEditRegularTransactionScreen(category)
             MAIN_WITH_SUM_SCREEN -> navigator?.backToMainScreen(category)
             else -> navigator?.openCreateCategoryScreen(category)
         }

@@ -18,6 +18,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import com.d9tilov.moneymanager.category.CategoryDestination.EDIT_TRANSACTION_SCREEN
+import com.d9tilov.moneymanager.category.CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN
 import com.d9tilov.moneymanager.category.CategoryDestination.MAIN_WITH_SUM_SCREEN
 
 class CategoryViewModel @AssistedInject constructor(
@@ -40,6 +41,7 @@ class CategoryViewModel @AssistedInject constructor(
         } else {
             when (destination) {
                 EDIT_TRANSACTION_SCREEN -> navigator?.backToEditTransactionScreen(category)
+                EDIT_REGULAR_TRANSACTION_SCREEN -> navigator?.backToEditRegularTransactionScreen(category)
                 MAIN_WITH_SUM_SCREEN -> navigator?.backToMainScreen(category)
                 else -> navigator?.openCreateCategoryScreen(category)
             }

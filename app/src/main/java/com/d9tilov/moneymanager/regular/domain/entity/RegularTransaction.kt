@@ -5,13 +5,10 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_DATA_ID
+import com.d9tilov.moneymanager.core.util.currentDate
 import com.d9tilov.moneymanager.core.util.currentDateTime
-import com.d9tilov.moneymanager.core.util.getStartOfDay
-import com.d9tilov.moneymanager.period.PeriodType
 import com.d9tilov.moneymanager.transaction.TransactionType
-import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.plus
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
 import java.math.BigDecimal
@@ -25,9 +22,7 @@ data class RegularTransaction(
     val sum: BigDecimal,
     val category: Category,
     val createdDate: @RawValue LocalDateTime,
-    val startDate: @RawValue LocalDateTime,
-    val periodType: PeriodType,
-    val dayOfWeek: Int,
+    val executionPeriod: ExecutionPeriod,
     val description: String,
     val pushEnabled: Boolean,
     val autoAdd: Boolean
@@ -42,9 +37,10 @@ data class RegularTransaction(
             sum = BigDecimal.ZERO,
             category = Category.EMPTY,
             createdDate = currentDateTime(),
-            startDate = currentDateTime().date.plus(1, DateTimeUnit.DAY).getStartOfDay(),
-            periodType = PeriodType.MONTH,
-            dayOfWeek = 0,
+            executionPeriod = ExecutionPeriod.EveryMonth(
+                currentDate().dayOfMonth,
+                currentDateTime()
+            ),
             description = "",
             pushEnabled = true,
             autoAdd = true
