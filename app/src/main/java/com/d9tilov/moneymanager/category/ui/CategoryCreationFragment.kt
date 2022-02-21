@@ -39,9 +39,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class CategoryCreationFragment :
-    BaseFragment<CategoryCreationNavigator>(
-        R.layout.fragment_creation_category
-    ),
+    BaseFragment<CategoryCreationNavigator>(R.layout.fragment_creation_category),
     CategoryCreationNavigator {
 
     private val args by navArgs<CategoryCreationFragmentArgs>()
@@ -50,7 +48,7 @@ class CategoryCreationFragment :
         args.category ?: Category.EMPTY.copy(
             type = transactionType,
             name = "",
-            icon = if (transactionType == TransactionType.EXPENSE) R.drawable.ic_category_expense_food else R.drawable.ic_category_income_business,
+            icon = if (transactionType == TransactionType.EXPENSE) R.drawable.ic_category_food else R.drawable.ic_category_business,
             color = R.color.category_pink
         )
     }
@@ -119,8 +117,7 @@ class CategoryCreationFragment :
             categoryCreationEtName.setText(category.name)
             updateIcon(category.icon)
             setColorToColorIcon()
-            categoryCreationSave.isEnabled =
-                categoryCreationEtName.length() > 0
+            categoryCreationSave.isEnabled = categoryCreationEtName.length() > 0
             categoryCreationEtName.onChange { text ->
                 categoryCreationSave.isEnabled = text.isNotEmpty()
                 categoryCreationEtNameLayout.error = null
@@ -131,7 +128,7 @@ class CategoryCreationFragment :
                 categoryCreationDelete.show()
             }
             categoryCreationIconLayout.setOnClickListener {
-                val action = CategoryCreationFragmentDirections.toCategorySetDest(transactionType)
+                val action = CategoryCreationFragmentDirections.toCategorySetDest()
                 findNavController().navigate(action)
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
                     param(FirebaseAnalytics.Param.ITEM_ID, "open_category_set_screen")

@@ -36,7 +36,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_goneMarginStart="@dimen/standard_left_margin"
-            tools:src="@drawable/ic_category_expense_cafe" />
+            tools:src="@drawable/ic_category_cafe" />
 
         <TextView
             android:id="@+id/item_regular_transaction_category_name"

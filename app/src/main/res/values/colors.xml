@@ -37,9 +37,6 @@
 
     <color name="transaction_divider_color">#3d3d3d</color>
 
-    <color name="category_white">#ffffff</color>
-    <color name="category_black">#000000</color>
-    <color name="category_red">#ff3333</color>
     <color name="category_yellow">#ffcc00</color>
     <color name="category_light_green">#63e693</color>
     <color name="category_green">#00b341</color>
@@ -47,7 +44,6 @@
     <color name="category_blue">#0077ff</color>
     <color name="category_violet">#5844a2</color>
     <color name="category_dark_red">#b12d24</color>
-    <color name="category_brick_red">#e23d31</color>
     <color name="category_dark_orange">#d3593e</color>
     <color name="category_orange">#f19433</color>
     <color name="category_light_yellow">#f8ed94</color>
@@ -58,8 +54,6 @@
     <color name="category_lollipop">#66c5bb</color>
     <color name="category_navy_blue">#5842da</color>
     <color name="category_grey_blue">#4d86c0</color>
-    <color name="category_sad_blue">#4d5f74</color>
-    <color name="category_grey">#67676f</color>
     <color name="category_purple">#8c3554</color>
     <color name="category_flower_violet">#7b71b7</color>
     <color name="category_light_violet">#a48eae</color>

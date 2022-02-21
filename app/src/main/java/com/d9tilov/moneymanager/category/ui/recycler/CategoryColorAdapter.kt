@@ -21,9 +21,6 @@ class CategoryColorAdapter(@ColorRes private var chosenColor: Int?) :
     private var selectedPosition = -1
 
     private val categoryColorList = listOf(
-        R.color.category_white,
-        R.color.category_black,
-        R.color.category_red,
         R.color.category_yellow,
         R.color.category_light_green,
         R.color.category_green,
@@ -31,7 +28,6 @@ class CategoryColorAdapter(@ColorRes private var chosenColor: Int?) :
         R.color.category_blue,
         R.color.category_violet,
         R.color.category_dark_red,
-        R.color.category_brick_red,
         R.color.category_dark_orange,
         R.color.category_orange,
         R.color.category_light_yellow,
@@ -42,8 +38,6 @@ class CategoryColorAdapter(@ColorRes private var chosenColor: Int?) :
         R.color.category_lollipop,
         R.color.category_navy_blue,
         R.color.category_grey_blue,
-        R.color.category_sad_blue,
-        R.color.category_grey,
         R.color.category_purple,
         R.color.category_flower_violet,
         R.color.category_light_violet,

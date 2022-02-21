@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
@@ -26,8 +25,6 @@ class CategoryIconSetFragment :
     BaseFragment<CategorySetNavigator>(R.layout.fragment_category_icon_set),
     CategorySetNavigator {
 
-    private val args by navArgs<CategoryIconSetFragmentArgs>()
-    private val transactionType by lazy { args.transactionType }
     private val viewBinding by viewBinding(FragmentCategoryIconSetBinding::bind)
     private var toolbar: MaterialToolbar? = null
     private lateinit var categoryAdapter: CategoryIconSetAdapter
@@ -46,7 +43,7 @@ class CategoryIconSetFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        categoryAdapter = CategoryIconSetAdapter(transactionType)
+        categoryAdapter = CategoryIconSetAdapter()
         categoryAdapter.itemClickListener = onItemIconClickListener
     }
 
@@ -60,10 +57,7 @@ class CategoryIconSetFragment :
         super.onViewCreated(view, savedInstanceState)
         viewBinding.run {
             val layoutManager =
-                GridLayoutManager(
-                    requireContext(),
-                    SPAN_COUNT, GridLayoutManager.VERTICAL, false
-                )
+                GridLayoutManager(requireContext(), SPAN_COUNT, GridLayoutManager.VERTICAL, false)
             categorySetRvCategory.layoutManager = layoutManager
             categorySetRvCategory.adapter = categoryAdapter
             categorySetRvCategory.addItemDecoration(

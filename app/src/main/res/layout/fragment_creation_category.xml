@@ -75,7 +75,7 @@
                     android:id="@+id/category_creation_icon"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    tools:srcCompat="@drawable/ic_category_expense_doctor"
+                    tools:srcCompat="@drawable/ic_category_doctor"
                     tools:tint="@color/category_pink" />
 
                 <ImageView

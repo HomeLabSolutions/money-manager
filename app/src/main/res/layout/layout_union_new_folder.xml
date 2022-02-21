@@ -15,7 +15,7 @@
             app:layout_constraintEnd_toStartOf="@+id/category_dialog_union_plus_sign"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/ic_category_expense_cafe" />
+            tools:srcCompat="@drawable/ic_category_cafe" />
 
         <TextView
             android:id="@+id/category_dialog_union_plus_sign"
@@ -37,7 +37,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/ic_category_expense_doctor" />
+            tools:srcCompat="@drawable/ic_category_doctor" />
 
         <ImageView
             android:id="@+id/category_dialog_union_arrow_right"

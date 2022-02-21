@@ -3,42 +3,120 @@ package com.d9tilov.moneymanager.category.ui.recycler
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.databinding.ItemCategoryIconBinding
-import com.d9tilov.moneymanager.transaction.TransactionType
 
-class CategoryIconSetAdapter(private val transactionType: TransactionType) :
+class CategoryIconSetAdapter :
     RecyclerView.Adapter<CategoryIconSetAdapter.CategoryIconViewHolder>() {
 
     var itemClickListener: OnItemClickListener<Int>? = null
 
-    private val expenseCategoryIconList = listOf(
-        R.drawable.ic_category_expense_cafe to R.color.category_yellow,
-        R.drawable.ic_category_expense_car to R.color.category_light_green,
-        R.drawable.ic_category_expense_car_service to R.color.category_violet,
-        R.drawable.ic_category_expense_doctor to R.color.category_light_blue,
-        R.drawable.ic_category_expense_relax to R.color.category_brick_red,
-        R.drawable.ic_category_expense_food to R.color.category_orange,
-        R.drawable.ic_category_internet to R.color.category_mint,
-        R.drawable.ic_category_expense_home to R.color.category_mud_green,
-        R.drawable.ic_category_expense_travels to R.color.category_flower_violet,
-        R.drawable.ic_category_expense_grocery to R.color.category_light_violet,
-        R.drawable.ic_category_expense_fuel to R.color.category_sad_blue
+    private val categoryList = listOf(
+        R.drawable.ic_category_backery,
+        R.drawable.ic_category_barber_shop,
+        R.drawable.ic_category_barista,
+        R.drawable.ic_category_beach,
+        R.drawable.ic_category_beauty,
+        R.drawable.ic_category_beer,
+        R.drawable.ic_category_boxing,
+        R.drawable.ic_category_business,
+        R.drawable.ic_category_bycicle,
+        R.drawable.ic_category_cafe,
+        R.drawable.ic_category_car,
+        R.drawable.ic_category_car_repair,
+        R.drawable.ic_category_car_service,
+        R.drawable.ic_category_coffee,
+        R.drawable.ic_category_coffee2,
+        R.drawable.ic_category_cosmetics,
+        R.drawable.ic_category_deal,
+        R.drawable.ic_category_doctor,
+        R.drawable.ic_category_electric_train,
+        R.drawable.ic_category_electricity,
+        R.drawable.ic_category_epilation,
+        R.drawable.ic_category_fastfood,
+        R.drawable.ic_category_food,
+        R.drawable.ic_category_fuel,
+        R.drawable.ic_category_garbage,
+        R.drawable.ic_category_grocery,
+        R.drawable.ic_category_group,
+        R.drawable.ic_category_gym,
+        R.drawable.ic_category_gym2,
+        R.drawable.ic_category_hair_dryer,
+        R.drawable.ic_category_haircut,
+        R.drawable.ic_category_haircut2,
+        R.drawable.ic_category_haircut_female,
+        R.drawable.ic_category_haircut_modern,
+        R.drawable.ic_category_hike,
+        R.drawable.ic_category_home,
+        R.drawable.ic_category_home_relax,
+        R.drawable.ic_category_injury,
+        R.drawable.ic_category_internet,
+        R.drawable.ic_category_investment,
+        R.drawable.ic_category_massage,
+        R.drawable.ic_category_massage2,
+        R.drawable.ic_category_motorbyke,
+        R.drawable.ic_category_part_time_job,
+        R.drawable.ic_category_percent,
+        R.drawable.ic_category_pipette,
+        R.drawable.ic_category_plumber,
+        R.drawable.ic_category_police,
+        R.drawable.ic_category_pomade,
+        R.drawable.ic_category_public_transport,
+        R.drawable.ic_category_relax,
+        R.drawable.ic_category_relax2,
+        R.drawable.ic_category_rent,
+        R.drawable.ic_category_rent2,
+        R.drawable.ic_category_rent3,
+        R.drawable.ic_category_salary,
+        R.drawable.ic_category_sale,
+        R.drawable.ic_category_sale_house,
+        R.drawable.ic_category_shampoo,
+        R.drawable.ic_category_sushi,
+        R.drawable.ic_category_taxi,
+        R.drawable.ic_category_travels,
+        R.drawable.ic_category_trip,
+        R.drawable.ic_category_turka,
+        R.drawable.ic_category_walking,
+        R.drawable.ic_category_washing,
+        R.drawable.ic_category_water,
+        R.drawable.ic_category_yoga,
+        R.drawable.ic_category_yoga2
     )
 
-    private val incomeCategoryIconList = listOf(
-        R.drawable.ic_category_income_business to R.color.category_yellow,
-        R.drawable.ic_category_income_part_time_job to R.color.category_light_green,
-        R.drawable.ic_category_income_salary to R.color.category_violet,
-        R.drawable.ic_category_income_sale to R.color.category_light_blue
+    private val colorList = listOf(
+        R.color.category_yellow,
+        R.color.category_light_green,
+        R.color.category_green,
+        R.color.category_light_blue,
+        R.color.category_blue,
+        R.color.category_violet,
+        R.color.category_dark_red,
+        R.color.category_dark_orange,
+        R.color.category_orange,
+        R.color.category_light_yellow,
+        R.color.category_mint,
+        R.color.category_grass_green,
+        R.color.category_mud_green,
+        R.color.category_lollipop,
+        R.color.category_navy_blue,
+        R.color.category_flower_violet,
+        R.color.category_light_violet,
+        R.color.category_pink
     )
+
+    private val categoryColorMap = mutableListOf<Pair<Int, Int>>()
 
     init {
         setHasStableIds(true)
+        categoryList.forEachIndexed { index, icon ->
+            categoryColorMap.add(icon to colorList[index % colorList.size])
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryIconViewHolder {
@@ -52,9 +130,7 @@ class CategoryIconSetAdapter(private val transactionType: TransactionType) :
             val adapterPosition = viewHolder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 itemClickListener?.onItemClick(
-                    if (transactionType == TransactionType.EXPENSE)
-                        expenseCategoryIconList[adapterPosition].first else
-                        incomeCategoryIconList[adapterPosition].first,
+                    categoryColorMap[adapterPosition].first,
                     adapterPosition
                 )
             }
@@ -62,11 +138,10 @@ class CategoryIconSetAdapter(private val transactionType: TransactionType) :
         return viewHolder
     }
 
-    override fun getItemCount() =
-        if (transactionType == TransactionType.EXPENSE) expenseCategoryIconList.size else incomeCategoryIconList.size
+    override fun getItemCount() = categoryColorMap.size
 
     override fun onBindViewHolder(holder: CategoryIconViewHolder, position: Int) {
-        holder.bind(if (transactionType == TransactionType.EXPENSE) expenseCategoryIconList[position] else incomeCategoryIconList[position])
+        holder.bind(categoryColorMap[position])
     }
 
     class CategoryIconViewHolder(private val viewBinding: ItemCategoryIconBinding) :
@@ -78,7 +153,12 @@ class CategoryIconSetAdapter(private val transactionType: TransactionType) :
             GlideApp
                 .with(context)
                 .load(tintDrawable)
-                .into(viewBinding.categoryIcon)
+                .apply(RequestOptions().override(120, 120))
+                .fitCenter()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(viewBinding.categoryItemIcon)
         }
     }
+
+    override fun getItemId(position: Int): Long = categoryColorMap[position].first.toLong()
 }

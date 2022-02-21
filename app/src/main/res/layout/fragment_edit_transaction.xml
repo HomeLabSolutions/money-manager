@@ -62,7 +62,7 @@
                 android:maxLines="1"
                 android:textAppearance="?attr/textAppearanceSubtitle1"
                 android:textColor="?android:attr/textColorPrimary"
-                app:drawableStartCompat="@drawable/ic_category_expense_food"
+                app:drawableStartCompat="@drawable/ic_category_food"
                 app:layout_constraintEnd_toStartOf="@+id/edit_transaction_date"
                 app:layout_constraintStart_toStartOf="@+id/edit_transaction_main_sum_title"
                 app:layout_constraintTop_toBottomOf="@+id/edit_transaction_main_sum"

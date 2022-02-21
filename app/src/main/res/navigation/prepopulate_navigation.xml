@@ -283,12 +283,7 @@
         android:id="@+id/category_set_dest"
         android:name="com.d9tilov.moneymanager.category.ui.CategoryIconSetFragment"
         android:label="fragment_title_screen"
-        tools:layout="@layout/fragment_category_icon_set">
-
-        <argument
-            android:name="transactionType"
-            app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
-    </fragment>
+        tools:layout="@layout/fragment_category_icon_set"/>
 
     <fragment
         android:id="@+id/goals_dest"
