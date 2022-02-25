@@ -219,12 +219,7 @@
         android:id="@+id/category_set_dest"
         android:name="com.d9tilov.moneymanager.category.ui.CategoryIconSetFragment"
         android:label="fragment_title_screen"
-        tools:layout="@layout/fragment_category_icon_set">
-
-        <argument
-            android:name="transactionType"
-            app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
-    </fragment>
+        tools:layout="@layout/fragment_category_icon_set"/>
 
     <fragment
         android:id="@+id/currency_dest"
@@ -241,6 +236,14 @@
             app:popUpTo="@+id/edit_transaction_dest"
             app:popUpToInclusive="true" />
 
+        <action
+            android:id="@+id/to_common_amount_dest"
+            app:destination="@id/budget_amount_dest"
+            app:enterAnim="@anim/slide_up_enter"
+            app:exitAnim="@anim/slide_up_exit"
+            app:popEnterAnim="@anim/slide_down_enter"
+            app:popExitAnim="@anim/slide_down_exit" />
+
         <argument
             android:name="destination"
             android:defaultValue="@null"
@@ -252,6 +255,17 @@
             android:defaultValue="@null"
             app:argType="string"
             app:nullable="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/budget_amount_dest"
+        android:name="com.d9tilov.moneymanager.budget.ui.BudgetAmountFragment"
+        android:label="fragment_title_screen"
+        tools:layout="@layout/fragment_budget_amount">
+
+        <argument
+            android:name="destination"
+            app:argType="com.d9tilov.moneymanager.budget.BudgetDestination"/>
     </fragment>
 
     <dialog
