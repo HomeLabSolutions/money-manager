@@ -127,21 +127,6 @@ class TransactionLocalSource(
         } else transactionDao.delete(currentUserId, transaction.toDbModel().id)
     }
 
-    override fun removeAllByCategory(category: Category): Flow<Int> {
-        val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            throw WrongUidException()
-        } else {
-            transactionDao.getByCategoryId(currentUserId, category.id)
-                .map { list ->
-                    for (transaction in list) {
-                        transactionDao.deleteByCategoryId(currentUserId, category.id)
-                    }
-                    list.size
-                }
-        }
-    }
-
     override suspend fun clearAll() {
         val currentUserId = preferencesStore.uid
         if (currentUserId == null) {

@@ -16,3 +16,6 @@ sealed class TransactionType(open val name: String) : Parcelable {
     @Parcelize
     object EXPENSE : TransactionType(EXPENSE_TRANSACTION_NAME)
 }
+
+fun TransactionType.isIncome() = this is TransactionType.INCOME
+fun TransactionType.isExpense() = this is TransactionType.EXPENSE

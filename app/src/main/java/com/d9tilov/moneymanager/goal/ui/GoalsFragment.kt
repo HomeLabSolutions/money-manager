@@ -104,14 +104,13 @@ class GoalsFragment :
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
             ARG_UNDO_REMOVE_LAYOUT_DISMISS
         )?.observe(viewLifecycleOwner) { if (it) goalAdapter.cancelDeletion() }
+        viewModel.accumulated.observe(
+            this.viewLifecycleOwner
+        ) { viewBinding.run { goalsAmount.setValue(it) } }
         viewModel.budget.observe(
             this.viewLifecycleOwner
-        ) {
-            viewBinding.run {
-                goalsAmount.setValue(it.sum)
-                goalsSumPerPeriod.setValue(it.saveSum)
-            }
-        }
+        ) { viewBinding.run { goalsSumPerPeriod.setValue(it.saveSum) } }
+
         viewModel.goals.observe(
             this.viewLifecycleOwner
         ) {

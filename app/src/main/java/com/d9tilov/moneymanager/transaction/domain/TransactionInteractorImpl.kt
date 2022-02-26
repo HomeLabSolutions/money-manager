@@ -21,9 +21,11 @@ import com.d9tilov.moneymanager.regular.domain.entity.ExecutionPeriod
 import com.d9tilov.moneymanager.regular.domain.entity.PeriodType
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDataModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDomainModel
+import com.d9tilov.moneymanager.transaction.isIncome
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
@@ -56,11 +58,19 @@ class TransactionInteractorImpl(
     override suspend fun addTransaction(transaction: Transaction) {
         val currencyCode = transaction.currencyCode
         val usdSumValue = currencyInteractor.toUsd(transaction.sum, currencyCode)
-        val newTransaction = transaction.copy(currencyCode = currencyCode, usdSum = usdSumValue).toDataModel()
+        val newTransaction =
+            transaction.copy(currencyCode = currencyCode, usdSum = usdSumValue).toDataModel()
         transactionRepo.addTransaction(newTransaction)
         val category = categoryInteractor.getCategoryById(transaction.category.id)
         val count = category.usageCount + 1
         categoryInteractor.update(category.copy(usageCount = count))
+        val budget = budgetInteractor.get().first()
+        var budgetSum = budget.sum
+        budgetSum += currencyInteractor.convertToMainCurrency(
+            if (transaction.type.isIncome()) transaction.sum else transaction.sum.negate(),
+            transaction.currencyCode
+        )
+        budgetInteractor.update(budget.copy(sum = budgetSum))
     }
 
     override fun getTransactionById(id: Long): Flow<Transaction> {
@@ -72,7 +82,7 @@ class TransactionInteractorImpl(
                     transactionDataModel.clientId,
                     transactionDataModel.type,
                     category,
-                    transactionDataModel.currency,
+                    transactionDataModel.currencyCode,
                     transactionDataModel.sum,
                     transactionDataModel.usdSum,
                     transactionDataModel.date,
@@ -120,7 +130,7 @@ class TransactionInteractorImpl(
                     onlyInStatistics = true,
                     withRegular = false
                 ).map { list ->
-                    list.sumOf { currencyInteractor.convertToMainCurrency(it.sum, it.currency) }
+                    list.sumOf { currencyInteractor.convertToMainCurrency(it.sum, it.currencyCode) }
                 }
             }
         val expenseFlow = flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
@@ -138,7 +148,7 @@ class TransactionInteractorImpl(
                 list.sumOf {
                     currencyInteractor.convertToMainCurrency(
                         it.sum,
-                        it.currency
+                        it.currencyCode
                     )
                 }
             }
@@ -157,7 +167,7 @@ class TransactionInteractorImpl(
             onlyInStatistics = true,
             withRegular = false
         ).map { list ->
-            list.sumOf { currencyInteractor.convertToMainCurrency(it.sum, it.currency) }
+            list.sumOf { currencyInteractor.convertToMainCurrency(it.sum, it.currencyCode) }
         }
 
         val numeratorFlow = combine(
@@ -226,12 +236,51 @@ class TransactionInteractorImpl(
             ).map { list ->
                 val currentCurrency = userInteractor.getCurrentCurrency()
                 val currencies = mutableSetOf<String>()
-                list.forEach { tr -> currencies.add(tr.currency) }
+                list.forEach { tr -> currencies.add(tr.currencyCode) }
                 val currencyCode = userInteractor.getCurrentCurrency()
                 if ((currencies.size == 1 && currencies.contains(currencyCode)) || currentCurrency == DataConstants.DEFAULT_CURRENCY_CODE) BigDecimal.ZERO
                 else list.sumOf { it.usdSum }
             }
         }
+    }
+
+    override fun getSumInFiscalPeriod(): Flow<BigDecimal> {
+        val incomesFlow =
+            flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
+                val endDate = currentDateTime().getEndOfDay()
+                val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
+                transactionRepo.getTransactionsByTypeInPeriod(
+                    startDate,
+                    endDate,
+                    TransactionType.INCOME,
+                    onlyInStatistics = true,
+                    withRegular = true
+                ).map { list ->
+                    list.sumOf { currencyInteractor.convertToMainCurrency(it.sum, it.currencyCode) }
+                }
+            }
+        val expenseFlow = flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
+            val endDate = currentDateTime().getEndOfDay()
+            val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
+            transactionRepo.getTransactionsByTypeInPeriod(
+                startDate,
+                endDate,
+                TransactionType.EXPENSE,
+                onlyInStatistics = true,
+                withRegular = true
+            ).map { list ->
+                list.sumOf {
+                    currencyInteractor.convertToMainCurrency(
+                        it.sum,
+                        it.currencyCode
+                    )
+                }
+            }
+        }
+        return combine(
+            incomesFlow,
+            expenseFlow
+        ) { income, expense -> income.minus(expense) }
     }
 
     override fun getSumTodayInUsd(type: TransactionType): Flow<BigDecimal> =
@@ -242,7 +291,7 @@ class TransactionInteractorImpl(
         ).map { list ->
             val currentCurrency = userInteractor.getCurrentCurrency()
             val currencies = mutableSetOf<String>()
-            list.forEach { tr -> currencies.add(tr.currency) }
+            list.forEach { tr -> currencies.add(tr.currencyCode) }
             val currencyCode = userInteractor.getCurrentCurrency()
             if ((currencies.size == 1 && currencies.contains(currencyCode)) || currentCurrency == DataConstants.DEFAULT_CURRENCY_CODE) BigDecimal.ZERO
             else list.sumOf { it.usdSum }
@@ -259,7 +308,7 @@ class TransactionInteractorImpl(
             ).map { list ->
                 val currentCurrency = userInteractor.getCurrentCurrency()
                 list.sumOf { tr ->
-                    if (tr.currency == currentCurrency) {
+                    if (tr.currencyCode == currentCurrency) {
                         tr.sum
                     } else {
                         val trCurrency = currencyInteractor.getCurrencyByCode(currentCurrency)
@@ -278,7 +327,7 @@ class TransactionInteractorImpl(
         ).map { list ->
             val currentCurrency = userInteractor.getCurrentCurrency()
             list.sumOf { tr ->
-                if (tr.currency == currentCurrency) {
+                if (tr.currencyCode == currentCurrency) {
                     tr.sum
                 } else {
                     val trCurrency = currencyInteractor.getCurrencyByCode(currentCurrency)
@@ -416,17 +465,39 @@ class TransactionInteractorImpl(
 
     override suspend fun update(transaction: Transaction) {
         val usdSumValue = currencyInteractor.toUsd(transaction.sum, transaction.currencyCode)
+        val oldTransaction: TransactionDataModel =
+            transactionRepo.getTransactionById(transaction.id).first()
         transactionRepo.update(transaction.toDataModel().copy(usdSum = usdSumValue))
+        val budget = budgetInteractor.get().first()
+        var budgetSum = budget.sum
+        budgetSum += currencyInteractor.convertToMainCurrency(
+            if (oldTransaction.type.isIncome()) oldTransaction.sum.negate() else oldTransaction.sum,
+            oldTransaction.currencyCode
+        )
+        budgetSum += currencyInteractor.convertToMainCurrency(
+            if (transaction.type.isIncome()) oldTransaction.sum else oldTransaction.sum.negate(),
+            transaction.currencyCode
+        )
+        budgetInteractor.update(budget.copy(sum = budgetSum))
     }
 
     override suspend fun removeTransaction(transaction: Transaction) {
         transactionRepo.removeTransaction(transaction.toDataModel())
+        val budget = budgetInteractor.get().first()
+        var budgetSum = budget.sum
+        budgetSum += currencyInteractor.convertToMainCurrency(
+            if (transaction.type.isIncome()) transaction.sum.negate() else transaction.sum,
+            transaction.currencyCode
+        )
+        budgetInteractor.update(budget.copy(sum = budgetSum))
     }
 
     override fun removeAllByCategory(category: Category): Flow<Int> {
-        return transactionRepo.getByCategory(category).flatMapConcat {
-            transactionRepo.removeAllByCategory(category)
-        }
+        return transactionRepo.getByCategory(category)
+            .map { list: List<TransactionDataModel> ->
+                list.forEach { tr -> removeTransaction(tr.toDomainModel(category)) }
+                list.size
+            }
     }
 
     override suspend fun clearAll() {

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.multidex.MultiDexApplication
 import androidx.work.Configuration
+import com.d9tilov.moneymanager.backup.PeriodicBackupWorker
 import com.facebook.appevents.AppEventsLogger
 import com.facebook.stetho.Stetho
 import dagger.hilt.android.HiltAndroidApp
@@ -35,6 +36,7 @@ class App : MultiDexApplication(), Configuration.Provider {
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
         }
+        PeriodicBackupWorker.startPeriodicJob(this)
     }
 
     override fun getWorkManagerConfiguration(): Configuration {

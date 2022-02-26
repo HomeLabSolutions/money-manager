@@ -12,7 +12,7 @@ data class TransactionDataModel(
     val clientId: String = NO_ID.toString(),
     val type: TransactionType,
     val categoryId: Long,
-    val currency: String,
+    val currencyCode: String,
     val sum: BigDecimal,
     val usdSum: BigDecimal,
     val date: LocalDateTime = currentDateTime(),

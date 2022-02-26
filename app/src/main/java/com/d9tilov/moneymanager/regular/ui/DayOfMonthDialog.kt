@@ -2,6 +2,7 @@ package com.d9tilov.moneymanager.regular.ui
 
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -9,7 +10,7 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseDialogFragment
 import com.d9tilov.moneymanager.base.ui.navigator.DayOfMonthDialogNavigator
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
-import com.d9tilov.moneymanager.databinding.FragmentDialogDayOfMonthBinding
+import com.d9tilov.moneymanager.databinding.FragmentDialogDayOfMonthPickerBinding
 import com.d9tilov.moneymanager.regular.ui.RegularTransactionCreationFragment.Companion.ARG_DAY_OF_MONTH
 import com.d9tilov.moneymanager.regular.vm.DayOfMonthViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,9 +19,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class DayOfMonthDialog :
     BaseDialogFragment<DayOfMonthDialogNavigator>(), DayOfMonthDialogNavigator {
 
-    private val viewBinding by viewBinding(FragmentDialogDayOfMonthBinding::bind)
+    private val viewBinding by viewBinding(FragmentDialogDayOfMonthPickerBinding::bind)
 
-    override val layoutId = R.layout.fragment_dialog_day_of_month
+    override val layoutId = R.layout.fragment_dialog_day_of_month_picker
     override fun getNavigator() = this
     override val viewModel by viewModels<DayOfMonthViewModel>()
 
@@ -71,51 +72,51 @@ class DayOfMonthDialog :
     }
 
     private fun setDayOfMonth(day: Int) {
-        for (i in 1 until 31) {
-            viewBinding.run {
-                val view = when (i) {
-                    1 -> dayOfMonth1
-                    2 -> dayOfMonth2
-                    3 -> dayOfMonth3
-                    4 -> dayOfMonth4
-                    5 -> dayOfMonth5
-                    6 -> dayOfMonth6
-                    7 -> dayOfMonth7
-                    8 -> dayOfMonth8
-                    9 -> dayOfMonth9
-                    10 -> dayOfMonth10
-                    11 -> dayOfMonth11
-                    12 -> dayOfMonth12
-                    13 -> dayOfMonth13
-                    14 -> dayOfMonth14
-                    15 -> dayOfMonth15
-                    16 -> dayOfMonth16
-                    17 -> dayOfMonth17
-                    18 -> dayOfMonth18
-                    19 -> dayOfMonth19
-                    20 -> dayOfMonth20
-                    21 -> dayOfMonth21
-                    22 -> dayOfMonth22
-                    23 -> dayOfMonth23
-                    24 -> dayOfMonth24
-                    25 -> dayOfMonth25
-                    26 -> dayOfMonth26
-                    27 -> dayOfMonth27
-                    28 -> dayOfMonth28
-                    29 -> dayOfMonth29
-                    30 -> dayOfMonth30
-                    31 -> dayOfMonth31
-                    else -> throw IllegalArgumentException("Unknown day of week: $day")
-                }
-                view.isSelected = i == day
-                view.setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        if (view.isSelected) R.color.primary_color else R.color.control_activated_color
-                    )
-                )
+        val newView = getViewFromDay(day)
+        val oldView = getViewFromDay(viewModel.dayOfMonth)
+        oldView.isSelected = false
+        oldView.setTextColor(ContextCompat.getColor(requireContext(), R.color.control_activated_color))
+        newView.isSelected = true
+        newView.setTextColor(ContextCompat.getColor(requireContext(), R.color.primary_color))
+        viewModel.dayOfMonth = day
+    }
+
+    private fun getViewFromDay(day: Int): TextView {
+        return viewBinding.run {
+            when (day) {
+                1 -> dayOfMonth1
+                2 -> dayOfMonth2
+                3 -> dayOfMonth3
+                4 -> dayOfMonth4
+                5 -> dayOfMonth5
+                6 -> dayOfMonth6
+                7 -> dayOfMonth7
+                8 -> dayOfMonth8
+                9 -> dayOfMonth9
+                10 -> dayOfMonth10
+                11 -> dayOfMonth11
+                12 -> dayOfMonth12
+                13 -> dayOfMonth13
+                14 -> dayOfMonth14
+                15 -> dayOfMonth15
+                16 -> dayOfMonth16
+                17 -> dayOfMonth17
+                18 -> dayOfMonth18
+                19 -> dayOfMonth19
+                20 -> dayOfMonth20
+                21 -> dayOfMonth21
+                22 -> dayOfMonth22
+                23 -> dayOfMonth23
+                24 -> dayOfMonth24
+                25 -> dayOfMonth25
+                26 -> dayOfMonth26
+                27 -> dayOfMonth27
+                28 -> dayOfMonth28
+                29 -> dayOfMonth29
+                30 -> dayOfMonth30
+                31 -> dayOfMonth31
+                else -> throw IllegalArgumentException("Unknown day of week: $day")
             }
         }
-        viewModel.dayOfMonth = day
     }
 }

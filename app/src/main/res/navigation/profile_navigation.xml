@@ -497,7 +497,7 @@
     <dialog
         android:id="@+id/day_of_month_dialog"
         android:name="com.d9tilov.moneymanager.regular.ui.DayOfMonthDialog"
-        tools:layout="@layout/fragment_dialog_day_of_month">
+        tools:layout="@layout/fragment_dialog_day_of_month_picker">
 
         <argument
             android:name="day_of_month"

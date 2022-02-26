@@ -9,4 +9,4 @@ fun Transaction.toDataModel(): TransactionDataModel = TransactionDataModel(
 )
 
 fun TransactionDataModel.toDomainModel(category: Category): Transaction =
-    Transaction(id, clientId, type, category, currency, sum, usdSum, date, description, qrCode, isRegular, inStatistics)
+    Transaction(id, clientId, type, category, currencyCode, sum, usdSum, date, description, qrCode, isRegular, inStatistics)

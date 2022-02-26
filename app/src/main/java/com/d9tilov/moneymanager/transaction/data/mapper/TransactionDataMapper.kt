@@ -24,7 +24,7 @@ fun TransactionDataModel.toDbModel(): TransactionDbModel =
         clientId,
         type,
         categoryId,
-        currency,
+        currencyCode,
         sum,
         usdSum,
         date,

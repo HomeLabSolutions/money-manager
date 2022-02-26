@@ -5,6 +5,7 @@ import android.text.InputFilter
 import android.text.InputType
 import android.text.Spanned
 import android.util.AttributeSet
+import android.util.Log
 import androidx.appcompat.widget.AppCompatEditText
 import com.d9tilov.moneymanager.core.R
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DECIMAL_SEPARATOR
@@ -140,6 +141,7 @@ class MoneyEditText @JvmOverloads constructor(
         }
         val sbResult = StringBuilder()
         val notFormattedText = userInput.replace(GROUPING_SEPARATOR.toString(), "")
+        if (notFormattedText.length == 1 && notFormattedText == "-") return
         if (notFormattedText.contains(DECIMAL_SEPARATOR)) {
             // Есть дробная часть
             val wholeText =
