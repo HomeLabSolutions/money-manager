@@ -35,7 +35,7 @@ import com.d9tilov.moneymanager.regular.domain.entity.ExecutionPeriod
 import com.d9tilov.moneymanager.regular.domain.entity.PeriodType
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.regular.vm.CreatedRegularTransactionViewModel
-import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.isIncome
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.math.BigDecimal
@@ -352,7 +352,7 @@ class RegularTransactionCreationFragment :
         activity.setSupportActionBar(toolbar)
         toolbar?.title =
             getString(
-                if (transactionType == TransactionType.INCOME) R.string.title_prepopulate_regular_income
+                if (transactionType.isIncome()) R.string.title_prepopulate_regular_income
                 else R.string.title_prepopulate_regular_expense
             )
         activity.setSupportActionBar(toolbar)

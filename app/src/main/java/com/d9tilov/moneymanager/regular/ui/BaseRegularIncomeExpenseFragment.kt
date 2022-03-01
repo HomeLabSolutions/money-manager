@@ -21,6 +21,7 @@ import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.regular.vm.BaseRegularIncomeExpenseViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.isIncome
 import com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialog
 import com.google.android.material.appbar.MaterialToolbar
 
@@ -36,7 +37,7 @@ abstract class BaseRegularIncomeExpenseFragment<N : BaseRegularIncomeExpenseNavi
 
     private val onItemClickListener = object : OnItemClickListener<RegularTransaction> {
         override fun onItemClick(item: RegularTransaction, position: Int) {
-            val action = if (transactionType == TransactionType.INCOME) {
+            val action = if (transactionType.isIncome()) {
                 RegularIncomeFragmentDirections.toCreateRegularTransactionDest(
                     transactionType,
                     item
@@ -63,7 +64,7 @@ abstract class BaseRegularIncomeExpenseFragment<N : BaseRegularIncomeExpenseNavi
     }
 
     private fun openRemoveConfirmationDialog(transaction: RegularTransaction) {
-        val action = if (transactionType == TransactionType.INCOME) {
+        val action = if (transactionType.isIncome()) {
             RegularIncomeFragmentDirections.toRemoveTransactionDialog(regularTransaction = transaction)
         } else {
             RegularExpenseFragmentDirections.toRemoveTransactionDialog(regularTransaction = transaction)
@@ -138,7 +139,7 @@ abstract class BaseRegularIncomeExpenseFragment<N : BaseRegularIncomeExpenseNavi
                 inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_title)
             stubTitle?.text =
                 getString(
-                    if (transactionType == TransactionType.INCOME)
+                    if (transactionType.isIncome())
                         R.string.transaction_empty_placeholder_regular_income_title else
                         R.string.transaction_empty_placeholder_regular_expense_title
                 )
@@ -161,7 +162,7 @@ abstract class BaseRegularIncomeExpenseFragment<N : BaseRegularIncomeExpenseNavi
     }
 
     private fun openCreatedScreen(transactionType: TransactionType) {
-        val action = if (transactionType == TransactionType.INCOME) {
+        val action = if (transactionType.isIncome()) {
             RegularIncomeFragmentDirections.toCreateRegularTransactionDest(TransactionType.INCOME)
         } else {
             RegularExpenseFragmentDirections.toCreateRegularTransactionDest(TransactionType.EXPENSE)

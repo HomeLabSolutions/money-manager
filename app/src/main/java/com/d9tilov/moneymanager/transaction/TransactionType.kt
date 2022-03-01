@@ -18,4 +18,3 @@ sealed class TransactionType(open val name: String) : Parcelable {
 }
 
 fun TransactionType.isIncome() = this is TransactionType.INCOME
-fun TransactionType.isExpense() = this is TransactionType.EXPENSE

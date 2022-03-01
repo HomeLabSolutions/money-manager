@@ -32,6 +32,7 @@ import com.d9tilov.moneymanager.incomeexpense.ui.listeners.OnIncomeExpenseListen
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
+import com.d9tilov.moneymanager.transaction.isIncome
 import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.flow.collect
@@ -158,9 +159,9 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
             val stubTitle = inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_title)
             stubTitle?.text =
                 getString(
-                    if (getType() == TransactionType.EXPENSE)
-                        R.string.transaction_empty_placeholder_expense_title
-                    else R.string.transaction_empty_placeholder_income_title
+                    if (getType().isIncome())
+                        R.string.transaction_empty_placeholder_income_title
+                    else R.string.transaction_empty_placeholder_expense_title
                 )
             val stubSubTitle = inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_subtitle)
             stubSubTitle?.show()

@@ -29,6 +29,7 @@ import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
 import com.d9tilov.moneymanager.incomeexpense.ui.BaseIncomeExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
 import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.isIncome
 import com.d9tilov.moneymanager.transaction.ui.callback.TransactionSwipeToDeleteCallback
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
@@ -186,7 +187,7 @@ class ExpenseFragment :
     }
 
     override fun saveTransaction(category: Category) {
-        if (category.type == TransactionType.EXPENSE) {
+        if (!category.type.isIncome()) {
             viewModel.saveTransaction(category, getSum(), getCurrencyCode())
         }
     }

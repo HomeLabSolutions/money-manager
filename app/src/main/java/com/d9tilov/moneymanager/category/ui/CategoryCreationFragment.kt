@@ -30,7 +30,7 @@ import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentCreationCategoryBinding
-import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.isIncome
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
@@ -48,7 +48,7 @@ class CategoryCreationFragment :
         args.category ?: Category.EMPTY.copy(
             type = transactionType,
             name = "",
-            icon = if (transactionType == TransactionType.EXPENSE) R.drawable.ic_category_food else R.drawable.ic_category_business,
+            icon = if (!transactionType.isIncome()) R.drawable.ic_category_food else R.drawable.ic_category_business,
             color = R.color.category_pink
         )
     }
