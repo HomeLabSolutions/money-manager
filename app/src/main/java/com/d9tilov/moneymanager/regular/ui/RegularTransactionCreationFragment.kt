@@ -30,7 +30,7 @@ import com.d9tilov.moneymanager.core.util.toBigDecimal
 import com.d9tilov.moneymanager.currency.CurrencyDestination
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.ui.CurrencyFragment
-import com.d9tilov.moneymanager.databinding.FragmentCreationRegularTransactionBinding
+import com.d9tilov.moneymanager.databinding.FragmentRegularTransactionCreationBinding
 import com.d9tilov.moneymanager.regular.domain.entity.ExecutionPeriod
 import com.d9tilov.moneymanager.regular.domain.entity.PeriodType
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
@@ -43,7 +43,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class RegularTransactionCreationFragment :
-    BaseFragment<RegularTransactionCreatedNavigator>(R.layout.fragment_creation_regular_transaction),
+    BaseFragment<RegularTransactionCreatedNavigator>(R.layout.fragment_regular_transaction_creation),
     RegularTransactionCreatedNavigator {
 
     private val args by navArgs<RegularTransactionCreationFragmentArgs>()
@@ -54,7 +54,7 @@ class RegularTransactionCreationFragment :
         PeriodType.WEEK to 1,
         PeriodType.MONTH to 2
     )
-    private val viewBinding by viewBinding(FragmentCreationRegularTransactionBinding::bind)
+    private val viewBinding by viewBinding(FragmentRegularTransactionCreationBinding::bind)
     private var toolbar: MaterialToolbar? = null
     private var localTransaction: RegularTransaction? = null
 

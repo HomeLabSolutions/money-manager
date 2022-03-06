@@ -68,4 +68,9 @@
     <dimen name="pin_button_margin_height">0dp</dimen>
     <dimen name="pin_text_size">32sp</dimen>
 
+    <dimen name="statistics_padding_vertical">8dp</dimen>
+    <dimen name="statistics_padding_horizontal">0dp</dimen>
+    <dimen name="statistics_period_width">72dp</dimen>
+    <dimen name="statistics_period_text_size">12sp</dimen>
+
 </resources>

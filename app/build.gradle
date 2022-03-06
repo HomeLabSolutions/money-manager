@@ -113,6 +113,10 @@ task ktlintFormat(type: JavaExec, group: "formatting") {
     args "-F", "src/**/*.kt"
 }
 
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
 dependencies {
 
     implementation project(':core')
@@ -153,6 +157,8 @@ dependencies {
     implementation "androidx.hilt:hilt-work:1.0.0"
 
     implementation 'com.beust:klaxon:5.5'
+
+    implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
 
     ktlint "com.pinterest:ktlint:0.37.2"
 }

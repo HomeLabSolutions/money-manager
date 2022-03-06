@@ -171,4 +171,10 @@
 
 
     <string name="day_of_month_title">Выберите день месяца</string>
+
+    <string name="statistics_period_day">День</string>
+    <string name="statistics_period_week">Неделя</string>
+    <string name="statistics_period_month">Месяц</string>
+    <string name="statistics_period_year">Год</string>
+    <string name="statistics_period_custom">Другой…</string>
 </resources>

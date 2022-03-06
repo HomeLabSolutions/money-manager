@@ -124,7 +124,7 @@
         android:id="@+id/regular_created_transaction_dest"
         android:name="com.d9tilov.moneymanager.regular.ui.RegularTransactionCreationFragment"
         android:label="fragment_title_screen"
-        tools:layout="@layout/fragment_creation_regular_transaction">
+        tools:layout="@layout/fragment_regular_transaction_creation">
 
         <action
             android:id="@+id/to_fixed_category_dest"

@@ -169,4 +169,10 @@
     <string name="notification_channel_expense_name">Regular expenses</string>
 
     <string name="day_of_month_title">Choose the day of the month</string>
+
+    <string name="statistics_period_day">Day</string>
+    <string name="statistics_period_week">Week</string>
+    <string name="statistics_period_month">Month</string>
+    <string name="statistics_period_year">Year</string>
+    <string name="statistics_period_custom">Custom…</string>
 </resources>

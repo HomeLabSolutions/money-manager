@@ -5,12 +5,106 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/statistics_day"
+        android:layout_width="@dimen/statistics_period_width"
         android:layout_height="wrap_content"
-        android:text="@string/coming_soon"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/background_statistics_left_selector"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingHorizontal="@dimen/statistics_padding_horizontal"
+        android:paddingVertical="@dimen/statistics_padding_vertical"
+        android:text="@string/statistics_period_day"
+        android:textColor="@drawable/background_statistics_selector_text_color"
+        android:textSize="@dimen/statistics_period_text_size"
+        app:layout_constraintEnd_toStartOf="@+id/statistics_week"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/statistics_week"
+        android:layout_width="@dimen/statistics_period_width"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_statistics_selector"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingHorizontal="@dimen/statistics_padding_horizontal"
+        android:paddingVertical="@dimen/statistics_padding_vertical"
+        android:text="@string/statistics_period_week"
+        android:textColor="@drawable/background_statistics_selector_text_color"
+        android:textSize="@dimen/statistics_period_text_size"
+        app:layout_constraintBottom_toBottomOf="@+id/statistics_day"
+        app:layout_constraintEnd_toStartOf="@+id/statistics_month"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/statistics_day"
+        app:layout_constraintTop_toTopOf="@+id/statistics_day" />
+
+    <TextView
+        android:id="@+id/statistics_month"
+        android:layout_width="@dimen/statistics_period_width"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_statistics_selector"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingHorizontal="@dimen/statistics_padding_horizontal"
+        android:paddingVertical="@dimen/statistics_padding_vertical"
+        android:text="@string/statistics_period_month"
+        android:textColor="@drawable/background_statistics_selector_text_color"
+        android:textSize="@dimen/statistics_period_text_size"
+        app:layout_constraintBottom_toBottomOf="@+id/statistics_day"
+        app:layout_constraintEnd_toStartOf="@+id/statistics_year"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/statistics_week" />
+
+    <TextView
+        android:id="@+id/statistics_year"
+        android:layout_width="@dimen/statistics_period_width"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_statistics_selector"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingHorizontal="@dimen/statistics_padding_horizontal"
+        android:paddingVertical="@dimen/statistics_padding_vertical"
+        android:text="@string/statistics_period_year"
+        android:textColor="@drawable/background_statistics_selector_text_color"
+        android:textSize="@dimen/statistics_period_text_size"
+        app:layout_constraintBottom_toBottomOf="@+id/statistics_day"
+        app:layout_constraintEnd_toStartOf="@+id/statistics_custom"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/statistics_month"
+        app:layout_constraintTop_toTopOf="@+id/statistics_day" />
+
+    <TextView
+        android:id="@+id/statistics_custom"
+        android:layout_width="@dimen/statistics_period_width"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_statistics_right_selector"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingHorizontal="@dimen/statistics_padding_horizontal"
+        android:paddingVertical="@dimen/statistics_padding_vertical"
+        android:text="@string/statistics_period_custom"
+        android:textColor="@drawable/background_statistics_selector_text_color"
+        android:textSize="@dimen/statistics_period_text_size"
+        app:layout_constraintBottom_toBottomOf="@+id/statistics_day"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/statistics_year"
+        app:layout_constraintTop_toTopOf="@+id/statistics_day" />
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/statistics_pie_chart"
+        android:layout_width="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="400dp"
+        android:layout_marginTop="36dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statistics_day" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
