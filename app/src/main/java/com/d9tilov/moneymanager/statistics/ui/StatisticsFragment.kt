@@ -18,7 +18,6 @@ import com.d9tilov.moneymanager.core.util.currentDate
 import com.d9tilov.moneymanager.core.util.divideBy
 import com.d9tilov.moneymanager.core.util.getEndOfDay
 import com.d9tilov.moneymanager.core.util.gone
-import com.d9tilov.moneymanager.core.util.hide
 import com.d9tilov.moneymanager.core.util.isSameDay
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.toMillis
