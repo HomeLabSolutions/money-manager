@@ -111,12 +111,22 @@ class StatisticsFragment :
         val dataSet = PieDataSet(
             list
                 .filter { tr ->
-                    tr.usdSum.divideBy(sum).multiply(BigDecimal(100)) > PERCENT_LIMIT_TO_SHOW_LABEL
+                    tr.usdSum.divideBy(sum)
+                        .multiply(BigDecimal(100)) > PERCENT_LIMIT_TO_SHOW_LABEL_FILTER
                 }
                 .map { tr ->
+                    val categoryName = tr.category.name
+                    val percent: BigDecimal = tr.usdSum.divideBy(sum).multiply(BigDecimal(100))
+                    val displayName = if (percent > PERCENT_LIMIT_TO_SHOW_LABEL) {
+                        if (categoryName.length > MAX_CATEGORY_NAME_LENGTH) "${
+                            categoryName.dropLast(
+                                categoryName.length - MAX_CATEGORY_NAME_LENGTH
+                            )
+                        }..." else categoryName
+                    } else ""
                     PieEntry(
                         tr.sum.toFloat(),
-                        tr.category.name,
+                        displayName,
                         createTintDrawable(requireContext(), tr.category.icon, tr.category.color)
                     )
                 },
@@ -218,6 +228,8 @@ class StatisticsFragment :
     }
 
     companion object {
-        private val PERCENT_LIMIT_TO_SHOW_LABEL = BigDecimal(0)
+        private val PERCENT_LIMIT_TO_SHOW_LABEL_FILTER = BigDecimal(0)
+        private val PERCENT_LIMIT_TO_SHOW_LABEL = BigDecimal(3)
+        private const val MAX_CATEGORY_NAME_LENGTH = 10
     }
 }

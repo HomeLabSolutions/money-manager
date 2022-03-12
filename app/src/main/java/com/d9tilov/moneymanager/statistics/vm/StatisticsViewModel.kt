@@ -27,7 +27,7 @@ class StatisticsViewModel @Inject constructor(private val transactionInteractor:
     BaseViewModel<StatisticsNavigator>() {
 
     var chartMode: StatisticsChartMode = StatisticsChartMode.PIE_CHART
-    var chartPeriod: StatisticsPeriod = StatisticsPeriod.MONTH
+    var chartPeriod: StatisticsPeriod = StatisticsPeriod.DAY
         private set
 
     private val transactionsLiveData = MutableLiveData<List<TransactionChartModel>>()
