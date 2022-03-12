@@ -23,6 +23,8 @@ import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
+import com.d9tilov.moneymanager.transaction.domain.mapper.toChartModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDataModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDomainModel
 import com.d9tilov.moneymanager.transaction.isIncome
@@ -38,6 +40,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.atTime
 import kotlinx.datetime.minus
 import kotlinx.datetime.periodUntil
@@ -71,6 +74,48 @@ class TransactionInteractorImpl(
             transaction.currencyCode
         )
         budgetInteractor.update(budget.copy(sum = budgetSum))
+    }
+
+    override fun getTransactionsGroupedByCategory(
+        type: TransactionType,
+        from: LocalDateTime,
+        to: LocalDateTime,
+        inStatistics: Boolean
+    ): Flow<List<TransactionChartModel>> {
+        return categoryInteractor.getGroupedCategoriesByType(type)
+            .flatMapLatest { categoryList ->
+                transactionRepo.getTransactionsByTypeInPeriod(from, to, type, inStatistics)
+                    .map {
+                        it.map { item ->
+                            val category =
+                                categoryList.find { listItem -> item.categoryId == listItem.id }
+                                    ?: throw CategoryNotFoundException("Not found category with id: ${item.categoryId}")
+                            item.toChartModel(category)
+                        }
+                    }
+                    .map { list ->
+                        list.groupBy { tr -> tr.category }
+                            .map { entry: Map.Entry<Category, List<TransactionChartModel>> ->
+                                val currencySum: BigDecimal = entry.value.sumOf { item ->
+                                    currencyInteractor.convertToMainCurrency(
+                                        item.sum,
+                                        item.currencyCode
+                                    )
+                                }
+                                val usdSum: BigDecimal = entry.value.sumOf { item -> item.usdSum }
+                                val transaction: TransactionChartModel = entry.value.first()
+                                TransactionChartModel(
+                                    transaction.clientId,
+                                    transaction.type,
+                                    entry.key,
+                                    userInteractor.getCurrentCurrency(),
+                                    currencySum,
+                                    usdSum,
+                                    inStatistics
+                                )
+                            }
+                    }
+            }
     }
 
     override fun getTransactionById(id: Long): Flow<Transaction> {

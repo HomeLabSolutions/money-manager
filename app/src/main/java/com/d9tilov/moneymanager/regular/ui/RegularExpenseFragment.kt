@@ -51,7 +51,7 @@ class RegularExpenseFragment :
                 }
             }).attachToRecyclerView(regularExpenseRvList)
         }
-        emptyViewStub = viewBinding.root.findViewById(R.id.regular_expense_empty_placeholder)
+        emptyViewStub = viewBinding.regularExpenseEmptyPlaceholder
         viewModel.regularExpenseTransactionList.observe(
             this.viewLifecycleOwner
         ) {

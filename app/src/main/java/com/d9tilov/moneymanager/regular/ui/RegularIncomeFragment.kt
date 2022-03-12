@@ -51,7 +51,7 @@ class RegularIncomeFragment :
                 }
             }).attachToRecyclerView(regularIncomeRvList)
         }
-        emptyViewStub = viewBinding.root.findViewById(R.id.regular_income_empty_placeholder)
+        emptyViewStub = viewBinding.regularIncomeEmptyPlaceholder
         viewModel.regularIncomeTransactionList.observe(
             this.viewLifecycleOwner
         ) {

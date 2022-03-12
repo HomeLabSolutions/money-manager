@@ -4,9 +4,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
-import android.view.ViewStub
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -27,6 +24,7 @@ import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentGoalsBinding
+import com.d9tilov.moneymanager.databinding.LayoutEmptyListGoalsPlaceholderBinding
 import com.d9tilov.moneymanager.goal.GoalDestination
 import com.d9tilov.moneymanager.goal.domain.entity.Goal
 import com.d9tilov.moneymanager.goal.ui.dialog.GoalRemoveDialog.Companion.ARG_UNDO_REMOVE_LAYOUT_DISMISS
@@ -46,7 +44,7 @@ class GoalsFragment :
     private val destination by lazy { args.destination }
 
     private var toolbar: MaterialToolbar? = null
-    private var emptyViewStub: ViewStub? = null
+    private var emptyViewStub: LayoutEmptyListGoalsPlaceholderBinding? = null
     private val goalAdapter: GoalAdapter = GoalAdapter()
     private val viewBinding by viewBinding(FragmentGoalsBinding::bind)
     private var showViewStub = false
@@ -80,7 +78,7 @@ class GoalsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        emptyViewStub = viewBinding.root.findViewById(R.id.goals_empty_placeholder)
+        emptyViewStub = viewBinding.goalsEmptyPlaceholder
         viewBinding.run {
             if (destination != GoalDestination.PREPOPULATE_SCREEN) {
                 goalsSave.show()
@@ -165,33 +163,26 @@ class GoalsFragment :
     }
 
     private fun showViewStub() {
-        if (emptyViewStub?.parent == null) {
-            emptyViewStub?.show()
-        } else {
-            val inflatedStub = emptyViewStub?.inflate()
-            val stubIcon =
-                inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_icon)
-            stubIcon?.setImageDrawable(
+        emptyViewStub?.let {
+            it.root.show()
+            it.emptyPlaceholderIcon.setImageDrawable(
                 ContextCompat.getDrawable(
                     requireContext(),
                     R.drawable.ic_goal_placeholder
                 )
             )
-            val stubTitle = inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_title)
-            stubTitle?.text = getString(R.string.goals_empty_placeholder_title)
-            val stubSubTitle = inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_subtitle)
-            stubSubTitle?.show()
-            stubSubTitle?.text = getString(R.string.goals_empty_placeholder_subtitle)
-            val addButton = inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_add)
-            addButton?.show()
-            addButton?.setOnClickListener {
-                openCreationGoalScreen()
-            }
+            it.emptyPlaceholderTitle.text = getString(R.string.goals_empty_placeholder_title)
+            val stubSubTitle = it.emptyPlaceholderSubtitle
+            stubSubTitle.show()
+            stubSubTitle.text = getString(R.string.goals_empty_placeholder_subtitle)
+            val addButton = it.emptyPlaceholderAdd
+            addButton.show()
+            addButton.setOnClickListener { openCreationGoalScreen() }
         }
     }
 
     private fun hideViewStub() {
-        emptyViewStub?.visibility = View.GONE
+        emptyViewStub?.root?.gone()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

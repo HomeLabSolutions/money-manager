@@ -54,7 +54,7 @@ class ExpenseFragment :
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun initViews() {
-        emptyViewStub = viewBinding.root.findViewById(R.id.expense_transaction_empty_placeholder)
+        emptyViewStub = viewBinding.expenseTransactionEmptyPlaceholderInclude
         categoryRvList = viewBinding.expenseInfoLayoutInclude.expenseCategoryRvList
         transactionRvList = viewBinding.expenseTransactionLayoutInclude.expenseTransactionRvList
         transactionBtnAdd = viewBinding.expenseTransactionLayoutInclude.expenseTransactionBtnAdd

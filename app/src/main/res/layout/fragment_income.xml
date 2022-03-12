@@ -18,7 +18,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <!-- Should be invisible. Need to stick header for the first time-->
     <include
         android:id="@+id/income_transaction_layout_include"
@@ -31,14 +30,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ViewStub
+    <include
         android:id="@+id/income_transaction_empty_placeholder"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="16dp"
-        android:inflatedId="@+id/inflate"
-        android:layout="@layout/layout_empty_list_placeholder"
+        layout="@layout/layout_empty_list_placeholder"
         android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

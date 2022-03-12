@@ -3,10 +3,6 @@ package com.d9tilov.moneymanager.incomeexpense.ui
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
-import android.view.View.GONE
-import android.view.ViewStub
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -28,6 +24,7 @@ import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showWithAnimation
 import com.d9tilov.moneymanager.core.util.toast
+import com.d9tilov.moneymanager.databinding.LayoutEmptyListPlaceholderBinding
 import com.d9tilov.moneymanager.incomeexpense.ui.listeners.OnIncomeExpenseListener
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -47,7 +44,7 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
 
     protected val categoryAdapter by lazy { CategoryAdapter() }
     protected val transactionAdapter by lazy { TransactionAdapter() }
-    protected var isTransactionDataEmpty = false
+    private var isTransactionDataEmpty = false
 
     override val snackBarBackgroundTint = R.color.button_normal_color_disable
 
@@ -147,33 +144,24 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
 
     private fun showViewStub() {
         if ((requireParentFragment() as IncomeExpenseFragment).isKeyboardOpened()) return
-        if (emptyViewStub.parent == null) {
-            emptyViewStub.show()
-        } else {
-            val inflatedStub = emptyViewStub.inflate()
-            val stubIcon =
-                inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_icon)
-            stubIcon?.setImageDrawable(
-                ContextCompat.getDrawable(requireContext(), R.drawable.ic_wallet_empty)
+        emptyViewStub.root.show()
+        emptyViewStub.emptyPlaceholderIcon.setImageDrawable(
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_wallet_empty)
+        )
+        emptyViewStub.emptyPlaceholderTitle.text =
+            getString(
+                if (getType().isIncome()) R.string.transaction_empty_placeholder_income_title
+                else R.string.transaction_empty_placeholder_expense_title
             )
-            val stubTitle = inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_title)
-            stubTitle?.text =
-                getString(
-                    if (getType().isIncome())
-                        R.string.transaction_empty_placeholder_income_title
-                    else R.string.transaction_empty_placeholder_expense_title
-                )
-            val stubSubTitle = inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_subtitle)
-            stubSubTitle?.show()
-            stubSubTitle?.text = getString(R.string.transaction_empty_placeholder_subtitle)
-            val addTransaction = inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_add)
-            addTransaction?.setOnClickListener { (requireParentFragment() as IncomeExpenseFragment).openKeyboard() }
-        }
+        emptyViewStub.emptyPlaceholderSubtitle.show()
+        emptyViewStub.emptyPlaceholderSubtitle.text =
+            getString(R.string.transaction_empty_placeholder_subtitle)
+        val addTransaction = emptyViewStub.emptyPlaceholderAdd
+        addTransaction.setOnClickListener { (requireParentFragment() as IncomeExpenseFragment).openKeyboard() }
     }
 
-    protected fun hideViewStub() {
-        /*don't use gone() extension!!! isVisible and isShown not worked*/
-        emptyViewStub.visibility = GONE
+    private fun hideViewStub() {
+        emptyViewStub.root.gone()
     }
 
     private fun openRemoveConfirmationDialog(transaction: Transaction) {
@@ -206,11 +194,11 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@Layout
     protected fun getSum(): BigDecimal = (requireParentFragment() as IncomeExpenseFragment).getSum()
     protected fun getCurrencyCode(): String = (requireParentFragment() as IncomeExpenseFragment).getCurrencyCode()
 
-    protected fun resetMainSum() {
+    private fun resetMainSum() {
         (requireParentFragment() as IncomeExpenseFragment).resetSum()
     }
 
-    protected open lateinit var emptyViewStub: ViewStub
+    protected open lateinit var emptyViewStub: LayoutEmptyListPlaceholderBinding
     protected open lateinit var categoryRvList: RecyclerView
     protected open lateinit var transactionRvList: RecyclerView
     protected open lateinit var transactionBtnAdd: FloatingActionButton

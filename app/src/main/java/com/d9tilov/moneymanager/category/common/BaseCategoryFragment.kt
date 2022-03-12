@@ -3,9 +3,6 @@ package com.d9tilov.moneymanager.category.common
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewStub
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.navArgs
@@ -24,8 +21,10 @@ import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.gone
+import com.d9tilov.moneymanager.core.util.hide
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentCategoryBinding
+import com.d9tilov.moneymanager.databinding.LayoutEmptyListPlaceholderBinding
 import com.google.android.material.appbar.MaterialToolbar
 
 abstract class BaseCategoryFragment<N : BaseNavigator> :
@@ -39,7 +38,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
     protected val viewBinding by viewBinding(FragmentCategoryBinding::bind)
     protected var toolbar: MaterialToolbar? = null
     protected lateinit var categoryAdapter: CategoryModifyAdapter
-    private lateinit var viewStub: ViewStub
+    private var viewStub: LayoutEmptyListPlaceholderBinding? = null
 
     private val onItemClickListener = object : OnItemClickListener<Category> {
         override fun onItemClick(item: Category, position: Int) {
@@ -75,7 +74,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewStub = viewBinding.root.findViewById(R.id.category_empty_placeholder)
+        viewStub = viewBinding.categoryEmptyPlaceholder
         initToolbar()
         viewBinding.run {
             val layoutManager =
@@ -145,34 +144,25 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
     }
 
     private fun showViewStub() {
-        if (viewStub.parent == null) {
-            viewStub.show()
-        } else {
-            val inflatedStub = viewStub.inflate()
-            val stubIcon =
-                inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_icon)
-            stubIcon?.setImageDrawable(
+        viewStub?.let {
+            it.root.show()
+            it.emptyPlaceholderIcon.setImageDrawable(
                 ContextCompat.getDrawable(
                     requireContext(),
                     R.drawable.ic_categories_empty
                 )
             )
-            val stubTitle =
-                inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_title)
-            stubTitle?.text =
+            it.emptyPlaceholderTitle.text =
                 getString(R.string.category_empty_placeholder_title)
-            val stubSubTitle =
-                inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_subtitle)
-            stubSubTitle?.show()
-            stubSubTitle?.text = getString(R.string.category_empty_placeholder_subtitle)
-            val addButton =
-                inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_add)
-            addButton?.gone()
+            it.emptyPlaceholderSubtitle.show()
+            it.emptyPlaceholderSubtitle.text =
+                getString(R.string.category_empty_placeholder_subtitle)
+            it.emptyPlaceholderAdd.hide()
         }
     }
 
     private fun hideViewStub() {
-        viewStub.gone()
+        viewStub?.root?.gone()
     }
 
     override fun onBackPressed(): Boolean {

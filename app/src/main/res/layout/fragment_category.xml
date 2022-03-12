@@ -68,14 +68,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ViewStub
+    <include
         android:id="@+id/category_empty_placeholder"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:inflatedId="@+id/inflate"
-        android:layout="@layout/layout_empty_list_placeholder"
+        layout="@layout/layout_empty_list_placeholder"
         app:layout_constraintBottom_toTopOf="@+id/category_create"
         app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/category_toolbar_container" />
 

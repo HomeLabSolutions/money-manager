@@ -177,4 +177,6 @@
     <string name="statistics_period_month">Месяц</string>
     <string name="statistics_period_year">Год</string>
     <string name="statistics_period_custom">Другой…</string>
+    <string name="statistics_today">Сегодня</string>
+    <string name="statistics_no_data">Недостаточно данных для отображения</string>
 </resources>

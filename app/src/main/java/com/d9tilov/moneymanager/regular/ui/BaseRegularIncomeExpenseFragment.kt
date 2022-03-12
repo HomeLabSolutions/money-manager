@@ -4,9 +4,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
-import android.view.ViewStub
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -16,8 +13,10 @@ import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.BaseRegularIncomeExpenseNavigator
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
+import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.show
+import com.d9tilov.moneymanager.databinding.LayoutEmptyListPlaceholderBinding
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.regular.vm.BaseRegularIncomeExpenseViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -33,7 +32,7 @@ abstract class BaseRegularIncomeExpenseFragment<N : BaseRegularIncomeExpenseNavi
     protected abstract val transactionType: TransactionType
     protected abstract fun showBackButton(): Boolean
     protected var toolbar: MaterialToolbar? = null
-    protected var emptyViewStub: ViewStub? = null
+    protected var emptyViewStub: LayoutEmptyListPlaceholderBinding? = null
 
     private val onItemClickListener = object : OnItemClickListener<RegularTransaction> {
         override fun onItemClick(item: RegularTransaction, position: Int) {
@@ -48,7 +47,6 @@ abstract class BaseRegularIncomeExpenseFragment<N : BaseRegularIncomeExpenseNavi
                     item
                 )
             }
-
             findNavController().navigate(action)
         }
     }
@@ -123,42 +121,28 @@ abstract class BaseRegularIncomeExpenseFragment<N : BaseRegularIncomeExpenseNavi
     }
 
     protected fun showViewStub(transactionType: TransactionType) {
-        if (emptyViewStub?.parent == null) {
-            emptyViewStub?.show()
-        } else {
-            val inflatedStub = emptyViewStub?.inflate()
-            val stubIcon =
-                inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_icon)
-            stubIcon?.setImageDrawable(
-                ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.ic_wallet_empty
-                )
+        emptyViewStub?.let {
+            it.root.show()
+            it.emptyPlaceholderIcon.setImageDrawable(
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_wallet_empty)
             )
-            val stubTitle =
-                inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_title)
-            stubTitle?.text =
+            it.emptyPlaceholderTitle.text =
                 getString(
                     if (transactionType.isIncome())
                         R.string.transaction_empty_placeholder_regular_income_title else
                         R.string.transaction_empty_placeholder_regular_expense_title
                 )
-            val stubSubTitle =
-                inflatedStub?.findViewById<TextView>(R.id.empty_placeholder_subtitle)
-            stubSubTitle?.show()
-            stubSubTitle?.text = getString(R.string.transaction_empty_placeholder_subtitle)
-            val addExpense =
-                inflatedStub?.findViewById<ImageView>(R.id.empty_placeholder_add)
-            addExpense?.show()
-            addExpense?.setOnClickListener {
-                openCreatedScreen(transactionType)
-            }
+            it.emptyPlaceholderSubtitle.show()
+            it.emptyPlaceholderTitle.text =
+                getString(R.string.transaction_empty_placeholder_subtitle)
+            val addExpense = it.emptyPlaceholderAdd
+            addExpense.show()
+            addExpense.setOnClickListener { openCreatedScreen(transactionType) }
         }
     }
 
     protected fun hideViewStub() {
-        /* don't use gone() */
-        emptyViewStub?.visibility = View.GONE
+        emptyViewStub?.root?.gone()
     }
 
     private fun openCreatedScreen(transactionType: TransactionType) {

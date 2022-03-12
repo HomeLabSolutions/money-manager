@@ -25,13 +25,14 @@
         app:layout_constraintTop_toBottomOf="@+id/regular_expense_toolbar_container"
         tools:listitem="@layout/item_regular_transaction" />
 
-    <ViewStub
+    <include
         android:id="@+id/regular_expense_empty_placeholder"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:inflatedId="@+id/inflate"
-        android:layout="@layout/layout_empty_list_placeholder"
+        android:visibility="gone"
+        tools:visibility="visible"
+        layout="@layout/layout_empty_list_placeholder"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

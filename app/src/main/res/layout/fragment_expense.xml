@@ -30,17 +30,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ViewStub
-        android:id="@+id/expense_transaction_empty_placeholder"
+    <include
+        android:id="@+id/expense_transaction_empty_placeholder_include"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="16dp"
-        android:inflatedId="@+id/inflate"
-        android:layout="@layout/layout_empty_list_placeholder"
+        layout="@layout/layout_empty_list_placeholder"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

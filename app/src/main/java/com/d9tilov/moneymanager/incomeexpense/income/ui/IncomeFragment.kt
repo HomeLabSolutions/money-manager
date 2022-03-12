@@ -52,7 +52,7 @@ class IncomeFragment :
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun initViews() {
-        emptyViewStub = viewBinding.root.findViewById(R.id.income_transaction_empty_placeholder)
+        emptyViewStub = viewBinding.incomeTransactionEmptyPlaceholder
         categoryRvList = viewBinding.incomeInfoLayoutInclude.incomeCategoryRvList
         transactionRvList = viewBinding.incomeTransactionLayoutInclude.incomeTransactionRvList
         transactionBtnAdd = viewBinding.incomeTransactionLayoutInclude.incomeTransactionBtnAdd
