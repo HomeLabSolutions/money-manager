@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.util.Pair
 import androidx.fragment.app.viewModels
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
@@ -15,11 +16,13 @@ import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.RECENT_DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.currentDate
+import com.d9tilov.moneymanager.core.util.currentDateTime
 import com.d9tilov.moneymanager.core.util.divideBy
 import com.d9tilov.moneymanager.core.util.getEndOfDay
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.isSameDay
 import com.d9tilov.moneymanager.core.util.show
+import com.d9tilov.moneymanager.core.util.toLocalDateTime
 import com.d9tilov.moneymanager.core.util.toMillis
 import com.d9tilov.moneymanager.databinding.FragmentStatisticsBinding
 import com.d9tilov.moneymanager.databinding.LayoutEmptyStatisticsPlaceholderBinding
@@ -44,6 +47,9 @@ import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.utils.MPPointF
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointBackward
+import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.minus
@@ -51,6 +57,7 @@ import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 @AndroidEntryPoint
 class StatisticsFragment :
@@ -77,11 +84,40 @@ class StatisticsFragment :
             statisticsWeek.setOnClickListener { setChartMode(PIE_CHART, WEEK) }
             statisticsMonth.setOnClickListener { setChartMode(PIE_CHART, MONTH) }
             statisticsYear.setOnClickListener { setChartMode(PIE_CHART, YEAR) }
-            statisticsCustom.setOnClickListener { setChartMode(PIE_CHART, CUSTOM) }
+            statisticsCustom.setOnClickListener { openRangeCalendar() }
         }
 
         initChart()
         viewModel.getTransactions().observe(viewLifecycleOwner) { list -> setData(list) }
+    }
+
+    private fun openRangeCalendar() {
+        val builderRange = MaterialDatePicker.Builder.dateRangePicker()
+        val timezone = TimeZone.getDefault()
+        val startDateSelection = viewModel.periodPair.first.toLocalDateTime().toMillis()
+        val endDateSelection = viewModel.periodPair.second.toLocalDateTime().toMillis()
+        val startSelectionMillis = startDateSelection + timezone.getOffset(startDateSelection)
+        val endSelectionMillis = endDateSelection + timezone.getOffset(endDateSelection)
+        builderRange
+            .setCalendarConstraints(limitRange().build())
+            .setSelection(Pair(startSelectionMillis, endSelectionMillis))
+        val pickerRange = builderRange.build()
+        pickerRange.addOnPositiveButtonClickListener { startEndPair: Pair<Long, Long> ->
+
+            val startDate = startEndPair.first.toLocalDateTime().toMillis()
+            val endDate = startEndPair.second.toLocalDateTime().toMillis()
+            val startMillis = startDate - timezone.getOffset(startDate)
+            val endMillis = endDate - timezone.getOffset(endDate)
+            setChartMode(PIE_CHART, CUSTOM, Pair(startMillis, endMillis))
+        }
+        pickerRange.show(parentFragmentManager, pickerRange.toString())
+    }
+
+    private fun limitRange(): CalendarConstraints.Builder {
+        val constraintsBuilderRange = CalendarConstraints.Builder()
+        constraintsBuilderRange.setEnd(currentDateTime().toMillis())
+        constraintsBuilderRange.setValidator(DateValidatorPointBackward.now())
+        return constraintsBuilderRange
     }
 
     private fun updatePeriod() {
@@ -118,11 +154,9 @@ class StatisticsFragment :
                     val categoryName = tr.category.name
                     val percent: BigDecimal = tr.usdSum.divideBy(sum).multiply(BigDecimal(100))
                     val displayName = if (percent > PERCENT_LIMIT_TO_SHOW_LABEL) {
-                        if (categoryName.length > MAX_CATEGORY_NAME_LENGTH) "${
-                            categoryName.dropLast(
-                                categoryName.length - MAX_CATEGORY_NAME_LENGTH
-                            )
-                        }..." else categoryName
+                        if (categoryName.length > MAX_CATEGORY_NAME_LENGTH)
+                            "${categoryName.dropLast(categoryName.length - MAX_CATEGORY_NAME_LENGTH)}..."
+                        else categoryName
                     } else ""
                     PieEntry(
                         tr.sum.toFloat(),
@@ -189,7 +223,8 @@ class StatisticsFragment :
 
     private fun setChartMode(
         mode: StatisticsChartMode,
-        period: StatisticsPeriod = MONTH
+        period: StatisticsPeriod = MONTH,
+        periodPair: Pair<Long, Long>? = null
     ) {
         when (mode) {
             PIE_CHART -> {
@@ -197,7 +232,11 @@ class StatisticsFragment :
                 oldView.isSelected = false
                 val newView = getViewFromPeriod(period)
                 newView.isSelected = true
-                viewModel.updatePeriod(period)
+                if (period != CUSTOM) {
+                    viewModel.updatePeriod(period)
+                } else {
+                    viewModel.updatePeriod(period, periodPair)
+                }
             }
             LINE_CHART -> {}
         }
