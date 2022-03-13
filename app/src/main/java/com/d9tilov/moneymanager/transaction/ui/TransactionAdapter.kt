@@ -19,6 +19,7 @@ import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.formatDate
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.core.util.gone
+import com.d9tilov.moneymanager.core.util.hide
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.ItemTransactionBinding
 import com.d9tilov.moneymanager.databinding.ItemTransactionHeaderBinding
@@ -122,6 +123,7 @@ class TransactionAdapter :
                         transaction.category.color
                     )
                 )
+                if (transaction.isRegular) itemTransactionRegularIcon.show() else itemTransactionRegularIcon.hide()
                 val description = transaction.description
                 if (description.isNotEmpty()) {
                     itemTransactionDescription.show()

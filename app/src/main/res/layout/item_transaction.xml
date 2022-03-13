@@ -48,6 +48,17 @@
         tools:text="Pie"
         tools:visibility="visible" />
 
+    <ImageView
+        android:id="@+id/item_transaction_regular_icon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:visibility="gone"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintEnd_toStartOf="@+id/item_transaction_icon"
+        app:layout_constraintTop_toTopOf="@+id/item_transaction_icon"
+        app:srcCompat="@drawable/ic_repeat"
+        tools:visibility="visible" />
+
     <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
         android:id="@+id/item_transaction_sum"
         android:layout_width="wrap_content"
