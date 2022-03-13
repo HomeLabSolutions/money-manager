@@ -520,7 +520,7 @@ class TransactionInteractorImpl(
             oldTransaction.currencyCode
         )
         budgetSum += currencyInteractor.convertToMainCurrency(
-            if (transaction.type.isIncome()) oldTransaction.sum else oldTransaction.sum.negate(),
+            if (transaction.type.isIncome()) transaction.sum else transaction.sum.negate(),
             transaction.currencyCode
         )
         budgetInteractor.update(budget.copy(sum = budgetSum))
