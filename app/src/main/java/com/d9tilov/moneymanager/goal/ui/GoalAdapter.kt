@@ -73,8 +73,8 @@ class GoalAdapter : RecyclerView.Adapter<GoalAdapter.GoalViewHolder>() {
         fun bind(goal: Goal, position: Int) {
             viewBinding.itemGoalTitle.text = goal.name
             viewBinding.itemGoalProgress.setProgress(
-                goal.currentSum.toInt(),
-                goal.targetSum.toInt(),
+                goal.currentSum.toFloat(),
+                goal.targetSum.toFloat(),
                 getCurrencySignBy(goal.currencyCode),
                 DELAY_ANIM_MULTIPLIER * (position + 1)
             )

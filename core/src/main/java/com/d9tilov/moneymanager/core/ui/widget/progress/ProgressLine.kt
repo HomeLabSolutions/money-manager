@@ -39,7 +39,7 @@ class ProgressLine @JvmOverloads constructor(
     private val progressLinePaint = Paint()
     private val underLinePaint = Paint()
 
-    private val defaultPaddingLeft = 30
+    private val defaultPaddingLeft = 0
     private val defaultPaddingRight = 30
     private val percentPaddingRight = 16
 
@@ -49,9 +49,9 @@ class ProgressLine @JvmOverloads constructor(
     private var percentTextWidth: Float = 0.toFloat()
     private var percentTextHeight: Float = 0.toFloat()
 
-    private var currentValue: Int = 0
-    private var maxValue: Int = 100
-    private var percentage = 0
+    private var currentValue: Float = 0f
+    private var maxValue: Float = 100f
+    private var percentage = 0f
     private var barLength: Int = 0
     private var scale = 1f
 
@@ -69,10 +69,10 @@ class ProgressLine @JvmOverloads constructor(
                     getDimension(R.styleable.ProgressLine_valueTextSize, valueTextSize)
                 percentTextSize =
                     getDimension(R.styleable.ProgressLine_percentTextSize, percentTextSize)
-                currentValue = getInt(R.styleable.ProgressLine_currentValue, currentValue)
-                maxValue = getInt(R.styleable.ProgressLine_maxValue, maxValue)
+                currentValue = getFloat(R.styleable.ProgressLine_currentValue, currentValue)
+                maxValue = getFloat(R.styleable.ProgressLine_maxValue, maxValue)
                 percentage = currentValue.toBigDecimal().divideBy(maxValue.toBigDecimal())
-                    .multiply(100.toBigDecimal()).toInt()
+                    .multiply(100.toBigDecimal()).toFloat()
                 underLineColor = getColor(R.styleable.ProgressLine_underLineColor, underLineColor)
                 valueTextColor = getColor(R.styleable.ProgressLine_valueTextColor, valueTextColor)
                 percentTextColor =
@@ -136,7 +136,7 @@ class ProgressLine @JvmOverloads constructor(
         val endXu = endXp + barLength * (1 - scale)
         canvas.drawRoundRect(
             startXp,
-            (this.height / 2).toFloat(),
+            (this.height / 2).toFloat() - barWidth,
             endXu,
             (this.height / 2 + barWidth),
             CORNER_RADIUS,
@@ -145,7 +145,7 @@ class ProgressLine @JvmOverloads constructor(
         )
         canvas.drawRoundRect(
             startXp,
-            (this.height / 2).toFloat(),
+            (this.height / 2).toFloat() - barWidth,
             endXp,
             (this.height / 2 + barWidth),
             CORNER_RADIUS,
@@ -168,26 +168,40 @@ class ProgressLine @JvmOverloads constructor(
         }
     }
 
+    fun setProgress(progress: Float, color: Int, delayAnimDuration: Long = 0L) {
+        progressColor = color
+        val valueAnimator = ValueAnimator
+            .ofFloat(0f, progress)
+            .setDuration(ANIMATION_DURATION)
+        valueAnimator.addUpdateListener { animation ->
+            percentage = animation.animatedValue as Float
+            setupBounds()
+            setupPaints()
+            calculateBarScale()
+            invalidate()
+        }
+        Handler(Looper.myLooper()!!).postDelayed({ valueAnimator.start() }, delayAnimDuration)
+    }
+
     fun setProgress(
-        currentValue: Int,
-        maxValue: Int,
+        currentValue: Float,
+        maxValue: Float,
         postfix: String = "",
         delayAnimDuration: Long = 0L
     ) {
         valueText = "$currentValue$postfix / $maxValue$postfix"
-        percentText =
-            currentValue.toBigDecimal().divideBy(maxValue.toBigDecimal())
-                .multiply(100.toBigDecimal()).setScale(ROUND_UP)
-                .toString() + context.getString(R.string.percent_sign)
+        val progress = currentValue.toBigDecimal().divideBy(maxValue.toBigDecimal())
+            .multiply(100.toBigDecimal()).setScale(ROUND_UP).toFloat()
+        percentText = context.getString(R.string.number_with_percent, progress.toString())
         val diff =
             currentValue.toBigDecimal().divideBy(maxValue.toBigDecimal())
                 .multiply(100.toBigDecimal())
-                .toInt() - percentage
+                .toFloat() - progress
         val valueAnimator = ValueAnimator
-            .ofInt(percentage, percentage + diff)
+            .ofFloat(progress, progress + diff)
             .setDuration(ANIMATION_DURATION)
         valueAnimator.addUpdateListener { animation ->
-            percentage = animation.animatedValue as Int
+            percentage = animation.animatedValue as Float
             setupBounds()
             setupPaints()
             calculateBarScale()

@@ -116,13 +116,13 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
 
     private fun updateProgress(progress: Int) {
         viewBinding.prepopulateProgress.setProgress(
-            progress + 1,
+            progress + 1f,
             MAX_SCREEN_AMOUNT
         )
     }
 
     companion object {
-        private const val MAX_SCREEN_AMOUNT = 5
+        private const val MAX_SCREEN_AMOUNT = 5f
     }
 
     override val navHostFragmentId = R.id.prepopulate_nav_host_container

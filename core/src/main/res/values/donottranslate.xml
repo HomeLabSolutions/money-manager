@@ -9,4 +9,5 @@
     <string name="percent_sign">%</string>
     <string name="minus_sign">-</string>
     <string name="approx_sign">≈</string>
+    <string name="number_with_percent">%1$s %%</string>
 </resources>

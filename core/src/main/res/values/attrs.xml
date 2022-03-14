@@ -27,8 +27,8 @@
 
     <declare-styleable name="ProgressLine">
         <attr name="value" format="string" />
-        <attr name="currentValue" format="integer" />
-        <attr name="maxValue" format="integer" />
+        <attr name="currentValue" format="float" />
+        <attr name="maxValue" format="float" />
         <attr name="showPercent" format="boolean" />
         <attr name="lineBarWidth" format="dimension" />
         <attr name="valueTextSize" format="dimension" />

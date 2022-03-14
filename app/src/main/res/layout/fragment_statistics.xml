@@ -99,30 +99,28 @@
         app:layout_constraintStart_toEndOf="@+id/statistics_year"
         app:layout_constraintTop_toTopOf="@+id/statistics_day" />
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/statistics_nested_scroll_view"
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/statistics_pie_chart"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="360dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/statistics_day">
+        app:layout_constraintTop_toBottomOf="@+id/statistics_day" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/statistics_bar_chart"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statistics_pie_chart"
+        tools:listitem="@layout/item_statistics_bar_chart"
+        tools:visibility="visible" />
 
-
-            <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/statistics_pie_chart"
-                android:layout_width="0dp"
-                android:layout_height="400dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
     <include
         android:id="@+id/statistics_empty_placeholder"
         android:layout_width="0dp"

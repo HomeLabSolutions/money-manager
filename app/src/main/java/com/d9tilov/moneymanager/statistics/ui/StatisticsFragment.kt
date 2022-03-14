@@ -13,11 +13,10 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsNavigator
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
-import com.d9tilov.moneymanager.core.util.RECENT_DATE_FORMAT
+import com.d9tilov.moneymanager.core.util.DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.currentDate
 import com.d9tilov.moneymanager.core.util.currentDateTime
-import com.d9tilov.moneymanager.core.util.divideBy
 import com.d9tilov.moneymanager.core.util.getEndOfDay
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.isSameDay
@@ -38,7 +37,6 @@ import com.d9tilov.moneymanager.transaction.domain.entity.StatisticsPeriod.WEEK
 import com.d9tilov.moneymanager.transaction.domain.entity.StatisticsPeriod.YEAR
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
 import com.github.mikephil.charting.animation.Easing
-import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -68,6 +66,7 @@ class StatisticsFragment :
     override fun getNavigator() = this
     override val viewModel by viewModels<StatisticsViewModel>()
     private val viewBinding by viewBinding(FragmentStatisticsBinding::bind)
+    private val statisticsBarChartAdapter: StatisticsBarChartAdapter = StatisticsBarChartAdapter()
     private var emptyViewStub: LayoutEmptyStatisticsPlaceholderBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,6 +78,7 @@ class StatisticsFragment :
         super.onViewCreated(view, savedInstanceState)
         setChartMode(viewModel.chartMode, viewModel.chartPeriod)
         viewBinding.run {
+            statisticsBarChart.adapter = statisticsBarChartAdapter
             emptyViewStub = viewBinding.statisticsEmptyPlaceholder
             statisticsDay.setOnClickListener { setChartMode(PIE_CHART, DAY) }
             statisticsWeek.setOnClickListener { setChartMode(PIE_CHART, WEEK) }
@@ -87,8 +87,11 @@ class StatisticsFragment :
             statisticsCustom.setOnClickListener { openRangeCalendar() }
         }
 
-        initChart()
-        viewModel.getTransactions().observe(viewLifecycleOwner) { list -> setData(list) }
+        initPieChart()
+        viewModel.getTransactions().observe(viewLifecycleOwner) { list ->
+            setPieChartData(list)
+            statisticsBarChartAdapter.updateItems(list)
+        }
     }
 
     private fun openRangeCalendar() {
@@ -103,7 +106,6 @@ class StatisticsFragment :
             .setSelection(Pair(startSelectionMillis, endSelectionMillis))
         val pickerRange = builderRange.build()
         pickerRange.addOnPositiveButtonClickListener { startEndPair: Pair<Long, Long> ->
-
             val startDate = startEndPair.first.toLocalDateTime().toMillis()
             val endDate = startEndPair.second.toLocalDateTime().toMillis()
             val startMillis = startDate - timezone.getOffset(startDate)
@@ -132,63 +134,20 @@ class StatisticsFragment :
 
         viewBinding.statisticsPieChart.centerText =
             if (to.isSameDay(from)) getString(R.string.statistics_today)
-            else SimpleDateFormat(RECENT_DATE_FORMAT, Locale.getDefault()).format(Date(from.getEndOfDay().toMillis())) +
-                " - " + SimpleDateFormat(RECENT_DATE_FORMAT, Locale.getDefault()).format(Date(to.getEndOfDay().toMillis()))
-        viewBinding.statisticsPieChart.setCenterTextColor(ContextCompat.getColor(requireContext(), R.color.control_activated_color))
-    }
-
-    private fun setData(list: List<TransactionChartModel>) {
-        if (list.isEmpty()) {
-            showViewStub()
-            return
-        }
-        hideViewStub()
-        val sum = list.sumOf { item -> item.usdSum }
-        val dataSet = PieDataSet(
-            list
-                .filter { tr ->
-                    tr.usdSum.divideBy(sum)
-                        .multiply(BigDecimal(100)) > PERCENT_LIMIT_TO_SHOW_LABEL_FILTER
-                }
-                .map { tr ->
-                    val categoryName = tr.category.name
-                    val percent: BigDecimal = tr.usdSum.divideBy(sum).multiply(BigDecimal(100))
-                    val displayName = if (percent > PERCENT_LIMIT_TO_SHOW_LABEL) {
-                        if (categoryName.length > MAX_CATEGORY_NAME_LENGTH)
-                            "${categoryName.dropLast(categoryName.length - MAX_CATEGORY_NAME_LENGTH)}..."
-                        else categoryName
-                    } else ""
-                    PieEntry(
-                        tr.sum.toFloat(),
-                        displayName,
-                        createTintDrawable(requireContext(), tr.category.icon, tr.category.color)
-                    )
-                },
-            ""
+            else {
+                val endOfCurDay = Date(from.getEndOfDay().toMillis())
+                val sb = StringBuilder()
+                sb.append(SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(endOfCurDay))
+                sb.append(" - ")
+                sb.append(SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(endOfCurDay))
+                sb.toString()
+            }
+        viewBinding.statisticsPieChart.setCenterTextColor(
+            ContextCompat.getColor(requireContext(), R.color.control_activated_color)
         )
-        dataSet.setDrawIcons(false)
-        dataSet.sliceSpace = 3f
-        dataSet.iconsOffset = MPPointF(0f, 40f)
-        dataSet.selectionShift = 5f
-        dataSet.valueLinePart1OffsetPercentage = 80f
-        dataSet.valueLinePart1Length = 0.2f
-        dataSet.valueLinePart2Length = 0.4f
-        dataSet.valueLineColor = ContextCompat.getColor(requireContext(), R.color.primary_color)
-
-        // add a lot of colors
-        dataSet.colors = list.map { ContextCompat.getColor(requireContext(), it.category.color) }
-        val data = PieData(dataSet)
-        data.setValueFormatter(PercentFormatter(viewBinding.statisticsPieChart))
-        data.setValueTextSize(12f)
-        data.setValueTextColor(ContextCompat.getColor(requireContext(), R.color.primary_color))
-        viewBinding.statisticsPieChart.data = data
-
-        updatePeriod()
-        viewBinding.statisticsPieChart.highlightValues(null)
-        viewBinding.statisticsPieChart.invalidate()
     }
 
-    private fun initChart() {
+    private fun initPieChart() {
         val tfRegular = Typeface.createFromAsset(requireContext().assets, "OpenSans-Regular.ttf")
         viewBinding.run {
             statisticsPieChart.setUsePercentValues(true)
@@ -210,15 +169,60 @@ class StatisticsFragment :
             statisticsPieChart.isHighlightPerTapEnabled = false
 
             statisticsPieChart.setOnChartValueSelectedListener(this@StatisticsFragment)
-            statisticsPieChart.animateY(1400, Easing.EaseInOutQuad)
-            statisticsPieChart.setEntryLabelColor(ContextCompat.getColor(requireContext(), R.color.primary_color))
+            statisticsPieChart.animateY(ANIMATION_DURATION, Easing.EaseInOutQuad)
+            statisticsPieChart.setEntryLabelColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.primary_color
+                )
+            )
             statisticsPieChart.setEntryLabelTypeface(tfRegular)
             statisticsPieChart.setEntryLabelTextSize(15f)
             statisticsPieChart.setCenterTextSize(16f)
-
-            val l: Legend = statisticsPieChart.legend
-            l.isEnabled = false
+            statisticsPieChart.legend.isEnabled = false
         }
+    }
+
+    private fun setPieChartData(list: List<TransactionChartModel>) {
+        if (list.isEmpty()) {
+            showViewStub()
+            return
+        }
+        hideViewStub()
+        val dataSet = PieDataSet(
+            list
+                .mapIndexed { index, tr ->
+                    val categoryName = tr.category.name
+                    val displayName = if (tr.percent > PERCENT_LIMIT_TO_SHOW_LABEL) {
+                        if (categoryName.length > MAX_CATEGORY_NAME_LENGTH)
+                            "${categoryName.dropLast(categoryName.length - MAX_CATEGORY_NAME_LENGTH)}..."
+                        else categoryName
+                    } else ""
+                    PieEntry(
+                        tr.sum.toFloat(),
+                        displayName,
+                        createTintDrawable(requireContext(), tr.category.icon, tr.category.color)
+                    )
+                },
+            ""
+        )
+        dataSet.setDrawIcons(false)
+        dataSet.sliceSpace = 3f
+        dataSet.iconsOffset = MPPointF(0f, 40f)
+        dataSet.selectionShift = 5f
+        dataSet.valueLinePart1OffsetPercentage = 80f
+        dataSet.valueLinePart1Length = 0.2f
+        dataSet.valueLinePart2Length = 0.4f
+        dataSet.colors = list.map { ContextCompat.getColor(requireContext(), it.category.color) }
+        val data = PieData(dataSet)
+        data.setValueFormatter(PercentFormatter(viewBinding.statisticsPieChart))
+        data.setValueTextSize(12f)
+        data.setValueTextColor(ContextCompat.getColor(requireContext(), R.color.primary_color))
+        viewBinding.statisticsPieChart.data = data
+
+        updatePeriod()
+        viewBinding.statisticsPieChart.highlightValues(null)
+        viewBinding.statisticsPieChart.invalidate()
     }
 
     private fun setChartMode(
@@ -267,8 +271,8 @@ class StatisticsFragment :
     }
 
     companion object {
-        private val PERCENT_LIMIT_TO_SHOW_LABEL_FILTER = BigDecimal(0)
-        private val PERCENT_LIMIT_TO_SHOW_LABEL = BigDecimal(3)
+        private val PERCENT_LIMIT_TO_SHOW_LABEL = BigDecimal(6)
         private const val MAX_CATEGORY_NAME_LENGTH = 10
+        private const val ANIMATION_DURATION = 500
     }
 }

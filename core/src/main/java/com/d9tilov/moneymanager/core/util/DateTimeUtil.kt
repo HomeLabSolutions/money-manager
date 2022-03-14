@@ -20,7 +20,7 @@ import java.util.Date
 import java.util.Locale
 import kotlin.math.abs
 
-const val RECENT_DATE_FORMAT = "dd.MM.yyyy"
+const val DATE_FORMAT = "dd.MM.yyyy"
 const val TRANSACTION_DATE_FORMAT = "dd MMMM yyyy"
 const val TRANSACTION_DATE_FORMAT_DAY_MONTH = "dd MMMM"
 const val BACKUP_DATE = "dd.MM.yyyy HH:mm"
@@ -40,7 +40,7 @@ fun Long.toBackupDate(): String {
 }
 
 fun LocalDateTime.toBudgetCreatedDate(): String {
-    return SimpleDateFormat(RECENT_DATE_FORMAT, Locale.getDefault()).format(Date(this.toMillis()))
+    return SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(Date(this.toMillis()))
 }
 
 fun currentDateTime(): LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())

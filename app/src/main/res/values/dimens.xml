@@ -47,7 +47,7 @@
 
     //It is a TextView
     <dimen name="currency_icon_size">30sp</dimen>
-    <dimen name="goal_progress_line_bar_width">16dp</dimen>
+    <dimen name="goal_progress_line_bar_width">32dp</dimen>
     <dimen name="goal_progress_percent_text_size">10sp</dimen>
     <dimen name="goal_value_text_size">12sp</dimen>
     <dimen name="goal_period_save_value_text_size">54sp</dimen>
@@ -72,5 +72,6 @@
     <dimen name="statistics_padding_horizontal">0dp</dimen>
     <dimen name="statistics_period_width">72dp</dimen>
     <dimen name="statistics_period_text_size">12sp</dimen>
-
+    <dimen name="statistics_item_icon_size">28dp</dimen>
+    <dimen name="statistics_item_min_height">60dp</dimen>
 </resources>

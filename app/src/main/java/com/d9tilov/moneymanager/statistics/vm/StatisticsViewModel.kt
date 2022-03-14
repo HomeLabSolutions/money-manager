@@ -1,9 +1,9 @@
 package com.d9tilov.moneymanager.statistics.vm
 
+import androidx.core.util.Pair
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.core.util.Pair
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsNavigator
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.core.util.currentDate
@@ -20,6 +20,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.minus
@@ -56,6 +57,7 @@ class StatisticsViewModel @Inject constructor(private val transactionInteractor:
                     to.getEndOfDay(),
                     true
                 )
+                    .map { list -> list.sortedByDescending { tr -> tr.sum } }
                     .flowOn(Dispatchers.IO)
                     .collect { transactionsLiveData.value = it }
             } else {
@@ -66,10 +68,11 @@ class StatisticsViewModel @Inject constructor(private val transactionInteractor:
                     periodPair.second.toLocalDate().getEndOfDay(),
                     true
                 )
+                    .map { list -> list.sortedByDescending { tr -> tr.sum } }
                     .flowOn(Dispatchers.IO)
                     .collect { transactionsLiveData.value = it }
             }
-    }
+        }
 
     fun getTransactions(): LiveData<List<TransactionChartModel>> = transactionsLiveData
 }

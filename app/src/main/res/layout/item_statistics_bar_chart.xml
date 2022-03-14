@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/statistics_item_min_height"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <ImageView
+        android:id="@+id/item_statistics_icon"
+        android:layout_width="@dimen/statistics_item_icon_size"
+        android:layout_height="@dimen/statistics_item_icon_size"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/item_statistics_progress"
+        app:layout_constraintStart_toStartOf="@+id/item_statistics_progress"
+        tools:src="@drawable/ic_category_cafe" />
+
+    <TextView
+        android:id="@+id/item_statistics_category_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="4dp"
+        android:textAppearance="?attr/textAppearanceBody2"
+        app:layout_constraintBottom_toBottomOf="@+id/item_statistics_icon"
+        app:layout_constraintStart_toEndOf="@+id/item_statistics_icon"
+        app:layout_constraintTop_toTopOf="@+id/item_statistics_icon"
+        tools:text="Cafe" />
+
+    <com.d9tilov.moneymanager.core.ui.widget.progress.ProgressLine
+        android:id="@+id/item_statistics_progress"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        android:layout_marginStart="@dimen/standard_left_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/item_statistics_icon"
+        app:layout_constraintEnd_toEndOf="@+id/item_statistics_vertical_guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:lineBarWidth="@dimen/goal_progress_line_bar_width"
+        app:lineProgressColor="@color/goal_active_progress_line_color"
+        app:percentTextColor="@color/goal_percent_text_color"
+        app:percentTextSize="@dimen/goal_progress_percent_text_size"
+        app:underLineColor="@android:color/transparent"
+        app:valueTextColor="@color/goal_value_text_color"
+        app:valueTextSize="@dimen/goal_value_text_size" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/item_statistics_vertical_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75" />
+
+    <TextView
+        android:id="@+id/item_statistics_percent"
+        style="?attr/textAppearanceCaption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_primary_transparent_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/item_statistics_vertical_guideline"
+        tools:text="37%" />
+
+    <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
+        android:id="@+id/item_statistics_sum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/item_statistics_vertical_guideline"
+        app:layout_constraintTop_toTopOf="parent"
+        app:showDecimalPart="true"
+        app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
+        app:sumTextStyle="?attr/textAppearanceCurrencyValueSmall"
+        tools:sumText="15000" />
+</androidx.constraintlayout.widget.ConstraintLayout>
