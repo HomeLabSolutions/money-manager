@@ -10,9 +10,11 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
+import com.d9tilov.moneymanager.core.util.removeScale
 import com.d9tilov.moneymanager.databinding.ItemStatisticsBarChartBinding
 import com.d9tilov.moneymanager.statistics.ui.diff.StatisticsBarCharDiffUtils
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
+import java.math.RoundingMode
 
 class StatisticsBarChartAdapter :
     RecyclerView.Adapter<StatisticsBarChartAdapter.StatisticsBarChartViewHolder>() {
@@ -63,7 +65,7 @@ class StatisticsBarChartAdapter :
                 )
                 itemStatisticsPercent.text = context.getString(
                     R.string.number_with_percent,
-                    item.percent.toString()
+                    item.percent.setScale(1, RoundingMode.HALF_UP).removeScale.toString()
                 )
                 itemStatisticsSum.setValue(item.sum, item.currencyCode)
                 itemStatisticsProgress.setProgress(

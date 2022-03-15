@@ -112,8 +112,7 @@ class TransactionInteractorImpl(
                                     userInteractor.getCurrentCurrency(),
                                     currencySum,
                                     usdSum,
-                                    usdSum.divideBy(sum).multiply(BigDecimal(100))
-                                        .setScale(1, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
+                                    usdSum.divideBy(sum).multiply(BigDecimal(100)),
                                     inStatistics
                                 )
                             }
