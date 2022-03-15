@@ -76,7 +76,7 @@ class StatisticsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setChartMode(viewModel.chartMode, viewModel.chartPeriod)
+        setChartMode(viewModel.chartMode, viewModel.chartPeriod, viewModel.periodPair)
         viewBinding.run {
             statisticsBarChart.adapter = statisticsBarChartAdapter
             emptyViewStub = viewBinding.statisticsEmptyPlaceholder
