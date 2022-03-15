@@ -19,12 +19,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/standard_left_margin"
             android:layout_marginEnd="@dimen/standard_right_margin"
-            android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Medium"
             app:layout_constraintBottom_toBottomOf="@+id/item_regular_transaction_icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/item_regular_transaction_icon"
             app:signTextStyle="?attr/textAppearanceCurrencySignMedium"
-            app:sumTextStyle="?attr/textAppearanceCurrencyValueMedium"
+            app:sumTextStyle="?attr/textAppearanceCurrencySumMedium"
             tools:sumText="15000" />
 
         <ImageView

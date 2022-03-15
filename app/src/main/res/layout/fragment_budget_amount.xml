@@ -30,16 +30,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/standard_right_margin"
-        android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Big"
         app:enableInput="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/common_budget_amount_title"
         app:layout_constraintTop_toBottomOf="@+id/common_budget_amount_title"
         app:scaleEnabled="true"
         app:showDecimalPart="false"
-        app:signTextStyle="?attr/textAppearanceCurrencySignBig"
+        app:signTextStyle="?attr/textAppearanceCurrencySignExtraBig"
         app:sum="5000"
-        app:sumTextStyle="?attr/textAppearanceHeadline1" />
+        app:sumTextStyle="?attr/textAppearanceCurrencySumExtraBig" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/created_budget_save"

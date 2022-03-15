@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="textAppearanceCurrencyValueBig" format="reference" />
+    <attr name="textAppearanceCurrencySumExtraBig" format="reference" />
+    <attr name="textAppearanceCurrencySignExtraBig" format="reference" />
+    <attr name="textAppearanceCurrencySumBig" format="reference" />
     <attr name="textAppearanceCurrencySignBig" format="reference" />
-    <attr name="textAppearanceCurrencyValueMedium" format="reference" />
+    <attr name="textAppearanceCurrencySumMedium" format="reference" />
     <attr name="textAppearanceCurrencySignMedium" format="reference" />
-    <attr name="textAppearanceCurrencyValueSmall" format="reference" />
+    <attr name="textAppearanceCurrencySumSmall" format="reference" />
     <attr name="textAppearanceCurrencySignSmall" format="reference" />
-    <attr name="textAppearanceCurrencyValueExtraSmall" format="reference" />
+    <attr name="textAppearanceCurrencySumExtraSmall" format="reference" />
     <attr name="textAppearanceCurrencySignExtraSmall" format="reference" />
-    <attr name="textAppearanceGoalValueMedium" format="reference" />
-    <attr name="textAppearanceGoalSignMedium" format="reference" />
     <attr name="moneyManagerBottomActionButtonStyle" format="reference" />
     <attr name="moneyManagerBottomActionButtonSelectedStyle" format="reference" />
 </resources>

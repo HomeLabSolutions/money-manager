@@ -32,7 +32,7 @@
                     android:layout_gravity="center"
                     android:duplicateParentState="true"
                     android:text="@string/_1"
-                    android:textAppearance="?textAppearanceHeadline1"
+                    android:textAppearance="?textAppearanceHeadline2"
                     android:textColor="@color/text_primary_color"
                     android:textSize="@dimen/pin_text_size" />
             </com.d9tilov.moneymanager.keyboard.PinButton>
@@ -53,7 +53,7 @@
                     android:layout_gravity="center"
                     android:duplicateParentState="true"
                     android:text="@string/_2"
-                    android:textAppearance="?textAppearanceHeadline1"
+                    android:textAppearance="?textAppearanceHeadline2"
                     android:textColor="@color/text_primary_color"
                     android:textSize="@dimen/pin_text_size" />
             </com.d9tilov.moneymanager.keyboard.PinButton>
@@ -73,7 +73,7 @@
                     android:layout_gravity="center"
                     android:duplicateParentState="true"
                     android:text="@string/_3"
-                    android:textAppearance="?textAppearanceHeadline1"
+                    android:textAppearance="?textAppearanceHeadline2"
                     android:textColor="@color/text_primary_color"
                     android:textSize="@dimen/pin_text_size" />
             </com.d9tilov.moneymanager.keyboard.PinButton>
@@ -99,7 +99,7 @@
                     android:layout_gravity="center"
                     android:duplicateParentState="true"
                     android:text="@string/_4"
-                    android:textAppearance="?textAppearanceHeadline1"
+                    android:textAppearance="?textAppearanceHeadline2"
                     android:textColor="@color/text_primary_color"
                     android:textSize="@dimen/pin_text_size" />
             </com.d9tilov.moneymanager.keyboard.PinButton>
@@ -120,7 +120,7 @@
                     android:layout_gravity="center"
                     android:duplicateParentState="true"
                     android:text="@string/_5"
-                    android:textAppearance="?textAppearanceHeadline1"
+                    android:textAppearance="?textAppearanceHeadline2"
                     android:textColor="@color/text_primary_color"
                     android:textSize="@dimen/pin_text_size" />
             </com.d9tilov.moneymanager.keyboard.PinButton>
@@ -141,7 +141,7 @@
                     android:duplicateParentState="true"
                     android:singleLine="true"
                     android:text="@string/_6"
-                    android:textAppearance="?textAppearanceHeadline1"
+                    android:textAppearance="?textAppearanceHeadline2"
                     android:textColor="@color/text_primary_color"
                     android:textSize="@dimen/pin_text_size" />
             </com.d9tilov.moneymanager.keyboard.PinButton>
@@ -166,7 +166,7 @@
                     android:layout_gravity="center"
                     android:duplicateParentState="true"
                     android:text="@string/_7"
-                    android:textAppearance="?textAppearanceHeadline1"
+                    android:textAppearance="?textAppearanceHeadline2"
                     android:textColor="@color/text_primary_color"
                     android:textSize="@dimen/pin_text_size" />
             </com.d9tilov.moneymanager.keyboard.PinButton>
@@ -187,7 +187,7 @@
                     android:layout_gravity="center"
                     android:duplicateParentState="true"
                     android:text="@string/_8"
-                    android:textAppearance="?textAppearanceHeadline1"
+                    android:textAppearance="?textAppearanceHeadline2"
                     android:textColor="@color/text_primary_color"
                     android:textSize="@dimen/pin_text_size" />
             </com.d9tilov.moneymanager.keyboard.PinButton>
@@ -207,7 +207,7 @@
                     android:layout_gravity="center"
                     android:duplicateParentState="true"
                     android:text="@string/_9"
-                    android:textAppearance="?textAppearanceHeadline1"
+                    android:textAppearance="?textAppearanceHeadline2"
                     android:textColor="@color/text_primary_color"
                     android:textSize="@dimen/pin_text_size" />
             </com.d9tilov.moneymanager.keyboard.PinButton>
@@ -232,7 +232,7 @@
                     android:layout_gravity="center"
                     android:duplicateParentState="true"
                     android:text="@string/_dot"
-                    android:textAppearance="?textAppearanceHeadline1"
+                    android:textAppearance="?textAppearanceHeadline2"
                     android:textColor="@color/text_primary_color"
                     android:textSize="@dimen/pin_text_size" />
             </com.d9tilov.moneymanager.keyboard.PinButton>
@@ -253,7 +253,7 @@
                     android:layout_gravity="center"
                     android:duplicateParentState="true"
                     android:text="@string/_0"
-                    android:textAppearance="?textAppearanceHeadline1"
+                    android:textAppearance="?textAppearanceHeadline2"
                     android:textColor="@color/text_primary_color"
                     android:textSize="@dimen/pin_text_size" />
 

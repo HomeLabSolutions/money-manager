@@ -1,93 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="TextAppearance.MoneyManager.H1" parent="TextAppearance.MaterialComponents.Headline1">
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="android:textSize">@dimen/headline1_text_size</item>
+    <style name="TextAppearance.MoneyManager.H1" parent="TextAppearance.MaterialComponents.Headline1" />
+
+    <style name="TextAppearance.MoneyManager.H2" parent="TextAppearance.MaterialComponents.Headline2" />
+
+    <style name="TextAppearance.MoneyManager.H3" parent="TextAppearance.MaterialComponents.Headline3" />
+
+    <style name="TextAppearance.MoneyManager.H4" parent="TextAppearance.MaterialComponents.Headline4" />
+
+    <style name="TextAppearance.MoneyManager.H5" parent="TextAppearance.MaterialComponents.Headline5" />
+
+    <style name="TextAppearance.MoneyManager.H6" parent="TextAppearance.MaterialComponents.Headline6" />
+
+    <style name="TextAppearance.MoneyManager.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1" />
+
+    <style name="TextAppearance.MoneyManager.Subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2" />
+
+    <style name="TextAppearance.MoneyManager.Body1" parent="TextAppearance.MaterialComponents.Body1" />
+
+    <style name="TextAppearance.MoneyManager.Body2" parent="TextAppearance.MaterialComponents.Body2" />
+
+    <style name="TextAppearance.MoneyManager.Button" parent="TextAppearance.AppCompat.Button" />
+
+    <style name="TextAppearance.MoneyManager.Caption" parent="TextAppearance.MaterialComponents.Caption" />
+
+    <style name="TextAppearance.MoneyManager.Overline" parent="TextAppearance.MaterialComponents.Overline" />
+
+    <style name="TextAppearance.MoneyManager.CurrencySum.ExtraBig" parent="TextAppearance.MoneyManager.H1">
+        <item name="android:textColor">?attr/colorControlActivated</item>
     </style>
 
-    <style name="TextAppearance.MoneyManager.H4" parent="TextAppearance.MaterialComponents.Headline4">
-        <item name="android:textSize">@dimen/headline4_text_size</item>
+    <style name="TextAppearance.MoneyManager.CurrencySign.ExtraBig" parent="TextAppearance.MoneyManager.H1">
+        <item name="android:textColor">?attr/colorControlActivated</item>
+        <item name="android:textSize">@dimen/currency_sign_extra_big_text_size</item>
     </style>
 
-    <style name="TextAppearance.MoneyManager.H5" parent="TextAppearance.MaterialComponents.Headline5">
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="android:textStyle">bold</item>
+    <style name="TextAppearance.MoneyManager.CurrencySum.Big" parent="TextAppearance.MoneyManager.H2">
+        <item name="android:textColor">?attr/colorControlActivated</item>
     </style>
 
-    <style name="TextAppearance.MoneyManager.H6" parent="TextAppearance.MaterialComponents.Headline6">
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/headline6_text_size</item>
-    </style>
-
-    <style name="TextAppearance.MoneyManager.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
-        <item name="android:textSize">@dimen/subtitle1_text_size</item>
-    </style>
-
-    <style name="TextAppearance.MoneyManager.Subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
-        <item name="android:fontFamily">sans-serif-light</item>
-        <item name="android:textSize">@dimen/subtitle2_text_size</item>
-        <item name="android:textStyle">normal</item>
-    </style>
-
-    <style name="TextAppearance.MoneyManager.Body1" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textSize">@dimen/body1_text_size</item>
-    </style>
-
-    <style name="TextAppearance.MoneyManager.Body2" parent="TextAppearance.MaterialComponents.Body2">
-        <item name="android:textSize">@dimen/body2_text_size</item>
-    </style>
-
-    <style name="TextAppearance.MoneyManager.Button" parent="TextAppearance.AppCompat.Button">
-        <item name="android:textSize">@dimen/button_text_size</item>
-    </style>
-
-    <style name="TextAppearance.MoneyManager.Caption" parent="TextAppearance.MaterialComponents.Caption">
-        <item name="android:textSize">@dimen/caption_text_size</item>
-    </style>
-
-    <style name="TextAppearance.MoneyManager.Overline" parent="TextAppearance.MaterialComponents.Overline">
-        <item name="android:textSize">@dimen/overline_text_size</item>
-    </style>
-
-    <style name="TextAppearance.MoneyManager.CurrencyValue.Big" parent="TextAppearance.MoneyManager.Subtitle2">
-        <item name="android:textSize">@dimen/currency_big_text_size</item>
-    </style>
-
-    <style name="TextAppearance.MoneyManager.CurrencySign.Big" parent="TextAppearance.MoneyManager.Subtitle2">
+    <style name="TextAppearance.MoneyManager.CurrencySign.Big" parent="TextAppearance.MoneyManager.H2">
+        <item name="android:textColor">?attr/colorControlActivated</item>
         <item name="android:textSize">@dimen/currency_sign_big_text_size</item>
     </style>
 
-    <style name="TextAppearance.MoneyManager.CurrencyValue.Medium" parent="TextAppearance.MoneyManager.Subtitle2">
-        <item name="android:textSize">@dimen/currency_medium_text_size</item>
+    <style name="TextAppearance.MoneyManager.CurrencySum.Medium" parent="TextAppearance.MoneyManager.H4">
+        <item name="android:textColor">?attr/colorControlActivated</item>
     </style>
 
-    <style name="TextAppearance.MoneyManager.CurrencySign.Medium" parent="TextAppearance.MoneyManager.Subtitle2">
+    <style name="TextAppearance.MoneyManager.CurrencySign.Medium" parent="TextAppearance.MoneyManager.H4">
+        <item name="android:textColor">?attr/colorControlActivated</item>
         <item name="android:textSize">@dimen/currency_sign_medium_text_size</item>
     </style>
 
-    <style name="TextAppearance.MoneyManager.CurrencyValue.Small" parent="TextAppearance.MoneyManager.Subtitle2">
-        <item name="android:textSize">@dimen/currency_small_text_size</item>
+    <style name="TextAppearance.MoneyManager.CurrencySum.Small" parent="TextAppearance.MoneyManager.H5">
+        <item name="android:textColor">?attr/colorControlActivated</item>
     </style>
 
-    <style name="TextAppearance.MoneyManager.CurrencySign.Small" parent="TextAppearance.MoneyManager.Subtitle2">
+    <style name="TextAppearance.MoneyManager.CurrencySign.Small" parent="TextAppearance.MoneyManager.H5">
         <item name="android:textSize">@dimen/currency_sign_small_text_size</item>
+        <item name="android:textColor">?attr/colorControlActivated</item>
     </style>
 
-    <style name="TextAppearance.MoneyManager.CurrencyValue.ExtraSmall" parent="TextAppearance.MoneyManager.Subtitle2">
+    <style name="TextAppearance.MoneyManager.CurrencySum.ExtraSmall" parent="TextAppearance.MoneyManager.H6">
         <item name="android:textSize">@dimen/currency_extra_small_text_size</item>
+        <item name="android:textColor">?attr/colorControlActivated</item>
     </style>
 
-    <style name="TextAppearance.MoneyManager.CurrencySign.ExtraSmall" parent="TextAppearance.MoneyManager.Subtitle2">
+    <style name="TextAppearance.MoneyManager.CurrencySign.ExtraSmall" parent="TextAppearance.MoneyManager.H6">
         <item name="android:textSize">@dimen/currency_sign_extra_small_text_size</item>
-    </style>
-
-    <style name="TextAppearance.MoneyManager.GoalValue.Medium" parent="TextAppearance.MoneyManager.Caption">
-        <item name="android:textSize">@dimen/goal_period_save_value_text_size</item>
-    </style>
-    <style name="TextAppearance.MoneyManager.GoalSign.Medium" parent="TextAppearance.MoneyManager.Caption">
-        <item name="android:textSize">@dimen/goal_period_save_sign_text_size</item>
+        <item name="android:textColor">?attr/colorControlActivated</item>
     </style>
 
     <style name="TextAppearance.MoneyManager.Tab" parent="TextAppearance.MoneyManager.H6">

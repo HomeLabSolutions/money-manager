@@ -39,35 +39,35 @@
         <item name="moneyManagerBottomActionButtonSelectedStyle">
             @style/Widget.MoneyManager.Button.BottomAction.Selected
         </item>
-        <item name="textAppearanceCurrencyValueBig">
-            @style/TextAppearance.MoneyManager.CurrencyValue.Big
+        <item name="textAppearanceCurrencySumExtraBig">
+            @style/TextAppearance.MoneyManager.CurrencySum.ExtraBig
+        </item>
+        <item name="textAppearanceCurrencySignExtraBig">
+            @style/TextAppearance.MoneyManager.CurrencySign.ExtraBig
+        </item>
+        <item name="textAppearanceCurrencySumBig">
+            @style/TextAppearance.MoneyManager.CurrencySum.Big
         </item>
         <item name="textAppearanceCurrencySignBig">
             @style/TextAppearance.MoneyManager.CurrencySign.Big
         </item>
-        <item name="textAppearanceCurrencyValueMedium">
-            @style/TextAppearance.MoneyManager.CurrencyValue.Medium
+        <item name="textAppearanceCurrencySumMedium">
+            @style/TextAppearance.MoneyManager.CurrencySum.Medium
         </item>
         <item name="textAppearanceCurrencySignMedium">
             @style/TextAppearance.MoneyManager.CurrencySign.Medium
         </item>
-        <item name="textAppearanceCurrencyValueSmall">
-            @style/TextAppearance.MoneyManager.CurrencyValue.Small
+        <item name="textAppearanceCurrencySumSmall">
+            @style/TextAppearance.MoneyManager.CurrencySum.Small
         </item>
         <item name="textAppearanceCurrencySignSmall">
             @style/TextAppearance.MoneyManager.CurrencySign.Small
         </item>
-        <item name="textAppearanceCurrencyValueExtraSmall">
-            @style/TextAppearance.MoneyManager.CurrencyValue.ExtraSmall
+        <item name="textAppearanceCurrencySumExtraSmall">
+            @style/TextAppearance.MoneyManager.CurrencySum.ExtraSmall
         </item>
         <item name="textAppearanceCurrencySignExtraSmall">
             @style/TextAppearance.MoneyManager.CurrencySign.ExtraSmall
-        </item>
-        <item name="textAppearanceGoalValueMedium">
-            @style/TextAppearance.MoneyManager.GoalValue.Medium
-        </item>
-        <item name="textAppearanceGoalSignMedium">
-            @style/TextAppearance.MoneyManager.GoalSign.Medium
         </item>
     </style>
 
@@ -99,36 +99,6 @@
     <style name="Theme.Splash" parent="Theme.MoneyManager">
         <item name="android:windowBackground">@drawable/splash_screen_background</item>
         <item name="colorPrimaryDark">?attr/colorPrimary</item>
-    </style>
-
-    <style name="ThemeOverlay.MoneyManager.CurrencyView.Big" parent="">
-        <item name="android:textColorPrimary">@color/text_primary_color</item>
-        <item name="android:textColorSecondary">@color/text_primary_color</item>
-    </style>
-
-    <style name="ThemeOverlay.MoneyManager.CurrencyView.Medium" parent="">
-        <item name="android:textColorPrimary">@color/text_primary_color</item>
-        <item name="android:textColorSecondary">@color/text_primary_color</item>
-    </style>
-
-    <style name="ThemeOverlay.MoneyManager.CurrencyView.Medium.Transparent" parent="">
-        <item name="android:textColorPrimary">@color/text_primary_transparent_color</item>
-        <item name="android:textColorSecondary">@color/text_primary_transparent_color</item>
-    </style>
-
-    <style name="ThemeOverlay.MoneyManager.CurrencyView.Small" parent="">
-        <item name="android:textColorPrimary">@color/text_primary_color</item>
-        <item name="android:textColorSecondary">@color/text_primary_color</item>
-    </style>
-
-    <style name="ThemeOverlay.MoneyManager.CurrencyView.Small.Transparent" parent="">
-        <item name="android:textColorPrimary">@color/text_primary_transparent_color</item>
-        <item name="android:textColorSecondary">@color/text_primary_transparent_color</item>
-    </style>
-
-    <style name="ThemeOverlay.MoneyManager.Goals.Medium" parent="">
-        <item name="android:textColorPrimary">@color/text_primary_color</item>
-        <item name="android:textColorSecondary">@color/text_primary_color</item>
     </style>
 
     <style name="ThemeOverlay.MoneyManager.AppBarLayout" parent="">

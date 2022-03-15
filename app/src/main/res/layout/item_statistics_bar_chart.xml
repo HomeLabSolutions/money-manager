@@ -5,8 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="@dimen/statistics_item_min_height"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
@@ -15,8 +13,9 @@
         android:id="@+id/item_statistics_icon"
         android:layout_width="@dimen/statistics_item_icon_size"
         android:layout_height="@dimen/statistics_item_icon_size"
-        android:layout_marginBottom="4dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/item_statistics_progress"
+        app:layout_constraintVertical_chainStyle="spread"
         app:layout_constraintStart_toStartOf="@+id/item_statistics_progress"
         tools:src="@drawable/ic_category_cafe" />
 
@@ -24,7 +23,7 @@
         android:id="@+id/item_statistics_category_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginEnd="4dp"
         android:textAppearance="?attr/textAppearanceBody2"
         app:layout_constraintBottom_toBottomOf="@+id/item_statistics_icon"
@@ -38,7 +37,8 @@
         android:layout_height="4dp"
         android:layout_marginStart="@dimen/standard_left_margin"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/item_statistics_icon"
+        app:layout_constraintTop_toBottomOf="@+id/item_statistics_icon"
+        app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintEnd_toEndOf="@+id/item_statistics_vertical_guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:lineBarWidth="@dimen/goal_progress_line_bar_width"
@@ -56,27 +56,32 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.75" />
 
-    <TextView
-        android:id="@+id/item_statistics_percent"
-        style="?attr/textAppearanceCaption"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/text_primary_transparent_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/item_statistics_vertical_guideline"
-        tools:text="37%" />
-
     <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
         android:id="@+id/item_statistics_sum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Medium"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/item_statistics_percent"
+        app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintStart_toStartOf="@+id/item_statistics_vertical_guideline"
         app:layout_constraintTop_toTopOf="parent"
         app:showDecimalPart="true"
+        app:signTextSize="@dimen/statistics_bar_chart_sign_text_size"
+        app:sumTextSize="@dimen/statistics_bar_chart_sum_text_size"
         app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
-        app:sumTextStyle="?attr/textAppearanceCurrencyValueSmall"
+        app:sumTextStyle="?attr/textAppearanceCurrencySumSmall"
         tools:sumText="15000" />
+
+    <TextView
+        android:id="@+id/item_statistics_percent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:textColor="@color/text_primary_transparent_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/item_statistics_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/item_statistics_sum"
+        app:layout_constraintVertical_chainStyle="spread"
+        tools:text="37%" />
 </androidx.constraintlayout.widget.ConstraintLayout>

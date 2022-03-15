@@ -64,15 +64,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
-        android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="4dp"
         app:showDecimalPart="true"
         app:layout_constraintBottom_toTopOf="@+id/item_transaction_usd_sum"
         app:layout_constraintVertical_chainStyle="spread"
-        app:signTextStyle="?attr/textAppearanceCurrencySignMedium"
-        app:sumTextStyle="?attr/textAppearanceCurrencyValueMedium"
+        app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
+        app:sumTextStyle="?attr/textAppearanceCurrencySumSmall"
         tools:sumText="15000" />
 
     <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
@@ -82,13 +81,14 @@
         android:layout_marginBottom="4dp"
         android:visibility="gone"
         tools:visibility="visible"
-        android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Medium.Transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/item_transaction_sum"
         app:layout_constraintTop_toBottomOf="@+id/item_transaction_sum"
         app:layout_constraintVertical_chainStyle="spread"
         app:showDecimalPart="true"
+        app:signTextColor="@color/text_primary_transparent_color"
+        app:sumTextColor="@color/text_primary_transparent_color"
         app:signTextStyle="?attr/textAppearanceCurrencySignExtraSmall"
-        app:sumTextStyle="?attr/textAppearanceCurrencyValueExtraSmall"
+        app:sumTextStyle="?attr/textAppearanceCurrencySumExtraSmall"
         tools:sumText="15000" />
 </androidx.constraintlayout.widget.ConstraintLayout>

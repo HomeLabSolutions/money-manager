@@ -39,16 +39,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/standard_right_margin"
-                android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Big"
                 app:enableInput="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/edit_transaction_main_sum_title"
                 app:layout_constraintTop_toBottomOf="@+id/edit_transaction_main_sum_title"
                 app:scaleEnabled="true"
                 app:showDecimalPart="true"
-                app:signTextStyle="?attr/textAppearanceCurrencySignBig"
+                app:signTextStyle="?attr/textAppearanceCurrencySignExtraBig"
                 app:sum="5000"
-                app:sumTextStyle="?attr/textAppearanceHeadline1" />
+                app:sumTextStyle="?attr/textAppearanceCurrencySumExtraBig" />
 
             <TextView
                 android:id="@+id/edit_transaction_category"

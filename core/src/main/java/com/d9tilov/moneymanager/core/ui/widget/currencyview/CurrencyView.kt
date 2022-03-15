@@ -20,7 +20,6 @@ import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENC
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.STORE_NAME
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DECIMAL_LENGTH
 import com.d9tilov.moneymanager.core.util.CurrencyUtils.getSymbolByCode
-import com.d9tilov.moneymanager.core.util.getColorFromAttr
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.removeScale
 import com.d9tilov.moneymanager.core.util.string
@@ -35,12 +34,12 @@ class CurrencyView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ViewGroup(context, attrs, defStyleAttr) {
 
-    private var sumTextStyle = DEFAULT_VALUE
-    private var sumTextColor = DEFAULT_VALUE
-    private var signTextStyle = DEFAULT_VALUE
-    private var signTextColor = DEFAULT_VALUE
-    private var signTextSize = resources.getDimensionPixelSize(R.dimen.currency_sign_text_size)
-    private var sumTextSize = resources.getDimensionPixelSize(R.dimen.currency_sum_text_size)
+    private var sumTextStyle = DEFAULT
+    private var sumTextColor = DEFAULT
+    private var signTextStyle = DEFAULT
+    private var signTextColor = DEFAULT
+    private var signTextSize = DEFAULT
+    private var sumTextSize = DEFAULT
     private var currencyGravity = Gravity.START
     private var showUnderline = false
     private var showCurrencySign = true
@@ -87,28 +86,35 @@ class CurrencyView @JvmOverloads constructor(
             with(getContext().obtainStyledAttributes(it, R.styleable.CurrencyView)) {
                 showUnderline = getBoolean(R.styleable.CurrencyView_showUnderline, false)
                 showCurrencySign = getBoolean(R.styleable.CurrencyView_showSign, true)
-                showSignBeforeValue = getBoolean(R.styleable.CurrencyView_showSignBeforeValue, false)
+                showSignBeforeValue =
+                    getBoolean(R.styleable.CurrencyView_showSignBeforeValue, false)
                 enableInput = getBoolean(R.styleable.CurrencyView_enableInput, false)
                 scaleEnable = getBoolean(R.styleable.CurrencyView_scaleEnabled, false)
                 showDecimalPart = getBoolean(R.styleable.CurrencyView_showDecimalPart, false)
-                showShortDecimalPart = getBoolean(R.styleable.CurrencyView_showShortDecimalPart, false)
-                sumTextSize = getDimensionPixelSize(R.styleable.CurrencyView_sumTextSize, resources.getDimensionPixelSize(R.dimen.currency_sum_text_size))
-                sumTextColor = getColor(R.styleable.CurrencyView_sumTextColor, DEFAULT_VALUE)
-                sumTextStyle = getResourceId(R.styleable.CurrencyView_sumTextStyle, DEFAULT_VALUE)
+                showShortDecimalPart =
+                    getBoolean(R.styleable.CurrencyView_showShortDecimalPart, false)
+                sumTextSize =
+                    getDimensionPixelSize(R.styleable.CurrencyView_sumTextSize, DEFAULT)
+                sumTextColor = getColor(R.styleable.CurrencyView_sumTextColor, DEFAULT)
+                sumTextStyle = getResourceId(R.styleable.CurrencyView_sumTextStyle, DEFAULT)
                 currencyGravity = getInt(R.styleable.CurrencyView_gravity, Gravity.START)
                 sum = getString(R.styleable.CurrencyView_sum)?.toBigDecimal ?: BigDecimal.ZERO
                 initSum()
 
                 prefixText = getString(R.styleable.CurrencyView_prefixText) ?: ""
                 initPrefix()
-                signTextSize = getDimensionPixelSize(R.styleable.CurrencyView_signTextSize, resources.getDimensionPixelSize(R.dimen.currency_sign_text_size))
-                signTextColor = getColor(R.styleable.CurrencyView_signTextColor, DEFAULT_VALUE)
+                signTextSize =
+                    getDimensionPixelSize(R.styleable.CurrencyView_signTextSize, DEFAULT)
+                signTextColor = getColor(R.styleable.CurrencyView_signTextColor, DEFAULT)
 
                 signText = getString(R.styleable.CurrencyView_signCode) ?: baseCurrencySymbol
-                signTextStyle = getResourceId(R.styleable.CurrencyView_signTextStyle, DEFAULT_VALUE)
+                signTextStyle = getResourceId(R.styleable.CurrencyView_signTextStyle, DEFAULT)
                 initSign()
 
-                marginBetweenSign = getDimensionPixelSize(R.styleable.CurrencyView_marginBetweenSign, resources.getDimensionPixelSize(R.dimen.currency_margin_between_sign))
+                marginBetweenSign = getDimensionPixelSize(
+                    R.styleable.CurrencyView_marginBetweenSign,
+                    resources.getDimensionPixelSize(R.dimen.currency_margin_between_sign)
+                )
                 recycle()
             }
         }
@@ -137,15 +143,16 @@ class CurrencyView @JvmOverloads constructor(
 
     private fun initPrefix() {
         with(prefixTextView) {
-            if (sumTextStyle < 0) {
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, sumTextSize.toFloat())
-            } else {
-                TextViewCompat.setTextAppearance(this, sumTextStyle)
-            }
-            setTextColor(context.getColorFromAttr(android.R.attr.textColorPrimary))
-            if (!showUnderline) {
-                background = null
-            }
+            if (sumTextStyle == DEFAULT) {
+                setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    resources.getDimensionPixelSize(R.dimen.currency_sum_text_size).toFloat()
+                )
+                setTextColor(R.attr.colorControlActivated)
+            } else TextViewCompat.setTextAppearance(this, sumTextStyle)
+            if (sumTextColor != DEFAULT) setTextColor(sumTextColor)
+            if (sumTextSize != DEFAULT) setTextSize(TypedValue.COMPLEX_UNIT_PX, sumTextSize.toFloat())
+            if (!showUnderline) background = null
             isSingleLine = true
             gravity = currencyGravity
             text = prefixText
@@ -158,19 +165,16 @@ class CurrencyView @JvmOverloads constructor(
     private fun initSum() {
         with(moneyEditText) {
             showDelimiter = showDecimalPart
-            if (sumTextStyle < 0) {
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, sumTextSize.toFloat())
-            } else {
-                TextViewCompat.setTextAppearance(this, sumTextStyle)
-            }
-            if (sumTextColor == DEFAULT_VALUE) {
-                setTextColor(context.getColorFromAttr(android.R.attr.textColorPrimary))
-            } else {
-                setTextColor(sumTextColor)
-            }
-            if (!showUnderline) {
-                background = null
-            }
+            if (sumTextStyle == DEFAULT) {
+                setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    resources.getDimensionPixelSize(R.dimen.currency_sum_text_size).toFloat()
+                )
+                setTextColor(R.attr.colorControlActivated)
+            } else TextViewCompat.setTextAppearance(this, sumTextStyle)
+            if (sumTextColor != DEFAULT) setTextColor(sumTextColor)
+            if (sumTextSize != DEFAULT) setTextSize(TypedValue.COMPLEX_UNIT_PX, sumTextSize.toFloat())
+            if (!showUnderline) background = null
             isSingleLine = true
             gravity = currencyGravity
             setText(formatInputSum(sum))
@@ -184,19 +188,16 @@ class CurrencyView @JvmOverloads constructor(
 
     private fun initSign() {
         with(signTextView) {
-            if (signTextStyle < 0) {
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, signTextSize.toFloat())
-            } else {
-                TextViewCompat.setTextAppearance(this, signTextStyle)
-            }
-            if (signTextColor == DEFAULT_VALUE) {
-                setTextColor(context.getColorFromAttr(android.R.attr.textColorSecondary))
-            } else {
-                setTextColor(signTextColor)
-            }
-            if (!showCurrencySign) {
-                gone()
-            }
+            if (signTextStyle == DEFAULT) {
+                setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    resources.getDimensionPixelSize(R.dimen.currency_sign_text_size).toFloat()
+                )
+                setTextColor(R.attr.colorControlActivated)
+            } else TextViewCompat.setTextAppearance(this, signTextStyle)
+            if (signTextColor != DEFAULT) setTextColor(signTextColor)
+            if (signTextSize != DEFAULT) setTextSize(TypedValue.COMPLEX_UNIT_PX, signTextSize.toFloat())
+            if (!showCurrencySign) gone()
             text = signText
             gravity = currencyGravity
             includeFontPadding = false
@@ -386,7 +387,7 @@ class CurrencyView @JvmOverloads constructor(
         private const val SPARSE_STATE_KEY = "SPARSE_STATE_KEY"
         private const val SUPER_STATE_KEY = "SUPER_STATE_KEY"
 
-        private const val DEFAULT_VALUE = -1
+        private const val DEFAULT = -1
         private const val MIN_LENGTH_OF_TEXT_SIZE_MULTIPLIER = 5
 
         lateinit var PLUS_SIGN: String

@@ -23,7 +23,6 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/background_round_border"
         android:padding="4dp"
-        android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Medium"
         android:visibility="invisible"
         app:enableInput="false"
         app:gravity="center"
@@ -33,7 +32,7 @@
         app:scaleEnabled="true"
         app:showDecimalPart="true"
         app:signTextStyle="?attr/textAppearanceCurrencySignMedium"
-        app:sumTextStyle="?attr/textAppearanceHeadline4" />
+        app:sumTextStyle="?attr/textAppearanceCurrencySumMedium" />
 
     <TextView
         android:id="@+id/income_expense_main_sum_title_left"

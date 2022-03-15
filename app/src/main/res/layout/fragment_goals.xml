@@ -42,7 +42,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/standard_right_margin"
-                android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Big"
+                app:signTextStyle="?attr/textAppearanceCurrencySignBig"
+                app:sumTextStyle="?attr/textAppearanceCurrencySumBig"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/goals_main_sum_title"
                 app:layout_constraintTop_toBottomOf="@+id/goals_main_sum_title"
@@ -65,15 +66,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/standard_right_margin"
-                android:theme="@style/ThemeOverlay.MoneyManager.Goals.Medium"
                 app:enableInput="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/goals_sum_per_period_title"
                 app:layout_constraintTop_toBottomOf="@+id/goals_sum_per_period_title"
                 app:scaleEnabled="true"
-                app:signTextStyle="?attr/textAppearanceGoalSignMedium"
-                app:sum="300"
-                app:sumTextStyle="?attr/textAppearanceGoalValueMedium" />
+                app:signTextStyle="?attr/textAppearanceCurrencySignMedium"
+                app:sumTextStyle="?attr/textAppearanceCurrencySumMedium"
+                app:sum="300" />
 
             <ImageView
                 android:id="@+id/goals_delimiter"

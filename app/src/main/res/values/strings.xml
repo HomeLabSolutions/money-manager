@@ -177,4 +177,5 @@
     <string name="statistics_period_custom">Custom…</string>
     <string name="statistics_today">Today</string>
     <string name="statistics_no_data">Not enough data on this period for display</string>
+    <string name="statistics_expense_info_period_title">Was spent in period:</string>
 </resources>

@@ -33,13 +33,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="24dp"
-        android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Small"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/profile_item_budget_title"
         app:layout_constraintTop_toTopOf="parent"
         app:showDecimalPart="true"
         app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
-        app:sumTextStyle="?attr/textAppearanceCurrencyValueSmall"
+        app:sumTextSize="@dimen/profile_item_text_size"
+        app:signTextSize="@dimen/overline_text_size"
+        app:sumTextStyle="?attr/textAppearanceCurrencySumSmall"
         tools:sumText="15000" />
 
     <TextView

@@ -14,14 +14,12 @@
     <dimen name="caption_text_size">14sp</dimen>
     <dimen name="overline_text_size">12sp</dimen>
 
-    <dimen name="currency_big_text_size">50sp</dimen>
-    <dimen name="currency_sign_big_text_size">36sp</dimen>
-    <dimen name="currency_medium_text_size">30sp</dimen>
-    <dimen name="currency_sign_medium_text_size">20sp</dimen>
-    <dimen name="currency_small_text_size">18sp</dimen>
+    <dimen name="currency_sign_extra_big_text_size">50sp</dimen>
+    <dimen name="currency_sign_big_text_size">32sp</dimen>
+    <dimen name="currency_sign_medium_text_size">18sp</dimen>
     <dimen name="currency_sign_small_text_size">14sp</dimen>
     <dimen name="currency_extra_small_text_size">14sp</dimen>
-    <dimen name="currency_sign_extra_small_text_size">12sp</dimen>
+    <dimen name="currency_sign_extra_small_text_size">10sp</dimen>
 
     <dimen name="standard_top_margin">16dp</dimen>
     <dimen name="standard_bottom_margin">16dp</dimen>
@@ -74,4 +72,9 @@
     <dimen name="statistics_period_text_size">12sp</dimen>
     <dimen name="statistics_item_icon_size">28dp</dimen>
     <dimen name="statistics_item_min_height">60dp</dimen>
+    <dimen name="statistics_bar_chart_sum_text_size">20sp</dimen>
+    <dimen name="statistics_bar_chart_sign_text_size">12sp</dimen>
+
+    <dimen name="income_expense_info_sum_text_size">16sp</dimen>
+    <dimen name="income_expense_info_sign_text_size">10sp</dimen>
 </resources>

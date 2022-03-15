@@ -38,16 +38,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/standard_right_margin"
-                android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Big"
                 app:enableInput="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/created_goal_title"
                 app:layout_constraintTop_toBottomOf="@+id/created_goal_title"
                 app:scaleEnabled="true"
                 app:showDecimalPart="false"
-                app:signTextStyle="?attr/textAppearanceCurrencySignBig"
+                app:signTextStyle="?attr/textAppearanceCurrencySignExtraBig"
                 app:sum="5000"
-                app:sumTextStyle="?attr/textAppearanceHeadline1" />
+                app:sumTextStyle="?attr/textAppearanceCurrencySumExtraBig" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/created_goal_name_layout"

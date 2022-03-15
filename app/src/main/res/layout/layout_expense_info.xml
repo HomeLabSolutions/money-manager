@@ -28,14 +28,15 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="8dp"
-        android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Small"
-        app:layout_constraintBottom_toBottomOf="@+id/expense_can_spend_today_info_title"
-        app:layout_constraintStart_toEndOf="@+id/expense_can_spend_today_info_title"
-        app:layout_constraintTop_toTopOf="@+id/expense_can_spend_today_info_title"
         app:showShortDecimalPart="true"
+        app:sumTextStyle="?attr/textAppearanceCurrencySumSmall"
         app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
         app:sum="1000"
-        app:sumTextStyle="?attr/textAppearanceCurrencyValueSmall" />
+        app:sumTextSize="@dimen/income_expense_info_sum_text_size"
+        app:signTextSize="@dimen/income_expense_info_sign_text_size"
+        app:layout_constraintBottom_toBottomOf="@+id/expense_can_spend_today_info_title"
+        app:layout_constraintStart_toEndOf="@+id/expense_can_spend_today_info_title"
+        app:layout_constraintTop_toTopOf="@+id/expense_can_spend_today_info_title" />
 
     <TextView
         android:id="@+id/expense_today_info_title"
@@ -69,14 +70,17 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Small.Transparent"
         app:layout_constraintBottom_toBottomOf="@+id/expense_today_info_approx_sign"
         app:layout_constraintStart_toEndOf="@+id/expense_today_info_approx_sign"
         app:layout_constraintTop_toTopOf="@+id/expense_today_info_approx_sign"
         app:showShortDecimalPart="true"
+        app:sumTextColor="@color/text_primary_transparent_color"
+        app:signTextColor="@color/text_primary_transparent_color"
+        app:sumTextStyle="?attr/textAppearanceCurrencySumSmall"
         app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
-        app:sum="1000"
-        app:sumTextStyle="?attr/textAppearanceCurrencyValueSmall" />
+        app:sumTextSize="@dimen/income_expense_info_sum_text_size"
+        app:signTextSize="@dimen/income_expense_info_sign_text_size"
+        app:sum="1000" />
 
     <TextView
         android:id="@+id/expense_period_info_title"
@@ -110,14 +114,17 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:theme="@style/ThemeOverlay.MoneyManager.CurrencyView.Small.Transparent"
         app:layout_constraintBottom_toBottomOf="@+id/expense_period_info_approx_sign"
         app:layout_constraintStart_toEndOf="@+id/expense_period_info_approx_sign"
         app:layout_constraintTop_toTopOf="@+id/expense_period_info_approx_sign"
         app:showShortDecimalPart="true"
+        app:sumTextStyle="?attr/textAppearanceCurrencySumSmall"
         app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
-        app:sum="1000"
-        app:sumTextStyle="?attr/textAppearanceCurrencyValueSmall" />
+        app:sumTextSize="@dimen/income_expense_info_sum_text_size"
+        app:signTextSize="@dimen/income_expense_info_sign_text_size"
+        app:sumTextColor="@color/text_primary_transparent_color"
+        app:signTextColor="@color/text_primary_transparent_color"
+        app:sum="1000" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/expense_category_rv_list"

@@ -179,4 +179,5 @@
     <string name="statistics_period_custom">Другой…</string>
     <string name="statistics_today">Сегодня</string>
     <string name="statistics_no_data">Недостаточно данных для отображения</string>
+    <string name="statistics_expense_info_period_title">Было потрачено за период: </string>
 </resources>
