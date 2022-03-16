@@ -116,28 +116,14 @@ class ProfileFragment :
             viewModel.regularIncomes().observe(
                 viewLifecycleOwner
             ) { list ->
-                val incomes = list.joinToString(separator = ",") { it.category.name }
-                when (incomes.isEmpty()) {
-                    true ->
-                        viewBinding.profileRegularIncomes.profileItemRegularIncomeTitle.text =
-                            getString(R.string.profile_item_regular_incomes_title_empty)
-                    false ->
-                        viewBinding.profileRegularIncomes.profileItemRegularIncomeTitle.text =
-                            getString(R.string.profile_item_regular_incomes_title, incomes)
-                }
+                val incomes = list.joinToString(separator = ", ") { it.category.name }
+                viewBinding.profileRegularIncomes.profileItemRegularIncomeSubtitle.text = incomes
             }
             viewModel.regularExpenses().observe(
                 viewLifecycleOwner
             ) { list ->
-                val expenses = list.joinToString(separator = ",") { it.category.name }
-                when (expenses.isEmpty()) {
-                    true ->
-                        viewBinding.profileRegularExpenses.profileItemRegularExpenseTitle.text =
-                            getString(R.string.profile_item_regular_expenses_title_empty)
-                    false ->
-                        viewBinding.profileRegularExpenses.profileItemRegularExpenseTitle.text =
-                            getString(R.string.profile_item_regular_expenses_title, expenses)
-                }
+                val expenses = list.joinToString(separator = ", ") { it.category.name }
+                viewBinding.profileRegularExpenses.profileItemRegularExpenseSubtitle.text = expenses
             }
             viewModel.goals().observe(
                 viewLifecycleOwner

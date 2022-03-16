@@ -45,12 +45,13 @@
 
     <TextView
         android:id="@+id/profile_item_budget_created_date"
+        style="@style/Widget.MoneyManager.TextView.ProfileItem.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/budget_date_created"
         android:textSize="@dimen/budget_created_date"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/profile_item_budget_value"
+        app:layout_constraintStart_toStartOf="@+id/profile_item_budget_title"
         app:layout_constraintTop_toBottomOf="@+id/profile_item_budget_value" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

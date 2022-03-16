@@ -145,10 +145,8 @@
 
     <string name="profile_item_currency_title">Currency: </string>
     <string name="profile_item_budget_title">Budget: </string>
-    <string name="profile_item_regular_incomes_title">Regular incomes: %1$s</string>
-    <string name="profile_item_regular_incomes_title_empty">Regular incomes</string>
-    <string name="profile_item_regular_expenses_title">Regular expenses: %1$s</string>
-    <string name="profile_item_regular_expenses_title_empty">Regular expenses</string>
+    <string name="profile_item_regular_incomes_title">Regular incomes</string>
+    <string name="profile_item_regular_expenses_title">Regular expenses</string>
     <string name="profile_item_goals_title">Goals: %1$s</string>
     <string name="profile_item_goals_title_empty">Goals</string>
     <string name="profile_item_settings_title">Settings</string>

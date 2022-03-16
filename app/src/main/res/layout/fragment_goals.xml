@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/goals_sum_per_period_title"
-                android:textAppearance="?attr/textAppearanceBody2"
+                android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textColor="@color/tertiary_color"
                 app:layout_constraintStart_toStartOf="@+id/goals_main_sum_title"
                 app:layout_constraintTop_toBottomOf="@+id/goals_amount" />

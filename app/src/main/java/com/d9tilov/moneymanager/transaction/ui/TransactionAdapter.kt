@@ -125,9 +125,9 @@ class TransactionAdapter :
                 )
                 if (transaction.isRegular) itemTransactionRegularIcon.show() else itemTransactionRegularIcon.hide()
                 val description = transaction.description
+                    itemTransactionDescription.text = transaction.description
                 if (description.isNotEmpty()) {
                     itemTransactionDescription.show()
-                    itemTransactionDescription.text = transaction.description
                 } else {
                     val constraintSet = ConstraintSet()
                     constraintSet.clone(viewBinding.root)

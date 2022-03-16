@@ -32,7 +32,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="32dp"
                 android:text="@string/settings_start_period_day_title"
-                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textAppearance="?attr/textAppearanceBody1"
                 android:textColor="@color/control_activated_color"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -44,6 +44,7 @@
                 android:layout_marginStart="8dp"
                 android:inputType="number"
                 android:maxLength="2"
+                android:textAppearance="?attr/textAppearanceBody1"
                 app:layout_constraintBottom_toBottomOf="@+id/settings_day_of_month_title"
                 app:layout_constraintStart_toEndOf="@+id/settings_day_of_month_title"
                 app:layout_constraintTop_toTopOf="@+id/settings_day_of_month_title"
@@ -56,6 +57,7 @@
                 android:layout_marginStart="8dp"
                 android:text="@string/settings_start_period_day_postfix"
                 android:textSize="14sp"
+                android:textAppearance="?attr/textAppearanceCaption"
                 app:layout_constraintBottom_toBottomOf="@+id/settings_day_of_month_title"
                 app:layout_constraintStart_toEndOf="@+id/settings_day_of_month_edit" />
 
@@ -77,9 +79,9 @@
         android:id="@+id/settings_backup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="48dp"
         android:text="@string/settings_backup"
-        android:textAppearance="?attr/textAppearanceHeadline6"
+        android:textAppearance="?attr/textAppearanceBody1"
         android:textColor="@color/control_activated_color"
         app:layout_constraintStart_toStartOf="@+id/settings_day_of_month_title"
         app:layout_constraintTop_toBottomOf="@+id/settings_day_of_month_title" />
@@ -88,6 +90,7 @@
                 android:id="@+id/settings_backup_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceCaption"
                 app:layout_constraintStart_toStartOf="@+id/settings_backup"
                 app:layout_constraintTop_toBottomOf="@+id/settings_backup"
                 tools:text="Last backup was " />

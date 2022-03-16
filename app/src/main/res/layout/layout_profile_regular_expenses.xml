@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/profile_item_height"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:gravity="center_vertical"
-    android:id="@+id/profile_regular_expenses_layout"
-    android:orientation="horizontal">
+    android:id="@+id/profile_regular_expenses_layout">
 
     <ImageView
         android:id="@+id/profile_item_regular_expense_icon"
         android:layout_width="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:src="@drawable/ic_regular_expense" />
@@ -17,11 +21,27 @@
         android:id="@+id/profile_item_regular_expense_title"
         style="@style/Widget.MoneyManager.TextView.ProfileItem"
         android:layout_width="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/profile_item_regular_expense_icon"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:ellipsize="end"
         android:maxLines="1"
+        android:ellipsize="end"
         android:text="@string/profile_item_regular_expenses_title" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/profile_item_regular_expense_subtitle"
+        style="@style/Widget.MoneyManager.TextView.ProfileItem.Subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/profile_item_regular_expense_title"
+        app:layout_constraintTop_toBottomOf="@+id/profile_item_regular_expense_title"
+        tools:text="@string/profile_item_regular_expenses_title" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

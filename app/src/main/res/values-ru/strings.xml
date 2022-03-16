@@ -146,10 +146,8 @@
 
     <string name="profile_item_currency_title">Валюта: </string>
     <string name="profile_item_budget_title">Бюджет: </string>
-    <string name="profile_item_regular_incomes_title">Постоянные доходы: %1$s</string>
-    <string name="profile_item_regular_incomes_title_empty">Постоянные доходы</string>
-    <string name="profile_item_regular_expenses_title">Постоянные расходы: %1$s</string>
-    <string name="profile_item_regular_expenses_title_empty">Постоянные расходы</string>
+    <string name="profile_item_regular_incomes_title">Постоянные доходы</string>
+    <string name="profile_item_regular_expenses_title">Постоянные расходы</string>
     <string name="profile_item_goals_title">Цели: %1$s</string>
     <string name="profile_item_goals_title_empty">Цели</string>
     <string name="profile_item_settings_title">Настройки</string>
