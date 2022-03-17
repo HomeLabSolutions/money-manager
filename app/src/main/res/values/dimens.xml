@@ -82,6 +82,9 @@
     <dimen name="statistics_item_min_height">60dp</dimen>
     <dimen name="statistics_bar_chart_sum_text_size">20sp</dimen>
     <dimen name="statistics_bar_chart_sign_text_size">12sp</dimen>
+    <dimen name="statistics_spent_in_period">16sp</dimen>
+    <dimen name="statistics_spent_in_period_sum">16sp</dimen>
+    <dimen name="statistics_spent_in_period_sign">12sp</dimen>
 
     <dimen name="income_expense_info_sum_text_size">16sp</dimen>
     <dimen name="income_expense_info_sign_text_size">10sp</dimen>

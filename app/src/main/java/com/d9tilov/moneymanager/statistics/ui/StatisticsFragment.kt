@@ -91,6 +91,8 @@ class StatisticsFragment :
         viewModel.getTransactions().observe(viewLifecycleOwner) { list ->
             setPieChartData(list)
             statisticsBarChartAdapter.updateItems(list)
+            viewBinding.statisticsSpentInPeriodSum.setValue(list.sumOf { it.sum })
+            viewBinding.statisticsBarChart.scrollToPosition(0)
         }
     }
 
