@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
 
     <TextView
         android:id="@+id/statistics_day"
@@ -86,14 +87,82 @@
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/statistics_day" />
+        app:layout_constraintTop_toBottomOf="@+id/statistics_additional_menu" />
+
+    <ImageView
+        android:id="@+id/statistics_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="@dimen/standard_half_right_margin"
+        android:background="?selectableItemBackgroundBorderless"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statistics_custom"
+        app:srcCompat="@drawable/ic_statistics_menu" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/statistics_additional_menu"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/statistics_menu_item_height"
+        android:visibility="gone"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="@dimen/standard_left_margin"
+        app:layout_constraintEnd_toStartOf="@+id/statistics_menu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statistics_day"
+        tools:visibility="visible">
+
+        <include
+            android:id="@+id/statistics_menu_item_chart"
+            layout="@layout/item_statistics_menu"
+            android:layout_width="@dimen/statistics_menu_item_width"
+            android:layout_height="@dimen/statistics_menu_item_height"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/statistics_menu_item_currency"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/statistics_menu_item_currency"
+            layout="@layout/item_statistics_menu_currency"
+            android:layout_width="@dimen/statistics_menu_item_width"
+            android:layout_height="@dimen/statistics_menu_item_height"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/statistics_menu_item_in_stat"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toEndOf="@+id/statistics_menu_item_chart"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/statistics_menu_item_in_stat"
+            layout="@layout/item_statistics_menu"
+            android:layout_width="@dimen/statistics_menu_item_width"
+            android:layout_height="@dimen/statistics_menu_item_height"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/statistics_menu_item_tr_type"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toEndOf="@+id/statistics_menu_item_currency"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/statistics_menu_item_tr_type"
+            layout="@layout/item_statistics_menu"
+            android:layout_width="@dimen/statistics_menu_item_width"
+            android:layout_height="@dimen/statistics_menu_item_height"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toEndOf="@+id/statistics_menu_item_in_stat"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/statistics_vertical_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.25"/>
+        app:layout_constraintGuide_percent="0.25" />
 
     <TextView
         android:id="@+id/statistics_spent_in_period"
@@ -152,6 +221,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/statistics_day"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toBottomOf="@+id/statistics_day" />
 </androidx.constraintlayout.widget.ConstraintLayout>

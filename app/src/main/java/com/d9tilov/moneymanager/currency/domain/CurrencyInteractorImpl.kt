@@ -45,7 +45,7 @@ class CurrencyInteractorImpl(
     override suspend fun getCurrencyByCode(code: String): Currency =
         currencyRepo.getCurrencyByCode(code)
 
-    override suspend fun convertToMainCurrency(
+    override suspend fun toMainCurrency(
         amount: BigDecimal,
         currencyCode: String
     ): BigDecimal {
@@ -84,8 +84,8 @@ class CurrencyInteractorImpl(
         budgetInteractor.get()
             .catch { Timber.d("Can't update non-created budget") }
             .collect { budget ->
-                val newAmount = convertToMainCurrency(budget.sum, budget.currencyCode)
-                val newSavedAmount = convertToMainCurrency(budget.saveSum, budget.currencyCode)
+                val newAmount = toMainCurrency(budget.sum, budget.currencyCode)
+                val newSavedAmount = toMainCurrency(budget.saveSum, budget.currencyCode)
                 budgetInteractor.update(
                     budget.copy(
                         sum = newAmount,

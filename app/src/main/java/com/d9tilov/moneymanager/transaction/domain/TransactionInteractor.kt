@@ -16,7 +16,8 @@ interface TransactionInteractor : Interactor {
         type: TransactionType,
         from: LocalDateTime,
         to: LocalDateTime,
-        inStatistics: Boolean = true
+        currencyCode: String,
+        inStatistics: Boolean
     ): Flow<List<TransactionChartModel>>
     fun getTransactionById(id: Long): Flow<Transaction>
     fun getTransactionsByType(type: TransactionType): Flow<PagingData<Transaction>>
@@ -28,6 +29,7 @@ interface TransactionInteractor : Interactor {
     fun getApproxSumTodayCurrentCurrency(type: TransactionType): Flow<BigDecimal>
     fun removeAllByCategory(category: Category): Flow<Int>
     suspend fun addTransaction(transaction: Transaction)
+    suspend fun getCurrentCurrencyCode(): String
     suspend fun executeRegularIfNeeded(type: TransactionType)
     suspend fun update(transaction: Transaction)
     suspend fun removeTransaction(transaction: Transaction)

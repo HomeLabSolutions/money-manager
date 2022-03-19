@@ -12,9 +12,8 @@ data class TransactionChartModel(
     val clientId: String = DataConstants.NO_ID.toString(),
     val type: TransactionType,
     val category: Category,
-    val currencyCode: String = DataConstants.DEFAULT_CURRENCY_CODE,
+    val currencyCode: String,
     val sum: BigDecimal,
-    val usdSum: BigDecimal = BigDecimal.ZERO,
     val percent: BigDecimal,
-    val inStatistics: Boolean = true
+    val inStatistics: Boolean
 ) : Parcelable

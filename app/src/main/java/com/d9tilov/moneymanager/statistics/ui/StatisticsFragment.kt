@@ -13,6 +13,7 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsNavigator
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
+import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.core.util.DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.currentDate
@@ -21,21 +22,20 @@ import com.d9tilov.moneymanager.core.util.getEndOfDay
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.isSameDay
 import com.d9tilov.moneymanager.core.util.show
-import com.d9tilov.moneymanager.core.util.toLocalDate
 import com.d9tilov.moneymanager.core.util.toLocalDateTime
 import com.d9tilov.moneymanager.core.util.toMillis
 import com.d9tilov.moneymanager.databinding.FragmentStatisticsBinding
 import com.d9tilov.moneymanager.databinding.LayoutEmptyStatisticsPlaceholderBinding
+import com.d9tilov.moneymanager.statistics.domain.StatisticsChartMode
+import com.d9tilov.moneymanager.statistics.domain.StatisticsChartMode.LINE_CHART
+import com.d9tilov.moneymanager.statistics.domain.StatisticsChartMode.PIE_CHART
+import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod
+import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod.CUSTOM
+import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod.DAY
+import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod.MONTH
+import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod.WEEK
+import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod.YEAR
 import com.d9tilov.moneymanager.statistics.vm.StatisticsViewModel
-import com.d9tilov.moneymanager.transaction.domain.entity.StatisticsChartMode
-import com.d9tilov.moneymanager.transaction.domain.entity.StatisticsChartMode.LINE_CHART
-import com.d9tilov.moneymanager.transaction.domain.entity.StatisticsChartMode.PIE_CHART
-import com.d9tilov.moneymanager.transaction.domain.entity.StatisticsPeriod
-import com.d9tilov.moneymanager.transaction.domain.entity.StatisticsPeriod.CUSTOM
-import com.d9tilov.moneymanager.transaction.domain.entity.StatisticsPeriod.DAY
-import com.d9tilov.moneymanager.transaction.domain.entity.StatisticsPeriod.MONTH
-import com.d9tilov.moneymanager.transaction.domain.entity.StatisticsPeriod.WEEK
-import com.d9tilov.moneymanager.transaction.domain.entity.StatisticsPeriod.YEAR
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.data.Entry
@@ -51,6 +51,7 @@ import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.minus
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
@@ -69,6 +70,7 @@ class StatisticsFragment :
     private val viewBinding by viewBinding(FragmentStatisticsBinding::bind)
     private val statisticsBarChartAdapter: StatisticsBarChartAdapter = StatisticsBarChartAdapter()
     private var emptyViewStub: LayoutEmptyStatisticsPlaceholderBinding? = null
+    private var showMenu = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +79,7 @@ class StatisticsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setChartMode(viewModel.chartMode, viewModel.chartPeriod, viewModel.periodPair)
+        setChartMode(viewModel.chartMode, viewModel.chartPeriod)
         viewBinding.run {
             statisticsBarChart.adapter = statisticsBarChartAdapter
             emptyViewStub = viewBinding.statisticsEmptyPlaceholder
@@ -86,22 +88,48 @@ class StatisticsFragment :
             statisticsMonth.setOnClickListener { setChartMode(PIE_CHART, MONTH) }
             statisticsYear.setOnClickListener { setChartMode(PIE_CHART, YEAR) }
             statisticsCustom.setOnClickListener { openRangeCalendar() }
+            statisticsMenu.setOnClickListener {
+                showMenu = !showMenu
+                if (showMenu) {
+                    statisticsMenu.setImageResource(R.drawable.ic_statistics_close)
+                    statisticsAdditionalMenu.show()
+                } else {
+                    statisticsMenu.setImageResource(R.drawable.ic_statistics_menu)
+                    statisticsAdditionalMenu.gone()
+                }
+            }
+            statisticsMenuItemCurrency.root.setOnClickListener {
+                viewModel.updateCurrency()
+                updateCurrencyIcon()
+            }
         }
 
         initPieChart()
         viewModel.getTransactions().observe(viewLifecycleOwner) { list ->
             setPieChartData(list)
             statisticsBarChartAdapter.updateItems(list)
-            viewBinding.statisticsSpentInPeriodSum.setValue(list.sumOf { it.sum })
+            viewBinding.statisticsSpentInPeriodSum.setValue(
+                list.sumOf { it.sum },
+                viewModel.currencyCode
+            )
             viewBinding.statisticsBarChart.scrollToPosition(0)
         }
+        viewModel.currency.observe(viewLifecycleOwner) { code ->
+            viewModel.updateCurrency(code)
+            updateCurrencyIcon()
+        }
+    }
+
+    private fun updateCurrencyIcon() {
+        viewBinding.statisticsMenuItemCurrency.statisticsMenuCurrencyIcon.text =
+            CurrencyUtils.getCurrencyIcon(viewModel.currencyCode)
     }
 
     private fun openRangeCalendar() {
         val builderRange = MaterialDatePicker.Builder.dateRangePicker()
         val timezone = TimeZone.getDefault()
-        val startDateSelection = viewModel.periodPair.first.toLocalDateTime().toMillis()
-        val endDateSelection = viewModel.periodPair.second.toLocalDateTime().toMillis()
+        val startDateSelection = viewModel.from.toMillis()
+        val endDateSelection = viewModel.to.toMillis()
         val startSelectionMillis = startDateSelection + timezone.getOffset(startDateSelection)
         val endSelectionMillis = endDateSelection + timezone.getOffset(endDateSelection)
         builderRange
@@ -113,7 +141,11 @@ class StatisticsFragment :
             val endDate = startEndPair.second.toLocalDateTime().toMillis()
             val startMillis = startDate - timezone.getOffset(startDate)
             val endMillis = endDate - timezone.getOffset(endDate)
-            setChartMode(PIE_CHART, CUSTOM, Pair(startMillis, endMillis))
+            setChartMode(
+                PIE_CHART,
+                CUSTOM,
+                Pair(startMillis.toLocalDateTime(), endMillis.toLocalDateTime())
+            )
         }
         pickerRange.show(parentFragmentManager, pickerRange.toString())
     }
@@ -126,27 +158,28 @@ class StatisticsFragment :
     }
 
     private fun updatePeriod() {
-        var to = currentDate()
-        val from = when (viewModel.chartPeriod) {
-            DAY -> to
-            WEEK -> to.minus(1, DateTimeUnit.WEEK)
-            MONTH -> to.minus(1, DateTimeUnit.MONTH)
-            YEAR -> to.minus(1, DateTimeUnit.YEAR)
+        val to = currentDate()
+        var toLocalDateTime = to.getEndOfDay()
+        val fromLocalDateTime = when (viewModel.chartPeriod) {
+            DAY -> to.getEndOfDay()
+            WEEK -> to.minus(1, DateTimeUnit.WEEK).getEndOfDay()
+            MONTH -> to.minus(1, DateTimeUnit.MONTH).getEndOfDay()
+            YEAR -> to.minus(1, DateTimeUnit.YEAR).getEndOfDay()
             CUSTOM -> {
-                to = viewModel.periodPair.second.toLocalDate()
-                viewModel.periodPair.first.toLocalDate()
+                toLocalDateTime = viewModel.to
+                viewModel.from
             }
         }
 
         viewBinding.statisticsPieChart.centerText =
-            if (to.isSameDay(from)) getString(R.string.statistics_today)
+            if (toLocalDateTime.isSameDay(fromLocalDateTime)) getString(R.string.statistics_today)
             else {
-                val endOfStartDay = Date(from.getEndOfDay().toMillis())
-                val endOfEndDay = Date(to.getEndOfDay().toMillis())
+                val fromMillis = Date(fromLocalDateTime.toMillis())
+                val toMillis = Date(toLocalDateTime.getEndOfDay().toMillis())
                 val sb = StringBuilder()
-                sb.append(SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(endOfStartDay))
+                sb.append(SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(fromMillis))
                 sb.append(" - ")
-                sb.append(SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(endOfEndDay))
+                sb.append(SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(toMillis))
                 sb.toString()
             }
         viewBinding.statisticsPieChart.setCenterTextColor(
@@ -198,7 +231,7 @@ class StatisticsFragment :
         hideViewStub()
         val dataSet = PieDataSet(
             list
-                .mapIndexed { index, tr ->
+                .map { tr ->
                     val categoryName = tr.category.name
                     val displayName = if (tr.percent > PERCENT_LIMIT_TO_SHOW_LABEL) {
                         if (categoryName.length > MAX_CATEGORY_NAME_LENGTH)
@@ -235,7 +268,7 @@ class StatisticsFragment :
     private fun setChartMode(
         mode: StatisticsChartMode,
         period: StatisticsPeriod = MONTH,
-        periodPair: Pair<Long, Long>? = null
+        periodPair: Pair<LocalDateTime, LocalDateTime>? = null
     ) {
         when (mode) {
             PIE_CHART -> {
