@@ -21,6 +21,7 @@ import com.d9tilov.moneymanager.core.util.getEndOfDay
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.isSameDay
 import com.d9tilov.moneymanager.core.util.show
+import com.d9tilov.moneymanager.core.util.toLocalDate
 import com.d9tilov.moneymanager.core.util.toLocalDateTime
 import com.d9tilov.moneymanager.core.util.toMillis
 import com.d9tilov.moneymanager.databinding.FragmentStatisticsBinding
@@ -125,23 +126,27 @@ class StatisticsFragment :
     }
 
     private fun updatePeriod() {
-        val to = currentDate()
+        var to = currentDate()
         val from = when (viewModel.chartPeriod) {
             DAY -> to
             WEEK -> to.minus(1, DateTimeUnit.WEEK)
             MONTH -> to.minus(1, DateTimeUnit.MONTH)
             YEAR -> to.minus(1, DateTimeUnit.YEAR)
-            CUSTOM -> to.minus(1, DateTimeUnit.YEAR)
+            CUSTOM -> {
+                to = viewModel.periodPair.second.toLocalDate()
+                viewModel.periodPair.first.toLocalDate()
+            }
         }
 
         viewBinding.statisticsPieChart.centerText =
             if (to.isSameDay(from)) getString(R.string.statistics_today)
             else {
-                val endOfCurDay = Date(from.getEndOfDay().toMillis())
+                val endOfStartDay = Date(from.getEndOfDay().toMillis())
+                val endOfEndDay = Date(to.getEndOfDay().toMillis())
                 val sb = StringBuilder()
-                sb.append(SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(endOfCurDay))
+                sb.append(SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(endOfStartDay))
                 sb.append(" - ")
-                sb.append(SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(endOfCurDay))
+                sb.append(SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(endOfEndDay))
                 sb.toString()
             }
         viewBinding.statisticsPieChart.setCenterTextColor(

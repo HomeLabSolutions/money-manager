@@ -94,10 +94,12 @@ class TransactionInteractorImpl(
                         }
                     }
                     .map { list ->
-                        val sum = list.sumOf { tr -> currencyInteractor.convertToMainCurrency(
-                            tr.sum,
-                            tr.currencyCode
-                        ) }
+                        val sum = list.sumOf { tr ->
+                            currencyInteractor.convertToMainCurrency(
+                                tr.sum,
+                                tr.currencyCode
+                            )
+                        }
                         list.groupBy { tr -> tr.category }
                             .map { entry: Map.Entry<Category, List<TransactionChartModel>> ->
                                 val currencySum: BigDecimal = entry.value.sumOf { item ->
