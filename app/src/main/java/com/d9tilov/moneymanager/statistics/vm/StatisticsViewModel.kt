@@ -48,6 +48,8 @@ class StatisticsViewModel @Inject constructor(private val transactionInteractor:
         private set
     var currencyCode: String = DEFAULT_CURRENCY_CODE
         private set
+    var transactionType: TransactionType = TransactionType.EXPENSE
+        private set
 
     fun updateCurrency(currencyCode: String? = null) {
         if (currencyCode == null) {
@@ -87,10 +89,18 @@ class StatisticsViewModel @Inject constructor(private val transactionInteractor:
         update()
     }
 
+    fun updateTransactionType() {
+        transactionType = when (transactionType) {
+            TransactionType.INCOME -> TransactionType.EXPENSE
+            TransactionType.EXPENSE -> TransactionType.INCOME
+        }
+        update()
+    }
+
     fun update() {
         viewModelScope.launch(Dispatchers.Main) {
             transactionInteractor.getTransactionsGroupedByCategory(
-                TransactionType.EXPENSE,
+                transactionType,
                 from.getStartOfDay(),
                 to.getEndOfDay(),
                 currencyCode,

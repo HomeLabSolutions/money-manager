@@ -157,6 +157,13 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/statistics_barrier"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="statistics_additional_menu,statistics_menu" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/statistics_vertical_guideline"
         android:layout_width="wrap_content"
@@ -221,5 +228,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/statistics_day" />
+        app:layout_constraintTop_toBottomOf="@+id/statistics_barrier" />
 </androidx.constraintlayout.widget.ConstraintLayout>

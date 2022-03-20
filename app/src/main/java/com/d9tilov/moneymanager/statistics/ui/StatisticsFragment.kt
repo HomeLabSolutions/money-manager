@@ -37,6 +37,7 @@ import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod.WEEK
 import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod.YEAR
 import com.d9tilov.moneymanager.statistics.vm.StatisticsViewModel
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
+import com.d9tilov.moneymanager.transaction.isIncome
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
@@ -106,6 +107,10 @@ class StatisticsFragment :
                 viewModel.updateStatisticsFlag()
                 updateInStatisticsIcon()
             }
+            statisticsMenuItemTrType.root.setOnClickListener {
+                viewModel.updateTransactionType()
+                updateTransactionTypeIcon()
+            }
         }
 
         initPieChart()
@@ -123,6 +128,7 @@ class StatisticsFragment :
             updateCurrencyIcon()
         }
         updateInStatisticsIcon()
+        updateTransactionTypeIcon()
     }
 
     private fun updateCurrencyIcon() {
@@ -134,11 +140,23 @@ class StatisticsFragment :
         if (viewModel.inStatistics) {
             viewBinding.statisticsMenuItemInStat.statisticsMenuIcon.setImageResource(R.drawable.ic_in_statistics)
             viewBinding.statisticsMenuItemInStat.statisticsMenuTitle.text =
-                getString(R.string.statistics_in_statistics_title)
+                getString(R.string.statistics_menu_in_statistics_title)
         } else {
             viewBinding.statisticsMenuItemInStat.statisticsMenuIcon.setImageResource(R.drawable.ic_not_in_statistics)
             viewBinding.statisticsMenuItemInStat.statisticsMenuTitle.text =
-                getString(R.string.statistics_not_in_statistics_title)
+                getString(R.string.statistics_menu_not_in_statistics_title)
+        }
+    }
+
+    private fun updateTransactionTypeIcon() {
+        if (viewModel.transactionType.isIncome()) {
+            viewBinding.statisticsMenuItemTrType.statisticsMenuIcon.setImageResource(R.drawable.ic_statistics_income)
+            viewBinding.statisticsMenuItemTrType.statisticsMenuTitle.text =
+                getString(R.string.statistics_menu_incomes_title)
+        } else {
+            viewBinding.statisticsMenuItemTrType.statisticsMenuIcon.setImageResource(R.drawable.ic_statistics_expense)
+            viewBinding.statisticsMenuItemTrType.statisticsMenuTitle.text =
+                getString(R.string.statistics_menu_expenses_title)
         }
     }
 
