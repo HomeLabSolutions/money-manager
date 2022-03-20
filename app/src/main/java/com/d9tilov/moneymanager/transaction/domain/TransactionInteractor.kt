@@ -17,7 +17,8 @@ interface TransactionInteractor : Interactor {
         from: LocalDateTime,
         to: LocalDateTime,
         currencyCode: String,
-        inStatistics: Boolean
+        inStatistics: Boolean,
+        onlySubcategories: Boolean
     ): Flow<List<TransactionChartModel>>
     fun getTransactionById(id: Long): Flow<Transaction>
     fun getTransactionsByType(type: TransactionType): Flow<PagingData<Transaction>>

@@ -184,4 +184,6 @@
     <string name="statistics_menu_incomes_title">Доходы</string>
     <string name="statistics_menu_expenses_title">Расходы</string>
     <string name="statistics_menu_chart_type_title">График</string>
+    <string name="statistics_menu_category_type_parent_title">Категории</string>
+    <string name="statistics_menu_category_type_child_title">Подкатегории</string>
 </resources>

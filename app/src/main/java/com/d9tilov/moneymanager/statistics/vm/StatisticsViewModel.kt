@@ -12,7 +12,12 @@ import com.d9tilov.moneymanager.core.util.currentDate
 import com.d9tilov.moneymanager.core.util.currentDateTime
 import com.d9tilov.moneymanager.core.util.getEndOfDay
 import com.d9tilov.moneymanager.core.util.getStartOfDay
-import com.d9tilov.moneymanager.statistics.domain.StatisticsChartMode
+import com.d9tilov.moneymanager.statistics.domain.BaseStatisticsMenuType
+import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuCategoryType
+import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuChartMode
+import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuCurrency
+import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuInStatistics
+import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuTransactionType
 import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
@@ -33,31 +38,51 @@ import javax.inject.Inject
 class StatisticsViewModel @Inject constructor(private val transactionInteractor: TransactionInteractor) :
     BaseViewModel<StatisticsNavigator>() {
 
-    var chartMode: StatisticsChartMode = StatisticsChartMode.PIE_CHART
-    var chartPeriod: StatisticsPeriod = StatisticsPeriod.DAY
-        private set
     val currency: LiveData<String> =
         flow { emit(transactionInteractor.getCurrentCurrencyCode()) }.flowOn(Dispatchers.IO)
             .asLiveData()
-    var inStatistics: Boolean = true
-        private set
     private val transactionsLiveData = MutableLiveData<List<TransactionChartModel>>()
+
+    var chartMode: StatisticsMenuChartMode = StatisticsMenuChartMode.PIE_CHART
+        private set
+    var chartPeriod: StatisticsPeriod = StatisticsPeriod.DAY
+        private set
+    var inStatistics: StatisticsMenuInStatistics = StatisticsMenuInStatistics.IN_STATISTICS
+        private set
+    var currencyType: StatisticsMenuCurrency = StatisticsMenuCurrency.CURRENT(DEFAULT_CURRENCY_CODE)
+        private set
+    var transactionType: StatisticsMenuTransactionType = StatisticsMenuTransactionType.EXPENSE
+        private set
+    var categoryType: StatisticsMenuCategoryType = StatisticsMenuCategoryType.CHILD
+        private set
+
+    var currencyCode: String = DEFAULT_CURRENCY_CODE
     var from: LocalDateTime = currentDateTime().getStartOfDay()
         private set
     var to: LocalDateTime = currentDateTime().getEndOfDay()
         private set
-    var currencyCode: String = DEFAULT_CURRENCY_CODE
-        private set
-    var transactionType: TransactionType = TransactionType.EXPENSE
-        private set
+
+    val menuItemList = mutableListOf(
+        chartMode,
+        categoryType,
+        transactionType,
+        inStatistics
+    )
 
     fun updateCurrency(currencyCode: String? = null) {
         if (currencyCode == null) {
-            this.currencyCode = if (this.currencyCode == DEFAULT_CURRENCY_CODE) currency.value
-                ?: DEFAULT_CURRENCY_CODE else DEFAULT_CURRENCY_CODE
+            currencyType = when (currencyType) {
+                StatisticsMenuCurrency.DEFAULT -> StatisticsMenuCurrency.CURRENT(this.currencyCode)
+                is StatisticsMenuCurrency.CURRENT -> StatisticsMenuCurrency.DEFAULT
+            }
         } else {
             this.currencyCode = currencyCode
+            currencyType = StatisticsMenuCurrency.CURRENT(currencyCode)
+            if (!menuItemList.contains(currencyType)) {
+                menuItemList.add(0, currencyType)
+            }
         }
+        updateItemInList(currencyType, 0)
         update()
     }
 
@@ -85,39 +110,63 @@ class StatisticsViewModel @Inject constructor(private val transactionInteractor:
     }
 
     fun updateStatisticsFlag() {
-        inStatistics = !inStatistics
+        inStatistics = when (inStatistics) {
+            StatisticsMenuInStatistics.IN_STATISTICS -> StatisticsMenuInStatistics.ALL
+            StatisticsMenuInStatistics.ALL -> StatisticsMenuInStatistics.IN_STATISTICS
+        }
+        updateItemInList(inStatistics, 4)
         update()
     }
 
     fun updateTransactionType() {
         transactionType = when (transactionType) {
-            TransactionType.INCOME -> TransactionType.EXPENSE
-            TransactionType.EXPENSE -> TransactionType.INCOME
+            StatisticsMenuTransactionType.INCOME -> StatisticsMenuTransactionType.EXPENSE
+            StatisticsMenuTransactionType.EXPENSE -> StatisticsMenuTransactionType.INCOME
         }
+        updateItemInList(transactionType, 3)
         update()
     }
 
     fun updateCharMode() {
         chartMode = when (chartMode) {
-            StatisticsChartMode.LINE_CHART -> StatisticsChartMode.PIE_CHART
-            StatisticsChartMode.PIE_CHART -> StatisticsChartMode.LINE_CHART
+            StatisticsMenuChartMode.LINE_CHART -> StatisticsMenuChartMode.PIE_CHART
+            StatisticsMenuChartMode.PIE_CHART -> StatisticsMenuChartMode.LINE_CHART
         }
+        updateItemInList(chartMode, 1)
+        update()
+    }
+
+    fun updateCategoryType() {
+        categoryType = when (categoryType) {
+            StatisticsMenuCategoryType.CHILD -> StatisticsMenuCategoryType.PARENT
+            StatisticsMenuCategoryType.PARENT -> StatisticsMenuCategoryType.CHILD
+        }
+        updateItemInList(categoryType, 2)
         update()
     }
 
     fun update() {
         viewModelScope.launch(Dispatchers.Main) {
             transactionInteractor.getTransactionsGroupedByCategory(
-                transactionType,
+                when (transactionType) {
+                    StatisticsMenuTransactionType.EXPENSE -> TransactionType.EXPENSE
+                    StatisticsMenuTransactionType.INCOME -> TransactionType.INCOME
+                },
                 from.getStartOfDay(),
                 to.getEndOfDay(),
-                currencyCode,
-                inStatistics
+                currencyType.currencyCode,
+                inStatistics == StatisticsMenuInStatistics.IN_STATISTICS,
+                categoryType == StatisticsMenuCategoryType.CHILD
             )
                 .map { list -> list.sortedByDescending { tr -> tr.sum } }
                 .flowOn(Dispatchers.IO)
                 .collect { transactionsLiveData.value = it }
         }
+    }
+
+    private fun updateItemInList(item: BaseStatisticsMenuType, index: Int) {
+        menuItemList.removeAt(index)
+        menuItemList.add(index, item)
     }
 
     fun getTransactions(): LiveData<List<TransactionChartModel>> = transactionsLiveData

@@ -85,7 +85,8 @@ class TransactionInteractorImpl(
         from: LocalDateTime,
         to: LocalDateTime,
         currencyCode: String,
-        inStatistics: Boolean
+        inStatistics: Boolean,
+        onlySubcategories: Boolean
     ): Flow<List<TransactionChartModel>> {
         return categoryInteractor.getGroupedCategoriesByType(type)
             .flatMapLatest { categoryList ->
@@ -105,7 +106,13 @@ class TransactionInteractorImpl(
                     }
                     .map { list ->
                         val sum = list.sumOf { tr -> tr.sum }
-                        list.groupBy { tr -> tr.category }
+                        list.groupBy { tr ->
+                            if (onlySubcategories) {
+                                tr.category
+                            } else {
+                                tr.category.parent ?: tr.category
+                            }
+                        }
                             .map { entry: Map.Entry<Category, List<TransactionChartModel>> ->
                                 val currencySum: BigDecimal = entry.value.sumOf { item -> item.sum }
                                 val transaction: TransactionChartModel = entry.value.first()

@@ -182,4 +182,6 @@
     <string name="statistics_menu_incomes_title">Incomes</string>
     <string name="statistics_menu_expenses_title">Expenses</string>
     <string name="statistics_menu_chart_type_title">Chart type</string>
+    <string name="statistics_menu_category_type_parent_title">Categories</string>
+    <string name="statistics_menu_category_type_child_title">Subcategories</string>
 </resources>

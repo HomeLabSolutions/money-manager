@@ -11,11 +11,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
+import androidx.recyclerview.widget.SnapHelper
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsNavigator
+import com.d9tilov.moneymanager.core.events.OnItemClickListener
+import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
-import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.core.util.DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.currentDate
@@ -28,9 +32,13 @@ import com.d9tilov.moneymanager.core.util.toLocalDateTime
 import com.d9tilov.moneymanager.core.util.toMillis
 import com.d9tilov.moneymanager.databinding.FragmentStatisticsBinding
 import com.d9tilov.moneymanager.databinding.LayoutEmptyStatisticsPlaceholderBinding
-import com.d9tilov.moneymanager.statistics.domain.StatisticsChartMode
-import com.d9tilov.moneymanager.statistics.domain.StatisticsChartMode.LINE_CHART
-import com.d9tilov.moneymanager.statistics.domain.StatisticsChartMode.PIE_CHART
+import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuCategoryType
+import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuChartMode
+import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuChartMode.LINE_CHART
+import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuChartMode.PIE_CHART
+import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuCurrency
+import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuInStatistics
+import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuTransactionType
 import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod
 import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod.CUSTOM
 import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod.DAY
@@ -39,7 +47,6 @@ import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod.WEEK
 import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod.YEAR
 import com.d9tilov.moneymanager.statistics.vm.StatisticsViewModel
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
-import com.d9tilov.moneymanager.transaction.isIncome
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
@@ -72,13 +79,62 @@ class StatisticsFragment :
     override val viewModel by viewModels<StatisticsViewModel>()
     private val viewBinding by viewBinding(FragmentStatisticsBinding::bind)
     private val statisticsBarChartAdapter: StatisticsBarChartAdapter = StatisticsBarChartAdapter()
+    private val statisticsMenuAdapter: StatisticsMenuAdapter = StatisticsMenuAdapter()
     private var emptyViewStub: LayoutEmptyStatisticsPlaceholderBinding? = null
     private var showMenu = false
     private val hideMenuHandler = Handler(Looper.getMainLooper())
 
+    private val onCharMenuItemClickListener =
+        object : OnItemClickListener<StatisticsMenuChartMode> {
+            override fun onItemClick(item: StatisticsMenuChartMode, position: Int) {
+                viewModel.updateCharMode()
+                statisticsMenuAdapter.updateItems(viewModel.menuItemList)
+                hideMenuWithDelay()
+            }
+        }
+    private val onCurrencyMenuItemClickListener =
+        object : OnItemClickListener<StatisticsMenuCurrency> {
+            override fun onItemClick(item: StatisticsMenuCurrency, position: Int) {
+                viewModel.updateCurrency()
+                statisticsMenuAdapter.updateItems(viewModel.menuItemList)
+                hideMenuWithDelay()
+            }
+        }
+    private val onInStatisticsMenuItemClickListener =
+        object : OnItemClickListener<StatisticsMenuInStatistics> {
+            override fun onItemClick(item: StatisticsMenuInStatistics, position: Int) {
+                viewModel.updateStatisticsFlag()
+                statisticsMenuAdapter.updateItems(viewModel.menuItemList)
+                hideMenuWithDelay()
+            }
+        }
+
+    private val onTrTypeMenuItemClickListener =
+        object : OnItemClickListener<StatisticsMenuTransactionType> {
+            override fun onItemClick(item: StatisticsMenuTransactionType, position: Int) {
+                viewModel.updateTransactionType()
+                statisticsMenuAdapter.updateItems(viewModel.menuItemList)
+                hideMenuWithDelay()
+            }
+        }
+    private val onCategoryItemClickListener =
+        object : OnItemClickListener<StatisticsMenuCategoryType> {
+            override fun onItemClick(item: StatisticsMenuCategoryType, position: Int) {
+                viewModel.updateCategoryType()
+                statisticsMenuAdapter.updateItems(viewModel.menuItemList)
+                hideMenuWithDelay()
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.hide()
+        statisticsMenuAdapter.chartMenuItemClickListener = onCharMenuItemClickListener
+        statisticsMenuAdapter.currencyMenuItemClickListener = onCurrencyMenuItemClickListener
+        statisticsMenuAdapter.inStatisticsMenuItemClickListener =
+            onInStatisticsMenuItemClickListener
+        statisticsMenuAdapter.trTypeMenuItemClickListener = onTrTypeMenuItemClickListener
+        statisticsMenuAdapter.categoryMenuItemClickListener = onCategoryItemClickListener
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -87,34 +143,13 @@ class StatisticsFragment :
         viewBinding.run {
             statisticsBarChart.adapter = statisticsBarChartAdapter
             emptyViewStub = viewBinding.statisticsEmptyPlaceholder
+            initStatisticsMenuRv()
             statisticsDay.setOnClickListener { setChartMode(PIE_CHART, DAY) }
             statisticsWeek.setOnClickListener { setChartMode(PIE_CHART, WEEK) }
             statisticsMonth.setOnClickListener { setChartMode(PIE_CHART, MONTH) }
             statisticsYear.setOnClickListener { setChartMode(PIE_CHART, YEAR) }
             statisticsCustom.setOnClickListener { openRangeCalendar() }
-            statisticsMenu.setOnClickListener {
-                if (!showMenu) showMenu() else hideMenu()
-            }
-            statisticsMenuItemCurrency.root.setOnClickListener {
-                viewModel.updateCurrency()
-                updateCurrencyIcon()
-                hideMenuWithDelay()
-            }
-            statisticsMenuItemInStat.root.setOnClickListener {
-                viewModel.updateStatisticsFlag()
-                updateInStatisticsIcon()
-                hideMenuWithDelay()
-            }
-            statisticsMenuItemTrType.root.setOnClickListener {
-                viewModel.updateTransactionType()
-                updateTransactionTypeIcon()
-                hideMenuWithDelay()
-            }
-            statisticsMenuItemChart.root.setOnClickListener {
-                viewModel.updateCharMode()
-                updateCharTypeIcon()
-                hideMenuWithDelay()
-            }
+            statisticsMenu.setOnClickListener { if (!showMenu) showMenu() else hideMenu() }
         }
 
         initPieChart()
@@ -123,24 +158,31 @@ class StatisticsFragment :
             statisticsBarChartAdapter.updateItems(list)
             viewBinding.statisticsSpentInPeriodSum.setValue(
                 list.sumOf { it.sum },
-                viewModel.currencyCode
+                viewModel.currencyType.currencyCode
             )
             viewBinding.statisticsBarChart.scrollToPosition(0)
         }
         viewModel.currency.observe(viewLifecycleOwner) { code ->
             viewModel.updateCurrency(code)
-            updateCurrencyIcon()
+            statisticsMenuAdapter.updateItems(viewModel.menuItemList)
         }
-        updateInStatisticsIcon()
-        updateTransactionTypeIcon()
-        updateCharTypeIcon()
+    }
+
+    private fun initStatisticsMenuRv() {
+        val layoutManager = LinearLayoutManager(requireContext(), HORIZONTAL, false)
+        viewBinding.run {
+            val snapHelper: SnapHelper = ItemSnapHelper()
+            snapHelper.attachToRecyclerView(statisticsMenuRv)
+            statisticsMenuRv.layoutManager = layoutManager
+            statisticsMenuRv.adapter = statisticsMenuAdapter
+        }
     }
 
     private fun showMenu() {
         showMenu = true
         viewBinding.run {
             statisticsMenu.setImageResource(R.drawable.ic_statistics_close)
-            statisticsAdditionalMenu.show()
+            statisticsMenuRv.show()
         }
     }
 
@@ -148,52 +190,13 @@ class StatisticsFragment :
         showMenu = false
         viewBinding.run {
             statisticsMenu.setImageResource(R.drawable.ic_statistics_menu)
-            statisticsAdditionalMenu.gone()
+            statisticsMenuRv.gone()
         }
     }
 
     private fun hideMenuWithDelay() {
         hideMenuHandler.removeCallbacksAndMessages(null)
         hideMenuHandler.postDelayed({ hideMenu() }, HIDE_MENU_DELAY)
-    }
-
-    private fun updateCurrencyIcon() {
-        viewBinding.statisticsMenuItemCurrency.statisticsMenuCurrencyIcon.text =
-            CurrencyUtils.getCurrencyIcon(viewModel.currencyCode)
-    }
-
-    private fun updateInStatisticsIcon() {
-        if (viewModel.inStatistics) {
-            viewBinding.statisticsMenuItemInStat.statisticsMenuIcon.setImageResource(R.drawable.ic_in_statistics)
-            viewBinding.statisticsMenuItemInStat.statisticsMenuTitle.text =
-                getString(R.string.statistics_menu_in_statistics_title)
-        } else {
-            viewBinding.statisticsMenuItemInStat.statisticsMenuIcon.setImageResource(R.drawable.ic_not_in_statistics)
-            viewBinding.statisticsMenuItemInStat.statisticsMenuTitle.text =
-                getString(R.string.statistics_menu_not_in_statistics_title)
-        }
-    }
-
-    private fun updateTransactionTypeIcon() {
-        if (viewModel.transactionType.isIncome()) {
-            viewBinding.statisticsMenuItemTrType.statisticsMenuIcon.setImageResource(R.drawable.ic_statistics_income)
-            viewBinding.statisticsMenuItemTrType.statisticsMenuTitle.text =
-                getString(R.string.statistics_menu_incomes_title)
-        } else {
-            viewBinding.statisticsMenuItemTrType.statisticsMenuIcon.setImageResource(R.drawable.ic_statistics_expense)
-            viewBinding.statisticsMenuItemTrType.statisticsMenuTitle.text =
-                getString(R.string.statistics_menu_expenses_title)
-        }
-    }
-
-    private fun updateCharTypeIcon() {
-        viewBinding.statisticsMenuItemChart.statisticsMenuTitle.text =
-            getString(R.string.statistics_menu_chart_type_title)
-        if (viewModel.chartMode == LINE_CHART) {
-            viewBinding.statisticsMenuItemChart.statisticsMenuIcon.setImageResource(R.drawable.ic_line_chart)
-        } else {
-            viewBinding.statisticsMenuItemChart.statisticsMenuIcon.setImageResource(R.drawable.ic_pie_chart)
-        }
     }
 
     private fun openRangeCalendar() {
@@ -337,7 +340,7 @@ class StatisticsFragment :
     }
 
     private fun setChartMode(
-        mode: StatisticsChartMode,
+        mode: StatisticsMenuChartMode,
         period: StatisticsPeriod = MONTH,
         periodPair: Pair<LocalDateTime, LocalDateTime>? = null
     ) {

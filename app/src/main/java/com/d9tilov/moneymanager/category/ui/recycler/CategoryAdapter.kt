@@ -33,10 +33,7 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>
             false
         ) else
             ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        val viewHolder =
-            CategoryViewHolder(
-                viewBinding
-            )
+        val viewHolder = CategoryViewHolder(viewBinding)
         viewBinding.root.setOnClickListener {
             val adapterPosition = viewHolder.bindingAdapterPosition
             if (adapterPosition != NO_POSITION) {

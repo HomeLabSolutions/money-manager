@@ -87,7 +87,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/statistics_additional_menu" />
+        app:layout_constraintTop_toBottomOf="@+id/statistics_menu_rv" />
 
     <ImageView
         android:id="@+id/statistics_menu"
@@ -100,69 +100,26 @@
         app:layout_constraintTop_toBottomOf="@+id/statistics_custom"
         app:srcCompat="@drawable/ic_statistics_menu" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/statistics_additional_menu"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/statistics_menu_rv"
         android:layout_width="0dp"
-        android:layout_height="@dimen/statistics_menu_item_height"
-        android:visibility="gone"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:visibility="gone"
+        android:layout_marginEnd="@dimen/standard_right_margin"
+        app:layout_constraintTop_toBottomOf="@+id/statistics_day"
         android:layout_marginStart="@dimen/standard_left_margin"
+        tools:listitem="@layout/item_statistics_menu"
         app:layout_constraintEnd_toStartOf="@+id/statistics_menu"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/statistics_day"
-        tools:visibility="visible">
-
-        <include
-            android:id="@+id/statistics_menu_item_chart"
-            layout="@layout/item_statistics_menu"
-            android:layout_width="@dimen/statistics_menu_item_width"
-            android:layout_height="@dimen/statistics_menu_item_height"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/statistics_menu_item_currency"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <include
-            android:id="@+id/statistics_menu_item_currency"
-            layout="@layout/item_statistics_menu_currency"
-            android:layout_width="@dimen/statistics_menu_item_width"
-            android:layout_height="@dimen/statistics_menu_item_height"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/statistics_menu_item_in_stat"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toEndOf="@+id/statistics_menu_item_chart"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <include
-            android:id="@+id/statistics_menu_item_in_stat"
-            layout="@layout/item_statistics_menu"
-            android:layout_width="@dimen/statistics_menu_item_width"
-            android:layout_height="@dimen/statistics_menu_item_height"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/statistics_menu_item_tr_type"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toEndOf="@+id/statistics_menu_item_currency"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <include
-            android:id="@+id/statistics_menu_item_tr_type"
-            layout="@layout/item_statistics_menu"
-            android:layout_width="@dimen/statistics_menu_item_width"
-            android:layout_height="@dimen/statistics_menu_item_height"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toEndOf="@+id/statistics_menu_item_in_stat"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/statistics_barrier"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="statistics_additional_menu,statistics_menu" />
+        app:constraint_referenced_ids="statistics_menu_rv,statistics_menu" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/statistics_vertical_guideline"
