@@ -3,6 +3,8 @@ package com.d9tilov.moneymanager.statistics.ui
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -72,6 +74,7 @@ class StatisticsFragment :
     private val statisticsBarChartAdapter: StatisticsBarChartAdapter = StatisticsBarChartAdapter()
     private var emptyViewStub: LayoutEmptyStatisticsPlaceholderBinding? = null
     private var showMenu = false
+    private val hideMenuHandler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,30 +93,27 @@ class StatisticsFragment :
             statisticsYear.setOnClickListener { setChartMode(PIE_CHART, YEAR) }
             statisticsCustom.setOnClickListener { openRangeCalendar() }
             statisticsMenu.setOnClickListener {
-                showMenu = !showMenu
-                if (showMenu) {
-                    statisticsMenu.setImageResource(R.drawable.ic_statistics_close)
-                    statisticsAdditionalMenu.show()
-                } else {
-                    statisticsMenu.setImageResource(R.drawable.ic_statistics_menu)
-                    statisticsAdditionalMenu.gone()
-                }
+                if (!showMenu) showMenu() else hideMenu()
             }
             statisticsMenuItemCurrency.root.setOnClickListener {
                 viewModel.updateCurrency()
                 updateCurrencyIcon()
+                hideMenuWithDelay()
             }
             statisticsMenuItemInStat.root.setOnClickListener {
                 viewModel.updateStatisticsFlag()
                 updateInStatisticsIcon()
+                hideMenuWithDelay()
             }
             statisticsMenuItemTrType.root.setOnClickListener {
                 viewModel.updateTransactionType()
                 updateTransactionTypeIcon()
+                hideMenuWithDelay()
             }
             statisticsMenuItemChart.root.setOnClickListener {
                 viewModel.updateCharMode()
                 updateCharTypeIcon()
+                hideMenuWithDelay()
             }
         }
 
@@ -134,6 +134,27 @@ class StatisticsFragment :
         updateInStatisticsIcon()
         updateTransactionTypeIcon()
         updateCharTypeIcon()
+    }
+
+    private fun showMenu() {
+        showMenu = true
+        viewBinding.run {
+            statisticsMenu.setImageResource(R.drawable.ic_statistics_close)
+            statisticsAdditionalMenu.show()
+        }
+    }
+
+    private fun hideMenu() {
+        showMenu = false
+        viewBinding.run {
+            statisticsMenu.setImageResource(R.drawable.ic_statistics_menu)
+            statisticsAdditionalMenu.gone()
+        }
+    }
+
+    private fun hideMenuWithDelay() {
+        hideMenuHandler.removeCallbacksAndMessages(null)
+        hideMenuHandler.postDelayed({ hideMenu() }, HIDE_MENU_DELAY)
     }
 
     private fun updateCurrencyIcon() {
@@ -364,5 +385,11 @@ class StatisticsFragment :
         private val PERCENT_LIMIT_TO_SHOW_LABEL = BigDecimal(6)
         private const val MAX_CATEGORY_NAME_LENGTH = 10
         private const val ANIMATION_DURATION = 500
+        private const val HIDE_MENU_DELAY = 5000L
+    }
+
+    override fun onStop() {
+        super.onStop()
+        hideMenuWithDelay()
     }
 }
