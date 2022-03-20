@@ -20,7 +20,6 @@ import com.d9tilov.moneymanager.base.data.Status
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.CurrencyNavigator
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
-import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
@@ -38,7 +37,10 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class CurrencyFragment :
-    BaseFragment<CurrencyNavigator>(R.layout.fragment_currency),
+    BaseFragment<CurrencyNavigator, FragmentCurrencyBinding>(
+        FragmentCurrencyBinding::inflate,
+        R.layout.fragment_currency
+    ),
     CurrencyNavigator {
 
     private val args by navArgs<CurrencyFragmentArgs>()
@@ -46,7 +48,6 @@ class CurrencyFragment :
     private val currencyCode: String? by lazy { args.currencyCode }
 
     private var menu: Menu? = null
-    private val viewBinding by viewBinding(FragmentCurrencyBinding::bind)
     private var toolbar: MaterialToolbar? = null
     private val currencyAdapter: CurrencyAdapter by lazy { CurrencyAdapter() }
     override val viewModel by viewModels<CurrencyViewModel>()
@@ -103,25 +104,25 @@ class CurrencyFragment :
                                 }
                         currencyAdapter.updateItems(sortedList)
                         val checkedIndex = sortedList.indexOfFirst { it.isBase }
-                        viewBinding.currencyRv.scrollToPosition(checkedIndex)
+                        viewBinding?.currencyRv?.scrollToPosition(checkedIndex)
                     }
-                    viewBinding.currencyProgress.gone()
+                    viewBinding?.currencyProgress?.gone()
                 }
                 Status.ERROR -> {
                     menuItem?.isEnabled = true
                     showError()
-                    viewBinding.currencyProgress.gone()
+                    viewBinding?.currencyProgress?.gone()
                 }
                 Status.LOADING -> {
                     menuItem?.isEnabled = false
-                    viewBinding.currencyProgress.show()
+                    viewBinding?.currencyProgress?.show()
                 }
             }
         }
-        viewBinding.currencyRv.adapter = currencyAdapter
+        viewBinding?.currencyRv?.adapter = currencyAdapter
         val layoutManager = LinearLayoutManager(requireContext())
-        viewBinding.currencyRv.layoutManager = layoutManager
-        (viewBinding.currencyRv.itemAnimator as SimpleItemAnimator).supportsChangeAnimations =
+        viewBinding?.currencyRv?.layoutManager = layoutManager
+        (viewBinding?.currencyRv?.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations =
             false
     }
 
@@ -152,7 +153,7 @@ class CurrencyFragment :
     }
 
     private fun initToolbar() {
-        toolbar = viewBinding.currencyToolbarContainer.toolbar
+        toolbar = viewBinding?.currencyToolbarContainer?.toolbar
         val activity = activity as AppCompatActivity
         toolbar?.title = getString(R.string.title_prepopulate_currency)
         activity.setSupportActionBar(toolbar)
@@ -184,27 +185,28 @@ class CurrencyFragment :
     }
 
     override fun showError() {
-        val snackBar = Snackbar
-            .make(
-                viewBinding.currencyParentLayout,
-                getString(R.string.currency_error),
-                Snackbar.LENGTH_INDEFINITE
+        val snackBar = viewBinding?.let {
+            Snackbar
+                .make(
+                    it.currencyParentLayout,
+                    getString(R.string.currency_error),
+                    Snackbar.LENGTH_INDEFINITE
+                )
+        }
+        snackBar?.run {
+            view.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.button_normal_color_end
+                )
             )
-        snackBar.view.setBackgroundColor(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.button_normal_color_end
-            )
-        )
-        snackBar
-            .setActionTextColor(
+            setActionTextColor(
                 ContextCompat.getColor(
                     requireContext(),
                     R.color.button_normal_color_start
                 )
-            )
-            .setAction(getString(R.string.retry)) { viewModel.getCurrencies() }
-            .show()
+            ).setAction(getString(R.string.retry)) { viewModel.getCurrencies() }.show()
+        }
     }
 
     companion object {

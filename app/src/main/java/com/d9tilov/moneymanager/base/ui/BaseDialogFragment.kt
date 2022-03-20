@@ -9,11 +9,12 @@ import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.viewbinding.ViewBinding
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.core.util.toast
 
-abstract class BaseDialogFragment<N : BaseNavigator> :
+abstract class BaseDialogFragment<N : BaseNavigator, VB : ViewBinding>(private val inflate: Inflate<VB>) :
     AppCompatDialogFragment() {
 
     @get:LayoutRes
@@ -23,19 +24,16 @@ abstract class BaseDialogFragment<N : BaseNavigator> :
     protected abstract val viewModel: BaseViewModel<N>
 
     private var baseActivity: BaseActivity<*>? = null
+    protected var viewBinding: VB? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is BaseActivity<*>) {
-            baseActivity = context
-        }
+        if (context is BaseActivity<*>) baseActivity = context
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        baseActivity?.let {
-            viewModel.navigator = getNavigator()
-        }
+        baseActivity?.let { viewModel.navigator = getNavigator() }
         isCancelable = false
     }
 
@@ -48,7 +46,10 @@ abstract class BaseDialogFragment<N : BaseNavigator> :
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = LayoutInflater.from(requireContext()).inflate(layoutId, container, false)
+    ): View? {
+        viewBinding = inflate.invoke(inflater, container, false)
+        return viewBinding!!.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

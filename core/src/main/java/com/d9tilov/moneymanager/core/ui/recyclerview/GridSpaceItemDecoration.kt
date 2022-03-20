@@ -10,8 +10,7 @@ class GridSpaceItemDecoration(
     private val spanCount: Int,
     private val spacing: Int,
     @LinearLayoutCompat.OrientationMode private val orientation: Int = LinearLayoutCompat.VERTICAL
-) :
-    ItemDecoration() {
+) : ItemDecoration() {
 
     private var maxColumnNumber = 0
     private var maxLineNumber = 0

@@ -12,8 +12,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
+import androidx.viewbinding.ViewBinding
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
+import com.d9tilov.moneymanager.base.ui.Inflate
 import com.d9tilov.moneymanager.base.ui.navigator.BaseIncomeExpenseNavigator
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryAdapter
@@ -36,8 +38,11 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator>(@LayoutRes layoutId: Int) :
-    BaseFragment<N>(layoutId),
+abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : ViewBinding>(
+    inflate: Inflate<VB>,
+    @LayoutRes layoutId: Int
+) :
+    BaseFragment<N, VB>(inflate, layoutId),
     OnDialogDismissListener,
     BaseIncomeExpenseNavigator,
     OnIncomeExpenseListener {

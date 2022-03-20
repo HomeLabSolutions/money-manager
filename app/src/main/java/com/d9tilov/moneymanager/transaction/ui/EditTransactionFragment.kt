@@ -14,7 +14,6 @@ import com.d9tilov.moneymanager.base.ui.navigator.EditTransactionNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.common.BaseCategoryFragment.Companion.ARG_CATEGORY
 import com.d9tilov.moneymanager.category.data.entity.Category
-import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.currentDateTime
@@ -42,15 +41,14 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class EditTransactionFragment : EditTransactionNavigator,
-    BaseFragment<EditTransactionNavigator>(
+    BaseFragment<EditTransactionNavigator, FragmentEditTransactionBinding>(
+        FragmentEditTransactionBinding::inflate,
         R.layout.fragment_edit_transaction
     ) {
 
     private val args by navArgs<EditTransactionFragmentArgs>()
     private val transaction by lazy { args.editedTransaction }
     private val transactionType by lazy { args.transactionType }
-
-    private val viewBinding by viewBinding(FragmentEditTransactionBinding::bind)
 
     private var toolbar: MaterialToolbar? = null
     private var localTransaction: Transaction? = null
@@ -93,7 +91,7 @@ class EditTransactionFragment : EditTransactionNavigator,
                 ARG_CURRENCY
             )
         }
-        viewBinding.run {
+        viewBinding?.run {
             editTransactionSave.setOnClickListener {
                 viewModel.update(
                     localTransaction?.copy(
@@ -118,7 +116,7 @@ class EditTransactionFragment : EditTransactionNavigator,
                 picker.addOnPositiveButtonClickListener { calendarDate ->
                     val date = calendarDate.toLocalDateTime()
                     localTransaction = localTransaction?.copy(date = date)
-                    viewBinding.editTransactionDate.text = SimpleDateFormat(
+                    editTransactionDate.text = SimpleDateFormat(
                         TRANSACTION_DATE_FORMAT,
                         Locale.getDefault()
                     ).format(Date(calendarDate.toLocalDateTime().toMillis()))
@@ -162,17 +160,17 @@ class EditTransactionFragment : EditTransactionNavigator,
                 localTransaction = localTransaction?.copy(inStatistics = isChecked)
             }
         }
-        toolbar = viewBinding.editTransactionToolbarContainer.toolbar
+        toolbar = viewBinding?.editTransactionToolbarContainer?.toolbar
         initToolbar(toolbar)
     }
 
     override fun onStart() {
         super.onStart()
-        showKeyboard(viewBinding.editTransactionMainSum.moneyEditText)
+        showKeyboard(viewBinding?.editTransactionMainSum?.moneyEditText)
     }
 
     private fun updateInStatistics() {
-        viewBinding.editTransactionInStatisticsCheckbox.isChecked = localTransaction!!.inStatistics
+        viewBinding?.editTransactionInStatisticsCheckbox?.isChecked = localTransaction!!.inStatistics
     }
 
     private fun updateIcon() {
@@ -182,7 +180,7 @@ class EditTransactionFragment : EditTransactionNavigator,
             localTransaction?.category?.color ?: transaction.category.icon
         )
         iconDrawable.setBounds(0, 0, 120, 120)
-        viewBinding.run {
+        viewBinding?.run {
             editTransactionCategory.setCompoundDrawables(iconDrawable, null, null, null)
             editTransactionCategory.text = localTransaction?.category?.name
             editTransactionCategory.setTextColor(
@@ -196,7 +194,7 @@ class EditTransactionFragment : EditTransactionNavigator,
 
     private fun updateCurrency() {
         localTransaction?.let {
-            viewBinding.editTransactionMainSum.setValue(it.sum, it.currencyCode)
+            viewBinding?.editTransactionMainSum?.setValue(it.sum, it.currencyCode)
         }
     }
 

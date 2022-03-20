@@ -19,7 +19,6 @@ import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsNavigator
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
-import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.currentDate
@@ -71,13 +70,15 @@ import java.util.TimeZone
 
 @AndroidEntryPoint
 class StatisticsFragment :
-    BaseFragment<StatisticsNavigator>(R.layout.fragment_statistics),
+    BaseFragment<StatisticsNavigator, FragmentStatisticsBinding>(
+        FragmentStatisticsBinding::inflate,
+        R.layout.fragment_statistics
+    ),
     StatisticsNavigator,
     OnChartValueSelectedListener {
 
     override fun getNavigator() = this
     override val viewModel by viewModels<StatisticsViewModel>()
-    private val viewBinding by viewBinding(FragmentStatisticsBinding::bind)
     private val statisticsBarChartAdapter: StatisticsBarChartAdapter = StatisticsBarChartAdapter()
     private val statisticsMenuAdapter: StatisticsMenuAdapter = StatisticsMenuAdapter()
     private var emptyViewStub: LayoutEmptyStatisticsPlaceholderBinding? = null
@@ -140,9 +141,9 @@ class StatisticsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setChartMode(viewModel.chartMode, viewModel.chartPeriod)
-        viewBinding.run {
+        viewBinding?.run {
             statisticsBarChart.adapter = statisticsBarChartAdapter
-            emptyViewStub = viewBinding.statisticsEmptyPlaceholder
+            emptyViewStub = statisticsEmptyPlaceholder
             initStatisticsMenuRv()
             statisticsDay.setOnClickListener { setChartMode(PIE_CHART, DAY) }
             statisticsWeek.setOnClickListener { setChartMode(PIE_CHART, WEEK) }
@@ -156,11 +157,11 @@ class StatisticsFragment :
         viewModel.getTransactions().observe(viewLifecycleOwner) { list ->
             setPieChartData(list)
             statisticsBarChartAdapter.updateItems(list)
-            viewBinding.statisticsSpentInPeriodSum.setValue(
+            viewBinding?.statisticsSpentInPeriodSum?.setValue(
                 list.sumOf { it.sum },
                 viewModel.currencyType.currencyCode
             )
-            viewBinding.statisticsBarChart.scrollToPosition(0)
+            viewBinding?.statisticsBarChart?.scrollToPosition(0)
         }
         viewModel.currency.observe(viewLifecycleOwner) { code ->
             viewModel.updateCurrency(code)
@@ -170,7 +171,7 @@ class StatisticsFragment :
 
     private fun initStatisticsMenuRv() {
         val layoutManager = LinearLayoutManager(requireContext(), HORIZONTAL, false)
-        viewBinding.run {
+        viewBinding?.run {
             val snapHelper: SnapHelper = ItemSnapHelper()
             snapHelper.attachToRecyclerView(statisticsMenuRv)
             statisticsMenuRv.layoutManager = layoutManager
@@ -180,7 +181,7 @@ class StatisticsFragment :
 
     private fun showMenu() {
         showMenu = true
-        viewBinding.run {
+        viewBinding?.run {
             statisticsMenu.setImageResource(R.drawable.ic_statistics_close)
             statisticsMenuRv.show()
         }
@@ -188,7 +189,7 @@ class StatisticsFragment :
 
     private fun hideMenu() {
         showMenu = false
-        viewBinding.run {
+        viewBinding?.run {
             statisticsMenu.setImageResource(R.drawable.ic_statistics_menu)
             statisticsMenuRv.gone()
         }
@@ -245,7 +246,7 @@ class StatisticsFragment :
             }
         }
 
-        viewBinding.statisticsPieChart.centerText =
+        viewBinding?.statisticsPieChart?.centerText =
             if (toLocalDateTime.isSameDay(fromLocalDateTime)) getString(R.string.statistics_today)
             else {
                 val fromMillis = Date(fromLocalDateTime.toMillis())
@@ -256,14 +257,14 @@ class StatisticsFragment :
                 sb.append(SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(toMillis))
                 sb.toString()
             }
-        viewBinding.statisticsPieChart.setCenterTextColor(
+        viewBinding?.statisticsPieChart?.setCenterTextColor(
             ContextCompat.getColor(requireContext(), R.color.control_activated_color)
         )
     }
 
     private fun initPieChart() {
         val tfRegular = Typeface.createFromAsset(requireContext().assets, "OpenSans-Regular.ttf")
-        viewBinding.run {
+        viewBinding?.run {
             statisticsPieChart.setUsePercentValues(true)
             statisticsPieChart.description.isEnabled = false
             statisticsPieChart.setExtraOffsets(10f, 0f, 10f, 0f)
@@ -329,14 +330,14 @@ class StatisticsFragment :
         dataSet.valueLinePart2Length = 0.4f
         dataSet.colors = list.map { ContextCompat.getColor(requireContext(), it.category.color) }
         val data = PieData(dataSet)
-        data.setValueFormatter(PercentFormatter(viewBinding.statisticsPieChart))
+        data.setValueFormatter(PercentFormatter(viewBinding?.statisticsPieChart))
         data.setValueTextSize(12f)
         data.setValueTextColor(ContextCompat.getColor(requireContext(), R.color.primary_color))
-        viewBinding.statisticsPieChart.data = data
+        viewBinding?.statisticsPieChart?.data = data
 
         updatePeriod()
-        viewBinding.statisticsPieChart.highlightValues(null)
-        viewBinding.statisticsPieChart.invalidate()
+        viewBinding?.statisticsPieChart?.highlightValues(null)
+        viewBinding?.statisticsPieChart?.invalidate()
     }
 
     private fun setChartMode(
@@ -347,9 +348,9 @@ class StatisticsFragment :
         when (mode) {
             PIE_CHART -> {
                 val oldView = getViewFromPeriod(viewModel.chartPeriod)
-                oldView.isSelected = false
+                oldView?.isSelected = false
                 val newView = getViewFromPeriod(period)
-                newView.isSelected = true
+                newView?.isSelected = true
                 if (period != CUSTOM) {
                     viewModel.updatePeriod(period)
                 } else {
@@ -360,8 +361,8 @@ class StatisticsFragment :
         }
     }
 
-    private fun getViewFromPeriod(period: StatisticsPeriod): TextView {
-        return viewBinding.run {
+    private fun getViewFromPeriod(period: StatisticsPeriod): TextView? {
+        return viewBinding?.run {
             when (period) {
                 DAY -> statisticsDay
                 WEEK -> statisticsWeek

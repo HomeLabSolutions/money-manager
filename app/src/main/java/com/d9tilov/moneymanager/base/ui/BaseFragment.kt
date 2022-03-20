@@ -16,9 +16,14 @@ import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.toast
 
-abstract class BaseFragment<N : BaseNavigator>(@LayoutRes layoutId: Int) :
-    Fragment(layoutId) {
+typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 
+abstract class BaseFragment<N : BaseNavigator, VB : ViewBinding>(
+    private val inflate: Inflate<VB>,
+    @LayoutRes layoutId: Int
+) : Fragment(layoutId) {
+
+    protected var viewBinding: VB? = null
     abstract fun getNavigator(): N
 
     private var baseActivity: BaseActivity<*>? = null
@@ -26,14 +31,21 @@ abstract class BaseFragment<N : BaseNavigator>(@LayoutRes layoutId: Int) :
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is BaseActivity<*>) {
-            baseActivity = context
-        }
+        if (context is BaseActivity<*>) baseActivity = context
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         baseActivity?.let { viewModel.navigator = getNavigator() }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        viewBinding = inflate.invoke(inflater, container, false)
+        return viewBinding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,6 +56,11 @@ abstract class BaseFragment<N : BaseNavigator>(@LayoutRes layoutId: Int) :
     override fun onStop() {
         super.onStop()
         hideKeyboard()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewBinding = null
     }
 
     fun isNetworkConnected() = baseActivity?.isNetworkEnabled()

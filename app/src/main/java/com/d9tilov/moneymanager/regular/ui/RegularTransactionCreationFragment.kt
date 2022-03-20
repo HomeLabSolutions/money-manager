@@ -16,7 +16,6 @@ import com.d9tilov.moneymanager.base.ui.navigator.RegularTransactionCreatedNavig
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.common.BaseCategoryFragment.Companion.ARG_CATEGORY
 import com.d9tilov.moneymanager.category.data.entity.Category
-import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.currentDate
 import com.d9tilov.moneymanager.core.util.currentDateTime
@@ -43,7 +42,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class RegularTransactionCreationFragment :
-    BaseFragment<RegularTransactionCreatedNavigator>(R.layout.fragment_regular_transaction_creation),
+    BaseFragment<RegularTransactionCreatedNavigator, FragmentRegularTransactionCreationBinding>(FragmentRegularTransactionCreationBinding::inflate, R.layout.fragment_regular_transaction_creation),
     RegularTransactionCreatedNavigator {
 
     private val args by navArgs<RegularTransactionCreationFragmentArgs>()
@@ -54,7 +53,6 @@ class RegularTransactionCreationFragment :
         PeriodType.WEEK to 1,
         PeriodType.MONTH to 2
     )
-    private val viewBinding by viewBinding(FragmentRegularTransactionCreationBinding::bind)
     private var toolbar: MaterialToolbar? = null
     private var localTransaction: RegularTransaction? = null
 
@@ -103,13 +101,13 @@ class RegularTransactionCreationFragment :
                     currentDateTime()
                 )
             )
-            viewBinding.createdRegularTransactionRepeatStartsDate.text =
+            viewBinding?.createdRegularTransactionRepeatStartsDate?.text =
                 getString(R.string.regular_transaction_repeat_period_month_2, dayOfMonth.toString())
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<Int>(
                 ARG_DAY_OF_MONTH
             )
         }
-        viewBinding.run {
+        viewBinding?.run {
             createdRegularTransactionDescription.onChange { description ->
                 localTransaction = localTransaction?.copy(description = description)
             }
@@ -159,7 +157,7 @@ class RegularTransactionCreationFragment :
                                         )
                                     )
                                 }
-                                viewBinding.createdRegularTransactionRepeatStartsDate.text =
+                                createdRegularTransactionRepeatStartsDate.text =
                                     getString(
                                         R.string.regular_transaction_repeat_period_month_2,
                                         (localTransaction?.executionPeriod as? ExecutionPeriod.EveryMonth)?.dayOfMonth
@@ -222,7 +220,7 @@ class RegularTransactionCreationFragment :
         updateCategoryIcon()
         updateCurrency()
         updateSaveButtonState()
-        viewBinding.run {
+        viewBinding?.run {
             if (!localTransaction!!.isValid()) {
                 createdRegularTransactionCategoryArrow.show()
                 createdRegularTransactionDelete.gone()
@@ -237,7 +235,7 @@ class RegularTransactionCreationFragment :
             createdRegularTransactionDescription.setText(localTransaction!!.description)
             createdRegularTransactionNotifyCheckbox.isChecked = localTransaction!!.pushEnabled
 
-            viewBinding.createdRegularTransactionRepeatStartsDate.text =
+            createdRegularTransactionRepeatStartsDate.text =
                 getString(
                     R.string.regular_transaction_repeat_period_month_2,
                     (localTransaction?.executionPeriod as? ExecutionPeriod.EveryMonth)?.dayOfMonth.toString()
@@ -252,7 +250,7 @@ class RegularTransactionCreationFragment :
 
     private fun updateCurrency() {
         localTransaction?.let {
-            viewBinding.createdRegularTransactionMainSum.setValue(it.sum, it.currencyCode)
+            viewBinding?.createdRegularTransactionMainSum?.setValue(it.sum, it.currencyCode)
         }
     }
 
@@ -262,17 +260,17 @@ class RegularTransactionCreationFragment :
             R.anim.animation_shake
         )
         if (localTransaction?.sum?.signum() == 0) {
-            viewBinding.createdRegularTransactionMainSum.startAnimation(animation)
+            viewBinding?.createdRegularTransactionMainSum?.startAnimation(animation)
         } else if (localTransaction?.category == Category.EMPTY) {
-            viewBinding.createdRegularTransactionCategoryLayout.startAnimation(animation)
+            viewBinding?.createdRegularTransactionCategoryLayout?.startAnimation(animation)
         } else if (localTransaction?.executionPeriod?.periodType == PeriodType.WEEK && (localTransaction?.executionPeriod as ExecutionPeriod.EveryWeek).dayOfWeek == 0) {
-            viewBinding.createdRegularTransactionWeekSelector.startAnimation(animation)
+            viewBinding?.createdRegularTransactionWeekSelector?.startAnimation(animation)
         }
     }
 
     private fun setWeekdaySelected(day: Int) {
         for (i in 0..6) {
-            viewBinding.run {
+            viewBinding?.run {
                 val view = when (i) {
                     0 -> createdRegularTransactionMonday
                     1 -> createdRegularTransactionTuesday
@@ -303,7 +301,7 @@ class RegularTransactionCreationFragment :
     }
 
     private fun updateSaveButtonState() {
-        viewBinding.createdRegularTransactionSave.isSelected = localTransaction?.let {
+        viewBinding?.createdRegularTransactionSave?.isSelected = localTransaction?.let {
             it.sum.signum() > 0 && it.category != Category.EMPTY
         } ?: false
     }
@@ -313,7 +311,7 @@ class RegularTransactionCreationFragment :
             localTransaction?.category?.let {
                 val iconDrawable = createTintDrawable(requireContext(), it.icon, it.color)
                 iconDrawable.setBounds(0, 0, 120, 120)
-                viewBinding.run {
+                viewBinding?.run {
                     createdRegularTransactionCategory.setCompoundDrawables(
                         iconDrawable,
                         null,
@@ -327,7 +325,7 @@ class RegularTransactionCreationFragment :
                 }
             }
         } else {
-            viewBinding.createdRegularTransactionCategory.text =
+            viewBinding?.createdRegularTransactionCategory?.text =
                 getString(R.string.regular_transaction_choose_category)
         }
     }
@@ -343,11 +341,11 @@ class RegularTransactionCreationFragment :
 
     override fun onStart() {
         super.onStart()
-        showKeyboard(viewBinding.createdRegularTransactionMainSum.moneyEditText)
+        showKeyboard(viewBinding?.createdRegularTransactionMainSum?.moneyEditText)
     }
 
     private fun initToolbar() {
-        toolbar = viewBinding.createdRegularTransactionToolbarContainer.toolbar
+        toolbar = viewBinding?.createdRegularTransactionToolbarContainer?.toolbar
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         toolbar?.title =

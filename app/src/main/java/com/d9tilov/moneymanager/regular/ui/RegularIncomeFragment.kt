@@ -11,7 +11,6 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.callback.SwipeToDeleteCallback
 import com.d9tilov.moneymanager.base.ui.navigator.RegularIncomeNavigator
 import com.d9tilov.moneymanager.core.ui.recyclerview.MarginItemDecoration
-import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentRegularIncomeBinding
@@ -22,20 +21,22 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class RegularIncomeFragment :
-    BaseRegularIncomeExpenseFragment<RegularIncomeNavigator>(R.layout.fragment_regular_income),
+    BaseRegularIncomeExpenseFragment<RegularIncomeNavigator, FragmentRegularIncomeBinding>(
+        FragmentRegularIncomeBinding::inflate,
+        R.layout.fragment_regular_income
+    ),
     RegularIncomeNavigator {
 
     private val args by navArgs<RegularIncomeFragmentArgs>()
     private val destination by lazy { args.destination }
 
-    private val viewBinding by viewBinding(FragmentRegularIncomeBinding::bind)
     override val transactionType = TransactionType.INCOME
     override fun getNavigator() = this
     override val viewModel by viewModels<RegularIncomeViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding.run {
+        viewBinding?.run {
             toolbar = regularIncomeToolbarContainer.toolbar
             regularIncomeRvList.adapter = regularTransactionAdapter
             val layoutManager = LinearLayoutManager(requireContext())
@@ -51,16 +52,16 @@ class RegularIncomeFragment :
                 }
             }).attachToRecyclerView(regularIncomeRvList)
         }
-        emptyViewStub = viewBinding.regularIncomeEmptyPlaceholder
+        emptyViewStub = viewBinding?.regularIncomeEmptyPlaceholder
         viewModel.regularIncomeTransactionList.observe(
             this.viewLifecycleOwner
         ) {
             if (it.isEmpty()) {
-                viewBinding.regularIncomeRvList.gone()
+                viewBinding?.regularIncomeRvList?.gone()
                 showViewStub(TransactionType.INCOME)
             } else {
                 hideViewStub()
-                viewBinding.regularIncomeRvList.show()
+                viewBinding?.regularIncomeRvList?.show()
                 regularTransactionAdapter.updateItems(it)
             }
         }

@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
+import com.d9tilov.moneymanager.databinding.FragmentSplashBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.prepopulate.ui.PrepopulateActivity
 import com.d9tilov.moneymanager.splash.vm.SplashViewModel
@@ -14,7 +15,12 @@ import com.firebase.ui.auth.AuthUI
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SplashFragment : BaseFragment<SplashNavigator>(R.layout.fragment_splash), SplashNavigator {
+class SplashFragment :
+    BaseFragment<SplashNavigator, FragmentSplashBinding>(
+        FragmentSplashBinding::inflate,
+        R.layout.fragment_splash
+    ),
+    SplashNavigator {
 
     private val providers = arrayListOf(
         AuthUI.IdpConfig.EmailBuilder().build(),

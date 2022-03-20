@@ -19,7 +19,6 @@ import com.d9tilov.moneymanager.base.ui.navigator.GoalsNavigator
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.ui.recyclerview.MarginItemDecoration
-import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.show
@@ -36,7 +35,10 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class GoalsFragment :
-    BaseFragment<GoalsNavigator>(R.layout.fragment_goals),
+    BaseFragment<GoalsNavigator, FragmentGoalsBinding>(
+        FragmentGoalsBinding::inflate,
+        R.layout.fragment_goals
+    ),
     GoalsNavigator,
     ControlsClicked {
 
@@ -46,7 +48,6 @@ class GoalsFragment :
     private var toolbar: MaterialToolbar? = null
     private var emptyViewStub: LayoutEmptyListGoalsPlaceholderBinding? = null
     private val goalAdapter: GoalAdapter = GoalAdapter()
-    private val viewBinding by viewBinding(FragmentGoalsBinding::bind)
     private var showViewStub = false
 
     override fun getNavigator() = this
@@ -78,8 +79,8 @@ class GoalsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        emptyViewStub = viewBinding.goalsEmptyPlaceholder
-        viewBinding.run {
+        viewBinding?.run {
+            emptyViewStub = goalsEmptyPlaceholder
             if (destination != GoalDestination.PREPOPULATE_SCREEN) {
                 goalsSave.show()
             }
@@ -104,20 +105,20 @@ class GoalsFragment :
         )?.observe(viewLifecycleOwner) { if (it) goalAdapter.cancelDeletion() }
         viewModel.accumulated.observe(
             this.viewLifecycleOwner
-        ) { viewBinding.run { goalsAmount.setValue(it) } }
+        ) { viewBinding?.run { goalsAmount.setValue(it) } }
         viewModel.budget.observe(
             this.viewLifecycleOwner
-        ) { viewBinding.run { goalsSumPerPeriod.setValue(it.saveSum) } }
+        ) { viewBinding?.run { goalsSumPerPeriod.setValue(it.saveSum) } }
 
         viewModel.goals.observe(
             this.viewLifecycleOwner
         ) {
             if (it.isEmpty()) {
-                viewBinding.goalsRvList.gone()
+                viewBinding?.goalsRvList?.gone()
                 showViewStub()
             } else {
                 hideViewStub()
-                viewBinding.goalsRvList.show()
+                viewBinding?.goalsRvList?.show()
                 goalAdapter.updateItems(it)
             }
             showViewStub = it.isEmpty()
@@ -140,7 +141,7 @@ class GoalsFragment :
     }
 
     private fun initToolbar() {
-        toolbar = viewBinding.goalsToolbarContainer.toolbar
+        toolbar = viewBinding?.goalsToolbarContainer?.toolbar
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         toolbar?.title = getString(R.string.title_goal)
@@ -193,7 +194,7 @@ class GoalsFragment :
     }
 
     override fun onNextClick() {
-        viewModel.savePrepopulateStatusAndSavedSum(viewBinding.goalsSumPerPeriod.getValue())
+        viewBinding?.goalsSumPerPeriod?.let { viewModel.savePrepopulateStatusAndSavedSum(it.getValue()) }
     }
 
     override fun save() {

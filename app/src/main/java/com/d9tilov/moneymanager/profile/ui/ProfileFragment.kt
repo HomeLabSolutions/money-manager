@@ -11,7 +11,6 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
 import com.d9tilov.moneymanager.budget.BudgetDestination
-import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.core.util.show
@@ -30,11 +29,10 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ProfileFragment :
-    BaseFragment<ProfileNavigator>(R.layout.fragment_profile),
+    BaseFragment<ProfileNavigator, FragmentProfileBinding>(FragmentProfileBinding::inflate, R.layout.fragment_profile),
     ProfileNavigator {
 
     private lateinit var googleSignInClient: GoogleSignInClient
-    private val viewBinding by viewBinding(FragmentProfileBinding::bind)
 
     override fun getNavigator() = this
     override val viewModel by viewModels<ProfileViewModel>()
@@ -58,7 +56,7 @@ class ProfileFragment :
             viewLifecycleOwner
         ) { if (it) viewModel.cancelAllJobs() }
 
-        viewBinding.run {
+        viewBinding?.run {
             profileLogout.setOnClickListener {
                 val action = ProfileFragmentDirections.toLogoutDialogDest()
                 findNavController().navigate(action)
@@ -96,53 +94,53 @@ class ProfileFragment :
                 val action = ProfileFragmentDirections.toSettingsDest()
                 findNavController().navigate(action)
             }
-            viewModel.userData().observe(
-                viewLifecycleOwner
-            ) { profile ->
-                profile.currentCurrencyCode.run {
-                    val icon = CurrencyUtils.getCurrencyIcon(this)
-                    val currencyTitle = CurrencyUtils.getCurrencySignBy(this)
-                    viewBinding.profileCurrency.profileItemCurrentCurrencyIcon.text = icon
-                    viewBinding.profileCurrency.profileItemCurrentCurrencySign.text = currencyTitle
-                }
+        }
+        viewModel.userData().observe(
+            viewLifecycleOwner
+        ) { profile ->
+            profile.currentCurrencyCode.run {
+                val icon = CurrencyUtils.getCurrencyIcon(this)
+                val currencyTitle = CurrencyUtils.getCurrencySignBy(this)
+                viewBinding?.profileCurrency?.profileItemCurrentCurrencyIcon?.text = icon
+                viewBinding?.profileCurrency?.profileItemCurrentCurrencySign?.text = currencyTitle
             }
-            viewModel.budget().observe(
-                viewLifecycleOwner
-            ) {
-                viewBinding.profileBudget.profileItemBudgetValue.setValue(it.sum)
-                viewBinding.profileBudget.profileItemBudgetCreatedDate.text =
-                    getString(R.string.budget_date_created, it.createdDate.toBudgetCreatedDate())
-            }
-            viewModel.regularIncomes().observe(
-                viewLifecycleOwner
-            ) { list ->
-                val incomes = list.joinToString(separator = ", ") { it.category.name }
-                viewBinding.profileRegularIncomes.profileItemRegularIncomeSubtitle.text = incomes
-            }
-            viewModel.regularExpenses().observe(
-                viewLifecycleOwner
-            ) { list ->
-                val expenses = list.joinToString(separator = ", ") { it.category.name }
-                viewBinding.profileRegularExpenses.profileItemRegularExpenseSubtitle.text = expenses
-            }
-            viewModel.goals().observe(
-                viewLifecycleOwner
-            ) { list ->
-                val goals = list.joinToString(separator = ",") { it.name }
-                when (goals.isEmpty()) {
-                    true ->
-                        viewBinding.profileGoals.profileItemGoalTitle.text =
-                            getString(R.string.profile_item_goals_title_empty)
-                    false ->
-                        viewBinding.profileGoals.profileItemGoalTitle.text =
-                            getString(R.string.profile_item_goals_title, goals)
-                }
+        }
+        viewModel.budget().observe(
+            viewLifecycleOwner
+        ) {
+            viewBinding?.profileBudget?.profileItemBudgetValue?.setValue(it.sum)
+            viewBinding?.profileBudget?.profileItemBudgetCreatedDate?.text =
+                getString(R.string.budget_date_created, it.createdDate.toBudgetCreatedDate())
+        }
+        viewModel.regularIncomes().observe(
+            viewLifecycleOwner
+        ) { list ->
+            val incomes = list.joinToString(separator = ", ") { it.category.name }
+            viewBinding?.profileRegularIncomes?.profileItemRegularIncomeSubtitle?.text = incomes
+        }
+        viewModel.regularExpenses().observe(
+            viewLifecycleOwner
+        ) { list ->
+            val expenses = list.joinToString(separator = ", ") { it.category.name }
+            viewBinding?.profileRegularExpenses?.profileItemRegularExpenseSubtitle?.text = expenses
+        }
+        viewModel.goals().observe(
+            viewLifecycleOwner
+        ) { list ->
+            val goals = list.joinToString(separator = ",") { it.name }
+            when (goals.isEmpty()) {
+                true ->
+                    viewBinding?.profileGoals?.profileItemGoalTitle?.text =
+                        getString(R.string.profile_item_goals_title_empty)
+                false ->
+                    viewBinding?.profileGoals?.profileItemGoalTitle?.text =
+                        getString(R.string.profile_item_goals_title, goals)
             }
         }
     }
 
     private fun updateUI() {
-        viewBinding.profileAppVersion.text = BuildConfig.VERSION_NAME
+        viewBinding?.profileAppVersion?.text = BuildConfig.VERSION_NAME
         val currencyUser = viewModel.getCurrentUser()
         if (currencyUser == null) {
             startActivity(
@@ -151,7 +149,7 @@ class ProfileFragment :
             )
             requireActivity().finish()
         } else {
-            viewBinding.run {
+            viewBinding?.run {
                 this.profileAvatar.show()
                 profileName.show()
                 profileName.text = currencyUser.displayName

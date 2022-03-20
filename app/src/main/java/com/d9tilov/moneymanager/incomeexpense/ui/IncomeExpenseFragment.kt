@@ -10,9 +10,9 @@ import androidx.viewpager2.widget.ViewPager2
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeExpenseNavigator
+import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.events.OnBackPressed
 import com.d9tilov.moneymanager.core.events.OnDialogDismissListener
-import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideWithAnimation
 import com.d9tilov.moneymanager.core.util.showWithAnimation
@@ -36,11 +36,9 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class IncomeExpenseFragment :
-    BaseFragment<IncomeExpenseNavigator>(R.layout.fragment_income_expense),
+    BaseFragment<IncomeExpenseNavigator, FragmentIncomeExpenseBinding>(FragmentIncomeExpenseBinding::inflate, R.layout.fragment_income_expense),
     IncomeExpenseNavigator,
     OnBackPressed {
-
-    private val viewBinding by viewBinding(FragmentIncomeExpenseBinding::bind)
 
     override fun getNavigator() = this
     override val viewModel by viewModels<IncomeExpenseViewModel>()
@@ -56,7 +54,7 @@ class IncomeExpenseFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         incomeExpenseAdapter = IncomeExpenseAdapter(childFragmentManager, lifecycle)
-        viewBinding.run {
+        viewBinding?.run {
             if (commonGroup.isEmpty()) {
                 commonGroup.add(incomeExpenseMainSum)
                 commonGroup.add(incomeExpenseKeyboardLayout.root)
@@ -116,7 +114,7 @@ class IncomeExpenseFragment :
         }
         viewModel.getCurrencyCode().observe(
             viewLifecycleOwner
-        ) { viewBinding.incomeExpenseMainSum.setCurrencyCode(it) }
+        ) { viewBinding?.incomeExpenseMainSum?.setCurrencyCode(it) }
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<DomainCurrency>(
             CurrencyFragment.ARG_CURRENCY
         )?.observe(
@@ -140,7 +138,7 @@ class IncomeExpenseFragment :
     private fun onHandleInput(str: String?) {
         val dot = getString(R.string._dot)
         val zero = getString(R.string._0)
-        var input = viewBinding.incomeExpenseMainSum.moneyEditText.text.toString()
+        var input = viewBinding?.incomeExpenseMainSum?.moneyEditText?.text.toString()
         when (str) {
             dot -> {
                 if (input.contains(dot)) return
@@ -156,12 +154,12 @@ class IncomeExpenseFragment :
             else -> input = input.plus(str)
         }
         if (input.isEmpty()) input = getString(R.string._0)
-        viewBinding.incomeExpenseMainSum.moneyEditText.setText(input)
+        viewBinding?.incomeExpenseMainSum?.moneyEditText?.setText(input)
     }
 
     fun openKeyboard() {
         isKeyboardOpen = true
-        viewBinding.run {
+        viewBinding?.run {
             if (pageIndex == 0) {
                 incomeExpenseMainSumTitleRight.showWithAnimation()
                 incomeExpenseMainSumTitleLeft.hideWithAnimation()
@@ -181,8 +179,8 @@ class IncomeExpenseFragment :
     fun closeKeyboard() {
         isKeyboardOpen = false
         commonGroup.forEach { it.gone() }
-        viewBinding.incomeExpenseMainSumTitleLeft.gone()
-        viewBinding.incomeExpenseMainSumTitleRight.gone()
+        viewBinding?.incomeExpenseMainSumTitleLeft?.gone()
+        viewBinding?.incomeExpenseMainSumTitleRight?.gone()
         for (fragment in getFragmentsInViewPager()) {
             (fragment as? OnIncomeExpenseListener)?.onKeyboardShown(false)
         }
@@ -190,11 +188,11 @@ class IncomeExpenseFragment :
 
     fun isKeyboardOpened(): Boolean = isKeyboardOpen
 
-    fun getSum(): BigDecimal = viewBinding.incomeExpenseMainSum.getValue()
-    fun getCurrencyCode(): String = viewBinding.incomeExpenseMainSum.getCurrencyCode()
+    fun getSum(): BigDecimal = viewBinding?.incomeExpenseMainSum?.getValue() ?: BigDecimal.ZERO
+    fun getCurrencyCode(): String = viewBinding?.incomeExpenseMainSum?.getCurrencyCode() ?: DEFAULT_CURRENCY_CODE
 
     fun resetSum() {
-        viewBinding.incomeExpenseMainSum.setValue(BigDecimal.ZERO)
+        viewBinding?.incomeExpenseMainSum?.setValue(BigDecimal.ZERO)
         viewModel.setDefaultCurrencyCode()
         onHandleInput("")
     }
@@ -203,7 +201,7 @@ class IncomeExpenseFragment :
         val fragments = mutableListOf<Fragment>()
         for (i in 0 until TAB_COUNT) {
             val fragment = childFragmentManager.findFragmentByTag(
-                "f" + viewBinding.incomeExpenseViewPager.adapter?.getItemId(i)
+                "f" + viewBinding?.incomeExpenseViewPager?.adapter?.getItemId(i)
             )
             fragment?.let { fragments.add(it) }
         }

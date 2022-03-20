@@ -10,7 +10,6 @@ import com.d9tilov.moneymanager.base.ui.navigator.CategoryUnionDialogNavigator
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.exception.CategoryExistException
 import com.d9tilov.moneymanager.category.ui.vm.CategoryUnionViewModel
-import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.onChange
@@ -22,14 +21,13 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class CategoryUnitDialog :
-    BaseDialogFragment<CategoryUnionDialogNavigator>(),
+    BaseDialogFragment<CategoryUnionDialogNavigator, FragmentDialogCategoryUnionBinding>(FragmentDialogCategoryUnionBinding::inflate),
     CategoryUnionDialogNavigator {
 
     private val args by navArgs<CategoryUnitDialogArgs>()
     private val firstCategory by lazy { args.firstCategory }
     private val secondCategory by lazy { args.secondCategory }
     private val transactionType by lazy { args.transactionType }
-    private val viewBinding by viewBinding(FragmentDialogCategoryUnionBinding::bind)
 
     override val layoutId = R.layout.fragment_dialog_category_union
     override fun getNavigator() = this
@@ -50,7 +48,7 @@ class CategoryUnitDialog :
 
     override fun showError(error: Throwable) {
         if (error is CategoryExistException) {
-            viewBinding.categoryDialogUnionEtNameLayout.error =
+            viewBinding?.categoryDialogUnionEtNameLayout?.error =
                 getString(R.string.category_unit_name_exist_error)
         }
     }
@@ -61,7 +59,7 @@ class CategoryUnitDialog :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding.run {
+        viewBinding?.run {
             categoryDialogUnionCancel.setOnClickListener { viewModel.cancel() }
             val firstDrawable =
                 createTintDrawable(requireContext(), firstCategory.icon, firstCategory.color)
@@ -91,7 +89,7 @@ class CategoryUnitDialog :
             }
             categoryDialogUnionConfirm.setOnClickListener {
                 if (secondCategory.children.isEmpty() &&
-                    viewBinding.categoryDialogUnionEtName.text.toString().isEmpty()
+                    categoryDialogUnionEtName.text.toString().isEmpty()
                 ) {
                     showError(IllegalArgumentException())
                 } else if (secondCategory.children.isNotEmpty()) {
@@ -106,8 +104,8 @@ class CategoryUnitDialog :
             }
             categoryDialogUnionEtName.onChange { text ->
                 val isNameEmpty = text.isEmpty()
-                viewBinding.categoryDialogUnionConfirm.isEnabled = !isNameEmpty
-                viewBinding.categoryDialogUnionEtNameLayout.error = null
+                categoryDialogUnionConfirm.isEnabled = !isNameEmpty
+                categoryDialogUnionEtNameLayout.error = null
             }
         }
     }
@@ -115,7 +113,7 @@ class CategoryUnitDialog :
     private fun createUnionCategory(): Category {
         return Category.EMPTY.copy(
             type = transactionType,
-            name = viewBinding.categoryDialogUnionEtName.text.toString(),
+            name = viewBinding?.categoryDialogUnionEtName?.text.toString(),
             color = R.color.category_all_color,
             icon = R.drawable.ic_category_folder
         )
@@ -124,7 +122,7 @@ class CategoryUnitDialog :
     override fun onStart() {
         super.onStart()
         if (secondCategory.children.isEmpty()) {
-            showKeyboard(viewBinding.categoryDialogUnionEtName)
+            showKeyboard(viewBinding?.categoryDialogUnionEtName)
         }
     }
 }

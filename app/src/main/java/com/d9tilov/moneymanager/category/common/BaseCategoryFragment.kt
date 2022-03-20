@@ -19,7 +19,6 @@ import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemLongClickListener
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
-import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hide
 import com.d9tilov.moneymanager.core.util.show
@@ -28,14 +27,16 @@ import com.d9tilov.moneymanager.databinding.LayoutEmptyListPlaceholderBinding
 import com.google.android.material.appbar.MaterialToolbar
 
 abstract class BaseCategoryFragment<N : BaseNavigator> :
-    BaseFragment<N>(R.layout.fragment_category),
+    BaseFragment<N, FragmentCategoryBinding>(
+        FragmentCategoryBinding::inflate,
+        R.layout.fragment_category
+    ),
     OnBackPressed {
 
     private val args by navArgs<CategoryFragmentArgs>()
     protected val destination by lazy { args.destination }
     protected val transactionType by lazy { args.transactionType }
 
-    protected val viewBinding by viewBinding(FragmentCategoryBinding::bind)
     protected var toolbar: MaterialToolbar? = null
     protected lateinit var categoryAdapter: CategoryModifyAdapter
     private var viewStub: LayoutEmptyListPlaceholderBinding? = null
@@ -74,9 +75,9 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewStub = viewBinding.categoryEmptyPlaceholder
+        viewStub = viewBinding?.categoryEmptyPlaceholder
         initToolbar()
-        viewBinding.run {
+        viewBinding?.run {
             val layoutManager =
                 GridLayoutManager(requireContext(), SPAN_COUNT, GridLayoutManager.VERTICAL, false)
             categoryRv.layoutManager = layoutManager
@@ -135,7 +136,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
     }
 
     private fun initToolbar() {
-        toolbar = viewBinding.categoryToolbarContainer.toolbar
+        toolbar = viewBinding?.categoryToolbarContainer?.toolbar
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)

@@ -8,8 +8,10 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
+import androidx.viewbinding.ViewBinding
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
+import com.d9tilov.moneymanager.base.ui.Inflate
 import com.d9tilov.moneymanager.base.ui.navigator.BaseRegularIncomeExpenseNavigator
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
@@ -24,9 +26,12 @@ import com.d9tilov.moneymanager.transaction.isIncome
 import com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialog
 import com.google.android.material.appbar.MaterialToolbar
 
-abstract class BaseRegularIncomeExpenseFragment<N : BaseRegularIncomeExpenseNavigator>(
+abstract class BaseRegularIncomeExpenseFragment<N : BaseRegularIncomeExpenseNavigator, VB : ViewBinding>(
+    inflate: Inflate<VB>,
     @LayoutRes layoutId: Int
-) : BaseFragment<N>(layoutId), BaseRegularIncomeExpenseNavigator {
+) :
+    BaseFragment<N, VB>(inflate, layoutId),
+    BaseRegularIncomeExpenseNavigator {
 
     protected val regularTransactionAdapter: RegularTransactionAdapter = RegularTransactionAdapter()
     protected abstract val transactionType: TransactionType

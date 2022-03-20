@@ -20,7 +20,6 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
-import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DECIMAL_LENGTH
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.isTablet
@@ -41,10 +40,11 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ExpenseFragment :
-    BaseIncomeExpenseFragment<ExpenseNavigator>(R.layout.fragment_expense),
+    BaseIncomeExpenseFragment<ExpenseNavigator, FragmentExpenseBinding>(
+        FragmentExpenseBinding::inflate,
+        R.layout.fragment_expense
+    ),
     ExpenseNavigator {
-
-    private val viewBinding by viewBinding(FragmentExpenseBinding::bind)
 
     override fun getNavigator() = this
     override val viewModel by viewModels<ExpenseViewModel>()
@@ -54,12 +54,14 @@ class ExpenseFragment :
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun initViews() {
-        emptyViewStub = viewBinding.expenseTransactionEmptyPlaceholderInclude
-        categoryRvList = viewBinding.expenseInfoLayoutInclude.expenseCategoryRvList
-        transactionRvList = viewBinding.expenseTransactionLayoutInclude.expenseTransactionRvList
-        transactionBtnAdd = viewBinding.expenseTransactionLayoutInclude.expenseTransactionBtnAdd
-        infoLayout = viewBinding.expenseInfoLayoutInclude.root
-        transactionsLayout = viewBinding.expenseTransactionLayoutInclude.root
+        viewBinding?.run {
+            emptyViewStub = expenseTransactionEmptyPlaceholderInclude
+            categoryRvList = expenseInfoLayoutInclude.expenseCategoryRvList
+            transactionRvList = expenseTransactionLayoutInclude.expenseTransactionRvList
+            transactionBtnAdd = expenseTransactionLayoutInclude.expenseTransactionBtnAdd
+            infoLayout = expenseInfoLayoutInclude.root
+            transactionsLayout = expenseTransactionLayoutInclude.root
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -85,33 +87,29 @@ class ExpenseFragment :
             viewLifecycleOwner
         ) { sum ->
             if (sum.signum() == 0) {
-                viewBinding.expenseInfoLayoutInclude.expensePeriodInfoApproxSign.gone()
+                viewBinding?.expenseInfoLayoutInclude?.expensePeriodInfoApproxSign?.gone()
             } else {
-                viewBinding.expenseInfoLayoutInclude.expensePeriodInfoApproxSign.show()
+                viewBinding?.expenseInfoLayoutInclude?.expensePeriodInfoApproxSign?.show()
             }
         }
         viewModel.spentInPeriodApprox.observe(
-            viewLifecycleOwner,
-            viewBinding.expenseInfoLayoutInclude.expensePeriodInfoApproxSum::setValue
-        )
+            viewLifecycleOwner
+        ) { viewBinding?.expenseInfoLayoutInclude?.expensePeriodInfoApproxSum?.setValue(it) }
         viewModel.spentToday.observe(
             viewLifecycleOwner
         ) { sum ->
             if (sum.signum() == 0) {
-                viewBinding.expenseInfoLayoutInclude.expenseTodayInfoApproxSign.gone()
+                viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoApproxSign?.gone()
             } else {
-                viewBinding.expenseInfoLayoutInclude.expenseTodayInfoApproxSign.show()
+                viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoApproxSign?.show()
             }
         }
         viewModel.spentTodayApprox.observe(
-            viewLifecycleOwner,
-            viewBinding.expenseInfoLayoutInclude.expenseTodayInfoApproxSum::setValue
-        )
-        viewModel.ableToSpendToday.observe(
             viewLifecycleOwner
-        ) { sum ->
-            viewBinding.expenseInfoLayoutInclude.expenseTodayInfoValue.setValue(sum)
-            viewBinding.expenseInfoLayoutInclude.expenseTodayInfoValue.setColor(
+        ) { viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoApproxSum?.setValue(it) }
+        viewModel.ableToSpendToday.observe(viewLifecycleOwner) { sum ->
+            viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoValue?.setValue(sum)
+            viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoValue?.setColor(
                 if (sum.setScale(DECIMAL_LENGTH, ROUND_HALF_UP).signum() > 0)
                     ContextCompat.getColor(requireContext(), R.color.success_color) else
                     ContextCompat.getColor(requireContext(), R.color.error_color)
@@ -120,7 +118,7 @@ class ExpenseFragment :
     }
 
     override fun initCategoryRecyclerView() {
-        viewBinding.expenseInfoLayoutInclude.run {
+        viewBinding?.expenseInfoLayoutInclude?.run {
             val layoutManager =
                 GridLayoutManager(
                     requireContext(),
@@ -143,7 +141,7 @@ class ExpenseFragment :
     }
 
     override fun initTransactionsRecyclerView() {
-        viewBinding.expenseTransactionLayoutInclude.run {
+        viewBinding?.expenseTransactionLayoutInclude?.run {
             val layoutManager = LinearLayoutManager(requireContext())
             expenseTransactionRvList.layoutManager = layoutManager
             expenseTransactionRvList.adapter = transactionAdapter
@@ -169,7 +167,7 @@ class ExpenseFragment :
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
             param(FirebaseAnalytics.Param.ITEM_ID, "click_all_categories_expense")
         }
-        viewBinding.run {
+        viewBinding?.run {
             val inputSum = getSum()
             val action = if (inputSum.signum() > 0) {
                 IncomeExpenseFragmentDirections.toCategoryDest(

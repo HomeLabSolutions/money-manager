@@ -20,7 +20,6 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.core.ui.recyclerview.StickyHeaderItemDecorator
-import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.isTablet
 import com.d9tilov.moneymanager.core.util.show
@@ -39,10 +38,11 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class IncomeFragment :
-    BaseIncomeExpenseFragment<IncomeNavigator>(R.layout.fragment_income),
+    BaseIncomeExpenseFragment<IncomeNavigator, FragmentIncomeBinding>(
+        FragmentIncomeBinding::inflate,
+        R.layout.fragment_income
+    ),
     IncomeNavigator {
-
-    private val viewBinding by viewBinding(FragmentIncomeBinding::bind)
 
     override fun getNavigator() = this
     override val viewModel by viewModels<IncomeViewModel>()
@@ -52,12 +52,14 @@ class IncomeFragment :
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun initViews() {
-        emptyViewStub = viewBinding.incomeTransactionEmptyPlaceholder
-        categoryRvList = viewBinding.incomeInfoLayoutInclude.incomeCategoryRvList
-        transactionRvList = viewBinding.incomeTransactionLayoutInclude.incomeTransactionRvList
-        transactionBtnAdd = viewBinding.incomeTransactionLayoutInclude.incomeTransactionBtnAdd
-        infoLayout = viewBinding.incomeInfoLayoutInclude.root
-        transactionsLayout = viewBinding.incomeTransactionLayoutInclude.root
+        viewBinding?.run {
+            emptyViewStub = incomeTransactionEmptyPlaceholder
+            categoryRvList = incomeInfoLayoutInclude.incomeCategoryRvList
+            transactionRvList = incomeTransactionLayoutInclude.incomeTransactionRvList
+            transactionBtnAdd = incomeTransactionLayoutInclude.incomeTransactionBtnAdd
+            infoLayout = incomeInfoLayoutInclude.root
+            transactionsLayout = incomeTransactionLayoutInclude.root
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -82,18 +84,18 @@ class IncomeFragment :
                 viewLifecycleOwner
             ) { sum ->
                 if (sum.signum() == 0) {
-                    viewBinding.incomeInfoLayoutInclude.incomePeriodInfoApproxSign.gone()
+                    viewBinding?.incomeInfoLayoutInclude?.incomePeriodInfoApproxSign?.gone()
                 } else
-                    viewBinding.incomeInfoLayoutInclude.incomePeriodInfoApproxSign.show()
+                    viewBinding?.incomeInfoLayoutInclude?.incomePeriodInfoApproxSign?.show()
             }
             viewModel.earnedInPeriodApprox.observe(
                 viewLifecycleOwner
-            ) { sum -> viewBinding.incomeInfoLayoutInclude.incomePeriodInfoApproxSum.setValue(sum) }
+            ) { sum -> viewBinding?.incomeInfoLayoutInclude?.incomePeriodInfoApproxSum?.setValue(sum) }
         }
     }
 
     override fun initCategoryRecyclerView() {
-        viewBinding.incomeInfoLayoutInclude.run {
+        viewBinding?.incomeInfoLayoutInclude?.run {
             val layoutManager =
                 GridLayoutManager(
                     requireContext(),
@@ -116,7 +118,7 @@ class IncomeFragment :
     }
 
     override fun initTransactionsRecyclerView() {
-        viewBinding.incomeTransactionLayoutInclude.run {
+        viewBinding?.incomeTransactionLayoutInclude?.run {
             val layoutManager = LinearLayoutManager(requireContext())
             incomeTransactionRvList.layoutManager = layoutManager
             incomeTransactionRvList.layoutManager = layoutManager

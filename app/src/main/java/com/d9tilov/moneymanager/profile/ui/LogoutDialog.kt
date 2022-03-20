@@ -9,7 +9,6 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.backup.PeriodicBackupWorker
 import com.d9tilov.moneymanager.base.ui.BaseDialogFragment
 import com.d9tilov.moneymanager.base.ui.navigator.LogoutDialogNavigator
-import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.databinding.FragmentDialogLogoutBinding
 import com.d9tilov.moneymanager.profile.ui.vm.LogoutViewModel
 import com.d9tilov.moneymanager.splash.ui.SplashActivity
@@ -18,9 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LogoutDialog :
-    BaseDialogFragment<LogoutDialogNavigator>(), LogoutDialogNavigator {
-
-    private val viewBinding by viewBinding(FragmentDialogLogoutBinding::bind)
+    BaseDialogFragment<LogoutDialogNavigator, FragmentDialogLogoutBinding>(FragmentDialogLogoutBinding::inflate), LogoutDialogNavigator {
 
     override val layoutId = R.layout.fragment_dialog_logout
     override fun getNavigator() = this
@@ -28,7 +25,7 @@ class LogoutDialog :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding.run {
+        viewBinding?.run {
             logoutButtonConfirm.setOnClickListener {
                 AuthUI.getInstance()
                     .signOut(requireContext())

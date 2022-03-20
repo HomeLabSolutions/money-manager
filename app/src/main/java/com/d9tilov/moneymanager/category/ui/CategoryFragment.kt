@@ -98,14 +98,14 @@ class CategoryFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toolbar?.title = getString(R.string.title_category)
-        viewBinding.categoryCreate.setOnClickListener {
+        viewBinding?.categoryCreate?.setOnClickListener {
             val action = CategoryFragmentDirections.toCategoryCreationDest(transactionType)
             findNavController().navigate(action)
         }
         val callback = SimpleItemTouchHelperCallback(categoryAdapter)
         val touchHelper = ItemTouchHelper(callback)
-        touchHelper.attachToRecyclerView(viewBinding.categoryRv)
-        (viewBinding.categoryRv.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        touchHelper.attachToRecyclerView(viewBinding?.categoryRv)
+        (viewBinding?.categoryRv?.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
     }
 
     override fun onStart() {

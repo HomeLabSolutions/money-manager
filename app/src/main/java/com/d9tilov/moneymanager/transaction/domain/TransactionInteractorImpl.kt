@@ -100,18 +100,15 @@ class TransactionInteractorImpl(
                                 category,
                                 currencyCode,
                                 if (currencyCode == DEFAULT_CURRENCY_CODE) item.usdSum
-                                else currencyInteractor.toMainCurrency(item.sum, currencyCode)
+                                else currencyInteractor.toMainCurrency(item.sum, item.currencyCode)
                             )
                         }
                     }
                     .map { list ->
                         val sum = list.sumOf { tr -> tr.sum }
                         list.groupBy { tr ->
-                            if (onlySubcategories) {
-                                tr.category
-                            } else {
-                                tr.category.parent ?: tr.category
-                            }
+                            if (onlySubcategories) tr.category
+                            else tr.category.parent ?: tr.category
                         }
                             .map { entry: Map.Entry<Category, List<TransactionChartModel>> ->
                                 val currencySum: BigDecimal = entry.value.sumOf { item -> item.sum }

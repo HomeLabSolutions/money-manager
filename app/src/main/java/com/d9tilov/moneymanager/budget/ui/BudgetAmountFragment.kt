@@ -11,7 +11,6 @@ import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.BudgetAmountNavigator
 import com.d9tilov.moneymanager.budget.BudgetDestination
 import com.d9tilov.moneymanager.budget.vm.BudgetAmountViewModel
-import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentBudgetAmountBinding
@@ -23,14 +22,16 @@ import java.math.BigDecimal
 
 @AndroidEntryPoint
 class BudgetAmountFragment :
-    BaseFragment<BudgetAmountNavigator>(R.layout.fragment_budget_amount),
+    BaseFragment<BudgetAmountNavigator, FragmentBudgetAmountBinding>(
+        FragmentBudgetAmountBinding::inflate,
+        R.layout.fragment_budget_amount
+    ),
     BudgetAmountNavigator,
     ControlsClicked {
 
     private val args by navArgs<BudgetAmountFragmentArgs>()
     private val destination by lazy { args.destination }
 
-    private val viewBinding by viewBinding(FragmentBudgetAmountBinding::bind)
     private var toolbar: MaterialToolbar? = null
 
     override fun getNavigator() = this
@@ -41,11 +42,13 @@ class BudgetAmountFragment :
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         if (destination == BudgetDestination.PROFILE_SCREEN) {
-            viewBinding.createdBudgetSave.run {
+            viewBinding?.createdBudgetSave?.run {
                 show()
                 isSelected = true
                 setOnClickListener {
-                    viewModel.saveBudgetAmount(viewBinding.commonBudgetAmount.getValue())
+                    viewModel.saveBudgetAmount(
+                        viewBinding?.commonBudgetAmount?.getValue() ?: BigDecimal.ZERO
+                    )
                     findNavController().popBackStack()
                 }
             }
@@ -53,11 +56,13 @@ class BudgetAmountFragment :
         viewModel.budgetData.observe(
             this.viewLifecycleOwner
         ) {
-            viewBinding.commonBudgetAmount.setValue(it.sum)
+            viewBinding?.commonBudgetAmount?.setValue(it.sum)
             if (it.sum.compareTo(BigDecimal.ZERO) == 0) {
-                viewBinding.commonBudgetAmount.moneyEditText.setSelection(1)
+                viewBinding?.commonBudgetAmount?.moneyEditText?.setSelection(1)
             } else {
-                viewBinding.commonBudgetAmount.moneyEditText.setSelection(viewBinding.commonBudgetAmount.moneyEditText.length())
+                viewBinding?.commonBudgetAmount?.moneyEditText?.setSelection(
+                    viewBinding?.commonBudgetAmount?.moneyEditText?.length() ?: 0
+                )
             }
         }
     }
@@ -67,7 +72,7 @@ class BudgetAmountFragment :
         if (activity is PrepopulateActivity) {
             (activity as PrepopulateActivity).controlsClick = this
         }
-        showKeyboard(viewBinding.commonBudgetAmount.moneyEditText)
+        showKeyboard(viewBinding?.commonBudgetAmount?.moneyEditText)
     }
 
     override fun onStop() {
@@ -78,7 +83,7 @@ class BudgetAmountFragment :
     }
 
     private fun initToolbar() {
-        toolbar = viewBinding.commonBudgetToolbarContainer.toolbar
+        toolbar = viewBinding?.commonBudgetToolbarContainer?.toolbar
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         toolbar?.title = getString(R.string.title_prepopulate_budget)
@@ -97,6 +102,6 @@ class BudgetAmountFragment :
     }
 
     override fun onNextClick() {
-        viewModel.saveBudgetAmount(viewBinding.commonBudgetAmount.getValue())
+        viewBinding?.commonBudgetAmount?.let { viewModel.saveBudgetAmount(it.getValue()) }
     }
 }

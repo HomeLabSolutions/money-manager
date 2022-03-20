@@ -9,19 +9,17 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseDialogFragment
 import com.d9tilov.moneymanager.base.ui.navigator.RemoveSubCategoryDialogNavigator
 import com.d9tilov.moneymanager.category.ui.vm.SubcategoryRemoveViewModel
-import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.databinding.FragmentDialogTripleRemoveBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class SubcategoryRemoveDialogFragment :
-    BaseDialogFragment<RemoveSubCategoryDialogNavigator>(),
+    BaseDialogFragment<RemoveSubCategoryDialogNavigator, FragmentDialogTripleRemoveBinding>(FragmentDialogTripleRemoveBinding::inflate),
     RemoveSubCategoryDialogNavigator {
 
     private val args by navArgs<SubcategoryRemoveDialogFragmentArgs>()
     private val subCategory by lazy { args.subcategory }
-    private val viewBinding by viewBinding(FragmentDialogTripleRemoveBinding::bind)
 
     override val layoutId = R.layout.fragment_dialog_triple_remove
     override fun getNavigator() = this
@@ -39,7 +37,7 @@ class SubcategoryRemoveDialogFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding.run {
+        viewBinding?.run {
             tripleRemoveDialogButtonAction1.text = getString(R.string.sub_category_delete)
             tripleRemoveDialogButtonAction2.text =
                 getString(R.string.sub_category_delete_from_group)

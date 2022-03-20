@@ -59,7 +59,7 @@ class SubCategoryFragment :
                 SUB_CATEGORY_TITLE
             )
         }
-        viewBinding.run {
+        viewBinding?.run {
             categoryGroupEdit.show()
             categoryGroupDelete.show()
             categoryCreate.gone()

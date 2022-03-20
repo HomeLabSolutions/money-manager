@@ -9,7 +9,6 @@ import androidx.navigation.fragment.findNavController
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseDialogFragment
 import com.d9tilov.moneymanager.base.ui.navigator.DayOfMonthDialogNavigator
-import com.d9tilov.moneymanager.core.ui.viewbinding.viewBinding
 import com.d9tilov.moneymanager.databinding.FragmentDialogDayOfMonthPickerBinding
 import com.d9tilov.moneymanager.regular.ui.RegularTransactionCreationFragment.Companion.ARG_DAY_OF_MONTH
 import com.d9tilov.moneymanager.regular.vm.DayOfMonthViewModel
@@ -17,9 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DayOfMonthDialog :
-    BaseDialogFragment<DayOfMonthDialogNavigator>(), DayOfMonthDialogNavigator {
-
-    private val viewBinding by viewBinding(FragmentDialogDayOfMonthPickerBinding::bind)
+    BaseDialogFragment<DayOfMonthDialogNavigator, FragmentDialogDayOfMonthPickerBinding>(FragmentDialogDayOfMonthPickerBinding::inflate), DayOfMonthDialogNavigator {
 
     override val layoutId = R.layout.fragment_dialog_day_of_month_picker
     override fun getNavigator() = this
@@ -28,7 +25,7 @@ class DayOfMonthDialog :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setDayOfMonth(viewModel.dayOfMonth)
-        viewBinding.run {
+        viewBinding?.run {
             dayOfMonthButtonConfirm.setOnClickListener {
                 findNavController().previousBackStackEntry?.savedStateHandle?.set(
                     ARG_DAY_OF_MONTH,
@@ -74,15 +71,15 @@ class DayOfMonthDialog :
     private fun setDayOfMonth(day: Int) {
         val newView = getViewFromDay(day)
         val oldView = getViewFromDay(viewModel.dayOfMonth)
-        oldView.isSelected = false
-        oldView.setTextColor(ContextCompat.getColor(requireContext(), R.color.control_activated_color))
-        newView.isSelected = true
-        newView.setTextColor(ContextCompat.getColor(requireContext(), R.color.primary_color))
+        oldView?.isSelected = false
+        oldView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.control_activated_color))
+        newView?.isSelected = true
+        newView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.primary_color))
         viewModel.dayOfMonth = day
     }
 
-    private fun getViewFromDay(day: Int): TextView {
-        return viewBinding.run {
+    private fun getViewFromDay(day: Int): TextView? {
+        return viewBinding?.run {
             when (day) {
                 1 -> dayOfMonth1
                 2 -> dayOfMonth2
