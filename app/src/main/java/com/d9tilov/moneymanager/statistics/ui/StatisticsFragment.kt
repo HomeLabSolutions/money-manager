@@ -111,6 +111,10 @@ class StatisticsFragment :
                 viewModel.updateTransactionType()
                 updateTransactionTypeIcon()
             }
+            statisticsMenuItemChart.root.setOnClickListener {
+                viewModel.updateCharMode()
+                updateCharTypeIcon()
+            }
         }
 
         initPieChart()
@@ -129,6 +133,7 @@ class StatisticsFragment :
         }
         updateInStatisticsIcon()
         updateTransactionTypeIcon()
+        updateCharTypeIcon()
     }
 
     private fun updateCurrencyIcon() {
@@ -157,6 +162,16 @@ class StatisticsFragment :
             viewBinding.statisticsMenuItemTrType.statisticsMenuIcon.setImageResource(R.drawable.ic_statistics_expense)
             viewBinding.statisticsMenuItemTrType.statisticsMenuTitle.text =
                 getString(R.string.statistics_menu_expenses_title)
+        }
+    }
+
+    private fun updateCharTypeIcon() {
+        viewBinding.statisticsMenuItemChart.statisticsMenuTitle.text =
+            getString(R.string.statistics_menu_chart_type_title)
+        if (viewModel.chartMode == LINE_CHART) {
+            viewBinding.statisticsMenuItemChart.statisticsMenuIcon.setImageResource(R.drawable.ic_line_chart)
+        } else {
+            viewBinding.statisticsMenuItemChart.statisticsMenuIcon.setImageResource(R.drawable.ic_pie_chart)
         }
     }
 

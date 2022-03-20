@@ -183,4 +183,5 @@
     <string name="statistics_menu_currency_title">Валюта</string>
     <string name="statistics_menu_incomes_title">Доходы</string>
     <string name="statistics_menu_expenses_title">Расходы</string>
+    <string name="statistics_menu_chart_type_title">График</string>
 </resources>

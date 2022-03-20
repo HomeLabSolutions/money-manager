@@ -97,6 +97,14 @@ class StatisticsViewModel @Inject constructor(private val transactionInteractor:
         update()
     }
 
+    fun updateCharMode() {
+        chartMode = when (chartMode) {
+            StatisticsChartMode.LINE_CHART -> StatisticsChartMode.PIE_CHART
+            StatisticsChartMode.PIE_CHART -> StatisticsChartMode.LINE_CHART
+        }
+        update()
+    }
+
     fun update() {
         viewModelScope.launch(Dispatchers.Main) {
             transactionInteractor.getTransactionsGroupedByCategory(
