@@ -9,7 +9,6 @@
         android:id="@+id/statistics_menu_currency_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:textSize="@dimen/statistics_currency_icon_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

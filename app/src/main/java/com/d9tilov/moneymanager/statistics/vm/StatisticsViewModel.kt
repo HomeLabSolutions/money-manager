@@ -82,6 +82,11 @@ class StatisticsViewModel @Inject constructor(private val transactionInteractor:
         update()
     }
 
+    fun updateStatisticsFlag() {
+        inStatistics = !inStatistics
+        update()
+    }
+
     fun update() {
         viewModelScope.launch(Dispatchers.Main) {
             transactionInteractor.getTransactionsGroupedByCategory(

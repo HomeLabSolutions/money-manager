@@ -102,6 +102,10 @@ class StatisticsFragment :
                 viewModel.updateCurrency()
                 updateCurrencyIcon()
             }
+            statisticsMenuItemInStat.root.setOnClickListener {
+                viewModel.updateStatisticsFlag()
+                updateInStatisticsIcon()
+            }
         }
 
         initPieChart()
@@ -118,11 +122,24 @@ class StatisticsFragment :
             viewModel.updateCurrency(code)
             updateCurrencyIcon()
         }
+        updateInStatisticsIcon()
     }
 
     private fun updateCurrencyIcon() {
         viewBinding.statisticsMenuItemCurrency.statisticsMenuCurrencyIcon.text =
             CurrencyUtils.getCurrencyIcon(viewModel.currencyCode)
+    }
+
+    private fun updateInStatisticsIcon() {
+        if (viewModel.inStatistics) {
+            viewBinding.statisticsMenuItemInStat.statisticsMenuIcon.setImageResource(R.drawable.ic_in_statistics)
+            viewBinding.statisticsMenuItemInStat.statisticsMenuTitle.text =
+                getString(R.string.statistics_in_statistics_title)
+        } else {
+            viewBinding.statisticsMenuItemInStat.statisticsMenuIcon.setImageResource(R.drawable.ic_not_in_statistics)
+            viewBinding.statisticsMenuItemInStat.statisticsMenuTitle.text =
+                getString(R.string.statistics_not_in_statistics_title)
+        }
     }
 
     private fun openRangeCalendar() {
