@@ -89,32 +89,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/statistics_menu_rv" />
 
-    <ImageView
-        android:id="@+id/statistics_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="@dimen/standard_half_right_margin"
-        android:background="?selectableItemBackgroundBorderless"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/statistics_custom"
-        app:srcCompat="@drawable/ic_statistics_menu" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/statistics_menu_rv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/standard_left_margin"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="@dimen/standard_right_margin"
-        android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@+id/statistics_menu"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/statistics_day"
-        tools:listitem="@layout/item_statistics_menu"
-        tools:visibility="visible" />
-
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/statistics_barrier"
         android:layout_width="1dp"
@@ -187,4 +161,29 @@
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/statistics_day" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/statistics_menu_rv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/standard_left_margin"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="@dimen/standard_right_margin"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@+id/statistics_menu"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statistics_day"
+        tools:listitem="@layout/item_statistics_menu"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/statistics_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="@dimen/standard_half_right_margin"
+        android:background="?selectableItemBackgroundBorderless"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statistics_custom"
+        app:srcCompat="@drawable/ic_statistics_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>
