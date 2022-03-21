@@ -90,6 +90,8 @@ class TransactionInteractorImpl(
     ): Flow<List<TransactionChartModel>> {
         return categoryInteractor.getGroupedCategoriesByType(type)
             .flatMapLatest { categoryList ->
+                val parentChildrenMap: Map<Category, List<Category>> =
+                    categoryList.groupBy { category -> category.parent ?: category }
                 transactionRepo.getTransactionsByTypeInPeriod(from, to, type, inStatistics)
                     .map {
                         it.map { item ->
@@ -110,13 +112,18 @@ class TransactionInteractorImpl(
                             if (onlySubcategories) tr.category
                             else tr.category.parent ?: tr.category
                         }
+                            .mapKeys { entry ->
+                                val category = entry.key
+                                category.copy(children = parentChildrenMap[category] ?: emptyList())
+                            }
                             .map { entry: Map.Entry<Category, List<TransactionChartModel>> ->
                                 val currencySum: BigDecimal = entry.value.sumOf { item -> item.sum }
                                 val transaction: TransactionChartModel = entry.value.first()
+                                val category = entry.key
                                 TransactionChartModel(
                                     transaction.clientId,
                                     transaction.type,
-                                    entry.key,
+                                    category,
                                     currencyCode,
                                     currencySum,
                                     currencySum.divideBy(sum).multiply(BigDecimal(100)),

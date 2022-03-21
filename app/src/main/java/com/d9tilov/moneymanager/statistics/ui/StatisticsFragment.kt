@@ -156,10 +156,15 @@ class StatisticsFragment :
 
         initPieChart()
         viewModel.getTransactions().observe(viewLifecycleOwner) { list ->
-            setPieChartData(list)
-            statisticsBarChartAdapter.updateItems(list)
+            val newList = list.map { item ->
+                if (item.category.children.isNotEmpty()) {
+                    item.copy(category = item.category.copy(color = item.category.children[0].color))
+                } else item
+            }
+            setPieChartData(newList)
+            statisticsBarChartAdapter.updateItems(newList)
             viewBinding?.statisticsSpentInPeriodSum?.setValue(
-                list.sumOf { it.sum },
+                newList.sumOf { it.sum },
                 viewModel.currencyType.currencyCode
             )
             viewBinding?.statisticsBarChart?.scrollToPosition(0)

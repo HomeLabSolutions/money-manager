@@ -8,6 +8,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
+import com.d9tilov.moneymanager.core.ui.color.ColorManager
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.databinding.ItemCategoryIconBinding
@@ -115,33 +116,13 @@ class CategoryIconSetAdapter :
         R.drawable.ic_category_yoga2
     )
 
-    private val colorList = listOf(
-        R.color.category_yellow,
-        R.color.category_light_green,
-        R.color.category_green,
-        R.color.category_light_blue,
-        R.color.category_blue,
-        R.color.category_violet,
-        R.color.category_dark_red,
-        R.color.category_dark_orange,
-        R.color.category_orange,
-        R.color.category_light_yellow,
-        R.color.category_mint,
-        R.color.category_grass_green,
-        R.color.category_mud_green,
-        R.color.category_lollipop,
-        R.color.category_navy_blue,
-        R.color.category_flower_violet,
-        R.color.category_light_violet,
-        R.color.category_pink
-    )
-
     private val categoryColorMap = mutableListOf<Pair<Int, Int>>()
 
     init {
         setHasStableIds(true)
+        val colorManager = ColorManager()
         categoryList.forEachIndexed { index, icon ->
-            categoryColorMap.add(icon to colorList[index % colorList.size])
+            categoryColorMap.add(icon to colorManager.colorList[index % colorManager.colorList.size])
         }
     }
 
