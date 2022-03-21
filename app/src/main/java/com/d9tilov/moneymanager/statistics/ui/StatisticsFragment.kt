@@ -140,6 +140,7 @@ class StatisticsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        showMenu = false
         setChartMode(viewModel.chartMode, viewModel.chartPeriod)
         viewBinding?.run {
             statisticsBarChart.adapter = statisticsBarChartAdapter
@@ -167,6 +168,12 @@ class StatisticsFragment :
             viewModel.updateCurrency(code)
             statisticsMenuAdapter.updateItems(viewModel.menuItemList)
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        hideMenuHandler.removeCallbacksAndMessages(null)
+        hideMenu()
     }
 
     private fun initStatisticsMenuRv() {
@@ -345,18 +352,17 @@ class StatisticsFragment :
         period: StatisticsPeriod = MONTH,
         periodPair: Pair<LocalDateTime, LocalDateTime>? = null
     ) {
+        val oldView = getViewFromPeriod(viewModel.chartPeriod)
+        oldView?.isSelected = false
+        val newView = getViewFromPeriod(period)
+        newView?.isSelected = true
+        if (period != CUSTOM) {
+            viewModel.updatePeriod(period)
+        } else {
+            viewModel.updatePeriod(period, periodPair)
+        }
         when (mode) {
-            PIE_CHART -> {
-                val oldView = getViewFromPeriod(viewModel.chartPeriod)
-                oldView?.isSelected = false
-                val newView = getViewFromPeriod(period)
-                newView?.isSelected = true
-                if (period != CUSTOM) {
-                    viewModel.updatePeriod(period)
-                } else {
-                    viewModel.updatePeriod(period, periodPair)
-                }
-            }
+            PIE_CHART -> {}
             LINE_CHART -> {}
         }
     }
@@ -390,10 +396,5 @@ class StatisticsFragment :
         private const val MAX_CATEGORY_NAME_LENGTH = 10
         private const val ANIMATION_DURATION = 500
         private const val HIDE_MENU_DELAY = 5000L
-    }
-
-    override fun onStop() {
-        super.onStop()
-        hideMenuWithDelay()
     }
 }
