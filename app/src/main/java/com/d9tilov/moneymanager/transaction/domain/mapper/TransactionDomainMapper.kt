@@ -24,6 +24,5 @@ fun TransactionDataModel.toChartModel(
         category,
         currencyCode,
         sum,
-        BigDecimal.ZERO,
-        inStatistics
+        BigDecimal.ZERO
     )

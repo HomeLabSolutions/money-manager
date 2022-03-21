@@ -130,6 +130,7 @@
         app:layout_constraintStart_toEndOf="@+id/statistics_spent_in_period"
         app:layout_constraintTop_toTopOf="@+id/statistics_spent_in_period"
         app:scaleEnabled="true"
+        app:showDecimalPart="true"
         app:signTextColor="@color/text_primary_transparent_color"
         app:signTextSize="@dimen/statistics_spent_in_period_sign"
         app:signTextStyle="?attr/textAppearanceCurrencySignExtraSmall"

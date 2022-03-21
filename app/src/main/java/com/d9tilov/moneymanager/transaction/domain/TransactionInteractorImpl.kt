@@ -126,8 +126,7 @@ class TransactionInteractorImpl(
                                     category,
                                     currencyCode,
                                     currencySum,
-                                    currencySum.divideBy(sum).multiply(BigDecimal(100)),
-                                    inStatistics
+                                    currencySum.divideBy(sum).multiply(BigDecimal(100))
                                 )
                             }
                     }

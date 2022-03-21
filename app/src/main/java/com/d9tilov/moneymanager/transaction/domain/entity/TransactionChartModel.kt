@@ -14,6 +14,5 @@ data class TransactionChartModel(
     val category: Category,
     val currencyCode: String,
     val sum: BigDecimal,
-    val percent: BigDecimal,
-    val inStatistics: Boolean
+    val percent: BigDecimal
 ) : Parcelable
