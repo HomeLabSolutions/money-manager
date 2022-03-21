@@ -63,6 +63,7 @@ class StatisticsViewModel @Inject constructor(private val transactionInteractor:
         private set
 
     val menuItemList = mutableListOf(
+        currencyType,
         chartMode,
         categoryType,
         transactionType,
@@ -78,9 +79,6 @@ class StatisticsViewModel @Inject constructor(private val transactionInteractor:
         } else {
             this.currencyCode = currencyCode
             currencyType = StatisticsMenuCurrency.CURRENT(currencyCode)
-            if (!menuItemList.contains(currencyType)) {
-                menuItemList.add(0, currencyType)
-            }
         }
         updateItemInList(currencyType, 0)
         update()
@@ -165,8 +163,7 @@ class StatisticsViewModel @Inject constructor(private val transactionInteractor:
     }
 
     private fun updateItemInList(item: BaseStatisticsMenuType, index: Int) {
-        menuItemList.removeAt(index)
-        menuItemList.add(index, item)
+        menuItemList[index] = item
     }
 
     fun getTransactions(): LiveData<List<TransactionChartModel>> = transactionsLiveData

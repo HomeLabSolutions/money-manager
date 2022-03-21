@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.statistics.ui
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -145,7 +144,6 @@ class StatisticsMenuAdapter : RecyclerView.Adapter<BaseViewHolder>() {
     override fun getItemId(position: Int) = menuItems[position].menuType.id.toLong()
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        Log.d("moggot", "onBindViewHolder: " + menuItems)
         when (holder.itemViewType) {
             0 -> (holder as CurrencyModeViewHolder).bind(menuItems[position] as StatisticsMenuCurrency)
             1 -> (holder as ChartModeViewHolder).bind(menuItems[position] as StatisticsMenuChartMode)
