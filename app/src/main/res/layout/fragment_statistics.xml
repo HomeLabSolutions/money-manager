@@ -104,19 +104,20 @@
         android:id="@+id/statistics_menu_rv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:visibility="gone"
-        android:layout_marginEnd="@dimen/standard_right_margin"
-        app:layout_constraintTop_toBottomOf="@+id/statistics_day"
         android:layout_marginStart="@dimen/standard_left_margin"
-        tools:listitem="@layout/item_statistics_menu"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="@dimen/standard_right_margin"
+        android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@+id/statistics_menu"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statistics_day"
+        tools:listitem="@layout/item_statistics_menu"
         tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/statistics_barrier"
-        android:layout_width="0dp"
+        android:layout_width="1dp"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
         app:constraint_referenced_ids="statistics_menu_rv,statistics_menu" />
@@ -185,5 +186,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/statistics_barrier" />
+        app:layout_constraintTop_toBottomOf="@+id/statistics_day" />
 </androidx.constraintlayout.widget.ConstraintLayout>
