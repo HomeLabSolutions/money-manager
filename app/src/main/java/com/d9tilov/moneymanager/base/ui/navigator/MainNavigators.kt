@@ -56,6 +56,7 @@ interface IncomeExpenseNavigator : BaseNavigator
 interface ProfileNavigator : BaseNavigator
 
 interface StatisticsNavigator : BaseNavigator
+interface StatisticsDetailsNavigator : BaseNavigator
 
 interface RemoveTransactionDialogNavigator : BaseNavigator {
     fun remove()

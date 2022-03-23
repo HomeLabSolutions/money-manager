@@ -20,6 +20,15 @@ interface TransactionInteractor : Interactor {
         inStatistics: Boolean,
         onlySubcategories: Boolean
     ): Flow<List<TransactionChartModel>>
+
+    suspend fun getTransactionsByCategory(
+        type: TransactionType,
+        category: Category,
+        from: LocalDateTime,
+        to: LocalDateTime,
+        inStatistics: Boolean
+    ): List<Transaction>
+
     fun getTransactionById(id: Long): Flow<Transaction>
     fun getTransactionsByType(type: TransactionType): Flow<PagingData<Transaction>>
     fun ableToSpendToday(): Flow<BigDecimal>

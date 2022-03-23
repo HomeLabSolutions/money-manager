@@ -36,11 +36,24 @@ interface TransactionDao {
     @Query("SELECT * FROM transactions WHERE clientId =:uid AND categoryId =:categoryId")
     fun getByCategoryId(uid: String, categoryId: Long): Flow<List<TransactionDbModel>>
 
+    @Query("SELECT * FROM transactions WHERE clientId =:uid AND categoryId =:categoryId AND date >= :from AND date <= :to")
+    fun getByCategoryIdInPeriod(
+        uid: String,
+        categoryId: Long,
+        from: LocalDateTime,
+        to: LocalDateTime,
+    ): Flow<List<TransactionDbModel>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(transaction: TransactionDbModel)
 
     @Query("SELECT count(*) FROM transactions WHERE clientId=:uid AND type=:type AND date >= :from AND date <= :to")
-    suspend fun getItemsCountInDay(uid: String, type: TransactionType, from: LocalDateTime, to: LocalDateTime): Int
+    suspend fun getItemsCountInDay(
+        uid: String,
+        type: TransactionType,
+        from: LocalDateTime,
+        to: LocalDateTime
+    ): Int
 
     @Query("SELECT count(*) FROM transactions WHERE clientId=:uid AND currency=:code")
     suspend fun getCountByCurrencyCode(uid: String, code: String): Int

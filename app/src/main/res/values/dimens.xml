@@ -90,6 +90,7 @@
     <dimen name="statistics_menu_item_icon_size">32dp</dimen>
     <dimen name="statistics_menu_item_text_size">12sp</dimen>
     <dimen name="statistics_currency_icon_size">25sp</dimen>
+    <dimen name="statistics_details_date_text_size">10sp</dimen>
 
     <dimen name="income_expense_info_sum_text_size">16sp</dimen>
     <dimen name="income_expense_info_sign_text_size">10sp</dimen>

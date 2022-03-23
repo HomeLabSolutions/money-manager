@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.statistics.ui.diff
+package com.d9tilov.moneymanager.statistics.ui.recycler.diff
 
 import androidx.recyclerview.widget.DiffUtil
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel

@@ -87,13 +87,31 @@ class TransactionLocalSource(
         }
     }
 
-    override fun getByCategory(category: Category): Flow<List<TransactionDataModel>> {
+    override fun getAllByCategory(category: Category): Flow<List<TransactionDataModel>> {
         val currentUserId = preferencesStore.uid
         return if (currentUserId == null) {
             throw WrongUidException()
         } else {
             transactionDao.getByCategoryId(currentUserId, category.id)
                 .map { list -> list.map { item -> item.toDataModel() } }
+        }
+    }
+
+    override fun getByCategoryInPeriod(
+        category: Category,
+        from: LocalDateTime,
+        to: LocalDateTime,
+        onlyInStatistics: Boolean
+    ): Flow<List<TransactionDataModel>> {
+        val currentUserId = preferencesStore.uid
+        return if (currentUserId == null) {
+            throw WrongUidException()
+        } else {
+            transactionDao.getByCategoryIdInPeriod(currentUserId, category.id, from, to)
+                .map { list ->
+                    list.map { item -> item.toDataModel() }
+                        .filter { if (onlyInStatistics) it.inStatistics else true }
+                }
         }
     }
 

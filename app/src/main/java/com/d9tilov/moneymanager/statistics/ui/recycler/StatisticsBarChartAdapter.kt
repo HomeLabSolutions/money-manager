@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.statistics.ui
+package com.d9tilov.moneymanager.statistics.ui.recycler
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,17 +7,20 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
 import com.d9tilov.moneymanager.R
+import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.core.util.removeScale
 import com.d9tilov.moneymanager.databinding.ItemStatisticsBarChartBinding
-import com.d9tilov.moneymanager.statistics.ui.diff.StatisticsBarCharDiffUtils
+import com.d9tilov.moneymanager.statistics.ui.recycler.diff.StatisticsBarCharDiffUtils
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
 import java.math.RoundingMode
 
 class StatisticsBarChartAdapter :
     RecyclerView.Adapter<StatisticsBarChartAdapter.StatisticsBarChartViewHolder>() {
+
+    var transactionClickListener: OnItemClickListener<TransactionChartModel>? = null
 
     private var data = mutableListOf<TransactionChartModel>()
 
@@ -35,7 +38,14 @@ class StatisticsBarChartAdapter :
                 parent,
                 false
             )
-        return StatisticsBarChartViewHolder(viewBinding)
+        val viewHolder = StatisticsBarChartViewHolder(viewBinding)
+        viewBinding.root.setOnClickListener {
+            val adapterPosition = viewHolder.bindingAdapterPosition
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                transactionClickListener?.onItemClick(data[adapterPosition], adapterPosition)
+            }
+        }
+        return viewHolder
     }
 
     override fun onBindViewHolder(holder: StatisticsBarChartViewHolder, position: Int) {

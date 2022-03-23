@@ -1,15 +1,15 @@
-package com.d9tilov.moneymanager.statistics.ui.diff
+package com.d9tilov.moneymanager.statistics.ui.recycler.diff
 
 import androidx.recyclerview.widget.DiffUtil
-import com.d9tilov.moneymanager.statistics.domain.BaseStatisticsMenuType
+import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 
-class StatisticsMenuItemDiffUtils(
-    private val oldData: List<BaseStatisticsMenuType>,
-    private val newData: List<BaseStatisticsMenuType>,
+class StatisticsDetailsDiffUtils(
+    private val oldData: List<Transaction>,
+    private val newData: List<Transaction>,
 ) : DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-        oldData[oldItemPosition].menuType == newData[newItemPosition].menuType
+        oldData[oldItemPosition].id == newData[newItemPosition].id
 
     override fun getOldListSize() = oldData.size
     override fun getNewListSize() = newData.size

@@ -25,7 +25,14 @@ interface TransactionSource {
         withRegular: Boolean
     ): Flow<List<TransactionDataModel>>
 
-    fun getByCategory(category: Category): Flow<List<TransactionDataModel>>
+    fun getAllByCategory(category: Category): Flow<List<TransactionDataModel>>
+    fun getByCategoryInPeriod(
+        category: Category,
+        from: LocalDateTime,
+        to: LocalDateTime,
+        onlyInStatistics: Boolean,
+    ): Flow<List<TransactionDataModel>>
+
     suspend fun getCountByCurrencyCode(code: String): Int
     suspend fun update(transaction: TransactionDataModel)
     suspend fun remove(transaction: TransactionDataModel)

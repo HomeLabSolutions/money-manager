@@ -133,6 +133,26 @@ class TransactionInteractorImpl(
             }
     }
 
+    override suspend fun getTransactionsByCategory(
+        type: TransactionType,
+        category: Category,
+        from: LocalDateTime,
+        to: LocalDateTime,
+        inStatistics: Boolean
+    ): List<Transaction> {
+        val categoryList: List<Category> = category.children.ifEmpty { listOf(category) }
+        return categoryList.flatMap { item: Category ->
+            transactionRepo.getByCategoryInPeriod(item, from, to, inStatistics)
+                .first()
+                .map { tr: TransactionDataModel ->
+                    val foundCategory =
+                        categoryList.find { listItem -> tr.categoryId == listItem.id }
+                            ?: throw CategoryNotFoundException("Not found category with id: ${tr.categoryId}")
+                    tr.toDomainModel(foundCategory)
+                }
+        }
+    }
+
     override fun getTransactionById(id: Long): Flow<Transaction> {
         return transactionRepo.getTransactionById(id)
             .map { transactionDataModel ->
@@ -553,7 +573,7 @@ class TransactionInteractorImpl(
     }
 
     override fun removeAllByCategory(category: Category): Flow<Int> {
-        return transactionRepo.getByCategory(category)
+        return transactionRepo.getAllByCategory(category)
             .map { list: List<TransactionDataModel> ->
                 list.forEach { tr -> removeTransaction(tr.toDomainModel(category)) }
                 list.size

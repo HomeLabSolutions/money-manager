@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.statistics.ui
+package com.d9tilov.moneymanager.statistics.ui.recycler
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -17,7 +17,7 @@ import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuCurrency
 import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuInStatistics
 import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuTransactionType
 import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuType
-import com.d9tilov.moneymanager.statistics.ui.diff.StatisticsMenuItemDiffUtils
+import com.d9tilov.moneymanager.statistics.ui.recycler.diff.StatisticsMenuItemDiffUtils
 
 class StatisticsMenuAdapter : RecyclerView.Adapter<BaseViewHolder>() {
 

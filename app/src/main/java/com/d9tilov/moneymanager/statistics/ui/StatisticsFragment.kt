@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
 import androidx.recyclerview.widget.SnapHelper
@@ -24,6 +25,7 @@ import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.currentDate
 import com.d9tilov.moneymanager.core.util.currentDateTime
 import com.d9tilov.moneymanager.core.util.getEndOfDay
+import com.d9tilov.moneymanager.core.util.getStartOfDay
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.isSameDay
 import com.d9tilov.moneymanager.core.util.show
@@ -44,7 +46,10 @@ import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod.DAY
 import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod.MONTH
 import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod.WEEK
 import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod.YEAR
+import com.d9tilov.moneymanager.statistics.ui.recycler.StatisticsBarChartAdapter
+import com.d9tilov.moneymanager.statistics.ui.recycler.StatisticsMenuAdapter
 import com.d9tilov.moneymanager.statistics.vm.StatisticsViewModel
+import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.data.Entry
@@ -85,6 +90,22 @@ class StatisticsFragment :
     private var showMenu = false
     private val hideMenuHandler = Handler(Looper.getMainLooper())
 
+    private val onTransactionClickListener =
+        object : OnItemClickListener<TransactionChartModel> {
+            override fun onItemClick(item: TransactionChartModel, position: Int) {
+                val action = StatisticsFragmentDirections.toStatisticsDetailsDest(
+                    item.category,
+                    viewModel.from.getStartOfDay().toMillis(),
+                    viewModel.to.getStartOfDay().toMillis(),
+                    viewModel.inStatistics == StatisticsMenuInStatistics.IN_STATISTICS,
+                    when (viewModel.transactionType) {
+                        StatisticsMenuTransactionType.EXPENSE -> TransactionType.EXPENSE
+                        StatisticsMenuTransactionType.INCOME -> TransactionType.INCOME
+                    }
+                )
+                findNavController().navigate(action)
+            }
+        }
     private val onCharMenuItemClickListener =
         object : OnItemClickListener<StatisticsMenuChartMode> {
             override fun onItemClick(item: StatisticsMenuChartMode, position: Int) {
@@ -130,6 +151,7 @@ class StatisticsFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.hide()
+        statisticsBarChartAdapter.transactionClickListener = onTransactionClickListener
         statisticsMenuAdapter.chartMenuItemClickListener = onCharMenuItemClickListener
         statisticsMenuAdapter.currencyMenuItemClickListener = onCurrencyMenuItemClickListener
         statisticsMenuAdapter.inStatisticsMenuItemClickListener =

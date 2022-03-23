@@ -32,8 +32,15 @@ class TransactionDataRepo(private val transactionSource: TransactionSource) : Tr
     ): Flow<List<TransactionDataModel>> =
         transactionSource.getAllByTypeInPeriod(from, to, transactionType, onlyInStatistics, withRegular)
 
-    override fun getByCategory(category: Category): Flow<List<TransactionDataModel>> =
-        transactionSource.getByCategory(category)
+    override fun getAllByCategory(category: Category): Flow<List<TransactionDataModel>> =
+        transactionSource.getAllByCategory(category)
+
+    override fun getByCategoryInPeriod(
+        category: Category,
+        from: LocalDateTime,
+        to: LocalDateTime,
+        inStatistics: Boolean
+    ): Flow<List<TransactionDataModel>> = transactionSource.getByCategoryInPeriod(category, from, to, inStatistics)
 
     override suspend fun getCountByCurrencyCode(code: String): Int =
         transactionSource.getCountByCurrencyCode(code)
