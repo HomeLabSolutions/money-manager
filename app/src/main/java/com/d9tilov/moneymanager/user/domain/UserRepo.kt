@@ -6,13 +6,12 @@ import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepo {
-    fun getUser(): Flow<UserProfile>
+    fun getCurrentUser(): Flow<UserProfile>
     fun getBackupData(): Flow<BackupData>
-    suspend fun getCurrentCurrency(): String
     suspend fun showPrepopulate(): Boolean
     suspend fun getFiscalDay(): Int
-    suspend fun createUser(entity: UserProfile): UserProfile
-    suspend fun updateUser(entity: UserProfile)
+    suspend fun create(entity: UserProfile): UserProfile
+    suspend fun update(entity: UserProfile)
     suspend fun backup(): Result<Nothing>
-    suspend fun deleteUser()
+    suspend fun delete()
 }

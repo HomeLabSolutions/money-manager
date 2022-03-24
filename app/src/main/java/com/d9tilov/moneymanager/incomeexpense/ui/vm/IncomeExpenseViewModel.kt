@@ -9,7 +9,6 @@ import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
-import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +18,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class IncomeExpenseViewModel @Inject constructor(
-    private val userInteractor: UserInteractor,
     private val transactionInteractor: TransactionInteractor,
     private val currencyInteractor: CurrencyInteractor
 ) :
@@ -31,7 +29,9 @@ class IncomeExpenseViewModel @Inject constructor(
     }
 
     init {
-        viewModelScope.launch { currencyCodeStr.value = userInteractor.getCurrentCurrency() }
+        viewModelScope.launch {
+            currencyCodeStr.value = currencyInteractor.getCurrentCurrency().code
+        }
         viewModelScope.launch(Dispatchers.IO + updateCurrencyExceptionHandler) {
             currencyInteractor.updateCurrencyRates()
         }
@@ -46,7 +46,9 @@ class IncomeExpenseViewModel @Inject constructor(
     }
 
     fun setDefaultCurrencyCode() {
-        viewModelScope.launch { currencyCodeStr.value = userInteractor.getCurrentCurrency() }
+        viewModelScope.launch {
+            currencyCodeStr.value = currencyInteractor.getCurrentCurrency().code
+        }
     }
 
     fun getCurrencyCode(): LiveData<String> = currencyCodeStr

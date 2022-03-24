@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.currency.data
 
+import com.d9tilov.moneymanager.base.data.local.preferences.CurrencyMetaData
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.currency.data.entity.Currency
 import com.d9tilov.moneymanager.currency.data.local.CurrencySource
@@ -27,6 +28,8 @@ class CurrencyDataRepo(
             list
         }
     }
+
+    override fun getCurrentCurrency(): CurrencyMetaData = preferencesStore.getCurrentCurrency()
 
     override suspend fun getCurrencyByCode(code: String): Currency =
         currencySource.getCurrencyByCode(code)

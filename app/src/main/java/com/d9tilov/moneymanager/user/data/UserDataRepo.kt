@@ -7,27 +7,24 @@ import com.d9tilov.moneymanager.user.data.local.UserSource
 import com.d9tilov.moneymanager.user.domain.UserRepo
 import kotlinx.coroutines.flow.Flow
 
-class UserDataRepo(
-    private val userLocalSource: UserSource
-) : UserRepo {
+class UserDataRepo(private val userLocalSource: UserSource) : UserRepo {
 
-    override fun getUser(): Flow<UserProfile> = userLocalSource.getCurrentUser()
-    override suspend fun getCurrentCurrency(): String = userLocalSource.getCurrentCurrency()
+    override fun getCurrentUser(): Flow<UserProfile> = userLocalSource.getCurrentUser()
     override fun getBackupData(): Flow<BackupData> = userLocalSource.getBackupData()
 
     override suspend fun showPrepopulate(): Boolean = userLocalSource.showPrepopulate()
     override suspend fun getFiscalDay(): Int = userLocalSource.getFiscalDay()
 
-    override suspend fun createUser(entity: UserProfile): UserProfile =
+    override suspend fun create(entity: UserProfile): UserProfile =
         userLocalSource.createUserOrRestore(entity)
 
-    override suspend fun updateUser(entity: UserProfile) {
+    override suspend fun update(entity: UserProfile) {
         userLocalSource.updateCurrentUser(entity)
     }
 
     override suspend fun backup(): Result<Nothing> = userLocalSource.backupUser()
 
-    override suspend fun deleteUser() {
+    override suspend fun delete() {
         userLocalSource.deleteUser()
     }
 }

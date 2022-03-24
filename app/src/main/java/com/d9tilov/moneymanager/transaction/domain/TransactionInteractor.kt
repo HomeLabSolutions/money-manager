@@ -39,7 +39,6 @@ interface TransactionInteractor : Interactor {
     fun getApproxSumTodayCurrentCurrency(type: TransactionType): Flow<BigDecimal>
     fun removeAllByCategory(category: Category): Flow<Int>
     suspend fun addTransaction(transaction: Transaction)
-    suspend fun getCurrentCurrencyCode(): String
     suspend fun executeRegularIfNeeded(type: TransactionType)
     suspend fun update(transaction: Transaction)
     suspend fun removeTransaction(transaction: Transaction)

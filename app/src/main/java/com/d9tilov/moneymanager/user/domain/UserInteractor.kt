@@ -11,11 +11,11 @@ interface UserInteractor : Interactor {
 
     fun getCurrentUser(): Flow<UserProfile>
     fun getBackupData(): Flow<BackupData>
-    suspend fun getCurrentCurrency(): String
     suspend fun showPrepopulate(): Boolean
     suspend fun getFiscalDay(): Int
     suspend fun createUser(user: FirebaseUser?): UserProfile
     suspend fun updateUser(userProfile: UserProfile)
+    suspend fun updateCurrency(code: String)
     suspend fun backup(): Result<Nothing>
     suspend fun deleteUser()
 }

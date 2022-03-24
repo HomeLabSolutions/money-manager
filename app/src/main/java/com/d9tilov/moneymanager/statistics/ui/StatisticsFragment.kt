@@ -186,10 +186,7 @@ class StatisticsFragment :
             )
             viewBinding?.statisticsBarChart?.scrollToPosition(0)
         }
-        viewModel.currency.observe(viewLifecycleOwner) { code ->
-            viewModel.updateCurrency(code)
-            statisticsMenuAdapter.updateItems(viewModel.menuItemList)
-        }
+        statisticsMenuAdapter.updateItems(viewModel.menuItemList)
     }
 
     override fun onStop() {

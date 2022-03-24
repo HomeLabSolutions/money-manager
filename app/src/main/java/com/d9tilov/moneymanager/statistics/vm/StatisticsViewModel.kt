@@ -2,11 +2,10 @@ package com.d9tilov.moneymanager.statistics.vm
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsNavigator
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
+import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.statistics.domain.BaseStatisticsMenuType
 import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuCategoryType
 import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuChartMode
@@ -20,35 +19,32 @@ import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class StatisticsViewModel @Inject constructor(private val transactionInteractor: TransactionInteractor) :
-    BaseViewModel<StatisticsNavigator>() {
+class StatisticsViewModel @Inject constructor(
+    private val transactionInteractor: TransactionInteractor,
+    currencyInteractor: CurrencyInteractor
+) : BaseViewModel<StatisticsNavigator>() {
 
-    val currency: LiveData<String> =
-        flow { emit(transactionInteractor.getCurrentCurrencyCode()) }.flowOn(Dispatchers.IO)
-            .asLiveData()
     private val transactionsLiveData = MutableLiveData<List<TransactionChartModel>>()
 
+    private val currencyCode = currencyInteractor.getCurrentCurrency().code
     var chartMode: StatisticsMenuChartMode = StatisticsMenuChartMode.PIE_CHART
         private set
     var chartPeriod: StatisticsPeriod = StatisticsPeriod.DAY
         private set
     var inStatistics: StatisticsMenuInStatistics = StatisticsMenuInStatistics.IN_STATISTICS
         private set
-    var currencyType: StatisticsMenuCurrency = StatisticsMenuCurrency.CURRENT(DEFAULT_CURRENCY_CODE)
+    var currencyType: StatisticsMenuCurrency = StatisticsMenuCurrency.CURRENT(currencyCode)
         private set
     var transactionType: StatisticsMenuTransactionType = StatisticsMenuTransactionType.EXPENSE
         private set
     var categoryType: StatisticsMenuCategoryType = StatisticsMenuCategoryType.CHILD
         private set
-
-    var currencyCode: String = DEFAULT_CURRENCY_CODE
 
     val menuItemList = mutableListOf(
         currencyType,
@@ -58,17 +54,11 @@ class StatisticsViewModel @Inject constructor(private val transactionInteractor:
         inStatistics
     )
 
-    fun updateCurrency(currencyCode: String? = null) {
-        if (currencyCode == null) {
-            currencyType = when (currencyType) {
-                StatisticsMenuCurrency.DEFAULT -> StatisticsMenuCurrency.CURRENT(this.currencyCode)
-                is StatisticsMenuCurrency.CURRENT -> StatisticsMenuCurrency.DEFAULT
-            }
-        } else {
-            this.currencyCode = currencyCode
-            currencyType = StatisticsMenuCurrency.CURRENT(currencyCode)
+    fun updateCurrency() {
+        currencyType = when (currencyType) {
+            StatisticsMenuCurrency.DEFAULT -> StatisticsMenuCurrency.CURRENT(this.currencyCode)
+            is StatisticsMenuCurrency.CURRENT -> StatisticsMenuCurrency.DEFAULT
         }
-        updateItemInList(currencyType, 0)
         update()
     }
 

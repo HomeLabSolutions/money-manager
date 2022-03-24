@@ -6,7 +6,6 @@ import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.category.exception.CategoryNotFoundException
-import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.util.countDaysRemainingNextFiscalDate
 import com.d9tilov.moneymanager.core.util.currentDate
@@ -76,9 +75,6 @@ class TransactionInteractorImpl(
         )
         budgetInteractor.update(budget.copy(sum = budgetSum))
     }
-
-    override suspend fun getCurrentCurrencyCode(): String =
-        currencyInteractor.getCurrentCurrencyCode()
 
     override fun getTransactionsGroupedByCategory(
         type: TransactionType,
@@ -314,11 +310,10 @@ class TransactionInteractorImpl(
                 endDate,
                 type
             ).map { list ->
-                val currentCurrency = userInteractor.getCurrentCurrency()
                 val currencies = mutableSetOf<String>()
                 list.forEach { tr -> currencies.add(tr.currencyCode) }
-                val currencyCode = userInteractor.getCurrentCurrency()
-                if ((currencies.size == 1 && currencies.contains(currencyCode)) || currentCurrency == DataConstants.DEFAULT_CURRENCY_CODE) BigDecimal.ZERO
+                val currencyCode = currencyInteractor.getCurrentCurrency().code
+                if ((currencies.size == 1 && currencies.contains(currencyCode)) || currencyCode == DEFAULT_CURRENCY_CODE) BigDecimal.ZERO
                 else list.sumOf { it.usdSum }
             }
         }
@@ -369,11 +364,10 @@ class TransactionInteractorImpl(
             currentDateTime().getEndOfDay(),
             type
         ).map { list ->
-            val currentCurrency = userInteractor.getCurrentCurrency()
             val currencies = mutableSetOf<String>()
             list.forEach { tr -> currencies.add(tr.currencyCode) }
-            val currencyCode = userInteractor.getCurrentCurrency()
-            if ((currencies.size == 1 && currencies.contains(currencyCode)) || currentCurrency == DataConstants.DEFAULT_CURRENCY_CODE) BigDecimal.ZERO
+            val currencyCode = currencyInteractor.getCurrentCurrency().code
+            if ((currencies.size == 1 && currencies.contains(currencyCode)) || currencyCode == DEFAULT_CURRENCY_CODE) BigDecimal.ZERO
             else list.sumOf { it.usdSum }
         }
 
@@ -386,7 +380,7 @@ class TransactionInteractorImpl(
                 endDate,
                 type
             ).map { list ->
-                val currentCurrency = userInteractor.getCurrentCurrency()
+                val currentCurrency = currencyInteractor.getCurrentCurrency().code
                 list.sumOf { tr ->
                     if (tr.currencyCode == currentCurrency) {
                         tr.sum
@@ -405,7 +399,7 @@ class TransactionInteractorImpl(
             currentDateTime().getEndOfDay(),
             type
         ).map { list ->
-            val currentCurrency = userInteractor.getCurrentCurrency()
+            val currentCurrency = currencyInteractor.getCurrentCurrency().code
             list.sumOf { tr ->
                 if (tr.currencyCode == currentCurrency) {
                     tr.sum

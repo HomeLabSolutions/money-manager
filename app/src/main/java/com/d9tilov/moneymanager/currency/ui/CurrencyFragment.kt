@@ -57,10 +57,10 @@ class CurrencyFragment :
         override fun onItemClick(item: DomainCurrency, position: Int) {
             when (destination ?: CurrencyDestination.PREPOPULATE_SCREEN) {
                 CurrencyDestination.PREPOPULATE_SCREEN -> {
-                    viewModel.updateCurrentCurrency(item)
+                    viewModel.changeCurrency(item)
                 }
                 CurrencyDestination.PROFILE_SCREEN_CURRENT -> {
-                    viewModel.updateCurrentCurrency(item)
+                    viewModel.changeCurrency(item)
                     findNavController().popBackStack()
                 }
                 CurrencyDestination.EDIT_TRANSACTION_SCREEN,

@@ -8,6 +8,7 @@ import com.d9tilov.moneymanager.budget.data.local.BudgetSource
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractorImpl
 import com.d9tilov.moneymanager.budget.domain.BudgetRepo
+import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.Module
 import dagger.Provides
@@ -21,9 +22,10 @@ class BudgetModule {
     @Provides
     fun provideBudgetInteractor(
         budgetRepo: BudgetRepo,
-        userInteractor: UserInteractor
+        userInteractor: UserInteractor,
+        currencyInteractor: CurrencyInteractor
     ): BudgetInteractor =
-        BudgetInteractorImpl(budgetRepo, userInteractor)
+        BudgetInteractorImpl(budgetRepo, userInteractor, currencyInteractor)
 
     @Provides
     fun provideBudgetLocalSource(

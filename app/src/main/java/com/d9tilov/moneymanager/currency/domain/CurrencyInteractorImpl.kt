@@ -1,46 +1,36 @@
 package com.d9tilov.moneymanager.currency.domain
 
-import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
+import com.d9tilov.moneymanager.base.data.local.preferences.CurrencyMetaData
 import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.util.divideBy
 import com.d9tilov.moneymanager.currency.data.entity.Currency
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.domain.mapper.CurrencyDomainMapper
-import com.d9tilov.moneymanager.user.domain.UserInteractor
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import timber.log.Timber
 import java.math.BigDecimal
 import java.util.Calendar
 
 class CurrencyInteractorImpl(
     private val currencyRepo: CurrencyRepo,
-    private val userInteractor: UserInteractor,
-    private val domainMapper: CurrencyDomainMapper,
-    private val budgetInteractor: BudgetInteractor,
+    private val domainMapper: CurrencyDomainMapper
 ) : CurrencyInteractor {
 
     override fun getCurrencies(): Flow<List<DomainCurrency>> {
-        return flow { emit(userInteractor.getCurrentCurrency()) }
+        return flow { emit(currencyRepo.getCurrentCurrency()) }
             .flatMapConcat { baseCurrency ->
                 currencyRepo.getCurrencies()
                     .map { list ->
                         list.map { item ->
-                            domainMapper.toDomain(
-                                item,
-                                baseCurrency == item.code
-                            )
+                            domainMapper.toDomain(item, baseCurrency.code == item.code)
                         }
                     }
             }
     }
 
-    override suspend fun getCurrentCurrencyCode(): String = userInteractor.getCurrentCurrency()
+    override fun getCurrentCurrency(): CurrencyMetaData = currencyRepo.getCurrentCurrency()
 
     override suspend fun getCurrencyByCode(code: String): Currency =
         currencyRepo.getCurrencyByCode(code)
@@ -49,9 +39,9 @@ class CurrencyInteractorImpl(
         amount: BigDecimal,
         currencyCode: String
     ): BigDecimal {
-        val mainCurrencyCode = getCurrentCurrencyCode()
-        if (currencyCode == mainCurrencyCode) return amount
-        val mainCurrency = getCurrencyByCode(mainCurrencyCode)
+        val mainCurrencyCode = getCurrentCurrency()
+        if (currencyCode == mainCurrencyCode.code) return amount
+        val mainCurrency = getCurrencyByCode(mainCurrencyCode.code)
         val currentCurrency = getCurrencyByCode(currencyCode)
         val c = Calendar.getInstance()
         c.timeInMillis = mainCurrency.lastUpdateTime
@@ -79,20 +69,5 @@ class CurrencyInteractorImpl(
 
     override suspend fun updateCurrentCurrency(currency: DomainCurrency) {
         currencyRepo.updateCurrentCurrency(domainMapper.toDataModel(currency))
-        val user = userInteractor.getCurrentUser().first()
-        userInteractor.updateUser(user.copy(currentCurrencyCode = currency.code))
-        budgetInteractor.get()
-            .catch { Timber.d("Can't update non-created budget") }
-            .collect { budget ->
-                val newAmount = toMainCurrency(budget.sum, budget.currencyCode)
-                val newSavedAmount = toMainCurrency(budget.saveSum, budget.currencyCode)
-                budgetInteractor.update(
-                    budget.copy(
-                        sum = newAmount,
-                        saveSum = newSavedAmount,
-                        currencyCode = currency.code
-                    )
-                )
-            }
     }
 }
