@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.statistics.vm
 
-import androidx.core.util.Pair
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
@@ -8,10 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsNavigator
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
-import com.d9tilov.moneymanager.core.util.currentDate
-import com.d9tilov.moneymanager.core.util.currentDateTime
-import com.d9tilov.moneymanager.core.util.getEndOfDay
-import com.d9tilov.moneymanager.core.util.getStartOfDay
 import com.d9tilov.moneymanager.statistics.domain.BaseStatisticsMenuType
 import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuCategoryType
 import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuChartMode
@@ -29,9 +24,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.minus
 import javax.inject.Inject
 
 @HiltViewModel
@@ -57,10 +49,6 @@ class StatisticsViewModel @Inject constructor(private val transactionInteractor:
         private set
 
     var currencyCode: String = DEFAULT_CURRENCY_CODE
-    var from: LocalDateTime = currentDateTime().getStartOfDay()
-        private set
-    var to: LocalDateTime = currentDateTime().getEndOfDay()
-        private set
 
     val menuItemList = mutableListOf(
         currencyType,
@@ -84,26 +72,8 @@ class StatisticsViewModel @Inject constructor(private val transactionInteractor:
         update()
     }
 
-    fun updatePeriod(
-        period: StatisticsPeriod,
-        periodPair: Pair<LocalDateTime, LocalDateTime>? = null
-    ) {
+    fun updatePeriod(period: StatisticsPeriod) {
         chartPeriod = period
-        if (periodPair == null) {
-            val toCurrentDate = currentDate()
-            val fromCurrentDate = when (chartPeriod) {
-                StatisticsPeriod.DAY -> toCurrentDate
-                StatisticsPeriod.WEEK -> toCurrentDate.minus(1, DateTimeUnit.WEEK)
-                StatisticsPeriod.MONTH -> toCurrentDate.minus(1, DateTimeUnit.MONTH)
-                StatisticsPeriod.YEAR -> toCurrentDate.minus(1, DateTimeUnit.YEAR)
-                StatisticsPeriod.CUSTOM -> throw IllegalArgumentException("Wrong period type with nullable period pair")
-            }
-            this.from = fromCurrentDate.getStartOfDay()
-            this.to = toCurrentDate.getEndOfDay()
-        } else {
-            this.from = periodPair.first?.getStartOfDay() ?: currentDateTime().getStartOfDay()
-            this.to = periodPair.second?.getEndOfDay() ?: currentDateTime().getEndOfDay()
-        }
         update()
     }
 
@@ -150,8 +120,8 @@ class StatisticsViewModel @Inject constructor(private val transactionInteractor:
                     StatisticsMenuTransactionType.EXPENSE -> TransactionType.EXPENSE
                     StatisticsMenuTransactionType.INCOME -> TransactionType.INCOME
                 },
-                from.getStartOfDay(),
-                to.getEndOfDay(),
+                chartPeriod.from,
+                chartPeriod.to,
                 currencyType.currencyCode,
                 inStatistics == StatisticsMenuInStatistics.IN_STATISTICS,
                 categoryType == StatisticsMenuCategoryType.CHILD
