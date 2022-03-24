@@ -98,7 +98,7 @@ class RegularTransactionCreationFragment :
             localTransaction = localTransaction?.copy(
                 executionPeriod = ExecutionPeriod.EveryMonth(
                     dayOfMonth,
-                    currentDateTime()
+                    currentDateTime().getStartOfDay()
                 )
             )
             viewBinding?.createdRegularTransactionRepeatStartsDate?.text =
