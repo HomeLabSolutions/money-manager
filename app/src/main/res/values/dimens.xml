@@ -43,7 +43,9 @@
 
     <dimen name="button_height">56dp</dimen>
     <dimen name="button_prepopulate_height">36dp</dimen>
+
     <dimen name="transaction_sum_title_text_size">12sp</dimen>
+    <dimen name="transaction_meta_icon_size">12dp</dimen>
 
     <dimen name="item_color_picker_size_wrapper">48dp</dimen>
     <dimen name="item_color_picker_size">32dp</dimen>

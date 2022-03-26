@@ -124,6 +124,7 @@ class TransactionAdapter :
                     )
                 )
                 if (transaction.isRegular) itemTransactionRegularIcon.show() else itemTransactionRegularIcon.hide()
+                if (!transaction.inStatistics) itemTransactionStatisticsIcon.show() else itemTransactionStatisticsIcon.hide()
                 val description = transaction.description
                 itemTransactionDescription.text = transaction.description
                 if (description.isNotEmpty()) {
