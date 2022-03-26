@@ -44,11 +44,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:lineBarWidth="@dimen/goal_progress_line_bar_width"
         app:lineProgressColor="@color/goal_active_progress_line_color"
-        app:percentTextColor="@color/goal_percent_text_color"
-        app:percentTextSize="@dimen/goal_progress_percent_text_size"
-        app:underLineColor="@android:color/transparent"
-        app:valueTextColor="@color/goal_value_text_color"
-        app:valueTextSize="@dimen/goal_value_text_size" />
+        app:underLineColor="@android:color/transparent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/item_statistics_vertical_guideline"

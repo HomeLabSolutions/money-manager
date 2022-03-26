@@ -46,7 +46,7 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
             supportFragmentManager.findFragmentById(R.id.prepopulate_nav_host_container) as NavHostFragment
         val navController = navHostFragment.navController
         updateProgress(0)
-        navController.addOnDestinationChangedListener { controller, destination, _ ->
+        navController.addOnDestinationChangedListener { _, destination, _ ->
             setControlsVisibility(!fullScreenDestinationSet.contains(destination.id))
             enableBackButton(destination.id != R.id.choose_currency_dest)
         }
@@ -110,13 +110,18 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
         val typedValue = TypedValue()
         resources.getValue(R.dimen.alpha_disable, typedValue, true)
         val disableValue = typedValue.float
-        viewBinding.prepopulateBackBtn.alpha =
-            if (enable) 1f else disableValue
+        viewBinding.prepopulateBackBtn.alpha = if (enable) 1f else disableValue
     }
 
     private fun updateProgress(progress: Int) {
+        val newProgress = progress + 1f
+        viewBinding.prepopulateProgressTitle.text = getString(
+            R.string.prepopulate_progress,
+            newProgress.toInt().toString(),
+            MAX_SCREEN_AMOUNT.toInt().toString()
+        )
         viewBinding.prepopulateProgress.setProgress(
-            progress + 1f,
+            newProgress,
             MAX_SCREEN_AMOUNT
         )
     }

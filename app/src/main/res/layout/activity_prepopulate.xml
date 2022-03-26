@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent">
 
     <androidx.fragment.app.FragmentContainerView
@@ -17,20 +18,29 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/prepopulate_navigation" />
 
+    <TextView
+        android:id="@+id/prepopulate_progress_title"
+        style="?attr/textAppearanceCaption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?attr/colorSecondary"
+        android:padding="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/prepopulate_progress"
+        app:layout_constraintEnd_toEndOf="@+id/prepopulate_progress"
+        tools:text="3/5" />
+
     <com.d9tilov.moneymanager.core.ui.widget.progress.ProgressLine
         android:id="@+id/prepopulate_progress"
         android:layout_width="0dp"
-        android:layout_height="36dp"
+        android:layout_height="4dp"
         android:layout_marginStart="@dimen/standard_left_margin"
         android:layout_marginEnd="@dimen/standard_right_margin"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/prepopulate_next_btn"
+        app:lineBarWidth="4dp"
         app:layout_constraintEnd_toStartOf="@+id/prepopulate_back_btn"
         app:layout_constraintStart_toStartOf="parent"
         app:lineProgressColor="?attr/colorSecondary"
-        app:underLineColor="@color/control_highlight_color"
-        app:valueTextColor="@color/text_primary_color"
-        app:valueTextSize="12sp" />
+        app:underLineColor="@color/control_highlight_color" />
 
     <ImageView
         android:id="@+id/prepopulate_back_btn"

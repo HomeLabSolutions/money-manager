@@ -7,16 +7,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
-import com.d9tilov.moneymanager.core.util.CurrencyUtils.getCurrencySignBy
 import com.d9tilov.moneymanager.databinding.ItemGoalBinding
 import com.d9tilov.moneymanager.goal.domain.entity.Goal
 import com.d9tilov.moneymanager.goal.ui.diff.GoalDiffUtil
 
 class GoalAdapter : RecyclerView.Adapter<GoalAdapter.GoalViewHolder>() {
 
-    private var goals = mutableListOf<Goal>()
     var itemClickListener: OnItemClickListener<Goal>? = null
     var itemSwipeListener: OnItemSwipeListener<Goal>? = null
+    private var goals = mutableListOf<Goal>()
     private var removedItemPosition: Int = 0
 
     init {
@@ -38,7 +37,7 @@ class GoalAdapter : RecyclerView.Adapter<GoalAdapter.GoalViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: GoalViewHolder, position: Int) {
-        holder.bind(goals[position], position)
+        holder.bind(goals[position])
     }
 
     override fun getItemCount() = goals.size
@@ -70,18 +69,12 @@ class GoalAdapter : RecyclerView.Adapter<GoalAdapter.GoalViewHolder>() {
     class GoalViewHolder(private val viewBinding: ItemGoalBinding) :
         BaseViewHolder(viewBinding) {
 
-        fun bind(goal: Goal, position: Int) {
+        fun bind(goal: Goal) {
             viewBinding.itemGoalTitle.text = goal.name
             viewBinding.itemGoalProgress.setProgress(
                 goal.currentSum.toFloat(),
-                goal.targetSum.toFloat(),
-                getCurrencySignBy(goal.currencyCode),
-                DELAY_ANIM_MULTIPLIER * (position + 1)
+                goal.targetSum.toFloat()
             )
-        }
-
-        companion object {
-            private const val DELAY_ANIM_MULTIPLIER = 0L
         }
     }
 }

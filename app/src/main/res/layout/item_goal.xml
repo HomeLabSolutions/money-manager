@@ -43,12 +43,7 @@
             app:layout_constraintTop_toBottomOf="@+id/item_goal_title"
             app:lineBarWidth="@dimen/goal_progress_line_bar_width"
             app:lineProgressColor="@color/goal_active_progress_line_color"
-            app:percentTextColor="@color/goal_percent_text_color"
-            app:percentTextSize="@dimen/goal_progress_percent_text_size"
-            app:showPercent="true"
-            app:underLineColor="@color/goal_default_progress_line_color"
-            app:valueTextColor="@color/goal_value_text_color"
-            app:valueTextSize="@dimen/goal_value_text_size" />
+            app:underLineColor="@color/goal_default_progress_line_color" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
