@@ -45,6 +45,8 @@ class CategoryIconSetAdapter :
         R.drawable.ic_category_doctor3,
         R.drawable.ic_category_electric_train,
         R.drawable.ic_category_electricity,
+        R.drawable.ic_category_electricity2,
+        R.drawable.ic_category_electricity3,
         R.drawable.ic_category_epilation,
         R.drawable.ic_category_fastfood,
         R.drawable.ic_category_food,
