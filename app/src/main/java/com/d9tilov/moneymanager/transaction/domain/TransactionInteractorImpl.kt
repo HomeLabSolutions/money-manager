@@ -15,6 +15,7 @@ import com.d9tilov.moneymanager.core.util.getEndDateOfFiscalPeriod
 import com.d9tilov.moneymanager.core.util.getEndOfDay
 import com.d9tilov.moneymanager.core.util.getStartDateOfFiscalPeriod
 import com.d9tilov.moneymanager.core.util.getStartOfDay
+import com.d9tilov.moneymanager.core.util.isSameDay
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
 import com.d9tilov.moneymanager.regular.domain.entity.ExecutionPeriod
@@ -418,7 +419,7 @@ class TransactionInteractorImpl(
                     PeriodType.DAY -> {
                         var dayIterator = tr.executionPeriod.lastExecutionDateTime.date
                         val listOfSkippedDates = mutableListOf<LocalDate>()
-                        while (dayIterator <= curDay) {
+                        while (dayIterator <= curDay && !curDay.isSameDay(dayIterator)) {
                             dayIterator = dayIterator.plus(1, DateTimeUnit.DAY)
                             listOfSkippedDates.add(dayIterator)
                         }
@@ -451,7 +452,7 @@ class TransactionInteractorImpl(
                         var dayIterator = tr.executionPeriod.lastExecutionDateTime.date
                         val executeDay = (tr.executionPeriod as ExecutionPeriod.EveryWeek).dayOfWeek
                         val listOfSkippedDates = mutableListOf<LocalDate>()
-                        while (dayIterator <= curDay) {
+                        while (dayIterator <= curDay && !curDay.isSameDay(dayIterator)) {
                             dayIterator = dayIterator.plus(1, DateTimeUnit.DAY)
                             if (dayIterator.dayOfWeek.ordinal == executeDay) {
                                 listOfSkippedDates.add(dayIterator)
@@ -488,7 +489,7 @@ class TransactionInteractorImpl(
                         val executeDay =
                             (tr.executionPeriod as ExecutionPeriod.EveryMonth).dayOfMonth
                         val listOfSkippedDates = mutableListOf<LocalDate>()
-                        while (dayIterator <= curDay) {
+                        while (dayIterator <= curDay && !curDay.isSameDay(dayIterator)) {
                             dayIterator = dayIterator.plus(1, DateTimeUnit.DAY)
                             val c = GregorianCalendar(
                                 dayIterator.year,
