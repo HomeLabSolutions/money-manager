@@ -6,6 +6,7 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionLineChartModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
@@ -20,6 +21,14 @@ interface TransactionInteractor : Interactor {
         inStatistics: Boolean,
         onlySubcategories: Boolean
     ): Flow<List<TransactionChartModel>>
+
+    fun getTransactionsGroupedByDate(
+        type: TransactionType,
+        from: LocalDateTime,
+        to: LocalDateTime,
+        currencyCode: String,
+        inStatistics: Boolean
+    ): Flow<Map<LocalDateTime, TransactionLineChartModel>>
 
     suspend fun getTransactionsByCategory(
         type: TransactionType,

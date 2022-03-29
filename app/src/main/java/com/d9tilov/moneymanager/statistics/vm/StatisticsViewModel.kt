@@ -16,12 +16,14 @@ import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionLineChartModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,6 +33,8 @@ class StatisticsViewModel @Inject constructor(
 ) : BaseViewModel<StatisticsNavigator>() {
 
     private val transactionsLiveData = MutableLiveData<List<TransactionChartModel>>()
+    private val periodTransactionsLiveData =
+        MutableLiveData<Map<LocalDateTime, TransactionLineChartModel>>()
 
     private val currencyCode = currencyInteractor.getCurrentCurrency().code
     var chartMode: StatisticsMenuChartMode = StatisticsMenuChartMode.PIE_CHART
@@ -59,6 +63,7 @@ class StatisticsViewModel @Inject constructor(
             StatisticsMenuCurrency.DEFAULT -> StatisticsMenuCurrency.CURRENT(this.currencyCode)
             is StatisticsMenuCurrency.CURRENT -> StatisticsMenuCurrency.DEFAULT
         }
+        updateItemInList(currencyType, 0)
         update()
     }
 
@@ -103,7 +108,14 @@ class StatisticsViewModel @Inject constructor(
         update()
     }
 
-    fun update() {
+    private fun update() {
+        updateTransactions()
+        if (chartMode == StatisticsMenuChartMode.LINE_CHART) {
+            updatePeriodTransactions()
+        }
+    }
+
+    private fun updateTransactions() {
         viewModelScope.launch(Dispatchers.Main) {
             transactionInteractor.getTransactionsGroupedByCategory(
                 when (transactionType) {
@@ -122,9 +134,28 @@ class StatisticsViewModel @Inject constructor(
         }
     }
 
+    private fun updatePeriodTransactions() {
+        viewModelScope.launch(Dispatchers.Main) {
+            transactionInteractor.getTransactionsGroupedByDate(
+                when (transactionType) {
+                    StatisticsMenuTransactionType.EXPENSE -> TransactionType.EXPENSE
+                    StatisticsMenuTransactionType.INCOME -> TransactionType.INCOME
+                },
+                chartPeriod.from,
+                chartPeriod.to,
+                currencyType.currencyCode,
+                inStatistics == StatisticsMenuInStatistics.IN_STATISTICS
+            )
+                .flowOn(Dispatchers.IO)
+                .collect { periodTransactionsLiveData.value = it }
+        }
+    }
+
     private fun updateItemInList(item: BaseStatisticsMenuType, index: Int) {
         menuItemList[index] = item
     }
 
     fun getTransactions(): LiveData<List<TransactionChartModel>> = transactionsLiveData
+    fun getPeriodTransactions(): LiveData<Map<LocalDateTime, TransactionLineChartModel>> =
+        periodTransactionsLiveData
 }

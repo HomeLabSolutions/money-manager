@@ -53,4 +53,6 @@
 
     <color name="info_background">#32FFBD78</color>
 
+    <color name="statistics_line_chart_axis_text_color">#B47DC0</color>
+
 </resources>

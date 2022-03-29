@@ -25,6 +25,7 @@ import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionLineChartModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toChartModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDataModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDomainModel
@@ -126,6 +127,32 @@ class TransactionInteractorImpl(
                                     currencySum.divideBy(sum).multiply(BigDecimal(100))
                                 )
                             }
+                    }
+            }
+    }
+
+    override fun getTransactionsGroupedByDate(
+        type: TransactionType,
+        from: LocalDateTime,
+        to: LocalDateTime,
+        currencyCode: String,
+        inStatistics: Boolean
+    ): Flow<Map<LocalDateTime, TransactionLineChartModel>> {
+        return transactionRepo.getTransactionsByTypeInPeriod(from, to, type, inStatistics)
+            .map { list ->
+                list.map { item -> item.copy(date = item.date.getStartOfDay()) }.toList()
+                    .groupBy { item -> item.date }
+                    .toSortedMap()
+                    .mapValues { item: Map.Entry<LocalDateTime, List<TransactionDataModel>> ->
+                        TransactionLineChartModel(
+                            currencyCode = currencyCode,
+                            sum = item.value.sumOf { model ->
+                                if (currencyCode == DEFAULT_CURRENCY_CODE) model.usdSum
+                                else currencyInteractor.toMainCurrency(
+                                    model.sum,
+                                    model.currencyCode
+                                )
+                            })
                     }
             }
     }

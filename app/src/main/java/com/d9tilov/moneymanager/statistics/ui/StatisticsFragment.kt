@@ -21,14 +21,17 @@ import com.d9tilov.moneymanager.base.ui.navigator.StatisticsNavigator
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.core.util.DATE_FORMAT
+import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT_SHORT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.currentDate
 import com.d9tilov.moneymanager.core.util.currentDateTime
 import com.d9tilov.moneymanager.core.util.getEndOfDay
 import com.d9tilov.moneymanager.core.util.getStartOfDay
 import com.d9tilov.moneymanager.core.util.gone
+import com.d9tilov.moneymanager.core.util.hideWithAnimation
 import com.d9tilov.moneymanager.core.util.isSameDay
 import com.d9tilov.moneymanager.core.util.show
+import com.d9tilov.moneymanager.core.util.showWithAnimation
 import com.d9tilov.moneymanager.core.util.toLocalDateTime
 import com.d9tilov.moneymanager.core.util.toMillis
 import com.d9tilov.moneymanager.databinding.FragmentStatisticsBinding
@@ -49,19 +52,27 @@ import com.d9tilov.moneymanager.statistics.ui.recycler.StatisticsMenuAdapter
 import com.d9tilov.moneymanager.statistics.vm.StatisticsViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionLineChartModel
 import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.utils.MPPointF
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -172,20 +183,28 @@ class StatisticsFragment :
         }
 
         initPieChart()
+        initLineChart()
         viewModel.getTransactions().observe(viewLifecycleOwner) { list ->
             val newList = list.map { item ->
                 if (item.category.children.isNotEmpty()) {
                     item.copy(category = item.category.copy(color = item.category.children[0].color))
                 } else item
             }
-            setPieChartData(newList)
             statisticsBarChartAdapter.updateItems(newList)
             viewBinding?.statisticsSpentInPeriodSum?.setValue(
                 newList.sumOf { it.sum },
                 viewModel.currencyType.currencyCode
             )
             viewBinding?.statisticsBarChart?.scrollToPosition(0)
+            if (viewModel.chartMode == StatisticsMenuChartMode.PIE_CHART) {
+                setPieChartData(newList)
+            }
+            showChart()
         }
+        viewModel.getPeriodTransactions()
+            .observe(viewLifecycleOwner) { map ->
+                setLineChartData(map)
+            }
         statisticsMenuAdapter.updateItems(viewModel.menuItemList)
     }
 
@@ -193,6 +212,21 @@ class StatisticsFragment :
         super.onStop()
         hideMenuHandler.removeCallbacksAndMessages(null)
         hideMenu()
+    }
+
+    private fun showChart() {
+        viewBinding?.run {
+            when (viewModel.chartMode) {
+                StatisticsMenuChartMode.PIE_CHART -> {
+                    statisticsPieChart.showWithAnimation()
+                    statisticsLineChart.hideWithAnimation()
+                }
+                StatisticsMenuChartMode.LINE_CHART -> {
+                    statisticsPieChart.hideWithAnimation()
+                    statisticsLineChart.showWithAnimation()
+                }
+            }
+        }
     }
 
     private fun initStatisticsMenuRv() {
@@ -314,14 +348,14 @@ class StatisticsFragment :
         }
     }
 
-    private fun setPieChartData(list: List<TransactionChartModel>) {
-        if (list.isEmpty()) {
+    private fun setPieChartData(data: List<TransactionChartModel>) {
+        if (data.isEmpty()) {
             showViewStub()
             return
         }
         hideViewStub()
         val dataSet = PieDataSet(
-            list
+            data
                 .map { tr ->
                     val categoryName = tr.category.name
                     val displayName = if (tr.percent > PERCENT_LIMIT_TO_SHOW_LABEL) {
@@ -344,16 +378,78 @@ class StatisticsFragment :
         dataSet.valueLinePart1OffsetPercentage = 80f
         dataSet.valueLinePart1Length = 0.2f
         dataSet.valueLinePart2Length = 0.4f
-        dataSet.colors = list.map { ContextCompat.getColor(requireContext(), it.category.color) }
-        val data = PieData(dataSet)
-        data.setValueFormatter(PercentFormatter(viewBinding?.statisticsPieChart))
-        data.setValueTextSize(12f)
-        data.setValueTextColor(ContextCompat.getColor(requireContext(), R.color.primary_color))
-        viewBinding?.statisticsPieChart?.data = data
+        dataSet.colors = data.map { ContextCompat.getColor(requireContext(), it.category.color) }
+        val pieData = PieData(dataSet)
+        pieData.setValueFormatter(PercentFormatter(viewBinding?.statisticsPieChart))
+        pieData.setValueTextSize(12f)
+        pieData.setValueTextColor(ContextCompat.getColor(requireContext(), R.color.primary_color))
+        viewBinding?.statisticsPieChart?.data = pieData
 
         updatePeriod()
         viewBinding?.statisticsPieChart?.highlightValues(null)
         viewBinding?.statisticsPieChart?.invalidate()
+    }
+
+    private fun initLineChart() {
+        viewBinding?.run {
+            statisticsLineChart.setTouchEnabled(true)
+            statisticsLineChart.isDragEnabled = true
+            statisticsLineChart.setScaleEnabled(true)
+            statisticsLineChart.setPinchZoom(true)
+            statisticsLineChart.setMaxVisibleValueCount(20)
+            statisticsLineChart.description.isEnabled = false
+            val xAxis: XAxis = statisticsLineChart.xAxis
+            xAxis.textColor = ContextCompat.getColor(requireContext(), R.color.statistics_line_chart_axis_text_color)
+            xAxis.enableGridDashedLine(10f, 10f, 0f)
+            val yAxis: YAxis = statisticsLineChart.axisLeft
+            yAxis.textColor = ContextCompat.getColor(requireContext(), R.color.statistics_line_chart_axis_text_color)
+            yAxis.enableGridDashedLine(10f, 10f, 0f)
+
+            statisticsLineChart.axisRight.isEnabled = false
+            statisticsLineChart.legend.isEnabled = false
+            statisticsLineChart.animateX(ANIMATION_DURATION)
+        }
+    }
+
+    private fun setLineChartData(data: Map<LocalDateTime, TransactionLineChartModel>) {
+        if (data.isEmpty()) {
+            showViewStub()
+            return
+        }
+        hideViewStub()
+        val values = data.toList()
+            .mapIndexed { index, pair -> Entry(index.toFloat(), pair.second.sum.toFloat()) }
+        viewBinding?.run {
+            val lineDataSet = LineDataSet(values, "")
+            lineDataSet.circleRadius = 1f
+            lineDataSet.formSize = 15f
+            lineDataSet.valueTextSize = 9f
+            lineDataSet.valueTextColor =
+                ContextCompat.getColor(requireContext(), R.color.text_primary_color)
+            lineDataSet.enableDashedHighlightLine(10f, 5f, 0f)
+            lineDataSet.fillDrawable =
+                ContextCompat.getDrawable(requireContext(), R.drawable.statistics_fade_line_chart)
+            lineDataSet.setDrawFilled(true)
+            lineDataSet.setFillFormatter { _, _ -> statisticsLineChart.axisLeft.axisMinimum }
+            val dataSets = mutableListOf<ILineDataSet>()
+            dataSets.add(lineDataSet)
+            val newData = LineData(dataSets)
+            statisticsLineChart.data = newData
+            statisticsLineChart.invalidate()
+            statisticsLineChart.xAxis?.run {
+                position = XAxis.XAxisPosition.BOTTOM
+                axisMinimum = 0f
+                granularity = 1f
+                valueFormatter =
+                    IndexAxisValueFormatter(
+                        data.keys.toTypedArray().map { item: LocalDateTime ->
+                            SimpleDateFormat(
+                                TRANSACTION_DATE_FORMAT_SHORT,
+                                Locale.getDefault()
+                            ).format(item.toMillis())
+                        })
+            }
+        }
     }
 
     private fun updatePeriod(period: StatisticsPeriod = MONTH) {
