@@ -15,7 +15,7 @@
         android:paddingTop="4dp"
         android:paddingEnd="8dp"
         android:paddingBottom="4dp"
-        android:text="@string/category_expense_info_can_spend_today_title"
+        tools:text="@string/category_expense_info_can_spend_today_title"
         android:textAppearance="?attr/textAppearanceCaption"
         app:layout_constraintBottom_toTopOf="@id/expense_today_info_title"
         app:layout_constraintStart_toStartOf="parent"

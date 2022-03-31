@@ -447,7 +447,8 @@ class StatisticsFragment :
                                 TRANSACTION_DATE_FORMAT_SHORT,
                                 Locale.getDefault()
                             ).format(item.toMillis())
-                        })
+                        }
+                    )
             }
         }
     }

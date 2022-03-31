@@ -28,6 +28,7 @@ import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
 import com.d9tilov.moneymanager.incomeexpense.ui.BaseIncomeExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
 import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionSpendingTodayModel
 import com.d9tilov.moneymanager.transaction.isIncome
 import com.d9tilov.moneymanager.transaction.ui.callback.TransactionSwipeToDeleteCallback
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -107,13 +108,31 @@ class ExpenseFragment :
         viewModel.spentTodayApprox.observe(
             viewLifecycleOwner
         ) { viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoApproxSum?.setValue(it) }
-        viewModel.ableToSpendToday.observe(viewLifecycleOwner) { sum ->
-            viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoValue?.setValue(sum)
-            viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoValue?.setColor(
-                if (sum.setScale(DECIMAL_LENGTH, ROUND_HALF_UP).signum() > 0)
-                    ContextCompat.getColor(requireContext(), R.color.success_color) else
-                    ContextCompat.getColor(requireContext(), R.color.error_color)
-            )
+        viewModel.ableToSpendToday.observe(viewLifecycleOwner) { spendModel ->
+            when (spendModel) {
+                is TransactionSpendingTodayModel.OVERSPENDING -> {
+                    viewBinding?.run {
+                        expenseInfoLayoutInclude.expenseCanSpendTodayInfoTitle.text =
+                            getString(R.string.category_expense_info_can_spend_today_negate_title)
+                        viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoValue?.setValue(spendModel.trSum)
+                        viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoValue?.setColor(
+                            ContextCompat.getColor(requireContext(), R.color.error_color)
+                        )
+                    }
+                }
+                is TransactionSpendingTodayModel.NORMAL -> {
+                    viewBinding?.run {
+                        expenseInfoLayoutInclude.expenseCanSpendTodayInfoTitle.text =
+                            getString(R.string.category_expense_info_can_spend_today_title)
+                        viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoValue?.setValue(spendModel.trSum)
+                        viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoValue?.setColor(
+                            if (spendModel.trSum.setScale(DECIMAL_LENGTH, ROUND_HALF_UP).signum() > 0)
+                                ContextCompat.getColor(requireContext(), R.color.success_color)
+                            else ContextCompat.getColor(requireContext(), R.color.error_color)
+                        )
+                    }
+                }
+            }
         }
     }
 

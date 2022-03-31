@@ -22,14 +22,14 @@ import javax.inject.Inject
 class GoalsViewModel @Inject constructor(
     private val budgetInteractor: BudgetInteractor,
     private val userInteractor: UserInteractor,
-    private val transactionInteractor: TransactionInteractor,
+    transactionInteractor: TransactionInteractor,
     goalInteractor: GoalInteractor
 ) : BaseViewModel<GoalsNavigator>() {
 
     val budget = budgetInteractor.get().distinctUntilChanged().asLiveData()
     val goals = goalInteractor.getAll().asLiveData()
     val accumulated =
-        transactionInteractor.getSumInFiscalPeriod().flowOn(Dispatchers.IO).asLiveData()
+        transactionInteractor.ableToSpendInFiscalPeriod().flowOn(Dispatchers.IO).asLiveData()
 
     fun savePrepopulateStatusAndSavedSum(sum: BigDecimal) = viewModelScope.launch(Dispatchers.IO) {
         val user = userInteractor.getCurrentUser().first()

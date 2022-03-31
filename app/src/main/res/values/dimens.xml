@@ -58,6 +58,8 @@
     <dimen name="goal_value_text_size">12sp</dimen>
     <dimen name="goal_period_save_value_text_size">54sp</dimen>
     <dimen name="goal_period_save_sign_text_size">30sp</dimen>
+    <dimen name="goal_able_to_spend_in_period_text_size">20sp</dimen>
+    <dimen name="goal_save_every_period_text_size">16sp</dimen>
 
     // for floating button
     <dimen name="design_fab_image_size" tools:override="true">56dp</dimen>

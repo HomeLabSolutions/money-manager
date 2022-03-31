@@ -78,6 +78,7 @@
     <string name="category_unit_name_group_hint">Name of group</string>
     <string name="category_unit_name_exist_error">Name of this group already exists</string>
     <string name="category_expense_info_can_spend_today_title">you can spend today:</string>
+    <string name="category_expense_info_can_spend_today_negate_title">overspending:</string>
     <string name="category_expense_info_today_title">was spent today:</string>
     <string name="category_expense_info_period_title">was spent in period:</string>
     <string name="category_income_info_period_title">was earned in period:</string>
@@ -124,7 +125,7 @@
         <item>Month</item>
     </string-array>
 
-    <string name="goals_accumulated">Accumulated over the period</string>
+    <string name="goals_remaining_to_spend">Able to be spend in current period</string>
     <string name="goals_empty_placeholder_title">Add goals</string>
     <string name="goals_empty_placeholder_subtitle">Add the goal for which you want to accumulate</string>
     <string name="goals_target_name_hint">Goal name</string>

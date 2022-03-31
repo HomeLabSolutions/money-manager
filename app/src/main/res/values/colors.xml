@@ -6,6 +6,7 @@
     <color name="secondary_color">#f99225</color>
     <color name="control_normal_color">#fff</color>
     <color name="control_activated_color">#CBD4B6</color>
+    <color name="control_activated_color_disable">#ccCBD4B6</color>
     <color name="control_activated_color_light">#598F3D43</color>
     <color name="control_activated_color_dark">#8F3D43</color>
     <color name="control_highlight_color">#828F89</color>

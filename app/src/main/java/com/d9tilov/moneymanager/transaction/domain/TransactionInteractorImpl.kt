@@ -26,6 +26,7 @@ import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionLineChartModel
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionSpendingTodayModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toChartModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDataModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDomainModel
@@ -152,7 +153,8 @@ class TransactionInteractorImpl(
                                     model.sum,
                                     model.currencyCode
                                 )
-                            })
+                            }
+                        )
                     }
             }
     }
@@ -211,7 +213,46 @@ class TransactionInteractorImpl(
             }
     }
 
-    override fun ableToSpendToday(): Flow<BigDecimal> {
+    override fun ableToSpendToday(): Flow<TransactionSpendingTodayModel> {
+        val countDaysSinceFiscalDateFlow: Flow<BigDecimal> =
+            flow { emit(userInteractor.getFiscalDay()) }.map { fiscalDay ->
+                currentDateTime().countDaysRemainingNextFiscalDate(fiscalDay).toBigDecimal()
+            }
+        val numeratorFlow = getNumerator()
+        val expensesPerCurrentDayFlow = getExpensesPerCurrentDay()
+
+        return combine(
+            numeratorFlow,
+            countDaysSinceFiscalDateFlow,
+            expensesPerCurrentDayFlow
+        ) { numerator, countDaysSinceFiscalDate, expensesPerCurrentDay ->
+            if (numerator.minus(expensesPerCurrentDay).signum() < 0)
+                TransactionSpendingTodayModel.OVERSPENDING(numerator.minus(expensesPerCurrentDay))
+            else TransactionSpendingTodayModel.NORMAL(
+                numerator.divideBy(countDaysSinceFiscalDate).minus(expensesPerCurrentDay)
+            )
+        }
+    }
+
+    override fun ableToSpendInFiscalPeriod(): Flow<BigDecimal> {
+        return combine(
+            getNumerator(),
+            getExpensesPerCurrentDay()
+        ) { numerator, expensesPerCurrentDay -> numerator.minus(expensesPerCurrentDay) }
+    }
+
+    private fun getExpensesPerCurrentDay(): Flow<BigDecimal> =
+        transactionRepo.getTransactionsByTypeInPeriod(
+            currentDateTime().getStartOfDay(),
+            currentDateTime().getEndOfDay(),
+            TransactionType.EXPENSE,
+            onlyInStatistics = true,
+            withRegular = false
+        ).map { list ->
+            list.sumOf { currencyInteractor.toMainCurrency(it.sum, it.currencyCode) }
+        }
+
+    private fun getNumerator(): Flow<BigDecimal> {
         val regularIncomeSumFlow =
             flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
                 regularTransactionInteractor.getAll(TransactionType.INCOME).map { incomes ->
@@ -259,22 +300,8 @@ class TransactionInteractorImpl(
         }
 
         val savedSumPerPeriodFlow = budgetInteractor.get().map { it.saveSum }
-        val countDaysSinceFiscalDateFlow: Flow<BigDecimal> =
-            flow { emit(userInteractor.getFiscalDay()) }.map { fiscalDay ->
-                currentDateTime().countDaysRemainingNextFiscalDate(fiscalDay).toBigDecimal()
-            }
 
-        val expensesPerCurrentDayFlow = transactionRepo.getTransactionsByTypeInPeriod(
-            currentDateTime().getStartOfDay(),
-            currentDateTime().getEndOfDay(),
-            TransactionType.EXPENSE,
-            onlyInStatistics = true,
-            withRegular = false
-        ).map { list ->
-            list.sumOf { currencyInteractor.toMainCurrency(it.sum, it.currencyCode) }
-        }
-
-        val numeratorFlow = combine(
+        return combine(
             regularIncomeSumFlow,
             regularExpenseSumFlow,
             savedSumPerPeriodFlow,
@@ -283,13 +310,6 @@ class TransactionInteractorImpl(
         ) { regularIncomes, regularExpenses, savedSumPerPeriod, incomes, expenses ->
             regularIncomes.minus(regularExpenses).minus(savedSumPerPeriod).plus(incomes)
                 .minus(expenses)
-        }
-        return combine(
-            numeratorFlow,
-            countDaysSinceFiscalDateFlow,
-            expensesPerCurrentDayFlow
-        ) { numerator, countDaysSinceFiscalDate, expensesPerCurrentDay ->
-            numerator.divideBy(countDaysSinceFiscalDate).minus(expensesPerCurrentDay)
         }
     }
 

@@ -7,6 +7,7 @@ import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionLineChartModel
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionSpendingTodayModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
@@ -40,7 +41,8 @@ interface TransactionInteractor : Interactor {
 
     fun getTransactionById(id: Long): Flow<Transaction>
     fun getTransactionsByType(type: TransactionType): Flow<PagingData<Transaction>>
-    fun ableToSpendToday(): Flow<BigDecimal>
+    fun ableToSpendToday(): Flow<TransactionSpendingTodayModel>
+    fun ableToSpendInFiscalPeriod(): Flow<BigDecimal>
     fun getSumInFiscalPeriodInUsd(type: TransactionType): Flow<BigDecimal>
     fun getSumInFiscalPeriod(): Flow<BigDecimal>
     fun getSumTodayInUsd(type: TransactionType): Flow<BigDecimal>
