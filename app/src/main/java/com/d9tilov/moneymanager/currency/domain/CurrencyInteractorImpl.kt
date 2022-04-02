@@ -30,7 +30,7 @@ class CurrencyInteractorImpl(
             }
     }
 
-    override fun getCurrentCurrency(): CurrencyMetaData = currencyRepo.getCurrentCurrency()
+    override suspend fun getCurrentCurrency(): CurrencyMetaData = currencyRepo.getCurrentCurrency()
 
     override suspend fun getCurrencyByCode(code: String): Currency =
         currencyRepo.getCurrencyByCode(code)

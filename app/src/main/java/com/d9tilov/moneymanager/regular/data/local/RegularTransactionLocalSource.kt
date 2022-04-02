@@ -6,8 +6,12 @@ import com.d9tilov.moneymanager.regular.data.entity.RegularTransactionData
 import com.d9tilov.moneymanager.regular.data.local.mapper.toDataModel
 import com.d9tilov.moneymanager.regular.data.local.mapper.toDbModel
 import com.d9tilov.moneymanager.transaction.TransactionType
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 class RegularTransactionLocalSource(
     private val preferencesStore: PreferencesStore,
@@ -15,48 +19,32 @@ class RegularTransactionLocalSource(
 ) : RegularTransactionSource {
 
     override suspend fun insert(regularTransactionData: RegularTransactionData) {
-        val currentUserId = preferencesStore.uid
-        if (currentUserId == null) {
-            throw WrongUidException()
-        } else {
-            standingDao.insert(regularTransactionData.copy(clientId = currentUserId).toDbModel())
-        }
+        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+        if (currentUserId == null) throw WrongUidException()
+        else standingDao.insert(regularTransactionData.copy(clientId = currentUserId).toDbModel())
     }
 
-    override fun getAll(type: TransactionType): Flow<List<RegularTransactionData>> {
-        val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            throw WrongUidException()
-        } else {
-            standingDao.getAll(currentUserId, type)
-                .map { it.map { item -> item.toDataModel() } }
+    override fun getAll(type: TransactionType): Flow<List<RegularTransactionData>> =
+        preferencesStore.uid.flatMapConcat { uid ->
+            if (uid == null) throw WrongUidException()
+            else standingDao.getAll(uid, type).map { it.map { item -> item.toDataModel() } }
         }
-    }
 
     override suspend fun getById(id: Long): RegularTransactionData {
-        val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            throw WrongUidException()
-        } else {
-            standingDao.getById(currentUserId, id).toDataModel()
-        }
+        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+        return if (currentUserId == null) throw WrongUidException()
+        else standingDao.getById(currentUserId, id).toDataModel()
     }
 
     override suspend fun update(regularTransactionData: RegularTransactionData) {
-        val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            throw WrongUidException()
-        } else {
-            standingDao.update(regularTransactionData.toDbModel())
-        }
+        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+        return if (currentUserId == null) throw WrongUidException()
+        else standingDao.update(regularTransactionData.toDbModel())
     }
 
     override suspend fun delete(regularTransactionData: RegularTransactionData) {
-        val currentUserId = preferencesStore.uid
-        return if (currentUserId == null) {
-            throw WrongUidException()
-        } else {
-            standingDao.delete(regularTransactionData.toDbModel())
-        }
+        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+        return if (currentUserId == null) throw WrongUidException()
+        else standingDao.delete(regularTransactionData.toDbModel())
     }
 }

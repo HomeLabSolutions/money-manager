@@ -25,6 +25,7 @@ import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.isTablet
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
+import com.d9tilov.moneymanager.home.ui.currencyCode
 import com.d9tilov.moneymanager.incomeexpense.ui.BaseIncomeExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -95,7 +96,12 @@ class ExpenseFragment :
         }
         viewModel.spentInPeriodApprox.observe(
             viewLifecycleOwner
-        ) { viewBinding?.expenseInfoLayoutInclude?.expensePeriodInfoApproxSum?.setValue(it) }
+        ) {
+            viewBinding?.expenseInfoLayoutInclude?.expensePeriodInfoApproxSum?.setValue(
+                it,
+                currencyCode()
+            )
+        }
         viewModel.spentToday.observe(
             viewLifecycleOwner
         ) { sum ->
@@ -107,14 +113,22 @@ class ExpenseFragment :
         }
         viewModel.spentTodayApprox.observe(
             viewLifecycleOwner
-        ) { viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoApproxSum?.setValue(it) }
+        ) {
+            viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoApproxSum?.setValue(
+                it,
+                currencyCode()
+            )
+        }
         viewModel.ableToSpendToday.observe(viewLifecycleOwner) { spendModel ->
             when (spendModel) {
                 is TransactionSpendingTodayModel.OVERSPENDING -> {
                     viewBinding?.run {
                         expenseInfoLayoutInclude.expenseCanSpendTodayInfoTitle.text =
                             getString(R.string.category_expense_info_can_spend_today_negate_title)
-                        viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoValue?.setValue(spendModel.trSum)
+                        viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoValue?.setValue(
+                            spendModel.trSum,
+                            currencyCode()
+                        )
                         viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoValue?.setColor(
                             ContextCompat.getColor(requireContext(), R.color.error_color)
                         )
@@ -124,7 +138,10 @@ class ExpenseFragment :
                     viewBinding?.run {
                         expenseInfoLayoutInclude.expenseCanSpendTodayInfoTitle.text =
                             getString(R.string.category_expense_info_can_spend_today_title)
-                        viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoValue?.setValue(spendModel.trSum)
+                        viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoValue?.setValue(
+                            spendModel.trSum,
+                            currencyCode()
+                        )
                         viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoValue?.setColor(
                             if (spendModel.trSum.setScale(DECIMAL_LENGTH, ROUND_HALF_UP).signum() > 0)
                                 ContextCompat.getColor(requireContext(), R.color.success_color)

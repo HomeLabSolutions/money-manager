@@ -10,7 +10,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeExpenseNavigator
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.events.OnBackPressed
 import com.d9tilov.moneymanager.core.events.OnDialogDismissListener
 import com.d9tilov.moneymanager.core.util.gone
@@ -107,12 +106,12 @@ class IncomeExpenseFragment :
                 val action =
                     IncomeExpenseFragmentDirections.toCurrencyDest(
                         CurrencyDestination.INCOME_EXPENSE_SCREEN,
-                        incomeExpenseMainSum.getCurrencyCode()
+                        viewModel.getCurrencyCode()
                     )
                 findNavController().navigate(action)
             }
         }
-        viewModel.getCurrencyCode().observe(
+        viewModel.getCurrencyCodeAsync().observe(
             viewLifecycleOwner
         ) { viewBinding?.incomeExpenseMainSum?.setCurrencyCode(it) }
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<DomainCurrency>(
@@ -189,10 +188,10 @@ class IncomeExpenseFragment :
     fun isKeyboardOpened(): Boolean = isKeyboardOpen
 
     fun getSum(): BigDecimal = viewBinding?.incomeExpenseMainSum?.getValue() ?: BigDecimal.ZERO
-    fun getCurrencyCode(): String = viewBinding?.incomeExpenseMainSum?.getCurrencyCode() ?: DEFAULT_CURRENCY_CODE
+    fun getCurrencyCode(): String = viewModel.getCurrencyCode()
 
     fun resetSum() {
-        viewBinding?.incomeExpenseMainSum?.setValue(BigDecimal.ZERO)
+        viewBinding?.incomeExpenseMainSum?.setValue(BigDecimal.ZERO, viewModel.getCurrencyCode())
         viewModel.setDefaultCurrencyCode()
         onHandleInput("")
     }

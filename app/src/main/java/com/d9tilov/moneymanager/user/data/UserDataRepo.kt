@@ -22,7 +22,7 @@ class UserDataRepo(private val userLocalSource: UserSource) : UserRepo {
         userLocalSource.updateCurrentUser(entity)
     }
 
-    override suspend fun backup(): Result<Nothing> = userLocalSource.backupUser()
+    override suspend fun backup(): Result<BackupData> = userLocalSource.backupUser()
 
     override suspend fun delete() {
         userLocalSource.deleteUser()

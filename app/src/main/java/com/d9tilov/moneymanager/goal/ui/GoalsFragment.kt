@@ -28,6 +28,7 @@ import com.d9tilov.moneymanager.goal.GoalDestination
 import com.d9tilov.moneymanager.goal.domain.entity.Goal
 import com.d9tilov.moneymanager.goal.ui.dialog.GoalRemoveDialog.Companion.ARG_UNDO_REMOVE_LAYOUT_DISMISS
 import com.d9tilov.moneymanager.goal.vm.GoalsViewModel
+import com.d9tilov.moneymanager.home.ui.currencyCode
 import com.d9tilov.moneymanager.prepopulate.ui.ControlsClicked
 import com.d9tilov.moneymanager.prepopulate.ui.PrepopulateActivity
 import com.google.android.material.appbar.MaterialToolbar
@@ -105,11 +106,10 @@ class GoalsFragment :
         )?.observe(viewLifecycleOwner) { if (it) goalAdapter.cancelDeletion() }
         viewModel.accumulated.observe(
             this.viewLifecycleOwner
-        ) { viewBinding?.run { goalsAmount.setValue(it) } }
+        ) { viewBinding?.run { goalsAmount.setValue(it, currencyCode()) } }
         viewModel.budget.observe(
             this.viewLifecycleOwner
-        ) { viewBinding?.run { goalsSumPerPeriod.setValue(it.saveSum) } }
-
+        ) { viewBinding?.run { goalsSumPerPeriod.setValue(it.saveSum, currencyCode()) } }
         viewModel.goals.observe(
             this.viewLifecycleOwner
         ) {

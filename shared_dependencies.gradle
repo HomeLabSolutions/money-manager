@@ -39,4 +39,6 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
 
     implementation "org.jetbrains.kotlinx:kotlinx-datetime:0.3.2"
+
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
 }

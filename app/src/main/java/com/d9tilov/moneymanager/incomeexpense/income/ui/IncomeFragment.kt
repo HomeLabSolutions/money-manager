@@ -24,6 +24,7 @@ import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.isTablet
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentIncomeBinding
+import com.d9tilov.moneymanager.home.ui.currencyCode
 import com.d9tilov.moneymanager.incomeexpense.ui.BaseIncomeExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -90,7 +91,7 @@ class IncomeFragment :
             }
             viewModel.earnedInPeriodApprox.observe(
                 viewLifecycleOwner
-            ) { sum -> viewBinding?.incomeInfoLayoutInclude?.incomePeriodInfoApproxSum?.setValue(sum) }
+            ) { sum -> viewBinding?.incomeInfoLayoutInclude?.incomePeriodInfoApproxSum?.setValue(sum, currencyCode()) }
         }
     }
 

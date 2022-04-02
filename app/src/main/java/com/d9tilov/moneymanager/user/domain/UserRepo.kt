@@ -12,6 +12,6 @@ interface UserRepo {
     suspend fun getFiscalDay(): Int
     suspend fun create(entity: UserProfile): UserProfile
     suspend fun update(entity: UserProfile)
-    suspend fun backup(): Result<Nothing>
+    suspend fun backup(): Result<BackupData>
     suspend fun delete()
 }

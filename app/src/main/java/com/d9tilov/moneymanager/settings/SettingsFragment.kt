@@ -2,6 +2,8 @@ package com.d9tilov.moneymanager.settings
 
 import android.os.Bundle
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.isDigitsOnly
 import androidx.fragment.app.viewModels
@@ -29,6 +31,8 @@ class SettingsFragment :
 
     override fun getNavigator() = this
 
+    private var rotation: Animation? = null
+
     override val viewModel by viewModels<SettingsViewModel>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,11 +48,8 @@ class SettingsFragment :
                     settingsDayOfMonthEdit.setSelection(it.length)
                     val isError =
                         it.isEmpty() || !it.isDigitsOnly() || it.toInt() > 31 || it.toInt() < 1
-                    if (isError) {
-                        settingsDayOfMonthError.show()
-                    } else {
-                        settingsDayOfMonthError.gone()
-                    }
+                    if (isError) settingsDayOfMonthError.show()
+                    else settingsDayOfMonthError.gone()
                     settingsSave.isEnabled = !isError
                 }
             )
@@ -60,18 +61,42 @@ class SettingsFragment :
         }
         viewModel.userData.observe(
             viewLifecycleOwner
-        ) {
-            viewBinding?.settingsDayOfMonthEdit?.setText(it.fiscalDay.toString())
-            if (it.backupData.lastBackupTimestamp == 0L) {
+        ) { data ->
+            viewBinding?.settingsDayOfMonthEdit?.setText(data.fiscalDay.toString())
+            if (data.backupData.lastBackupTimestamp == 0L) {
                 viewBinding?.settingsBackupInfo?.setText(R.string.settings_backup_empty)
             } else {
                 viewBinding?.settingsBackupInfo?.text =
                     getString(
                         R.string.settings_backup_info,
-                        it.backupData.lastBackupTimestamp.toBackupDate()
+                        data.backupData.lastBackupTimestamp.toBackupDate()
                     )
             }
         }
+    }
+
+    private fun startRotation() {
+        rotation = AnimationUtils.loadAnimation(requireActivity(), R.anim.rotate)
+        rotation?.fillAfter = true
+        viewBinding?.settingsRefresh?.startAnimation(rotation)
+    }
+
+    private fun stopRotation() {
+        viewBinding?.settingsRefresh?.clearAnimation()
+    }
+
+    override fun showCustomLoading(): Boolean {
+        startRotation()
+        return true
+    }
+
+    override fun hideCustomLoading() {
+        stopRotation()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        stopRotation()
     }
 
     private fun initToolbar() {

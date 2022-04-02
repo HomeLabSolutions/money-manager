@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsNavigator
+import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.statistics.domain.BaseStatisticsMenuType
@@ -36,7 +37,7 @@ class StatisticsViewModel @Inject constructor(
     private val periodTransactionsLiveData =
         MutableLiveData<Map<LocalDateTime, TransactionLineChartModel>>()
 
-    private val currencyCode = currencyInteractor.getCurrentCurrency().code
+    private var currencyCode = DEFAULT_CURRENCY_CODE
     var chartMode: StatisticsMenuChartMode = StatisticsMenuChartMode.PIE_CHART
         private set
     var chartPeriod: StatisticsPeriod = StatisticsPeriod.DAY
@@ -50,13 +51,19 @@ class StatisticsViewModel @Inject constructor(
     var categoryType: StatisticsMenuCategoryType = StatisticsMenuCategoryType.CHILD
         private set
 
-    val menuItemList = mutableListOf(
-        currencyType,
-        chartMode,
-        categoryType,
-        transactionType,
-        inStatistics
-    )
+    val menuItemList = mutableListOf<BaseStatisticsMenuType>()
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            currencyCode = currencyInteractor.getCurrentCurrency().code
+            currencyType = StatisticsMenuCurrency.CURRENT(currencyCode)
+            menuItemList.add(currencyType)
+            menuItemList.add(chartMode)
+            menuItemList.add(categoryType)
+            menuItemList.add(transactionType)
+            menuItemList.add(inStatistics)
+        }
+    }
 
     fun updateCurrency() {
         currencyType = when (currencyType) {

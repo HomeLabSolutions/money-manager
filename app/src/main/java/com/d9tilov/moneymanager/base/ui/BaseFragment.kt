@@ -88,10 +88,20 @@ abstract class BaseFragment<N : BaseNavigator, VB : ViewBinding>(
         }
     }
 
-    private fun showLoading() = baseActivity?.showLoading()
-    private fun hideLoading() = baseActivity?.hideLoading()
+    private fun showLoading() {
+        if (showCustomLoading()) return
+        baseActivity?.showLoading()
+    }
+    private fun hideLoading() {
+        hideCustomLoading()
+        baseActivity?.hideLoading()
+    }
 
     @get:ColorRes
     protected open val snackBarBackgroundTint = 0
     protected open val snackBarAnchorView: View? = null
+    protected open fun showCustomLoading(): Boolean {
+        return false
+    }
+    protected open fun hideCustomLoading() {}
 }

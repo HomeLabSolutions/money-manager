@@ -18,6 +18,7 @@ import com.d9tilov.moneymanager.core.util.toBudgetCreatedDate
 import com.d9tilov.moneymanager.currency.CurrencyDestination
 import com.d9tilov.moneymanager.databinding.FragmentProfileBinding
 import com.d9tilov.moneymanager.goal.GoalDestination
+import com.d9tilov.moneymanager.home.ui.currencyCode
 import com.d9tilov.moneymanager.profile.ui.LogoutDialog.Companion.ARG_LOGOUT_CANCEL_JOB
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileViewModel
 import com.d9tilov.moneymanager.regular.RegularTransactionDestination
@@ -108,7 +109,7 @@ class ProfileFragment :
         viewModel.budget().observe(
             viewLifecycleOwner
         ) {
-            viewBinding?.profileBudget?.profileItemBudgetValue?.setValue(it.sum)
+            viewBinding?.profileBudget?.profileItemBudgetValue?.setValue(it.sum, currencyCode())
             viewBinding?.profileBudget?.profileItemBudgetCreatedDate?.text =
                 getString(R.string.budget_date_created, it.createdDate.toBudgetCreatedDate())
         }

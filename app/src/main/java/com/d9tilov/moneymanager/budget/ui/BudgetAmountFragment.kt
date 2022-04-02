@@ -14,6 +14,7 @@ import com.d9tilov.moneymanager.budget.vm.BudgetAmountViewModel
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentBudgetAmountBinding
+import com.d9tilov.moneymanager.home.ui.currencyCode
 import com.d9tilov.moneymanager.prepopulate.ui.ControlsClicked
 import com.d9tilov.moneymanager.prepopulate.ui.PrepopulateActivity
 import com.google.android.material.appbar.MaterialToolbar
@@ -56,7 +57,7 @@ class BudgetAmountFragment :
         viewModel.budgetData.observe(
             this.viewLifecycleOwner
         ) {
-            viewBinding?.commonBudgetAmount?.setValue(it.sum)
+            viewBinding?.commonBudgetAmount?.setValue(it.sum, currencyCode())
             if (it.sum.compareTo(BigDecimal.ZERO) == 0) {
                 viewBinding?.commonBudgetAmount?.moneyEditText?.setSelection(1)
             } else {

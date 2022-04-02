@@ -6,12 +6,17 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.d9tilov.moneymanager.R
+import com.d9tilov.moneymanager.base.data.local.preferences.CurrencyMetaData
+import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.base.ui.navigator.HomeNavigator
+import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.events.OnBackPressed
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
@@ -19,6 +24,8 @@ import com.d9tilov.moneymanager.core.util.setupWithNavController
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity :
@@ -35,10 +42,19 @@ class MainActivity :
         R.id.remove_transaction_dialog,
     )
 
+    @Inject
+    lateinit var preferenceDataStore: PreferencesStore
+
+    private var currency = CurrencyMetaData(
+        DataConstants.DEFAULT_CURRENCY_CODE,
+        DataConstants.DEFAULT_CURRENCY_SYMBOL
+    )
+
     override val navHostFragmentId = R.id.nav_host_container
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        lifecycleScope.launchWhenCreated { currency = preferenceDataStore.currentCurrency.first() }
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         } // Else, need to wait for onRestoreInstanceState
@@ -119,9 +135,13 @@ class MainActivity :
         bottomBarAnimationAppear.start()
     }
 
+    fun getCurrency() = currency
+
     companion object {
         private const val ALPHA_BAR_MIN = 0f
         private const val ALPHA_BAR_MAX = 1f
         private const val ANIMATION_DURATION_BAR = 500L
     }
 }
+
+fun Fragment.currencyCode() = (requireActivity() as MainActivity).getCurrency().code

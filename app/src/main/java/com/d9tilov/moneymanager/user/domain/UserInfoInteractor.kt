@@ -34,7 +34,7 @@ class UserInfoInteractor(
         userRepo.update(user.copy(currentCurrencyCode = code))
     }
 
-    override suspend fun backup(): Result<Nothing> = userRepo.backup()
+    override suspend fun backup(): Result<BackupData> = userRepo.backup()
 
     override suspend fun deleteUser() {
         userRepo.delete()

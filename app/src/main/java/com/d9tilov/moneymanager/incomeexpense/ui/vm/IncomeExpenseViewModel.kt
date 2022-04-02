@@ -13,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -28,14 +29,17 @@ class IncomeExpenseViewModel @Inject constructor(
         Timber.d("Unable to update currency: $exception")
     }
 
+    private var defaultCurrencyCode: String = DEFAULT_CURRENCY_CODE
+
     init {
-        viewModelScope.launch {
-            currencyCodeStr.value = currencyInteractor.getCurrentCurrency().code
-        }
         viewModelScope.launch(Dispatchers.IO + updateCurrencyExceptionHandler) {
             currencyInteractor.updateCurrencyRates()
         }
         viewModelScope.launch(Dispatchers.IO) {
+            withContext(Dispatchers.Main) {
+                currencyCodeStr.value = currencyInteractor.getCurrentCurrency().code
+                defaultCurrencyCode = currencyCodeStr.value ?: DEFAULT_CURRENCY_CODE
+            }
             transactionInteractor.executeRegularIfNeeded(TransactionType.INCOME)
             transactionInteractor.executeRegularIfNeeded(TransactionType.EXPENSE)
         }
@@ -46,10 +50,9 @@ class IncomeExpenseViewModel @Inject constructor(
     }
 
     fun setDefaultCurrencyCode() {
-        viewModelScope.launch {
-            currencyCodeStr.value = currencyInteractor.getCurrentCurrency().code
-        }
+        currencyCodeStr.value = defaultCurrencyCode
     }
 
-    fun getCurrencyCode(): LiveData<String> = currencyCodeStr
+    fun getCurrencyCodeAsync(): LiveData<String> = currencyCodeStr
+    fun getCurrencyCode(): String = currencyCodeStr.value ?: DEFAULT_CURRENCY_CODE
 }

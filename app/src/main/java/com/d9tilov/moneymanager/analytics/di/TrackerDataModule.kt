@@ -8,6 +8,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import javax.inject.Singleton
 
 @Module
@@ -20,7 +23,7 @@ object TrackerDataModule {
         preferencesStore: PreferencesStore
     ): FirebaseAnalytics {
         val tracker: FirebaseAnalytics = Firebase.analytics
-        tracker.setUserId(preferencesStore.uid)
+        GlobalScope.launch { tracker.setUserId(preferencesStore.uid.first()) }
         return tracker
     }
 }

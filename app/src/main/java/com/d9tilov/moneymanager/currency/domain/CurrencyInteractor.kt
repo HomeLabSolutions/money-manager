@@ -9,7 +9,7 @@ import java.math.BigDecimal
 interface CurrencyInteractor {
 
     fun getCurrencies(): Flow<List<DomainCurrency>>
-    fun getCurrentCurrency(): CurrencyMetaData
+    suspend fun getCurrentCurrency(): CurrencyMetaData
     suspend fun getCurrencyByCode(code: String): Currency
     suspend fun toMainCurrency(amount: BigDecimal, currencyCode: String): BigDecimal
     suspend fun toUsd(amount: BigDecimal, currencyCode: String): BigDecimal

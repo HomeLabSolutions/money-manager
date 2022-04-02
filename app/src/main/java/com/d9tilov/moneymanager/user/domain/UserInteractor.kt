@@ -16,6 +16,6 @@ interface UserInteractor : Interactor {
     suspend fun createUser(user: FirebaseUser?): UserProfile
     suspend fun updateUser(userProfile: UserProfile)
     suspend fun updateCurrency(code: String)
-    suspend fun backup(): Result<Nothing>
+    suspend fun backup(): Result<BackupData>
     suspend fun deleteUser()
 }

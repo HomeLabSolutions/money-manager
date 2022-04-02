@@ -1,7 +1,6 @@
 package com.d9tilov.moneymanager.core.ui.widget.currencyview
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.AttributeSet
@@ -14,15 +13,11 @@ import android.widget.TextView
 import androidx.core.view.setPadding
 import androidx.core.widget.TextViewCompat
 import com.d9tilov.moneymanager.core.R
-import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENCE_CURRENT_CURRENCY_SYMBOL
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.STORE_NAME
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DECIMAL_LENGTH
 import com.d9tilov.moneymanager.core.util.CurrencyUtils.getSymbolByCode
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.removeScale
-import com.d9tilov.moneymanager.core.util.string
 import com.d9tilov.moneymanager.core.util.toBigDecimal
 import java.math.BigDecimal
 import java.util.Locale
@@ -69,15 +64,6 @@ class CurrencyView @JvmOverloads constructor(
     val signTextView: TextView = TextView(context)
     val prefixTextView: TextView = TextView(context)
 
-    private val sharedPreferences: SharedPreferences = context.getSharedPreferences(
-        STORE_NAME,
-        Context.MODE_PRIVATE
-    )
-    private var baseCurrencySymbol by sharedPreferences.string(
-        defaultValue = DataConstants.DEFAULT_CURRENCY_SYMBOL,
-        key = { PREFERENCE_CURRENT_CURRENCY_SYMBOL }
-    )
-
     init {
         PLUS_SIGN = context.getString(R.string.plus_sign)
         MINUS_SIGN = context.getString(R.string.minus_sign)
@@ -107,7 +93,7 @@ class CurrencyView @JvmOverloads constructor(
                     getDimensionPixelSize(R.styleable.CurrencyView_signTextSize, DEFAULT)
                 signTextColor = getColor(R.styleable.CurrencyView_signTextColor, DEFAULT)
 
-                signText = getString(R.styleable.CurrencyView_signCode) ?: baseCurrencySymbol
+                signText = getString(R.styleable.CurrencyView_signCode) ?: DEFAULT_CURRENCY_CODE
                 signTextStyle = getResourceId(R.styleable.CurrencyView_signTextStyle, DEFAULT)
                 initSign()
 
@@ -340,15 +326,15 @@ class CurrencyView @JvmOverloads constructor(
         }
     }
 
-    fun setValue(value: BigDecimal, currencyCode: String = baseCurrencySymbol) {
+    fun setValue(value: BigDecimal, currencyCode: String) {
         this.sum = value
-        this.signText = getSymbolByCode(currencyCode)
         this.currencyCode = currencyCode
+        this.signText = getSymbolByCode(currencyCode)
     }
 
-    fun setCurrencyCode(currencyCode: String = baseCurrencySymbol) {
-        this.signText = getSymbolByCode(currencyCode)
+    fun setCurrencyCode(currencyCode: String) {
         this.currencyCode = currencyCode
+        this.signText = getSymbolByCode(currencyCode)
     }
 
     fun setColor(color: Int) {
@@ -357,8 +343,6 @@ class CurrencyView @JvmOverloads constructor(
     }
 
     fun getValue(): BigDecimal = moneyEditText.text.toString().toBigDecimal
-
-    fun getCurrencyCode(): String = currencyCode
 
     override fun onInterceptTouchEvent(ev: MotionEvent?) = !enableInput
 

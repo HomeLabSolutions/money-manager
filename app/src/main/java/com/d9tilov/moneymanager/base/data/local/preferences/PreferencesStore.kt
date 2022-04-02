@@ -1,52 +1,61 @@
 package com.d9tilov.moneymanager.base.data.local.preferences
 
 import android.content.Context
-import com.d9tilov.moneymanager.core.constants.DataConstants
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.BASE_NAMESPACE
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.SharedPreferencesMigration
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DATA_STORE_NAME
+import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_SYMBOL
+import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENCE_CLIENT_UID
+import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENCE_CURRENT_CURRENCY
+import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENCE_CURRENT_CURRENCY_SYMBOL
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.STORE_NAME
-import com.d9tilov.moneymanager.core.util.string
-import com.d9tilov.moneymanager.core.util.stringNullable
 import com.d9tilov.moneymanager.currency.data.entity.Currency
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
-import javax.inject.Singleton
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
-@Singleton
-class PreferencesStore @Inject constructor(@ApplicationContext context: Context) {
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
+    DATA_STORE_NAME,
+    produceMigrations = { context -> listOf(SharedPreferencesMigration(context, STORE_NAME)) }
+)
 
-    private val sharedPreferences = context.getSharedPreferences(
-        STORE_NAME,
-        Context.MODE_PRIVATE
-    )
+class PreferencesStore(context: Context) {
 
-    var uid by sharedPreferences.stringNullable(key = { PREFERENCE_CLIENT_UID })
+    private val dataStore: DataStore<Preferences> = context.dataStore
 
-    fun getCurrentCurrency(): CurrencyMetaData =
-        CurrencyMetaData(currentCurrencyCode, currentCurrencySymbol)
+    val uid: Flow<String?> = dataStore.data.map { data -> data[PREFERENCE_CLIENT_UID_KEY] }
 
-    fun saveCurrentCurrency(currency: Currency) {
-        currentCurrencyCode = currency.code
-        currentCurrencySymbol = currency.symbol
-    }
-
-    private var currentCurrencyCode by sharedPreferences.string(
-        defaultValue = DataConstants.DEFAULT_CURRENCY_CODE,
-        key = { DataConstants.PREFERENCE_CURRENT_CURRENCY }
-    )
-    private var currentCurrencySymbol by sharedPreferences.string(
-        defaultValue = DEFAULT_CURRENCY_SYMBOL,
-        key = { DataConstants.PREFERENCE_CURRENT_CURRENCY_SYMBOL }
-    )
-
-    fun clearAllData() {
-        val prefs: Map<String, *> = sharedPreferences.all
-        for ((key) in prefs) {
-            sharedPreferences.edit().remove(key).apply()
+    suspend fun updateUid(uid: String) {
+        dataStore.edit { preferences ->
+            preferences[PREFERENCE_CLIENT_UID_KEY] = uid
         }
     }
 
+    val currentCurrency: Flow<CurrencyMetaData> = dataStore.data.map { data ->
+        val code = data[PREFERENCE_CURRENCY_CODE_KEY] ?: DEFAULT_CURRENCY_CODE
+        val symbol = data[PREFERENCE_CURRENCY_SYMBOL_KEY] ?: DEFAULT_CURRENCY_SYMBOL
+        CurrencyMetaData(code, symbol)
+    }
+
+    suspend fun updateCurrentCurrency(currency: Currency) {
+        dataStore.edit { preferences ->
+            preferences[PREFERENCE_CURRENCY_CODE_KEY] = currency.code
+            preferences[PREFERENCE_CURRENCY_SYMBOL_KEY] = currency.symbol
+        }
+    }
+
+    suspend fun clearAllData() {
+        dataStore.edit { it.clear() }
+    }
+
     companion object {
-        const val PREFERENCE_CLIENT_UID = BASE_NAMESPACE + "current.client.uid"
+        private val PREFERENCE_CLIENT_UID_KEY = stringPreferencesKey(PREFERENCE_CLIENT_UID)
+        private val PREFERENCE_CURRENCY_CODE_KEY = stringPreferencesKey(PREFERENCE_CURRENT_CURRENCY)
+        private val PREFERENCE_CURRENCY_SYMBOL_KEY =
+            stringPreferencesKey(PREFERENCE_CURRENT_CURRENCY_SYMBOL)
     }
 }
