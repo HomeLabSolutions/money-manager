@@ -17,7 +17,6 @@ import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentDialogCategoryUnionBinding
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class CategoryUnitDialog :
@@ -31,16 +30,7 @@ class CategoryUnitDialog :
 
     override val layoutId = R.layout.fragment_dialog_category_union
     override fun getNavigator() = this
-    override val viewModel by viewModels<CategoryUnionViewModel> {
-        CategoryUnionViewModel.provideFactory(
-            categoryUnionViewModelFactory,
-            this,
-            arguments
-        )
-    }
-
-    @Inject
-    lateinit var categoryUnionViewModelFactory: CategoryUnionViewModel.CategoryUnionViewModelFactory
+    override val viewModel by viewModels<CategoryUnionViewModel>()
 
     override fun accept() {
         dismiss()

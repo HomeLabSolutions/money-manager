@@ -38,7 +38,6 @@ import com.d9tilov.moneymanager.transaction.isIncome
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.math.BigDecimal
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class RegularTransactionCreationFragment :
@@ -57,16 +56,7 @@ class RegularTransactionCreationFragment :
     private var localTransaction: RegularTransaction? = null
 
     override fun getNavigator() = this
-    override val viewModel by viewModels<CreatedRegularTransactionViewModel> {
-        CreatedRegularTransactionViewModel.provideFactory(
-            createdRegularTransactionViewModelFactory,
-            this,
-            arguments
-        )
-    }
-
-    @Inject
-    lateinit var createdRegularTransactionViewModelFactory: CreatedRegularTransactionViewModel.CreatedRegularTransactionViewModelFactory
+    override val viewModel by viewModels<CreatedRegularTransactionViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

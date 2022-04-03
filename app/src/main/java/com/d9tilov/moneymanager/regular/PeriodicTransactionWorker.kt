@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.regular
 
 import android.content.Context
+import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -24,6 +25,7 @@ import timber.log.Timber
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
+@HiltWorker
 class PeriodicTransactionWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted workerParameters: WorkerParameters,

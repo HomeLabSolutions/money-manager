@@ -1,13 +1,9 @@
 package com.d9tilov.moneymanager.statistics.vm
 
-import android.os.Bundle
-import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.savedstate.SavedStateRegistryOwner
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsDetailsNavigator
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
@@ -17,14 +13,14 @@ import com.d9tilov.moneymanager.core.util.toLocalDateTime
 import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class StatisticsDetailsViewModel @AssistedInject constructor(
-    @Assisted val savedStateHandle: SavedStateHandle,
+@HiltViewModel
+class StatisticsDetailsViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val transactionInteractor: TransactionInteractor
 ) : BaseViewModel<StatisticsDetailsNavigator>() {
 
@@ -49,27 +45,4 @@ class StatisticsDetailsViewModel @AssistedInject constructor(
     }
 
     fun getTransactions(): LiveData<List<Transaction>> = transactions
-
-    @AssistedFactory
-    interface StatisticsDetailsViewModelFactory {
-        fun create(handle: SavedStateHandle): StatisticsDetailsViewModel
-    }
-
-    companion object {
-        fun provideFactory(
-            assistedFactory: StatisticsDetailsViewModelFactory,
-            owner: SavedStateRegistryOwner,
-            defaultArgs: Bundle? = null
-        ): AbstractSavedStateViewModelFactory =
-            object : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel?> create(
-                    key: String,
-                    modelClass: Class<T>,
-                    handle: SavedStateHandle
-                ): T {
-                    return assistedFactory.create(handle) as T
-                }
-            }
-    }
 }

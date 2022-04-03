@@ -17,7 +17,6 @@ import com.d9tilov.moneymanager.statistics.ui.recycler.StatisticsDetailsAdapter
 import com.d9tilov.moneymanager.statistics.vm.StatisticsDetailsViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class FragmentStatisticsDetails :
@@ -35,16 +34,7 @@ class FragmentStatisticsDetails :
     private var toolbar: MaterialToolbar? = null
 
     override fun getNavigator() = this
-    override val viewModel by viewModels<StatisticsDetailsViewModel> {
-        StatisticsDetailsViewModel.provideFactory(
-            statisticsDetailsViewModelFactory,
-            this,
-            arguments
-        )
-    }
-
-    @Inject
-    lateinit var statisticsDetailsViewModelFactory: StatisticsDetailsViewModel.StatisticsDetailsViewModelFactory
+    override val viewModel by viewModels<StatisticsDetailsViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

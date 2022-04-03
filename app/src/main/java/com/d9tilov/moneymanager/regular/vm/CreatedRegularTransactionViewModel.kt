@@ -1,27 +1,21 @@
 package com.d9tilov.moneymanager.regular.vm
 
-import android.os.Bundle
-import androidx.lifecycle.AbstractSavedStateViewModelFactory
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.savedstate.SavedStateRegistryOwner
 import com.d9tilov.moneymanager.base.ui.navigator.RegularTransactionCreatedNavigator
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class CreatedRegularTransactionViewModel @AssistedInject constructor(
-    private val regularTransactionInteractor: RegularTransactionInteractor,
-    @Assisted val savedStateHandle: SavedStateHandle
+@HiltViewModel
+class CreatedRegularTransactionViewModel @Inject constructor(
+    private val regularTransactionInteractor: RegularTransactionInteractor
 ) : BaseViewModel<RegularTransactionCreatedNavigator>() {
 
     val defaultTransaction = regularTransactionInteractor.createDefault()
@@ -32,28 +26,5 @@ class CreatedRegularTransactionViewModel @AssistedInject constructor(
             regularTransactionInteractor.insert(transaction)
             withContext(Dispatchers.Main) { navigator?.back() }
         }
-    }
-
-    @AssistedFactory
-    interface CreatedRegularTransactionViewModelFactory {
-        fun create(handle: SavedStateHandle): CreatedRegularTransactionViewModel
-    }
-
-    companion object {
-        fun provideFactory(
-            assistedFactory: CreatedRegularTransactionViewModelFactory,
-            owner: SavedStateRegistryOwner,
-            defaultArgs: Bundle? = null
-        ): AbstractSavedStateViewModelFactory =
-            object : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel?> create(
-                    key: String,
-                    modelClass: Class<T>,
-                    handle: SavedStateHandle
-                ): T {
-                    return assistedFactory.create(handle) as T
-                }
-            }
     }
 }

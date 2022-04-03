@@ -1,29 +1,25 @@
 package com.d9tilov.moneymanager.category.ui.vm
 
-import android.os.Bundle
-import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.savedstate.SavedStateRegistryOwner
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
+import com.d9tilov.moneymanager.category.CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN
+import com.d9tilov.moneymanager.category.CategoryDestination.EDIT_TRANSACTION_SCREEN
+import com.d9tilov.moneymanager.category.CategoryDestination.MAIN_WITH_SUM_SCREEN
 import com.d9tilov.moneymanager.category.common.BaseCategoryViewModel
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.transaction.TransactionType
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import com.d9tilov.moneymanager.category.CategoryDestination.EDIT_TRANSACTION_SCREEN
-import com.d9tilov.moneymanager.category.CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN
-import com.d9tilov.moneymanager.category.CategoryDestination.MAIN_WITH_SUM_SCREEN
+import javax.inject.Inject
 
-class CategoryViewModel @AssistedInject constructor(
+@HiltViewModel
+class CategoryViewModel @Inject constructor(
     private val categoryInteractor: CategoryInteractor,
-    @Assisted val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle
 ) : BaseCategoryViewModel<CategoryNavigator>() {
 
     init {
@@ -50,28 +46,5 @@ class CategoryViewModel @AssistedInject constructor(
 
     override fun onCategoryRemoved(category: Category) {
         navigator?.openRemoveDialog(category)
-    }
-
-    @AssistedFactory
-    interface CategoryViewModelFactory {
-        fun create(handle: SavedStateHandle): CategoryViewModel
-    }
-
-    companion object {
-        fun provideFactory(
-            assistedFactory: CategoryViewModelFactory,
-            owner: SavedStateRegistryOwner,
-            defaultArgs: Bundle? = null
-        ): AbstractSavedStateViewModelFactory =
-            object : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel?> create(
-                    key: String,
-                    modelClass: Class<T>,
-                    handle: SavedStateHandle
-                ): T {
-                    return assistedFactory.create(handle) as T
-                }
-            }
     }
 }
