@@ -21,7 +21,7 @@ class CategoryViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : BaseCategoryViewModel<CategoryNavigator>() {
 
-    val transactionType:  TransactionType = savedStateHandle.get<TransactionType>("transactionType") ?: TransactionType.EXPENSE
+    val transactionType: TransactionType = savedStateHandle.get<TransactionType>("transactionType") ?: TransactionType.EXPENSE
     override val categories: LiveData<List<Category>> = categoryInteractor.getAllCategoriesByType(transactionType).asLiveData()
 
     override fun onCategoryClicked(category: Category) {

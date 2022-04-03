@@ -30,9 +30,8 @@ class TransactionActionReceiver : BroadcastReceiver() {
         intent?.run {
             val actionType =
                 requireNotNull(
-                    extras?.getParcelable<ActionType>(EXTRA_ACTION_TYPE),
-                    { "Action type must't be null" }
-                )
+                    extras?.getParcelable<ActionType>(EXTRA_ACTION_TYPE)
+                ) { "Action type mustn't be null" }
             val action = if (actionType == ActionType.BUTTON) {
                 action!!
             } else {

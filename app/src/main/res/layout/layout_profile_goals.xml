@@ -1,23 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/profile_item_height"
+    android:id="@+id/profile_goals_title"
+    style="@style/Widget.MoneyManager.TextView.ProfileItem"
+    android:drawablePadding="@dimen/standard_half_right_margin"
     android:gravity="center_vertical"
-    android:id="@+id/profile_goals_layout"
-    android:orientation="horizontal">
-
-    <ImageView
-        android:id="@+id/profile_item_goal_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:src="@drawable/ic_goal" />
-
-    <TextView
-        android:id="@+id/profile_item_goal_title"
-        style="@style/Widget.MoneyManager.TextView.ProfileItem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="@string/profile_item_goals_title" />
-</LinearLayout>
+    android:paddingStart="@dimen/standard_left_margin"
+    android:paddingEnd="@dimen/standard_right_margin"
+    app:drawableStartCompat="@drawable/ic_goal"
+    tools:text="@string/profile_item_goals_title" />

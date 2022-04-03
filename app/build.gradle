@@ -124,11 +124,11 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.10"
 
-    implementation "com.google.firebase:firebase-auth:21.0.2"
+    implementation "com.google.firebase:firebase-auth:21.0.3"
     implementation "com.firebaseui:firebase-ui-auth:6.2.0"
     implementation "com.google.android.gms:play-services-auth:20.1.0"
 
-    implementation "com.google.firebase:firebase-analytics-ktx:20.1.0"
+    implementation "com.google.firebase:firebase-analytics-ktx:20.1.2"
     implementation "com.google.firebase:firebase-crashlytics:18.2.9"
     implementation "com.google.firebase:firebase-storage-ktx:20.0.1"
 
@@ -162,3 +162,4 @@ dependencies {
 
     ktlint "com.pinterest:ktlint:0.37.2"
 }
+  

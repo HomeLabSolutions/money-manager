@@ -6,25 +6,18 @@
     android:id="@+id/profile_budget_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
-        android:id="@+id/profile_item_budget_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="24dp"
-        android:src="@drawable/ic_budget_icon" />
-
     <TextView
         android:id="@+id/profile_item_budget_title"
         style="@style/Widget.MoneyManager.TextView.ProfileItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/profile_item_budget_icon"
+        android:drawablePadding="@dimen/standard_half_right_margin"
+        android:paddingStart="@dimen/standard_left_margin"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="8dp"
+        android:paddingEnd="0dp"
+        app:drawableStartCompat="@drawable/ic_budget_icon"
+        app:layout_constraintStart_toStartOf="parent"
         android:text="@string/profile_item_budget_title" />
 
     <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
@@ -50,8 +43,9 @@
         android:layout_height="wrap_content"
         android:text="@string/budget_date_created"
         android:textSize="@dimen/budget_created_date"
+        android:layout_marginStart="72dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/profile_item_budget_title"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_item_budget_value" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

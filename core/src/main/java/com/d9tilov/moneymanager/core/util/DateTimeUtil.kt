@@ -23,7 +23,6 @@ import kotlin.math.abs
 const val DATE_FORMAT = "dd.MM.yyyy"
 const val TRANSACTION_DATE_FORMAT = "dd MMMM yyyy"
 const val TRANSACTION_DATE_FORMAT_SHORT = "dd.MM.yy"
-const val TRANSACTION_DATE_FORMAT_DAY_MONTH = "dd MMMM"
 const val BACKUP_DATE = "dd.MM.yyyy HH:mm"
 
 fun formatDate(date: LocalDateTime, format: String): String {

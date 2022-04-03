@@ -7,7 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class DayOfMonthViewModel @Inject constructor(private val savedStateHandle: SavedStateHandle) :
+class DayOfMonthViewModel @Inject constructor(savedStateHandle: SavedStateHandle) :
     BaseViewModel<DayOfMonthDialogNavigator>() {
 
     var dayOfMonth: Int = savedStateHandle.get<Int>("day_of_month") ?: 1

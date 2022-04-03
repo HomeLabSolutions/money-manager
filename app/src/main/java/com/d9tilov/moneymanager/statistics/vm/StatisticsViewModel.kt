@@ -38,6 +38,7 @@ class StatisticsViewModel @Inject constructor(
         MutableLiveData<Map<LocalDateTime, TransactionLineChartModel>>()
 
     private var currencyCode = DEFAULT_CURRENCY_CODE
+    private var categoryType: StatisticsMenuCategoryType = StatisticsMenuCategoryType.CHILD
     var chartMode: StatisticsMenuChartMode = StatisticsMenuChartMode.PIE_CHART
         private set
     var chartPeriod: StatisticsPeriod = StatisticsPeriod.DAY
@@ -47,8 +48,6 @@ class StatisticsViewModel @Inject constructor(
     var currencyType: StatisticsMenuCurrency = StatisticsMenuCurrency.CURRENT(currencyCode)
         private set
     var transactionType: StatisticsMenuTransactionType = StatisticsMenuTransactionType.EXPENSE
-        private set
-    var categoryType: StatisticsMenuCategoryType = StatisticsMenuCategoryType.CHILD
         private set
 
     val menuItemList = mutableListOf<BaseStatisticsMenuType>()

@@ -73,15 +73,11 @@ class ProfileFragment :
                     ProfileFragmentDirections.toRegularExpensesDest(RegularTransactionDestination.PROFILE_SCREEN)
                 findNavController().navigate(action)
             }
-            profileGoals.profileGoalsLayout.setOnClickListener {
+            profileGoals.profileGoalsTitle.setOnClickListener {
                 val action = ProfileFragmentDirections.toGoalsDest(GoalDestination.PROFILE_SCREEN)
                 findNavController().navigate(action)
             }
-            profileSettings.profileSettingsLayout.setOnClickListener {
-                val action = ProfileFragmentDirections.toSettingsDest()
-                findNavController().navigate(action)
-            }
-            profileSettings.profileSettingsLayout.setOnClickListener {
+            profileSettings.profileSettingsTitle.setOnClickListener {
                 val action = ProfileFragmentDirections.toSettingsDest()
                 findNavController().navigate(action)
             }
@@ -121,10 +117,10 @@ class ProfileFragment :
             val goals = list.joinToString(separator = ",") { it.name }
             when (goals.isEmpty()) {
                 true ->
-                    viewBinding?.profileGoals?.profileItemGoalTitle?.text =
+                    viewBinding?.profileGoals?.profileGoalsTitle?.text =
                         getString(R.string.profile_item_goals_title_empty)
                 false ->
-                    viewBinding?.profileGoals?.profileItemGoalTitle?.text =
+                    viewBinding?.profileGoals?.profileGoalsTitle?.text =
                         getString(R.string.profile_item_goals_title, goals)
             }
         }
