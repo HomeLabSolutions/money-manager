@@ -34,12 +34,11 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
     OnBackPressed {
 
     private val args by navArgs<CategoryFragmentArgs>()
+    private var viewStub: LayoutEmptyListPlaceholderBinding? = null
     protected val destination by lazy { args.destination }
     protected val transactionType by lazy { args.transactionType }
-
     protected var toolbar: MaterialToolbar? = null
-    protected lateinit var categoryAdapter: CategoryModifyAdapter
-    private var viewStub: LayoutEmptyListPlaceholderBinding? = null
+    protected val categoryAdapter: CategoryModifyAdapter = CategoryModifyAdapter()
 
     private val onItemClickListener = object : OnItemClickListener<Category> {
         override fun onItemClick(item: Category, position: Int) {
@@ -62,7 +61,6 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        categoryAdapter = CategoryModifyAdapter()
         categoryAdapter.itemClickListener = onItemClickListener
         categoryAdapter.itemLongClickListener = onItemLongClickListener
         categoryAdapter.itemRemoveClickListener = onItemRemoveClickListener

@@ -47,10 +47,8 @@ class CurrencyDataRepo(
         }.first()
     }
 
-    override suspend fun updateCurrency(currency: Currency) = currencySource.update(currency)
-
-    override suspend fun updateCurrentCurrency(currency: Currency) {
-        preferencesStore.updateCurrentCurrency(currency)
+    override suspend fun updateCurrentCurrency(code: String) {
+        preferencesStore.updateCurrentCurrency(code)
     }
 
     override suspend fun hasAlreadyUpdatedToday(baseCurrency: String): Boolean =

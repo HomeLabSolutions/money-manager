@@ -59,7 +59,7 @@ class CategoryCreationFragment :
     private var icon: Int = 0
 
     private var toolbar: MaterialToolbar? = null
-    private lateinit var categoryColorAdapter: CategoryColorAdapter
+    private val categoryColorAdapter: CategoryColorAdapter = CategoryColorAdapter(category.color)
 
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -69,7 +69,6 @@ class CategoryCreationFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        categoryColorAdapter = CategoryColorAdapter(category.color)
         categoryColorAdapter.itemClickListener = onItemColorClickListener
     }
 

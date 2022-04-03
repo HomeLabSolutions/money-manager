@@ -26,18 +26,19 @@ class SubCategoryFragment :
     SubCategoryNavigator {
 
     private val args by navArgs<SubCategoryFragmentArgs>()
-    private val parentCategory by lazy { args.parentCategory }
-    private lateinit var modifiedParentCategory: Category
+    private val parentCategory: Category by lazy { args.parentCategory }
+    private var modifiedParentCategory: Category? = null
 
     override fun getNavigator() = this
     override val viewModel by viewModels<SubCategoryViewModel>()
+
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         modifiedParentCategory = parentCategory
-        toolbar?.title = getString(R.string.title_sub_category, modifiedParentCategory.name)
+        toolbar?.title = getString(R.string.title_sub_category, modifiedParentCategory?.name)
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Category>(
             SUB_CATEGORY_TITLE
         )?.observe(
@@ -55,14 +56,13 @@ class SubCategoryFragment :
             categoryCreate.gone()
             categoryGroupDelete.setOnClickListener {
                 val action = SubCategoryFragmentDirections.toRemoveCategoryDialog(
-                    CategoryDestination.SUB_CATEGORY_SCREEN, modifiedParentCategory
+                    CategoryDestination.SUB_CATEGORY_SCREEN, modifiedParentCategory!!
                 )
                 findNavController().navigate(action)
             }
             categoryGroupEdit.setOnClickListener {
-                val action = SubCategoryFragmentDirections.toEditCategoryDialog(
-                    modifiedParentCategory
-                )
+                val action =
+                    SubCategoryFragmentDirections.toEditCategoryDialog(modifiedParentCategory!!)
                 findNavController().navigate(action)
             }
             (categoryRv.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false

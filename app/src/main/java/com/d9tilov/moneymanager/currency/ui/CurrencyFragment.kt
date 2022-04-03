@@ -49,7 +49,7 @@ class CurrencyFragment :
 
     private var menu: Menu? = null
     private var toolbar: MaterialToolbar? = null
-    private val currencyAdapter: CurrencyAdapter by lazy { CurrencyAdapter() }
+    private val currencyAdapter: CurrencyAdapter = CurrencyAdapter()
     override val viewModel by viewModels<CurrencyViewModel>()
     override fun getNavigator(): CurrencyNavigator = this
 

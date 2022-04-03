@@ -65,9 +65,6 @@ class CurrencyView @JvmOverloads constructor(
     val prefixTextView: TextView = TextView(context)
 
     init {
-        PLUS_SIGN = context.getString(R.string.plus_sign)
-        MINUS_SIGN = context.getString(R.string.minus_sign)
-
         attrs?.let {
             with(getContext().obtainStyledAttributes(it, R.styleable.CurrencyView)) {
                 showUnderline = getBoolean(R.styleable.CurrencyView_showUnderline, false)
@@ -329,12 +326,12 @@ class CurrencyView @JvmOverloads constructor(
     fun setValue(value: BigDecimal, currencyCode: String) {
         this.sum = value
         this.currencyCode = currencyCode
-        this.signText = getSymbolByCode(currencyCode)
+        this.signText = currencyCode.getSymbolByCode()
     }
 
     fun setCurrencyCode(currencyCode: String) {
         this.currencyCode = currencyCode
-        this.signText = getSymbolByCode(currencyCode)
+        this.signText = currencyCode.getSymbolByCode()
     }
 
     fun setColor(color: Int) {
@@ -373,8 +370,5 @@ class CurrencyView @JvmOverloads constructor(
 
         private const val DEFAULT = -1
         private const val MIN_LENGTH_OF_TEXT_SIZE_MULTIPLIER = 5
-
-        lateinit var PLUS_SIGN: String
-        lateinit var MINUS_SIGN: String
     }
 }

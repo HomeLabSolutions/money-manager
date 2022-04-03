@@ -30,7 +30,10 @@ class UserLocalSource(
         preferencesStore.updateUid(userProfile.uid)
         val result: Result<Nothing> = backupManager.restoreDb()
         if (result.status == Status.ERROR) userDao.insert(userProfile.toDbModel())
-        return userDao.getById(userProfile.uid).first().toDataModel()
+        val dbUser = userDao.getById(userProfile.uid).first().toDataModel()
+        val currencyCode = dbUser.currentCurrencyCode
+        preferencesStore.updateCurrentCurrency(currencyCode)
+        return dbUser
     }
 
     override suspend fun updateCurrentUser(userProfile: UserProfile) {
@@ -75,9 +78,6 @@ class UserLocalSource(
     override suspend fun deleteUser() {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
         if (currentUserId == null) throw WrongUidException()
-        else {
-            userDao.delete(currentUserId)
-            preferencesStore.clearAllData()
-        }
+        else preferencesStore.clearAllData()
     }
 }

@@ -9,8 +9,8 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.annotation.StringRes
 
-fun showLoadingDialog(context: Context, rootView: View): ProgressBar {
-    val layout = rootView as ViewGroup
+fun showLoadingDialog(context: Context, rootView: View?): ProgressBar {
+    val layout = rootView as? ViewGroup
     val params = RelativeLayout.LayoutParams(
         RelativeLayout.LayoutParams.MATCH_PARENT,
         RelativeLayout.LayoutParams.MATCH_PARENT
@@ -24,7 +24,7 @@ fun showLoadingDialog(context: Context, rootView: View): ProgressBar {
     rl.gravity = Gravity.CENTER
     rl.addView(mProgressBar)
 
-    layout.addView(rl, params)
+    layout?.addView(rl, params)
 
     return mProgressBar
 }

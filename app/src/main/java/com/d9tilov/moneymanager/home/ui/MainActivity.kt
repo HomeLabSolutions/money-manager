@@ -74,22 +74,19 @@ class MainActivity :
             R.navigation.statistics_navigation,
             R.navigation.profile_navigation
         )
-        val controller = viewBinding.bottomNav.setupWithNavController(
+        val controller = viewBinding?.bottomNav?.setupWithNavController(
             navGraphIds = navGraphIds,
             fragmentManager = supportFragmentManager,
             containerId = R.id.nav_host_container,
             intent = intent
         )
         // Whenever the selected controller changes, setup the action bar.
-        controller.observe(
+        controller?.observe(
             this
         ) { navController ->
             navController.addOnDestinationChangedListener { _, destination, _ ->
-                if (setOfShownBottomBar.contains(destination.id)) {
-                    showBottomBarWithAnimation()
-                } else {
-                    viewBinding.bottomNav.gone()
-                }
+                if (setOfShownBottomBar.contains(destination.id)) showBottomBarWithAnimation()
+                else viewBinding?.bottomNav?.gone()
             }
         }
         currentNavController = controller
@@ -118,21 +115,21 @@ class MainActivity :
     }
 
     private fun showBottomBarWithAnimation() {
-        if (viewBinding.bottomNav.isVisible) {
-            return
+        viewBinding?.run {
+            if (bottomNav.isVisible) return
+            val bottomBarAnimationAppear =
+                ObjectAnimator.ofFloat(
+                    bottomNav,
+                    View.ALPHA,
+                    ALPHA_BAR_MIN,
+                    ALPHA_BAR_MAX
+                ).apply {
+                    duration = ANIMATION_DURATION_BAR
+                    interpolator = AccelerateInterpolator()
+                }
+            bottomNav.show()
+            bottomBarAnimationAppear.start()
         }
-        val bottomBarAnimationAppear =
-            ObjectAnimator.ofFloat(
-                viewBinding.bottomNav,
-                View.ALPHA,
-                ALPHA_BAR_MIN,
-                ALPHA_BAR_MAX
-            ).apply {
-                duration = ANIMATION_DURATION_BAR
-                interpolator = AccelerateInterpolator()
-            }
-        viewBinding.bottomNav.show()
-        bottomBarAnimationAppear.start()
     }
 
     fun getCurrency() = currency

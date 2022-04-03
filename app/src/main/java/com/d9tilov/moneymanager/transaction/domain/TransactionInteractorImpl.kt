@@ -200,7 +200,7 @@ class TransactionInteractorImpl(
 
     override fun getTransactionsByType(type: TransactionType): Flow<PagingData<Transaction>> {
         return categoryInteractor.getGroupedCategoriesByType(type)
-            .flatMapLatest { categoryList ->
+            .flatMapConcat { categoryList ->
                 transactionRepo.getTransactionsByType(transactionType = type)
                     .map {
                         it.map { item ->

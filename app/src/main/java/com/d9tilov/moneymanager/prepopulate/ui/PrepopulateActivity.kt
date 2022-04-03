@@ -53,46 +53,48 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
         navHostFragment.childFragmentManager.addOnBackStackChangedListener {
             updateProgress(navHostFragment.childFragmentManager.backStackEntryCount)
         }
-        viewBinding.prepopulateNextBtn.setOnClickListener {
-            val action: NavDirections
-            when (navController.currentDestination?.id) {
-                R.id.choose_currency_dest -> {
-                    action =
-                        CurrencyFragmentDirections.toCommonAmountDest(BudgetDestination.PREPOPULATE_SCREEN)
-                    navController.navigate(action)
+        viewBinding?.run {
+            prepopulateNextBtn.setOnClickListener {
+                val action: NavDirections
+                when (navController.currentDestination?.id) {
+                    R.id.choose_currency_dest -> {
+                        action =
+                            CurrencyFragmentDirections.toCommonAmountDest(BudgetDestination.PREPOPULATE_SCREEN)
+                        navController.navigate(action)
+                    }
+                    R.id.budget_amount_dest -> {
+                        action = BudgetAmountFragmentDirections.toRegularIncomeDest(
+                            RegularTransactionDestination.PREPOPULATE_SCREEN
+                        )
+                        navController.navigate(action)
+                    }
+                    R.id.regular_income_dest -> {
+                        action = RegularIncomeFragmentDirections.toRegularExpenseDest(
+                            RegularTransactionDestination.PREPOPULATE_SCREEN
+                        )
+                        navController.navigate(action)
+                    }
+                    R.id.regular_expense_dest -> {
+                        action =
+                            RegularExpenseFragmentDirections.toGoalsDest(GoalDestination.PREPOPULATE_SCREEN)
+                        navController.navigate(action)
+                    }
+                    else -> {
+                        startActivity(Intent(this@PrepopulateActivity, MainActivity::class.java))
+                        finish()
+                    }
                 }
-                R.id.budget_amount_dest -> {
-                    action = BudgetAmountFragmentDirections.toRegularIncomeDest(
-                        RegularTransactionDestination.PREPOPULATE_SCREEN
-                    )
-                    navController.navigate(action)
-                }
-                R.id.regular_income_dest -> {
-                    action = RegularIncomeFragmentDirections.toRegularExpenseDest(
-                        RegularTransactionDestination.PREPOPULATE_SCREEN
-                    )
-                    navController.navigate(action)
-                }
-                R.id.regular_expense_dest -> {
-                    action =
-                        RegularExpenseFragmentDirections.toGoalsDest(GoalDestination.PREPOPULATE_SCREEN)
-                    navController.navigate(action)
-                }
-                else -> {
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
-                }
+                controlsClick?.onNextClick()
             }
-            controlsClick?.onNextClick()
-        }
-        viewBinding.prepopulateBackBtn.setOnClickListener {
-            navController.popBackStack()
-            controlsClick?.onBackClick()
+            prepopulateBackBtn.setOnClickListener {
+                navController.popBackStack()
+                controlsClick?.onBackClick()
+            }
         }
     }
 
     private fun setControlsVisibility(visible: Boolean) {
-        viewBinding.run {
+        viewBinding?.run {
             if (visible) {
                 prepopulateBackBtn.show()
                 prepopulateNextBtn.show()
@@ -106,24 +108,25 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
     }
 
     private fun enableBackButton(enable: Boolean) {
-        viewBinding.prepopulateBackBtn.isEnabled = enable
-        val typedValue = TypedValue()
-        resources.getValue(R.dimen.alpha_disable, typedValue, true)
-        val disableValue = typedValue.float
-        viewBinding.prepopulateBackBtn.alpha = if (enable) 1f else disableValue
+        viewBinding?.run {
+            prepopulateBackBtn.isEnabled = enable
+            val typedValue = TypedValue()
+            resources.getValue(R.dimen.alpha_disable, typedValue, true)
+            val disableValue = typedValue.float
+            prepopulateBackBtn.alpha = if (enable) 1f else disableValue
+        }
     }
 
     private fun updateProgress(progress: Int) {
         val newProgress = progress + 1f
-        viewBinding.prepopulateProgressTitle.text = getString(
-            R.string.prepopulate_progress,
-            newProgress.toInt().toString(),
-            MAX_SCREEN_AMOUNT.toInt().toString()
-        )
-        viewBinding.prepopulateProgress.setProgress(
-            newProgress,
-            MAX_SCREEN_AMOUNT
-        )
+        viewBinding?.run {
+            prepopulateProgressTitle.text = getString(
+                R.string.prepopulate_progress,
+                newProgress.toInt().toString(),
+                MAX_SCREEN_AMOUNT.toInt().toString()
+            )
+            prepopulateProgress.setProgress(newProgress, MAX_SCREEN_AMOUNT)
+        }
     }
 
     companion object {

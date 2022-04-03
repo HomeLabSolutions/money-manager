@@ -173,11 +173,8 @@ class RegularTransactionCreationFragment :
                 findNavController().navigate(action)
             }
             createdRegularTransactionSave.setOnClickListener { view ->
-                if (view.isSelected) {
-                    viewModel.saveOrUpdate(localTransaction!!)
-                } else {
-                    shakeError()
-                }
+                if (view.isSelected) viewModel.saveOrUpdate(localTransaction!!)
+                else shakeError()
             }
             createdRegularTransactionMonday.setOnClickListener { setWeekdaySelected(0) }
             createdRegularTransactionTuesday.setOnClickListener { setWeekdaySelected(1) }

@@ -47,8 +47,8 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : Vi
     BaseIncomeExpenseNavigator,
     OnIncomeExpenseListener {
 
-    protected val categoryAdapter by lazy { CategoryAdapter() }
-    protected val transactionAdapter by lazy { TransactionAdapter() }
+    protected val categoryAdapter = CategoryAdapter()
+    protected val transactionAdapter = TransactionAdapter()
     private var isTransactionDataEmpty = false
 
     override val snackBarBackgroundTint = R.color.button_normal_color_disable
@@ -106,7 +106,7 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : Vi
             hideViewStub()
             resetMainSum()
             (requireParentFragment() as IncomeExpenseFragment).closeKeyboard()
-            transactionRvList.scrollToPosition(0)
+            transactionRvList?.scrollToPosition(0)
         }
         lifecycleScope.launch {
             transactionAdapter
@@ -118,23 +118,23 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : Vi
                     if (isTransactionDataEmpty) showViewStub() else hideViewStub()
                 }
         }
-        transactionRvList.addOnScrollListener(
+        transactionRvList?.addOnScrollListener(
             object : RecyclerView.OnScrollListener() {
                 private val fab = transactionBtnAdd
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    if (dy > 0 || dy < 0 && fab.isShown) fab.hide()
+                    if (dy > 0 || dy < 0 && fab?.isShown == true) fab?.hide()
                 }
 
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE) fab.show()
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) fab?.show()
                     super.onScrollStateChanged(recyclerView, newState)
                 }
             }
         )
-        transactionBtnAdd.setOnClickListener { (requireParentFragment() as IncomeExpenseFragment).openKeyboard() }
+        transactionBtnAdd?.setOnClickListener { (requireParentFragment() as IncomeExpenseFragment).openKeyboard() }
 
         // need for work horizontal scroll of categories rv and viewpager
-        categoryRvList.addOnItemTouchListener(object : OnItemTouchListener {
+        categoryRvList?.addOnItemTouchListener(object : OnItemTouchListener {
             override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
                 when (e.action) {
                     MotionEvent.ACTION_MOVE -> rv.parent.requestDisallowInterceptTouchEvent(true)
@@ -149,24 +149,24 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : Vi
 
     private fun showViewStub() {
         if ((requireParentFragment() as IncomeExpenseFragment).isKeyboardOpened()) return
-        emptyViewStub.root.show()
-        emptyViewStub.emptyPlaceholderIcon.setImageDrawable(
+        emptyViewStub?.root?.show()
+        emptyViewStub?.emptyPlaceholderIcon?.setImageDrawable(
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_wallet_empty)
         )
-        emptyViewStub.emptyPlaceholderTitle.text =
+        emptyViewStub?.emptyPlaceholderTitle?.text =
             getString(
                 if (getType().isIncome()) R.string.transaction_empty_placeholder_income_title
                 else R.string.transaction_empty_placeholder_expense_title
             )
-        emptyViewStub.emptyPlaceholderSubtitle.show()
-        emptyViewStub.emptyPlaceholderSubtitle.text =
+        emptyViewStub?.emptyPlaceholderSubtitle?.show()
+        emptyViewStub?.emptyPlaceholderSubtitle?.text =
             getString(R.string.transaction_empty_placeholder_subtitle)
-        val addTransaction = emptyViewStub.emptyPlaceholderAdd
-        addTransaction.setOnClickListener { (requireParentFragment() as IncomeExpenseFragment).openKeyboard() }
+        val addTransaction = emptyViewStub?.emptyPlaceholderAdd
+        addTransaction?.setOnClickListener { (requireParentFragment() as IncomeExpenseFragment).openKeyboard() }
     }
 
     private fun hideViewStub() {
-        emptyViewStub.root.gone()
+        emptyViewStub?.root?.gone()
     }
 
     private fun openRemoveConfirmationDialog(transaction: Transaction) {
@@ -187,28 +187,29 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : Vi
     override fun onKeyboardShown(show: Boolean) {
         val hiddenGroup = if (show) transactionsLayout else infoLayout
         val shownGroup = if (show) infoLayout else transactionsLayout
-        hiddenGroup.gone()
+        hiddenGroup?.gone()
         if (show) {
             hideViewStub()
         } else {
             if (isTransactionDataEmpty) showViewStub()
         }
-        if (!shownGroup.isVisible) shownGroup.showWithAnimation()
+        if (shownGroup?.isVisible == false) shownGroup.showWithAnimation()
     }
 
     protected fun getSum(): BigDecimal = (requireParentFragment() as IncomeExpenseFragment).getSum()
-    protected fun getCurrencyCode(): String = (requireParentFragment() as IncomeExpenseFragment).getCurrencyCode()
+    protected fun getCurrencyCode(): String =
+        (requireParentFragment() as IncomeExpenseFragment).getCurrencyCode()
 
     private fun resetMainSum() {
         (requireParentFragment() as IncomeExpenseFragment).resetSum()
     }
 
-    protected open lateinit var emptyViewStub: LayoutEmptyListPlaceholderBinding
-    protected open lateinit var categoryRvList: RecyclerView
-    protected open lateinit var transactionRvList: RecyclerView
-    protected open lateinit var transactionBtnAdd: FloatingActionButton
-    protected open lateinit var infoLayout: ConstraintLayout
-    protected open lateinit var transactionsLayout: ConstraintLayout
+    protected open var emptyViewStub: LayoutEmptyListPlaceholderBinding? = null
+    protected open var categoryRvList: RecyclerView? = null
+    protected open var transactionRvList: RecyclerView? = null
+    protected open var transactionBtnAdd: FloatingActionButton? = null
+    protected open var infoLayout: ConstraintLayout? = null
+    protected open var transactionsLayout: ConstraintLayout? = null
     protected abstract fun getType(): TransactionType
     protected abstract fun initViews()
     protected abstract fun initCategoryRecyclerView()

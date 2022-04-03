@@ -1,8 +1,8 @@
 package com.d9tilov.moneymanager.category.ui.vm
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN
@@ -13,22 +13,16 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.transaction.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
-    private val categoryInteractor: CategoryInteractor,
+    categoryInteractor: CategoryInteractor,
     private val savedStateHandle: SavedStateHandle
 ) : BaseCategoryViewModel<CategoryNavigator>() {
 
-    init {
-        val transactionType =
-            savedStateHandle.get<TransactionType>("transactionType") ?: TransactionType.EXPENSE
-        viewModelScope.launch {
-            categories = categoryInteractor.getAllCategoriesByType(transactionType).asLiveData()
-        }
-    }
+    val transactionType:  TransactionType = savedStateHandle.get<TransactionType>("transactionType") ?: TransactionType.EXPENSE
+    override val categories: LiveData<List<Category>> = categoryInteractor.getAllCategoriesByType(transactionType).asLiveData()
 
     override fun onCategoryClicked(category: Category) {
         val destination = savedStateHandle.get<CategoryDestination>("destination")

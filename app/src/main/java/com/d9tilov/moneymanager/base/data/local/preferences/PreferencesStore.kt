@@ -9,12 +9,10 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DATA_STORE_NAME
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENCE_CLIENT_UID
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENCE_CURRENT_CURRENCY
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENCE_CURRENT_CURRENCY_SYMBOL
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.STORE_NAME
-import com.d9tilov.moneymanager.currency.data.entity.Currency
+import com.d9tilov.moneymanager.core.util.CurrencyUtils.getSymbolByCode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -37,15 +35,11 @@ class PreferencesStore(context: Context) {
 
     val currentCurrency: Flow<CurrencyMetaData> = dataStore.data.map { data ->
         val code = data[PREFERENCE_CURRENCY_CODE_KEY] ?: DEFAULT_CURRENCY_CODE
-        val symbol = data[PREFERENCE_CURRENCY_SYMBOL_KEY] ?: DEFAULT_CURRENCY_SYMBOL
-        CurrencyMetaData(code, symbol)
+        CurrencyMetaData(code, code.getSymbolByCode())
     }
 
-    suspend fun updateCurrentCurrency(currency: Currency) {
-        dataStore.edit { preferences ->
-            preferences[PREFERENCE_CURRENCY_CODE_KEY] = currency.code
-            preferences[PREFERENCE_CURRENCY_SYMBOL_KEY] = currency.symbol
-        }
+    suspend fun updateCurrentCurrency(code: String) {
+        dataStore.edit { preferences -> preferences[PREFERENCE_CURRENCY_CODE_KEY] = code }
     }
 
     suspend fun clearAllData() {
@@ -55,7 +49,5 @@ class PreferencesStore(context: Context) {
     companion object {
         private val PREFERENCE_CLIENT_UID_KEY = stringPreferencesKey(PREFERENCE_CLIENT_UID)
         private val PREFERENCE_CURRENCY_CODE_KEY = stringPreferencesKey(PREFERENCE_CURRENT_CURRENCY)
-        private val PREFERENCE_CURRENCY_SYMBOL_KEY =
-            stringPreferencesKey(PREFERENCE_CURRENT_CURRENCY_SYMBOL)
     }
 }

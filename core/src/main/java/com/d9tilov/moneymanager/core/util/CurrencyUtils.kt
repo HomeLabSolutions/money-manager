@@ -140,5 +140,5 @@ object CurrencyUtils {
         return String(Character.toChars(firstChar)) + String(Character.toChars(secondChar))
     }
 
-    fun getSymbolByCode(code: String): String = currencyMap[code] ?: code
+    fun String.getSymbolByCode(): String = currencyMap[this] ?: this
 }

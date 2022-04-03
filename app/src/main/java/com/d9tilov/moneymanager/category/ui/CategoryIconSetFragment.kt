@@ -24,14 +24,13 @@ class CategoryIconSetFragment :
     CategorySetNavigator {
 
     private var toolbar: MaterialToolbar? = null
-    private lateinit var categoryAdapter: CategoryIconSetAdapter
+    private val categoryAdapter: CategoryIconSetAdapter = CategoryIconSetAdapter()
 
     override fun getNavigator() = this
     override val viewModel by viewModels<CategorySetViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        categoryAdapter = CategoryIconSetAdapter()
         categoryAdapter.itemClickListener = onItemIconClickListener
     }
 

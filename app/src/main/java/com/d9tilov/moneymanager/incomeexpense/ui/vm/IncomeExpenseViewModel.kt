@@ -28,7 +28,6 @@ class IncomeExpenseViewModel @Inject constructor(
     private val updateCurrencyExceptionHandler = CoroutineExceptionHandler { _, exception ->
         Timber.d("Unable to update currency: $exception")
     }
-
     private var defaultCurrencyCode: String = DEFAULT_CURRENCY_CODE
 
     init {

@@ -11,7 +11,7 @@ fun CurrencyResponse.toDataModel(): List<Currency> {
         val item = Currency(
             code = key,
             value = value.toBigDecimal(),
-            symbol = getSymbolByCode(key),
+            symbol = key.getSymbolByCode(),
             lastUpdateTime = date
         )
         currencyRateList.add(item)

@@ -42,7 +42,7 @@ class IncomeExpenseFragment :
     override fun getNavigator() = this
     override val viewModel by viewModels<IncomeExpenseViewModel>()
 
-    private lateinit var incomeExpenseAdapter: IncomeExpenseAdapter
+    private var incomeExpenseAdapter: IncomeExpenseAdapter? = null
     private var pageIndex = -1
     private var isKeyboardOpen = true
     private val commonGroup = mutableListOf<View>()
@@ -52,7 +52,7 @@ class IncomeExpenseFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        incomeExpenseAdapter = IncomeExpenseAdapter(childFragmentManager, lifecycle)
+        incomeExpenseAdapter = IncomeExpenseAdapter(childFragmentManager, lifecycle) // must create adapter every time
         viewBinding?.run {
             if (commonGroup.isEmpty()) {
                 commonGroup.add(incomeExpenseMainSum)

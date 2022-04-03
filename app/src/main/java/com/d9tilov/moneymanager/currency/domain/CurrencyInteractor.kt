@@ -14,6 +14,5 @@ interface CurrencyInteractor {
     suspend fun toMainCurrency(amount: BigDecimal, currencyCode: String): BigDecimal
     suspend fun toUsd(amount: BigDecimal, currencyCode: String): BigDecimal
     suspend fun updateCurrencyRates()
-    suspend fun updateCurrency(currency: Currency)
     suspend fun updateCurrentCurrency(currency: DomainCurrency)
 }

@@ -24,14 +24,14 @@ import com.google.android.material.snackbar.Snackbar
 abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
 
     protected open val navHostFragmentId: Int = -1
-    protected lateinit var viewBinding: T
+    protected var viewBinding: T? = null
     private var progress: ProgressBar? = null
     private val contentLayout: ViewGroup by lazy { findViewById<ViewGroup>(android.R.id.content) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = performDataBinding()
-        setContentView(viewBinding.root)
+        setContentView(viewBinding!!.root)
         if (BuildConfig.DEBUG) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
@@ -43,12 +43,12 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
 
     fun showLoading() {
         hideLoading()
-        progress = showLoadingDialog(this, viewBinding.root)
+        progress = showLoadingDialog(this, viewBinding?.root)
     }
 
     fun hideLoading() {
         if (null != progress) {
-            hideLoadingDialog(viewBinding.root as ViewGroup, progress?.parent as ViewGroup)
+            hideLoadingDialog(viewBinding?.root as ViewGroup, progress?.parent as ViewGroup)
             progress = null
         }
     }

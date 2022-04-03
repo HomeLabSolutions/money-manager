@@ -7,7 +7,7 @@ import com.d9tilov.moneymanager.core.ui.BaseViewModel
 
 abstract class BaseCategoryViewModel<T : BaseNavigator> : BaseViewModel<T>() {
 
-    lateinit var categories: LiveData<List<Category>>
+    abstract val categories: LiveData<List<Category>>
 
     abstract fun onCategoryClicked(category: Category)
     abstract fun onCategoryRemoved(category: Category)

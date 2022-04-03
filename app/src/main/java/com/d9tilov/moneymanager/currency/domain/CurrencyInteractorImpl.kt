@@ -65,9 +65,7 @@ class CurrencyInteractorImpl(
         currencyRepo.updateCurrencies()
     }
 
-    override suspend fun updateCurrency(currency: Currency) = currencyRepo.updateCurrency(currency)
-
     override suspend fun updateCurrentCurrency(currency: DomainCurrency) {
-        currencyRepo.updateCurrentCurrency(domainMapper.toDataModel(currency))
+        currencyRepo.updateCurrentCurrency(domainMapper.toDataModel(currency).code)
     }
 }

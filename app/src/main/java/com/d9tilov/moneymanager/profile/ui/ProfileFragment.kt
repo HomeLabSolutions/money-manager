@@ -23,9 +23,6 @@ import com.d9tilov.moneymanager.profile.ui.LogoutDialog.Companion.ARG_LOGOUT_CAN
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileViewModel
 import com.d9tilov.moneymanager.regular.RegularTransactionDestination
 import com.d9tilov.moneymanager.splash.ui.SplashActivity
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,18 +30,11 @@ class ProfileFragment :
     BaseFragment<ProfileNavigator, FragmentProfileBinding>(FragmentProfileBinding::inflate, R.layout.fragment_profile),
     ProfileNavigator {
 
-    private lateinit var googleSignInClient: GoogleSignInClient
-
     override fun getNavigator() = this
     override val viewModel by viewModels<ProfileViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-        googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
         (activity as AppCompatActivity).supportActionBar?.hide()
     }
 

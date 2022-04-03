@@ -5,7 +5,6 @@ import android.text.InputFilter
 import android.text.InputType
 import android.text.Spanned
 import android.util.AttributeSet
-import android.util.Log
 import androidx.appcompat.widget.AppCompatEditText
 import com.d9tilov.moneymanager.core.R
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DECIMAL_SEPARATOR
@@ -37,14 +36,13 @@ class MoneyEditText @JvmOverloads constructor(
         DEFAULT_DECIMAL_SEPARATOR
     )
     var showDelimiter = false
-    private lateinit var formatter: DecimalFormat
+    private val formatter: DecimalFormat by lazy { createFormatter() }
 
     init {
         initInputFilter()
         inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
         isSingleLine = true
         maxLines = 1
-        initFormatter()
         includeFontPadding = false
         requestFocus()
     }
@@ -77,13 +75,13 @@ class MoneyEditText @JvmOverloads constructor(
         filters = inputFilterArray
     }
 
-    private fun initFormatter() {
+    private fun createFormatter(): DecimalFormat {
         val formatSymbols = DecimalFormatSymbols(Locale.ENGLISH)
         formatSymbols.groupingSeparator = GROUPING_SEPARATOR
         if (showDelimiter) {
             formatSymbols.decimalSeparator = DECIMAL_SEPARATOR[0]
         }
-        formatter = DecimalFormat(FORMAT_STRING, formatSymbols)
+        return DecimalFormat(FORMAT_STRING, formatSymbols)
     }
 
     override fun onTextChanged(s: CharSequence, start: Int, lengthBefore: Int, lengthAfter: Int) {
@@ -104,7 +102,7 @@ class MoneyEditText @JvmOverloads constructor(
             .dropLastWhile { !showDelimiter && it.toString() == DECIMAL_SEPARATOR }
             .replace(DEFAULT_DECIMAL_SEPARATOR, DECIMAL_SEPARATOR)
             .trim()
-        val userInput = if (formattedInput.isEmpty()) ZERO else formattedInput
+        val userInput = formattedInput.ifEmpty { ZERO }
         // ,, -> ,
         if (userInput.count { ch -> ch.toString() == DECIMAL_SEPARATOR } > 1) {
             setText(prevInput)
@@ -124,7 +122,7 @@ class MoneyEditText @JvmOverloads constructor(
         if (startWithDecimalSeparator && userInput.length > 1) {
             val st = StringTokenizer(userInput)
             val afterDot = st.nextToken(DECIMAL_SEPARATOR)
-            var decimalPart = extractDigits(afterDot)
+            val decimalPart = extractDigits(afterDot)
             val result = "$ZERO$DECIMAL_SEPARATOR$decimalPart"
             setText(result)
             setSelection(2)
