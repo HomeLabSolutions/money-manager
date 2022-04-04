@@ -93,11 +93,8 @@ class SubCategoryFragment :
         findNavController().popBackStack(R.id.category_dest, true)
     }
 
-    override fun openCreateCategoryScreen(category: Category?) {
-        val action = SubCategoryFragmentDirections.toCategoryCreationDest(
-            transactionType,
-            category
-        )
+    override fun openCreateCategoryScreen(category: Category) {
+        val action = SubCategoryFragmentDirections.toCategoryCreationDest(category)
         findNavController().navigate(action)
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
             param(FirebaseAnalytics.Param.ITEM_ID, "open_creation_category_screen")

@@ -16,7 +16,6 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryCreationNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
-import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.exception.CategoryExistException
 import com.d9tilov.moneymanager.category.ui.CategoryIconSetFragment.Companion.ARG_CATEGORY_ICON_ID
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryColorAdapter
@@ -29,7 +28,6 @@ import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentCreationCategoryBinding
-import com.d9tilov.moneymanager.transaction.isIncome
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
@@ -42,15 +40,7 @@ class CategoryCreationFragment :
     CategoryCreationNavigator {
 
     private val args by navArgs<CategoryCreationFragmentArgs>()
-    private val transactionType by lazy { args.transactionType }
-    private val category by lazy {
-        args.category ?: Category.EMPTY.copy(
-            type = transactionType,
-            name = "",
-            icon = if (!transactionType.isIncome()) R.drawable.ic_category_food else R.drawable.ic_category_business,
-            color = R.color.category_pink
-        )
-    }
+    private val category by lazy { args.category }
 
     @ColorRes
     private var color: Int = 0
@@ -59,7 +49,7 @@ class CategoryCreationFragment :
     private var icon: Int = 0
 
     private var toolbar: MaterialToolbar? = null
-    private val categoryColorAdapter: CategoryColorAdapter = CategoryColorAdapter(category.color)
+    private val categoryColorAdapter by lazy { CategoryColorAdapter(category.color) } // must be lazy for properly initialization with args
 
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics

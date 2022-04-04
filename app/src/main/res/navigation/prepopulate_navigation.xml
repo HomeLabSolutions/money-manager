@@ -270,13 +270,8 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
         <argument
-            android:name="transactionType"
-            app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
-        <argument
             android:name="category"
-            android:defaultValue="@null"
-            app:argType="com.d9tilov.moneymanager.category.data.entity.Category"
-            app:nullable="true" />
+            app:argType="com.d9tilov.moneymanager.category.data.entity.Category" />
     </fragment>
 
     <fragment

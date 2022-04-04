@@ -91,7 +91,7 @@ interface LogoutDialogNavigator : BaseNavigator {
 
 interface CategoryNavigator : BaseNavigator {
     fun openSubCategoryScreen(category: Category)
-    fun openCreateCategoryScreen(category: Category? = null)
+    fun openCreateCategoryScreen(category: Category)
     fun openRemoveDialog(category: Category)
     fun backToEditTransactionScreen(category: Category)
     fun backToEditRegularTransactionScreen(category: Category)
@@ -115,7 +115,7 @@ interface SubCategoryNavigator : BaseNavigator {
     fun backToEditTransactionScreen(category: Category)
     fun backToEditRegularTransactionScreen(category: Category)
     fun backToMainScreen(category: Category)
-    fun openCreateCategoryScreen(category: Category? = null)
+    fun openCreateCategoryScreen(category: Category)
     fun openRemoveDialog(subCategory: Category)
 }
 

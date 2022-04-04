@@ -16,6 +16,7 @@ import com.d9tilov.moneymanager.category.ui.vm.CategoryViewModel
 import com.d9tilov.moneymanager.core.events.OnItemMoveListener
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragment.Companion.ARG_TRANSACTION_CREATED
+import com.d9tilov.moneymanager.transaction.isIncome
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,11 +45,8 @@ class CategoryFragment :
         }
     }
 
-    override fun openCreateCategoryScreen(category: Category?) {
-        val action = CategoryFragmentDirections.toCategoryCreationDest(
-            transactionType,
-            category
-        )
+    override fun openCreateCategoryScreen(category: Category) {
+        val action = CategoryFragmentDirections.toCategoryCreationDest(category)
         findNavController().navigate(action)
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
             param(FirebaseAnalytics.Param.ITEM_ID, "open_creation_category_screen")
@@ -90,7 +88,13 @@ class CategoryFragment :
         super.onViewCreated(view, savedInstanceState)
         toolbar?.title = getString(R.string.title_category)
         viewBinding?.categoryCreate?.setOnClickListener {
-            val action = CategoryFragmentDirections.toCategoryCreationDest(transactionType)
+            val action = CategoryFragmentDirections.toCategoryCreationDest(
+                Category.EMPTY.copy(
+                    type = transactionType,
+                    icon = if (!transactionType.isIncome()) R.drawable.ic_category_food else R.drawable.ic_category_business,
+                    color = R.color.category_pink
+                )
+            )
             findNavController().navigate(action)
         }
         val callback = SimpleItemTouchHelperCallback(categoryAdapter)
