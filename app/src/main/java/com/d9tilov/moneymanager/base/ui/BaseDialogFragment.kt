@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
-import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.viewbinding.ViewBinding
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
@@ -17,8 +16,6 @@ import com.d9tilov.moneymanager.core.util.toast
 abstract class BaseDialogFragment<N : BaseNavigator, VB : ViewBinding>(private val inflate: Inflate<VB>) :
     AppCompatDialogFragment() {
 
-    @get:LayoutRes
-    protected abstract val layoutId: Int
     abstract fun getNavigator(): N
 
     protected abstract val viewModel: BaseViewModel<N>

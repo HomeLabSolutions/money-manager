@@ -18,7 +18,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class DayOfMonthDialog :
     BaseDialogFragment<DayOfMonthDialogNavigator, FragmentDialogDayOfMonthPickerBinding>(FragmentDialogDayOfMonthPickerBinding::inflate), DayOfMonthDialogNavigator {
 
-    override val layoutId = R.layout.fragment_dialog_day_of_month_picker
     override fun getNavigator() = this
     override val viewModel by viewModels<DayOfMonthViewModel>()
 

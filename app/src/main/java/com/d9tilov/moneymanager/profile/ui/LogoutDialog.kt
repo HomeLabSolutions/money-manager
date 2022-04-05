@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.backup.PeriodicBackupWorker
 import com.d9tilov.moneymanager.base.ui.BaseDialogFragment
 import com.d9tilov.moneymanager.base.ui.navigator.LogoutDialogNavigator
@@ -19,7 +18,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class LogoutDialog :
     BaseDialogFragment<LogoutDialogNavigator, FragmentDialogLogoutBinding>(FragmentDialogLogoutBinding::inflate), LogoutDialogNavigator {
 
-    override val layoutId = R.layout.fragment_dialog_logout
     override fun getNavigator() = this
     override val viewModel by viewModels<LogoutViewModel>()
 

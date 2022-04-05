@@ -250,6 +250,14 @@
             android:defaultValue="@null"
             app:argType="string"
             app:nullable="true" />
+
+        <action
+            android:id="@+id/to_change_currency_dialog"
+            app:destination="@id/change_currency_dialog"
+            app:enterAnim="@anim/slide_up_enter"
+            app:exitAnim="@anim/slide_up_exit"
+            app:popEnterAnim="@anim/slide_down_enter"
+            app:popExitAnim="@anim/slide_down_exit" />
     </fragment>
 
     <fragment
@@ -326,5 +334,15 @@
         <argument
             android:name="category"
             app:argType="com.d9tilov.moneymanager.category.data.entity.Category" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/change_currency_dialog"
+        android:name="com.d9tilov.moneymanager.currency.ui.CurrencyChangeDialog"
+        tools:layout="@layout/fragment_dialog_change_currency">
+
+        <argument
+            android:name="currency"
+            app:argType="com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency" />
     </dialog>
 </navigation>

@@ -113,7 +113,12 @@ class IncomeExpenseFragment :
         }
         viewModel.getCurrencyCodeAsync().observe(
             viewLifecycleOwner
-        ) { viewBinding?.incomeExpenseMainSum?.setCurrencyCode(it) }
+        ) {
+            viewBinding?.run {
+                val sum = incomeExpenseMainSum.getValue()
+                incomeExpenseMainSum.setValue(sum, it)
+            }
+        }
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<DomainCurrency>(
             CurrencyFragment.ARG_CURRENCY
         )?.observe(

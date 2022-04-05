@@ -52,7 +52,7 @@ class ProfileFragment :
                 val action = ProfileFragmentDirections.toLogoutDialogDest()
                 findNavController().navigate(action)
             }
-            profileCurrency.profileItemCurrentCurrencyLayout.setOnClickListener {
+            profileCurrency.profileCurrencyLayout.setOnClickListener {
                 val action =
                     ProfileFragmentDirections.toCurrencyDest(CurrencyDestination.PROFILE_SCREEN_CURRENT)
                 findNavController().navigate(action)

@@ -88,11 +88,8 @@ class ExpenseFragment :
         viewModel.spentInPeriod.observe(
             viewLifecycleOwner
         ) { sum ->
-            if (sum.signum() == 0) {
-                viewBinding?.expenseInfoLayoutInclude?.expensePeriodInfoApproxSign?.gone()
-            } else {
-                viewBinding?.expenseInfoLayoutInclude?.expensePeriodInfoApproxSign?.show()
-            }
+            if (sum.signum() == 0) viewBinding?.expenseInfoLayoutInclude?.expensePeriodInfoApproxSign?.gone()
+            else viewBinding?.expenseInfoLayoutInclude?.expensePeriodInfoApproxSign?.show()
         }
         viewModel.spentInPeriodApprox.observe(
             viewLifecycleOwner
@@ -105,11 +102,8 @@ class ExpenseFragment :
         viewModel.spentToday.observe(
             viewLifecycleOwner
         ) { sum ->
-            if (sum.signum() == 0) {
-                viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoApproxSign?.gone()
-            } else {
-                viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoApproxSign?.show()
-            }
+            if (sum.signum() == 0) viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoApproxSign?.gone()
+            else viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoApproxSign?.show()
         }
         viewModel.spentTodayApprox.observe(
             viewLifecycleOwner

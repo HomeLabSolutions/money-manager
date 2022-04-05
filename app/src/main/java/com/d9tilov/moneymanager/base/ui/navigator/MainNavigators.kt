@@ -16,6 +16,9 @@ interface CurrencyNavigator : BaseNavigator {
     fun skip()
     fun showError()
 }
+interface CurrencyChangeNavigator : BaseNavigator {
+    fun change()
+}
 
 interface BudgetAmountNavigator : BaseNavigator {
     fun goToRegularIncomeScreen()

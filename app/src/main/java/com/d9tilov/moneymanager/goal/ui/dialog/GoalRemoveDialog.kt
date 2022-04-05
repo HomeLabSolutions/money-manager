@@ -20,8 +20,6 @@ class GoalRemoveDialog :
     private val args by navArgs<GoalRemoveDialogArgs>()
     private val goal by lazy { args.goal }
 
-    override val layoutId = R.layout.fragment_dialog_remove
-
     override fun getNavigator() = this
 
     override val viewModel by viewModels<RemoveGoalViewModel>()

@@ -5,6 +5,7 @@
     android:layout_height="@dimen/profile_item_height"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center|start"
+    android:id="@+id/profile_currency_layout"
     android:orientation="horizontal">
 
     <TextView

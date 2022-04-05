@@ -329,11 +329,6 @@ class CurrencyView @JvmOverloads constructor(
         this.signText = currencyCode.getSymbolByCode()
     }
 
-    fun setCurrencyCode(currencyCode: String) {
-        this.currencyCode = currencyCode
-        this.signText = currencyCode.getSymbolByCode()
-    }
-
     fun setColor(color: Int) {
         moneyEditText.setTextColor(color)
         signTextView.setTextColor(color)

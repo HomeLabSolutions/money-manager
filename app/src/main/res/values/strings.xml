@@ -27,6 +27,8 @@
     <string name="profile_logout">Logout</string>
 
     <string name="currency_error">Failed to get currency list</string>
+    <string name="currency_change_title">Change currency?</string>
+    <string name="currency_change_subtitle">The app will restart.</string>
 
     <string name="default_category_expense_food">Food</string>
     <string name="default_category_expense_cafe">Cafe</string>
@@ -50,6 +52,7 @@
 
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="change">Change</string>
     <string name="exit">Exit</string>
     <string name="cancel">Cancel</string>
     <string name="retry">Retry</string>
@@ -58,7 +61,7 @@
     <string name="add">Add</string>
     <string name="create">Create</string>
 
-    <string name="transaction_delete_dialog_title">Deleting a transaction</string>
+    <string name="transaction_delete_dialog_title">Delete this transaction?</string>
     <string name="transaction_delete_dialog_subtitle">Do you really want to delete the transaction?</string>
     <string name="transaction_edit_sum_title">Amount</string>
     <string name="transaction_edit_description_hint">Description</string>
@@ -90,7 +93,7 @@
     <string name="category_empty_placeholder_title">Category list is empty</string>
     <string name="category_empty_placeholder_subtitle">Add at least one category</string>
 
-    <string name="sub_category_delete_title">Deleting a subcategory</string>
+    <string name="sub_category_delete_title">Delete subcategory?</string>
     <string name="sub_category_delete_subtitle">Do you want to delete the subcategory \"%1$s\"\?\n\nAll operations with this category will also be deleted.</string>
     <string name="sub_category_delete">Delete</string>
     <string name="sub_category_delete_from_group">Delete from group</string>
@@ -130,7 +133,7 @@
     <string name="goals_empty_placeholder_subtitle">Add the goal for which you want to accumulate</string>
     <string name="goals_target_name_hint">Goal name</string>
     <string name="goals_description_hint">Goal description</string>
-    <string name="goals_remove_dialog_title">Deleting a goal</string>
+    <string name="goals_remove_dialog_title">Delete this goal?</string>
     <string name="goals_remove_dialog_subtitle">Do you really want to delete the goal?</string>
     <string name="goals_sum_title">Price of goal</string>
     <string name="goals_sum_per_period_title">Save every period</string>

@@ -49,19 +49,17 @@ class CurrencyFragment :
 
     private var menu: Menu? = null
     private var toolbar: MaterialToolbar? = null
-    private val currencyAdapter: CurrencyAdapter = CurrencyAdapter()
+    private val currencyAdapter: CurrencyAdapter by lazy { CurrencyAdapter(destination != CurrencyDestination.PROFILE_SCREEN_CURRENT) }
     override val viewModel by viewModels<CurrencyViewModel>()
     override fun getNavigator(): CurrencyNavigator = this
 
     private val onItemClickListener = object : OnItemClickListener<DomainCurrency> {
         override fun onItemClick(item: DomainCurrency, position: Int) {
             when (destination ?: CurrencyDestination.PREPOPULATE_SCREEN) {
-                CurrencyDestination.PREPOPULATE_SCREEN -> {
-                    viewModel.changeCurrency(item)
-                }
+                CurrencyDestination.PREPOPULATE_SCREEN -> viewModel.changeCurrency(item)
                 CurrencyDestination.PROFILE_SCREEN_CURRENT -> {
-                    viewModel.changeCurrency(item)
-                    findNavController().popBackStack()
+                    val action = CurrencyFragmentDirections.toChangeCurrencyDialog(item)
+                    findNavController().navigate(action)
                 }
                 CurrencyDestination.EDIT_TRANSACTION_SCREEN,
                 CurrencyDestination.EDIT_REGULAR_TRANSACTION_SCREEN,

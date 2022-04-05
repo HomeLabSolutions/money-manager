@@ -22,7 +22,6 @@ class CategoryRemoveDialog :
     private val category by lazy { args.category }
     private val destination by lazy { args.destination }
 
-    override val layoutId = R.layout.fragment_dialog_remove
     override fun getNavigator() = this
     override val viewModel by viewModels<CategoryRemoveViewModel>()
 

@@ -28,7 +28,6 @@ class CategoryUnitDialog :
     private val secondCategory by lazy { args.secondCategory }
     private val transactionType by lazy { args.transactionType }
 
-    override val layoutId = R.layout.fragment_dialog_category_union
     override fun getNavigator() = this
     override val viewModel by viewModels<CategoryUnionViewModel>()
 

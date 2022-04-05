@@ -23,7 +23,6 @@ class CategoryEditDialog :
 
     private val args by navArgs<CategoryEditDialogArgs>()
     private val category by lazy { args.category }
-    override val layoutId = R.layout.fragment_dialog_edit_category
     override fun getNavigator() = this
     override val viewModel by viewModels<CategoryGroupEditViewModel>()
 

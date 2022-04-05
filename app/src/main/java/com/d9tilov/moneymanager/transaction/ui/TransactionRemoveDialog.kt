@@ -24,7 +24,6 @@ class TransactionRemoveDialog :
     private val transaction by lazy { args.transaction }
     private val regularTransaction by lazy { args.regularTransaction }
 
-    override val layoutId = R.layout.fragment_dialog_remove
     override fun getNavigator() = this
     override val viewModel by viewModels<RemoveTransactionViewModel>()
 
