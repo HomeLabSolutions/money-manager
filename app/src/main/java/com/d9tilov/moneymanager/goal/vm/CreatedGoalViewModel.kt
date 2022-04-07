@@ -9,6 +9,7 @@ import com.d9tilov.moneymanager.goal.domain.entity.Goal
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -22,7 +23,13 @@ class CreatedGoalViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val goal = savedStateHandle.get<Goal>("goal")
             if (goal == null) {
-                goalInteractor.insert(Goal(name = name, targetSum = sum, description = description))
+                goalInteractor.insert(
+                    Goal.EMPTY.copy(
+                        name = name,
+                        targetSum = sum,
+                        description = description
+                    )
+                )
             } else {
                 goalInteractor.update(
                     goal.copy(
@@ -32,7 +39,7 @@ class CreatedGoalViewModel @Inject constructor(
                     )
                 )
             }
+            withContext(Dispatchers.Main) { navigator?.back() }
         }
-        navigator?.back()
     }
 }

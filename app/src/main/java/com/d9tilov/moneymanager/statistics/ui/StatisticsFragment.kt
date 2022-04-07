@@ -11,11 +11,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
 import androidx.recyclerview.widget.SnapHelper
 import com.d9tilov.moneymanager.R
+import com.d9tilov.moneymanager.base.data.ResultOf
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsNavigator
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
@@ -72,6 +76,8 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
@@ -118,6 +124,7 @@ class StatisticsFragment :
                 viewModel.updateCharMode()
                 statisticsMenuAdapter.updateItems(viewModel.menuItemList)
                 hideMenuWithDelay()
+                showChart()
             }
         }
     private val onCurrencyMenuItemClickListener =
@@ -170,6 +177,7 @@ class StatisticsFragment :
         super.onViewCreated(view, savedInstanceState)
         showMenu = false
         updatePeriod(viewModel.chartPeriod)
+        showChart()
         viewBinding?.run {
             statisticsBarChart.adapter = statisticsBarChartAdapter
             emptyViewStub = statisticsEmptyPlaceholder
@@ -180,31 +188,46 @@ class StatisticsFragment :
             statisticsYear.setOnClickListener { updatePeriod(YEAR) }
             statisticsCustom.setOnClickListener { openRangeCalendar() }
             statisticsMenu.setOnClickListener { if (!showMenu) showMenu() else hideMenu() }
-        }
 
-        initPieChart()
-        initLineChart()
-        viewModel.getTransactions().observe(viewLifecycleOwner) { list ->
-            val newList = list.map { item ->
-                if (item.category.children.isNotEmpty()) {
-                    item.copy(category = item.category.copy(color = item.category.children[0].color))
-                } else item
+            initPieChart()
+            initLineChart()
+
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    launch {
+                        viewModel.getTransactions()
+                            .collect { result ->
+                                when (result) {
+                                    is ResultOf.Success -> {
+                                        val list = result.data
+                                        val newList = list.map { item ->
+                                            if (item.category.children.isNotEmpty()) {
+                                                item.copy(category = item.category.copy(color = item.category.children[0].color))
+                                            } else item
+                                        }
+                                        statisticsBarChartAdapter.updateItems(newList)
+                                        statisticsSpentInPeriodSum.setValue(
+                                            newList.sumOf { it.sum },
+                                            viewModel.currencyType.currencyCode
+                                        )
+                                        statisticsBarChart.scrollToPosition(0)
+                                        setPieChartData(newList)
+                                    }
+                                    else -> {}
+                                }
+                            }
+                    }
+                    launch {
+                        viewModel.getPeriodTransactions().collect { result ->
+                            when (result) {
+                                is ResultOf.Success -> setLineChartData(result.data)
+                                else -> {}
+                            }
+                        }
+                    }
+                }
             }
-            statisticsBarChartAdapter.updateItems(newList)
-            viewBinding?.statisticsSpentInPeriodSum?.setValue(
-                newList.sumOf { it.sum },
-                viewModel.currencyType.currencyCode
-            )
-            viewBinding?.statisticsBarChart?.scrollToPosition(0)
-            if (viewModel.chartMode == StatisticsMenuChartMode.PIE_CHART) {
-                setPieChartData(newList)
-            }
-            showChart()
         }
-        viewModel.getPeriodTransactions()
-            .observe(viewLifecycleOwner) { map ->
-                setLineChartData(map)
-            }
         statisticsMenuAdapter.updateItems(viewModel.menuItemList)
     }
 

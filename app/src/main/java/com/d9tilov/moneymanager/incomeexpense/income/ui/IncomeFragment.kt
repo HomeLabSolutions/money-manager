@@ -5,7 +5,9 @@ import android.view.View
 import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
@@ -33,6 +35,7 @@ import com.d9tilov.moneymanager.transaction.ui.callback.TransactionSwipeToDelete
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -65,33 +68,36 @@ class IncomeFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.run {
-            categories.observe(viewLifecycleOwner) { list ->
-                val sortedCategories = list.sortedWith(
-                    compareBy(
-                        { it.children.isEmpty() },
-                        { -it.usageCount },
-                        { it.name }
-                    )
-                )
-                categoryAdapter.updateItems(sortedCategories)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.categories.collect { list ->
+                        val sortedCategories = list.sortedWith(
+                            compareBy(
+                                { it.children.isEmpty() },
+                                { -it.usageCount },
+                                { it.name }
+                            )
+                        )
+                        categoryAdapter.updateItems(sortedCategories)
+                    }
+                }
+                launch { viewModel.transactions.collectLatest { transactionAdapter.submitData(it) } }
+                launch {
+                    viewModel.earnedInPeriod.collect { sum ->
+                        if (sum.signum() == 0) viewBinding?.incomeInfoLayoutInclude?.incomePeriodInfoApproxSign?.gone()
+                        else viewBinding?.incomeInfoLayoutInclude?.incomePeriodInfoApproxSign?.show()
+                    }
+                }
+                launch {
+                    viewModel.earnedInPeriodApprox.collect { sum ->
+                        viewBinding?.incomeInfoLayoutInclude?.incomePeriodInfoApproxSum?.setValue(
+                            sum,
+                            currencyCode()
+                        )
+                    }
+                }
             }
-        }
-        lifecycleScope.launch {
-            viewModel.transactions.collectLatest { transactionAdapter.submitData(it) }
-        }
-        lifecycleScope.launch {
-            viewModel.earnedInPeriod.observe(
-                viewLifecycleOwner
-            ) { sum ->
-                if (sum.signum() == 0) {
-                    viewBinding?.incomeInfoLayoutInclude?.incomePeriodInfoApproxSign?.gone()
-                } else
-                    viewBinding?.incomeInfoLayoutInclude?.incomePeriodInfoApproxSign?.show()
-            }
-            viewModel.earnedInPeriodApprox.observe(
-                viewLifecycleOwner
-            ) { sum -> viewBinding?.incomeInfoLayoutInclude?.incomePeriodInfoApproxSum?.setValue(sum, currencyCode()) }
         }
     }
 

@@ -5,7 +5,9 @@ import android.view.View
 import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
@@ -35,6 +37,7 @@ import com.d9tilov.moneymanager.transaction.ui.callback.TransactionSwipeToDelete
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.math.BigDecimal.ROUND_HALF_UP
@@ -68,79 +71,83 @@ class ExpenseFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.run {
-            categories.observe(
-                viewLifecycleOwner
-            ) { list ->
-                val sortedCategories = list.sortedWith(
-                    compareBy(
-                        { it.children.isEmpty() },
-                        { -it.usageCount },
-                        { it.name }
-                    )
-                )
-                categoryAdapter.updateItems(sortedCategories)
-            }
-        }
-        lifecycleScope.launch {
-            viewModel.transactions.collectLatest { transactionAdapter.submitData(it) }
-        }
-        viewModel.spentInPeriod.observe(
-            viewLifecycleOwner
-        ) { sum ->
-            if (sum.signum() == 0) viewBinding?.expenseInfoLayoutInclude?.expensePeriodInfoApproxSign?.gone()
-            else viewBinding?.expenseInfoLayoutInclude?.expensePeriodInfoApproxSign?.show()
-        }
-        viewModel.spentInPeriodApprox.observe(
-            viewLifecycleOwner
-        ) {
-            viewBinding?.expenseInfoLayoutInclude?.expensePeriodInfoApproxSum?.setValue(
-                it,
-                currencyCode()
-            )
-        }
-        viewModel.spentToday.observe(
-            viewLifecycleOwner
-        ) { sum ->
-            if (sum.signum() == 0) viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoApproxSign?.gone()
-            else viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoApproxSign?.show()
-        }
-        viewModel.spentTodayApprox.observe(
-            viewLifecycleOwner
-        ) {
-            viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoApproxSum?.setValue(
-                it,
-                currencyCode()
-            )
-        }
-        viewModel.ableToSpendToday.observe(viewLifecycleOwner) { spendModel ->
-            when (spendModel) {
-                is TransactionSpendingTodayModel.OVERSPENDING -> {
-                    viewBinding?.run {
-                        expenseInfoLayoutInclude.expenseCanSpendTodayInfoTitle.text =
-                            getString(R.string.category_expense_info_can_spend_today_negate_title)
-                        viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoValue?.setValue(
-                            spendModel.trSum,
-                            currencyCode()
-                        )
-                        viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoValue?.setColor(
-                            ContextCompat.getColor(requireContext(), R.color.error_color)
-                        )
+        viewBinding?.run {
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    launch {
+                        viewModel.categories.collect { list ->
+                            val sortedCategories = list.sortedWith(
+                                compareBy(
+                                    { it.children.isEmpty() },
+                                    { -it.usageCount },
+                                    { it.name }
+                                )
+                            )
+                            categoryAdapter.updateItems(sortedCategories)
+                        }
                     }
-                }
-                is TransactionSpendingTodayModel.NORMAL -> {
-                    viewBinding?.run {
-                        expenseInfoLayoutInclude.expenseCanSpendTodayInfoTitle.text =
-                            getString(R.string.category_expense_info_can_spend_today_title)
-                        viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoValue?.setValue(
-                            spendModel.trSum,
-                            currencyCode()
-                        )
-                        viewBinding?.expenseInfoLayoutInclude?.expenseTodayInfoValue?.setColor(
-                            if (spendModel.trSum.setScale(DECIMAL_LENGTH, ROUND_HALF_UP).signum() > 0)
-                                ContextCompat.getColor(requireContext(), R.color.success_color)
-                            else ContextCompat.getColor(requireContext(), R.color.error_color)
-                        )
+                    launch { viewModel.transactions.collectLatest { transactionAdapter.submitData(it) } }
+                    launch {
+                        viewModel.spentInPeriod.collect { sum ->
+                            if (sum.signum() == 0) expenseInfoLayoutInclude.expensePeriodInfoApproxSign.gone()
+                            else expenseInfoLayoutInclude.expensePeriodInfoApproxSign.show()
+                        }
+                    }
+                    launch {
+                        viewModel.spentInPeriodApprox.collect {
+                            expenseInfoLayoutInclude.expensePeriodInfoApproxSum.setValue(
+                                it,
+                                currencyCode()
+                            )
+                        }
+                    }
+                    launch {
+                        viewModel.spentToday.collect { sum ->
+                            if (sum.signum() == 0) expenseInfoLayoutInclude.expenseTodayInfoApproxSign.gone()
+                            else expenseInfoLayoutInclude.expenseTodayInfoApproxSign.show()
+                        }
+                    }
+                    launch {
+                        viewModel.spentTodayApprox.collect {
+                            expenseInfoLayoutInclude.expenseTodayInfoApproxSum.setValue(
+                                it,
+                                currencyCode()
+                            )
+                        }
+                    }
+                    launch {
+                        viewModel.ableToSpendToday.collect { spendModel ->
+                            expenseInfoLayoutInclude.run {
+                                when (spendModel) {
+                                    is TransactionSpendingTodayModel.OVERSPENDING -> {
+                                        expenseCanSpendTodayInfoTitle.text =
+                                            getString(R.string.category_expense_info_can_spend_today_negate_title)
+                                        expenseTodayInfoValue.setValue(
+                                            spendModel.trSum,
+                                            currencyCode()
+                                        )
+                                        expenseTodayInfoValue.setColor(
+                                            ContextCompat.getColor(
+                                                requireContext(),
+                                                R.color.error_color
+                                            )
+                                        )
+                                    }
+                                    is TransactionSpendingTodayModel.NORMAL -> {
+                                        expenseCanSpendTodayInfoTitle.text =
+                                            getString(R.string.category_expense_info_can_spend_today_title)
+                                        expenseTodayInfoValue.run {
+                                            setValue(spendModel.trSum, currencyCode())
+                                            val color = if (spendModel.trSum.setScale(DECIMAL_LENGTH, ROUND_HALF_UP).signum() > 0)
+                                                ContextCompat.getColor(requireContext(), R.color.success_color)
+                                            else
+                                                ContextCompat.getColor(requireContext(), R.color.error_color)
+                                            setColor(color)
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

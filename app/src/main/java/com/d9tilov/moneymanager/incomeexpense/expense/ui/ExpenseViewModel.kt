@@ -1,7 +1,5 @@
 package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -10,6 +8,7 @@ import androidx.paging.map
 import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
+import com.d9tilov.moneymanager.core.util.currentDateTime
 import com.d9tilov.moneymanager.core.util.getEndOfDay
 import com.d9tilov.moneymanager.core.util.isSameDay
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
@@ -21,8 +20,11 @@ import com.d9tilov.moneymanager.transaction.domain.entity.TransactionHeader
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
@@ -73,62 +75,46 @@ class ExpenseViewModel @Inject constructor(
                     newItem
                 }
             }
-            .cachedIn(viewModelScope).flowOn(Dispatchers.IO)
+            .cachedIn(viewModelScope)
+            .flowOn(Dispatchers.IO)
     val ableToSpendToday = transactionInteractor.ableToSpendToday()
-        .flowOn(Dispatchers.IO).asLiveData()
+        .flowOn(Dispatchers.IO)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, BigDecimal.ZERO)
     val spentToday = transactionInteractor.getSumTodayInUsd(TransactionType.EXPENSE)
-        .flowOn(Dispatchers.IO).asLiveData()
+        .flowOn(Dispatchers.IO)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, BigDecimal.ZERO)
     val spentInPeriod = transactionInteractor.getSumInFiscalPeriodInUsd(TransactionType.EXPENSE)
-        .flowOn(Dispatchers.IO).asLiveData()
-    val spentTodayApprox = transactionInteractor.getApproxSumTodayCurrentCurrency(TransactionType.EXPENSE)
-        .flowOn(Dispatchers.IO).asLiveData()
-    val spentInPeriodApprox = transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.EXPENSE)
-        .flowOn(Dispatchers.IO).asLiveData()
-    override val categories: LiveData<List<Category>> =
-        categoryInteractor.getGroupedCategoriesByType(TransactionType.EXPENSE).asLiveData()
+        .flowOn(Dispatchers.IO)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, BigDecimal.ZERO)
+    val spentTodayApprox =
+        transactionInteractor.getApproxSumTodayCurrentCurrency(TransactionType.EXPENSE)
+            .flowOn(Dispatchers.IO)
+            .stateIn(viewModelScope, SharingStarted.Eagerly, BigDecimal.ZERO)
+    val spentInPeriodApprox =
+        transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.EXPENSE)
+            .flowOn(Dispatchers.IO)
+            .stateIn(viewModelScope, SharingStarted.Eagerly, BigDecimal.ZERO)
+    override val categories: StateFlow<List<Category>> =
+        categoryInteractor.getGroupedCategoriesByType(TransactionType.EXPENSE)
+            .flowOn(Dispatchers.IO)
+            .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     override fun saveTransaction(category: Category, sum: BigDecimal, currencyCode: String) {
         viewModelScope.launch(Dispatchers.Main) {
             if (sum.signum() > 0) {
                 withContext(Dispatchers.IO) {
                     transactionInteractor.addTransaction(
-                        Transaction(
+                        Transaction.EMPTY.copy(
                             type = TransactionType.EXPENSE,
-                            sum = sum,
                             category = category,
-                            currencyCode = currencyCode
+                            currencyCode = currencyCode,
+                            sum = sum,
+                            date = currentDateTime()
                         )
                     )
                 }
                 addTransactionEvent.call()
-            } else {
-                navigator?.showEmptySumError()
-            }
+            } else navigator?.showEmptySumError()
         }
     }
-
-    // fun generateData() = viewModelScope.launch {
-    //     val numbers = IntArray(100) { it + 1 }.toList()
-    //     for (i in numbers) {
-    //         val category = categoryInteractor.getCategoryById((7..11).random().toLong())
-    //         transactionInteractor.addTransaction(
-    //             createTransaction(
-    //                 category,
-    //                 i
-    //             )
-    //         )
-    //     }
-    // }
-    //
-    // private fun createTransaction(category: Category, number: Int): Transaction {
-    //     val d = Calendar.getInstance().timeInMillis
-    //     val rand = (number..number + 1).random()
-    //     val dateBefore = Date(d - rand * 24 * 3600 * 100)
-    //     return Transaction(
-    //         type = TransactionType.EXPENSE,
-    //         sum = number.toBigDecimal(),
-    //         date = dateBefore,
-    //         category = category
-    //     )
-    // }
 }

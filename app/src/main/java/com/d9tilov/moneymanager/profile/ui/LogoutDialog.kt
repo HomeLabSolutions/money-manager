@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.d9tilov.moneymanager.backup.PeriodicBackupWorker
 import com.d9tilov.moneymanager.base.ui.BaseDialogFragment
 import com.d9tilov.moneymanager.base.ui.navigator.LogoutDialogNavigator
@@ -27,13 +26,7 @@ class LogoutDialog :
             logoutButtonConfirm.setOnClickListener {
                 AuthUI.getInstance()
                     .signOut(requireContext())
-                    .addOnCompleteListener {
-                        findNavController().previousBackStackEntry?.savedStateHandle?.set(
-                            ARG_LOGOUT_CANCEL_JOB,
-                            true
-                        )
-                        viewModel.logout()
-                    }
+                    .addOnCompleteListener { viewModel.logout() }
             }
             logoutButtonCancel.setOnClickListener { dismiss() }
         }
@@ -46,9 +39,5 @@ class LogoutDialog :
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         )
         requireActivity().finish()
-    }
-
-    companion object {
-        const val ARG_LOGOUT_CANCEL_JOB = "arg_logout_cancel_job"
     }
 }

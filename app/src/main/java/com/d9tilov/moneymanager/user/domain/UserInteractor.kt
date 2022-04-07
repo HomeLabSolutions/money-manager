@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.user.domain
 
 import com.d9tilov.moneymanager.backup.BackupData
-import com.d9tilov.moneymanager.base.data.Result
+import com.d9tilov.moneymanager.base.data.ResultOf
 import com.d9tilov.moneymanager.base.domain.Interactor
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.google.firebase.auth.FirebaseUser
@@ -16,6 +16,6 @@ interface UserInteractor : Interactor {
     suspend fun createUser(user: FirebaseUser?): UserProfile
     suspend fun updateUser(userProfile: UserProfile)
     suspend fun updateCurrency(code: String)
-    suspend fun backup(): Result<BackupData>
+    suspend fun backup(): ResultOf<BackupData>
     suspend fun deleteUser()
 }

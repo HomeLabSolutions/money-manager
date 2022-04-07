@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.user.domain
 
 import com.d9tilov.moneymanager.backup.BackupData
-import com.d9tilov.moneymanager.base.data.Result
+import com.d9tilov.moneymanager.base.data.ResultOf
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import kotlinx.coroutines.flow.Flow
 
@@ -12,6 +12,6 @@ interface UserRepo {
     suspend fun getFiscalDay(): Int
     suspend fun create(entity: UserProfile): UserProfile
     suspend fun update(entity: UserProfile)
-    suspend fun backup(): Result<BackupData>
+    suspend fun backup(): ResultOf<BackupData>
     suspend fun delete()
 }

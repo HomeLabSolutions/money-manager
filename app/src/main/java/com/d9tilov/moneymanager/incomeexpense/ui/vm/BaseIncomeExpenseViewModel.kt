@@ -8,13 +8,14 @@ import com.d9tilov.moneymanager.core.events.SingleLiveEvent
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import java.math.BigDecimal
 
 abstract class BaseIncomeExpenseViewModel<T : BaseIncomeExpenseNavigator> : BaseViewModel<T>() {
 
     protected val addTransactionEvent = SingleLiveEvent<Void>()
 
-    abstract val categories: LiveData<List<Category>>
+    abstract val categories: StateFlow<List<Category>>
     abstract val transactions: Flow<PagingData<BaseTransaction>>
     abstract fun saveTransaction(category: Category, sum: BigDecimal, currencyCode: String)
 

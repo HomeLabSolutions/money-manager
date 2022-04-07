@@ -1,7 +1,5 @@
 package com.d9tilov.moneymanager.profile.ui.vm
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
 import com.d9tilov.moneymanager.budget.data.entity.BudgetData
@@ -18,7 +16,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
@@ -32,52 +31,49 @@ class ProfileViewModel @Inject constructor(
     goalInteractor: GoalInteractor
 ) : BaseViewModel<ProfileNavigator>() {
 
-    private val userData = MutableLiveData<UserProfile>()
-    private val budget = MutableLiveData<BudgetData>()
-    private val regularIncomes = MutableLiveData<List<RegularTransaction>>()
-    private val regularExpenses = MutableLiveData<List<RegularTransaction>>()
-    private val goals = MutableLiveData<List<Goal>>()
+    private val userData = MutableStateFlow(UserProfile.EMPTY)
+    private val budget = MutableStateFlow(BudgetData.EMPTY)
+    private val regularIncomes = MutableStateFlow<List<RegularTransaction>>(emptyList())
+    private val regularExpenses = MutableStateFlow<List<RegularTransaction>>(emptyList())
+    private val goals = MutableStateFlow<List<Goal>>(emptyList())
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private val job = Job()
 
     init {
-        viewModelScope.launch(Dispatchers.Main + job) {
-            userInfoInteractor.getCurrentUser()
-                .flowOn(Dispatchers.IO)
-                .collect { userData.value = it }
-        }
-        viewModelScope.launch(Dispatchers.Main + job) {
-            budgetInteractor.get()
-                .flowOn(Dispatchers.IO)
-                .collect { budget.value = it }
-        }
-        viewModelScope.launch(Dispatchers.Main + job) {
-            regularTransactionInteractor.getAll(TransactionType.INCOME)
-                .flowOn(Dispatchers.IO)
-                .collect { regularIncomes.value = it }
-        }
-        viewModelScope.launch(Dispatchers.Main + job) {
-            regularTransactionInteractor.getAll(TransactionType.EXPENSE)
-                .flowOn(Dispatchers.IO)
-                .collect { regularExpenses.value = it }
-        }
-        viewModelScope.launch(Dispatchers.Main + job) {
-            goalInteractor.getAll()
-                .flowOn(Dispatchers.IO)
-                .collect { goals.value = it }
+        viewModelScope.launch {
+            launch {
+                userInfoInteractor.getCurrentUser()
+                    .flowOn(Dispatchers.IO)
+                    .collect { userData.value = it }
+            }
+            launch {
+                budgetInteractor.get()
+                    .flowOn(Dispatchers.IO)
+                    .collect { budget.value = it }
+            }
+            launch {
+                regularTransactionInteractor.getAll(TransactionType.INCOME)
+                    .flowOn(Dispatchers.IO)
+                    .collect { regularIncomes.value = it }
+            }
+            launch {
+                regularTransactionInteractor.getAll(TransactionType.EXPENSE)
+                    .flowOn(Dispatchers.IO)
+                    .collect { regularExpenses.value = it }
+            }
+            launch {
+                goalInteractor.getAll()
+                    .flowOn(Dispatchers.IO)
+                    .collect { goals.value = it }
+            }
         }
     }
 
     fun getCurrentUser(): FirebaseUser? = auth.currentUser
 
-    fun cancelAllJobs() {
-        job.cancel()
-    }
-
-    fun userData(): LiveData<UserProfile> = userData
-    fun budget(): LiveData<BudgetData> = budget
-    fun regularIncomes(): LiveData<List<RegularTransaction>> = regularIncomes
-    fun regularExpenses(): LiveData<List<RegularTransaction>> = regularExpenses
-    fun goals(): LiveData<List<Goal>> = goals
+    fun userData(): StateFlow<UserProfile> = userData
+    fun budget(): StateFlow<BudgetData> = budget
+    fun regularIncomes(): StateFlow<List<RegularTransaction>> = regularIncomes
+    fun regularExpenses(): StateFlow<List<RegularTransaction>> = regularExpenses
+    fun goals(): StateFlow<List<Goal>> = goals
 }

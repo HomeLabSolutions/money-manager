@@ -11,12 +11,15 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.base.data.Status
+import com.d9tilov.moneymanager.base.data.ResultOf
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.CurrencyNavigator
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
@@ -33,6 +36,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -85,43 +90,49 @@ class CurrencyFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        viewModel.currencies().observe(
-            this.viewLifecycleOwner
-        ) { result ->
-            val menuItem = menu?.findItem(R.id.action_skip)
-            when (result.status) {
-                Status.SUCCESS -> {
-                    menuItem?.isEnabled = true
-                    result.data?.let { data ->
-                        val sortedList =
-                            data.sortedBy { CurrencyUtils.getCurrencyFullName(it.code) }
-                                .map { currency ->
-                                    if (currencyCode != null) {
-                                        currency.copy(isBase = (currencyCode == currency.code))
-                                    } else currency
-                                }
-                        currencyAdapter.updateItems(sortedList)
-                        val checkedIndex = sortedList.indexOfFirst { it.isBase }
-                        viewBinding?.currencyRv?.scrollToPosition(checkedIndex)
+        viewBinding?.run {
+            currencyRv.adapter = currencyAdapter
+            val layoutManager = LinearLayoutManager(requireContext())
+            currencyRv.layoutManager = layoutManager
+            (currencyRv.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
+
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.currencies()
+                    .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                    .collect { result ->
+                        val menuItem = menu?.findItem(R.id.action_skip)
+                        when (result) {
+                            is ResultOf.Success -> {
+                                menuItem?.isEnabled = true
+                                val sortedList =
+                                    result.data.sortedBy { item ->
+                                        CurrencyUtils.getCurrencyFullName(
+                                            item.code
+                                        )
+                                    }
+                                        .map { currency ->
+                                            if (currencyCode != null)
+                                                currency.copy(isBase = (currencyCode == currency.code))
+                                            else currency
+                                        }
+                                currencyAdapter.updateItems(sortedList)
+                                val checkedIndex = sortedList.indexOfFirst { it.isBase }
+                                currencyRv.scrollToPosition(checkedIndex)
+                                currencyProgress.gone()
+                            }
+                            is ResultOf.Failure -> {
+                                menuItem?.isEnabled = true
+                                showError()
+                                currencyProgress.gone()
+                            }
+                            is ResultOf.Loading -> {
+                                menuItem?.isEnabled = false
+                                currencyProgress.show()
+                            }
+                        }
                     }
-                    viewBinding?.currencyProgress?.gone()
-                }
-                Status.ERROR -> {
-                    menuItem?.isEnabled = true
-                    showError()
-                    viewBinding?.currencyProgress?.gone()
-                }
-                Status.LOADING -> {
-                    menuItem?.isEnabled = false
-                    viewBinding?.currencyProgress?.show()
-                }
             }
         }
-        viewBinding?.currencyRv?.adapter = currencyAdapter
-        val layoutManager = LinearLayoutManager(requireContext())
-        viewBinding?.currencyRv?.layoutManager = layoutManager
-        (viewBinding?.currencyRv?.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations =
-            false
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

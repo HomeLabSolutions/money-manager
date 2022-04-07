@@ -7,6 +7,9 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -33,6 +36,8 @@ import com.d9tilov.moneymanager.prepopulate.ui.ControlsClicked
 import com.d9tilov.moneymanager.prepopulate.ui.PrepopulateActivity
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class GoalsFragment :
@@ -100,28 +105,29 @@ class GoalsFragment :
             }).attachToRecyclerView(goalsRvList)
             goalsSumPerPeriod.moneyEditText.clearFocus()
             goalsSave.setOnClickListener { viewModel.insertSavedSum(goalsSumPerPeriod.getValue()) }
-        }
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
-            ARG_UNDO_REMOVE_LAYOUT_DISMISS
-        )?.observe(viewLifecycleOwner) { if (it) goalAdapter.cancelDeletion() }
-        viewModel.accumulated.observe(
-            this.viewLifecycleOwner
-        ) { viewBinding?.run { goalsAmount.setValue(it, currencyCode()) } }
-        viewModel.budget.observe(
-            this.viewLifecycleOwner
-        ) { viewBinding?.run { goalsSumPerPeriod.setValue(it.saveSum, currencyCode()) } }
-        viewModel.goals.observe(
-            this.viewLifecycleOwner
-        ) {
-            if (it.isEmpty()) {
-                viewBinding?.goalsRvList?.gone()
-                showViewStub()
-            } else {
-                hideViewStub()
-                viewBinding?.goalsRvList?.show()
-                goalAdapter.updateItems(it)
+
+            findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
+                ARG_UNDO_REMOVE_LAYOUT_DISMISS
+            )?.observe(viewLifecycleOwner) { if (it) goalAdapter.cancelDeletion() }
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    launch { viewModel.accumulated.collect { goalsAmount.setValue(it, currencyCode()) } }
+                    launch { viewModel.budget.collect { goalsSumPerPeriod.setValue(it.saveSum, currencyCode()) } }
+                    launch {
+                        viewModel.goals.collect {
+                            if (it.isEmpty()) {
+                                goalsRvList.gone()
+                                showViewStub()
+                            } else {
+                                hideViewStub()
+                                goalsRvList.show()
+                                goalAdapter.updateItems(it)
+                            }
+                            showViewStub = it.isEmpty()
+                        }
+                    }
+                }
             }
-            showViewStub = it.isEmpty()
         }
     }
 

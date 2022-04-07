@@ -109,7 +109,6 @@ abstract class BaseRegularIncomeExpenseFragment<N : BaseRegularIncomeExpenseNavi
         activity.setSupportActionBar(toolbar)
         toolbar?.title =
             getString(if (transactionType == TransactionType.INCOME) R.string.title_prepopulate_regular_incomes else R.string.title_prepopulate_regular_expenses)
-        activity.setSupportActionBar(toolbar)
         setHasOptionsMenu(true)
         if (showBackButton()) {
             activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)

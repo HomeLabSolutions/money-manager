@@ -1,9 +1,10 @@
 package com.d9tilov.moneymanager.core.ui
 
 import androidx.annotation.StringRes
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_DATA_ID
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 abstract class BaseViewModel<T : BaseNavigator> : ViewModel() {
 
@@ -12,15 +13,9 @@ abstract class BaseViewModel<T : BaseNavigator> : ViewModel() {
             field = value
             field?.let { onNavigatorAttached() }
         }
-    private val msg = MutableLiveData<Int>()
-    private val loading = MutableLiveData<Boolean>()
+    private val msg = MutableStateFlow(DEFAULT_MESSAGE_ID)
+    private val loading = MutableStateFlow(false)
 
-    // Post in background thread
-    fun postMessage(@StringRes message: Int) {
-        msg.postValue(message)
-    }
-
-    // Post in main thread
     fun setMessage(@StringRes message: Int) {
         msg.value = message
     }
@@ -29,13 +24,12 @@ abstract class BaseViewModel<T : BaseNavigator> : ViewModel() {
         loading.value = show
     }
 
-    fun postLoading(show: Boolean) {
-        loading.postValue(show)
-    }
-
     protected open fun onNavigatorAttached() {}
 
-    fun getMsg(): LiveData<Int> = msg
-    fun getLoading(): LiveData<Boolean> = loading
+    fun getMsg(): StateFlow<Int> = msg
+    fun getLoading(): StateFlow<Boolean> = loading
 
+    companion object {
+        const val DEFAULT_MESSAGE_ID = -1
+    }
 }

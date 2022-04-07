@@ -1,8 +1,7 @@
 package com.d9tilov.moneymanager.statistics.vm
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.d9tilov.moneymanager.base.data.ResultOf
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsNavigator
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
@@ -20,6 +19,9 @@ import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionLineChartModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -33,9 +35,10 @@ class StatisticsViewModel @Inject constructor(
     currencyInteractor: CurrencyInteractor
 ) : BaseViewModel<StatisticsNavigator>() {
 
-    private val transactionsLiveData = MutableLiveData<List<TransactionChartModel>>()
-    private val periodTransactionsLiveData =
-        MutableLiveData<Map<LocalDateTime, TransactionLineChartModel>>()
+    private val transactions =
+        MutableStateFlow<ResultOf<List<TransactionChartModel>>>(ResultOf.Loading())
+    private val periodTransactions =
+        MutableStateFlow<ResultOf<Map<LocalDateTime, TransactionLineChartModel>>>(ResultOf.Loading())
 
     private var currencyCode = DEFAULT_CURRENCY_CODE
     private var categoryType: StatisticsMenuCategoryType = StatisticsMenuCategoryType.CHILD
@@ -122,7 +125,7 @@ class StatisticsViewModel @Inject constructor(
     }
 
     private fun updateTransactions() {
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch {
             transactionInteractor.getTransactionsGroupedByCategory(
                 when (transactionType) {
                     StatisticsMenuTransactionType.EXPENSE -> TransactionType.EXPENSE
@@ -136,12 +139,13 @@ class StatisticsViewModel @Inject constructor(
             )
                 .map { list -> list.sortedByDescending { tr -> tr.sum } }
                 .flowOn(Dispatchers.IO)
-                .collect { transactionsLiveData.value = it }
+                .catch { periodTransactions.value = ResultOf.Failure(it) }
+                .collect { transactions.value = ResultOf.Success(it) }
         }
     }
 
     private fun updatePeriodTransactions() {
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch {
             transactionInteractor.getTransactionsGroupedByDate(
                 when (transactionType) {
                     StatisticsMenuTransactionType.EXPENSE -> TransactionType.EXPENSE
@@ -153,7 +157,8 @@ class StatisticsViewModel @Inject constructor(
                 inStatistics == StatisticsMenuInStatistics.IN_STATISTICS
             )
                 .flowOn(Dispatchers.IO)
-                .collect { periodTransactionsLiveData.value = it }
+                .catch { periodTransactions.value = ResultOf.Failure(it) }
+                .collect { periodTransactions.value = ResultOf.Success(it) }
         }
     }
 
@@ -161,7 +166,7 @@ class StatisticsViewModel @Inject constructor(
         menuItemList[index] = item
     }
 
-    fun getTransactions(): LiveData<List<TransactionChartModel>> = transactionsLiveData
-    fun getPeriodTransactions(): LiveData<Map<LocalDateTime, TransactionLineChartModel>> =
-        periodTransactionsLiveData
+    fun getTransactions(): StateFlow<ResultOf<List<TransactionChartModel>>> = transactions
+    fun getPeriodTransactions(): StateFlow<ResultOf<Map<LocalDateTime, TransactionLineChartModel>>> =
+        periodTransactions
 }

@@ -5,6 +5,9 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.d9tilov.moneymanager.R
@@ -30,6 +33,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -81,9 +86,7 @@ class IncomeExpenseFragment :
                     else -> requireContext().getString(R.string.tab_income)
                 }
             }.attach()
-            incomeExpenseKeyboardLayout.btnHideKeyboard.setOnClickListener {
-                closeKeyboard()
-            }
+            incomeExpenseKeyboardLayout.btnHideKeyboard.setOnClickListener { closeKeyboard() }
             incomeExpenseKeyboardLayout.pinKeyboard.clickPinButton = object : PinKeyboard.ClickPinButton {
                 override fun onPinClick(button: PinButton?) {
                     when (button?.id) {
@@ -110,32 +113,25 @@ class IncomeExpenseFragment :
                     )
                 findNavController().navigate(action)
             }
-        }
-        viewModel.getCurrencyCodeAsync().observe(
-            viewLifecycleOwner
-        ) {
-            viewBinding?.run {
-                val sum = incomeExpenseMainSum.getValue()
-                incomeExpenseMainSum.setValue(sum, it)
+            lifecycleScope.launch {
+                viewModel.getCurrencyCodeAsync()
+                    .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                    .collect { incomeExpenseMainSum.setValue(incomeExpenseMainSum.getValue(), it) }
             }
         }
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<DomainCurrency>(
-            CurrencyFragment.ARG_CURRENCY
-        )?.observe(
-            viewLifecycleOwner
-        ) {
-            viewModel.setCurrencyCode(it.code)
-            findNavController().currentBackStackEntry?.savedStateHandle?.remove<DomainCurrency>(
-                CurrencyFragment.ARG_CURRENCY
-            )
-        }
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
-            TransactionRemoveDialog.ARG_UNDO_REMOVE_LAYOUT_DISMISS
-        )?.observe(viewLifecycleOwner) {
-            if (it) {
-                val fragments = getFragmentsInViewPager()
-                for (fragment in fragments) (fragment as? OnDialogDismissListener)?.onDismiss()
-            }
+        findNavController().currentBackStackEntry?.savedStateHandle?.run {
+            getLiveData<DomainCurrency>(CurrencyFragment.ARG_CURRENCY)
+                .observe(viewLifecycleOwner) {
+                    viewModel.setCurrencyCode(it.code)
+                    remove<DomainCurrency>(CurrencyFragment.ARG_CURRENCY)
+                }
+            getLiveData<Boolean>(TransactionRemoveDialog.ARG_UNDO_REMOVE_LAYOUT_DISMISS)
+                .observe(viewLifecycleOwner) {
+                    if (it) {
+                        val fragments = getFragmentsInViewPager()
+                        for (fragment in fragments) (fragment as? OnDialogDismissListener)?.onDismiss()
+                    }
+                }
         }
     }
 

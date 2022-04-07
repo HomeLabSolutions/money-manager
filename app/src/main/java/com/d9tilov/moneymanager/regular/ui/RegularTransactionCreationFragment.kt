@@ -8,6 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.arrayMapOf
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.d9tilov.moneymanager.R
@@ -37,6 +40,8 @@ import com.d9tilov.moneymanager.regular.vm.CreatedRegularTransactionViewModel
 import com.d9tilov.moneymanager.transaction.isIncome
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 @AndroidEntryPoint
@@ -46,67 +51,61 @@ class RegularTransactionCreationFragment :
 
     private val args by navArgs<RegularTransactionCreationFragmentArgs>()
     private val transactionType by lazy { args.transactionType }
-    private val regularTransaction by lazy { args.regularTransaction }
+    private val regularTransaction: RegularTransaction? by lazy { args.regularTransaction }
     private val spinnerPeriodMap = arrayMapOf(
         PeriodType.DAY to 0,
         PeriodType.WEEK to 1,
         PeriodType.MONTH to 2
     )
     private var toolbar: MaterialToolbar? = null
-    private var localTransaction: RegularTransaction? = null
+    private var localTransaction: RegularTransaction = RegularTransaction.EMPTY
 
     override fun getNavigator() = this
     override val viewModel by viewModels<CreatedRegularTransactionViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Category>(
-            ARG_CATEGORY
-        )?.observe(
-            viewLifecycleOwner
-        ) { category ->
-            localTransaction = localTransaction?.copy(category = category)
-            findNavController().currentBackStackEntry?.savedStateHandle?.remove<Category>(
-                ARG_CATEGORY
-            )
-        }
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<DomainCurrency>(
-            CurrencyFragment.ARG_CURRENCY
-        )?.observe(
-            viewLifecycleOwner
-        ) {
-            localTransaction = localTransaction?.copy(currencyCode = it.code)
-            findNavController().currentBackStackEntry?.savedStateHandle?.remove<DomainCurrency>(
-                CurrencyFragment.ARG_CURRENCY
-            )
-        }
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Int>(
-            ARG_DAY_OF_MONTH
-        )?.observe(
-            viewLifecycleOwner
-        ) { dayOfMonth ->
-            localTransaction = localTransaction?.copy(
-                executionPeriod = ExecutionPeriod.EveryMonth(
-                    dayOfMonth,
-                    currentDateTime().getStartOfDay()
-                )
-            )
-            viewBinding?.createdRegularTransactionRepeatStartsDate?.text =
-                getString(R.string.regular_transaction_repeat_period_month_2, dayOfMonth.toString())
-            findNavController().currentBackStackEntry?.savedStateHandle?.remove<Int>(
-                ARG_DAY_OF_MONTH
-            )
-        }
         viewBinding?.run {
+            findNavController().currentBackStackEntry?.savedStateHandle?.run {
+                getLiveData<Category>(ARG_CATEGORY)
+                    .observe(viewLifecycleOwner) { category ->
+                        localTransaction = localTransaction.copy(category = category)
+                        remove<Category>(ARG_CATEGORY)
+                        updateCategoryIcon()
+                        updateSaveButtonState()
+                    }
+                getLiveData<DomainCurrency>(CurrencyFragment.ARG_CURRENCY)
+                    .observe(viewLifecycleOwner) {
+                        localTransaction = localTransaction.copy(currencyCode = it.code)
+                        findNavController().currentBackStackEntry?.savedStateHandle?.remove<DomainCurrency>(
+                            CurrencyFragment.ARG_CURRENCY
+                        )
+                    }
+                getLiveData<Int>(ARG_DAY_OF_MONTH)
+                    .observe(viewLifecycleOwner) { dayOfMonth ->
+                        localTransaction = localTransaction.copy(
+                            executionPeriod = ExecutionPeriod.EveryMonth(
+                                dayOfMonth,
+                                currentDateTime().getStartOfDay()
+                            )
+                        )
+                        createdRegularTransactionRepeatStartsDate.text =
+                            getString(
+                                R.string.regular_transaction_repeat_period_month_2,
+                                dayOfMonth.toString()
+                            )
+                        remove<Int>(ARG_DAY_OF_MONTH)
+                    }
+            }
             createdRegularTransactionDescription.onChange { description ->
-                localTransaction = localTransaction?.copy(description = description)
+                localTransaction = localTransaction.copy(description = description)
             }
             createdRegularTransactionNotifyCheckbox.setOnCheckedChangeListener { _, isChecked ->
-                localTransaction = localTransaction?.copy(pushEnabled = isChecked)
+                localTransaction = localTransaction.copy(pushEnabled = isChecked)
             }
             createdRegularTransactionMainSum.moneyEditText.onChange { sum ->
                 localTransaction =
-                    localTransaction?.copy(sum = if (sum.isEmpty()) BigDecimal.ZERO else sum.toBigDecimal)
+                    localTransaction.copy(sum = if (sum.isEmpty()) BigDecimal.ZERO else sum.toBigDecimal)
                 updateSaveButtonState()
             }
             createdRegularTransactionRepeatSpinner.onItemSelectedListener =
@@ -122,7 +121,7 @@ class RegularTransactionCreationFragment :
                                 createdRegularTransactionWeekSelector.gone()
                                 createdRegularTransactionRepeatStartsDate.hide()
                                 createdRegularTransactionRepeatStartsTitle.hide()
-                                localTransaction = localTransaction?.copy(
+                                localTransaction = localTransaction.copy(
                                     executionPeriod = ExecutionPeriod.EveryDay(currentDate().getStartOfDay())
                                 )
                             }
@@ -131,16 +130,18 @@ class RegularTransactionCreationFragment :
                                 createdRegularTransactionRepeatStartsDate.hide()
                                 createdRegularTransactionRepeatStartsTitle.hide()
                                 setWeekdaySelected(
-                                    (localTransaction?.executionPeriod as? ExecutionPeriod.EveryWeek)?.dayOfWeek
-                                        ?: currentDate().dayOfWeek.ordinal
+                                    when (val period = localTransaction.executionPeriod) {
+                                        is ExecutionPeriod.EveryWeek -> period.dayOfWeek
+                                        else -> currentDate().dayOfWeek.ordinal
+                                    }
                                 )
                             }
                             PeriodType.MONTH -> {
                                 createdRegularTransactionWeekSelector.gone()
                                 createdRegularTransactionRepeatStartsDate.show()
                                 createdRegularTransactionRepeatStartsTitle.show()
-                                if (localTransaction?.executionPeriod !is ExecutionPeriod.EveryMonth) {
-                                    localTransaction = localTransaction?.copy(
+                                if (localTransaction.executionPeriod !is ExecutionPeriod.EveryMonth) {
+                                    localTransaction = localTransaction.copy(
                                         executionPeriod = ExecutionPeriod.EveryMonth(
                                             currentDate().dayOfMonth,
                                             currentDate().getStartOfDay()
@@ -150,30 +151,21 @@ class RegularTransactionCreationFragment :
                                 createdRegularTransactionRepeatStartsDate.text =
                                     getString(
                                         R.string.regular_transaction_repeat_period_month_2,
-                                        (localTransaction?.executionPeriod as? ExecutionPeriod.EveryMonth)?.dayOfMonth
-                                            ?: currentDate().dayOfMonth.toString()
+                                        when (val period = localTransaction.executionPeriod) {
+                                            is ExecutionPeriod.EveryMonth -> period.dayOfMonth.toString()
+                                            else -> currentDate().dayOfMonth.toString()
+                                        }
                                     )
                             }
                         }
                     }
+
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                 }
-            createdRegularTransactionRepeatStartsDate.setOnClickListener {
-                val action = RegularTransactionCreationFragmentDirections.toDayOfMonthDest(
-                    (localTransaction?.executionPeriod as? ExecutionPeriod.EveryMonth)?.dayOfMonth
-                        ?: 1
-                )
-                findNavController().navigate(action)
-            }
-            createdRegularTransactionCategoryLayout.setOnClickListener {
-                val action = RegularTransactionCreationFragmentDirections.toFixedCategoryDest(
-                    destination = CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN,
-                    transactionType = transactionType
-                )
-                findNavController().navigate(action)
-            }
+            createdRegularTransactionRepeatStartsDate.setOnClickListener { toDayOfMonthDialog() }
+            createdRegularTransactionCategoryLayout.setOnClickListener { toFixedCategoryScreen() }
             createdRegularTransactionSave.setOnClickListener { view ->
-                if (view.isSelected) viewModel.saveOrUpdate(localTransaction!!)
+                if (view.isSelected) viewModel.saveOrUpdate(localTransaction)
                 else shakeError()
             }
             createdRegularTransactionMonday.setOnClickListener { setWeekdaySelected(0) }
@@ -183,32 +175,52 @@ class RegularTransactionCreationFragment :
             createdRegularTransactionFriday.setOnClickListener { setWeekdaySelected(4) }
             createdRegularTransactionSaturday.setOnClickListener { setWeekdaySelected(5) }
             createdRegularTransactionSunday.setOnClickListener { setWeekdaySelected(6) }
-            createdRegularTransactionMainSum.addOnCurrencyClickListener {
-                val action =
-                    RegularTransactionCreationFragmentDirections.toCurrencyDest(
-                        CurrencyDestination.EDIT_REGULAR_TRANSACTION_SCREEN,
-                        localTransaction?.currencyCode
-                    )
-                findNavController().navigate(action)
-            }
+            createdRegularTransactionMainSum.addOnCurrencyClickListener { toCurrencyScreen() }
         }
-        viewModel.defaultTransaction.observe(
-            viewLifecycleOwner
-        ) {
-            if (localTransaction == null) localTransaction = regularTransaction ?: it
-            localTransaction = localTransaction!!.copy(type = transactionType)
-            initUi()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.defaultTransaction
+                .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                .collect { defaultTransaction ->
+                    if (localTransaction == RegularTransaction.EMPTY) {
+                        localTransaction = regularTransaction ?: defaultTransaction
+                    }
+                    localTransaction = localTransaction.copy(type = transactionType)
+                    initUi()
+                }
         }
     }
 
+    private fun toCurrencyScreen() {
+        val action =
+            RegularTransactionCreationFragmentDirections.toCurrencyDest(
+                CurrencyDestination.EDIT_REGULAR_TRANSACTION_SCREEN,
+                localTransaction.currencyCode
+            )
+        findNavController().navigate(action)
+    }
+
+    private fun toFixedCategoryScreen() {
+        val action = RegularTransactionCreationFragmentDirections.toFixedCategoryDest(
+            destination = CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN,
+            transactionType = transactionType
+        )
+        findNavController().navigate(action)
+    }
+
+    private fun toDayOfMonthDialog() {
+        val action = RegularTransactionCreationFragmentDirections.toDayOfMonthDest(
+            (localTransaction.executionPeriod as ExecutionPeriod.EveryMonth).dayOfMonth
+        )
+        findNavController().navigate(action)
+    }
+
     private fun initUi() {
-        if (localTransaction == null) return
         initToolbar()
         updateCategoryIcon()
         updateCurrency()
         updateSaveButtonState()
         viewBinding?.run {
-            if (!localTransaction!!.isValid()) {
+            if (!localTransaction.isValid()) {
                 createdRegularTransactionCategoryArrow.show()
                 createdRegularTransactionDelete.gone()
             } else {
@@ -216,29 +228,24 @@ class RegularTransactionCreationFragment :
                 createdRegularTransactionDelete.show()
             }
             createdRegularTransactionMainSum.setValue(
-                localTransaction!!.sum,
-                localTransaction!!.currencyCode
+                localTransaction.sum,
+                localTransaction.currencyCode
             )
-            createdRegularTransactionDescription.setText(localTransaction!!.description)
-            createdRegularTransactionNotifyCheckbox.isChecked = localTransaction!!.pushEnabled
-
-            createdRegularTransactionRepeatStartsDate.text =
-                getString(
-                    R.string.regular_transaction_repeat_period_month_2,
-                    (localTransaction?.executionPeriod as? ExecutionPeriod.EveryMonth)?.dayOfMonth.toString()
-                )
+            createdRegularTransactionDescription.setText(localTransaction.description)
+            createdRegularTransactionNotifyCheckbox.isChecked = localTransaction.pushEnabled
             createdRegularTransactionRepeatSpinner.setSelection(
                 spinnerPeriodMap.getValue(
-                    localTransaction?.executionPeriod?.periodType ?: PeriodType.MONTH
+                    localTransaction.executionPeriod.periodType
                 )
             )
         }
     }
 
     private fun updateCurrency() {
-        localTransaction?.let {
-            viewBinding?.createdRegularTransactionMainSum?.setValue(it.sum, it.currencyCode)
-        }
+        viewBinding?.createdRegularTransactionMainSum?.setValue(
+            localTransaction.sum,
+            localTransaction.currencyCode
+        )
     }
 
     private fun shakeError() {
@@ -246,12 +253,14 @@ class RegularTransactionCreationFragment :
             context,
             R.anim.animation_shake
         )
-        if (localTransaction?.sum?.signum() == 0) {
-            viewBinding?.createdRegularTransactionMainSum?.startAnimation(animation)
-        } else if (localTransaction?.category == Category.EMPTY) {
-            viewBinding?.createdRegularTransactionCategoryLayout?.startAnimation(animation)
-        } else if (localTransaction?.executionPeriod?.periodType == PeriodType.WEEK && (localTransaction?.executionPeriod as ExecutionPeriod.EveryWeek).dayOfWeek == 0) {
-            viewBinding?.createdRegularTransactionWeekSelector?.startAnimation(animation)
+        viewBinding?.run {
+            if (localTransaction.sum.signum() == 0) {
+                createdRegularTransactionMainSum.startAnimation(animation)
+            } else if (localTransaction.category == Category.EMPTY) {
+                createdRegularTransactionCategoryLayout.startAnimation(animation)
+            } else if (localTransaction.executionPeriod.periodType == PeriodType.WEEK && (localTransaction.executionPeriod as ExecutionPeriod.EveryWeek).dayOfWeek == 0) {
+                createdRegularTransactionWeekSelector.startAnimation(animation)
+            }
         }
     }
 
@@ -278,42 +287,42 @@ class RegularTransactionCreationFragment :
             }
         }
         localTransaction =
-            localTransaction?.copy(
+            localTransaction.copy(
                 executionPeriod = ExecutionPeriod.EveryWeek(
                     day,
                     currentDateTime().getStartOfDay()
                 )
             )
-        updateSaveButtonState()
     }
 
     private fun updateSaveButtonState() {
-        viewBinding?.createdRegularTransactionSave?.isSelected = localTransaction?.let {
-            it.sum.signum() > 0 && it.category != Category.EMPTY
-        } ?: false
+        viewBinding?.createdRegularTransactionSave?.isSelected =
+            localTransaction.sum.signum() > 0 && localTransaction.category != Category.EMPTY
     }
 
     private fun updateCategoryIcon() {
-        if (localTransaction?.category != Category.EMPTY) {
-            localTransaction?.category?.let {
-                val iconDrawable = createTintDrawable(requireContext(), it.icon, it.color)
+        viewBinding?.run {
+            if (localTransaction.category != Category.EMPTY) {
+                val iconDrawable = createTintDrawable(
+                    requireContext(),
+                    localTransaction.category.icon,
+                    localTransaction.category.color
+                )
                 iconDrawable.setBounds(0, 0, 120, 120)
-                viewBinding?.run {
-                    createdRegularTransactionCategory.setCompoundDrawables(
-                        iconDrawable,
-                        null,
-                        null,
-                        null
-                    )
-                    createdRegularTransactionCategory.text = it.name
-                    createdRegularTransactionCategory.setTextColor(
-                        ContextCompat.getColor(requireContext(), it.color)
-                    )
-                }
+                createdRegularTransactionCategory.setCompoundDrawables(
+                    iconDrawable,
+                    null,
+                    null,
+                    null
+                )
+                createdRegularTransactionCategory.text = localTransaction.category.name
+                createdRegularTransactionCategory.setTextColor(
+                    ContextCompat.getColor(requireContext(), localTransaction.category.color)
+                )
+            } else {
+                createdRegularTransactionCategory.text =
+                    getString(R.string.regular_transaction_choose_category)
             }
-        } else {
-            viewBinding?.createdRegularTransactionCategory?.text =
-                getString(R.string.regular_transaction_choose_category)
         }
     }
 
@@ -340,7 +349,6 @@ class RegularTransactionCreationFragment :
                 if (transactionType.isIncome()) R.string.title_prepopulate_regular_income
                 else R.string.title_prepopulate_regular_expense
             )
-        activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity.supportActionBar?.setDisplayShowHomeEnabled(true)
         setHasOptionsMenu(true)

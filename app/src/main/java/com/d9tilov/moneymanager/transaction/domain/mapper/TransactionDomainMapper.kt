@@ -11,7 +11,20 @@ fun Transaction.toDataModel(): TransactionDataModel = TransactionDataModel(
 )
 
 fun TransactionDataModel.toDomainModel(category: Category): Transaction =
-    Transaction(id, clientId, type, category, currencyCode, sum, usdSum, date, description, qrCode, isRegular, inStatistics)
+    Transaction.EMPTY.copy(
+        id = id,
+        clientId = clientId,
+        type = type,
+        category = category,
+        currencyCode = currencyCode,
+        sum = sum,
+        usdSum = usdSum,
+        date = date,
+        description = description,
+        qrCode = qrCode,
+        isRegular = isRegular,
+        inStatistics = inStatistics
+    )
 
 fun TransactionDataModel.toChartModel(
     category: Category,

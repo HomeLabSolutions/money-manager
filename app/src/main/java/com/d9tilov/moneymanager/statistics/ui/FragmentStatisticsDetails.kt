@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +20,8 @@ import com.d9tilov.moneymanager.statistics.ui.recycler.StatisticsDetailsAdapter
 import com.d9tilov.moneymanager.statistics.vm.StatisticsDetailsViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class FragmentStatisticsDetails :
@@ -30,7 +35,6 @@ class FragmentStatisticsDetails :
     private val category by lazy { args.category }
 
     private val adapter = StatisticsDetailsAdapter()
-
     private var toolbar: MaterialToolbar? = null
 
     override fun getNavigator() = this
@@ -38,11 +42,9 @@ class FragmentStatisticsDetails :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        toolbar = viewBinding?.statisticsDetailsToolbar?.toolbar
-        initToolbar(toolbar)
-
         viewBinding?.run {
+            toolbar = viewBinding?.statisticsDetailsToolbar?.toolbar
+            initToolbar(toolbar)
             statisticsDetailsRv.adapter = adapter
             val layoutManager = LinearLayoutManager(requireContext())
             val dividerItemDecoration = DividerItemDecoration(
@@ -54,7 +56,11 @@ class FragmentStatisticsDetails :
             dividerDrawable?.let { dividerItemDecoration.setDrawable(it) }
             statisticsDetailsRv.addItemDecoration(dividerItemDecoration)
         }
-        viewModel.getTransactions().observe(viewLifecycleOwner) { adapter.updateItems(it) }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.getTransactions()
+                .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                .collect { list -> adapter.updateItems(list) }
+        }
     }
 
     private fun initToolbar(toolbar: Toolbar?) {

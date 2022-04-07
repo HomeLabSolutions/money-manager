@@ -1,9 +1,7 @@
 package com.d9tilov.moneymanager.currency.vm
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.d9tilov.moneymanager.base.data.Result
+import com.d9tilov.moneymanager.base.data.ResultOf
 import com.d9tilov.moneymanager.base.ui.navigator.CurrencyNavigator
 import com.d9tilov.moneymanager.budget.data.entity.BudgetData
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
@@ -14,11 +12,14 @@ import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -29,7 +30,8 @@ class CurrencyViewModel @Inject constructor(
     private val budgetInteractor: BudgetInteractor
 ) : BaseViewModel<CurrencyNavigator>() {
 
-    private val currencies = MutableLiveData<Result<List<DomainCurrency>>>()
+    private val currencies: MutableStateFlow<ResultOf<List<DomainCurrency>>> =
+        MutableStateFlow(ResultOf.Loading())
 
     init {
         getCurrencies()
@@ -40,32 +42,32 @@ class CurrencyViewModel @Inject constructor(
         userInteractor.updateCurrency(currency.code)
         budgetInteractor.updateBudgetWithCurrency(currency.code)
         val newCurrencyList = mutableListOf<DomainCurrency>()
-        for (item in currencies.value?.data ?: emptyList()) {
-            newCurrencyList.add(item.copy(isBase = item.code == currency.code))
+        if (currencies.value is ResultOf.Success) {
+            for (item in (currencies.value as ResultOf.Success).data) {
+                newCurrencyList.add(item.copy(isBase = item.code == currency.code))
+            }
+            currencies.value = ResultOf.Success(newCurrencyList)
         }
-        currencies.postValue(Result.success(newCurrencyList))
     }
 
     fun skip() {
         viewModelScope.launch(Dispatchers.IO) {
-            budgetInteractor.create(
-                BudgetData(sum = BigDecimal.ZERO)
-            )
+            budgetInteractor.create(BudgetData.EMPTY.copy(sum = BigDecimal.ZERO))
             val user = userInteractor.getCurrentUser().first()
             userInteractor.updateUser(user.copy(showPrepopulate = false))
+            withContext(Dispatchers.Main) { navigator?.skip() }
         }
-        navigator?.skip()
     }
 
     fun getCurrencies() =
         viewModelScope.launch {
             delay(300)
-            currencies.value = Result.loading()
+            currencies.value = ResultOf.Loading()
             currencyInteractor.getCurrencies()
-                .catch { currencies.postValue(Result.error(it)) }
+                .catch { currencies.value = ResultOf.Failure(it) }
                 .flowOn(Dispatchers.IO)
-                .collect { currencies.value = Result.success(it) }
+                .collect { currencies.value = ResultOf.Success(it) }
         }
 
-    fun currencies(): LiveData<Result<List<DomainCurrency>>> = currencies
+    fun currencies(): StateFlow<ResultOf<List<DomainCurrency>>> = currencies
 }

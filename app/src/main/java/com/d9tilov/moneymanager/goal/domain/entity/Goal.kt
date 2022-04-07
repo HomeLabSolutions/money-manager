@@ -10,12 +10,26 @@ import java.math.BigDecimal
 
 @Parcelize
 data class Goal(
-    val id: Long = DataConstants.DEFAULT_DATA_ID,
-    val clientId: String = DataConstants.NO_ID.toString(),
-    val currencyCode: String = DataConstants.DEFAULT_CURRENCY_CODE,
+    val id: Long,
+    val clientId: String,
+    val currencyCode: String,
     val name: String,
     val targetSum: BigDecimal,
-    val currentSum: BigDecimal = BigDecimal.ZERO,
-    val createdDate: @RawValue LocalDateTime = currentDateTime(),
-    val description: String = ""
-) : Parcelable
+    val currentSum: BigDecimal,
+    val createdDate: @RawValue LocalDateTime,
+    val description: String
+) : Parcelable {
+
+    companion object {
+        val EMPTY = Goal(
+            id = DataConstants.DEFAULT_DATA_ID,
+            clientId = DataConstants.NO_ID.toString(),
+            currencyCode = DataConstants.DEFAULT_CURRENCY_CODE,
+            name = "",
+            targetSum = BigDecimal.ZERO,
+            currentSum = BigDecimal.ZERO,
+            createdDate = currentDateTime(),
+            description = ""
+        )
+    }
+}

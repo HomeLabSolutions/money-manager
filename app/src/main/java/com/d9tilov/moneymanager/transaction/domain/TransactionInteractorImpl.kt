@@ -32,7 +32,6 @@ import com.d9tilov.moneymanager.transaction.domain.mapper.toDataModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDomainModel
 import com.d9tilov.moneymanager.transaction.isIncome
 import com.d9tilov.moneymanager.user.domain.UserInteractor
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
@@ -40,7 +39,6 @@ import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
@@ -183,7 +181,7 @@ class TransactionInteractorImpl(
         return transactionRepo.getTransactionById(id)
             .map { transactionDataModel ->
                 val category = categoryInteractor.getCategoryById(transactionDataModel.categoryId)
-                Transaction(
+                Transaction.EMPTY.copy(
                     transactionDataModel.id,
                     transactionDataModel.clientId,
                     transactionDataModel.type,
@@ -254,50 +252,54 @@ class TransactionInteractorImpl(
 
     private fun getNumerator(): Flow<BigDecimal> {
         val regularIncomeSumFlow =
-            flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
-                regularTransactionInteractor.getAll(TransactionType.INCOME).map { incomes ->
-                    getSumOfRegularTransactions(fiscalDay, incomes)
+            flow { emit(userInteractor.getFiscalDay()) }
+                .flatMapConcat { fiscalDay ->
+                    regularTransactionInteractor.getAll(TransactionType.INCOME).map { incomes ->
+                        getSumOfRegularTransactions(fiscalDay, incomes)
+                    }
                 }
-            }
         val regularExpenseSumFlow =
-            flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
-                regularTransactionInteractor.getAll(TransactionType.EXPENSE)
-                    .map { expenses -> getSumOfRegularTransactions(fiscalDay, expenses) }
-            }
+            flow { emit(userInteractor.getFiscalDay()) }
+                .flatMapConcat { fiscalDay ->
+                    regularTransactionInteractor.getAll(TransactionType.EXPENSE)
+                        .map { expenses -> getSumOfRegularTransactions(fiscalDay, expenses) }
+                }
         val incomesFlow =
-            flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
-                val endDate = currentDateTime().getEndOfDay()
+            flow { emit(userInteractor.getFiscalDay()) }
+                .flatMapConcat { fiscalDay ->
+                    val endDate = currentDateTime().getEndOfDay()
+                    val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
+                    transactionRepo.getTransactionsByTypeInPeriod(
+                        startDate,
+                        endDate,
+                        TransactionType.INCOME,
+                        onlyInStatistics = true,
+                        withRegular = false
+                    ).map { list ->
+                        list.sumOf { currencyInteractor.toMainCurrency(it.sum, it.currencyCode) }
+                    }
+                }
+        val expenseFlow = flow { emit(userInteractor.getFiscalDay()) }
+            .flatMapConcat { fiscalDay ->
+                val endDate = currentDateTime()
+                val endDateMinusDay =
+                    endDate.date.minus(1, DateTimeUnit.DAY).atTime(0, 0, 0, 0).getEndOfDay()
                 val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
                 transactionRepo.getTransactionsByTypeInPeriod(
                     startDate,
-                    endDate,
-                    TransactionType.INCOME,
+                    endDateMinusDay,
+                    TransactionType.EXPENSE,
                     onlyInStatistics = true,
                     withRegular = false
                 ).map { list ->
-                    list.sumOf { currencyInteractor.toMainCurrency(it.sum, it.currencyCode) }
+                    list.sumOf {
+                        currencyInteractor.toMainCurrency(
+                            it.sum,
+                            it.currencyCode
+                        )
+                    }
                 }
             }
-        val expenseFlow = flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
-            val endDate = currentDateTime()
-            val endDateMinusDay =
-                endDate.date.minus(1, DateTimeUnit.DAY).atTime(0, 0, 0, 0).getEndOfDay()
-            val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
-            transactionRepo.getTransactionsByTypeInPeriod(
-                startDate,
-                endDateMinusDay,
-                TransactionType.EXPENSE,
-                onlyInStatistics = true,
-                withRegular = false
-            ).map { list ->
-                list.sumOf {
-                    currencyInteractor.toMainCurrency(
-                        it.sum,
-                        it.currencyCode
-                    )
-                }
-            }
-        }
 
         val savedSumPerPeriodFlow = budgetInteractor.get().map { it.saveSum }
 
@@ -350,56 +352,59 @@ class TransactionInteractorImpl(
     }
 
     override fun getSumInFiscalPeriodInUsd(type: TransactionType): Flow<BigDecimal> {
-        return flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
-            val endDate = currentDateTime()
-            val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
-            transactionRepo.getTransactionsByTypeInPeriod(
-                startDate,
-                endDate,
-                type
-            ).map { list ->
-                val currencies = mutableSetOf<String>()
-                list.forEach { tr -> currencies.add(tr.currencyCode) }
-                val currencyCode = currencyInteractor.getCurrentCurrency().code
-                if ((currencies.size == 1 && currencies.contains(currencyCode)) || currencyCode == DEFAULT_CURRENCY_CODE) BigDecimal.ZERO
-                else list.sumOf { it.usdSum }
+        return flow { emit(userInteractor.getFiscalDay()) }
+            .flatMapConcat { fiscalDay ->
+                val endDate = currentDateTime()
+                val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
+                transactionRepo.getTransactionsByTypeInPeriod(
+                    startDate,
+                    endDate,
+                    type
+                ).map { list ->
+                    val currencies = mutableSetOf<String>()
+                    list.forEach { tr -> currencies.add(tr.currencyCode) }
+                    val currencyCode = currencyInteractor.getCurrentCurrency().code
+                    if ((currencies.size == 1 && currencies.contains(currencyCode)) || currencyCode == DEFAULT_CURRENCY_CODE) BigDecimal.ZERO
+                    else list.sumOf { it.usdSum }
+                }
             }
-        }
     }
 
     override fun getSumInFiscalPeriod(): Flow<BigDecimal> {
         val incomesFlow =
-            flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
+            flow { emit(userInteractor.getFiscalDay()) }
+                .flatMapConcat { fiscalDay ->
+                    val endDate = currentDateTime().getEndOfDay()
+                    val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
+                    transactionRepo.getTransactionsByTypeInPeriod(
+                        startDate,
+                        endDate,
+                        TransactionType.INCOME,
+                        onlyInStatistics = true,
+                        withRegular = true
+                    ).map { list ->
+                        list.sumOf { currencyInteractor.toMainCurrency(it.sum, it.currencyCode) }
+                    }
+                }
+        val expenseFlow = flow { emit(userInteractor.getFiscalDay()) }
+            .flatMapConcat { fiscalDay ->
                 val endDate = currentDateTime().getEndOfDay()
                 val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
                 transactionRepo.getTransactionsByTypeInPeriod(
                     startDate,
                     endDate,
-                    TransactionType.INCOME,
+                    TransactionType.EXPENSE,
                     onlyInStatistics = true,
                     withRegular = true
                 ).map { list ->
-                    list.sumOf { currencyInteractor.toMainCurrency(it.sum, it.currencyCode) }
+                    list.sumOf {
+                        currencyInteractor.toMainCurrency(
+                            it.sum,
+                            it.currencyCode
+                        )
+                    }
                 }
             }
-        val expenseFlow = flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
-            val endDate = currentDateTime().getEndOfDay()
-            val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
-            transactionRepo.getTransactionsByTypeInPeriod(
-                startDate,
-                endDate,
-                TransactionType.EXPENSE,
-                onlyInStatistics = true,
-                withRegular = true
-            ).map { list ->
-                list.sumOf {
-                    currencyInteractor.toMainCurrency(
-                        it.sum,
-                        it.currencyCode
-                    )
-                }
-            }
-        }
         return combine(
             incomesFlow,
             expenseFlow
@@ -420,25 +425,26 @@ class TransactionInteractorImpl(
         }
 
     override fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<BigDecimal> {
-        return flow { emit(userInteractor.getFiscalDay()) }.flatMapConcat { fiscalDay ->
-            val endDate = currentDateTime()
-            val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
-            transactionRepo.getTransactionsByTypeInPeriod(
-                startDate,
-                endDate,
-                type
-            ).map { list ->
-                val currentCurrency = currencyInteractor.getCurrentCurrency().code
-                list.sumOf { tr ->
-                    if (tr.currencyCode == currentCurrency) {
-                        tr.sum
-                    } else {
-                        val trCurrency = currencyInteractor.getCurrencyByCode(currentCurrency)
-                        trCurrency.value.multiply(tr.usdSum)
+        return flow { emit(userInteractor.getFiscalDay()) }
+            .flatMapConcat { fiscalDay ->
+                val endDate = currentDateTime()
+                val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
+                transactionRepo.getTransactionsByTypeInPeriod(
+                    startDate,
+                    endDate,
+                    type
+                ).map { list ->
+                    val currentCurrency = currencyInteractor.getCurrentCurrency().code
+                    list.sumOf { tr ->
+                        if (tr.currencyCode == currentCurrency) {
+                            tr.sum
+                        } else {
+                            val trCurrency = currencyInteractor.getCurrencyByCode(currentCurrency)
+                            trCurrency.value.multiply(tr.usdSum)
+                        }
                     }
                 }
             }
-        }
     }
 
     override fun getApproxSumTodayCurrentCurrency(type: TransactionType): Flow<BigDecimal> =
@@ -471,7 +477,7 @@ class TransactionInteractorImpl(
                             listOfSkippedDates.add(dayIterator)
                         }
                         listOfSkippedDates.forEachIndexed { index, day ->
-                            val transaction = Transaction(
+                            val transaction = Transaction.EMPTY.copy(
                                 type = tr.type,
                                 sum = tr.sum,
                                 category = tr.category,
@@ -481,17 +487,15 @@ class TransactionInteractorImpl(
                                 isRegular = true,
                                 inStatistics = true
                             )
-                            GlobalScope.launch {
-                                addTransaction(transaction)
-                                if (index == listOfSkippedDates.size - 1) {
-                                    regularTransactionInteractor.update(
-                                        tr.copy(
-                                            executionPeriod = ExecutionPeriod.EveryDay(
-                                                day.getStartOfDay()
-                                            )
+                            addTransaction(transaction)
+                            if (index == listOfSkippedDates.size - 1) {
+                                regularTransactionInteractor.update(
+                                    tr.copy(
+                                        executionPeriod = ExecutionPeriod.EveryDay(
+                                            day.getStartOfDay()
                                         )
                                     )
-                                }
+                                )
                             }
                         }
                     }
@@ -506,7 +510,7 @@ class TransactionInteractorImpl(
                             }
                         }
                         listOfSkippedDates.forEachIndexed { index, day ->
-                            val transaction = Transaction(
+                            val transaction = Transaction.EMPTY.copy(
                                 type = tr.type,
                                 sum = tr.sum,
                                 category = tr.category,
@@ -516,18 +520,16 @@ class TransactionInteractorImpl(
                                 isRegular = true,
                                 inStatistics = true
                             )
-                            GlobalScope.launch {
-                                addTransaction(transaction)
-                                if (index == listOfSkippedDates.size - 1) {
-                                    regularTransactionInteractor.update(
-                                        tr.copy(
-                                            executionPeriod = ExecutionPeriod.EveryWeek(
-                                                tr.executionPeriod.dayOfWeek,
-                                                day.getStartOfDay()
-                                            )
+                            addTransaction(transaction)
+                            if (index == listOfSkippedDates.size - 1) {
+                                regularTransactionInteractor.update(
+                                    tr.copy(
+                                        executionPeriod = ExecutionPeriod.EveryWeek(
+                                            tr.executionPeriod.dayOfWeek,
+                                            day.getStartOfDay()
                                         )
                                     )
-                                }
+                                )
                             }
                         }
                     }
@@ -555,7 +557,7 @@ class TransactionInteractorImpl(
                             }
                         }
                         listOfSkippedDates.forEachIndexed { index, day ->
-                            val transaction = Transaction(
+                            val transaction = Transaction.EMPTY.copy(
                                 type = tr.type,
                                 sum = tr.sum,
                                 category = tr.category,
@@ -565,18 +567,16 @@ class TransactionInteractorImpl(
                                 isRegular = true,
                                 inStatistics = true
                             )
-                            GlobalScope.launch {
-                                addTransaction(transaction)
-                                if (index == listOfSkippedDates.size - 1) {
-                                    regularTransactionInteractor.update(
-                                        tr.copy(
-                                            executionPeriod = ExecutionPeriod.EveryMonth(
-                                                tr.executionPeriod.dayOfMonth,
-                                                day.getStartOfDay()
-                                            )
+                            addTransaction(transaction)
+                            if (index == listOfSkippedDates.size - 1) {
+                                regularTransactionInteractor.update(
+                                    tr.copy(
+                                        executionPeriod = ExecutionPeriod.EveryMonth(
+                                            tr.executionPeriod.dayOfMonth,
+                                            day.getStartOfDay()
                                         )
                                     )
-                                }
+                                )
                             }
                         }
                     }

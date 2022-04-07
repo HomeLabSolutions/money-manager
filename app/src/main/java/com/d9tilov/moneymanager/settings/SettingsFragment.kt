@@ -21,6 +21,8 @@ import com.d9tilov.moneymanager.core.util.toBackupDate
 import com.d9tilov.moneymanager.databinding.FragmentSettingsBinding
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SettingsFragment :
@@ -28,12 +30,11 @@ class SettingsFragment :
     SettingsNavigator {
 
     private var toolbar: MaterialToolbar? = null
-
-    override fun getNavigator() = this
-
     private var rotation: Animation? = null
 
+    override fun getNavigator() = this
     override val viewModel by viewModels<SettingsViewModel>()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
@@ -58,19 +59,19 @@ class SettingsFragment :
                     settingsDayOfMonthEdit.text.toString().toInt()
                 )
             }
-        }
-        viewModel.userData.observe(
-            viewLifecycleOwner
-        ) { data ->
-            viewBinding?.settingsDayOfMonthEdit?.setText(data.fiscalDay.toString())
-            if (data.backupData.lastBackupTimestamp == 0L) {
-                viewBinding?.settingsBackupInfo?.setText(R.string.settings_backup_empty)
-            } else {
-                viewBinding?.settingsBackupInfo?.text =
-                    getString(
-                        R.string.settings_backup_info,
-                        data.backupData.lastBackupTimestamp.toBackupDate()
-                    )
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.userData.collect { data ->
+                    settingsDayOfMonthEdit.setText(data.fiscalDay.toString())
+                    if (data.backupData.lastBackupTimestamp == 0L) {
+                        settingsBackupInfo.setText(R.string.settings_backup_empty)
+                    } else {
+                        settingsBackupInfo.text =
+                            getString(
+                                R.string.settings_backup_info,
+                                data.backupData.lastBackupTimestamp.toBackupDate()
+                            )
+                    }
+                }
             }
         }
     }

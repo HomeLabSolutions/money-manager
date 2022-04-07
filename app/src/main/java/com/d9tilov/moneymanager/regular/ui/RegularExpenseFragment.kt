@@ -3,6 +3,9 @@ package com.d9tilov.moneymanager.regular.ui
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +21,8 @@ import com.d9tilov.moneymanager.regular.RegularTransactionDestination
 import com.d9tilov.moneymanager.regular.vm.RegularExpenseViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RegularExpenseFragment :
@@ -53,17 +58,19 @@ class RegularExpenseFragment :
             }).attachToRecyclerView(regularExpenseRvList)
         }
         emptyViewStub = viewBinding?.regularExpenseEmptyPlaceholder
-        viewModel.regularExpenseTransactionList.observe(
-            this.viewLifecycleOwner
-        ) {
-            if (it.isEmpty()) {
-                viewBinding?.regularExpenseRvList?.gone()
-                showViewStub(TransactionType.EXPENSE)
-            } else {
-                hideViewStub()
-                viewBinding?.regularExpenseRvList?.show()
-                regularTransactionAdapter.updateItems(it)
-            }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.regularExpenseTransactionList
+                .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                .collect { list ->
+                    if (list.isEmpty()) {
+                        viewBinding?.regularExpenseRvList?.gone()
+                        showViewStub(TransactionType.EXPENSE)
+                    } else {
+                        hideViewStub()
+                        viewBinding?.regularExpenseRvList?.show()
+                        regularTransactionAdapter.updateItems(list)
+                    }
+                }
         }
     }
 

@@ -9,8 +9,21 @@ data class UserProfile(
     val displayedName: String?,
     val firstName: String?,
     val lastName: String?,
-    val currentCurrencyCode: String = DataConstants.DEFAULT_CURRENCY_CODE,
-    val showPrepopulate: Boolean = true,
-    val backupData: BackupData = BackupData(0, AppDatabase.VERSION_NUMBER),
+    val currentCurrencyCode: String,
+    val showPrepopulate: Boolean,
+    val backupData: BackupData,
     val fiscalDay: Int
-)
+) {
+    companion object {
+        val EMPTY = UserProfile(
+            uid = DataConstants.DEFAULT_DATA_ID.toString(),
+            displayedName = "",
+            firstName = "",
+            lastName = "",
+            currentCurrencyCode = DataConstants.DEFAULT_CURRENCY_CODE,
+            showPrepopulate = true,
+            backupData = BackupData(0, AppDatabase.VERSION_NUMBER),
+            fiscalDay = 1
+        )
+    }
+}

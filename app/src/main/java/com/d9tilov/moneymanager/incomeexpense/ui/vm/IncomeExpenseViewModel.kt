@@ -1,7 +1,5 @@
 package com.d9tilov.moneymanager.incomeexpense.ui.vm
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeExpenseNavigator
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
@@ -12,6 +10,8 @@ import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -21,10 +21,9 @@ import javax.inject.Inject
 class IncomeExpenseViewModel @Inject constructor(
     private val transactionInteractor: TransactionInteractor,
     private val currencyInteractor: CurrencyInteractor
-) :
-    BaseViewModel<IncomeExpenseNavigator>() {
+) : BaseViewModel<IncomeExpenseNavigator>() {
 
-    private var currencyCodeStr: MutableLiveData<String> = MutableLiveData(DEFAULT_CURRENCY_CODE)
+    private var currencyCodeStr: MutableStateFlow<String> = MutableStateFlow(DEFAULT_CURRENCY_CODE)
     private val updateCurrencyExceptionHandler = CoroutineExceptionHandler { _, exception ->
         Timber.d("Unable to update currency: $exception")
     }
@@ -52,6 +51,6 @@ class IncomeExpenseViewModel @Inject constructor(
         currencyCodeStr.value = defaultCurrencyCode
     }
 
-    fun getCurrencyCodeAsync(): LiveData<String> = currencyCodeStr
-    fun getCurrencyCode(): String = currencyCodeStr.value ?: DEFAULT_CURRENCY_CODE
+    fun getCurrencyCodeAsync(): StateFlow<String> = currencyCodeStr
+    fun getCurrencyCode(): String = currencyCodeStr.value
 }

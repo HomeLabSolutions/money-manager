@@ -77,7 +77,6 @@ class GoalCreationFragment :
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         toolbar?.title = getString(R.string.title_goal)
-        activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity.supportActionBar?.setDisplayShowHomeEnabled(true)
         setHasOptionsMenu(true)

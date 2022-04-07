@@ -14,20 +14,39 @@ import java.math.BigDecimal
 
 @Parcelize
 data class Transaction(
-    val id: Long = DataConstants.DEFAULT_DATA_ID,
-    val clientId: String = NO_ID.toString(),
+    val id: Long,
+    val clientId: String,
     val type: TransactionType,
     val category: Category,
-    val currencyCode: String = DataConstants.DEFAULT_CURRENCY_CODE,
+    val currencyCode: String,
     val sum: BigDecimal,
-    val usdSum: BigDecimal = BigDecimal.ZERO,
-    val date: @RawValue LocalDateTime = currentDateTime(),
-    val description: String = "",
-    val qrCode: String? = null,
-    val isRegular: Boolean = false,
-    val inStatistics: Boolean = true,
-    override val headerPosition: Int = 0
+    val usdSum: BigDecimal,
+    val date: @RawValue LocalDateTime,
+    val description: String,
+    val qrCode: String?,
+    val isRegular: Boolean,
+    val inStatistics: Boolean,
+    override val headerPosition: Int
 ) : BaseTransaction, Parcelable {
+
+    companion object {
+        val EMPTY = Transaction(
+            id = DataConstants.DEFAULT_DATA_ID,
+            clientId = NO_ID.toString(),
+            type = TransactionType.EXPENSE,
+            category = Category.EMPTY,
+            currencyCode = DataConstants.DEFAULT_CURRENCY_CODE,
+            sum = BigDecimal.ZERO,
+            usdSum = BigDecimal.ZERO,
+            date = currentDateTime(),
+            description = "",
+            qrCode = null,
+            isRegular = false,
+            inStatistics = true,
+            headerPosition = 0
+        )
+    }
+
     override val itemType: Int
         get() = ITEM
 

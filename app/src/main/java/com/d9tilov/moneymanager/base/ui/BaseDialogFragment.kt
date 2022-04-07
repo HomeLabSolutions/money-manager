@@ -8,10 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
+import com.d9tilov.moneymanager.core.ui.BaseViewModel.Companion.DEFAULT_MESSAGE_ID
 import com.d9tilov.moneymanager.core.util.toast
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 abstract class BaseDialogFragment<N : BaseNavigator, VB : ViewBinding>(private val inflate: Inflate<VB>) :
     AppCompatDialogFragment() {
@@ -55,12 +61,17 @@ abstract class BaseDialogFragment<N : BaseNavigator, VB : ViewBinding>(private v
 
     @CallSuper
     protected open fun initObservers() {
-        viewModel.getMsg().observe(
-            this.viewLifecycleOwner
-        ) { requireContext().toast(it) }
-        viewModel.getLoading().observe(
-            this.viewLifecycleOwner
-        ) { if (it) showLoading() else hideLoading() }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.getMsg()
+                        .collect { if (it != DEFAULT_MESSAGE_ID) requireContext().toast(it) }
+                }
+                launch {
+                    viewModel.getLoading().collect { if (it) showLoading() else hideLoading() }
+                }
+            }
+        }
     }
 
     private fun showLoading() = baseActivity?.showLoading()

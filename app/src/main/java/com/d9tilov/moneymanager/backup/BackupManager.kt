@@ -3,7 +3,7 @@ package com.d9tilov.moneymanager.backup
 import android.content.Context
 import android.net.Uri
 import com.d9tilov.moneymanager.App
-import com.d9tilov.moneymanager.base.data.Result
+import com.d9tilov.moneymanager.base.data.ResultOf
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DATABASE_NAME
@@ -24,13 +24,13 @@ import kotlin.coroutines.suspendCoroutine
 
 class BackupManager(private val context: Context, private val preferencesStore: PreferencesStore) {
 
-    suspend fun backupDb(): Result<BackupData> {
+    suspend fun backupDb(): ResultOf<BackupData> {
         val uid = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
         return suspendCoroutine { continuation ->
             Timber.tag(App.TAG).d("Backup start")
             if (uid.isNullOrEmpty()) {
                 Timber.tag(App.TAG).d("Empty uid")
-                continuation.resume(Result.error(WrongUidException()))
+                continuation.resume(ResultOf.Failure(WrongUidException()))
             }
             val file = context.getDatabasePath(DATABASE_NAME)
             val parentPath = "$uid/$DATABASE_NAME"
@@ -39,24 +39,24 @@ class BackupManager(private val context: Context, private val preferencesStore: 
             Timber.tag(App.TAG).d("Backup end")
             uploadTask
                 .addOnSuccessListener {
-                    continuation.resume(Result.success(BackupData(currentDateTime().toMillis())))
+                    continuation.resume(ResultOf.Success(BackupData(currentDateTime().toMillis())))
                     Timber.tag(App.TAG).d("Backup was compete successfully")
                 }
                 .addOnFailureListener {
-                    continuation.resume(Result.error(it))
+                    continuation.resume(ResultOf.Failure(it))
                     Timber.tag(App.TAG).d("Backup was compete with error: $it")
                 }
         }
     }
 
-    suspend fun restoreDb(): Result<Nothing> {
+    suspend fun restoreDb(): ResultOf<Any> {
         val uid = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
         return suspendCoroutine { continuation ->
             if (uid.isNullOrEmpty()) {
-                return@suspendCoroutine continuation.resume(Result.error(WrongUidException()))
+                return@suspendCoroutine continuation.resume(ResultOf.Failure(WrongUidException()))
             }
             if (uid.isEmpty()) {
-                continuation.resume(Result.error(WrongUidException()))
+                continuation.resume(ResultOf.Failure(WrongUidException()))
             }
             val parentPath = "$uid/$DATABASE_NAME"
             val fileRef = Firebase.storage.reference.child(parentPath)
@@ -73,10 +73,10 @@ class BackupManager(private val context: Context, private val preferencesStore: 
                 myOutput.flush()
                 myOutput.close()
                 myInputs.close()
-                continuation.resume(Result.success())
+                continuation.resume(ResultOf.Success(Any()))
                 Timber.tag(App.TAG).d("Restore was compete successfully")
             }.addOnFailureListener {
-                continuation.resume(Result.error(it))
+                continuation.resume(ResultOf.Failure(it))
                 Timber.tag(App.TAG).d("Restore was complete with error: $it")
             }
         }

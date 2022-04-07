@@ -1,7 +1,5 @@
 package com.d9tilov.moneymanager.statistics.vm
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsDetailsNavigator
@@ -15,6 +13,8 @@ import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,25 +24,23 @@ class StatisticsDetailsViewModel @Inject constructor(
     private val transactionInteractor: TransactionInteractor
 ) : BaseViewModel<StatisticsDetailsNavigator>() {
 
-    private val transactions = MutableLiveData<List<Transaction>>()
+    private val transactions = MutableStateFlow<List<Transaction>>(emptyList())
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            transactions.postValue(
-                transactionInteractor.getTransactionsByCategory(
-                    savedStateHandle.get<TransactionType>("transactionType")
-                        ?: throw IllegalArgumentException("TransactionType is null"),
-                    savedStateHandle.get<Category>("category")
-                        ?: throw IllegalArgumentException("Category is null"),
-                    savedStateHandle.get<Long>("start_period")?.toLocalDateTime()?.getStartOfDay()
-                        ?: throw IllegalArgumentException("Start period is null"),
-                    savedStateHandle.get<Long>("end_period")?.toLocalDateTime()?.getEndOfDay()
-                        ?: throw IllegalArgumentException("End period is null"),
-                    savedStateHandle.get<Boolean>("in_statistics") ?: true
-                ).sortedByDescending { item -> item.date }
-            )
+            transactions.value = transactionInteractor.getTransactionsByCategory(
+                savedStateHandle.get<TransactionType>("transactionType")
+                    ?: throw IllegalArgumentException("TransactionType is null"),
+                savedStateHandle.get<Category>("category")
+                    ?: throw IllegalArgumentException("Category is null"),
+                savedStateHandle.get<Long>("start_period")?.toLocalDateTime()?.getStartOfDay()
+                    ?: throw IllegalArgumentException("Start period is null"),
+                savedStateHandle.get<Long>("end_period")?.toLocalDateTime()?.getEndOfDay()
+                    ?: throw IllegalArgumentException("End period is null"),
+                savedStateHandle.get<Boolean>("in_statistics") ?: true
+            ).sortedByDescending { item -> item.date }
         }
     }
 
-    fun getTransactions(): LiveData<List<Transaction>> = transactions
+    fun getTransactions(): StateFlow<List<Transaction>> = transactions
 }

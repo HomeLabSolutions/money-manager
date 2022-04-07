@@ -3,8 +3,7 @@ package com.d9tilov.moneymanager.user.data.local
 import android.content.Context
 import com.d9tilov.moneymanager.backup.BackupData
 import com.d9tilov.moneymanager.backup.BackupManager
-import com.d9tilov.moneymanager.base.data.Result
-import com.d9tilov.moneymanager.base.data.Status
+import com.d9tilov.moneymanager.base.data.ResultOf
 import com.d9tilov.moneymanager.base.data.local.exceptions.NetworkException
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
@@ -28,8 +27,8 @@ class UserLocalSource(
 
     override suspend fun createUserOrRestore(userProfile: UserProfile): UserProfile {
         preferencesStore.updateUid(userProfile.uid)
-        val result: Result<Nothing> = backupManager.restoreDb()
-        if (result.status == Status.ERROR) userDao.insert(userProfile.toDbModel())
+        val result: ResultOf<Any> = backupManager.restoreDb()
+        if (result is ResultOf.Failure) userDao.insert(userProfile.toDbModel())
         val dbUser = userDao.getById(userProfile.uid).first().toDataModel()
         val currencyCode = dbUser.currentCurrencyCode
         preferencesStore.updateCurrentCurrency(currencyCode)
@@ -66,12 +65,18 @@ class UserLocalSource(
         }
     }
 
-    override suspend fun backupUser(): Result<BackupData> {
+    override suspend fun backupUser(): ResultOf<BackupData> {
         val currentUserId = preferencesStore.uid.first()
-        return if (currentUserId == null) Result.error(WrongUidException())
+        return if (currentUserId == null) ResultOf.Failure(WrongUidException())
         else {
-            if (isNetworkConnected(context)) backupManager.backupDb()
-            else Result.error(NetworkException())
+            if (isNetworkConnected(context)) {
+                val backupData: ResultOf<BackupData> = backupManager.backupDb()
+                if (backupData is ResultOf.Success) {
+                    val user = getCurrentUser().first()
+                    updateCurrentUser(user.copy(backupData = backupData.data))
+                }
+                backupData
+            } else ResultOf.Failure(NetworkException())
         }
     }
 

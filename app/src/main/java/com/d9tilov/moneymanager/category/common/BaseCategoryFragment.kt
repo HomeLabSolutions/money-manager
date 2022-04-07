@@ -5,6 +5,9 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +28,8 @@ import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentCategoryBinding
 import com.d9tilov.moneymanager.databinding.LayoutEmptyListPlaceholderBinding
 import com.google.android.material.appbar.MaterialToolbar
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 abstract class BaseCategoryFragment<N : BaseNavigator> :
     BaseFragment<N, FragmentCategoryBinding>(
@@ -114,22 +119,21 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
                 }
             })
         }
-        (viewModel as BaseCategoryViewModel<*>).categories.observe(
-            this.viewLifecycleOwner
-        ) { list ->
-            val sortedList = list.sortedWith(
-                compareBy(
-                    { it.children.isEmpty() },
-                    { -it.usageCount },
-                    { it.name }
-                )
-            )
-            if (list.isEmpty()) {
-                showViewStub()
-            } else {
-                hideViewStub()
-            }
-            categoryAdapter.updateItems(sortedList)
+        viewLifecycleOwner.lifecycleScope.launch {
+            (viewModel as BaseCategoryViewModel<*>).categories
+                .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                .collect { list ->
+                    val sortedList = list.sortedWith(
+                        compareBy(
+                            { it.children.isEmpty() },
+                            { -it.usageCount },
+                            { it.name }
+                        )
+                    )
+                    if (list.isEmpty()) showViewStub()
+                    else hideViewStub()
+                    categoryAdapter.updateItems(sortedList)
+                }
         }
     }
 
@@ -168,9 +172,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
         return if (categoryAdapter.editModeEnable) {
             categoryAdapter.enableEditMode(false)
             false
-        } else {
-            true
-        }
+        } else true
     }
 
     companion object {

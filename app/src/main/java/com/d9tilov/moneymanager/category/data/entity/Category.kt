@@ -3,6 +3,7 @@ package com.d9tilov.moneymanager.category.data.entity
 import android.os.Parcelable
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_DATA_ID
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
 import com.d9tilov.moneymanager.transaction.TransactionType
@@ -29,8 +30,8 @@ data class Category(
             children = emptyList(),
             type = TransactionType.EXPENSE,
             name = "",
-            icon = 0,
-            color = 0,
+            icon = R.drawable.ic_category_backery,
+            color = R.color.primary_color,
             usageCount = 0
         )
     }

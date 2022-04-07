@@ -10,11 +10,17 @@ import androidx.annotation.ColorRes
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
+import com.d9tilov.moneymanager.core.ui.BaseViewModel.Companion.DEFAULT_MESSAGE_ID
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.toast
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 
@@ -72,12 +78,19 @@ abstract class BaseFragment<N : BaseNavigator, VB : ViewBinding>(
 
     @CallSuper
     protected open fun initObservers() {
-        viewModel.getMsg().observe(
-            this.viewLifecycleOwner
-        ) { event -> requireContext().toast(event) }
-        viewModel.getLoading().observe(
-            this.viewLifecycleOwner
-        ) { show -> if (show) showLoading() else hideLoading() }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.getMsg().collect { message ->
+                        if (message != DEFAULT_MESSAGE_ID) requireContext().toast(message)
+                    }
+                }
+                launch {
+                    viewModel.getLoading()
+                        .collect { show -> if (show) showLoading() else hideLoading() }
+                }
+            }
+        }
     }
 
     protected fun showSnackBar(text: String, gravityCenter: Boolean = false) {

@@ -3,6 +3,9 @@ package com.d9tilov.moneymanager.regular.ui
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +21,8 @@ import com.d9tilov.moneymanager.regular.RegularTransactionDestination
 import com.d9tilov.moneymanager.regular.vm.RegularIncomeViewModel
 import com.d9tilov.moneymanager.transaction.TransactionType
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RegularIncomeFragment :
@@ -51,18 +56,20 @@ class RegularIncomeFragment :
                     regularTransactionAdapter.deleteItem(viewHolder.bindingAdapterPosition)
                 }
             }).attachToRecyclerView(regularIncomeRvList)
-        }
-        emptyViewStub = viewBinding?.regularIncomeEmptyPlaceholder
-        viewModel.regularIncomeTransactionList.observe(
-            this.viewLifecycleOwner
-        ) {
-            if (it.isEmpty()) {
-                viewBinding?.regularIncomeRvList?.gone()
-                showViewStub(TransactionType.INCOME)
-            } else {
-                hideViewStub()
-                viewBinding?.regularIncomeRvList?.show()
-                regularTransactionAdapter.updateItems(it)
+            emptyViewStub = regularIncomeEmptyPlaceholder
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.regularIncomeTransactionList
+                    .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                    .collect { list ->
+                        if (list.isEmpty()) {
+                            regularIncomeRvList.gone()
+                            showViewStub(TransactionType.INCOME)
+                        } else {
+                            hideViewStub()
+                            regularIncomeRvList.show()
+                            regularTransactionAdapter.updateItems(list)
+                        }
+                    }
             }
         }
     }

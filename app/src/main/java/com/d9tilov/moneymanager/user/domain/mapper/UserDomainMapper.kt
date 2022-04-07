@@ -20,7 +20,7 @@ class UserDomainMapper @Inject constructor() {
                         parsedSecondName = tmpArrayName[1]
                     }
                 }
-                return UserProfile(
+                return UserProfile.EMPTY.copy(
                     uid = uid,
                     displayedName = displayName,
                     firstName = parsedFirstName,
@@ -28,7 +28,7 @@ class UserDomainMapper @Inject constructor() {
                     fiscalDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
                 )
             }
-        } ?: return UserProfile(
+        } ?: return UserProfile.EMPTY.copy(
             uid = DEFAULT_DATA_ID.toString(),
             displayedName = "Name Surname",
             firstName = "Name",

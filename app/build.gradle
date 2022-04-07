@@ -93,6 +93,12 @@ android {
         correctErrorTypes = true
     }
 
+    if (project.hasProperty('devBuild')) {
+        splits.abi.enable = false
+        splits.density.enable = false
+        aaptOptions.cruncherEnabled = false
+    }
+
 }
 
 task ktlint(type: JavaExec, group: "verification") {
@@ -152,6 +158,9 @@ dependencies {
     kapt "androidx.room:room-compiler:2.4.2"
 
     implementation "androidx.viewpager2:viewpager2:1.0.0"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1"
 
     implementation "androidx.work:work-runtime-ktx:2.7.1"
     implementation "androidx.hilt:hilt-work:1.0.0"

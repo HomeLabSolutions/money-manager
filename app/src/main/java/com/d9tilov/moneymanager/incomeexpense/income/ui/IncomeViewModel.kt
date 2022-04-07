@@ -1,7 +1,5 @@
 package com.d9tilov.moneymanager.incomeexpense.income.ui
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -22,8 +20,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -41,20 +42,25 @@ class IncomeViewModel @Inject constructor(
     }
 
     val earnedInPeriod = transactionInteractor.getSumInFiscalPeriodInUsd(TransactionType.INCOME)
-        .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler).asLiveData()
+        .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, BigDecimal.ZERO)
+
     val earnedInPeriodApprox =
         transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.INCOME)
-            .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler).asLiveData()
+            .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler)
+            .stateIn(viewModelScope, SharingStarted.Eagerly, BigDecimal.ZERO)
 
-    override val categories: LiveData<List<Category>> =
-        categoryInteractor.getGroupedCategoriesByType(TransactionType.INCOME).asLiveData()
+    override val categories: StateFlow<List<Category>> =
+        categoryInteractor.getGroupedCategoriesByType(TransactionType.INCOME)
+            .flowOn(Dispatchers.IO)
+            .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     override fun saveTransaction(category: Category, sum: BigDecimal, currencyCode: String) {
         viewModelScope.launch(Dispatchers.Main) {
             if (sum.signum() > 0) {
                 withContext(Dispatchers.IO) {
                     transactionInteractor.addTransaction(
-                        Transaction(
+                        Transaction.EMPTY.copy(
                             type = TransactionType.INCOME,
                             sum = sum,
                             category = category,
@@ -63,9 +69,7 @@ class IncomeViewModel @Inject constructor(
                     )
                 }
                 addTransactionEvent.call()
-            } else {
-                navigator?.showEmptySumError()
-            }
+            } else navigator?.showEmptySumError()
         }
     }
 
@@ -108,5 +112,6 @@ class IncomeViewModel @Inject constructor(
                     newItem
                 }
             }
-            .cachedIn(viewModelScope).flowOn(Dispatchers.IO)
+            .cachedIn(viewModelScope)
+            .flowOn(Dispatchers.IO)
 }
