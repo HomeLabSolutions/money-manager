@@ -128,7 +128,7 @@ dependencies {
     implementation project(':core')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.10"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.20"
 
     implementation "com.google.firebase:firebase-auth:21.0.3"
     implementation "com.firebaseui:firebase-ui-auth:6.2.0"
@@ -165,10 +165,9 @@ dependencies {
     implementation "androidx.work:work-runtime-ktx:2.7.1"
     implementation "androidx.hilt:hilt-work:1.0.0"
 
-    implementation 'com.beust:klaxon:5.5'
+    implementation "com.beust:klaxon:5.5"
 
     implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
 
     ktlint "com.pinterest:ktlint:0.37.2"
 }
-  
