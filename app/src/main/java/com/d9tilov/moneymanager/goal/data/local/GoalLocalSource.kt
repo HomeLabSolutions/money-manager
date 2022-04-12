@@ -8,7 +8,7 @@ import com.d9tilov.moneymanager.goal.data.local.mapper.toDbModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
@@ -24,7 +24,7 @@ class GoalLocalSource(
     }
 
     override fun getAll(): Flow<List<GoalData>> =
-        preferencesStore.uid.flatMapConcat { uid ->
+        preferencesStore.uid.flatMapMerge { uid ->
             if (uid == null) throw WrongUidException()
             else goalDao.getAll(uid).map { list -> list.map { it.toDataModel() } }
         }

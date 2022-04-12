@@ -14,7 +14,7 @@ import com.d9tilov.moneymanager.transaction.TransactionType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
@@ -105,14 +105,14 @@ class CategoryLocalSource(
     )
 
     override fun getByParentId(id: Long): Flow<List<Category>> =
-        preferencesStore.uid.flatMapConcat { uid ->
+        preferencesStore.uid.flatMapMerge { uid ->
             if (uid == null) throw WrongUidException()
             else categoryDao.getByParentId(uid, id)
                 .map { it.map { item -> categoryMapper.toDataParentModel(item) } }
         }
 
     override fun getCategoriesByType(type: TransactionType): Flow<List<Category>> =
-        preferencesStore.uid.flatMapConcat { uid ->
+        preferencesStore.uid.flatMapMerge { uid ->
             if (uid == null) throw WrongUidException()
             else categoryDao.getAllByType(uid, type).map { groupChildrenWithParent(it) }
         }

@@ -7,7 +7,7 @@ import com.d9tilov.moneymanager.currency.data.entity.Currency
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.domain.mapper.CurrencyDomainMapper
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import java.math.BigDecimal
@@ -20,7 +20,7 @@ class CurrencyInteractorImpl(
 
     override fun getCurrencies(): Flow<List<DomainCurrency>> {
         return flow { emit(currencyRepo.getCurrentCurrency()) }
-            .flatMapConcat { baseCurrency ->
+            .flatMapMerge { baseCurrency ->
                 currencyRepo.getCurrencies()
                     .map { list ->
                         list.map { item ->

@@ -14,7 +14,7 @@ import com.d9tilov.moneymanager.user.data.local.mapper.toDbModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
@@ -52,14 +52,14 @@ class UserLocalSource(
     }
 
     override fun getBackupData(): Flow<BackupData> {
-        return preferencesStore.uid.flatMapConcat { uid ->
+        return preferencesStore.uid.flatMapMerge { uid ->
             if (uid == null) throw WrongUidException()
             else userDao.getBackupData(uid)
         }
     }
 
     override fun getCurrentUser(): Flow<UserProfile> {
-        return preferencesStore.uid.flatMapConcat { uid ->
+        return preferencesStore.uid.flatMapMerge { uid ->
             if (uid == null) throw WrongUidException()
             else userDao.getById(uid).map { it.toDataModel() }
         }

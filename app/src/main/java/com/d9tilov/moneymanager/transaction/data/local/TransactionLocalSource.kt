@@ -17,7 +17,7 @@ import com.d9tilov.moneymanager.transaction.data.mapper.toDbModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDateTime
@@ -34,7 +34,7 @@ class TransactionLocalSource(
     }
 
     override fun getById(id: Long): Flow<TransactionDataModel> =
-        preferencesStore.uid.flatMapConcat { uid ->
+        preferencesStore.uid.flatMapMerge { uid ->
             if (uid == null) throw WrongUidException()
             else transactionDao.getById(uid, id).map { it.toDataModel() }
         }
@@ -43,7 +43,7 @@ class TransactionLocalSource(
         from: LocalDateTime,
         to: LocalDateTime,
         transactionType: TransactionType
-    ): Flow<PagingData<TransactionDataModel>> = preferencesStore.uid.flatMapConcat { uid ->
+    ): Flow<PagingData<TransactionDataModel>> = preferencesStore.uid.flatMapMerge { uid ->
         if (uid == null) throw WrongUidException()
         else Pager(config = PagingConfig(PAGE_SIZE, enablePlaceholders = false)) {
             transactionDao.getAllByType(
@@ -61,7 +61,7 @@ class TransactionLocalSource(
         transactionType: TransactionType,
         onlyInStatistics: Boolean,
         withRegular: Boolean
-    ): Flow<List<TransactionDataModel>> = preferencesStore.uid.flatMapConcat { uid ->
+    ): Flow<List<TransactionDataModel>> = preferencesStore.uid.flatMapMerge { uid ->
         if (uid == null) throw WrongUidException()
         else transactionDao.getAllByTypeInPeriod(
             uid,
@@ -77,7 +77,7 @@ class TransactionLocalSource(
     }
 
     override fun getAllByCategory(category: Category): Flow<List<TransactionDataModel>> =
-        preferencesStore.uid.flatMapConcat { uid ->
+        preferencesStore.uid.flatMapMerge { uid ->
             if (uid == null) throw WrongUidException()
             else transactionDao.getByCategoryId(uid, category.id)
                 .map { list -> list.map { item -> item.toDataModel() } }
@@ -89,7 +89,7 @@ class TransactionLocalSource(
         to: LocalDateTime,
         onlyInStatistics: Boolean
     ): Flow<List<TransactionDataModel>> {
-        return preferencesStore.uid.flatMapConcat { uid ->
+        return preferencesStore.uid.flatMapMerge { uid ->
             if (uid == null) throw WrongUidException()
             else transactionDao.getByCategoryIdInPeriod(uid, category.id, from, to)
                 .map { list ->

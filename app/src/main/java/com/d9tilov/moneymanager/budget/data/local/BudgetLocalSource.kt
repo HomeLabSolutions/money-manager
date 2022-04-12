@@ -9,7 +9,7 @@ import com.d9tilov.moneymanager.budget.data.local.mapper.toDbModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
@@ -25,7 +25,7 @@ class BudgetLocalSource(
     }
 
     override fun get(): Flow<BudgetData> =
-        preferencesStore.uid.flatMapConcat { uid ->
+        preferencesStore.uid.flatMapMerge { uid ->
             if (uid == null) throw WrongUidException()
             else budgetDao.get(uid)
                 .map { it?.toDataModel() ?: throw EmptyDbDataException("Budget doesn't exists") }
