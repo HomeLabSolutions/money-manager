@@ -7,7 +7,20 @@ import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
 import java.math.BigDecimal
 
 fun Transaction.toDataModel(): TransactionDataModel = TransactionDataModel(
-    id, clientId, type, category.id, currencyCode, sum, usdSum, date, description, qrCode, isRegular, inStatistics
+    id,
+    clientId,
+    type,
+    category.id,
+    currencyCode,
+    sum,
+    usdSum,
+    date,
+    description,
+    qrCode,
+    isRegular,
+    inStatistics,
+    location,
+    photoUri
 )
 
 fun TransactionDataModel.toDomainModel(category: Category): Transaction =
@@ -23,7 +36,9 @@ fun TransactionDataModel.toDomainModel(category: Category): Transaction =
         description = description,
         qrCode = qrCode,
         isRegular = isRegular,
-        inStatistics = inStatistics
+        inStatistics = inStatistics,
+        location = location,
+        photoUri = photoUri
     )
 
 fun TransactionDataModel.toChartModel(

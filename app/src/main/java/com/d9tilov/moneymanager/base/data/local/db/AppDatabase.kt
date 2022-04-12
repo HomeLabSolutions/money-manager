@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.base.data.local.db
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -7,6 +8,7 @@ import com.d9tilov.moneymanager.backup.BackupDataConverter
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase.Companion.VERSION_NUMBER
 import com.d9tilov.moneymanager.base.data.local.db.converters.CurrencyConverter
 import com.d9tilov.moneymanager.base.data.local.db.converters.DateConverter
+import com.d9tilov.moneymanager.base.data.local.db.converters.LocationConverter
 import com.d9tilov.moneymanager.base.data.local.db.converters.ModelTypeConverter
 import com.d9tilov.moneymanager.budget.data.local.BudgetDao
 import com.d9tilov.moneymanager.budget.data.local.entity.BudgetDbModel
@@ -34,13 +36,14 @@ import com.d9tilov.moneymanager.user.data.local.entity.UserDbModel
         GoalDbModel::class
     ],
     version = VERSION_NUMBER,
-    exportSchema = false
+    exportSchema = true
 )
 @TypeConverters(
     CurrencyConverter::class,
     DateConverter::class,
     ModelTypeConverter::class,
-    BackupDataConverter::class
+    BackupDataConverter::class,
+    LocationConverter::class
 )
 
 abstract class AppDatabase : RoomDatabase() {
@@ -54,6 +57,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun goalDao(): GoalDao
 
     companion object {
-        const val VERSION_NUMBER = 2
+        const val VERSION_NUMBER = 1
     }
 }

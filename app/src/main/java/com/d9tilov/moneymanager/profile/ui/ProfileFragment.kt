@@ -21,7 +21,7 @@ import com.d9tilov.moneymanager.core.util.toBudgetCreatedDate
 import com.d9tilov.moneymanager.currency.CurrencyDestination
 import com.d9tilov.moneymanager.databinding.FragmentProfileBinding
 import com.d9tilov.moneymanager.goal.GoalDestination
-import com.d9tilov.moneymanager.home.ui.currencyCode
+import com.d9tilov.moneymanager.base.ui.currencyCode
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileViewModel
 import com.d9tilov.moneymanager.regular.RegularTransactionDestination
 import com.d9tilov.moneymanager.splash.ui.SplashActivity

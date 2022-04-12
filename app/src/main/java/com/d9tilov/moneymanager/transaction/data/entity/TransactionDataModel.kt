@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.transaction.data.entity
 
+import android.location.Location
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_DATA_ID
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
 import com.d9tilov.moneymanager.core.util.currentDateTime
@@ -19,5 +20,7 @@ data class TransactionDataModel(
     val description: String = "",
     val qrCode: String? = null,
     val isRegular: Boolean,
-    val inStatistics: Boolean
+    val inStatistics: Boolean,
+    val location: Location? = null,
+    val photoUri: String? = null
 )

@@ -14,7 +14,7 @@ import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentCreationGoalBinding
 import com.d9tilov.moneymanager.goal.vm.CreatedGoalViewModel
-import com.d9tilov.moneymanager.home.ui.currencyCode
+import com.d9tilov.moneymanager.base.ui.currencyCode
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 

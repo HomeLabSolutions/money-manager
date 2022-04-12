@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.transaction.data.local.entity
 
+import android.location.Location
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -33,6 +34,8 @@ data class TransactionDbModel(
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "qrCode") val qrCode: String?,
     @ColumnInfo(name = "isRegular") val isRegular: Boolean,
-    @ColumnInfo(name = "inStatistics") val inStatistics: Boolean
+    @ColumnInfo(name = "inStatistics") val inStatistics: Boolean,
+    @ColumnInfo(name = "location") val location: Location?,
+    @ColumnInfo(name = "photo") val photoUri: String?
 
 )

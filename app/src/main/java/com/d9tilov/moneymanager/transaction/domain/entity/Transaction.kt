@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.transaction.domain.entity
 
+import android.location.Location
 import android.os.Parcelable
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.constants.DataConstants
@@ -26,6 +27,8 @@ data class Transaction(
     val qrCode: String?,
     val isRegular: Boolean,
     val inStatistics: Boolean,
+    val location: Location?,
+    val photoUri: String?,
     override val headerPosition: Int
 ) : BaseTransaction, Parcelable {
 
@@ -43,7 +46,9 @@ data class Transaction(
             qrCode = null,
             isRegular = false,
             inStatistics = true,
-            headerPosition = 0
+            headerPosition = 0,
+            location = null,
+            photoUri = null
         )
     }
 
@@ -66,6 +71,8 @@ data class Transaction(
         if (qrCode != other.qrCode) return false
         if (isRegular != other.isRegular) return false
         if (inStatistics != other.inStatistics) return false
+        if (location != other.location) return false
+        if (photoUri != other.photoUri) return false
 
         return true
     }
@@ -83,6 +90,8 @@ data class Transaction(
         result = 31 * result + (qrCode?.hashCode() ?: 0)
         result = 31 * result + isRegular.hashCode()
         result = 31 * result + inStatistics.hashCode()
+        result = 31 * result + (location?.hashCode() ?: 0)
+        result = 31 * result + (photoUri?.hashCode() ?: 0)
         return result
     }
 }

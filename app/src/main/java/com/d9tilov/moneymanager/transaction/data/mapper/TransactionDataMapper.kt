@@ -15,7 +15,9 @@ fun TransactionDbModel.toDataModel(): TransactionDataModel = TransactionDataMode
     description,
     qrCode,
     isRegular,
-    inStatistics
+    inStatistics,
+    location,
+    photoUri
 )
 
 fun TransactionDataModel.toDbModel(): TransactionDbModel =
@@ -31,5 +33,7 @@ fun TransactionDataModel.toDbModel(): TransactionDbModel =
         description,
         qrCode,
         isRegular,
-        inStatistics
+        inStatistics,
+        location,
+        photoUri
     )
