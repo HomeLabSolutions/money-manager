@@ -37,7 +37,7 @@ data class Transaction(
             id = DataConstants.DEFAULT_DATA_ID,
             clientId = NO_ID.toString(),
             type = TransactionType.EXPENSE,
-            category = Category.EMPTY,
+            category = Category.EMPTY_EXPENSE,
             currencyCode = DataConstants.DEFAULT_CURRENCY_CODE,
             sum = BigDecimal.ZERO,
             usdSum = BigDecimal.ZERO,

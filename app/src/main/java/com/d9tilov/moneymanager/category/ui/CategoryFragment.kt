@@ -89,11 +89,8 @@ class CategoryFragment :
         toolbar?.title = getString(R.string.title_category)
         viewBinding?.categoryCreate?.setOnClickListener {
             val action = CategoryFragmentDirections.toCategoryCreationDest(
-                Category.EMPTY.copy(
-                    type = transactionType,
-                    icon = if (!transactionType.isIncome()) R.drawable.ic_category_food else R.drawable.ic_category_business,
-                    color = R.color.category_pink
-                )
+                if (transactionType.isIncome()) Category.EMPTY_INCOME
+                else Category.EMPTY_EXPENSE
             )
             findNavController().navigate(action)
         }

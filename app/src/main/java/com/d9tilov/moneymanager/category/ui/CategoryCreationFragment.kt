@@ -16,6 +16,8 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryCreationNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
+import com.d9tilov.moneymanager.category.data.entity.Category
+import com.d9tilov.moneymanager.category.data.entity.isEmpty
 import com.d9tilov.moneymanager.category.exception.CategoryExistException
 import com.d9tilov.moneymanager.category.ui.CategoryIconSetFragment.Companion.ARG_CATEGORY_ICON_ID
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryColorAdapter
@@ -42,13 +44,8 @@ class CategoryCreationFragment :
     private val args by navArgs<CategoryCreationFragmentArgs>()
     private val category by lazy { args.category }
 
-    @ColorRes
-    private var color: Int = 0
-
-    @DrawableRes
-    private var icon: Int = 0
-
     private var toolbar: MaterialToolbar? = null
+    private var localCategory: Category = Category.EMPTY_EXPENSE
     private val categoryColorAdapter by lazy { CategoryColorAdapter(category.color) } // must be lazy for properly initialization with args
 
     @Inject
@@ -64,11 +61,9 @@ class CategoryCreationFragment :
 
     private val onItemColorClickListener = object : OnItemClickListener<Int> {
         override fun onItemClick(item: Int, position: Int) {
-            color = item
             viewBinding?.run {
                 categoryCreationRvColorPicker.gone()
-                updateIcon(icon)
-                setColorToColorIcon()
+                updateColor(item)
             }
         }
     }
@@ -85,22 +80,23 @@ class CategoryCreationFragment :
                 ARG_CATEGORY_ICON_ID
             )
         }
-        color = category.color
         viewBinding?.run {
+            if (localCategory.isEmpty()) localCategory = category
             val colorLayoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             categoryCreationRvColorPicker.layoutManager = colorLayoutManager
             categoryCreationRvColorPicker.adapter = categoryColorAdapter
             categoryCreationRvColorPicker.scrollToPosition(categoryColorAdapter.getSelectedPosition())
-            categoryCreationEtName.setText(category.name)
-            updateIcon(category.icon)
-            setColorToColorIcon()
+            categoryCreationEtName.setText(localCategory.name)
+            updateColor(localCategory.color)
+            updateIcon(localCategory.icon)
             categoryCreationSave.isEnabled = categoryCreationEtName.length() > 0
             categoryCreationEtName.onChange { text ->
                 categoryCreationSave.isEnabled = text.isNotEmpty()
                 categoryCreationEtNameLayout.error = null
+                localCategory = localCategory.copy(name = text)
             }
-            if (category.id == DEFAULT_DATA_ID) {
+            if (localCategory.id == DEFAULT_DATA_ID) {
                 categoryCreationDelete.gone()
             } else {
                 categoryCreationDelete.show()
@@ -112,15 +108,7 @@ class CategoryCreationFragment :
                     param(FirebaseAnalytics.Param.ITEM_ID, "open_category_set_screen")
                 }
             }
-            categoryCreationSave.setOnClickListener {
-                viewModel.save(
-                    category.copy(
-                        name = categoryCreationEtName.text.toString(),
-                        color = color,
-                        icon = icon
-                    )
-                )
-            }
+            categoryCreationSave.setOnClickListener { viewModel.save(localCategory) }
             categoryCreationColor.root.setOnClickListener {
                 categoryCreationRvColorPicker.show()
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
@@ -128,15 +116,15 @@ class CategoryCreationFragment :
                 }
             }
             categoryCreationDelete.setOnClickListener {
-                if (category.id == DEFAULT_DATA_ID) {
+                if (localCategory.id == DEFAULT_DATA_ID) {
                     return@setOnClickListener
                 }
-                val action: NavDirections = if (category.parent != null) {
-                    CategoryCreationFragmentDirections.toRemoveSubCategoryDialog(category)
+                val action: NavDirections = if (localCategory.parent != null) {
+                    CategoryCreationFragmentDirections.toRemoveSubCategoryDialog(localCategory)
                 } else {
                     CategoryCreationFragmentDirections.toRemoveCategoryDialog(
                         CategoryDestination.CATEGORY_CREATION_SCREEN,
-                        category
+                        localCategory
                     )
                 }
                 findNavController().navigate(action)
@@ -146,23 +134,31 @@ class CategoryCreationFragment :
     }
 
     override fun onStart() {
-        if (category.id == DEFAULT_DATA_ID) {
-            showKeyboard(viewBinding?.categoryCreationEtName)
-        }
+        if (localCategory.id == DEFAULT_DATA_ID) showKeyboard(viewBinding?.categoryCreationEtName)
         super.onStart()
     }
 
-    private fun setColorToColorIcon() {
+    private fun updateColor(@ColorRes color: Int) {
+        localCategory = localCategory.copy(color = color)
+        invalidateItemCircleColor()
+        invalidateIcon()
+    }
+
+    private fun invalidateItemCircleColor() {
         viewBinding?.categoryCreationColor?.colorCircle?.backgroundTintList =
-            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), color))
+            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), localCategory.color))
     }
 
     private fun updateIcon(@DrawableRes iconId: Int) {
-        this.icon = iconId
+        localCategory = localCategory.copy(icon = iconId)
+        invalidateIcon()
+    }
+
+    private fun invalidateIcon() {
         val tintIcon = createTintDrawable(
             requireContext(),
-            icon,
-            color
+            localCategory.icon,
+            localCategory.color
         )
         viewBinding?.categoryCreationIcon?.setImageDrawable(tintIcon)
     }
@@ -173,7 +169,7 @@ class CategoryCreationFragment :
         activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar?.title =
-            getString(if (category.id != DEFAULT_DATA_ID) R.string.title_category_creation else R.string.title_category_creation_create)
+            getString(if (localCategory.id != DEFAULT_DATA_ID) R.string.title_category_creation else R.string.title_category_creation_create)
     }
 
     override fun save() {

@@ -100,7 +100,7 @@ class CategoryUnitDialog :
     }
 
     private fun createUnionCategory(): Category {
-        return Category.EMPTY.copy(
+        return Category.EMPTY_EXPENSE.copy(
             type = transactionType,
             name = viewBinding?.categoryDialogUnionEtName?.text.toString(),
             color = R.color.category_all_color,

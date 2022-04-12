@@ -19,6 +19,7 @@ import com.d9tilov.moneymanager.base.ui.navigator.RegularTransactionCreatedNavig
 import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.common.BaseCategoryFragment.Companion.ARG_CATEGORY
 import com.d9tilov.moneymanager.category.data.entity.Category
+import com.d9tilov.moneymanager.category.data.entity.isEmpty
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.currentDate
 import com.d9tilov.moneymanager.core.util.currentDateTime
@@ -256,7 +257,7 @@ class RegularTransactionCreationFragment :
         viewBinding?.run {
             if (localTransaction.sum.signum() == 0) {
                 createdRegularTransactionMainSum.startAnimation(animation)
-            } else if (localTransaction.category == Category.EMPTY) {
+            } else if (localTransaction.category.isEmpty()) {
                 createdRegularTransactionCategoryLayout.startAnimation(animation)
             } else if (localTransaction.executionPeriod.periodType == PeriodType.WEEK && (localTransaction.executionPeriod as ExecutionPeriod.EveryWeek).dayOfWeek == 0) {
                 createdRegularTransactionWeekSelector.startAnimation(animation)
@@ -297,12 +298,12 @@ class RegularTransactionCreationFragment :
 
     private fun updateSaveButtonState() {
         viewBinding?.createdRegularTransactionSave?.isSelected =
-            localTransaction.sum.signum() > 0 && localTransaction.category != Category.EMPTY
+            localTransaction.sum.signum() > 0 && !localTransaction.category.isEmpty()
     }
 
     private fun updateCategoryIcon() {
         viewBinding?.run {
-            if (localTransaction.category != Category.EMPTY) {
+            if (!localTransaction.category.isEmpty()) {
                 val iconDrawable = createTintDrawable(
                     requireContext(),
                     localTransaction.category.icon,

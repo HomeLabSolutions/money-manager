@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.base.data.local.db
 
-import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters

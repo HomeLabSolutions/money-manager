@@ -35,7 +35,7 @@ data class RegularTransaction(
             currencyCode = DEFAULT_CURRENCY_CODE,
             type = TransactionType.EXPENSE,
             sum = BigDecimal.ZERO,
-            category = Category.EMPTY,
+            category = Category.EMPTY_EXPENSE,
             createdDate = currentDateTime(),
             executionPeriod = ExecutionPeriod.EveryMonth(
                 currentDate().dayOfMonth,

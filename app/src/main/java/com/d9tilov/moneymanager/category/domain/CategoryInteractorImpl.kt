@@ -55,7 +55,7 @@ class CategoryInteractorImpl(private val categoryRepo: CategoryRepo) :
         return categoriesAsChild
     }
 
-    private fun createAllItemsFolder(categories: List<Category>) = Category.EMPTY.copy(
+    private fun createAllItemsFolder(categories: List<Category>) = Category.EMPTY_EXPENSE.copy(
         id = ALL_ITEMS_ID,
         clientId = NO_ID.toString(),
         children = categories,
