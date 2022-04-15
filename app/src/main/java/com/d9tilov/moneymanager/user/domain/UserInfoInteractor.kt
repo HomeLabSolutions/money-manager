@@ -1,7 +1,5 @@
 package com.d9tilov.moneymanager.user.domain
 
-import com.d9tilov.moneymanager.backup.BackupData
-import com.d9tilov.moneymanager.base.data.ResultOf
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.domain.mapper.UserDomainMapper
 import com.google.firebase.auth.FirebaseUser
@@ -13,30 +11,18 @@ class UserInfoInteractor(
     private val userDomainMapper: UserDomainMapper,
 ) : UserInteractor {
 
-    override fun getCurrentUser(): Flow<UserProfile> {
-        return userRepo.getCurrentUser()
-    }
-
-    override fun getBackupData(): Flow<BackupData> = userRepo.getBackupData()
-
-    override suspend fun showPrepopulate(): Boolean = userRepo.showPrepopulate()
+    override fun getCurrentUser(): Flow<UserProfile> = userRepo.getCurrentUser()
     override suspend fun getFiscalDay(): Int = userRepo.getFiscalDay()
 
     override suspend fun createUser(user: FirebaseUser?): UserProfile =
         userRepo.create(userDomainMapper.toDataModel(user))
 
-    override suspend fun updateUser(userProfile: UserProfile) {
-        userRepo.update(userProfile)
-    }
+    override suspend fun updateUser(userProfile: UserProfile) = userRepo.update(userProfile)
 
     override suspend fun updateCurrency(code: String) {
         val user = userRepo.getCurrentUser().first()
         userRepo.update(user.copy(currentCurrencyCode = code))
     }
 
-    override suspend fun backup(): ResultOf<BackupData> = userRepo.backup()
-
-    override suspend fun deleteUser() {
-        userRepo.delete()
-    }
+    override suspend fun deleteUser() = userRepo.delete()
 }

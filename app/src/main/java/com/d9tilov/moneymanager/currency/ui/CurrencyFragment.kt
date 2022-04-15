@@ -214,7 +214,7 @@ class CurrencyFragment :
                     requireContext(),
                     R.color.button_normal_color_start
                 )
-            ).setAction(getString(R.string.retry)) { viewModel.getCurrencies() }.show()
+            ).setAction(getString(R.string.retry)) { viewModel.loadCurrencies() }.show()
         }
     }
 

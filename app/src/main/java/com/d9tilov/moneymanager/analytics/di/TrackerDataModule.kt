@@ -7,23 +7,22 @@ import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.GlobalScope
+import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
-import javax.inject.Singleton
+import kotlinx.coroutines.runBlocking
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ActivityRetainedComponent::class)
 object TrackerDataModule {
 
     @Provides
-    @Singleton
+    @ActivityRetainedScoped
     fun provideFirebaseTracker(
         preferencesStore: PreferencesStore
     ): FirebaseAnalytics {
         val tracker: FirebaseAnalytics = Firebase.analytics
-        GlobalScope.launch { tracker.setUserId(preferencesStore.uid.first()) }
+        runBlocking { tracker.setUserId(preferencesStore.uid.first()) }
         return tracker
     }
 }

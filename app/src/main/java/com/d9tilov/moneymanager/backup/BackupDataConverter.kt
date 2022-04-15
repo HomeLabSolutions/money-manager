@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.backup
 
 import androidx.room.TypeConverter
+import com.d9tilov.moneymanager.backup.data.entity.BackupData
 
 object BackupDataConverter {
 

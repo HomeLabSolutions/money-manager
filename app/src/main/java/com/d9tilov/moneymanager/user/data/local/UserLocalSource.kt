@@ -1,13 +1,10 @@
 package com.d9tilov.moneymanager.user.data.local
 
 import android.content.Context
-import com.d9tilov.moneymanager.backup.BackupData
 import com.d9tilov.moneymanager.backup.BackupManager
 import com.d9tilov.moneymanager.base.data.ResultOf
-import com.d9tilov.moneymanager.base.data.local.exceptions.NetworkException
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
-import com.d9tilov.moneymanager.core.util.isNetworkConnected
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.data.local.mapper.toDataModel
 import com.d9tilov.moneymanager.user.data.local.mapper.toDbModel
@@ -39,44 +36,16 @@ class UserLocalSource(
         userDao.update(userProfile.toDbModel().copy())
     }
 
-    override suspend fun showPrepopulate(): Boolean {
-        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
-        return if (currentUserId == null) throw WrongUidException()
-        else userDao.showPrepopulate(currentUserId)
-    }
-
     override suspend fun getFiscalDay(): Int {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
         return if (currentUserId == null) throw WrongUidException()
         else userDao.getFiscalDay(currentUserId)
     }
 
-    override fun getBackupData(): Flow<BackupData> {
-        return preferencesStore.uid.flatMapMerge { uid ->
-            if (uid == null) throw WrongUidException()
-            else userDao.getBackupData(uid)
-        }
-    }
-
     override fun getCurrentUser(): Flow<UserProfile> {
         return preferencesStore.uid.flatMapMerge { uid ->
             if (uid == null) throw WrongUidException()
             else userDao.getById(uid).map { it.toDataModel() }
-        }
-    }
-
-    override suspend fun backupUser(): ResultOf<BackupData> {
-        val currentUserId = preferencesStore.uid.first()
-        return if (currentUserId == null) ResultOf.Failure(WrongUidException())
-        else {
-            if (isNetworkConnected(context)) {
-                val backupData: ResultOf<BackupData> = backupManager.backupDb()
-                if (backupData is ResultOf.Success) {
-                    val user = getCurrentUser().first()
-                    updateCurrentUser(user.copy(backupData = backupData.data))
-                }
-                backupData
-            } else ResultOf.Failure(NetworkException())
         }
     }
 

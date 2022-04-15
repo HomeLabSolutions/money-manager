@@ -5,8 +5,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface BudgetInteractor {
 
-    suspend fun create(budgetData: BudgetData)
     fun get(): Flow<BudgetData>
+    suspend fun create(budgetData: BudgetData)
     suspend fun update(budgetData: BudgetData)
     suspend fun updateBudgetWithCurrency(currencyCode: String)
     suspend fun delete(budgetData: BudgetData)

@@ -13,17 +13,20 @@ import com.d9tilov.moneymanager.category.domain.CategoryRepo
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ActivityRetainedComponent::class)
 class CategoryModule {
 
     @Provides
+    @ActivityRetainedScoped
     fun provideCategoryInteractor(categoryRepo: CategoryRepo): CategoryInteractor =
         CategoryInteractorImpl(categoryRepo)
 
     @Provides
+    @ActivityRetainedScoped
     fun provideCategoryLocalSource(
         preferencesStore: PreferencesStore,
         categoryMapper: CategoryMapper,
@@ -38,6 +41,7 @@ class CategoryModule {
         )
 
     @Provides
+    @ActivityRetainedScoped
     fun provideCategoryRepo(categoryLocalSource: CategorySource): CategoryRepo =
         CategoryRepoImpl(
             categoryLocalSource

@@ -9,8 +9,6 @@ fun UserDbModel.toDataModel(): UserProfile = UserProfile(
     firstName = firstName,
     lastName = lastName,
     currentCurrencyCode = currentCurrencyCode,
-    showPrepopulate = showPrepopulate,
-    backupData = backupData,
     fiscalDay = fiscalDay
 )
 
@@ -20,7 +18,5 @@ fun UserProfile.toDbModel(): UserDbModel =
         firstName = firstName,
         lastName = lastName,
         currentCurrencyCode = currentCurrencyCode,
-        showPrepopulate = showPrepopulate,
-        backupData = backupData,
         fiscalDay = fiscalDay
     )

@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.regular.di
 
-import android.content.Context
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
@@ -11,17 +10,18 @@ import com.d9tilov.moneymanager.regular.data.local.RegularTransactionSource
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractorImpl
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionRepo
-import com.d9tilov.moneymanager.regular.ui.notification.TransactionNotificationBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ActivityRetainedComponent::class)
 class RegularTransactionModule {
 
     @Provides
+    @ActivityRetainedScoped
     fun provideRegularTransactionSource(
         preferencesStore: PreferencesStore,
         appDatabase: AppDatabase
@@ -29,11 +29,13 @@ class RegularTransactionModule {
         RegularTransactionLocalSource(preferencesStore, appDatabase.regularTransactionDao())
 
     @Provides
+    @ActivityRetainedScoped
     fun provideRegularTransactionRepo(
         regularTransactionSource: RegularTransactionSource,
     ): RegularTransactionRepo = RegularTransactionDataRepo(regularTransactionSource)
 
     @Provides
+    @ActivityRetainedScoped
     fun provideRegularTransactionInteractor(
         regularTransactionRepo: RegularTransactionRepo,
         categoryInteractor: CategoryInteractor,
@@ -43,8 +45,4 @@ class RegularTransactionModule {
         categoryInteractor,
         currencyInteractor
     )
-
-    @Provides
-    fun provideNotificationBuilder(context: Context): TransactionNotificationBuilder =
-        TransactionNotificationBuilder(context)
 }

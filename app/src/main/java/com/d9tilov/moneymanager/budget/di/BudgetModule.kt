@@ -13,13 +13,15 @@ import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ActivityRetainedComponent::class)
 class BudgetModule {
 
     @Provides
+    @ActivityRetainedScoped
     fun provideBudgetInteractor(
         budgetRepo: BudgetRepo,
         userInteractor: UserInteractor,
@@ -28,12 +30,14 @@ class BudgetModule {
         BudgetInteractorImpl(budgetRepo, userInteractor, currencyInteractor)
 
     @Provides
+    @ActivityRetainedScoped
     fun provideBudgetLocalSource(
         preferencesStore: PreferencesStore,
         database: AppDatabase
     ): BudgetSource = BudgetLocalSource(preferencesStore, database.budgetDao())
 
     @Provides
+    @ActivityRetainedScoped
     fun provideBudgetRepo(budgetSource: BudgetSource): BudgetRepo =
         BudgetDataRepo(budgetSource)
 }

@@ -1,7 +1,5 @@
 package com.d9tilov.moneymanager.user.data.entity
 
-import com.d9tilov.moneymanager.backup.BackupData
-import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.core.constants.DataConstants
 
 data class UserProfile(
@@ -10,8 +8,6 @@ data class UserProfile(
     val firstName: String?,
     val lastName: String?,
     val currentCurrencyCode: String,
-    val showPrepopulate: Boolean,
-    val backupData: BackupData,
     val fiscalDay: Int
 ) {
     companion object {
@@ -21,8 +17,6 @@ data class UserProfile(
             firstName = "",
             lastName = "",
             currentCurrencyCode = DataConstants.DEFAULT_CURRENCY_CODE,
-            showPrepopulate = true,
-            backupData = BackupData(0, AppDatabase.VERSION_NUMBER),
             fiscalDay = 1
         )
     }

@@ -20,6 +20,7 @@ import javax.inject.Singleton
 class NetworkModule {
 
     @Provides
+    @Singleton
     fun provideOkHttpClient(interceptor: HttpLoggingInterceptor): OkHttpClient =
         OkHttpClient.Builder()
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
@@ -29,6 +30,7 @@ class NetworkModule {
             .build()
 
     @Provides
+    @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor =
         HttpLoggingInterceptor { message -> Timber.tag(TAG).d("HTTP REQUEST: $message") }.apply {
             level = if (BuildConfig.DEBUG) {

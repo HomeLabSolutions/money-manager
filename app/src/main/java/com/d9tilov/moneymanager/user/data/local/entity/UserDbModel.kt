@@ -3,7 +3,6 @@ package com.d9tilov.moneymanager.user.data.local.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.d9tilov.moneymanager.backup.BackupData
 
 @Entity(tableName = "users")
 data class UserDbModel(
@@ -12,7 +11,5 @@ data class UserDbModel(
     @ColumnInfo(name = "firstName") val firstName: String?,
     @ColumnInfo(name = "lastName") val lastName: String?,
     @ColumnInfo(name = "currentCurrencyCode") val currentCurrencyCode: String,
-    @ColumnInfo(name = "showPrepopulate") val showPrepopulate: Boolean,
-    @ColumnInfo(name = "backupData") val backupData: BackupData,
     @ColumnInfo(name = "fiscalDay") val fiscalDay: Int
 )

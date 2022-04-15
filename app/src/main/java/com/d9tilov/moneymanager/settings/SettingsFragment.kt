@@ -7,9 +7,12 @@ import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.isDigitsOnly
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.d9tilov.moneymanager.R
+import com.d9tilov.moneymanager.backup.data.entity.BackupData
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
 import com.d9tilov.moneymanager.core.util.debounce
@@ -19,6 +22,7 @@ import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.core.util.toBackupDate
 import com.d9tilov.moneymanager.databinding.FragmentSettingsBinding
+import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -60,16 +64,24 @@ class SettingsFragment :
                 )
             }
             viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.userData.collect { data ->
-                    settingsDayOfMonthEdit.setText(data.fiscalDay.toString())
-                    if (data.backupData.lastBackupTimestamp == 0L) {
-                        settingsBackupInfo.setText(R.string.settings_backup_empty)
-                    } else {
-                        settingsBackupInfo.text =
-                            getString(
-                                R.string.settings_backup_info,
-                                data.backupData.lastBackupTimestamp.toBackupDate()
-                            )
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    launch {
+                        viewModel.userData.collect { data: UserProfile ->
+                            settingsDayOfMonthEdit.setText(data.fiscalDay.toString())
+                        }
+                    }
+                    launch {
+                        viewModel.backupData.collect { data ->
+                            if (data.lastBackupTimestamp == BackupData.UNKNOWN_BACKUP_DATA) {
+                                settingsBackupInfo.setText(R.string.settings_backup_empty)
+                            } else {
+                                settingsBackupInfo.text =
+                                    getString(
+                                        R.string.settings_backup_info,
+                                        data.lastBackupTimestamp.toBackupDate()
+                                    )
+                            }
+                        }
                     }
                 }
             }

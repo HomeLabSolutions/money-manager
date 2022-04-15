@@ -2,6 +2,8 @@ package com.d9tilov.moneymanager.settings
 
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.R
+import com.d9tilov.moneymanager.backup.data.entity.BackupData
+import com.d9tilov.moneymanager.backup.domain.BackupInteractor
 import com.d9tilov.moneymanager.base.data.ResultOf
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
@@ -21,16 +23,21 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val userInteractor: UserInteractor,
+    private val backupInteractor: BackupInteractor
 ) : BaseViewModel<SettingsNavigator>() {
 
     val userData = userInteractor.getCurrentUser().distinctUntilChanged()
         .flowOn(Dispatchers.IO)
         .stateIn(viewModelScope, SharingStarted.Eagerly, UserProfile.EMPTY)
 
+    val backupData = backupInteractor.getBackupData()
+        .flowOn(Dispatchers.IO)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, BackupData.EMPTY)
+
     fun backup() {
         viewModelScope.launch(Dispatchers.IO) {
             setLoading(true)
-            when (userInteractor.backup()) {
+            when (backupInteractor.makeBackup()) {
                 is ResultOf.Success -> setMessage(R.string.settings_backup_succeeded)
                 else -> setMessage(R.string.settings_backup_error)
             }

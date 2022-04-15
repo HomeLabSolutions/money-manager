@@ -3,20 +3,25 @@ package com.d9tilov.moneymanager.backup
 import android.content.Context
 import android.net.Uri
 import com.d9tilov.moneymanager.App
+import com.d9tilov.moneymanager.backup.data.entity.BackupData
 import com.d9tilov.moneymanager.base.data.ResultOf
+import com.d9tilov.moneymanager.base.data.local.exceptions.NetworkException
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DATABASE_NAME
 import com.d9tilov.moneymanager.core.util.currentDateTime
+import com.d9tilov.moneymanager.core.util.isNetworkConnected
 import com.d9tilov.moneymanager.core.util.toMillis
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.InputStream
 import kotlin.coroutines.resume
@@ -25,6 +30,7 @@ import kotlin.coroutines.suspendCoroutine
 class BackupManager(private val context: Context, private val preferencesStore: PreferencesStore) {
 
     suspend fun backupDb(): ResultOf<BackupData> {
+        if (!isNetworkConnected(context)) return ResultOf.Failure(NetworkException())
         val uid = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
         return suspendCoroutine { continuation ->
             Timber.tag(App.TAG).d("Backup start")
@@ -33,13 +39,16 @@ class BackupManager(private val context: Context, private val preferencesStore: 
                 continuation.resume(ResultOf.Failure(WrongUidException()))
             }
             val file = context.getDatabasePath(DATABASE_NAME)
+            if (!file.exists()) continuation.resume(ResultOf.Failure(FileNotFoundException()))
             val parentPath = "$uid/$DATABASE_NAME"
             val fileRef = Firebase.storage.reference.child(parentPath)
             val uploadTask = fileRef.putFile(Uri.fromFile(file))
             Timber.tag(App.TAG).d("Backup end")
             uploadTask
                 .addOnSuccessListener {
-                    continuation.resume(ResultOf.Success(BackupData(currentDateTime().toMillis())))
+                    val backupDate = currentDateTime().toMillis()
+                    runBlocking { preferencesStore.updateLastBackupDate(backupDate) }
+                    continuation.resume(ResultOf.Success(BackupData.EMPTY.copy(lastBackupTimestamp = backupDate)))
                     Timber.tag(App.TAG).d("Backup was compete successfully")
                 }
                 .addOnFailureListener {

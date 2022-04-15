@@ -67,11 +67,5 @@
             android:exported="false"
             tools:node="remove">
         </provider>
-
-        <receiver
-            android:name=".regular.ui.notification.TransactionActionReceiver"
-            android:exported="false" />
-
     </application>
-
 </manifest>

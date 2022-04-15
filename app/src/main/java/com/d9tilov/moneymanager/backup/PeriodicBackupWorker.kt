@@ -8,23 +8,26 @@ import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.d9tilov.moneymanager.App
+import com.d9tilov.moneymanager.backup.domain.BackupInteractor
 import com.d9tilov.moneymanager.base.data.ResultOf
-import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 @HiltWorker
 class PeriodicBackupWorker @AssistedInject constructor(
     @Assisted context: Context,
-    @Assisted workerParameters: WorkerParameters,
-    private val userInteractor: UserInteractor
+    @Assisted workerParameters: WorkerParameters
 ) : CoroutineWorker(context, workerParameters) {
+
+    @Inject
+    lateinit var backupInteractor: BackupInteractor
 
     override suspend fun doWork(): Result {
         Timber.tag(App.TAG).d("Do work...")
-        val result = userInteractor.backup()
+        val result = backupInteractor.makeBackup()
         return if (result is ResultOf.Success) {
             Timber.tag(App.TAG).d("Do work with success")
             Result.success()
