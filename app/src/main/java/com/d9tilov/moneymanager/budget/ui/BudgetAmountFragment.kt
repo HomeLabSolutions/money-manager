@@ -91,10 +91,6 @@ class BudgetAmountFragment :
         }
     }
 
-    override fun goToRegularIncomeScreen() {}
-
-    override fun showError() {}
-
     override fun onNextClick() {
         viewBinding?.commonBudgetAmount?.let { viewModel.saveBudgetAmount(it.getValue()) }
     }

@@ -14,9 +14,6 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
-val <T> T.exhaustive: T
-    get() = this
-
 val String?.toBigDecimal: BigDecimal
     get() {
         val df = DecimalFormat()
@@ -63,12 +60,9 @@ private fun calculateScale(decimalPart: String): Int {
     return countZeroes + 2
 }
 
-fun EditText.onChange(cb: (String) -> Unit) {
+inline fun EditText.onChange(crossinline cb: (String) -> Unit) {
     this.addTextChangedListener(object : TextWatcher {
-        override fun afterTextChanged(s: Editable?) {
-            cb(s.toString())
-        }
-
+        override fun afterTextChanged(s: Editable?) = cb(s.toString())
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
     })
@@ -88,6 +82,3 @@ fun <T> debounce(
         }
     }
 }
-
-fun Long.toModInt(): Int = (this % Int.MAX_VALUE).toInt()
-

@@ -20,10 +20,7 @@ interface CurrencyChangeNavigator : BaseNavigator {
     fun change()
 }
 
-interface BudgetAmountNavigator : BaseNavigator {
-    fun goToRegularIncomeScreen()
-    fun showError()
-}
+interface BudgetAmountNavigator : BaseNavigator
 
 interface RegularTransactionCreatedNavigator : BaseNavigator {
     fun back()

@@ -68,9 +68,7 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.PercentFormatter
-import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.utils.MPPointF
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
@@ -91,8 +89,7 @@ class StatisticsFragment :
         FragmentStatisticsBinding::inflate,
         R.layout.fragment_statistics
     ),
-    StatisticsNavigator,
-    OnChartValueSelectedListener {
+    StatisticsNavigator {
 
     override fun getNavigator() = this
     override val viewModel by viewModels<StatisticsViewModel>()
@@ -356,7 +353,6 @@ class StatisticsFragment :
             statisticsPieChart.isRotationEnabled = true
             statisticsPieChart.isHighlightPerTapEnabled = false
 
-            statisticsPieChart.setOnChartValueSelectedListener(this@StatisticsFragment)
             statisticsPieChart.animateY(ANIMATION_DURATION, Easing.EaseInOutQuad)
             statisticsPieChart.setEntryLabelColor(
                 ContextCompat.getColor(
@@ -495,10 +491,6 @@ class StatisticsFragment :
             }
         }
     }
-
-    override fun onValueSelected(e: Entry?, h: Highlight?) {}
-
-    override fun onNothingSelected() {}
 
     private fun showViewStub() {
         emptyViewStub?.root?.show()
