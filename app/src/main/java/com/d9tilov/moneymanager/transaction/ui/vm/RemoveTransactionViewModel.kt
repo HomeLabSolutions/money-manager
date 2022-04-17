@@ -10,6 +10,7 @@ import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,14 +22,14 @@ class RemoveTransactionViewModel @Inject constructor(
     fun removeTransaction(transaction: Transaction) {
         viewModelScope.launch(Dispatchers.IO) {
             transactionInteractor.removeTransaction(transaction)
-            viewModelScope.launch { navigator?.remove() }
+            withContext(Dispatchers.Main) { navigator?.remove() }
         }
     }
 
     fun removeRegularTransaction(regularTransaction: RegularTransaction) {
         viewModelScope.launch(Dispatchers.IO) {
             regularTransactionInteractor.delete(regularTransaction)
-            viewModelScope.launch { navigator?.remove() }
+            withContext(Dispatchers.Main) { navigator?.remove() }
         }
     }
 }

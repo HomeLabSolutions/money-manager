@@ -7,6 +7,10 @@ import com.d9tilov.moneymanager.category.CategoryDestination
 import com.d9tilov.moneymanager.category.CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN
 import com.d9tilov.moneymanager.category.CategoryDestination.EDIT_TRANSACTION_SCREEN
 import com.d9tilov.moneymanager.category.CategoryDestination.MAIN_WITH_SUM_SCREEN
+import com.d9tilov.moneymanager.category.CategoryDestination.MAIN_SCREEN
+import com.d9tilov.moneymanager.category.CategoryDestination.CATEGORY_CREATION_SCREEN
+import com.d9tilov.moneymanager.category.CategoryDestination.CATEGORY_SCREEN
+import com.d9tilov.moneymanager.category.CategoryDestination.SUB_CATEGORY_SCREEN
 import com.d9tilov.moneymanager.category.common.BaseCategoryViewModel
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
@@ -34,16 +38,19 @@ class CategoryViewModel @Inject constructor(
 
     override fun onCategoryClicked(category: Category) {
         val destination = savedStateHandle.get<CategoryDestination>("destination")
-        if (category.children.isNotEmpty()) {
-            navigator?.openSubCategoryScreen(category)
-        } else {
+        if (category.children.isNotEmpty()) navigator?.openSubCategoryScreen(category)
+        else {
             when (destination) {
                 EDIT_TRANSACTION_SCREEN -> navigator?.backToEditTransactionScreen(category)
                 EDIT_REGULAR_TRANSACTION_SCREEN -> navigator?.backToEditRegularTransactionScreen(
                     category
                 )
                 MAIN_WITH_SUM_SCREEN -> navigator?.backToMainScreen(category)
-                else -> navigator?.openCreateCategoryScreen(category)
+                MAIN_SCREEN,
+                CATEGORY_CREATION_SCREEN,
+                CATEGORY_SCREEN,
+                SUB_CATEGORY_SCREEN,
+                null -> navigator?.openCreateCategoryScreen(category)
             }
         }
     }

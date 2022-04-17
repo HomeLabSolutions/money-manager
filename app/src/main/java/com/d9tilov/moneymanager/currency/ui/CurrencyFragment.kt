@@ -180,7 +180,7 @@ class CurrencyFragment :
                     firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
                         param(FirebaseAnalytics.Param.ITEM_ID, "skip_prepopulation")
                     }
-                    viewModel.skip()
+                    viewModel.createBudgetAndSkip()
                 }
                 else -> throw IllegalArgumentException("Unknown menu item with id: ${it.itemId}")
             }

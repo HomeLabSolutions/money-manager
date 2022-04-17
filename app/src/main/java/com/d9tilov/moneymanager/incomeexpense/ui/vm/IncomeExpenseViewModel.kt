@@ -13,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -34,10 +33,8 @@ class IncomeExpenseViewModel @Inject constructor(
             currencyInteractor.updateCurrencyRates()
         }
         viewModelScope.launch(Dispatchers.IO) {
-            withContext(Dispatchers.Main) {
-                currencyCodeStr.value = currencyInteractor.getCurrentCurrency().code
-                defaultCurrencyCode = currencyCodeStr.value ?: DEFAULT_CURRENCY_CODE
-            }
+            currencyCodeStr.value = currencyInteractor.getCurrentCurrency().code
+            defaultCurrencyCode = currencyCodeStr.value
             transactionInteractor.executeRegularIfNeeded(TransactionType.INCOME)
             transactionInteractor.executeRegularIfNeeded(TransactionType.EXPENSE)
         }

@@ -56,7 +56,7 @@ class IncomeViewModel @Inject constructor(
             .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     override fun saveTransaction(category: Category, sum: BigDecimal, currencyCode: String) {
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch {
             if (sum.signum() > 0) {
                 withContext(Dispatchers.IO) {
                     transactionInteractor.addTransaction(

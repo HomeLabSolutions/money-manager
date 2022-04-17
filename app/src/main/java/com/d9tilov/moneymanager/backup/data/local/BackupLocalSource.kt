@@ -11,7 +11,7 @@ class BackupLocalSource(
     private val preferencesStore: PreferencesStore
 ) : BackupSource {
 
+    override fun getBackupData(): Flow<BackupData> = preferencesStore.backupData
     override suspend fun makeBackup(): ResultOf<BackupData> = backupManager.backupDb()
     override suspend fun restoreBackup(): ResultOf<Any> = backupManager.restoreDb()
-    override fun getBackupData(): Flow<BackupData> = preferencesStore.backupData
 }

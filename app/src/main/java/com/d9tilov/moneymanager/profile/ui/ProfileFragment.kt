@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
+import com.d9tilov.moneymanager.base.ui.currencyCode
 import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
 import com.d9tilov.moneymanager.budget.BudgetDestination
 import com.d9tilov.moneymanager.core.util.CurrencyUtils
@@ -21,7 +22,6 @@ import com.d9tilov.moneymanager.core.util.toBudgetCreatedDate
 import com.d9tilov.moneymanager.currency.CurrencyDestination
 import com.d9tilov.moneymanager.databinding.FragmentProfileBinding
 import com.d9tilov.moneymanager.goal.GoalDestination
-import com.d9tilov.moneymanager.base.ui.currencyCode
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileViewModel
 import com.d9tilov.moneymanager.regular.RegularTransactionDestination
 import com.d9tilov.moneymanager.splash.ui.SplashActivity
@@ -58,9 +58,9 @@ class ProfileFragment :
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     launch {
                         viewModel.userData().collect { profile ->
-                            profile.currentCurrencyCode.run {
-                                val icon = CurrencyUtils.getCurrencyIcon(this)
-                                val currencyTitle = CurrencyUtils.getCurrencySignBy(this)
+                            profile?.currentCurrencyCode?.let { code ->
+                                val icon = CurrencyUtils.getCurrencyIcon(code)
+                                val currencyTitle = CurrencyUtils.getCurrencySignBy(code)
                                 profileCurrency.profileItemCurrentCurrencyIcon.text = icon
                                 profileCurrency.profileItemCurrentCurrencySign.text = currencyTitle
                             }

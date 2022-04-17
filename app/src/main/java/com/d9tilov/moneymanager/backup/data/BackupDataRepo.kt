@@ -8,9 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 class BackupDataRepo(private val backupSource: BackupSource) : BackupRepo {
 
-    override suspend fun makeBackup(): ResultOf<BackupData> = backupSource.makeBackup()
-
-    override suspend fun restoreBackup(): ResultOf<Any> = backupSource.restoreBackup()
-
     override fun getBackupData(): Flow<BackupData> = backupSource.getBackupData()
+    override suspend fun makeBackup(): ResultOf<BackupData> = backupSource.makeBackup()
+    override suspend fun restoreBackup(): ResultOf<Any> = backupSource.restoreBackup()
 }

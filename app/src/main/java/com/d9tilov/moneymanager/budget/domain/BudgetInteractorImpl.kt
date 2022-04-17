@@ -4,6 +4,7 @@ import com.d9tilov.moneymanager.budget.data.entity.BudgetData
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 
 class BudgetInteractorImpl(
     private val budgetRepo: BudgetRepo,
@@ -12,8 +13,8 @@ class BudgetInteractorImpl(
 ) : BudgetInteractor {
 
     override suspend fun create(budgetData: BudgetData) {
-        val user = userInteractor.getCurrentUser().first()
-        budgetRepo.insert(budgetData.copy(currencyCode = user.currentCurrencyCode))
+        val user = userInteractor.getCurrentUser().firstOrNull()
+        user?.let { budgetRepo.insert(budgetData.copy(currencyCode = it.currentCurrencyCode)) }
     }
 
     override fun get() = budgetRepo.get()

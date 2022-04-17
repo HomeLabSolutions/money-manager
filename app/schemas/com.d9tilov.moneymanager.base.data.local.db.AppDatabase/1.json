@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "f04abdbf0f65e7326c4c8fae384e29f9",
+    "identityHash": "f2305199f747aa83714e6589ee3d3c64",
     "entities": [
       {
         "tableName": "users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` TEXT NOT NULL, `firstName` TEXT, `lastName` TEXT, `currentCurrencyCode` TEXT NOT NULL, `fiscalDay` INTEGER NOT NULL, PRIMARY KEY(`uid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` TEXT NOT NULL, `firstName` TEXT, `lastName` TEXT, `currentCurrencyCode` TEXT NOT NULL, `showPrepopulate` INTEGER NOT NULL, `fiscalDay` INTEGER NOT NULL, PRIMARY KEY(`uid`))",
         "fields": [
           {
             "fieldPath": "uid",
@@ -30,6 +30,12 @@
             "fieldPath": "currentCurrencyCode",
             "columnName": "currentCurrencyCode",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "showPrepopulate",
+            "columnName": "showPrepopulate",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -552,7 +558,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f04abdbf0f65e7326c4c8fae384e29f9')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f2305199f747aa83714e6589ee3d3c64')"
     ]
   }
 }

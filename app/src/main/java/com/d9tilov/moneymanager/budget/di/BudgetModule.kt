@@ -14,14 +14,12 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
-import dagger.hilt.android.scopes.ActivityRetainedScoped
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 class BudgetModule {
 
     @Provides
-    @ActivityRetainedScoped
     fun provideBudgetInteractor(
         budgetRepo: BudgetRepo,
         userInteractor: UserInteractor,
@@ -30,14 +28,12 @@ class BudgetModule {
         BudgetInteractorImpl(budgetRepo, userInteractor, currencyInteractor)
 
     @Provides
-    @ActivityRetainedScoped
     fun provideBudgetLocalSource(
         preferencesStore: PreferencesStore,
         database: AppDatabase
     ): BudgetSource = BudgetLocalSource(preferencesStore, database.budgetDao())
 
     @Provides
-    @ActivityRetainedScoped
     fun provideBudgetRepo(budgetSource: BudgetSource): BudgetRepo =
         BudgetDataRepo(budgetSource)
 }

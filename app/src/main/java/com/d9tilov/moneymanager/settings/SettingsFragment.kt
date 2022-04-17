@@ -66,8 +66,8 @@ class SettingsFragment :
             viewLifecycleOwner.lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     launch {
-                        viewModel.userData.collect { data: UserProfile ->
-                            settingsDayOfMonthEdit.setText(data.fiscalDay.toString())
+                        viewModel.userData.collect { data: UserProfile? ->
+                            settingsDayOfMonthEdit.setText(data?.fiscalDay.toString())
                         }
                     }
                     launch {

@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserSource : Source {
 
+    fun getCurrentUser(): Flow<UserProfile?>
     suspend fun createUserOrRestore(userProfile: UserProfile): UserProfile
     suspend fun updateCurrentUser(userProfile: UserProfile)
     suspend fun getFiscalDay(): Int
-    fun getCurrentUser(): Flow<UserProfile>
     suspend fun deleteUser()
 }

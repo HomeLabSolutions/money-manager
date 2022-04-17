@@ -8,6 +8,7 @@ import com.d9tilov.moneymanager.goal.domain.entity.Goal
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,7 +19,7 @@ class RemoveGoalViewModel @Inject constructor(
     fun remove(goal: Goal) {
         viewModelScope.launch(Dispatchers.IO) {
             goalInteractor.delete(goal)
+            withContext(Dispatchers.Main) { navigator?.closeDialog() }
         }
-        navigator?.closeDialog()
     }
 }

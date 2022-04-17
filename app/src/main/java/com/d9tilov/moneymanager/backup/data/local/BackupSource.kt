@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface BackupSource {
 
+    fun getBackupData(): Flow<BackupData>
     suspend fun makeBackup(): ResultOf<BackupData>
     suspend fun restoreBackup(): ResultOf<Any>
-    fun getBackupData(): Flow<BackupData>
 }

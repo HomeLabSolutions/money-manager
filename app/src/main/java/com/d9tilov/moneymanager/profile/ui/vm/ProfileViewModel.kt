@@ -31,7 +31,7 @@ class ProfileViewModel @Inject constructor(
     goalInteractor: GoalInteractor
 ) : BaseViewModel<ProfileNavigator>() {
 
-    private val userData = MutableStateFlow(UserProfile.EMPTY)
+    private val userData: MutableStateFlow<UserProfile?> = MutableStateFlow(UserProfile.EMPTY)
     private val budget = MutableStateFlow(BudgetData.EMPTY)
     private val regularIncomes = MutableStateFlow<List<RegularTransaction>>(emptyList())
     private val regularExpenses = MutableStateFlow<List<RegularTransaction>>(emptyList())
@@ -71,7 +71,7 @@ class ProfileViewModel @Inject constructor(
 
     fun getCurrentUser(): FirebaseUser? = auth.currentUser
 
-    fun userData(): StateFlow<UserProfile> = userData
+    fun userData(): StateFlow<UserProfile?> = userData
     fun budget(): StateFlow<BudgetData> = budget
     fun regularIncomes(): StateFlow<List<RegularTransaction>> = regularIncomes
     fun regularExpenses(): StateFlow<List<RegularTransaction>> = regularExpenses

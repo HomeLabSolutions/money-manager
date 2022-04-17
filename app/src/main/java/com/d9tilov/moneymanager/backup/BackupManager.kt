@@ -13,6 +13,7 @@ import com.d9tilov.moneymanager.core.util.currentDateTime
 import com.d9tilov.moneymanager.core.util.isNetworkConnected
 import com.d9tilov.moneymanager.core.util.toMillis
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -36,10 +37,12 @@ class BackupManager(private val context: Context, private val preferencesStore: 
             Timber.tag(App.TAG).d("Backup start")
             if (uid.isNullOrEmpty()) {
                 Timber.tag(App.TAG).d("Empty uid")
-                continuation.resume(ResultOf.Failure(WrongUidException()))
+                return@suspendCoroutine continuation.resume(ResultOf.Failure(WrongUidException()))
             }
             val file = context.getDatabasePath(DATABASE_NAME)
-            if (!file.exists()) continuation.resume(ResultOf.Failure(FileNotFoundException()))
+            if (!file.exists()) {
+                return@suspendCoroutine continuation.resume(ResultOf.Failure(FileNotFoundException()))
+            }
             val parentPath = "$uid/$DATABASE_NAME"
             val fileRef = Firebase.storage.reference.child(parentPath)
             val uploadTask = fileRef.putFile(Uri.fromFile(file))
@@ -64,11 +67,8 @@ class BackupManager(private val context: Context, private val preferencesStore: 
             if (uid.isNullOrEmpty()) {
                 return@suspendCoroutine continuation.resume(ResultOf.Failure(WrongUidException()))
             }
-            if (uid.isEmpty()) {
-                continuation.resume(ResultOf.Failure(WrongUidException()))
-            }
             val parentPath = "$uid/$DATABASE_NAME"
-            val fileRef = Firebase.storage.reference.child(parentPath)
+            val fileRef: StorageReference = Firebase.storage.reference.child(parentPath)
             val localFile = File.createTempFile(DATABASE_NAME, "db")
             fileRef.getFile(localFile).addOnSuccessListener {
                 val output = context.getDatabasePath(DATABASE_NAME)

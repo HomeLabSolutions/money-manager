@@ -32,10 +32,7 @@ class SplashFragment :
     override fun getNavigator() = this
     override val viewModel by viewModels<SplashViewModel>()
     private val startForResult: ActivityResultLauncher<Intent> =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            viewModel.updateUid()
-            openPrepopulate()
-        }
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { viewModel.updateUid() }
 
     override fun openHomeScreen() {
         startActivity(Intent(requireActivity(), MainActivity::class.java))

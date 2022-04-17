@@ -15,25 +15,21 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
-import dagger.hilt.android.scopes.ActivityRetainedScoped
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 class GoalModule {
 
     @Provides
-    @ActivityRetainedScoped
     fun provideGoalSource(
         preferencesStore: PreferencesStore,
         appDatabase: AppDatabase,
     ): GoalSource = GoalLocalSource(preferencesStore, appDatabase.goalDao())
 
     @Provides
-    @ActivityRetainedScoped
     fun provideGoalRepo(goalSource: GoalSource): GoalRepo = GoalRepoImpl(goalSource)
 
     @Provides
-    @ActivityRetainedScoped
     fun provideGoalInteractor(
         goalRepo: GoalRepo,
         budgetInteractor: BudgetInteractor,

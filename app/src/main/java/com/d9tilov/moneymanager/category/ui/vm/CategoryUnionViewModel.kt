@@ -27,8 +27,8 @@ class CategoryUnionViewModel @Inject constructor(
     fun addToGroup(categoryItem: Category, parentCategory: Category) {
         viewModelScope.launch(Dispatchers.IO + saveCategoryExceptionHandler) {
             categoryInteractor.update(categoryItem.copy(parent = parentCategory))
+            withContext(Dispatchers.Main) { navigator?.accept() }
         }
-        navigator?.accept()
     }
 
     fun createGroup(categoryItem1: Category, categoryItem2: Category, groupedCategory: Category) {

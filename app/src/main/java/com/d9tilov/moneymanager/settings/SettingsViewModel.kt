@@ -12,8 +12,7 @@ import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -26,7 +25,7 @@ class SettingsViewModel @Inject constructor(
     private val backupInteractor: BackupInteractor
 ) : BaseViewModel<SettingsNavigator>() {
 
-    val userData = userInteractor.getCurrentUser().distinctUntilChanged()
+    val userData = userInteractor.getCurrentUser()
         .flowOn(Dispatchers.IO)
         .stateIn(viewModelScope, SharingStarted.Eagerly, UserProfile.EMPTY)
 
@@ -47,8 +46,8 @@ class SettingsViewModel @Inject constructor(
 
     fun changeFiscalDay(day: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            val user = userInteractor.getCurrentUser().first()
-            userInteractor.updateUser(user.copy(fiscalDay = day))
+            val user = userInteractor.getCurrentUser().firstOrNull()
+            user?.let { userInteractor.updateUser(it.copy(fiscalDay = day)) }
             withContext(Dispatchers.Main) { navigator?.save() }
         }
     }

@@ -13,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,10 +35,8 @@ class CategoryCreationViewModel @Inject constructor(
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
                     param("create_category", "name: " + category.name)
                 }
-            } else {
-                categoryInteractor.update(category)
-            }
-            navigator?.save()
+            } else categoryInteractor.update(category)
+            withContext(Dispatchers.Main) { navigator?.save() }
         }
     }
 }

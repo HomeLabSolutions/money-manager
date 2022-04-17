@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 class UserDataRepo(private val userLocalSource: UserSource) : UserRepo {
 
-    override fun getCurrentUser(): Flow<UserProfile> = userLocalSource.getCurrentUser()
+    override fun getCurrentUser(): Flow<UserProfile?> = userLocalSource.getCurrentUser()
 
     override suspend fun getFiscalDay(): Int = userLocalSource.getFiscalDay()
 

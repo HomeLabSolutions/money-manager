@@ -57,10 +57,6 @@
             android:windowSoftInputMode="adjustResize"
             android:exported="false"/>
 
-        <meta-data
-            android:name="com.google.android.backup.api_key"
-            android:value="AEdPqrEAAAAIgOqlvch5IjMsMWJ5bC0Ac2r4XduYTuilMaYWhw" />
-
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
