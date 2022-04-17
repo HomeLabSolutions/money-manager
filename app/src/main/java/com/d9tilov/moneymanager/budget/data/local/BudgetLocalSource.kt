@@ -8,6 +8,7 @@ import com.d9tilov.moneymanager.budget.data.local.mapper.toDataModel
 import com.d9tilov.moneymanager.budget.data.local.mapper.toDbModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
@@ -25,11 +26,13 @@ class BudgetLocalSource(
     }
 
     override fun get(): Flow<BudgetData> =
-        preferencesStore.uid.flatMapMerge { uid ->
-            if (uid == null) throw WrongUidException()
-            else budgetDao.get(uid)
-                .map { it?.toDataModel() ?: throw EmptyDbDataException("Budget doesn't exists") }
-        }
+        preferencesStore.uid
+            .filterNotNull()
+            .flatMapMerge { uid ->
+                budgetDao.get(uid).map {
+                    it?.toDataModel() ?: throw EmptyDbDataException("Budget doesn't exists")
+                }
+            }
 
     override suspend fun update(budgetData: BudgetData) {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }

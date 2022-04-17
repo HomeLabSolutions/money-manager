@@ -13,6 +13,7 @@ import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
 import com.d9tilov.moneymanager.transaction.TransactionType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
@@ -105,17 +106,19 @@ class CategoryLocalSource(
     )
 
     override fun getByParentId(id: Long): Flow<List<Category>> =
-        preferencesStore.uid.flatMapMerge { uid ->
-            if (uid == null) throw WrongUidException()
-            else categoryDao.getByParentId(uid, id)
-                .map { it.map { item -> categoryMapper.toDataParentModel(item) } }
-        }
+        preferencesStore.uid
+            .filterNotNull()
+            .flatMapMerge { uid ->
+                categoryDao.getByParentId(uid, id)
+                    .map { it.map { item -> categoryMapper.toDataParentModel(item) } }
+            }
 
     override fun getCategoriesByType(type: TransactionType): Flow<List<Category>> =
-        preferencesStore.uid.flatMapMerge { uid ->
-            if (uid == null) throw WrongUidException()
-            else categoryDao.getAllByType(uid, type).map { groupChildrenWithParent(it) }
-        }
+        preferencesStore.uid
+            .filterNotNull()
+            .flatMapMerge { uid ->
+                categoryDao.getAllByType(uid, type).map { groupChildrenWithParent(it) }
+            }
 
     private fun groupChildrenWithParent(list: List<CategoryDbModel>): List<Category> {
         val childrenOfOneParent = list.groupBy { it.parentId }

@@ -8,6 +8,7 @@ import com.d9tilov.moneymanager.regular.data.local.mapper.toDbModel
 import com.d9tilov.moneymanager.transaction.TransactionType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
@@ -25,10 +26,11 @@ class RegularTransactionLocalSource(
     }
 
     override fun getAll(type: TransactionType): Flow<List<RegularTransactionData>> =
-        preferencesStore.uid.flatMapMerge { uid ->
-            if (uid == null) throw WrongUidException()
-            else standingDao.getAll(uid, type).map { it.map { item -> item.toDataModel() } }
-        }
+        preferencesStore.uid
+            .filterNotNull()
+            .flatMapMerge { uid ->
+                standingDao.getAll(uid, type).map { it.map { item -> item.toDataModel() } }
+            }
 
     override suspend fun getById(id: Long): RegularTransactionData {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
