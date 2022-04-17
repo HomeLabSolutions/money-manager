@@ -16,7 +16,7 @@ import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_C
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENCE_CLIENT_UID
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENCE_CURRENT_CURRENCY
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENCE_LAST_BACKUP_DATE
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENCE_PREFILL_COMPLETED
+import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENCE_SHOW_PREPOPULATE
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.STORE_NAME
 import com.d9tilov.moneymanager.core.util.CurrencyUtils.getSymbolByCode
 import kotlinx.coroutines.flow.Flow
@@ -57,11 +57,11 @@ class PreferencesStore(context: Context) {
         dataStore.edit { preferences -> preferences[PREFERENCE_CURRENCY_CODE_KEY] = code }
     }
 
-    val prefillCompleted: Flow<Boolean> =
-        dataStore.data.map { data -> data[PREFERENCE_PREFILL_COMPLETED_KEY] ?: false }
+    val showPrepopulate: Flow<Boolean> =
+        dataStore.data.map { data -> data[PREFERENCE_SHOW_PREPOPULATE_KEY] ?: true }
 
     suspend fun updatePrefill(completed: Boolean) {
-        dataStore.edit { preferences -> preferences[PREFERENCE_PREFILL_COMPLETED_KEY] = completed }
+        dataStore.edit { preferences -> preferences[PREFERENCE_SHOW_PREPOPULATE_KEY] = completed }
     }
 
     suspend fun clearAllData() {
@@ -73,7 +73,7 @@ class PreferencesStore(context: Context) {
             longPreferencesKey(PREFERENCE_LAST_BACKUP_DATE)
         private val PREFERENCE_CLIENT_UID_KEY = stringPreferencesKey(PREFERENCE_CLIENT_UID)
         private val PREFERENCE_CURRENCY_CODE_KEY = stringPreferencesKey(PREFERENCE_CURRENT_CURRENCY)
-        private val PREFERENCE_PREFILL_COMPLETED_KEY =
-            booleanPreferencesKey(PREFERENCE_PREFILL_COMPLETED)
+        private val PREFERENCE_SHOW_PREPOPULATE_KEY =
+            booleanPreferencesKey(PREFERENCE_SHOW_PREPOPULATE)
     }
 }

@@ -2,16 +2,13 @@ package com.d9tilov.moneymanager.currency.vm
 
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.data.ResultOf
-import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.base.ui.navigator.CurrencyNavigator
 import com.d9tilov.moneymanager.budget.data.entity.BudgetData
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
-import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.user.domain.UserInteractor
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -30,26 +27,13 @@ class CurrencyViewModel @Inject constructor(
     private val currencyInteractor: CurrencyInteractor,
     private val userInteractor: UserInteractor,
     private val budgetInteractor: BudgetInteractor,
-    private val categoryInteractor: CategoryInteractor,
-    private val preferencesStore: PreferencesStore
 ) : BaseViewModel<CurrencyNavigator>() {
 
     private val currencies: MutableStateFlow<ResultOf<List<DomainCurrency>>> =
         MutableStateFlow(ResultOf.Loading())
-    private val auth = FirebaseAuth.getInstance()
 
     init {
         loadCurrencies()
-        createUserAndDefaultCategoriesIfNeeded()
-    }
-
-    private fun createUserAndDefaultCategoriesIfNeeded() = viewModelScope.launch(Dispatchers.IO) {
-        userInteractor.getCurrentUser()
-            .catch {
-                userInteractor.createUser(auth.currentUser)
-                categoryInteractor.createDefaultCategories()
-            }
-            .collect()
     }
 
     fun changeCurrency(currency: DomainCurrency) = viewModelScope.launch(Dispatchers.IO) {
@@ -65,10 +49,10 @@ class CurrencyViewModel @Inject constructor(
         }
     }
 
-    fun skip() {
+    fun createBudgetAndSkip() {
         viewModelScope.launch(Dispatchers.IO) {
             budgetInteractor.create(BudgetData.EMPTY.copy(sum = BigDecimal.ZERO))
-            preferencesStore.updatePrefill(true)
+            userInteractor.prepopulateCompleted()
             withContext(Dispatchers.Main) { navigator?.skip() }
         }
     }

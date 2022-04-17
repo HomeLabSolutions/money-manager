@@ -8,6 +8,7 @@ data class UserProfile(
     val firstName: String?,
     val lastName: String?,
     val currentCurrencyCode: String,
+    val showPrepopulate: Boolean,
     val fiscalDay: Int
 ) {
     companion object {
@@ -17,6 +18,7 @@ data class UserProfile(
             firstName = "",
             lastName = "",
             currentCurrencyCode = DataConstants.DEFAULT_CURRENCY_CODE,
+            showPrepopulate = true,
             fiscalDay = 1
         )
     }

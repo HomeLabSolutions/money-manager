@@ -82,6 +82,9 @@ class BackupManager(private val context: Context, private val preferencesStore: 
                 myOutput.flush()
                 myOutput.close()
                 myInputs.close()
+                fileRef.metadata.addOnSuccessListener { metadata ->
+                    runBlocking { preferencesStore.updateLastBackupDate(metadata.updatedTimeMillis) }
+                }
                 continuation.resume(ResultOf.Success(Any()))
                 Timber.tag(App.TAG).d("Restore was compete successfully")
             }.addOnFailureListener {

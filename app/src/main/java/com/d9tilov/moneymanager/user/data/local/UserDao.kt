@@ -20,6 +20,9 @@ interface UserDao {
     @Query("SELECT fiscalDay FROM Users WHERE uid = :id")
     fun getFiscalDay(id: String): Int
 
+    @Query("SELECT showPrepopulate FROM Users WHERE uid = :id")
+    suspend fun showPrepopulate(id: String): Boolean
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(user: UserDbModel)
 

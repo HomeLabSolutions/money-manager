@@ -9,6 +9,9 @@ class UserDataRepo(private val userLocalSource: UserSource) : UserRepo {
 
     override fun getCurrentUser(): Flow<UserProfile?> = userLocalSource.getCurrentUser()
 
+    override suspend fun showPrepopulate(): Boolean = userLocalSource.showPrepopulate()
+    override suspend fun prepopulateCompleted() = userLocalSource.prepopulateCompleted()
+
     override suspend fun getFiscalDay(): Int = userLocalSource.getFiscalDay()
 
     override suspend fun create(entity: UserProfile): UserProfile =

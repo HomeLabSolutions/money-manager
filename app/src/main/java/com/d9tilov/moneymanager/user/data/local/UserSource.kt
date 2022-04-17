@@ -9,6 +9,8 @@ interface UserSource : Source {
     fun getCurrentUser(): Flow<UserProfile?>
     suspend fun createUserOrRestore(userProfile: UserProfile): UserProfile
     suspend fun updateCurrentUser(userProfile: UserProfile)
+    suspend fun showPrepopulate(): Boolean
+    suspend fun prepopulateCompleted()
     suspend fun getFiscalDay(): Int
     suspend fun deleteUser()
 }

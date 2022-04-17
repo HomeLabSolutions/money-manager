@@ -1,7 +1,5 @@
 package com.d9tilov.moneymanager.user.di
 
-import android.content.Context
-import com.d9tilov.moneymanager.backup.BackupManager
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.user.data.UserDataRepo
@@ -31,20 +29,15 @@ class UserModule {
     @Provides
     @ActivityRetainedScoped
     fun provideUserLocalSource(
-        context: Context,
         preferenceStore: PreferencesStore,
-        appDatabase: AppDatabase,
-        backupManager: BackupManager
-    ): UserSource =
-        UserLocalSource(context, preferenceStore, appDatabase.userDao(), backupManager)
+        appDatabase: AppDatabase
+    ): UserSource {
+        return UserLocalSource(preferenceStore, appDatabase.userDao())
+    }
 
     @Provides
     @ActivityRetainedScoped
-    fun userRepo(
-        userLocalSource: UserSource
-    ): UserRepo = UserDataRepo(
-        userLocalSource
-    )
+    fun userRepo(userLocalSource: UserSource): UserRepo = UserDataRepo(userLocalSource)
 
     @Provides
     @ActivityRetainedScoped

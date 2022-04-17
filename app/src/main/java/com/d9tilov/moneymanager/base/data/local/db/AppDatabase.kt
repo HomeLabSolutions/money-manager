@@ -3,7 +3,6 @@ package com.d9tilov.moneymanager.base.data.local.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.d9tilov.moneymanager.backup.BackupDataConverter
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase.Companion.VERSION_NUMBER
 import com.d9tilov.moneymanager.base.data.local.db.converters.CurrencyConverter
 import com.d9tilov.moneymanager.base.data.local.db.converters.DateConverter
@@ -41,7 +40,6 @@ import com.d9tilov.moneymanager.user.data.local.entity.UserDbModel
     CurrencyConverter::class,
     DateConverter::class,
     ModelTypeConverter::class,
-    BackupDataConverter::class,
     LocationConverter::class
 )
 
