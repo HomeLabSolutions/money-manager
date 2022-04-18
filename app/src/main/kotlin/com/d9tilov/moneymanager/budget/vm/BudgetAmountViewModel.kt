@@ -6,7 +6,6 @@ import com.d9tilov.moneymanager.base.ui.navigator.BudgetAmountNavigator
 import com.d9tilov.moneymanager.budget.data.entity.BudgetData
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
-import com.d9tilov.moneymanager.core.util.currentDateTime
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,13 +22,7 @@ class BudgetAmountViewModel @Inject constructor(private val budgetInteractor: Bu
     BaseViewModel<BudgetAmountNavigator>() {
 
     val budgetData = budgetInteractor.get()
-        .catch {
-            if (it is EmptyDbDataException) {
-                budgetInteractor.create(
-                    BudgetData.EMPTY.copy(sum = BigDecimal.ZERO, createdDate = currentDateTime())
-                )
-            }
-        }
+        .catch { if (it is EmptyDbDataException) budgetInteractor.create() }
         .flowOn(Dispatchers.IO)
         .stateIn(viewModelScope, SharingStarted.Eagerly, BudgetData.EMPTY)
 

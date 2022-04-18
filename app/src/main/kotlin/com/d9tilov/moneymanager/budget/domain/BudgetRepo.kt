@@ -5,8 +5,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface BudgetRepo {
 
-    suspend fun insert(budgetData: BudgetData)
     fun get(): Flow<BudgetData>
+    suspend fun create()
     suspend fun update(budgetData: BudgetData)
     suspend fun delete(budgetData: BudgetData)
 }

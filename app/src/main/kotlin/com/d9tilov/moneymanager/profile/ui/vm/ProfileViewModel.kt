@@ -40,30 +40,25 @@ class ProfileViewModel @Inject constructor(
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             launch {
                 userInfoInteractor.getCurrentUser()
-                    .flowOn(Dispatchers.IO)
                     .collect { userData.value = it }
             }
             launch {
                 budgetInteractor.get()
-                    .flowOn(Dispatchers.IO)
                     .collect { budget.value = it }
             }
             launch {
                 regularTransactionInteractor.getAll(TransactionType.INCOME)
-                    .flowOn(Dispatchers.IO)
                     .collect { regularIncomes.value = it }
             }
             launch {
                 regularTransactionInteractor.getAll(TransactionType.EXPENSE)
-                    .flowOn(Dispatchers.IO)
                     .collect { regularExpenses.value = it }
             }
             launch {
                 goalInteractor.getAll()
-                    .flowOn(Dispatchers.IO)
                     .collect { goals.value = it }
             }
         }

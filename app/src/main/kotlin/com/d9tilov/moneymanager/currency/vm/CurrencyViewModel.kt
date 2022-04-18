@@ -3,7 +3,6 @@ package com.d9tilov.moneymanager.currency.vm
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.data.ResultOf
 import com.d9tilov.moneymanager.base.ui.navigator.CurrencyNavigator
-import com.d9tilov.moneymanager.budget.data.entity.BudgetData
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
@@ -19,7 +18,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.math.BigDecimal
 import javax.inject.Inject
 
 @HiltViewModel
@@ -51,7 +49,7 @@ class CurrencyViewModel @Inject constructor(
 
     fun createBudgetAndSkip() {
         viewModelScope.launch(Dispatchers.IO) {
-            budgetInteractor.create(BudgetData.EMPTY.copy(sum = BigDecimal.ZERO))
+            budgetInteractor.create()
             userInteractor.prepopulateCompleted()
             withContext(Dispatchers.Main) { navigator?.skip() }
         }

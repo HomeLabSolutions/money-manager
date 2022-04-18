@@ -44,14 +44,17 @@ class UserLocalSource(
     }
 
     override suspend fun prepopulateCompleted() {
-        preferencesStore.updatePrefill(true)
+        preferencesStore.updatePrepopulate(false)
         getCurrentUser().firstOrNull()?.let { updateCurrentUser(it.copy(showPrepopulate = false)) }
     }
 
     override suspend fun getFiscalDay(): Int {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
         return if (currentUserId == null) throw WrongUidException()
-        else userDao.getFiscalDay(currentUserId)
+        else {
+            val fiscalDay = userDao.getFiscalDay(currentUserId)
+            if (fiscalDay == 0) 1 else fiscalDay
+        }
     }
 
     override fun getCurrentUser(): Flow<UserProfile?> = preferencesStore.uid

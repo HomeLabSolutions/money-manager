@@ -19,10 +19,15 @@ class BudgetLocalSource(
     private val budgetDao: BudgetDao
 ) : BudgetSource {
 
-    override suspend fun insert(budgetData: BudgetData) {
+    override suspend fun create() {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
         if (currentUserId == null) throw WrongUidException()
-        else budgetDao.insert(budgetData.copy(clientId = currentUserId).toDbModel())
+        else budgetDao.insert(
+            BudgetData.EMPTY.copy(
+                clientId = currentUserId,
+                currencyCode = preferencesStore.currentCurrency.first().code
+            ).toDbModel()
+        )
     }
 
     override fun get(): Flow<BudgetData> =

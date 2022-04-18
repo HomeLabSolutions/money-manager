@@ -60,7 +60,7 @@ class PreferencesStore(context: Context) {
     val showPrepopulate: Flow<Boolean> =
         dataStore.data.map { data -> data[PREFERENCE_SHOW_PREPOPULATE_KEY] ?: true }
 
-    suspend fun updatePrefill(completed: Boolean) {
+    suspend fun updatePrepopulate(completed: Boolean) {
         dataStore.edit { preferences -> preferences[PREFERENCE_SHOW_PREPOPULATE_KEY] = completed }
     }
 

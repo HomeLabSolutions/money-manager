@@ -38,8 +38,8 @@ class SplashViewModel @Inject constructor(
                         auth.signOut()
                         navigator?.openAuthScreen()
                     } else {
-                        if (preferencesStore.showPrepopulate.first()) navigator?.openHomeScreen()
-                        else navigator?.openPrepopulate()
+                        if (preferencesStore.showPrepopulate.first()) navigator?.openPrepopulate()
+                        else navigator?.openHomeScreen()
                     }
                 }
             }
