@@ -15,6 +15,7 @@ import com.d9tilov.moneymanager.core.util.removeScale
 import com.d9tilov.moneymanager.databinding.ItemStatisticsBarChartBinding
 import com.d9tilov.moneymanager.statistics.ui.recycler.diff.StatisticsBarCharDiffUtils
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
+import java.math.BigDecimal
 import java.math.RoundingMode
 
 class StatisticsBarChartAdapter :
@@ -73,9 +74,14 @@ class StatisticsBarChartAdapter :
                 itemStatisticsCategoryName.setTextColor(
                     ContextCompat.getColor(context, item.category.color)
                 )
+                val percent = item.percent.setScale(1, RoundingMode.HALF_UP).removeScale
                 itemStatisticsPercent.text = context.getString(
                     R.string.number_with_percent,
-                    item.percent.setScale(1, RoundingMode.HALF_UP).removeScale.toString()
+                    when {
+                        percent < BigDecimal(0.01) -> "<1"
+                        percent > BigDecimal(99.99) -> "${context.getString(R.string.approx_sign)}100"
+                        else -> percent.toString()
+                    }
                 )
                 itemStatisticsSum.setValue(item.sum, item.currencyCode)
                 itemStatisticsProgress.setProgress(
