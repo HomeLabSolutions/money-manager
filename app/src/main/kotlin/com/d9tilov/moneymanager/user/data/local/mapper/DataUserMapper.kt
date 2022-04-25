@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.user.data.local.mapper
 
+import com.d9tilov.moneymanager.encryption.digest
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.data.local.entity.UserDbModel
 
@@ -15,7 +16,7 @@ fun UserDbModel.toDataModel(): UserProfile = UserProfile(
 
 fun UserProfile.toDbModel(): UserDbModel =
     UserDbModel(
-        uid = uid,
+        uid = digest(uid),
         firstName = firstName,
         lastName = lastName,
         currentCurrencyCode = currentCurrencyCode,

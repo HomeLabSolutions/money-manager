@@ -43,7 +43,7 @@ class BackupManager(private val context: Context, private val preferencesStore: 
             if (!file.exists()) {
                 return@suspendCoroutine continuation.resume(ResultOf.Failure(FileNotFoundException()))
             }
-            val parentPath = "$uid/$DATABASE_NAME"
+            val parentPath = "${uid.normalizePath()}/$DATABASE_NAME"
             val fileRef = Firebase.storage.reference.child(parentPath)
             val uploadTask = fileRef.putFile(Uri.fromFile(file))
             Timber.tag(App.TAG).d("Backup end")
@@ -67,7 +67,7 @@ class BackupManager(private val context: Context, private val preferencesStore: 
             if (uid.isNullOrEmpty()) {
                 return@suspendCoroutine continuation.resume(ResultOf.Failure(WrongUidException()))
             }
-            val parentPath = "$uid/$DATABASE_NAME"
+            val parentPath = "${uid.normalizePath()}/$DATABASE_NAME"
             val fileRef: StorageReference = Firebase.storage.reference.child(parentPath)
             val localFile = File.createTempFile(DATABASE_NAME, "db")
             fileRef.getFile(localFile).addOnSuccessListener {
@@ -94,3 +94,5 @@ class BackupManager(private val context: Context, private val preferencesStore: 
         }
     }
 }
+
+private fun String.normalizePath() = this.trim()

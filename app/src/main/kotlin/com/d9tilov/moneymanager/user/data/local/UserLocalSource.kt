@@ -21,10 +21,11 @@ class UserLocalSource(
 ) : UserSource {
 
     override suspend fun createUserOrRestore(userProfile: UserProfile): UserProfile {
-        preferencesStore.updateUid(userProfile.uid)
-        val dbUser = userDao.getById(userProfile.uid).firstOrNull()
+        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
+            ?: throw WrongUidException()
+        val dbUser = userDao.getById(currentUserId).firstOrNull()
         return if (dbUser == null) {
-            userDao.insert(userProfile.toDbModel())
+            userDao.insert(userProfile.toDbModel().copy(uid = currentUserId))
             userProfile
         } else {
             val currencyCode = dbUser.currentCurrencyCode
@@ -66,6 +67,9 @@ class UserLocalSource(
     override suspend fun deleteUser() {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
         if (currentUserId == null) throw WrongUidException()
-        else preferencesStore.clearAllData()
+        else {
+            preferencesStore.clearAllData()
+            userDao.deleteUser(currentUserId)
+        }
     }
 }

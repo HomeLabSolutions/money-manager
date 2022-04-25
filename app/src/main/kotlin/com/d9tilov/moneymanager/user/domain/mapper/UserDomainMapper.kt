@@ -21,7 +21,6 @@ class UserDomainMapper @Inject constructor() {
                     }
                 }
                 return UserProfile.EMPTY.copy(
-                    uid = uid,
                     displayedName = displayName,
                     firstName = parsedFirstName,
                     lastName = parsedSecondName,

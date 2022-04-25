@@ -11,7 +11,6 @@ import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
@@ -28,7 +27,7 @@ class GoalsViewModel @Inject constructor(
     goalInteractor: GoalInteractor
 ) : BaseViewModel<GoalsNavigator>() {
 
-    val budget = budgetInteractor.get().distinctUntilChanged()
+    val budget = budgetInteractor.get()
         .flowOn(Dispatchers.IO)
         .stateIn(viewModelScope, SharingStarted.Eagerly, BudgetData.EMPTY)
     val goals = goalInteractor.getAll()

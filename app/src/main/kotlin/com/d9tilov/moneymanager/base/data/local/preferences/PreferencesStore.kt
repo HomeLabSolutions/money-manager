@@ -19,6 +19,7 @@ import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENC
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENCE_SHOW_PREPOPULATE
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.STORE_NAME
 import com.d9tilov.moneymanager.core.util.CurrencyUtils.getSymbolByCode
+import com.d9tilov.moneymanager.encryption.digest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -34,7 +35,7 @@ class PreferencesStore(context: Context) {
     val uid: Flow<String?> = dataStore.data.map { data -> data[PREFERENCE_CLIENT_UID_KEY] }
 
     suspend fun updateUid(uid: String) {
-        dataStore.edit { preferences -> preferences[PREFERENCE_CLIENT_UID_KEY] = uid }
+        dataStore.edit { preferences -> preferences[PREFERENCE_CLIENT_UID_KEY] = digest(uid) }
     }
 
     val backupData: Flow<BackupData> =

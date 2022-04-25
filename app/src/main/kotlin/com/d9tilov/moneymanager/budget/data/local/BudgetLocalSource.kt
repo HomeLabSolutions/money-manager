@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.budget.data.local
 
-import com.d9tilov.moneymanager.base.data.local.exceptions.EmptyDbDataException
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.budget.data.entity.BudgetData
@@ -22,22 +21,20 @@ class BudgetLocalSource(
     override suspend fun create() {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
         if (currentUserId == null) throw WrongUidException()
-        else budgetDao.insert(
-            BudgetData.EMPTY.copy(
-                clientId = currentUserId,
-                currencyCode = preferencesStore.currentCurrency.first().code
-            ).toDbModel()
-        )
+        else {
+            budgetDao.insert(
+                BudgetData.EMPTY.copy(
+                    clientId = currentUserId,
+                    currencyCode = preferencesStore.currentCurrency.first().code
+                ).toDbModel()
+            )
+        }
     }
 
     override fun get(): Flow<BudgetData> =
         preferencesStore.uid
             .filterNotNull()
-            .flatMapMerge { uid ->
-                budgetDao.get(uid).map {
-                    it?.toDataModel() ?: throw EmptyDbDataException("Budget doesn't exists")
-                }
-            }
+            .flatMapMerge { uid -> budgetDao.get(uid).filterNotNull().map { it.toDataModel() } }
 
     override suspend fun update(budgetData: BudgetData) {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }

@@ -6,6 +6,7 @@ import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
+import com.d9tilov.moneymanager.encryption.equalsDigest
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Lazy
@@ -30,16 +31,21 @@ class SplashViewModel @Inject constructor(
 
     override fun onNavigatorAttached() {
         super.onNavigatorAttached()
-        if (auth.currentUser == null) navigator?.openAuthScreen()
-        else {
-            viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
+            val firebaseUid = auth.currentUser?.uid
+            if (firebaseUid == null) {
+                withContext(Dispatchers.Main) { navigator?.openAuthScreen() }
+            } else {
                 preferencesStore.uid.collect { uid ->
-                    if (uid != auth.uid) {
+                    if (!auth.uid.equalsDigest(uid)) {
+                        if (uid != null) userInteractor.get().deleteUser()
                         auth.signOut()
-                        navigator?.openAuthScreen()
+                        withContext(Dispatchers.Main) { navigator?.openAuthScreen() }
                     } else {
-                        if (preferencesStore.showPrepopulate.first()) navigator?.openPrepopulate()
-                        else navigator?.openHomeScreen()
+                        withContext(Dispatchers.Main) {
+                            if (preferencesStore.showPrepopulate.first()) navigator?.openPrepopulate()
+                            else navigator?.openHomeScreen()
+                        }
                     }
                 }
             }

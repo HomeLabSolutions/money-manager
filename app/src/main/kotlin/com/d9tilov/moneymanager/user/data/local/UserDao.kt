@@ -30,5 +30,5 @@ interface UserDao {
     suspend fun update(user: UserDbModel)
 
     @Query("DELETE FROM users WHERE uid=:uid")
-    suspend fun delete(uid: String)
+    suspend fun deleteUser(uid: String)
 }

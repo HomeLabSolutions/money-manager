@@ -39,7 +39,8 @@ android {
         versionCode 1000 * (1000 * versionMajor + 100 * versionMinor + versionPatch) + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
-        buildConfigField("String", "API_KEY", keystoreProperties['currencyApiKey'])
+        buildConfigField("String", "API_KEY", keystoreProperties['currency_api_key'])
+        buildConfigField("String", "SALT", keystoreProperties['database_salt'])
 
         vectorDrawables.useSupportLibrary = true
 
