@@ -21,6 +21,7 @@ import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.data.local.preferences.CurrencyMetaData
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
+import com.d9tilov.moneymanager.billing.BillingManager
 import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.util.hideLoadingDialog
 import com.d9tilov.moneymanager.core.util.isNetworkConnected
@@ -37,6 +38,7 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
     private val contentLayout: ViewGroup by lazy { findViewById<ViewGroup>(android.R.id.content) }
 
     private val preferenceDataStore: PreferencesStore by lazy { PreferencesStore(this) }
+    private val billingManager: BillingManager by lazy { BillingManager(this) }
 
     private var currency = CurrencyMetaData(
         DataConstants.DEFAULT_CURRENCY_CODE,
