@@ -50,7 +50,7 @@ class SplashViewModel @Inject constructor(
         }
     }
 
-    fun updateUid() {
+    fun updateData() {
         viewModelScope.launch(Dispatchers.IO) {
             auth.currentUser?.let { firebaseUser ->
                 preferencesStore.updateUid(firebaseUser.uid) // need for decryption DataBase
@@ -60,7 +60,10 @@ class SplashViewModel @Inject constructor(
                     userInteractor.get().createUser(auth.currentUser)
                     categoryInteractor.get().createDefaultCategories()
                     withContext(Dispatchers.Main) { navigator?.openPrepopulate() }
-                } else withContext(Dispatchers.Main) { navigator?.openHomeScreen() }
+                } else {
+                    preferencesStore.updateCurrentCurrency(user.currentCurrencyCode)
+                    withContext(Dispatchers.Main) { navigator?.openHomeScreen() }
+                }
             }
         }
     }

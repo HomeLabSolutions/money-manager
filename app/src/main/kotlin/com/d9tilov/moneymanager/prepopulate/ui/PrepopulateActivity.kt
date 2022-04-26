@@ -99,10 +99,12 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
                 prepopulateBackBtn.show()
                 prepopulateNextBtn.show()
                 prepopulateProgress.show()
+                prepopulateProgressTitle.show()
             } else {
                 prepopulateBackBtn.gone()
                 prepopulateNextBtn.gone()
                 prepopulateProgress.gone()
+                prepopulateProgressTitle.gone()
             }
         }
     }
