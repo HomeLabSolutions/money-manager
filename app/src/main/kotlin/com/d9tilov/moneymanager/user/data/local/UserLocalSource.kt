@@ -7,6 +7,8 @@ import com.d9tilov.moneymanager.user.data.local.entity.UserDbModel
 import com.d9tilov.moneymanager.user.data.local.mapper.toDataModel
 import com.d9tilov.moneymanager.user.data.local.mapper.toDbModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
@@ -38,6 +40,14 @@ class UserLocalSource(
         userDao.update(userProfile.toDbModel().copy())
     }
 
+    override suspend fun updateCurrency(code: String): Unit = coroutineScope {
+        val user = getCurrentUser().firstOrNull() ?: return@coroutineScope
+        val one = async { preferencesStore.updateCurrentCurrency(code) }
+        val two = async { updateCurrentUser(user.copy(currentCurrencyCode = code)) }
+        one.await()
+        two.await()
+    }
+
     override suspend fun showPrepopulate(): Boolean {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
         return if (currentUserId == null) throw WrongUidException()
@@ -45,7 +55,6 @@ class UserLocalSource(
     }
 
     override suspend fun prepopulateCompleted() {
-        preferencesStore.updatePrepopulate(false)
         getCurrentUser().firstOrNull()?.let { updateCurrentUser(it.copy(showPrepopulate = false)) }
     }
 

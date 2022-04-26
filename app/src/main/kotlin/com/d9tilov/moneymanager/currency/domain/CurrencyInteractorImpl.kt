@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.currency.domain
 
-import com.d9tilov.moneymanager.base.data.local.preferences.CurrencyMetaData
 import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.util.divideBy
 import com.d9tilov.moneymanager.currency.data.entity.Currency
@@ -30,8 +29,6 @@ class CurrencyInteractorImpl(
             }
     }
 
-    override suspend fun getCurrentCurrency(): CurrencyMetaData = currencyRepo.getCurrentCurrency()
-
     override suspend fun getCurrencyByCode(code: String): Currency =
         currencyRepo.getCurrencyByCode(code)
 
@@ -39,7 +36,7 @@ class CurrencyInteractorImpl(
         amount: BigDecimal,
         currencyCode: String
     ): BigDecimal {
-        val mainCurrencyCode = getCurrentCurrency()
+        val mainCurrencyCode = currencyRepo.getCurrentCurrency()
         if (currencyCode == mainCurrencyCode.code) return amount
         val mainCurrency = getCurrencyByCode(mainCurrencyCode.code)
         val currentCurrency = getCurrencyByCode(currencyCode)
@@ -63,9 +60,5 @@ class CurrencyInteractorImpl(
 
     override suspend fun updateCurrencyRates() {
         currencyRepo.updateCurrencies()
-    }
-
-    override suspend fun updateCurrentCurrency(currency: DomainCurrency) {
-        currencyRepo.updateCurrentCurrency(domainMapper.toDataModel(currency).code)
     }
 }

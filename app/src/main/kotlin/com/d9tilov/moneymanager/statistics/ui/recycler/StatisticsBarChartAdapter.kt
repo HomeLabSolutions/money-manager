@@ -79,7 +79,7 @@ class StatisticsBarChartAdapter :
                     R.string.number_with_percent,
                     when {
                         percent < BigDecimal(0.01) -> "<1"
-                        percent > BigDecimal(99.99) -> "${context.getString(R.string.approx_sign)}100"
+                        percent > BigDecimal(99.99) && percent < BigDecimal(100) -> "${context.getString(R.string.approx_sign)}100"
                         else -> percent.toString()
                     }
                 )

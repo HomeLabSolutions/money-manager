@@ -21,7 +21,6 @@ class CurrencyChangeViewModel @Inject constructor(
 ) : BaseViewModel<CurrencyChangeNavigator>() {
 
     fun changeCurrency(currency: DomainCurrency) = viewModelScope.launch(Dispatchers.IO) {
-        currencyInteractor.updateCurrentCurrency(currency)
         userInteractor.updateCurrency(currency.code)
         budgetInteractor.updateBudgetWithCurrency(currency.code)
         withContext(Dispatchers.Main) { navigator?.change() }

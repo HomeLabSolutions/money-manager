@@ -13,7 +13,6 @@ import dagger.Lazy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -42,10 +41,9 @@ class SplashViewModel @Inject constructor(
                         auth.signOut()
                         withContext(Dispatchers.Main) { navigator?.openAuthScreen() }
                     } else {
-                        withContext(Dispatchers.Main) {
-                            if (preferencesStore.showPrepopulate.first()) navigator?.openPrepopulate()
-                            else navigator?.openHomeScreen()
-                        }
+                        if (userInteractor.get().showPrepopulate())
+                            withContext(Dispatchers.Main) { navigator?.openPrepopulate() }
+                        else withContext(Dispatchers.Main) { navigator?.openHomeScreen() }
                     }
                 }
             }

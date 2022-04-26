@@ -10,6 +10,5 @@ interface CurrencyRepo {
     suspend fun getCurrentCurrency(): CurrencyMetaData
     suspend fun getCurrencyByCode(code: String): Currency
     suspend fun updateCurrencies()
-    suspend fun updateCurrentCurrency(code: String)
     suspend fun hasAlreadyUpdatedToday(baseCurrency: String): Boolean
 }

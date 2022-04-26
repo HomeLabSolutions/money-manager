@@ -27,7 +27,7 @@
     <string name="profile_logout">Logout</string>
 
     <string name="currency_error">Failed to get currency list</string>
-    <string name="currency_change_title">Change currency?</string>
+    <string name="currency_change_title">Change currency to %s?</string>
     <string name="currency_change_subtitle">The app will restart.</string>
 
     <string name="default_category_expense_food">Food</string>

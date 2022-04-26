@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseDialogFragment
 import com.d9tilov.moneymanager.base.ui.navigator.CurrencyChangeNavigator
+import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.vm.CurrencyChangeViewModel
 import com.d9tilov.moneymanager.databinding.FragmentDialogChangeCurrencyBinding
@@ -31,6 +33,7 @@ class CurrencyChangeDialog :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewBinding?.run {
+            removeDialogTitle.text = getString(R.string.currency_change_title, CurrencyUtils.getCurrencyFullName(currency.code))
             changeButtonConfirm.setOnClickListener { viewModel.changeCurrency(currency) }
             changeButtonCancel.setOnClickListener { dismiss() }
         }

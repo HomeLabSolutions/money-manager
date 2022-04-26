@@ -17,6 +17,8 @@ class UserDataRepo(private val userLocalSource: UserSource) : UserRepo {
     override suspend fun create(entity: UserProfile): UserProfile =
         userLocalSource.createUserOrRestore(entity)
 
+    override suspend fun updateCurrency(code: String) = userLocalSource.updateCurrency(code)
+
     override suspend fun update(entity: UserProfile) {
         userLocalSource.updateCurrentUser(entity)
     }

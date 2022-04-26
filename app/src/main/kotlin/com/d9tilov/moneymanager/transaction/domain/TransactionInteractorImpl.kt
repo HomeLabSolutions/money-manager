@@ -363,7 +363,7 @@ class TransactionInteractorImpl(
                 ).map { list ->
                     val currencies = mutableSetOf<String>()
                     list.forEach { tr -> currencies.add(tr.currencyCode) }
-                    val currencyCode = currencyInteractor.getCurrentCurrency().code
+                    val currencyCode = userInteractor.getCurrentCurrency()
                     if ((currencies.size == 1 && currencies.contains(currencyCode)) || currencyCode == DEFAULT_CURRENCY_CODE) BigDecimal.ZERO
                     else list.sumOf { it.usdSum }
                 }
@@ -419,7 +419,7 @@ class TransactionInteractorImpl(
         ).map { list ->
             val currencies = mutableSetOf<String>()
             list.forEach { tr -> currencies.add(tr.currencyCode) }
-            val currencyCode = currencyInteractor.getCurrentCurrency().code
+            val currencyCode = userInteractor.getCurrentCurrency()
             if ((currencies.size == 1 && currencies.contains(currencyCode)) || currencyCode == DEFAULT_CURRENCY_CODE) BigDecimal.ZERO
             else list.sumOf { it.usdSum }
         }
@@ -434,7 +434,7 @@ class TransactionInteractorImpl(
                     endDate,
                     type
                 ).map { list ->
-                    val currentCurrency = currencyInteractor.getCurrentCurrency().code
+                    val currentCurrency = userInteractor.getCurrentCurrency()
                     list.sumOf { tr ->
                         if (tr.currencyCode == currentCurrency) {
                             tr.sum
@@ -453,7 +453,7 @@ class TransactionInteractorImpl(
             currentDateTime().getEndOfDay(),
             type
         ).map { list ->
-            val currentCurrency = currencyInteractor.getCurrentCurrency().code
+            val currentCurrency = userInteractor.getCurrentCurrency()
             list.sumOf { tr ->
                 if (tr.currencyCode == currentCurrency) {
                     tr.sum

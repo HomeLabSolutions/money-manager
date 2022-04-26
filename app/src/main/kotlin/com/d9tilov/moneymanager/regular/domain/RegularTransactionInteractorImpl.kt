@@ -2,11 +2,11 @@ package com.d9tilov.moneymanager.regular.domain
 
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.category.exception.CategoryNotFoundException
-import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.regular.domain.mapper.toData
 import com.d9tilov.moneymanager.regular.domain.mapper.toDomain
 import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.user.domain.UserInteractor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
@@ -15,11 +15,11 @@ import kotlinx.coroutines.flow.map
 class RegularTransactionInteractorImpl(
     private val regularTransactionRepo: RegularTransactionRepo,
     private val categoryInteractor: CategoryInteractor,
-    private val currencyInteractor: CurrencyInteractor
+    private val userInteractor: UserInteractor
 ) : RegularTransactionInteractor {
 
     override fun createDefault(): Flow<RegularTransaction> = flow {
-        val currentCurrency = currencyInteractor.getCurrentCurrency().code
+        val currentCurrency = userInteractor.getCurrentCurrency()
         emit(RegularTransaction.EMPTY.copy(currencyCode = currentCurrency))
     }
 

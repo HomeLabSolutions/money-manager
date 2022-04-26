@@ -9,6 +9,7 @@ interface UserRepo {
     suspend fun showPrepopulate(): Boolean
     suspend fun prepopulateCompleted()
     suspend fun create(entity: UserProfile): UserProfile
+    suspend fun updateCurrency(code: String)
     suspend fun update(entity: UserProfile)
     suspend fun delete()
 }

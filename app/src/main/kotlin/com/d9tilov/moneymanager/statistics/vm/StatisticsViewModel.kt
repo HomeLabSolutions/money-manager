@@ -5,7 +5,6 @@ import com.d9tilov.moneymanager.base.data.ResultOf
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsNavigator
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
-import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.statistics.domain.BaseStatisticsMenuType
 import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuCategoryType
 import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuChartMode
@@ -17,6 +16,7 @@ import com.d9tilov.moneymanager.transaction.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionLineChartModel
+import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,7 +32,7 @@ import javax.inject.Inject
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
     private val transactionInteractor: TransactionInteractor,
-    currencyInteractor: CurrencyInteractor
+    userInteractor: UserInteractor
 ) : BaseViewModel<StatisticsNavigator>() {
 
     private val transactions =
@@ -57,7 +57,7 @@ class StatisticsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            currencyCode = currencyInteractor.getCurrentCurrency().code
+            currencyCode = userInteractor.getCurrentCurrency()
             currencyType = StatisticsMenuCurrency.CURRENT(currencyCode)
             menuItemList.add(currencyType)
             menuItemList.add(chartMode)
