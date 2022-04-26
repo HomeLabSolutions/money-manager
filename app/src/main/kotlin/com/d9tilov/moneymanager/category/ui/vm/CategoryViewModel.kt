@@ -17,10 +17,11 @@ import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.transaction.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted.Companion.Eagerly
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.shareIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,10 +32,11 @@ class CategoryViewModel @Inject constructor(
 
     val transactionType: TransactionType =
         savedStateHandle.get<TransactionType>("transactionType") ?: TransactionType.EXPENSE
-    override val categories: StateFlow<List<Category>> =
+    override val categories: SharedFlow<List<Category>> =
         categoryInteractor.getAllCategoriesByType(transactionType)
             .flowOn(Dispatchers.IO)
-            .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+            .distinctUntilChanged()
+            .shareIn(viewModelScope, Eagerly, 1)
 
     override fun onCategoryClicked(category: Category) {
         val destination = savedStateHandle.get<CategoryDestination>("destination")

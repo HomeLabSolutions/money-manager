@@ -4,22 +4,23 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.SubCategoryNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
-import com.d9tilov.moneymanager.category.CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN
-import com.d9tilov.moneymanager.category.CategoryDestination.EDIT_TRANSACTION_SCREEN
-import com.d9tilov.moneymanager.category.CategoryDestination.MAIN_WITH_SUM_SCREEN
-import com.d9tilov.moneymanager.category.CategoryDestination.MAIN_SCREEN
 import com.d9tilov.moneymanager.category.CategoryDestination.CATEGORY_CREATION_SCREEN
 import com.d9tilov.moneymanager.category.CategoryDestination.CATEGORY_SCREEN
+import com.d9tilov.moneymanager.category.CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN
+import com.d9tilov.moneymanager.category.CategoryDestination.EDIT_TRANSACTION_SCREEN
+import com.d9tilov.moneymanager.category.CategoryDestination.MAIN_SCREEN
+import com.d9tilov.moneymanager.category.CategoryDestination.MAIN_WITH_SUM_SCREEN
 import com.d9tilov.moneymanager.category.CategoryDestination.SUB_CATEGORY_SCREEN
 import com.d9tilov.moneymanager.category.common.BaseCategoryViewModel
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.shareIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,10 +30,11 @@ class SubCategoryViewModel @Inject constructor(
 ) : BaseCategoryViewModel<SubCategoryNavigator>() {
 
     private val parentCategory: Category? = savedStateHandle.get<Category>("parent_category")
-    override val categories: StateFlow<List<Category>> =
+    override val categories: SharedFlow<List<Category>> =
         categoryInteractor.getChildrenByParent(parentCategory!!)
             .flowOn(Dispatchers.IO)
-            .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+            .distinctUntilChanged()
+            .shareIn(viewModelScope, SharingStarted.Eagerly, 1)
 
     init {
         if (parentCategory == null || parentCategory.children.isEmpty()) {

@@ -12,8 +12,6 @@ import com.d9tilov.moneymanager.category.exception.NoCategoryParentException
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
 import com.d9tilov.moneymanager.transaction.TransactionType
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
@@ -148,10 +146,8 @@ class CategoryLocalSource(
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
         if (currentUserId == null) throw WrongUidException()
         else {
-            awaitAll(
-                async { categoryDao.delete(currentUserId, category.id) },
-                async { category.children.forEach { categoryDao.delete(currentUserId, it.id) } }
-            )
+            categoryDao.delete(currentUserId, category.id)
+            category.children.forEach { categoryDao.delete(currentUserId, it.id) }
         }
     }
 
