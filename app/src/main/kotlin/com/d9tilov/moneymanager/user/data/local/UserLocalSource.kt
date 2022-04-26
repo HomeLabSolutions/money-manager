@@ -8,6 +8,7 @@ import com.d9tilov.moneymanager.user.data.local.mapper.toDataModel
 import com.d9tilov.moneymanager.user.data.local.mapper.toDbModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
@@ -42,10 +43,10 @@ class UserLocalSource(
 
     override suspend fun updateCurrency(code: String): Unit = coroutineScope {
         val user = getCurrentUser().firstOrNull() ?: return@coroutineScope
-        val one = async { preferencesStore.updateCurrentCurrency(code) }
-        val two = async { updateCurrentUser(user.copy(currentCurrencyCode = code)) }
-        one.await()
-        two.await()
+        awaitAll(
+            async { preferencesStore.updateCurrentCurrency(code) },
+            async { updateCurrentUser(user.copy(currentCurrencyCode = code)) }
+        )
     }
 
     override suspend fun showPrepopulate(): Boolean {

@@ -5,6 +5,9 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.data.entity.Category.Companion.ALL_ITEMS_ID
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
 import com.d9tilov.moneymanager.transaction.TransactionType
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -13,9 +16,11 @@ class CategoryInteractorImpl(private val categoryRepo: CategoryRepo) :
 
     override suspend fun create(category: Category) = categoryRepo.create(category)
 
-    override suspend fun createDefaultCategories() {
-        categoryRepo.createExpenseDefaultCategories()
-        categoryRepo.createIncomeDefaultCategories()
+    override suspend fun createDefaultCategories(): Unit = coroutineScope {
+        awaitAll(
+            async { categoryRepo.createExpenseDefaultCategories() },
+            async { categoryRepo.createIncomeDefaultCategories() }
+        )
     }
 
     override suspend fun update(category: Category) = categoryRepo.update(category)
@@ -45,11 +50,8 @@ class CategoryInteractorImpl(private val categoryRepo: CategoryRepo) :
     private fun getAllWithChildrenInSingleList(categories: List<Category>): List<Category> {
         val categoriesAsChild = mutableListOf<Category>()
         for (category in categories) {
-            if (category.children.isNotEmpty()) {
-                categoriesAsChild.addAll(category.children)
-            } else {
-                categoriesAsChild.add(category)
-            }
+            if (category.children.isNotEmpty()) categoriesAsChild.addAll(category.children)
+            else categoriesAsChild.add(category)
         }
         categoriesAsChild.add(0, createAllItemsFolder(categories))
         return categoriesAsChild

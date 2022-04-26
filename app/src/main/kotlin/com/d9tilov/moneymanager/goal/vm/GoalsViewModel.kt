@@ -10,6 +10,8 @@ import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
@@ -39,9 +41,13 @@ class GoalsViewModel @Inject constructor(
             .stateIn(viewModelScope, SharingStarted.Eagerly, BigDecimal.ZERO)
 
     fun savePrepopulateStatusAndSavedSum(sum: BigDecimal) = viewModelScope.launch(Dispatchers.IO) {
-        userInteractor.prepopulateCompleted()
-        val budget = budgetInteractor.get().first()
-        budgetInteractor.update(budget.copy(saveSum = sum))
+        awaitAll(
+            async { userInteractor.prepopulateCompleted() },
+            async {
+                val budget = budgetInteractor.get().first()
+                budgetInteractor.update(budget.copy(saveSum = sum))
+            }
+        )
     }
 
     fun insertSavedSum(sum: BigDecimal) {

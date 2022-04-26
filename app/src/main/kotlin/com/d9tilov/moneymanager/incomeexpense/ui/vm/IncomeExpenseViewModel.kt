@@ -12,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -36,15 +37,15 @@ class IncomeExpenseViewModel @Inject constructor(
             currencyInteractor.updateCurrencyRates()
         }
         viewModelScope.launch(Dispatchers.IO) {
-            val currentCurrencyCode = async { userInteractor.getCurrentCurrency() }
-            val executeRegularIncome =
-                async { transactionInteractor.executeRegularIfNeeded(TransactionType.INCOME) }
-            val executeRegularExpense =
-                async { transactionInteractor.executeRegularIfNeeded(TransactionType.EXPENSE) }
-            currencyCodeStr.value = currentCurrencyCode.await()
-            executeRegularIncome.await()
-            executeRegularExpense.await()
-            defaultCurrencyCode = currencyCodeStr.value
+            awaitAll(
+                async { transactionInteractor.executeRegularIfNeeded(TransactionType.INCOME) },
+                async { transactionInteractor.executeRegularIfNeeded(TransactionType.EXPENSE) },
+                async {
+                    val currencyCode = userInteractor.getCurrentCurrency()
+                    currencyCodeStr.value = currencyCode
+                    defaultCurrencyCode = currencyCodeStr.value
+                }
+            )
         }
     }
 

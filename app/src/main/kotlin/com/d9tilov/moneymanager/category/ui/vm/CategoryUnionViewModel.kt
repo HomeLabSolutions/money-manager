@@ -10,6 +10,8 @@ import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -35,8 +37,10 @@ class CategoryUnionViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO + saveCategoryExceptionHandler) {
             val parentId = categoryInteractor.create(groupedCategory)
             val category = categoryInteractor.getCategoryById(parentId)
-            categoryInteractor.update(categoryItem1.copy(parent = category))
-            categoryInteractor.update(categoryItem2.copy(parent = category))
+            awaitAll(
+                async { categoryInteractor.update(categoryItem1.copy(parent = category)) },
+                async { categoryInteractor.update(categoryItem2.copy(parent = category)) }
+            )
             withContext(Dispatchers.Main) { navigator?.accept() }
         }
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {

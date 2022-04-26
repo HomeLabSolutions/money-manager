@@ -57,7 +57,7 @@ class ProfileFragment :
             viewLifecycleOwner.lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     launch {
-                        viewModel.userData().collect { profile ->
+                        viewModel.userData.collect { profile ->
                             profile?.currentCurrencyCode?.let { code ->
                                 val icon = CurrencyUtils.getCurrencyIcon(code)
                                 val currencyTitle = CurrencyUtils.getCurrencySignBy(code)
@@ -67,7 +67,7 @@ class ProfileFragment :
                         }
                     }
                     launch {
-                        viewModel.budget().collect { budget ->
+                        viewModel.budget.collect { budget ->
                             profileBudget.profileItemBudgetValue.setValue(
                                 budget.sum,
                                 currencyCode()
@@ -80,19 +80,19 @@ class ProfileFragment :
                         }
                     }
                     launch {
-                        viewModel.regularIncomes().collect { list ->
+                        viewModel.regularIncomes.collect { list ->
                             val incomes = list.joinToString(separator = ", ") { it.category.name }
                             profileRegularIncomes.profileItemRegularIncomeSubtitle.text = incomes
                         }
                     }
                     launch {
-                        viewModel.regularExpenses().collect { list ->
+                        viewModel.regularExpenses.collect { list ->
                             val expenses = list.joinToString(separator = ", ") { it.category.name }
                             profileRegularExpenses.profileItemRegularExpenseSubtitle.text = expenses
                         }
                     }
                     launch {
-                        viewModel.goals().collect { list ->
+                        viewModel.goals.collect { list ->
                             val goals = list.joinToString(separator = ",") { it.name }
                             when (goals.isEmpty()) {
                                 true ->

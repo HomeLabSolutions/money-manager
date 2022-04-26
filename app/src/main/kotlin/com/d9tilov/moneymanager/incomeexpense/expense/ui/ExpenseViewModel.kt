@@ -42,19 +42,16 @@ class ExpenseViewModel @Inject constructor(
                 var itemPosition = -1
                 var itemHeaderPosition = itemPosition
                 pagingData.insertSeparators { before: Transaction?, after: Transaction? ->
-                    if (before == null && after == null) {
-                        null
-                    } else if (before != null && after == null) {
-                        null
-                    } else if (before == null && after != null) {
+                    if (before == null && after == null) null
+                    else if (before != null && after == null) null
+                    else if (before == null && after != null) {
                         val header = TransactionHeader(
                             after.date.getEndOfDay(),
                             after.currencyCode
                         )
                         header
-                    } else if (before != null && after != null && before.date.isSameDay(after.date)) {
-                        null
-                    } else if (before != null && after != null && !before.date.isSameDay(after.date)) {
+                    } else if (before != null && after != null && before.date.isSameDay(after.date)) null
+                    else if (before != null && after != null && !before.date.isSameDay(after.date)) {
                         val header = TransactionHeader(
                             after.date.getEndOfDay(),
                             after.currencyCode,

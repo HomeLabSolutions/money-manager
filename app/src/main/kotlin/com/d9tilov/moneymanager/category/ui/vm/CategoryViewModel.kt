@@ -4,12 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryNavigator
 import com.d9tilov.moneymanager.category.CategoryDestination
-import com.d9tilov.moneymanager.category.CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN
-import com.d9tilov.moneymanager.category.CategoryDestination.EDIT_TRANSACTION_SCREEN
-import com.d9tilov.moneymanager.category.CategoryDestination.MAIN_WITH_SUM_SCREEN
-import com.d9tilov.moneymanager.category.CategoryDestination.MAIN_SCREEN
 import com.d9tilov.moneymanager.category.CategoryDestination.CATEGORY_CREATION_SCREEN
 import com.d9tilov.moneymanager.category.CategoryDestination.CATEGORY_SCREEN
+import com.d9tilov.moneymanager.category.CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN
+import com.d9tilov.moneymanager.category.CategoryDestination.EDIT_TRANSACTION_SCREEN
+import com.d9tilov.moneymanager.category.CategoryDestination.MAIN_SCREEN
+import com.d9tilov.moneymanager.category.CategoryDestination.MAIN_WITH_SUM_SCREEN
 import com.d9tilov.moneymanager.category.CategoryDestination.SUB_CATEGORY_SCREEN
 import com.d9tilov.moneymanager.category.common.BaseCategoryViewModel
 import com.d9tilov.moneymanager.category.data.entity.Category

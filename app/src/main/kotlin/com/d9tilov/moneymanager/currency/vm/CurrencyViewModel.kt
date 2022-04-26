@@ -11,6 +11,7 @@ import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,16 +37,18 @@ class CurrencyViewModel @Inject constructor(
     }
 
     fun changeCurrency(currency: DomainCurrency) = viewModelScope.launch(Dispatchers.IO) {
-        val currencyUpdate = async { userInteractor.updateCurrency(currency.code) }
-        val budgetUpdate = async { budgetInteractor.updateBudgetWithCurrency(currency.code) }
-        currencyUpdate.await()
-        budgetUpdate.await()
+        awaitAll(
+            async { userInteractor.updateCurrency(currency.code) },
+            async { budgetInteractor.updateBudgetWithCurrency(currency.code) }
+        )
     }
 
     fun createBudgetAndSkip() {
         viewModelScope.launch(Dispatchers.IO) {
-            budgetInteractor.create()
-            userInteractor.prepopulateCompleted()
+            awaitAll(
+                async { budgetInteractor.create() },
+                async { userInteractor.prepopulateCompleted() }
+            )
             withContext(Dispatchers.Main) { navigator?.skip() }
         }
     }

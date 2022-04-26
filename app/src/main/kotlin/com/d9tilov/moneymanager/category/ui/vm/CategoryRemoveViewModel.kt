@@ -30,9 +30,7 @@ class CategoryRemoveViewModel @Inject constructor(
         viewModelScope.launch {
             transactionInteractor.removeAllByCategory(category).map {
                 category.children.map {
-                    async {
-                        transactionInteractor.removeAllByCategory(it).first()
-                    }
+                    async { transactionInteractor.removeAllByCategory(it).first() }
                 }.awaitAll()
                 categoryInteractor.deleteCategory(category)
             }

@@ -1,10 +1,11 @@
 package com.d9tilov.moneymanager.regular.domain
 
+import com.d9tilov.moneymanager.base.domain.Interactor
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.transaction.TransactionType
 import kotlinx.coroutines.flow.Flow
 
-interface RegularTransactionInteractor {
+interface RegularTransactionInteractor : Interactor {
 
     fun createDefault(): Flow<RegularTransaction>
     fun getAll(type: TransactionType): Flow<List<RegularTransaction>>
