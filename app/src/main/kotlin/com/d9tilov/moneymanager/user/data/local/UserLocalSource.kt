@@ -38,7 +38,7 @@ class UserLocalSource(
     }
 
     override suspend fun updateCurrentUser(userProfile: UserProfile) {
-        userDao.update(userProfile.toDbModel().copy())
+        userDao.update(userProfile.toDbModel())
     }
 
     override suspend fun updateCurrency(code: String): Unit = coroutineScope {
@@ -56,7 +56,10 @@ class UserLocalSource(
     }
 
     override suspend fun prepopulateCompleted() {
-        getCurrentUser().firstOrNull()?.let { updateCurrentUser(it.copy(showPrepopulate = false)) }
+        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+            ?: throw WrongUidException()
+        val user = userDao.getById(currentUserId).firstOrNull()
+        user?.let { userDao.update(it.copy(showPrepopulate = false)) }
     }
 
     override suspend fun getFiscalDay(): Int {
