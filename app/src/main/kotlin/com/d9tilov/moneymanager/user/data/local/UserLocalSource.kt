@@ -42,11 +42,15 @@ class UserLocalSource(
     }
 
     override suspend fun updateCurrency(code: String): Unit = coroutineScope {
-        val user = getCurrentUser().firstOrNull() ?: return@coroutineScope
-        awaitAll(
-            async { preferencesStore.updateCurrentCurrency(code) },
-            async { updateCurrentUser(user.copy(currentCurrencyCode = code)) }
-        )
+        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+            ?: throw WrongUidException()
+        val user = userDao.getById(currentUserId).firstOrNull()
+        user?.let {
+            awaitAll(
+                async { preferencesStore.updateCurrentCurrency(code) },
+                async { userDao.update(it.copy(currentCurrencyCode = code)) }
+            )
+        }
     }
 
     override suspend fun showPrepopulate(): Boolean {
