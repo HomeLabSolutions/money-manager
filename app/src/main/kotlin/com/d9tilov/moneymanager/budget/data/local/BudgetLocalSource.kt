@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -18,16 +19,18 @@ class BudgetLocalSource(
     private val budgetDao: BudgetDao
 ) : BudgetSource {
 
-    override suspend fun create() {
+    override suspend fun createIfNeeded() {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
         if (currentUserId == null) throw WrongUidException()
         else {
-            budgetDao.insert(
-                BudgetData.EMPTY.copy(
-                    clientId = currentUserId,
-                    currencyCode = preferencesStore.currentCurrency.first().code
-                ).toDbModel()
-            )
+            val budget = budgetDao.get(currentUserId).firstOrNull()
+            if (budget == null)
+                budgetDao.insert(
+                    BudgetData.EMPTY.copy(
+                        clientId = currentUserId,
+                        currencyCode = preferencesStore.currentCurrency.first().code
+                    ).toDbModel()
+                )
         }
     }
 
