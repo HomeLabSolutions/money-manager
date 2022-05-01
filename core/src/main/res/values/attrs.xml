@@ -13,7 +13,7 @@
         <attr name="sumTextStyle" format="reference|integer" />
         <attr name="signTextStyle" format="reference|integer" />
         <attr name="signTextColor" format="reference" />
-        <attr name="signCode" format="string" />
+        <attr name="signSymbol" format="string" />
         <attr name="sum" format="string" />
         <attr name="prefixText" format="string" />
         <attr name="showUnderline" format="boolean" />

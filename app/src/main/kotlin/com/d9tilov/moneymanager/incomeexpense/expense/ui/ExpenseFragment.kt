@@ -99,6 +99,7 @@ class ExpenseFragment :
                                 it,
                                 currencyCode()
                             )
+                            expenseInfoLayoutInclude.expensePeriodInfoApproxSum.show()
                         }
                     }
                     launch {
@@ -113,6 +114,7 @@ class ExpenseFragment :
                                 it,
                                 currencyCode()
                             )
+                            expenseInfoLayoutInclude.expenseTodayInfoApproxSum.show()
                         }
                     }
                     launch {
@@ -146,6 +148,7 @@ class ExpenseFragment :
                                         }
                                     }
                                 }
+                                expenseTodayInfoValue.show()
                             }
                         }
                     }

@@ -81,6 +81,7 @@ class RegularTransactionCreationFragment :
                         findNavController().currentBackStackEntry?.savedStateHandle?.remove<DomainCurrency>(
                             CurrencyFragment.ARG_CURRENCY
                         )
+                        updateCurrency()
                     }
                 getLiveData<Int>(ARG_DAY_OF_MONTH)
                     .observe(viewLifecycleOwner) { dayOfMonth ->

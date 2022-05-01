@@ -13,7 +13,7 @@ import android.widget.TextView
 import androidx.core.view.setPadding
 import androidx.core.widget.TextViewCompat
 import com.d9tilov.moneymanager.core.R
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
+import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DECIMAL_LENGTH
 import com.d9tilov.moneymanager.core.util.CurrencyUtils.getSymbolByCode
 import com.d9tilov.moneymanager.core.util.gone
@@ -51,7 +51,6 @@ class CurrencyView @JvmOverloads constructor(
             field = value
             signTextView.text = value
         }
-    private var currencyCode = DEFAULT_CURRENCY_CODE
     private var prefixText = ""
         set(value) {
             field = value
@@ -90,7 +89,7 @@ class CurrencyView @JvmOverloads constructor(
                     getDimensionPixelSize(R.styleable.CurrencyView_signTextSize, DEFAULT)
                 signTextColor = getColor(R.styleable.CurrencyView_signTextColor, DEFAULT)
 
-                signText = getString(R.styleable.CurrencyView_signCode) ?: DEFAULT_CURRENCY_CODE
+                signText = getString(R.styleable.CurrencyView_signSymbol) ?: DEFAULT_CURRENCY_SYMBOL
                 signTextStyle = getResourceId(R.styleable.CurrencyView_signTextStyle, DEFAULT)
                 initSign()
 
@@ -325,7 +324,6 @@ class CurrencyView @JvmOverloads constructor(
 
     fun setValue(value: BigDecimal, currencyCode: String) {
         this.sum = value
-        this.currencyCode = currencyCode
         this.signText = currencyCode.getSymbolByCode()
     }
 
