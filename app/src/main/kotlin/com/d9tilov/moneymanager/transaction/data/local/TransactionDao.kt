@@ -6,8 +6,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.d9tilov.moneymanager.transaction.TransactionType
-import com.d9tilov.moneymanager.transaction.data.local.entity.TransactionDbModel
+import com.d9tilov.moneymanager.transaction.data.entity.TransactionDbModel
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
 

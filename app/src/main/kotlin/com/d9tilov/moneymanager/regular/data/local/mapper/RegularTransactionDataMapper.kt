@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.regular.data.local.mapper
 
 import com.d9tilov.moneymanager.regular.data.entity.RegularTransactionData
-import com.d9tilov.moneymanager.regular.data.local.entity.RegularTransactionDbModel
+import com.d9tilov.moneymanager.regular.data.entity.RegularTransactionDbModel
 
 fun RegularTransactionDbModel.toDataModel(): RegularTransactionData =
     RegularTransactionData(

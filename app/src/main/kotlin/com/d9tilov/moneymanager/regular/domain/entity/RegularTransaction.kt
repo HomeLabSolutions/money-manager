@@ -7,7 +7,7 @@ import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_C
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_DATA_ID
 import com.d9tilov.moneymanager.core.util.currentDate
 import com.d9tilov.moneymanager.core.util.currentDateTime
-import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import kotlinx.datetime.LocalDateTime
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue

@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.currency
+package com.d9tilov.moneymanager.currency.domain.entity
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -23,7 +23,9 @@ sealed class CurrencyDestination(open val name: String) : Parcelable {
     object EDIT_TRANSACTION_SCREEN : CurrencyDestination(FROM_EDIT_TRANSACTION_SCREEN)
 
     @Parcelize
-    object EDIT_REGULAR_TRANSACTION_SCREEN : CurrencyDestination(FROM_EDIT_REGULAR_TRANSACTION_SCREEN)
+    object EDIT_REGULAR_TRANSACTION_SCREEN : CurrencyDestination(
+        FROM_EDIT_REGULAR_TRANSACTION_SCREEN
+    )
 
     @Parcelize
     object INCOME_EXPENSE_SCREEN : CurrencyDestination(FROM_INCOME_EXPENSE_SCREEN)

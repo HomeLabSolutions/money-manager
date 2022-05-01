@@ -8,7 +8,7 @@ import androidx.navigation.fragment.navArgs
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseDialogFragment
 import com.d9tilov.moneymanager.base.ui.navigator.RemoveCategoryDialogNavigator
-import com.d9tilov.moneymanager.category.CategoryDestination
+import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination
 import com.d9tilov.moneymanager.category.ui.vm.CategoryRemoveViewModel
 import com.d9tilov.moneymanager.databinding.FragmentDialogRemoveBinding
 import dagger.hilt.android.AndroidEntryPoint

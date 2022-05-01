@@ -1,6 +1,6 @@
 package com.d9tilov.moneymanager.budget.data
 
-import com.d9tilov.moneymanager.budget.data.entity.BudgetData
+import com.d9tilov.moneymanager.budget.domain.entity.BudgetData
 import com.d9tilov.moneymanager.budget.data.local.BudgetSource
 import com.d9tilov.moneymanager.budget.domain.BudgetRepo
 

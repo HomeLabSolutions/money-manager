@@ -11,7 +11,7 @@ import androidx.navigation.fragment.navArgs
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.EditTransactionNavigator
-import com.d9tilov.moneymanager.category.CategoryDestination
+import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination
 import com.d9tilov.moneymanager.category.common.BaseCategoryFragment.Companion.ARG_CATEGORY
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT
@@ -20,7 +20,7 @@ import com.d9tilov.moneymanager.core.util.currentDateTime
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.core.util.toLocalDateTime
 import com.d9tilov.moneymanager.core.util.toMillis
-import com.d9tilov.moneymanager.currency.CurrencyDestination
+import com.d9tilov.moneymanager.currency.domain.entity.CurrencyDestination
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.ui.CurrencyFragment.Companion.ARG_CURRENCY
 import com.d9tilov.moneymanager.databinding.FragmentEditTransactionBinding

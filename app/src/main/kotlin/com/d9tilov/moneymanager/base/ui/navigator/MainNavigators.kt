@@ -14,7 +14,7 @@ interface SplashNavigator : BaseNavigator {
 
 interface CurrencyNavigator : BaseNavigator {
     fun skip()
-    fun showError()
+    fun showError(throwable: Throwable)
 }
 interface CurrencyChangeNavigator : BaseNavigator {
     fun change()

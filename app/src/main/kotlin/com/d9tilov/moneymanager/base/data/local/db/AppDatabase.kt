@@ -9,19 +9,19 @@ import com.d9tilov.moneymanager.base.data.local.db.converters.DateConverter
 import com.d9tilov.moneymanager.base.data.local.db.converters.LocationConverter
 import com.d9tilov.moneymanager.base.data.local.db.converters.ModelTypeConverter
 import com.d9tilov.moneymanager.budget.data.local.BudgetDao
-import com.d9tilov.moneymanager.budget.data.local.entity.BudgetDbModel
+import com.d9tilov.moneymanager.budget.data.entity.BudgetDbModel
 import com.d9tilov.moneymanager.category.data.local.CategoryDao
-import com.d9tilov.moneymanager.category.data.local.entity.CategoryDbModel
+import com.d9tilov.moneymanager.category.data.entity.CategoryDbModel
 import com.d9tilov.moneymanager.currency.data.local.CurrencyDao
 import com.d9tilov.moneymanager.currency.data.local.entity.CurrencyDbModel
 import com.d9tilov.moneymanager.goal.data.local.GoalDao
-import com.d9tilov.moneymanager.goal.data.local.entity.GoalDbModel
+import com.d9tilov.moneymanager.goal.data.entity.GoalDbModel
 import com.d9tilov.moneymanager.regular.data.local.RegularTransactionDao
-import com.d9tilov.moneymanager.regular.data.local.entity.RegularTransactionDbModel
+import com.d9tilov.moneymanager.regular.data.entity.RegularTransactionDbModel
 import com.d9tilov.moneymanager.transaction.data.local.TransactionDao
-import com.d9tilov.moneymanager.transaction.data.local.entity.TransactionDbModel
+import com.d9tilov.moneymanager.transaction.data.entity.TransactionDbModel
 import com.d9tilov.moneymanager.user.data.local.UserDao
-import com.d9tilov.moneymanager.user.data.local.entity.UserDbModel
+import com.d9tilov.moneymanager.user.data.entity.UserDbModel
 
 @Database(
     entities = [

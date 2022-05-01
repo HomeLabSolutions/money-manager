@@ -10,7 +10,7 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.util.getEndOfDay
 import com.d9tilov.moneymanager.core.util.getStartOfDay
 import com.d9tilov.moneymanager.core.util.isSameDay
-import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.data.mapper.toDataModel
 import com.d9tilov.moneymanager.transaction.data.mapper.toDbModel

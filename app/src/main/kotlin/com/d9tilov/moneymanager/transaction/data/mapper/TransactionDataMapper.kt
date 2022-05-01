@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.transaction.data.mapper
 
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
-import com.d9tilov.moneymanager.transaction.data.local.entity.TransactionDbModel
+import com.d9tilov.moneymanager.transaction.data.entity.TransactionDbModel
 
 fun TransactionDbModel.toDataModel(): TransactionDataModel = TransactionDataModel(
     id,

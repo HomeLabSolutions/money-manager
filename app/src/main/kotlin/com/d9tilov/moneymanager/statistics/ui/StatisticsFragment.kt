@@ -54,7 +54,7 @@ import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod.YEAR
 import com.d9tilov.moneymanager.statistics.ui.recycler.StatisticsBarChartAdapter
 import com.d9tilov.moneymanager.statistics.ui.recycler.StatisticsMenuAdapter
 import com.d9tilov.moneymanager.statistics.vm.StatisticsViewModel
-import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionLineChartModel
 import com.github.mikephil.charting.animation.Easing

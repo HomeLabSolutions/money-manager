@@ -8,18 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:606418510936:android:63270e091e532461b0962d",
+        "mobilesdk_app_id": "1:606418510936:android:917c844d442330e7b0962d",
         "android_client_info": {
           "package_name": "com.d9tilov.moneymanager"
         }
       },
       "oauth_client": [
         {
-          "client_id": "606418510936-atr20okr0e08ig9jcmffm2a3pmeahvfq.apps.googleusercontent.com",
+          "client_id": "606418510936-3d06ld192mk7di929churjv4bj9b6r0a.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.d9tilov.moneymanager",
-            "certificate_hash": "dd9af357bc2344e009785007eb57e7ae8bc09036"
+            "certificate_hash": "b22013dd2208b464154f1badf0a056c999bf76ff"
           }
         },
         {
@@ -31,11 +31,11 @@
           }
         },
         {
-          "client_id": "606418510936-3d06ld192mk7di929churjv4bj9b6r0a.apps.googleusercontent.com",
+          "client_id": "606418510936-gahdn90epqc39ndrf2val8b559n3rimf.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.d9tilov.moneymanager",
-            "certificate_hash": "b22013dd2208b464154f1badf0a056c999bf76ff"
+            "certificate_hash": "dd9af357bc2344e009785007eb57e7ae8bc09036"
           }
         },
         {

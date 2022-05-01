@@ -11,9 +11,9 @@ data class BackupData(
 ) : Parcelable {
 
     companion object {
-        const val UNKNOWN_BACKUP_DATA = -1L
+        const val UNKNOWN_BACKUP_DATE = -1L
         val EMPTY = BackupData(
-            lastBackupTimestamp = UNKNOWN_BACKUP_DATA,
+            lastBackupTimestamp = UNKNOWN_BACKUP_DATE,
             dbVersion = AppDatabase.VERSION_NUMBER
         )
     }

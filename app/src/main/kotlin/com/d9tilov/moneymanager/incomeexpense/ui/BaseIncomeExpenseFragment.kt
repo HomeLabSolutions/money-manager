@@ -29,9 +29,9 @@ import com.d9tilov.moneymanager.core.util.toast
 import com.d9tilov.moneymanager.databinding.LayoutEmptyListPlaceholderBinding
 import com.d9tilov.moneymanager.incomeexpense.ui.listeners.OnIncomeExpenseListener
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
-import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
-import com.d9tilov.moneymanager.transaction.isIncome
+import com.d9tilov.moneymanager.transaction.domain.entity.isIncome
 import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.flow.collect

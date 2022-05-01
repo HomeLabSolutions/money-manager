@@ -53,7 +53,7 @@ class SplashViewModel @Inject constructor(
     fun updateData() {
         viewModelScope.launch(Dispatchers.IO) {
             auth.currentUser?.let { firebaseUser ->
-                preferencesStore.updateUid(firebaseUser.uid) // need for decryption DataBase
+                preferencesStore.updateUid(firebaseUser.uid) // need for dataBase decryption
                 backupInteractor.restoreBackup()
                 val user = userInteractor.get().getCurrentUser().firstOrNull()
                 if (user == null || user.showPrepopulate) {

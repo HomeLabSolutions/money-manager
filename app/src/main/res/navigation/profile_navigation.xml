@@ -100,7 +100,7 @@
         <argument
             android:name="destination"
             android:defaultValue="@null"
-            app:argType="com.d9tilov.moneymanager.currency.CurrencyDestination"
+            app:argType="com.d9tilov.moneymanager.currency.domain.entity.CurrencyDestination"
             app:nullable="true" />
 
         <argument
@@ -127,7 +127,7 @@
 
         <argument
             android:name="destination"
-            app:argType="com.d9tilov.moneymanager.budget.BudgetDestination"/>
+            app:argType="com.d9tilov.moneymanager.budget.domain.entity.BudgetDestination" />
     </fragment>
 
     <fragment
@@ -138,7 +138,7 @@
 
         <argument
             android:name="destination"
-            app:argType="com.d9tilov.moneymanager.budget.BudgetDestination" />
+            app:argType="com.d9tilov.moneymanager.budget.domain.entity.BudgetDestination" />
     </fragment>
 
     <fragment
@@ -172,7 +172,7 @@
 
         <argument
             android:name="destination"
-            app:argType="com.d9tilov.moneymanager.regular.RegularTransactionDestination" />
+            app:argType="com.d9tilov.moneymanager.regular.domain.entity.RegularTransactionDestination" />
 
     </fragment>
 
@@ -208,7 +208,7 @@
 
         <argument
             android:name="transactionType"
-            app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
+            app:argType="com.d9tilov.moneymanager.transaction.domain.entity.TransactionType" />
         <argument
             android:name="regular_transaction"
             android:defaultValue="@null"
@@ -247,7 +247,7 @@
 
         <argument
             android:name="destination"
-            app:argType="com.d9tilov.moneymanager.regular.RegularTransactionDestination" />
+            app:argType="com.d9tilov.moneymanager.regular.domain.entity.RegularTransactionDestination" />
     </fragment>
 
     <fragment
@@ -285,10 +285,10 @@
 
         <argument
             android:name="destination"
-            app:argType="com.d9tilov.moneymanager.category.CategoryDestination" />
+            app:argType="com.d9tilov.moneymanager.category.domain.entity.CategoryDestination" />
         <argument
             android:name="transactionType"
-            app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
+            app:argType="com.d9tilov.moneymanager.transaction.domain.entity.TransactionType" />
 
         <argument
             android:name="sum"
@@ -332,10 +332,10 @@
 
         <argument
             android:name="destination"
-            app:argType="com.d9tilov.moneymanager.category.CategoryDestination" />
+            app:argType="com.d9tilov.moneymanager.category.domain.entity.CategoryDestination" />
         <argument
             android:name="transactionType"
-            app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
+            app:argType="com.d9tilov.moneymanager.transaction.domain.entity.TransactionType" />
         <argument
             android:name="parent_category"
             app:argType="com.d9tilov.moneymanager.category.data.entity.Category" />
@@ -403,7 +403,7 @@
 
         <argument
             android:name="destination"
-            app:argType="com.d9tilov.moneymanager.goal.GoalDestination"/>
+            app:argType="com.d9tilov.moneymanager.goal.domain.entity.GoalDestination" />
 
     </fragment>
 
@@ -428,7 +428,7 @@
 
         <argument
             android:name="transactionType"
-            app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
+            app:argType="com.d9tilov.moneymanager.transaction.domain.entity.TransactionType" />
         <argument
             android:name="firstCategory"
             app:argType="com.d9tilov.moneymanager.category.data.entity.Category" />
@@ -444,7 +444,7 @@
 
         <argument
             android:name="destination"
-            app:argType="com.d9tilov.moneymanager.category.CategoryDestination" />
+            app:argType="com.d9tilov.moneymanager.category.domain.entity.CategoryDestination" />
         <argument
             android:name="category"
             app:argType="com.d9tilov.moneymanager.category.data.entity.Category" />

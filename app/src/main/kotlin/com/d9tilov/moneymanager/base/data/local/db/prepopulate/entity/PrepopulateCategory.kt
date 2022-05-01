@@ -1,6 +1,6 @@
 package com.d9tilov.moneymanager.base.data.local.db.prepopulate.entity
 
-import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 
 data class PrepopulateCategory(
     val id: Long,

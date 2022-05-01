@@ -17,9 +17,9 @@ import com.d9tilov.moneymanager.core.ui.recyclerview.MarginItemDecoration
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentRegularIncomeBinding
-import com.d9tilov.moneymanager.regular.RegularTransactionDestination
+import com.d9tilov.moneymanager.regular.domain.entity.RegularTransactionDestination
 import com.d9tilov.moneymanager.regular.vm.RegularIncomeViewModel
-import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch

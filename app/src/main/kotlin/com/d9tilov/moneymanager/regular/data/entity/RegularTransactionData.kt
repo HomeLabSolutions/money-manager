@@ -4,7 +4,7 @@ import android.os.Parcelable
 import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.util.currentDateTime
 import com.d9tilov.moneymanager.regular.domain.entity.ExecutionPeriod
-import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import kotlinx.datetime.LocalDateTime
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue

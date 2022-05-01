@@ -16,7 +16,7 @@ import androidx.navigation.fragment.navArgs
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.RegularTransactionCreatedNavigator
-import com.d9tilov.moneymanager.category.CategoryDestination
+import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination
 import com.d9tilov.moneymanager.category.common.BaseCategoryFragment.Companion.ARG_CATEGORY
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.data.entity.isEmpty
@@ -30,7 +30,7 @@ import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.core.util.toBigDecimal
-import com.d9tilov.moneymanager.currency.CurrencyDestination
+import com.d9tilov.moneymanager.currency.domain.entity.CurrencyDestination
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.ui.CurrencyFragment
 import com.d9tilov.moneymanager.databinding.FragmentRegularTransactionCreationBinding
@@ -38,7 +38,7 @@ import com.d9tilov.moneymanager.regular.domain.entity.ExecutionPeriod
 import com.d9tilov.moneymanager.regular.domain.entity.PeriodType
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.regular.vm.CreatedRegularTransactionViewModel
-import com.d9tilov.moneymanager.transaction.isIncome
+import com.d9tilov.moneymanager.transaction.domain.entity.isIncome
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect

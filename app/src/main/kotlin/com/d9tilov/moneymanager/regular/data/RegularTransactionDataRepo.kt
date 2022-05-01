@@ -3,7 +3,7 @@ package com.d9tilov.moneymanager.regular.data
 import com.d9tilov.moneymanager.regular.data.entity.RegularTransactionData
 import com.d9tilov.moneymanager.regular.data.local.RegularTransactionSource
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionRepo
-import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 
 class RegularTransactionDataRepo(private val regularTransactionSource: RegularTransactionSource) :
     RegularTransactionRepo {

@@ -2,7 +2,7 @@ package com.d9tilov.moneymanager.goal.vm
 
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.GoalsNavigator
-import com.d9tilov.moneymanager.budget.data.entity.BudgetData
+import com.d9tilov.moneymanager.budget.domain.entity.BudgetData
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.goal.domain.GoalInteractor

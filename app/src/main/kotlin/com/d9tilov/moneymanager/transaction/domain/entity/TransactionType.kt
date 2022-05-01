@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.transaction
+package com.d9tilov.moneymanager.transaction.domain.entity
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

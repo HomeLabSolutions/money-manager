@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.budget.domain
 
 import com.d9tilov.moneymanager.base.domain.Interactor
-import com.d9tilov.moneymanager.budget.data.entity.BudgetData
+import com.d9tilov.moneymanager.budget.domain.entity.BudgetData
 import kotlinx.coroutines.flow.Flow
 
 interface BudgetInteractor : Interactor {

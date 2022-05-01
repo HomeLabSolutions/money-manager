@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.budget.data.entity
+package com.d9tilov.moneymanager.budget.domain.entity
 
 import android.os.Parcelable
 import com.d9tilov.moneymanager.core.constants.DataConstants

@@ -9,7 +9,7 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.d9tilov.moneymanager.backup.data.entity.BackupData
-import com.d9tilov.moneymanager.backup.data.entity.BackupData.Companion.UNKNOWN_BACKUP_DATA
+import com.d9tilov.moneymanager.backup.data.entity.BackupData.Companion.UNKNOWN_BACKUP_DATE
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DATA_STORE_NAME
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.PREFERENCE_CLIENT_UID
@@ -39,7 +39,7 @@ class PreferencesStore(context: Context) {
     val backupData: Flow<BackupData> =
         dataStore.data.map { data ->
             BackupData.EMPTY.copy(
-                lastBackupTimestamp = data[PREFERENCE_LAST_BACKUP_DATE_KEY] ?: UNKNOWN_BACKUP_DATA
+                lastBackupTimestamp = data[PREFERENCE_LAST_BACKUP_DATE_KEY] ?: UNKNOWN_BACKUP_DATE
             )
         }
 

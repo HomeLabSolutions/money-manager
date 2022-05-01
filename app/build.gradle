@@ -132,16 +132,16 @@ dependencies {
     implementation project(':core')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.20"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.21"
 
-    implementation platform('com.google.firebase:firebase-bom:26.1.0')
-    implementation "com.google.firebase:firebase-auth:21.0.3"
+    implementation platform('com.google.firebase:firebase-bom:29.3.1')
+    implementation "com.google.firebase:firebase-auth-ktx"
     implementation "com.firebaseui:firebase-ui-auth:6.2.0"
-    implementation "com.google.android.gms:play-services-auth:20.1.0"
+    implementation "com.google.android.gms:play-services-auth:20.2.0"
 
-    implementation "com.google.firebase:firebase-analytics-ktx:20.1.2"
-    implementation "com.google.firebase:firebase-crashlytics:18.2.9"
-    implementation "com.google.firebase:firebase-storage-ktx:20.0.1"
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-storage-ktx'
 
     implementation "com.facebook.android:facebook-login:5.15.3"
     implementation("com.twitter.sdk.android:twitter:3.3.0") {

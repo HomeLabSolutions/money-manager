@@ -1,11 +1,11 @@
-package com.d9tilov.moneymanager.category.data.local.entity
+package com.d9tilov.moneymanager.category.data.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.d9tilov.moneymanager.transaction.TransactionType
-import com.d9tilov.moneymanager.user.data.local.entity.UserDbModel
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
+import com.d9tilov.moneymanager.user.data.entity.UserDbModel
 
 @Entity(
     tableName = "categories",

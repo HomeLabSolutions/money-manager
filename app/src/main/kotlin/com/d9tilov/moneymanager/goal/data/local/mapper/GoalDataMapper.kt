@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.goal.data.local.mapper
 
 import com.d9tilov.moneymanager.goal.data.entity.GoalData
-import com.d9tilov.moneymanager.goal.data.local.entity.GoalDbModel
+import com.d9tilov.moneymanager.goal.data.entity.GoalDbModel
 
 fun GoalDbModel.toDataModel(): GoalData =
 

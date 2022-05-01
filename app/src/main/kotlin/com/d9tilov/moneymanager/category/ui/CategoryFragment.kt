@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryNavigator
-import com.d9tilov.moneymanager.category.CategoryDestination
+import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination
 import com.d9tilov.moneymanager.category.common.BaseCategoryFragment
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.ui.recycler.SimpleItemTouchHelperCallback
@@ -16,7 +16,7 @@ import com.d9tilov.moneymanager.category.ui.vm.CategoryViewModel
 import com.d9tilov.moneymanager.core.events.OnItemMoveListener
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragment.Companion.ARG_TRANSACTION_CREATED
-import com.d9tilov.moneymanager.transaction.isIncome
+import com.d9tilov.moneymanager.transaction.domain.entity.isIncome
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint

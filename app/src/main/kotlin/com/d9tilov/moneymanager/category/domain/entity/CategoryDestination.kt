@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.category
+package com.d9tilov.moneymanager.category.domain.entity
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -25,7 +25,9 @@ sealed class CategoryDestination(open val name: String) : Parcelable {
     object EDIT_TRANSACTION_SCREEN : CategoryDestination(FROM_EDIT_TRANSACTION_SCREEN)
 
     @Parcelize
-    object EDIT_REGULAR_TRANSACTION_SCREEN : CategoryDestination(FROM_EDIT_REGULAR_TRANSACTION_SCREEN)
+    object EDIT_REGULAR_TRANSACTION_SCREEN : CategoryDestination(
+        FROM_EDIT_REGULAR_TRANSACTION_SCREEN
+    )
 
     @Parcelize
     object CATEGORY_CREATION_SCREEN : CategoryDestination(FROM_CATEGORY_CREATION_SCREEN)

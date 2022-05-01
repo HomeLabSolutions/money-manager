@@ -2,7 +2,7 @@ package com.d9tilov.moneymanager.budget.data.local
 
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
-import com.d9tilov.moneymanager.budget.data.entity.BudgetData
+import com.d9tilov.moneymanager.budget.domain.entity.BudgetData
 import com.d9tilov.moneymanager.budget.data.local.mapper.toDataModel
 import com.d9tilov.moneymanager.budget.data.local.mapper.toDbModel
 import kotlinx.coroutines.Dispatchers

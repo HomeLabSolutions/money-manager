@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.budget
+package com.d9tilov.moneymanager.budget.domain.entity
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

@@ -26,7 +26,7 @@ import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
-import com.d9tilov.moneymanager.currency.CurrencyDestination
+import com.d9tilov.moneymanager.currency.domain.entity.CurrencyDestination
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.vm.CurrencyViewModel
 import com.d9tilov.moneymanager.databinding.FragmentCurrencyBinding
@@ -122,7 +122,7 @@ class CurrencyFragment :
                             }
                             is ResultOf.Failure -> {
                                 menuItem?.isEnabled = true
-                                showError()
+                                showError(result.throwable!!)
                                 currencyProgress.gone()
                             }
                             is ResultOf.Loading -> {
@@ -193,12 +193,12 @@ class CurrencyFragment :
         activity?.finish()
     }
 
-    override fun showError() {
+    override fun showError(throwable: Throwable) {
         val snackBar = viewBinding?.let {
             Snackbar
                 .make(
                     it.currencyParentLayout,
-                    getString(R.string.currency_error),
+                    throwable.message!!,
                     Snackbar.LENGTH_INDEFINITE
                 )
         }

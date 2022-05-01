@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeNavigator
-import com.d9tilov.moneymanager.category.CategoryDestination
+import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
@@ -29,8 +29,8 @@ import com.d9tilov.moneymanager.databinding.FragmentIncomeBinding
 import com.d9tilov.moneymanager.base.ui.currencyCode
 import com.d9tilov.moneymanager.incomeexpense.ui.BaseIncomeExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
-import com.d9tilov.moneymanager.transaction.TransactionType
-import com.d9tilov.moneymanager.transaction.isIncome
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
+import com.d9tilov.moneymanager.transaction.domain.entity.isIncome
 import com.d9tilov.moneymanager.transaction.ui.callback.TransactionSwipeToDeleteCallback
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent

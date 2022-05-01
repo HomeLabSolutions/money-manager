@@ -2,7 +2,7 @@ package com.d9tilov.moneymanager.user.data.local.mapper
 
 import com.d9tilov.moneymanager.encryption.digest
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
-import com.d9tilov.moneymanager.user.data.local.entity.UserDbModel
+import com.d9tilov.moneymanager.user.data.entity.UserDbModel
 
 fun UserDbModel.toDataModel(): UserProfile = UserProfile(
     uid = uid,

@@ -2,7 +2,7 @@ package com.d9tilov.moneymanager.transaction.data.local
 
 import androidx.paging.PagingData
 import com.d9tilov.moneymanager.category.data.entity.Category
-import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime

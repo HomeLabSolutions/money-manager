@@ -40,6 +40,6 @@
             app:argType="boolean" />
         <argument
             android:name="transactionType"
-            app:argType="com.d9tilov.moneymanager.transaction.TransactionType" />
+            app:argType="com.d9tilov.moneymanager.transaction.domain.entity.TransactionType" />
     </fragment>
 </navigation>

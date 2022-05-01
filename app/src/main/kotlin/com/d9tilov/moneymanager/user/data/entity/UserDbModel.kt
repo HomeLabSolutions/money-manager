@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.user.data.local.entity
+package com.d9tilov.moneymanager.user.data.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

@@ -72,7 +72,7 @@ class SettingsFragment :
                     }
                     launch {
                         viewModel.backupData.collect { data ->
-                            if (data.lastBackupTimestamp == BackupData.UNKNOWN_BACKUP_DATA) {
+                            if (data.lastBackupTimestamp == BackupData.UNKNOWN_BACKUP_DATE) {
                                 settingsBackupInfo.setText(R.string.settings_backup_empty)
                             } else {
                                 settingsBackupInfo.text =

@@ -21,7 +21,7 @@ import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
 import com.d9tilov.moneymanager.regular.domain.entity.ExecutionPeriod
 import com.d9tilov.moneymanager.regular.domain.entity.PeriodType
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
-import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
@@ -30,7 +30,7 @@ import com.d9tilov.moneymanager.transaction.domain.entity.TransactionSpendingTod
 import com.d9tilov.moneymanager.transaction.domain.mapper.toChartModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDataModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDomainModel
-import com.d9tilov.moneymanager.transaction.isIncome
+import com.d9tilov.moneymanager.transaction.domain.entity.isIncome
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll

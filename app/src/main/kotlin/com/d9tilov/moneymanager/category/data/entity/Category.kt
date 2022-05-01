@@ -6,7 +6,7 @@ import androidx.annotation.DrawableRes
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_DATA_ID
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
-import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

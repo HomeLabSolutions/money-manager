@@ -1,6 +1,6 @@
 package com.d9tilov.moneymanager.budget.domain
 
-import com.d9tilov.moneymanager.budget.data.entity.BudgetData
+import com.d9tilov.moneymanager.budget.domain.entity.BudgetData
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import kotlinx.coroutines.flow.first
 

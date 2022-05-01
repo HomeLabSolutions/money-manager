@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.d9tilov.moneymanager.goal.data.local.entity.GoalDbModel
+import com.d9tilov.moneymanager.goal.data.entity.GoalDbModel
 import kotlinx.coroutines.flow.Flow
 
 @Dao

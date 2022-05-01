@@ -2,7 +2,7 @@ package com.d9tilov.moneymanager.regular.data.local
 
 import com.d9tilov.moneymanager.base.data.Source
 import com.d9tilov.moneymanager.regular.data.entity.RegularTransactionData
-import com.d9tilov.moneymanager.transaction.TransactionType
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import kotlinx.coroutines.flow.Flow
 
 interface RegularTransactionSource : Source {
