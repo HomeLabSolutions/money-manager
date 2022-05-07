@@ -2,10 +2,13 @@ package com.d9tilov.moneymanager.profile.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
@@ -15,6 +18,7 @@ import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.currencyCode
 import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
 import com.d9tilov.moneymanager.budget.domain.entity.BudgetDestination
+import com.d9tilov.moneymanager.category.common.BaseCategoryViewModel
 import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.core.util.show

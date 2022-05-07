@@ -70,7 +70,7 @@
     <string name="transaction_empty_placeholder_regular_expense_title">Add regular expense</string>
     <string name="transaction_empty_placeholder_income_title">Add income</string>
     <string name="transaction_empty_placeholder_regular_income_title">Add regular income</string>
-    <string name="transaction_empty_placeholder_subtitle">Enter the amount and tap on the category</string>
+    <string name="transaction_empty_placeholder_subtitle">Enter the amount and tap on a category</string>
 
     <string name="category_name_title">Category name</string>
     <string name="category_name_hint">Enter name</string>
@@ -119,8 +119,8 @@
     <string name="regular_transaction_repeat_sunday">Sunday</string>
     <string name="regular_transaction_repeat_period_day">every day</string>
     <string name="regular_transaction_repeat_period_week">repeat on: %1$s</string>
-    <string name="regular_transaction_repeat_period_month">every month\non the %1$sth</string>
-    <string name="regular_transaction_repeat_period_month_2">every month on the %1$sth</string>
+    <string name="regular_transaction_repeat_period_month">every month\non %1$sth</string>
+    <string name="regular_transaction_repeat_period_month_2">every month on %1$sth</string>
     <string name="regular_transaction_repeat_period_year">every year\n%1$s</string>
     <string-array name="regular_transaction_repeat_list">
         <item>Day</item>
@@ -130,7 +130,7 @@
 
     <string name="goals_remaining_to_spend">Able to be spend in current period</string>
     <string name="goals_empty_placeholder_title">Add goals</string>
-    <string name="goals_empty_placeholder_subtitle">Add the goal for which you want to accumulate</string>
+    <string name="goals_empty_placeholder_subtitle">Add a goal you want to accumulate</string>
     <string name="goals_target_name_hint">Goal name</string>
     <string name="goals_description_hint">Goal description</string>
     <string name="goals_remove_dialog_title">Delete this goal?</string>
@@ -146,6 +146,12 @@
     <string name="settings_start_period_day_title">Start of period:</string>
     <string name="settings_start_period_day_postfix">day of month</string>
     <string name="settings_start_period_day_error">The day should be in interval from 1 to 31</string>
+    <string name="settings_subscription_premium_title">Go Premium</string>
+    <string name="settings_subscription_premium_acknowledged_title">Premium</string>
+    <string name="settings_subscription_premium_acknowledged_subtitle_renewing">Subscription will be renewing automatically</string>
+    <string name="settings_subscription_premium_acknowledged_subtitle_cancel">Subscription is cancelled</string>
+    <string name="settings_subscription_premium_description">cost control\nextra icons\nregular transactions\nand much more…\n</string>
+    <string name="settings_subscription_premium_min_price">from %1$s %2$s</string>
 
     <string name="profile_item_currency_title">Currency: </string>
     <string name="profile_item_budget_title">Budget: </string>
@@ -170,7 +176,7 @@
     <string name="notification_channel_income_name">Regular incomes</string>
     <string name="notification_channel_expense_name">Regular expenses</string>
 
-    <string name="day_of_month_title">Choose the day of the month</string>
+    <string name="day_of_month_title">Choose a day of the month</string>
 
     <string name="statistics_period_day">Day</string>
     <string name="statistics_period_week">Week</string>

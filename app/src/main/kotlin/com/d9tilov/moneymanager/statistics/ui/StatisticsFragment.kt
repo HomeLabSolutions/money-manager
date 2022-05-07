@@ -215,7 +215,7 @@ class StatisticsFragment :
                             }
                     }
                     launch {
-                        viewModel.getPeriodTransactions().collect { result ->
+                        viewModel.getTransactionsInCurrentPeriod().collect { result ->
                             when (result) {
                                 is ResultOf.Success -> setLineChartData(result.data)
                                 else -> {}

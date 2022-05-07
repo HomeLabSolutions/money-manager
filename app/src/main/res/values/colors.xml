@@ -40,6 +40,8 @@
 
     <color name="category_all_color">@color/color_midnight_white</color>
     <color name="color_midnight_white">#fdfbfc</color>
+    <color name="color_gold">#FFD700</color>
+    <color name="color_silver">#C0C0C0</color>
     <color name="edit_text_hint_text_color">#59ffffff</color>
     <color name="button_disable_text_color">#59ffffff</color>
 

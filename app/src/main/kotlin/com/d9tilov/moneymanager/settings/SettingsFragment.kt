@@ -15,8 +15,10 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.backup.data.entity.BackupData
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
+import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails
 import com.d9tilov.moneymanager.core.util.debounce
 import com.d9tilov.moneymanager.core.util.gone
+import com.d9tilov.moneymanager.core.util.hide
 import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
@@ -38,6 +40,11 @@ class SettingsFragment :
 
     override fun getNavigator() = this
     override val viewModel by viewModels<SettingsViewModel>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().lifecycle.addObserver(viewModel.lifecycleObserver)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -63,6 +70,14 @@ class SettingsFragment :
                     settingsDayOfMonthEdit.text.toString().toInt()
                 )
             }
+            settingsSubscription.root.setOnClickListener {
+                viewModel.buySubscription { billingClient, paramBuilder ->
+                    billingClient.launchBillingFlow(
+                        requireActivity(),
+                        paramBuilder
+                    )
+                }
+            }
             viewLifecycleOwner.lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     launch {
@@ -79,6 +94,47 @@ class SettingsFragment :
                                     getString(
                                         R.string.settings_backup_info,
                                         data.lastBackupTimestamp.toBackupDate()
+                                    )
+                            }
+                        }
+                    }
+                    launch {
+                        viewModel.canPurchase.collect { canPurchase ->
+                            if (canPurchase) settingsSubscription.root.show()
+                            else settingsSubscription.root.gone()
+                        }
+                    }
+                    launch {
+                        viewModel.minBillingPrice.collect { price ->
+                            settingsSubscription.settingsSubscriptionPrice.text = getString(
+                                R.string.settings_subscription_premium_min_price,
+                                price.value,
+                                price.code
+                            )
+                        }
+                    }
+                    launch {
+                        viewModel.isPremium.collect { isPremium ->
+                            if (isPremium) {
+                                settingsSubscription.settingsSubscriptionTitle.text =
+                                    getString(R.string.settings_subscription_premium_acknowledged_title)
+                                settingsSubscription.settingsSubscriptionPrice.hide()
+                            } else {
+                                settingsSubscription.settingsSubscriptionTitle.text =
+                                    getString(R.string.settings_subscription_premium_title)
+                                settingsSubscription.settingsSubscriptionDescription.text =
+                                    getString(R.string.settings_subscription_premium_description)
+                                settingsSubscription.settingsSubscriptionPrice.show()
+                            }
+                        }
+                    }
+                    launch {
+                        viewModel.getActiveSku.collect { activeSku: BillingSkuDetails? ->
+                            activeSku?.metaData?.autoRenewing?.let { autoRenewing ->
+                                settingsSubscription.settingsSubscriptionDescription.text =
+                                    getString(
+                                        if (autoRenewing) R.string.settings_subscription_premium_acknowledged_subtitle_renewing
+                                        else R.string.settings_subscription_premium_acknowledged_subtitle_cancel
                                     )
                             }
                         }

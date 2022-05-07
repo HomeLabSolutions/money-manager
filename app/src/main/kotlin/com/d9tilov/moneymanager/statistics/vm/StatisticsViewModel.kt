@@ -37,7 +37,7 @@ class StatisticsViewModel @Inject constructor(
 
     private val transactions =
         MutableStateFlow<ResultOf<List<TransactionChartModel>>>(ResultOf.Loading())
-    private val periodTransactions =
+    private val transactionsInCurrentPeriod =
         MutableStateFlow<ResultOf<Map<LocalDateTime, TransactionLineChartModel>>>(ResultOf.Loading())
 
     private var currencyCode = DEFAULT_CURRENCY_CODE
@@ -139,7 +139,7 @@ class StatisticsViewModel @Inject constructor(
             )
                 .map { list -> list.sortedByDescending { tr -> tr.sum } }
                 .flowOn(Dispatchers.IO)
-                .catch { periodTransactions.value = ResultOf.Failure(it) }
+                .catch { transactionsInCurrentPeriod.value = ResultOf.Failure(it) }
                 .collect { transactions.value = ResultOf.Success(it) }
         }
     }
@@ -157,8 +157,8 @@ class StatisticsViewModel @Inject constructor(
                 inStatistics == StatisticsMenuInStatistics.IN_STATISTICS
             )
                 .flowOn(Dispatchers.IO)
-                .catch { periodTransactions.value = ResultOf.Failure(it) }
-                .collect { periodTransactions.value = ResultOf.Success(it) }
+                .catch { transactionsInCurrentPeriod.value = ResultOf.Failure(it) }
+                .collect { transactionsInCurrentPeriod.value = ResultOf.Success(it) }
         }
     }
 
@@ -167,6 +167,6 @@ class StatisticsViewModel @Inject constructor(
     }
 
     fun getTransactions(): StateFlow<ResultOf<List<TransactionChartModel>>> = transactions
-    fun getPeriodTransactions(): StateFlow<ResultOf<Map<LocalDateTime, TransactionLineChartModel>>> =
-        periodTransactions
+    fun getTransactionsInCurrentPeriod(): StateFlow<ResultOf<Map<LocalDateTime, TransactionLineChartModel>>> =
+        transactionsInCurrentPeriod
 }

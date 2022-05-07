@@ -48,6 +48,9 @@
     <dimen name="transaction_sum_title_text_size">12sp</dimen>
     <dimen name="transaction_meta_icon_size">12dp</dimen>
 
+    <dimen name="regular_transaction_item_title_text_size">24sp</dimen>
+    <dimen name="regular_transaction_item_description_text_size">12sp</dimen>
+
     <dimen name="item_color_picker_size_wrapper">48dp</dimen>
     <dimen name="item_color_picker_size">32dp</dimen>
     <dimen name="item_weekday_size">36dp</dimen>
@@ -101,4 +104,9 @@
     <dimen name="income_expense_info_sign_text_size">10sp</dimen>
     <dimen name="income_expense_name_text_size">20sp</dimen>
     <dimen name="income_expense_name_description_text_size">12sp</dimen>
+
+    <dimen name="settings_subscription_card_min_height">64dp</dimen>
+    <dimen name="settings_subscription_icon_size">64dp</dimen>
+    <dimen name="settings_subscription_title_text_size">20sp</dimen>
+    <dimen name="settings_subscription_price_text_size">14sp</dimen>
 </resources>

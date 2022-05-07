@@ -147,6 +147,12 @@
     <string name="settings_start_period_day_title">Начало периода:</string>
     <string name="settings_start_period_day_postfix">день месяца</string>
     <string name="settings_start_period_day_error">День должен быть в интервале от 1 до 31</string>
+    <string name="settings_subscription_premium_title">Премиум</string>
+    <string name="settings_subscription_premium_acknowledged_title">Premium</string>
+    <string name="settings_subscription_premium_acknowledged_subtitle_renewing">Подписка будет продлена автоматически</string>
+    <string name="settings_subscription_premium_acknowledged_subtitle_cancel">Подписка отменена</string>
+    <string name="settings_subscription_premium_description">контроль расходов\nрасширенные иконки\nрегулярные транзакции\nи многое другое…\n</string>
+    <string name="settings_subscription_premium_min_price">от %1$s %2$s</string>
 
     <string name="profile_item_currency_title">Валюта: </string>
     <string name="profile_item_budget_title">Бюджет: </string>
