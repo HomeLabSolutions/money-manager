@@ -11,17 +11,13 @@ import android.widget.TextView
 import kotlin.math.max
 import kotlin.math.min
 
-class AutoScaleHelper(
-    private val currencyView: CurrencyView, private val enableInput: Boolean
-) {
+class AutoScaleHelper(private val currencyView: CurrencyView) {
 
     companion object {
         private const val PRECISION = 0.5f
 
-        fun create(
-            rootView: CurrencyView, enableInput: Boolean
-        ): AutoScaleHelper {
-            val helper = AutoScaleHelper(rootView, enableInput)
+        fun create(rootView: CurrencyView): AutoScaleHelper {
+            val helper = AutoScaleHelper(rootView)
             val minTextSize = helper.minTextSize
             helper.setMinTextSize(TypedValue.COMPLEX_UNIT_PX, minTextSize)
             helper.setEnabled()
@@ -29,9 +25,9 @@ class AutoScaleHelper(
         }
     }
 
-    private val prefixTextView: TextView = currencyView.prefixTextView
+    private val prefixTextView: TextView = currencyView.minusSignTextView
     private val valueTextView: TextView = currencyView.moneyEditText
-    private val signTextView = currencyView.signTextView
+    private val signTextView = currencyView.currencySymbolTextView
     private val valuePaint = TextPaint()
     private val signPaint = TextPaint()
     private val prefixPaint = TextPaint()
@@ -98,9 +94,9 @@ class AutoScaleHelper(
         valuePaint.textSize = size
         signPaint.textSize = size
         if ((prefixPaint.measureText(prefixTextView.text, 0, prefixTextView.text.length)
-                + valuePaint.measureText(text, 0, text.length)
-                + currencyView.marginBetweenSign
-                + signPaint.measureText(signText, 0, signText.length)) > targetWidth
+                    + valuePaint.measureText(text, 0, text.length)
+                    + currencyView.marginBetweenCurrencySymbol
+                    + signPaint.measureText(signText, 0, signText.length)) > targetWidth
         ) {
             size = getAutoScaleTextSize(
                 prefixText, text, signText, targetWidth.toFloat(), 0f, high,
@@ -111,41 +107,8 @@ class AutoScaleHelper(
             size = minTextSize
         }
         prefixTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
-        setRealPrefixWidth()
         valueTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
-        setRealValueWidth()
         signTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, size / textSizeMultiplier)
-        setRealSignWidth()
-    }
-
-    private fun setRealPrefixWidth() {
-        if (!enableInput) {
-            val text = prefixTextView.text
-            val measuredTextWidth = prefixPaint.measureText(text, 0, text.length)
-            val params = prefixTextView.layoutParams
-            params.width = measuredTextWidth.toInt()
-            prefixTextView.layoutParams = params
-        }
-    }
-
-    private fun setRealValueWidth() {
-        if (!enableInput) {
-            val text = valueTextView.text
-            val measuredTextWidth = valuePaint.measureText(text, 0, text.length)
-            val params = valueTextView.layoutParams
-            params.width = measuredTextWidth.toInt()
-            valueTextView.layoutParams = params
-        }
-    }
-
-    private fun setRealSignWidth() {
-        if (!enableInput) {
-            val text = signTextView.text
-            val measuredTextWidth = signPaint.measureText(text, 0, text.length)
-            val params = signTextView.layoutParams
-            params.width = measuredTextWidth.toInt()
-            signTextView.layoutParams = params
-        }
     }
 
     //Binary search to define new text size
@@ -174,9 +137,9 @@ class AutoScaleHelper(
 
         val maxLineWidth =
             prefixPaint.measureText(prefixText, 0, prefixText.length) +
-                valuePaint.measureText(valueText, 0, valueText.length) +
-                currencyView.marginBetweenSign +
-                signPaint.measureText(signText, 0, signText.length)
+                    valuePaint.measureText(valueText, 0, valueText.length) +
+                    currencyView.marginBetweenCurrencySymbol +
+                    signPaint.measureText(signText, 0, signText.length)
         return when {
             high - low < PRECISION -> {
                 low

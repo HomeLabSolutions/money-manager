@@ -15,10 +15,9 @@
         <attr name="signTextColor" format="reference" />
         <attr name="signSymbol" format="string" />
         <attr name="sum" format="string" />
-        <attr name="prefixText" format="string" />
         <attr name="showUnderline" format="boolean" />
-        <attr name="showSign" format="boolean" />
-        <attr name="showSignBeforeValue" format="boolean" />
+        <attr name="showCurrencySymbol" format="boolean" />
+        <attr name="showCurrencySymbolBeforeValue" format="boolean" />
         <attr name="enableInput" format="boolean" />
         <attr name="scaleEnabled" format="boolean" />
         <attr name="showDecimalPart" format="boolean" />

@@ -22,6 +22,7 @@
     <string name="title_prepopulate_regular_expense">Постоянный расход</string>
     <string name="title_goal">Цели</string>
     <string name="title_settings">Настройки</string>
+    <string name="title_billing">Подписки</string>
 
     <string name="toolbar_menu_skip">Пропустить</string>
 
@@ -59,6 +60,7 @@
     <string name="retry">Повторить</string>
     <string name="next">Далее</string>
     <string name="save">Сохранить</string>
+    <string name="buy">Купить</string>
     <string name="add">Добавить</string>
     <string name="create">Создать</string>
 
@@ -147,6 +149,10 @@
     <string name="settings_start_period_day_title">Начало периода:</string>
     <string name="settings_start_period_day_postfix">день месяца</string>
     <string name="settings_start_period_day_error">День должен быть в интервале от 1 до 31</string>
+    <string name="settings_subscription_premium_acknowledged_subtitle_renewing">Подписка будет продлена автоматически</string>
+    <string name="settings_subscription_premium_acknowledged_subtitle_cancel">Подписка отменена</string>
+    <string name="settings_subscription_premium_description">контроль расходов\nрасширенные иконки\nрегулярные транзакции\nи многое другое…\n</string>
+    <string name="settings_subscription_premium_min_price">от %1$s%2$s %3$s</string>
 
     <string name="profile_item_currency_title">Валюта: </string>
     <string name="profile_item_budget_title">Бюджет: </string>
@@ -190,4 +196,10 @@
     <string name="statistics_menu_chart_type_title">График</string>
     <string name="statistics_menu_category_type_parent_title">Категории</string>
     <string name="statistics_menu_category_type_child_title">Подкатегории</string>
+
+    <string name="billing_purchase_type">Типы подписок</string>
+    <string name="billing_purchase_quarterly">Квартальная</string>
+    <string name="billing_purchase_annual">Годовая</string>
+    <string name="billing_purchase_quarterly_price">%1$s%2$s %3$s/3 месяца</string>
+    <string name="billing_purchase_annual_price">%1$s%2$s %3$s/год</string>
 </resources>

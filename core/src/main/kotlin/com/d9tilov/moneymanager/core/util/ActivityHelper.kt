@@ -29,4 +29,3 @@ interface AddressableActivity {
      */
     val className: String
 }
-

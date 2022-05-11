@@ -14,6 +14,7 @@
     <color name="button_normal_color_dark">#2c292a</color>
     <color name="button_normal_color_disable">#59f99225</color>
     <color name="button_normal_color_start">#fae353</color>
+    <color name="button_normal_color_start_shadowed">#b3fae353</color>
     <color name="button_normal_color_end_disable">#59e43d3b</color>
     <color name="button_normal_color_start_disable">#59fae353</color>
     <color name="spinner_background">#3f3f3f</color>
@@ -26,6 +27,7 @@
     <color name="text_primary_color">#b6be9a</color>
     <color name="text_primary_transparent_color">#80b6be9a</color>
     <color name="text_primary_color_disable">#59b6be9a</color>
+    <color name="text_primary_color_disable_dark">#33b6be9a</color>
     <color name="text_primary_color_dark">#7eb13f</color>
     <color name="text_highlight_color">#8F3D43</color>
     <color name="header_color">#00894d</color>
@@ -40,6 +42,8 @@
 
     <color name="category_all_color">@color/color_midnight_white</color>
     <color name="color_midnight_white">#fdfbfc</color>
+    <color name="color_gold">#FFD700</color>
+    <color name="color_silver">#C0C0C0</color>
     <color name="edit_text_hint_text_color">#59ffffff</color>
     <color name="button_disable_text_color">#59ffffff</color>
 
@@ -53,6 +57,8 @@
     <color name="keyboard_pin_color_pressed">#7A4C56</color>
 
     <color name="info_background">#32FFBD78</color>
+    <color name="premium">#202613</color>
+    <color name="premium_acknowledged">#0C1919</color>
 
     <color name="statistics_line_chart_axis_text_color">#B47DC0</color>
 

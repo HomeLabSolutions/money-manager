@@ -518,7 +518,22 @@
         android:id="@+id/settings_dest"
         android:name="com.d9tilov.moneymanager.settings.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings">
+
+        <action
+            android:id="@+id/to_settings_billing_dest"
+            app:destination="@id/settings_billing_dest"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settings_billing_dest"
+        android:name="com.d9tilov.moneymanager.settings.SettingsBillingIntroFragment"
+        android:label="fragment_settings_billing"
+        tools:layout="@layout/fragment_billing_intro"/>
 
     <dialog
         android:id="@+id/change_currency_dialog"

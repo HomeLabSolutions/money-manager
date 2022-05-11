@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Base.V19.Theme.MoneyManager" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Base.V21.Theme.MoneyManager" parent="Theme.MaterialComponents.Light.NoActionBar"/>
+    <style name="Base.Theme.MoneyManager" parent="Base.V21.Theme.MoneyManager"/>
+
+    <style name="Theme.MoneyManager" parent="Base.Theme.MoneyManager">
         <item name="android:windowBackground">@color/primary_color</item>
         <item name="android:actionBarStyle">@style/Widget.MoneyManager.AppBarLayout</item>
         <item name="colorPrimary">@color/primary_color</item>
@@ -31,6 +34,8 @@
         <item name="textAppearanceOverline">@style/TextAppearance.MoneyManager.Overline</item>
         <item name="appBarLayoutStyle">@style/Widget.MoneyManager.AppBarLayout</item>
         <item name="checkboxStyle">@style/Widget.MoneyManager.CheckBox</item>
+        <item name="radioButtonStyle">@style/Widget.MoneyManager.RadioButton</item>
+        <item name="editTextStyle">@style/Widget.MoneyManager.EditText</item>
         <item name="bottomNavigationStyle">@style/Widget.MoneyManager.BottomNavigationStyle</item>
         <item name="tabStyle">@style/Widget.MoneyManager.TabLayout</item>
         <item name="moneyManagerBottomActionButtonStyle">
@@ -69,10 +74,6 @@
         <item name="textAppearanceCurrencySignExtraSmall">
             @style/TextAppearance.MoneyManager.CurrencySign.ExtraSmall
         </item>
-    </style>
-
-    <style name="Theme.MoneyManager" parent="Base.V19.Theme.MoneyManager">
-        <item name="colorPrimaryDark">@color/primary_dark_color</item>
     </style>
 
     <style name="ThemeOverlay.MoneyManager.Toolbar" parent="">

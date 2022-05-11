@@ -66,6 +66,10 @@
         <item name="android:background">@drawable/button_background_state_enable_selector</item>
     </style>
 
+    <style name="Widget.MoneyManager.EditText" parent="Widget.AppCompat.EditText">
+        <item name="android:textColorHint">@color/text_primary_transparent_color</item>
+    </style>
+
     <style name="Widget.MoneyManager.EditText.Description" parent="Widget.AppCompat.EditText">
         <item name="android:textAppearance">?attr/textAppearanceBody1</item>
         <item name="android:textColor">@color/color_midnight_white</item>
@@ -100,6 +104,16 @@
         <item name="android:buttonTint">@color/button_normal_color_start</item>
     </style>
 
+    <style name="Widget.MoneyManager.RadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:textColor">@color/control_activated_color_disable</item>
+        <item name="android:textColorHighlight">@color/control_activated_color</item>
+        <item name="android:textSize">@dimen/billing_subscription_radio_button_text_size</item>
+        <item name="android:buttonTint">@color/control_activated_color</item>
+        <item name="android:textAppearance">?attr/textAppearanceBody1</item>
+    </style>
+
+
+
     <style name="Widget.MoneyManager.TextView.ProfileItem" parent="Widget.AppCompat.TextView">
         <item name="android:textAppearance">?attr/textAppearanceHeadline6</item>
         <item name="android:textColor">@color/text_primary_color</item>
@@ -119,5 +133,17 @@
         <item name="android:maxLines">1</item>
         <item name="android:gravity">center</item>
         <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="Widget.MoneyManager.TextView.PremiumLabel" parent="Widget.AppCompat.TextView">
+        <item name="android:textAppearance">?attr/textAppearanceButton</item>
+        <item name="android:textSize">@dimen/billing_premium_label</item>
+        <item name="android:background">@drawable/background_round_corner</item>
+        <item name="android:textColor">@color/text_primary_color_dark</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="Widget.MoneyManager.TextView.PremiumLabel.Acknowledged">
+        <item name="android:textColor">@color/premium_acknowledged</item>
     </style>
 </resources>
