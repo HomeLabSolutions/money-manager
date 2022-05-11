@@ -30,14 +30,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/standard_right_margin"
+        app:scaleEnabled="true"
+        app:showDecimalPart="false"
         app:enableInput="true"
+        app:signTextStyle="?attr/textAppearanceCurrencySignExtraBig"
+        app:sum="5000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/common_budget_amount_title"
         app:layout_constraintTop_toBottomOf="@+id/common_budget_amount_title"
-        app:scaleEnabled="true"
-        app:showDecimalPart="false"
-        app:signTextStyle="?attr/textAppearanceCurrencySignExtraBig"
-        app:sum="5000"
         app:sumTextStyle="?attr/textAppearanceCurrencySumExtraBig" />
 
     <androidx.appcompat.widget.AppCompatButton

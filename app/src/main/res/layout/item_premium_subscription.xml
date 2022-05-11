@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settings_premium_quarterly"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?selectableItemBackgroundBorderless"
+    android:minHeight="@dimen/settings_subscription_card_min_height"
+    app:cardBackgroundColor="@color/card_view_background"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/settings_backup_info">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/settings_subscription_icon"
+            android:layout_width="@dimen/settings_subscription_icon_size"
+            android:layout_height="@dimen/settings_subscription_icon_size"
+            android:layout_marginStart="@dimen/standard_half_left_margin"
+            android:src="@drawable/ic_money_manager_logo_gold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/settings_subscription_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/standard_left_margin"
+            android:layout_marginTop="16dp"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:maxLines="1"
+            tools:text="@string/settings_subscription_premium_title"
+            android:textAppearance="?attr/textAppearanceHeadline4"
+            android:textColor="@color/header_color"
+            android:textSize="@dimen/settings_subscription_title_text_size"
+            app:layout_constraintStart_toEndOf="@+id/settings_subscription_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/settings_subscription_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/standard_left_margin"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/standard_half_right_margin"
+            android:layout_marginBottom="16dp"
+            android:gravity="start"
+            tools:text="@string/settings_subscription_premium_description"
+            android:textAppearance="?attr/textAppearanceSubtitle2"
+            android:textColor="@color/text_primary_transparent_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/settings_subscription_price"
+            app:layout_constraintStart_toEndOf="@+id/settings_subscription_icon"
+            app:layout_constraintTop_toBottomOf="@+id/settings_subscription_title" />
+
+        <TextView
+            android:id="@+id/settings_subscription_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/standard_half_right_margin"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:textAppearance="?attr/textAppearanceHeadline5"
+            android:textColor="?attr/colorControlActivated"
+            android:textSize="@dimen/settings_subscription_price_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="from 30$" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

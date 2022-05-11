@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="currency_margin_between_sign">2dp</dimen>
+    <dimen name="currency_margin_between_currency_symbol">2dp</dimen>
     <dimen name="currency_sum_text_size">84sp</dimen>
     <dimen name="currency_sign_text_size">50sp</dimen>
 </resources>

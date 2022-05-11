@@ -19,6 +19,10 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keep class com.d9tilov.moneymanager.billing.domain.entity.** { *; }
+-keepclassmembers class com.d9tilov.moneymanager.billing.domain.entity.** { *; }
+-keepnames @kotlin.Metadata class com.d9tilov.moneymanager.billing.domain.entity.** { *; }
+
 -keep class com.d9tilov.moneymanager.backup.data.entity.** { *; }
 -keepclassmembers class com.d9tilov.moneymanager.backup.data.entity.** { *; }
 -keepnames @kotlin.Metadata class com.d9tilov.moneymanager.backup.data.entity.** { *; }

@@ -1,11 +1,13 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-parcelize'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'androidx.navigation.safeargs.kotlin'
-apply plugin: 'com.google.firebase.crashlytics'
-apply plugin: 'dagger.hilt.android.plugin'
+plugins {
+    id('com.android.application')
+    id('kotlin-android')
+    id('kotlin-kapt')
+    id('kotlin-parcelize')
+    id('com.google.gms.google-services')
+    id('androidx.navigation.safeargs.kotlin')
+    id('com.google.firebase.crashlytics')
+    id('dagger.hilt.android.plugin')
+}
 
 apply from: '../shared_dependencies.gradle'
 
@@ -30,7 +32,7 @@ android {
     def versionMajor = 1
     def versionMinor = 0
     def versionPatch = 0
-    def versionBuild = 12
+    def versionBuild = 13
 
     defaultConfig {
         applicationId names.applicationId
@@ -41,6 +43,7 @@ android {
 
         buildConfigField("String", "API_KEY", keystoreProperties['currency_api_key'])
         buildConfigField("String", "SALT", keystoreProperties['database_salt'])
+        buildConfigField("String", "BASE64_ENCODED_PUBLIC_KEY", "\"" + keystoreProperties['base64EncodedPublicKey'] + "\"")
 
         vectorDrawables.useSupportLibrary = true
 
@@ -166,7 +169,7 @@ dependencies {
 
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1"
 
     implementation "androidx.work:work-runtime-ktx:2.7.1"
@@ -177,4 +180,7 @@ dependencies {
     implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
 
     ktlint "com.pinterest:ktlint:0.37.2"
+
+    implementation "com.android.billingclient:billing-ktx:4.1.0"
+    implementation "com.tbuonomo:dotsindicator:4.3"
 }
