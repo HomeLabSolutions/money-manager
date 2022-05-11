@@ -122,3 +122,5 @@ interface SubCategoryNavigator : BaseNavigator {
 interface SettingsNavigator : BaseNavigator {
     fun save()
 }
+
+interface SettingsBillingNavigator : BaseNavigator

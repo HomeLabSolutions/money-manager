@@ -21,6 +21,7 @@
     <string name="title_prepopulate_regular_expense">Regular expense</string>
     <string name="title_goal">Goals</string>
     <string name="title_settings">Settings</string>
+    <string name="title_billing">Subscriptions</string>
 
     <string name="toolbar_menu_skip">Skip</string>
 
@@ -58,6 +59,7 @@
     <string name="retry">Retry</string>
     <string name="next">Next</string>
     <string name="save">Save</string>
+    <string name="buy">Buy</string>
     <string name="add">Add</string>
     <string name="create">Create</string>
 
@@ -146,12 +148,12 @@
     <string name="settings_start_period_day_title">Start of period:</string>
     <string name="settings_start_period_day_postfix">day of month</string>
     <string name="settings_start_period_day_error">The day should be in interval from 1 to 31</string>
-    <string name="settings_subscription_premium_title">Go Premium</string>
-    <string name="settings_subscription_premium_acknowledged_title">Premium</string>
+    <string name="settings_subscription_premium_title" translatable="false">Go Premium</string>
+    <string name="settings_subscription_premium_acknowledged_title" translatable="false">Premium</string>
     <string name="settings_subscription_premium_acknowledged_subtitle_renewing">Subscription will be renewing automatically</string>
     <string name="settings_subscription_premium_acknowledged_subtitle_cancel">Subscription is cancelled</string>
     <string name="settings_subscription_premium_description">cost control\nextra icons\nregular transactions\nand much more…\n</string>
-    <string name="settings_subscription_premium_min_price">from %1$s %2$s</string>
+    <string name="settings_subscription_premium_min_price">from %1$s%2$s %3$s</string>
 
     <string name="profile_item_currency_title">Currency: </string>
     <string name="profile_item_budget_title">Budget: </string>
@@ -194,4 +196,10 @@
     <string name="statistics_menu_chart_type_title">Chart type</string>
     <string name="statistics_menu_category_type_parent_title">Categories</string>
     <string name="statistics_menu_category_type_child_title">Subcategories</string>
+
+    <string name="billing_purchase_type">Subscription types</string>
+    <string name="billing_purchase_quarterly">Quarterly</string>
+    <string name="billing_purchase_annual">Annual</string>
+    <string name="billing_purchase_quarterly_price">%1$s%2$s %3$s/3 months</string>
+    <string name="billing_purchase_annual_price">%1$s%2$s %3$s/year</string>
 </resources>

@@ -1,14 +1,12 @@
 package com.d9tilov.moneymanager.profile.ui
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
@@ -18,7 +16,6 @@ import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.currencyCode
 import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
 import com.d9tilov.moneymanager.budget.domain.entity.BudgetDestination
-import com.d9tilov.moneymanager.category.common.BaseCategoryViewModel
 import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.core.util.show
@@ -51,12 +48,12 @@ class ProfileFragment :
         updateUI()
         viewBinding?.run {
             profileLogout.setOnClickListener { logout() }
-            profileCurrency.profileCurrencyLayout.setOnClickListener { openCurrencyScreen() }
-            profileBudget.profileBudgetLayout.setOnClickListener { openBudgetScreen() }
-            profileRegularIncomes.profileRegularIncomesLayout.setOnClickListener { openRegularIncomesScreen() }
-            profileRegularExpenses.profileRegularExpensesLayout.setOnClickListener { openRegularExepenseScreen() }
-            profileGoals.profileGoalsTitle.setOnClickListener { openGoalScreen() }
-            profileSettings.profileSettingsTitle.setOnClickListener { openSettingsScreen() }
+            profileCurrency.root.setOnClickListener { openCurrencyScreen() }
+            profileBudget.root.setOnClickListener { openBudgetScreen() }
+            profileRegularIncomes.root.setOnClickListener { openRegularIncomesScreen() }
+            profileRegularExpenses.root.setOnClickListener { openRegularExepenseScreen() }
+            profileGoals.root.setOnClickListener { openGoalScreen() }
+            profileSettings.root.setOnClickListener { openSettingsScreen() }
 
             viewLifecycleOwner.lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -105,6 +102,31 @@ class ProfileFragment :
                                 false ->
                                     profileGoals.profileGoalsTitle.text =
                                         getString(R.string.profile_item_goals_title, goals)
+                            }
+                        }
+                    }
+                    launch {
+                        viewModel.isPremium.collect { isPremium ->
+                            if (isPremium) {
+                                profileSettings.profileSettingsPremium.text = getString(R.string.settings_subscription_premium_acknowledged_title)
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    profileSettings.profileSettingsPremium.setTextAppearance(R.style.Widget_MoneyManager_TextView_PremiumLabel_Acknowledged)
+                                } else {
+                                    profileSettings.profileSettingsPremium.setTextAppearance(
+                                        requireContext(),
+                                        R.style.Widget_MoneyManager_TextView_PremiumLabel_Acknowledged
+                                    )
+                                }
+                            } else {
+                                profileSettings.profileSettingsPremium.text = getString(R.string.settings_subscription_premium_title)
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    profileSettings.profileSettingsPremium.setTextAppearance(R.style.Widget_MoneyManager_TextView_PremiumLabel)
+                                } else {
+                                    profileSettings.profileSettingsPremium.setTextAppearance(
+                                        requireContext(),
+                                        R.style.Widget_MoneyManager_TextView_PremiumLabel
+                                    )
+                                }
                             }
                         }
                     }

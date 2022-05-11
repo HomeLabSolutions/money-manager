@@ -71,12 +71,9 @@ class SettingsFragment :
                 )
             }
             settingsSubscription.root.setOnClickListener {
-                viewModel.buySubscription { billingClient, paramBuilder ->
-                    billingClient.launchBillingFlow(
-                        requireActivity(),
-                        paramBuilder
-                    )
-                }
+                findNavController().navigate(
+                    SettingsFragmentDirections.toSettingsBillingDest()
+                )
             }
             viewLifecycleOwner.lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -108,6 +105,7 @@ class SettingsFragment :
                         viewModel.minBillingPrice.collect { price ->
                             settingsSubscription.settingsSubscriptionPrice.text = getString(
                                 R.string.settings_subscription_premium_min_price,
+                                price.symbol,
                                 price.value,
                                 price.code
                             )
@@ -115,6 +113,7 @@ class SettingsFragment :
                     }
                     launch {
                         viewModel.isPremium.collect { isPremium ->
+                            settingsSubscription.root.isEnabled = !isPremium
                             if (isPremium) {
                                 settingsSubscription.settingsSubscriptionTitle.text =
                                     getString(R.string.settings_subscription_premium_acknowledged_title)

@@ -14,7 +14,7 @@
         android:restoreAnyVersion="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Base.V19.Theme.MoneyManager">
+        android:theme="@style/Theme.MoneyManager">
 
         <activity
             android:name="com.facebook.FacebookActivity"

@@ -23,6 +23,7 @@ import com.d9tilov.moneymanager.billing.domain.entity.PurchaseMetaData
 import com.d9tilov.moneymanager.billing.domain.entity.PurchaseRemote
 import com.d9tilov.moneymanager.billing.domain.mapper.toPurchaseMetaData
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
+import com.d9tilov.moneymanager.core.util.CurrencyUtils.getSymbolByCode
 import com.d9tilov.moneymanager.currency.data.entity.Currency
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
@@ -167,7 +168,7 @@ class BillingDataSource constructor(
     /**
      * Called by initializeFlows to create the various Flow objects we're planning to emit.
      * @param skuList a List<String> of SKUs representing purchases and subscriptions.
-    </String> */
+     */
     private fun addSkuFlows(skuList: List<String>) {
         for (sku in skuList) {
             val skuState = MutableStateFlow(SkuState.SKU_STATE_UNPURCHASED)
@@ -231,7 +232,6 @@ class BillingDataSource constructor(
         }
     }
 
-
     // There's lots of information in SkuDetails, but our app only needs a few things, since our
     // goods never go on sale, have introductory pricing, etc. You can add to this for your app,
     // or create your own class to pass the information across.
@@ -239,7 +239,7 @@ class BillingDataSource constructor(
      * The title of our SKU from SkuDetails.
      * @param sku to get the title from
      * @return title of the requested SKU as an observable Flow<String>
-    </String> */
+     */
     override fun getSkuTitle(sku: String): Flow<String> {
         val skuDetailsFlow = skuDetailsMap[sku]!!
         return skuDetailsFlow.mapNotNull { skuDetails ->
@@ -251,10 +251,12 @@ class BillingDataSource constructor(
     override fun getSkuPrice(sku: String): Flow<Currency> {
         val skuDetailsFlow = skuDetailsMap[sku]!!
         return skuDetailsFlow.mapNotNull { skuDetails ->
+            val currencyCode = skuDetails?.priceCurrencyCode ?: DEFAULT_CURRENCY_CODE
             Currency.EMPTY.copy(
-                code = skuDetails?.priceCurrencyCode ?: DEFAULT_CURRENCY_CODE,
+                code = currencyCode,
                 value = skuDetails?.priceAmountMicros?.toBigDecimal()?.divide(BigDecimal(1_000_000))
-                    ?: BigDecimal.ZERO
+                    ?: BigDecimal.ZERO,
+                symbol = currencyCode.getSymbolByCode()
             )
         }
     }
@@ -293,10 +295,7 @@ class BillingDataSource constructor(
                 Timber.tag(PURCHASE_TAG).i("onSkuDetailsResponse: $responseCode $debugMessage")
                 if (skuDetailsList == null || skuDetailsList.isEmpty()) {
                     Timber.tag(PURCHASE_TAG)
-                        .e(
-                            "onSkuDetailsResponse: Found null or empty SkuDetails. " +
-                                    "Check to see if the SKUs you requested are correctly published in the Google Play Console."
-                        )
+                        .e("onSkuDetailsResponse: Found null or empty SkuDetails. Check to see if the SKUs you requested are correctly published in the Google Play Console.")
                 } else {
                     for (skuDetails in skuDetailsList) {
                         val sku = skuDetails.sku
@@ -319,8 +318,8 @@ class BillingDataSource constructor(
             BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED,
             BillingClient.BillingResponseCode.ITEM_NOT_OWNED ->
                 Timber.tag(PURCHASE_TAG).wtf("onSkuDetailsResponse: $responseCode $debugMessage")
-            else -> Timber.tag(PURCHASE_TAG)
-                .wtf("onSkuDetailsResponse: $responseCode $debugMessage")
+            else ->
+                Timber.tag(PURCHASE_TAG).wtf("onSkuDetailsResponse: $responseCode $debugMessage")
         }
         skuDetailsResponseTime =
             if (responseCode == BillingClient.BillingResponseCode.OK) SystemClock.elapsedRealtime()
@@ -333,7 +332,7 @@ class BillingDataSource constructor(
      * required to make a purchase.
      */
     private suspend fun querySkuDetailsAsync() {
-        if (!knownSubscriptionSKUs.isNullOrEmpty()) {
+        if (knownSubscriptionSKUs.isNotEmpty()) {
             val skuDetailsResult = billingClient.querySkuDetails(
                 SkuDetailsParams.newBuilder()
                     .setType(BillingClient.SkuType.SUBS)
@@ -409,13 +408,11 @@ class BillingDataSource constructor(
                 when (purchase.purchaseState) {
                     Purchase.PurchaseState.PENDING -> skuStateFlow.tryEmit(SkuState.SKU_STATE_PENDING)
                     Purchase.PurchaseState.UNSPECIFIED_STATE -> skuStateFlow.tryEmit(SkuState.SKU_STATE_UNPURCHASED)
-                    Purchase.PurchaseState.PURCHASED -> if (purchase.isAcknowledged) {
-                        skuStateFlow.tryEmit(SkuState.SKU_STATE_PURCHASED_AND_ACKNOWLEDGED)
-                    } else {
-                        skuStateFlow.tryEmit(SkuState.SKU_STATE_PURCHASED)
-                    }
-                    else -> Timber.tag(PURCHASE_TAG)
-                        .e("Purchase in unknown state: ${purchase.purchaseState}")
+                    Purchase.PurchaseState.PURCHASED ->
+                        if (purchase.isAcknowledged) skuStateFlow.tryEmit(SkuState.SKU_STATE_PURCHASED_AND_ACKNOWLEDGED)
+                        else { skuStateFlow.tryEmit(SkuState.SKU_STATE_PURCHASED) }
+                    else ->
+                        Timber.tag(PURCHASE_TAG).e("Purchase in unknown state: ${purchase.purchaseState}")
                 }
             }
         }
@@ -580,14 +577,16 @@ class BillingDataSource constructor(
                 processPurchaseList(list, null)
                 return
             } else Timber.tag(PURCHASE_TAG).d("Null Purchase List Returned from OK response!")
-            BillingClient.BillingResponseCode.USER_CANCELED -> Timber.tag(PURCHASE_TAG)
-                .i("onPurchasesUpdated: User canceled the purchase")
-            BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> Timber.tag(PURCHASE_TAG)
-                .i("onPurchasesUpdated: The user already owns this item")
-            BillingClient.BillingResponseCode.DEVELOPER_ERROR -> Timber.tag(PURCHASE_TAG)
-                .e("onPurchasesUpdated: Developer error means that Google Play does not recognize the configuration. If you are just getting started, make sure you have configured the application correctly in the Google Play Console. The SKU product ID must match and the APK you are using must be signed with release keys.")
-            else -> Timber.tag(PURCHASE_TAG)
-                .d("BillingResult [ ${billingResult.responseCode} ]: ${billingResult.debugMessage}")
+            BillingClient.BillingResponseCode.USER_CANCELED ->
+                Timber.tag(PURCHASE_TAG).i("onPurchasesUpdated: User canceled the purchase")
+            BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED ->
+                Timber.tag(PURCHASE_TAG).i("onPurchasesUpdated: The user already owns this item")
+            BillingClient.BillingResponseCode.DEVELOPER_ERROR ->
+                Timber.tag(PURCHASE_TAG)
+                    .e("onPurchasesUpdated: Developer error means that Google Play does not recognize the configuration. If you are just getting started, make sure you have configured the application correctly in the Google Play Console. The SKU product ID must match and the APK you are using must be signed with release keys.")
+            else ->
+                Timber.tag(PURCHASE_TAG)
+                    .d("BillingResult [ ${billingResult.responseCode} ]: ${billingResult.debugMessage}")
         }
         defaultScope.launch {
             billingFlowInProcess.emit(false)
@@ -619,8 +618,6 @@ class BillingDataSource constructor(
     }
 
     companion object {
-        const val SKU_SUBSCRIPTION_QUARTERLY = "premium_quarterly"
-        const val SKU_SUBSCRIPTION_ANNUAL = "premium_annual"
         private const val PURCHASE_TAG = "[Purchase]"
     }
 }

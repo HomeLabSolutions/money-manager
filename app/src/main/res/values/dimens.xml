@@ -109,4 +109,8 @@
     <dimen name="settings_subscription_icon_size">64dp</dimen>
     <dimen name="settings_subscription_title_text_size">20sp</dimen>
     <dimen name="settings_subscription_price_text_size">14sp</dimen>
+
+    <dimen name="billing_subscription_title_text_size">20sp</dimen>
+    <dimen name="billing_subscription_radio_button_text_size">16sp</dimen>
+    <dimen name="billing_premium_label">10sp</dimen>
 </resources>

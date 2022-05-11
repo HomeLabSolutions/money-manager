@@ -48,8 +48,8 @@ object Security {
      * @param signature  the signature for the data, signed with the private key
      */
     fun verifyPurchase(signedData: String, signature: String?): Boolean {
-        if (TextUtils.isEmpty(signedData) || TextUtils.isEmpty(BASE_64_ENCODED_PUBLIC_KEY)
-            || TextUtils.isEmpty(signature)
+        if (TextUtils.isEmpty(signedData) || TextUtils.isEmpty(BASE_64_ENCODED_PUBLIC_KEY) ||
+            TextUtils.isEmpty(signature)
         ) {
             Timber.tag(App.TAG).w("Purchase verification failed: missing data.")
             return false

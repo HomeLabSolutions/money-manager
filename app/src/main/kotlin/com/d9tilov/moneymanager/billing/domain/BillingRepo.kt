@@ -20,5 +20,6 @@ interface BillingRepo {
         result: (billingClient: BillingClient, paramBuilder: BillingFlowParams) -> BillingResult
     )
 
+    fun purchaseCompleted(): Flow<Boolean>
     fun canPurchase(): Flow<Boolean>
 }

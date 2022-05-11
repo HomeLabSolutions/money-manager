@@ -10,22 +10,25 @@ import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.domain.mapper.CurrencyDomainMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.math.BigDecimal
 
 class BillingInteractorImpl(private val billingRepo: BillingRepo, private val currencyDomainMapper: CurrencyDomainMapper) : BillingInteractor {
 
-    override fun getObserver(): LifecycleObserver  = billingRepo.getObserver()
+    override fun getObserver(): LifecycleObserver = billingRepo.getObserver()
     override fun isPremium(): Flow<Boolean> = billingRepo.isPremium()
     override fun getSkuDetails(): Flow<List<BillingSkuDetails>> = billingRepo.getSkuDetails()
     override fun getActiveSku(): Flow<BillingSkuDetails?> = billingRepo.getActiveSku()
 
-    override fun getMinPrice(): Flow<DomainCurrency> = billingRepo.getMinPrice().map { item: Currency -> currencyDomainMapper.toDomain(item, false) }
+    override fun getMinPrice(): Flow<DomainCurrency> = billingRepo.getMinPrice()
+        .map { item: Currency -> currencyDomainMapper.toDomain(item, false) }
+
     override fun buySku(
         sku: String,
         result: (billingClient: BillingClient, paramBuilder: BillingFlowParams) -> BillingResult
     ) {
         billingRepo.buySku(sku, result)
     }
+
+    override fun purchaseCompleted(): Flow<Boolean> = billingRepo.purchaseCompleted()
 
     override fun canPurchase(): Flow<Boolean> = billingRepo.canPurchase()
 }

@@ -10,6 +10,11 @@ data class BillingSkuDetails(
     val title: String,
     val description: String,
     val price: Currency,
-    val isPurchased:Boolean,
+    val isPurchased: Boolean,
     val metaData: PurchaseMetaData?
-) : Parcelable
+) : Parcelable {
+    companion object {
+        const val SKU_SUBSCRIPTION_QUARTERLY = "premium_quarterly"
+        const val SKU_SUBSCRIPTION_ANNUAL = "premium_annual"
+    }
+}

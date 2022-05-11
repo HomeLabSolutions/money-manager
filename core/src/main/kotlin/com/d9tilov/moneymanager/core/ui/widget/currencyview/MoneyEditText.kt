@@ -6,11 +6,12 @@ import android.text.InputType
 import android.text.Spanned
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
-import com.d9tilov.moneymanager.core.R
+import androidx.core.content.ContextCompat
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DECIMAL_SEPARATOR
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DEFAULT_DECIMAL_SEPARATOR
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.FORMAT_STRING
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.GROUPING_SEPARATOR
+import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.MINUS_SIGN
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.ZERO
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -30,7 +31,7 @@ class MoneyEditText @JvmOverloads constructor(
     private var prevInput = ""
     private var isFormatting = false
     private val allowableSymbols = setOf(
-        context.getString(R.string.minus_sign),
+        MINUS_SIGN,
         GROUPING_SEPARATOR.toString(),
         DECIMAL_SEPARATOR,
         DEFAULT_DECIMAL_SEPARATOR
@@ -91,9 +92,7 @@ class MoneyEditText @JvmOverloads constructor(
         if (s.isNotEmpty()) {
             isFormatting = true
             formatInput(s.toString(), start, lengthAfter)
-        } else {
-            hint = ZERO
-        }
+        } else hint = ZERO
         isFormatting = false
     }
 
@@ -101,6 +100,7 @@ class MoneyEditText @JvmOverloads constructor(
         val formattedInput = input
             .dropLastWhile { !showDelimiter && it.toString() == DECIMAL_SEPARATOR }
             .replace(DEFAULT_DECIMAL_SEPARATOR, DECIMAL_SEPARATOR)
+            .replace(MINUS_SIGN, "")
             .trim()
         val userInput = formattedInput.ifEmpty { ZERO }
         // ,, -> ,

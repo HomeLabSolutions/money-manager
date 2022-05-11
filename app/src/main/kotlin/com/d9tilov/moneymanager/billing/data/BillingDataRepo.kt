@@ -5,16 +5,16 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.d9tilov.moneymanager.App
-import com.d9tilov.moneymanager.billing.data.local.BillingDataSource.Companion.SKU_SUBSCRIPTION_ANNUAL
-import com.d9tilov.moneymanager.billing.data.local.BillingDataSource.Companion.SKU_SUBSCRIPTION_QUARTERLY
 import com.d9tilov.moneymanager.billing.data.local.BillingSource
 import com.d9tilov.moneymanager.billing.domain.BillingRepo
 import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails
+import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails.Companion.SKU_SUBSCRIPTION_ANNUAL
+import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails.Companion.SKU_SUBSCRIPTION_QUARTERLY
 import com.d9tilov.moneymanager.currency.data.entity.Currency
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
@@ -31,7 +31,7 @@ class BillingDataRepo(
     }
 
     private val skus = listOf(SKU_SUBSCRIPTION_QUARTERLY, SKU_SUBSCRIPTION_ANNUAL)
-    private val premiumMessage: MutableSharedFlow<String> = MutableSharedFlow()
+    private val purchaseCompleted: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     init {
         postMessagesFromBillingFlow()
@@ -93,6 +93,8 @@ class BillingDataRepo(
         else billingSource.launchBillingFlow(sku, result, oldSku)
     }
 
+    override fun purchaseCompleted(): Flow<Boolean> = purchaseCompleted
+
     override fun canPurchase(): Flow<Boolean> {
         val flowList: List<Flow<Boolean>> = skus.map { billingSource.canPurchase(it) }
         return combine(flowList) { result: Array<Boolean> -> result.firstOrNull { it } ?: false }
@@ -105,15 +107,11 @@ class BillingDataRepo(
                     when (sku) {
                         SKU_SUBSCRIPTION_QUARTERLY, SKU_SUBSCRIPTION_ANNUAL -> {
                             billingSource.refreshPurchases()
-                            sendMessage(sku)
+                            purchaseCompleted.emit(true)
                         }
                     }
                 }
             }
         }
-    }
-
-    private suspend fun sendMessage(purchase: String) {
-        premiumMessage.emit(purchase)
     }
 }

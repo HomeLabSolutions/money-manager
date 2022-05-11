@@ -25,5 +25,4 @@ interface BillingSource : DefaultLifecycleObserver {
     fun getNewPurchases(): SharedFlow<List<String>>
     fun canPurchase(sku: String): Flow<Boolean>
     suspend fun refreshPurchases()
-
 }

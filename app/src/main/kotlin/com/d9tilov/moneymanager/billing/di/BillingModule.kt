@@ -3,12 +3,12 @@ package com.d9tilov.moneymanager.billing.di
 import android.app.Application
 import com.d9tilov.moneymanager.billing.data.BillingDataRepo
 import com.d9tilov.moneymanager.billing.data.local.BillingDataSource
-import com.d9tilov.moneymanager.billing.data.local.BillingDataSource.Companion.SKU_SUBSCRIPTION_ANNUAL
-import com.d9tilov.moneymanager.billing.data.local.BillingDataSource.Companion.SKU_SUBSCRIPTION_QUARTERLY
 import com.d9tilov.moneymanager.billing.data.local.BillingSource
 import com.d9tilov.moneymanager.billing.domain.BillingInteractor
 import com.d9tilov.moneymanager.billing.domain.BillingInteractorImpl
 import com.d9tilov.moneymanager.billing.domain.BillingRepo
+import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails.Companion.SKU_SUBSCRIPTION_ANNUAL
+import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails.Companion.SKU_SUBSCRIPTION_QUARTERLY
 import com.d9tilov.moneymanager.currency.domain.mapper.CurrencyDomainMapper
 import dagger.Module
 import dagger.Provides

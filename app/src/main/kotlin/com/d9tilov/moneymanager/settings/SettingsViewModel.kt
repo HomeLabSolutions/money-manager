@@ -1,9 +1,6 @@
 package com.d9tilov.moneymanager.settings
 
 import androidx.lifecycle.viewModelScope
-import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.BillingFlowParams
-import com.android.billingclient.api.BillingResult
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.backup.data.entity.BackupData
 import com.d9tilov.moneymanager.backup.domain.BackupInteractor
@@ -23,14 +20,13 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.math.BigDecimal
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val userInteractor: UserInteractor,
     private val backupInteractor: BackupInteractor,
-    private val billingInteractor: BillingInteractor
+    billingInteractor: BillingInteractor
 ) : BaseViewModel<SettingsNavigator>() {
 
     val lifecycleObserver = billingInteractor.getObserver()
@@ -49,11 +45,11 @@ class SettingsViewModel @Inject constructor(
 
     val isPremium = billingInteractor.isPremium()
         .flowOn(Dispatchers.IO)
-        .shareIn(viewModelScope, SharingStarted.Lazily)
+        .shareIn(viewModelScope, SharingStarted.WhileSubscribed())
 
     val getActiveSku = billingInteractor.getActiveSku()
         .flowOn(Dispatchers.IO)
-        .shareIn(viewModelScope, SharingStarted.Lazily)
+        .shareIn(viewModelScope, SharingStarted.WhileSubscribed())
 
     val canPurchase = billingInteractor.canPurchase()
         .flowOn(Dispatchers.IO)
@@ -68,10 +64,6 @@ class SettingsViewModel @Inject constructor(
             }
             setLoading(false)
         }
-    }
-
-    fun buySubscription(result: (billingClient: BillingClient, paramBuilder: BillingFlowParams) -> BillingResult) {
-        billingInteractor.buySku("premium_quarterly", result)
     }
 
     fun changeFiscalDay(day: Int) {
