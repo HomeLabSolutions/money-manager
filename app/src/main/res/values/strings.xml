@@ -202,4 +202,8 @@
     <string name="billing_purchase_annual">Annual</string>
     <string name="billing_purchase_quarterly_price">%1$s%2$s %3$s/3 months</string>
     <string name="billing_purchase_annual_price">%1$s%2$s %3$s/year</string>
+    <string name="billing_intro_1">Expense Assistant</string>
+    <string name="billing_intro_2">Regular transactions</string>
+    <string name="billing_intro_3">Extra icons</string>
+    <string name="billing_intro_4">Extra statistics</string>
 </resources>

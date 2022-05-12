@@ -202,4 +202,8 @@
     <string name="billing_purchase_annual">Годовая</string>
     <string name="billing_purchase_quarterly_price">%1$s%2$s %3$s/3 месяца</string>
     <string name="billing_purchase_annual_price">%1$s%2$s %3$s/год</string>
+    <string name="billing_intro_1">Контроль расходов</string>
+    <string name="billing_intro_2">Регулярные транзакции</string>
+    <string name="billing_intro_3">Дополнительные иконки</string>
+    <string name="billing_intro_4">Дополнительная статистика</string>
 </resources>

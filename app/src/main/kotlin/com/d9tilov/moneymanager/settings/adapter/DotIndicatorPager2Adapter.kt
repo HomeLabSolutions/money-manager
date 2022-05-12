@@ -2,28 +2,47 @@ package com.d9tilov.moneymanager.settings.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.d9tilov.moneymanager.R
+import com.d9tilov.moneymanager.core.ui.BaseViewHolder
+import com.d9tilov.moneymanager.core.util.glide.GlideApp
+import com.d9tilov.moneymanager.databinding.ItemBillingIntroCardBinding
 
 class DotIndicatorPager2Adapter : RecyclerView.Adapter<ViewHolder>() {
 
-    data class Card(val id: Int)
+    data class Card(@DrawableRes val id: Int, @StringRes val strId: Int)
 
-    val items = mutableListOf<Card>().apply {
-        repeat(10) { add(Card(it)) }
-    }
+    private val items = listOf(
+        Card(R.drawable.ic_billing_1, R.string.billing_intro_1),
+        Card(R.drawable.ic_billing_2, R.string.billing_intro_2),
+        Card(R.drawable.ic_billing_3, R.string.billing_intro_3),
+        Card(R.drawable.ic_billing_4, R.string.billing_intro_4)
+    )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return object : ViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_billing_intro_card, parent, false)
-        ) {}
+        val viewBinding =
+            ItemBillingIntroCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return BillingPreviewViewHolder(viewBinding)
     }
 
     override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // Empty
+        (holder as BillingPreviewViewHolder).bind(items[position])
+    }
+
+    class BillingPreviewViewHolder(private val viewBinding: ItemBillingIntroCardBinding) :
+        BaseViewHolder(viewBinding) {
+
+        fun bind(card: Card) {
+            GlideApp
+                .with(context)
+                .load(card.id)
+                .into(viewBinding.itemBillingCardIcon)
+            viewBinding.itemBillingCardDescription.text = context.getString(card.strId)
+        }
     }
 }

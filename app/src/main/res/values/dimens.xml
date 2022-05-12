@@ -113,4 +113,5 @@
     <dimen name="billing_subscription_title_text_size">20sp</dimen>
     <dimen name="billing_subscription_radio_button_text_size">16sp</dimen>
     <dimen name="billing_premium_label">10sp</dimen>
+    <dimen name="billing_intro_card_descripton_text_size">14sp</dimen>
 </resources>
