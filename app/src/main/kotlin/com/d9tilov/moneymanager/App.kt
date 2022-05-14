@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager
 
 import android.os.Build
+import android.os.StrictMode
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
@@ -32,9 +33,17 @@ class App : MultiDexApplication(), Configuration.Provider {
         AppEventsLogger.activateApp(this)
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this)
-        }
-        if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
+            val threadPolicy = StrictMode.ThreadPolicy.Builder()
+                .detectAll()
+                .penaltyLog()
+                .build()
+            StrictMode.setThreadPolicy(threadPolicy)
+            val vmPolicy = StrictMode.VmPolicy.Builder()
+                .detectAll()
+                .penaltyLog()
+                .build()
+            StrictMode.setVmPolicy(vmPolicy)
         }
         PeriodicBackupWorker.startPeriodicJob(this)
     }

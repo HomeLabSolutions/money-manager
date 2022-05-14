@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.transaction.domain
 
+import android.os.StrictMode
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
@@ -206,6 +207,7 @@ class TransactionInteractorImpl(
     }
 
     override fun getTransactionsByType(type: TransactionType): Flow<PagingData<Transaction>> {
+        StrictMode.noteSlowCall("getTransactionsByType")
         return categoryInteractor.getGroupedCategoriesByType(type)
             .flatMapLatest { categoryList ->
                 transactionRepo.getTransactionsByType(transactionType = type)
@@ -221,6 +223,7 @@ class TransactionInteractorImpl(
     }
 
     override fun ableToSpendToday(): Flow<TransactionSpendingTodayModel> {
+        StrictMode.noteSlowCall("ableToSpendToday")
         val countDaysSinceFiscalDateFlow: Flow<BigDecimal> =
             flow { emit(userInteractor.getFiscalDay()) }.map { fiscalDay ->
                 currentDateTime().countDaysRemainingNextFiscalDate(fiscalDay).toBigDecimal()
@@ -242,6 +245,7 @@ class TransactionInteractorImpl(
     }
 
     override fun ableToSpendInFiscalPeriod(): Flow<BigDecimal> {
+        StrictMode.noteSlowCall("ableToSpendInFiscalPeriod")
         return combine(
             getNumerator(),
             getExpensesPerCurrentDay()
@@ -380,6 +384,7 @@ class TransactionInteractorImpl(
     }
 
     override fun getSumInFiscalPeriod(): Flow<BigDecimal> {
+        StrictMode.noteSlowCall("getSumInFiscalPeriod")
         val incomesFlow =
             flow { emit(userInteractor.getFiscalDay()) }
                 .flatMapMerge { fiscalDay ->
@@ -474,6 +479,7 @@ class TransactionInteractorImpl(
         }
 
     override suspend fun executeRegularIfNeeded(type: TransactionType) {
+        StrictMode.noteSlowCall("executeRegularIfNeeded")
         regularTransactionInteractor.getAll(type).map { transactions ->
             for (tr in transactions) {
                 val curDay = currentDate()
