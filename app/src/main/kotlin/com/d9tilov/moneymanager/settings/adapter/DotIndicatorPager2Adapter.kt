@@ -19,7 +19,9 @@ class DotIndicatorPager2Adapter : RecyclerView.Adapter<ViewHolder>() {
         Card(R.drawable.ic_billing_1, R.string.billing_intro_1),
         Card(R.drawable.ic_billing_2, R.string.billing_intro_2),
         Card(R.drawable.ic_billing_3, R.string.billing_intro_3),
-        Card(R.drawable.ic_billing_4, R.string.billing_intro_4)
+        Card(R.drawable.ic_billing_4, R.string.billing_intro_4),
+        Card(R.drawable.ic_billing_5, R.string.billing_intro_5),
+        Card(R.drawable.ic_billing_6, R.string.billing_intro_6)
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

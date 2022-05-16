@@ -45,7 +45,6 @@ class App : MultiDexApplication(), Configuration.Provider {
                 .build()
             StrictMode.setVmPolicy(vmPolicy)
         }
-        PeriodicBackupWorker.startPeriodicJob(this)
     }
 
     override fun getWorkManagerConfiguration(): Configuration {

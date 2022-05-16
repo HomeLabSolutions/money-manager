@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/profile_item_height"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/profile_item_height"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -35,4 +36,14 @@
         app:layout_constraintStart_toEndOf="@+id/profile_settings_title"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/settings_subscription_premium_acknowledged_title" />
+
+    <View
+        android:id="@+id/profile_settings_separator"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="64dp"
+        android:background="@color/button_normal_color_dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

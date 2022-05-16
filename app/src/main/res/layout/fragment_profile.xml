@@ -40,135 +40,67 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_avatar" />
 
-    <View
-        android:id="@+id/profile_separator_1"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="64dp"
-        android:background="@color/button_normal_color_dark"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_name_separator" />
-
     <include
         android:id="@+id/profile_currency"
         layout="@layout/layout_profile_currency"
+        android:layout_marginTop="32dp"
         android:layout_width="0dp"
+        app:layout_constraintStart_toStartOf="parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/profile_separator_2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_separator_1" />
-
-    <View
-        android:id="@+id/profile_separator_2"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="64dp"
-        android:background="@color/button_normal_color_dark"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_separator_1" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_name_separator" />
 
     <include
         android:id="@+id/profile_budget"
         layout="@layout/layout_profile_budget"
+        app:layout_constraintStart_toStartOf="parent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/profile_separator_3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_separator_2" />
-
-    <View
-        android:id="@+id/profile_separator_3"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="64dp"
-        android:background="@color/button_normal_color_dark"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_separator_2" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_currency" />
 
     <include
         android:id="@+id/profile_regular_incomes"
         layout="@layout/layout_profile_regular_incomes"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/profile_budget"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/profile_separator_4"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_separator_3" />
-
-    <View
-        android:id="@+id/profile_separator_4"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="64dp"
-        android:background="@color/button_normal_color_dark"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_separator_3" />
+        tools:visibility="visible" />
 
     <include
         android:id="@+id/profile_regular_expenses"
         layout="@layout/layout_profile_regular_expenses"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/profile_regular_incomes"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/profile_separator_5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_separator_4" />
-
-    <View
-        android:id="@+id/profile_separator_5"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="64dp"
-        android:background="@color/button_normal_color_dark"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_separator_4" />
+        tools:visibility="visible" />
 
     <include
         android:id="@+id/profile_goals"
         layout="@layout/layout_profile_goals"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_regular_expenses"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/profile_separator_6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_separator_5" />
-
-    <View
-        android:id="@+id/profile_separator_6"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="64dp"
-        android:background="@color/button_normal_color_dark"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_separator_5" />
+        tools:visibility="visible" />
 
     <include
         android:id="@+id/profile_settings"
         layout="@layout/layout_profile_settings"
+        android:layout_marginBottom="32dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/profile_separator_7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_separator_6" />
-
-    <View
-        android:id="@+id/profile_separator_7"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="64dp"
-        android:background="@color/button_normal_color_dark"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_separator_6" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_goals" />
 
     <TextView
         android:id="@+id/profile_logout"

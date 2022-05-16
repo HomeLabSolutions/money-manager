@@ -93,22 +93,13 @@ class ProfileFragment :
                         }
                     }
                     launch {
-                        viewModel.goals.collect { list ->
-                            val goals = list.joinToString(separator = ",") { it.name }
-                            when (goals.isEmpty()) {
-                                true ->
-                                    profileGoals.profileGoalsTitle.text =
-                                        getString(R.string.profile_item_goals_title_empty)
-                                false ->
-                                    profileGoals.profileGoalsTitle.text =
-                                        getString(R.string.profile_item_goals_title, goals)
-                            }
-                        }
-                    }
-                    launch {
                         viewModel.isPremium.collect { isPremium ->
                             if (isPremium) {
-                                profileSettings.profileSettingsPremium.text = getString(R.string.settings_subscription_premium_acknowledged_title)
+                                profileGoals.root.show()
+                                profileRegularExpenses.root.show()
+                                profileRegularIncomes.root.show()
+                                profileSettings.profileSettingsPremium.text =
+                                    getString(R.string.settings_subscription_premium_acknowledged_title)
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                     profileSettings.profileSettingsPremium.setTextAppearance(R.style.Widget_MoneyManager_TextView_PremiumLabel_Acknowledged)
                                 } else {

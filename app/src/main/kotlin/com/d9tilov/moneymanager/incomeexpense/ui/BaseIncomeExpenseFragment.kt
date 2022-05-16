@@ -6,7 +6,6 @@ import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
@@ -29,8 +28,8 @@ import com.d9tilov.moneymanager.core.util.toast
 import com.d9tilov.moneymanager.databinding.LayoutEmptyListPlaceholderBinding
 import com.d9tilov.moneymanager.incomeexpense.ui.listeners.OnIncomeExpenseListener
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.isIncome
 import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -57,9 +56,7 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : Vi
         override fun onItemClick(item: Category, position: Int) {
             if (item.id == Category.ALL_ITEMS_ID) {
                 (viewModel as BaseIncomeExpenseViewModel<N>).openAllCategories()
-            } else {
-                saveTransaction(item)
-            }
+            } else saveTransaction(item)
         }
     }
 
@@ -185,17 +182,21 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : Vi
     }
 
     override fun onKeyboardShown(show: Boolean) {
-        val hiddenGroup = if (show) transactionsLayout else infoLayout
-        val shownGroup = if (show) infoLayout else transactionsLayout
-        hiddenGroup?.gone()
         if (show) {
             hideViewStub()
+            if (isPremium()) infoLayout?.showWithAnimation()
+            categoryRvList?.showWithAnimation()
+            transactionsLayout?.gone()
         } else {
             if (isTransactionDataEmpty) showViewStub()
+            transactionsLayout?.showWithAnimation()
+            infoLayout?.gone()
+            categoryRvList?.gone()
         }
-        if (shownGroup?.isVisible == false) shownGroup.showWithAnimation()
     }
 
+    private fun isPremium(): Boolean = (requireParentFragment() as IncomeExpenseFragment).isPremium
+    protected fun isKeyboardOpen(): Boolean = (requireParentFragment() as IncomeExpenseFragment).isKeyboardOpen
     protected fun getSum(): BigDecimal = (requireParentFragment() as IncomeExpenseFragment).getSum()
     protected fun getCurrencyCode(): String =
         (requireParentFragment() as IncomeExpenseFragment).getCurrencyCode()

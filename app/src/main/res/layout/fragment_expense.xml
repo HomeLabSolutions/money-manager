@@ -15,8 +15,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/expense_category_rv_list"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/expense_category_rv_list"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/standard_half_left_margin"
+        android:layout_marginBottom="4dp"
+        android:minHeight="172dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:listitem="@layout/item_category" />
 
     <!-- Should be invisible. Need to stick header for the first time-->
     <include
@@ -32,14 +44,16 @@
 
     <include
         android:id="@+id/expense_transaction_empty_placeholder_include"
+        layout="@layout/layout_empty_list_placeholder"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        layout="@layout/layout_empty_list_placeholder"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible"/>
+        app:layout_constraintVertical_bias="0.0"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

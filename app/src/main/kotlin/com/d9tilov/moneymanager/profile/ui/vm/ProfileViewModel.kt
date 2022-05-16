@@ -44,10 +44,6 @@ class ProfileViewModel @Inject constructor(
         regularTransactionInteractor.getAll(TransactionType.EXPENSE)
             .flowOn(Dispatchers.IO)
             .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
-    val goals =
-        goalInteractor.getAll()
-            .flowOn(Dispatchers.IO)
-            .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
     val isPremium = billingInteractor.isPremium()
         .flowOn(Dispatchers.IO)
         .shareIn(viewModelScope, SharingStarted.WhileSubscribed())

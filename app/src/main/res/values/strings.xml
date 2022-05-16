@@ -204,6 +204,8 @@
     <string name="billing_purchase_annual_price">%1$s%2$s %3$s/year</string>
     <string name="billing_intro_1">Expense Assistant</string>
     <string name="billing_intro_2">Regular transactions</string>
-    <string name="billing_intro_3">Extra icons</string>
-    <string name="billing_intro_4">Extra statistics</string>
+    <string name="billing_intro_3">Goals</string>
+    <string name="billing_intro_4">Extra icons</string>
+    <string name="billing_intro_5">Extra statistics</string>
+    <string name="billing_intro_6">Automatically backup</string>
 </resources>
