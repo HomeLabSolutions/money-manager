@@ -3,6 +3,7 @@ package com.d9tilov.moneymanager.statistics.vm
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.data.ResultOf
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsNavigator
+import com.d9tilov.moneymanager.billing.domain.BillingInteractor
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.statistics.domain.BaseStatisticsMenuType
@@ -20,11 +21,13 @@ import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 import javax.inject.Inject
@@ -32,7 +35,8 @@ import javax.inject.Inject
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
     private val transactionInteractor: TransactionInteractor,
-    userInteractor: UserInteractor
+    userInteractor: UserInteractor,
+    billingInteractor: BillingInteractor
 ) : BaseViewModel<StatisticsNavigator>() {
 
     private val transactions =
@@ -54,6 +58,10 @@ class StatisticsViewModel @Inject constructor(
         private set
 
     val menuItemList = mutableListOf<BaseStatisticsMenuType>()
+
+    val isPremium = billingInteractor.isPremium()
+        .flowOn(Dispatchers.IO)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     init {
         viewModelScope.launch(Dispatchers.IO) {

@@ -196,7 +196,6 @@ class GoalsFragment :
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.prepopulate_menu, menu)
         menu.findItem(R.id.action_skip).isVisible = false
-        menu.findItem(R.id.action_add).isVisible = true
     }
 
     override fun onNextClick() {

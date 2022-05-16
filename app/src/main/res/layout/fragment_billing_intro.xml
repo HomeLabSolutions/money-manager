@@ -31,6 +31,7 @@
         android:layout_height="wrap_content"
         app:dotsColor="@color/control_activated_color"
         app:dotsStrokeColor="@color/control_activated_color"
+        app:dotsSize="12dp"
         app:layout_constraintBottom_toTopOf="@+id/settings_billing_intro_horizontal_guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

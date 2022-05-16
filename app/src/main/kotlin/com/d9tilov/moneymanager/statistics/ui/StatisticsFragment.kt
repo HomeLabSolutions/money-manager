@@ -54,9 +54,9 @@ import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod.YEAR
 import com.d9tilov.moneymanager.statistics.ui.recycler.StatisticsBarChartAdapter
 import com.d9tilov.moneymanager.statistics.ui.recycler.StatisticsMenuAdapter
 import com.d9tilov.moneymanager.statistics.vm.StatisticsViewModel
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionLineChartModel
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -220,6 +220,12 @@ class StatisticsFragment :
                                 is ResultOf.Success -> setLineChartData(result.data)
                                 else -> {}
                             }
+                        }
+                    }
+                    launch {
+                        viewModel.isPremium.collect { isPremium ->
+                            if (isPremium) statisticsMenu.show()
+                            else statisticsMenu.gone()
                         }
                     }
                 }

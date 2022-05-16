@@ -50,7 +50,7 @@
         android:paddingBottom="4dp"
         android:text="@string/category_expense_info_today_title"
         android:textAppearance="?attr/textAppearanceCaption"
-        app:layout_constraintBottom_toTopOf="@+id/expense_category_rv_list"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/expense_can_spend_today_info_title"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -126,17 +126,5 @@
         app:sumTextColor="@color/text_primary_transparent_color"
         app:signTextColor="@color/text_primary_transparent_color"
         app:sum="1000" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/expense_category_rv_list"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:minHeight="172dp"
-        android:layout_marginStart="@dimen/standard_half_left_margin"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/item_category" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

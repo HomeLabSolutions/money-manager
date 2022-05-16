@@ -4,11 +4,11 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
-sealed class TransactionSpendingTodayModel(sum: BigDecimal) : Parcelable {
+sealed class TransactionSpendingTodayModel : Parcelable {
 
     @Parcelize
-    data class OVERSPENDING(val trSum: BigDecimal) : TransactionSpendingTodayModel(trSum)
+    data class OVERSPENDING(val trSum: BigDecimal) : TransactionSpendingTodayModel()
 
     @Parcelize
-    data class NORMAL(val trSum: BigDecimal) : TransactionSpendingTodayModel(trSum)
+    data class NORMAL(val trSum: BigDecimal) : TransactionSpendingTodayModel()
 }

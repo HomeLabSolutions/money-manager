@@ -6,8 +6,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.d9tilov.moneymanager.R
@@ -49,15 +49,22 @@ class IncomeExpenseFragment :
 
     private var incomeExpenseAdapter: IncomeExpenseAdapter? = null
     private var pageIndex = -1
-    private var isKeyboardOpen = true
     private val commonGroup = mutableListOf<View>()
+    var isKeyboardOpen = true
+        private set
+    var isPremium = false
+        private set
 
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        incomeExpenseAdapter = IncomeExpenseAdapter(childFragmentManager, lifecycle) // must create adapter every time
+        incomeExpenseAdapter =
+            IncomeExpenseAdapter(
+                childFragmentManager,
+                lifecycle
+            ) // must create adapter every time
         viewBinding?.run {
             if (commonGroup.isEmpty()) {
                 commonGroup.add(incomeExpenseMainSum)
@@ -65,7 +72,8 @@ class IncomeExpenseFragment :
             }
             incomeExpenseViewPager.adapter = incomeExpenseAdapter
             incomeExpenseViewPager.offscreenPageLimit = 2
-            incomeExpenseViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            incomeExpenseViewPager.registerOnPageChangeCallback(object :
+                ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
                     pageIndex = position
@@ -87,24 +95,25 @@ class IncomeExpenseFragment :
                 }
             }.attach()
             incomeExpenseKeyboardLayout.btnHideKeyboard.setOnClickListener { closeKeyboard() }
-            incomeExpenseKeyboardLayout.pinKeyboard.clickPinButton = object : PinKeyboard.ClickPinButton {
-                override fun onPinClick(button: PinButton?) {
-                    when (button?.id) {
-                        R.id.keyboard_pin_0 -> onHandleInput(getString(R.string._0))
-                        R.id.keyboard_pin_1 -> onHandleInput(getString(R.string._1))
-                        R.id.keyboard_pin_2 -> onHandleInput(getString(R.string._2))
-                        R.id.keyboard_pin_3 -> onHandleInput(getString(R.string._3))
-                        R.id.keyboard_pin_4 -> onHandleInput(getString(R.string._4))
-                        R.id.keyboard_pin_5 -> onHandleInput(getString(R.string._5))
-                        R.id.keyboard_pin_6 -> onHandleInput(getString(R.string._6))
-                        R.id.keyboard_pin_7 -> onHandleInput(getString(R.string._7))
-                        R.id.keyboard_pin_8 -> onHandleInput(getString(R.string._8))
-                        R.id.keyboard_pin_9 -> onHandleInput(getString(R.string._9))
-                        R.id.keyboard_pin_dot -> onHandleInput(getString(R.string._dot))
-                        else -> onHandleInput(null)
+            incomeExpenseKeyboardLayout.pinKeyboard.clickPinButton =
+                object : PinKeyboard.ClickPinButton {
+                    override fun onPinClick(button: PinButton?) {
+                        when (button?.id) {
+                            R.id.keyboard_pin_0 -> onHandleInput(getString(R.string._0))
+                            R.id.keyboard_pin_1 -> onHandleInput(getString(R.string._1))
+                            R.id.keyboard_pin_2 -> onHandleInput(getString(R.string._2))
+                            R.id.keyboard_pin_3 -> onHandleInput(getString(R.string._3))
+                            R.id.keyboard_pin_4 -> onHandleInput(getString(R.string._4))
+                            R.id.keyboard_pin_5 -> onHandleInput(getString(R.string._5))
+                            R.id.keyboard_pin_6 -> onHandleInput(getString(R.string._6))
+                            R.id.keyboard_pin_7 -> onHandleInput(getString(R.string._7))
+                            R.id.keyboard_pin_8 -> onHandleInput(getString(R.string._8))
+                            R.id.keyboard_pin_9 -> onHandleInput(getString(R.string._9))
+                            R.id.keyboard_pin_dot -> onHandleInput(getString(R.string._dot))
+                            else -> onHandleInput(null)
+                        }
                     }
                 }
-            }
             incomeExpenseMainSum.setOnClickListener {
                 val action =
                     IncomeExpenseFragmentDirections.toCurrencyDest(
@@ -113,10 +122,23 @@ class IncomeExpenseFragment :
                     )
                 findNavController().navigate(action)
             }
-            lifecycleScope.launch {
-                viewModel.getCurrencyCodeAsync()
-                    .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-                    .collect { incomeExpenseMainSum.setValue(incomeExpenseMainSum.getValue(), it) }
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    launch {
+                        viewModel.isPremium.collect { isPremium ->
+                            this@IncomeExpenseFragment.isPremium = isPremium
+                        }
+                    }
+                    launch {
+                        viewModel.getCurrencyCodeAsync()
+                            .collect {
+                                incomeExpenseMainSum.setValue(
+                                    incomeExpenseMainSum.getValue(),
+                                    it
+                                )
+                            }
+                    }
+                }
             }
         }
         findNavController().currentBackStackEntry?.savedStateHandle?.run {
@@ -150,7 +172,8 @@ class IncomeExpenseFragment :
                 else input = input.plus(str)
             }
             null ->
-                if (input.isNotEmpty()) input = input.removeRange(input.length - 1, input.length)
+                if (input.isNotEmpty()) input =
+                    input.removeRange(input.length - 1, input.length)
             else -> input = input.plus(str)
         }
         if (input.isEmpty()) input = getString(R.string._0)
@@ -187,12 +210,14 @@ class IncomeExpenseFragment :
     }
 
     fun isKeyboardOpened(): Boolean = isKeyboardOpen
-
     fun getSum(): BigDecimal = viewBinding?.incomeExpenseMainSum?.getValue() ?: BigDecimal.ZERO
     fun getCurrencyCode(): String = viewModel.getCurrencyCode()
 
     fun resetSum() {
-        viewBinding?.incomeExpenseMainSum?.setValue(BigDecimal.ZERO, viewModel.getCurrencyCode())
+        viewBinding?.incomeExpenseMainSum?.setValue(
+            BigDecimal.ZERO,
+            viewModel.getCurrencyCode()
+        )
         viewModel.setDefaultCurrencyCode()
         onHandleInput("")
     }
