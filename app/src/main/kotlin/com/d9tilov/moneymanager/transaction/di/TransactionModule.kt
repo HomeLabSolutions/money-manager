@@ -34,7 +34,7 @@ class TransactionModule {
     @ActivityRetainedScoped
     fun provideTransactionLocalSource(
         preferencesStore: PreferencesStore,
-        appDatabase: AppDatabase,
+        appDatabase: AppDatabase
     ): TransactionSource = TransactionLocalSource(
         preferencesStore,
         appDatabase.transactionDao()

@@ -15,19 +15,14 @@ import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.ui.color.ColorManager
 import com.d9tilov.moneymanager.databinding.ItemColorPickerBinding
 
-class CategoryColorAdapter(@ColorRes private var chosenColor: Int?) :
+class CategoryColorAdapter(@ColorRes private var chosenColor: Int?, private val itemClickListener: OnItemClickListener<Int>) :
     RecyclerView.Adapter<CategoryColorAdapter.CategoryColorViewHolder>() {
 
-    var itemClickListener: OnItemClickListener<Int>? = null
     private var selectedPosition = -1
-    private val colorManager = ColorManager()
 
     init {
-        if (chosenColor == null) {
-            chosenColor = R.color.category_pink
-        }
-
-        selectedPosition = colorManager.colorList.indexOf(chosenColor!!)
+        if (chosenColor == null) chosenColor = R.color.category_pink
+        selectedPosition = ColorManager.colorList.indexOf(chosenColor!!)
     }
 
     fun getSelectedPosition() = selectedPosition
@@ -50,8 +45,8 @@ class CategoryColorAdapter(@ColorRes private var chosenColor: Int?) :
                     UNSCALE_UPDATE
                 )
 
-                val clickedColor = colorManager.colorList[adapterPosition]
-                itemClickListener?.onItemClick(clickedColor)
+                val clickedColor = ColorManager.colorList[adapterPosition]
+                itemClickListener.onItemClick(clickedColor, adapterPosition)
                 chosenColor = clickedColor
                 selectedPosition = adapterPosition
                 notifyItemChanged(
@@ -63,13 +58,13 @@ class CategoryColorAdapter(@ColorRes private var chosenColor: Int?) :
         return viewHolder
     }
 
-    override fun getItemCount() = colorManager.colorList.size
+    override fun getItemCount() = ColorManager.colorList.size
 
     override fun onBindViewHolder(
         holder: CategoryColorViewHolder,
         position: Int
     ) {
-        holder.bind(colorManager.colorList[position], position == selectedPosition)
+        holder.bind(ColorManager.colorList[position], position == selectedPosition)
     }
 
     override fun onBindViewHolder(

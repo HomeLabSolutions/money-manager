@@ -5,7 +5,7 @@ import com.d9tilov.moneymanager.statistics.domain.BaseStatisticsMenuType
 
 class StatisticsMenuItemDiffUtils(
     private val oldData: List<BaseStatisticsMenuType>,
-    private val newData: List<BaseStatisticsMenuType>,
+    private val newData: List<BaseStatisticsMenuType>
 ) : DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =

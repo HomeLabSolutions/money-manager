@@ -22,12 +22,10 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.data.ResultOf
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.CurrencyNavigator
-import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.currency.domain.entity.CurrencyDestination
-import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.vm.CurrencyViewModel
 import com.d9tilov.moneymanager.databinding.FragmentCurrencyBinding
 import com.d9tilov.moneymanager.home.ui.MainActivity
@@ -54,12 +52,10 @@ class CurrencyFragment :
 
     private var menu: Menu? = null
     private var toolbar: MaterialToolbar? = null
-    private val currencyAdapter: CurrencyAdapter by lazy { CurrencyAdapter(destination != CurrencyDestination.PROFILE_SCREEN_CURRENT) }
-    override val viewModel by viewModels<CurrencyViewModel>()
-    override fun getNavigator(): CurrencyNavigator = this
-
-    private val onItemClickListener = object : OnItemClickListener<DomainCurrency> {
-        override fun onItemClick(item: DomainCurrency, position: Int) {
+    private val currencyAdapter: CurrencyAdapter by lazy {
+        CurrencyAdapter(
+            destination != CurrencyDestination.PROFILE_SCREEN_CURRENT
+        ) { item, _ ->
             when (destination ?: CurrencyDestination.PREPOPULATE_SCREEN) {
                 CurrencyDestination.PREPOPULATE_SCREEN -> viewModel.changeCurrency(item)
                 CurrencyDestination.PROFILE_SCREEN_CURRENT -> {
@@ -78,14 +74,11 @@ class CurrencyFragment :
             }
         }
     }
+    override val viewModel by viewModels<CurrencyViewModel>()
+    override fun getNavigator(): CurrencyNavigator = this
 
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        currencyAdapter.itemClickListener = onItemClickListener
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

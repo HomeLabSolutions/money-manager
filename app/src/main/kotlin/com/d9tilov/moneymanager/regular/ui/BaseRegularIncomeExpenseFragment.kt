@@ -13,8 +13,6 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.Inflate
 import com.d9tilov.moneymanager.base.ui.navigator.BaseRegularIncomeExpenseNavigator
-import com.d9tilov.moneymanager.core.events.OnItemClickListener
-import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.show
@@ -33,53 +31,24 @@ abstract class BaseRegularIncomeExpenseFragment<N : BaseRegularIncomeExpenseNavi
     BaseFragment<N, VB>(inflate, layoutId),
     BaseRegularIncomeExpenseNavigator {
 
-    protected val regularTransactionAdapter: RegularTransactionAdapter = RegularTransactionAdapter()
+    protected val regularTransactionAdapter: RegularTransactionAdapter = RegularTransactionAdapter(
+        { item, _ ->
+            val action = if (transactionType.isIncome()) RegularIncomeFragmentDirections.toCreateRegularTransactionDest(transactionType, item)
+            else RegularExpenseFragmentDirections.toCreateRegularTransactionDest(transactionType, item)
+            findNavController().navigate(action)
+        },
+        { item, _ -> (viewModel as BaseRegularIncomeExpenseViewModel<N>).onCheckClicked(item) },
+        { item, _ -> openRemoveConfirmationDialog(item) }
+    )
     protected abstract val transactionType: TransactionType
     protected abstract fun showBackButton(): Boolean
     protected var toolbar: MaterialToolbar? = null
     protected var emptyViewStub: LayoutEmptyListPlaceholderBinding? = null
 
-    private val onItemClickListener = object : OnItemClickListener<RegularTransaction> {
-        override fun onItemClick(item: RegularTransaction, position: Int) {
-            val action = if (transactionType.isIncome()) {
-                RegularIncomeFragmentDirections.toCreateRegularTransactionDest(
-                    transactionType,
-                    item
-                )
-            } else {
-                RegularExpenseFragmentDirections.toCreateRegularTransactionDest(
-                    transactionType,
-                    item
-                )
-            }
-            findNavController().navigate(action)
-        }
-    }
-    private val onItemSwipeListener = object : OnItemSwipeListener<RegularTransaction> {
-        override fun onItemSwiped(item: RegularTransaction, position: Int) {
-            openRemoveConfirmationDialog(item)
-        }
-    }
-    private val onCheckBoxClickListener = object : OnItemClickListener<RegularTransaction> {
-        override fun onItemClick(item: RegularTransaction, position: Int) {
-            (viewModel as BaseRegularIncomeExpenseViewModel<N>).onCheckClicked(item)
-        }
-    }
-
     private fun openRemoveConfirmationDialog(transaction: RegularTransaction) {
-        val action = if (transactionType.isIncome()) {
-            RegularIncomeFragmentDirections.toRemoveTransactionDialog(regularTransaction = transaction)
-        } else {
-            RegularExpenseFragmentDirections.toRemoveTransactionDialog(regularTransaction = transaction)
-        }
+        val action = if (transactionType.isIncome()) RegularIncomeFragmentDirections.toRemoveTransactionDialog(regularTransaction = transaction)
+        else RegularExpenseFragmentDirections.toRemoveTransactionDialog(regularTransaction = transaction)
         findNavController().navigate(action)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        regularTransactionAdapter.itemClickListener = onItemClickListener
-        regularTransactionAdapter.checkBoxClickListener = onCheckBoxClickListener
-        regularTransactionAdapter.itemSwipeListener = onItemSwipeListener
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

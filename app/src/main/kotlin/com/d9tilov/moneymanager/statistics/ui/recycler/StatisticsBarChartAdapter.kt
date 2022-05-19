@@ -18,10 +18,8 @@ import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class StatisticsBarChartAdapter :
+class StatisticsBarChartAdapter(private val transactionClickListener: OnItemClickListener<TransactionChartModel>) :
     RecyclerView.Adapter<StatisticsBarChartAdapter.StatisticsBarChartViewHolder>() {
-
-    var transactionClickListener: OnItemClickListener<TransactionChartModel>? = null
 
     private var data = mutableListOf<TransactionChartModel>()
 
@@ -43,7 +41,7 @@ class StatisticsBarChartAdapter :
         viewBinding.root.setOnClickListener {
             val adapterPosition = viewHolder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
-                transactionClickListener?.onItemClick(data[adapterPosition], adapterPosition)
+                transactionClickListener.onItemClick(data[adapterPosition], adapterPosition)
             }
         }
         return viewHolder

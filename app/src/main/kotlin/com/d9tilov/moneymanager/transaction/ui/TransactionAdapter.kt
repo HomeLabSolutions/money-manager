@@ -29,13 +29,14 @@ import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction.Compan
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionHeader
 
-class TransactionAdapter :
+class TransactionAdapter(
+    private val itemClickListener: OnItemClickListener<Transaction>,
+    private val itemSwipeListener: OnItemSwipeListener<Transaction>
+) :
     StickyAdapter<BaseTransaction, RecyclerView.ViewHolder, RecyclerView.ViewHolder>(
         diffCallback
     ) {
 
-    var itemSwipeListener: OnItemSwipeListener<Transaction>? = null
-    var itemClickListener: OnItemClickListener<Transaction>? = null
     private var removedItemPosition: Int = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -48,7 +49,7 @@ class TransactionAdapter :
                 val adapterPosition = viewHolder.bindingAdapterPosition
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     val item = getItem(adapterPosition) as Transaction
-                    itemClickListener?.onItemClick(item, adapterPosition)
+                    itemClickListener.onItemClick(item, adapterPosition)
                 }
             }
         } else {
@@ -94,7 +95,7 @@ class TransactionAdapter :
         if (getItem(position) is Transaction) {
             removedItemPosition = position
             val transactionToDelete = getItem(position) as Transaction
-            itemSwipeListener?.onItemSwiped(transactionToDelete, position)
+            itemSwipeListener.onItemSwiped(transactionToDelete, position)
         }
     }
 

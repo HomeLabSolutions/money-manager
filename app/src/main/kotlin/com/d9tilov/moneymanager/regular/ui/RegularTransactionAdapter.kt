@@ -17,13 +17,14 @@ import com.d9tilov.moneymanager.regular.domain.entity.PeriodType
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.regular.ui.diff.RegularTransactionDiffUtil
 
-class RegularTransactionAdapter :
+class RegularTransactionAdapter(
+    private val itemClickListener: OnItemClickListener<RegularTransaction>,
+    private val checkBoxClickListener: OnItemClickListener<RegularTransaction>,
+    private val itemSwipeListener: OnItemSwipeListener<RegularTransaction>
+) :
     RecyclerView.Adapter<RegularTransactionAdapter.RegularTransactionViewHolder>() {
 
     private var regularTransactions = mutableListOf<RegularTransaction>()
-    var itemClickListener: OnItemClickListener<RegularTransaction>? = null
-    var checkBoxClickListener: OnItemClickListener<RegularTransaction>? = null
-    var itemSwipeListener: OnItemSwipeListener<RegularTransaction>? = null
     private var removedItemPosition: Int = 0
 
     init {
@@ -45,19 +46,13 @@ class RegularTransactionAdapter :
         viewBinding.root.setOnClickListener {
             val adapterPosition = viewHolder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
-                itemClickListener?.onItemClick(
-                    regularTransactions[adapterPosition],
-                    adapterPosition
-                )
+                itemClickListener.onItemClick(regularTransactions[adapterPosition], adapterPosition)
             }
         }
         viewBinding.itemRegularTransactionNotify.setOnClickListener {
             val adapterPosition = viewHolder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
-                checkBoxClickListener?.onItemClick(
-                    regularTransactions[adapterPosition],
-                    adapterPosition
-                )
+                checkBoxClickListener.onItemClick(regularTransactions[adapterPosition], adapterPosition)
             }
         }
         return viewHolder
@@ -86,7 +81,7 @@ class RegularTransactionAdapter :
     fun deleteItem(position: Int) {
         removedItemPosition = position
         val transactionToDelete = regularTransactions[position]
-        itemSwipeListener?.onItemSwiped(transactionToDelete, position)
+        itemSwipeListener.onItemSwiped(transactionToDelete, position)
     }
 
     fun cancelDeletion() {

@@ -5,7 +5,7 @@ import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
 
 class StatisticsBarCharDiffUtils(
     private val oldData: List<TransactionChartModel>,
-    private val newData: List<TransactionChartModel>,
+    private val newData: List<TransactionChartModel>
 ) : DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =

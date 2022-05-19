@@ -1,5 +1,5 @@
 package com.d9tilov.moneymanager.core.events
 
-interface OnBackPressed {
+fun interface OnBackPressed {
     fun onBackPressed(): Boolean
 }

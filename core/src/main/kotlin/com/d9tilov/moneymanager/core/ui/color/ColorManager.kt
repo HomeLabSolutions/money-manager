@@ -1,8 +1,11 @@
 package com.d9tilov.moneymanager.core.ui.color
 
 import com.d9tilov.moneymanager.core.R
+import com.d9tilov.moneymanager.core.util.currentDateTime
+import com.d9tilov.moneymanager.core.util.toMillis
+import java.util.Random
 
-class ColorManager {
+object ColorManager {
 
     val colorList = listOf(
         R.color.category_yellow,
@@ -23,7 +26,5 @@ class ColorManager {
         R.color.category_flower_violet,
         R.color.category_light_violet,
         R.color.category_pink
-    )
-
-    fun getRandomColor(): Int = colorList[(colorList.indices).random()]
+    ).shuffled(Random(currentDateTime().toMillis()))
 }

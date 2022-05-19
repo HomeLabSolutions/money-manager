@@ -2,7 +2,6 @@ package com.d9tilov.moneymanager.core.ui
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_DATA_ID
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 

@@ -104,4 +104,3 @@ fun LocalDateTime.countDaysRemainingNextFiscalDate(fiscalDay: Int): Int {
     return if (this.date < fiscalDate) this.date.daysUntil(fiscalDate)
     else this.date.daysUntil(fiscalDate.plus(1, DateTimeUnit.MONTH))
 }
-

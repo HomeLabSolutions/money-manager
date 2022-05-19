@@ -56,14 +56,6 @@
             app:popUpTo="@+id/edit_transaction_dest"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/to_income_expense_dest"
-            app:destination="@id/income_expense_dest"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@+id/income_expense_dest"
-            app:popUpToInclusive="true" />
-        <action
             android:id="@+id/to_create_group_dialog"
             app:destination="@id/unit_category_to_folder_dialog"
             app:exitAnim="@anim/nav_default_exit_anim"
@@ -102,14 +94,6 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-        <action
-            android:id="@+id/to_income_expense_dest"
-            app:destination="@id/income_expense_dest"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@+id/income_expense_dest"
-            app:popUpToInclusive="true" />
         <action
             android:id="@+id/to_category_creation_dest"
             app:destination="@id/category_creation_dest"
@@ -193,6 +177,12 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
+            android:id="@+id/to_grouped_category_set_dest"
+            app:destination="@id/grouped_category_set_dest"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
             android:id="@+id/to_remove_sub_category_dialog"
             app:destination="@id/remove_sub_category_dialog"
             app:exitAnim="@anim/nav_default_exit_anim"
@@ -214,7 +204,26 @@
         android:id="@+id/category_set_dest"
         android:name="com.d9tilov.moneymanager.category.ui.CategoryIconSetFragment"
         android:label="fragment_title_screen"
-        tools:layout="@layout/fragment_category_icon_set"/>
+        tools:layout="@layout/fragment_category_icon_set" >
+
+        <argument
+            android:name="groupId"
+            app:argType="com.d9tilov.moneymanager.category.domain.entity.CategoryGroup" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/grouped_category_set_dest"
+        android:name="com.d9tilov.moneymanager.category.ui.CategoryGroupIconSetFragment"
+        android:label="fragment_title_screen"
+        tools:layout="@layout/fragment_group_category_icon_set">
+
+        <action
+            android:id="@+id/to_category_set_dest"
+            app:destination="@id/category_set_dest"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
 
     <fragment
         android:id="@+id/currency_dest"

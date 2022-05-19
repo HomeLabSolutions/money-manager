@@ -2,6 +2,7 @@ package com.d9tilov.moneymanager.base.ui.navigator
 
 import androidx.annotation.DrawableRes
 import com.d9tilov.moneymanager.category.data.entity.Category
+import com.d9tilov.moneymanager.category.domain.entity.CategoryGroupItem
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
 
 interface HomeNavigator : BaseNavigator
@@ -105,6 +106,10 @@ interface CategoryCreationNavigator : BaseNavigator {
 
 interface CategorySetNavigator : BaseNavigator {
     fun save(@DrawableRes icon: Int)
+}
+
+interface CategoryGroupSetNavigator : BaseNavigator {
+    fun openCategoryGroup(item: CategoryGroupItem)
 }
 
 interface EditTransactionNavigator : BaseNavigator {

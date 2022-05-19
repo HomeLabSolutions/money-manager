@@ -13,6 +13,7 @@
     <string name="title_sub_category">Категория: %1$s</string>
     <string name="title_category_creation">Категория</string>
     <string name="title_category_set">Доступные иконки</string>
+    <string name="title_category_group_set">Категории</string>
     <string name="title_category_creation_create">Создание категории</string>
     <string name="title_prepopulate_currency">Выберите валюту</string>
     <string name="title_prepopulate_budget">Текущий бюджет</string>
@@ -88,6 +89,18 @@
     <string name="category_expense_info_today_title">потрачено сегодня:</string>
     <string name="category_expense_info_period_title">потрачено за период:</string>
     <string name="category_income_info_period_title">заработано за период:</string>
+    <string name="category_group_housing">Жильё</string>
+    <string name="category_group_transportation">Транспорт</string>
+    <string name="category_group_food">Еда</string>
+    <string name="category_group_utilities">Коммунальные услуги</string>
+    <string name="category_group_insurance">Страхование</string>
+    <string name="category_group_medical">Медицина</string>
+    <string name="category_group_sport">Спорт</string>
+    <string name="category_group_investing">Инвестирование</string>
+    <string name="category_group_recreation">Отдых</string>
+    <string name="category_group_clothes">Одежда</string>
+    <string name="category_group_personal">Личное</string>
+    <string name="category_group_others">Другое</string>
 
     <string name="category_edit_title">Редактирование группы категорий</string>
     <string name="category_delete_title">Удаление категории</string>

@@ -32,6 +32,15 @@
         <item name="android:maxLines">1</item>
     </style>
 
+    <style name="Widget.MoneyManager.Category.Group.Title" parent="TextAppearance.MoneyManager.H5">
+        <item name="android:textSize">@dimen/statistics_item_group_icon_text_size</item>
+        <item name="android:gravity">center_vertical|start</item>
+        <item name="android:paddingStart">@dimen/standard_left_margin</item>
+        <item name="android:paddingEnd">@dimen/standard_right_margin</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
     <style name="Widget.MoneyManager.Category.Subtitle" parent="TextAppearance.MoneyManager.Subtitle1">
         <item name="android:textAllCaps">false</item>
         <item name="android:textColor">?android:textColorPrimary</item>

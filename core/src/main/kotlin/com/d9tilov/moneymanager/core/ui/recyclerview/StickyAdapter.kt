@@ -23,7 +23,7 @@ abstract class StickyAdapter<T : Any, SVH : RecyclerView.ViewHolder, VH : Recycl
     /**
      * This method gets called by [StickyHeaderItemDecorator] to setup the header View.
      *
-     * @param holder         RecyclerView.ViewHolder. Holder to bind the data on.
+     * @param holder RecyclerView.ViewHolder. Holder to bind the data on.
      * @param headerPosition int. Position of the header item in the adapter.
      */
     abstract fun onBindHeaderViewHolder(holder: SVH, headerPosition: Int)

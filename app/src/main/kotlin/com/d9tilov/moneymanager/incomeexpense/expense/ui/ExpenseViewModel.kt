@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn

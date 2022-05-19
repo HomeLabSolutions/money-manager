@@ -72,16 +72,12 @@ class IncomeExpenseFragment :
             }
             incomeExpenseViewPager.adapter = incomeExpenseAdapter
             incomeExpenseViewPager.offscreenPageLimit = 2
-            incomeExpenseViewPager.registerOnPageChangeCallback(object :
-                ViewPager2.OnPageChangeCallback() {
+            incomeExpenseViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
                     pageIndex = position
                     firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
-                        param(
-                            FirebaseAnalytics.Param.ITEM_ID,
-                            if (position == 0) "expense" else "income"
-                        )
+                        param(FirebaseAnalytics.Param.ITEM_ID, if (position == 0) "expense" else "income")
                     }
                     if (isKeyboardOpen) openKeyboard()
                     else closeKeyboard()
@@ -237,9 +233,7 @@ class IncomeExpenseFragment :
         return if (isKeyboardOpen) {
             closeKeyboard()
             false
-        } else {
-            true
-        }
+        } else true
     }
 
     override fun onDestroyView() {

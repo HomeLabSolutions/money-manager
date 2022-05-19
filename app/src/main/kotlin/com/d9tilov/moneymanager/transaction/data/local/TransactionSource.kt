@@ -30,7 +30,7 @@ interface TransactionSource {
         category: Category,
         from: LocalDateTime,
         to: LocalDateTime,
-        onlyInStatistics: Boolean,
+        onlyInStatistics: Boolean
     ): Flow<List<TransactionDataModel>>
 
     suspend fun getCountByCurrencyCode(code: String): Int
