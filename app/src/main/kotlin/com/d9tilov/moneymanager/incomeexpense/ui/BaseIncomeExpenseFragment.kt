@@ -19,8 +19,6 @@ import com.d9tilov.moneymanager.base.ui.navigator.BaseIncomeExpenseNavigator
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryAdapter
 import com.d9tilov.moneymanager.core.events.OnDialogDismissListener
-import com.d9tilov.moneymanager.core.events.OnItemClickListener
-import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showWithAnimation
@@ -46,42 +44,21 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : Vi
     BaseIncomeExpenseNavigator,
     OnIncomeExpenseListener {
 
-    protected val categoryAdapter = CategoryAdapter()
-    protected val transactionAdapter = TransactionAdapter()
+    protected val categoryAdapter = CategoryAdapter { item, _ ->
+        if (item.id == Category.ALL_ITEMS_ID) (viewModel as BaseIncomeExpenseViewModel<N>).openAllCategories()
+        else saveTransaction(item)
+    }
+    protected val transactionAdapter = TransactionAdapter(
+        itemClickListener = { item, _ ->
+            val action = IncomeExpenseFragmentDirections.toEditTransactionDest(item.type, item)
+            findNavController().navigate(action)
+        },
+        itemSwipeListener = { item, _ -> openRemoveConfirmationDialog(item) }
+    )
+
     private var isTransactionDataEmpty = false
 
     override val snackBarBackgroundTint = R.color.button_normal_color_disable
-
-    private val onAllCategoriesClickListener = object : OnItemClickListener<Category> {
-        override fun onItemClick(item: Category, position: Int) {
-            if (item.id == Category.ALL_ITEMS_ID) {
-                (viewModel as BaseIncomeExpenseViewModel<N>).openAllCategories()
-            } else saveTransaction(item)
-        }
-    }
-
-    private val onTransactionClickListener = object : OnItemClickListener<Transaction> {
-        override fun onItemClick(item: Transaction, position: Int) {
-            val action = IncomeExpenseFragmentDirections.toEditTransactionDest(
-                item.type,
-                item
-            )
-            findNavController().navigate(action)
-        }
-    }
-
-    private val onItemSwipeListener = object : OnItemSwipeListener<Transaction> {
-        override fun onItemSwiped(item: Transaction, position: Int) {
-            openRemoveConfirmationDialog(item)
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        categoryAdapter.itemClickListener = onAllCategoriesClickListener
-        transactionAdapter.itemSwipeListener = onItemSwipeListener
-        transactionAdapter.itemClickListener = onTransactionClickListener
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -19,13 +19,14 @@ import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuTransactionType
 import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuType
 import com.d9tilov.moneymanager.statistics.ui.recycler.diff.StatisticsMenuItemDiffUtils
 
-class StatisticsMenuAdapter : RecyclerView.Adapter<BaseViewHolder>() {
+class StatisticsMenuAdapter(
+    private val chartMenuItemClickListener: OnItemClickListener<StatisticsMenuChartMode>,
+    private val currencyMenuItemClickListener: OnItemClickListener<StatisticsMenuCurrency>,
+    private val inStatisticsMenuItemClickListener: OnItemClickListener<StatisticsMenuInStatistics>,
+    private val trTypeMenuItemClickListener: OnItemClickListener<StatisticsMenuTransactionType>,
+    private val categoryMenuItemClickListener: OnItemClickListener<StatisticsMenuCategoryType>
+) : RecyclerView.Adapter<BaseViewHolder>() {
 
-    var chartMenuItemClickListener: OnItemClickListener<StatisticsMenuChartMode>? = null
-    var currencyMenuItemClickListener: OnItemClickListener<StatisticsMenuCurrency>? = null
-    var inStatisticsMenuItemClickListener: OnItemClickListener<StatisticsMenuInStatistics>? = null
-    var trTypeMenuItemClickListener: OnItemClickListener<StatisticsMenuTransactionType>? = null
-    var categoryMenuItemClickListener: OnItemClickListener<StatisticsMenuCategoryType>? = null
     private var menuItems = mutableListOf<BaseStatisticsMenuType>()
 
     init {
@@ -55,10 +56,7 @@ class StatisticsMenuAdapter : RecyclerView.Adapter<BaseViewHolder>() {
                 viewBinding.root.setOnClickListener {
                     val adapterPosition = viewHolder.bindingAdapterPosition
                     if (adapterPosition != RecyclerView.NO_POSITION) {
-                        currencyMenuItemClickListener?.onItemClick(
-                            menuItems[adapterPosition] as StatisticsMenuCurrency,
-                            adapterPosition
-                        )
+                        currencyMenuItemClickListener.onItemClick(menuItems[adapterPosition] as StatisticsMenuCurrency, adapterPosition)
                     }
                 }
                 viewHolder
@@ -73,10 +71,7 @@ class StatisticsMenuAdapter : RecyclerView.Adapter<BaseViewHolder>() {
                 viewBinding.root.setOnClickListener {
                     val adapterPosition = viewHolder.bindingAdapterPosition
                     if (adapterPosition != RecyclerView.NO_POSITION) {
-                        chartMenuItemClickListener?.onItemClick(
-                            menuItems[adapterPosition] as StatisticsMenuChartMode,
-                            adapterPosition
-                        )
+                        chartMenuItemClickListener.onItemClick(menuItems[adapterPosition] as StatisticsMenuChartMode, adapterPosition)
                     }
                 }
                 viewHolder
@@ -91,10 +86,7 @@ class StatisticsMenuAdapter : RecyclerView.Adapter<BaseViewHolder>() {
                 viewBinding.root.setOnClickListener {
                     val adapterPosition = viewHolder.bindingAdapterPosition
                     if (adapterPosition != RecyclerView.NO_POSITION) {
-                        categoryMenuItemClickListener?.onItemClick(
-                            menuItems[adapterPosition] as StatisticsMenuCategoryType,
-                            adapterPosition
-                        )
+                        categoryMenuItemClickListener.onItemClick(menuItems[adapterPosition] as StatisticsMenuCategoryType, adapterPosition)
                     }
                 }
                 viewHolder
@@ -109,10 +101,7 @@ class StatisticsMenuAdapter : RecyclerView.Adapter<BaseViewHolder>() {
                 viewBinding.root.setOnClickListener {
                     val adapterPosition = viewHolder.bindingAdapterPosition
                     if (adapterPosition != RecyclerView.NO_POSITION) {
-                        trTypeMenuItemClickListener?.onItemClick(
-                            menuItems[adapterPosition] as StatisticsMenuTransactionType,
-                            adapterPosition
-                        )
+                        trTypeMenuItemClickListener.onItemClick(menuItems[adapterPosition] as StatisticsMenuTransactionType, adapterPosition)
                     }
                 }
                 viewHolder
@@ -127,10 +116,7 @@ class StatisticsMenuAdapter : RecyclerView.Adapter<BaseViewHolder>() {
                 viewBinding.root.setOnClickListener {
                     val adapterPosition = viewHolder.bindingAdapterPosition
                     if (adapterPosition != RecyclerView.NO_POSITION) {
-                        inStatisticsMenuItemClickListener?.onItemClick(
-                            menuItems[adapterPosition] as StatisticsMenuInStatistics,
-                            adapterPosition
-                        )
+                        inStatisticsMenuItemClickListener.onItemClick(menuItems[adapterPosition] as StatisticsMenuInStatistics, adapterPosition)
                     }
                 }
                 viewHolder

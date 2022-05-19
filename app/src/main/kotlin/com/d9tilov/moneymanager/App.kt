@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.multidex.MultiDexApplication
 import androidx.work.Configuration
-import com.d9tilov.moneymanager.backup.PeriodicBackupWorker
 import com.facebook.appevents.AppEventsLogger
 import com.facebook.stetho.Stetho
 import dagger.hilt.android.HiltAndroidApp

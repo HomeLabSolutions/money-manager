@@ -11,10 +11,11 @@ import com.d9tilov.moneymanager.databinding.ItemGoalBinding
 import com.d9tilov.moneymanager.goal.domain.entity.Goal
 import com.d9tilov.moneymanager.goal.ui.diff.GoalDiffUtil
 
-class GoalAdapter : RecyclerView.Adapter<GoalAdapter.GoalViewHolder>() {
+class GoalAdapter(
+    private val itemClickListener: OnItemClickListener<Goal>,
+    private val itemSwipeListener: OnItemSwipeListener<Goal>
+) : RecyclerView.Adapter<GoalAdapter.GoalViewHolder>() {
 
-    var itemClickListener: OnItemClickListener<Goal>? = null
-    var itemSwipeListener: OnItemSwipeListener<Goal>? = null
     private var goals = mutableListOf<Goal>()
     private var removedItemPosition: Int = 0
 
@@ -30,7 +31,7 @@ class GoalAdapter : RecyclerView.Adapter<GoalAdapter.GoalViewHolder>() {
         viewBinding.root.setOnClickListener {
             val adapterPosition = viewHolder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
-                itemClickListener?.onItemClick(goals[adapterPosition], adapterPosition)
+                itemClickListener.onItemClick(goals[adapterPosition], adapterPosition)
             }
         }
         return viewHolder
@@ -59,7 +60,7 @@ class GoalAdapter : RecyclerView.Adapter<GoalAdapter.GoalViewHolder>() {
     fun deleteItem(position: Int) {
         removedItemPosition = position
         val goalToDelete = goals[position]
-        itemSwipeListener?.onItemSwiped(goalToDelete, position)
+        itemSwipeListener.onItemSwiped(goalToDelete, position)
     }
 
     fun cancelDeletion() {

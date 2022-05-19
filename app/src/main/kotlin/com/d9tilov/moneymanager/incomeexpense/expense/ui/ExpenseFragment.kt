@@ -136,20 +136,10 @@ class ExpenseFragment :
                                                 getString(R.string.category_expense_info_can_spend_today_title)
                                             expenseTodayInfoValue.run {
                                                 setValue(ableToSpendToday.trSum, currencyCode())
-                                                val color = if (ableToSpendToday.trSum.setScale(
-                                                        DECIMAL_LENGTH,
-                                                        ROUND_HALF_UP
-                                                    ).signum() > 0
-                                                )
-                                                    ContextCompat.getColor(
-                                                        requireContext(),
-                                                        R.color.success_color
-                                                    )
-                                                else
-                                                    ContextCompat.getColor(
-                                                        requireContext(),
-                                                        R.color.error_color
-                                                    )
+                                                val color =
+                                                    if (ableToSpendToday.trSum.setScale(DECIMAL_LENGTH, ROUND_HALF_UP).signum() > 0)
+                                                        ContextCompat.getColor(requireContext(), R.color.success_color)
+                                                    else ContextCompat.getColor(requireContext(), R.color.error_color)
                                                 setColor(color)
                                             }
                                         }

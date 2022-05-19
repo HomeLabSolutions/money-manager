@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.firstOrNull
 
 class UserInfoInteractor(
     private val userRepo: UserRepo,
-    private val userDomainMapper: UserDomainMapper,
+    private val userDomainMapper: UserDomainMapper
 ) : UserInteractor {
 
     override fun getCurrentUser(): Flow<UserProfile?> = userRepo.getCurrentUser()

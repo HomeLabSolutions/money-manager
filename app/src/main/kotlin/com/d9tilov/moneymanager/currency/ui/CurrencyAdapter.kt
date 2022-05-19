@@ -12,11 +12,10 @@ import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.databinding.ItemCurrencyBinding
 
-class CurrencyAdapter(private val shouldCheck: Boolean) :
+class CurrencyAdapter(private val shouldCheck: Boolean, private val itemClickListener: OnItemClickListener<DomainCurrency>) :
     RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>() {
 
     private val currencies: MutableList<DomainCurrency> = mutableListOf()
-    var itemClickListener: OnItemClickListener<DomainCurrency>? = null
 
     init {
         setHasStableIds(true)
@@ -32,7 +31,7 @@ class CurrencyAdapter(private val shouldCheck: Boolean) :
         viewBinding.root.setOnClickListener {
             val adapterPosition = viewHolder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
-                itemClickListener?.onItemClick(currencies[adapterPosition], adapterPosition)
+                itemClickListener.onItemClick(currencies[adapterPosition], adapterPosition)
                 if (shouldCheck) check(adapterPosition)
             }
         }

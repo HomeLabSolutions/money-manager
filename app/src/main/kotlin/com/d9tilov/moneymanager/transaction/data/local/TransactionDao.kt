@@ -41,7 +41,7 @@ interface TransactionDao {
         uid: String,
         categoryId: Long,
         from: LocalDateTime,
-        to: LocalDateTime,
+        to: LocalDateTime
     ): Flow<List<TransactionDbModel>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

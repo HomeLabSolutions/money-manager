@@ -10,7 +10,6 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.ui.diff.CategoryDiffUtil
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
-import com.d9tilov.moneymanager.core.events.OnItemLongClickListener
 import com.d9tilov.moneymanager.core.events.OnItemMoveListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemTouchHelperCallback
@@ -20,17 +19,17 @@ import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.ItemCategoryBinding
 
-class CategoryModifyAdapter :
+class CategoryModifyAdapter(
+    private val itemClickListener: OnItemClickListener<Category>,
+    private val itemRemoveClickListener: OnItemClickListener<Category>
+) :
     RecyclerView.Adapter<CategoryModifyAdapter.ModifyCategoryViewHolder>(),
     ItemTouchHelperCallback {
 
-    var itemClickListener: OnItemClickListener<Category>? = null
-    var itemLongClickListener: OnItemLongClickListener<Category>? = null
-    var itemRemoveClickListener: OnItemClickListener<Category>? = null
-    var itemMoveListener: OnItemMoveListener<Category>? = null
     var editModeEnable = false
         private set
     private var categories = mutableListOf<Category>()
+    var itemMoveListener: OnItemMoveListener<Category>? = null
 
     init {
         setHasStableIds(true)
@@ -46,13 +45,13 @@ class CategoryModifyAdapter :
         viewBinding.root.setOnClickListener {
             val adapterPosition = viewHolder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
-                itemClickListener?.onItemClick(categories[adapterPosition], adapterPosition)
+                itemClickListener.onItemClick(categories[adapterPosition], adapterPosition)
             }
         }
         viewBinding.root.setOnLongClickListener {
             val adapterPosition = viewHolder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION && !editModeEnable) {
-                itemLongClickListener?.onItemLongClick(categories[adapterPosition])
+                enableEditMode(true)
                 return@setOnLongClickListener true
             }
             return@setOnLongClickListener false
@@ -60,7 +59,8 @@ class CategoryModifyAdapter :
         viewBinding.categoryItemRemove.setOnClickListener {
             val adapterPosition = viewHolder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
-                itemRemoveClickListener?.onItemClick(categories[adapterPosition], adapterPosition)
+                itemRemoveClickListener.onItemClick(categories[adapterPosition], adapterPosition)
+                enableEditMode(false)
             }
         }
         return viewHolder

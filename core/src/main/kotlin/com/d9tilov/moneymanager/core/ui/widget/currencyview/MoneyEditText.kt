@@ -6,7 +6,6 @@ import android.text.InputType
 import android.text.Spanned
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
-import androidx.core.content.ContextCompat
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DECIMAL_SEPARATOR
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DEFAULT_DECIMAL_SEPARATOR
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.FORMAT_STRING
@@ -63,12 +62,10 @@ class MoneyEditText @JvmOverloads constructor(
                 var ch: Char
                 for (i in start until end) {
                     ch = source[i]
-                    if (!(Character.isDigit(ch)
-                            || Character.isWhitespace(ch)
-                            || allowableSymbols.contains(ch.toString()))
-                    ) {
-                        return ""
-                    }
+                    if (!(Character.isDigit(ch) ||
+                                Character.isWhitespace(ch) ||
+                                allowableSymbols.contains(ch.toString()))
+                    ) return ""
                 }
                 return null
             }

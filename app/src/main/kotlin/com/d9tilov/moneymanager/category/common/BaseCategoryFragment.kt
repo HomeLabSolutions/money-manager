@@ -14,12 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
-import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.ui.CategoryFragmentArgs
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryModifyAdapter
 import com.d9tilov.moneymanager.core.events.OnBackPressed
-import com.d9tilov.moneymanager.core.events.OnItemClickListener
-import com.d9tilov.moneymanager.core.events.OnItemLongClickListener
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.core.util.gone
@@ -43,33 +40,10 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
     protected val destination by lazy { args.destination }
     protected val transactionType by lazy { args.transactionType }
     protected var toolbar: MaterialToolbar? = null
-    protected val categoryAdapter: CategoryModifyAdapter = CategoryModifyAdapter()
-
-    private val onItemClickListener = object : OnItemClickListener<Category> {
-        override fun onItemClick(item: Category, position: Int) {
-            (viewModel as BaseCategoryViewModel<N>).onCategoryClicked(item)
-        }
-    }
-
-    private val onItemLongClickListener = object : OnItemLongClickListener<Category> {
-        override fun onItemLongClick(item: Category, position: Int) {
-            categoryAdapter.enableEditMode(true)
-        }
-    }
-
-    private val onItemRemoveClickListener = object : OnItemClickListener<Category> {
-        override fun onItemClick(item: Category, position: Int) {
-            (viewModel as BaseCategoryViewModel<N>).onCategoryRemoved(item)
-            categoryAdapter.enableEditMode(false)
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        categoryAdapter.itemClickListener = onItemClickListener
-        categoryAdapter.itemLongClickListener = onItemLongClickListener
-        categoryAdapter.itemRemoveClickListener = onItemRemoveClickListener
-    }
+    protected val categoryAdapter: CategoryModifyAdapter = CategoryModifyAdapter(
+        { item, _ -> (viewModel as BaseCategoryViewModel<N>).onCategoryClicked(item) },
+        { item, _ -> (viewModel as BaseCategoryViewModel<N>).onCategoryRemoved(item) }
+    )
 
     override fun onStop() {
         categoryAdapter.enableEditMode(false)

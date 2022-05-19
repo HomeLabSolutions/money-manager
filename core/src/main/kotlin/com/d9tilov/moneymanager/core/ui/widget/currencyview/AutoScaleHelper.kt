@@ -93,10 +93,10 @@ class AutoScaleHelper(private val currencyView: CurrencyView) {
         prefixPaint.textSize = size
         valuePaint.textSize = size
         signPaint.textSize = size
-        if ((prefixPaint.measureText(prefixTextView.text, 0, prefixTextView.text.length)
-                    + valuePaint.measureText(text, 0, text.length)
-                    + currencyView.marginBetweenCurrencySymbol
-                    + signPaint.measureText(signText, 0, signText.length)) > targetWidth
+        if ((prefixPaint.measureText(prefixTextView.text, 0, prefixTextView.text.length) +
+                    valuePaint.measureText(text, 0, text.length) +
+                    currencyView.marginBetweenCurrencySymbol +
+                    signPaint.measureText(signText, 0, signText.length)) > targetWidth
         ) {
             size = getAutoScaleTextSize(
                 prefixText, text, signText, targetWidth.toFloat(), 0f, high,
@@ -111,7 +111,7 @@ class AutoScaleHelper(private val currencyView: CurrencyView) {
         signTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, size / textSizeMultiplier)
     }
 
-    //Binary search to define new text size
+    // Binary search to define new text size
     private fun getAutoScaleTextSize(
         prefixText: CharSequence,
         valueText: CharSequence,

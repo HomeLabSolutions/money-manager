@@ -12,6 +12,7 @@
     <string name="title_sub_category">Category: %1$s</string>
     <string name="title_category_creation">Category</string>
     <string name="title_category_set">Available icons</string>
+    <string name="title_category_group_set">Categories</string>
     <string name="title_category_creation_create">Category creation</string>
     <string name="title_prepopulate_currency">Choose currency</string>
     <string name="title_prepopulate_budget">Current budget</string>
@@ -87,6 +88,18 @@
     <string name="category_expense_info_today_title">was spent today:</string>
     <string name="category_expense_info_period_title">was spent in period:</string>
     <string name="category_income_info_period_title">was earned in period:</string>
+    <string name="category_group_housing">Housing</string>
+    <string name="category_group_transportation">Transportation</string>
+    <string name="category_group_food">Food</string>
+    <string name="category_group_utilities">Utilities</string>
+    <string name="category_group_insurance">Insurance</string>
+    <string name="category_group_medical">Medical &amp; Healthcare</string>
+    <string name="category_group_sport">Sport</string>
+    <string name="category_group_investing">Investing</string>
+    <string name="category_group_recreation">Recreation</string>
+    <string name="category_group_clothes">Clothes</string>
+    <string name="category_group_personal">Clothes</string>
+    <string name="category_group_others">Others</string>
 
     <string name="category_edit_title">Edit category group</string>
     <string name="category_delete_title">Remove category?</string>

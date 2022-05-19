@@ -13,15 +13,18 @@ import com.d9tilov.moneymanager.databinding.ItemBillingIntroCardBinding
 
 class DotIndicatorPager2Adapter : RecyclerView.Adapter<ViewHolder>() {
 
-    data class Card(@DrawableRes val id: Int, @StringRes val strId: Int)
+    data class Card(val image: Image, @StringRes val strId: Int)
+
+    @JvmInline
+    value class Image(@DrawableRes val id: Int)
 
     private val items = listOf(
-        Card(R.drawable.ic_billing_1, R.string.billing_intro_1),
-        Card(R.drawable.ic_billing_2, R.string.billing_intro_2),
-        Card(R.drawable.ic_billing_3, R.string.billing_intro_3),
-        Card(R.drawable.ic_billing_4, R.string.billing_intro_4),
-        Card(R.drawable.ic_billing_5, R.string.billing_intro_5),
-        Card(R.drawable.ic_billing_6, R.string.billing_intro_6)
+        Card(Image(R.drawable.ic_billing_1), R.string.billing_intro_1),
+        Card(Image(R.drawable.ic_billing_2), R.string.billing_intro_2),
+        Card(Image(R.drawable.ic_billing_3), R.string.billing_intro_3),
+        Card(Image(R.drawable.ic_billing_4), R.string.billing_intro_4),
+        Card(Image(R.drawable.ic_billing_5), R.string.billing_intro_5),
+        Card(Image(R.drawable.ic_billing_6), R.string.billing_intro_6)
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -42,7 +45,7 @@ class DotIndicatorPager2Adapter : RecyclerView.Adapter<ViewHolder>() {
         fun bind(card: Card) {
             GlideApp
                 .with(context)
-                .load(card.id)
+                .load(card.image.id)
                 .into(viewBinding.itemBillingCardIcon)
             viewBinding.itemBillingCardDescription.text = context.getString(card.strId)
         }

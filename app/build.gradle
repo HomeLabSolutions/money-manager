@@ -179,7 +179,7 @@ dependencies {
 
     implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
 
-    ktlint "com.pinterest:ktlint:0.37.2"
+    ktlint "com.pinterest:ktlint:0.45.2"
 
     implementation "com.android.billingclient:billing-ktx:4.1.0"
     implementation "com.tbuonomo:dotsindicator:4.3"

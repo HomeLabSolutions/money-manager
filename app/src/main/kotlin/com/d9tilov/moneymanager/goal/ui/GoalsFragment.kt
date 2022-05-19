@@ -18,9 +18,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.callback.SwipeToDeleteCallback
+import com.d9tilov.moneymanager.base.ui.currencyCode
 import com.d9tilov.moneymanager.base.ui.navigator.GoalsNavigator
-import com.d9tilov.moneymanager.core.events.OnItemClickListener
-import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.ui.recyclerview.MarginItemDecoration
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
@@ -28,10 +27,9 @@ import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentGoalsBinding
 import com.d9tilov.moneymanager.databinding.LayoutEmptyListGoalsPlaceholderBinding
 import com.d9tilov.moneymanager.goal.domain.entity.Goal
+import com.d9tilov.moneymanager.goal.domain.entity.GoalDestination
 import com.d9tilov.moneymanager.goal.ui.dialog.GoalRemoveDialog.Companion.ARG_UNDO_REMOVE_LAYOUT_DISMISS
 import com.d9tilov.moneymanager.goal.vm.GoalsViewModel
-import com.d9tilov.moneymanager.base.ui.currencyCode
-import com.d9tilov.moneymanager.goal.domain.entity.GoalDestination
 import com.d9tilov.moneymanager.prepopulate.ui.ControlsClicked
 import com.d9tilov.moneymanager.prepopulate.ui.PrepopulateActivity
 import com.google.android.material.appbar.MaterialToolbar
@@ -53,33 +51,21 @@ class GoalsFragment :
 
     private var toolbar: MaterialToolbar? = null
     private var emptyViewStub: LayoutEmptyListGoalsPlaceholderBinding? = null
-    private val goalAdapter: GoalAdapter = GoalAdapter()
+    private val goalAdapter: GoalAdapter = GoalAdapter(
+        itemClickListener = { item, _ ->
+            val action = GoalsFragmentDirections.toGoalsCreationDest(item)
+            findNavController().navigate(action)
+        },
+        itemSwipeListener = { item, _ -> openRemoveConfirmationDialog(item) }
+    )
     private var showViewStub = false
 
     override fun getNavigator() = this
     override val viewModel by viewModels<GoalsViewModel>()
 
-    private val onItemClickListener = object : OnItemClickListener<Goal> {
-        override fun onItemClick(item: Goal, position: Int) {
-            val action = GoalsFragmentDirections.toGoalsCreationDest(item)
-            findNavController().navigate(action)
-        }
-    }
-    private val onItemSwipeListener = object : OnItemSwipeListener<Goal> {
-        override fun onItemSwiped(item: Goal, position: Int) {
-            openRemoveConfirmationDialog(item)
-        }
-    }
-
     private fun openRemoveConfirmationDialog(goal: Goal) {
         val action = GoalsFragmentDirections.toRemoveGoalDialog(goal)
         findNavController().navigate(action)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        goalAdapter.itemClickListener = onItemClickListener
-        goalAdapter.itemSwipeListener = onItemSwipeListener
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

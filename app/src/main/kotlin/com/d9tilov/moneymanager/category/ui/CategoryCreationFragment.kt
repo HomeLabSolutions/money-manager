@@ -15,15 +15,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryCreationNavigator
-import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.data.entity.isEmpty
+import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination
+import com.d9tilov.moneymanager.category.domain.entity.CategoryGroup
 import com.d9tilov.moneymanager.category.exception.CategoryExistException
 import com.d9tilov.moneymanager.category.ui.CategoryIconSetFragment.Companion.ARG_CATEGORY_ICON_ID
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryColorAdapter
 import com.d9tilov.moneymanager.category.ui.vm.CategoryCreationViewModel
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_DATA_ID
-import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.onChange
@@ -46,27 +46,20 @@ class CategoryCreationFragment :
 
     private var toolbar: MaterialToolbar? = null
     private var localCategory: Category = Category.EMPTY_EXPENSE
-    private val categoryColorAdapter by lazy { CategoryColorAdapter(category.color) } // must be lazy for properly initialization with args
+    private val categoryColorAdapter by lazy {
+        CategoryColorAdapter(category.color) { item, _ ->
+            viewBinding?.run {
+                categoryCreationRvColorPicker.gone()
+                updateColor(item)
+            }
+        }
+    } // must be lazy for properly initialization with args
 
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun getNavigator() = this
     override val viewModel by viewModels<CategoryCreationViewModel>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        categoryColorAdapter.itemClickListener = onItemColorClickListener
-    }
-
-    private val onItemColorClickListener = object : OnItemClickListener<Int> {
-        override fun onItemClick(item: Int, position: Int) {
-            viewBinding?.run {
-                categoryCreationRvColorPicker.gone()
-                updateColor(item)
-            }
-        }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -96,13 +89,11 @@ class CategoryCreationFragment :
                 categoryCreationEtNameLayout.error = null
                 localCategory = localCategory.copy(name = text)
             }
-            if (localCategory.id == DEFAULT_DATA_ID) {
-                categoryCreationDelete.gone()
-            } else {
-                categoryCreationDelete.show()
-            }
+            if (localCategory.id == DEFAULT_DATA_ID) categoryCreationDelete.gone()
+            else categoryCreationDelete.show()
             categoryCreationIconLayout.setOnClickListener {
-                val action = CategoryCreationFragmentDirections.toCategorySetDest()
+                val action = if (viewModel.isPremium) CategoryCreationFragmentDirections.toGroupedCategorySetDest()
+                else CategoryCreationFragmentDirections.toCategorySetDest(CategoryGroup.UNKNOWN)
                 findNavController().navigate(action)
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
                     param(FirebaseAnalytics.Param.ITEM_ID, "open_category_set_screen")

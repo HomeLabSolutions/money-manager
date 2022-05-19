@@ -22,7 +22,6 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.data.ResultOf
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsNavigator
-import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.core.util.DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT_SHORT
@@ -40,9 +39,7 @@ import com.d9tilov.moneymanager.core.util.toLocalDateTime
 import com.d9tilov.moneymanager.core.util.toMillis
 import com.d9tilov.moneymanager.databinding.FragmentStatisticsBinding
 import com.d9tilov.moneymanager.databinding.LayoutEmptyStatisticsPlaceholderBinding
-import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuCategoryType
 import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuChartMode
-import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuCurrency
 import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuInStatistics
 import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuTransactionType
 import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod
@@ -93,81 +90,57 @@ class StatisticsFragment :
 
     override fun getNavigator() = this
     override val viewModel by viewModels<StatisticsViewModel>()
-    private val statisticsBarChartAdapter: StatisticsBarChartAdapter = StatisticsBarChartAdapter()
-    private val statisticsMenuAdapter: StatisticsMenuAdapter = StatisticsMenuAdapter()
-    private var emptyViewStub: LayoutEmptyStatisticsPlaceholderBinding? = null
-    private var showMenu = false
-    private val hideMenuHandler = Handler(Looper.getMainLooper())
-
-    private val onTransactionClickListener =
-        object : OnItemClickListener<TransactionChartModel> {
-            override fun onItemClick(item: TransactionChartModel, position: Int) {
-                val action = StatisticsFragmentDirections.toStatisticsDetailsDest(
-                    item.category,
-                    viewModel.chartPeriod.from.toMillis(),
-                    viewModel.chartPeriod.to.toMillis(),
-                    viewModel.inStatistics == StatisticsMenuInStatistics.IN_STATISTICS,
-                    when (viewModel.transactionType) {
-                        StatisticsMenuTransactionType.EXPENSE -> TransactionType.EXPENSE
-                        StatisticsMenuTransactionType.INCOME -> TransactionType.INCOME
-                    }
-                )
-                findNavController().navigate(action)
-            }
+    private val statisticsBarChartAdapter: StatisticsBarChartAdapter =
+        StatisticsBarChartAdapter { item, _ ->
+            val action = StatisticsFragmentDirections.toStatisticsDetailsDest(
+                item.category,
+                viewModel.chartPeriod.from.toMillis(),
+                viewModel.chartPeriod.to.toMillis(),
+                viewModel.inStatistics == StatisticsMenuInStatistics.IN_STATISTICS,
+                when (viewModel.transactionType) {
+                    StatisticsMenuTransactionType.EXPENSE -> TransactionType.EXPENSE
+                    StatisticsMenuTransactionType.INCOME -> TransactionType.INCOME
+                }
+            )
+            findNavController().navigate(action)
         }
-    private val onCharMenuItemClickListener =
-        object : OnItemClickListener<StatisticsMenuChartMode> {
-            override fun onItemClick(item: StatisticsMenuChartMode, position: Int) {
+    private val statisticsMenuAdapter: StatisticsMenuAdapter by lazy {
+        StatisticsMenuAdapter(
+            chartMenuItemClickListener = { _, _ ->
                 viewModel.updateCharMode()
                 statisticsMenuAdapter.updateItems(viewModel.menuItemList)
                 hideMenuWithDelay()
                 showChart()
-            }
-        }
-    private val onCurrencyMenuItemClickListener =
-        object : OnItemClickListener<StatisticsMenuCurrency> {
-            override fun onItemClick(item: StatisticsMenuCurrency, position: Int) {
+            },
+            currencyMenuItemClickListener = { _, _ ->
                 viewModel.updateCurrency()
                 statisticsMenuAdapter.updateItems(viewModel.menuItemList)
                 hideMenuWithDelay()
-            }
-        }
-    private val onInStatisticsMenuItemClickListener =
-        object : OnItemClickListener<StatisticsMenuInStatistics> {
-            override fun onItemClick(item: StatisticsMenuInStatistics, position: Int) {
+            },
+            inStatisticsMenuItemClickListener = { _, _ ->
                 viewModel.updateStatisticsFlag()
                 statisticsMenuAdapter.updateItems(viewModel.menuItemList)
                 hideMenuWithDelay()
-            }
-        }
-
-    private val onTrTypeMenuItemClickListener =
-        object : OnItemClickListener<StatisticsMenuTransactionType> {
-            override fun onItemClick(item: StatisticsMenuTransactionType, position: Int) {
+            },
+            trTypeMenuItemClickListener = { _, _ ->
                 viewModel.updateTransactionType()
                 statisticsMenuAdapter.updateItems(viewModel.menuItemList)
                 hideMenuWithDelay()
-            }
-        }
-    private val onCategoryItemClickListener =
-        object : OnItemClickListener<StatisticsMenuCategoryType> {
-            override fun onItemClick(item: StatisticsMenuCategoryType, position: Int) {
+            },
+            categoryMenuItemClickListener = { _, _ ->
                 viewModel.updateCategoryType()
                 statisticsMenuAdapter.updateItems(viewModel.menuItemList)
                 hideMenuWithDelay()
             }
-        }
+        )
+    }
+    private var emptyViewStub: LayoutEmptyStatisticsPlaceholderBinding? = null
+    private var showMenu = false
+    private val hideMenuHandler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity as AppCompatActivity).supportActionBar?.hide()
-        statisticsBarChartAdapter.transactionClickListener = onTransactionClickListener
-        statisticsMenuAdapter.chartMenuItemClickListener = onCharMenuItemClickListener
-        statisticsMenuAdapter.currencyMenuItemClickListener = onCurrencyMenuItemClickListener
-        statisticsMenuAdapter.inStatisticsMenuItemClickListener =
-            onInStatisticsMenuItemClickListener
-        statisticsMenuAdapter.trTypeMenuItemClickListener = onTrTypeMenuItemClickListener
-        statisticsMenuAdapter.categoryMenuItemClickListener = onCategoryItemClickListener
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
