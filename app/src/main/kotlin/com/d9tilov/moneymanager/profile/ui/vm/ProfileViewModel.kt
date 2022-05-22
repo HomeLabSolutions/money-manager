@@ -6,7 +6,6 @@ import com.d9tilov.moneymanager.billing.domain.BillingInteractor
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.budget.domain.entity.BudgetData
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
-import com.d9tilov.moneymanager.goal.domain.GoalInteractor
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
@@ -26,7 +25,6 @@ class ProfileViewModel @Inject constructor(
     userInfoInteractor: UserInteractor,
     budgetInteractor: BudgetInteractor,
     regularTransactionInteractor: RegularTransactionInteractor,
-    goalInteractor: GoalInteractor,
     billingInteractor: BillingInteractor
 ) : BaseViewModel<ProfileNavigator>() {
 
