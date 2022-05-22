@@ -3,6 +3,7 @@ package com.d9tilov.moneymanager.core.ui.widget.currencyview
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
+import android.text.Editable
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.setPadding
 import androidx.core.widget.TextViewCompat
+import androidx.core.widget.addTextChangedListener
 import com.d9tilov.moneymanager.core.R
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DECIMAL_LENGTH
@@ -177,6 +179,7 @@ class CurrencyView @JvmOverloads constructor(
             includeFontPadding = false
             setPadding(0)
             addView(this)
+            addTextChangedListener { text: Editable? -> if (text?.isEmpty() == true) minusSignTextView.gone() }
         }
     }
 

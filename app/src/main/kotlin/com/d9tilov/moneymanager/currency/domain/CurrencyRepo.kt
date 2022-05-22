@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface CurrencyRepo {
 
     fun getCurrencies(): Flow<List<Currency>>
-    suspend fun getCurrentCurrency(): CurrencyMetaData
+    fun getCurrentCurrency(): Flow<CurrencyMetaData>
     suspend fun getCurrencyByCode(code: String): Currency
     suspend fun updateCurrencies()
     suspend fun hasAlreadyUpdatedToday(baseCurrency: String): Boolean

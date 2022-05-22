@@ -40,7 +40,8 @@ class MoneyEditText @JvmOverloads constructor(
 
     init {
         initInputFilter()
-        inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        inputType = InputType.TYPE_CLASS_NUMBER or
+                    InputType.TYPE_NUMBER_FLAG_DECIMAL
         isSingleLine = true
         maxLines = 1
         includeFontPadding = false

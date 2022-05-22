@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.incomeexpense.ui.vm
 
 import androidx.lifecycle.viewModelScope
+import com.d9tilov.moneymanager.backup.PeriodicBackupWorker
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeExpenseNavigator
 import com.d9tilov.moneymanager.billing.domain.BillingInteractor
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
@@ -49,11 +50,12 @@ class IncomeExpenseViewModel @Inject constructor(
             billingInteractor.isPremium()
                 .flowOn(Dispatchers.IO)
                 .collect { isPremium ->
-                    if (isPremium)
+                    if (isPremium) {
                         awaitAll(
                             async { transactionInteractor.executeRegularIfNeeded(TransactionType.INCOME) },
                             async { transactionInteractor.executeRegularIfNeeded(TransactionType.EXPENSE) },
                         )
+                    }
                 }
         }
     }

@@ -8,11 +8,9 @@ import com.d9tilov.moneymanager.currency.data.remote.CurrencyApi
 import com.d9tilov.moneymanager.currency.data.remote.mapper.toDataModel
 import com.d9tilov.moneymanager.currency.data.remote.mapper.toDataModelValues
 import com.d9tilov.moneymanager.currency.domain.CurrencyRepo
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 
 class CurrencyDataRepo(
     private val preferencesStore: PreferencesStore,
@@ -31,8 +29,7 @@ class CurrencyDataRepo(
         }
     }
 
-    override suspend fun getCurrentCurrency(): CurrencyMetaData =
-        withContext(Dispatchers.IO) { preferencesStore.currentCurrency.first() }
+    override fun getCurrentCurrency(): Flow<CurrencyMetaData> = preferencesStore.currentCurrency
 
     override suspend fun getCurrencyByCode(code: String): Currency =
         currencySource.getCurrencyByCode(code)

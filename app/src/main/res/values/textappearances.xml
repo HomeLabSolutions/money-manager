@@ -39,11 +39,13 @@
     </style>
 
     <style name="TextAppearance.MoneyManager.CurrencySum.Big" parent="TextAppearance.MoneyManager.H2">
+        <item name="android:textSize">@dimen/currency_sum_big_text_size</item>
         <item name="android:textColor">?attr/colorControlActivated</item>
         <item name="android:textColorHint">@color/text_primary_transparent_color</item>
     </style>
 
     <style name="TextAppearance.MoneyManager.CurrencySign.Big" parent="TextAppearance.MoneyManager.H2">
+        <item name="android:textSize">@dimen/currency_sign_big_text_size</item>
         <item name="android:textColor">?attr/colorControlActivated</item>
         <item name="android:textColorHint">@color/text_primary_transparent_color</item>
     </style>

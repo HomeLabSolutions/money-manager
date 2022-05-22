@@ -11,6 +11,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.d9tilov.moneymanager.R
+import com.d9tilov.moneymanager.backup.PeriodicBackupWorker
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeExpenseNavigator
 import com.d9tilov.moneymanager.core.events.OnBackPressed
@@ -123,6 +124,7 @@ class IncomeExpenseFragment :
                     launch {
                         viewModel.isPremium.collect { isPremium ->
                             this@IncomeExpenseFragment.isPremium = isPremium
+                            if (isPremium) PeriodicBackupWorker.startPeriodicJob(requireContext())
                         }
                     }
                     launch {

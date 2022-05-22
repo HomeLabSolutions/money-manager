@@ -16,13 +16,7 @@ class BudgetInteractorImpl(
         val budget = budgetRepo.get().first()
         val newAmount = currencyInteractor.toMainCurrency(budget.sum, budget.currencyCode)
         val newSavedAmount = currencyInteractor.toMainCurrency(budget.saveSum, budget.currencyCode)
-        budgetRepo.update(
-            budget.copy(
-                sum = newAmount,
-                saveSum = newSavedAmount,
-                currencyCode = currencyCode
-            )
-        )
+        budgetRepo.update(budget.copy(sum = newAmount, saveSum = newSavedAmount, currencyCode = currencyCode))
     }
 
     override suspend fun delete(budgetData: BudgetData) = budgetRepo.delete(budgetData)
