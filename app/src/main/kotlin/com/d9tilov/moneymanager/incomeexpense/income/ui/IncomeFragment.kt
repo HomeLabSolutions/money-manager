@@ -155,12 +155,12 @@ class IncomeFragment :
             val inputSum = getSum()
             val action = if (inputSum.signum() > 0) {
                 IncomeExpenseFragmentDirections.toCategoryDest(
-                    destination = CategoryDestination.MAIN_WITH_SUM_SCREEN,
+                    destination = CategoryDestination.MainWithSumScreen,
                     transactionType = TransactionType.INCOME
                 )
             } else {
                 IncomeExpenseFragmentDirections.toCategoryDest(
-                    destination = CategoryDestination.MAIN_SCREEN,
+                    destination = CategoryDestination.MainScreen,
                     transactionType = TransactionType.INCOME
                 )
             }

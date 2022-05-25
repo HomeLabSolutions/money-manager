@@ -15,6 +15,7 @@ import com.d9tilov.moneymanager.databinding.ItemRegularTransactionBinding
 import com.d9tilov.moneymanager.regular.domain.entity.ExecutionPeriod
 import com.d9tilov.moneymanager.regular.domain.entity.PeriodType
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
+import com.d9tilov.moneymanager.regular.domain.entity.WeekDays
 import com.d9tilov.moneymanager.regular.ui.diff.RegularTransactionDiffUtil
 
 class RegularTransactionAdapter(
@@ -132,13 +133,13 @@ class RegularTransactionAdapter(
         }
 
         private fun getWeekDayString(day: Int) = when (day) {
-            0 -> context.getString(R.string.regular_transaction_repeat_monday)
-            1 -> context.getString(R.string.regular_transaction_repeat_tuesday)
-            2 -> context.getString(R.string.regular_transaction_repeat_wednesday)
-            3 -> context.getString(R.string.regular_transaction_repeat_thursday)
-            4 -> context.getString(R.string.regular_transaction_repeat_friday)
-            5 -> context.getString(R.string.regular_transaction_repeat_saturday)
-            6 -> context.getString(R.string.regular_transaction_repeat_sunday)
+            WeekDays.MONDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_monday)
+            WeekDays.TUESDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_tuesday)
+            WeekDays.WEDNESDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_wednesday)
+            WeekDays.THURSDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_thursday)
+            WeekDays.FRIDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_friday)
+            WeekDays.SATURDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_saturday)
+            WeekDays.SUNDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_sunday)
             else -> throw IllegalArgumentException("Unknown day of week: $day")
         }
     }

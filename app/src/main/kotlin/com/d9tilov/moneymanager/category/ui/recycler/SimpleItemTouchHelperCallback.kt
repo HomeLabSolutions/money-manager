@@ -59,33 +59,28 @@ class SimpleItemTouchHelperCallback(
 
             // Here you are notified that the drag operation is in progress
             clearBackground()
-            val itemActualYPosition =
-                viewHolder.itemView.top + dY + viewHolder.itemView.height / 2
-
-            val itemActualXPosition =
-                viewHolder.itemView.left + dX + viewHolder.itemView.width / 2
+            val itemActualYPosition = viewHolder.itemView.top + dY + viewHolder.itemView.height / 2
+            val itemActualXPosition = viewHolder.itemView.left + dX + viewHolder.itemView.width / 2
 
             // Find folder under dragged item
             for (i in 0 until recyclerView.childCount) {
                 val child = recyclerView.getChildAt(i)
 
                 // Exclude dragged item from detection
-                if (child != viewHolder.itemView) {
-
-                    // Accept folder which encloses item position
-                    if (child.top < itemActualYPosition &&
-                        itemActualYPosition < child.bottom &&
-                        child.left < itemActualXPosition &&
-                        child.right > itemActualXPosition
-                    ) {
-                        folder = child
-                        // Set folder background to a color indicating
-                        // that an item will be dropped into it upon release
-                        folderPosition = recyclerView.getChildAdapterPosition(child)
-                        folder?.background =
-                            (ContextCompat.getDrawable(recyclerView.context, R.drawable.round_view))
-                        break
-                    }
+                if (child == viewHolder.itemView) continue
+                // Accept folder which encloses item position
+                if (child.top < itemActualYPosition &&
+                    child.bottom > itemActualYPosition &&
+                    child.left < itemActualXPosition &&
+                    child.right > itemActualXPosition
+                ) {
+                    folder = child
+                    // Set folder background to a color indicating
+                    // that an item will be dropped into it upon release
+                    folderPosition = recyclerView.getChildAdapterPosition(child)
+                    folder?.background =
+                        (ContextCompat.getDrawable(recyclerView.context, R.drawable.round_view))
+                    break
                 }
             }
         }

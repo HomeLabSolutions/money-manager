@@ -37,10 +37,8 @@ class CurrencyViewModel @Inject constructor(
     }
 
     fun changeCurrency(currency: DomainCurrency) = viewModelScope.launch(Dispatchers.IO) {
-        awaitAll(
-            async { userInteractor.updateCurrency(currency.code) },
-            async { budgetInteractor.updateBudgetWithCurrency(currency.code) }
-        )
+        launch { userInteractor.updateCurrency(currency.code) }
+        launch { budgetInteractor.updateBudgetWithCurrency(currency.code) }
     }
 
     fun createBudgetAndSkip() {
@@ -55,7 +53,7 @@ class CurrencyViewModel @Inject constructor(
 
     fun loadCurrencies() =
         viewModelScope.launch {
-            delay(300)
+            delay(LOAD_CURRENCIES_DELAY)
             currencies.value = ResultOf.Loading()
             currencyInteractor.getCurrencies()
                 .catch { currencies.value = ResultOf.Failure(it) }
@@ -64,4 +62,8 @@ class CurrencyViewModel @Inject constructor(
         }
 
     fun currencies(): StateFlow<ResultOf<List<DomainCurrency>>> = currencies
+
+    companion object {
+        private const val LOAD_CURRENCIES_DELAY = 300L
+    }
 }

@@ -3,38 +3,26 @@ package com.d9tilov.moneymanager.category.domain.entity
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
-sealed class CategoryDestination(open val name: String) : Parcelable {
-
-    companion object {
-        const val FROM_MAIN_SCREEN = "main"
-        const val FROM_MAIN_WITH_SUM_SCREEN = "main_with_sum"
-        const val FROM_EDIT_TRANSACTION_SCREEN = "edit_transaction"
-        const val FROM_EDIT_REGULAR_TRANSACTION_SCREEN = "edit_regular_transaction"
-        const val FROM_CATEGORY_CREATION_SCREEN = "category_creation_screen"
-        const val FROM_CATEGORY_SCREEN = "category"
-        const val FROM_SUB_CATEGORY_SCREEN = "sub_category"
-    }
+sealed class CategoryDestination : Parcelable {
 
     @Parcelize
-    object MAIN_SCREEN : CategoryDestination(FROM_MAIN_SCREEN)
+    object MainScreen : CategoryDestination()
 
     @Parcelize
-    object MAIN_WITH_SUM_SCREEN : CategoryDestination(FROM_MAIN_WITH_SUM_SCREEN)
+    object MainWithSumScreen : CategoryDestination()
 
     @Parcelize
-    object EDIT_TRANSACTION_SCREEN : CategoryDestination(FROM_EDIT_TRANSACTION_SCREEN)
+    object EditTransactionScreen : CategoryDestination()
 
     @Parcelize
-    object EDIT_REGULAR_TRANSACTION_SCREEN : CategoryDestination(
-        FROM_EDIT_REGULAR_TRANSACTION_SCREEN
-    )
+    object EditRegularTransactionScreen : CategoryDestination()
 
     @Parcelize
-    object CATEGORY_CREATION_SCREEN : CategoryDestination(FROM_CATEGORY_CREATION_SCREEN)
+    object CategoryCreationScreen : CategoryDestination()
 
     @Parcelize
-    object CATEGORY_SCREEN : CategoryDestination(FROM_CATEGORY_SCREEN)
+    object CategoryScreen : CategoryDestination()
 
     @Parcelize
-    object SUB_CATEGORY_SCREEN : CategoryDestination(FROM_SUB_CATEGORY_SCREEN)
+    object SubCategoryScreen : CategoryDestination()
 }

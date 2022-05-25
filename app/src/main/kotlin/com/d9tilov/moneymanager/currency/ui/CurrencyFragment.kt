@@ -54,17 +54,17 @@ class CurrencyFragment :
     private var toolbar: MaterialToolbar? = null
     private val currencyAdapter: CurrencyAdapter by lazy {
         CurrencyAdapter(
-            destination != CurrencyDestination.PROFILE_SCREEN_CURRENT
+            destination != CurrencyDestination.ProfileCurrentScreen
         ) { item, _ ->
-            when (destination ?: CurrencyDestination.PREPOPULATE_SCREEN) {
-                CurrencyDestination.PREPOPULATE_SCREEN -> viewModel.changeCurrency(item)
-                CurrencyDestination.PROFILE_SCREEN_CURRENT -> {
+            when (destination ?: CurrencyDestination.PrepopulateScreen) {
+                CurrencyDestination.PrepopulateScreen -> viewModel.changeCurrency(item)
+                CurrencyDestination.ProfileCurrentScreen -> {
                     val action = CurrencyFragmentDirections.toChangeCurrencyDialog(item)
                     findNavController().navigate(action)
                 }
-                CurrencyDestination.EDIT_TRANSACTION_SCREEN,
-                CurrencyDestination.EDIT_REGULAR_TRANSACTION_SCREEN,
-                CurrencyDestination.INCOME_EXPENSE_SCREEN -> {
+                CurrencyDestination.EditTransactionScreen,
+                CurrencyDestination.EditRegularTransactionScreen,
+                CurrencyDestination.IncomeExpenseScreen -> {
                     findNavController().previousBackStackEntry?.savedStateHandle?.set(
                         ARG_CURRENCY,
                         item

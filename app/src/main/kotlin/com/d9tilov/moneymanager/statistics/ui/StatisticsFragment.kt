@@ -96,10 +96,10 @@ class StatisticsFragment :
                 item.category,
                 viewModel.chartPeriod.from.toMillis(),
                 viewModel.chartPeriod.to.toMillis(),
-                viewModel.inStatistics == StatisticsMenuInStatistics.IN_STATISTICS,
+                viewModel.inStatistics == StatisticsMenuInStatistics.InStatistics,
                 when (viewModel.transactionType) {
-                    StatisticsMenuTransactionType.EXPENSE -> TransactionType.EXPENSE
-                    StatisticsMenuTransactionType.INCOME -> TransactionType.INCOME
+                    StatisticsMenuTransactionType.Expense -> TransactionType.EXPENSE
+                    StatisticsMenuTransactionType.Income -> TransactionType.INCOME
                 }
             )
             findNavController().navigate(action)
@@ -158,10 +158,8 @@ class StatisticsFragment :
             statisticsYear.setOnClickListener { updatePeriod(YEAR) }
             statisticsCustom.setOnClickListener { openRangeCalendar() }
             statisticsMenu.setOnClickListener { if (!showMenu) showMenu() else hideMenu() }
-
             initPieChart()
             initLineChart()
-
             viewLifecycleOwner.lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     launch {
@@ -171,15 +169,12 @@ class StatisticsFragment :
                                     is ResultOf.Success -> {
                                         val list = result.data
                                         val newList = list.map { item ->
-                                            if (item.category.children.isNotEmpty()) {
+                                            if (item.category.children.isNotEmpty())
                                                 item.copy(category = item.category.copy(color = item.category.children[0].color))
-                                            } else item
+                                            else item
                                         }
                                         statisticsBarChartAdapter.updateItems(newList)
-                                        statisticsSpentInPeriodSum.setValue(
-                                            newList.sumOf { it.sum },
-                                            viewModel.currencyType.currencyCode
-                                        )
+                                        statisticsSpentInPeriodSum.setValue(newList.sumOf { it.sum }, viewModel.currencyType.currencyCode)
                                         statisticsBarChart.scrollToPosition(0)
                                         setPieChartData(newList)
                                     }
@@ -216,11 +211,11 @@ class StatisticsFragment :
     private fun showChart() {
         viewBinding?.run {
             when (viewModel.chartMode) {
-                StatisticsMenuChartMode.PIE_CHART -> {
+                StatisticsMenuChartMode.PieChart -> {
                     statisticsPieChart.showWithAnimation()
                     statisticsLineChart.hideWithAnimation()
                 }
-                StatisticsMenuChartMode.LINE_CHART -> {
+                StatisticsMenuChartMode.LineChart -> {
                     statisticsPieChart.hideWithAnimation()
                     statisticsLineChart.showWithAnimation()
                 }
@@ -316,19 +311,25 @@ class StatisticsFragment :
         viewBinding?.run {
             statisticsPieChart.setUsePercentValues(true)
             statisticsPieChart.description.isEnabled = false
-            statisticsPieChart.setExtraOffsets(10f, 0f, 10f, 0f)
+            statisticsPieChart.setExtraOffsets(
+                PIE_CHART_LEFT_OFFSET,
+                PIE_CHART_TOP_OFFSET,
+                PIE_CHART_RIGHT_OFFSET,
+                PIE_CHART_BOTTOM_OFFSET
+            )
 
-            statisticsPieChart.dragDecelerationFrictionCoef = 0.95f
+            statisticsPieChart.dragDecelerationFrictionCoef =
+                PIE_CHART_DRAG_DECELERATION_FRICTION_COEF
 
             statisticsPieChart.isDrawHoleEnabled = true
             statisticsPieChart.setHoleColor(Color.TRANSPARENT)
 
-            statisticsPieChart.holeRadius = 48f
-            statisticsPieChart.transparentCircleRadius = 48f
+            statisticsPieChart.holeRadius = PIE_CHART_RADIUS
+            statisticsPieChart.transparentCircleRadius = PIE_CHART_RADIUS
 
             statisticsPieChart.setDrawCenterText(true)
 
-            statisticsPieChart.rotationAngle = 0f
+            statisticsPieChart.rotationAngle = PIE_CHART_ROTATION_ANGEL
             statisticsPieChart.isRotationEnabled = true
             statisticsPieChart.isHighlightPerTapEnabled = false
 
@@ -340,8 +341,8 @@ class StatisticsFragment :
                 )
             )
             statisticsPieChart.setEntryLabelTypeface(tfRegular)
-            statisticsPieChart.setEntryLabelTextSize(15f)
-            statisticsPieChart.setCenterTextSize(16f)
+            statisticsPieChart.setEntryLabelTextSize(PIE_CHART_ENTRY_LABEL_TEXT_SIZE)
+            statisticsPieChart.setCenterTextSize(PIE_CHART_CENTER_TEXT_SIZE)
             statisticsPieChart.legend.isEnabled = false
         }
     }
@@ -370,16 +371,16 @@ class StatisticsFragment :
             ""
         )
         dataSet.setDrawIcons(false)
-        dataSet.sliceSpace = 3f
-        dataSet.iconsOffset = MPPointF(0f, 40f)
-        dataSet.selectionShift = 5f
-        dataSet.valueLinePart1OffsetPercentage = 80f
-        dataSet.valueLinePart1Length = 0.2f
-        dataSet.valueLinePart2Length = 0.4f
+        dataSet.sliceSpace = PIE_CHART_SLICE_SPACE
+        dataSet.iconsOffset = MPPointF(PIE_CHART_ICONS_X_OFFSET, PIE_CHART_ICONS_Y_OFFSET)
+        dataSet.selectionShift = PIE_CHART_SELECTION_SHIFT
+        dataSet.valueLinePart1OffsetPercentage = PIE_CHART_VALUE_LINE_PART_OFFSET_PERCENTAGE
+        dataSet.valueLinePart1Length = PIE_CHART_VALUE_LINE_PART1_LENGTH
+        dataSet.valueLinePart2Length = PIE_CHART_VALUE_LINE_PART2_LENGTH
         dataSet.colors = data.map { ContextCompat.getColor(requireContext(), it.category.color) }
         val pieData = PieData(dataSet)
         pieData.setValueFormatter(PercentFormatter(viewBinding?.statisticsPieChart))
-        pieData.setValueTextSize(12f)
+        pieData.setValueTextSize(PIE_CHART_VALUE_TEXT_SIZE)
         pieData.setValueTextColor(ContextCompat.getColor(requireContext(), R.color.primary_color))
         viewBinding?.statisticsPieChart?.data = pieData
 
@@ -394,14 +395,22 @@ class StatisticsFragment :
             statisticsLineChart.isDragEnabled = true
             statisticsLineChart.setScaleEnabled(true)
             statisticsLineChart.setPinchZoom(true)
-            statisticsLineChart.setMaxVisibleValueCount(20)
+            statisticsLineChart.setMaxVisibleValueCount(LINE_CHART_MAX_VISIBLE_VALUE_COUNT)
             statisticsLineChart.description.isEnabled = false
             val xAxis: XAxis = statisticsLineChart.xAxis
             xAxis.textColor = ContextCompat.getColor(requireContext(), R.color.statistics_line_chart_axis_text_color)
-            xAxis.enableGridDashedLine(10f, 10f, 0f)
+            xAxis.enableGridDashedLine(
+                LINE_CHART_LINE_LENGTH,
+                LINE_CHART_SPACE_LENGTH_AXIS,
+                LINE_CHART_PHASE
+            )
             val yAxis: YAxis = statisticsLineChart.axisLeft
             yAxis.textColor = ContextCompat.getColor(requireContext(), R.color.statistics_line_chart_axis_text_color)
-            yAxis.enableGridDashedLine(10f, 10f, 0f)
+            yAxis.enableGridDashedLine(
+                LINE_CHART_LINE_LENGTH,
+                LINE_CHART_SPACE_LENGTH_AXIS,
+                LINE_CHART_PHASE
+            )
 
             statisticsLineChart.axisRight.isEnabled = false
             statisticsLineChart.legend.isEnabled = false
@@ -419,12 +428,16 @@ class StatisticsFragment :
             .mapIndexed { index, pair -> Entry(index.toFloat(), pair.second.sum.toFloat()) }
         viewBinding?.run {
             val lineDataSet = LineDataSet(values, "")
-            lineDataSet.circleRadius = 1f
-            lineDataSet.formSize = 15f
-            lineDataSet.valueTextSize = 9f
+            lineDataSet.circleRadius = LINE_CHART_DATA_CIRCLE_RADIUS
+            lineDataSet.formSize = LINE_CHART_DATA_FORM_SIZE
+            lineDataSet.valueTextSize = LINE_CHART_DATA_LABEL_TEXT_SIZE
             lineDataSet.valueTextColor =
                 ContextCompat.getColor(requireContext(), R.color.text_primary_color)
-            lineDataSet.enableDashedHighlightLine(10f, 5f, 0f)
+            lineDataSet.enableDashedHighlightLine(
+                LINE_CHART_LINE_LENGTH,
+                LINE_CHART_SPACE_LENGTH,
+                LINE_CHART_PHASE
+            )
             lineDataSet.fillDrawable =
                 ContextCompat.getDrawable(requireContext(), R.drawable.statistics_fade_line_chart)
             lineDataSet.setDrawFilled(true)
@@ -436,8 +449,8 @@ class StatisticsFragment :
             statisticsLineChart.invalidate()
             statisticsLineChart.xAxis?.run {
                 position = XAxis.XAxisPosition.BOTTOM
-                axisMinimum = 0f
-                granularity = 1f
+                axisMinimum = LINE_CHART_X_AXIS_MINIMUM
+                granularity = LINE_CHART_X_AXIS_GRANULARITY
                 valueFormatter =
                     IndexAxisValueFormatter(
                         data.keys.toTypedArray().map { item: LocalDateTime ->
@@ -484,5 +497,34 @@ class StatisticsFragment :
         private const val MAX_CATEGORY_NAME_LENGTH = 10
         private const val ANIMATION_DURATION = 500
         private const val HIDE_MENU_DELAY = 5000L
+
+        private const val LINE_CHART_MAX_VISIBLE_VALUE_COUNT = 20
+        private const val LINE_CHART_LINE_LENGTH = 10f
+        private const val LINE_CHART_SPACE_LENGTH = 5f
+        private const val LINE_CHART_SPACE_LENGTH_AXIS = 10f
+        private const val LINE_CHART_PHASE = 0f
+        private const val LINE_CHART_X_AXIS_MINIMUM = 0f
+        private const val LINE_CHART_X_AXIS_GRANULARITY = 1f
+        private const val LINE_CHART_DATA_LABEL_TEXT_SIZE = 9f
+        private const val LINE_CHART_DATA_FORM_SIZE = 15f
+        private const val LINE_CHART_DATA_CIRCLE_RADIUS = 1f
+
+        private const val PIE_CHART_LEFT_OFFSET = 10f
+        private const val PIE_CHART_RIGHT_OFFSET = 10f
+        private const val PIE_CHART_TOP_OFFSET = 0f
+        private const val PIE_CHART_BOTTOM_OFFSET = 0f
+        private const val PIE_CHART_VALUE_TEXT_SIZE = 12f
+        private const val PIE_CHART_SLICE_SPACE = 3f
+        private const val PIE_CHART_ICONS_X_OFFSET = 0f
+        private const val PIE_CHART_ICONS_Y_OFFSET = 40f
+        private const val PIE_CHART_SELECTION_SHIFT = 5f
+        private const val PIE_CHART_VALUE_LINE_PART_OFFSET_PERCENTAGE = 80f
+        private const val PIE_CHART_VALUE_LINE_PART1_LENGTH = 0.2f
+        private const val PIE_CHART_VALUE_LINE_PART2_LENGTH = 0.4f
+        private const val PIE_CHART_CENTER_TEXT_SIZE = 16f
+        private const val PIE_CHART_ENTRY_LABEL_TEXT_SIZE = 15f
+        private const val PIE_CHART_ROTATION_ANGEL = 0f
+        private const val PIE_CHART_RADIUS = 48f
+        private const val PIE_CHART_DRAG_DECELERATION_FRICTION_COEF = 0.95f
     }
 }

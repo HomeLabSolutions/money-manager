@@ -114,7 +114,7 @@ class IncomeExpenseFragment :
             incomeExpenseMainSum.setOnClickListener {
                 val action =
                     IncomeExpenseFragmentDirections.toCurrencyDest(
-                        CurrencyDestination.INCOME_EXPENSE_SCREEN,
+                        CurrencyDestination.IncomeExpenseScreen,
                         viewModel.getCurrencyCode()
                     )
                 findNavController().navigate(action)
@@ -161,8 +161,10 @@ class IncomeExpenseFragment :
         var input = viewBinding?.incomeExpenseMainSum?.moneyEditText?.text.toString()
         when (str) {
             dot -> {
-                if (input.contains(dot)) return
-                if (input.isEmpty() || input[input.length - 1].toString() == dot) return
+                if (input.contains(dot) ||
+                    input.isEmpty() ||
+                    input[input.length - 1].toString() == dot
+                ) return
                 else input = input.plus(str)
             }
             zero -> {

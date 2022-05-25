@@ -73,15 +73,9 @@ class CategoryColorAdapter(@ColorRes private var chosenColor: Int?, private val 
         payloads: List<Any>
     ) {
         when {
-            payloads.contains(SCALE_UPDATE) -> {
-                holder.scale(COLOR_SELECTED_SCALE)
-            }
-            payloads.contains(UNSCALE_UPDATE) -> {
-                holder.scale(COLOR_DEFAULT_SCALE)
-            }
-            else -> {
-                super.onBindViewHolder(holder, position, payloads)
-            }
+            payloads.contains(SCALE_UPDATE) -> holder.scale(COLOR_SELECTED_SCALE)
+            payloads.contains(UNSCALE_UPDATE) -> holder.scale(COLOR_DEFAULT_SCALE)
+            else -> super.onBindViewHolder(holder, position, payloads)
         }
     }
 
@@ -97,8 +91,8 @@ class CategoryColorAdapter(@ColorRes private var chosenColor: Int?, private val 
         fun scale(scaleValue: Float) {
             val scaleDownX = ObjectAnimator.ofFloat(viewBinding.root, View.SCALE_X, scaleValue)
             val scaleDownY = ObjectAnimator.ofFloat(viewBinding.root, View.SCALE_Y, scaleValue)
-            scaleDownX.duration = 200
-            scaleDownY.duration = 200
+            scaleDownX.duration = SCALE_ANIMATION_DURATION
+            scaleDownY.duration = SCALE_ANIMATION_DURATION
             val scaleDown = AnimatorSet()
             scaleDown.play(scaleDownX).with(scaleDownY)
             scaleDown.start()
@@ -110,5 +104,6 @@ class CategoryColorAdapter(@ColorRes private var chosenColor: Int?, private val 
         private const val SCALE_UPDATE = 102
         private const val COLOR_DEFAULT_SCALE = 1f
         private const val COLOR_SELECTED_SCALE = 1.5f
+        private const val SCALE_ANIMATION_DURATION = 200L
     }
 }

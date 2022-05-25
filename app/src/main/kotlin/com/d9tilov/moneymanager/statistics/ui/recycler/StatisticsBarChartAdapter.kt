@@ -76,8 +76,8 @@ class StatisticsBarChartAdapter(private val transactionClickListener: OnItemClic
                 itemStatisticsPercent.text = context.getString(
                     R.string.number_with_percent,
                     when {
-                        percent < BigDecimal(0.01) -> "<1"
-                        percent > BigDecimal(99.99) && percent < BigDecimal(100) -> "${context.getString(R.string.approx_sign)}100"
+                        percent < BigDecimal(STATISTICAL_ERROR) -> "<1"
+                        percent > BigDecimal(MAX_PERCENT_AMOUNT - STATISTICAL_ERROR) && percent < BigDecimal(MAX_PERCENT_AMOUNT) -> "${context.getString(R.string.approx_sign)}100"
                         else -> percent.toString()
                     }
                 )
@@ -101,6 +101,8 @@ class StatisticsBarChartAdapter(private val transactionClickListener: OnItemClic
 
         companion object {
             private const val IMAGE_SIZE_IN_PX = 136
+            private const val MAX_PERCENT_AMOUNT = 100
+            private const val STATISTICAL_ERROR = 0.01
         }
     }
 }

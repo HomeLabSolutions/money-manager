@@ -59,24 +59,24 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
                 when (navController.currentDestination?.id) {
                     R.id.choose_currency_dest -> {
                         action =
-                            CurrencyFragmentDirections.toCommonAmountDest(BudgetDestination.PREPOPULATE_SCREEN)
+                            CurrencyFragmentDirections.toCommonAmountDest(BudgetDestination.PrepopulateScreen)
                         navController.navigate(action)
                     }
                     R.id.budget_amount_dest -> {
                         action = BudgetAmountFragmentDirections.toRegularIncomeDest(
-                            RegularTransactionDestination.PREPOPULATE_SCREEN
+                            RegularTransactionDestination.PrepopulateScreen
                         )
                         navController.navigate(action)
                     }
                     R.id.regular_income_dest -> {
                         action = RegularIncomeFragmentDirections.toRegularExpenseDest(
-                            RegularTransactionDestination.PREPOPULATE_SCREEN
+                            RegularTransactionDestination.PrepopulateScreen
                         )
                         navController.navigate(action)
                     }
                     R.id.regular_expense_dest -> {
                         action =
-                            RegularExpenseFragmentDirections.toGoalsDest(GoalDestination.PREPOPULATE_SCREEN)
+                            RegularExpenseFragmentDirections.toGoalsDest(GoalDestination.PrepopulateScreen)
                         navController.navigate(action)
                     }
                     else -> {

@@ -1,7 +1,6 @@
 package com.d9tilov.moneymanager.incomeexpense.ui.vm
 
 import androidx.lifecycle.viewModelScope
-import com.d9tilov.moneymanager.backup.PeriodicBackupWorker
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeExpenseNavigator
 import com.d9tilov.moneymanager.billing.domain.BillingInteractor
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
@@ -13,8 +12,6 @@ import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -41,22 +38,21 @@ class IncomeExpenseViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO + updateCurrencyExceptionHandler) {
-            currencyInteractor.updateCurrencyRates()
-        }
-        viewModelScope.launch(Dispatchers.IO) {
-            val currencyCode = userInteractor.getCurrentCurrency()
-            currencyCodeStr.value = currencyCode
-            defaultCurrencyCode = currencyCodeStr.value
-            billingInteractor.isPremium()
-                .flowOn(Dispatchers.IO)
-                .collect { isPremium ->
-                    if (isPremium) {
-                        awaitAll(
-                            async { transactionInteractor.executeRegularIfNeeded(TransactionType.INCOME) },
-                            async { transactionInteractor.executeRegularIfNeeded(TransactionType.EXPENSE) },
-                        )
+            launch {
+                currencyInteractor.updateCurrencyRates()
+                val currencyCode = userInteractor.getCurrentCurrency()
+                currencyCodeStr.value = currencyCode
+                defaultCurrencyCode = currencyCodeStr.value
+                billingInteractor.isPremium()
+                    .collect { isPremium ->
+                        if (isPremium) {
+                            launch {
+                                transactionInteractor.executeRegularIfNeeded(TransactionType.INCOME)
+                                transactionInteractor.executeRegularIfNeeded(TransactionType.EXPENSE)
+                            }
+                        }
                     }
-                }
+            }
         }
     }
 

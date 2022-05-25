@@ -8,7 +8,7 @@ import androidx.navigation.fragment.navArgs
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseDialogFragment
 import com.d9tilov.moneymanager.base.ui.navigator.EditCategoryDialogNavigator
-import com.d9tilov.moneymanager.category.exception.CategoryExistException
+import com.d9tilov.moneymanager.category.exception.CategoryException
 import com.d9tilov.moneymanager.category.subcategory.SubCategoryFragment.Companion.SUB_CATEGORY_TITLE
 import com.d9tilov.moneymanager.category.ui.vm.CategoryGroupEditViewModel
 import com.d9tilov.moneymanager.core.util.onChange
@@ -48,7 +48,7 @@ class CategoryEditDialog :
     }
 
     override fun showError(error: Throwable) {
-        if (error is CategoryExistException) {
+        if (error is CategoryException.CategoryExistException) {
             viewBinding?.categoryDialogEditEtNameLayout?.error =
                 getString(R.string.category_unit_name_exist_error)
         }

@@ -4,13 +4,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryNavigator
 import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination
-import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination.CATEGORY_CREATION_SCREEN
-import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination.CATEGORY_SCREEN
-import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN
-import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination.EDIT_TRANSACTION_SCREEN
-import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination.MAIN_SCREEN
-import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination.MAIN_WITH_SUM_SCREEN
-import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination.SUB_CATEGORY_SCREEN
+import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination.CategoryCreationScreen
+import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination.CategoryScreen
+import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination.EditRegularTransactionScreen
+import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination.EditTransactionScreen
+import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination.MainScreen
+import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination.MainWithSumScreen
+import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination.SubCategoryScreen
 import com.d9tilov.moneymanager.category.common.BaseCategoryViewModel
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
@@ -43,15 +43,15 @@ class CategoryViewModel @Inject constructor(
         if (category.children.isNotEmpty()) navigator?.openSubCategoryScreen(category)
         else {
             when (destination) {
-                EDIT_TRANSACTION_SCREEN -> navigator?.backToEditTransactionScreen(category)
-                EDIT_REGULAR_TRANSACTION_SCREEN -> navigator?.backToEditRegularTransactionScreen(
+                EditTransactionScreen -> navigator?.backToEditTransactionScreen(category)
+                EditRegularTransactionScreen -> navigator?.backToEditRegularTransactionScreen(
                     category
                 )
-                MAIN_WITH_SUM_SCREEN -> navigator?.backToMainScreen(category)
-                MAIN_SCREEN,
-                CATEGORY_CREATION_SCREEN,
-                CATEGORY_SCREEN,
-                SUB_CATEGORY_SCREEN,
+                MainWithSumScreen -> navigator?.backToMainScreen(category)
+                MainScreen,
+                CategoryCreationScreen,
+                CategoryScreen,
+                SubCategoryScreen,
                 null -> navigator?.openCreateCategoryScreen(category)
             }
         }

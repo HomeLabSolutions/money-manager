@@ -56,7 +56,7 @@ class SubCategoryFragment :
             categoryCreate.gone()
             categoryGroupDelete.setOnClickListener {
                 val action = SubCategoryFragmentDirections.toRemoveCategoryDialog(
-                    CategoryDestination.SUB_CATEGORY_SCREEN, modifiedParentCategory!!
+                    CategoryDestination.SubCategoryScreen, modifiedParentCategory!!
                 )
                 findNavController().navigate(action)
             }

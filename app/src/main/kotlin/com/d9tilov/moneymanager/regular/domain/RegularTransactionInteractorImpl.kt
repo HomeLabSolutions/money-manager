@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.regular.domain
 
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
-import com.d9tilov.moneymanager.category.exception.CategoryNotFoundException
+import com.d9tilov.moneymanager.category.exception.CategoryException
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.regular.domain.mapper.toData
 import com.d9tilov.moneymanager.regular.domain.mapper.toDomain
@@ -35,7 +35,7 @@ class RegularTransactionInteractorImpl(
                     for (item in list) {
                         val category =
                             categoryList.find { item.categoryId == it.id }
-                                ?: throw CategoryNotFoundException("Not found category with id: ${item.categoryId}")
+                                ?: throw CategoryException.CategoryNotFoundException("Not found category with id: ${item.categoryId}")
                         val regularTransaction = item.toDomain(category)
                         newList.add(regularTransaction)
                     }

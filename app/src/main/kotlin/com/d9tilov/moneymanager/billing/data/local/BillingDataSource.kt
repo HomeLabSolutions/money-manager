@@ -254,7 +254,8 @@ class BillingDataSource constructor(
             val currencyCode = skuDetails?.priceCurrencyCode ?: DEFAULT_CURRENCY_CODE
             Currency.EMPTY.copy(
                 code = currencyCode,
-                value = skuDetails?.priceAmountMicros?.toBigDecimal()?.divide(BigDecimal(1_000_000))
+                value = skuDetails?.priceAmountMicros?.toBigDecimal()
+                    ?.divide(BigDecimal(AMOUNT_DIVIDER))
                     ?: BigDecimal.ZERO,
                 symbol = currencyCode.getSymbolByCode()
             )
@@ -371,6 +372,7 @@ class BillingDataSource constructor(
      * @param skuType sku type, inapp or subscription, to get purchase information for.
      * @return purchases
      */
+    @Suppress("NestedBlockDepth")
     private suspend fun getPurchases(skus: List<String>, skuType: String): List<Purchase> {
         val purchasesResult = billingClient.queryPurchasesAsync(skuType)
         val br = purchasesResult.billingResult
@@ -398,6 +400,7 @@ class BillingDataSource constructor(
      * acknowledged state.
      * @param purchase an up-to-date object to set the state for the Sku
      */
+    @Suppress("NestedBlockDepth")
     private fun setSkuStateFromPurchase(purchase: Purchase) {
         for (purchaseSku in purchase.skus) {
             val skuStateFlow = skuStateMap[purchaseSku]
@@ -456,6 +459,7 @@ class BillingDataSource constructor(
      * @param skusToUpdate a list of skus that we want to update the state from --- this allows us
      * to set the state of non-returned SKUs to UNPURCHASED.
      */
+    @Suppress("NestedBlockDepth")
     private fun processPurchaseList(purchases: List<Purchase>?, skusToUpdate: List<String>?) {
         Timber.tag(PURCHASE_TAG).d("ProcessPurchaseList. Purchases: $purchases")
         val updatedSkus = HashMap<String, String>()
@@ -583,14 +587,11 @@ class BillingDataSource constructor(
                 Timber.tag(PURCHASE_TAG).i("onPurchasesUpdated: The user already owns this item")
             BillingClient.BillingResponseCode.DEVELOPER_ERROR ->
                 Timber.tag(PURCHASE_TAG)
-                    .e("onPurchasesUpdated: Developer error means that Google Play does not recognize the configuration. If you are just getting started, make sure you have configured the application correctly in the Google Play Console. The SKU product ID must match and the APK you are using must be signed with release keys.")
-            else ->
-                Timber.tag(PURCHASE_TAG)
-                    .d("BillingResult [ ${billingResult.responseCode} ]: ${billingResult.debugMessage}")
+                    .e("Developer error means that Google Play does not recognize the configuration.")
+            else -> Timber.tag(PURCHASE_TAG)
+                .d("BillingResult [ ${billingResult.responseCode} ]: ${billingResult.debugMessage}")
         }
-        defaultScope.launch {
-            billingFlowInProcess.emit(false)
-        }
+        defaultScope.launch { billingFlowInProcess.emit(false) }
     }
 
     /**
@@ -619,5 +620,6 @@ class BillingDataSource constructor(
 
     companion object {
         private const val PURCHASE_TAG = "[Purchase]"
+        private const val AMOUNT_DIVIDER = 1_000_000
     }
 }

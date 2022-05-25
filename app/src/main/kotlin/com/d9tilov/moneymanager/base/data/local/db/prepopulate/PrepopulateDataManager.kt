@@ -12,6 +12,7 @@ import javax.inject.Inject
 
 class PrepopulateDataManager @Inject constructor(private val context: Context) {
 
+    @Suppress("MagicNumber")
     fun createDefaultExpenseCategories(): List<PrepopulateCategory> {
         return listOf(
             createCategory(
@@ -105,6 +106,7 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
         )
     }
 
+    @Suppress("MagicNumber")
     fun createDefaultIncomeCategories(): List<PrepopulateCategory> {
         return listOf(
             createCategory(

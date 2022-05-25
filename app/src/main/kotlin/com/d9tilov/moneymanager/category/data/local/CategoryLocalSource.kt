@@ -7,12 +7,10 @@ import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.data.entity.CategoryDbModel
 import com.d9tilov.moneymanager.category.data.local.mapper.CategoryMapper
-import com.d9tilov.moneymanager.category.exception.CategoryExistException
-import com.d9tilov.moneymanager.category.exception.NoCategoryParentException
+import com.d9tilov.moneymanager.category.exception.CategoryException
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
@@ -59,7 +57,7 @@ class CategoryLocalSource(
         else {
             val count = categoryDao.getCategoriesCountByName(currentUserId, category.name)
             if (count == 0) categoryDao.create(categoryMapper.toDbModel(category.copy(clientId = currentUserId)))
-            else throw CategoryExistException("Category with name: ${category.name} has already existed")
+            else throw CategoryException.CategoryExistException("Category with name: ${category.name} has already existed")
         }
     }
 
@@ -74,7 +72,7 @@ class CategoryLocalSource(
             else {
                 val count = categoryDao.getCategoriesCountByName(currentUserId, category.name)
                 if (count == 0) categoryDao.update(categoryMapper.toDbModel(category))
-                else throw CategoryExistException("Category with name: ${category.name} has already existed")
+                else throw CategoryException.CategoryExistException("Category with name: ${category.name} has already existed")
             }
         }
     }
@@ -142,7 +140,7 @@ class CategoryLocalSource(
         return categories
     }
 
-    override suspend fun delete(category: Category): Unit = coroutineScope {
+    override suspend fun delete(category: Category) {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
         if (currentUserId == null) throw WrongUidException()
         else {
@@ -155,7 +153,7 @@ class CategoryLocalSource(
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
         return when {
             currentUserId == null -> throw WrongUidException()
-            subCategory.parent == null -> throw NoCategoryParentException("Subcategory $subCategory has not parent")
+            subCategory.parent == null -> throw CategoryException.CategoryNoParentException("Subcategory $subCategory has not parent")
             else -> {
                 categoryDao.delete(currentUserId, subCategory.id)
                 val list = categoryDao.getByParentId(
@@ -173,7 +171,7 @@ class CategoryLocalSource(
         return when {
             currentUserId == null -> throw WrongUidException()
             subCategory.parent == null ->
-                throw NoCategoryParentException("Subcategory $subCategory has not parent")
+                throw CategoryException.CategoryNoParentException("Subcategory $subCategory has not parent")
             else -> {
                 categoryDao.update(categoryMapper.toDbModel(subCategory.copy(parent = null)))
                 val list = categoryDao.getByParentId(

@@ -8,7 +8,7 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseDialogFragment
 import com.d9tilov.moneymanager.base.ui.navigator.CategoryUnionDialogNavigator
 import com.d9tilov.moneymanager.category.data.entity.Category
-import com.d9tilov.moneymanager.category.exception.CategoryExistException
+import com.d9tilov.moneymanager.category.exception.CategoryException
 import com.d9tilov.moneymanager.category.ui.vm.CategoryUnionViewModel
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.gone
@@ -36,7 +36,7 @@ class CategoryUnitDialog :
     }
 
     override fun showError(error: Throwable) {
-        if (error is CategoryExistException) {
+        if (error is CategoryException.CategoryExistException) {
             viewBinding?.categoryDialogUnionEtNameLayout?.error =
                 getString(R.string.category_unit_name_exist_error)
         }
@@ -77,19 +77,11 @@ class CategoryUnitDialog :
                 categoryDialogUnionFolder.root.show()
             }
             categoryDialogUnionConfirm.setOnClickListener {
-                if (secondCategory.children.isEmpty() &&
-                    categoryDialogUnionEtName.text.toString().isEmpty()
-                ) {
-                    showError(IllegalArgumentException())
-                } else if (secondCategory.children.isNotEmpty()) {
+                if (secondCategory.children.isEmpty() && categoryDialogUnionEtName.text.toString().isEmpty())
+                    showError(CategoryException.CategoryEmptyNameException())
+                else if (secondCategory.children.isNotEmpty())
                     viewModel.addToGroup(firstCategory, secondCategory)
-                } else {
-                    viewModel.createGroup(
-                        firstCategory,
-                        secondCategory,
-                        createUnionCategory()
-                    )
-                }
+                else viewModel.createGroup(firstCategory, secondCategory, createUnionCategory())
             }
             categoryDialogUnionEtName.onChange { text ->
                 val isNameEmpty = text.isEmpty()

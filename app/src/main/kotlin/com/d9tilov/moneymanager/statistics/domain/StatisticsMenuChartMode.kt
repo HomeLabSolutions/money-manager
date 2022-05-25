@@ -2,18 +2,13 @@ package com.d9tilov.moneymanager.statistics.domain
 
 import kotlinx.parcelize.Parcelize
 
-sealed class StatisticsMenuChartMode(val name: String) : BaseStatisticsMenuType {
-
-    companion object {
-        private const val STATISTICS_PIE_CHART_NAME = "statistics_pie_chart_name"
-        private const val STATISTICS_LINE_CHART_NAME = "statistics_line_chart_name"
-    }
+sealed class StatisticsMenuChartMode : BaseStatisticsMenuType {
 
     @Parcelize
-    object PIE_CHART : StatisticsMenuChartMode(STATISTICS_PIE_CHART_NAME)
+    object PieChart : StatisticsMenuChartMode()
 
     @Parcelize
-    object LINE_CHART : StatisticsMenuChartMode(STATISTICS_LINE_CHART_NAME)
+    object LineChart : StatisticsMenuChartMode()
 
     override val menuType: StatisticsMenuType = StatisticsMenuType.CHART
 }
