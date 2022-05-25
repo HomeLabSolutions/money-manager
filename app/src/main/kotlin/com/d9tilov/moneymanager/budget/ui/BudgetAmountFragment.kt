@@ -46,7 +46,7 @@ class BudgetAmountFragment :
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         viewBinding?.run {
-            if (destination == BudgetDestination.PROFILE_SCREEN) {
+            if (destination == BudgetDestination.ProfileScreen) {
                 createdBudgetSave.show()
                 createdBudgetSave.isSelected = true
                 createdBudgetSave.setOnClickListener {
@@ -86,7 +86,7 @@ class BudgetAmountFragment :
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         toolbar?.title = getString(R.string.title_prepopulate_budget)
-        if (destination == BudgetDestination.PROFILE_SCREEN) {
+        if (destination == BudgetDestination.ProfileScreen) {
             activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
     }

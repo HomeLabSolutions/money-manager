@@ -41,7 +41,7 @@ class CategoryRemoveDialog :
 
     override fun closeDialog() {
         dismiss()
-        if (destination == CategoryDestination.SUB_CATEGORY_SCREEN) {
+        if (destination == CategoryDestination.SubCategoryScreen) {
             findNavController().popBackStack(R.id.sub_category_dest, true)
         } else {
             findNavController().popBackStack(R.id.category_creation_dest, true)

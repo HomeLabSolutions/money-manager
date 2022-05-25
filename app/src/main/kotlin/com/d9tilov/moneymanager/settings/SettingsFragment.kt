@@ -59,7 +59,7 @@ class SettingsFragment :
                 debounce(DEBOUNCE, lifecycleScope) {
                     settingsDayOfMonthEdit.setSelection(it.length)
                     val isError =
-                        it.isEmpty() || !it.isDigitsOnly() || it.toInt() > 31 || it.toInt() < 1
+                        it.isEmpty() || !it.isDigitsOnly() || it.toInt() > LAST_MAX_DAY_IN_MONTH || it.toInt() < FIRST_MIN_DAY_IN_MONTH
                     if (isError) settingsDayOfMonthError.show()
                     else settingsDayOfMonthError.gone()
                     settingsSave.isEnabled = !isError
@@ -183,5 +183,7 @@ class SettingsFragment :
 
     companion object {
         private const val DEBOUNCE = 300L
+        private const val LAST_MAX_DAY_IN_MONTH = 31
+        private const val FIRST_MIN_DAY_IN_MONTH = 1
     }
 }

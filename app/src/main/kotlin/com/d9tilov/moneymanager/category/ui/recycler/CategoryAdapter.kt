@@ -84,7 +84,7 @@ class CategoryAdapter(private val itemClickListener: OnItemClickListener<Categor
                                 context,
                                 category.color
                             ),
-                            240
+                            COLOR_ALPHA
                         )
                         categoryItemSubtitle.setTextColor(parentColor)
                         val drawable = createTintDrawable(context, category.icon, category.color)
@@ -99,8 +99,8 @@ class CategoryAdapter(private val itemClickListener: OnItemClickListener<Categor
     }
 
     private companion object {
-
         private const val ALL = 0
         private const val ORDINARY = 1
+        private const val COLOR_ALPHA = 240
     }
 }

@@ -55,7 +55,7 @@ class CategoryFragment :
 
     override fun openRemoveDialog(category: Category) {
         val action = CategoryFragmentDirections.toRemoveCategoryDialog(
-            CategoryDestination.CATEGORY_SCREEN,
+            CategoryDestination.CategoryScreen,
             category
         )
         findNavController().navigate(action)

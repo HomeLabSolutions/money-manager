@@ -61,7 +61,7 @@ class CategoryIconsSetAdapter(
             GlideApp
                 .with(context)
                 .load(tintDrawable)
-                .apply(RequestOptions().override(120, 120))
+                .apply(RequestOptions().override(ICON_SIZE, ICON_SIZE))
                 .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(viewBinding.categoryItemIcon)
@@ -69,4 +69,8 @@ class CategoryIconsSetAdapter(
     }
 
     override fun getItemId(position: Int): Long = categoryColorMap[position].first.toLong()
+
+    companion object {
+        private const val ICON_SIZE = 120
+    }
 }

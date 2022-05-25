@@ -14,7 +14,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,14 +26,13 @@ class CategoryRemoveViewModel @Inject constructor(
 ) : BaseViewModel<RemoveCategoryDialogNavigator>() {
 
     fun remove(category: Category) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             transactionInteractor.removeAllByCategory(category).map {
                 category.children.map {
                     async { transactionInteractor.removeAllByCategory(it).first() }
                 }.awaitAll()
                 categoryInteractor.deleteCategory(category)
             }
-                .flowOn(Dispatchers.IO)
                 .collect { navigator?.closeDialog() }
         }
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {

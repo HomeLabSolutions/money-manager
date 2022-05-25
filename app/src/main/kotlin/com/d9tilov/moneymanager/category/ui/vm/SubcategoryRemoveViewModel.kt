@@ -13,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -25,10 +24,9 @@ class SubcategoryRemoveViewModel @Inject constructor(
     private val firebaseAnalytics: FirebaseAnalytics
 ) : BaseViewModel<RemoveSubCategoryDialogNavigator>() {
 
-    fun remove(subcategory: Category) = viewModelScope.launch {
+    fun remove(subcategory: Category) = viewModelScope.launch(Dispatchers.IO) {
         transactionInteractor.removeAllByCategory(subcategory)
             .flatMapMerge { flow { emit(categoryInteractor.deleteSubCategory(subcategory)) } }
-            .flowOn(Dispatchers.IO)
             .collect { parentRemoved ->
                 if (parentRemoved) navigator?.closeDialogAndGoToCategory()
                 else navigator?.closeDialog()

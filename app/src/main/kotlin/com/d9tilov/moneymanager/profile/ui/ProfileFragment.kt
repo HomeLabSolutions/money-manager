@@ -132,30 +132,30 @@ class ProfileFragment :
     }
 
     private fun openGoalScreen() {
-        val action = ProfileFragmentDirections.toGoalsDest(GoalDestination.PROFILE_SCREEN)
+        val action = ProfileFragmentDirections.toGoalsDest(GoalDestination.ProfileScreen)
         findNavController().navigate(action)
     }
 
     private fun openRegularExepenseScreen() {
         val action =
-            ProfileFragmentDirections.toRegularExpensesDest(RegularTransactionDestination.PROFILE_SCREEN)
+            ProfileFragmentDirections.toRegularExpensesDest(RegularTransactionDestination.ProfileScreen)
         findNavController().navigate(action)
     }
 
     private fun openRegularIncomesScreen() {
         val action =
-            ProfileFragmentDirections.toRegularIncomesDest(RegularTransactionDestination.PROFILE_SCREEN)
+            ProfileFragmentDirections.toRegularIncomesDest(RegularTransactionDestination.ProfileScreen)
         findNavController().navigate(action)
     }
 
     private fun openBudgetScreen() {
-        val action = ProfileFragmentDirections.toBudgetDest(BudgetDestination.PROFILE_SCREEN)
+        val action = ProfileFragmentDirections.toBudgetDest(BudgetDestination.ProfileScreen)
         findNavController().navigate(action)
     }
 
     private fun openCurrencyScreen() {
         val action =
-            ProfileFragmentDirections.toCurrencyDest(CurrencyDestination.PROFILE_SCREEN_CURRENT)
+            ProfileFragmentDirections.toCurrencyDest(CurrencyDestination.ProfileCurrentScreen)
         findNavController().navigate(action)
     }
 

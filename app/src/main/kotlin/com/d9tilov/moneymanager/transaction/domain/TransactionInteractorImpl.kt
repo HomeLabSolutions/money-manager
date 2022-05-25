@@ -6,7 +6,7 @@ import androidx.paging.map
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
-import com.d9tilov.moneymanager.category.exception.CategoryNotFoundException
+import com.d9tilov.moneymanager.category.exception.CategoryException
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.util.countDaysRemainingNextFiscalDate
 import com.d9tilov.moneymanager.core.util.currentDate
@@ -33,8 +33,6 @@ import com.d9tilov.moneymanager.transaction.domain.mapper.toChartModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDataModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDomainModel
 import com.d9tilov.moneymanager.user.domain.UserInteractor
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -43,6 +41,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
@@ -63,19 +62,19 @@ class TransactionInteractorImpl(
     private val budgetInteractor: BudgetInteractor
 ) : TransactionInteractor {
 
-    override suspend fun addTransaction(transaction: Transaction): Unit = coroutineScope {
+    override suspend fun addTransaction(transaction: Transaction) {
         val currencyCode = transaction.currencyCode
         val usdSumValue = currencyInteractor.toUsd(transaction.sum, currencyCode)
         val newTransaction =
             transaction.copy(currencyCode = currencyCode, usdSum = usdSumValue).toDataModel()
-        awaitAll(
-            async { transactionRepo.addTransaction(newTransaction) },
-            async {
+        coroutineScope {
+            launch { transactionRepo.addTransaction(newTransaction) }
+            launch {
                 val category = categoryInteractor.getCategoryById(transaction.category.id)
                 val count = category.usageCount + 1
                 categoryInteractor.update(category.copy(usageCount = count))
-            },
-            async {
+            }
+            launch {
                 val budget = budgetInteractor.get().first()
                 var budgetSum = budget.sum
                 budgetSum += currencyInteractor.toMainCurrency(
@@ -84,7 +83,7 @@ class TransactionInteractorImpl(
                 )
                 budgetInteractor.update(budget.copy(sum = budgetSum))
             }
-        )
+        }
     }
 
     override fun getTransactionsGroupedByCategory(
@@ -104,7 +103,7 @@ class TransactionInteractorImpl(
                         it.map { item ->
                             val category =
                                 categoryList.find { listItem -> item.categoryId == listItem.id }
-                                    ?: throw CategoryNotFoundException("Not found category with id: ${item.categoryId}")
+                                    ?: throw CategoryException.CategoryNotFoundException("Not found category with id: ${item.categoryId}")
                             item.toChartModel(
                                 category,
                                 currencyCode,
@@ -133,7 +132,8 @@ class TransactionInteractorImpl(
                                     category,
                                     currencyCode,
                                     currencySum,
-                                    currencySum.divideBy(sum).multiply(BigDecimal(100))
+                                    currencySum.divideBy(sum)
+                                        .multiply(BigDecimal(PERCENT_FULL_COUNT))
                                 )
                             }
                     }
@@ -181,7 +181,7 @@ class TransactionInteractorImpl(
                 .map { tr: TransactionDataModel ->
                     val foundCategory =
                         categoryList.find { listItem -> tr.categoryId == listItem.id }
-                            ?: throw CategoryNotFoundException("Not found category with id: ${tr.categoryId}")
+                            ?: throw CategoryException.CategoryNotFoundException("Not found category with id: ${tr.categoryId}")
                     tr.toDomainModel(foundCategory)
                 }
         }
@@ -215,7 +215,7 @@ class TransactionInteractorImpl(
                         it.map { item ->
                             val category =
                                 categoryList.find { listItem -> item.categoryId == listItem.id }
-                                    ?: throw CategoryNotFoundException("Not found category with id: ${item.categoryId}")
+                                    ?: throw CategoryException.CategoryNotFoundException("Not found category with id: ${item.categoryId}")
                             item.toDomainModel(category)
                         }
                     }
@@ -600,16 +600,15 @@ class TransactionInteractorImpl(
         }.first()
     }
 
-    override suspend fun update(transaction: Transaction): Unit = coroutineScope {
-        awaitAll(
-            async {
+    override suspend fun update(transaction: Transaction) {
+        coroutineScope {
+            launch {
                 val usdSumValue =
                     currencyInteractor.toUsd(transaction.sum, transaction.currencyCode)
                 transactionRepo.update(transaction.toDataModel().copy(usdSum = usdSumValue))
-            },
-            async {
-                val oldTransaction: TransactionDataModel =
-                    transactionRepo.getTransactionById(transaction.id).first()
+            }
+            launch {
+                val oldTransaction = transactionRepo.getTransactionById(transaction.id).first()
                 val budget = budgetInteractor.get().first()
                 var budgetSum = budget.sum
                 budgetSum += currencyInteractor.toMainCurrency(
@@ -622,13 +621,13 @@ class TransactionInteractorImpl(
                 )
                 budgetInteractor.update(budget.copy(sum = budgetSum))
             }
-        )
+        }
     }
 
-    override suspend fun removeTransaction(transaction: Transaction): Unit = coroutineScope {
-        awaitAll(
-            async { transactionRepo.removeTransaction(transaction.toDataModel()) },
-            async {
+    override suspend fun removeTransaction(transaction: Transaction) {
+        coroutineScope {
+            launch { transactionRepo.removeTransaction(transaction.toDataModel()) }
+            launch {
                 val budget = budgetInteractor.get().first()
                 var budgetSum = budget.sum
                 budgetSum += currencyInteractor.toMainCurrency(
@@ -637,7 +636,7 @@ class TransactionInteractorImpl(
                 )
                 budgetInteractor.update(budget.copy(sum = budgetSum))
             }
-        )
+        }
     }
 
     override fun removeAllByCategory(category: Category): Flow<Int> {
@@ -650,5 +649,9 @@ class TransactionInteractorImpl(
 
     override suspend fun clearAll() {
         transactionRepo.clearAll()
+    }
+
+    companion object {
+        private const val PERCENT_FULL_COUNT = 100
     }
 }

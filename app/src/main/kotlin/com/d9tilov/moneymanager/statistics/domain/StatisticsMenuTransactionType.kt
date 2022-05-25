@@ -2,18 +2,13 @@ package com.d9tilov.moneymanager.statistics.domain
 
 import kotlinx.parcelize.Parcelize
 
-sealed class StatisticsMenuTransactionType(val name: String) : BaseStatisticsMenuType {
-
-    companion object {
-        private const val STATISTICS_EXPENSE_NAME = "statistics_expense_name"
-        private const val STATISTICS_INCOME_NAME = "statistics_income_name"
-    }
+sealed class StatisticsMenuTransactionType : BaseStatisticsMenuType {
 
     @Parcelize
-    object EXPENSE : StatisticsMenuTransactionType(STATISTICS_EXPENSE_NAME)
+    object Expense : StatisticsMenuTransactionType()
 
     @Parcelize
-    object INCOME : StatisticsMenuTransactionType(STATISTICS_INCOME_NAME)
+    object Income : StatisticsMenuTransactionType()
 
     override val menuType: StatisticsMenuType = StatisticsMenuType.TRANSACTION_TYPE
 }

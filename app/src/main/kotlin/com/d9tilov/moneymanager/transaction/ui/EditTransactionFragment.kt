@@ -129,7 +129,7 @@ class EditTransactionFragment : EditTransactionNavigator,
             editTransactionCategory.setOnClickListener {
                 val action =
                     EditTransactionFragmentDirections.toCategoryDest(
-                        CategoryDestination.EDIT_TRANSACTION_SCREEN,
+                        CategoryDestination.EditTransactionScreen,
                         transactionType
                     )
                 findNavController().navigate(action)
@@ -145,7 +145,7 @@ class EditTransactionFragment : EditTransactionNavigator,
             editTransactionMainSum.addOnCurrencyClickListener {
                 val action =
                     EditTransactionFragmentDirections.toCurrencyDest(
-                        CurrencyDestination.EDIT_TRANSACTION_SCREEN,
+                        CurrencyDestination.EditTransactionScreen,
                         localTransaction?.currencyCode
                     )
                 findNavController().navigate(action)
@@ -179,7 +179,7 @@ class EditTransactionFragment : EditTransactionNavigator,
             localTransaction?.category?.icon ?: transaction.category.icon,
             localTransaction?.category?.color ?: transaction.category.icon
         )
-        iconDrawable.setBounds(0, 0, 120, 120)
+        iconDrawable.setBounds(LEFT_BOUND, TOP_BOUND, RIGHT_BOUND, BOTTOM_BOUND)
         viewBinding?.run {
             editTransactionCategory.setCompoundDrawables(iconDrawable, null, null, null)
             editTransactionCategory.text = localTransaction?.category?.name
@@ -209,5 +209,12 @@ class EditTransactionFragment : EditTransactionNavigator,
 
     override fun save() {
         findNavController().popBackStack()
+    }
+
+    companion object {
+        private const val LEFT_BOUND = 0
+        private const val TOP_BOUND = 0
+        private const val RIGHT_BOUND = 120
+        private const val BOTTOM_BOUND = 120
     }
 }

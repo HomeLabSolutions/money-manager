@@ -74,5 +74,5 @@ class RegularExpenseFragment :
         }
     }
 
-    override fun showBackButton() = destination == RegularTransactionDestination.PROFILE_SCREEN
+    override fun showBackButton() = destination == RegularTransactionDestination.ProfileScreen
 }

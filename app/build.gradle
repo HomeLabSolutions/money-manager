@@ -7,6 +7,7 @@ plugins {
     id('androidx.navigation.safeargs.kotlin')
     id('com.google.firebase.crashlytics')
     id('dagger.hilt.android.plugin')
+    id('io.gitlab.arturbosch.detekt')
 }
 
 apply from: '../shared_dependencies.gradle'
@@ -181,6 +182,6 @@ dependencies {
 
     ktlint "com.pinterest:ktlint:0.45.2"
 
-    implementation "com.android.billingclient:billing-ktx:4.1.0"
+    implementation "com.android.billingclient:billing-ktx:5.0.0"
     implementation "com.tbuonomo:dotsindicator:4.3"
 }

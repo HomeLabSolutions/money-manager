@@ -3,16 +3,11 @@ package com.d9tilov.moneymanager.goal.domain.entity
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
-sealed class GoalDestination(open val name: String) : Parcelable {
-
-    companion object {
-        const val FROM_PREPOPULATE_SCREEN = "prepopulate"
-        const val FROM_PROFILE_SCREEN = "profile"
-    }
+sealed class GoalDestination : Parcelable {
 
     @Parcelize
-    object PREPOPULATE_SCREEN : GoalDestination(FROM_PREPOPULATE_SCREEN)
+    object PrepopulateScreen : GoalDestination()
 
     @Parcelize
-    object PROFILE_SCREEN : GoalDestination(FROM_PROFILE_SCREEN)
+    object ProfileScreen : GoalDestination()
 }

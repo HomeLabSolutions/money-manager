@@ -41,7 +41,7 @@ class BillingDataRepo(
 
     override fun isPremium(): Flow<Boolean> {
         val flowList: List<Flow<Boolean>> = skus.map { billingSource.isPurchased(it) }
-        return combine(flowList) { result: Array<Boolean> -> result.firstOrNull { it } ?: false }
+        return combine(flowList) { result -> result.firstOrNull { it } ?: false }
     }
 
     override fun getSkuDetails(): Flow<List<BillingSkuDetails>> {
@@ -56,11 +56,7 @@ class BillingDataRepo(
 
     override fun getMinPrice(): Flow<Currency> =
         getSkuDetails().map { list: List<BillingSkuDetails> ->
-            list.minOfWith({ t1, t2 ->
-                t1.value.compareTo(
-                    t2.value
-                )
-            }) { it.price }
+            list.minOfWith({ t1, t2 -> t1.value.compareTo(t2.value) }) { it.price }
         }
 
     private fun createSkuDetails(sku: String): Flow<BillingSkuDetails> = combine(
@@ -97,7 +93,7 @@ class BillingDataRepo(
 
     override fun canPurchase(): Flow<Boolean> {
         val flowList: List<Flow<Boolean>> = skus.map { billingSource.canPurchase(it) }
-        return combine(flowList) { result: Array<Boolean> -> result.firstOrNull { it } ?: false }
+        return combine(flowList) { result -> result.firstOrNull { it } ?: false }
     }
 
     private fun postMessagesFromBillingFlow() {

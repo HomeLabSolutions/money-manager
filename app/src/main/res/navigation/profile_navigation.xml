@@ -390,6 +390,11 @@
         <argument
             android:name="groupId"
             app:argType="com.d9tilov.moneymanager.category.domain.entity.CategoryGroup" />
+        <argument
+            android:name="title"
+            android:defaultValue="-1"
+            app:argType="integer"
+            app:nullable="false" />
     </fragment>
 
     <fragment

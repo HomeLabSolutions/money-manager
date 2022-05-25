@@ -5,22 +5,20 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.data.entity.Category.Companion.ALL_ITEMS_ID
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 class CategoryInteractorImpl(private val categoryRepo: CategoryRepo) :
     CategoryInteractor {
 
     override suspend fun create(category: Category) = categoryRepo.create(category)
-
-    override suspend fun createDefaultCategories(): Unit = coroutineScope {
-        awaitAll(
-            async { categoryRepo.createExpenseDefaultCategories() },
-            async { categoryRepo.createIncomeDefaultCategories() }
-        )
+    override suspend fun createDefaultCategories() {
+        coroutineScope {
+            launch { categoryRepo.createExpenseDefaultCategories() }
+            launch { categoryRepo.createIncomeDefaultCategories() }
+        }
     }
 
     override suspend fun update(category: Category) = categoryRepo.update(category)

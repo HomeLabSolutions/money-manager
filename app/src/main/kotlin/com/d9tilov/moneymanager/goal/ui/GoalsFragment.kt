@@ -73,7 +73,7 @@ class GoalsFragment :
         initToolbar()
         viewBinding?.run {
             emptyViewStub = goalsEmptyPlaceholder
-            if (destination != GoalDestination.PREPOPULATE_SCREEN) {
+            if (destination != GoalDestination.PrepopulateScreen) {
                 goalsSave.show()
             }
             goalsRvList.adapter = goalAdapter
@@ -138,7 +138,7 @@ class GoalsFragment :
         activity.setSupportActionBar(toolbar)
         toolbar?.title = getString(R.string.title_goal)
         setHasOptionsMenu(true)
-        if (destination == GoalDestination.PROFILE_SCREEN) {
+        if (destination == GoalDestination.ProfileScreen) {
             activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         toolbar?.setOnMenuItemClickListener {

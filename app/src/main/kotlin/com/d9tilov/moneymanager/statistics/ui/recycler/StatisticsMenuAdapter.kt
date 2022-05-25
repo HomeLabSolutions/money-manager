@@ -17,6 +17,7 @@ import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuCurrency
 import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuInStatistics
 import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuTransactionType
 import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuType
+import com.d9tilov.moneymanager.statistics.domain.toType
 import com.d9tilov.moneymanager.statistics.ui.recycler.diff.StatisticsMenuItemDiffUtils
 
 class StatisticsMenuAdapter(
@@ -46,7 +47,7 @@ class StatisticsMenuAdapter(
         viewType: Int
     ): BaseViewHolder {
         return when (viewType) {
-            0 -> {
+            StatisticsMenuType.CURRENCY.ordinal -> {
                 val viewBinding = ItemStatisticsMenuCurrencyBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -56,12 +57,15 @@ class StatisticsMenuAdapter(
                 viewBinding.root.setOnClickListener {
                     val adapterPosition = viewHolder.bindingAdapterPosition
                     if (adapterPosition != RecyclerView.NO_POSITION) {
-                        currencyMenuItemClickListener.onItemClick(menuItems[adapterPosition] as StatisticsMenuCurrency, adapterPosition)
+                        currencyMenuItemClickListener.onItemClick(
+                            menuItems[adapterPosition] as StatisticsMenuCurrency,
+                            adapterPosition
+                        )
                     }
                 }
                 viewHolder
             }
-            1 -> {
+            StatisticsMenuType.CHART.ordinal -> {
                 val viewBinding = ItemStatisticsMenuBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -71,12 +75,15 @@ class StatisticsMenuAdapter(
                 viewBinding.root.setOnClickListener {
                     val adapterPosition = viewHolder.bindingAdapterPosition
                     if (adapterPosition != RecyclerView.NO_POSITION) {
-                        chartMenuItemClickListener.onItemClick(menuItems[adapterPosition] as StatisticsMenuChartMode, adapterPosition)
+                        chartMenuItemClickListener.onItemClick(
+                            menuItems[adapterPosition] as StatisticsMenuChartMode,
+                            adapterPosition
+                        )
                     }
                 }
                 viewHolder
             }
-            2 -> {
+            StatisticsMenuType.CATEGORY_TYPE.ordinal -> {
                 val viewBinding = ItemStatisticsMenuBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -86,12 +93,15 @@ class StatisticsMenuAdapter(
                 viewBinding.root.setOnClickListener {
                     val adapterPosition = viewHolder.bindingAdapterPosition
                     if (adapterPosition != RecyclerView.NO_POSITION) {
-                        categoryMenuItemClickListener.onItemClick(menuItems[adapterPosition] as StatisticsMenuCategoryType, adapterPosition)
+                        categoryMenuItemClickListener.onItemClick(
+                            menuItems[adapterPosition] as StatisticsMenuCategoryType,
+                            adapterPosition
+                        )
                     }
                 }
                 viewHolder
             }
-            3 -> {
+            StatisticsMenuType.TRANSACTION_TYPE.ordinal -> {
                 val viewBinding = ItemStatisticsMenuBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -101,12 +111,15 @@ class StatisticsMenuAdapter(
                 viewBinding.root.setOnClickListener {
                     val adapterPosition = viewHolder.bindingAdapterPosition
                     if (adapterPosition != RecyclerView.NO_POSITION) {
-                        trTypeMenuItemClickListener.onItemClick(menuItems[adapterPosition] as StatisticsMenuTransactionType, adapterPosition)
+                        trTypeMenuItemClickListener.onItemClick(
+                            menuItems[adapterPosition] as StatisticsMenuTransactionType,
+                            adapterPosition
+                        )
                     }
                 }
                 viewHolder
             }
-            4 -> {
+            StatisticsMenuType.STATISTICS.ordinal -> {
                 val viewBinding = ItemStatisticsMenuBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -116,7 +129,10 @@ class StatisticsMenuAdapter(
                 viewBinding.root.setOnClickListener {
                     val adapterPosition = viewHolder.bindingAdapterPosition
                     if (adapterPosition != RecyclerView.NO_POSITION) {
-                        inStatisticsMenuItemClickListener.onItemClick(menuItems[adapterPosition] as StatisticsMenuInStatistics, adapterPosition)
+                        inStatisticsMenuItemClickListener.onItemClick(
+                            menuItems[adapterPosition] as StatisticsMenuInStatistics,
+                            adapterPosition
+                        )
                     }
                 }
                 viewHolder
@@ -125,39 +141,27 @@ class StatisticsMenuAdapter(
         }
     }
 
+    override fun getItemId(position: Int) = menuItems[position].menuType.ordinal.toLong()
     override fun getItemCount(): Int = menuItems.size
-
-    override fun getItemId(position: Int) = menuItems[position].menuType.id.toLong()
+    override fun getItemViewType(position: Int): Int = StatisticsMenuType.values()[position].ordinal
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        when (holder.itemViewType) {
-            0 -> (holder as CurrencyModeViewHolder).bind(menuItems[position] as StatisticsMenuCurrency)
-            1 -> (holder as ChartModeViewHolder).bind(menuItems[position] as StatisticsMenuChartMode)
-            2 -> (holder as CategoryTypeViewHolder).bind(menuItems[position] as StatisticsMenuCategoryType)
-            3 -> (holder as TransactionTypeViewHolder).bind(menuItems[position] as StatisticsMenuTransactionType)
-            4 -> (holder as InStatisticsViewHolder).bind(menuItems[position] as StatisticsMenuInStatistics)
+        when (toType(holder.itemViewType)) {
+            StatisticsMenuType.CURRENCY -> (holder as CurrencyModeViewHolder).bind(menuItems[position] as StatisticsMenuCurrency)
+            StatisticsMenuType.CHART -> (holder as ChartModeViewHolder).bind(menuItems[position] as StatisticsMenuChartMode)
+            StatisticsMenuType.CATEGORY_TYPE -> (holder as CategoryTypeViewHolder).bind(menuItems[position] as StatisticsMenuCategoryType)
+            StatisticsMenuType.TRANSACTION_TYPE -> (holder as TransactionTypeViewHolder).bind(menuItems[position] as StatisticsMenuTransactionType)
+            StatisticsMenuType.STATISTICS -> (holder as InStatisticsViewHolder).bind(menuItems[position] as StatisticsMenuInStatistics)
         }
-    }
-
-    override fun getItemViewType(position: Int): Int = when (position) {
-        0 -> StatisticsMenuType.CURRENCY.id
-        1 -> StatisticsMenuType.CHART.id
-        2 -> StatisticsMenuType.CATEGORY_TYPE.id
-        3 -> StatisticsMenuType.TRANSACTION_TYPE.id
-        4 -> StatisticsMenuType.STATISTICS.id
-        else -> throw IllegalArgumentException("Unknown ViewType for position: $position")
     }
 
     class ChartModeViewHolder(private val viewBinding: ItemStatisticsMenuBinding) :
         BaseViewHolder(viewBinding) {
         fun bind(mode: StatisticsMenuChartMode) {
-            viewBinding.statisticsMenuTitle.text =
-                context.getString(R.string.statistics_menu_chart_type_title)
+            viewBinding.statisticsMenuTitle.text = context.getString(R.string.statistics_menu_chart_type_title)
             when (mode) {
-                StatisticsMenuChartMode.LINE_CHART ->
-                    viewBinding.statisticsMenuIcon.setImageResource(R.drawable.ic_line_chart)
-                StatisticsMenuChartMode.PIE_CHART ->
-                    viewBinding.statisticsMenuIcon.setImageResource(R.drawable.ic_pie_chart)
+                StatisticsMenuChartMode.LineChart -> viewBinding.statisticsMenuIcon.setImageResource(R.drawable.ic_line_chart)
+                StatisticsMenuChartMode.PieChart -> viewBinding.statisticsMenuIcon.setImageResource(R.drawable.ic_pie_chart)
             }
         }
     }
@@ -174,12 +178,12 @@ class StatisticsMenuAdapter(
         BaseViewHolder(viewBinding) {
         fun bind(inStatisticsType: StatisticsMenuInStatistics) {
             when (inStatisticsType) {
-                StatisticsMenuInStatistics.IN_STATISTICS -> {
+                StatisticsMenuInStatistics.InStatistics -> {
                     viewBinding.statisticsMenuIcon.setImageResource(R.drawable.ic_in_statistics)
                     viewBinding.statisticsMenuTitle.text =
                         context.getString(R.string.statistics_menu_in_statistics_title)
                 }
-                StatisticsMenuInStatistics.ALL -> {
+                StatisticsMenuInStatistics.All -> {
                     viewBinding.statisticsMenuIcon.setImageResource(R.drawable.ic_not_in_statistics)
                     viewBinding.statisticsMenuTitle.text =
                         context.getString(R.string.statistics_menu_not_in_statistics_title)
@@ -192,12 +196,12 @@ class StatisticsMenuAdapter(
         BaseViewHolder(viewBinding) {
         fun bind(type: StatisticsMenuTransactionType) {
             when (type) {
-                StatisticsMenuTransactionType.INCOME -> {
+                StatisticsMenuTransactionType.Income -> {
                     viewBinding.statisticsMenuIcon.setImageResource(R.drawable.ic_statistics_income)
                     viewBinding.statisticsMenuTitle.text =
                         context.getString(R.string.statistics_menu_incomes_title)
                 }
-                StatisticsMenuTransactionType.EXPENSE -> {
+                StatisticsMenuTransactionType.Expense -> {
                     viewBinding.statisticsMenuIcon.setImageResource(R.drawable.ic_statistics_expense)
                     viewBinding.statisticsMenuTitle.text =
                         context.getString(R.string.statistics_menu_expenses_title)
@@ -210,12 +214,12 @@ class StatisticsMenuAdapter(
         BaseViewHolder(viewBinding) {
         fun bind(type: StatisticsMenuCategoryType) {
             when (type) {
-                StatisticsMenuCategoryType.PARENT -> {
+                StatisticsMenuCategoryType.Parent -> {
                     viewBinding.statisticsMenuIcon.setImageResource(R.drawable.ic_statistics_root)
                     viewBinding.statisticsMenuTitle.text =
                         context.getString(R.string.statistics_menu_category_type_parent_title)
                 }
-                StatisticsMenuCategoryType.CHILD -> {
+                StatisticsMenuCategoryType.Child -> {
                     viewBinding.statisticsMenuIcon.setImageResource(R.drawable.ic_statistics_child)
                     viewBinding.statisticsMenuTitle.text =
                         context.getString(R.string.statistics_menu_category_type_child_title)

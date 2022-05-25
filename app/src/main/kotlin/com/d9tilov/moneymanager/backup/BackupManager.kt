@@ -73,7 +73,7 @@ class BackupManager(private val context: Context, private val preferencesStore: 
             fileRef.getFile(localFile).addOnSuccessListener {
                 val output = context.getDatabasePath(DATABASE_NAME)
                 val myInputs: InputStream = FileInputStream(localFile.path)
-                val buffer = ByteArray(1024)
+                val buffer = ByteArray(BUFFER_SIZE)
                 var length: Int
                 val myOutput = FileOutputStream(output.path)
                 while (myInputs.read(buffer).also { length = it } > 0) {
@@ -92,6 +92,10 @@ class BackupManager(private val context: Context, private val preferencesStore: 
                 Timber.tag(App.TAG).d("Restore was complete with error: $it")
             }
         }
+    }
+
+    companion object {
+        private const val BUFFER_SIZE = 1024
     }
 }
 

@@ -2,12 +2,10 @@ package com.d9tilov.moneymanager.billing
 
 import android.text.TextUtils
 import android.util.Base64
-import timber.log.Timber
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.BuildConfig
+import timber.log.Timber
 import java.io.IOException
-import java.lang.IllegalArgumentException
-import java.lang.RuntimeException
 import java.security.InvalidKeyException
 import java.security.KeyFactory
 import java.security.NoSuchAlgorithmException
@@ -16,7 +14,6 @@ import java.security.Signature
 import java.security.SignatureException
 import java.security.spec.InvalidKeySpecException
 import java.security.spec.X509EncodedKeySpec
-import kotlin.Throws
 
 /*
  * This class is an sample of how you can check to make sure your purchases on the device came from
@@ -71,6 +68,7 @@ object Security {
      * is invalid
      */
     @Throws(IOException::class)
+    @Suppress("TooGenericExceptionThrown")
     private fun generatePublicKey(encodedPublicKey: String): PublicKey {
         return try {
             val decodedKey = Base64.decode(encodedPublicKey, Base64.DEFAULT)
@@ -95,6 +93,7 @@ object Security {
      * @param signature  server signature
      * @return true if the data and signature match
      */
+    @Suppress("TooGenericExceptionThrown", "SwallowedException")
     private fun verify(publicKey: PublicKey, signedData: String, signature: String?): Boolean {
         val signatureBytes: ByteArray = try {
             Base64.decode(signature, Base64.DEFAULT)

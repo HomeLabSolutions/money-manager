@@ -19,7 +19,7 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.data.entity.isEmpty
 import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination
 import com.d9tilov.moneymanager.category.domain.entity.CategoryGroup
-import com.d9tilov.moneymanager.category.exception.CategoryExistException
+import com.d9tilov.moneymanager.category.exception.CategoryException
 import com.d9tilov.moneymanager.category.ui.CategoryIconSetFragment.Companion.ARG_CATEGORY_ICON_ID
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryColorAdapter
 import com.d9tilov.moneymanager.category.ui.vm.CategoryCreationViewModel
@@ -65,14 +65,13 @@ class CategoryCreationFragment :
         super.onViewCreated(view, savedInstanceState)
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<@DrawableRes Int>(
             ARG_CATEGORY_ICON_ID
-        )?.observe(
-            viewLifecycleOwner
-        ) {
-            updateIcon(it)
-            findNavController().currentBackStackEntry?.savedStateHandle?.remove<@DrawableRes Int>(
-                ARG_CATEGORY_ICON_ID
-            )
-        }
+        )
+            ?.observe(viewLifecycleOwner) {
+                updateIcon(it)
+                findNavController().currentBackStackEntry?.savedStateHandle?.remove<@DrawableRes Int>(
+                    ARG_CATEGORY_ICON_ID
+                )
+            }
         viewBinding?.run {
             if (localCategory.isEmpty()) localCategory = category
             val colorLayoutManager =
@@ -114,7 +113,7 @@ class CategoryCreationFragment :
                     CategoryCreationFragmentDirections.toRemoveSubCategoryDialog(localCategory)
                 } else {
                     CategoryCreationFragmentDirections.toRemoveCategoryDialog(
-                        CategoryDestination.CATEGORY_CREATION_SCREEN,
+                        CategoryDestination.CategoryCreationScreen,
                         localCategory
                     )
                 }
@@ -168,7 +167,7 @@ class CategoryCreationFragment :
     }
 
     override fun showError(error: Throwable) {
-        if (error is CategoryExistException) {
+        if (error is CategoryException.CategoryExistException) {
             viewBinding?.categoryCreationEtNameLayout?.error =
                 getString(R.string.category_unit_name_exist_error)
         }

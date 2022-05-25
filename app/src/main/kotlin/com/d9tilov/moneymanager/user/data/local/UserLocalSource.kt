@@ -7,8 +7,6 @@ import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.data.local.mapper.toDataModel
 import com.d9tilov.moneymanager.user.data.local.mapper.toDbModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
@@ -16,6 +14,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class UserLocalSource(
@@ -41,15 +40,14 @@ class UserLocalSource(
         userDao.update(userProfile.toDbModel())
     }
 
-    override suspend fun updateCurrency(code: String): Unit = coroutineScope {
+    override suspend fun updateCurrency(code: String) {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
             ?: throw WrongUidException()
-        val user = userDao.getById(currentUserId).firstOrNull()
-        user?.let {
-            awaitAll(
-                async { preferencesStore.updateCurrentCurrency(code) },
-                async { userDao.update(it.copy(currentCurrencyCode = code)) }
-            )
+        userDao.getById(currentUserId).firstOrNull()?.also {
+            coroutineScope {
+                launch { preferencesStore.updateCurrentCurrency(code) }
+                launch { userDao.update(it.copy(currentCurrencyCode = code)) }
+            }
         }
     }
 

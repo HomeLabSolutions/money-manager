@@ -16,10 +16,10 @@ import androidx.navigation.fragment.navArgs
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.RegularTransactionCreatedNavigator
-import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination
 import com.d9tilov.moneymanager.category.common.BaseCategoryFragment.Companion.ARG_CATEGORY
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.data.entity.isEmpty
+import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.currentDate
 import com.d9tilov.moneymanager.core.util.currentDateTime
@@ -37,6 +37,7 @@ import com.d9tilov.moneymanager.databinding.FragmentRegularTransactionCreationBi
 import com.d9tilov.moneymanager.regular.domain.entity.ExecutionPeriod
 import com.d9tilov.moneymanager.regular.domain.entity.PeriodType
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
+import com.d9tilov.moneymanager.regular.domain.entity.WeekDays
 import com.d9tilov.moneymanager.regular.vm.CreatedRegularTransactionViewModel
 import com.d9tilov.moneymanager.transaction.domain.entity.isIncome
 import com.google.android.material.appbar.MaterialToolbar
@@ -170,13 +171,13 @@ class RegularTransactionCreationFragment :
                 if (view.isSelected) viewModel.saveOrUpdate(localTransaction)
                 else shakeError()
             }
-            createdRegularTransactionMonday.setOnClickListener { setWeekdaySelected(0) }
-            createdRegularTransactionTuesday.setOnClickListener { setWeekdaySelected(1) }
-            createdRegularTransactionWednesday.setOnClickListener { setWeekdaySelected(2) }
-            createdRegularTransactionThursday.setOnClickListener { setWeekdaySelected(3) }
-            createdRegularTransactionFriday.setOnClickListener { setWeekdaySelected(4) }
-            createdRegularTransactionSaturday.setOnClickListener { setWeekdaySelected(5) }
-            createdRegularTransactionSunday.setOnClickListener { setWeekdaySelected(6) }
+            createdRegularTransactionMonday.setOnClickListener { setWeekdaySelected(WeekDays.MONDAY.ordinal) }
+            createdRegularTransactionTuesday.setOnClickListener { setWeekdaySelected(WeekDays.TUESDAY.ordinal) }
+            createdRegularTransactionWednesday.setOnClickListener { setWeekdaySelected(WeekDays.WEDNESDAY.ordinal) }
+            createdRegularTransactionThursday.setOnClickListener { setWeekdaySelected(WeekDays.THURSDAY.ordinal) }
+            createdRegularTransactionFriday.setOnClickListener { setWeekdaySelected(WeekDays.FRIDAY.ordinal) }
+            createdRegularTransactionSaturday.setOnClickListener { setWeekdaySelected(WeekDays.SATURDAY.ordinal) }
+            createdRegularTransactionSunday.setOnClickListener { setWeekdaySelected(WeekDays.SUNDAY.ordinal) }
             createdRegularTransactionMainSum.addOnCurrencyClickListener { toCurrencyScreen() }
         }
         viewLifecycleOwner.lifecycleScope.launch {
@@ -195,7 +196,7 @@ class RegularTransactionCreationFragment :
     private fun toCurrencyScreen() {
         val action =
             RegularTransactionCreationFragmentDirections.toCurrencyDest(
-                CurrencyDestination.EDIT_REGULAR_TRANSACTION_SCREEN,
+                CurrencyDestination.EditRegularTransactionScreen,
                 localTransaction.currencyCode
             )
         findNavController().navigate(action)
@@ -203,7 +204,7 @@ class RegularTransactionCreationFragment :
 
     private fun toFixedCategoryScreen() {
         val action = RegularTransactionCreationFragmentDirections.toFixedCategoryDest(
-            destination = CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN,
+            destination = CategoryDestination.EditRegularTransactionScreen,
             transactionType = transactionType
         )
         findNavController().navigate(action)
@@ -267,19 +268,18 @@ class RegularTransactionCreationFragment :
     }
 
     private fun setWeekdaySelected(day: Int) {
-        for (i in 0..6) {
+        for (i in WeekDays.values()) {
             viewBinding?.run {
                 val view = when (i) {
-                    0 -> createdRegularTransactionMonday
-                    1 -> createdRegularTransactionTuesday
-                    2 -> createdRegularTransactionWednesday
-                    3 -> createdRegularTransactionThursday
-                    4 -> createdRegularTransactionFriday
-                    5 -> createdRegularTransactionSaturday
-                    6 -> createdRegularTransactionSunday
-                    else -> throw IllegalArgumentException("Unknown day of week: $day")
+                    WeekDays.MONDAY -> createdRegularTransactionMonday
+                    WeekDays.TUESDAY -> createdRegularTransactionTuesday
+                    WeekDays.WEDNESDAY -> createdRegularTransactionWednesday
+                    WeekDays.THURSDAY -> createdRegularTransactionThursday
+                    WeekDays.FRIDAY -> createdRegularTransactionFriday
+                    WeekDays.SATURDAY -> createdRegularTransactionSaturday
+                    WeekDays.SUNDAY -> createdRegularTransactionSunday
                 }
-                view.isSelected = i == day
+                view.isSelected = i.ordinal == day
                 view.setTextColor(
                     ContextCompat.getColor(
                         requireContext(),
@@ -310,7 +310,7 @@ class RegularTransactionCreationFragment :
                     localTransaction.category.icon,
                     localTransaction.category.color
                 )
-                iconDrawable.setBounds(0, 0, 120, 120)
+                iconDrawable.setBounds(LEFT_BOUND, TOP_BOUND, RIGHT_BOUND, BOTTOM_BOUND)
                 createdRegularTransactionCategory.setCompoundDrawables(
                     iconDrawable,
                     null,
@@ -369,5 +369,9 @@ class RegularTransactionCreationFragment :
 
     companion object {
         const val ARG_DAY_OF_MONTH = "arg_day_of_month"
+        private const val LEFT_BOUND = 0
+        private const val TOP_BOUND = 0
+        private const val RIGHT_BOUND = 120
+        private const val BOTTOM_BOUND = 120
     }
 }
