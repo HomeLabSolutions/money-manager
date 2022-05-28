@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
-import com.d9tilov.moneymanager.base.ui.currencyCode
+import com.d9tilov.moneymanager.home.ui.currencyCode
 import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
 import com.d9tilov.moneymanager.budget.domain.entity.BudgetDestination
 import com.d9tilov.moneymanager.core.util.CurrencyUtils

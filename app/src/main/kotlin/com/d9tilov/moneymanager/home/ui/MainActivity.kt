@@ -5,13 +5,21 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AccelerateInterpolator
+import androidx.activity.viewModels
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.d9tilov.moneymanager.R
+import com.d9tilov.moneymanager.backup.PeriodicBackupWorker
+import com.d9tilov.moneymanager.base.data.local.preferences.CurrencyMetaData
 import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.base.ui.navigator.HomeNavigator
+import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.events.OnBackPressed
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
@@ -19,6 +27,8 @@ import com.d9tilov.moneymanager.core.util.setupWithNavController
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity :
@@ -34,14 +44,33 @@ class MainActivity :
         R.id.logout_dialog,
         R.id.remove_transaction_dialog
     )
-
+    private val viewModel by viewModels<MainViewModel>()
     override val navHostFragmentId = R.id.nav_host_container
+    private var currency = CurrencyMetaData(
+        DataConstants.DEFAULT_CURRENCY_CODE,
+        DataConstants.DEFAULT_CURRENCY_SYMBOL
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         } // Else, need to wait for onRestoreInstanceState
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.isPremium
+                        .collect { isPremium ->
+                            if (isPremium) PeriodicBackupWorker.startPeriodicJob(this@MainActivity)
+                        }
+                }
+                launch {
+                    viewModel.currency.collect { currency ->
+                        this@MainActivity.currency = currency
+                    }
+                }
+            }
+        }
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -116,9 +145,13 @@ class MainActivity :
         }
     }
 
+    fun getCurrency(): CurrencyMetaData = currency
+
     companion object {
         private const val ALPHA_BAR_MIN = 0f
         private const val ALPHA_BAR_MAX = 1f
         private const val ANIMATION_DURATION_BAR = 500L
     }
 }
+
+fun Fragment.currencyCode() = (requireActivity() as MainActivity).getCurrency().code

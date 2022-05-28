@@ -1,7 +1,9 @@
 package com.d9tilov.moneymanager.user.data.local
 
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
+import com.d9tilov.moneymanager.base.data.local.preferences.CurrencyMetaData
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
+import com.d9tilov.moneymanager.core.util.CurrencyUtils.getSymbolByCode
 import com.d9tilov.moneymanager.user.data.entity.UserDbModel
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.data.local.mapper.toDataModel
@@ -77,6 +79,17 @@ class UserLocalSource(
         .filterNotNull()
         .flatMapMerge { uid ->
             userDao.getById(uid).map { user: UserDbModel? -> user?.toDataModel() }
+        }
+
+    override fun getCurrentCurrency(): Flow<CurrencyMetaData> = preferencesStore.uid
+        .filterNotNull()
+        .flatMapMerge { uid ->
+            userDao.getCurrentCurrency(uid).map { currencyCode ->
+                CurrencyMetaData(
+                    currencyCode,
+                    currencyCode.getSymbolByCode()
+                )
+            }
         }
 
     override suspend fun deleteUser() {

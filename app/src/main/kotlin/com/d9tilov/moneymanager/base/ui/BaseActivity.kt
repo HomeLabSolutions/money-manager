@@ -13,21 +13,13 @@ import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.base.data.local.preferences.CurrencyMetaData
-import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
-import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.util.hideLoadingDialog
 import com.d9tilov.moneymanager.core.util.isNetworkConnected
 import com.d9tilov.moneymanager.core.util.showLoadingDialog
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
 
@@ -36,30 +28,16 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
     private var progress: ProgressBar? = null
     private val contentLayout: ViewGroup by lazy { findViewById<ViewGroup>(android.R.id.content) }
 
-    private val preferenceDataStore: PreferencesStore by lazy { PreferencesStore(this) }
-
-    private var currency = CurrencyMetaData(
-        DataConstants.DEFAULT_CURRENCY_CODE,
-        DataConstants.DEFAULT_CURRENCY_SYMBOL
-    )
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = performDataBinding()
         setContentView(viewBinding!!.root)
-        lifecycleScope.launch {
-            preferenceDataStore.currentCurrency
-                .flowWithLifecycle(lifecycle, Lifecycle.State.CREATED)
-                .collect { currency = it }
-        }
         if (BuildConfig.DEBUG) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
     }
 
     abstract fun performDataBinding(): T
-
-    fun getCurrency() = currency
 
     fun isNetworkEnabled() = isNetworkConnected(this)
 
@@ -124,5 +102,3 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
         }
     }
 }
-
-fun Fragment.currencyCode() = (requireActivity() as BaseActivity<*>).getCurrency().code

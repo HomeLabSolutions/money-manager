@@ -9,7 +9,6 @@ import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 class RegularTransactionInteractorImpl(
@@ -18,10 +17,8 @@ class RegularTransactionInteractorImpl(
     private val userInteractor: UserInteractor
 ) : RegularTransactionInteractor {
 
-    override fun createDefault(): Flow<RegularTransaction> = flow {
-        val currentCurrency = userInteractor.getCurrentCurrency()
-        emit(RegularTransaction.EMPTY.copy(currencyCode = currentCurrency))
-    }
+    override fun createDefault(): Flow<RegularTransaction> = userInteractor.getCurrentCurrency()
+        .map { RegularTransaction.EMPTY.copy(currencyCode = it.code) }
 
     override suspend fun insert(regularTransactionData: RegularTransaction) {
         regularTransactionRepo.insert(regularTransactionData.toData())

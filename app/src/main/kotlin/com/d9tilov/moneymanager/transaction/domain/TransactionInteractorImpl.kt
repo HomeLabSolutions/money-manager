@@ -365,8 +365,9 @@ class TransactionInteractorImpl(
     }
 
     override fun getSumInFiscalPeriodInUsd(type: TransactionType): Flow<BigDecimal> {
-        return flow { emit(userInteractor.getFiscalDay()) }
-            .flatMapMerge { fiscalDay ->
+        return userInteractor.getCurrentCurrency()
+            .flatMapMerge { currency ->
+                val fiscalDay = userInteractor.getFiscalDay()
                 val endDate = currentDateTime()
                 val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
                 transactionRepo.getTransactionsByTypeInPeriod(
@@ -376,7 +377,7 @@ class TransactionInteractorImpl(
                 ).map { list ->
                     val currencies = mutableSetOf<String>()
                     list.forEach { tr -> currencies.add(tr.currencyCode) }
-                    val currencyCode = userInteractor.getCurrentCurrency()
+                    val currencyCode = currency.code
                     if ((currencies.size == 1 && currencies.contains(currencyCode)) || currencyCode == DEFAULT_CURRENCY_CODE) BigDecimal.ZERO
                     else list.sumOf { it.usdSum }
                 }
@@ -426,21 +427,25 @@ class TransactionInteractorImpl(
     }
 
     override fun getSumTodayInUsd(type: TransactionType): Flow<BigDecimal> =
-        transactionRepo.getTransactionsByTypeInPeriod(
-            currentDateTime().getStartOfDay(),
-            currentDateTime().getEndOfDay(),
-            type
-        ).map { list ->
+        combine(
+            transactionRepo.getTransactionsByTypeInPeriod(
+                currentDateTime().getStartOfDay(),
+                currentDateTime().getEndOfDay(),
+                type
+            ),
+            userInteractor.getCurrentCurrency()
+        ) { list, currency ->
             val currencies = mutableSetOf<String>()
             list.forEach { tr -> currencies.add(tr.currencyCode) }
-            val currencyCode = userInteractor.getCurrentCurrency()
+            val currencyCode = currency.code
             if ((currencies.size == 1 && currencies.contains(currencyCode)) || currencyCode == DEFAULT_CURRENCY_CODE) BigDecimal.ZERO
             else list.sumOf { it.usdSum }
         }
 
     override fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<BigDecimal> {
-        return flow { emit(userInteractor.getFiscalDay()) }
-            .flatMapMerge { fiscalDay ->
+        return userInteractor.getCurrentCurrency()
+            .flatMapMerge { currency ->
+                val fiscalDay = userInteractor.getFiscalDay()
                 val endDate = currentDateTime()
                 val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
                 transactionRepo.getTransactionsByTypeInPeriod(
@@ -448,12 +453,11 @@ class TransactionInteractorImpl(
                     endDate,
                     type
                 ).map { list ->
-                    val currentCurrency = userInteractor.getCurrentCurrency()
                     list.sumOf { tr ->
-                        if (tr.currencyCode == currentCurrency) {
-                            tr.sum
-                        } else {
-                            val trCurrency = currencyInteractor.getCurrencyByCode(currentCurrency)
+                        val currencyCode = currency.code
+                        if (tr.currencyCode == currencyCode) tr.sum
+                        else {
+                            val trCurrency = currencyInteractor.getCurrencyByCode(currencyCode)
                             trCurrency.value.multiply(tr.usdSum)
                         }
                     }
@@ -462,17 +466,19 @@ class TransactionInteractorImpl(
     }
 
     override fun getApproxSumTodayCurrentCurrency(type: TransactionType): Flow<BigDecimal> =
-        transactionRepo.getTransactionsByTypeInPeriod(
-            currentDateTime().getStartOfDay(),
-            currentDateTime().getEndOfDay(),
-            type
-        ).map { list ->
-            val currentCurrency = userInteractor.getCurrentCurrency()
+        combine(
+            transactionRepo.getTransactionsByTypeInPeriod(
+                currentDateTime().getStartOfDay(),
+                currentDateTime().getEndOfDay(),
+                type
+            ),
+            userInteractor.getCurrentCurrency()
+        ) { list, currency ->
             list.sumOf { tr ->
-                if (tr.currencyCode == currentCurrency) {
-                    tr.sum
-                } else {
-                    val trCurrency = currencyInteractor.getCurrencyByCode(currentCurrency)
+                val currencyCode = currency.code
+                if (tr.currencyCode == currencyCode) tr.sum
+                else {
+                    val trCurrency = currencyInteractor.getCurrencyByCode(currencyCode)
                     trCurrency.value.multiply(tr.usdSum)
                 }
             }
