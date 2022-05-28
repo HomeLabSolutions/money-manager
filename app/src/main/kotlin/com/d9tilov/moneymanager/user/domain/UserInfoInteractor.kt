@@ -1,11 +1,10 @@
 package com.d9tilov.moneymanager.user.domain
 
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
+import com.d9tilov.moneymanager.base.data.local.preferences.CurrencyMetaData
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.domain.mapper.UserDomainMapper
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.firstOrNull
 
 class UserInfoInteractor(
     private val userRepo: UserRepo,
@@ -13,7 +12,7 @@ class UserInfoInteractor(
 ) : UserInteractor {
 
     override fun getCurrentUser(): Flow<UserProfile?> = userRepo.getCurrentUser()
-    override suspend fun getCurrentCurrency(): String = getCurrentUser().firstOrNull()?.currentCurrencyCode ?: DEFAULT_CURRENCY_CODE
+    override fun getCurrentCurrency(): Flow<CurrencyMetaData> = userRepo.getCurrentCurrency()
 
     override suspend fun getFiscalDay(): Int = userRepo.getFiscalDay()
     override suspend fun showPrepopulate(): Boolean = userRepo.showPrepopulate()

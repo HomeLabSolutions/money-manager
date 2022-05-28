@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.base.ui.currencyCode
+import com.d9tilov.moneymanager.home.ui.currencyCode
 import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination

@@ -15,7 +15,7 @@ interface UserDao {
     fun getById(id: String): Flow<UserDbModel>
 
     @Query("SELECT currentCurrencyCode FROM Users WHERE uid = :id")
-    suspend fun getCurrentCurrency(id: String): String
+    fun getCurrentCurrency(id: String): Flow<String>
 
     @Query("SELECT fiscalDay FROM Users WHERE uid = :id")
     fun getFiscalDay(id: String): Int

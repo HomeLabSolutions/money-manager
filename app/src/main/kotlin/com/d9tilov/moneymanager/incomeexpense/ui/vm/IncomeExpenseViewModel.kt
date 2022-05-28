@@ -5,9 +5,6 @@ import com.d9tilov.moneymanager.base.ui.navigator.IncomeExpenseNavigator
 import com.d9tilov.moneymanager.billing.domain.BillingInteractor
 import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
-import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
-import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -25,9 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class IncomeExpenseViewModel @Inject constructor(
     private val userInteractor: UserInteractor,
-    private val currencyInteractor: CurrencyInteractor,
-    private val transactionInteractor: TransactionInteractor,
-    private val billingInteractor: BillingInteractor
+    billingInteractor: BillingInteractor
 ) : BaseViewModel<IncomeExpenseNavigator>() {
 
     private var currencyCodeStr: MutableStateFlow<String> = MutableStateFlow(DEFAULT_CURRENCY_CODE)
@@ -38,21 +33,11 @@ class IncomeExpenseViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO + updateCurrencyExceptionHandler) {
-            launch {
-                currencyInteractor.updateCurrencyRates()
-                val currencyCode = userInteractor.getCurrentCurrency()
-                currencyCodeStr.value = currencyCode
-                defaultCurrencyCode = currencyCodeStr.value
-                billingInteractor.isPremium()
-                    .collect { isPremium ->
-                        if (isPremium) {
-                            launch {
-                                transactionInteractor.executeRegularIfNeeded(TransactionType.INCOME)
-                                transactionInteractor.executeRegularIfNeeded(TransactionType.EXPENSE)
-                            }
-                        }
-                    }
-            }
+            userInteractor.getCurrentCurrency()
+                .collect { currency ->
+                    currencyCodeStr.value = currency.code
+                    defaultCurrencyCode = currencyCodeStr.value
+                }
         }
     }
 
