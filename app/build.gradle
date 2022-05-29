@@ -27,8 +27,8 @@ android {
         }
     }
 
-    compileSdkVersion versions.compileSdk
-    buildToolsVersion versions.buildTools
+    compileSdkVersion 31
+    buildToolsVersion "31.0.0"
 
     def versionMajor = 1
     def versionMinor = 0
@@ -36,9 +36,9 @@ android {
     def versionBuild = 13
 
     defaultConfig {
-        applicationId names.applicationId
-        minSdkVersion versions.minSdk
-        targetSdkVersion versions.targetSdk
+        applicationId "com.d9tilov.moneymanager"
+        minSdkVersion 21
+        targetSdkVersion 31
         versionCode 1000 * (1000 * versionMajor + 100 * versionMinor + versionPatch) + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
