@@ -10,6 +10,7 @@ import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
@@ -23,7 +24,7 @@ class MainViewModel @Inject constructor(
     userInteractor: UserInteractor,
     private val currencyInteractor: CurrencyInteractor,
     private val transactionInteractor: TransactionInteractor,
-    billingInteractor: BillingInteractor
+    private val billingInteractor: BillingInteractor
 ) : ViewModel() {
 
     private val updateCurrencyExceptionHandler = CoroutineExceptionHandler { _, exception ->
@@ -36,7 +37,11 @@ class MainViewModel @Inject constructor(
         .flowOn(Dispatchers.IO)
         .shareIn(viewModelScope, SharingStarted.Eagerly)
 
+    private val _billingConnectionState = MutableStateFlow(false)
+    val billingConnectionState: MutableStateFlow<Boolean> = _billingConnectionState
+
     init {
+        billingInteractor.startBillingConnection(_billingConnectionState)
         viewModelScope.launch(Dispatchers.IO + updateCurrencyExceptionHandler) {
             isPremium
                 .collect { isPremium ->
@@ -49,5 +54,9 @@ class MainViewModel @Inject constructor(
                 }
             launch { currencyInteractor.updateCurrencyRates() }
         }
+    }
+
+    override fun onCleared() {
+        billingInteractor.terminateBillingConnection()
     }
 }

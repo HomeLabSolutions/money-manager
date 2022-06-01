@@ -1,113 +1,95 @@
 package com.d9tilov.moneymanager.billing.data
 
-import androidx.lifecycle.LifecycleObserver
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
-import com.d9tilov.moneymanager.App
+import com.android.billingclient.api.ProductDetails
+import com.android.billingclient.api.Purchase
 import com.d9tilov.moneymanager.billing.data.local.BillingSource
 import com.d9tilov.moneymanager.billing.domain.BillingRepo
 import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails
-import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails.Companion.SKU_SUBSCRIPTION_ANNUAL
-import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails.Companion.SKU_SUBSCRIPTION_QUARTERLY
+import com.d9tilov.moneymanager.billing.domain.exceptions.BillingFailure
+import com.d9tilov.moneymanager.core.util.CurrencyUtils.getSymbolByCode
 import com.d9tilov.moneymanager.currency.data.entity.Currency
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class BillingDataRepo(
     private val billingSource: BillingSource,
-    private val defaultScope: CoroutineScope
 ) : BillingRepo {
 
-    private val purchaseExceptionHandler = CoroutineExceptionHandler { _, exception ->
-        Timber.tag(App.TAG).e("Billing flow completed with error: $exception")
+    override val currentPurchases: Flow<List<Purchase>> = billingSource.purchases
+
+    // ProductDetails for the premium subscription.
+    override val premiumProductDetails: Flow<ProductDetails?> =
+        billingSource.productWithProductDetails.filter {
+            it.containsKey(PREMIUM_SUB)
+        }.map { it[PREMIUM_SUB] }
+
+    // Set to true when a purchase is acknowledged.
+    override val isNewPurchaseAcknowledged: Flow<Boolean> = billingSource.isNewPurchaseAcknowledged
+
+    override fun startBillingConnection(billingConnectionState: MutableStateFlow<Boolean>) {
+        billingSource.startBillingConnection(billingConnectionState)
     }
 
-    private val skus = listOf(SKU_SUBSCRIPTION_QUARTERLY, SKU_SUBSCRIPTION_ANNUAL)
-    private val purchaseCompleted: MutableStateFlow<Boolean> = MutableStateFlow(false)
-
-    init {
-        postMessagesFromBillingFlow()
-    }
-
-    override fun getObserver(): LifecycleObserver = billingSource
-
-    override fun isPremium(): Flow<Boolean> {
-        val flowList: List<Flow<Boolean>> = skus.map { billingSource.isPurchased(it) }
-        return combine(flowList) { result -> result.firstOrNull { it } ?: false }
+    override fun terminateBillingConnection() {
+        billingSource.terminateBillingConnection()
     }
 
     override fun getSkuDetails(): Flow<List<BillingSkuDetails>> {
-        val flowList: List<Flow<BillingSkuDetails>> = skus.map { createSkuDetails(it) }
-        return combine(flowList) { result: Array<BillingSkuDetails> -> result.toList() }
-    }
-
-    override fun getActiveSku(): Flow<BillingSkuDetails?> {
-        val flowList: List<Flow<BillingSkuDetails>> = skus.map { createSkuDetails(it) }
-        return combine(flowList) { result: Array<BillingSkuDetails> -> result.firstOrNull { it.isPurchased } }
-    }
-
-    override fun getMinPrice(): Flow<Currency> =
-        getSkuDetails().map { list: List<BillingSkuDetails> ->
-            list.minOfWith({ t1, t2 -> t1.value.compareTo(t2.value) }) { it.price }
-        }
-
-    private fun createSkuDetails(sku: String): Flow<BillingSkuDetails> = combine(
-        billingSource.getSkuTitle(sku),
-        billingSource.getSkuDescription(sku),
-        billingSource.getSkuPrice(sku),
-        billingSource.isPurchased(sku),
-        billingSource.getSubscriptionMetaData(sku)
-    ) { title, description, price, isPurchased, metaData ->
-        BillingSkuDetails(
-            sku,
-            title,
-            description,
-            price,
-            isPurchased,
-            metaData
-        )
+        return billingSource.productWithProductDetails.map { details: Map<String, ProductDetails> -> details.toList() }
+            .map { list: List<Pair<String, ProductDetails>> -> list.first() }
+            .map { item ->
+                Pair<String, List<ProductDetails.SubscriptionOfferDetails>?>(
+                    item.first,
+                    item.second.subscriptionOfferDetails
+                )
+            }
+            .map { pair: Pair<String, List<ProductDetails.SubscriptionOfferDetails>?> ->
+                val product: String = pair.first
+                pair.second?.map { details: ProductDetails.SubscriptionOfferDetails ->
+                    val tag =
+                        details.offerTags.first() ?: throw BillingFailure.TagNotFoundException(
+                            product
+                        )
+                    val offerToken = details.offerToken
+                    val price = details.pricingPhases.pricingPhaseList.first()
+                        ?: throw BillingFailure.PriceNotFoundException(product)
+                    val formattedPrice =
+                        price.priceAmountMicros.toBigDecimal().divide(AMOUNT_DIVIDER.toBigDecimal())
+                    val currencyCode = price.priceCurrencyCode
+                    val currency = Currency.EMPTY.copy(
+                        code = currencyCode,
+                        value = formattedPrice,
+                        symbol = currencyCode.getSymbolByCode()
+                    )
+                    BillingSkuDetails(tag, offerToken, currency)
+                } ?: throw BillingFailure.SubscriptionNotFoundException(product)
+            }
     }
 
     override fun buySku(
-        sku: String,
+        tag: String,
+        productDetails: ProductDetails?,
+        currentPurchases: List<Purchase>,
         result: (billingClient: BillingClient, paramBuilder: BillingFlowParams) -> BillingResult
     ) {
-        var oldSku: String? = null
-        when (sku) {
-            SKU_SUBSCRIPTION_QUARTERLY -> oldSku = SKU_SUBSCRIPTION_ANNUAL
-            SKU_SUBSCRIPTION_ANNUAL -> oldSku = SKU_SUBSCRIPTION_QUARTERLY
-        }
-        if (oldSku == null) billingSource.launchBillingFlow(sku, result)
-        else billingSource.launchBillingFlow(sku, result, oldSku)
+        billingSource.buySku(tag, productDetails, currentPurchases, result)
     }
 
-    override fun purchaseCompleted(): Flow<Boolean> = purchaseCompleted
-
-    override fun canPurchase(): Flow<Boolean> {
-        val flowList: List<Flow<Boolean>> = skus.map { billingSource.canPurchase(it) }
-        return combine(flowList) { result -> result.firstOrNull { it } ?: false }
+    // Set to true when a returned purchases is an auto-renewing premium subscription.
+    override val hasRenewablePremium: Flow<Boolean> = billingSource.purchases.map { purchaseList ->
+        purchaseList.any { purchase ->
+            purchase.products.contains(PREMIUM_SUB) && purchase.isAutoRenewing
+        }
     }
 
-    private fun postMessagesFromBillingFlow() {
-        defaultScope.launch(purchaseExceptionHandler) {
-            billingSource.getNewPurchases().collect { list ->
-                for (sku in list) {
-                    when (sku) {
-                        SKU_SUBSCRIPTION_QUARTERLY, SKU_SUBSCRIPTION_ANNUAL -> {
-                            billingSource.refreshPurchases()
-                            purchaseCompleted.emit(true)
-                        }
-                    }
-                }
-            }
-        }
+    companion object {
+        // List of subscription product offerings
+        private const val PREMIUM_SUB = "common_subs"
+        private const val AMOUNT_DIVIDER = 1_000_000
     }
 }
