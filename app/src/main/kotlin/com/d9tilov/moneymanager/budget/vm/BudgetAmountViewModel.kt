@@ -2,9 +2,10 @@ package com.d9tilov.moneymanager.budget.vm
 
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.BudgetAmountNavigator
-import com.d9tilov.moneymanager.budget.domain.entity.BudgetData
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
+import com.d9tilov.moneymanager.budget.domain.entity.BudgetData
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
+import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
@@ -16,7 +17,10 @@ import java.math.BigDecimal
 import javax.inject.Inject
 
 @HiltViewModel
-class BudgetAmountViewModel @Inject constructor(private val budgetInteractor: BudgetInteractor) :
+class BudgetAmountViewModel @Inject constructor(
+    private val budgetInteractor: BudgetInteractor,
+    private val userInteractor: UserInteractor
+) :
     BaseViewModel<BudgetAmountNavigator>() {
 
     val budgetData = budgetInteractor.get()
@@ -28,7 +32,10 @@ class BudgetAmountViewModel @Inject constructor(private val budgetInteractor: Bu
     }
 
     fun saveBudgetAmount(sum: BigDecimal) = viewModelScope.launch(Dispatchers.IO) {
-        val budget = budgetInteractor.get().first()
-        budgetInteractor.update(budget.copy(sum = sum))
+        launch {
+            val budget = budgetInteractor.get().first()
+            budgetInteractor.update(budget.copy(sum = sum))
+        }
+        launch { userInteractor.prepopulateCompleted() }
     }
 }
