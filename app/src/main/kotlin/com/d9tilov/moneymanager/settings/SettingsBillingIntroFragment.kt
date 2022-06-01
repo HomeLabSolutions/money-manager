@@ -12,8 +12,8 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsBillingNavigator
 import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails
-import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails.Companion.SKU_SUBSCRIPTION_ANNUAL
-import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails.Companion.SKU_SUBSCRIPTION_QUARTERLY
+import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails.Companion.TAG_ANNUAL
+import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails.Companion.TAG_QUARTERLY
 import com.d9tilov.moneymanager.core.util.ZoomOutPageTransformer
 import com.d9tilov.moneymanager.databinding.FragmentBillingIntroBinding
 import com.d9tilov.moneymanager.settings.adapter.DotIndicatorPager2Adapter
@@ -36,11 +36,6 @@ class SettingsBillingIntroFragment :
 
     override val viewModel by viewModels<SettingsBillingIntroViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requireActivity().lifecycle.addObserver(viewModel.lifecycleObserver)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
@@ -56,15 +51,12 @@ class SettingsBillingIntroFragment :
             settingsBillingIntroDots.attachTo(settingsBillingIntroViewpager)
             settingsBillingIntroBuy.setOnClickListener {
                 val skuType = when (settingsBillingIntroRadioGroup.checkedRadioButtonId) {
-                    R.id.settings_billing_intro_radio_quarterly -> SKU_SUBSCRIPTION_QUARTERLY
-                    R.id.settings_billing_intro_radio_annual -> SKU_SUBSCRIPTION_ANNUAL
+                    R.id.settings_billing_intro_radio_quarterly -> TAG_QUARTERLY
+                    R.id.settings_billing_intro_radio_annual -> TAG_ANNUAL
                     else -> throw IllegalArgumentException("Wrong radio button id: ${settingsBillingIntroRadioGroup.checkedRadioButtonId}")
                 }
                 viewModel.buySubscription(skuType) { billingClient, paramBuilder ->
-                    billingClient.launchBillingFlow(
-                        requireActivity(),
-                        paramBuilder
-                    )
+                    billingClient.launchBillingFlow(requireActivity(), paramBuilder)
                 }
             }
 
@@ -73,22 +65,22 @@ class SettingsBillingIntroFragment :
                     launch {
                         viewModel.skuDetails.collect { skuDetails: List<BillingSkuDetails> ->
                             for (sku in skuDetails) {
-                                when (sku.type) {
-                                    SKU_SUBSCRIPTION_QUARTERLY ->
+                                when (sku.tag) {
+                                    TAG_QUARTERLY ->
                                         settingsBillingIntroRadioQuarterlyPrice.text = getString(
                                             R.string.billing_purchase_quarterly_price,
                                             sku.price.symbol,
                                             sku.price.value,
                                             sku.price.code
                                         )
-                                    SKU_SUBSCRIPTION_ANNUAL ->
+                                    TAG_ANNUAL ->
                                         settingsBillingIntroRadioAnnualPrice.text = getString(
                                             R.string.billing_purchase_annual_price,
                                             sku.price.symbol,
                                             sku.price.value,
                                             sku.price.code
                                         )
-                                    else -> throw IllegalArgumentException("Wrong sku type: ${sku.type}")
+                                    else -> throw IllegalArgumentException("Wrong sku tag: ${sku.tag}")
                                 }
                             }
                         }

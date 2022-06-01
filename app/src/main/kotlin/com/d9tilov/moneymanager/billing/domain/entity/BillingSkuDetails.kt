@@ -6,15 +6,12 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class BillingSkuDetails(
-    val type: String,
-    val title: String,
-    val description: String,
-    val price: Currency,
-    val isPurchased: Boolean,
-    val metaData: PurchaseMetaData?
+    val tag: String,
+    val offerToken: String,
+    val price: Currency
 ) : Parcelable {
     companion object {
-        const val SKU_SUBSCRIPTION_QUARTERLY = "premium_quarterly"
-        const val SKU_SUBSCRIPTION_ANNUAL = "premium_annual"
+        const val TAG_ANNUAL = "annual-offer"
+        const val TAG_QUARTERLY = "quarterly-offer"
     }
 }

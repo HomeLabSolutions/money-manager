@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.settings
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -15,7 +16,6 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.backup.data.entity.BackupData
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
-import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails
 import com.d9tilov.moneymanager.core.util.debounce
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hide
@@ -40,11 +40,6 @@ class SettingsFragment :
 
     override fun getNavigator() = this
     override val viewModel by viewModels<SettingsViewModel>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requireActivity().lifecycle.addObserver(viewModel.lifecycleObserver)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -96,6 +91,9 @@ class SettingsFragment :
                         }
                     }
                     launch {
+                        viewModel.skuDetails.collect { Log.d("moggot", "onViewCreated: " + it) }
+                    }
+                    launch {
                         viewModel.canPurchase.collect { canPurchase ->
                             if (canPurchase) settingsSubscription.root.show()
                             else settingsSubscription.root.gone()
@@ -128,14 +126,12 @@ class SettingsFragment :
                         }
                     }
                     launch {
-                        viewModel.getActiveSku.collect { activeSku: BillingSkuDetails? ->
-                            activeSku?.metaData?.autoRenewing?.let { autoRenewing ->
-                                settingsSubscription.settingsSubscriptionDescription.text =
-                                    getString(
-                                        if (autoRenewing) R.string.settings_subscription_premium_acknowledged_subtitle_renewing
-                                        else R.string.settings_subscription_premium_acknowledged_subtitle_cancel
-                                    )
-                            }
+                        viewModel.getActiveSku.collect { hasRenewablePremium ->
+                            settingsSubscription.settingsSubscriptionDescription.text =
+                                getString(
+                                    if (hasRenewablePremium) R.string.settings_subscription_premium_acknowledged_subtitle_renewing
+                                    else R.string.settings_subscription_premium_acknowledged_subtitle_cancel
+                                )
                         }
                     }
                 }

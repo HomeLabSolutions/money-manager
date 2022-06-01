@@ -29,8 +29,6 @@ class SettingsViewModel @Inject constructor(
     billingInteractor: BillingInteractor
 ) : BaseViewModel<SettingsNavigator>() {
 
-    val lifecycleObserver = billingInteractor.getObserver()
-
     val userData = userInteractor.getCurrentUser()
         .flowOn(Dispatchers.IO)
         .stateIn(viewModelScope, SharingStarted.Eagerly, UserProfile.EMPTY)
@@ -38,7 +36,9 @@ class SettingsViewModel @Inject constructor(
     val backupData = backupInteractor.getBackupData()
         .flowOn(Dispatchers.IO)
         .stateIn(viewModelScope, SharingStarted.Eagerly, BackupData.EMPTY)
-
+    val skuDetails = billingInteractor.getSkuDetails()
+        .flowOn(Dispatchers.IO)
+        .shareIn(viewModelScope, SharingStarted.WhileSubscribed())
     val minBillingPrice = billingInteractor.getMinPrice()
         .flowOn(Dispatchers.IO)
         .stateIn(viewModelScope, SharingStarted.Eagerly, DomainCurrency.EMPTY)
@@ -47,7 +47,7 @@ class SettingsViewModel @Inject constructor(
         .flowOn(Dispatchers.IO)
         .shareIn(viewModelScope, SharingStarted.WhileSubscribed())
 
-    val getActiveSku = billingInteractor.getActiveSku()
+    val getActiveSku = billingInteractor.hasRenewablePremium
         .flowOn(Dispatchers.IO)
         .shareIn(viewModelScope, SharingStarted.WhileSubscribed())
 
