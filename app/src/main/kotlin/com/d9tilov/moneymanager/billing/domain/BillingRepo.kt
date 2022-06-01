@@ -7,7 +7,6 @@ import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 
 interface BillingRepo {
 
@@ -15,7 +14,7 @@ interface BillingRepo {
     val premiumProductDetails: Flow<ProductDetails?>
     val isNewPurchaseAcknowledged: Flow<Boolean>
     val hasRenewablePremium: Flow<Boolean>
-    fun startBillingConnection(billingConnectionState: MutableStateFlow<Boolean>)
+    fun startBillingConnection()
     fun terminateBillingConnection()
     fun getSkuDetails(): Flow<List<BillingSkuDetails>>
     fun buySku(

@@ -46,7 +46,7 @@ class BillingDataSource(context: Context) :
         .build()
 
     // Establish a connection to Google Play.
-    override fun startBillingConnection(billingConnectionState: MutableStateFlow<Boolean>) {
+    override fun startBillingConnection() {
 
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
@@ -55,7 +55,6 @@ class BillingDataSource(context: Context) :
                     // The BillingClient is ready. You can query purchases and product details here
                     queryPurchases()
                     queryProductDetails()
-                    billingConnectionState.value = true
                 } else {
                     Timber.tag(TAG).e(billingResult.debugMessage)
                 }
@@ -63,7 +62,7 @@ class BillingDataSource(context: Context) :
 
             override fun onBillingServiceDisconnected() {
                 Timber.tag(TAG).i("Billing connection disconnected")
-                startBillingConnection(billingConnectionState)
+                startBillingConnection()
             }
         })
     }
@@ -125,7 +124,6 @@ class BillingDataSource(context: Context) :
     ) {
         val responseCode = billingResult.responseCode
         val debugMessage = billingResult.debugMessage
-        Log.d("moggot", "onProductDetailsResponse: " + productDetailsList)
         when (responseCode) {
             BillingClient.BillingResponseCode.OK -> {
                 var newMap = emptyMap<String, ProductDetails>()

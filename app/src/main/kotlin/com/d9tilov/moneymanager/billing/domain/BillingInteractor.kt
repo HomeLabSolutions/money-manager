@@ -8,7 +8,6 @@ import com.android.billingclient.api.Purchase
 import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 
 interface BillingInteractor {
 
@@ -16,7 +15,7 @@ interface BillingInteractor {
     val productDetails: Flow<ProductDetails?>
     val isNewPurchaseAcknowledged: Flow<Boolean>
     val hasRenewablePremium: Flow<Boolean>
-    fun startBillingConnection(billingConnectionState: MutableStateFlow<Boolean>)
+    fun startBillingConnection()
     fun terminateBillingConnection()
     fun canPurchase(): Flow<Boolean>
     fun buySku(

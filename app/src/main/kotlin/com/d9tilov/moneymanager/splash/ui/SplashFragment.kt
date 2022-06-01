@@ -25,8 +25,7 @@ class SplashFragment :
     private val providers = arrayListOf(
         AuthUI.IdpConfig.EmailBuilder().build(),
         AuthUI.IdpConfig.PhoneBuilder().build(),
-        AuthUI.IdpConfig.GoogleBuilder().build(),
-        AuthUI.IdpConfig.FacebookBuilder().build()
+        AuthUI.IdpConfig.GoogleBuilder().build()
     )
 
     override fun getNavigator() = this

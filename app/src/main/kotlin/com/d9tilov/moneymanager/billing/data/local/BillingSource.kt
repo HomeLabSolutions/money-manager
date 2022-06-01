@@ -7,14 +7,13 @@ import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.d9tilov.moneymanager.base.data.Source
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 
 interface BillingSource : Source {
 
     val purchases: Flow<List<Purchase>>
     val productWithProductDetails: Flow<Map<String, ProductDetails>>
     val isNewPurchaseAcknowledged: Flow<Boolean>
-    fun startBillingConnection(billingConnectionState: MutableStateFlow<Boolean>)
+    fun startBillingConnection()
     fun terminateBillingConnection()
     fun buySku(
         tag: String,
