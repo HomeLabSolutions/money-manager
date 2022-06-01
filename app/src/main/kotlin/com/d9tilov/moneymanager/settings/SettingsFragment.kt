@@ -1,7 +1,6 @@
 package com.d9tilov.moneymanager.settings
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -89,9 +88,6 @@ class SettingsFragment :
                                     )
                             }
                         }
-                    }
-                    launch {
-                        viewModel.skuDetails.collect { Log.d("moggot", "onViewCreated: " + it) }
                     }
                     launch {
                         viewModel.canPurchase.collect { canPurchase ->

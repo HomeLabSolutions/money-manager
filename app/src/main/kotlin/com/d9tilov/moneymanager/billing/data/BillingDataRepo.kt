@@ -12,7 +12,6 @@ import com.d9tilov.moneymanager.billing.domain.exceptions.BillingFailure
 import com.d9tilov.moneymanager.core.util.CurrencyUtils.getSymbolByCode
 import com.d9tilov.moneymanager.currency.data.entity.Currency
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 
@@ -31,8 +30,8 @@ class BillingDataRepo(
     // Set to true when a purchase is acknowledged.
     override val isNewPurchaseAcknowledged: Flow<Boolean> = billingSource.isNewPurchaseAcknowledged
 
-    override fun startBillingConnection(billingConnectionState: MutableStateFlow<Boolean>) {
-        billingSource.startBillingConnection(billingConnectionState)
+    override fun startBillingConnection() {
+        billingSource.startBillingConnection()
     }
 
     override fun terminateBillingConnection() {

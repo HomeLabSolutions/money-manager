@@ -20,8 +20,8 @@ class BillingInteractorImpl(private val billingRepo: BillingRepo, private val cu
     override val isNewPurchaseAcknowledged: Flow<Boolean> = billingRepo.isNewPurchaseAcknowledged
     override val hasRenewablePremium: Flow<Boolean> = billingRepo.hasRenewablePremium
 
-    override fun startBillingConnection(billingConnectionState: MutableStateFlow<Boolean>) {
-        billingRepo.startBillingConnection(billingConnectionState)
+    override fun startBillingConnection() {
+        billingRepo.startBillingConnection()
     }
 
     override fun terminateBillingConnection() {

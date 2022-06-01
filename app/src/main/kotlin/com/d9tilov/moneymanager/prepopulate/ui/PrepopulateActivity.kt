@@ -8,16 +8,11 @@ import androidx.navigation.fragment.NavHostFragment
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseActivity
 import com.d9tilov.moneymanager.budget.domain.entity.BudgetDestination
-import com.d9tilov.moneymanager.budget.ui.BudgetAmountFragmentDirections
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.currency.ui.CurrencyFragmentDirections
 import com.d9tilov.moneymanager.databinding.ActivityPrepopulateBinding
-import com.d9tilov.moneymanager.goal.domain.entity.GoalDestination
 import com.d9tilov.moneymanager.home.ui.MainActivity
-import com.d9tilov.moneymanager.regular.domain.entity.RegularTransactionDestination
-import com.d9tilov.moneymanager.regular.ui.RegularExpenseFragmentDirections
-import com.d9tilov.moneymanager.regular.ui.RegularIncomeFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,16 +20,14 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
 
     private val fullScreenDestinationSet =
         setOf(
-            R.id.regular_created_transaction_dest,
             R.id.category_dest,
+            R.id.sub_category_dest,
+            R.id.category_set_dest,
+            R.id.category_creation_dest,
             R.id.edit_category_dialog,
             R.id.remove_sub_category_dialog,
             R.id.remove_category_dialog,
-            R.id.unit_category_to_folder_dialog,
-            R.id.category_set_dest,
-            R.id.category_creation_dest,
-            R.id.sub_category_dest,
-            R.id.goal_creation_dest
+            R.id.unit_category_to_folder_dialog
         )
     var controlsClick: ControlsClicked? = null
 
@@ -60,23 +53,6 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
                     R.id.choose_currency_dest -> {
                         action =
                             CurrencyFragmentDirections.toCommonAmountDest(BudgetDestination.PrepopulateScreen)
-                        navController.navigate(action)
-                    }
-                    R.id.budget_amount_dest -> {
-                        action = BudgetAmountFragmentDirections.toRegularIncomeDest(
-                            RegularTransactionDestination.PrepopulateScreen
-                        )
-                        navController.navigate(action)
-                    }
-                    R.id.regular_income_dest -> {
-                        action = RegularIncomeFragmentDirections.toRegularExpenseDest(
-                            RegularTransactionDestination.PrepopulateScreen
-                        )
-                        navController.navigate(action)
-                    }
-                    R.id.regular_expense_dest -> {
-                        action =
-                            RegularExpenseFragmentDirections.toGoalsDest(GoalDestination.PrepopulateScreen)
                         navController.navigate(action)
                     }
                     else -> {
@@ -132,7 +108,7 @@ class PrepopulateActivity : BaseActivity<ActivityPrepopulateBinding>() {
     }
 
     companion object {
-        private const val MAX_SCREEN_AMOUNT = 5f
+        private const val MAX_SCREEN_AMOUNT = 2f
     }
 
     override val navHostFragmentId = R.id.prepopulate_nav_host_container
