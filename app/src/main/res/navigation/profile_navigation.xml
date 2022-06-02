@@ -437,6 +437,20 @@
 
     </fragment>
 
+    <fragment
+        android:id="@+id/grouped_category_set_dest"
+        android:name="com.d9tilov.moneymanager.category.ui.CategoryGroupIconSetFragment"
+        android:label="fragment_title_screen"
+        tools:layout="@layout/fragment_group_category_icon_set">
+
+        <action
+            android:id="@+id/to_category_set_dest"
+            app:destination="@id/category_set_dest"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
     <dialog
         android:id="@+id/unit_category_to_folder_dialog"
         android:name="com.d9tilov.moneymanager.category.ui.CategoryUnitDialog"

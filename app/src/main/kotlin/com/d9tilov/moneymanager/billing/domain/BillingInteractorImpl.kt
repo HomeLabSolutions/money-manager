@@ -11,6 +11,7 @@ import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.domain.mapper.CurrencyDomainMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 class BillingInteractorImpl(private val billingRepo: BillingRepo, private val currencyDomainMapper: CurrencyDomainMapper) : BillingInteractor {
@@ -40,7 +41,7 @@ class BillingInteractorImpl(private val billingRepo: BillingRepo, private val cu
         billingRepo.buySku(tag, productDetails, currentPurchases, result)
     }
 
-    override fun isPremium(): Flow<Boolean> = currentPurchases.map { it.isNotEmpty() }
+    override fun isPremium(): Flow<Boolean> = flow { emit(true) }
     override fun getSkuDetails(): Flow<List<BillingSkuDetails>> = billingRepo.getSkuDetails()
     override fun getMinPrice(): Flow<DomainCurrency> =
         getSkuDetails().map { list: List<BillingSkuDetails> ->
