@@ -20,6 +20,7 @@ class BillingDataRepo(
 ) : BillingRepo {
 
     override val currentPurchases: Flow<List<Purchase>> = billingSource.purchases
+    override val billingConnectionReady: Flow<Boolean> = billingSource.billingConnectionReady
 
     // ProductDetails for the premium subscription.
     override val premiumProductDetails: Flow<ProductDetails?> =
@@ -30,14 +31,8 @@ class BillingDataRepo(
     // Set to true when a purchase is acknowledged.
     override val isNewPurchaseAcknowledged: Flow<Boolean> = billingSource.isNewPurchaseAcknowledged
 
-    override fun startBillingConnection() {
-        billingSource.startBillingConnection()
-    }
-
-    override fun terminateBillingConnection() {
-        billingSource.terminateBillingConnection()
-    }
-
+    override fun startBillingConnection() = billingSource.startBillingConnection()
+    override fun terminateBillingConnection() = billingSource.terminateBillingConnection()
     override fun getSkuDetails(): Flow<List<BillingSkuDetails>> {
         return billingSource.productWithProductDetails.map { details: Map<String, ProductDetails> -> details.toList() }
             .map { list: List<Pair<String, ProductDetails>> -> list.first() }

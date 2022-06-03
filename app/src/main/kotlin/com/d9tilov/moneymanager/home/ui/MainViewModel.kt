@@ -11,6 +11,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
@@ -35,15 +36,14 @@ class MainViewModel @Inject constructor(
     init {
         billingInteractor.startBillingConnection()
         viewModelScope.launch(Dispatchers.IO + updateCurrencyExceptionHandler) {
-            isPremium
-                .collect { isPremium ->
-                    if (isPremium) {
-                        launch {
-                            transactionInteractor.executeRegularIfNeeded(TransactionType.INCOME)
-                            transactionInteractor.executeRegularIfNeeded(TransactionType.EXPENSE)
-                        }
-                    }
+            billingInteractor.billingConnectionReady.combine(isPremium) { isReady, isPremium ->
+                isReady && isPremium
+            }.collect { readyForPremium ->
+                if (readyForPremium) {
+                    launch { transactionInteractor.executeRegularIfNeeded(TransactionType.INCOME) }
+                    launch { transactionInteractor.executeRegularIfNeeded(TransactionType.EXPENSE) }
                 }
+            }
             launch { currencyInteractor.updateCurrencyRates() }
         }
     }

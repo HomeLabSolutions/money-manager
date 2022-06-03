@@ -1,7 +1,6 @@
 package com.d9tilov.moneymanager.billing.data.local
 
 import android.content.Context
-import android.util.Log
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
@@ -30,14 +29,16 @@ class BillingDataSource(context: Context) :
         _productWithProductDetails.asStateFlow()
 
     // Current Purchases
-    private val _purchases =
-        MutableStateFlow<List<Purchase>>(listOf())
+    private val _purchases = MutableStateFlow<List<Purchase>>(listOf())
     override val purchases: Flow<List<Purchase>> = _purchases.asStateFlow()
 
     // Tracks new purchases acknowledgement state.
     // Set to true when a purchase is acknowledged and false when not.
     private val _isNewPurchaseAcknowledged = MutableStateFlow(value = false)
     override val isNewPurchaseAcknowledged: Flow<Boolean> = _isNewPurchaseAcknowledged.asStateFlow()
+
+    private val _billingConnectionReady = MutableStateFlow(false)
+    override val billingConnectionReady: Flow<Boolean> = _billingConnectionReady.asStateFlow()
 
     // Initialize the BillingClient.
     private val billingClient = BillingClient.newBuilder(context)
@@ -47,7 +48,6 @@ class BillingDataSource(context: Context) :
 
     // Establish a connection to Google Play.
     override fun startBillingConnection() {
-
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
@@ -55,9 +55,8 @@ class BillingDataSource(context: Context) :
                     // The BillingClient is ready. You can query purchases and product details here
                     queryPurchases()
                     queryProductDetails()
-                } else {
-                    Timber.tag(TAG).e(billingResult.debugMessage)
-                }
+                    _billingConnectionReady.value = true
+                } else Timber.tag(TAG).e(billingResult.debugMessage)
             }
 
             override fun onBillingServiceDisconnected() {
@@ -84,14 +83,9 @@ class BillingDataSource(context: Context) :
             QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.SUBS).build()
         ) { billingResult, purchaseList ->
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                if (!purchaseList.isEmpty()) {
-                    _purchases.value = purchaseList
-                } else {
-                    _purchases.value = emptyList()
-                }
-            } else {
-                Timber.tag(TAG).e(billingResult.debugMessage)
-            }
+                if (purchaseList.isNotEmpty()) _purchases.value = purchaseList
+                else _purchases.value = emptyList()
+            } else Timber.tag(TAG).e(billingResult.debugMessage)
         }
     }
 
