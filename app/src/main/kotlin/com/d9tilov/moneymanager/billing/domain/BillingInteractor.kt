@@ -15,6 +15,7 @@ interface BillingInteractor {
     val productDetails: Flow<ProductDetails?>
     val isNewPurchaseAcknowledged: Flow<Boolean>
     val hasRenewablePremium: Flow<Boolean>
+    val billingConnectionReady: Flow<Boolean>
     fun startBillingConnection()
     fun terminateBillingConnection()
     fun canPurchase(): Flow<Boolean>

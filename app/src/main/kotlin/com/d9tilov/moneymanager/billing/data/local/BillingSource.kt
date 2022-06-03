@@ -13,6 +13,7 @@ interface BillingSource : Source {
     val purchases: Flow<List<Purchase>>
     val productWithProductDetails: Flow<Map<String, ProductDetails>>
     val isNewPurchaseAcknowledged: Flow<Boolean>
+    val billingConnectionReady: Flow<Boolean>
     fun startBillingConnection()
     fun terminateBillingConnection()
     fun buySku(
