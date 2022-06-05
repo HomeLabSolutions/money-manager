@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.base.data.local.db.converters
 
 import androidx.room.TypeConverter
-import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.Companion.DECIMAL_LENGTH
+import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.DECIMAL_LENGTH
 import java.math.BigDecimal
 
 object CurrencyConverter {

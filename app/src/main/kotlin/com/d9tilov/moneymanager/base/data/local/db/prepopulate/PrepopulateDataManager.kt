@@ -6,7 +6,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.entity.PrepopulateCategory
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
+import com.d9tilov.moneymanager.core.constants.DataConstants.NO_ID
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import javax.inject.Inject
 

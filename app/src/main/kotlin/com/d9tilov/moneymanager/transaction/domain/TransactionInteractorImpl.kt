@@ -7,7 +7,7 @@ import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.category.exception.CategoryException
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
+import com.d9tilov.moneymanager.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.util.countDaysRemainingNextFiscalDate
 import com.d9tilov.moneymanager.core.util.currentDate
 import com.d9tilov.moneymanager.core.util.currentDateTime
@@ -281,7 +281,7 @@ class TransactionInteractorImpl(
             flow { emit(userInteractor.getFiscalDay()) }
                 .flatMapMerge { fiscalDay ->
                     val endDate = currentDateTime().getEndOfDay()
-                    val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
+                    val startDate = getStartDateOfFiscalPeriod(fiscalDay)
                     transactionRepo.getTransactionsByTypeInPeriod(
                         startDate,
                         endDate,
@@ -297,7 +297,7 @@ class TransactionInteractorImpl(
                 val endDate = currentDateTime()
                 val endDateMinusDay =
                     endDate.date.minus(1, DateTimeUnit.DAY).atTime(0, 0, 0, 0).getEndOfDay()
-                val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
+                val startDate = getStartDateOfFiscalPeriod(fiscalDay)
                 transactionRepo.getTransactionsByTypeInPeriod(
                     startDate,
                     endDateMinusDay,
@@ -333,7 +333,7 @@ class TransactionInteractorImpl(
         transactions: List<RegularTransaction>
     ): BigDecimal {
         val curDate = currentDateTime().getEndOfDay()
-        val startDate = curDate.getStartDateOfFiscalPeriod(fiscalDay).date
+        val startDate = getStartDateOfFiscalPeriod(fiscalDay).date
         val endDate = curDate.getEndDateOfFiscalPeriod(fiscalDay).date
         return transactions.sumOf { tr ->
             when (tr.executionPeriod.periodType) {
@@ -369,7 +369,7 @@ class TransactionInteractorImpl(
             .flatMapMerge { currency ->
                 val fiscalDay = userInteractor.getFiscalDay()
                 val endDate = currentDateTime()
-                val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
+                val startDate = getStartDateOfFiscalPeriod(fiscalDay)
                 transactionRepo.getTransactionsByTypeInPeriod(
                     startDate,
                     endDate,
@@ -390,7 +390,7 @@ class TransactionInteractorImpl(
             flow { emit(userInteractor.getFiscalDay()) }
                 .flatMapMerge { fiscalDay ->
                     val endDate = currentDateTime().getEndOfDay()
-                    val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
+                    val startDate = getStartDateOfFiscalPeriod(fiscalDay)
                     transactionRepo.getTransactionsByTypeInPeriod(
                         startDate,
                         endDate,
@@ -404,7 +404,7 @@ class TransactionInteractorImpl(
         val expenseFlow = flow { emit(userInteractor.getFiscalDay()) }
             .flatMapMerge { fiscalDay ->
                 val endDate = currentDateTime().getEndOfDay()
-                val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
+                val startDate = getStartDateOfFiscalPeriod(fiscalDay)
                 transactionRepo.getTransactionsByTypeInPeriod(
                     startDate,
                     endDate,
@@ -447,7 +447,7 @@ class TransactionInteractorImpl(
             .flatMapMerge { currency ->
                 val fiscalDay = userInteractor.getFiscalDay()
                 val endDate = currentDateTime()
-                val startDate = endDate.getStartDateOfFiscalPeriod(fiscalDay)
+                val startDate = getStartDateOfFiscalPeriod(fiscalDay)
                 transactionRepo.getTransactionsByTypeInPeriod(
                     startDate,
                     endDate,

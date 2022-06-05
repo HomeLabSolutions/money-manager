@@ -5,7 +5,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DATABASE_NAME
+import com.d9tilov.moneymanager.core.constants.DataConstants.DATABASE_NAME
 import com.d9tilov.moneymanager.encryption.digest
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module

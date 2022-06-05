@@ -41,6 +41,28 @@
     <color name="transaction_divider_color">#3d3d3d</color>
 
     <color name="category_all_color">@color/color_midnight_white</color>
+    <color name="category_yellow">#ffcc00</color>
+    <color name="category_light_green">#63e693</color>
+    <color name="category_green">#00b341</color>
+    <color name="category_light_blue">#5fcef9</color>
+    <color name="category_blue">#0077ff</color>
+    <color name="category_violet">#5844a2</color>
+    <color name="category_dark_red">#b12d24</color>
+    <color name="category_dark_orange">#d3593e</color>
+    <color name="category_orange">#f19433</color>
+    <color name="category_light_yellow">#f8ed94</color>
+    <color name="category_mint">#aae8a7</color>
+    <color name="category_grass_green">#9bd26c</color>
+    <color name="category_green_confirm">#009688</color>
+    <color name="category_mud_green">#6e8e76</color>
+    <color name="category_lollipop">#66c5bb</color>
+    <color name="category_navy_blue">#5842da</color>
+    <color name="category_grey_blue">#4d86c0</color>
+    <color name="category_purple">#8c3554</color>
+    <color name="category_flower_violet">#7b71b7</color>
+    <color name="category_light_violet">#a48eae</color>
+    <color name="category_pink">#f8d6d5</color>
+
     <color name="color_midnight_white">#fdfbfc</color>
     <color name="color_gold">#FFD700</color>
     <color name="color_silver">#C0C0C0</color>

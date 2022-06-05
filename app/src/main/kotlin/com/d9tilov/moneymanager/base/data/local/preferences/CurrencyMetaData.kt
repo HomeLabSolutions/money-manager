@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.base.data.local.preferences
 
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_SYMBOL
+import com.d9tilov.moneymanager.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
+import com.d9tilov.moneymanager.core.constants.DataConstants.DEFAULT_CURRENCY_SYMBOL
 
 data class CurrencyMetaData(val code: String, val symbol: String) {
 

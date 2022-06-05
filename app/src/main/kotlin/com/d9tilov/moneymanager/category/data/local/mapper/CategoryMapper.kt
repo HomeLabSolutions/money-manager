@@ -4,7 +4,7 @@ import android.content.Context
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.entity.PrepopulateCategory
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.data.entity.CategoryDbModel
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
+import com.d9tilov.moneymanager.core.constants.DataConstants.NO_ID
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

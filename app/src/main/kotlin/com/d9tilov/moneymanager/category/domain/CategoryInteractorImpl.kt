@@ -3,7 +3,7 @@ package com.d9tilov.moneymanager.category.domain
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.data.entity.Category.Companion.ALL_ITEMS_ID
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.NO_ID
+import com.d9tilov.moneymanager.core.constants.DataConstants.NO_ID
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
