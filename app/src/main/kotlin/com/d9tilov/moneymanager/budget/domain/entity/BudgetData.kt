@@ -2,7 +2,7 @@ package com.d9tilov.moneymanager.budget.domain.entity
 
 import android.os.Parcelable
 import com.d9tilov.moneymanager.core.constants.DataConstants
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
+import com.d9tilov.moneymanager.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.util.currentDateTime
 import kotlinx.datetime.LocalDateTime
 import kotlinx.parcelize.Parcelize

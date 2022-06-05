@@ -8,7 +8,7 @@ import com.d9tilov.moneymanager.base.data.ResultOf
 import com.d9tilov.moneymanager.base.data.local.exceptions.NetworkException
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DATABASE_NAME
+import com.d9tilov.moneymanager.core.constants.DataConstants.DATABASE_NAME
 import com.d9tilov.moneymanager.core.util.currentDateTime
 import com.d9tilov.moneymanager.core.util.isNetworkConnected
 import com.d9tilov.moneymanager.core.util.toMillis

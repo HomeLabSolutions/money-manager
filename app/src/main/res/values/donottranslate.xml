@@ -4,6 +4,17 @@
     <string name="facebook_application_id">224976218580875</string>
     <string name="facebook_login_protocol_scheme">fb224976218580875</string>
 
+    <string name="ruble_code">RUB</string>
+    <string name="ruble_sign">₽</string>
+    <string name="usd_code">USD</string>
+    <string name="usd_sign">$</string>
+    <string name="plus_sign">+</string>
+    <string name="percent_sign">%</string>
+    <string name="minus_sign">-</string>
+    <string name="approx_sign">≈</string>
+    <string name="number_with_percent">%1$s%%</string>
+    <string name="prepopulate_progress">%1$s/%2$s</string>
+
     <string name="_0">0</string>
     <string name="_1">1</string>
     <string name="_2">2</string>

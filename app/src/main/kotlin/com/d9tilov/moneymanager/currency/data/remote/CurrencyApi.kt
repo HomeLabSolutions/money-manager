@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.currency.data.remote
 
 import com.d9tilov.moneymanager.BuildConfig
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_CURRENCY_CODE
+import com.d9tilov.moneymanager.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.currency.data.remote.entity.CurrencyResponse
 import retrofit2.http.GET
 import retrofit2.http.Path

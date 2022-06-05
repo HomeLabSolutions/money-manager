@@ -6,7 +6,7 @@ import com.d9tilov.moneymanager.base.ui.navigator.CategoryCreationNavigator
 import com.d9tilov.moneymanager.billing.domain.BillingInteractor
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_DATA_ID
+import com.d9tilov.moneymanager.core.constants.DataConstants.DEFAULT_DATA_ID
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent

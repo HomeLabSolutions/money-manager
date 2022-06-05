@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.base.di
 
 import com.d9tilov.moneymanager.App.Companion.TAG
-import com.d9tilov.moneymanager.core.BuildConfig
+import com.d9tilov.moneymanager.BuildConfig
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import dagger.Module
 import dagger.Provides

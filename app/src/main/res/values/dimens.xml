@@ -24,6 +24,9 @@
     <dimen name="currency_sign_small_text_size">14sp</dimen>
     <dimen name="currency_extra_small_text_size">14sp</dimen>
     <dimen name="currency_sign_extra_small_text_size">10sp</dimen>
+    <dimen name="currency_margin_between_currency_symbol">2dp</dimen>
+    <dimen name="currency_sum_text_size">84sp</dimen>
+    <dimen name="currency_sign_text_size">50sp</dimen>
 
     <dimen name="standard_top_margin">16dp</dimen>
     <dimen name="standard_bottom_margin">16dp</dimen>

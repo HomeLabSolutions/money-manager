@@ -1,6 +1,6 @@
 package com.d9tilov.moneymanager.user.domain.mapper
 
-import com.d9tilov.moneymanager.core.constants.DataConstants.Companion.DEFAULT_DATA_ID
+import com.d9tilov.moneymanager.core.constants.DataConstants.DEFAULT_DATA_ID
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.google.firebase.auth.FirebaseUser
 import java.util.Calendar
