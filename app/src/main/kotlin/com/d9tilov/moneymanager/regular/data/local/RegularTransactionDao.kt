@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.d9tilov.moneymanager.regular.data.entity.RegularTransactionDbModel
+import com.d9tilov.moneymanager.transaction.data.entity.TransactionDbModel
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import kotlinx.coroutines.flow.Flow
 
@@ -24,6 +25,9 @@ interface RegularTransactionDao {
 
     @Query("SELECT * FROM regularTransaction WHERE clientId=:uid AND id=:id")
     suspend fun getById(uid: String, id: Long): RegularTransactionDbModel
+
+    @Query("SELECT * FROM regularTransaction WHERE clientId =:uid AND categoryId =:categoryId")
+    suspend fun getByCategoryId(uid: String, categoryId: Long): List<RegularTransactionDbModel>
 
     @Update
     suspend fun update(budget: RegularTransactionDbModel)

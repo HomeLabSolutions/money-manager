@@ -1,9 +1,12 @@
 package com.d9tilov.moneymanager.regular.data
 
+import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.regular.data.entity.RegularTransactionData
 import com.d9tilov.moneymanager.regular.data.local.RegularTransactionSource
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionRepo
+import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
+import kotlinx.coroutines.flow.Flow
 
 class RegularTransactionDataRepo(private val regularTransactionSource: RegularTransactionSource) :
     RegularTransactionRepo {
@@ -12,6 +15,10 @@ class RegularTransactionDataRepo(private val regularTransactionSource: RegularTr
         regularTransactionSource.insert(regularTransactionData)
 
     override fun getAll(type: TransactionType) = regularTransactionSource.getAll(type)
+
+    override suspend fun getAllByCategory(category: Category): List<RegularTransactionData> =
+        regularTransactionSource.getAllByCategory(category)
+
     override suspend fun getById(id: Long): RegularTransactionData = regularTransactionSource.getById(id)
 
     override suspend fun update(regularTransactionData: RegularTransactionData) =

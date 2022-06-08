@@ -84,7 +84,7 @@ class UserLocalSource(
     override fun getCurrentCurrency(): Flow<CurrencyMetaData> = preferencesStore.uid
         .filterNotNull()
         .flatMapMerge { uid ->
-            userDao.getCurrentCurrency(uid).map { currencyCode ->
+            userDao.getCurrentCurrency(uid).map { currencyCode -> 
                 CurrencyMetaData(
                     currencyCode,
                     currencyCode.getSymbolByCode()

@@ -34,7 +34,7 @@ interface TransactionDao {
     fun getById(uid: String, id: Long): Flow<TransactionDbModel>
 
     @Query("SELECT * FROM transactions WHERE clientId =:uid AND categoryId =:categoryId")
-    fun getByCategoryId(uid: String, categoryId: Long): Flow<List<TransactionDbModel>>
+    suspend fun getByCategoryId(uid: String, categoryId: Long): List<TransactionDbModel>
 
     @Query("SELECT * FROM transactions WHERE clientId =:uid AND categoryId =:categoryId AND date >= :from AND date <= :to")
     fun getByCategoryIdInPeriod(

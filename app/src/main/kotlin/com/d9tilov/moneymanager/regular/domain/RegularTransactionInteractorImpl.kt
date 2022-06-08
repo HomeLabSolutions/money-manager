@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.regular.domain
 
+import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.category.exception.CategoryException
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
@@ -32,13 +33,18 @@ class RegularTransactionInteractorImpl(
                     for (item in list) {
                         val category =
                             categoryList.find { item.categoryId == it.id }
-                                ?: throw CategoryException.CategoryNotFoundException("Not found category with id: ${item.categoryId}")
+                                ?: throw CategoryException.CategoryNotFoundException("getAll Not found category with id: ${item.categoryId}")
                         val regularTransaction = item.toDomain(category)
                         newList.add(regularTransaction)
                     }
                     newList
                 }
             }
+    }
+
+    override suspend fun removeAllByCategory(category: Category) {
+        regularTransactionRepo.getAllByCategory(category)
+            .map { tr -> delete(tr.toDomain(category)) }
     }
 
     override suspend fun getById(id: Long): RegularTransaction {

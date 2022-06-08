@@ -10,10 +10,10 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.util.getEndOfDay
 import com.d9tilov.moneymanager.core.util.getStartOfDay
 import com.d9tilov.moneymanager.core.util.isSameDay
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.data.mapper.toDataModel
 import com.d9tilov.moneymanager.transaction.data.mapper.toDbModel
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
@@ -78,13 +78,12 @@ class TransactionLocalSource(
                 }
         }
 
-    override fun getAllByCategory(category: Category): Flow<List<TransactionDataModel>> =
-        preferencesStore.uid
-            .filterNotNull()
-            .flatMapMerge { uid ->
-                transactionDao.getByCategoryId(uid, category.id)
-                    .map { list -> list.map { item -> item.toDataModel() } }
-            }
+    override suspend fun getAllByCategory(category: Category): List<TransactionDataModel> {
+        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+        return if (currentUserId == null) throw WrongUidException()
+        else transactionDao.getByCategoryId(currentUserId, category.id)
+            .map { item -> item.toDataModel() }
+    }
 
     override fun getByCategoryInPeriod(
         category: Category,

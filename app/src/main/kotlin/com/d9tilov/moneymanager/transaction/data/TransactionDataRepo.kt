@@ -1,10 +1,10 @@
 package com.d9tilov.moneymanager.transaction.data
 
 import com.d9tilov.moneymanager.category.data.entity.Category
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.data.local.TransactionSource
 import com.d9tilov.moneymanager.transaction.domain.TransactionRepo
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
 
@@ -32,7 +32,7 @@ class TransactionDataRepo(private val transactionSource: TransactionSource) : Tr
     ): Flow<List<TransactionDataModel>> =
         transactionSource.getAllByTypeInPeriod(from, to, transactionType, onlyInStatistics, withRegular)
 
-    override fun getAllByCategory(category: Category): Flow<List<TransactionDataModel>> =
+    override suspend fun getAllByCategory(category: Category): List<TransactionDataModel> =
         transactionSource.getAllByCategory(category)
 
     override fun getByCategoryInPeriod(
@@ -42,7 +42,7 @@ class TransactionDataRepo(private val transactionSource: TransactionSource) : Tr
         inStatistics: Boolean
     ): Flow<List<TransactionDataModel>> = transactionSource.getByCategoryInPeriod(category, from, to, inStatistics)
 
-    override suspend fun getCountByCurrencyCode(code: String): Int =
+    override suspend fun getCountByCurrencyCode(code: String) =
         transactionSource.getCountByCurrencyCode(code)
 
     override suspend fun update(transaction: TransactionDataModel) =

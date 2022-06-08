@@ -103,7 +103,7 @@ class TransactionInteractorImpl(
                         it.map { item ->
                             val category =
                                 categoryList.find { listItem -> item.categoryId == listItem.id }
-                                    ?: throw CategoryException.CategoryNotFoundException("Not found category with id: ${item.categoryId}")
+                                    ?: throw CategoryException.CategoryNotFoundException("getTransactionsGroupedByCategory Not found category with id: ${item.categoryId}")
                             item.toChartModel(
                                 category,
                                 currencyCode,
@@ -181,7 +181,7 @@ class TransactionInteractorImpl(
                 .map { tr: TransactionDataModel ->
                     val foundCategory =
                         categoryList.find { listItem -> tr.categoryId == listItem.id }
-                            ?: throw CategoryException.CategoryNotFoundException("Not found category with id: ${tr.categoryId}")
+                            ?: throw CategoryException.CategoryNotFoundException("getTransactionsByCategory Not found category with id: ${tr.categoryId}")
                     tr.toDomainModel(foundCategory)
                 }
         }
@@ -215,7 +215,7 @@ class TransactionInteractorImpl(
                         it.map { item ->
                             val category =
                                 categoryList.find { listItem -> item.categoryId == listItem.id }
-                                    ?: throw CategoryException.CategoryNotFoundException("Not found category with id: ${item.categoryId}")
+                                    ?: throw CategoryException.CategoryNotFoundException("getTransactionsByType Not found category with id: ${item.categoryId}")
                             item.toDomainModel(category)
                         }
                     }
@@ -645,12 +645,9 @@ class TransactionInteractorImpl(
         }
     }
 
-    override fun removeAllByCategory(category: Category): Flow<Int> {
-        return transactionRepo.getAllByCategory(category)
-            .map { list: List<TransactionDataModel> ->
-                list.forEach { tr -> removeTransaction(tr.toDomainModel(category)) }
-                list.size
-            }
+    override suspend fun removeAllByCategory(category: Category) {
+        transactionRepo.getAllByCategory(category)
+            .map { tr -> removeTransaction(tr.toDomainModel(category)) }
     }
 
     override suspend fun clearAll() {
