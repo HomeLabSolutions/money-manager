@@ -18,6 +18,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/income_category_rv_list"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/standard_half_left_margin"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:listitem="@layout/item_category" />
+
     <!-- Should be invisible. Need to stick header for the first time-->
     <include
         android:id="@+id/income_transaction_layout_include"
@@ -31,7 +42,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <include
-        android:id="@+id/income_transaction_empty_placeholder"
+        android:id="@+id/income_transaction_empty_placeholder_include"
         android:layout_width="0dp"
         android:layout_height="0dp"
         layout="@layout/layout_empty_list_placeholder"
