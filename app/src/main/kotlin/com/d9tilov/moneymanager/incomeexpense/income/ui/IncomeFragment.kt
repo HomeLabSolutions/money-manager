@@ -57,8 +57,8 @@ class IncomeFragment :
 
     override fun initViews() {
         viewBinding?.run {
-            emptyViewStub = incomeTransactionEmptyPlaceholder
-            categoryRvList = incomeInfoLayoutInclude.incomeCategoryRvList
+            emptyViewStub = incomeTransactionEmptyPlaceholderInclude
+            categoryRvList = incomeCategoryRvList
             transactionRvList = incomeTransactionLayoutInclude.incomeTransactionRvList
             transactionBtnAdd = incomeTransactionLayoutInclude.incomeTransactionBtnAdd
             infoLayout = incomeInfoLayoutInclude.root
@@ -102,7 +102,7 @@ class IncomeFragment :
     }
 
     override fun initCategoryRecyclerView() {
-        viewBinding?.incomeInfoLayoutInclude?.run {
+        viewBinding?.run {
             val layoutManager =
                 GridLayoutManager(
                     requireContext(),

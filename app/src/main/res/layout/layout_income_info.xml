@@ -49,15 +49,4 @@
         app:sum="1000"
         app:sumTextStyle="?attr/textAppearanceCurrencySumSmall" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/income_category_rv_list"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/standard_half_left_margin"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/item_category" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

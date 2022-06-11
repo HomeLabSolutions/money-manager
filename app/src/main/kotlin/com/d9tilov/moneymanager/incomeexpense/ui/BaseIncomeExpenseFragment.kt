@@ -1,11 +1,13 @@
 package com.d9tilov.moneymanager.incomeexpense.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
@@ -159,6 +161,9 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : Vi
     }
 
     override fun onKeyboardShown(show: Boolean) {
+        Log.d("moggot", "onKeyboardShown: " + show)
+        Log.d("moggot", "categoryRvList: " + categoryRvList?.isVisible)
+        Log.d("moggot", "categoryRvList: " + categoryRvList)
         if (show) {
             hideViewStub()
             if (isPremium()) infoLayout?.showWithAnimation()
