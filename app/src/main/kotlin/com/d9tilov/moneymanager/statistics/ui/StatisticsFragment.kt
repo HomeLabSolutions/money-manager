@@ -304,6 +304,7 @@ class StatisticsFragment :
         viewBinding?.statisticsPieChart?.setCenterTextColor(
             ContextCompat.getColor(requireContext(), R.color.control_activated_color)
         )
+        viewBinding?.statisticsPieChart?.invalidate()
     }
 
     private fun initPieChart() {
@@ -384,7 +385,6 @@ class StatisticsFragment :
         pieData.setValueTextColor(ContextCompat.getColor(requireContext(), R.color.primary_color))
         viewBinding?.statisticsPieChart?.data = pieData
 
-        updatePeriod()
         viewBinding?.statisticsPieChart?.highlightValues(null)
         viewBinding?.statisticsPieChart?.invalidate()
     }
@@ -470,6 +470,7 @@ class StatisticsFragment :
         val newView = getViewFromPeriod(period)
         newView?.isSelected = true
         viewModel.updatePeriod(period)
+        updatePeriod()
     }
 
     private fun getViewFromPeriod(period: StatisticsPeriod): TextView? {
