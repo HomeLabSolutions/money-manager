@@ -7,49 +7,46 @@
     android:layout_height="wrap_content">
 
     <TextView
+        style="@style/Theme.MoneyManager.MaterialComponents.Title.Text"
         android:id="@+id/remove_dialog_title"
-        style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="start"
-        android:paddingStart="@dimen/standard_left_margin"
+        android:paddingStart="@dimen/standard_half_left_margin"
         android:paddingTop="16dp"
         android:paddingEnd="@dimen/standard_right_margin"
-        android:textColor="@color/secondary_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/transaction_delete_dialog_title" />
 
     <TextView
-        android:id="@+id/remove_dialog_subtitle"
         style="@style/Theme.MoneyManager.MaterialComponents.Body.Text"
+        android:id="@+id/remove_dialog_subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/standard_left_margin"
+        android:paddingStart="@dimen/standard_half_left_margin"
         android:paddingTop="16dp"
         android:paddingEnd="@dimen/standard_right_margin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/remove_dialog_title"
         tools:text="@string/transaction_delete_dialog_subtitle" />
 
-    <com.google.android.material.button.MaterialButton
+    <TextView
+        style="@style/Theme.MoneyManager.MaterialComponents.Button.Text"
         android:id="@+id/remove_button_cancel"
-        style="@style/Widget.MoneyManager.Button.TextButton.Dialog"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
-        android:layout_marginEnd="8dp"
         android:text="@string/cancel"
         app:layout_constraintEnd_toStartOf="@+id/remove_button_confirm"
         app:layout_constraintTop_toBottomOf="@+id/remove_dialog_subtitle" />
 
-    <com.google.android.material.button.MaterialButton
+    <TextView
+        style="@style/Theme.MoneyManager.MaterialComponents.Button.Text"
         android:id="@+id/remove_button_confirm"
-        style="@style/Widget.MoneyManager.Button.TextButton.Dialog"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
-        android:layout_marginEnd="8dp"
         android:text="@string/delete"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/remove_dialog_subtitle" />

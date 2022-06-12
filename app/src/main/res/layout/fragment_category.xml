@@ -58,10 +58,11 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:visibility="visible" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/category_create"
-        style="?attr/moneyManagerBottomActionButtonStyle"
         android:layout_width="match_parent"
+        android:layout_marginHorizontal="@dimen/button_padding_horizontal"
+        android:layout_marginVertical="@dimen/button_padding_vertical"
         android:layout_height="@dimen/button_height"
         android:text="@string/create"
         app:layout_constraintBottom_toBottomOf="parent"

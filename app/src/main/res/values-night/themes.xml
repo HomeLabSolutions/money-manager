@@ -1,3 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="Base.V21.Night.Theme.MoneyManager" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/colorPrimaryLight</item>
+        <item name="android:actionBarStyle">@style/Widget.MoneyManager.AppBarLayout</item>
+        <item name="colorPrimary">?attr/colorPrimary</item>
+        <item name="colorPrimaryDark">?attr/colorPrimaryDark</item>
+        <item name="colorSecondary">@color/secondary_color</item>
+        <item name="colorControlNormal">@color/control_normal_color</item>
+        <item name="colorControlActivated">@color/control_activated_color</item>
+        <item name="colorControlHighlight">@color/control_highlight_color</item>
+        <item name="colorButtonNormal">@color/button_normal_color</item>
+        <item name="colorSwitchThumbNormal">@color/switch_thumb_normal_color</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textColorPrimary">@color/textColor</item>
+        <item name="android:textColorHighlight">@color/text_highlight_color</item>
+        <item name="colorError">@color/error_color</item>
+        <item name="android:textColorTertiary">@color/tertiary_color</item>
+        <item name="textAppearanceHeadline1">@style/TextAppearance.MoneyManager.H1</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.MoneyManager.H4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.MoneyManager.H5</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.MoneyManager.H6</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.MoneyManager.Subtitle1</item>
+        <item name="textAppearanceSubtitle2">@style/TextAppearance.MoneyManager.Subtitle2</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.MoneyManager.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.MoneyManager.Body2</item>
+        <item name="textAppearanceButton">@style/TextAppearance.MoneyManager.Button</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.MoneyManager.Caption</item>
+        <item name="textAppearanceOverline">@style/TextAppearance.MoneyManager.Overline</item>
+        <item name="appBarLayoutStyle">@style/Widget.MoneyManager.AppBarLayout</item>
+        <item name="radioButtonStyle">@style/Widget.MoneyManager.RadioButton</item>
+        <item name="editTextStyle">@style/Widget.MoneyManager.EditText</item>
+        <item name="bottomNavigationStyle">@style/Widget.MoneyManager.BottomNavigationStyle</item>
+        <item name="tabStyle">@style/Widget.MoneyManager.TabLayout</item>
+    </style>
+
+    <style name="Base.Theme.MoneyManager" parent="Base.V21.Night.Theme.MoneyManager"/>
+    <style name="Theme.MoneyManager" parent="Base.Theme.MoneyManager"/>
+
+    <style name="Theme.MoneyManager.Home" parent="Theme.MoneyManager">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
 </resources>

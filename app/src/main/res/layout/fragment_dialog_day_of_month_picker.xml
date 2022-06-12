@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/day_of_month_title"
-        style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
+         style="@style/Theme.MoneyManager.MaterialComponents.Title.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="start"
@@ -515,7 +515,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/day_of_month_button_cancel"
-        style="@style/Widget.MoneyManager.Button.TextButton.Dialog"
+
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
@@ -526,7 +526,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/day_of_month_button_confirm"
-        style="@style/Widget.MoneyManager.Button.TextButton.Dialog"
+
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"

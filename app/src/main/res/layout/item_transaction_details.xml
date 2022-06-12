@@ -113,9 +113,9 @@
         app:layout_constraintTop_toBottomOf="@+id/item_transaction_sum"
         app:layout_constraintVertical_chainStyle="spread"
         app:showDecimalPart="true"
-        app:signTextColor="@color/text_primary_transparent_color"
+        app:signTextColor="@color/colorPrimaryLight"
         app:signTextStyle="?attr/textAppearanceCurrencySignExtraSmall"
-        app:sumTextColor="@color/text_primary_transparent_color"
+        app:sumTextColor="@color/colorPrimaryLight"
         app:sumTextStyle="?attr/textAppearanceCurrencySumExtraSmall"
         tools:sumText="15000"
         tools:visibility="visible" />

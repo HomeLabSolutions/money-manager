@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/logout_dialog_title"
-        style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
+         style="@style/Theme.MoneyManager.MaterialComponents.Title.Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="start"
@@ -21,7 +21,7 @@
 
     <TextView
         android:id="@+id/logout_dialog_subtitle"
-        style="@style/Theme.MoneyManager.MaterialComponents.Body.Text"
+
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/standard_left_margin"
@@ -33,7 +33,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/logout_button_cancel"
-        style="@style/Widget.MoneyManager.Button.TextButton.Dialog"
+
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
@@ -44,7 +44,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/logout_button_confirm"
-        style="@style/Widget.MoneyManager.Button.TextButton.Dialog"
+
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"

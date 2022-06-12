@@ -53,7 +53,7 @@
             android:gravity="start"
             tools:text="@string/settings_subscription_premium_description"
             android:textAppearance="?attr/textAppearanceSubtitle2"
-            android:textColor="@color/text_primary_transparent_color"
+            android:textColor="@color/colorPrimaryLight"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/settings_subscription_price"
             app:layout_constraintStart_toEndOf="@+id/settings_subscription_icon"

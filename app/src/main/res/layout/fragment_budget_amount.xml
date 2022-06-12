@@ -42,7 +42,6 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/created_budget_save"
-        style="?attr/moneyManagerBottomActionButtonSelectedStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
         android:text="@string/save"

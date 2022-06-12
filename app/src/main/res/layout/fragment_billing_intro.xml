@@ -116,7 +116,6 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/settings_billing_intro_buy"
-        style="?attr/moneyManagerBottomActionButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
         android:text="@string/buy"

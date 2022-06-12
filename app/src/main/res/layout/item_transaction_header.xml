@@ -9,13 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:background="@drawable/header_gradient"
+        android:background="@color/colorPrimaryLight"
+        android:textColor="?attr/colorOnPrimary"
         android:paddingStart="@dimen/standard_left_margin"
         android:paddingTop="4dp"
         android:paddingEnd="@dimen/standard_left_margin"
         android:paddingBottom="4dp"
         android:textAppearance="?attr/textAppearanceCaption"
-        android:textColor="@color/tertiary_color"
         tools:text="31.03.1993" />
 
 </LinearLayout>
