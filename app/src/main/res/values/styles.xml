@@ -9,15 +9,15 @@
         <item name="android:background">@color/color_midnight_white</item>
     </style>
 
-    <style name="Widget.MoneyManager.BottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView">
-        <item name="android:background">@drawable/button_gradient</item>
+    <style name="Widget.MoneyManager.BottomNavigationStyle" parent="Widget.Material3.BottomNavigationView">
+        <item name="android:background">?attr/colorPrimary</item>
         <item name="itemIconTint">@drawable/bottom_tab_selector</item>
         <item name="itemTextColor">@drawable/bottom_tab_selector</item>
-        <item name="selectableItemBackground">?attr/colorSecondary</item>
+        <item name="selectableItemBackground">?attr/colorAccent</item>
     </style>
 
-    <style name="Widget.MoneyManager.TabLayout" parent="Widget.MaterialComponents.TabLayout">
-        <item name="tabIndicatorColor">?attr/colorAccent</item>
+    <style name="Widget.MoneyManager.TabLayout" parent="Widget.Material3.TabLayout">
+        <item name="tabIndicatorColor">?attr/colorSecondary</item>
         <item name="tabTextColor">@drawable/tabs_color_selector</item>
         <item name="tabIndicatorFullWidth">false</item>
         <item name="tabTextAppearance">@style/TextAppearance.MoneyManager.Tab</item>
@@ -59,24 +59,8 @@
         <item name="android:maxLines">1</item>
     </style>
 
-    <style name="Widget.MoneyManager.Button.BottomAction" parent="Widget.AppCompat.Button">
-        <item name="android:insetTop">0dp</item>
-        <item name="android:insetBottom">0dp</item>
-        <item name="android:paddingStart">32dp</item>
-        <item name="android:paddingEnd">32dp</item>
-        <item name="android:background">@drawable/button_background_state_selector</item>
-        <item name="iconPadding">-24dp</item>
-        <item name="android:textColor">@drawable/button_background_text_color_state_selector</item>
-        <item name="android:textSize">@dimen/button_text_size</item>
-        <item name="iconTint">@drawable/button_icon_background</item>
-    </style>
-
-    <style name="Widget.MoneyManager.Button.BottomAction.Selected" parent="Widget.MoneyManager.Button.BottomAction">
-        <item name="android:background">@drawable/button_background_state_enable_selector</item>
-    </style>
-
     <style name="Widget.MoneyManager.EditText" parent="Widget.AppCompat.EditText">
-        <item name="android:textColorHint">@color/text_primary_transparent_color</item>
+        <item name="android:textColorHint">@color/colorPrimaryLight</item>
     </style>
 
     <style name="Widget.MoneyManager.EditText.Description" parent="Widget.AppCompat.EditText">
@@ -96,21 +80,12 @@
 
     <style name="Widget.MoneyManager.EditText.Category.Union" parent="Widget.AppCompat.EditText">
         <item name="android:textAppearance">?attr/textAppearanceBody1</item>
-        <item name="android:textColor">@color/color_midnight_white</item>
-        <item name="android:textColorHint">@color/edit_text_hint_text_color</item>
+        <item name="android:textColor">@color/secondary_color</item>
+        <item name="android:textColorHint">?attr/colorSecondary</item>
     </style>
 
     <style name="Widget.MoneyManager.Error" parent="TextAppearance.MoneyManager.Caption">
         <item name="android:textColor">@color/error_color</item>
-    </style>
-
-    <style name="Widget.MoneyManager.Button.TextButton.Dialog" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/button_background_dialog_state_selector</item>
-    </style>
-
-    <style name="Widget.MoneyManager.CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
-        <item name="android:textColor">@color/button_normal_color_start</item>
-        <item name="android:buttonTint">@color/button_normal_color_start</item>
     </style>
 
     <style name="Widget.MoneyManager.RadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
@@ -121,8 +96,6 @@
         <item name="android:textAppearance">?attr/textAppearanceBody1</item>
     </style>
 
-
-
     <style name="Widget.MoneyManager.TextView.ProfileItem" parent="Widget.AppCompat.TextView">
         <item name="android:textAppearance">?attr/textAppearanceHeadline6</item>
         <item name="android:textColor">@color/text_primary_color</item>
@@ -132,7 +105,7 @@
     <style name="Widget.MoneyManager.TextView.ProfileItem.Subtitle" parent="Widget.AppCompat.TextView">
         <item name="android:textAppearance">?attr/textAppearanceSubtitle1</item>
         <item name="android:textSize">@dimen/profile_item_text_subtitle_size</item>
-        <item name="android:textColor">@color/text_primary_transparent_color</item>
+        <item name="android:textColor">@color/colorPrimaryLight</item>
     </style>
 
     <style name="Widget.MoneyManager.TextView.Statistics" parent="Widget.AppCompat.TextView">
@@ -154,5 +127,12 @@
 
     <style name="Widget.MoneyManager.TextView.PremiumLabel.Acknowledged">
         <item name="android:textColor">@color/premium_acknowledged</item>
+    </style>
+
+    <style name="Widget.MoneyManager.TextView.Keyboard" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textAppearance">?attr/textAppearanceHeadline2</item>
+        <item name="android:duplicateParentState">true</item>
+        <item name="android:textSize">@dimen/pin_text_size</item>
+        <item name="android:layout_gravity">center</item>
     </style>
 </resources>

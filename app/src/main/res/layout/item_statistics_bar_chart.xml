@@ -75,7 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?attr/textAppearanceCaption"
-        android:textColor="@color/text_primary_transparent_color"
+        android:textColor="@color/colorPrimaryLight"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/item_statistics_vertical_guideline"

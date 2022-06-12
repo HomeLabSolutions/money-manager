@@ -75,8 +75,8 @@
         app:layout_constraintStart_toEndOf="@+id/expense_today_info_approx_sign"
         app:layout_constraintTop_toTopOf="@+id/expense_today_info_approx_sign"
         app:showShortDecimalPart="true"
-        app:sumTextColor="@color/text_primary_transparent_color"
-        app:signTextColor="@color/text_primary_transparent_color"
+        app:sumTextColor="@color/colorPrimaryLight"
+        app:signTextColor="@color/colorPrimaryLight"
         app:sumTextStyle="?attr/textAppearanceCurrencySumSmall"
         app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
         app:sumTextSize="@dimen/income_expense_info_sum_text_size"
@@ -123,8 +123,8 @@
         app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
         app:sumTextSize="@dimen/income_expense_info_sum_text_size"
         app:signTextSize="@dimen/income_expense_info_sign_text_size"
-        app:sumTextColor="@color/text_primary_transparent_color"
-        app:signTextColor="@color/text_primary_transparent_color"
+        app:sumTextColor="@color/colorPrimaryLight"
+        app:signTextColor="@color/colorPrimaryLight"
         app:sum="1000" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

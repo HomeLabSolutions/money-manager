@@ -29,58 +29,57 @@
 
     <style name="TextAppearance.MoneyManager.CurrencySum.ExtraBig" parent="TextAppearance.MoneyManager.H2">
         <item name="android:textSize">@dimen/currency_sum_extra_big_text_size</item>
-        <item name="android:textColor">?attr/colorControlActivated</item>
-        <item name="android:textColorHint">@color/text_primary_transparent_color</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textColorHint">@color/colorPrimaryLight</item>
     </style>
 
     <style name="TextAppearance.MoneyManager.CurrencySign.ExtraBig" parent="TextAppearance.MoneyManager.H2">
         <item name="android:textSize">@dimen/currency_sign_extra_big_text_size</item>
-        <item name="android:textColor">?attr/colorControlActivated</item>
+        <item name="android:textColor">@color/textColor</item>
     </style>
 
     <style name="TextAppearance.MoneyManager.CurrencySum.Big" parent="TextAppearance.MoneyManager.H2">
         <item name="android:textSize">@dimen/currency_sum_big_text_size</item>
-        <item name="android:textColor">?attr/colorControlActivated</item>
-        <item name="android:textColorHint">@color/text_primary_transparent_color</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textColorHint">@color/colorPrimaryLight</item>
     </style>
 
     <style name="TextAppearance.MoneyManager.CurrencySign.Big" parent="TextAppearance.MoneyManager.H2">
         <item name="android:textSize">@dimen/currency_sign_big_text_size</item>
-        <item name="android:textColor">?attr/colorControlActivated</item>
-        <item name="android:textColorHint">@color/text_primary_transparent_color</item>
+        <item name="android:textColorHint">@color/colorPrimaryLight</item>
+        <item name="android:textColor">@color/textColor</item>
     </style>
 
     <style name="TextAppearance.MoneyManager.CurrencySum.Medium" parent="TextAppearance.MoneyManager.H2">
         <item name="android:textSize">@dimen/currency_sum_medium_text_size</item>
-        <item name="android:textColor">?attr/colorControlActivated</item>
-        <item name="android:textColorHint">@color/text_primary_transparent_color</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textColorHint">@color/colorPrimaryLight</item>
     </style>
 
     <style name="TextAppearance.MoneyManager.CurrencySign.Medium" parent="TextAppearance.MoneyManager.H2">
         <item name="android:textSize">@dimen/currency_sign_medium_text_size</item>
-        <item name="android:textColor">?attr/colorControlActivated</item>
+        <item name="android:textColor">@color/textColor</item>
     </style>
 
     <style name="TextAppearance.MoneyManager.CurrencySum.Small" parent="TextAppearance.MoneyManager.H5">
         <item name="android:textSize">@dimen/currency_sum_small_text_size</item>
-        <item name="android:textColor">?attr/colorControlActivated</item>
-        <item name="android:textColorHint">@color/text_primary_transparent_color</item>
+        <item name="android:textColor">@color/textColor</item>
     </style>
 
     <style name="TextAppearance.MoneyManager.CurrencySign.Small" parent="TextAppearance.MoneyManager.H5">
         <item name="android:textSize">@dimen/currency_sign_small_text_size</item>
-        <item name="android:textColor">?attr/colorControlActivated</item>
+        <item name="android:textColor">@color/textColor</item>
     </style>
 
-    <style name="TextAppearance.MoneyManager.CurrencySum.ExtraSmall" parent="TextAppearance.MoneyManager.H6">
+    <style name="TextAppearance.MoneyManager.CurrencySum.ExtraSmall" parent="TextAppearance.MoneyManager.H2">
         <item name="android:textSize">@dimen/currency_extra_small_text_size</item>
-        <item name="android:textColor">?attr/colorControlActivated</item>
-        <item name="android:textColorHint">@color/text_primary_transparent_color</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textColorHint">@color/colorPrimaryLight</item>
     </style>
 
-    <style name="TextAppearance.MoneyManager.CurrencySign.ExtraSmall" parent="TextAppearance.MoneyManager.H6">
+    <style name="TextAppearance.MoneyManager.CurrencySign.ExtraSmall" parent="TextAppearance.MoneyManager.H2">
         <item name="android:textSize">@dimen/currency_sign_extra_small_text_size</item>
-        <item name="android:textColor">?attr/colorControlActivated</item>
+        <item name="android:textColor">@color/textColor</item>
     </style>
 
     <style name="TextAppearance.MoneyManager.Tab" parent="TextAppearance.MoneyManager.H6">

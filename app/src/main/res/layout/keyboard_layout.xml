@@ -27,14 +27,10 @@
                 android:background="?selectableItemBackgroundBorderless">
 
                 <TextView
+                    style="@style/Widget.MoneyManager.TextView.Keyboard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:duplicateParentState="true"
-                    android:text="@string/_1"
-                    android:textAppearance="?textAppearanceHeadline2"
-                    android:textColor="@color/text_primary_color"
-                    android:textSize="@dimen/pin_text_size" />
+                    android:text="@string/_1" />
             </com.d9tilov.moneymanager.keyboard.PinButton>
 
             <com.d9tilov.moneymanager.keyboard.PinButton
@@ -48,14 +44,10 @@
                 android:background="?selectableItemBackgroundBorderless">
 
                 <TextView
+                    style="@style/Widget.MoneyManager.TextView.Keyboard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:duplicateParentState="true"
-                    android:text="@string/_2"
-                    android:textAppearance="?textAppearanceHeadline2"
-                    android:textColor="@color/text_primary_color"
-                    android:textSize="@dimen/pin_text_size" />
+                    android:text="@string/_2" />
             </com.d9tilov.moneymanager.keyboard.PinButton>
 
             <com.d9tilov.moneymanager.keyboard.PinButton
@@ -68,14 +60,10 @@
                 android:background="?selectableItemBackgroundBorderless">
 
                 <TextView
+                    style="@style/Widget.MoneyManager.TextView.Keyboard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:duplicateParentState="true"
-                    android:text="@string/_3"
-                    android:textAppearance="?textAppearanceHeadline2"
-                    android:textColor="@color/text_primary_color"
-                    android:textSize="@dimen/pin_text_size" />
+                    android:text="@string/_3" />
             </com.d9tilov.moneymanager.keyboard.PinButton>
 
         </TableRow>
@@ -94,14 +82,10 @@
                 android:background="?selectableItemBackgroundBorderless">
 
                 <TextView
+                    style="@style/Widget.MoneyManager.TextView.Keyboard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:duplicateParentState="true"
-                    android:text="@string/_4"
-                    android:textAppearance="?textAppearanceHeadline2"
-                    android:textColor="@color/text_primary_color"
-                    android:textSize="@dimen/pin_text_size" />
+                    android:text="@string/_4" />
             </com.d9tilov.moneymanager.keyboard.PinButton>
 
             <com.d9tilov.moneymanager.keyboard.PinButton
@@ -115,14 +99,10 @@
                 android:background="?selectableItemBackgroundBorderless">
 
                 <TextView
+                    style="@style/Widget.MoneyManager.TextView.Keyboard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:duplicateParentState="true"
-                    android:text="@string/_5"
-                    android:textAppearance="?textAppearanceHeadline2"
-                    android:textColor="@color/text_primary_color"
-                    android:textSize="@dimen/pin_text_size" />
+                    android:text="@string/_5" />
             </com.d9tilov.moneymanager.keyboard.PinButton>
 
             <com.d9tilov.moneymanager.keyboard.PinButton
@@ -135,15 +115,10 @@
                 android:background="?selectableItemBackgroundBorderless">
 
                 <TextView
+                    style="@style/Widget.MoneyManager.TextView.Keyboard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:duplicateParentState="true"
-                    android:singleLine="true"
-                    android:text="@string/_6"
-                    android:textAppearance="?textAppearanceHeadline2"
-                    android:textColor="@color/text_primary_color"
-                    android:textSize="@dimen/pin_text_size" />
+                    android:text="@string/_6" />
             </com.d9tilov.moneymanager.keyboard.PinButton>
         </TableRow>
 
@@ -161,14 +136,10 @@
                 android:background="?selectableItemBackgroundBorderless">
 
                 <TextView
+                    style="@style/Widget.MoneyManager.TextView.Keyboard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:duplicateParentState="true"
-                    android:text="@string/_7"
-                    android:textAppearance="?textAppearanceHeadline2"
-                    android:textColor="@color/text_primary_color"
-                    android:textSize="@dimen/pin_text_size" />
+                    android:text="@string/_7" />
             </com.d9tilov.moneymanager.keyboard.PinButton>
 
             <com.d9tilov.moneymanager.keyboard.PinButton
@@ -182,14 +153,10 @@
                 android:background="?selectableItemBackgroundBorderless">
 
                 <TextView
+                    style="@style/Widget.MoneyManager.TextView.Keyboard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:duplicateParentState="true"
-                    android:text="@string/_8"
-                    android:textAppearance="?textAppearanceHeadline2"
-                    android:textColor="@color/text_primary_color"
-                    android:textSize="@dimen/pin_text_size" />
+                    android:text="@string/_8" />
             </com.d9tilov.moneymanager.keyboard.PinButton>
 
             <com.d9tilov.moneymanager.keyboard.PinButton
@@ -202,14 +169,10 @@
                 android:background="?selectableItemBackgroundBorderless">
 
                 <TextView
+                    style="@style/Widget.MoneyManager.TextView.Keyboard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:duplicateParentState="true"
-                    android:text="@string/_9"
-                    android:textAppearance="?textAppearanceHeadline2"
-                    android:textColor="@color/text_primary_color"
-                    android:textSize="@dimen/pin_text_size" />
+                    android:text="@string/_9" />
             </com.d9tilov.moneymanager.keyboard.PinButton>
         </TableRow>
 
@@ -227,14 +190,10 @@
                 android:background="?selectableItemBackgroundBorderless">
 
                 <TextView
+                    style="@style/Widget.MoneyManager.TextView.Keyboard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:duplicateParentState="true"
-                    android:text="@string/_dot"
-                    android:textAppearance="?textAppearanceHeadline2"
-                    android:textColor="@color/text_primary_color"
-                    android:textSize="@dimen/pin_text_size" />
+                    android:text="@string/_dot" />
             </com.d9tilov.moneymanager.keyboard.PinButton>
 
             <com.d9tilov.moneymanager.keyboard.PinButton
@@ -248,15 +207,10 @@
                 android:background="?selectableItemBackgroundBorderless">
 
                 <TextView
+                    style="@style/Widget.MoneyManager.TextView.Keyboard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:duplicateParentState="true"
-                    android:text="@string/_0"
-                    android:textAppearance="?textAppearanceHeadline2"
-                    android:textColor="@color/text_primary_color"
-                    android:textSize="@dimen/pin_text_size" />
-
+                    android:text="@string/_0" />
             </com.d9tilov.moneymanager.keyboard.PinButton>
 
             <com.d9tilov.moneymanager.keyboard.PinButton

@@ -120,7 +120,7 @@
         android:layout_height="wrap_content"
         android:text="@string/statistics_expense_info_period_title"
         android:textAppearance="?attr/textAppearanceHeadline5"
-        android:textColor="@color/text_primary_transparent_color"
+        android:textColor="@color/colorPrimaryLight"
         android:layout_marginTop="16dp"
         android:textSize="@dimen/statistics_spent_in_period"
         app:layout_constraintBottom_toTopOf="@+id/statistics_bar_chart"
@@ -142,11 +142,11 @@
         app:layout_constraintTop_toTopOf="@+id/statistics_spent_in_period"
         app:scaleEnabled="true"
         app:showDecimalPart="true"
-        app:signTextColor="@color/text_primary_transparent_color"
+        app:signTextColor="@color/colorPrimaryLight"
         app:signTextSize="@dimen/statistics_spent_in_period_sign"
         app:signTextStyle="?attr/textAppearanceCurrencySignExtraSmall"
         app:sum="300"
-        app:sumTextColor="@color/text_primary_transparent_color"
+        app:sumTextColor="@color/colorPrimaryLight"
         app:sumTextSize="@dimen/statistics_spent_in_period"
         app:sumTextStyle="?attr/textAppearanceCurrencySumExtraSmall" />
 
@@ -162,17 +162,6 @@
         app:layout_constraintTop_toBottomOf="@+id/statistics_spent_in_period"
         tools:listitem="@layout/item_statistics_bar_chart"
         tools:visibility="visible" />
-
-    <include
-        android:id="@+id/statistics_empty_placeholder"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        layout="@layout/layout_empty_statistics_placeholder"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/statistics_day" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/statistics_menu_rv"
@@ -201,4 +190,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/statistics_custom"
         app:srcCompat="@drawable/ic_statistics_menu" />
+
+    <include
+        android:id="@+id/statistics_empty_placeholder"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        layout="@layout/layout_empty_statistics_placeholder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statistics_day" />
 </androidx.constraintlayout.widget.ConstraintLayout>

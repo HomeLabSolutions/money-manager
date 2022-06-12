@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Base.V21.Theme.MoneyManager" parent="Theme.MaterialComponents.Light.NoActionBar"/>
-    <style name="Base.Theme.MoneyManager" parent="Base.V21.Theme.MoneyManager"/>
-
-    <style name="Theme.MoneyManager" parent="Base.Theme.MoneyManager">
-        <item name="android:windowBackground">@color/primary_color</item>
+    <style name="Base.V21.Theme.MoneyManager" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/backgroundColor</item>
         <item name="android:actionBarStyle">@style/Widget.MoneyManager.AppBarLayout</item>
-        <item name="colorPrimary">@color/primary_color</item>
-        <item name="colorPrimaryDark">@color/primary_dark_color</item>
-        <item name="colorAccent">@color/accent_color</item>
+        <item name="backgroundColor">@color/backgroundColor</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorOnPrimary">@color/on_primary_color</item>
         <item name="colorSecondary">@color/secondary_color</item>
-        <item name="colorControlNormal">@color/control_normal_color</item>
-        <item name="colorControlActivated">@color/control_activated_color</item>
-        <item name="colorControlHighlight">@color/control_highlight_color</item>
-        <item name="colorButtonNormal">@color/button_normal_color</item>
-        <item name="colorSwitchThumbNormal">@color/switch_thumb_normal_color</item>
-        <item name="android:textColor">@color/text_normal_color</item>
-        <item name="android:textColorPrimary">@color/text_primary_color</item>
-        <item name="android:textColorHighlight">@color/text_highlight_color</item>
+        <item name="colorOnSecondary">@color/on_secondary_color</item>
         <item name="colorError">@color/error_color</item>
-        <item name="android:textColorTertiary">@color/tertiary_color</item>
+        <item name="colorOnError">@color/on_error_color</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
         <item name="textAppearanceHeadline1">@style/TextAppearance.MoneyManager.H1</item>
         <item name="textAppearanceHeadline4">@style/TextAppearance.MoneyManager.H4</item>
         <item name="textAppearanceHeadline5">@style/TextAppearance.MoneyManager.H5</item>
@@ -33,17 +26,15 @@
         <item name="textAppearanceCaption">@style/TextAppearance.MoneyManager.Caption</item>
         <item name="textAppearanceOverline">@style/TextAppearance.MoneyManager.Overline</item>
         <item name="appBarLayoutStyle">@style/Widget.MoneyManager.AppBarLayout</item>
-        <item name="checkboxStyle">@style/Widget.MoneyManager.CheckBox</item>
         <item name="radioButtonStyle">@style/Widget.MoneyManager.RadioButton</item>
-        <item name="editTextStyle">@style/Widget.MoneyManager.EditText</item>
         <item name="bottomNavigationStyle">@style/Widget.MoneyManager.BottomNavigationStyle</item>
         <item name="tabStyle">@style/Widget.MoneyManager.TabLayout</item>
-        <item name="moneyManagerBottomActionButtonStyle">
-            @style/Widget.MoneyManager.Button.BottomAction
-        </item>
-        <item name="moneyManagerBottomActionButtonSelectedStyle">
-            @style/Widget.MoneyManager.Button.BottomAction.Selected
-        </item>
+    </style>
+
+    <style name="Base.Theme.MoneyManager" parent="Base.V21.Theme.MoneyManager" />
+
+    <style name="Theme.MoneyManager" parent="Base.Theme.MoneyManager">
+
         <item name="textAppearanceCurrencySumExtraBig">
             @style/TextAppearance.MoneyManager.CurrencySum.ExtraBig
         </item>
@@ -77,13 +68,13 @@
     </style>
 
     <style name="ThemeOverlay.MoneyManager.Toolbar" parent="">
-        <item name="android:textColorPrimary">@color/text_normal_color</item>
+        <item name="android:textColorPrimary">?attr/colorOnPrimary</item>
         <item name="android:homeAsUpIndicator">@drawable/ic_back_arrow</item>
     </style>
 
     <style name="Theme.MoneyManager.Home" parent="Theme.MoneyManager">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowActionModeOverlay">true</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -91,7 +82,7 @@
 
     <style name="Theme.MoneyManager.Prepopulate" parent="Theme.MoneyManager">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowActionModeOverlay">true</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -108,32 +99,43 @@
 
     <style name="ThemeOverlay.MoneyManager.Toolbar.Inverted" parent="ThemeOverlay.MoneyManager.Toolbar">
         <item name="actionMenuTextColor">@color/secondary_color</item>
-        <item name="colorSurface">@color/primary_dark_color</item>
+        <item name="colorSurface">?attr/colorPrimaryDark</item>
     </style>
 
     <style name="ThemeOverlay.MoneyManager.Surface.NeutralLight" parent="">
         <item name="colorSurface">@color/neutral_light_color</item>
     </style>
 
-    <style name="Theme.MoneyManager.Material.Alert.Dialog" parent="Theme.MaterialComponents.Dialog.Alert">
-        <item name="colorSurface">@color/neutral_light_color</item>
-        <item name="android:background">@color/primary_color</item>
-        <item name="colorControlNormal">@color/control_normal_color</item>
-        <item name="colorControlActivated">@color/control_activated_color</item>
-        <item name="colorControlHighlight">@color/control_highlight_color</item>
+    <style name="Theme.MoneyManager.Material.Alert.Dialog" parent="Theme.Material3.DayNight.Dialog.Alert">
+        <item name="android:background">@drawable/dialog_background</item>
+        <item name="background">@drawable/dialog_background</item>
+        <item name="elevation">16dp</item>
     </style>
 
-    <style name="Theme.MoneyManager.MaterialComponents.Body.Text" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
-        <item name="android:textColor">@color/control_highlight_color</item>
+    <style name="Theme.MoneyManager.MaterialComponents.Title.Text" parent="MaterialAlertDialog.Material3.Title.Text">
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textAppearance">?attr/textAppearanceHeadline5</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Theme.MoneyManager.MaterialComponents.Body.Text" parent="MaterialAlertDialog.Material3.Body.Text">
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textAppearance">?attr/textAppearanceSubtitle1</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Theme.MoneyManager.MaterialComponents.Button.Text" parent="">
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:padding">@dimen/standard_padding</item>
     </style>
 
     <style name="TextInputLayoutAppearance" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="errorTextAppearance">@style/ErrorText</item>
-        <item name="boxStrokeColor">@color/text_input_box_stroke</item>
-        <item name="android:textColorHint">@color/text_input_box_stroke</item>
-        <item name="hintTextColor">@color/text_input_box_stroke</item>
-        <item name="counterTextColor">@color/text_input_box_stroke</item>
-        <item name="android:textColor">@color/color_midnight_white</item>
+        <item name="boxStrokeColor">@color/secondary_color</item>
+        <item name="android:textColorHint">@color/secondary_color</item>
+        <item name="hintTextColor">@color/secondary_color</item>
+        <item name="counterTextColor">@color/secondary_color</item>
+        <item name="android:textColor">@color/secondary_color</item>
         <item name="android:theme">@style/textCursor</item>
         <item name="counterEnabled">true</item>
         <item name="counterMaxLength">@integer/max_category_name_length</item>
@@ -146,7 +148,7 @@
     </style>
 
     <style name="ErrorText" parent="TextAppearance.MoneyManager.Caption">
-        <item name="android:textColor">@color/accent_color</item>
+        <item name="android:textColor">@color/error_color</item>
     </style>
 
 </resources>

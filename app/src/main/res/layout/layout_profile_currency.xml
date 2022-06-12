@@ -51,7 +51,7 @@
         android:id="@+id/profile_currency_separator"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="@color/button_normal_color_dark"
+        android:background="@drawable/rv_divider"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -11,6 +11,7 @@
     <dimen name="body1_text_size">18sp</dimen>
     <dimen name="body2_text_size">16sp</dimen>
     <dimen name="button_text_size">16sp</dimen>
+    <dimen name="button_elevation">8dp</dimen>
     <dimen name="caption_text_size">14sp</dimen>
     <dimen name="overline_text_size">12sp</dimen>
 
@@ -34,6 +35,7 @@
     <dimen name="standard_half_left_margin">16dp</dimen>
     <dimen name="standard_right_margin">32dp</dimen>
     <dimen name="standard_half_right_margin">16dp</dimen>
+    <dimen name="standard_padding">16dp</dimen>
 
     <dimen name="recycler_view_category_offset">4dp</dimen>
     <dimen name="recycler_view_regular_category_margin">16dp</dimen>
@@ -48,6 +50,8 @@
     <dimen name="category_creation_name_text_size">24sp</dimen>
     <dimen name="category_creation_icon_size">48dp</dimen>
 
+    <dimen name="button_padding_horizontal">16dp</dimen>
+    <dimen name="button_padding_vertical">8dp</dimen>
     <dimen name="button_height">56dp</dimen>
     <dimen name="button_prepopulate_height">36dp</dimen>
 

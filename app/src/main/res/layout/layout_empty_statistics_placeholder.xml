@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorPrimary">
+    android:background="@color/backgroundColor">
 
     <ImageView
         android:id="@+id/statistics_empty_placeholder_icon"
@@ -24,7 +24,6 @@
         android:gravity="center"
         android:text="@string/statistics_no_data"
         android:textAppearance="?attr/textAppearanceHeadline6"
-        android:textColor="@color/text_primary_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

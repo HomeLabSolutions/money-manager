@@ -2,6 +2,8 @@ package com.d9tilov.moneymanager.base.ui
 
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -56,6 +58,7 @@ abstract class BaseDialogFragment<N : BaseNavigator, VB : ViewBinding>(private v
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         initObservers()
     }
 

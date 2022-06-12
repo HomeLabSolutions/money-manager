@@ -283,7 +283,7 @@ class RegularTransactionCreationFragment :
                 view.setTextColor(
                     ContextCompat.getColor(
                         requireContext(),
-                        if (view.isSelected) R.color.primary_color else R.color.control_activated_color
+                        if (view.isSelected) R.color.colorPrimary else R.color.control_activated_color
                     )
                 )
             }
