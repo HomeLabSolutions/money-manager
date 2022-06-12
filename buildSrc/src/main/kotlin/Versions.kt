@@ -1,7 +1,7 @@
 object Versions {
 
     const val gradlePlugin = "7.2.1"
-    const val kotlin = "1.6.21"
+    const val kotlin = "1.7.0"
     const val kotlinDatetime = "0.3.2"
 
     const val appCompat = "1.4.2"
