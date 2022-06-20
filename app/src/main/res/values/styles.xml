@@ -1,30 +1,16 @@
 <resources>
 
-    <style name="Widget.MoneyManager.AppBarLayout" parent="">
-        <item name="android:background">?attr/colorPrimary</item>
-        <item name="colorControlHighlight">?attr/colorPrimaryDark</item>
-    </style>
-
-    <style name="Widget.MoneyManager.AppBarLayoutMotion" parent="Widget.MoneyManager.AppBarLayout">
-        <item name="android:background">@color/color_midnight_white</item>
-    </style>
-
-    <style name="Widget.MoneyManager.BottomNavigationStyle" parent="Widget.Material3.BottomNavigationView">
-        <item name="android:background">?attr/colorPrimary</item>
-        <item name="itemIconTint">@drawable/bottom_tab_selector</item>
-        <item name="itemTextColor">@drawable/bottom_tab_selector</item>
-        <item name="selectableItemBackground">?attr/colorAccent</item>
+    <style name="Widget.MoneyManager.AppBarLayout" parent="Widget.Material3.AppBarLayout">
+        <item name="android:background">?attr/colorPrimaryContainer</item>
     </style>
 
     <style name="Widget.MoneyManager.TabLayout" parent="Widget.Material3.TabLayout">
-        <item name="tabIndicatorColor">?attr/colorSecondary</item>
         <item name="tabTextColor">@drawable/tabs_color_selector</item>
         <item name="tabIndicatorFullWidth">false</item>
         <item name="tabTextAppearance">@style/TextAppearance.MoneyManager.Tab</item>
-        <item name="android:background">?attr/colorPrimary</item>
     </style>
 
-    <style name="Widget.MoneyManager.Category.Title" parent="TextAppearance.MoneyManager.H5">
+    <style name="Widget.MoneyManager.Category.Title" parent="TextAppearance.MoneyManager.TitleLarge">
         <item name="android:scrollHorizontally">false</item>
         <item name="android:textSize">@dimen/category_item_name_text_size</item>
         <item name="android:gravity">center</item>
@@ -32,7 +18,7 @@
         <item name="android:maxLines">1</item>
     </style>
 
-    <style name="Widget.MoneyManager.Category.Group.Title" parent="TextAppearance.MoneyManager.H5">
+    <style name="Widget.MoneyManager.Category.Group.Title" parent="TextAppearance.MoneyManager.TitleLarge">
         <item name="android:textSize">@dimen/statistics_item_group_icon_text_size</item>
         <item name="android:gravity">center_vertical|start</item>
         <item name="android:paddingStart">@dimen/standard_left_margin</item>
@@ -41,9 +27,9 @@
         <item name="android:maxLines">1</item>
     </style>
 
-    <style name="Widget.MoneyManager.Category.Subtitle" parent="TextAppearance.MoneyManager.Subtitle1">
+    <style name="Widget.MoneyManager.Category.Subtitle" parent="TextAppearance.MoneyManager.TitleMedium">
         <item name="android:textAllCaps">false</item>
-        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
         <item name="android:textSize">@dimen/category_item_name_parent_text_size</item>
         <item name="android:gravity">center</item>
         <item name="android:scrollHorizontally">false</item>
@@ -51,7 +37,7 @@
         <item name="android:maxLines">1</item>
     </style>
 
-    <style name="Widget.MoneyManager.StatisticsMenu.Title" parent="TextAppearance.MoneyManager.H5">
+    <style name="Widget.MoneyManager.StatisticsMenu.Title" parent="TextAppearance.MoneyManager.TitleLarge">
         <item name="android:scrollHorizontally">false</item>
         <item name="android:textSize">@dimen/statistics_menu_item_text_size</item>
         <item name="android:gravity">center</item>
@@ -60,56 +46,34 @@
     </style>
 
     <style name="Widget.MoneyManager.EditText" parent="Widget.AppCompat.EditText">
-        <item name="android:textColorHint">@color/colorPrimaryLight</item>
+        <item name="android:textColorHint">?attr/colorPrimaryContainer</item>
+        <item name="android:textCursorDrawable">@null</item>
     </style>
 
     <style name="Widget.MoneyManager.EditText.Description" parent="Widget.AppCompat.EditText">
-        <item name="android:textAppearance">?attr/textAppearanceBody1</item>
-        <item name="android:textColor">@color/color_midnight_white</item>
-        <item name="android:textColorHint">@color/edit_text_hint_text_color</item>
+        <item name="android:textAppearance">?attr/textAppearanceBodyLarge</item>
+        <item name="android:textColorHint">?attr/colorSecondary</item>
         <item name="android:background">@null</item>
     </style>
 
-    <style name="Widget.MoneyManager.EditText.CategoryName" parent="Widget.AppCompat.EditText">
-        <item name="android:textAppearance">?attr/textAppearanceSubtitle1</item>
-        <item name="android:textColor">@color/text_primary_color</item>
-        <item name="android:textSize">@dimen/category_creation_name_text_size</item>
-        <item name="android:textColorHint">@color/edit_text_hint_text_color</item>
-        <item name="android:maxLength">@integer/max_category_name_length</item>
-    </style>
-
-    <style name="Widget.MoneyManager.EditText.Category.Union" parent="Widget.AppCompat.EditText">
-        <item name="android:textAppearance">?attr/textAppearanceBody1</item>
-        <item name="android:textColor">@color/secondary_color</item>
-        <item name="android:textColorHint">?attr/colorSecondary</item>
-    </style>
-
-    <style name="Widget.MoneyManager.Error" parent="TextAppearance.MoneyManager.Caption">
-        <item name="android:textColor">@color/error_color</item>
-    </style>
-
-    <style name="Widget.MoneyManager.RadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
-        <item name="android:textColor">@color/control_activated_color_disable</item>
-        <item name="android:textColorHighlight">@color/control_activated_color</item>
-        <item name="android:textSize">@dimen/billing_subscription_radio_button_text_size</item>
-        <item name="android:buttonTint">@color/control_activated_color</item>
-        <item name="android:textAppearance">?attr/textAppearanceBody1</item>
-    </style>
-
     <style name="Widget.MoneyManager.TextView.ProfileItem" parent="Widget.AppCompat.TextView">
-        <item name="android:textAppearance">?attr/textAppearanceHeadline6</item>
-        <item name="android:textColor">@color/text_primary_color</item>
+        <item name="android:textAppearance">?attr/textAppearanceTitleLarge</item>
         <item name="android:textSize">@dimen/profile_item_text_size</item>
     </style>
 
+    <style name="Widget.MoneyManager.TextView.Title" parent="Widget.AppCompat.TextView">
+        <item name="android:textAppearance">?attr/textAppearanceTitleLarge</item>
+        <item name="android:gravity">start</item>
+    </style>
+
     <style name="Widget.MoneyManager.TextView.ProfileItem.Subtitle" parent="Widget.AppCompat.TextView">
-        <item name="android:textAppearance">?attr/textAppearanceSubtitle1</item>
+        <item name="android:textAppearance">?attr/textAppearanceTitleMedium</item>
         <item name="android:textSize">@dimen/profile_item_text_subtitle_size</item>
-        <item name="android:textColor">@color/colorPrimaryLight</item>
+        <item name="android:textColor">?attr/colorSecondary</item>
     </style>
 
     <style name="Widget.MoneyManager.TextView.Statistics" parent="Widget.AppCompat.TextView">
-        <item name="android:textAppearance">?attr/textAppearanceCaption</item>
+        <item name="android:textAppearance">?attr/textAppearanceBodySmall</item>
         <item name="android:textColor">@drawable/background_statistics_selector_text_color</item>
         <item name="android:textSize">@dimen/statistics_period_text_size</item>
         <item name="android:maxLines">1</item>
@@ -117,22 +81,49 @@
         <item name="android:ellipsize">end</item>
     </style>
 
-    <style name="Widget.MoneyManager.TextView.PremiumLabel" parent="Widget.AppCompat.TextView">
-        <item name="android:textAppearance">?attr/textAppearanceButton</item>
-        <item name="android:textSize">@dimen/billing_premium_label</item>
-        <item name="android:background">@drawable/background_round_corner</item>
-        <item name="android:textColor">@color/text_primary_color_dark</item>
+    <style name="Widget.MoneyManager.TextView.CircleSelector" parent="Widget.AppCompat.TextView">
+        <item name="android:textAppearance">?attr/textAppearanceBodySmall</item>
+        <item name="android:textColor">@drawable/background_day_of_month_selector_text_color</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:background">@drawable/background_circle_selector</item>
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="Widget.MoneyManager.TextView.PremiumLabel.Acknowledged">
-        <item name="android:textColor">@color/premium_acknowledged</item>
+    <style name="Widget.MoneyManager.TextView.Info.Label" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_marginStart">@dimen/standard_left_margin</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:textColor">?attr/colorOnPrimaryContainer</item>
+        <item name="android:background">@drawable/background_round_fill</item>
+        <item name="android:textAppearance">?attr/textAppearanceBodySmall</item>
+    </style>
+
+    <style name="Widget.MoneyManager.TextView.PremiumLabel" parent="">
+        <item name="android:textAppearance">?attr/textAppearanceLabelLarge</item>
+        <item name="android:textSize">@dimen/billing_premium_label</item>
+        <item name="android:textColor">?attr/colorOnTertiary</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="Widget.MoneyManager.TextView.Acknowledged" parent="">
+        <item name="android:textAppearance">?attr/textAppearanceLabelLarge</item>
+        <item name="android:textSize">@dimen/billing_premium_label</item>
+        <item name="android:textColor">?attr/colorOnSecondaryContainer</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="Widget.MoneyManager.TextView.Keyboard" parent="Widget.MaterialComponents.TextView">
-        <item name="android:textAppearance">?attr/textAppearanceHeadline2</item>
+        <item name="android:textAppearance">?attr/textAppearanceHeadlineLarge</item>
         <item name="android:duplicateParentState">true</item>
         <item name="android:textSize">@dimen/pin_text_size</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
         <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="Widget.MoneyManager.CheckBox" parent="Widget.Material3.CompoundButton.CheckBox">
+        <item name="android:textColor">?attr/colorTertiary</item>
+        <item name="buttonTint">?attr/colorTertiary</item>
     </style>
 </resources>

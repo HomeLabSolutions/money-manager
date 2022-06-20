@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="@color/card_view_background"
+    app:cardBackgroundColor="?attr/colorPrimary"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
@@ -23,8 +23,7 @@
             android:ellipsize="end"
             android:gravity="start"
             android:maxLines="1"
-            android:textAppearance="?attr/textAppearanceHeadline6"
-            android:textColor="@color/goal_title_text_color"
+            android:textAppearance="?attr/textAppearanceTitleLarge"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -42,8 +41,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/item_goal_title"
             app:lineBarWidth="@dimen/goal_progress_line_bar_width"
-            app:lineProgressColor="@color/goal_active_progress_line_color"
-            app:underLineColor="@color/goal_default_progress_line_color" />
+            app:lineProgressColor="?attr/colorPrimary"
+            app:underLineColor="?attr/colorPrimaryContainer" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

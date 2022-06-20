@@ -31,14 +31,12 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="@dimen/standard_right_margin"
                 android:text="@string/category_name_title"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textColor="@color/text_primary_color_dark"
+                android:textAppearance="?attr/textAppearanceTitleLarge"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/category_creation_et_name_layout"
-                style="@style/TextInputLayoutAppearance"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/standard_left_margin"
@@ -50,7 +48,6 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/category_creation_et_name"
-                    style="@style/Widget.MoneyManager.EditText.CategoryName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/category_name_hint"
@@ -84,7 +81,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="8dp"
                     app:srcCompat="@drawable/ic_arrow_forward"
-                    app:tint="?attr/colorControlActivated" />
+                    app:tint="?attr/colorPrimary" />
             </LinearLayout>
 
             <include
@@ -104,8 +101,9 @@
                 android:layout_marginTop="280dp"
                 android:padding="8dp"
                 android:text="@string/delete"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textColor="?attr/colorAccent"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textColor="?attr/colorError"
+                app:drawableStartCompat="@drawable/ic_delete"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -129,12 +127,14 @@
         tools:listitem="@layout/item_color_picker"
         tools:visibility="visible" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/category_creation_save"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/button_height"
+        android:layout_height="wrap_content"
         android:enabled="false"
         android:text="@string/save"
+        android:layout_marginHorizontal="@dimen/button_margin_horizontal"
+        android:layout_marginVertical="@dimen/button_margin_vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

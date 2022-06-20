@@ -47,7 +47,7 @@ class SplashFragment :
         startForResult.launch(
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
-                .setLogo(R.drawable.ic_money_manager_logo_white)
+                .setLogo(R.drawable.ic_money_manager_logo)
                 .setTheme(R.style.Theme_MoneyManager)
                 .setAvailableProviders(providers)
                 .setIsSmartLockEnabled(false)
