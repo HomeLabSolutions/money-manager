@@ -71,7 +71,6 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
@@ -223,6 +222,13 @@ class StatisticsFragment :
         }
     }
 
+    private fun hideChart() {
+        viewBinding?.run {
+            statisticsPieChart.gone()
+            statisticsLineChart.gone()
+        }
+    }
+
     private fun initStatisticsMenuRv() {
         val layoutManager = LinearLayoutManager(requireContext(), HORIZONTAL, false)
         viewBinding?.run {
@@ -302,7 +308,7 @@ class StatisticsFragment :
                 sb.toString()
             }
         viewBinding?.statisticsPieChart?.setCenterTextColor(
-            ContextCompat.getColor(requireContext(), R.color.control_activated_color)
+            ContextCompat.getColor(requireContext(), R.color.colorPrimary)
         )
         viewBinding?.statisticsPieChart?.invalidate()
     }
@@ -398,14 +404,14 @@ class StatisticsFragment :
             statisticsLineChart.setMaxVisibleValueCount(LINE_CHART_MAX_VISIBLE_VALUE_COUNT)
             statisticsLineChart.description.isEnabled = false
             val xAxis: XAxis = statisticsLineChart.xAxis
-            xAxis.textColor = ContextCompat.getColor(requireContext(), R.color.statistics_line_chart_axis_text_color)
+            xAxis.textColor = ContextCompat.getColor(requireContext(), R.color.colorPrimary)
             xAxis.enableGridDashedLine(
                 LINE_CHART_LINE_LENGTH,
                 LINE_CHART_SPACE_LENGTH_AXIS,
                 LINE_CHART_PHASE
             )
             val yAxis: YAxis = statisticsLineChart.axisLeft
-            yAxis.textColor = ContextCompat.getColor(requireContext(), R.color.statistics_line_chart_axis_text_color)
+            yAxis.textColor = ContextCompat.getColor(requireContext(), R.color.colorPrimary)
             yAxis.enableGridDashedLine(
                 LINE_CHART_LINE_LENGTH,
                 LINE_CHART_SPACE_LENGTH_AXIS,
@@ -432,7 +438,7 @@ class StatisticsFragment :
             lineDataSet.formSize = LINE_CHART_DATA_FORM_SIZE
             lineDataSet.valueTextSize = LINE_CHART_DATA_LABEL_TEXT_SIZE
             lineDataSet.valueTextColor =
-                ContextCompat.getColor(requireContext(), R.color.text_primary_color)
+                ContextCompat.getColor(requireContext(), R.color.colorPrimary)
             lineDataSet.enableDashedHighlightLine(
                 LINE_CHART_LINE_LENGTH,
                 LINE_CHART_SPACE_LENGTH,
@@ -487,10 +493,18 @@ class StatisticsFragment :
 
     private fun showViewStub() {
         emptyViewStub?.root?.show()
+        viewBinding?.run {
+            statisticsDetailedInfo.gone()
+            hideChart()
+        }
     }
 
     private fun hideViewStub() {
         emptyViewStub?.root?.gone()
+        viewBinding?.run {
+            statisticsDetailedInfo.show()
+            showChart()
+        }
     }
 
     companion object {

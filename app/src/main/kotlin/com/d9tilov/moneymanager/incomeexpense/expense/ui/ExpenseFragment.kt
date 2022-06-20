@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
 import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
 import androidx.core.content.ContextCompat
@@ -38,7 +39,6 @@ import com.d9tilov.moneymanager.transaction.ui.callback.TransactionSwipeToDelete
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.math.BigDecimal.ROUND_HALF_UP
@@ -124,23 +124,32 @@ class ExpenseFragment :
                                                 ableToSpendToday.trSum,
                                                 currencyCode()
                                             )
-                                            expenseTodayInfoValue.setColor(
-                                                ContextCompat.getColor(
-                                                    requireContext(),
-                                                    R.color.error_color
-                                                )
+                                            val value = TypedValue()
+                                            requireContext().theme.resolveAttribute(
+                                                R.attr.colorError,
+                                                value,
+                                                true
                                             )
+                                            val backgroundColor = value.data
+                                            expenseTodayInfoValue.setColor(backgroundColor)
                                         }
                                         is TransactionSpendingTodayModel.NORMAL -> {
                                             expenseCanSpendTodayInfoTitle.text =
                                                 getString(R.string.category_expense_info_can_spend_today_title)
                                             expenseTodayInfoValue.run {
                                                 setValue(ableToSpendToday.trSum, currencyCode())
-                                                val color =
-                                                    if (ableToSpendToday.trSum.setScale(DECIMAL_LENGTH, ROUND_HALF_UP).signum() > 0)
-                                                        ContextCompat.getColor(requireContext(), R.color.success_color)
-                                                    else ContextCompat.getColor(requireContext(), R.color.error_color)
-                                                setColor(color)
+                                                val value = TypedValue()
+                                                context.theme.resolveAttribute(
+                                                    if (ableToSpendToday.trSum.setScale(
+                                                            DECIMAL_LENGTH,
+                                                            ROUND_HALF_UP
+                                                        ).signum() > 0
+                                                    ) R.attr.colorPrimary
+                                                    else R.attr.colorError,
+                                                    value,
+                                                    true
+                                                )
+                                                setColor(value.data)
                                             }
                                         }
                                     }

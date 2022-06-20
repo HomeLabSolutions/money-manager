@@ -9,15 +9,10 @@
         android:id="@+id/expense_can_spend_today_info_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_round_fill"
-        android:paddingStart="8dp"
+        style="@style/Widget.MoneyManager.TextView.Info.Label"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="@dimen/standard_left_margin"
-        android:paddingTop="4dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="4dp"
         android:text="@string/category_expense_info_can_spend_today_title"
-        android:textAppearance="?attr/textAppearanceCaption"
         app:layout_constraintBottom_toTopOf="@id/expense_today_info_title"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -43,21 +38,17 @@
         android:id="@+id/expense_today_info_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_round_fill"
-        android:paddingStart="8dp"
-        android:paddingTop="4dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="4dp"
+        style="@style/Widget.MoneyManager.TextView.Info.Label"
         android:text="@string/category_expense_info_today_title"
-        android:textAppearance="?attr/textAppearanceCaption"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/expense_can_spend_today_info_title"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/expense_today_info_approx_sign"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="?attr/colorPrimary"
         android:layout_marginStart="4dp"
         android:text="@string/approx_sign"
         app:layout_constraintBottom_toBottomOf="@+id/expense_today_info_title"
@@ -75,8 +66,8 @@
         app:layout_constraintStart_toEndOf="@+id/expense_today_info_approx_sign"
         app:layout_constraintTop_toTopOf="@+id/expense_today_info_approx_sign"
         app:showShortDecimalPart="true"
-        app:sumTextColor="@color/colorPrimaryLight"
-        app:signTextColor="@color/colorPrimaryLight"
+        app:signTextColor="?attr/colorPrimary"
+        app:sumTextColor="?attr/colorPrimary"
         app:sumTextStyle="?attr/textAppearanceCurrencySumSmall"
         app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
         app:sumTextSize="@dimen/income_expense_info_sum_text_size"
@@ -87,15 +78,10 @@
         android:id="@+id/expense_period_info_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_round_fill"
-        android:paddingStart="8dp"
+        style="@style/Widget.MoneyManager.TextView.Info.Label"
         android:layout_marginTop="8dp"
-        android:paddingTop="4dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="4dp"
         android:text="@string/category_expense_info_period_title"
-        android:textAppearance="?attr/textAppearanceCaption"
-        app:layout_constraintStart_toStartOf="@+id/expense_today_info_title"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/expense_today_info_title" />
 
     <TextView
@@ -104,6 +90,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:text="@string/approx_sign"
+        android:textColor="?attr/colorPrimary"
         app:layout_constraintBottom_toBottomOf="@+id/expense_period_info_title"
         app:layout_constraintStart_toEndOf="@+id/expense_period_info_title"
         app:layout_constraintTop_toTopOf="@+id/expense_period_info_title" />
@@ -123,8 +110,8 @@
         app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
         app:sumTextSize="@dimen/income_expense_info_sum_text_size"
         app:signTextSize="@dimen/income_expense_info_sign_text_size"
-        app:sumTextColor="@color/colorPrimaryLight"
-        app:signTextColor="@color/colorPrimaryLight"
+        app:signTextColor="?attr/colorPrimary"
+        app:sumTextColor="?attr/colorPrimary"
         app:sum="1000" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

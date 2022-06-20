@@ -6,17 +6,11 @@
 
     <TextView
         android:id="@+id/income_period_info_title"
+        style="@style/Widget.MoneyManager.TextView.Info.Label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/background_round_fill"
-        android:paddingStart="8dp"
-        android:layout_marginStart="@dimen/standard_left_margin"
-        android:paddingTop="4dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="4dp"
         android:text="@string/category_income_info_period_title"
-        android:textAppearance="?attr/textAppearanceCaption"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:text="@string/approx_sign"
+        android:textColor="?attr/colorPrimary"
         app:layout_constraintBottom_toBottomOf="@+id/income_period_info_title"
         app:layout_constraintStart_toEndOf="@+id/income_period_info_title"
         app:layout_constraintTop_toTopOf="@+id/income_period_info_title" />
@@ -38,13 +33,13 @@
         android:layout_marginStart="4dp"
         app:signTextSize="@dimen/income_expense_info_sign_text_size"
         app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
-        app:sumTextColor="@color/colorPrimaryLight"
         app:sumTextSize="@dimen/income_expense_info_sum_text_size"
         app:layout_constraintBottom_toBottomOf="@+id/income_period_info_approx_sign"
         app:layout_constraintStart_toEndOf="@+id/income_period_info_approx_sign"
         app:layout_constraintTop_toTopOf="@+id/income_period_info_approx_sign"
         app:showShortDecimalPart="true"
-        app:signTextColor="@color/colorPrimaryLight"
+        app:signTextColor="?attr/colorPrimary"
+        app:sumTextColor="?attr/colorPrimary"
         app:sum="1000"
         app:sumTextStyle="?attr/textAppearanceCurrencySumSmall" />
 

@@ -20,10 +20,10 @@
 
     <TextView
         android:id="@+id/prepopulate_progress_title"
-        style="?attr/textAppearanceCaption"
+        style="?attr/textAppearanceBodySmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="?attr/colorSecondary"
+        android:textColor="?attr/colorPrimary"
         android:padding="4dp"
         app:layout_constraintBottom_toTopOf="@+id/prepopulate_progress"
         app:layout_constraintEnd_toEndOf="@+id/prepopulate_progress"
@@ -39,8 +39,8 @@
         app:lineBarWidth="4dp"
         app:layout_constraintEnd_toStartOf="@+id/prepopulate_back_btn"
         app:layout_constraintStart_toStartOf="parent"
-        app:lineProgressColor="?attr/colorSecondary"
-        app:underLineColor="@color/control_highlight_color" />
+        app:lineProgressColor="?attr/colorPrimary"
+        app:underLineColor="?attr/colorPrimaryContainer" />
 
     <ImageView
         android:id="@+id/prepopulate_back_btn"

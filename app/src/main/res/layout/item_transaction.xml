@@ -26,7 +26,7 @@
         android:layout_marginEnd="4dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textAppearance="?attr/textAppearanceHeadline5"
+        android:textAppearance="?attr/textAppearanceTitleLarge"
         android:textSize="@dimen/income_expense_name_text_size"
         app:layout_constraintBottom_toTopOf="@+id/item_transaction_description"
         app:layout_constraintEnd_toStartOf="@+id/item_transaction_sum"
@@ -39,9 +39,9 @@
         android:id="@+id/item_transaction_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceSubtitle1"
-        android:textColor="@color/tertiary_color"
+        android:textAppearance="?attr/textAppearanceTitleMedium"
         android:visibility="gone"
+        android:textColor="?attr/colorTertiary"
         android:textSize="@dimen/income_expense_name_description_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/item_transaction_category"
@@ -59,6 +59,7 @@
         app:layout_constraintEnd_toStartOf="@+id/item_transaction_icon"
         app:layout_constraintTop_toTopOf="@+id/item_transaction_icon"
         app:srcCompat="@drawable/ic_repeat"
+        app:tint="?attr/colorTertiary"
         tools:visibility="visible" />
 
     <ImageView
@@ -71,7 +72,7 @@
         app:layout_constraintEnd_toEndOf="@+id/item_transaction_regular_icon"
         app:layout_constraintTop_toBottomOf="@+id/item_transaction_regular_icon"
         app:srcCompat="@drawable/ic_not_in_statistics"
-        app:tint="@color/error_color"
+        app:tint="?attr/colorError"
         tools:visibility="visible" />
 
     <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
@@ -83,6 +84,8 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="4dp"
         app:showDecimalPart="true"
+        app:signTextColor="?attr/colorPrimary"
+        app:sumTextColor="?attr/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/item_transaction_usd_sum"
         app:layout_constraintVertical_chainStyle="spread"
         app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
@@ -96,6 +99,8 @@
         android:layout_marginBottom="4dp"
         android:visibility="gone"
         tools:visibility="visible"
+        app:signTextColor="?attr/colorSecondary"
+        app:sumTextColor="?attr/colorSecondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/item_transaction_sum"
         app:layout_constraintTop_toBottomOf="@+id/item_transaction_sum"

@@ -5,12 +5,13 @@
     <item
         android:id="@+id/action_skip"
         android:title="@string/toolbar_menu_skip"
+        app:iconTint="?attr/colorOnPrimaryContainer"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_add"
         android:icon="@drawable/ic_add"
-        android:iconTint="?attr/colorControlActivated"
+        app:iconTint="?attr/colorOnPrimaryContainer"
         android:title=""
         android:visible="false"
         app:showAsAction="ifRoom"

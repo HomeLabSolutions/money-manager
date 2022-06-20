@@ -67,7 +67,7 @@ class CategoryUnitDialog :
                 )
                 categoryDialogCurrentFolder.root.show()
             } else {
-                categoryDialogUnionConfirm.isEnabled = categoryDialogUnionEtName.length() > 0
+                categoryDialogUnionConfirm.isEnabled = categoryDialogUnionEtName.text.toString().isNotEmpty()
                 categoryDialogUnionSubtitle.text = getString(R.string.category_unit_new_name_subtitle)
                 categoryDialogUnionTitle.text = getString(R.string.category_unit_to_group_title)
                 categoryDialogUnionFolder.categoryDialogUnionItem1.setImageDrawable(firstDrawable)

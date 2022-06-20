@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="4dp"
-        android:textAppearance="?attr/textAppearanceHeadline5"
+        android:textAppearance="?attr/textAppearanceTitleLarge"
         android:textSize="@dimen/statistics_item_text_size"
         app:layout_constraintBottom_toBottomOf="@+id/item_statistics_icon"
         app:layout_constraintStart_toEndOf="@+id/item_statistics_icon"
@@ -43,7 +43,7 @@
         app:layout_constraintEnd_toEndOf="@+id/item_statistics_vertical_guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:lineBarWidth="@dimen/goal_progress_line_bar_width"
-        app:lineProgressColor="@color/goal_active_progress_line_color"
+        app:lineProgressColor="?attr/colorPrimary"
         app:underLineColor="@android:color/transparent" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -66,6 +66,8 @@
         app:showDecimalPart="true"
         app:signTextSize="@dimen/statistics_bar_chart_sign_text_size"
         app:sumTextSize="@dimen/statistics_bar_chart_sum_text_size"
+        app:signTextColor="?attr/colorPrimary"
+        app:sumTextColor="?attr/colorPrimary"
         app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
         app:sumTextStyle="?attr/textAppearanceCurrencySumSmall"
         tools:sumText="15000" />
@@ -74,8 +76,8 @@
         android:id="@+id/item_statistics_percent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceCaption"
-        android:textColor="@color/colorPrimaryLight"
+        android:textAppearance="?attr/textAppearanceBodySmall"
+        android:textColor="?attr/colorSecondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/item_statistics_vertical_guideline"

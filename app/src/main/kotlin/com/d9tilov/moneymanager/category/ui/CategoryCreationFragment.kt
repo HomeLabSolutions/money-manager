@@ -38,7 +38,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class CategoryCreationFragment :
-    BaseFragment<CategoryCreationNavigator, FragmentCreationCategoryBinding>(FragmentCreationCategoryBinding::inflate, R.layout.fragment_creation_category),
+    BaseFragment<CategoryCreationNavigator, FragmentCreationCategoryBinding>
+        (FragmentCreationCategoryBinding::inflate, R.layout.fragment_creation_category),
     CategoryCreationNavigator {
 
     private val args by navArgs<CategoryCreationFragmentArgs>()

@@ -5,7 +5,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -24,7 +23,6 @@ import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentGoalsBinding
-import com.d9tilov.moneymanager.databinding.LayoutEmptyListGoalsPlaceholderBinding
 import com.d9tilov.moneymanager.goal.domain.entity.Goal
 import com.d9tilov.moneymanager.goal.domain.entity.GoalDestination
 import com.d9tilov.moneymanager.goal.ui.dialog.GoalRemoveDialog.Companion.ARG_UNDO_REMOVE_LAYOUT_DISMISS
@@ -34,7 +32,6 @@ import com.d9tilov.moneymanager.prepopulate.ui.ControlsClicked
 import com.d9tilov.moneymanager.prepopulate.ui.PrepopulateActivity
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -50,7 +47,6 @@ class GoalsFragment :
     private val destination by lazy { args.destination }
 
     private var toolbar: MaterialToolbar? = null
-    private var emptyViewStub: LayoutEmptyListGoalsPlaceholderBinding? = null
     private val goalAdapter: GoalAdapter = GoalAdapter(
         itemClickListener = { item, _ ->
             val action = GoalsFragmentDirections.toGoalsCreationDest(item)
@@ -72,7 +68,6 @@ class GoalsFragment :
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         viewBinding?.run {
-            emptyViewStub = goalsEmptyPlaceholder
             if (destination != GoalDestination.PrepopulateScreen) {
                 goalsSave.show()
             }
@@ -101,11 +96,9 @@ class GoalsFragment :
                     launch { viewModel.budget.collect { goalsSumPerPeriod.setValue(it.saveSum, currencyCode()) } }
                     launch {
                         viewModel.goals.collect {
-                            if (it.isEmpty()) {
+                            if (it.isEmpty())
                                 goalsRvList.gone()
-                                showViewStub()
-                            } else {
-                                hideViewStub()
+                            else {
                                 goalsRvList.show()
                                 goalAdapter.updateItems(it)
                             }
@@ -153,29 +146,6 @@ class GoalsFragment :
     private fun openCreationGoalScreen(goal: Goal? = null) {
         val action = GoalsFragmentDirections.toGoalsCreationDest(goal)
         findNavController().navigate(action)
-    }
-
-    private fun showViewStub() {
-        emptyViewStub?.let {
-            it.root.show()
-            it.emptyPlaceholderIcon.setImageDrawable(
-                ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.ic_goal_placeholder
-                )
-            )
-            it.emptyPlaceholderTitle.text = getString(R.string.goals_empty_placeholder_title)
-            val stubSubTitle = it.emptyPlaceholderSubtitle
-            stubSubTitle.show()
-            stubSubTitle.text = getString(R.string.goals_empty_placeholder_subtitle)
-            val addButton = it.emptyPlaceholderAdd
-            addButton.show()
-            addButton.setOnClickListener { openCreationGoalScreen() }
-        }
-    }
-
-    private fun hideViewStub() {
-        emptyViewStub?.root?.gone()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

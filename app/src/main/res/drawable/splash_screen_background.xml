@@ -3,8 +3,7 @@
     android:opacity="opaque">
 
     <item android:drawable="?attr/colorPrimary" />
-
     <item
-        android:drawable="@drawable/ic_money_manager_logo_white"
+        android:drawable="@drawable/ic_money_manager_logo"
         android:gravity="center" />
 </layer-list>

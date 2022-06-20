@@ -104,13 +104,13 @@
 
     <string name="category_edit_title">Редактирование группы категорий</string>
     <string name="category_delete_title">Удаление категории</string>
-    <string name="category_delete_sub_title">Вы действительно хотите удалить категорию \"%1$s\"\?\n\nТак же будут удалены все операции с этой статьёй</string>
-    <string name="category_delete_group_sub_title">Вы действительно хотите удалить категорию \"%1$s\"\?\n\nТак же будут удалены все подкатегории и операции со статьей</string>
+    <string name="category_delete_sub_title">Так же будут удалены все операции с этой статьёй</string>
+    <string name="category_delete_group_sub_title">Так же будут удалены все подкатегории и операции со статьей</string>
     <string name="category_empty_placeholder_title">Список категорий пуст</string>
     <string name="category_empty_placeholder_subtitle">Добавьте хотя бы одну категорию</string>
 
     <string name="sub_category_delete_title">Удаление подкатегории</string>
-    <string name="sub_category_delete_subtitle">Вы действительно хотите удалить подкатегорию \"%1$s\"\?\n\nТак же будут удалены все операции с этой статьей</string>
+    <string name="sub_category_delete_subtitle">Так же будут удалены все операции с этой статьей</string>
     <string name="sub_category_delete">Удалить</string>
     <string name="sub_category_delete_from_group">Удалить из группы</string>
 
@@ -210,7 +210,6 @@
     <string name="statistics_menu_category_type_parent_title">Категории</string>
     <string name="statistics_menu_category_type_child_title">Подкатегории</string>
 
-    <string name="billing_purchase_type">Типы подписок</string>
     <string name="billing_purchase_quarterly">Квартальная</string>
     <string name="billing_purchase_annual">Годовая</string>
     <string name="billing_purchase_quarterly_price">%1$s%2$s %3$s/3 месяца</string>

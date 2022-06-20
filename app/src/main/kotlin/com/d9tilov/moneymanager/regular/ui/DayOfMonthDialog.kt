@@ -72,9 +72,7 @@ class DayOfMonthDialog :
         val newView = getViewFromDay(day)
         val oldView = getViewFromDay(viewModel.dayOfMonth)
         oldView?.isSelected = false
-        oldView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.control_activated_color))
         newView?.isSelected = true
-        newView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
         viewModel.dayOfMonth = day
     }
 

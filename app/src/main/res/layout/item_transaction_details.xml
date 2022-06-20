@@ -20,11 +20,11 @@
 
     <TextView
         android:id="@+id/item_transaction_date"
-        style="?attr/textAppearanceCaption"
+        style="?attr/textAppearanceBodySmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingVertical="2dp"
-        android:textColor="?attr/colorControlActivated"
+        android:textColor="?attr/colorTertiary"
         android:textSize="@dimen/statistics_details_date_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/item_transaction_icon"
@@ -39,8 +39,9 @@
         android:layout_marginEnd="4dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textAppearance="?attr/textAppearanceHeadline5"
+        android:textAppearance="?attr/textAppearanceTitleLarge"
         android:textSize="@dimen/income_expense_name_text_size"
+        android:textColor="?attr/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/item_transaction_description"
         app:layout_constraintEnd_toStartOf="@+id/item_transaction_sum"
         app:layout_constraintStart_toEndOf="@+id/item_transaction_icon"
@@ -52,10 +53,10 @@
         android:id="@+id/item_transaction_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceSubtitle1"
-        android:textColor="@color/tertiary_color"
+        android:textAppearance="?attr/textAppearanceTitleMedium"
         android:textSize="@dimen/income_expense_name_description_text_size"
         android:visibility="gone"
+        android:textColor="?attr/colorTertiary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/item_transaction_category"
         app:layout_constraintTop_toBottomOf="@+id/item_transaction_category"
@@ -84,7 +85,7 @@
         app:layout_constraintEnd_toEndOf="@+id/item_transaction_regular_icon"
         app:layout_constraintTop_toBottomOf="@+id/item_transaction_regular_icon"
         app:srcCompat="@drawable/ic_not_in_statistics"
-        app:tint="@color/error_color"
+        app:tint="?attr/colorError"
         tools:visibility="visible" />
 
     <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
@@ -98,6 +99,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="spread"
         app:showDecimalPart="true"
+        app:signTextColor="?attr/colorPrimary"
+        app:sumTextColor="?attr/colorPrimary"
         app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
         app:sumTextStyle="?attr/textAppearanceCurrencySumSmall"
         tools:sumText="15000" />
@@ -113,9 +116,9 @@
         app:layout_constraintTop_toBottomOf="@+id/item_transaction_sum"
         app:layout_constraintVertical_chainStyle="spread"
         app:showDecimalPart="true"
-        app:signTextColor="@color/colorPrimaryLight"
+        app:signTextColor="?attr/colorSecondary"
+        app:sumTextColor="?attr/colorSecondary"
         app:signTextStyle="?attr/textAppearanceCurrencySignExtraSmall"
-        app:sumTextColor="@color/colorPrimaryLight"
         app:sumTextStyle="?attr/textAppearanceCurrencySumExtraSmall"
         tools:sumText="15000"
         tools:visibility="visible" />

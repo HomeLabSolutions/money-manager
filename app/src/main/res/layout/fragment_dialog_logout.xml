@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/Theme.MoneyManager.Material.Alert.Dialog"
+
     android:layout_width="280dp"
     android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/logout_dialog_title"
-         style="@style/Theme.MoneyManager.MaterialComponents.Title.Text"
+        style="@style/Theme.MoneyManager.MaterialDialog.Title.Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="start"
         android:paddingStart="@dimen/standard_left_margin"
         android:paddingTop="16dp"
         android:paddingEnd="@dimen/standard_right_margin"
         android:text="@string/logout_dialog_title"
-        android:textColor="@color/secondary_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/logout_dialog_subtitle"
-
+        style="@style/Theme.MoneyManager.MaterialDialog.Body.Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/standard_left_margin"
@@ -31,10 +29,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logout_dialog_title" />
 
-    <com.google.android.material.button.MaterialButton
+    <TextView
         android:id="@+id/logout_button_cancel"
-
         android:layout_width="0dp"
+        style="@style/Theme.MoneyManager.MaterialDialog.Button.Text"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:layout_marginEnd="8dp"
@@ -42,9 +40,9 @@
         app:layout_constraintEnd_toStartOf="@+id/logout_button_confirm"
         app:layout_constraintTop_toBottomOf="@+id/logout_dialog_subtitle" />
 
-    <com.google.android.material.button.MaterialButton
+    <TextView
         android:id="@+id/logout_button_confirm"
-
+        style="@style/Theme.MoneyManager.MaterialDialog.Button.Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"

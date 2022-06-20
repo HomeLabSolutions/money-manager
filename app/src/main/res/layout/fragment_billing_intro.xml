@@ -29,26 +29,13 @@
         android:id="@+id/settings_billing_intro_dots"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:dotsColor="@color/control_activated_color"
-        app:dotsStrokeColor="@color/control_activated_color"
+        app:dotsColor="?attr/colorPrimary"
+        app:dotsStrokeColor="?attr/colorPrimary"
         app:dotsSize="12dp"
         app:layout_constraintBottom_toTopOf="@+id/settings_billing_intro_horizontal_guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:stiffness="300" />
-
-    <TextView
-        android:id="@+id/settings_billing_intro_subscription_types_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/billing_purchase_type"
-        android:textAppearance="?attr/textAppearanceHeadline5"
-        android:textColor="@color/header_color"
-        android:textSize="@dimen/billing_subscription_title_text_size"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/settings_billing_intro_horizontal_guideline" />
 
     <RadioGroup
         android:id="@+id/settings_billing_intro_radio_group"
@@ -57,7 +44,7 @@
         android:layout_marginStart="@dimen/standard_left_margin"
         app:layout_constraintBottom_toTopOf="@+id/settings_billing_intro_buy"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_billing_intro_subscription_types_title">
+        app:layout_constraintTop_toBottomOf="@+id/settings_billing_intro_dots">
 
         <RadioButton
             android:id="@+id/settings_billing_intro_radio_quarterly"
@@ -89,7 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/standard_right_margin"
         android:layout_marginBottom="4dp"
-        android:textColor="@color/button_normal_color_start_shadowed"
+        android:textColor="?attr/colorSecondary"
         app:layout_constraintBottom_toBottomOf="@+id/settings_billing_intro_spacer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/settings_billing_intro_radio_group"
@@ -101,7 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="@dimen/standard_right_margin"
-        android:textColor="@color/button_normal_color_start_shadowed"
+        android:textColor="?attr/colorSecondary"
         app:layout_constraintBottom_toBottomOf="@+id/settings_billing_intro_radio_group"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/settings_billing_intro_spacer"
@@ -114,10 +101,12 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.55" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/settings_billing_intro_buy"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/button_height"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/button_margin_horizontal"
+        android:layout_marginVertical="@dimen/button_margin_vertical"
         android:text="@string/buy"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
