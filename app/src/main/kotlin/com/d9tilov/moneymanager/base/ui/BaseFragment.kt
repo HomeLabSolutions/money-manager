@@ -96,8 +96,8 @@ abstract class BaseFragment<N : BaseNavigator, VB : ViewBinding>(
     protected fun showSnackBar(text: String, gravityCenter: Boolean = false) {
         baseActivity?.let {
             val backgroundTint = if (snackBarBackgroundTint != 0) {
-                ContextCompat.getColor(it, snackBarBackgroundTint) 
-            }else 0
+                ContextCompat.getColor(it, snackBarBackgroundTint)
+            } else 0
             it.showSnackBar(text, backgroundTint, snackBarAnchorView, gravityCenter)
         }
     }

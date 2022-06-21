@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.core.util
+package com.d9tilov.moneymanager.core.util // ktlint-disable filename
 
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.LONG_DECIMAL_LENGTH
 import java.math.BigDecimal
