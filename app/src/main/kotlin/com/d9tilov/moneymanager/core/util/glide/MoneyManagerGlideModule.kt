@@ -12,7 +12,6 @@ import com.bumptech.glide.request.RequestOptions
 class MoneyManagerGlideModule : AppGlideModule() {
 
     override fun applyOptions(context: Context, builder: GlideBuilder) {
-
         val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val defaultOptions = RequestOptions()
             .format(if (activityManager.isLowRamDevice) DecodeFormat.PREFER_RGB_565 else DecodeFormat.PREFER_ARGB_8888)

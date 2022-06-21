@@ -23,7 +23,8 @@ import java.math.BigDecimal
 )
 data class RegularTransactionDbModel(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id") val id: Long,
+    @ColumnInfo(name = "id")
+    val id: Long,
     @ColumnInfo(name = "clientId", index = true) val clientId: String,
     @ColumnInfo(name = "type") val type: TransactionType,
     @ColumnInfo(name = "sum") val sum: BigDecimal,

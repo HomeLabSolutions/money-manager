@@ -24,13 +24,14 @@ class BudgetLocalSource(
         if (currentUserId == null) throw WrongUidException()
         else {
             val budget = budgetDao.get(currentUserId).firstOrNull()
-            if (budget == null)
+            if (budget == null) {
                 budgetDao.insert(
                     BudgetData.EMPTY.copy(
                         clientId = currentUserId,
                         currencyCode = preferencesStore.currentCurrency.first().code
                     ).toDbModel()
                 )
+            }
         }
     }
 

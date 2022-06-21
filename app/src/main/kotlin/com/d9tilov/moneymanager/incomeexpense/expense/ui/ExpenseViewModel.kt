@@ -59,7 +59,7 @@ class ExpenseViewModel @Inject constructor(
                     else if (before != null && after != null && !before.date.isSameDay(after.date)) {
                         val header = TransactionHeader(
                             after.date.getEndOfDay(),
-                            after.currencyCode,
+                            after.currencyCode
                         )
                         header
                     } else null
@@ -100,7 +100,7 @@ class ExpenseViewModel @Inject constructor(
 
     val expenseSpendingInfoPremium: Flow<ExpenseInfoUiModel?> = combine(
         billingInteractor.isPremium(),
-        _expenseSpendingInfo,
+        _expenseSpendingInfo
     ) { isPremium, info ->
         if (isPremium) info
         else null

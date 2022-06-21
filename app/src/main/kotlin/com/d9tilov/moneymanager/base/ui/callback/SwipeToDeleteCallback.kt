@@ -66,7 +66,6 @@ abstract class SwipeToDeleteCallback(val context: Context) :
         actionState: Int,
         isCurrentlyActive: Boolean
     ) {
-
         val itemView = viewHolder.itemView
         val itemHeight = itemView.bottom - itemView.top
         val isCanceled = dX == 0f && !isCurrentlyActive

@@ -21,7 +21,8 @@ import java.math.BigDecimal
 )
 data class GoalDbModel(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id") val id: Long,
+    @ColumnInfo(name = "id")
+    val id: Long,
     @ColumnInfo(name = "clientId", index = true) val clientId: String,
     @ColumnInfo(name = "currency") val currency: String,
     @ColumnInfo(name = "name") val name: String,

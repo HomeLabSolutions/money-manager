@@ -16,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class CategoryRemoveDialog :
     BaseDialogFragment<RemoveCategoryDialogNavigator,
-            FragmentDialogRemoveBinding>(FragmentDialogRemoveBinding::inflate),
+        FragmentDialogRemoveBinding>(FragmentDialogRemoveBinding::inflate),
     RemoveCategoryDialogNavigator {
 
     private val args by navArgs<CategoryRemoveDialogArgs>()
@@ -33,7 +33,7 @@ class CategoryRemoveDialog :
             removeDialogSubtitle.text =
                 getString(
                     if (category.children.isEmpty()) R.string.category_delete_sub_title
-                    else R.string.category_delete_group_sub_title,
+                    else R.string.category_delete_group_sub_title
                 )
             removeButtonConfirm.setOnClickListener { viewModel.remove(category) }
             removeButtonCancel.setOnClickListener { dismiss() }

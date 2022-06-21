@@ -1,8 +1,6 @@
 package com.d9tilov.moneymanager.transaction.ui
 
 import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels

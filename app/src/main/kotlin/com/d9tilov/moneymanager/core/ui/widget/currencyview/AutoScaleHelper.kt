@@ -36,7 +36,8 @@ class AutoScaleHelper(private val currencyView: CurrencyView) {
         min(
             valueTextView.context.resources.displayMetrics.scaledDensity * PRECISION,
             signTextView.context.resources.displayMetrics.scaledDensity * PRECISION
-        ), prefixTextView.context.resources.displayMetrics.scaledDensity * PRECISION
+        ),
+        prefixTextView.context.resources.displayMetrics.scaledDensity * PRECISION
     )
     private val valueTextSize = valueTextView.textSize
     private val signTextSize = signTextView.textSize
@@ -93,13 +94,20 @@ class AutoScaleHelper(private val currencyView: CurrencyView) {
         prefixPaint.textSize = size
         valuePaint.textSize = size
         signPaint.textSize = size
-        if ((prefixPaint.measureText(prefixTextView.text, 0, prefixTextView.text.length) +
-                    valuePaint.measureText(text, 0, text.length) +
-                    currencyView.marginBetweenCurrencySymbol +
-                    signPaint.measureText(signText, 0, signText.length)) > targetWidth
+        if ((
+            prefixPaint.measureText(prefixTextView.text, 0, prefixTextView.text.length) +
+                valuePaint.measureText(text, 0, text.length) +
+                currencyView.marginBetweenCurrencySymbol +
+                signPaint.measureText(signText, 0, signText.length)
+            ) > targetWidth
         ) {
             size = getAutoScaleTextSize(
-                prefixText, text, signText, targetWidth.toFloat(), 0f, high,
+                prefixText,
+                text,
+                signText,
+                targetWidth.toFloat(),
+                0f,
+                high,
                 displayMetrics
             )
         }
@@ -123,36 +131,49 @@ class AutoScaleHelper(private val currencyView: CurrencyView) {
     ): Float {
         val mid = (low + high) / 2
         prefixPaint.textSize = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_PX, mid,
+            TypedValue.COMPLEX_UNIT_PX,
+            mid,
             displayMetrics
         )
         valuePaint.textSize = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_PX, mid,
+            TypedValue.COMPLEX_UNIT_PX,
+            mid,
             displayMetrics
         )
         signPaint.textSize = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_PX, mid,
+            TypedValue.COMPLEX_UNIT_PX,
+            mid,
             displayMetrics
         )
 
         val maxLineWidth =
             prefixPaint.measureText(prefixText, 0, prefixText.length) +
-                    valuePaint.measureText(valueText, 0, valueText.length) +
-                    currencyView.marginBetweenCurrencySymbol +
-                    signPaint.measureText(signText, 0, signText.length)
+                valuePaint.measureText(valueText, 0, valueText.length) +
+                currencyView.marginBetweenCurrencySymbol +
+                signPaint.measureText(signText, 0, signText.length)
         return when {
             high - low < PRECISION -> {
                 low
             }
             maxLineWidth > targetWidth -> {
                 getAutoScaleTextSize(
-                    prefixText, valueText, signText, targetWidth, low, mid,
+                    prefixText,
+                    valueText,
+                    signText,
+                    targetWidth,
+                    low,
+                    mid,
                     displayMetrics
                 )
             }
             maxLineWidth < targetWidth -> {
                 getAutoScaleTextSize(
-                    prefixText, valueText, signText, targetWidth, mid, high,
+                    prefixText,
+                    valueText,
+                    signText,
+                    targetWidth,
+                    mid,
+                    high,
                     displayMetrics
                 )
             }

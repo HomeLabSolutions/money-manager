@@ -51,7 +51,7 @@ object Versions {
     const val stetho = "1.5.1"
     const val multidex = "2.0.1"
     const val timber = "5.0.1"
-    const val ktlint = "0.45.2"
+    const val ktlint = "0.46.0"
     const val detekt = "1.20.0"
 
     const val datastore = "1.0.0"

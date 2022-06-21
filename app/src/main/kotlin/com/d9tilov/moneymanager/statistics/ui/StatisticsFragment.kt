@@ -168,9 +168,9 @@ class StatisticsFragment :
                                     is ResultOf.Success -> {
                                         val list = result.data
                                         val newList = list.map { item ->
-                                            if (item.category.children.isNotEmpty())
+                                            if (item.category.children.isNotEmpty()) {
                                                 item.copy(category = item.category.copy(color = item.category.children[0].color))
-                                            else item
+                                            } else item
                                         }
                                         statisticsBarChartAdapter.updateItems(newList)
                                         statisticsSpentInPeriodSum.setValue(newList.sumOf { it.sum }, viewModel.currencyType.currencyCode)
@@ -365,9 +365,9 @@ class StatisticsFragment :
                 .map { tr ->
                     val categoryName = tr.category.name
                     val displayName = if (tr.percent > PERCENT_LIMIT_TO_SHOW_LABEL) {
-                        if (categoryName.length > MAX_CATEGORY_NAME_LENGTH)
+                        if (categoryName.length > MAX_CATEGORY_NAME_LENGTH) {
                             "${categoryName.dropLast(categoryName.length - MAX_CATEGORY_NAME_LENGTH)}..."
-                        else categoryName
+                        } else categoryName
                     } else ""
                     PieEntry(
                         tr.sum.toFloat(),

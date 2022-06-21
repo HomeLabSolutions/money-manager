@@ -170,7 +170,8 @@ class StickyHeaderItemDecorator<T : Any>(private val adapter: StickyAdapter<T, R
                         )
                         currentStickyHolder!!.itemView.measure(childWidthSpec, childHeightSpec)
                         currentStickyHolder!!.itemView.layout(
-                            0, 0,
+                            0,
+                            0,
                             currentStickyHolder!!.itemView.measuredWidth,
                             currentStickyHolder!!.itemView.measuredHeight
                         )

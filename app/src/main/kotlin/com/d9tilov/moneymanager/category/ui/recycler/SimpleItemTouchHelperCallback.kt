@@ -56,7 +56,6 @@ class SimpleItemTouchHelperCallback(
         isCurrentlyActive: Boolean
     ) {
         if (actionState == ItemTouchHelper.ACTION_STATE_DRAG && isCurrentlyActive) {
-
             // Here you are notified that the drag operation is in progress
             clearBackground()
             val itemActualYPosition = viewHolder.itemView.top + dY + viewHolder.itemView.height / 2
@@ -94,11 +93,9 @@ class SimpleItemTouchHelperCallback(
             draggedItemPosition = viewHolder.bindingAdapterPosition
         }
         if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
-
             // Here you are notified that the drag operation began
             clearBackground()
         } else if (actionState == ItemTouchHelper.ACTION_STATE_IDLE) {
-
             // Here you are notified that the last operation ended
             if (folder != null) {
                 clearBackground()
