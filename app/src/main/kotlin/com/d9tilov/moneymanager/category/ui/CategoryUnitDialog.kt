@@ -77,11 +77,11 @@ class CategoryUnitDialog :
                 categoryDialogUnionFolder.root.show()
             }
             categoryDialogUnionConfirm.setOnClickListener {
-                if (secondCategory.children.isEmpty() && categoryDialogUnionEtName.text.toString().isEmpty())
+                if (secondCategory.children.isEmpty() && categoryDialogUnionEtName.text.toString().isEmpty()) {
                     showError(CategoryException.CategoryEmptyNameException())
-                else if (secondCategory.children.isNotEmpty())
+                } else if (secondCategory.children.isNotEmpty()) {
                     viewModel.addToGroup(firstCategory, secondCategory)
-                else viewModel.createGroup(firstCategory, secondCategory, createUnionCategory())
+                } else viewModel.createGroup(firstCategory, secondCategory, createUnionCategory())
             }
             categoryDialogUnionEtName.onChange { text ->
                 val isNameEmpty = text.isEmpty()

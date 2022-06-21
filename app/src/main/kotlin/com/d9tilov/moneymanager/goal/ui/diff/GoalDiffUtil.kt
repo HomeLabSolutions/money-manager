@@ -5,7 +5,7 @@ import com.d9tilov.moneymanager.goal.domain.entity.Goal
 
 class GoalDiffUtil(
     private val oldGoalData: List<Goal>,
-    private val newGoalData: List<Goal>,
+    private val newGoalData: List<Goal>
 ) : DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =

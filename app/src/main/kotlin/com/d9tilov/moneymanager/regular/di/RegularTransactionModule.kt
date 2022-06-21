@@ -28,7 +28,7 @@ class RegularTransactionModule {
 
     @Provides
     fun provideRegularTransactionRepo(
-        regularTransactionSource: RegularTransactionSource,
+        regularTransactionSource: RegularTransactionSource
     ): RegularTransactionRepo = RegularTransactionDataRepo(regularTransactionSource)
 
     @Provides

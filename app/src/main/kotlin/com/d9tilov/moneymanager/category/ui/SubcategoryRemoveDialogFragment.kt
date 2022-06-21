@@ -15,8 +15,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SubcategoryRemoveDialogFragment :
     BaseDialogFragment<
-            RemoveSubCategoryDialogNavigator,
-            FragmentDialogTripleRemoveBinding>(FragmentDialogTripleRemoveBinding::inflate),
+        RemoveSubCategoryDialogNavigator,
+        FragmentDialogTripleRemoveBinding>(FragmentDialogTripleRemoveBinding::inflate),
     RemoveSubCategoryDialogNavigator {
 
     private val args by navArgs<SubcategoryRemoveDialogFragmentArgs>()

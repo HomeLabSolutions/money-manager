@@ -99,9 +99,8 @@ abstract class BaseRegularIncomeExpenseFragment<N : BaseRegularIncomeExpenseNavi
             )
             it.emptyPlaceholderTitle.text =
                 getString(
-                    if (transactionType.isIncome())
-                        R.string.transaction_empty_placeholder_regular_income_title else
-                        R.string.transaction_empty_placeholder_regular_expense_title
+                    if (transactionType.isIncome()) R.string.transaction_empty_placeholder_regular_income_title
+                    else R.string.transaction_empty_placeholder_regular_expense_title
                 )
             it.emptyPlaceholderSubtitle.show()
         }

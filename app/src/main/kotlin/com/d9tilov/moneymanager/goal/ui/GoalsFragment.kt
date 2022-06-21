@@ -96,9 +96,9 @@ class GoalsFragment :
                     launch { viewModel.budget.collect { goalsSumPerPeriod.setValue(it.saveSum, currencyCode()) } }
                     launch {
                         viewModel.goals.collect {
-                            if (it.isEmpty())
+                            if (it.isEmpty()) {
                                 goalsRvList.gone()
-                            else {
+                            } else {
                                 goalsRvList.show()
                                 goalAdapter.updateItems(it)
                             }

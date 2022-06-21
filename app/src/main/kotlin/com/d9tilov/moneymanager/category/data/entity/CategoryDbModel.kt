@@ -14,13 +14,14 @@ import com.d9tilov.moneymanager.user.data.entity.UserDbModel
             entity = UserDbModel::class,
             parentColumns = ["uid"],
             childColumns = ["clientId"],
-            onDelete = ForeignKey.CASCADE,
+            onDelete = ForeignKey.CASCADE
         )
     ]
 )
 data class CategoryDbModel(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id") val id: Long,
+    @ColumnInfo(name = "id")
+    val id: Long,
     @ColumnInfo(name = "clientId", index = true) val uid: String,
     @ColumnInfo(name = "parentId") val parentId: Long,
     @ColumnInfo(name = "type") val type: TransactionType,

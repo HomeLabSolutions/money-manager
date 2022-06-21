@@ -30,8 +30,9 @@ fun showLoadingDialog(context: Context, rootView: View?): ProgressBar {
 }
 
 fun hideLoadingDialog(rootView: ViewGroup?, parentView: View?) {
-    if (rootView == null || parentView == null)
+    if (rootView == null || parentView == null) {
         return
+    }
     rootView.removeView(parentView)
 }
 

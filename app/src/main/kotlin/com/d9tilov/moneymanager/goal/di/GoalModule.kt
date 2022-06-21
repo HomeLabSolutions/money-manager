@@ -23,7 +23,7 @@ class GoalModule {
     @Provides
     fun provideGoalSource(
         preferencesStore: PreferencesStore,
-        appDatabase: AppDatabase,
+        appDatabase: AppDatabase
     ): GoalSource = GoalLocalSource(preferencesStore, appDatabase.goalDao())
 
     @Provides

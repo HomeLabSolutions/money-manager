@@ -14,7 +14,6 @@ class PrepopulateDataManager @Inject constructor(private val context: Context) {
 
     @Suppress("MagicNumber")
     fun createDefaultExpenseCategories(): List<PrepopulateCategory> {
-
         return listOf(
             createCategory(
                 1,

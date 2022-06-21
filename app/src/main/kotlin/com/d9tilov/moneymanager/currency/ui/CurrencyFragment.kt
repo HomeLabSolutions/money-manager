@@ -100,9 +100,9 @@ class CurrencyFragment :
                                         )
                                     }
                                         .map { currency ->
-                                            if (currencyCode != null)
+                                            if (currencyCode != null) {
                                                 currency.copy(isBase = (currencyCode == currency.code))
-                                            else currency
+                                            } else currency
                                         }
                                 currencyAdapter.updateItems(sortedList)
                                 val checkedIndex = sortedList.indexOfFirst { it.isBase }

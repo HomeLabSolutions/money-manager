@@ -109,12 +109,12 @@ class ProfileFragment :
                             } else {
                                 profileSettings.profileSettingsPremium.text =
                                     getString(R.string.settings_subscription_premium_title)
-                                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+                                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                                     profileSettings.profileSettingsPremium.setTextAppearance(
                                         requireContext(),
                                         R.style.Widget_MoneyManager_TextView_PremiumLabel
                                     )
-                                else profileSettings.profileSettingsPremium.setTextAppearance(R.style.Widget_MoneyManager_TextView_PremiumLabel)
+                                } else profileSettings.profileSettingsPremium.setTextAppearance(R.style.Widget_MoneyManager_TextView_PremiumLabel)
                                 profileSettings.profileSettingsPremium.background = ContextCompat.getDrawable(requireContext(), R.drawable.background_round_corner_premium)
                             }
                         }

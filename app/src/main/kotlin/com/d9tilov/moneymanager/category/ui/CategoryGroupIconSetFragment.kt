@@ -23,7 +23,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class CategoryGroupIconSetFragment :
     BaseFragment<CategoryGroupSetNavigator, FragmentGroupCategoryIconSetBinding>(
-        FragmentGroupCategoryIconSetBinding::inflate, R.layout.fragment_group_category_icon_set
+        FragmentGroupCategoryIconSetBinding::inflate,
+        R.layout.fragment_group_category_icon_set
     ),
     CategoryGroupSetNavigator {
 

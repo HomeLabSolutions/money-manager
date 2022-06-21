@@ -31,8 +31,9 @@ class CategoryAdapter(private val itemClickListener: OnItemClickListener<Categor
             LayoutInflater.from(parent.context),
             parent,
             false
-        ) else
+        ) else {
             ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        }
         val viewHolder = CategoryViewHolder(viewBinding)
         viewBinding.root.setOnClickListener {
             val adapterPosition = viewHolder.bindingAdapterPosition
