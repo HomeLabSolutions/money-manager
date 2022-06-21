@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.core.util
+package com.d9tilov.moneymanager.core.util // ktlint-disable filename
 
 import android.content.Context
 import android.net.ConnectivityManager

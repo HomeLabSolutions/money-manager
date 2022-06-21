@@ -42,7 +42,6 @@ import com.d9tilov.moneymanager.user.data.entity.UserDbModel
     ModelTypeConverter::class,
     LocationConverter::class
 )
-
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
