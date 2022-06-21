@@ -94,27 +94,34 @@ android {
     val ktlint by configurations.creating
 
     dependencies {
-        ktlint(Deps.ktlint)
+        ktlint(Deps.ktlint) {
+            attributes {
+                attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
+            }
+        }
     }
 
-    tasks.register<JavaExec>("ktlint") {
-        group = "verification"
+    val outputDir = "${project.buildDir}/reports/ktlint/"
+    val inputFiles = project.fileTree(mapOf("dir" to "src", "include" to "**/*.kt"))
+
+    val ktlintCheck by tasks.creating(JavaExec::class) {
+        inputs.files(inputFiles)
+        outputs.dir(outputDir)
+
         description = "Check Kotlin code style."
         classpath = ktlint
-        mainClass.set("com.github.shyiko.ktlint.Main")
-        args("--android", "src/**/*.kt")
+        mainClass.set("com.pinterest.ktlint.Main")
+        args = listOf("src/**/*.kt")
     }
 
-    tasks.named("check") {
-        dependsOn(ktlint)
-    }
+    val ktlintFormat by tasks.creating(JavaExec::class) {
+        inputs.files(inputFiles)
+        outputs.dir(outputDir)
 
-    tasks.register<JavaExec>("ktlintFormat") {
-        group = "formatting"
         description = "Fix Kotlin code style deviations."
         classpath = ktlint
-        mainClass.set("com.github.shyiko.ktlint.Main")
-        args("--android", "-F", "src/**/*.kt")
+        mainClass.set("com.pinterest.ktlint.Main")
+        args = listOf("-F", "src/**/*.kt")
     }
 
     packagingOptions {
@@ -175,7 +182,6 @@ dependencies {
     implementation(Deps.firebaseStorage)
 
     implementation(Deps.hilt)
-    kapt(Deps.hiltCompiler)
     kapt(Deps.hiltAndroidCompiler)
 
     implementation(Deps.navigation)

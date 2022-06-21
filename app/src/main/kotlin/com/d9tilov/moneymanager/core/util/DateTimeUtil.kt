@@ -50,7 +50,8 @@ fun LocalDateTime.toBudgetCreatedDate(): String {
 fun currentDateTime(): LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 fun currentDate(): LocalDate = currentDateTime().date
 fun LocalDateTime.toUTC(): LocalDateTime = Instant.fromEpochMilliseconds(this.toMillis()).toLocalDateTime(
-    TimeZone.UTC)
+    TimeZone.UTC
+)
 fun Instant.toLocal() = this.toLocalDateTime(TimeZone.currentSystemDefault())
 
 fun LocalDateTime.toMillis(): Long =

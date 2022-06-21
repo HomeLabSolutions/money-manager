@@ -42,7 +42,6 @@ import com.d9tilov.moneymanager.regular.vm.CreatedRegularTransactionViewModel
 import com.d9tilov.moneymanager.transaction.domain.entity.isIncome
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
@@ -280,12 +279,6 @@ class RegularTransactionCreationFragment :
                     WeekDays.SUNDAY -> createdRegularTransactionSunday
                 }
                 view.isSelected = i.ordinal == day
-                view.setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        if (view.isSelected) R.color.primary_color else R.color.control_activated_color
-                    )
-                )
             }
         }
         localTransaction =

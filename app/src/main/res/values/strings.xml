@@ -103,13 +103,13 @@
 
     <string name="category_edit_title">Edit category group</string>
     <string name="category_delete_title">Remove category?</string>
-    <string name="category_delete_sub_title">Do you want to delete the category \"%1$s\"\?\n\nAll operations with this category will also be deleted.</string>
-    <string name="category_delete_group_sub_title">Do you want to delete the category \"%1$s\"\?\nAll subcategories will also be deleted.\n\nAll operations with this category will be deleted too.</string>
+    <string name="category_delete_sub_title">All operations with this category will also be deleted.</string>
+    <string name="category_delete_group_sub_title">All subcategories will also be deleted.\n\nAll operations with this category will be deleted too.</string>
     <string name="category_empty_placeholder_title">Category list is empty</string>
     <string name="category_empty_placeholder_subtitle">Add at least one category</string>
 
     <string name="sub_category_delete_title">Delete subcategory?</string>
-    <string name="sub_category_delete_subtitle">Do you want to delete the subcategory \"%1$s\"\?\n\nAll operations with this category will also be deleted.</string>
+    <string name="sub_category_delete_subtitle">All operations with this category will also be deleted.</string>
     <string name="sub_category_delete">Delete</string>
     <string name="sub_category_delete_from_group">Delete from group</string>
 
@@ -143,7 +143,7 @@
         <item>Month</item>
     </string-array>
 
-    <string name="goals_remaining_to_spend">Able to be spend in current period</string>
+    <string name="goals_remaining_to_spend">Can be spend in that period</string>
     <string name="goals_empty_placeholder_title">Add goals</string>
     <string name="goals_empty_placeholder_subtitle">Add a goal you want to accumulate</string>
     <string name="goals_target_name_hint">Goal name</string>
@@ -210,7 +210,6 @@
     <string name="statistics_menu_category_type_parent_title">Categories</string>
     <string name="statistics_menu_category_type_child_title">Subcategories</string>
 
-    <string name="billing_purchase_type">Subscription types</string>
     <string name="billing_purchase_quarterly">Quarterly</string>
     <string name="billing_purchase_annual">Annual</string>
     <string name="billing_purchase_quarterly_price">%1$s%2$s %3$s/3 months</string>

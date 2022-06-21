@@ -17,7 +17,8 @@ import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.databinding.ItemCategoryBaseBinding
 import com.d9tilov.moneymanager.databinding.ItemCategoryBinding
 
-class CategoryAdapter(private val itemClickListener: OnItemClickListener<Category>) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
+class CategoryAdapter(private val itemClickListener: OnItemClickListener<Category>) :
+    RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     private var categories = mutableListOf<Category>()
 
@@ -30,8 +31,9 @@ class CategoryAdapter(private val itemClickListener: OnItemClickListener<Categor
             LayoutInflater.from(parent.context),
             parent,
             false
-        ) else
+        ) else {
             ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        }
         val viewHolder = CategoryViewHolder(viewBinding)
         viewBinding.root.setOnClickListener {
             val adapterPosition = viewHolder.bindingAdapterPosition

@@ -24,13 +24,12 @@
 
             <TextView
                 android:id="@+id/edit_transaction_main_sum_title"
+                style="@style/Widget.MoneyManager.TextView.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/standard_left_margin"
                 android:layout_marginTop="16dp"
                 android:text="@string/transaction_edit_sum_title"
-                android:textAppearance="?attr/textAppearanceHeadline5"
-                android:textColor="@color/text_primary_color_dark"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -59,7 +58,7 @@
                 android:ellipsize="end"
                 android:gravity="start|center_vertical"
                 android:maxLines="1"
-                android:textAppearance="?attr/textAppearanceBody1"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
                 android:textColor="?android:attr/textColorPrimary"
                 app:drawableStartCompat="@drawable/ic_category_food"
                 app:layout_constraintEnd_toStartOf="@+id/edit_transaction_date"
@@ -72,8 +71,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/standard_right_margin"
-                android:textAppearance="?attr/textAppearanceBody2"
-                android:textColor="?attr/colorAccent"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?attr/colorSecondary"
                 app:layout_constraintBottom_toBottomOf="@+id/edit_transaction_category"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/edit_transaction_category"
@@ -85,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:text="@string/transaction_edit_in_statistics"
-                android:textAppearance="?attr/textAppearanceBody1"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
                 app:layout_constraintStart_toStartOf="@+id/edit_transaction_category"
                 app:layout_constraintTop_toBottomOf="@+id/edit_transaction_category" />
 
@@ -127,8 +126,9 @@
                 android:layout_marginTop="200dp"
                 android:padding="8dp"
                 android:text="@string/delete"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textColor="?attr/colorAccent"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textColor="?attr/colorError"
+                app:drawableStartCompat="@drawable/ic_delete"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edit_transaction_description" />
@@ -137,13 +137,11 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/edit_transaction_save"
-        style="?attr/moneyManagerBottomActionButtonStyle"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/button_height"
-        android:text="@string/save"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/button_margin_horizontal"
+        android:layout_marginVertical="@dimen/button_margin_vertical"
+        android:text="@string/save" />
 </LinearLayout>

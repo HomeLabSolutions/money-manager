@@ -6,6 +6,7 @@ import android.text.InputType
 import android.text.Spanned
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
+import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.DECIMAL_SEPARATOR
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.DEFAULT_DECIMAL_SEPARATOR
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.FORMAT_STRING
@@ -41,7 +42,7 @@ class MoneyEditText @JvmOverloads constructor(
     init {
         initInputFilter()
         inputType = InputType.TYPE_CLASS_NUMBER or
-                    InputType.TYPE_NUMBER_FLAG_DECIMAL
+            InputType.TYPE_NUMBER_FLAG_DECIMAL
         isSingleLine = true
         maxLines = 1
         includeFontPadding = false
@@ -63,9 +64,11 @@ class MoneyEditText @JvmOverloads constructor(
                 var ch: Char
                 for (i in start until end) {
                     ch = source[i]
-                    if (!(Character.isDigit(ch) ||
-                                Character.isWhitespace(ch) ||
-                                allowableSymbols.contains(ch.toString()))
+                    if (!(
+                        Character.isDigit(ch) ||
+                            Character.isWhitespace(ch) ||
+                            allowableSymbols.contains(ch.toString())
+                        )
                     ) return ""
                 }
                 return null
@@ -169,9 +172,9 @@ class MoneyEditText @JvmOverloads constructor(
                 prevInput,
                 DECIMAL_SEPARATOR[0]
             )
-        )
+        ) {
             result.indexOf(DECIMAL_SEPARATOR) + 1
-        else
+        } else {
             start + (if (lengthAfter > 0) lengthAfter else 0) + getCharOccurrence(
                 result,
                 GROUPING_SEPARATOR
@@ -179,6 +182,7 @@ class MoneyEditText @JvmOverloads constructor(
                 prevInput,
                 GROUPING_SEPARATOR
             )
+        }
         if (newStart >= text.toString().length) {
             newStart = text.toString().length
         } else if (newStart <= 0) {

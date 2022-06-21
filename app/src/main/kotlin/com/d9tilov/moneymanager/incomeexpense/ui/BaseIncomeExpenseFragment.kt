@@ -1,13 +1,11 @@
 package com.d9tilov.moneymanager.incomeexpense.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
@@ -33,7 +31,6 @@ import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.isIncome
 import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
@@ -60,7 +57,7 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : Vi
 
     private var isTransactionDataEmpty = false
 
-    override val snackBarBackgroundTint = R.color.button_normal_color_disable
+    override val snackBarBackgroundTint = R.color.colorPrimary
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -137,8 +134,6 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : Vi
         emptyViewStub?.emptyPlaceholderSubtitle?.show()
         emptyViewStub?.emptyPlaceholderSubtitle?.text =
             getString(R.string.transaction_empty_placeholder_subtitle)
-        val addTransaction = emptyViewStub?.emptyPlaceholderAdd
-        addTransaction?.setOnClickListener { (requireParentFragment() as IncomeExpenseFragment).openKeyboard() }
     }
 
     private fun hideViewStub() {
@@ -161,9 +156,6 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : Vi
     }
 
     override fun onKeyboardShown(show: Boolean) {
-        Log.d("moggot", "onKeyboardShown: " + show)
-        Log.d("moggot", "categoryRvList: " + categoryRvList?.isVisible)
-        Log.d("moggot", "categoryRvList: " + categoryRvList)
         if (show) {
             hideViewStub()
             if (isPremium()) infoLayout?.showWithAnimation()

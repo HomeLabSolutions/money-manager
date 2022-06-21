@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 
 class BillingDataRepo(
-    private val billingSource: BillingSource,
+    private val billingSource: BillingSource
 ) : BillingRepo {
 
     override val currentPurchases: Flow<List<Purchase>> = billingSource.purchases

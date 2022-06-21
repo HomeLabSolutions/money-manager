@@ -2,7 +2,6 @@ package com.d9tilov.moneymanager.regular.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.d9tilov.moneymanager.R
@@ -96,12 +95,6 @@ class RegularTransactionAdapter(
             viewBinding.run {
                 itemRegularTransactionSum.setValue(regularTransaction.sum, regularTransaction.currencyCode)
                 itemRegularTransactionCategoryName.text = regularTransaction.category.name
-                itemRegularTransactionCategoryName.setTextColor(
-                    ContextCompat.getColor(
-                        context,
-                        regularTransaction.category.color
-                    )
-                )
                 val drawable = createTintDrawable(
                     context,
                     regularTransaction.category.icon,

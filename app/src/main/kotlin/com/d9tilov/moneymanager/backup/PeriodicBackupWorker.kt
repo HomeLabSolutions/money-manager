@@ -46,7 +46,8 @@ class PeriodicBackupWorker @AssistedInject constructor(
             val recurringWork = PeriodicWorkRequest
                 .Builder(
                     PeriodicBackupWorker::class.java,
-                    PERIOD_WORK_IN_HOURS, TimeUnit.HOURS
+                    PERIOD_WORK_IN_HOURS,
+                    TimeUnit.HOURS
                 )
                 .addTag(LOGIN_WORK_TAG)
                 .build()

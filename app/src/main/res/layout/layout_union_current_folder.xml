@@ -28,7 +28,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/category_dialog_union_item1"
             app:srcCompat="@drawable/ic_arrow_right"
-            app:tint="@color/color_midnight_white" />
+            app:tint="?attr/colorPrimary" />
 
         <ImageView
             android:id="@+id/category_dialog_union_folder"
@@ -37,7 +37,7 @@
             app:layout_constraintStart_toEndOf="@+id/category_dialog_union_arrow_right"
             app:layout_constraintTop_toTopOf="@+id/category_dialog_union_item1"
             app:srcCompat="@drawable/ic_category_folder"
-            app:tint="@color/color_midnight_white" />
+            app:tint="?attr/colorPrimary" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

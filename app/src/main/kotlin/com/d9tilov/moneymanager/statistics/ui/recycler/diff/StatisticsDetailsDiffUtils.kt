@@ -5,7 +5,7 @@ import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 
 class StatisticsDetailsDiffUtils(
     private val oldData: List<Transaction>,
-    private val newData: List<Transaction>,
+    private val newData: List<Transaction>
 ) : DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =

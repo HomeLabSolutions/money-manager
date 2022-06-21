@@ -27,16 +27,13 @@
 
             <TextView
                 android:id="@+id/goals_main_sum_title"
+                style="@style/Widget.MoneyManager.TextView.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/standard_left_margin"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="@dimen/standard_right_margin"
-                android:gravity="start"
-                android:textAppearance="?attr/textAppearanceHeadline5"
-                android:textColor="@color/text_primary_color_dark"
                 android:text="@string/goals_remaining_to_spend"
-                android:textSize="@dimen/goal_able_to_spend_in_period_text_size"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -48,8 +45,6 @@
                 android:layout_marginEnd="@dimen/standard_right_margin"
                 app:signTextStyle="?attr/textAppearanceCurrencySignBig"
                 app:sumTextStyle="?attr/textAppearanceCurrencySumBig"
-                app:signTextColor="@color/control_activated_color_disable"
-                app:sumTextColor="@color/control_activated_color_disable"
                 app:showDecimalPart="false"
                 app:scaleEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -61,11 +56,10 @@
                 android:id="@+id/goals_sum_per_period_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="32dp"
                 android:textSize="@dimen/goal_save_every_period_text_size"
                 android:text="@string/goals_sum_per_period_title"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textColor="@color/tertiary_color"
+                android:textAppearance="?attr/textAppearanceTitleLarge"
                 app:layout_constraintEnd_toEndOf="@+id/goals_main_sum_title"
                 app:layout_constraintStart_toStartOf="@+id/goals_main_sum_title"
                 app:layout_constraintTop_toBottomOf="@+id/goals_amount" />
@@ -110,27 +104,18 @@
                 tools:listitem="@layout/item_goal"
                 tools:visibility="visible" />
 
-            <include
-                android:id="@+id/goals_empty_placeholder"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                layout="@layout/layout_empty_list_goals_placeholder"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/goals_delimiter" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/goals_save"
-        style="?attr/moneyManagerBottomActionButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
         android:text="@string/save"
         android:visibility="gone"
         tools:visibility="visible"
+        android:layout_marginHorizontal="@dimen/button_margin_horizontal"
+        android:layout_marginVertical="@dimen/button_margin_vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

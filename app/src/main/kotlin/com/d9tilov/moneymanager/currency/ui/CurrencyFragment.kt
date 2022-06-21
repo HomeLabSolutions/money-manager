@@ -2,14 +2,11 @@ package com.d9tilov.moneymanager.currency.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
+import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -34,7 +31,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -104,9 +100,9 @@ class CurrencyFragment :
                                         )
                                     }
                                         .map { currency ->
-                                            if (currencyCode != null)
+                                            if (currencyCode != null) {
                                                 currency.copy(isBase = (currencyCode == currency.code))
-                                            else currency
+                                            } else currency
                                         }
                                 currencyAdapter.updateItems(sortedList)
                                 val checkedIndex = sortedList.indexOfFirst { it.isBase }
@@ -133,25 +129,7 @@ class CurrencyFragment :
         if (destination == null) {
             this.menu = menu
             inflater.inflate(R.menu.prepopulate_menu, menu)
-            setMenuTextColor(menu)
         }
-    }
-
-    private fun setMenuTextColor(menu: Menu) {
-        val item: MenuItem = menu.findItem(R.id.action_skip)
-        val s = SpannableString(getString(R.string.toolbar_menu_skip))
-        s.setSpan(
-            ForegroundColorSpan(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.control_activated_color
-                )
-            ),
-            0,
-            s.length,
-            0
-        )
-        item.title = s
     }
 
     private fun initToolbar() {
@@ -196,18 +174,14 @@ class CurrencyFragment :
                 )
         }
         snackBar?.run {
-            view.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.button_normal_color_end
-                )
-            )
-            setActionTextColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.button_normal_color_start
-                )
-            ).setAction(getString(R.string.retry)) { viewModel.loadCurrencies() }.show()
+            val value = TypedValue()
+            context.theme.resolveAttribute(R.attr.colorError, value, true)
+            val backgroundColor = value.data
+            view.setBackgroundColor(backgroundColor)
+            context.theme.resolveAttribute(R.attr.colorSecondary, value, true)
+            val actionTextColor = value.data
+            setActionTextColor(actionTextColor).setAction(getString(R.string.retry)) { viewModel.loadCurrencies() }
+                .show()
         }
     }
 

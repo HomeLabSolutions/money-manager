@@ -94,7 +94,7 @@ class IncomeViewModel @Inject constructor(
                     } else if (before != null && after != null && !before.date.isSameDay(after.date)) {
                         val header = TransactionHeader(
                             after.date.getEndOfDay(),
-                            after.currencyCode,
+                            after.currencyCode
                         )
                         header
                     } else null

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -19,13 +18,8 @@ import com.d9tilov.moneymanager.category.ui.recycler.CategoryModifyAdapter
 import com.d9tilov.moneymanager.core.events.OnBackPressed
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
-import com.d9tilov.moneymanager.core.util.gone
-import com.d9tilov.moneymanager.core.util.hide
-import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentCategoryBinding
-import com.d9tilov.moneymanager.databinding.LayoutEmptyListPlaceholderBinding
 import com.google.android.material.appbar.MaterialToolbar
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 abstract class BaseCategoryFragment<N : BaseNavigator> :
@@ -36,7 +30,6 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
     OnBackPressed {
 
     private val args by navArgs<CategoryFragmentArgs>()
-    private var viewStub: LayoutEmptyListPlaceholderBinding? = null
     protected val destination by lazy { args.destination }
     protected val transactionType by lazy { args.transactionType }
     protected var toolbar: MaterialToolbar? = null
@@ -52,7 +45,6 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewStub = viewBinding?.categoryEmptyPlaceholder
         initToolbar()
         viewBinding?.run {
             val layoutManager =
@@ -104,8 +96,6 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
                             { it.name }
                         )
                     )
-                    if (list.isEmpty()) showViewStub()
-                    else hideViewStub()
                     categoryAdapter.updateItems(sortedList)
                 }
         }
@@ -118,28 +108,6 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity.supportActionBar?.setDisplayShowHomeEnabled(true)
         setHasOptionsMenu(true)
-    }
-
-    private fun showViewStub() {
-        viewStub?.let {
-            it.root.show()
-            it.emptyPlaceholderIcon.setImageDrawable(
-                ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.ic_categories_empty
-                )
-            )
-            it.emptyPlaceholderTitle.text =
-                getString(R.string.category_empty_placeholder_title)
-            it.emptyPlaceholderSubtitle.show()
-            it.emptyPlaceholderSubtitle.text =
-                getString(R.string.category_empty_placeholder_subtitle)
-            it.emptyPlaceholderAdd.hide()
-        }
-    }
-
-    private fun hideViewStub() {
-        viewStub?.root?.gone()
     }
 
     override fun onBackPressed(): Boolean {

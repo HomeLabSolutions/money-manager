@@ -20,14 +20,14 @@ import com.d9tilov.moneymanager.core.util.px
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import java.util.Locale
 
-abstract class TransactionSwipeToDeleteCallback(context: Context) :
+abstract class TransactionSwipeToDeleteCallback(val context: Context) :
     ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
     private val deleteIcon = ContextCompat.getDrawable(context, R.drawable.ic_delete_swipe)
     private var intrinsicWidth = deleteIcon?.intrinsicWidth ?: 0
     private var intrinsicHeight = deleteIcon?.intrinsicHeight ?: 0
+    private val value = TypedValue()
     private val background = ColorDrawable()
-    private val backgroundColor = ContextCompat.getColor(context, R.color.error_color)
     private val clearPaint = Paint().apply { xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR) }
     private val textPaint = Paint()
     private val textView = TextView(context)
@@ -42,7 +42,7 @@ abstract class TransactionSwipeToDeleteCallback(context: Context) :
     init {
         val theme: Resources.Theme = context.theme
         val styleId = TypedValue()
-        if (theme.resolveAttribute(R.attr.textAppearanceButton, styleId, true)) {
+        if (theme.resolveAttribute(R.attr.textAppearanceLabelLarge, styleId, true)) {
             TextViewCompat.setTextAppearance(textView, styleId.data)
         }
         textPaint.color = context.getColorFromAttr(R.attr.colorOnPrimary)
@@ -75,7 +75,6 @@ abstract class TransactionSwipeToDeleteCallback(context: Context) :
         actionState: Int,
         isCurrentlyActive: Boolean
     ) {
-
         val itemView = viewHolder.itemView
         val itemHeight = itemView.bottom - itemView.top
         val isCanceled = dX == 0f && !isCurrentlyActive
@@ -92,6 +91,8 @@ abstract class TransactionSwipeToDeleteCallback(context: Context) :
             return
         }
 
+        context.theme.resolveAttribute(R.attr.colorError, value, true)
+        val backgroundColor = value.data
         background.color = backgroundColor
         background.setBounds(
             itemView.right + dX.toInt(),

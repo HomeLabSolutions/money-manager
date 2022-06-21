@@ -174,7 +174,6 @@ class CurrencyView @JvmOverloads constructor(
             isSingleLine = true
             gravity = currencyGravity
             setText(formatInputSum(sum))
-            isEnabled = enableInput
             isFocusable = enableInput
             includeFontPadding = false
             setPadding(0)

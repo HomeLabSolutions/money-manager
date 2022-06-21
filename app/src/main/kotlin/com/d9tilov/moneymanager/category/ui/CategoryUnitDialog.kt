@@ -67,7 +67,7 @@ class CategoryUnitDialog :
                 )
                 categoryDialogCurrentFolder.root.show()
             } else {
-                categoryDialogUnionConfirm.isEnabled = categoryDialogUnionEtName.length() > 0
+                categoryDialogUnionConfirm.isEnabled = categoryDialogUnionEtName.text.toString().isNotEmpty()
                 categoryDialogUnionSubtitle.text = getString(R.string.category_unit_new_name_subtitle)
                 categoryDialogUnionTitle.text = getString(R.string.category_unit_to_group_title)
                 categoryDialogUnionFolder.categoryDialogUnionItem1.setImageDrawable(firstDrawable)
@@ -77,11 +77,11 @@ class CategoryUnitDialog :
                 categoryDialogUnionFolder.root.show()
             }
             categoryDialogUnionConfirm.setOnClickListener {
-                if (secondCategory.children.isEmpty() && categoryDialogUnionEtName.text.toString().isEmpty())
+                if (secondCategory.children.isEmpty() && categoryDialogUnionEtName.text.toString().isEmpty()) {
                     showError(CategoryException.CategoryEmptyNameException())
-                else if (secondCategory.children.isNotEmpty())
+                } else if (secondCategory.children.isNotEmpty()) {
                     viewModel.addToGroup(firstCategory, secondCategory)
-                else viewModel.createGroup(firstCategory, secondCategory, createUnionCategory())
+                } else viewModel.createGroup(firstCategory, secondCategory, createUnionCategory())
             }
             categoryDialogUnionEtName.onChange { text ->
                 val isNameEmpty = text.isEmpty()

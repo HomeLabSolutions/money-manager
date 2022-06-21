@@ -3,10 +3,8 @@ package com.d9tilov.moneymanager.regular.ui
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseDialogFragment
 import com.d9tilov.moneymanager.base.ui.navigator.DayOfMonthDialogNavigator
 import com.d9tilov.moneymanager.databinding.FragmentDialogDayOfMonthPickerBinding
@@ -72,9 +70,7 @@ class DayOfMonthDialog :
         val newView = getViewFromDay(day)
         val oldView = getViewFromDay(viewModel.dayOfMonth)
         oldView?.isSelected = false
-        oldView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.control_activated_color))
         newView?.isSelected = true
-        newView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.primary_color))
         viewModel.dayOfMonth = day
     }
 

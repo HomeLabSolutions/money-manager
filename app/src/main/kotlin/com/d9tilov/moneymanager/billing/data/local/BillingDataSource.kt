@@ -94,7 +94,6 @@ class BillingDataSource(context: Context) :
         val params = QueryProductDetailsParams.newBuilder()
         val productList = mutableListOf<QueryProductDetailsParams.Product>()
         for (product in LIST_OF_PRODUCTS) {
-
             productList.add(
                 QueryProductDetailsParams.Product.newBuilder()
                     .setProductId(product)
