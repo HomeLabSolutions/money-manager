@@ -56,7 +56,6 @@ android {
                 )
             }
         }
-        multiDexEnabled = true
     }
 
     buildTypes {
@@ -188,8 +187,6 @@ dependencies {
     implementation(Deps.navigationUi)
 
     implementation(Deps.datastore)
-
-    implementation(Deps.multidex)
 
     implementation(Deps.facebookLogin)
     implementation(Deps.twitter) {

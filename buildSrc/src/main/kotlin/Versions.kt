@@ -49,7 +49,6 @@ object Versions {
 
     const val klaxon = "5.5"
     const val stetho = "1.5.1"
-    const val multidex = "2.0.1"
     const val timber = "5.0.1"
     const val ktlint = "0.46.0"
     const val detekt = "1.20.0"

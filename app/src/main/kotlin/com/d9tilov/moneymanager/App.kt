@@ -1,8 +1,8 @@
 package com.d9tilov.moneymanager
 
+import android.app.Application
 import android.os.StrictMode
 import androidx.hilt.work.HiltWorkerFactory
-import androidx.multidex.MultiDexApplication
 import androidx.work.Configuration
 import com.facebook.appevents.AppEventsLogger
 import com.facebook.stetho.Stetho
@@ -13,7 +13,7 @@ import timber.log.Timber.DebugTree
 import javax.inject.Inject
 
 @HiltAndroidApp
-class App : MultiDexApplication(), Configuration.Provider {
+class App : Application(), Configuration.Provider {
 
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
