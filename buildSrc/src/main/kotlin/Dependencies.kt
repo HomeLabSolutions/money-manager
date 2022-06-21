@@ -41,8 +41,6 @@ object Deps {
     val navigation by lazy { "androidx.navigation:navigation-fragment-ktx:${Versions.navigation}" }
     val navigationUi by lazy { "androidx.navigation:navigation-ui-ktx:${Versions.navigation}" }
 
-    val multidex by lazy { "androidx.multidex:multidex:${Versions.multidex}" }
-
     val firebase by lazy { "com.google.firebase:firebase-auth-ktx" }
     val firebaseAnalytics by lazy { "com.google.firebase:firebase-analytics-ktx" }
     val firebaseCrashlytics by lazy { "com.google.firebase:firebase-crashlytics-ktx" }
