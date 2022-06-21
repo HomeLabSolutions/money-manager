@@ -24,8 +24,8 @@
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:text="@string/plus_sign"
-            android:textAppearance="?attr/textAppearanceBody2"
-            android:textColor="@color/color_midnight_white"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?attr/colorPrimary"
             app:layout_constraintBottom_toBottomOf="@+id/category_dialog_union_item1"
             app:layout_constraintEnd_toStartOf="@+id/category_dialog_union_item2"
             app:layout_constraintTop_toTopOf="@+id/category_dialog_union_item1" />
@@ -49,7 +49,7 @@
             app:layout_constraintStart_toEndOf="@+id/category_dialog_union_item2"
             app:layout_constraintTop_toTopOf="@+id/category_dialog_union_item1"
             app:srcCompat="@drawable/ic_arrow_right"
-            app:tint="@color/color_midnight_white" />
+            app:tint="?attr/colorPrimary" />
 
         <ImageView
             android:id="@+id/category_dialog_union_folder"
@@ -58,7 +58,7 @@
             app:layout_constraintStart_toEndOf="@+id/category_dialog_union_arrow_right"
             app:layout_constraintTop_toTopOf="@+id/category_dialog_union_item1"
             app:srcCompat="@drawable/ic_category_folder"
-            app:tint="@color/color_midnight_white" />
+            app:tint="?attr/colorPrimary" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

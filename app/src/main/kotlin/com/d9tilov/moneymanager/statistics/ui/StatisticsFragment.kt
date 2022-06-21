@@ -71,7 +71,6 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
@@ -169,9 +168,9 @@ class StatisticsFragment :
                                     is ResultOf.Success -> {
                                         val list = result.data
                                         val newList = list.map { item ->
-                                            if (item.category.children.isNotEmpty())
+                                            if (item.category.children.isNotEmpty()) {
                                                 item.copy(category = item.category.copy(color = item.category.children[0].color))
-                                            else item
+                                            } else item
                                         }
                                         statisticsBarChartAdapter.updateItems(newList)
                                         statisticsSpentInPeriodSum.setValue(newList.sumOf { it.sum }, viewModel.currencyType.currencyCode)
@@ -220,6 +219,13 @@ class StatisticsFragment :
                     statisticsLineChart.showWithAnimation()
                 }
             }
+        }
+    }
+
+    private fun hideChart() {
+        viewBinding?.run {
+            statisticsPieChart.gone()
+            statisticsLineChart.gone()
         }
     }
 
@@ -302,7 +308,7 @@ class StatisticsFragment :
                 sb.toString()
             }
         viewBinding?.statisticsPieChart?.setCenterTextColor(
-            ContextCompat.getColor(requireContext(), R.color.control_activated_color)
+            ContextCompat.getColor(requireContext(), R.color.colorPrimary)
         )
         viewBinding?.statisticsPieChart?.invalidate()
     }
@@ -338,7 +344,7 @@ class StatisticsFragment :
             statisticsPieChart.setEntryLabelColor(
                 ContextCompat.getColor(
                     requireContext(),
-                    R.color.primary_color
+                    R.color.colorPrimary
                 )
             )
             statisticsPieChart.setEntryLabelTypeface(tfRegular)
@@ -359,9 +365,9 @@ class StatisticsFragment :
                 .map { tr ->
                     val categoryName = tr.category.name
                     val displayName = if (tr.percent > PERCENT_LIMIT_TO_SHOW_LABEL) {
-                        if (categoryName.length > MAX_CATEGORY_NAME_LENGTH)
+                        if (categoryName.length > MAX_CATEGORY_NAME_LENGTH) {
                             "${categoryName.dropLast(categoryName.length - MAX_CATEGORY_NAME_LENGTH)}..."
-                        else categoryName
+                        } else categoryName
                     } else ""
                     PieEntry(
                         tr.sum.toFloat(),
@@ -382,7 +388,7 @@ class StatisticsFragment :
         val pieData = PieData(dataSet)
         pieData.setValueFormatter(PercentFormatter(viewBinding?.statisticsPieChart))
         pieData.setValueTextSize(PIE_CHART_VALUE_TEXT_SIZE)
-        pieData.setValueTextColor(ContextCompat.getColor(requireContext(), R.color.primary_color))
+        pieData.setValueTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
         viewBinding?.statisticsPieChart?.data = pieData
 
         viewBinding?.statisticsPieChart?.highlightValues(null)
@@ -398,14 +404,14 @@ class StatisticsFragment :
             statisticsLineChart.setMaxVisibleValueCount(LINE_CHART_MAX_VISIBLE_VALUE_COUNT)
             statisticsLineChart.description.isEnabled = false
             val xAxis: XAxis = statisticsLineChart.xAxis
-            xAxis.textColor = ContextCompat.getColor(requireContext(), R.color.statistics_line_chart_axis_text_color)
+            xAxis.textColor = ContextCompat.getColor(requireContext(), R.color.colorPrimary)
             xAxis.enableGridDashedLine(
                 LINE_CHART_LINE_LENGTH,
                 LINE_CHART_SPACE_LENGTH_AXIS,
                 LINE_CHART_PHASE
             )
             val yAxis: YAxis = statisticsLineChart.axisLeft
-            yAxis.textColor = ContextCompat.getColor(requireContext(), R.color.statistics_line_chart_axis_text_color)
+            yAxis.textColor = ContextCompat.getColor(requireContext(), R.color.colorPrimary)
             yAxis.enableGridDashedLine(
                 LINE_CHART_LINE_LENGTH,
                 LINE_CHART_SPACE_LENGTH_AXIS,
@@ -432,7 +438,7 @@ class StatisticsFragment :
             lineDataSet.formSize = LINE_CHART_DATA_FORM_SIZE
             lineDataSet.valueTextSize = LINE_CHART_DATA_LABEL_TEXT_SIZE
             lineDataSet.valueTextColor =
-                ContextCompat.getColor(requireContext(), R.color.text_primary_color)
+                ContextCompat.getColor(requireContext(), R.color.colorPrimary)
             lineDataSet.enableDashedHighlightLine(
                 LINE_CHART_LINE_LENGTH,
                 LINE_CHART_SPACE_LENGTH,
@@ -487,10 +493,18 @@ class StatisticsFragment :
 
     private fun showViewStub() {
         emptyViewStub?.root?.show()
+        viewBinding?.run {
+            statisticsDetailedInfo.gone()
+            hideChart()
+        }
     }
 
     private fun hideViewStub() {
         emptyViewStub?.root?.gone()
+        viewBinding?.run {
+            statisticsDetailedInfo.show()
+            showChart()
+        }
     }
 
     companion object {

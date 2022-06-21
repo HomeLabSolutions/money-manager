@@ -2,21 +2,20 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Theme.MoneyManager.Material.Alert.Dialog"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:minWidth="300dp">
 
     <TextView
         android:id="@+id/category_dialog_union_title"
-        style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
+        style="@style/Theme.MoneyManager.MaterialDialog.Title.Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="start"
         android:paddingStart="@dimen/standard_left_margin"
         android:paddingTop="16dp"
         android:paddingEnd="@dimen/standard_right_margin"
-        android:textColor="@color/secondary_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,7 +23,7 @@
 
     <TextView
         android:id="@+id/category_dialog_union_subtitle"
-        style="@style/Theme.MoneyManager.MaterialComponents.Body.Text"
+        style="@style/Theme.MoneyManager.MaterialDialog.Body.Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/standard_left_margin"
@@ -67,7 +66,6 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/category_dialog_union_et_name_layout"
-        style="@style/TextInputLayoutAppearance"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/standard_left_margin"
@@ -79,7 +77,6 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/category_dialog_union_et_name"
-            style="@style/Widget.MoneyManager.EditText.Category.Union"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/category_unit_name_group_hint"
@@ -89,9 +86,9 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.button.MaterialButton
+    <TextView
+        style="@style/Theme.MoneyManager.MaterialDialog.Button.Text"
         android:id="@+id/category_dialog_union_cancel"
-        style="@style/Widget.MoneyManager.Button.TextButton.Dialog"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
@@ -100,9 +97,9 @@
         app:layout_constraintEnd_toStartOf="@+id/category_dialog_union_confirm"
         app:layout_constraintTop_toBottomOf="@+id/category_dialog_union_et_name_layout" />
 
-    <com.google.android.material.button.MaterialButton
+    <TextView
         android:id="@+id/category_dialog_union_confirm"
-        style="@style/Widget.MoneyManager.Button.TextButton.Dialog"
+        style="@style/Theme.MoneyManager.MaterialDialog.Button.Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/standard_right_margin"

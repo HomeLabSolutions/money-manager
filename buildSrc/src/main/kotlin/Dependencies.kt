@@ -85,6 +85,5 @@ object Deps {
     val billing by lazy { "com.android.billingclient:billing-ktx:${Versions.billing}" }
 
     val hilt by lazy { "com.google.dagger:hilt-android:${Versions.hilt}" }
-    val hiltCompiler by lazy { "androidx.hilt:hilt-compiler:${Versions.hiltCompiler}" }
     val hiltAndroidCompiler by lazy { "com.google.dagger:hilt-android-compiler:${Versions.hilt}" }
 }

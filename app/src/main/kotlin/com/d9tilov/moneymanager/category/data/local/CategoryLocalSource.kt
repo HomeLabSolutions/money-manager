@@ -33,7 +33,8 @@ class CategoryLocalSource(
             defaultCategories.forEach {
                 categoryDao.create(
                     categoryMapper.toDataModelFromPrePopulate(
-                        it, currentUserId
+                        it,
+                        currentUserId
                     )
                 )
             }
@@ -67,9 +68,9 @@ class CategoryLocalSource(
         else {
             val categoryById =
                 categoryDao.getById(currentUserId, category.id) ?: throw WrongIdException()
-            if (categoryById.name == category.name)
+            if (categoryById.name == category.name) {
                 categoryDao.update(categoryMapper.toDbModel(category))
-            else {
+            } else {
                 val count = categoryDao.getCategoriesCountByName(currentUserId, category.name)
                 if (count == 0) categoryDao.update(categoryMapper.toDbModel(category))
                 else throw CategoryException.CategoryExistException("Category with name: ${category.name} has already existed")

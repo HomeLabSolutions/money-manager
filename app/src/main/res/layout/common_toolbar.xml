@@ -21,10 +21,7 @@
             android:minHeight="?attr/actionBarSize"
             android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             android:theme="@style/ThemeOverlay.MoneyManager.Toolbar"
-            tools:title="Title">
-
-        </com.google.android.material.appbar.MaterialToolbar>
-
+            tools:title="Title"/>
     </com.google.android.material.appbar.AppBarLayout>
 
 </layout>

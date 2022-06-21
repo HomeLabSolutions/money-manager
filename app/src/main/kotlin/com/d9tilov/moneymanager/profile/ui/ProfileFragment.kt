@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -27,7 +28,6 @@ import com.d9tilov.moneymanager.profile.ui.vm.ProfileViewModel
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransactionDestination
 import com.d9tilov.moneymanager.splash.ui.SplashActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -100,24 +100,22 @@ class ProfileFragment :
                                 profileRegularIncomes.root.show()
                                 profileSettings.profileSettingsPremium.text =
                                     getString(R.string.settings_subscription_premium_acknowledged_title)
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                    profileSettings.profileSettingsPremium.setTextAppearance(R.style.Widget_MoneyManager_TextView_PremiumLabel_Acknowledged)
-                                } else {
-                                    profileSettings.profileSettingsPremium.setTextAppearance(
-                                        requireContext(),
-                                        R.style.Widget_MoneyManager_TextView_PremiumLabel_Acknowledged
-                                    )
-                                }
+                                profileSettings.profileSettingsPremium.background = ContextCompat.getDrawable(requireContext(), R.drawable.background_round_corner_premium_acknowledged)
+                                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) profileSettings.profileSettingsPremium.setTextAppearance(
+                                    requireContext(),
+                                    R.style.Widget_MoneyManager_TextView_Acknowledged
+                                )
+                                else profileSettings.profileSettingsPremium.setTextAppearance(R.style.Widget_MoneyManager_TextView_Acknowledged)
                             } else {
-                                profileSettings.profileSettingsPremium.text = getString(R.string.settings_subscription_premium_title)
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                    profileSettings.profileSettingsPremium.setTextAppearance(R.style.Widget_MoneyManager_TextView_PremiumLabel)
-                                } else {
+                                profileSettings.profileSettingsPremium.text =
+                                    getString(R.string.settings_subscription_premium_title)
+                                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                                     profileSettings.profileSettingsPremium.setTextAppearance(
                                         requireContext(),
                                         R.style.Widget_MoneyManager_TextView_PremiumLabel
                                     )
-                                }
+                                } else profileSettings.profileSettingsPremium.setTextAppearance(R.style.Widget_MoneyManager_TextView_PremiumLabel)
+                                profileSettings.profileSettingsPremium.background = ContextCompat.getDrawable(requireContext(), R.drawable.background_round_corner_premium)
                             }
                         }
                     }

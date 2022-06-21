@@ -26,7 +26,7 @@ import javax.inject.Inject
 class CurrencyViewModel @Inject constructor(
     private val currencyInteractor: CurrencyInteractor,
     private val userInteractor: UserInteractor,
-    private val budgetInteractor: BudgetInteractor,
+    private val budgetInteractor: BudgetInteractor
 ) : BaseViewModel<CurrencyNavigator>() {
 
     private val currencies: MutableStateFlow<ResultOf<List<DomainCurrency>>> =

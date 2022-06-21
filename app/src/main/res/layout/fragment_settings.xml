@@ -30,7 +30,7 @@
                 layout="@layout/item_premium_subscription"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:layout_margin="@dimen/standard_margin"
                 android:visibility="gone"
                 tools:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -44,8 +44,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="32dp"
                 android:text="@string/settings_start_period_day_title"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textColor="@color/control_activated_color"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/settings_subscription" />
 
@@ -56,7 +55,7 @@
                 android:layout_marginStart="8dp"
                 android:inputType="number"
                 android:maxLength="2"
-                android:textAppearance="?attr/textAppearanceBody1"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
                 app:layout_constraintBottom_toBottomOf="@+id/settings_day_of_month_title"
                 app:layout_constraintStart_toEndOf="@+id/settings_day_of_month_title"
                 app:layout_constraintTop_toTopOf="@+id/settings_day_of_month_title"
@@ -70,7 +69,7 @@
                 android:layout_marginStart="8dp"
                 android:text="@string/settings_start_period_day_postfix"
                 android:textSize="14sp"
-                android:textAppearance="?attr/textAppearanceCaption"
+                android:textAppearance="?attr/textAppearanceBodySmall"
                 app:layout_constraintBottom_toBottomOf="@+id/settings_day_of_month_title"
                 app:layout_constraintStart_toEndOf="@+id/settings_day_of_month_edit" />
 
@@ -86,8 +85,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_start_period_day_error"
-                android:textAppearance="?attr/textAppearanceCaption"
-                android:textColor="@color/error_color"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorError"
                 android:layout_marginTop="8dp"
                 android:textSize="12sp"
                 android:visibility="gone"
@@ -101,8 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="48dp"
                 android:text="@string/settings_backup"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textColor="@color/control_activated_color"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
                 app:layout_constraintStart_toStartOf="@+id/settings_day_of_month_title"
                 app:layout_constraintTop_toBottomOf="@+id/settings_day_of_month_title" />
 
@@ -110,7 +108,7 @@
                 android:id="@+id/settings_backup_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceCaption"
+                android:textAppearance="?attr/textAppearanceBodySmall"
                 app:layout_constraintStart_toStartOf="@+id/settings_backup"
                 app:layout_constraintTop_toBottomOf="@+id/settings_backup"
                 tools:text="Last backup was " />
@@ -122,18 +120,20 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:src="@drawable/ic_refresh"
+                app:tint="?attr/colorTertiary"
                 app:layout_constraintBottom_toBottomOf="@+id/settings_backup"
                 app:layout_constraintStart_toEndOf="@+id/settings_vertical_barrier"
                 app:layout_constraintTop_toTopOf="@+id/settings_backup" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/settings_save"
-        style="?attr/moneyManagerBottomActionButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
         android:text="@string/save"
+        android:layout_marginHorizontal="@dimen/button_margin_horizontal"
+        android:layout_marginVertical="@dimen/button_margin_vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

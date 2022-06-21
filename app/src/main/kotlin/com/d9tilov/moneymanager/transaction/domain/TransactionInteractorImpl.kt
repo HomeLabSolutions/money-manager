@@ -236,9 +236,9 @@ class TransactionInteractorImpl(
             countDaysSinceFiscalDateFlow,
             expensesPerCurrentDayFlow
         ) { numerator, countDaysSinceFiscalDate, expensesPerCurrentDay ->
-            if (numerator.minus(expensesPerCurrentDay).signum() < 0)
+            if (numerator.minus(expensesPerCurrentDay).signum() < 0) {
                 TransactionSpendingTodayModel.OVERSPENDING(numerator.minus(expensesPerCurrentDay))
-            else TransactionSpendingTodayModel.NORMAL(
+            } else TransactionSpendingTodayModel.NORMAL(
                 numerator.divideBy(countDaysSinceFiscalDate).minus(expensesPerCurrentDay)
             )
         }

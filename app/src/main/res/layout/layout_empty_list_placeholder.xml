@@ -22,8 +22,7 @@
         android:layout_marginStart="@dimen/standard_left_margin"
         android:layout_marginEnd="@dimen/standard_right_margin"
         android:gravity="center"
-        android:textAppearance="?attr/textAppearanceHeadline6"
-        android:textColor="@color/text_primary_color"
+        android:textAppearance="?attr/textAppearanceTitleLarge"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,25 +37,13 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="@dimen/standard_right_margin"
         android:gravity="center"
-        android:textAppearance="?attr/textAppearanceBody2"
-        android:textColor="@color/header_color"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/empty_placeholder_title"
         tools:text="@string/transaction_empty_placeholder_subtitle"
         tools:visibility="visible" />
-
-    <ImageView
-        android:id="@+id/empty_placeholder_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:srcCompat="@drawable/ic_add"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/empty_placeholder_subtitle"
-        app:tint="?attr/colorSecondary" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

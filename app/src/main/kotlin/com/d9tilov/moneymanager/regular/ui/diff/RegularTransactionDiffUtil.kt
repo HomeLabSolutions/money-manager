@@ -5,7 +5,7 @@ import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 
 class RegularTransactionDiffUtil(
     private val oldRegularTransactions: List<RegularTransaction>,
-    private val newRegularTransactions: List<RegularTransaction>,
+    private val newRegularTransactions: List<RegularTransaction>
 ) : DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =

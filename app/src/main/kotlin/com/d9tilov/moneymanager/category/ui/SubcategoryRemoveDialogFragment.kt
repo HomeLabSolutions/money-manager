@@ -14,7 +14,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SubcategoryRemoveDialogFragment :
-    BaseDialogFragment<RemoveSubCategoryDialogNavigator, FragmentDialogTripleRemoveBinding>(FragmentDialogTripleRemoveBinding::inflate),
+    BaseDialogFragment<
+        RemoveSubCategoryDialogNavigator,
+        FragmentDialogTripleRemoveBinding>(FragmentDialogTripleRemoveBinding::inflate),
     RemoveSubCategoryDialogNavigator {
 
     private val args by navArgs<SubcategoryRemoveDialogFragmentArgs>()
@@ -32,8 +34,6 @@ class SubcategoryRemoveDialogFragment :
                 getString(R.string.sub_category_delete_from_group)
             tripleRemoveDialogButtonCancel.text = getString(R.string.cancel)
             tripleRemoveDialogTitle.text = getString(R.string.sub_category_delete_title)
-            tripleRemoveDialogSubtitle.text =
-                getString(R.string.sub_category_delete_subtitle, subCategory.name)
             tripleRemoveDialogButtonAction1.setOnClickListener { viewModel.remove(subCategory) }
             tripleRemoveDialogButtonAction2.setOnClickListener { viewModel.removeFromGroup(subCategory) }
             tripleRemoveDialogButtonCancel.setOnClickListener { dismiss() }

@@ -2,8 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?attr/colorPrimary">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/statistics_empty_placeholder_icon"
@@ -23,8 +22,7 @@
         android:layout_marginEnd="@dimen/standard_right_margin"
         android:gravity="center"
         android:text="@string/statistics_no_data"
-        android:textAppearance="?attr/textAppearanceHeadline6"
-        android:textColor="@color/text_primary_color"
+        android:textAppearance="?attr/textAppearanceTitleMedium"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

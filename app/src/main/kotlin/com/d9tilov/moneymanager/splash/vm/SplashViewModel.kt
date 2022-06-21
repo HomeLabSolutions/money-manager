@@ -41,9 +41,9 @@ class SplashViewModel @Inject constructor(
                         auth.signOut()
                         withContext(Dispatchers.Main) { navigator?.openAuthScreen() }
                     } else {
-                        if (userInteractor.get().showPrepopulate())
+                        if (userInteractor.get().showPrepopulate()) {
                             withContext(Dispatchers.Main) { navigator?.openPrepopulate() }
-                        else withContext(Dispatchers.Main) { navigator?.openHomeScreen() }
+                        } else withContext(Dispatchers.Main) { navigator?.openHomeScreen() }
                     }
                 }
             }

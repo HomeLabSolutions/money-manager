@@ -107,70 +107,78 @@
         app:barrierDirection="bottom"
         app:constraint_referenced_ids="statistics_pie_chart,statistics_line_chart" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/statistics_vertical_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.25" />
-
-    <TextView
-        android:id="@+id/statistics_spent_in_period"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/statistics_expense_info_period_title"
-        android:textAppearance="?attr/textAppearanceHeadline5"
-        android:textColor="@color/text_primary_transparent_color"
-        android:layout_marginTop="16dp"
-        android:textSize="@dimen/statistics_spent_in_period"
-        app:layout_constraintBottom_toTopOf="@+id/statistics_bar_chart"
-        app:layout_constraintEnd_toStartOf="@+id/statistics_spent_in_period_sum"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="@+id/statistics_vertical_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/statistics_horizontal_barrier1" />
-
-    <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
-        android:id="@+id/statistics_spent_in_period_sum"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/statistics_detailed_info"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="@dimen/standard_right_margin"
-        app:layout_constraintBottom_toBottomOf="@+id/statistics_spent_in_period"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@+id/statistics_spent_in_period"
-        app:layout_constraintTop_toTopOf="@+id/statistics_spent_in_period"
-        app:scaleEnabled="true"
-        app:showDecimalPart="true"
-        app:signTextColor="@color/text_primary_transparent_color"
-        app:signTextSize="@dimen/statistics_spent_in_period_sign"
-        app:signTextStyle="?attr/textAppearanceCurrencySignExtraSmall"
-        app:sum="300"
-        app:sumTextColor="@color/text_primary_transparent_color"
-        app:sumTextSize="@dimen/statistics_spent_in_period"
-        app:sumTextStyle="?attr/textAppearanceCurrencySumExtraSmall" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statistics_horizontal_barrier1">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/statistics_vertical_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.25" />
+
+        <TextView
+            android:id="@+id/statistics_spent_in_period"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/statistics_expense_info_period_title"
+            android:textAppearance="?attr/textAppearanceTitleLarge"
+            android:textSize="@dimen/statistics_spent_in_period"
+            android:textColor="?attr/colorTertiary"
+            app:layout_constraintBottom_toTopOf="@+id/statistics_bar_chart"
+            app:layout_constraintEnd_toStartOf="@+id/statistics_spent_in_period_sum"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="@+id/statistics_vertical_guideline"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
+            android:id="@+id/statistics_spent_in_period_sum"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="@dimen/standard_right_margin"
+            app:layout_constraintBottom_toBottomOf="@+id/statistics_spent_in_period"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/statistics_spent_in_period"
+            app:layout_constraintTop_toTopOf="@+id/statistics_spent_in_period"
+            app:scaleEnabled="true"
+            app:showDecimalPart="true"
+            app:signTextSize="@dimen/statistics_spent_in_period_sign"
+            app:sumTextColor="?attr/colorTertiary"
+            app:signTextColor="?attr/colorTertiary"
+            app:signTextStyle="?attr/textAppearanceCurrencySignExtraSmall"
+            app:sum="300"
+            app:sumTextSize="@dimen/statistics_spent_in_period"
+            app:sumTextStyle="?attr/textAppearanceCurrencySumExtraSmall" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/statistics_bar_chart"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/statistics_spent_in_period"
-        tools:listitem="@layout/item_statistics_bar_chart"
-        tools:visibility="visible" />
+        tools:listitem="@layout/item_statistics_bar_chart" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include
         android:id="@+id/statistics_empty_placeholder"
+        layout="@layout/layout_empty_statistics_placeholder"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        layout="@layout/layout_empty_statistics_placeholder"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/statistics_day" />
 
