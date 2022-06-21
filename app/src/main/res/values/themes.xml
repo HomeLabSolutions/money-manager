@@ -107,7 +107,6 @@
 
     <style name="Theme.Splash" parent="Theme.MoneyManager">
         <item name="android:windowBackground">@drawable/splash_screen_background</item>
-        <item name="colorPrimaryDark">?attr/colorPrimary</item>
     </style>
 
     <style name="ThemeOverlay.MoneyManager.AppBarLayout" parent="">
