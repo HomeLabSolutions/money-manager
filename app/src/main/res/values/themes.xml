@@ -105,6 +105,9 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <style name="Theme.Login" parent="Theme.MoneyManager">
+    </style>
+
     <style name="Theme.Splash" parent="Theme.MoneyManager">
         <item name="android:windowBackground">@drawable/splash_screen_background</item>
     </style>
