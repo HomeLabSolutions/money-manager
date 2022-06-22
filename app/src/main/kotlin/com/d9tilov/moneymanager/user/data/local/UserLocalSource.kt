@@ -68,7 +68,7 @@ class UserLocalSource(
 
     override suspend fun getFiscalDay(): Int {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
-        return if (currentUserId == null) throw WrongUidException()
+        return if (currentUserId == null) 1
         else {
             val fiscalDay = userDao.getFiscalDay(currentUserId)
             if (fiscalDay == 0) 1 else fiscalDay
@@ -84,11 +84,9 @@ class UserLocalSource(
     override fun getCurrentCurrency(): Flow<CurrencyMetaData> = preferencesStore.uid
         .filterNotNull()
         .flatMapMerge { uid ->
-            userDao.getCurrentCurrency(uid).map { currencyCode ->
-                CurrencyMetaData(
-                    currencyCode,
-                    currencyCode.getSymbolByCode()
-                )
+            userDao.getCurrentCurrency(uid).map { currencyCode: String? ->
+                if (currencyCode == null) CurrencyMetaData.EMPTY
+                else CurrencyMetaData(currencyCode, currencyCode.getSymbolByCode())
             }
         }
 
