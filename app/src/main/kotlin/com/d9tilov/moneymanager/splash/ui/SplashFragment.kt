@@ -23,7 +23,6 @@ class SplashFragment :
     SplashNavigator {
 
     private val providers = arrayListOf(
-        AuthUI.IdpConfig.EmailBuilder().build(),
         AuthUI.IdpConfig.PhoneBuilder().build(),
         AuthUI.IdpConfig.GoogleBuilder().build()
     )
@@ -47,8 +46,8 @@ class SplashFragment :
         startForResult.launch(
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
-                .setLogo(R.drawable.ic_money_manager_logo)
-                .setTheme(R.style.Theme_MoneyManager)
+                .setLogo(R.drawable.ic_money_manager_logo_on_login)
+                .setTheme(R.style.Theme_Login)
                 .setAvailableProviders(providers)
                 .setIsSmartLockEnabled(false)
                 .build()
