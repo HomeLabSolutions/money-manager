@@ -344,7 +344,7 @@ class StatisticsFragment :
             statisticsPieChart.setEntryLabelColor(
                 ContextCompat.getColor(
                     requireContext(),
-                    R.color.colorPrimary
+                    android.R.color.white
                 )
             )
             statisticsPieChart.setEntryLabelTypeface(tfRegular)
@@ -388,7 +388,7 @@ class StatisticsFragment :
         val pieData = PieData(dataSet)
         pieData.setValueFormatter(PercentFormatter(viewBinding?.statisticsPieChart))
         pieData.setValueTextSize(PIE_CHART_VALUE_TEXT_SIZE)
-        pieData.setValueTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+        pieData.setValueTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
         viewBinding?.statisticsPieChart?.data = pieData
 
         viewBinding?.statisticsPieChart?.highlightValues(null)

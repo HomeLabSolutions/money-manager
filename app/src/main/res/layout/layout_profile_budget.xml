@@ -34,6 +34,8 @@
         app:sumTextSize="@dimen/profile_item_text_size"
         app:signTextSize="@dimen/overline_text_size"
         app:sumTextStyle="?attr/textAppearanceCurrencySumSmall"
+        app:sumTextColor="?attr/colorSecondary"
+        app:signTextColor="?attr/colorSecondary"
         tools:sumText="15000" />
 
     <TextView
