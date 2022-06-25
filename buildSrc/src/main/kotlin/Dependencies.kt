@@ -49,7 +49,7 @@ object Deps {
     val firebaseBom by lazy { "com.google.firebase:firebase-bom:${Versions.firebaseBom}" }
 
     val googlePlayServicesAuth by lazy { "com.google.android.gms:play-services-auth:${Versions.googlePlayServicesAuth}" }
-    val facebookLogin by lazy { "com.facebook.android:facebook-login:${Versions.facebookLogin}" }
+    val facebookLogin by lazy { "com.facebook.android:facebook-android-sdk:${Versions.facebookSdk}" }
     val twitter by lazy { "com.twitter.sdk.android:twitter:${Versions.twitter}" }
 
     val okHttp by lazy { "com.squareup.okhttp3:okhttp:${Versions.okhttp}" }

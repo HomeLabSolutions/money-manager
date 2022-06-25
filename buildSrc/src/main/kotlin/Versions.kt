@@ -21,7 +21,6 @@ object Versions {
     const val navigation = "2.4.2"
 
     const val hilt = "2.42"
-    const val hiltCompiler = "1.0.0"
 
     const val glide = "4.13.0"
     const val room = "2.4.2"
@@ -29,10 +28,11 @@ object Versions {
 
     const val firebaseCrashlytics = "2.9.0"
     const val firebaseBom = "30.1.0"
-    const val firebaseUi = "6.2.0"
-    const val facebookLogin = "5.15.3"
+    const val firebaseUi = "7.2.0"
 
+    const val facebookSdk = "8.0.0"
     const val twitter = "3.3.0"
+
     const val okhttp = "4.9.1"
 
     const val sql = "2.2.0"
