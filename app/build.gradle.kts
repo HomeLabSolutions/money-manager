@@ -188,11 +188,6 @@ dependencies {
 
     implementation(Deps.datastore)
 
-    implementation(Deps.facebookLogin)
-    implementation(Deps.twitter) {
-        isTransitive = true
-    }
-
     implementation(Deps.okHttp)
     implementation(Deps.okHttpInterceptor)
 

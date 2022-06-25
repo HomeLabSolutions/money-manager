@@ -253,6 +253,14 @@
             app:popEnterAnim="@anim/slide_down_enter"
             app:popExitAnim="@anim/slide_down_exit" />
 
+        <action
+            android:id="@+id/to_change_currency_dialog"
+            app:destination="@id/change_currency_dialog"
+            app:enterAnim="@anim/slide_up_enter"
+            app:exitAnim="@anim/slide_up_exit"
+            app:popEnterAnim="@anim/slide_down_enter"
+            app:popExitAnim="@anim/slide_down_exit" />
+
         <argument
             android:name="destination"
             android:defaultValue="@null"
@@ -265,13 +273,6 @@
             app:argType="string"
             app:nullable="true" />
 
-        <action
-            android:id="@+id/to_change_currency_dialog"
-            app:destination="@id/change_currency_dialog"
-            app:enterAnim="@anim/slide_up_enter"
-            app:exitAnim="@anim/slide_up_exit"
-            app:popEnterAnim="@anim/slide_down_enter"
-            app:popExitAnim="@anim/slide_down_exit" />
     </fragment>
 
     <fragment

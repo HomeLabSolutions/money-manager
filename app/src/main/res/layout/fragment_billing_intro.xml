@@ -62,7 +62,7 @@
             android:text="@string/billing_purchase_annual" />
     </RadioGroup>
 
-    <androidx.legacy.widget.Space
+    <Space
         android:id="@+id/settings_billing_intro_spacer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
