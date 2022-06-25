@@ -87,7 +87,7 @@
     </style>
 
     <style name="ThemeOverlay.MoneyManager.Toolbar" parent="">
-        <item name="android:textColorPrimary">?attr/colorOnPrimaryContainer</item>
+        <item name="android:textColorPrimary">?attr/colorOnBackground</item>
         <item name="android:homeAsUpIndicator">@drawable/ic_back_arrow</item>
     </style>
 
@@ -125,6 +125,7 @@
         <item name="android:ellipsize">end</item>
         <item name="android:maxLines">1</item>
         <item name="android:textSize">@dimen/dialog_title_text_size</item>
+        <item name="android:textColor">?attr/colorSecondary</item>
     </style>
 
     <style name="Theme.MoneyManager.MaterialDialog.Body.Text" parent="MaterialAlertDialog.Material3.Body.Text">

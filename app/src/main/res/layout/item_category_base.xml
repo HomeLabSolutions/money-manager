@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/category_item"
+        android:id="@+id/category_item_icon"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/category_item_title"
@@ -23,7 +23,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/category_all"
-        android:textColor="@color/category_all_color"
         app:layout_constraintBottom_toTopOf="@+id/category_item_subtitle" />
 
     <TextView

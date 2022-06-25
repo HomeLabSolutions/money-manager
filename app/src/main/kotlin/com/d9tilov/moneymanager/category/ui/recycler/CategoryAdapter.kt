@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import androidx.viewbinding.ViewBinding
+import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.ui.diff.CategoryDiffUtil
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
@@ -74,6 +75,31 @@ class CategoryAdapter(private val itemClickListener: OnItemClickListener<Categor
                 is ItemCategoryBinding -> {
                     viewBinding.run {
                         categoryItemTitle.text = category.name
+                        categoryItemTitle.setTextColor(
+                            ContextCompat.getColor(
+                                context,
+                                category.color
+                            )
+                        )
+                        categoryItemSubtitle.text = category.parent?.name
+                        val parentColor = ColorUtils.setAlphaComponent(
+                            ContextCompat.getColor(
+                                context,
+                                category.color
+                            ),
+                            COLOR_ALPHA
+                        )
+                        categoryItemSubtitle.setTextColor(parentColor)
+                        val drawable = createTintDrawable(context, category.icon, category.color)
+                        GlideApp
+                            .with(context)
+                            .load(drawable)
+                            .into(categoryItemIcon)
+                    }
+                }
+                is ItemCategoryBaseBinding -> {
+                    viewBinding.run {
+                        categoryItemTitle.text = context.getString(R.string.category_all)
                         categoryItemTitle.setTextColor(
                             ContextCompat.getColor(
                                 context,

@@ -1,7 +1,7 @@
 <resources>
 
     <style name="Widget.MoneyManager.AppBarLayout" parent="Widget.Material3.AppBarLayout">
-        <item name="android:background">?attr/colorPrimaryContainer</item>
+        <item name="android:background">?attr/background</item>
     </style>
 
     <style name="Widget.MoneyManager.TabLayout" parent="Widget.Material3.TabLayout">
@@ -59,6 +59,13 @@
     <style name="Widget.MoneyManager.TextView.ProfileItem" parent="Widget.AppCompat.TextView">
         <item name="android:textAppearance">?attr/textAppearanceTitleLarge</item>
         <item name="android:textSize">@dimen/profile_item_text_size</item>
+        <item name="android:textColor">?attr/colorSecondary</item>
+    </style>
+
+    <style name="Widget.MoneyManager.TextView.ProfileItem.Subtitle" parent="Widget.AppCompat.TextView">
+        <item name="android:textAppearance">?attr/textAppearanceTitleMedium</item>
+        <item name="android:textSize">@dimen/profile_item_text_subtitle_size</item>
+        <item name="android:textColor">?attr/colorTertiary</item>
     </style>
 
     <style name="Widget.MoneyManager.TextView.Title" parent="Widget.AppCompat.TextView">
@@ -66,11 +73,6 @@
         <item name="android:gravity">start</item>
     </style>
 
-    <style name="Widget.MoneyManager.TextView.ProfileItem.Subtitle" parent="Widget.AppCompat.TextView">
-        <item name="android:textAppearance">?attr/textAppearanceTitleMedium</item>
-        <item name="android:textSize">@dimen/profile_item_text_subtitle_size</item>
-        <item name="android:textColor">?attr/colorSecondary</item>
-    </style>
 
     <style name="Widget.MoneyManager.TextView.Statistics" parent="Widget.AppCompat.TextView">
         <item name="android:textAppearance">?attr/textAppearanceBodySmall</item>
@@ -95,7 +97,7 @@
         <item name="android:paddingBottom">4dp</item>
         <item name="android:paddingEnd">8dp</item>
         <item name="android:paddingStart">8dp</item>
-        <item name="android:textColor">?attr/colorOnPrimaryContainer</item>
+        <item name="android:textColor">?attr/colorOnSecondaryContainer</item>
         <item name="android:background">@drawable/background_round_fill</item>
         <item name="android:textAppearance">?attr/textAppearanceBodySmall</item>
     </style>
@@ -118,7 +120,7 @@
         <item name="android:textAppearance">?attr/textAppearanceHeadlineLarge</item>
         <item name="android:duplicateParentState">true</item>
         <item name="android:textSize">@dimen/pin_text_size</item>
-        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorSecondary</item>
         <item name="android:layout_gravity">center</item>
     </style>
 
