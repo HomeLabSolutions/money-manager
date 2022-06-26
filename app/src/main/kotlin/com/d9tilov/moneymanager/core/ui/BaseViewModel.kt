@@ -2,7 +2,9 @@ package com.d9tilov.moneymanager.core.ui
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
 abstract class BaseViewModel<T : BaseNavigator> : ViewModel() {
@@ -12,11 +14,11 @@ abstract class BaseViewModel<T : BaseNavigator> : ViewModel() {
             field = value
             field?.let { onNavigatorAttached() }
         }
-    private val msg = MutableStateFlow(DEFAULT_MESSAGE_ID)
+    private val msg = MutableSharedFlow<Int>()
     private val loading = MutableStateFlow(false)
 
-    fun setMessage(@StringRes message: Int) {
-        msg.value = message
+    suspend fun setMessage(@StringRes message: Int) {
+        msg.emit(message)
     }
 
     fun setLoading(show: Boolean) {
@@ -25,7 +27,7 @@ abstract class BaseViewModel<T : BaseNavigator> : ViewModel() {
 
     protected open fun onNavigatorAttached() {}
 
-    fun getMsg(): StateFlow<Int> = msg
+    fun getMsg(): SharedFlow<Int> = msg
     fun getLoading(): StateFlow<Boolean> = loading
 
     companion object {

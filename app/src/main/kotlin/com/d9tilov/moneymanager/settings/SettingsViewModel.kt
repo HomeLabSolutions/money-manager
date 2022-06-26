@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.backup.data.entity.BackupData
 import com.d9tilov.moneymanager.backup.domain.BackupInteractor
-import com.d9tilov.moneymanager.base.data.ResultOf
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
 import com.d9tilov.moneymanager.billing.domain.BillingInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
@@ -58,9 +57,11 @@ class SettingsViewModel @Inject constructor(
     fun backup() {
         viewModelScope.launch(Dispatchers.IO) {
             setLoading(true)
-            when (backupInteractor.makeBackup()) {
-                is ResultOf.Success -> setMessage(R.string.settings_backup_succeeded)
-                else -> setMessage(R.string.settings_backup_error)
+            try {
+                backupInteractor.makeBackup()
+                setMessage(R.string.settings_backup_succeeded)
+            } catch (ex: Exception) {
+                setMessage(R.string.settings_backup_error)
             }
             setLoading(false)
         }

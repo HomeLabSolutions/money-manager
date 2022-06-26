@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.splash.vm
 
 import androidx.lifecycle.viewModelScope
+import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.backup.domain.BackupInteractor
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -54,7 +56,11 @@ class SplashViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             auth.currentUser?.let { firebaseUser ->
                 preferencesStore.updateUid(firebaseUser.uid) // need for dataBase decryption
-                backupInteractor.restoreBackup()
+                try {
+                    backupInteractor.restoreBackup()
+                } catch (ex: Exception) {
+                    Timber.tag(App.TAG).e("Failed restoring the profile")
+                }
                 val user = userInteractor.get().getCurrentUser().firstOrNull()
                 if (user == null || user.showPrepopulate) {
                     userInteractor.get().createUser(auth.currentUser)

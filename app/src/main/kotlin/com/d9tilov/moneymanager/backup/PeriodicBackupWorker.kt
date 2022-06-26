@@ -9,7 +9,6 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.backup.domain.BackupInteractor
-import com.d9tilov.moneymanager.base.data.ResultOf
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import timber.log.Timber
@@ -27,12 +26,12 @@ class PeriodicBackupWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         Timber.tag(App.TAG).d("Do work...")
-        val result = backupInteractor.makeBackup()
-        return if (result is ResultOf.Success) {
+        return try {
+            backupInteractor.makeBackup()
             Timber.tag(App.TAG).d("Do work with success")
             Result.success()
-        } else {
-            Timber.tag(App.TAG).d("Do work with error ${(result as? ResultOf.Failure)?.throwable}")
+        } catch (ex: Exception) {
+            Timber.tag(App.TAG).d("Do work with error $ex")
             Result.failure()
         }
     }
