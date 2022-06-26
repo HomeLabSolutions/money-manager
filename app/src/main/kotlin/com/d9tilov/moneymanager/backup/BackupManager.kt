@@ -13,11 +13,11 @@ import com.d9tilov.moneymanager.core.util.currentDateTime
 import com.d9tilov.moneymanager.core.util.isNetworkConnected
 import com.d9tilov.moneymanager.core.util.toMillis
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
@@ -26,36 +26,36 @@ import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.InputStream
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
+import kotlin.coroutines.resumeWithException
 
 class BackupManager(private val context: Context, private val preferencesStore: PreferencesStore) {
 
     suspend fun backupDb(): ResultOf<BackupData> {
-        if (!isNetworkConnected(context)) return ResultOf.Failure(NetworkException())
         val uid = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
-        return suspendCoroutine { continuation ->
+        return suspendCancellableCoroutine { continuation ->
+            if (!isNetworkConnected(context)) continuation.resumeWithException(NetworkException())
             Timber.tag(App.TAG).d("Backup start")
             if (uid.isNullOrEmpty()) {
                 Timber.tag(App.TAG).d("Empty uid")
-                return@suspendCoroutine continuation.resume(ResultOf.Failure(WrongUidException()))
+                continuation.resumeWithException(WrongUidException())
             }
             val file = context.getDatabasePath(DATABASE_NAME)
-            if (!file.exists()) {
-                return@suspendCoroutine continuation.resume(ResultOf.Failure(FileNotFoundException()))
-            }
-            val parentPath = "${uid.normalizePath()}/$DATABASE_NAME"
+            if (!file.exists()) continuation.resumeWithException(FileNotFoundException())
+            val parentPath = "${uid?.normalizePath()}/$DATABASE_NAME"
             val fileRef = Firebase.storage.reference.child(parentPath)
             val uploadTask = fileRef.putFile(Uri.fromFile(file))
             Timber.tag(App.TAG).d("Backup end")
             uploadTask
                 .addOnSuccessListener {
+                    if (!continuation.isActive) return@addOnSuccessListener
                     val backupDate = currentDateTime().toMillis()
                     runBlocking { preferencesStore.updateLastBackupDate(backupDate) }
                     continuation.resume(ResultOf.Success(BackupData.EMPTY.copy(lastBackupTimestamp = backupDate)))
                     Timber.tag(App.TAG).d("Backup was compete successfully")
                 }
                 .addOnFailureListener {
-                    continuation.resume(ResultOf.Failure(it))
+                    if (!continuation.isActive) return@addOnFailureListener
+                    continuation.resumeWithException(it)
                     Timber.tag(App.TAG).d("Backup was compete with error: $it")
                 }
         }
@@ -63,14 +63,13 @@ class BackupManager(private val context: Context, private val preferencesStore: 
 
     suspend fun restoreDb(): ResultOf<Any> {
         val uid = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
-        return suspendCoroutine { continuation ->
-            if (uid.isNullOrEmpty()) {
-                return@suspendCoroutine continuation.resume(ResultOf.Failure(WrongUidException()))
-            }
-            val parentPath = "${uid.normalizePath()}/$DATABASE_NAME"
-            val fileRef: StorageReference = Firebase.storage.reference.child(parentPath)
+        return suspendCancellableCoroutine { continuation ->
+            if (uid.isNullOrEmpty()) continuation.resumeWithException(WrongUidException())
+            val parentPath = "${uid?.normalizePath()}/$DATABASE_NAME"
+            val fileRef = Firebase.storage.reference.child(parentPath)
             val localFile = File.createTempFile(DATABASE_NAME, "db")
             fileRef.getFile(localFile).addOnSuccessListener {
+                if (!continuation.isActive) return@addOnSuccessListener
                 val output = context.getDatabasePath(DATABASE_NAME)
                 val myInputs: InputStream = FileInputStream(localFile.path)
                 val buffer = ByteArray(BUFFER_SIZE)
@@ -88,7 +87,8 @@ class BackupManager(private val context: Context, private val preferencesStore: 
                 continuation.resume(ResultOf.Success(Any()))
                 Timber.tag(App.TAG).d("Restore was compete successfully")
             }.addOnFailureListener {
-                continuation.resume(ResultOf.Failure(it))
+                if (!continuation.isActive) return@addOnFailureListener
+                continuation.resumeWithException(it)
                 Timber.tag(App.TAG).d("Restore was complete with error: $it")
             }
         }
