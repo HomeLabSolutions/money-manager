@@ -38,8 +38,11 @@ class UserLocalSource(
         }
     }
 
-    override suspend fun updateCurrentUser(userProfile: UserProfile) {
-        userDao.update(userProfile.toDbModel())
+    override suspend fun updateFiscalDay(fiscalDay: Int) {
+        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+            ?: throw WrongUidException()
+        val user = userDao.getById(currentUserId).firstOrNull()
+        user?.let { userDao.update(it.copy(fiscalDay = fiscalDay)) }
     }
 
     override suspend fun updateCurrency(code: String) {

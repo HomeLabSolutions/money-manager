@@ -12,6 +12,6 @@ interface UserRepo {
     suspend fun prepopulateCompleted()
     suspend fun create(entity: UserProfile): UserProfile
     suspend fun updateCurrency(code: String)
-    suspend fun update(entity: UserProfile)
+    suspend fun updateFiscalDay(fiscalDay: Int)
     suspend fun delete()
 }

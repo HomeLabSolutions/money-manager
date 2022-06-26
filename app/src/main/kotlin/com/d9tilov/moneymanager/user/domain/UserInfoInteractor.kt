@@ -21,7 +21,7 @@ class UserInfoInteractor(
     override suspend fun createUser(user: FirebaseUser?): UserProfile =
         userRepo.create(userDomainMapper.toDataModel(user))
 
-    override suspend fun updateUser(userProfile: UserProfile) = userRepo.update(userProfile)
+    override suspend fun updateFiscalDay(fiscalDay: Int) = userRepo.updateFiscalDay(fiscalDay)
 
     override suspend fun updateCurrency(code: String) = userRepo.updateCurrency(code)
 

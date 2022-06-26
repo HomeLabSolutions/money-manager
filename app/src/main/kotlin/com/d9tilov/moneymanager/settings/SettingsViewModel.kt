@@ -17,7 +17,6 @@ import com.google.firebase.FirebaseException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
@@ -82,8 +81,7 @@ class SettingsViewModel @Inject constructor(
 
     fun changeFiscalDay(day: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            val user = userInteractor.getCurrentUser().firstOrNull()
-            user?.let { userInteractor.updateUser(it.copy(fiscalDay = day)) }
+            userInteractor.updateFiscalDay(day)
             withContext(Dispatchers.Main) { navigator?.save() }
         }
     }

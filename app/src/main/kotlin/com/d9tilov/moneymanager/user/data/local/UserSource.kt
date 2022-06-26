@@ -10,7 +10,7 @@ interface UserSource : Source {
     fun getCurrentUser(): Flow<UserProfile?>
     fun getCurrentCurrency(): Flow<CurrencyMetaData>
     suspend fun createUserOrRestore(userProfile: UserProfile): UserProfile
-    suspend fun updateCurrentUser(userProfile: UserProfile)
+    suspend fun updateFiscalDay(fiscalDay: Int)
     suspend fun updateCurrency(code: String)
     suspend fun showPrepopulate(): Boolean
     suspend fun prepopulateCompleted()
