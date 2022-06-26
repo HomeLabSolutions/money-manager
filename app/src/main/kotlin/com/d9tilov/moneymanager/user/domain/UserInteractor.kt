@@ -14,7 +14,7 @@ interface UserInteractor : Interactor {
     suspend fun showPrepopulate(): Boolean
     suspend fun prepopulateCompleted()
     suspend fun createUser(user: FirebaseUser?): UserProfile
-    suspend fun updateUser(userProfile: UserProfile)
+    suspend fun updateFiscalDay(fiscalDay: Int)
     suspend fun updateCurrency(code: String)
     suspend fun deleteUser()
 }

@@ -9,7 +9,6 @@ import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.util.getEndOfDay
 import com.d9tilov.moneymanager.core.util.getStartOfDay
-import com.d9tilov.moneymanager.core.util.isSameDay
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.data.mapper.toDataModel
 import com.d9tilov.moneymanager.transaction.data.mapper.toDbModel
@@ -111,11 +110,7 @@ class TransactionLocalSource(
     override suspend fun update(transaction: TransactionDataModel) {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
         if (currentUserId == null) throw WrongUidException()
-        else {
-            val oldTransaction = transactionDao.getById(currentUserId, transaction.id).first()
-            if (oldTransaction.date.isSameDay(transaction.date)) transactionDao.update(transaction.toDbModel())
-            else transactionDao.update(transaction.toDbModel())
-        }
+        else transactionDao.update(transaction.toDbModel())
     }
 
     override suspend fun remove(transaction: TransactionDataModel) {

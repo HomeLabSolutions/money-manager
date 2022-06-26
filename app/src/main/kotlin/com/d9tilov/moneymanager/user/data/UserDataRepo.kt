@@ -22,9 +22,7 @@ class UserDataRepo(private val userLocalSource: UserSource) : UserRepo {
 
     override suspend fun updateCurrency(code: String) = userLocalSource.updateCurrency(code)
 
-    override suspend fun update(entity: UserProfile) {
-        userLocalSource.updateCurrentUser(entity)
-    }
+    override suspend fun updateFiscalDay(fiscalDay: Int) = userLocalSource.updateFiscalDay(fiscalDay)
 
     override suspend fun delete() {
         userLocalSource.deleteUser()
