@@ -116,6 +116,13 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="Widget.MoneyManager.TextView.DeleteLabel" parent="">
+        <item name="android:textAppearance">?attr/textAppearanceLabelLarge</item>
+        <item name="android:textSize">@dimen/billing_premium_label</item>
+        <item name="android:textColor">?attr/colorOnTertiary</item>
+        <item name="android:gravity">center</item>
+    </style>
+
     <style name="Widget.MoneyManager.TextView.Keyboard" parent="Widget.MaterialComponents.TextView">
         <item name="android:textAppearance">?attr/textAppearanceHeadlineLarge</item>
         <item name="android:duplicateParentState">true</item>

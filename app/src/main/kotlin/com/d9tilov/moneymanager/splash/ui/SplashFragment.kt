@@ -1,7 +1,6 @@
 package com.d9tilov.moneymanager.splash.ui
 
 import android.content.Intent
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
@@ -25,7 +24,7 @@ class SplashFragment :
 
     private val providers = arrayListOf(
         AuthUI.IdpConfig.PhoneBuilder().build(),
-        AuthUI.IdpConfig.GoogleBuilder().build(),
+        AuthUI.IdpConfig.GoogleBuilder().build()
     )
 
     override fun getNavigator() = this

@@ -159,6 +159,11 @@
     <string name="settings_backup_empty">Резервная копия еще не создавалась</string>
     <string name="settings_backup_succeeded">Резервное копирование выполнено успешно</string>
     <string name="settings_backup_error">Ошибка резервного копирования</string>
+    <string name="settings_backup_network_error">Ошибка сети</string>
+    <string name="settings_backup_user_error">Неизвестный пользователь</string>
+    <string name="settings_backup_file_not_found_error">Файл не найден</string>
+    <string name="settings_backup_deleted">Резервная копия удалена</string>
+    <string name="settings_backup_delete_title">Удалить резервную копию?</string>
     <string name="settings_start_period_day_title">Начало периода:</string>
     <string name="settings_start_period_day_postfix">день месяца</string>
     <string name="settings_start_period_day_error">День должен быть в интервале от 1 до 31</string>

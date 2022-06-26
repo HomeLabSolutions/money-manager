@@ -9,4 +9,5 @@ class BackupInteractorImpl(private val backupRepo: BackupRepo) : BackupInteracto
     override fun getBackupData(): Flow<BackupData> = backupRepo.getBackupData()
     override suspend fun makeBackup(): ResultOf<BackupData> = backupRepo.makeBackup()
     override suspend fun restoreBackup(): ResultOf<Any> = backupRepo.restoreBackup()
+    override suspend fun deleteBackup() = backupRepo.deleteBackup()
 }

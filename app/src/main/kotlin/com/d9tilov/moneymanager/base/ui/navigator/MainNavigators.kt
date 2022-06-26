@@ -128,4 +128,8 @@ interface SettingsNavigator : BaseNavigator {
     fun save()
 }
 
+interface SettingsBackupDeletionNavigator : BaseNavigator {
+    fun dismiss()
+}
+
 interface SettingsBillingNavigator : BaseNavigator
