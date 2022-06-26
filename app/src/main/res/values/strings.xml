@@ -158,6 +158,11 @@
     <string name="settings_backup_empty">Backup hasn\'t been created yet</string>
     <string name="settings_backup_succeeded">Backup succeeded</string>
     <string name="settings_backup_error">Backup error</string>
+    <string name="settings_backup_network_error">Network error</string>
+    <string name="settings_backup_user_error">Unknown user error</string>
+    <string name="settings_backup_file_not_found_error">File not found</string>
+    <string name="settings_backup_deleted">Backup file was deleted</string>
+    <string name="settings_backup_delete_title">Delete backup?</string>
     <string name="settings_start_period_day_title">Start of period:</string>
     <string name="settings_start_period_day_postfix">day of month</string>
     <string name="settings_start_period_day_error">The day should be in interval from 1 to 31</string>

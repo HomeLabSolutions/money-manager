@@ -7,7 +7,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface BackupInteractor : Interactor {
 
+    fun getBackupData(): Flow<BackupData>
     suspend fun makeBackup(): ResultOf<BackupData>
     suspend fun restoreBackup(): ResultOf<Any>
-    fun getBackupData(): Flow<BackupData>
+    suspend fun deleteBackup(): ResultOf<Any>
 }

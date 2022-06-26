@@ -26,7 +26,6 @@ import com.d9tilov.moneymanager.databinding.FragmentSettingsBinding
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -45,6 +44,9 @@ class SettingsFragment :
         initToolbar()
         viewBinding?.run {
             settingsRefresh.setOnClickListener { viewModel.backup() }
+            settingsBackupDelete.setOnClickListener {
+                findNavController().navigate(SettingsFragmentDirections.toRemoveBackupDialog())
+            }
             settingsDayOfMonthPostfix.setOnClickListener {
                 settingsDayOfMonthEdit.requestFocus()
                 showKeyboard(settingsDayOfMonthEdit)
@@ -65,9 +67,7 @@ class SettingsFragment :
                 )
             }
             settingsSubscription.root.setOnClickListener {
-                findNavController().navigate(
-                    SettingsFragmentDirections.toSettingsBillingDest()
-                )
+                findNavController().navigate(SettingsFragmentDirections.toSettingsBillingDest())
             }
             viewLifecycleOwner.lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -80,12 +80,14 @@ class SettingsFragment :
                         viewModel.backupData.collect { data ->
                             if (data.lastBackupTimestamp == BackupData.UNKNOWN_BACKUP_DATE) {
                                 settingsBackupInfo.setText(R.string.settings_backup_empty)
+                                settingsBackupDelete.gone()
                             } else {
                                 settingsBackupInfo.text =
                                     getString(
                                         R.string.settings_backup_info,
                                         data.lastBackupTimestamp.toBackupDate()
                                     )
+                                settingsBackupDelete.show()
                             }
                         }
                     }

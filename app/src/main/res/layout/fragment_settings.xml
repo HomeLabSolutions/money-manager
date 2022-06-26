@@ -124,6 +124,20 @@
                 app:layout_constraintBottom_toBottomOf="@+id/settings_backup"
                 app:layout_constraintStart_toEndOf="@+id/settings_vertical_barrier"
                 app:layout_constraintTop_toTopOf="@+id/settings_backup" />
+
+            <ImageView
+                android:id="@+id/settings_backup_delete"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_horizontal"
+                android:padding="8dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:srcCompat="@drawable/ic_close"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="@dimen/standard_right_margin"
+                app:layout_constraintTop_toTopOf="@+id/settings_refresh"
+                app:layout_constraintBottom_toBottomOf="@+id/settings_refresh" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 

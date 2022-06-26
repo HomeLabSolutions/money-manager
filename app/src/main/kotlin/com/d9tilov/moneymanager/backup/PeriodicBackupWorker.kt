@@ -9,9 +9,13 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.backup.domain.BackupInteractor
+import com.d9tilov.moneymanager.base.data.local.exceptions.NetworkException
+import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
+import com.google.firebase.FirebaseException
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import timber.log.Timber
+import java.io.FileNotFoundException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -30,8 +34,17 @@ class PeriodicBackupWorker @AssistedInject constructor(
             backupInteractor.makeBackup()
             Timber.tag(App.TAG).d("Do work with success")
             Result.success()
-        } catch (ex: Exception) {
-            Timber.tag(App.TAG).d("Do work with error $ex")
+        } catch (ex: NetworkException) {
+            Timber.tag(App.TAG).d("Do work with network exception: $ex")
+            Result.failure()
+        } catch (ex: WrongUidException) {
+            Timber.tag(App.TAG).d("Do work with wrong uid exception: $ex")
+            Result.failure()
+        } catch (ex: FileNotFoundException) {
+            Timber.tag(App.TAG).d("Do work with file not found error: $ex")
+            Result.failure()
+        } catch (ex: FirebaseException) {
+            Timber.tag(App.TAG).d("Do work with exception: $ex")
             Result.failure()
         }
     }
