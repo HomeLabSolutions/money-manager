@@ -39,8 +39,8 @@
         app:lineBarWidth="4dp"
         app:layout_constraintEnd_toStartOf="@+id/prepopulate_back_btn"
         app:layout_constraintStart_toStartOf="parent"
-        app:lineProgressColor="?attr/colorPrimary"
-        app:underLineColor="?attr/colorPrimaryContainer" />
+        app:lineProgressColor="?attr/colorPrimaryContainer"
+        app:underLineColor="?attr/colorPrimary" />
 
     <ImageView
         android:id="@+id/prepopulate_back_btn"
