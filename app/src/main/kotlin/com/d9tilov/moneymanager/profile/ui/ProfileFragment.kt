@@ -3,6 +3,7 @@ package com.d9tilov.moneymanager.profile.ui
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -100,23 +101,24 @@ class ProfileFragment :
                                 profileRegularIncomes.root.show()
                                 profileSettings.profileSettingsPremium.text =
                                     getString(R.string.settings_subscription_premium_acknowledged_title)
-                                profileSettings.profileSettingsPremium.background = ContextCompat.getDrawable(requireContext(), R.drawable.background_round_corner_premium_acknowledged)
+                                profileSettings.profileSettingsPremium.background = ContextCompat.getDrawable(requireContext(), R.drawable.background_round_corner_positive)
                                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) profileSettings.profileSettingsPremium.setTextAppearance(
                                     requireContext(),
-                                    R.style.Widget_MoneyManager_TextView_Acknowledged
+                                    R.style.Widget_MoneyManager_TextView_Label_Positive
                                 )
-                                else profileSettings.profileSettingsPremium.setTextAppearance(R.style.Widget_MoneyManager_TextView_Acknowledged)
+                                else profileSettings.profileSettingsPremium.setTextAppearance(R.style.Widget_MoneyManager_TextView_Label_Positive)
                             } else {
                                 profileSettings.profileSettingsPremium.text =
                                     getString(R.string.settings_subscription_premium_title)
                                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                                     profileSettings.profileSettingsPremium.setTextAppearance(
                                         requireContext(),
-                                        R.style.Widget_MoneyManager_TextView_PremiumLabel
+                                        R.style.Widget_MoneyManager_TextView_Label_Neutral
                                     )
-                                } else profileSettings.profileSettingsPremium.setTextAppearance(R.style.Widget_MoneyManager_TextView_PremiumLabel)
-                                profileSettings.profileSettingsPremium.background = ContextCompat.getDrawable(requireContext(), R.drawable.background_round_corner_premium)
+                                } else profileSettings.profileSettingsPremium.setTextAppearance(R.style.Widget_MoneyManager_TextView_Label_Neutral)
+                                profileSettings.profileSettingsPremium.background = ContextCompat.getDrawable(requireContext(), R.drawable.background_round_corner_neutral)
                             }
+                            profileSettings.profileSettingsPremium.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.billing_premium_label_text_size))
                         }
                     }
                 }

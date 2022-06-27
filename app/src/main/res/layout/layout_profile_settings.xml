@@ -23,15 +23,12 @@
 
     <TextView
         android:id="@+id/profile_settings_premium"
-        style="@style/Widget.MoneyManager.TextView.PremiumLabel"
+        style="@style/Widget.MoneyManager.TextView.Label.Negative"
         android:layout_width="wrap_content"
+        android:textSize="@dimen/billing_premium_label_text_size"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="16dp"
-        android:paddingStart="8dp"
-        android:paddingTop="4dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/profile_settings_title"
         app:layout_constraintTop_toTopOf="parent"

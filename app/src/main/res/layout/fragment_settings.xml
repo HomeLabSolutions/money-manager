@@ -120,7 +120,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:src="@drawable/ic_refresh"
-                app:tint="?attr/colorTertiary"
+                app:tint="?attr/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="@+id/settings_backup"
                 app:layout_constraintStart_toEndOf="@+id/settings_vertical_barrier"
                 app:layout_constraintTop_toTopOf="@+id/settings_backup" />

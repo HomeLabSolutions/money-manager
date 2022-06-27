@@ -54,6 +54,7 @@
 
             <TextView
                 android:id="@+id/goals_sum_per_period_title"
+                style="@style/Widget.MoneyManager.TextView.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"

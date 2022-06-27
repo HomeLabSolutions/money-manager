@@ -48,7 +48,7 @@
         android:id="@+id/expense_today_info_approx_sign"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="?attr/colorPrimary"
+        android:textColor="?attr/colorOnPrimaryContainer"
         android:layout_marginStart="4dp"
         android:text="@string/approx_sign"
         app:layout_constraintBottom_toBottomOf="@+id/expense_today_info_title"
@@ -66,8 +66,8 @@
         app:layout_constraintStart_toEndOf="@+id/expense_today_info_approx_sign"
         app:layout_constraintTop_toTopOf="@+id/expense_today_info_approx_sign"
         app:showShortDecimalPart="true"
-        app:signTextColor="?attr/colorPrimary"
-        app:sumTextColor="?attr/colorPrimary"
+        app:signTextColor="?attr/colorOnPrimaryContainer"
+        app:sumTextColor="?attr/colorOnPrimaryContainer"
         app:sumTextStyle="?attr/textAppearanceCurrencySumSmall"
         app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
         app:sumTextSize="@dimen/income_expense_info_sum_text_size"
@@ -90,7 +90,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:text="@string/approx_sign"
-        android:textColor="?attr/colorPrimary"
+        android:textColor="?attr/colorOnPrimaryContainer"
         app:layout_constraintBottom_toBottomOf="@+id/expense_period_info_title"
         app:layout_constraintStart_toEndOf="@+id/expense_period_info_title"
         app:layout_constraintTop_toTopOf="@+id/expense_period_info_title" />
@@ -110,8 +110,8 @@
         app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
         app:sumTextSize="@dimen/income_expense_info_sum_text_size"
         app:signTextSize="@dimen/income_expense_info_sign_text_size"
-        app:signTextColor="?attr/colorPrimary"
-        app:sumTextColor="?attr/colorPrimary"
+        app:signTextColor="?attr/colorOnPrimaryContainer"
+        app:sumTextColor="?attr/colorOnPrimaryContainer"
         app:sum="1000" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

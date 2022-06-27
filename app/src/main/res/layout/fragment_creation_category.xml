@@ -94,16 +94,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/category_creation_icon_layout" />
 
             <TextView
+                style="@style/Widget.MoneyManager.TextView.Label.Negative"
                 android:id="@+id/category_creation_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="280dp"
-                android:padding="8dp"
                 android:text="@string/delete"
-                android:textAppearance="?attr/textAppearanceBodyLarge"
-                android:textColor="?attr/colorError"
-                app:drawableStartCompat="@drawable/ic_delete"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
