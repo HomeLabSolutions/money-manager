@@ -38,8 +38,8 @@
         app:layout_constraintStart_toEndOf="@+id/income_period_info_approx_sign"
         app:layout_constraintTop_toTopOf="@+id/income_period_info_approx_sign"
         app:showShortDecimalPart="true"
-        app:signTextColor="?attr/colorPrimary"
-        app:sumTextColor="?attr/colorPrimary"
+        app:signTextColor="?attr/colorOnSecondaryContainer"
+        app:sumTextColor="?attr/colorOnSecondaryContainer"
         app:sum="1000"
         app:sumTextStyle="?attr/textAppearanceCurrencySumSmall" />
 

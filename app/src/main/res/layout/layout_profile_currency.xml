@@ -40,6 +40,7 @@
         <TextView
             android:id="@+id/profile_item_current_currency_sign"
             style="@style/Widget.MoneyManager.TextView.ProfileItem"
+            android:textColor="?attr/colorSecondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

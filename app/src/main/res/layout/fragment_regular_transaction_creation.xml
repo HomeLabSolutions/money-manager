@@ -25,6 +25,7 @@
 
             <TextView
                 android:id="@+id/created_regular_transaction_main_sum_title"
+                style="@style/Widget.MoneyManager.TextView.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/standard_left_margin"
@@ -273,16 +274,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/created_regular_transaction_barrier" />
 
             <TextView
+                style="@style/Widget.MoneyManager.TextView.Label.Negative"
                 android:id="@+id/created_regular_transaction_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="160dp"
-                android:padding="8dp"
                 android:text="@string/delete"
-                android:textAppearance="?attr/textAppearanceBodyLarge"
-                android:textColor="?attr/colorError"
-                app:drawableStartCompat="@drawable/ic_delete"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

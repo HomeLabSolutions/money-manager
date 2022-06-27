@@ -144,7 +144,7 @@ class ExpenseFragment :
                                                             DECIMAL_LENGTH,
                                                             ROUND_HALF_UP
                                                         ).signum() > 0
-                                                    ) R.attr.colorPrimary
+                                                    ) R.attr.colorOnPrimaryContainer
                                                     else R.attr.colorError,
                                                     value,
                                                     true

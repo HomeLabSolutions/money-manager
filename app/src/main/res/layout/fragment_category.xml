@@ -29,14 +29,13 @@
         app:layout_constraintTop_toBottomOf="@+id/category_toolbar_container" />
 
     <TextView
+        style="@style/Widget.MoneyManager.TextView.Label.Positive"
         android:id="@+id/category_group_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:padding="8dp"
         android:text="@string/edit"
-        android:textAppearance="?attr/textAppearanceBodyLarge"
-        android:textColor="?attr/colorTertiary"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/category_group_delete"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,15 +43,12 @@
         tools:visibility="visible" />
 
     <TextView
+        style="@style/Widget.MoneyManager.TextView.Label.Negative"
         android:id="@+id/category_group_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:padding="8dp"
         android:text="@string/delete"
-        android:textAppearance="?attr/textAppearanceBodyLarge"
-        android:textColor="?attr/colorError"
-        app:drawableStartCompat="@drawable/ic_delete"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/category_create"
         app:layout_constraintEnd_toEndOf="parent"
