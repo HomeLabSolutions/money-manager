@@ -16,7 +16,6 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.Lazy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -34,8 +33,7 @@ class SplashViewModel @Inject constructor(
 
     private val auth = FirebaseAuth.getInstance()
 
-    override fun onNavigatorAttached() {
-        super.onNavigatorAttached()
+    fun onStartup() {
         viewModelScope.launch(Dispatchers.IO) {
             val firebaseUid = auth.currentUser?.uid
             if (firebaseUid == null) {

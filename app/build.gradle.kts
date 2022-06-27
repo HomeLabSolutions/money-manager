@@ -191,6 +191,8 @@ dependencies {
     implementation(Deps.okHttp)
     implementation(Deps.okHttpInterceptor)
 
+    implementation("androidx.core:core-splashscreen:1.0.0-rc01")
+
     implementation(Deps.glide)
     implementation(Deps.glideCompiler)
 
