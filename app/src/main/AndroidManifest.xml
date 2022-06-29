@@ -17,7 +17,7 @@
         android:theme="@style/Theme.MoneyManager">
 
         <activity
-            android:name="com.d9tilov.moneymanager.splash.ui.SplashActivity"
+            android:name="com.d9tilov.moneymanager.splash.ui.RouterActivity"
             android:theme="@style/Theme.App.Starting"
             android:exported="true">
             <intent-filter>

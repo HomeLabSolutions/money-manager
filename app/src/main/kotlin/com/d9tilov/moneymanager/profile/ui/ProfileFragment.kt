@@ -27,7 +27,7 @@ import com.d9tilov.moneymanager.databinding.FragmentProfileBinding
 import com.d9tilov.moneymanager.goal.domain.entity.GoalDestination
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileViewModel
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransactionDestination
-import com.d9tilov.moneymanager.splash.ui.SplashActivity
+import com.d9tilov.moneymanager.splash.ui.RouterActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -185,7 +185,7 @@ class ProfileFragment :
 
     private fun restart() {
         startActivity(
-            Intent(context, SplashActivity::class.java)
+            Intent(context, RouterActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         )
         requireActivity().finish()

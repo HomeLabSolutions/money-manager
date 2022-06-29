@@ -9,7 +9,7 @@ import com.d9tilov.moneymanager.base.ui.BaseDialogFragment
 import com.d9tilov.moneymanager.base.ui.navigator.LogoutDialogNavigator
 import com.d9tilov.moneymanager.databinding.FragmentDialogLogoutBinding
 import com.d9tilov.moneymanager.profile.ui.vm.LogoutViewModel
-import com.d9tilov.moneymanager.splash.ui.SplashActivity
+import com.d9tilov.moneymanager.splash.ui.RouterActivity
 import com.firebase.ui.auth.AuthUI
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,7 +35,7 @@ class LogoutDialog :
     override fun logout() {
         PeriodicBackupWorker.stopPeriodicJob(requireContext())
         startActivity(
-            Intent(context, SplashActivity::class.java)
+            Intent(context, RouterActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         )
         requireActivity().finish()
