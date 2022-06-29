@@ -48,7 +48,7 @@ import java.math.BigDecimal
 @AndroidEntryPoint
 class RegularTransactionCreationFragment :
     BaseFragment<RegularTransactionCreatedNavigator, FragmentRegularTransactionCreationBinding>
-        (FragmentRegularTransactionCreationBinding::inflate, R.layout.fragment_regular_transaction_creation),
+    (FragmentRegularTransactionCreationBinding::inflate, R.layout.fragment_regular_transaction_creation),
     RegularTransactionCreatedNavigator {
 
     private val args by navArgs<RegularTransactionCreationFragmentArgs>()

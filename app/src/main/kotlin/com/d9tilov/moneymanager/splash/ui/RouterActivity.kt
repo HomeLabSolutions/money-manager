@@ -11,19 +11,19 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
 import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.prepopulate.ui.PrepopulateActivity
-import com.d9tilov.moneymanager.splash.vm.SplashViewModel
+import com.d9tilov.moneymanager.splash.vm.RouterViewModel
 import com.firebase.ui.auth.AuthUI
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SplashActivity : AppCompatActivity(), SplashNavigator {
+class RouterActivity : AppCompatActivity(), SplashNavigator {
 
     private val providers = arrayListOf(
         AuthUI.IdpConfig.PhoneBuilder().build(),
         AuthUI.IdpConfig.GoogleBuilder().build()
     )
 
-    private val viewModel by viewModels<SplashViewModel>()
+    private val viewModel by viewModels<RouterViewModel>()
     private val startForResult: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { viewModel.updateData() }
 
@@ -50,7 +50,7 @@ class SplashActivity : AppCompatActivity(), SplashNavigator {
         startForResult.launch(
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
-                .setLogo(R.drawable.ic_money_manager_logo_on_login)
+                .setLogo(R.drawable.ic_money_manager_logo)
                 .setTheme(R.style.Theme_Login)
                 .setAvailableProviders(providers)
                 .setIsSmartLockEnabled(false)

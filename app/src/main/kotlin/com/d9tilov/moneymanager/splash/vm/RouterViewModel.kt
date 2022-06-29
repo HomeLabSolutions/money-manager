@@ -24,7 +24,7 @@ import java.io.FileNotFoundException
 import javax.inject.Inject
 
 @HiltViewModel
-class SplashViewModel @Inject constructor(
+class RouterViewModel @Inject constructor(
     private val preferencesStore: PreferencesStore,
     private val backupInteractor: BackupInteractor,
     private val userInteractor: Lazy<UserInteractor>,

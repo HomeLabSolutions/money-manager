@@ -13,7 +13,7 @@ import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.vm.CurrencyChangeViewModel
 import com.d9tilov.moneymanager.databinding.FragmentDialogChangeCurrencyBinding
-import com.d9tilov.moneymanager.splash.ui.SplashActivity
+import com.d9tilov.moneymanager.splash.ui.RouterActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -46,7 +46,7 @@ class CurrencyChangeDialog :
 
     override fun change() {
         startActivity(
-            Intent(context, SplashActivity::class.java)
+            Intent(context, RouterActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         )
         requireActivity().finish()
