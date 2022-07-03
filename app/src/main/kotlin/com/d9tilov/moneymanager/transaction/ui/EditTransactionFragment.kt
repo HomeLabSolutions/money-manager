@@ -204,7 +204,6 @@ class EditTransactionFragment : EditTransactionNavigator,
         toolbar?.title = getString(R.string.title_transaction)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity.supportActionBar?.setDisplayShowHomeEnabled(true)
-        setHasOptionsMenu(true)
     }
 
     override fun save() {

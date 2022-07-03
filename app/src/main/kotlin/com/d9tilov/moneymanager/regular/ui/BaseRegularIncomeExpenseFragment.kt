@@ -3,10 +3,13 @@ package com.d9tilov.moneymanager.regular.ui
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.d9tilov.moneymanager.R
@@ -53,18 +56,31 @@ abstract class BaseRegularIncomeExpenseFragment<N : BaseRegularIncomeExpenseNavi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().addMenuProvider(
+            object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    menuInflater.inflate(R.menu.prepopulate_menu, menu)
+                    menu.findItem(R.id.action_skip).isVisible = false
+                    menu.findItem(R.id.action_add).isVisible = true
+                }
+
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    when (menuItem.itemId) {
+                        R.id.action_add -> openCreatedScreen(transactionType)
+                        else -> throw IllegalArgumentException("Unknown menu item with id: ${menuItem.itemId}")
+                    }
+                    return true
+                }
+            },
+            viewLifecycleOwner,
+            Lifecycle.State.RESUMED
+        )
+
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(
             TransactionRemoveDialog.ARG_UNDO_REMOVE_LAYOUT_DISMISS
         )?.observe(
             viewLifecycleOwner
         ) { if (it) regularTransactionAdapter.cancelDeletion() }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.prepopulate_menu, menu)
-        menu.findItem(R.id.action_skip).isVisible = false
-        menu.findItem(R.id.action_add).isVisible = true
     }
 
     override fun onStart() {
@@ -78,16 +94,8 @@ abstract class BaseRegularIncomeExpenseFragment<N : BaseRegularIncomeExpenseNavi
         activity.setSupportActionBar(toolbar)
         toolbar?.title =
             getString(if (transactionType == TransactionType.INCOME) R.string.title_prepopulate_regular_incomes else R.string.title_prepopulate_regular_expenses)
-        setHasOptionsMenu(true)
         if (showBackButton()) {
             activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
-        toolbar?.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.action_add -> openCreatedScreen(transactionType)
-                else -> throw IllegalArgumentException("Unknown menu item with id: ${it.itemId}")
-            }
-            return@setOnMenuItemClickListener false
         }
     }
 
@@ -117,5 +125,9 @@ abstract class BaseRegularIncomeExpenseFragment<N : BaseRegularIncomeExpenseNavi
             RegularExpenseFragmentDirections.toCreateRegularTransactionDest(TransactionType.EXPENSE)
         }
         findNavController().navigate(action)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
     }
 }

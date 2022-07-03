@@ -1,9 +1,6 @@
 package com.d9tilov.moneymanager.core.ui.color
 
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.core.util.currentDateTime
-import com.d9tilov.moneymanager.core.util.toMillis
-import java.util.Random
 
 object ColorManager {
 

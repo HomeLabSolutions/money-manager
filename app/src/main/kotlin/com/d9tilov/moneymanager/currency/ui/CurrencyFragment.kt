@@ -2,11 +2,12 @@ package com.d9tilov.moneymanager.currency.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -20,6 +21,7 @@ import com.d9tilov.moneymanager.base.data.ResultOf
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.CurrencyNavigator
 import com.d9tilov.moneymanager.core.util.CurrencyUtils
+import com.d9tilov.moneymanager.core.util.getColorFromAttr
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.currency.domain.entity.CurrencyDestination
@@ -78,6 +80,30 @@ class CurrencyFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().addMenuProvider(
+            object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    if (destination == null) {
+                        menuInflater.inflate(R.menu.prepopulate_menu, menu)
+                    }
+                }
+
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    when (menuItem.itemId) {
+                        R.id.action_skip -> {
+                            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                                param(FirebaseAnalytics.Param.ITEM_ID, "skip_prepopulation")
+                            }
+                            viewModel.createBudgetAndSkip()
+                        }
+                        else -> throw IllegalArgumentException("Unknown menu item with id: ${menuItem.itemId}")
+                    }
+                    return true
+                }
+            },
+            viewLifecycleOwner,
+            Lifecycle.State.RESUMED
+        )
         initToolbar()
         viewBinding?.run {
             currencyRv.adapter = currencyAdapter
@@ -95,9 +121,7 @@ class CurrencyFragment :
                                 menuItem?.isEnabled = true
                                 val sortedList =
                                     result.data.sortedBy { item ->
-                                        CurrencyUtils.getCurrencyFullName(
-                                            item.code
-                                        )
+                                        CurrencyUtils.getCurrencyFullName(item.code)
                                     }
                                         .map { currency ->
                                             if (currencyCode != null) {
@@ -124,38 +148,17 @@ class CurrencyFragment :
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        if (destination == null) {
-            this.menu = menu
-            inflater.inflate(R.menu.prepopulate_menu, menu)
-        }
-    }
-
     private fun initToolbar() {
         toolbar = viewBinding?.currencyToolbarContainer?.toolbar
         val activity = activity as AppCompatActivity
         toolbar?.title = getString(R.string.title_prepopulate_currency)
         activity.setSupportActionBar(toolbar)
-        setHasOptionsMenu(true)
         if (destination != null) {
             activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
             activity.supportActionBar?.setHomeButtonEnabled(true)
         } else {
             activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
             activity.supportActionBar?.setHomeButtonEnabled(false)
-        }
-        toolbar?.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.action_skip -> {
-                    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                        param(FirebaseAnalytics.Param.ITEM_ID, "skip_prepopulation")
-                    }
-                    viewModel.createBudgetAndSkip()
-                }
-                else -> throw IllegalArgumentException("Unknown menu item with id: ${it.itemId}")
-            }
-            return@setOnMenuItemClickListener false
         }
     }
 
@@ -174,12 +177,9 @@ class CurrencyFragment :
                 )
         }
         snackBar?.run {
-            val value = TypedValue()
-            context.theme.resolveAttribute(R.attr.colorError, value, true)
-            val backgroundColor = value.data
+            val backgroundColor = context.getColorFromAttr(R.attr.colorError)
             view.setBackgroundColor(backgroundColor)
-            context.theme.resolveAttribute(R.attr.colorSecondary, value, true)
-            val actionTextColor = value.data
+            val actionTextColor = context.getColorFromAttr(R.attr.colorSecondary)
             setActionTextColor(actionTextColor).setAction(getString(R.string.retry)) { viewModel.loadCurrencies() }
                 .show()
         }

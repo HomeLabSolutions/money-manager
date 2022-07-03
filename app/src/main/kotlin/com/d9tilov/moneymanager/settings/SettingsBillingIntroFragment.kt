@@ -98,6 +98,5 @@ class SettingsBillingIntroFragment :
         activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity.supportActionBar?.setDisplayShowHomeEnabled(true)
-        setHasOptionsMenu(true)
     }
 }

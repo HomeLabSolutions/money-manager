@@ -79,7 +79,6 @@ class GoalCreationFragment :
         toolbar?.title = getString(R.string.title_goal)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity.supportActionBar?.setDisplayShowHomeEnabled(true)
-        setHasOptionsMenu(true)
     }
 
     override fun onStart() {

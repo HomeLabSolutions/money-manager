@@ -55,9 +55,6 @@ object Deps {
     val okHttp by lazy { "com.squareup.okhttp3:okhttp:${Versions.okhttp}" }
     val okHttpInterceptor by lazy { "com.squareup.okhttp3:logging-interceptor:${Versions.okhttp}" }
 
-    val stetho by lazy { "com.facebook.stetho:stetho:${Versions.stetho}" }
-    val stethoOkHttp by lazy { "com.facebook.stetho:stetho-okhttp3:${Versions.stetho}" }
-
     val viewpager by lazy { "androidx.viewpager2:viewpager2:${Versions.viewpager}" }
 
     val coroutinesCore by lazy { "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutinesCore}" }
@@ -84,4 +81,6 @@ object Deps {
 
     val hilt by lazy { "com.google.dagger:hilt-android:${Versions.hilt}" }
     val hiltAndroidCompiler by lazy { "com.google.dagger:hilt-android-compiler:${Versions.hilt}" }
+
+    val splashScreen by lazy { "androidx.core:core-splashscreen:${Versions.splashScreen}" }
 }

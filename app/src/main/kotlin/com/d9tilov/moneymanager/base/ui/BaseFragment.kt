@@ -6,20 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
-import androidx.annotation.ColorRes
 import androidx.annotation.LayoutRes
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
+import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.core.ui.BaseViewModel.Companion.DEFAULT_MESSAGE_ID
+import com.d9tilov.moneymanager.core.util.getColorFromAttr
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.toast
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
@@ -95,9 +94,7 @@ abstract class BaseFragment<N : BaseNavigator, VB : ViewBinding>(
 
     protected fun showSnackBar(text: String, gravityCenter: Boolean = false) {
         baseActivity?.let {
-            val backgroundTint = if (snackBarBackgroundTint != 0) {
-                ContextCompat.getColor(it, snackBarBackgroundTint)
-            } else 0
+            val backgroundTint = requireContext().getColorFromAttr(R.attr.colorPrimary)
             it.showSnackBar(text, backgroundTint, snackBarAnchorView, gravityCenter)
         }
     }
@@ -111,8 +108,6 @@ abstract class BaseFragment<N : BaseNavigator, VB : ViewBinding>(
         baseActivity?.hideLoading()
     }
 
-    @get:ColorRes
-    protected open val snackBarBackgroundTint = 0
     protected open val snackBarAnchorView: View? = null
     protected open fun showCustomLoading(): Boolean {
         return false

@@ -1,17 +1,14 @@
 package com.d9tilov.moneymanager.base.ui.callback
 
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
-import android.util.TypedValue
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.widget.TextViewCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.d9tilov.moneymanager.R
@@ -26,7 +23,6 @@ abstract class SwipeToDeleteCallback(val context: Context) :
     private var intrinsicWidth = deleteIcon?.intrinsicWidth ?: 0
     private var intrinsicHeight = deleteIcon?.intrinsicHeight ?: 0
     private val background = ColorDrawable()
-    private val value = TypedValue()
     private val clearPaint = Paint().apply { xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR) }
     private val textPaint = Paint()
     private val textView = TextView(context)
@@ -39,11 +35,6 @@ abstract class SwipeToDeleteCallback(val context: Context) :
     }
 
     init {
-        val theme: Resources.Theme = context.theme
-        val styleId = TypedValue()
-        if (theme.resolveAttribute(R.attr.textAppearanceLabelLarge, styleId, true)) {
-            TextViewCompat.setTextAppearance(textView, styleId.data)
-        }
         textPaint.color = context.getColorFromAttr(R.attr.colorOnPrimary)
         textPaint.textSize = textView.textSize
         textPaint.typeface = textView.typeface
@@ -81,9 +72,7 @@ abstract class SwipeToDeleteCallback(val context: Context) :
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
             return
         }
-
-        context.theme.resolveAttribute(R.attr.colorError, value, true)
-        val backgroundColor = value.data
+        val backgroundColor = context.getColorFromAttr(R.attr.colorError)
         background.color = backgroundColor
         background.setBounds(
             itemView.right + dX.toInt(),

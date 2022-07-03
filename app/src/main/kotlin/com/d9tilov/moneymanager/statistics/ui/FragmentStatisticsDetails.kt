@@ -20,7 +20,6 @@ import com.d9tilov.moneymanager.statistics.ui.recycler.StatisticsDetailsAdapter
 import com.d9tilov.moneymanager.statistics.vm.StatisticsDetailsViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -67,8 +66,5 @@ class FragmentStatisticsDetails :
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         toolbar?.title = category.name
-        activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        activity.supportActionBar?.setDisplayShowHomeEnabled(true)
-        setHasOptionsMenu(true)
     }
 }

@@ -4,7 +4,6 @@ import android.app.Application
 import android.os.StrictMode
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
-import com.facebook.stetho.Stetho
 import com.google.android.material.color.DynamicColors
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.HiltAndroidApp
@@ -23,7 +22,6 @@ class App : Application(), Configuration.Provider {
         DynamicColors.applyToActivitiesIfAvailable(this)
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
         if (BuildConfig.DEBUG) {
-            Stetho.initializeWithDefaults(this)
             Timber.plant(DebugTree())
             val threadPolicy = StrictMode.ThreadPolicy.Builder()
                 .detectAll()
