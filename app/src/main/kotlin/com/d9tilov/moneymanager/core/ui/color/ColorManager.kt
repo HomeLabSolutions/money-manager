@@ -9,18 +9,18 @@ object ColorManager {
 
     val colorList = listOf(
         R.color.category_light_yellow,
-        R.color.category_yellow_dark,
         R.color.category_yellow,
-        R.color.category_orange,
         R.color.category_orange_light,
+        R.color.category_yellow_dark,
+        R.color.category_orange,
         R.color.category_dark_orange,
         R.color.category_deep_orange,
         R.color.category_deep_orange_dark,
         R.color.category_deep_orange_bright,
         R.color.category_light_blue,
+        R.color.category_blue,
         R.color.category_grey_blue,
         R.color.category_flower_violet,
-        R.color.category_blue,
         R.color.category_navy_blue,
         R.color.category_violet,
         R.color.category_purple_light,
@@ -34,12 +34,12 @@ object ColorManager {
         R.color.category_green_dark,
         R.color.category_light_violet,
         R.color.category_red,
-        R.color.category_dark_red,
         R.color.category_dark_bright,
         R.color.category_pink,
-        R.color.category_pink_dark,
+        R.color.category_dark_red,
         R.color.category_pink_bright,
         R.color.category_purple,
+        R.color.category_pink_dark,
         R.color.category_deep_purple,
         R.color.category_deep_purple_bright,
         R.color.category_deep_purple_dark,
@@ -58,5 +58,5 @@ object ColorManager {
         R.color.category_brown,
         R.color.category_brown_dark,
         R.color.category_brown_bright
-    ).shuffled(Random(currentDateTime().toMillis()))
+    )
 }

@@ -149,6 +149,7 @@ class StatisticsFragment :
         showChart()
         viewBinding?.run {
             statisticsBarChart.adapter = statisticsBarChartAdapter
+            statisticsBarChart.layoutManager = LinearLayoutManager(requireContext())
             emptyViewStub = statisticsEmptyPlaceholder
             initStatisticsMenuRv()
             statisticsDay.setOnClickListener { updatePeriod(DAY) }
