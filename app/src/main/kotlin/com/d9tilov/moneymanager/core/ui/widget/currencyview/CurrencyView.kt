@@ -138,7 +138,7 @@ class CurrencyView @JvmOverloads constructor(
                     TypedValue.COMPLEX_UNIT_PX,
                     resources.getDimensionPixelSize(R.dimen.currency_sum_text_size).toFloat()
                 )
-                setTextColor(R.attr.colorControlActivated)
+                setTextColor(R.attr.colorOnBackground)
             } else TextViewCompat.setTextAppearance(this, sumTextStyle)
             if (sumTextColor != DEFAULT) setTextColor(sumTextColor)
             if (sumTextSize != DEFAULT) setTextSize(
@@ -163,7 +163,7 @@ class CurrencyView @JvmOverloads constructor(
                     TypedValue.COMPLEX_UNIT_PX,
                     resources.getDimensionPixelSize(R.dimen.currency_sum_text_size).toFloat()
                 )
-                setTextColor(R.attr.colorControlActivated)
+                setTextColor(R.attr.colorOnBackground)
             } else TextViewCompat.setTextAppearance(this, sumTextStyle)
             if (sumTextColor != DEFAULT) setTextColor(sumTextColor)
             if (sumTextSize != DEFAULT) setTextSize(
@@ -189,7 +189,7 @@ class CurrencyView @JvmOverloads constructor(
                     TypedValue.COMPLEX_UNIT_PX,
                     resources.getDimensionPixelSize(R.dimen.currency_sign_text_size).toFloat()
                 )
-                setTextColor(R.attr.colorControlActivated)
+                setTextColor(R.attr.colorOnBackground)
             } else TextViewCompat.setTextAppearance(this, signTextStyle)
             if (signTextColor != DEFAULT) setTextColor(signTextColor)
             if (signTextSize != DEFAULT) setTextSize(

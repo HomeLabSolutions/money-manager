@@ -3,8 +3,10 @@ package com.d9tilov.moneymanager.goal.ui
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.callback.SwipeToDeleteCallback
+import com.d9tilov.moneymanager.base.ui.currencyCode
 import com.d9tilov.moneymanager.base.ui.navigator.GoalsNavigator
 import com.d9tilov.moneymanager.core.ui.recyclerview.MarginItemDecoration
 import com.d9tilov.moneymanager.core.util.gone
@@ -27,7 +30,6 @@ import com.d9tilov.moneymanager.goal.domain.entity.Goal
 import com.d9tilov.moneymanager.goal.domain.entity.GoalDestination
 import com.d9tilov.moneymanager.goal.ui.dialog.GoalRemoveDialog.Companion.ARG_UNDO_REMOVE_LAYOUT_DISMISS
 import com.d9tilov.moneymanager.goal.vm.GoalsViewModel
-import com.d9tilov.moneymanager.base.ui.currencyCode
 import com.d9tilov.moneymanager.prepopulate.ui.ControlsClicked
 import com.d9tilov.moneymanager.prepopulate.ui.PrepopulateActivity
 import com.google.android.material.appbar.MaterialToolbar
@@ -66,6 +68,24 @@ class GoalsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().addMenuProvider(
+            object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    menuInflater.inflate(R.menu.prepopulate_menu, menu)
+                    menu.findItem(R.id.action_skip).isVisible = false
+                }
+
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    when (menuItem.itemId) {
+                        R.id.action_add -> openCreationGoalScreen()
+                        else -> throw IllegalArgumentException("Unknown menu item with id: ${menuItem.itemId}")
+                    }
+                    return true
+                }
+            },
+            viewLifecycleOwner,
+            Lifecycle.State.RESUMED
+        )
         initToolbar()
         viewBinding?.run {
             if (destination != GoalDestination.PrepopulateScreen) {
@@ -130,28 +150,14 @@ class GoalsFragment :
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         toolbar?.title = getString(R.string.title_goal)
-        setHasOptionsMenu(true)
         if (destination == GoalDestination.ProfileScreen) {
             activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
-        toolbar?.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.action_add -> openCreationGoalScreen()
-                else -> throw IllegalArgumentException("Unknown menu item with id: ${it.itemId}")
-            }
-            return@setOnMenuItemClickListener false
         }
     }
 
     private fun openCreationGoalScreen(goal: Goal? = null) {
         val action = GoalsFragmentDirections.toGoalsCreationDest(goal)
         findNavController().navigate(action)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.prepopulate_menu, menu)
-        menu.findItem(R.id.action_skip).isVisible = false
     }
 
     override fun onNextClick() {

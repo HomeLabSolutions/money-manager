@@ -57,8 +57,6 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : Vi
 
     private var isTransactionDataEmpty = false
 
-    override val snackBarBackgroundTint = R.color.colorPrimary
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()

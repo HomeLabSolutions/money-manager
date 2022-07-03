@@ -28,6 +28,7 @@ import com.d9tilov.moneymanager.core.util.TRANSACTION_DATE_FORMAT_SHORT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.currentDate
 import com.d9tilov.moneymanager.core.util.currentDateTime
+import com.d9tilov.moneymanager.core.util.getColorFromAttr
 import com.d9tilov.moneymanager.core.util.getEndOfDay
 import com.d9tilov.moneymanager.core.util.getStartOfDay
 import com.d9tilov.moneymanager.core.util.gone
@@ -308,9 +309,8 @@ class StatisticsFragment :
                 sb.append(SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(toMillis))
                 sb.toString()
             }
-        viewBinding?.statisticsPieChart?.setCenterTextColor(
-            ContextCompat.getColor(requireContext(), R.color.colorPrimary)
-        )
+        val centerColor = requireContext().getColorFromAttr(R.attr.colorOnBackground)
+        viewBinding?.statisticsPieChart?.setCenterTextColor(centerColor)
         viewBinding?.statisticsPieChart?.invalidate()
     }
 
@@ -342,12 +342,7 @@ class StatisticsFragment :
             statisticsPieChart.isHighlightPerTapEnabled = false
 
             statisticsPieChart.animateY(ANIMATION_DURATION, Easing.EaseInOutQuad)
-            statisticsPieChart.setEntryLabelColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    android.R.color.white
-                )
-            )
+            statisticsPieChart.setEntryLabelColor(requireContext().getColorFromAttr(R.attr.backgroundColor))
             statisticsPieChart.setEntryLabelTypeface(tfRegular)
             statisticsPieChart.setEntryLabelTextSize(PIE_CHART_ENTRY_LABEL_TEXT_SIZE)
             statisticsPieChart.setCenterTextSize(PIE_CHART_CENTER_TEXT_SIZE)
@@ -405,14 +400,14 @@ class StatisticsFragment :
             statisticsLineChart.setMaxVisibleValueCount(LINE_CHART_MAX_VISIBLE_VALUE_COUNT)
             statisticsLineChart.description.isEnabled = false
             val xAxis: XAxis = statisticsLineChart.xAxis
-            xAxis.textColor = ContextCompat.getColor(requireContext(), R.color.colorPrimary)
+            xAxis.textColor = requireContext().getColorFromAttr(R.attr.colorPrimary)
             xAxis.enableGridDashedLine(
                 LINE_CHART_LINE_LENGTH,
                 LINE_CHART_SPACE_LENGTH_AXIS,
                 LINE_CHART_PHASE
             )
             val yAxis: YAxis = statisticsLineChart.axisLeft
-            yAxis.textColor = ContextCompat.getColor(requireContext(), R.color.colorPrimary)
+            yAxis.textColor = requireContext().getColorFromAttr(R.attr.colorPrimary)
             yAxis.enableGridDashedLine(
                 LINE_CHART_LINE_LENGTH,
                 LINE_CHART_SPACE_LENGTH_AXIS,
@@ -438,8 +433,7 @@ class StatisticsFragment :
             lineDataSet.circleRadius = LINE_CHART_DATA_CIRCLE_RADIUS
             lineDataSet.formSize = LINE_CHART_DATA_FORM_SIZE
             lineDataSet.valueTextSize = LINE_CHART_DATA_LABEL_TEXT_SIZE
-            lineDataSet.valueTextColor =
-                ContextCompat.getColor(requireContext(), R.color.colorPrimary)
+            lineDataSet.valueTextColor = requireContext().getColorFromAttr(R.attr.colorPrimary)
             lineDataSet.enableDashedHighlightLine(
                 LINE_CHART_LINE_LENGTH,
                 LINE_CHART_SPACE_LENGTH,

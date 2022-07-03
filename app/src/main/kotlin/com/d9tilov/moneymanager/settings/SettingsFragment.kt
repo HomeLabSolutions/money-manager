@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.settings
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -26,6 +27,7 @@ import com.d9tilov.moneymanager.databinding.FragmentSettingsBinding
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -108,12 +110,22 @@ class SettingsFragment :
                         }
                     }
                     launch {
-                        viewModel.isPremium.collect { isPremium ->
+                        Log.d("moggot", "launch")
+                        viewModel.isPremium.combine(viewModel.getActiveSku) { isPremium, hasActiveSku -> Pair(isPremium, hasActiveSku) }.collect { pair ->
+                            val isPremium = pair.first
+                            val hasActiveSku = pair.second
+                            Log.d("moggot", "isPremium: $isPremium")
+                            Log.d("moggot", "hasActiveSku: $hasActiveSku")
                             settingsSubscription.root.isEnabled = !isPremium
                             if (isPremium) {
                                 settingsSubscription.settingsSubscriptionTitle.text =
                                     getString(R.string.settings_subscription_premium_acknowledged_title)
                                 settingsSubscription.settingsSubscriptionPrice.hide()
+                                settingsSubscription.settingsSubscriptionDescription.text =
+                                    getString(
+                                        if (hasActiveSku) R.string.settings_subscription_premium_acknowledged_subtitle_renewing
+                                        else R.string.settings_subscription_premium_acknowledged_subtitle_cancel
+                                    )
                             } else {
                                 settingsSubscription.settingsSubscriptionTitle.text =
                                     getString(R.string.settings_subscription_premium_title)
@@ -121,15 +133,6 @@ class SettingsFragment :
                                     getString(R.string.settings_subscription_premium_description)
                                 settingsSubscription.settingsSubscriptionPrice.show()
                             }
-                        }
-                    }
-                    launch {
-                        viewModel.getActiveSku.collect { hasRenewablePremium ->
-                            settingsSubscription.settingsSubscriptionDescription.text =
-                                getString(
-                                    if (hasRenewablePremium) R.string.settings_subscription_premium_acknowledged_subtitle_renewing
-                                    else R.string.settings_subscription_premium_acknowledged_subtitle_cancel
-                                )
                         }
                     }
                 }
@@ -168,7 +171,6 @@ class SettingsFragment :
         activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity.supportActionBar?.setDisplayShowHomeEnabled(true)
-        setHasOptionsMenu(true)
     }
 
     override fun save() {

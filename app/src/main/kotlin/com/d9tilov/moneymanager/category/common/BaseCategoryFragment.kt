@@ -107,7 +107,6 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
         activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity.supportActionBar?.setDisplayShowHomeEnabled(true)
-        setHasOptionsMenu(true)
     }
 
     override fun onBackPressed(): Boolean {

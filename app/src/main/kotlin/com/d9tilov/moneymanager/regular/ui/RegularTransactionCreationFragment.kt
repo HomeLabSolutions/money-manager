@@ -1,12 +1,16 @@
 package com.d9tilov.moneymanager.regular.ui
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.arrayMapOf
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -67,6 +71,21 @@ class RegularTransactionCreationFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().addMenuProvider(
+            object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {}
+
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    when (menuItem.itemId) {
+                        R.id.action_add -> {}
+                        else -> throw IllegalArgumentException("Unknown menu item with id: ${menuItem.itemId}")
+                    }
+                    return true
+                }
+            },
+            viewLifecycleOwner,
+            Lifecycle.State.RESUMED
+        )
         viewBinding?.run {
             findNavController().currentBackStackEntry?.savedStateHandle?.run {
                 getLiveData<Category>(ARG_CATEGORY)
@@ -347,14 +366,6 @@ class RegularTransactionCreationFragment :
             )
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity.supportActionBar?.setDisplayShowHomeEnabled(true)
-        setHasOptionsMenu(true)
-        toolbar?.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.action_add -> {}
-                else -> throw IllegalArgumentException("Unknown menu item with id: ${it.itemId}")
-            }
-            return@setOnMenuItemClickListener false
-        }
     }
 
     override fun back() {

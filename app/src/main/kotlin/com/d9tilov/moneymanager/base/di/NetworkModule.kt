@@ -2,7 +2,6 @@ package com.d9tilov.moneymanager.base.di
 
 import com.d9tilov.moneymanager.App.Companion.TAG
 import com.d9tilov.moneymanager.BuildConfig
-import com.facebook.stetho.okhttp3.StethoInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,7 +22,6 @@ class NetworkModule {
         OkHttpClient.Builder()
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
             .connectTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
-            .addNetworkInterceptor(StethoInterceptor())
             .addInterceptor(interceptor)
             .build()
 
