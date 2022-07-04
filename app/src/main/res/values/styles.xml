@@ -66,6 +66,8 @@
         <item name="android:textAppearance">?attr/textAppearanceTitleMedium</item>
         <item name="android:textSize">@dimen/profile_item_text_subtitle_size</item>
         <item name="android:textColor">?attr/colorTertiary</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
     </style>
 
     <style name="Widget.MoneyManager.TextView.Title" parent="Widget.AppCompat.TextView">
