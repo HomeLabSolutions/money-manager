@@ -342,7 +342,7 @@ class StatisticsFragment :
             statisticsPieChart.isHighlightPerTapEnabled = false
 
             statisticsPieChart.animateY(ANIMATION_DURATION, Easing.EaseInOutQuad)
-            statisticsPieChart.setEntryLabelColor(requireContext().getColorFromAttr(R.attr.backgroundColor))
+            statisticsPieChart.setEntryLabelColor(requireContext().getColorFromAttr(android.R.attr.colorBackground))
             statisticsPieChart.setEntryLabelTypeface(tfRegular)
             statisticsPieChart.setEntryLabelTextSize(PIE_CHART_ENTRY_LABEL_TEXT_SIZE)
             statisticsPieChart.setCenterTextSize(PIE_CHART_CENTER_TEXT_SIZE)
@@ -384,7 +384,7 @@ class StatisticsFragment :
         val pieData = PieData(dataSet)
         pieData.setValueFormatter(PercentFormatter(viewBinding?.statisticsPieChart))
         pieData.setValueTextSize(PIE_CHART_VALUE_TEXT_SIZE)
-        pieData.setValueTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
+        pieData.setValueTextColor(requireContext().getColorFromAttr(R.attr.backgroundColor))
         viewBinding?.statisticsPieChart?.data = pieData
 
         viewBinding?.statisticsPieChart?.highlightValues(null)
