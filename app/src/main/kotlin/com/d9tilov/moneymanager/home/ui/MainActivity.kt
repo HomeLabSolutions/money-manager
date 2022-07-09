@@ -24,7 +24,6 @@ import com.d9tilov.moneymanager.core.util.setupWithNavController
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint

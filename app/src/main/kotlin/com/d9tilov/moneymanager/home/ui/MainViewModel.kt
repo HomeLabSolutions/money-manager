@@ -30,7 +30,7 @@ class MainViewModel @Inject constructor(
 
     val isPremium = billingInteractor.isPremium()
         .flowOn(Dispatchers.IO)
-        .shareIn(viewModelScope, SharingStarted.Eagerly)
+        .shareIn(viewModelScope, SharingStarted.WhileSubscribed(), 1)
 
     init {
         billingInteractor.startBillingConnection()

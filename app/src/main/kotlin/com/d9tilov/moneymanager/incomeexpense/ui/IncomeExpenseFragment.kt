@@ -6,12 +6,11 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.backup.PeriodicBackupWorker
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeExpenseNavigator
 import com.d9tilov.moneymanager.core.events.OnBackPressed
@@ -34,7 +33,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import javax.inject.Inject
@@ -120,23 +118,11 @@ class IncomeExpenseFragment :
                 findNavController().navigate(action)
             }
             viewLifecycleOwner.lifecycleScope.launch {
-                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    launch {
-                        viewModel.isPremium.collect { isPremium ->
-                            this@IncomeExpenseFragment.isPremium = isPremium
-                            if (isPremium) PeriodicBackupWorker.startPeriodicJob(requireContext())
-                        }
+                viewModel.getCurrencyCodeAsync()
+                    .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                    .collect {
+                        incomeExpenseMainSum.setValue(incomeExpenseMainSum.getValue(), it)
                     }
-                    launch {
-                        viewModel.getCurrencyCodeAsync()
-                            .collect {
-                                incomeExpenseMainSum.setValue(
-                                    incomeExpenseMainSum.getValue(),
-                                    it
-                                )
-                            }
-                    }
-                }
             }
         }
         findNavController().currentBackStackEntry?.savedStateHandle?.run {
