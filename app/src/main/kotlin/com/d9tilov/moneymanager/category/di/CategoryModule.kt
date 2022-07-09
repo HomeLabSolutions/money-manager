@@ -43,7 +43,5 @@ class CategoryModule {
     @Provides
     @ActivityRetainedScoped
     fun provideCategoryRepo(categoryLocalSource: CategorySource): CategoryRepo =
-        CategoryRepoImpl(
-            categoryLocalSource
-        )
+        CategoryRepoImpl(categoryLocalSource)
 }

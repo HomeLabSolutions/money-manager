@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "f2305199f747aa83714e6589ee3d3c64",
+    "identityHash": "291c5776fcd57ef11b20b5d091c2b8c8",
     "entities": [
       {
         "tableName": "users",
@@ -56,7 +56,7 @@
       },
       {
         "tableName": "categories",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `clientId` TEXT NOT NULL, `parentId` INTEGER NOT NULL, `type` TEXT NOT NULL, `name` TEXT NOT NULL, `icon` TEXT NOT NULL, `color` TEXT NOT NULL, `usageCount` INTEGER NOT NULL, FOREIGN KEY(`clientId`) REFERENCES `users`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `clientId` TEXT NOT NULL, `parentId` INTEGER NOT NULL, `type` TEXT NOT NULL, `name` TEXT NOT NULL, `icon` INTEGER NOT NULL, `color` INTEGER NOT NULL, `usageCount` INTEGER NOT NULL, FOREIGN KEY(`clientId`) REFERENCES `users`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -89,15 +89,15 @@
             "notNull": true
           },
           {
-            "fieldPath": "iconName",
+            "fieldPath": "iconNameOrdinal",
             "columnName": "icon",
-            "affinity": "TEXT",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "colorName",
+            "fieldPath": "colorNameOrdinal",
             "columnName": "color",
-            "affinity": "TEXT",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -558,7 +558,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f2305199f747aa83714e6589ee3d3c64')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '291c5776fcd57ef11b20b5d091c2b8c8')"
     ]
   }
 }

@@ -1,18 +1,19 @@
 package com.d9tilov.moneymanager.category.data.local.mapper
 
-import android.content.Context
+import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.entity.PrepopulateCategory
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.data.entity.CategoryDbModel
+import com.d9tilov.moneymanager.category.domain.entity.categoryMap
+import com.d9tilov.moneymanager.category.domain.entity.fromCategoryRes
 import com.d9tilov.moneymanager.core.constants.DataConstants.NO_ID
-import dagger.hilt.android.qualifiers.ApplicationContext
+import com.d9tilov.moneymanager.core.util.colorMap
+import com.d9tilov.moneymanager.core.util.fromColorRes
 import javax.inject.Inject
 
-class CategoryMapper @Inject constructor(@ApplicationContext private val context: Context) {
+class CategoryMapper @Inject constructor() {
 
     fun toDataModel(model: CategoryDbModel, parentModel: CategoryDbModel? = null) = with(model) {
-        val iconResId = context.resources.getIdentifier(iconName, "drawable", context.packageName)
-        val colorResId = context.resources.getIdentifier(colorName, "color", context.packageName)
         parentModel?.let {
             Category.EMPTY_EXPENSE.copy(
                 id = id,
@@ -20,8 +21,8 @@ class CategoryMapper @Inject constructor(@ApplicationContext private val context
                 name = name,
                 parent = toDataParentModel(parentModel),
                 type = type,
-                icon = iconResId,
-                color = colorResId,
+                icon = categoryMap.getOrDefault(iconNameOrdinal, R.drawable.ic_category_folder),
+                color = colorMap.getOrDefault(colorNameOrdinal, R.color.category_all_color),
                 usageCount = usageCount
             )
         } ?: Category.EMPTY_EXPENSE.copy(
@@ -29,57 +30,53 @@ class CategoryMapper @Inject constructor(@ApplicationContext private val context
             clientId = uid,
             name = name,
             type = type,
-            icon = iconResId,
-            color = colorResId,
+            icon = categoryMap.getOrDefault(iconNameOrdinal, R.drawable.ic_category_folder),
+            color = colorMap.getOrDefault(colorNameOrdinal, R.color.category_all_color),
             usageCount = usageCount
         )
     }
 
     fun toDataParentModel(model: CategoryDbModel) =
         with(model) {
-            val iconResId =
-                context.resources.getIdentifier(iconName, "drawable", context.packageName)
-            val colorResId =
-                context.resources.getIdentifier(colorName, "color", context.packageName)
             Category.EMPTY_EXPENSE.copy(
                 id = id,
                 clientId = uid,
                 name = name,
                 type = type,
-                icon = iconResId,
-                color = colorResId,
+                icon = categoryMap.getOrDefault(iconNameOrdinal, R.drawable.ic_category_folder),
+                color = colorMap.getOrDefault(colorNameOrdinal, R.color.category_all_color),
                 usageCount = usageCount
             )
         }
 
     fun toDbModel(category: Category) =
         with(category) {
-            val iconName = context.resources.getResourceEntryName(icon)
-            val colorName = context.resources.getResourceEntryName(color)
+            val iconNameOrdinal = fromCategoryRes(icon)
+            val colorNameOrdinal = fromColorRes(color)
             CategoryDbModel(
                 id = id,
                 uid = clientId,
                 parentId = parent?.id ?: NO_ID,
                 type = type,
                 name = name,
-                iconName = iconName,
-                colorName = colorName,
+                iconNameOrdinal = iconNameOrdinal,
+                colorNameOrdinal = colorNameOrdinal,
                 usageCount = usageCount
             )
         }
 
     fun toDataModelFromPrePopulate(model: PrepopulateCategory, uid: String) =
         with(model) {
-            val iconName = context.resources.getResourceEntryName(icon)
-            val colorName = context.resources.getResourceEntryName(color)
+            val iconNameOrdinal = fromCategoryRes(icon)
+            val colorNameOrdinal = fromColorRes(color)
             CategoryDbModel(
                 id = id,
                 uid = uid,
                 parentId = parentId,
                 type = type,
                 name = name,
-                iconName = iconName,
-                colorName = colorName,
+                iconNameOrdinal = iconNameOrdinal,
+                colorNameOrdinal = colorNameOrdinal,
                 usageCount = usageCount
             )
         }
