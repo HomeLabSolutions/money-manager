@@ -26,7 +26,7 @@ data class CategoryDbModel(
     @ColumnInfo(name = "parentId") val parentId: Long,
     @ColumnInfo(name = "type") val type: TransactionType,
     @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "icon") val iconName: String,
-    @ColumnInfo(name = "color") val colorName: String,
+    @ColumnInfo(name = "icon") val iconNameOrdinal: Int,
+    @ColumnInfo(name = "color") val colorNameOrdinal: Int,
     @ColumnInfo(name = "usageCount") val usageCount: Int
 )

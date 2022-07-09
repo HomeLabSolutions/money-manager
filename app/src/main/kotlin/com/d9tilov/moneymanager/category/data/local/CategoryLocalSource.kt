@@ -100,8 +100,8 @@ class CategoryLocalSource(
         NO_ID,
         TransactionType.EXPENSE,
         "",
-        "",
-        "",
+        0,
+        0,
         0
     )
 
