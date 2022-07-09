@@ -11,9 +11,6 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -39,10 +36,6 @@ class IncomeExpenseViewModel @Inject constructor(
                 }
         }
     }
-
-    val isPremium = billingInteractor.isPremium()
-        .flowOn(Dispatchers.IO)
-        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     fun setCurrencyCode(currencyCode: String) {
         currencyCodeStr.value = currencyCode
