@@ -96,7 +96,7 @@ class ExpenseViewModel @Inject constructor(
         )
     }
         .flowOn(Dispatchers.IO)
-        .shareIn(viewModelScope, SharingStarted.Eagerly)
+        .shareIn(viewModelScope, SharingStarted.WhileSubscribed())
 
     val expenseSpendingInfoPremium: Flow<ExpenseInfoUiModel?> = combine(
         billingInteractor.isPremium(),
@@ -106,12 +106,12 @@ class ExpenseViewModel @Inject constructor(
         else null
     }
         .flowOn(Dispatchers.IO)
-        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
+        .shareIn(viewModelScope, SharingStarted.WhileSubscribed())
 
     override val categories: StateFlow<List<Category>> =
         categoryInteractor.getGroupedCategoriesByType(TransactionType.EXPENSE)
             .flowOn(Dispatchers.IO)
-            .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     override fun saveTransaction(category: Category, sum: BigDecimal, currencyCode: String) {
         viewModelScope.launch {

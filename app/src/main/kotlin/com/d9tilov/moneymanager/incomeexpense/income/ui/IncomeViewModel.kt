@@ -43,17 +43,17 @@ class IncomeViewModel @Inject constructor(
 
     val earnedInPeriod = transactionInteractor.getSumInFiscalPeriodInUsd(TransactionType.INCOME)
         .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler)
-        .stateIn(viewModelScope, SharingStarted.Eagerly, BigDecimal.ZERO)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), BigDecimal.ZERO)
 
     val earnedInPeriodApprox =
         transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.INCOME)
             .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler)
-            .stateIn(viewModelScope, SharingStarted.Eagerly, BigDecimal.ZERO)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), BigDecimal.ZERO)
 
     override val categories: StateFlow<List<Category>> =
         categoryInteractor.getGroupedCategoriesByType(TransactionType.INCOME)
             .flowOn(Dispatchers.IO)
-            .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     override fun saveTransaction(category: Category, sum: BigDecimal, currencyCode: String) {
         viewModelScope.launch {
