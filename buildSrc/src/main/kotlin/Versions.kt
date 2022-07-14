@@ -39,7 +39,7 @@ object Versions {
     const val sqlCipher = "4.5.1"
 
     const val viewpager = "1.0.0"
-    const val coroutinesCore = "1.6.3"
+    const val coroutinesCore = "1.6.4"
 
     const val lifecycle = "2.5.0"
     const val lifecycleExtension = "2.2.0"
