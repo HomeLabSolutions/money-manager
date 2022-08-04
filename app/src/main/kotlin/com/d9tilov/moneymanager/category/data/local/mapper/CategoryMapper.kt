@@ -21,8 +21,8 @@ class CategoryMapper @Inject constructor() {
                 name = name,
                 parent = toDataParentModel(parentModel),
                 type = type,
-                icon = categoryMap.getOrDefault(iconNameOrdinal, R.drawable.ic_category_folder),
-                color = colorMap.getOrDefault(colorNameOrdinal, R.color.category_all_color),
+                icon = categoryMap.getOrElse(iconNameOrdinal) { R.drawable.ic_category_folder },
+                color = colorMap.getOrElse(colorNameOrdinal) { R.color.category_all_color },
                 usageCount = usageCount
             )
         } ?: Category.EMPTY_EXPENSE.copy(
@@ -30,21 +30,21 @@ class CategoryMapper @Inject constructor() {
             clientId = uid,
             name = name,
             type = type,
-            icon = categoryMap.getOrDefault(iconNameOrdinal, R.drawable.ic_category_folder),
-            color = colorMap.getOrDefault(colorNameOrdinal, R.color.category_all_color),
+            icon = categoryMap.getOrElse(iconNameOrdinal) { R.drawable.ic_category_folder },
+            color = colorMap.getOrElse(colorNameOrdinal) { R.color.category_all_color },
             usageCount = usageCount
         )
     }
 
-    fun toDataParentModel(model: CategoryDbModel) =
+    fun toDataParentModel(model: CategoryDbModel): Category =
         with(model) {
             Category.EMPTY_EXPENSE.copy(
                 id = id,
                 clientId = uid,
                 name = name,
                 type = type,
-                icon = categoryMap.getOrDefault(iconNameOrdinal, R.drawable.ic_category_folder),
-                color = colorMap.getOrDefault(colorNameOrdinal, R.color.category_all_color),
+                icon = categoryMap.getOrElse(iconNameOrdinal) { R.drawable.ic_category_folder },
+                color = colorMap.getOrElse(colorNameOrdinal) { R.color.category_all_color },
                 usageCount = usageCount
             )
         }
