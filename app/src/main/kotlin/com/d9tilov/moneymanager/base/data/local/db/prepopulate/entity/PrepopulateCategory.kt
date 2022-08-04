@@ -9,7 +9,7 @@ data class PrepopulateCategory(
     val id: Long,
     val parentId: Long,
     val type: TransactionType,
-    @StringRes val name: String,
+    val name: String,
     @DrawableRes val icon: Int,
     @ColorRes val color: Int,
     val usageCount: Int
