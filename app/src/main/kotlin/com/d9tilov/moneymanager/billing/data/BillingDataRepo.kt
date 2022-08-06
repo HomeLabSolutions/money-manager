@@ -35,6 +35,7 @@ class BillingDataRepo(
     override fun terminateBillingConnection() = billingSource.terminateBillingConnection()
     override fun getSkuDetails(): Flow<List<BillingSkuDetails>> {
         return billingSource.productWithProductDetails.map { details: Map<String, ProductDetails> -> details.toList() }
+            .filter { it.isNotEmpty() }
             .map { list: List<Pair<String, ProductDetails>> -> list.first() }
             .map { item ->
                 Pair<String, List<ProductDetails.SubscriptionOfferDetails>?>(
@@ -45,13 +46,13 @@ class BillingDataRepo(
             .map { pair: Pair<String, List<ProductDetails.SubscriptionOfferDetails>?> ->
                 val product: String = pair.first
                 pair.second?.map { details: ProductDetails.SubscriptionOfferDetails ->
-                    val tag =
-                        details.offerTags.first() ?: throw BillingFailure.TagNotFoundException(
-                            product
-                        )
+                    val offerTags = details.offerTags
+                    if (offerTags.isEmpty()) throw BillingFailure.TagNotFoundException(product)
+                    val tag = offerTags.first()
                     val offerToken = details.offerToken
-                    val price = details.pricingPhases.pricingPhaseList.first()
-                        ?: throw BillingFailure.PriceNotFoundException(product)
+                    val pricingList = details.pricingPhases.pricingPhaseList
+                    if (pricingList.isEmpty()) throw BillingFailure.PriceNotFoundException(product)
+                    val price = pricingList.first()
                     val formattedPrice =
                         price.priceAmountMicros.toBigDecimal().divide(AMOUNT_DIVIDER.toBigDecimal())
                     val currencyCode = price.priceCurrencyCode

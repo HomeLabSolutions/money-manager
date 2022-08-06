@@ -15,6 +15,7 @@ import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import com.google.firebase.FirebaseException
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flowOn
@@ -33,6 +34,10 @@ class SettingsViewModel @Inject constructor(
     billingInteractor: BillingInteractor
 ) : BaseViewModel<SettingsNavigator>() {
 
+    private val minPriceExceptionHandler = CoroutineExceptionHandler { _, exception ->
+        Timber.d("Unable to get min price")
+    }
+
     val userData = userInteractor.getCurrentUser()
         .flowOn(Dispatchers.IO)
         .stateIn(viewModelScope, SharingStarted.Eagerly, UserProfile.EMPTY)
@@ -41,7 +46,7 @@ class SettingsViewModel @Inject constructor(
         .flowOn(Dispatchers.IO)
         .stateIn(viewModelScope, SharingStarted.Eagerly, BackupData.EMPTY)
     val minBillingPrice = billingInteractor.getMinPrice()
-        .flowOn(Dispatchers.IO)
+        .flowOn(Dispatchers.IO + minPriceExceptionHandler)
         .stateIn(viewModelScope, SharingStarted.Eagerly, DomainCurrency.EMPTY)
 
     val isPremium = billingInteractor.isPremium()

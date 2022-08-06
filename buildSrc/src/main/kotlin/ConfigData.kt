@@ -7,7 +7,7 @@ object ConfigData {
     private const val versionMajor = 1
     private const val versionMinor = 0
     private const val versionPatch = 2
-    private const val versionBuild = 10
+    private const val versionBuild = 11
     const val versionCode = 1000 * (1000 * versionMajor + 100 * versionMinor + versionPatch) + versionBuild
     const val versionName = "${versionMajor}.${versionMinor}.${versionPatch}.${versionBuild}"
 }
