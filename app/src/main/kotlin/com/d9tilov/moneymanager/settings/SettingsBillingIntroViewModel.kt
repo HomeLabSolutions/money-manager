@@ -10,12 +10,14 @@ import com.d9tilov.moneymanager.base.ui.navigator.SettingsBillingNavigator
 import com.d9tilov.moneymanager.billing.domain.BillingInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,6 +26,10 @@ class SettingsBillingIntroViewModel @Inject constructor(private val billingInter
 
     private var currentPurchases: List<Purchase> = listOf()
     private var productDetails: ProductDetails? = null
+
+    private val skuExceptionHandler = CoroutineExceptionHandler { _, exception ->
+        Timber.d("Unable to get sku")
+    }
 
     init {
         viewModelScope.launch {
@@ -41,7 +47,7 @@ class SettingsBillingIntroViewModel @Inject constructor(private val billingInter
     }
 
     val skuDetails = billingInteractor.getSkuDetails()
-        .flowOn(Dispatchers.IO)
+        .flowOn(Dispatchers.IO + skuExceptionHandler)
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
     val purchaseCompleted = billingInteractor.isNewPurchaseAcknowledged
         .flowOn(Dispatchers.IO)
