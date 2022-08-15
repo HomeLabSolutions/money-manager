@@ -17,6 +17,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
@@ -32,7 +33,9 @@ import kotlin.coroutines.resumeWithException
 class BackupManager(private val context: Context, private val preferencesStore: PreferencesStore) {
 
     suspend fun backupDb(): ResultOf<BackupData> {
-        val uid = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+        Timber.tag(App.TAG).d("Backup backupDb before")
+        val uid = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
+        Timber.tag(App.TAG).d("Backup backupDb: $uid")
         return suspendCancellableCoroutine { continuation ->
             if (!isNetworkConnected(context)) {
                 continuation.resumeWithException(NetworkException())

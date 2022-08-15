@@ -179,8 +179,10 @@ dependencies {
     implementation(Deps.firebaseAnalytics)
     implementation(Deps.firebaseCrashlytics)
     implementation(Deps.firebaseStorage)
+    implementation(Deps.firebaseConfig)
 
     implementation(Deps.hilt)
+    kapt(Deps.hiltCompiler)
     kapt(Deps.hiltAndroidCompiler)
 
     implementation(Deps.navigation)

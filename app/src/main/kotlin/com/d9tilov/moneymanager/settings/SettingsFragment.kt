@@ -1,7 +1,6 @@
 package com.d9tilov.moneymanager.settings
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -110,12 +109,9 @@ class SettingsFragment :
                         }
                     }
                     launch {
-                        Log.d("moggot", "launch")
                         viewModel.isPremium.combine(viewModel.getActiveSku) { isPremium, hasActiveSku -> Pair(isPremium, hasActiveSku) }.collect { pair ->
                             val isPremium = pair.first
                             val hasActiveSku = pair.second
-                            Log.d("moggot", "isPremium: $isPremium")
-                            Log.d("moggot", "hasActiveSku: $hasActiveSku")
                             settingsSubscription.root.isEnabled = !isPremium
                             if (isPremium) {
                                 settingsSubscription.settingsSubscriptionTitle.text =
