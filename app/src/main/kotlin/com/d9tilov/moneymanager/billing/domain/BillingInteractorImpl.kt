@@ -6,13 +6,23 @@ import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails
+import com.d9tilov.moneymanager.billing.domain.entity.PremiumEmails
 import com.d9tilov.moneymanager.currency.data.entity.Currency
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.domain.mapper.CurrencyDomainMapper
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
-class BillingInteractorImpl(private val billingRepo: BillingRepo, private val currencyDomainMapper: CurrencyDomainMapper) : BillingInteractor {
+class BillingInteractorImpl(
+    private val billingRepo: BillingRepo,
+    private val currencyDomainMapper: CurrencyDomainMapper
+) : BillingInteractor {
 
     override val currentPurchases: Flow<List<Purchase>> = billingRepo.currentPurchases
     override val productDetails: Flow<ProductDetails?> = billingRepo.premiumProductDetails
@@ -35,7 +45,16 @@ class BillingInteractorImpl(private val billingRepo: BillingRepo, private val cu
         billingRepo.buySku(tag, productDetails, currentPurchases, result)
     }
 
-    override fun isPremium(): Flow<Boolean> = currentPurchases.map { it.isNotEmpty() }
+    override fun isPremium(): Flow<Boolean> {
+        val config = Firebase.remoteConfig.getValue("premium_list").asString()
+        val moshi: Moshi = Moshi.Builder().build()
+        val jsonAdapter: JsonAdapter<PremiumEmails> = moshi.adapter(PremiumEmails::class.java)
+        val premiumConfig = jsonAdapter.fromJson(config)
+        val curEmail = Firebase.auth.currentUser?.email
+        if (premiumConfig?.emails?.contains(curEmail) == true) return flowOf(true)
+        return currentPurchases.map { it.isNotEmpty() }
+    }
+
     override fun getSkuDetails(): Flow<List<BillingSkuDetails>> = billingRepo.getSkuDetails()
     override fun getMinPrice(): Flow<DomainCurrency> =
         getSkuDetails().map { list: List<BillingSkuDetails> ->

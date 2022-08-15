@@ -45,6 +45,7 @@ object Deps {
     val firebaseAnalytics by lazy { "com.google.firebase:firebase-analytics-ktx" }
     val firebaseCrashlytics by lazy { "com.google.firebase:firebase-crashlytics-ktx" }
     val firebaseStorage by lazy { "com.google.firebase:firebase-storage-ktx" }
+    val firebaseConfig by lazy { "com.google.firebase:firebase-config-ktx" }
     val firebaseUi by lazy { "com.firebaseui:firebase-ui-auth:${Versions.firebaseUi}" }
     val firebaseBom by lazy { "com.google.firebase:firebase-bom:${Versions.firebaseBom}" }
 
@@ -80,6 +81,7 @@ object Deps {
     val billing by lazy { "com.android.billingclient:billing-ktx:${Versions.billing}" }
 
     val hilt by lazy { "com.google.dagger:hilt-android:${Versions.hilt}" }
+    val hiltCompiler by lazy { "androidx.hilt:hilt-compiler:${Versions.hiltCompiler}" }
     val hiltAndroidCompiler by lazy { "com.google.dagger:hilt-android-compiler:${Versions.hilt}" }
 
     val splashScreen by lazy { "androidx.core:core-splashscreen:${Versions.splashScreen}" }

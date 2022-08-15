@@ -17,16 +17,13 @@ import dagger.assisted.AssistedInject
 import timber.log.Timber
 import java.io.FileNotFoundException
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 @HiltWorker
 class PeriodicBackupWorker @AssistedInject constructor(
     @Assisted context: Context,
-    @Assisted workerParameters: WorkerParameters
+    @Assisted workerParameters: WorkerParameters,
+    val backupInteractor: BackupInteractor
 ) : CoroutineWorker(context, workerParameters) {
-
-    @Inject
-    lateinit var backupInteractor: BackupInteractor
 
     override suspend fun doWork(): Result {
         Timber.tag(App.TAG).d("Do work...")

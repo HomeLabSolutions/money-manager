@@ -3,6 +3,7 @@ package com.d9tilov.moneymanager.home.ui
 import android.animation.ObjectAnimator
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import androidx.activity.viewModels
@@ -52,6 +53,7 @@ class MainActivity :
             viewModel.isPremium
                 .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
                 .collect { isPremium ->
+                    Log.d("[MoneyManager]", "onCreate: $isPremium")
                     if (isPremium) PeriodicBackupWorker.startPeriodicJob(this@MainActivity)
                 }
         }
