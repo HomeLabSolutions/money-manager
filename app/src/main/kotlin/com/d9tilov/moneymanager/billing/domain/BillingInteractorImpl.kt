@@ -5,6 +5,7 @@ import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
+import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails
 import com.d9tilov.moneymanager.billing.domain.entity.PremiumEmails
 import com.d9tilov.moneymanager.currency.data.entity.Currency
@@ -16,13 +17,18 @@ import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
+import java.io.IOException
 
 class BillingInteractorImpl(
     private val billingRepo: BillingRepo,
     private val currencyDomainMapper: CurrencyDomainMapper
 ) : BillingInteractor {
+
+    private val premiumEmailList = MutableStateFlow(listOf<String>())
 
     override val currentPurchases: Flow<List<Purchase>> = billingRepo.currentPurchases
     override val productDetails: Flow<ProductDetails?> = billingRepo.premiumProductDetails
@@ -46,13 +52,26 @@ class BillingInteractorImpl(
     }
 
     override fun isPremium(): Flow<Boolean> {
-        val config = Firebase.remoteConfig.getValue("premium_list").asString()
-        val moshi: Moshi = Moshi.Builder().build()
-        val jsonAdapter: JsonAdapter<PremiumEmails> = moshi.adapter(PremiumEmails::class.java)
-        val premiumConfig = jsonAdapter.fromJson(config)
-        val curEmail = Firebase.auth.currentUser?.email
-        if (premiumConfig?.emails?.contains(curEmail) == true) return flowOf(true)
-        return currentPurchases.map { it.isNotEmpty() }
+        Firebase.remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val config = Firebase.remoteConfig.getValue("premium_list").asString()
+                val moshi: Moshi = Moshi.Builder().build()
+                val jsonAdapter: JsonAdapter<PremiumEmails> =
+                    moshi.adapter(PremiumEmails::class.java)
+                try {
+                    val premiumConfig = jsonAdapter.fromJson(config)
+                    premiumEmailList.value = premiumConfig?.emails ?: emptyList()
+                } catch (ex: IOException) {
+                    Timber.tag(App.TAG).e("Failed parsing remote config: $ex")
+                }
+            }
+        }
+        val isPremiumEmailExists =
+            premiumEmailList.map { it.contains(Firebase.auth.currentUser?.email) }
+        return combine(
+            isPremiumEmailExists,
+            currentPurchases.map { it.isNotEmpty() }
+        ) { isPremiumExists, isPremium -> isPremiumExists || isPremium }
     }
 
     override fun getSkuDetails(): Flow<List<BillingSkuDetails>> = billingRepo.getSkuDetails()
