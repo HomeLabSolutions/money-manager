@@ -6,8 +6,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.d9tilov.moneymanager.R
@@ -117,15 +117,23 @@ class IncomeExpenseFragment :
                     )
                 findNavController().navigate(action)
             }
-            lifecycleScope.launch {
-                viewModel.getCurrencyCodeAsync()
-                    .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-                    .collect {
-                        incomeExpenseMainSum.setValue(
-                            incomeExpenseMainSum.getValue(),
-                            it
-                        )
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    launch {
+                        viewModel.isPremium.collect { isPremium ->
+                            this@IncomeExpenseFragment.isPremium = isPremium
+                        }
                     }
+                    launch {
+                        viewModel.getCurrencyCodeAsync()
+                            .collect {
+                                incomeExpenseMainSum.setValue(
+                                    incomeExpenseMainSum.getValue(),
+                                    it
+                                )
+                            }
+                    }
+                }
             }
         }
         findNavController().currentBackStackEntry?.savedStateHandle?.run {
