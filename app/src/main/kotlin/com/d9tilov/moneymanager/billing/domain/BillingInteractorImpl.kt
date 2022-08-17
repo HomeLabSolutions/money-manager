@@ -30,6 +30,23 @@ class BillingInteractorImpl(
 
     private val premiumEmailList = MutableStateFlow(listOf<String>())
 
+    init {
+        Firebase.remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val config = Firebase.remoteConfig.getValue("premium_list").asString()
+                val moshi: Moshi = Moshi.Builder().build()
+                val jsonAdapter: JsonAdapter<PremiumEmails> =
+                    moshi.adapter(PremiumEmails::class.java)
+                try {
+                    val premiumConfig = jsonAdapter.fromJson(config)
+                    premiumEmailList.value = premiumConfig?.emails ?: emptyList()
+                } catch (ex: IOException) {
+                    Timber.tag(App.TAG).e("Failed parsing remote config: $ex")
+                }
+            }
+        }
+    }
+
     override val currentPurchases: Flow<List<Purchase>> = billingRepo.currentPurchases
     override val productDetails: Flow<ProductDetails?> = billingRepo.premiumProductDetails
     override val isNewPurchaseAcknowledged: Flow<Boolean> = billingRepo.isNewPurchaseAcknowledged
@@ -52,20 +69,6 @@ class BillingInteractorImpl(
     }
 
     override fun isPremium(): Flow<Boolean> {
-        Firebase.remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val config = Firebase.remoteConfig.getValue("premium_list").asString()
-                val moshi: Moshi = Moshi.Builder().build()
-                val jsonAdapter: JsonAdapter<PremiumEmails> =
-                    moshi.adapter(PremiumEmails::class.java)
-                try {
-                    val premiumConfig = jsonAdapter.fromJson(config)
-                    premiumEmailList.value = premiumConfig?.emails ?: emptyList()
-                } catch (ex: IOException) {
-                    Timber.tag(App.TAG).e("Failed parsing remote config: $ex")
-                }
-            }
-        }
         val isPremiumEmailExists =
             premiumEmailList.map { it.contains(Firebase.auth.currentUser?.email) }
         return combine(
