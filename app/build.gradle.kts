@@ -176,7 +176,6 @@ dependencies {
     implementation(Deps.googlePlayServicesAuth)
 
     implementation(Deps.firebaseAnalytics)
-    implementation(Deps.firebaseAnalytics)
     implementation(Deps.firebaseCrashlytics)
     implementation(Deps.firebaseStorage)
     implementation(Deps.firebaseConfig)
