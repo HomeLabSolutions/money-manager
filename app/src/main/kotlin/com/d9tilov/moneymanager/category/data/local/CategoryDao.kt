@@ -12,6 +12,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CategoryDao {
 
+    @Query("SELECT * FROM categories WHERE clientId=:uid")
+    fun getAll(uid: String): Flow<List<CategoryDbModel>>
+
     @Query("SELECT * FROM categories WHERE clientId=:uid AND type=:type")
     fun getAllByType(uid: String, type: TransactionType): Flow<List<CategoryDbModel>>
 
