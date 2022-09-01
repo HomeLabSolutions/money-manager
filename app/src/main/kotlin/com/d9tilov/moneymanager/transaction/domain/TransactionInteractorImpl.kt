@@ -33,6 +33,8 @@ import com.d9tilov.moneymanager.transaction.domain.mapper.toChartModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDataModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDomainModel
 import com.d9tilov.moneymanager.user.domain.UserInteractor
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -607,26 +609,33 @@ class TransactionInteractorImpl(
     }
 
     override suspend fun update(transaction: Transaction) {
+        StrictMode.noteSlowCall("update")
         coroutineScope {
-            launch {
-                val usdSumValue =
+            awaitAll(
+                async {val usdSumValue =
                     currencyInteractor.toUsd(transaction.sum, transaction.currencyCode)
-                transactionRepo.update(transaction.toDataModel().copy(usdSum = usdSumValue))
-            }
-            launch {
-                val oldTransaction = transactionRepo.getTransactionById(transaction.id).first()
-                val budget = budgetInteractor.get().first()
-                var budgetSum = budget.sum
-                budgetSum += currencyInteractor.toMainCurrency(
-                    if (oldTransaction.type.isIncome()) oldTransaction.sum.negate() else oldTransaction.sum,
-                    oldTransaction.currencyCode
-                )
-                budgetSum += currencyInteractor.toMainCurrency(
-                    if (transaction.type.isIncome()) transaction.sum else transaction.sum.negate(),
-                    transaction.currencyCode
-                )
-                budgetInteractor.update(budget.copy(sum = budgetSum))
-            }
+                    transactionRepo.update(transaction.toDataModel().copy(usdSum = usdSumValue))  },
+                async { StrictMode.noteSlowCall("update2")
+                    val oldTransaction = transactionRepo.getTransactionById(transaction.id).first()
+                    val budget = budgetInteractor.get().first()
+                    var budgetSum = budget.sum
+                    budgetSum += currencyInteractor.toMainCurrency(
+                        if (oldTransaction.type.isIncome()) oldTransaction.sum.negate() else oldTransaction.sum,
+                        oldTransaction.currencyCode
+                    )
+                    budgetSum += currencyInteractor.toMainCurrency(
+                        if (transaction.type.isIncome()) transaction.sum else transaction.sum.negate(),
+                        transaction.currencyCode
+                    )
+                    budgetInteractor.update(budget.copy(sum = budgetSum)) }
+            )
+            // launch {
+            //     StrictMode.noteSlowCall("update1")
+            //
+            // }
+            // launch {
+            //
+            // }
         }
     }
 

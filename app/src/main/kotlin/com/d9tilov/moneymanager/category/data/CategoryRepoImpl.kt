@@ -10,6 +10,10 @@ import kotlinx.coroutines.flow.map
 class CategoryRepoImpl(private val categoryLocalSource: CategorySource) :
     CategoryRepo {
 
+    override suspend fun saveInMemory(categories: List<Category>) {
+        categoryLocalSource.saveInMemory(categories)
+    }
+
     override suspend fun createExpenseDefaultCategories() =
         categoryLocalSource.createExpenseDefaultCategories()
 

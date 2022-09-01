@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CategoryInteractor : Interactor {
 
+    suspend fun saveInMemory(categories: List<Category>)
     suspend fun create(category: Category): Long
     suspend fun createDefaultCategories()
     suspend fun update(category: Category)

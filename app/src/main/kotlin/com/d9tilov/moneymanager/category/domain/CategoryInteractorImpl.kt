@@ -13,6 +13,10 @@ import kotlinx.coroutines.launch
 class CategoryInteractorImpl(private val categoryRepo: CategoryRepo) :
     CategoryInteractor {
 
+    override suspend fun saveInMemory(categories: List<Category>) {
+        categoryRepo.saveInMemory(categories)
+    }
+
     override suspend fun create(category: Category) = categoryRepo.create(category)
     override suspend fun createDefaultCategories() {
         coroutineScope {

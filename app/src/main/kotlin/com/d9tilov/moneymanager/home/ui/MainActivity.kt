@@ -49,14 +49,14 @@ class MainActivity :
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         } // Else, need to wait for onRestoreInstanceState
-        lifecycleScope.launch {
-            viewModel.isPremium
-                .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-                .collect { isPremium ->
-                    Log.d("[MoneyManager]", "onCreate: $isPremium")
-                    if (isPremium) PeriodicBackupWorker.startPeriodicJob(this@MainActivity)
-                }
-        }
+        // lifecycleScope.launch {
+        //     viewModel.isPremium
+        //         .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+        //         .collect { isPremium ->
+        //             Log.d("[MoneyManager]", "onCreate: $isPremium")
+        //             if (isPremium) PeriodicBackupWorker.startPeriodicJob(this@MainActivity)
+        //         }
+        // }
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -80,14 +80,14 @@ class MainActivity :
             intent = intent
         )
         // Whenever the selected controller changes, setup the action bar.
-        controller?.observe(
-            this
-        ) { navController ->
-            navController.addOnDestinationChangedListener { _, destination, _ ->
-                if (setOfShownBottomBar.contains(destination.id)) showBottomBarWithAnimation()
-                else viewBinding?.bottomNav?.gone()
-            }
-        }
+        // controller?.observe(
+        //     this
+        // ) { navController ->
+        //     navController.addOnDestinationChangedListener { _, destination, _ ->
+        //         // if (setOfShownBottomBar.contains(destination.id)) showBottomBarWithAnimation()
+        //         // else viewBinding?.bottomNav?.gone()
+        //     }
+        // }
         currentNavController = controller
     }
 

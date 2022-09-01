@@ -26,7 +26,9 @@ import com.d9tilov.moneymanager.core.util.hideLoadingDialog
 import com.d9tilov.moneymanager.core.util.isNetworkConnected
 import com.d9tilov.moneymanager.core.util.showLoadingDialog
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 
 abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
@@ -48,6 +50,7 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
         setContentView(viewBinding!!.root)
         lifecycleScope.launch {
             preferenceDataStore.currentCurrency
+                .flowOn(Dispatchers.IO)
                 .flowWithLifecycle(lifecycle, Lifecycle.State.CREATED)
                 .collect { currency = it }
         }

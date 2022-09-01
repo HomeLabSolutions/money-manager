@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.category.data.local
 
+import android.util.Log
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.PrepopulateDataManager
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongIdException
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
@@ -13,6 +14,7 @@ import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
@@ -28,16 +30,11 @@ class CategoryLocalSource(
     private val categoryDao: CategoryDao
 ) : CategorySource {
 
-    private val categories = MutableStateFlow(listOf<Category>())
+    private val categories = MutableStateFlow(setOf<Category>())
 
-    init {
-        preferencesStore.uid
-            .filterNotNull()
-            .flatMapMerge { uid ->
-                categoryDao.getAll(uid).map { groupChildrenWithParent(it) }
-            }
-            .map { categories.value = it }
-            .flowOn(Dispatchers.IO)
+    override suspend fun saveInMemory(categories: List<Category>) {
+        Log.d("moggot", "saveInMemory")
+        this.categories.value = categories.toSet()
     }
 
     override suspend fun createExpenseDefaultCategories() {
@@ -73,9 +70,6 @@ class CategoryLocalSource(
         else {
             val count = categoryDao.getCategoriesCountByName(currentUserId, category.name)
             if (count == 0) {
-                val localCategories = categories.value.toMutableList()
-                localCategories.add(category.copy(clientId = currentUserId))
-                categories.value = localCategories
                 categoryDao.create(categoryMapper.toDbModel(category.copy(clientId = currentUserId)))
             } else throw CategoryException.CategoryExistException("Category with name: ${category.name} has already existed")
         }
@@ -94,10 +88,6 @@ class CategoryLocalSource(
                 if (count == 0) categoryDao.update(categoryMapper.toDbModel(category))
                 else throw CategoryException.CategoryExistException("Category with name: ${category.name} has already existed")
             }
-            val localCategories = categories.value.toMutableList()
-            localCategories.remove(localCategories.find { it.id == category.id })
-            localCategories.add(category)
-            categories.value = localCategories
         }
     }
 
@@ -128,15 +118,27 @@ class CategoryLocalSource(
         0
     )
 
-    override fun getByParentId(id: Long): Flow<List<Category>> =
-        preferencesStore.uid
+    override fun getByParentId(id: Long): Flow<List<Category>> {
+        return preferencesStore.uid
             .filterNotNull()
             .flatMapMerge { uid ->
                 categoryDao.getByParentId(uid, id)
                     .map { it.map { item -> categoryMapper.toDataParentModel(item) } }
             }
+    }
 
-    override fun getCategoriesByType(type: TransactionType): Flow<List<Category>> = categories
+    override fun getCategoriesByType(type: TransactionType): Flow<List<Category>> {
+        return if (categories.value.isEmpty()) {
+            Log.d("moggot", "getCategoriesByType empty")
+            preferencesStore.uid
+                .filterNotNull()
+                .flatMapMerge { uid -> categoryDao.getAll(uid).map { groupChildrenWithParent(it) } }
+                .flowOn(Dispatchers.IO)
+        } else {
+            Log.d("moggot", "getCategoriesByType non empty")
+            categories.map { it.filter { it.type == type } }
+        }
+    }
 
     private fun groupChildrenWithParent(list: List<CategoryDbModel>): List<Category> {
         val childrenOfOneParent = list.groupBy { it.parentId }
@@ -163,20 +165,9 @@ class CategoryLocalSource(
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
         if (currentUserId == null) throw WrongUidException()
         else {
-            val categoriesToDelete = mutableListOf<Category>()
             categoryDao.delete(currentUserId, category.id)
             category.children.forEach { categoryDao.delete(currentUserId, it.id) }
-
-            categoriesToDelete.add(category)
-            categoriesToDelete.addAll(category.children)
-            deleteCategoriesFromLocal(categoriesToDelete)
         }
-    }
-
-    private fun deleteCategoriesFromLocal(categoriesToDelete: List<Category>) {
-        val localCategoryList = categories.value.toMutableList()
-        localCategoryList.removeAll(categoriesToDelete)
-        categories.value = localCategoryList
     }
 
     override suspend fun deleteSubcategory(subCategory: Category): Boolean {

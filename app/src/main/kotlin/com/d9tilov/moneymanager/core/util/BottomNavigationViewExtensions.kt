@@ -65,7 +65,8 @@ fun BottomNavigationView.setupWithNavController(
     var selectedItemTag = graphIdToTagMap[this.selectedItemId]
     val firstFragmentTag = graphIdToTagMap[firstFragmentGraphId]
     var isOnFirstFragment = selectedItemTag == firstFragmentTag
-
+    var jack = "adf"
+    jack = 
     // When a navigation item is selected
     setOnItemSelectedListener { item ->
         // Don't do anything if the state is state has already been saved.

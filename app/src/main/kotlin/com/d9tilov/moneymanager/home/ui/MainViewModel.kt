@@ -1,8 +1,10 @@
 package com.d9tilov.moneymanager.home.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.billing.domain.BillingInteractor
+import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
@@ -19,6 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    private val categoryInteractor: CategoryInteractor,
     private val currencyInteractor: CurrencyInteractor,
     private val transactionInteractor: TransactionInteractor,
     private val billingInteractor: BillingInteractor
@@ -33,18 +36,31 @@ class MainViewModel @Inject constructor(
         .shareIn(viewModelScope, SharingStarted.WhileSubscribed(), 1)
 
     init {
+        Log.d("moggot", "init")
         billingInteractor.startBillingConnection()
-        viewModelScope.launch(Dispatchers.IO + updateCurrencyExceptionHandler) {
-            billingInteractor.billingConnectionReady.combine(isPremium) { isReady, isPremium ->
-                isReady && isPremium
-            }.collect { readyForPremium ->
-                if (readyForPremium) {
-                    launch { transactionInteractor.executeRegularIfNeeded(TransactionType.INCOME) }
-                    launch { transactionInteractor.executeRegularIfNeeded(TransactionType.EXPENSE) }
-                }
-            }
-            launch { currencyInteractor.updateCurrencyRates() }
-        }
+        // viewModelScope.launch(Dispatchers.IO + updateCurrencyExceptionHandler) {
+        //     launch {
+        //         billingInteractor.billingConnectionReady.combine(isPremium) { isReady, isPremium ->
+        //             isReady && isPremium
+        //         }.collect { readyForPremium ->
+        //             if (readyForPremium) {
+        //                 launch { transactionInteractor.executeRegularIfNeeded(TransactionType.INCOME) }
+        //                 launch { transactionInteractor.executeRegularIfNeeded(TransactionType.EXPENSE) }
+        //             }
+        //         }
+        //     }
+        //     // launch { currencyInteractor.updateCurrencyRates() }
+        // }
+        // viewModelScope.launch(Dispatchers.IO) {
+        //     val incomeFlow = categoryInteractor.getAllCategoriesByType(TransactionType.INCOME)
+        //     val expenseFlow = categoryInteractor.getAllCategoriesByType(TransactionType.EXPENSE)
+        //     combine(
+        //         incomeFlow,
+        //         expenseFlow
+        //     ) { expense, income -> expense + income }
+        //         .flowOn(Dispatchers.IO)
+        //         .collect { list -> categoryInteractor.saveInMemory(list) }
+        // }
     }
 
     override fun onCleared() {

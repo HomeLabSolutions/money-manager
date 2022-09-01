@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CategorySource : Source {
 
+    suspend fun saveInMemory(categories: List<Category>)
     suspend fun createExpenseDefaultCategories()
     suspend fun createIncomeDefaultCategories()
     suspend fun create(category: Category): Long
