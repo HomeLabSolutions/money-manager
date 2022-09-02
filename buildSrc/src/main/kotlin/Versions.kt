@@ -16,7 +16,7 @@ object Versions {
     const val retrofit = "2.9.0"
 
     const val googlePlayServices = "4.3.10"
-    const val googlePlayServicesAuth = "20.2.0"
+    const val googlePlayServicesAuth = "20.3.0"
 
     const val navigation = "2.5.1"
 
@@ -28,7 +28,7 @@ object Versions {
     const val paging = "3.1.1"
 
     const val firebaseCrashlytics = "2.9.0"
-    const val firebaseBom = "30.3.2"
+    const val firebaseBom = "30.4.0"
     const val firebaseUi = "8.0.1"
 
     const val facebookSdk = "8.0.0"
