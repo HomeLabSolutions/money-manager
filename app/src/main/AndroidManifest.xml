@@ -8,9 +8,9 @@
 
     <application
         android:name=".App"
-        android:icon="@mipmap/ic_launcher"
         android:allowBackup="false"
         android:label="${appName}"
+        android:icon="@mipmap/ic_launcher"
         android:restoreAnyVersion="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.MoneyManager">
@@ -20,9 +20,9 @@
             android:value="false" />
 
         <activity
-            android:name="com.d9tilov.moneymanager.splash.ui.RouterActivity"
-            android:theme="@style/Theme.App.Starting"
-            android:exported="true">
+            android:name=".splash.ui.RouterActivity"
+            android:exported="true"
+            android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,21 +31,27 @@
         </activity>
         <activity
             android:name=".prepopulate.ui.PrepopulateActivity"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MoneyManager.Prepopulate"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="false"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.d9tilov.moneymanager.home.ui.MainActivity"
+            android:name=".prepopulate.ui.PrepopulateActivity2"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MoneyManager"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".home.ui.MainActivity"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MoneyManager.Home"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="false"/>
+            android:windowSoftInputMode="adjustResize" />
 
         <provider
-
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
             tools:node="remove" />
     </application>
+
 </manifest>

@@ -79,6 +79,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        compose = true
     }
     dataBinding {
         isEnabled = true
@@ -140,6 +141,9 @@ android {
             )
         }
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Versions.composeExtension
+    }
 
     kapt {
         correctErrorTypes = true
@@ -151,6 +155,7 @@ android {
         aaptOptions.cruncherEnabled = false
     }
 
+    tasks.getByPath("detekt").onlyIf { gradle.startParameter.taskNames.contains("detekt") }
 }
 
 repositories {
@@ -164,6 +169,7 @@ dependencies {
 
     implementation(Deps.appCompat)
     implementation(Deps.material)
+    implementation(Deps.composeMaterial3)
     implementation(Deps.core)
     implementation(Deps.coreRuntime)
     implementation(Deps.constraintLayout)
@@ -218,6 +224,18 @@ dependencies {
     implementation(Deps.lifecycleExtension)
     implementation(Deps.lifecycleCommon)
     implementation(Deps.lifecycleViewModel)
+
+    implementation(Deps.composeUi)
+    implementation(Deps.composeActivity)
+    implementation(Deps.composeToolingPreview)
+    debugImplementation(Deps.composeToolingUi)
+    implementation(Deps.composeFoundation)
+    implementation(Deps.composeMaterial)
+    implementation(Deps.composeMaterialIconsCore)
+    implementation(Deps.composeMaterialIconsExtended)
+    implementation(Deps.composeLiveData)
+    implementation(Deps.composeViewModel)
+    implementation(Deps.composeUiTestManifest)
 
     implementation(Deps.worker)
     implementation(Deps.workerHilt)
