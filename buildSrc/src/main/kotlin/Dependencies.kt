@@ -68,6 +68,19 @@ object Deps {
     val lifecycleViewModel by lazy { "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}" }
     val lifecycleCommon by lazy { "androidx.lifecycle:lifecycle-common-java8:${Versions.lifecycle}" }
 
+    val composeUi by lazy { "androidx.compose.ui:ui:${Versions.compose}" }
+    val composeMaterial3 by lazy { "androidx.compose.material3:material3:${Versions.composeMaterial3}" }
+    val composeActivity by lazy { "androidx.activity:activity-compose:${Versions.composeActivity}" }
+    val composeToolingUi by lazy { "androidx.compose.ui:ui-tooling:${Versions.compose}" }
+    val composeToolingPreview by lazy { "androidx.compose.ui:ui-tooling-preview:${Versions.compose}" }
+    val composeFoundation by lazy { "androidx.compose.foundation:foundation:${Versions.compose}" }
+    val composeMaterial by lazy { "androidx.compose.material:material:${Versions.compose}" }
+    val composeMaterialIconsCore by lazy { "androidx.compose.material:material-icons-core:${Versions.compose}" }
+    val composeMaterialIconsExtended by lazy { "androidx.compose.material:material-icons-extended:${Versions.compose}" }
+    val composeLiveData by lazy { "androidx.compose.runtime:runtime-livedata:${Versions.compose}" }
+    val composeViewModel by lazy { "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.composeViewModel}" }
+    val composeUiTestManifest by lazy { "androidx.compose.ui:ui-test-manifest:${Versions.compose}" }
+
     val worker by lazy { "androidx.work:work-runtime-ktx:${Versions.worker}" }
     val workerHilt by lazy { "androidx.hilt:hilt-work:${Versions.workerHilt}" }
 
