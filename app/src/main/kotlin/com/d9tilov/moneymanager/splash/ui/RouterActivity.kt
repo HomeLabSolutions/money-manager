@@ -11,6 +11,7 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
 import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.prepopulate.ui.PrepopulateActivity
+import com.d9tilov.moneymanager.prepopulate.ui.PrepopulateActivity2
 import com.d9tilov.moneymanager.splash.vm.RouterViewModel
 import com.firebase.ui.auth.AuthUI
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,7 +43,7 @@ class RouterActivity : AppCompatActivity(), SplashNavigator {
     }
 
     override fun openPrepopulate() {
-        startActivity(Intent(this, PrepopulateActivity::class.java))
+        startActivity(Intent(this, PrepopulateActivity2::class.java))
         this.finish()
     }
 
