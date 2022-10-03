@@ -12,6 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
@@ -19,7 +20,6 @@ import com.d9tilov.moneymanager.base.ui.currencyCode
 import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
 import com.d9tilov.moneymanager.budget.domain.entity.BudgetDestination
 import com.d9tilov.moneymanager.core.util.CurrencyUtils
-import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.toBudgetCreatedDate
 import com.d9tilov.moneymanager.currency.domain.entity.CurrencyDestination
@@ -173,7 +173,7 @@ class ProfileFragment :
                 this.profileAvatar.show()
                 profileName.show()
                 profileName.text = currencyUser.displayName
-                GlideApp
+                Glide
                     .with(this@ProfileFragment)
                     .load(viewModel.getCurrentUser()?.photoUrl)
                     .centerCrop()

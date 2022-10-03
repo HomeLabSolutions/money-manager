@@ -87,7 +87,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
     val ktlint by configurations.creating
@@ -195,7 +195,7 @@ dependencies {
     implementation(Deps.splashScreen)
 
     implementation(Deps.glide)
-    implementation(Deps.glideCompiler)
+    annotationProcessor(Deps.glideCompiler)
 
     implementation(Deps.paging)
     implementation(Deps.roomRuntime)

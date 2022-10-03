@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.createTintDrawable
-import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.databinding.ItemRegularTransactionBinding
 import com.d9tilov.moneymanager.regular.domain.entity.ExecutionPeriod
 import com.d9tilov.moneymanager.regular.domain.entity.PeriodType
@@ -100,7 +100,7 @@ class RegularTransactionAdapter(
                     regularTransaction.category.icon,
                     regularTransaction.category.color
                 )
-                GlideApp
+                Glide
                     .with(context)
                     .load(drawable)
                     .into(itemRegularTransactionIcon)

@@ -6,9 +6,9 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.bumptech.glide.Glide
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
-import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.databinding.ItemBillingIntroCardBinding
 
 class DotIndicatorPager2Adapter : RecyclerView.Adapter<ViewHolder>() {
@@ -43,7 +43,7 @@ class DotIndicatorPager2Adapter : RecyclerView.Adapter<ViewHolder>() {
         BaseViewHolder(viewBinding) {
 
         fun bind(card: Card) {
-            GlideApp
+            Glide
                 .with(context)
                 .load(card.image.id)
                 .into(viewBinding.itemBillingCardIcon)
