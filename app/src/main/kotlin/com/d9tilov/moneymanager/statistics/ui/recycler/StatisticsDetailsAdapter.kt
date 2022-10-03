@@ -6,13 +6,13 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable
-import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hide
 import com.d9tilov.moneymanager.core.util.show
@@ -118,7 +118,7 @@ class StatisticsDetailsAdapter :
                     DATE_FORMAT,
                     Locale.getDefault()
                 ).format(transaction.date.toMillis())
-                GlideApp
+                Glide
                     .with(context)
                     .load(drawable)
                     .apply(

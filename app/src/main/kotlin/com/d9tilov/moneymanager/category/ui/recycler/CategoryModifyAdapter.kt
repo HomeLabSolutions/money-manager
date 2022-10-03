@@ -6,6 +6,7 @@ import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.ui.diff.CategoryDiffUtil
@@ -14,7 +15,6 @@ import com.d9tilov.moneymanager.core.events.OnItemMoveListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemTouchHelperCallback
 import com.d9tilov.moneymanager.core.util.createTintDrawable
-import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.ItemCategoryBinding
@@ -147,7 +147,7 @@ class CategoryModifyAdapter(
                     )
                 )
                 val tintDrawable = createTintDrawable(context, category.icon, category.color)
-                GlideApp
+                Glide
                     .with(context)
                     .load(tintDrawable)
                     .into(categoryItemIcon)

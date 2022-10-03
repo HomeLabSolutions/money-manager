@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import androidx.viewbinding.ViewBinding
+import com.bumptech.glide.Glide
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.ui.diff.CategoryDiffUtil
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.createTintDrawable
-import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.databinding.ItemCategoryBaseBinding
 import com.d9tilov.moneymanager.databinding.ItemCategoryBinding
 
@@ -91,7 +91,7 @@ class CategoryAdapter(private val itemClickListener: OnItemClickListener<Categor
                         )
                         categoryItemSubtitle.setTextColor(parentColor)
                         val drawable = createTintDrawable(context, category.icon, category.color)
-                        GlideApp
+                        Glide
                             .with(context)
                             .load(drawable)
                             .into(categoryItemIcon)
@@ -116,7 +116,7 @@ class CategoryAdapter(private val itemClickListener: OnItemClickListener<Categor
                         )
                         categoryItemSubtitle.setTextColor(parentColor)
                         val drawable = createTintDrawable(context, category.icon, category.color)
-                        GlideApp
+                        Glide
                             .with(context)
                             .load(drawable)
                             .into(categoryItemIcon)

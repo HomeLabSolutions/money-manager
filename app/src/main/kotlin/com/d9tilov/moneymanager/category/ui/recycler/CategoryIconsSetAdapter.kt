@@ -3,13 +3,13 @@ package com.d9tilov.moneymanager.category.ui.recycler
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.ui.color.ColorManager
 import com.d9tilov.moneymanager.core.util.createTintDrawable
-import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.databinding.ItemCategoryIconBinding
 
 class CategoryIconsSetAdapter(
@@ -58,7 +58,7 @@ class CategoryIconsSetAdapter(
         fun bind(categoryItemIcon: Pair<Int, Int>) {
             val tintDrawable =
                 createTintDrawable(context, categoryItemIcon.first, categoryItemIcon.second)
-            GlideApp
+            Glide
                 .with(context)
                 .load(tintDrawable)
                 .apply(RequestOptions().override(ICON_SIZE, ICON_SIZE))

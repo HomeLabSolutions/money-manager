@@ -5,12 +5,12 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.createTintDrawable
-import com.d9tilov.moneymanager.core.util.glide.GlideApp
 import com.d9tilov.moneymanager.core.util.removeScale
 import com.d9tilov.moneymanager.databinding.ItemStatisticsBarChartBinding
 import com.d9tilov.moneymanager.statistics.ui.recycler.diff.StatisticsBarCharDiffUtils
@@ -91,7 +91,7 @@ class StatisticsBarChartAdapter(private val transactionClickListener: OnItemClic
                     item.category.icon,
                     item.category.color
                 )
-                GlideApp
+                Glide
                     .with(context)
                     .load(drawable)
                     .apply(RequestOptions().override(IMAGE_SIZE_IN_PX, IMAGE_SIZE_IN_PX))
