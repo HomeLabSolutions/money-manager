@@ -38,7 +38,6 @@
         <activity
             android:name=".prepopulate.ui.PrepopulateActivity2"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.MoneyManager"
             android:windowSoftInputMode="adjustResize" />
         <activity
