@@ -9,12 +9,15 @@ import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import javax.inject.Inject
+
+data class BudgetUiState(val budgetData: BudgetData)
 
 @HiltViewModel
 class BudgetAmountViewModel @Inject constructor(
@@ -23,7 +26,7 @@ class BudgetAmountViewModel @Inject constructor(
 ) :
     BaseViewModel<BudgetAmountNavigator>() {
 
-    val budgetData = budgetInteractor.get()
+    val budgetData: StateFlow<BudgetData> = budgetInteractor.get()
         .flowOn(Dispatchers.IO)
         .stateIn(viewModelScope, SharingStarted.Eagerly, BudgetData.EMPTY)
 
@@ -38,4 +41,10 @@ class BudgetAmountViewModel @Inject constructor(
         }
         launch { userInteractor.prepopulateCompleted() }
     }
+}
+
+private data class BudgetViewModelState(
+    val budgetData: BudgetData = BudgetData.EMPTY
+) {
+    fun toUiState(): BudgetUiState = BudgetUiState(budgetData)
 }
