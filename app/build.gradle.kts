@@ -196,6 +196,7 @@ dependencies {
 
     implementation(Deps.navigation)
     implementation(Deps.navigationUi)
+    implementation(Deps.navigationCompose)
 
     implementation(Deps.datastore)
 
