@@ -11,14 +11,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class PrepopulateActivity2 : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { PrepopulateRoute() }
+        setContent { PrepopulateScreen() }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    PrepopulateRoute()
+    PrepopulateScreen()
 }
 
 enum class PrepopulateScreen {
