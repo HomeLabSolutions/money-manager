@@ -1,22 +1,21 @@
 package com.d9tilov.moneymanager.prepopulate.ui
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.base.data.ResultOf
 import com.d9tilov.moneymanager.base.ui.navigator.GoalsNavigator
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.budget.domain.entity.BudgetData
 import com.d9tilov.moneymanager.budget.vm.BudgetUiState
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
+import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.core.util.ErrorMessage
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
+import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.vm.CurrencyUiState
-import com.d9tilov.moneymanager.currency.vm.CurrencyViewModel
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,6 +32,7 @@ data class PrepopulateUiState(
 
 @HiltViewModel
 class PrepopulateViewModel @Inject constructor(
+    private val userInteractor: UserInteractor,
     private val currencyInteractor: CurrencyInteractor,
     private val budgetInteractor: BudgetInteractor
 ) : BaseViewModel<GoalsNavigator>() {
@@ -64,12 +64,19 @@ class PrepopulateViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             currencyUiState = CurrencyUiState.HasCurrencies(
-                                currencyList = list,
+                                currencyList = list.sortedBy { item ->
+                                    CurrencyUtils.getCurrencyFullName(item.code)
+                                },
                                 isLoading = false
                             )
                         )
                     }
                 }
         }
+    }
+
+    fun changeCurrency(currency: DomainCurrency) = viewModelScope.launch(Dispatchers.IO) {
+        launch { userInteractor.updateCurrency(currency.code) }
+        launch { budgetInteractor.updateBudgetWithCurrency(currency.code) }
     }
 }

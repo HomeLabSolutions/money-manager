@@ -1,6 +1,8 @@
 package com.d9tilov.moneymanager.prepopulate.ui
 
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +23,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -31,32 +32,32 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 
 @Composable
-fun PrepopulateRoute(prepopulateViewModel: PrepopulateViewModel = viewModel()) {
+fun PrepopulateScreen(prepopulateViewModel: PrepopulateViewModel = viewModel()) {
     val uiState: PrepopulateUiState by prepopulateViewModel.uiState.collectAsState()
-    PrepopulateRoute(uiState)
+    PrepopulateScreen(uiState) { currency -> prepopulateViewModel.changeCurrency(currency) }
 }
 
 @Composable
-fun PrepopulateRoute(uiState: PrepopulateUiState) {
+fun PrepopulateScreen(
+    uiState: PrepopulateUiState,
+    clickCallback: (currency: DomainCurrency) -> Unit
+) {
     Column {
         var screenType: PrepopulateScreen by remember { mutableStateOf(PrepopulateScreen.CURRENCY) }
-        var progress by remember { mutableStateOf(1.0f / PrepopulateScreen.values().size) }
-        val animatedProgress = animateFloatAsState(
-            targetValue = progress,
-            animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
-        ).value
         when (screenType) {
             PrepopulateScreen.CURRENCY -> CurrencyListScreen(
                 uiState.currencyUiState,
-                Modifier.weight(1f)
+                Modifier.weight(1f),
+                clickCallback
             )
             PrepopulateScreen.BUDGET -> BudgetScreen(uiState.budgetUiState, Modifier.weight(1f))
         }
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -64,11 +65,8 @@ fun PrepopulateRoute(uiState: PrepopulateUiState) {
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            LinearProgressIndicator(
-                progress = animatedProgress, modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(0.5f)
-            )
+            var progress by remember { mutableStateOf(1.0f / PrepopulateScreen.values().size) }
+            ProgressIndicator(progress, Modifier.padding(16.dp).fillMaxWidth(0.5f))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
@@ -121,4 +119,17 @@ fun PrepopulateRoute(uiState: PrepopulateUiState) {
             }
         }
     }
+}
+
+@Composable
+fun ProgressIndicator(indicatorProgress: Float, modifier: Modifier) {
+    val progressAnimation by animateFloatAsState(
+        targetValue = indicatorProgress,
+        animationSpec = tween(durationMillis = 1500, easing = FastOutSlowInEasing)
+    )
+    LinearProgressIndicator(
+        modifier = modifier
+            .clip(RoundedCornerShape(20.dp)), // Rounded edges
+        progress = progressAnimation
+    )
 }
