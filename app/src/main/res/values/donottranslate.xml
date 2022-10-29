@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Money Manager</string>
-
     <string name="ruble_code">RUB</string>
     <string name="ruble_sign">₽</string>
     <string name="usd_code">USD</string>

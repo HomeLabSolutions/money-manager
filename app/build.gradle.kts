@@ -67,10 +67,13 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            manifestPlaceholders["appName"] = "Money Manager"
         }
         debug {
+            applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
             isMinifyEnabled = false
+            manifestPlaceholders["appName"] = "Money Manager1"
         }
     }
 
