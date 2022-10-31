@@ -29,6 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,23 +41,34 @@ import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 @Composable
 fun PrepopulateScreen(prepopulateViewModel: PrepopulateViewModel = viewModel()) {
     val uiState: PrepopulateUiState by prepopulateViewModel.uiState.collectAsState()
-    PrepopulateScreen(uiState) { currency -> prepopulateViewModel.changeCurrency(currency) }
+    PrepopulateScreen(
+        uiState,
+        { currency -> prepopulateViewModel.changeCurrency(currency) },
+        { budget -> prepopulateViewModel.changeBudgetAmount(budget) },
+        { prepopulateViewModel.saveBudgetAmount() }
+    )
 }
 
 @Composable
 fun PrepopulateScreen(
     uiState: PrepopulateUiState,
-    clickCallback: (currency: DomainCurrency) -> Unit
+    clickCallback: (currency: DomainCurrency) -> Unit,
+    onBudgetInputChanged: (String) -> Unit,
+    onBudgetSave: () -> Unit
 ) {
     Column {
-        var screenType: PrepopulateScreen by remember { mutableStateOf(PrepopulateScreen.CURRENCY) }
+        var screenType: PrepopulateScreen by rememberSaveable { mutableStateOf(PrepopulateScreen.CURRENCY) }
         when (screenType) {
             PrepopulateScreen.CURRENCY -> CurrencyListScreen(
                 uiState.currencyUiState,
                 Modifier.weight(1f),
                 clickCallback
             )
-            PrepopulateScreen.BUDGET -> BudgetScreen(uiState.budgetUiState, Modifier.weight(1f))
+            PrepopulateScreen.BUDGET -> BudgetScreen(
+                uiState.budgetUiState,
+                Modifier.weight(1f),
+                onBudgetInputChanged
+            )
         }
         Row(
             modifier = Modifier
@@ -65,7 +77,7 @@ fun PrepopulateScreen(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            var progress by remember { mutableStateOf(1.0f / PrepopulateScreen.values().size) }
+            var progress by remember { mutableStateOf((screenType.ordinal + 1f) / PrepopulateScreen.values().size) }
             ProgressIndicator(progress, Modifier.padding(16.dp).fillMaxWidth(0.5f))
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -96,7 +108,10 @@ fun PrepopulateScreen(
                     onClick = {
                         screenType = when (screenType) {
                             PrepopulateScreen.CURRENCY -> PrepopulateScreen.BUDGET
-                            else -> PrepopulateScreen.BUDGET
+                            else -> {
+                                onBudgetSave.invoke()
+                                PrepopulateScreen.BUDGET
+                            }
                         }
                         progress = (screenType.ordinal * 1.0f + 1) / PrepopulateScreen.values().size
                     },
