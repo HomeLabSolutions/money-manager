@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.prepopulate.ui
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.navigator.GoalsNavigator
@@ -20,9 +19,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 import javax.inject.Inject
 
 data class PrepopulateUiState(
@@ -78,5 +79,23 @@ class PrepopulateViewModel @Inject constructor(
     fun changeCurrency(currency: DomainCurrency) = viewModelScope.launch(Dispatchers.IO) {
         launch { userInteractor.updateCurrency(currency.code) }
         launch { budgetInteractor.updateBudgetWithCurrency(currency.code) }
+    }
+
+    fun changeBudgetAmount(amount: String) {
+        _uiState.update {
+            val budgetUiState = it.budgetUiState
+            val budgetData =
+                budgetUiState.budgetData.copy(sum = amount.toBigDecimalOrNull() ?: BigDecimal.ZERO)
+            val newBudgetUiState = budgetUiState.copy(budgetData = budgetData)
+            it.copy(budgetUiState = newBudgetUiState)
+        }
+    }
+
+    fun saveBudgetAmount() = viewModelScope.launch(Dispatchers.IO) {
+        launch {
+            budgetInteractor.get().firstOrNull()
+                ?.let { budgetInteractor.update(it.copy(sum = _uiState.value.budgetUiState.budgetData.sum)) }
+        }
+        launch { userInteractor.prepopulateCompleted() }
     }
 }

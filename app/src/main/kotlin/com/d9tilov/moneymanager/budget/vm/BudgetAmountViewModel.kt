@@ -10,7 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -35,16 +35,7 @@ class BudgetAmountViewModel @Inject constructor(
     }
 
     fun saveBudgetAmount(sum: BigDecimal) = viewModelScope.launch(Dispatchers.IO) {
-        launch {
-            val budget = budgetInteractor.get().first()
-            budgetInteractor.update(budget.copy(sum = sum))
-        }
+        launch { budgetInteractor.get().firstOrNull()?.let { budgetInteractor.update(it.copy(sum = sum)) } }
         launch { userInteractor.prepopulateCompleted() }
     }
-}
-
-private data class BudgetViewModelState(
-    val budgetData: BudgetData = BudgetData.EMPTY
-) {
-    fun toUiState(): BudgetUiState = BudgetUiState(budgetData)
 }

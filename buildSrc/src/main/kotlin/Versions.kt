@@ -47,7 +47,7 @@ object Versions {
 
     const val compose = "1.3.0"
     const val composeMaterial3 = "1.0.0"
-    const val composeActivity = "1.6.0"
+    const val composeActivity = "1.6.1"
     const val composeViewModel = "2.5.1"
     const val composeExtension = "1.3.2"
 
