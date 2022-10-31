@@ -34,6 +34,10 @@
     <dimen name="currency_sum_text_size">84sp</dimen>
     <dimen name="currency_sign_text_size">50sp</dimen>
 
+    <dimen name="standard_horizontal_margin_large">32dp</dimen>
+    <dimen name="standard_vertical_margin_large">32dp</dimen>
+    <dimen name="standard_horizontal_margin_medium">16dp</dimen>
+    <dimen name="standard_vertical_margin_medium">16dp</dimen>
     <dimen name="standard_top_margin">16dp</dimen>
     <dimen name="standard_bottom_margin">16dp</dimen>
     <dimen name="standard_left_margin">32dp</dimen>
