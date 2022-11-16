@@ -11,22 +11,17 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.currencyCode
 import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
-import com.d9tilov.moneymanager.budget.domain.entity.BudgetDestination
 import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.core.util.show
-import com.d9tilov.moneymanager.core.util.toBudgetCreatedDate
-import com.d9tilov.moneymanager.currency.domain.entity.CurrencyDestination
+import com.d9tilov.moneymanager.core.util.toBudgetCreatedDateStr
 import com.d9tilov.moneymanager.databinding.FragmentProfileBinding
-import com.d9tilov.moneymanager.goal.domain.entity.GoalDestination
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileViewModel
-import com.d9tilov.moneymanager.regular.domain.entity.RegularTransactionDestination
 import com.d9tilov.moneymanager.splash.ui.RouterActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -77,7 +72,7 @@ class ProfileFragment :
                             profileBudget.profileItemBudgetCreatedDate.text =
                                 getString(
                                     R.string.budget_date_created,
-                                    budget.createdDate.toBudgetCreatedDate()
+                                    budget.createdDate.toBudgetCreatedDateStr()
                                 )
                         }
                     }
@@ -127,41 +122,41 @@ class ProfileFragment :
     }
 
     private fun openSettingsScreen() {
-        val action = ProfileFragmentDirections.toSettingsDest()
-        findNavController().navigate(action)
+        // val action = ProfileFragmentDirections.toSettingsDest()
+        // findNavController().navigate(action)
     }
 
     private fun openGoalScreen() {
-        val action = ProfileFragmentDirections.toGoalsDest(GoalDestination.ProfileScreen)
-        findNavController().navigate(action)
+        // val action = ProfileFragmentDirections.toGoalsDest(GoalDestination.ProfileScreen)
+        // findNavController().navigate(action)
     }
 
     private fun openRegularExepenseScreen() {
-        val action =
-            ProfileFragmentDirections.toRegularExpensesDest(RegularTransactionDestination.ProfileScreen)
-        findNavController().navigate(action)
+        // val action =
+        //     ProfileFragmentDirections.toRegularExpensesDest(RegularTransactionDestination.ProfileScreen)
+        // findNavController().navigate(action)
     }
 
     private fun openRegularIncomesScreen() {
-        val action =
-            ProfileFragmentDirections.toRegularIncomesDest(RegularTransactionDestination.ProfileScreen)
-        findNavController().navigate(action)
+        // val action =
+        //     ProfileFragmentDirections.toRegularIncomesDest(RegularTransactionDestination.ProfileScreen)
+        // findNavController().navigate(action)
     }
 
     private fun openBudgetScreen() {
-        val action = ProfileFragmentDirections.toBudgetDest(BudgetDestination.ProfileScreen)
-        findNavController().navigate(action)
+        // val action = ProfileFragmentDirections.toBudgetDest(BudgetDestination.ProfileScreen)
+        // findNavController().navigate(action)
     }
 
     private fun openCurrencyScreen() {
-        val action =
-            ProfileFragmentDirections.toCurrencyDest(CurrencyDestination.ProfileCurrentScreen)
-        findNavController().navigate(action)
+        // val action =
+        //     ProfileFragmentDirections.toCurrencyDest(CurrencyDestination.ProfileCurrentScreen)
+        // findNavController().navigate(action)
     }
 
     private fun logout() {
-        val action = ProfileFragmentDirections.toLogoutDialogDest()
-        findNavController().navigate(action)
+        // val action = ProfileFragmentDirections.toLogoutDialogDest()
+        // findNavController().navigate(action)
     }
 
     private fun updateUI() {

@@ -10,8 +10,8 @@ fun CurrencyResponse.toDataModel(): List<Currency> {
     for ((key, value) in rates) {
         val item = Currency(
             code = key,
-            value = value.toBigDecimal(),
             symbol = key.getSymbolByCode(),
+            value = value.toBigDecimal(),
             lastUpdateTime = date
         )
         currencyRateList.add(item)

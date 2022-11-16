@@ -26,7 +26,7 @@ class RouterActivity : AppCompatActivity(), SplashNavigator {
 
     private val viewModel by viewModels<RouterViewModel>()
     private val startForResult: ActivityResultLauncher<Intent> =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { viewModel.updateData() }
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { viewModel.updateUid() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -34,7 +34,6 @@ class RouterActivity : AppCompatActivity(), SplashNavigator {
         setContentView(R.layout.activity_splash)
         viewModel.navigator = this
         splashScreen.setKeepOnScreenCondition { true }
-        viewModel.onStartup()
     }
 
     override fun openHomeScreen() {

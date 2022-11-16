@@ -7,10 +7,8 @@ import java.math.BigDecimal
 
 @Entity(tableName = "currency")
 data class CurrencyDbModel(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val id: Long,
-    @ColumnInfo(name = "code") val code: String,
+    @PrimaryKey
+    @ColumnInfo(name = "id") val id: String,
     @ColumnInfo(name = "symbol") val symbol: String,
     @ColumnInfo(name = "value") val value: BigDecimal,
     @ColumnInfo(name = "lastUpdateTime") val lastUpdateTime: Long

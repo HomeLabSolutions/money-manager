@@ -41,7 +41,7 @@ class BudgetLocalSource(
             .flatMapMerge { uid -> budgetDao.get(uid).filterNotNull().map { it.toDataModel() } }
 
     override suspend fun update(budgetData: BudgetData) {
-        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
         if (currentUserId == null) throw WrongUidException()
         else budgetDao.update(budgetData.toDbModel().copy(clientId = currentUserId))
     }

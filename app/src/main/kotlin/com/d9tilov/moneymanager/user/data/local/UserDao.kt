@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 interface UserDao {
 
     @Query("SELECT * FROM Users WHERE uid = :id")
-    fun getById(id: String): Flow<UserDbModel>
+    fun getById(id: String): Flow<UserDbModel?>
 
     @Query("SELECT currentCurrencyCode FROM Users WHERE uid = :id")
     fun getCurrentCurrency(id: String): Flow<String>

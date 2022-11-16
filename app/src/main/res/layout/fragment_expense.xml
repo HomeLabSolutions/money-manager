@@ -22,7 +22,7 @@
         android:id="@+id/expense_category_rv_list"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/standard_half_left_margin"
+        android:layout_marginStart="@dimen/standard_padding"
         android:layout_marginBottom="4dp"
         android:minHeight="172dp"
         app:layout_constraintBottom_toBottomOf="parent"

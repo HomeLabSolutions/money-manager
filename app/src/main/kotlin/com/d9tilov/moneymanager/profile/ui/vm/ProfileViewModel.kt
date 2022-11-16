@@ -7,6 +7,7 @@ import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.budget.domain.entity.BudgetData
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
+import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.domain.UserInteractor
@@ -15,6 +16,7 @@ import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
@@ -28,13 +30,13 @@ class ProfileViewModel @Inject constructor(
     billingInteractor: BillingInteractor
 ) : BaseViewModel<ProfileNavigator>() {
 
-    val userData = userInfoInteractor.getCurrentUser()
+    val userData: StateFlow<UserProfile?> = userInfoInteractor.getCurrentUser()
         .flowOn(Dispatchers.IO)
         .stateIn(viewModelScope, SharingStarted.Eagerly, UserProfile.EMPTY)
     val budget = budgetInteractor.get()
         .flowOn(Dispatchers.IO)
         .stateIn(viewModelScope, SharingStarted.Eagerly, BudgetData.EMPTY)
-    val regularIncomes =
+    val regularIncomes: StateFlow<List<RegularTransaction>> =
         regularTransactionInteractor.getAll(TransactionType.INCOME)
             .flowOn(Dispatchers.IO)
             .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())

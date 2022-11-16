@@ -9,7 +9,6 @@ import java.math.BigDecimal
 
 @Parcelize
 data class DomainCurrency(
-    val id: Long = DataConstants.DEFAULT_DATA_ID,
     val code: String,
     val symbol: String,
     val value: BigDecimal,
@@ -19,7 +18,6 @@ data class DomainCurrency(
 
     companion object {
         val EMPTY = DomainCurrency(
-            id = DataConstants.DEFAULT_DATA_ID,
             code = DataConstants.DEFAULT_CURRENCY_CODE,
             symbol = DataConstants.DEFAULT_CURRENCY_SYMBOL,
             value = BigDecimal.ZERO,

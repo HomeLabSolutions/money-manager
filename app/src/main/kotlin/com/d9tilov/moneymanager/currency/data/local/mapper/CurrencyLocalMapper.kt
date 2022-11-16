@@ -4,7 +4,7 @@ import com.d9tilov.moneymanager.currency.data.entity.Currency
 import com.d9tilov.moneymanager.currency.data.local.entity.CurrencyDbModel
 
 fun CurrencyDbModel.toDataModel(): Currency =
-    Currency(id, code, symbol, value, lastUpdateTime)
+    Currency(id, symbol, value, lastUpdateTime)
 
 fun Currency.toDbModel(): CurrencyDbModel =
-    CurrencyDbModel(id, code, symbol, value, lastUpdateTime)
+    CurrencyDbModel(code, symbol, value, lastUpdateTime)

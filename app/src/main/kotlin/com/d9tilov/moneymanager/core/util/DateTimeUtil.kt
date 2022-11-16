@@ -43,7 +43,7 @@ fun Long.toBackupDate(): String {
     return SimpleDateFormat(BACKUP_DATE, Locale.getDefault()).format(Date(this))
 }
 
-fun LocalDateTime.toBudgetCreatedDate(): String {
+fun LocalDateTime.toBudgetCreatedDateStr(): String {
     return SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(Date(this.toMillis()))
 }
 
