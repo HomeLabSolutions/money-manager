@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.user.data.local
 
+import android.util.Log
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.CurrencyMetaData
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
@@ -57,7 +58,7 @@ class UserLocalSource(
     }
 
     override suspend fun showPrepopulate(): Boolean {
-        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
         return if (currentUserId == null) throw WrongUidException()
         else userDao.showPrepopulate(currentUserId)
     }

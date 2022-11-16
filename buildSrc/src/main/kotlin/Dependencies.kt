@@ -25,6 +25,7 @@ object Deps {
 
     val glide by lazy { "com.github.bumptech.glide:glide:${Versions.glide}" }
     val glideCompiler by lazy { "com.github.bumptech.glide:compiler:${Versions.glide}" }
+    val coil by lazy { "io.coil-kt:coil-compose:${Versions.coil}" }
 
     val retrofit by lazy { "com.squareup.retrofit2:retrofit:${Versions.retrofit}" }
     val retrofitMoshi by lazy { "com.squareup.retrofit2:converter-moshi:${Versions.retrofit}" }
@@ -34,9 +35,6 @@ object Deps {
     val roomCompiler by lazy { "androidx.room:room-compiler:${Versions.room}" }
     val roomPaging by lazy { "androidx.room:room-paging:${Versions.room}" }
     val paging by lazy { "androidx.paging:paging-runtime-ktx:${Versions.paging}" }
-
-    val sql by lazy { "androidx.sqlite:sqlite-ktx:${Versions.sql}" }
-    val sqlCipher by lazy { "net.zetetic:android-database-sqlcipher:${Versions.sqlCipher}" }
 
     val navigation by lazy { "androidx.navigation:navigation-fragment-ktx:${Versions.navigation}" }
     val navigationUi by lazy { "androidx.navigation:navigation-ui-ktx:${Versions.navigation}" }
@@ -80,7 +78,9 @@ object Deps {
     val composeMaterialIconsExtended by lazy { "androidx.compose.material:material-icons-extended:${Versions.compose}" }
     val composeLiveData by lazy { "androidx.compose.runtime:runtime-livedata:${Versions.compose}" }
     val composeViewModel by lazy { "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.composeViewModel}" }
+    val composeRuntime by lazy { "androidx.lifecycle:lifecycle-runtime-compose:${Versions.composeRuntime}" }
     val composeUiTestManifest by lazy { "androidx.compose.ui:ui-test-manifest:${Versions.compose}" }
+    val composeConstraintLayout by lazy { "androidx.constraintlayout:constraintlayout-compose:${Versions.composeConstraintLayout}" }
 
     val worker by lazy { "androidx.work:work-runtime-ktx:${Versions.worker}" }
     val workerHilt by lazy { "androidx.hilt:hilt-work:${Versions.workerHilt}" }
@@ -97,6 +97,7 @@ object Deps {
     val hilt by lazy { "com.google.dagger:hilt-android:${Versions.hilt}" }
     val hiltCompiler by lazy { "androidx.hilt:hilt-compiler:${Versions.hiltCompiler}" }
     val hiltAndroidCompiler by lazy { "com.google.dagger:hilt-android-compiler:${Versions.hilt}" }
+    val hiltNavigationCompose by lazy { "androidx.hilt:hilt-navigation-compose:${Versions.hiltNavigationCompose}" }
 
     val splashScreen by lazy { "androidx.core:core-splashscreen:${Versions.splashScreen}" }
 }

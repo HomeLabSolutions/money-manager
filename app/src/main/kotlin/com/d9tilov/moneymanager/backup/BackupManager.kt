@@ -73,7 +73,7 @@ class BackupManager(private val context: Context, private val preferencesStore: 
     }
 
     suspend fun restoreDb(): ResultOf<Any> {
-        val uid = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+        val uid = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
         return suspendCancellableCoroutine { continuation ->
             if (!isNetworkConnected(context)) continuation.resumeWithException(NetworkException())
             if (uid.isNullOrEmpty()) continuation.resumeWithException(WrongUidException())

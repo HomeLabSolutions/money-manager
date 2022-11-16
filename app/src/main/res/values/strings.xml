@@ -187,6 +187,7 @@
     <string name="budget_date_created">Created: %1$s</string>
 
     <string name="logout_dialog_title">Logout</string>
+    <string name="logout_dialog_button">Logout</string>
     <string name="logout_dialog_subtitle">Do you really want to logout?</string>
 
     <string name="notification_income_title">Regular income</string>

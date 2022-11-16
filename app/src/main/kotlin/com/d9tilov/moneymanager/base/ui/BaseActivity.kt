@@ -26,7 +26,6 @@ import com.d9tilov.moneymanager.core.util.hideLoadingDialog
 import com.d9tilov.moneymanager.core.util.isNetworkConnected
 import com.d9tilov.moneymanager.core.util.showLoadingDialog
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {

@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.prepopulate.ui
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,14 +51,15 @@ fun CurrencyListScreen(
         is CurrencyUiState.HasCurrencies -> {
             val currencyList = currencyUiState.currencyList
             val state = rememberLazyListState()
-            val checkedIndex = currencyList.indexOfFirst { it.isBase }
             val coroutineScope = rememberCoroutineScope()
             LazyColumn(contentPadding = PaddingValues(16.dp), modifier = modifier, state = state) {
-                items(items = currencyList, key = { item -> item.id }) { item ->
+                items(items = currencyList, key = { item -> item.code }) { item ->
                     CurrencyItem(item, clickCallback)
                 }
             }
             LaunchedEffect(true) {
+                val checkedIndex = currencyList.indexOfFirst { it.isBase }
+                if (checkedIndex == -1) return@LaunchedEffect
                 coroutineScope.launch { state.scrollToItem(checkedIndex) }
             }
         }

@@ -33,8 +33,8 @@ fun BudgetScreen(
         Text(
             text = stringResource(R.string.transaction_edit_sum_title),
             modifier = Modifier.padding(
-                start = dimensionResource(R.dimen.standard_horizontal_margin_large),
-                top = dimensionResource(R.dimen.standard_vertical_margin_large),
+                start = dimensionResource(R.dimen.standard_large_padding),
+                top = dimensionResource(R.dimen.standard_large_padding),
             ),
             style = MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.secondary)
         )
@@ -46,7 +46,7 @@ fun BudgetScreen(
             true,
             Modifier.fillMaxWidth()
                 .padding(
-                    horizontal = dimensionResource(R.dimen.standard_horizontal_margin_medium),
+                    horizontal = dimensionResource(R.dimen.standard_padding),
                 )
         ) { s ->
             text = s

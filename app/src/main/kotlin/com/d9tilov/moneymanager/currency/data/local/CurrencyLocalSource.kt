@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.map
 class CurrencyLocalSource(private val currencyDao: CurrencyDao) : CurrencySource {
 
     override suspend fun saveCurrencies(currencies: List<Currency>) {
-        currencies.forEach { currency -> currencyDao.insert(currency.toDbModel()) }
+        currencyDao.insert(currencies.map { item -> item.toDbModel() }.toList())
     }
 
     override suspend fun getCurrencyByCode(code: String): Currency = currencyDao.getByCode(code).toDataModel()

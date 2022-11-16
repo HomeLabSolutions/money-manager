@@ -186,6 +186,7 @@
     <string name="budget_date_created">Создан: %1$s</string>
 
     <string name="logout_dialog_title">Выход</string>
+    <string name="logout_dialog_button">Выйти</string>
     <string name="logout_dialog_subtitle">Вы действительно хотите выйти?</string>
 
     <string name="notification_income_title">Постоянный доход</string>
