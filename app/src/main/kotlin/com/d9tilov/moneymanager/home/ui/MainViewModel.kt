@@ -43,7 +43,6 @@ class MainViewModel @Inject constructor(
                     launch { transactionInteractor.executeRegularIfNeeded(TransactionType.EXPENSE) }
                 }
             }
-            launch { currencyInteractor.updateCurrencyRates() }
         }
     }
 

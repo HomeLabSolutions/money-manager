@@ -34,18 +34,9 @@
     <dimen name="currency_sum_text_size">84sp</dimen>
     <dimen name="currency_sign_text_size">50sp</dimen>
 
-    <dimen name="standard_horizontal_margin_large">32dp</dimen>
-    <dimen name="standard_vertical_margin_large">32dp</dimen>
-    <dimen name="standard_horizontal_margin_medium">16dp</dimen>
-    <dimen name="standard_vertical_margin_medium">16dp</dimen>
-    <dimen name="standard_top_margin">16dp</dimen>
-    <dimen name="standard_bottom_margin">16dp</dimen>
-    <dimen name="standard_left_margin">32dp</dimen>
-    <dimen name="standard_half_left_margin">16dp</dimen>
-    <dimen name="standard_right_margin">32dp</dimen>
-    <dimen name="standard_half_right_margin">16dp</dimen>
     <dimen name="standard_padding">16dp</dimen>
-    <dimen name="standard_margin">16dp</dimen>
+    <dimen name="standard_large_padding">32dp</dimen>
+    <dimen name="standard_extra_large_padding">64dp</dimen>
     <dimen name="card_view_corner_radius">16dp</dimen>
 
     <dimen name="recycler_view_category_offset">4dp</dimen>

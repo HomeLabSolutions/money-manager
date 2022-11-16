@@ -11,15 +11,13 @@ import java.math.BigDecimal
 
 @Parcelize
 data class Currency(
-    val id: Long = DataConstants.DEFAULT_DATA_ID,
-    val code: String,
+    val code: String = DEFAULT_CURRENCY_CODE,
     val symbol: String,
     val value: BigDecimal,
     val lastUpdateTime: Long
 ) : Parcelable {
     companion object {
         val EMPTY = Currency(
-            id = DataConstants.DEFAULT_DATA_ID,
             code = DEFAULT_CURRENCY_CODE,
             symbol = DEFAULT_CURRENCY_SYMBOL,
             value = BigDecimal.ZERO,

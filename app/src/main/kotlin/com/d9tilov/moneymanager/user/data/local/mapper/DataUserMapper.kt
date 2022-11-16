@@ -1,12 +1,13 @@
 package com.d9tilov.moneymanager.user.data.local.mapper
 
-import com.d9tilov.moneymanager.encryption.digest
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.data.entity.UserDbModel
+import com.google.firebase.auth.FirebaseAuth
 
 fun UserDbModel.toDataModel(): UserProfile = UserProfile(
     uid = uid,
     displayedName = "$firstName $lastName",
+    photoUrl = FirebaseAuth.getInstance().currentUser?.photoUrl,
     firstName = firstName,
     lastName = lastName,
     currentCurrencyCode = currentCurrencyCode,
@@ -16,7 +17,7 @@ fun UserDbModel.toDataModel(): UserProfile = UserProfile(
 
 fun UserProfile.toDbModel(): UserDbModel =
     UserDbModel(
-        uid = digest(uid),
+        uid = uid,
         firstName = firstName,
         lastName = lastName,
         currentCurrencyCode = currentCurrencyCode,

@@ -36,9 +36,6 @@ object Versions {
 
     const val okhttp = "4.10.0"
 
-    const val sql = "2.3.0"
-    const val sqlCipher = "4.5.3"
-
     const val viewpager = "1.0.0"
     const val coroutinesCore = "1.6.4"
 
@@ -46,9 +43,11 @@ object Versions {
     const val lifecycleExtension = "2.2.0"
 
     const val compose = "1.3.0"
+    const val composeConstraintLayout = "1.0.1"
     const val composeMaterial3 = "1.0.0"
     const val composeActivity = "1.6.1"
     const val composeViewModel = "2.5.1"
+    const val composeRuntime = "2.6.0-alpha03"
     const val composeExtension = "1.3.2"
 
     const val worker = "2.7.1"

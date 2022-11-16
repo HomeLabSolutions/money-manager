@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 interface CurrencyDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(currency: CurrencyDbModel)
+    suspend fun insert(list: List<CurrencyDbModel>)
 
     @Update
     suspend fun update(currency: CurrencyDbModel)
@@ -20,9 +20,9 @@ interface CurrencyDao {
     @Query("SELECT * FROM currency")
     fun getAll(): Flow<List<CurrencyDbModel>>
 
-    @Query("SELECT * FROM currency WHERE code=:code")
+    @Query("SELECT * FROM currency WHERE id=:code")
     fun getByCode(code: String): CurrencyDbModel
 
-    @Query("SELECT lastUpdateTime FROM currency WHERE code=:code")
+    @Query("SELECT lastUpdateTime FROM currency WHERE id=:code")
     fun getLastUpdateTime(code: String): Long
 }

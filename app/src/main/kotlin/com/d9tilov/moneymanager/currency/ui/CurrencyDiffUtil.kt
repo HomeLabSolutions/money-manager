@@ -9,7 +9,7 @@ class CurrencyDiffUtil(
 ) : DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldCurrenciesList[oldItemPosition].id == newCurrenciesList[newItemPosition].id
+        return oldCurrenciesList[oldItemPosition].code == newCurrenciesList[newItemPosition].code
     }
 
     override fun getOldListSize(): Int {

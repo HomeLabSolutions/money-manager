@@ -191,6 +191,7 @@ dependencies {
     implementation(Deps.firebaseConfig)
 
     implementation(Deps.hilt)
+    implementation(Deps.hiltNavigationCompose)
     kapt(Deps.hiltCompiler)
     kapt(Deps.hiltAndroidCompiler)
 
@@ -207,15 +208,13 @@ dependencies {
 
     implementation(Deps.glide)
     annotationProcessor(Deps.glideCompiler)
+    implementation(Deps.coil)
 
     implementation(Deps.paging)
     implementation(Deps.roomRuntime)
     implementation(Deps.room)
     implementation(Deps.roomPaging)
     kapt(Deps.roomCompiler)
-
-    implementation(Deps.sql)
-    implementation(Deps.sqlCipher)
 
     implementation(Deps.viewpager)
 
@@ -237,7 +236,9 @@ dependencies {
     implementation(Deps.composeMaterialIconsExtended)
     implementation(Deps.composeLiveData)
     implementation(Deps.composeViewModel)
+    implementation(Deps.composeRuntime)
     implementation(Deps.composeUiTestManifest)
+    implementation(Deps.composeConstraintLayout)
 
     implementation(Deps.worker)
     implementation(Deps.workerHilt)

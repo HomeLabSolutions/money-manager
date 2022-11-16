@@ -7,8 +7,8 @@ import javax.inject.Inject
 class CurrencyDomainMapper @Inject constructor() {
 
     fun toDataModel(currencyDomain: DomainCurrency): Currency =
-        with(currencyDomain) { Currency(id, code, symbol, value, lastUpdateTime) }
+        with(currencyDomain) { Currency(code, symbol, value, lastUpdateTime) }
 
     fun toDomain(currency: Currency, isBase: Boolean): DomainCurrency =
-        with(currency) { DomainCurrency(id, code, symbol, value, isBase, lastUpdateTime) }
+        with(currency) { DomainCurrency(code, symbol, value, isBase, lastUpdateTime) }
 }
