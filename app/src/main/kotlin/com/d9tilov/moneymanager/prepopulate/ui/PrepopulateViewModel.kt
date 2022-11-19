@@ -55,7 +55,6 @@ class PrepopulateViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             budgetInteractor.create()
-            currencyInteractor.updateCurrencyRates()
         }
     }
 
