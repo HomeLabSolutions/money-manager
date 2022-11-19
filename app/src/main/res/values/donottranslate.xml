@@ -10,6 +10,9 @@
     <string name="approx_sign">≈</string>
     <string name="number_with_percent">%1$s%%</string>
     <string name="prepopulate_progress">%1$s/%2$s</string>
+    <string name="sync_notification_channel_name">Sync</string>
+    <string name="sync_notification_channel_description">Background tasks for MoneyManager</string>
+    <string name="sync_notification_title">Money Manager</string>
 
     <string name="_0">0</string>
     <string name="_1">1</string>

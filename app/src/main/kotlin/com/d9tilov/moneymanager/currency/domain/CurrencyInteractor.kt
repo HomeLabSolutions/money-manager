@@ -12,5 +12,5 @@ interface CurrencyInteractor : Interactor {
     suspend fun getCurrencyByCode(code: String): Currency
     suspend fun toMainCurrency(amount: BigDecimal, currencyCode: String): BigDecimal
     suspend fun toUsd(amount: BigDecimal, currencyCode: String): BigDecimal
-    suspend fun updateCurrencyRates()
+    suspend fun updateCurrencyRates(): Boolean
 }

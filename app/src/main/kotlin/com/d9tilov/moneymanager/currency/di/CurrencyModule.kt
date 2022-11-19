@@ -13,22 +13,22 @@ import com.d9tilov.moneymanager.currency.domain.mapper.CurrencyDomainMapper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityRetainedComponent
-import dagger.hilt.android.scopes.ActivityRetainedScoped
+import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
+import javax.inject.Singleton
 
 @Module
-@InstallIn(ActivityRetainedComponent::class)
+@InstallIn(SingletonComponent::class)
 class CurrencyModule {
 
     @Provides
-    @ActivityRetainedScoped
+    @Singleton
     fun provideCurrencySource(
         appDatabase: AppDatabase
     ): CurrencySource = CurrencyLocalSource(appDatabase.currencyDao())
 
     @Provides
-    @ActivityRetainedScoped
+    @Singleton
     fun provideCurrencyRepo(
         preferencesStore: PreferencesStore,
         currencySource: CurrencySource,
@@ -37,7 +37,7 @@ class CurrencyModule {
         CurrencyDataRepo(preferencesStore, currencySource, retrofit.create(CurrencyApi::class.java))
 
     @Provides
-    @ActivityRetainedScoped
+    @Singleton
     fun provideCurrencyInteractor(
         currencyRepo: CurrencyRepo,
         domainMapper: CurrencyDomainMapper

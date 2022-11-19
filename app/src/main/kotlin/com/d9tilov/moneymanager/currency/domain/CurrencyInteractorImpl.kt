@@ -58,7 +58,12 @@ class CurrencyInteractorImpl(
         return amount.divideBy(currentAbsoluteAmount)
     }
 
-    override suspend fun updateCurrencyRates() {
-        currencyRepo.updateCurrencies()
+    override suspend fun updateCurrencyRates(): Boolean {
+        return try {
+            currencyRepo.updateCurrencies()
+            true
+        } catch (ex: Exception) {
+            false
+        }
     }
 }
