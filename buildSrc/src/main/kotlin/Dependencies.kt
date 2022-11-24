@@ -69,6 +69,7 @@ object Deps {
 
     val composeUi by lazy { "androidx.compose.ui:ui:${Versions.compose}" }
     val composeMaterial3 by lazy { "androidx.compose.material3:material3:${Versions.composeMaterial3}" }
+    val composeMaterial3WindowSize by lazy { "androidx.compose.material3:material3-window-size-class:${Versions.composeMaterial3}" }
     val composeActivity by lazy { "androidx.activity:activity-compose:${Versions.composeActivity}" }
     val composeToolingUi by lazy { "androidx.compose.ui:ui-tooling:${Versions.compose}" }
     val composeToolingPreview by lazy { "androidx.compose.ui:ui-tooling-preview:${Versions.compose}" }

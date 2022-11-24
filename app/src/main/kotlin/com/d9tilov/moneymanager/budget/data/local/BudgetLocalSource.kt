@@ -2,13 +2,12 @@ package com.d9tilov.moneymanager.budget.data.local
 
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
-import com.d9tilov.moneymanager.budget.domain.entity.BudgetData
 import com.d9tilov.moneymanager.budget.data.local.mapper.toDataModel
 import com.d9tilov.moneymanager.budget.data.local.mapper.toDbModel
+import com.d9tilov.moneymanager.budget.domain.entity.BudgetData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
@@ -19,8 +18,8 @@ class BudgetLocalSource(
     private val budgetDao: BudgetDao
 ) : BudgetSource {
 
-    override suspend fun createIfNeeded() {
-        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+    override suspend fun createIfNeeded(currencyCode: String) {
+        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
         if (currentUserId == null) throw WrongUidException()
         else {
             val budget = budgetDao.get(currentUserId).firstOrNull()
@@ -28,7 +27,7 @@ class BudgetLocalSource(
                 budgetDao.insert(
                     BudgetData.EMPTY.copy(
                         clientId = currentUserId,
-                        currencyCode = preferencesStore.currentCurrency.first().code
+                        currencyCode = currencyCode
                     ).toDbModel()
                 )
             }
@@ -47,7 +46,7 @@ class BudgetLocalSource(
     }
 
     override suspend fun delete(budgetData: BudgetData) {
-        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
         if (currentUserId == null) throw WrongUidException()
         else budgetDao.delete(budgetData.toDbModel())
     }

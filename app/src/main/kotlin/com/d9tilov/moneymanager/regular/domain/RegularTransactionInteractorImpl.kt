@@ -18,7 +18,7 @@ class RegularTransactionInteractorImpl(
     private val userInteractor: UserInteractor
 ) : RegularTransactionInteractor {
 
-    override fun createDefault(): Flow<RegularTransaction> = userInteractor.getCurrentCurrency()
+    override fun createDefault(): Flow<RegularTransaction> = userInteractor.getCurrentCurrencyFlow()
         .map { RegularTransaction.EMPTY.copy(currencyCode = it.code) }
 
     override suspend fun insert(regularTransactionData: RegularTransaction) {

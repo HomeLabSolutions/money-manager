@@ -10,7 +10,7 @@ interface CurrencyInteractor : Interactor {
 
     fun getCurrencies(): Flow<List<DomainCurrency>>
     suspend fun getCurrencyByCode(code: String): Currency
-    suspend fun toMainCurrency(amount: BigDecimal, currencyCode: String): BigDecimal
+    suspend fun toTargetCurrency(amount: BigDecimal, sourceCurrencyCode: String, targetCurrencyCode: String): BigDecimal
     suspend fun toUsd(amount: BigDecimal, currencyCode: String): BigDecimal
     suspend fun updateCurrencyRates(): Boolean
 }
