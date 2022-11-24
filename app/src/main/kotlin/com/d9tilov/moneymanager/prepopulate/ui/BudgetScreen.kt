@@ -21,6 +21,7 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.budget.domain.entity.BudgetData
 import com.d9tilov.moneymanager.budget.vm.BudgetUiState
 import com.d9tilov.moneymanager.core.ui.views.CurrencyTextFieldExtraBig
+import com.d9tilov.moneymanager.core.util.CurrencyUtils.getSymbolByCode
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -42,7 +43,7 @@ fun BudgetScreen(
 
         CurrencyTextFieldExtraBig(
             text,
-            "$",
+            budgetUiState.budgetData.currencyCode.getSymbolByCode(),
             true,
             Modifier.fillMaxWidth()
                 .padding(

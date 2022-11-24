@@ -17,6 +17,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -25,22 +26,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-sealed interface CurrencyUiState {
-    val isLoading: Boolean
-    val errorMessages: List<ErrorMessage>
-
-    data class NoCurrencies(
-        override val isLoading: Boolean = true,
-        override val errorMessages: List<ErrorMessage> = emptyList()
-    ) : CurrencyUiState
-
-    data class HasCurrencies(
-        val currencyList: List<DomainCurrency> = emptyList(),
-        override val isLoading: Boolean,
-        override val errorMessages: List<ErrorMessage> = emptyList()
-    ) : CurrencyUiState
-}
-
 @HiltViewModel
 class CurrencyViewModel @Inject constructor(
     private val currencyInteractor: CurrencyInteractor,
@@ -48,15 +33,6 @@ class CurrencyViewModel @Inject constructor(
     private val budgetInteractor: BudgetInteractor
 ) : BaseViewModel<CurrencyNavigator>() {
 
-    private val viewModelState = MutableStateFlow(CurrencyViewModelState(isLoading = true))
-
-    val uiState = viewModelState
-        .map { it.toUiState() }
-        .stateIn(
-            viewModelScope,
-            SharingStarted.Eagerly,
-            viewModelState.value.toUiState()
-        )
 
     private val currencies: MutableStateFlow<ResultOf<List<DomainCurrency>>> =
         MutableStateFlow(ResultOf.Loading())

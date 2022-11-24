@@ -53,7 +53,6 @@ class MainActivity :
             viewModel.isPremium
                 .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
                 .collect { isPremium ->
-                    Log.d("[MoneyManager]", "onCreate: $isPremium")
                     if (isPremium) PeriodicBackupWorker.startPeriodicJob(this@MainActivity)
                 }
         }

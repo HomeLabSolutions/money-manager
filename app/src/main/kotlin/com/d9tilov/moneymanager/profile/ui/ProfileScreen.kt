@@ -3,8 +3,8 @@ package com.d9tilov.moneymanager.profile.ui
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -60,14 +60,17 @@ import dagger.hilt.android.internal.managers.FragmentComponentManager
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun ProfileScreen(viewModel: ProfileViewModel2 = hiltViewModel()) {
+fun ProfileRoute(
+    viewModel: ProfileViewModel2 = hiltViewModel(),
+    navigateToCurrencyList: () -> Unit,
+) {
     val state: ProfileUiState by viewModel.profileState.collectAsStateWithLifecycle()
     val showDialog by viewModel.showDialog.collectAsStateWithLifecycle()
     val context = LocalContext.current
     ProfileScreen(
         state,
         showDialog,
-        {},
+        navigateToCurrencyList,
         {},
         {},
         {},
@@ -104,7 +107,7 @@ fun ProfileScreen(
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         ProfileCard(state.userProfile)
-        ProfileSection(state.currency)
+        ProfileSection(state.currency, onCurrencyClicked)
         ProfileSection(state.budgetData)
         ProfileSection(state.regularIncomes)
         ProfileSection(state.regularExpenses)
@@ -191,7 +194,7 @@ fun ProfileContent(name: String?) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ProfileSection(profileUiItem: ProfileUiItem) {
+fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit = {}) {
     val (icon, title, subtitle) = when (profileUiItem) {
         is ProfileUiItem.CurrencyUiItem -> ProfileItemData(
             ImageVector.vectorResource(R.drawable.ic_currency_icon),
@@ -230,6 +233,7 @@ fun ProfileSection(profileUiItem: ProfileUiItem) {
             .fillMaxWidth()
             .padding(top = if (profileUiItem is ProfileUiItem.CurrencyUiItem) dimensionResource(R.dimen.standard_large_padding) else 0.dp)
             .height(dimensionResource(R.dimen.profile_item_height))
+            .clickable(onClick = navigationCallback)
     ) {
         val (idIcon, idTitle, idData, idSubtitle, idDivider) = createRefs()
         Icon(

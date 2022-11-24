@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.splash.vm
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.backup.domain.BackupInteractor
@@ -15,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.Lazy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -26,8 +28,8 @@ import javax.inject.Inject
 class RouterViewModel @Inject constructor(
     private val preferencesStore: PreferencesStore,
     private val backupInteractor: BackupInteractor,
-    private val userInteractor: Lazy<UserInteractor>,
-    private val categoryInteractor: Lazy<CategoryInteractor>
+    private val userInteractor: UserInteractor,
+    private val categoryInteractor: Lazy<CategoryInteractor>,
 ) : BaseViewModel<SplashNavigator>() {
 
     private val auth = FirebaseAuth.getInstance()
@@ -40,11 +42,11 @@ class RouterViewModel @Inject constructor(
                     withContext(Dispatchers.Main) { navigator?.openAuthScreen() }
                 } else {
                     if (firebaseUid != uid) {
-                        if (uid != null) userInteractor.get().deleteUser()
+                        if (uid != null) userInteractor.deleteUser()
                         auth.signOut()
                         withContext(Dispatchers.Main) { navigator?.openAuthScreen() }
                     } else {
-                        var user = userInteractor.get().getCurrentUser().firstOrNull()
+                        var user = userInteractor.getCurrentUser().firstOrNull()
                         if (user == null) {
                             try {
                                 backupInteractor.restoreBackup()
@@ -57,19 +59,19 @@ class RouterViewModel @Inject constructor(
                             } catch (ex: FirebaseException) {
                                 Timber.tag(App.TAG).d("Do work with exception: $ex")
                             }
-                            user = userInteractor.get().getCurrentUser().firstOrNull()
+                            user = userInteractor.getCurrentUser().firstOrNull()
                             if (user == null || user.showPrepopulate) {
-                                userInteractor.get().createUser(auth.currentUser)
+                                userInteractor.createUser(auth.currentUser)
                                 categoryInteractor.get().createDefaultCategories()
                                 withContext(Dispatchers.Main) { navigator?.openPrepopulate() }
                             } else {
-                                preferencesStore.updateCurrentCurrency(user.currentCurrencyCode)
                                 withContext(Dispatchers.Main) { navigator?.openHomeScreen() }
                             }
+                        } else {
+                            if (userInteractor.showPrepopulate())
+                                withContext(Dispatchers.Main) { navigator?.openPrepopulate() }
+                            else withContext(Dispatchers.Main) { navigator?.openHomeScreen() }
                         }
-                        if (userInteractor.get().showPrepopulate()) {
-                            withContext(Dispatchers.Main) { navigator?.openPrepopulate() }
-                        } else withContext(Dispatchers.Main) { navigator?.openHomeScreen() }
                     }
                 }
             }
@@ -78,9 +80,7 @@ class RouterViewModel @Inject constructor(
 
     fun updateUid() {
         viewModelScope.launch(Dispatchers.IO) {
-            auth.currentUser?.let { firebaseUser ->
-                preferencesStore.updateUid(firebaseUser.uid)
-            }
+            auth.currentUser?.let { firebaseUser -> preferencesStore.updateUid(firebaseUser.uid) }
         }
     }
 }

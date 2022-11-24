@@ -9,7 +9,8 @@ import kotlinx.coroutines.flow.Flow
 interface UserInteractor : Interactor {
 
     fun getCurrentUser(): Flow<UserProfile?>
-    fun getCurrentCurrency(): Flow<CurrencyMetaData>
+    fun getCurrentCurrencyFlow(): Flow<CurrencyMetaData>
+    suspend fun getCurrentCurrency(): CurrencyMetaData
     suspend fun getFiscalDay(): Int
     suspend fun showPrepopulate(): Boolean
     suspend fun prepopulateCompleted()

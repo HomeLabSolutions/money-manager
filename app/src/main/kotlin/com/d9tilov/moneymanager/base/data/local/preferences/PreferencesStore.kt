@@ -11,12 +11,9 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.d9tilov.moneymanager.backup.data.entity.BackupData
 import com.d9tilov.moneymanager.backup.data.entity.BackupData.Companion.UNKNOWN_BACKUP_DATE
 import com.d9tilov.moneymanager.core.constants.DataConstants.DATA_STORE_NAME
-import com.d9tilov.moneymanager.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.constants.DataConstants.PREFERENCE_CLIENT_UID
-import com.d9tilov.moneymanager.core.constants.DataConstants.PREFERENCE_CURRENT_CURRENCY
 import com.d9tilov.moneymanager.core.constants.DataConstants.PREFERENCE_LAST_BACKUP_DATE
 import com.d9tilov.moneymanager.core.constants.DataConstants.STORE_NAME
-import com.d9tilov.moneymanager.core.util.CurrencyUtils.getSymbolByCode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -46,15 +43,6 @@ class PreferencesStore(context: Context) {
         dataStore.edit { preferences -> preferences[PREFERENCE_LAST_BACKUP_DATE_KEY] = date }
     }
 
-    val currentCurrency: Flow<CurrencyMetaData> = dataStore.data.map { data ->
-        val code = data[PREFERENCE_CURRENCY_CODE_KEY] ?: DEFAULT_CURRENCY_CODE
-        CurrencyMetaData(code, code.getSymbolByCode())
-    }
-
-    suspend fun updateCurrentCurrency(code: String) {
-        dataStore.edit { preferences -> preferences[PREFERENCE_CURRENCY_CODE_KEY] = code }
-    }
-
     suspend fun clearAllData() {
         dataStore.edit { it.clear() }
     }
@@ -63,6 +51,5 @@ class PreferencesStore(context: Context) {
         private val PREFERENCE_LAST_BACKUP_DATE_KEY =
             longPreferencesKey(PREFERENCE_LAST_BACKUP_DATE)
         private val PREFERENCE_CLIENT_UID_KEY = stringPreferencesKey(PREFERENCE_CLIENT_UID)
-        private val PREFERENCE_CURRENCY_CODE_KEY = stringPreferencesKey(PREFERENCE_CURRENT_CURRENCY)
     }
 }
