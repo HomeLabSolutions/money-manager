@@ -34,7 +34,7 @@ class CurrencyChangeDialog :
         super.onViewCreated(view, savedInstanceState)
         viewBinding?.run {
             removeDialogTitle.text = getString(R.string.currency_change_title, CurrencyUtils.getCurrencyFullName(currency.code))
-            changeButtonConfirm.setOnClickListener { viewModel.changeCurrency(currency) }
+            changeButtonConfirm.setOnClickListener { viewModel.changeCurrency(currency.code) }
             changeButtonCancel.setOnClickListener { dismiss() }
         }
     }

@@ -32,7 +32,7 @@ class IncomeExpenseViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO + updateCurrencyExceptionHandler) {
-            userInteractor.getCurrentCurrency()
+            userInteractor.getCurrentCurrencyFlow()
                 .collect { currency ->
                     currencyCodeStr.value = currency.code
                     defaultCurrencyCode = currencyCodeStr.value

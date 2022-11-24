@@ -1,6 +1,5 @@
-package com.d9tilov.moneymanager.prepopulate.ui
+package com.d9tilov.moneymanager.currency.ui
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,16 +30,27 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.vm.CurrencyUiState
+import com.d9tilov.moneymanager.currency.vm.CurrencyViewModel2
 import kotlinx.coroutines.launch
+
+@OptIn(ExperimentalLifecycleComposeApi::class)
+@Composable
+fun CurrencyListRoute(viewModel: CurrencyViewModel2 = hiltViewModel()) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    CurrencyListScreen(uiState)
+}
 
 @Composable
 fun CurrencyListScreen(
     currencyUiState: CurrencyUiState,
-    modifier: Modifier,
-    clickCallback: (currency: DomainCurrency) -> Unit
+    modifier: Modifier = Modifier,
+    clickCallback: (currency: DomainCurrency) -> Unit = {}
 ) {
     if (currencyUiState.isLoading) {
         Box(modifier = modifier.fillMaxSize()) {

@@ -10,7 +10,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
 import com.d9tilov.moneymanager.home.ui.MainActivity
-import com.d9tilov.moneymanager.prepopulate.ui.PrepopulateActivity
 import com.d9tilov.moneymanager.prepopulate.ui.PrepopulateActivity2
 import com.d9tilov.moneymanager.splash.vm.RouterViewModel
 import com.firebase.ui.auth.AuthUI

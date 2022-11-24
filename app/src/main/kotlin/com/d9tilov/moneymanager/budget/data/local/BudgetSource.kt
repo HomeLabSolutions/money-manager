@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface BudgetSource : Source {
 
     fun get(): Flow<BudgetData>
-    suspend fun createIfNeeded()
+    suspend fun createIfNeeded(currencyCode: String)
     suspend fun update(budgetData: BudgetData)
     suspend fun delete(budgetData: BudgetData)
 }

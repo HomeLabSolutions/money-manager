@@ -170,6 +170,7 @@ dependencies {
     implementation(Deps.appCompat)
     implementation(Deps.material)
     implementation(Deps.composeMaterial3)
+    implementation(Deps.composeMaterial3WindowSize)
     implementation(Deps.core)
     implementation(Deps.coreRuntime)
     implementation(Deps.constraintLayout)

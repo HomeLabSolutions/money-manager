@@ -17,7 +17,6 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.currencyCode
 import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
-import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.toBudgetCreatedDateStr
 import com.d9tilov.moneymanager.databinding.FragmentProfileBinding
@@ -54,14 +53,14 @@ class ProfileFragment :
             viewLifecycleOwner.lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     launch {
-                        viewModel.userData.collect { profile ->
-                            profile?.currentCurrencyCode?.let { code ->
-                                val icon = CurrencyUtils.getCurrencyIcon(code)
-                                val currencyTitle = CurrencyUtils.getCurrencySignBy(code)
-                                profileCurrency.profileItemCurrentCurrencyIcon.text = icon
-                                profileCurrency.profileItemCurrentCurrencySign.text = currencyTitle
-                            }
-                        }
+                        // viewModel.userData.collect { profile: UserProfile? ->
+                        //     profile?.currentCurrencyCode?.let { code ->
+                        //         val icon = CurrencyUtils.getCurrencyIcon(code)
+                        //         val currencyTitle = CurrencyUtils.getCurrencySignBy(code)
+                        //         profileCurrency.profileItemCurrentCurrencyIcon.text = icon
+                        //         profileCurrency.profileItemCurrentCurrencySign.text = currencyTitle
+                        //     }
+                        // }
                     }
                     launch {
                         viewModel.budget.collect { budget ->

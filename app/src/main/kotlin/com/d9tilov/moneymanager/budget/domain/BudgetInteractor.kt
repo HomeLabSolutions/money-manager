@@ -9,6 +9,6 @@ interface BudgetInteractor : Interactor {
     fun get(): Flow<BudgetData>
     suspend fun create()
     suspend fun update(budgetData: BudgetData)
-    suspend fun updateBudgetWithCurrency(currencyCode: String)
+    suspend fun updateBudgetWithCurrency(currency: String)
     suspend fun delete(budgetData: BudgetData)
 }

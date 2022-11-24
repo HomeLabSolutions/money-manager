@@ -26,7 +26,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -76,7 +75,7 @@ class StatisticsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            currencyCode = userInteractor.getCurrentCurrency().first().code
+            currencyCode = userInteractor.getCurrentCurrency().code
             currencyType = StatisticsMenuCurrency.Current(currencyCode)
             menuItemList[currencyType.menuType.ordinal] = currencyType
             menuItemList[chartMode.menuType.ordinal] = chartMode

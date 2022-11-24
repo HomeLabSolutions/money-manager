@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.prepopulate.ui
 
+import android.app.Activity
 import android.content.Intent
-import android.util.Log
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -49,6 +49,7 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
+import com.d9tilov.moneymanager.currency.ui.CurrencyListScreen
 import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.prepopulate.ui.PrepopulateScreen.Companion.fromScreenId
 
@@ -59,11 +60,12 @@ fun PrepopulateScreen(prepopulateViewModel: PrepopulateViewModel = hiltViewModel
     val context = LocalContext.current
     PrepopulateScreen(
         uiState,
-        { currency -> prepopulateViewModel.changeCurrency(currency) },
+        { currency -> prepopulateViewModel.changeCurrency(currency.code) },
         { budget -> prepopulateViewModel.changeBudgetAmount(budget) },
         {
             prepopulateViewModel.saveBudgetAmountAndComplete()
             context.startActivity(Intent(context, MainActivity::class.java))
+            (context as Activity).finish()
         }
     )
 }
@@ -145,7 +147,7 @@ fun BottomNavigationBar(
                         else -> PrepopulateScreen.CurrencyScreen
                     }
                     progress =
-                        (screenType.id * 1.0f + 1) / PrepopulateScreen.SCREEN_COUNT
+                        (newScreenType.id * 1.0f + 1) / PrepopulateScreen.SCREEN_COUNT
                     onScreenChanged(newScreenType)
                 }, modifier = Modifier
                     .padding(horizontal = 4.dp)
@@ -172,7 +174,7 @@ fun BottomNavigationBar(
                         }
                     }
                     progress =
-                        (screenType.id * 1.0f + 1) / PrepopulateScreen.SCREEN_COUNT
+                        (newScreenType.id * 1.0f + 1) / PrepopulateScreen.SCREEN_COUNT
                     onScreenChanged(newScreenType)
                 },
                 modifier = Modifier

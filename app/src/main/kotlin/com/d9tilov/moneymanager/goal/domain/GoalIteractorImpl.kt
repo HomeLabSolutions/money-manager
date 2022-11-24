@@ -5,7 +5,6 @@ import com.d9tilov.moneymanager.goal.domain.entity.Goal
 import com.d9tilov.moneymanager.goal.domain.mapper.GoalDomainMapper
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
@@ -17,7 +16,7 @@ class GoalIteractorImpl(
 ) : GoalInteractor {
 
     override suspend fun insert(goal: Goal) {
-        val currency = userInteractor.getCurrentCurrency().first()
+        val currency = userInteractor.getCurrentCurrency()
         goalRepo.insert(goalDomainMapper.toData(goal.copy(currencyCode = currency.code)))
     }
 

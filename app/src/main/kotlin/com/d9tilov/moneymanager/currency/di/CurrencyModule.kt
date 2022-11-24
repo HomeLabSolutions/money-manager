@@ -10,6 +10,7 @@ import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractorImpl
 import com.d9tilov.moneymanager.currency.domain.CurrencyRepo
 import com.d9tilov.moneymanager.currency.domain.mapper.CurrencyDomainMapper
+import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,12 +35,13 @@ class CurrencyModule {
         currencySource: CurrencySource,
         retrofit: Retrofit
     ): CurrencyRepo =
-        CurrencyDataRepo(preferencesStore, currencySource, retrofit.create(CurrencyApi::class.java))
+        CurrencyDataRepo(currencySource, retrofit.create(CurrencyApi::class.java))
 
     @Provides
     @Singleton
     fun provideCurrencyInteractor(
+        userInteractor: UserInteractor,
         currencyRepo: CurrencyRepo,
         domainMapper: CurrencyDomainMapper
-    ): CurrencyInteractor = CurrencyInteractorImpl(currencyRepo, domainMapper)
+    ): CurrencyInteractor = CurrencyInteractorImpl(userInteractor, currencyRepo, domainMapper)
 }

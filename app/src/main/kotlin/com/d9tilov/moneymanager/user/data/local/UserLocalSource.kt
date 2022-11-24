@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.user.data.local
 
-import android.util.Log
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.CurrencyMetaData
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
@@ -13,7 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
@@ -32,28 +30,21 @@ class UserLocalSource(
         return if (dbUser == null) {
             userDao.insert(userProfile.toDbModel().copy(uid = currentUserId))
             userProfile
-        } else {
-            val currencyCode = dbUser.currentCurrencyCode
-            preferencesStore.updateCurrentCurrency(currencyCode)
-            dbUser.toDataModel()
-        }
+        } else dbUser.toDataModel()
     }
 
     override suspend fun updateFiscalDay(fiscalDay: Int) {
-        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
             ?: throw WrongUidException()
         val user = userDao.getById(currentUserId).firstOrNull()
         user?.let { userDao.update(it.copy(fiscalDay = fiscalDay)) }
     }
 
     override suspend fun updateCurrency(code: String) {
-        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
             ?: throw WrongUidException()
         userDao.getById(currentUserId).firstOrNull()?.also {
-            coroutineScope {
-                launch { preferencesStore.updateCurrentCurrency(code) }
-                launch { userDao.update(it.copy(currentCurrencyCode = code)) }
-            }
+            coroutineScope { launch { userDao.update(it.copy(currentCurrencyCode = code)) } }
         }
     }
 
@@ -64,14 +55,14 @@ class UserLocalSource(
     }
 
     override suspend fun prepopulateCompleted() {
-        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
             ?: throw WrongUidException()
         val user = userDao.getById(currentUserId).firstOrNull()
         user?.let { userDao.update(it.copy(showPrepopulate = false)) }
     }
 
     override suspend fun getFiscalDay(): Int {
-        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
         return if (currentUserId == null) 1
         else {
             val fiscalDay = userDao.getFiscalDay(currentUserId)
@@ -95,7 +86,7 @@ class UserLocalSource(
         }
 
     override suspend fun deleteUser() {
-        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
         if (currentUserId == null) throw WrongUidException()
         else {
             preferencesStore.clearAllData()

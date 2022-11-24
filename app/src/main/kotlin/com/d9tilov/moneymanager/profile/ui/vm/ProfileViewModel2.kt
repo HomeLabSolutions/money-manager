@@ -73,16 +73,16 @@ class ProfileViewModel2 @Inject constructor(
             regularTransactionInteractor.getAll(TransactionType.EXPENSE),
             billingInteractor.isPremium(),
         ) { userInfo, budgetData, regularIncomeList, regularExpenseList, isPremium ->
-            ProfileUiState(
-                userProfile = userInfo,
-                currency = ProfileUiItem.CurrencyUiItem(
-                    userInfo?.currentCurrencyCode ?: DataConstants.DEFAULT_CURRENCY_CODE
-                ),
-                budgetData = ProfileUiItem.BudgetUiItem(budgetData),
-                regularIncomes = ProfileUiItem.RegularIncomeUiItem(regularIncomeList),
-                regularExpenses = ProfileUiItem.RegularExpenseUiItem(regularExpenseList),
-                isPremium = isPremium
-            )
+            userInfo?.let { user ->
+                ProfileUiState(
+                    userProfile = user,
+                    currency = ProfileUiItem.CurrencyUiItem(user.currentCurrencyCode),
+                    budgetData = ProfileUiItem.BudgetUiItem(budgetData),
+                    regularIncomes = ProfileUiItem.RegularIncomeUiItem(regularIncomeList),
+                    regularExpenses = ProfileUiItem.RegularExpenseUiItem(regularExpenseList),
+                    isPremium = isPremium
+                )
+            } ?: ProfileUiState()
         }
             .flowOn(Dispatchers.IO)
             .stateIn(
