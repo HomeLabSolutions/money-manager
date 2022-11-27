@@ -21,6 +21,7 @@ object Versions {
     const val navigation = "2.5.3"
 
     const val hilt = "2.44.2"
+    const val hiltNavigationCompose = "1.0.0"
     const val hiltCompiler = "1.0.0"
 
     const val glide = "4.14.2"
@@ -42,7 +43,7 @@ object Versions {
     const val lifecycle = "2.5.1"
     const val lifecycleExtension = "2.2.0"
 
-    const val compose = "1.3.0"
+    const val compose = "1.3.1"
     const val composeConstraintLayout = "1.0.1"
     const val composeMaterial3 = "1.0.1"
     const val composeActivity = "1.6.1"
