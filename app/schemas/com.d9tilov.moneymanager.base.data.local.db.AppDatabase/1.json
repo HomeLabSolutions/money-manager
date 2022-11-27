@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "7327e10fb05d088dbd3913b9d1c2144d",
+    "identityHash": "cdf1e9f8b31914a6bb37d61a58659754",
     "entities": [
       {
         "tableName": "users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` TEXT NOT NULL, `firstName` TEXT, `lastName` TEXT, `currentCurrencyCode` TEXT NOT NULL, `showPrepopulate` INTEGER NOT NULL, `fiscalDay` INTEGER NOT NULL, PRIMARY KEY(`uid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` TEXT NOT NULL, `firstName` TEXT, `lastName` TEXT, `showPrepopulate` INTEGER NOT NULL, `fiscalDay` INTEGER NOT NULL, PRIMARY KEY(`uid`))",
         "fields": [
           {
             "fieldPath": "uid",
@@ -25,12 +25,6 @@
             "columnName": "lastName",
             "affinity": "TEXT",
             "notNull": false
-          },
-          {
-            "fieldPath": "currentCurrencyCode",
-            "columnName": "currentCurrencyCode",
-            "affinity": "TEXT",
-            "notNull": true
           },
           {
             "fieldPath": "showPrepopulate",
@@ -369,6 +363,60 @@
         "foreignKeys": []
       },
       {
+        "tableName": "main_currency",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `code` TEXT NOT NULL, `clientId` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`clientId`) REFERENCES `users`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "code",
+            "columnName": "code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "clientId",
+            "columnName": "clientId",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_main_currency_clientId",
+            "unique": false,
+            "columnNames": [
+              "clientId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_main_currency_clientId` ON `${TABLE_NAME}` (`clientId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "users",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "clientId"
+            ],
+            "referencedColumns": [
+              "uid"
+            ]
+          }
+        ]
+      },
+      {
         "tableName": "regularTransaction",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `clientId` TEXT NOT NULL, `type` TEXT NOT NULL, `sum` TEXT NOT NULL, `categoryId` INTEGER NOT NULL, `currency` TEXT NOT NULL, `createdDate` INTEGER NOT NULL, `executionPeriod` TEXT NOT NULL, `description` TEXT NOT NULL, `pushEnable` INTEGER NOT NULL, `autoAdd` INTEGER NOT NULL, FOREIGN KEY(`clientId`) REFERENCES `users`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
@@ -552,7 +600,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7327e10fb05d088dbd3913b9d1c2144d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cdf1e9f8b31914a6bb37d61a58659754')"
     ]
   }
 }

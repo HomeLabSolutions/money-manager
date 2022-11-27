@@ -10,7 +10,6 @@ fun UserDbModel.toDataModel(): UserProfile = UserProfile(
     photoUrl = FirebaseAuth.getInstance().currentUser?.photoUrl,
     firstName = firstName,
     lastName = lastName,
-    currentCurrencyCode = currentCurrencyCode,
     showPrepopulate = showPrepopulate,
     fiscalDay = fiscalDay
 )
@@ -20,7 +19,6 @@ fun UserProfile.toDbModel(): UserDbModel =
         uid = uid,
         firstName = firstName,
         lastName = lastName,
-        currentCurrencyCode = currentCurrencyCode,
         showPrepopulate = showPrepopulate,
         fiscalDay = fiscalDay
     )

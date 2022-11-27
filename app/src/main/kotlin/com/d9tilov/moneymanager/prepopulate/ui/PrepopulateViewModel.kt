@@ -1,22 +1,20 @@
 package com.d9tilov.moneymanager.prepopulate.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.budget.vm.BudgetUiState
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
+import com.d9tilov.moneymanager.currency.domain.UpdateCurrencyInteractor
 import com.d9tilov.moneymanager.currency.vm.CurrencyUiState
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -29,39 +27,32 @@ data class PrepopulateUiState(
 
 @HiltViewModel
 class PrepopulateViewModel @Inject constructor(
-    currencyInteractor: CurrencyInteractor,
-    private val userInteractor: UserInteractor,
-    private val budgetInteractor: BudgetInteractor
+    private val currencyInteractor: CurrencyInteractor,
+    private val updateCurrencyInteractor: UpdateCurrencyInteractor,
+    private val budgetInteractor: BudgetInteractor,
+    private val userInteractor: UserInteractor
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(PrepopulateUiState())
-    val uiState: StateFlow<PrepopulateUiState> = combine(
-        currencyInteractor.getCurrencies(),
-        budgetInteractor.get()
-    ) { currencyList, budget ->
-        PrepopulateUiState(
-            CurrencyUiState.HasCurrencies(currencyList, false),
-            BudgetUiState(budget)
-        )
-    }
-        .flowOn(Dispatchers.IO)
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = PrepopulateUiState()
-        )
+    val uiState: StateFlow<PrepopulateUiState> = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
             budgetInteractor.create()
+            combine(
+                currencyInteractor.getCurrencies(),
+                budgetInteractor.get()
+            ) { currencyList, budget ->
+                PrepopulateUiState(
+                    CurrencyUiState.HasCurrencies(currencyList, false),
+                    BudgetUiState(budget)
+                )
+            }.collect { state -> _uiState.update { state } }
         }
     }
 
     fun changeCurrency(currencyCode: String) = viewModelScope.launch(Dispatchers.IO) {
-        launch {
-            userInteractor.updateCurrency(currencyCode)
-            budgetInteractor.updateBudgetWithCurrency(currencyCode)
-        }
+        updateCurrencyInteractor.updateCurrency(currencyCode)
     }
 
     fun changeBudgetAmount(amount: String) {

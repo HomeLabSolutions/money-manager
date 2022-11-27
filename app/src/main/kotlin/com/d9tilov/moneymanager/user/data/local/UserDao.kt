@@ -20,9 +20,6 @@ interface UserDao {
     @Query("SELECT showPrepopulate FROM Users WHERE uid = :id")
     suspend fun showPrepopulate(id: String): Boolean
 
-    @Query("SELECT currentCurrencyCode FROM Users WHERE uid = :id")
-    fun getCurrentCurrency(id: String): Flow<String>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(user: UserDbModel)
 

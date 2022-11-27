@@ -4,22 +4,22 @@ import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.util.divideBy
 import com.d9tilov.moneymanager.core.util.removeScale
 import com.d9tilov.moneymanager.currency.data.entity.Currency
+import com.d9tilov.moneymanager.currency.data.entity.CurrencyMetaData
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.domain.mapper.CurrencyDomainMapper
-import com.d9tilov.moneymanager.user.domain.UserInteractor
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
 import java.math.BigDecimal
 
 class CurrencyInteractorImpl(
-    private val userInteractor: UserInteractor,
     private val currencyRepo: CurrencyRepo,
     private val domainMapper: CurrencyDomainMapper
 ) : CurrencyInteractor {
 
     override fun getCurrencies(): Flow<List<DomainCurrency>> {
-        return userInteractor.getCurrentCurrencyFlow()
+        return currencyRepo.getMainCurrency()
             .flatMapMerge { baseCurrency ->
                 currencyRepo.getCurrencies()
                     .map { list ->
@@ -29,6 +29,11 @@ class CurrencyInteractorImpl(
                     }
             }
     }
+
+    override fun getMainCurrencyFlow(): Flow<CurrencyMetaData> = currencyRepo.getMainCurrency()
+
+    override suspend fun getMainCurrency(): CurrencyMetaData =
+        currencyRepo.getMainCurrency().first()
 
     override suspend fun getCurrencyByCode(code: String): Currency =
         currencyRepo.getCurrencyByCode(code)
@@ -62,4 +67,6 @@ class CurrencyInteractorImpl(
             false
         }
     }
+
+    override suspend fun updateMainCurrency(code: String) = currencyRepo.updateMainCurrency(code)
 }

@@ -41,9 +41,12 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun CurrencyListRoute(viewModel: CurrencyViewModel2 = hiltViewModel()) {
+fun CurrencyListRoute(viewModel: CurrencyViewModel2 = hiltViewModel(), clickBack: () -> Unit) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    CurrencyListScreen(uiState)
+    CurrencyListScreen(uiState) { currency ->
+        viewModel.changeCurrency(currency.code)
+        clickBack.invoke()
+    }
 }
 
 @Composable

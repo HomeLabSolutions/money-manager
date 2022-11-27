@@ -49,7 +49,7 @@ class ProfileFragment2 :
                     startDestination = profileNavigationRoute
                 ) {
                     profileScreen { navController.navigateToCurrencyList() }
-                    currencyScreen()
+                    currencyScreen { navController.popBackStack() }
                 }
             }
         }
