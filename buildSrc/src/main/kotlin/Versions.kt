@@ -16,11 +16,11 @@ object Versions {
     const val retrofit = "2.9.0"
 
     const val googlePlayServices = "4.3.10"
-    const val googlePlayServicesAuth = "20.3.0"
+    const val googlePlayServicesAuth = "20.4.0"
 
     const val navigation = "2.5.3"
 
-    const val hilt = "2.44"
+    const val hilt = "2.44.2"
     const val hiltNavigationCompose = "1.0.0"
     const val hiltCompiler = "1.0.0"
 
@@ -30,7 +30,7 @@ object Versions {
     const val paging = "3.1.1"
 
     const val firebaseCrashlytics = "2.9.0"
-    const val firebaseBom = "31.0.2"
+    const val firebaseBom = "31.1.0"
     const val firebaseUi = "8.0.2"
 
     const val facebookSdk = "8.0.0"
@@ -44,7 +44,7 @@ object Versions {
     const val lifecycle = "2.5.1"
     const val lifecycleExtension = "2.2.0"
 
-    const val compose = "1.3.0"
+    const val compose = "1.3.1"
     const val composeConstraintLayout = "1.0.1"
     const val composeMaterial3 = "1.0.1"
     const val composeActivity = "1.6.1"
@@ -62,7 +62,7 @@ object Versions {
 
     const val datastore = "1.0.0"
 
-    const val billing = "5.0.0"
+    const val billing = "5.1.0"
 
     const val dotsIndicator = "4.3"
     const val androidChart = "v3.1.0"
