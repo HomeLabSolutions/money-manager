@@ -12,6 +12,6 @@ fun NavController.navigateToCurrencyList(navOptions: NavOptions? = null) {
     this.navigate(currencyNavigationRoute, navOptions)
 }
 
-fun NavGraphBuilder.currencyScreen() {
-    composable(route = currencyNavigationRoute) { CurrencyListRoute() }
+fun NavGraphBuilder.currencyScreen(clickBack: () -> Unit) {
+    composable(route = currencyNavigationRoute) { CurrencyListRoute(clickBack = clickBack) }
 }

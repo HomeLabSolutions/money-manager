@@ -5,8 +5,8 @@ import com.d9tilov.moneymanager.base.data.ResultOf
 import com.d9tilov.moneymanager.base.ui.navigator.CurrencyNavigator
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
-import com.d9tilov.moneymanager.core.util.ErrorMessage
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
+import com.d9tilov.moneymanager.currency.domain.UpdateCurrencyInteractor
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,19 +15,16 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class CurrencyViewModel @Inject constructor(
+    private val updateCurrencyInteractor: UpdateCurrencyInteractor,
     private val currencyInteractor: CurrencyInteractor,
     private val userInteractor: UserInteractor,
     private val budgetInteractor: BudgetInteractor
@@ -42,8 +39,7 @@ class CurrencyViewModel @Inject constructor(
     }
 
     fun changeCurrency(currency: DomainCurrency) = viewModelScope.launch(Dispatchers.IO) {
-        launch { userInteractor.updateCurrency(currency.code) }
-        launch { budgetInteractor.updateBudgetWithCurrency(currency.code) }
+        updateCurrencyInteractor.updateCurrency(currency.code)
     }
 
     fun createBudgetAndSkip() {
@@ -71,21 +67,4 @@ class CurrencyViewModel @Inject constructor(
     companion object {
         private const val LOAD_CURRENCIES_DELAY = 300L
     }
-}
-
-private data class CurrencyViewModelState(
-    val currencyList: List<DomainCurrency> = emptyList(),
-    val isLoading: Boolean = false,
-    val errorMessages: List<ErrorMessage> = emptyList()
-) {
-
-    fun toUiState(): CurrencyUiState =
-        if (currencyList.isEmpty()) CurrencyUiState.NoCurrencies(
-            isLoading = isLoading,
-            errorMessages = errorMessages
-        ) else CurrencyUiState.HasCurrencies(
-            currencyList = currencyList,
-            isLoading = isLoading,
-            errorMessages = errorMessages
-        )
 }

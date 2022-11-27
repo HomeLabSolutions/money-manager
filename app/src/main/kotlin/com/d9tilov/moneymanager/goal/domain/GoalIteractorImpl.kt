@@ -1,22 +1,22 @@
 package com.d9tilov.moneymanager.goal.domain
 
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
+import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.goal.domain.entity.Goal
 import com.d9tilov.moneymanager.goal.domain.mapper.GoalDomainMapper
-import com.d9tilov.moneymanager.user.domain.UserInteractor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
 class GoalIteractorImpl(
     private val goalRepo: GoalRepo,
-    private val userInteractor: UserInteractor,
+    private val currencyInteractor: CurrencyInteractor,
     private val budgetInteractor: BudgetInteractor,
     private val goalDomainMapper: GoalDomainMapper
 ) : GoalInteractor {
 
     override suspend fun insert(goal: Goal) {
-        val currency = userInteractor.getCurrentCurrency()
+        val currency = currencyInteractor.getMainCurrency()
         goalRepo.insert(goalDomainMapper.toData(goal.copy(currencyCode = currency.code)))
     }
 

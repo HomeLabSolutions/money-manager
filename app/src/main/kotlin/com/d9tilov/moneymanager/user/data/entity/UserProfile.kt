@@ -9,7 +9,6 @@ data class UserProfile(
     val photoUrl: Uri?,
     val firstName: String?,
     val lastName: String?,
-    val currentCurrencyCode: String,
     val showPrepopulate: Boolean,
     val fiscalDay: Int
 ) {
@@ -20,7 +19,6 @@ data class UserProfile(
             photoUrl = null,
             firstName = "",
             lastName = "",
-            currentCurrencyCode = DataConstants.DEFAULT_CURRENCY_CODE,
             showPrepopulate = true,
             fiscalDay = 1
         )

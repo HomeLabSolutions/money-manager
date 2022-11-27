@@ -9,31 +9,33 @@ import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractorImpl
 import com.d9tilov.moneymanager.budget.domain.BudgetRepo
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
-import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
-@InstallIn(ActivityRetainedComponent::class)
+@InstallIn(SingletonComponent::class)
 class BudgetModule {
 
     @Provides
+    @Singleton
     fun provideBudgetInteractor(
         budgetRepo: BudgetRepo,
-        currencyInteractor: CurrencyInteractor,
-        userInteractor: UserInteractor
+        currencyInteractor: CurrencyInteractor
     ): BudgetInteractor =
-        BudgetInteractorImpl(budgetRepo, currencyInteractor, userInteractor)
+        BudgetInteractorImpl(budgetRepo, currencyInteractor)
 
     @Provides
+    @Singleton
     fun provideBudgetLocalSource(
         preferencesStore: PreferencesStore,
         database: AppDatabase
     ): BudgetSource = BudgetLocalSource(preferencesStore, database.budgetDao())
 
     @Provides
+    @Singleton
     fun provideBudgetRepo(budgetSource: BudgetSource): BudgetRepo =
         BudgetDataRepo(budgetSource)
 }

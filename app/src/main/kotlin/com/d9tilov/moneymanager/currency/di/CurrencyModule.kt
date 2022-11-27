@@ -2,15 +2,19 @@ package com.d9tilov.moneymanager.currency.di
 
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
+import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.currency.data.CurrencyDataRepo
+import com.d9tilov.moneymanager.currency.data.local.CurrencyCacheSource
+import com.d9tilov.moneymanager.currency.data.local.CurrencyCacheSourceImpl
 import com.d9tilov.moneymanager.currency.data.local.CurrencyLocalSource
 import com.d9tilov.moneymanager.currency.data.local.CurrencySource
 import com.d9tilov.moneymanager.currency.data.remote.CurrencyApi
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractorImpl
 import com.d9tilov.moneymanager.currency.domain.CurrencyRepo
+import com.d9tilov.moneymanager.currency.domain.UpdateCurrencyInteractor
+import com.d9tilov.moneymanager.currency.domain.UpdateCurrencyInteractorImpl
 import com.d9tilov.moneymanager.currency.domain.mapper.CurrencyDomainMapper
-import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,23 +29,44 @@ class CurrencyModule {
     @Provides
     @Singleton
     fun provideCurrencySource(
-        appDatabase: AppDatabase
-    ): CurrencySource = CurrencyLocalSource(appDatabase.currencyDao())
+        appDatabase: AppDatabase,
+        preferencesStore: PreferencesStore,
+    ): CurrencySource = CurrencyLocalSource(
+        preferencesStore,
+        appDatabase.currencyDao(),
+        appDatabase.mainCurrencyDao()
+    )
+
+    @Provides
+    @Singleton
+    fun provideCurrencyCacheSource(): CurrencyCacheSource = CurrencyCacheSourceImpl()
 
     @Provides
     @Singleton
     fun provideCurrencyRepo(
-        preferencesStore: PreferencesStore,
         currencySource: CurrencySource,
-        retrofit: Retrofit
+        currencyCacheSource: CurrencyCacheSource,
+        retrofit: Retrofit,
+        preferencesStore: PreferencesStore
     ): CurrencyRepo =
-        CurrencyDataRepo(currencySource, retrofit.create(CurrencyApi::class.java))
+        CurrencyDataRepo(
+            currencySource,
+            currencyCacheSource,
+            retrofit.create(CurrencyApi::class.java),
+            preferencesStore
+        )
 
     @Provides
     @Singleton
     fun provideCurrencyInteractor(
-        userInteractor: UserInteractor,
         currencyRepo: CurrencyRepo,
         domainMapper: CurrencyDomainMapper
-    ): CurrencyInteractor = CurrencyInteractorImpl(userInteractor, currencyRepo, domainMapper)
+    ): CurrencyInteractor = CurrencyInteractorImpl(currencyRepo, domainMapper)
+
+    @Provides
+    fun provideUpdateCurrencyInteractor(
+        currencyInteractor: CurrencyInteractor,
+        budgetInteractor: BudgetInteractor,
+    ): UpdateCurrencyInteractor = UpdateCurrencyInteractorImpl(currencyInteractor, budgetInteractor)
+
 }

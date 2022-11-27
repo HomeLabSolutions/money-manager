@@ -7,6 +7,8 @@ import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.budget.domain.entity.BudgetData
 import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
+import com.d9tilov.moneymanager.currency.data.entity.CurrencyMetaData
+import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
@@ -58,6 +60,7 @@ data class ProfileUiState(
 class ProfileViewModel2 @Inject constructor(
     private val firebaseAnalytics: FirebaseAnalytics,
     private val userInfoInteractor: UserInteractor,
+    currencyInteractor: CurrencyInteractor,
     budgetInteractor: BudgetInteractor,
     regularTransactionInteractor: RegularTransactionInteractor,
     billingInteractor: BillingInteractor,
@@ -65,18 +68,26 @@ class ProfileViewModel2 @Inject constructor(
 
     private val _showDialog: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val showDialog: StateFlow<Boolean> = _showDialog.asStateFlow()
+    val userCurrencyPair = combine(
+        userInfoInteractor.getCurrentUser(),
+        currencyInteractor.getMainCurrencyFlow()
+    ) { userInfo, currency ->
+        Pair(userInfo, currency)
+    }
     val profileState: StateFlow<ProfileUiState> =
         combine(
-            userInfoInteractor.getCurrentUser(),
+            userCurrencyPair,
             budgetInteractor.get(),
             regularTransactionInteractor.getAll(TransactionType.INCOME),
             regularTransactionInteractor.getAll(TransactionType.EXPENSE),
             billingInteractor.isPremium(),
-        ) { userInfo, budgetData, regularIncomeList, regularExpenseList, isPremium ->
+        ) { userCurrencyPair, budgetData, regularIncomeList, regularExpenseList, isPremium ->
+            val userInfo = userCurrencyPair.first
+            val currency: CurrencyMetaData = userCurrencyPair.second
             userInfo?.let { user ->
                 ProfileUiState(
                     userProfile = user,
-                    currency = ProfileUiItem.CurrencyUiItem(user.currentCurrencyCode),
+                    currency = ProfileUiItem.CurrencyUiItem(currency.code),
                     budgetData = ProfileUiItem.BudgetUiItem(budgetData),
                     regularIncomes = ProfileUiItem.RegularIncomeUiItem(regularIncomeList),
                     regularExpenses = ProfileUiItem.RegularExpenseUiItem(regularExpenseList),

@@ -3,23 +3,24 @@ package com.d9tilov.moneymanager.regular.domain
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.category.exception.CategoryException
+import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.regular.domain.mapper.toData
 import com.d9tilov.moneymanager.regular.domain.mapper.toDomain
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
-import com.d9tilov.moneymanager.user.domain.UserInteractor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
 class RegularTransactionInteractorImpl(
+    private val currencyInteractor: CurrencyInteractor,
     private val regularTransactionRepo: RegularTransactionRepo,
     private val categoryInteractor: CategoryInteractor,
-    private val userInteractor: UserInteractor
 ) : RegularTransactionInteractor {
 
-    override fun createDefault(): Flow<RegularTransaction> = userInteractor.getCurrentCurrencyFlow()
-        .map { RegularTransaction.EMPTY.copy(currencyCode = it.code) }
+    override fun createDefault(): Flow<RegularTransaction> =
+        currencyInteractor.getMainCurrencyFlow()
+            .map { RegularTransaction.EMPTY.copy(currencyCode = it.code) }
 
     override suspend fun insert(regularTransactionData: RegularTransaction) {
         regularTransactionRepo.insert(regularTransactionData.toData())

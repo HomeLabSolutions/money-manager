@@ -1,12 +1,18 @@
 package com.d9tilov.moneymanager.currency.vm
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.core.util.ErrorMessage
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
+import com.d9tilov.moneymanager.currency.domain.UpdateCurrencyInteractor
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed interface CurrencyUiState {
@@ -27,10 +33,20 @@ sealed interface CurrencyUiState {
 
 @HiltViewModel
 class CurrencyViewModel2 @Inject constructor(
-    private val currencyInteractor: CurrencyInteractor
+    private val currencyInteractor: CurrencyInteractor,
+    private val updateCurrencyInteractor: UpdateCurrencyInteractor
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(CurrencyUiState.NoCurrencies())
+    val uiState = currencyInteractor.getCurrencies()
+        .map { CurrencyUiState.HasCurrencies(it, false) }
+        .flowOn(Dispatchers.IO)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = CurrencyUiState.NoCurrencies()
+        )
 
-    val uiState = _uiState.asStateFlow()
+    fun changeCurrency(code: String) = viewModelScope.launch(Dispatchers.IO) {
+        updateCurrencyInteractor.updateCurrency(code)
+    }
 }

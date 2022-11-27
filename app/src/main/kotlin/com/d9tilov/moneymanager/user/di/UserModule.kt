@@ -3,8 +3,6 @@ package com.d9tilov.moneymanager.user.di
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.user.data.UserDataRepo
-import com.d9tilov.moneymanager.user.data.local.UserCacheSource
-import com.d9tilov.moneymanager.user.data.local.UserCacheSourceImpl
 import com.d9tilov.moneymanager.user.data.local.UserDao
 import com.d9tilov.moneymanager.user.data.local.UserLocalSource
 import com.d9tilov.moneymanager.user.data.local.UserSource
@@ -35,12 +33,7 @@ class UserModule {
 
     @Provides
     @Singleton
-    fun provideUserCacheSource(): UserCacheSource = UserCacheSourceImpl()
-
-    @Provides
-    @Singleton
-    fun userRepo(userLocalSource: UserSource, userCacheSource: UserCacheSource): UserRepo =
-        UserDataRepo(userLocalSource, userCacheSource)
+    fun userRepo(userLocalSource: UserSource): UserRepo = UserDataRepo(userLocalSource)
 
     @Provides
     @Singleton
