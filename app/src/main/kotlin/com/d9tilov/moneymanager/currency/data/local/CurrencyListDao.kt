@@ -9,7 +9,7 @@ import com.d9tilov.moneymanager.currency.data.local.entity.CurrencyDbModel
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface CurrencyDao {
+interface CurrencyListDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(list: List<CurrencyDbModel>)

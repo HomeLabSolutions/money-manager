@@ -5,7 +5,7 @@ import com.d9tilov.moneymanager.base.ui.navigator.IncomeExpenseNavigator
 import com.d9tilov.moneymanager.billing.domain.BillingInteractor
 import com.d9tilov.moneymanager.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
-import com.d9tilov.moneymanager.user.domain.UserInteractor
+import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class IncomeExpenseViewModel @Inject constructor(
-    private val userInteractor: UserInteractor,
+    private val currencyInteractor: CurrencyInteractor,
     billingInteractor: BillingInteractor
 ) : BaseViewModel<IncomeExpenseNavigator>() {
 
@@ -32,7 +32,7 @@ class IncomeExpenseViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO + updateCurrencyExceptionHandler) {
-            userInteractor.getCurrentCurrencyFlow()
+            currencyInteractor.getMainCurrencyFlow()
                 .collect { currency ->
                     currencyCodeStr.value = currency.code
                     defaultCurrencyCode = currencyCodeStr.value

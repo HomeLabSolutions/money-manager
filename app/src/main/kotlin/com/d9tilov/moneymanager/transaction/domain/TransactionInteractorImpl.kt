@@ -50,8 +50,7 @@ import kotlinx.datetime.minus
 import kotlinx.datetime.periodUntil
 import kotlinx.datetime.plus
 import java.math.BigDecimal
-import java.util.Calendar
-import java.util.GregorianCalendar
+import java.util.*
 
 class TransactionInteractorImpl(
     private val transactionRepo: TransactionRepo,
@@ -80,7 +79,7 @@ class TransactionInteractorImpl(
                 budgetSum += currencyInteractor.toTargetCurrency(
                     if (transaction.type.isIncome()) transaction.sum else transaction.sum.negate(),
                     currencyCode,
-                    userInteractor.getCurrentCurrency().code
+                    currencyInteractor.getMainCurrency().code
                 )
                 budgetInteractor.update(budget.copy(sum = budgetSum))
             }
@@ -109,7 +108,11 @@ class TransactionInteractorImpl(
                                 category,
                                 currencyCode,
                                 if (currencyCode == DEFAULT_CURRENCY_CODE) item.usdSum
-                                else currencyInteractor.toTargetCurrency(item.sum, item.currencyCode, userInteractor.getCurrentCurrency().code)
+                                else currencyInteractor.toTargetCurrency(
+                                    item.sum,
+                                    item.currencyCode,
+                                    currencyInteractor.getMainCurrency().code
+                                )
                             )
                         }
                     }
@@ -161,7 +164,7 @@ class TransactionInteractorImpl(
                                 else currencyInteractor.toTargetCurrency(
                                     model.sum,
                                     model.currencyCode,
-                                    userInteractor.getCurrentCurrency().code
+                                    currencyInteractor.getMainCurrency().code
                                 )
                             }
                         )
@@ -262,7 +265,13 @@ class TransactionInteractorImpl(
             onlyInStatistics = true,
             withRegular = false
         ).map { list ->
-            list.sumOf { currencyInteractor.toTargetCurrency(it.sum, it.currencyCode, userInteractor.getCurrentCurrency().code) }
+            list.sumOf {
+                currencyInteractor.toTargetCurrency(
+                    it.sum,
+                    it.currencyCode,
+                    currencyInteractor.getMainCurrency().code
+                )
+            }
         }
 
     private fun getNumerator(): Flow<BigDecimal> {
@@ -291,7 +300,13 @@ class TransactionInteractorImpl(
                         onlyInStatistics = true,
                         withRegular = false
                     ).map { list ->
-                        list.sumOf { currencyInteractor.toTargetCurrency(it.sum, it.currencyCode, userInteractor.getCurrentCurrency().code) }
+                        list.sumOf {
+                            currencyInteractor.toTargetCurrency(
+                                it.sum,
+                                it.currencyCode,
+                                currencyInteractor.getMainCurrency().code
+                            )
+                        }
                     }
                 }
         val expenseFlow = flow { emit(userInteractor.getFiscalDay()) }
@@ -311,7 +326,7 @@ class TransactionInteractorImpl(
                         currencyInteractor.toTargetCurrency(
                             it.sum,
                             it.currencyCode,
-                            userInteractor.getCurrentCurrency().code
+                            currencyInteractor.getMainCurrency().code
                         )
                     }
                 }
@@ -343,7 +358,7 @@ class TransactionInteractorImpl(
                 PeriodType.MONTH -> currencyInteractor.toTargetCurrency(
                     tr.sum,
                     tr.currencyCode,
-                    userInteractor.getCurrentCurrency().code
+                    currencyInteractor.getMainCurrency().code
                 )
                 PeriodType.WEEK -> {
                     var dayOfWeekCount = 0
@@ -355,7 +370,7 @@ class TransactionInteractorImpl(
                     currencyInteractor.toTargetCurrency(
                         tr.sum.multiply(BigDecimal(dayOfWeekCount)),
                         tr.currencyCode,
-                        userInteractor.getCurrentCurrency().code
+                        currencyInteractor.getMainCurrency().code
                     )
                 }
                 PeriodType.DAY -> {
@@ -363,7 +378,7 @@ class TransactionInteractorImpl(
                     currencyInteractor.toTargetCurrency(
                         tr.sum.multiply(BigDecimal(countDays)),
                         tr.currencyCode,
-                        userInteractor.getCurrentCurrency().code
+                        currencyInteractor.getMainCurrency().code
                     )
                 }
             }
@@ -371,7 +386,7 @@ class TransactionInteractorImpl(
     }
 
     override fun getSumInFiscalPeriodInUsd(type: TransactionType): Flow<BigDecimal> {
-        return userInteractor.getCurrentCurrencyFlow()
+        return currencyInteractor.getMainCurrencyFlow()
             .flatMapMerge { currency ->
                 val fiscalDay = userInteractor.getFiscalDay()
                 val endDate = currentDateTime()
@@ -404,7 +419,13 @@ class TransactionInteractorImpl(
                         onlyInStatistics = true,
                         withRegular = true
                     ).map { list ->
-                        list.sumOf { currencyInteractor.toTargetCurrency(it.sum, it.currencyCode, userInteractor.getCurrentCurrency().code) }
+                        list.sumOf {
+                            currencyInteractor.toTargetCurrency(
+                                it.sum,
+                                it.currencyCode,
+                                currencyInteractor.getMainCurrency().code
+                            )
+                        }
                     }
                 }
         val expenseFlow = flow { emit(userInteractor.getFiscalDay()) }
@@ -422,7 +443,7 @@ class TransactionInteractorImpl(
                         currencyInteractor.toTargetCurrency(
                             it.sum,
                             it.currencyCode,
-                            userInteractor.getCurrentCurrency().code
+                            currencyInteractor.getMainCurrency().code
                         )
                     }
                 }
@@ -440,7 +461,7 @@ class TransactionInteractorImpl(
                 currentDateTime().getEndOfDay(),
                 type
             ),
-            userInteractor.getCurrentCurrencyFlow()
+            currencyInteractor.getMainCurrencyFlow()
         ) { list, currency ->
             val currencies = mutableSetOf<String>()
             list.forEach { tr -> currencies.add(tr.currencyCode) }
@@ -450,7 +471,7 @@ class TransactionInteractorImpl(
         }
 
     override fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<BigDecimal> {
-        return userInteractor.getCurrentCurrencyFlow()
+        return currencyInteractor.getMainCurrencyFlow()
             .flatMapMerge { currency ->
                 val fiscalDay = userInteractor.getFiscalDay()
                 val endDate = currentDateTime()
@@ -479,7 +500,7 @@ class TransactionInteractorImpl(
                 currentDateTime().getEndOfDay(),
                 type
             ),
-            userInteractor.getCurrentCurrencyFlow()
+            currencyInteractor.getMainCurrencyFlow()
         ) { list, currency ->
             list.sumOf { tr ->
                 val currencyCode = currency.code
@@ -627,12 +648,12 @@ class TransactionInteractorImpl(
                 budgetSum += currencyInteractor.toTargetCurrency(
                     if (oldTransaction.type.isIncome()) oldTransaction.sum.negate() else oldTransaction.sum,
                     oldTransaction.currencyCode,
-                    userInteractor.getCurrentCurrency().code
+                    currencyInteractor.getMainCurrency().code
                 )
                 budgetSum += currencyInteractor.toTargetCurrency(
                     if (transaction.type.isIncome()) transaction.sum else transaction.sum.negate(),
                     transaction.currencyCode,
-                    userInteractor.getCurrentCurrency().code
+                    currencyInteractor.getMainCurrency().code
                 )
                 budgetInteractor.update(budget.copy(sum = budgetSum))
             }
@@ -648,7 +669,7 @@ class TransactionInteractorImpl(
                 budgetSum += currencyInteractor.toTargetCurrency(
                     if (transaction.type.isIncome()) transaction.sum.negate() else transaction.sum,
                     transaction.currencyCode,
-                    userInteractor.getCurrentCurrency().code
+                    currencyInteractor.getMainCurrency().code
                 )
                 budgetInteractor.update(budget.copy(sum = budgetSum))
             }

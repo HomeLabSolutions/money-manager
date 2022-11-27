@@ -1,10 +1,10 @@
-package com.d9tilov.moneymanager.user.data.local
+package com.d9tilov.moneymanager.currency.data.local
 
-import com.d9tilov.moneymanager.base.data.local.preferences.CurrencyMetaData
+import com.d9tilov.moneymanager.currency.data.entity.CurrencyMetaData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class UserCacheSourceImpl : UserCacheSource {
+class CurrencyCacheSourceImpl : CurrencyCacheSource {
 
     private val currentCurrency: MutableStateFlow<CurrencyMetaData?> =
         MutableStateFlow(null)

@@ -1,21 +1,17 @@
 package com.d9tilov.moneymanager.user.data.local
 
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
-import com.d9tilov.moneymanager.base.data.local.preferences.CurrencyMetaData
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
-import com.d9tilov.moneymanager.core.util.CurrencyUtils.getSymbolByCode
 import com.d9tilov.moneymanager.user.data.entity.UserDbModel
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.data.local.mapper.toDataModel
 import com.d9tilov.moneymanager.user.data.local.mapper.toDbModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class UserLocalSource(
@@ -38,14 +34,6 @@ class UserLocalSource(
             ?: throw WrongUidException()
         val user = userDao.getById(currentUserId).firstOrNull()
         user?.let { userDao.update(it.copy(fiscalDay = fiscalDay)) }
-    }
-
-    override suspend fun updateCurrency(code: String) {
-        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
-            ?: throw WrongUidException()
-        userDao.getById(currentUserId).firstOrNull()?.also {
-            coroutineScope { launch { userDao.update(it.copy(currentCurrencyCode = code)) } }
-        }
     }
 
     override suspend fun showPrepopulate(): Boolean {
@@ -74,15 +62,6 @@ class UserLocalSource(
         .filterNotNull()
         .flatMapMerge { uid ->
             userDao.getById(uid).map { user: UserDbModel? -> user?.toDataModel() }
-        }
-
-    override fun getCurrentCurrency(): Flow<CurrencyMetaData> = preferencesStore.uid
-        .filterNotNull()
-        .flatMapMerge { uid ->
-            userDao.getCurrentCurrency(uid).map { currencyCode: String? ->
-                if (currencyCode == null) CurrencyMetaData.EMPTY
-                else CurrencyMetaData(currencyCode, currencyCode.getSymbolByCode())
-            }
         }
 
     override suspend fun deleteUser() {
