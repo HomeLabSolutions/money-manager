@@ -62,7 +62,8 @@ import dagger.hilt.android.internal.managers.FragmentComponentManager
 @Composable
 fun ProfileRoute(
     viewModel: ProfileViewModel2 = hiltViewModel(),
-    navigateToCurrencyList: () -> Unit,
+    navigateToCurrencyListScreen: () -> Unit,
+    navigateToBudgetScreen: () -> Unit
 ) {
     val state: ProfileUiState by viewModel.profileState.collectAsStateWithLifecycle()
     val showDialog by viewModel.showDialog.collectAsStateWithLifecycle()
@@ -70,8 +71,8 @@ fun ProfileRoute(
     ProfileScreen(
         state,
         showDialog,
-        navigateToCurrencyList,
-        {},
+        navigateToCurrencyListScreen,
+        navigateToBudgetScreen,
         {},
         {},
         {},
@@ -108,7 +109,7 @@ fun ProfileScreen(
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         ProfileCard(state.userProfile)
         ProfileSection(state.currency, onCurrencyClicked)
-        ProfileSection(state.budgetData)
+        ProfileSection(state.budgetData, onBudgetClicked)
         ProfileSection(state.regularIncomes)
         ProfileSection(state.regularExpenses)
         ProfileSection(ProfileUiItem.Goals)

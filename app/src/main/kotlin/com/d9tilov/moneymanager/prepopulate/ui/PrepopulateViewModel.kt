@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.budget.vm.BudgetUiState
+import com.d9tilov.moneymanager.core.util.CurrencyUtils.getSymbolByCode
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.currency.domain.UpdateCurrencyInteractor
 import com.d9tilov.moneymanager.currency.vm.CurrencyUiState
@@ -45,7 +46,7 @@ class PrepopulateViewModel @Inject constructor(
             ) { currencyList, budget ->
                 PrepopulateUiState(
                     CurrencyUiState.HasCurrencies(currencyList, false),
-                    BudgetUiState(budget)
+                    BudgetUiState(budget.sum.toString(), budget.currencyCode.getSymbolByCode())
                 )
             }.collect { state -> _uiState.update { state } }
         }
@@ -56,19 +57,20 @@ class PrepopulateViewModel @Inject constructor(
     }
 
     fun changeBudgetAmount(amount: String) {
-        _uiState.update {
-            val budgetUiState = it.budgetUiState
-            val budgetData =
-                budgetUiState.budgetData.copy(sum = amount.toBigDecimalOrNull() ?: BigDecimal.ZERO)
-            val newBudgetUiState = budgetUiState.copy(budgetData = budgetData)
-            it.copy(budgetUiState = newBudgetUiState)
-        }
+        _uiState.update { it.copy(budgetUiState = it.budgetUiState.copy(budgetSum = amount)) }
     }
 
     fun saveBudgetAmountAndComplete() = viewModelScope.launch(Dispatchers.IO) {
         launch {
             val budget = budgetInteractor.get().firstOrNull()
-            budget?.let { budgetInteractor.update(budget.copy(sum = _uiState.value.budgetUiState.budgetData.sum)) }
+            budget?.let {
+                budgetInteractor.update(
+                    budget.copy(
+                        sum = _uiState.value.budgetUiState.budgetSum.toBigDecimalOrNull()
+                            ?: BigDecimal.ZERO
+                    )
+                )
+            }
         }
         launch { userInteractor.prepopulateCompleted() }
     }

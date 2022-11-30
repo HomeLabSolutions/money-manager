@@ -33,7 +33,7 @@ sealed interface CurrencyUiState {
 
 @HiltViewModel
 class CurrencyViewModel2 @Inject constructor(
-    private val currencyInteractor: CurrencyInteractor,
+    currencyInteractor: CurrencyInteractor,
     private val updateCurrencyInteractor: UpdateCurrencyInteractor
 ) : ViewModel() {
 
