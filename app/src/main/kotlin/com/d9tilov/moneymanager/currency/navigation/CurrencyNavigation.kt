@@ -8,7 +8,7 @@ import com.d9tilov.moneymanager.currency.ui.CurrencyListRoute
 
 const val currencyNavigationRoute = "currency_list"
 
-fun NavController.navigateToCurrencyList(navOptions: NavOptions? = null) {
+fun NavController.navigateToCurrencyListScreen(navOptions: NavOptions? = null) {
     this.navigate(currencyNavigationRoute, navOptions)
 }
 

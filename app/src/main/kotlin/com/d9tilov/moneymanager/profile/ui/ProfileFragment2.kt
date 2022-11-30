@@ -12,9 +12,11 @@ import androidx.navigation.compose.rememberNavController
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
+import com.d9tilov.moneymanager.budget.navigation.budgetScreen
+import com.d9tilov.moneymanager.budget.navigation.navigateToBudgetScreen
 import com.d9tilov.moneymanager.currency.navigation.currencyScreen
+import com.d9tilov.moneymanager.currency.navigation.navigateToCurrencyListScreen
 import com.d9tilov.moneymanager.databinding.FragmentProfileBinding
-import com.d9tilov.moneymanager.profile.navigation.navigateToCurrencyList
 import com.d9tilov.moneymanager.profile.navigation.profileNavigationRoute
 import com.d9tilov.moneymanager.profile.navigation.profileScreen
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileViewModel
@@ -48,8 +50,12 @@ class ProfileFragment2 :
                     navController = navController,
                     startDestination = profileNavigationRoute
                 ) {
-                    profileScreen { navController.navigateToCurrencyList() }
+                    profileScreen(
+                        navigateToCurrencyListScreen = navController::navigateToCurrencyListScreen,
+                        navigateToBudgetScreen = navController::navigateToBudgetScreen
+                    )
                     currencyScreen { navController.popBackStack() }
+                    budgetScreen { navController.popBackStack() }
                 }
             }
         }

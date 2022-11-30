@@ -23,7 +23,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.ParagraphIntrinsics
-import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.createFontFamilyResolver
 import androidx.compose.ui.text.input.KeyboardType
@@ -230,7 +229,7 @@ private fun CurrencyTextField(
                     placeholder = {
                         Text(
                             text = BigDecimal.ZERO.toString(),
-                            style = style
+                            style = style.copy(color = MaterialTheme.colorScheme.primaryContainer)
                         )
                     },
                     textStyle = TextStyle(
@@ -242,7 +241,7 @@ private fun CurrencyTextField(
                     ),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     colors = TextFieldDefaults.textFieldColors(
-                        placeholderColor = MaterialTheme.colorScheme.primaryContainer,
+                        placeholderColor = MaterialTheme.colorScheme.error,
                         backgroundColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent

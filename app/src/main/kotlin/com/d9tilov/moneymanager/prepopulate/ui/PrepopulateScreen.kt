@@ -111,9 +111,9 @@ fun PrepopulateScreen(
                     clickCallback
                 )
                 PrepopulateScreen.BudgetScreen -> BudgetScreen(
-                    uiState.budgetUiState,
-                    Modifier.weight(1f),
-                    onBudgetInputChanged
+                    budgetUiState = uiState.budgetUiState,
+                    modifier = Modifier.weight(1f),
+                    onBudgetInputChanged = onBudgetInputChanged
                 )
             }
         }
