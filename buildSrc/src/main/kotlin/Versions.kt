@@ -1,7 +1,7 @@
 object Versions {
 
     const val gradlePlugin = "7.3.1"
-    const val kotlin = "1.7.20"
+    const val kotlin = "1.7.22"
     const val kotlinDatetime = "0.4.0"
 
     const val appCompat = "1.5.1"
@@ -16,11 +16,11 @@ object Versions {
     const val retrofit = "2.9.0"
 
     const val googlePlayServices = "4.3.10"
-    const val googlePlayServicesAuth = "20.3.0"
+    const val googlePlayServicesAuth = "20.4.0"
 
     const val navigation = "2.5.3"
 
-    const val hilt = "2.44"
+    const val hilt = "2.44.2"
     const val hiltCompiler = "1.0.0"
 
     const val glide = "4.14.2"
@@ -28,7 +28,7 @@ object Versions {
     const val paging = "3.1.1"
 
     const val firebaseCrashlytics = "2.9.0"
-    const val firebaseBom = "31.0.2"
+    const val firebaseBom = "31.1.0"
     const val firebaseUi = "8.0.2"
 
     const val facebookSdk = "8.0.0"
@@ -55,7 +55,7 @@ object Versions {
 
     const val datastore = "1.0.0"
 
-    const val billing = "5.0.0"
+    const val billing = "5.1.0"
 
     const val dotsIndicator = "4.3"
     const val androidChart = "v3.1.0"

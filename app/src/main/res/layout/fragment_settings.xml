@@ -141,14 +141,20 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
+    <TextView
+        android:id="@+id/settings_privacy_policy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="32dp"
+        android:linksClickable="true"
+        android:text="@string/settings_privacy_policy" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/settings_save"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
         android:text="@string/save"
         android:layout_marginHorizontal="@dimen/button_margin_horizontal"
-        android:layout_marginVertical="@dimen/button_margin_vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginVertical="@dimen/button_margin_vertical" />
 </LinearLayout>
