@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,6 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
@@ -63,22 +65,23 @@ import dagger.hilt.android.internal.managers.FragmentComponentManager
 fun ProfileRoute(
     viewModel: ProfileViewModel2 = hiltViewModel(),
     navigateToCurrencyListScreen: () -> Unit,
-    navigateToBudgetScreen: () -> Unit
+    navigateToBudgetScreen: () -> Unit,
+    navigateToSettingsScreen: () -> Unit,
 ) {
-    val state: ProfileUiState by viewModel.profileState.collectAsStateWithLifecycle()
+    val uiState: ProfileUiState by viewModel.profileState.collectAsStateWithLifecycle()
     val showDialog by viewModel.showDialog.collectAsStateWithLifecycle()
     val context = LocalContext.current
     ProfileScreen(
-        state,
-        showDialog,
-        navigateToCurrencyListScreen,
-        navigateToBudgetScreen,
-        {},
-        {},
-        {},
-        {},
-        { viewModel.showDialog() },
-        {
+        state = uiState,
+        showDialog = showDialog,
+        onCurrencyClicked = navigateToCurrencyListScreen,
+        onBudgetClicked = navigateToBudgetScreen,
+        onRegularIncomeClicked = {},
+        onRegularExpenseClicked = {},
+        onGoalsClicked = {},
+        onSettingsClicked = navigateToSettingsScreen,
+        onLogoutClicked = { viewModel.showDialog() },
+        onLogoutConfirmClicked = {
             viewModel.logout {
                 PeriodicBackupWorker.stopPeriodicJob(context)
                 context.startActivity(
@@ -88,7 +91,7 @@ fun ProfileRoute(
                 (FragmentComponentManager.findActivity(context) as Activity).finish()
             }
         },
-        { viewModel.dismissDialog() }
+        onLogoutDismissClicked = { viewModel.dismissDialog() }
     )
 }
 
@@ -113,10 +116,10 @@ fun ProfileScreen(
         ProfileSection(state.regularIncomes)
         ProfileSection(state.regularExpenses)
         ProfileSection(ProfileUiItem.Goals)
-        ProfileSection(ProfileUiItem.Settings)
+        ProfileSection(state.settings, onSettingsClicked)
         Spacer(modifier = Modifier.weight(1f))
         OutlinedButton(
-            modifier = Modifier.padding(top = dimensionResource(R.dimen.standard_padding)),
+            modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_medium)),
             onClick = { onLogoutClicked() },
             shape = RoundedCornerShape(50),
             colors = ButtonDefaults.outlinedButtonColors(backgroundColor = MaterialTheme.colorScheme.error)
@@ -128,7 +131,7 @@ fun ProfileScreen(
         }
         Text(
             text = BuildConfig.VERSION_NAME,
-            modifier = Modifier.padding(dimensionResource(R.dimen.standard_padding)),
+            modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium)),
             style = MaterialTheme.typography.bodySmall,
         )
         SimpleDialog(
@@ -188,7 +191,7 @@ fun ProfilePicture(uri: Uri?) {
 fun ProfileContent(name: String?) {
     Text(
         name ?: "",
-        modifier = Modifier.padding(16.dp),
+        modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium)),
         style = MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.onPrimaryContainer)
     )
 }
@@ -232,7 +235,7 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = if (profileUiItem is ProfileUiItem.CurrencyUiItem) dimensionResource(R.dimen.standard_large_padding) else 0.dp)
+            .padding(top = if (profileUiItem is ProfileUiItem.CurrencyUiItem) dimensionResource(R.dimen.padding_large) else 0.dp)
             .height(dimensionResource(R.dimen.profile_item_height))
             .clickable(onClick = navigationCallback)
     ) {
@@ -240,8 +243,8 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
         Icon(
             modifier = Modifier
                 .padding(
-                    start = dimensionResource(R.dimen.standard_large_padding),
-                    end = dimensionResource(R.dimen.standard_padding)
+                    start = dimensionResource(R.dimen.padding_large),
+                    end = dimensionResource(R.dimen.padding_medium)
                 )
                 .constrainAs(idIcon) {
                     top.linkTo(parent.top)
@@ -293,6 +296,37 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
                 },
                 style = MaterialTheme.typography.titleMedium
             )
+            is ProfileUiItem.Settings -> {
+                val isPremium = profileUiItem.isPremium
+                val (backgroundColor, text, textColor) = if (isPremium)
+                    Triple(
+                        MaterialTheme.colorScheme.secondaryContainer,
+                        stringResource(R.string.settings_subscription_premium_acknowledged_title),
+                        MaterialTheme.colorScheme.onSecondaryContainer
+                    ) else
+                    Triple(
+                        MaterialTheme.colorScheme.tertiaryContainer,
+                        stringResource(R.string.settings_subscription_premium_title),
+                        MaterialTheme.colorScheme.onTertiaryContainer
+                    )
+                Text(
+                    modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_large))
+                        .constrainAs(idData) {
+                            baseline.linkTo(idTitle.baseline)
+                            start.linkTo(idTitle.end)
+                        }
+                        .background(
+                            color = backgroundColor,
+                            shape = RoundedCornerShape(50)
+                        )
+                        .padding(all = 8.dp),
+                    style = MaterialTheme.typography.labelMedium.copy(
+                        fontSize = dimensionResource(R.dimen.billing_premium_label_text_size).value.sp,
+                        color = textColor
+                    ),
+                    text = text
+                )
+            }
             else -> {}
         }
 
@@ -309,7 +343,7 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
         }
         Divider(
             modifier = Modifier
-                .padding(horizontal = dimensionResource(R.dimen.standard_padding))
+                .padding(horizontal = dimensionResource(R.dimen.padding_medium))
                 .constrainAs(idDivider) { bottom.linkTo(parent.bottom) },
             thickness = 1.dp,
             color = MaterialTheme.colorScheme.primaryContainer

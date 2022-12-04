@@ -12,4 +12,5 @@ object DataConstants {
     const val DEFAULT_CURRENCY_CODE = "USD"
     const val DEFAULT_CURRENCY_SYMBOL = "$"
     const val NO_ID = -1L
+    const val NO_RES_ID = -1
 }

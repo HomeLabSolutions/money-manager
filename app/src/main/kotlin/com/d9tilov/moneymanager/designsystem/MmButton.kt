@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
  * @param content The button content.
  */
 @Composable
-fun MoneyManagerFilledButton(
+fun FilledButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -77,7 +77,7 @@ fun MoneyManagerFilledButton(
  * @param trailingIcon The button trailing icon content. Pass `null` here for no trailing icon.
  */
 @Composable
-fun MoneyManagerFilledButton(
+fun FilledButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -87,7 +87,7 @@ fun MoneyManagerFilledButton(
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null
 ) {
-    MoneyManagerFilledButton(
+    FilledButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
@@ -99,7 +99,7 @@ fun MoneyManagerFilledButton(
             trailingIcon = trailingIcon != null
         )
     ) {
-        MoneyManagerButtonContent(
+        ButtonContent(
             text = text,
             leadingIcon = leadingIcon,
             trailingIcon = trailingIcon
@@ -123,7 +123,7 @@ fun MoneyManagerFilledButton(
  * @param content The button content.
  */
 @Composable
-fun MoneyManagerOutlinedButton(
+fun OutlinedButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -168,7 +168,7 @@ fun MoneyManagerOutlinedButton(
  * @param trailingIcon The button trailing icon content. Pass `null` here for no trailing icon.
  */
 @Composable
-fun MoneyManagerOutlinedButton(
+fun OutlinedButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -179,7 +179,7 @@ fun MoneyManagerOutlinedButton(
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null
 ) {
-    MoneyManagerOutlinedButton(
+    OutlinedButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
@@ -192,7 +192,7 @@ fun MoneyManagerOutlinedButton(
             trailingIcon = trailingIcon != null
         )
     ) {
-        MoneyManagerButtonContent(
+        ButtonContent(
             text = text,
             leadingIcon = leadingIcon,
             trailingIcon = trailingIcon
@@ -215,7 +215,7 @@ fun MoneyManagerOutlinedButton(
  * @param content The button content.
  */
 @Composable
-fun MoneyManagerTextButton(
+fun TextButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -257,7 +257,7 @@ fun MoneyManagerTextButton(
  * @param trailingIcon The button trailing icon content. Pass `null` here for no trailing icon.
  */
 @Composable
-fun MoneyManagerTextButton(
+fun TextButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -267,7 +267,7 @@ fun MoneyManagerTextButton(
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null
 ) {
-    MoneyManagerTextButton(
+    TextButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
@@ -279,7 +279,7 @@ fun MoneyManagerTextButton(
             trailingIcon = trailingIcon != null
         )
     ) {
-        MoneyManagerButtonContent(
+        ButtonContent(
             text = text,
             leadingIcon = leadingIcon,
             trailingIcon = trailingIcon
@@ -296,7 +296,7 @@ fun MoneyManagerTextButton(
  * @param trailingIcon The button trailing icon content. Pass `null` here for no trailing icon.
  */
 @Composable
-private fun RowScope.MoneyManagerButtonContent(
+private fun RowScope.ButtonContent(
     text: @Composable () -> Unit,
     leadingIcon: @Composable (() -> Unit)?,
     trailingIcon: @Composable (() -> Unit)?

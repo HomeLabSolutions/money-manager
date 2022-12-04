@@ -14,12 +14,14 @@ fun NavController.navigateToProfile(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.profileScreen(
     navigateToCurrencyListScreen: () -> Unit,
-    navigateToBudgetScreen: () -> Unit
+    navigateToBudgetScreen: () -> Unit,
+    navigateToSettingsScreen: () -> Unit,
 ) {
     composable(route = profileNavigationRoute) {
         ProfileRoute(
             navigateToCurrencyListScreen = navigateToCurrencyListScreen,
-            navigateToBudgetScreen = navigateToBudgetScreen
+            navigateToBudgetScreen = navigateToBudgetScreen,
+            navigateToSettingsScreen = navigateToSettingsScreen
         )
     }
 }

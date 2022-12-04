@@ -48,6 +48,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.moneymanager.R
+import com.d9tilov.moneymanager.budget.ui.BudgetScreen
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.ui.CurrencyListScreen
 import com.d9tilov.moneymanager.home.ui.MainActivity
@@ -108,11 +109,12 @@ fun PrepopulateScreen(
                 PrepopulateScreen.CurrencyScreen -> CurrencyListScreen(
                     uiState.currencyUiState,
                     Modifier.weight(1f),
+                    false,
                     clickCallback
                 )
                 PrepopulateScreen.BudgetScreen -> BudgetScreen(
-                    budgetUiState = uiState.budgetUiState,
-                    modifier = Modifier.weight(1f),
+                    uiState = uiState.budgetUiState,
+                    showInPrepopulate = true,
                     onBudgetInputChanged = onBudgetInputChanged
                 )
             }

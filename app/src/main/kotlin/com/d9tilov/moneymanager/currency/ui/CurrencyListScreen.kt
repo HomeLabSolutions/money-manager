@@ -3,8 +3,10 @@ package com.d9tilov.moneymanager.currency.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.consumedWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,8 +19,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,48 +37,71 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.core.util.CurrencyUtils
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.vm.CurrencyUiState
 import com.d9tilov.moneymanager.currency.vm.CurrencyViewModel2
+import com.d9tilov.moneymanager.designsystem.MmTopAppBar
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun CurrencyListRoute(viewModel: CurrencyViewModel2 = hiltViewModel(), clickBack: () -> Unit) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    CurrencyListScreen(uiState) { currency ->
-        viewModel.changeCurrency(currency.code)
-        clickBack.invoke()
-    }
+    CurrencyListScreen(
+        uiState, showToolbar = true, onChooseCurrency = { currency ->
+            viewModel.changeCurrency(currency.code)
+            clickBack.invoke()
+        },
+        onClickBack = clickBack
+    )
 }
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun CurrencyListScreen(
     currencyUiState: CurrencyUiState,
     modifier: Modifier = Modifier,
-    clickCallback: (currency: DomainCurrency) -> Unit = {}
+    showToolbar: Boolean,
+    onChooseCurrency: (currency: DomainCurrency) -> Unit = {},
+    onClickBack: () -> Unit = {}
 ) {
-    if (currencyUiState.isLoading) {
-        Box(modifier = modifier.fillMaxSize()) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-        }
-    }
-    when (currencyUiState) {
-        is CurrencyUiState.NoCurrencies -> {}
-        is CurrencyUiState.HasCurrencies -> {
-            val currencyList = currencyUiState.currencyList
-            val state = rememberLazyListState()
-            val coroutineScope = rememberCoroutineScope()
-            LazyColumn(contentPadding = PaddingValues(16.dp), modifier = modifier, state = state) {
-                items(items = currencyList, key = { item -> item.code }) { item ->
-                    CurrencyItem(item, clickCallback)
-                }
+    Scaffold(
+        topBar = {
+            if (showToolbar)
+                MmTopAppBar(
+                    titleRes = R.string.title_prepopulate_currency,
+                    onNavigationClick = onClickBack
+                )
+
+        },
+    ) { padding ->
+        if (currencyUiState.isLoading) {
+            Box(modifier = modifier.fillMaxSize()) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
-            LaunchedEffect(true) {
-                val checkedIndex = currencyList.indexOfFirst { it.isBase }
-                if (checkedIndex == -1) return@LaunchedEffect
-                coroutineScope.launch { state.scrollToItem(checkedIndex) }
+        }
+        when (currencyUiState) {
+            is CurrencyUiState.NoCurrencies -> {}
+            is CurrencyUiState.HasCurrencies -> {
+                val currencyList = currencyUiState.currencyList
+                val state = rememberLazyListState()
+                val coroutineScope = rememberCoroutineScope()
+                LazyColumn(
+                    contentPadding = PaddingValues(16.dp),
+                    modifier = modifier.consumedWindowInsets(padding),
+                    state = state
+                ) {
+                    items(items = currencyList, key = { item -> item.code }) { item ->
+                        CurrencyItem(item, onChooseCurrency)
+                    }
+                }
+                LaunchedEffect(true) {
+                    val checkedIndex = currencyList.indexOfFirst { it.isBase }
+                    if (checkedIndex == -1) return@LaunchedEffect
+                    coroutineScope.launch { state.scrollToItem(checkedIndex) }
+                }
             }
         }
     }

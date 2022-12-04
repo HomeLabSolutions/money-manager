@@ -34,9 +34,10 @@
     <dimen name="currency_sum_text_size">84sp</dimen>
     <dimen name="currency_sign_text_size">50sp</dimen>
 
-    <dimen name="standard_padding">16dp</dimen>
-    <dimen name="standard_large_padding">32dp</dimen>
-    <dimen name="standard_extra_large_padding">64dp</dimen>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_medium">16dp</dimen>
+    <dimen name="padding_large">32dp</dimen>
+    <dimen name="padding_extra_large">64dp</dimen>
     <dimen name="card_view_corner_radius">16dp</dimen>
 
     <dimen name="recycler_view_category_offset">4dp</dimen>
@@ -117,13 +118,13 @@
     <dimen name="income_expense_name_text_size">20sp</dimen>
     <dimen name="income_expense_name_description_text_size">12sp</dimen>
 
-    <dimen name="settings_subscription_card_min_height">64dp</dimen>
+    <dimen name="settings_subscription_card_min_height">100dp</dimen>
     <dimen name="settings_subscription_icon_size">64dp</dimen>
     <dimen name="settings_subscription_title_text_size">20sp</dimen>
     <dimen name="settings_subscription_price_text_size">14sp</dimen>
 
     <dimen name="billing_subscription_title_text_size">20sp</dimen>
     <dimen name="billing_subscription_radio_button_text_size">16sp</dimen>
-    <dimen name="billing_premium_label_text_size">11sp</dimen>
+    <dimen name="billing_premium_label_text_size">10sp</dimen>
     <dimen name="billing_intro_card_description_text_size">14sp</dimen>
 </resources>
