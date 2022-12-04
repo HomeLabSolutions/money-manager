@@ -172,6 +172,7 @@
     <string name="settings_subscription_premium_acknowledged_subtitle_cancel">Subscription is cancelled</string>
     <string name="settings_subscription_premium_description">cost control\nextra icons\nregular transactions\nand much more…\n</string>
     <string name="settings_subscription_premium_min_price">from %1$s%2$s %3$s</string>
+    <string name="settings_privacy_policy"><a href="https://pages.flycricket.io/moneymanager-0/privacy.html">Privacy Policy</a></string>
 
     <string name="profile_item_currency_title">Currency: </string>
     <string name="profile_item_budget_title">Budget: </string>

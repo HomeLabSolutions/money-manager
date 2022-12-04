@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.settings
 
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -44,6 +45,7 @@ class SettingsFragment :
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         viewBinding?.run {
+            settingsPrivacyPolicy.movementMethod = LinkMovementMethod.getInstance()
             settingsRefresh.setOnClickListener { viewModel.backup() }
             settingsBackupDelete.setOnClickListener {
                 findNavController().navigate(SettingsFragmentDirections.toRemoveBackupDialog())
