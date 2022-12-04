@@ -8,6 +8,7 @@ import com.android.billingclient.api.Purchase
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails
 import com.d9tilov.moneymanager.billing.domain.entity.PremiumEmails
+import com.d9tilov.moneymanager.billing.domain.entity.PremiumInfo
 import com.d9tilov.moneymanager.currency.data.entity.Currency
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.currency.domain.mapper.CurrencyDomainMapper
@@ -19,6 +20,7 @@ import com.squareup.moshi.Moshi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
 import java.io.IOException
@@ -50,14 +52,26 @@ class BillingInteractorImpl(
     override val currentPurchases: Flow<List<Purchase>> = billingRepo.currentPurchases
     override val productDetails: Flow<ProductDetails?> = billingRepo.premiumProductDetails
     override val isNewPurchaseAcknowledged: Flow<Boolean> = billingRepo.isNewPurchaseAcknowledged
-    override val hasRenewablePremium: Flow<Boolean> = billingRepo.hasRenewablePremium
     override val billingConnectionReady: Flow<Boolean> = billingRepo.billingConnectionReady
+    override fun getPremiumInfo(): Flow<PremiumInfo> {
+        val canPurchaseFlow = flowOf(true)
+//            billingRepo.premiumProductDetails.map { productDetails -> productDetails != null }
+        val minPriceFlow = flowOf(DomainCurrency.EMPTY)
+//            getSkuDetails().map { list: List<BillingSkuDetails> ->
+//            list.minOfWith({ t1, t2 -> t1.value.compareTo(t2.value) }) { it.price }
+//        }.map { item: Currency -> currencyDomainMapper.toDomain(item, false) }
+        return combine(
+            canPurchaseFlow,
+            isPremium(),
+            billingRepo.hasRenewablePremium,
+            minPriceFlow
+        ) { canPurchase, isPremium, hasActiveSku, minPrice ->
+            PremiumInfo(canPurchase, isPremium, hasActiveSku, minPrice)
+        }
+    }
 
     override fun startBillingConnection() = billingRepo.startBillingConnection()
     override fun terminateBillingConnection() = billingRepo.terminateBillingConnection()
-
-    override fun canPurchase(): Flow<Boolean> =
-        billingRepo.premiumProductDetails.map { productDetails -> productDetails != null }
 
     override fun buySku(
         tag: String,
@@ -78,8 +92,5 @@ class BillingInteractorImpl(
     }
 
     override fun getSkuDetails(): Flow<List<BillingSkuDetails>> = billingRepo.getSkuDetails()
-    override fun getMinPrice(): Flow<DomainCurrency> =
-        getSkuDetails().map { list: List<BillingSkuDetails> ->
-            list.minOfWith({ t1, t2 -> t1.value.compareTo(t2.value) }) { it.price }
-        }.map { item: Currency -> currencyDomainMapper.toDomain(item, false) }
+
 }

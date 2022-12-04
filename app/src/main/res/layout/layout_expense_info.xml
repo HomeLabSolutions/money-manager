@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         style="@style/Widget.MoneyManager.TextView.Info.Label"
         android:layout_marginBottom="8dp"
-        android:layout_marginStart="@dimen/standard_large_padding"
+        android:layout_marginStart="@dimen/padding_large"
         android:text="@string/category_expense_info_can_spend_today_title"
         app:layout_constraintBottom_toTopOf="@id/expense_today_info_title"
         app:layout_constraintStart_toStartOf="parent" />

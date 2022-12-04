@@ -43,7 +43,7 @@ sealed class ProfileUiItem {
         ProfileUiItem()
 
     object Goals : ProfileUiItem()
-    object Settings : ProfileUiItem()
+    data class Settings(val isPremium: Boolean = false) : ProfileUiItem()
 }
 
 data class ProfileUiState(
@@ -52,7 +52,7 @@ data class ProfileUiState(
     val budgetData: ProfileUiItem = ProfileUiItem.BudgetUiItem(),
     val regularIncomes: ProfileUiItem = ProfileUiItem.RegularIncomeUiItem(),
     val regularExpenses: ProfileUiItem = ProfileUiItem.RegularExpenseUiItem(),
-    val isPremium: Boolean = false,
+    val settings: ProfileUiItem = ProfileUiItem.Settings(),
     val showLogoutDialog: Boolean = false
 )
 
@@ -91,7 +91,7 @@ class ProfileViewModel2 @Inject constructor(
                     budgetData = ProfileUiItem.BudgetUiItem(budgetData),
                     regularIncomes = ProfileUiItem.RegularIncomeUiItem(regularIncomeList),
                     regularExpenses = ProfileUiItem.RegularExpenseUiItem(regularExpenseList),
-                    isPremium = isPremium
+                    settings = ProfileUiItem.Settings(isPremium)
                 )
             } ?: ProfileUiState()
         }

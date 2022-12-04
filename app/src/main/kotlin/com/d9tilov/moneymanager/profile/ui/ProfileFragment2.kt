@@ -20,6 +20,8 @@ import com.d9tilov.moneymanager.databinding.FragmentProfileBinding
 import com.d9tilov.moneymanager.profile.navigation.profileNavigationRoute
 import com.d9tilov.moneymanager.profile.navigation.profileScreen
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileViewModel
+import com.d9tilov.moneymanager.settings.navigation.navigateToSettingsScreen
+import com.d9tilov.moneymanager.settings.navigation.settingsScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -52,10 +54,12 @@ class ProfileFragment2 :
                 ) {
                     profileScreen(
                         navigateToCurrencyListScreen = navController::navigateToCurrencyListScreen,
-                        navigateToBudgetScreen = navController::navigateToBudgetScreen
+                        navigateToBudgetScreen = navController::navigateToBudgetScreen,
+                        navigateToSettingsScreen = navController::navigateToSettingsScreen
                     )
                     currencyScreen { navController.popBackStack() }
                     budgetScreen { navController.popBackStack() }
+                    settingsScreen { navController.popBackStack() }
                 }
             }
         }

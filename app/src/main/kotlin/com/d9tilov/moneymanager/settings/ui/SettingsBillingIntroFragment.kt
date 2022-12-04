@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.settings
+package com.d9tilov.moneymanager.settings.ui
 
 import android.os.Bundle
 import android.view.View
@@ -17,9 +17,9 @@ import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails.Companio
 import com.d9tilov.moneymanager.core.util.ZoomOutPageTransformer
 import com.d9tilov.moneymanager.databinding.FragmentBillingIntroBinding
 import com.d9tilov.moneymanager.settings.adapter.DotIndicatorPager2Adapter
+import com.d9tilov.moneymanager.settings.vm.SettingsBillingIntroViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint

@@ -11,9 +11,9 @@
         android:layout_gravity="center_vertical"
         android:background="?attr/colorPrimaryContainer"
         android:textColor="?attr/colorOnPrimaryContainer"
-        android:paddingStart="@dimen/standard_large_padding"
+        android:paddingStart="@dimen/padding_large"
         android:paddingTop="4dp"
-        android:paddingEnd="@dimen/standard_large_padding"
+        android:paddingEnd="@dimen/padding_large"
         android:paddingBottom="4dp"
         android:textAppearance="?attr/textAppearanceBodySmall"
         tools:text="31.03.1993" />

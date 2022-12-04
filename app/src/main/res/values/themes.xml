@@ -133,7 +133,7 @@
     </style>
 
     <style name="Theme.MoneyManager.MaterialDialog.Button.Text" parent="">
-        <item name="android:padding">@dimen/standard_padding</item>
+        <item name="android:padding">@dimen/padding_medium</item>
         <item name="android:textColor">?attr/colorPrimary</item>
     </style>
 

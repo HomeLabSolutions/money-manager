@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.settings
+package com.d9tilov.moneymanager.settings.vm
 
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.App
@@ -10,7 +10,6 @@ import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
 import com.d9tilov.moneymanager.billing.domain.BillingInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
-import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import com.google.firebase.FirebaseException
@@ -45,21 +44,21 @@ class SettingsViewModel @Inject constructor(
     val backupData = backupInteractor.getBackupData()
         .flowOn(Dispatchers.IO)
         .stateIn(viewModelScope, SharingStarted.Eagerly, BackupData.EMPTY)
-    val minBillingPrice = billingInteractor.getMinPrice()
-        .flowOn(Dispatchers.IO + minPriceExceptionHandler)
-        .stateIn(viewModelScope, SharingStarted.Eagerly, DomainCurrency.EMPTY)
+//    val minBillingPrice = billingInteractor.getMinPrice()
+//        .flowOn(Dispatchers.IO + minPriceExceptionHandler)
+//        .stateIn(viewModelScope, SharingStarted.Eagerly, DomainCurrency.EMPTY)
 
     val isPremium = billingInteractor.isPremium()
         .flowOn(Dispatchers.IO)
         .shareIn(viewModelScope, SharingStarted.WhileSubscribed())
 
-    val getActiveSku = billingInteractor.hasRenewablePremium
-        .flowOn(Dispatchers.IO)
-        .shareIn(viewModelScope, SharingStarted.WhileSubscribed())
-
-    val canPurchase = billingInteractor.canPurchase()
-        .flowOn(Dispatchers.IO)
-        .stateIn(viewModelScope, SharingStarted.Lazily, false)
+//    val getActiveSku = billingInteractor.hasRenewablePremium
+//        .flowOn(Dispatchers.IO)
+//        .shareIn(viewModelScope, SharingStarted.WhileSubscribed())
+//
+//    val canPurchase = billingInteractor.canPurchase()
+//        .flowOn(Dispatchers.IO)
+//        .stateIn(viewModelScope, SharingStarted.Lazily, false)
 
     fun backup() {
         viewModelScope.launch(Dispatchers.IO) {
