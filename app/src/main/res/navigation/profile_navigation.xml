@@ -546,7 +546,7 @@
 
     <fragment
         android:id="@+id/settings_dest"
-        android:name="com.d9tilov.moneymanager.settings.SettingsFragment"
+        android:name="com.d9tilov.moneymanager.settings.ui.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings">
 
@@ -570,7 +570,7 @@
 
     <fragment
         android:id="@+id/settings_billing_dest"
-        android:name="com.d9tilov.moneymanager.settings.SettingsBillingIntroFragment"
+        android:name="com.d9tilov.moneymanager.settings.ui.SettingsBillingIntroFragment"
         android:label="fragment_settings_billing"
         tools:layout="@layout/fragment_billing_intro"/>
 

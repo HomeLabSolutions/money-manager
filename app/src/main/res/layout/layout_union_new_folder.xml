@@ -11,7 +11,7 @@
             android:id="@+id/category_dialog_union_item1"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_marginStart="@dimen/standard_large_padding"
+            android:layout_marginStart="@dimen/padding_large"
             app:layout_constraintEnd_toStartOf="@+id/category_dialog_union_plus_sign"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintTop_toTopOf="parent"

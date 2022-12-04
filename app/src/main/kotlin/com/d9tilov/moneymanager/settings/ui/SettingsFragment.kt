@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.settings
+package com.d9tilov.moneymanager.settings.ui
 
 import android.os.Bundle
 import android.view.View
@@ -17,16 +17,15 @@ import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
 import com.d9tilov.moneymanager.core.util.debounce
 import com.d9tilov.moneymanager.core.util.gone
-import com.d9tilov.moneymanager.core.util.hide
 import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.core.util.toBackupDate
 import com.d9tilov.moneymanager.databinding.FragmentSettingsBinding
+import com.d9tilov.moneymanager.settings.vm.SettingsViewModel
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -92,45 +91,45 @@ class SettingsFragment :
                             }
                         }
                     }
-                    launch {
-                        viewModel.canPurchase.collect { canPurchase ->
-                            if (canPurchase) settingsSubscription.root.show()
-                            else settingsSubscription.root.gone()
-                        }
-                    }
-                    launch {
-                        viewModel.minBillingPrice.collect { price ->
-                            settingsSubscription.settingsSubscriptionPrice.text = getString(
-                                R.string.settings_subscription_premium_min_price,
-                                price.symbol,
-                                price.value,
-                                price.code
-                            )
-                        }
-                    }
-                    launch {
-                        viewModel.isPremium.combine(viewModel.getActiveSku) { isPremium, hasActiveSku -> Pair(isPremium, hasActiveSku) }.collect { pair ->
-                            val isPremium = pair.first
-                            val hasActiveSku = pair.second
-                            settingsSubscription.root.isEnabled = !isPremium
-                            if (isPremium) {
-                                settingsSubscription.settingsSubscriptionTitle.text =
-                                    getString(R.string.settings_subscription_premium_acknowledged_title)
-                                settingsSubscription.settingsSubscriptionPrice.hide()
-                                settingsSubscription.settingsSubscriptionDescription.text =
-                                    getString(
-                                        if (hasActiveSku) R.string.settings_subscription_premium_acknowledged_subtitle_renewing
-                                        else R.string.settings_subscription_premium_acknowledged_subtitle_cancel
-                                    )
-                            } else {
-                                settingsSubscription.settingsSubscriptionTitle.text =
-                                    getString(R.string.settings_subscription_premium_title)
-                                settingsSubscription.settingsSubscriptionDescription.text =
-                                    getString(R.string.settings_subscription_premium_description)
-                                settingsSubscription.settingsSubscriptionPrice.show()
-                            }
-                        }
-                    }
+//                    launch {
+//                        viewModel.canPurchase.collect { canPurchase ->
+//                            if (canPurchase) settingsSubscription.root.show()
+//                            else settingsSubscription.root.gone()
+//                        }
+//                    }
+//                    launch {
+//                        viewModel.minBillingPrice.collect { price ->
+//                            settingsSubscription.settingsSubscriptionPrice.text = getString(
+//                                R.string.settings_subscription_premium_min_price,
+//                                price.symbol,
+//                                price.value,
+//                                price.code
+//                            )
+//                        }
+//                    }
+//                    launch {
+//                        viewModel.isPremium.combine(viewModel.getActiveSku) { isPremium, hasActiveSku -> Pair(isPremium, hasActiveSku) }.collect { pair ->
+//                            val isPremium = pair.first
+//                            val hasActiveSku = pair.second
+//                            settingsSubscription.root.isEnabled = !isPremium
+//                            if (isPremium) {
+//                                settingsSubscription.settingsSubscriptionTitle.text =
+//                                    getString(R.string.settings_subscription_premium_acknowledged_title)
+//                                settingsSubscription.settingsSubscriptionPrice.hide()
+//                                settingsSubscription.settingsSubscriptionDescription.text =
+//                                    getString(
+//                                        if (hasActiveSku) R.string.settings_subscription_premium_acknowledged_subtitle_renewing
+//                                        else R.string.settings_subscription_premium_acknowledged_subtitle_cancel
+//                                    )
+//                            } else {
+//                                settingsSubscription.settingsSubscriptionTitle.text =
+//                                    getString(R.string.settings_subscription_premium_title)
+//                                settingsSubscription.settingsSubscriptionDescription.text =
+//                                    getString(R.string.settings_subscription_premium_description)
+//                                settingsSubscription.settingsSubscriptionPrice.show()
+//                            }
+//                        }
+//                    }
                 }
             }
         }

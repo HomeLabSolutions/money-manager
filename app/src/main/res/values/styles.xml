@@ -21,8 +21,8 @@
     <style name="Widget.MoneyManager.Category.Group.Title" parent="TextAppearance.MoneyManager.TitleLarge">
         <item name="android:textSize">@dimen/statistics_item_group_icon_text_size</item>
         <item name="android:gravity">center_vertical|start</item>
-        <item name="android:paddingStart">@dimen/standard_large_padding</item>
-        <item name="android:paddingEnd">@dimen/standard_large_padding</item>
+        <item name="android:paddingStart">@dimen/padding_large</item>
+        <item name="android:paddingEnd">@dimen/padding_large</item>
         <item name="android:ellipsize">end</item>
         <item name="android:maxLines">1</item>
     </style>
@@ -95,7 +95,7 @@
     </style>
 
     <style name="Widget.MoneyManager.TextView.Info.Label" parent="Widget.AppCompat.TextView">
-        <item name="android:layout_marginStart">@dimen/standard_large_padding</item>
+        <item name="android:layout_marginStart">@dimen/padding_large</item>
         <item name="android:paddingTop">4dp</item>
         <item name="android:paddingBottom">4dp</item>
         <item name="android:paddingEnd">8dp</item>

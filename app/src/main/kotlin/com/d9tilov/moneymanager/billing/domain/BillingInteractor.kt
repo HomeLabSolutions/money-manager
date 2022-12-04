@@ -6,6 +6,7 @@ import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails
+import com.d9tilov.moneymanager.billing.domain.entity.PremiumInfo
 import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import kotlinx.coroutines.flow.Flow
 
@@ -14,11 +15,10 @@ interface BillingInteractor {
     val currentPurchases: Flow<List<Purchase>>
     val productDetails: Flow<ProductDetails?>
     val isNewPurchaseAcknowledged: Flow<Boolean>
-    val hasRenewablePremium: Flow<Boolean>
     val billingConnectionReady: Flow<Boolean>
+    fun getPremiumInfo(): Flow<PremiumInfo>
     fun startBillingConnection()
     fun terminateBillingConnection()
-    fun canPurchase(): Flow<Boolean>
     fun buySku(
         tag: String,
         productDetails: ProductDetails?,
@@ -28,5 +28,4 @@ interface BillingInteractor {
 
     fun isPremium(): Flow<Boolean>
     fun getSkuDetails(): Flow<List<BillingSkuDetails>>
-    fun getMinPrice(): Flow<DomainCurrency>
 }

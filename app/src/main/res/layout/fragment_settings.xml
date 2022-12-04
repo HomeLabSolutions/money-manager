@@ -30,7 +30,7 @@
                 layout="@layout/item_premium_subscription"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/standard_padding"
+                android:layout_margin="@dimen/padding_medium"
                 android:visibility="gone"
                 tools:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -135,7 +135,7 @@
                 tools:visibility="visible"
                 app:srcCompat="@drawable/ic_close"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="@dimen/standard_large_padding"
+                android:layout_marginEnd="@dimen/padding_large"
                 app:layout_constraintTop_toTopOf="@+id/settings_refresh"
                 app:layout_constraintBottom_toBottomOf="@+id/settings_refresh" />
         </androidx.constraintlayout.widget.ConstraintLayout>

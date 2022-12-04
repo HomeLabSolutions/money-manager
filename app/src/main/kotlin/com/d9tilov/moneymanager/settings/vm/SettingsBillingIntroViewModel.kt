@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.settings
+package com.d9tilov.moneymanager.settings.vm
 
 import androidx.lifecycle.viewModelScope
 import com.android.billingclient.api.BillingClient
