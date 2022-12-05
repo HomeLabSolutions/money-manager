@@ -7,13 +7,12 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath(BuildPlugins.android)
-        classpath(BuildPlugins.kotlin)
-        classpath(BuildPlugins.googlePlayServices)
-        classpath(BuildPlugins.navigation)
-        classpath(BuildPlugins.hilt)
-        classpath(BuildPlugins.firebaseCrashlytics)
-        classpath(BuildPlugins.detekt)
+        classpath("com.google.gms:google-services:4.3.14")
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.5.3")
+        classpath("com.google.dagger:hilt-android-gradle-plugin:2.44.2")
+        classpath("com.google.firebase:firebase-crashlytics-gradle:2.9.2")
+        classpath("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.20.0")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20")
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -26,6 +25,10 @@ allprojects {
     }
 }
 
-tasks.register("clean",Delete::class){
+tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
+}
+
+plugins {
+    alias(libs.plugins.android.application) apply false
 }
