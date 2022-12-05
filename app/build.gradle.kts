@@ -1,5 +1,5 @@
 import java.io.FileInputStream
-import java.util.Properties
+import java.util.*
 
 plugins {
     id("com.android.application")
@@ -28,15 +28,20 @@ android {
         }
     }
 
-    compileSdk = ConfigData.compileSdkVersion
-    buildToolsVersion = ConfigData.buildToolsVersion
+    compileSdk = 33
+    buildToolsVersion = "33.0.0"
 
     defaultConfig {
+        val versionMajor = 1
+        val versionMinor = 0
+        val versionPatch = 3
+        val versionBuild = 5
+
         applicationId = "com.d9tilov.moneymanager"
-        minSdk = ConfigData.minSdkVersion
-        targetSdk = ConfigData.targetSdkVersion
-        versionCode = ConfigData.versionCode
-        versionName = ConfigData.versionName
+        minSdk = 21
+        targetSdk = 33
+        versionCode = 1000 * (1000 * versionMajor + 100 * versionMinor + versionPatch) + versionBuild
+        versionName = "${versionMajor}.${versionMinor}.${versionPatch}.${versionBuild}"
 
         buildConfigField("String", "API_KEY", keystoreProperties["currency_api_key"] as String)
         buildConfigField("String", "SALT", keystoreProperties["database_salt"] as String)
@@ -97,7 +102,7 @@ android {
     val ktlint by configurations.creating
 
     dependencies {
-        ktlint(Deps.ktlint) {
+        ktlint(libs.ktlint) {
             attributes {
                 attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
             }
@@ -142,7 +147,7 @@ android {
         }
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.composeExtension
+        kotlinCompilerExtensionVersion = "1.3.2"
     }
 
     kapt {
@@ -164,90 +169,77 @@ repositories {
 
 dependencies {
 
-    implementation(Deps.kotlinJdk)
-    implementation(Deps.kotlinDatetime)
+    implementation(libs.kotlinJdk)
+    implementation(libs.kotlinDatetime)
 
-    implementation(Deps.appCompat)
-    implementation(Deps.material)
-    implementation(Deps.composeMaterial3)
-    implementation(Deps.composeMaterial3WindowSize)
-    implementation(Deps.core)
-    implementation(Deps.coreRuntime)
-    implementation(Deps.constraintLayout)
+    implementation(libs.appCompat)
+    implementation(libs.material)
+    implementation(libs.core)
+    implementation(libs.coreRuntime)
+    implementation(libs.constraintLayout)
 
-    implementation(Deps.fragment)
+    implementation(libs.fragment)
 
-    implementation(Deps.retrofit)
-    implementation(Deps.retrofitMoshi)
+    implementation(libs.bundles.retrofit)
 
-    implementation(Deps.firebase)
-    implementation(platform(Deps.firebaseBom))
-    implementation(Deps.firebaseUi)
-    implementation(Deps.googlePlayServicesAuth)
+    implementation(libs.firebase)
+    implementation(platform(libs.firebaseBom))
+    implementation(libs.firebaseUi)
+    implementation(libs.googlePlayServicesAuth)
 
-    implementation(Deps.firebaseAnalytics)
-    implementation(Deps.firebaseCrashlytics)
-    implementation(Deps.firebaseStorage)
-    implementation(Deps.firebaseConfig)
+    implementation(libs.firebaseAnalytics)
+    implementation(libs.firebaseCrashlytics)
+    implementation(libs.firebaseStorage)
+    implementation(libs.firebaseConfig)
 
-    implementation(Deps.hilt)
-    implementation(Deps.hiltNavigationCompose)
-    kapt(Deps.hiltCompiler)
-    kapt(Deps.hiltAndroidCompiler)
+    implementation(libs.hilt)
+    implementation(libs.hiltNavigationCompose)
+    kapt(libs.hiltCompiler)
+    kapt(libs.hiltAndroidCompiler)
 
-    implementation(Deps.navigation)
-    implementation(Deps.navigationUi)
-    implementation(Deps.navigationCompose)
+    implementation(libs.bundles.navigation)
 
-    implementation(Deps.datastore)
+    implementation(libs.datastore)
 
-    implementation(Deps.okHttp)
-    implementation(Deps.okHttpInterceptor)
+    implementation(libs.okHttp)
+    implementation(libs.okHttpInterceptor)
 
-    implementation(Deps.splashScreen)
+    implementation(libs.splashScreen)
 
-    implementation(Deps.glide)
-    annotationProcessor(Deps.glideCompiler)
-    implementation(Deps.coil)
+    implementation(libs.glide)
+    annotationProcessor(libs.glideCompiler)
+    implementation(libs.coil)
 
-    implementation(Deps.paging)
-    implementation(Deps.roomRuntime)
-    implementation(Deps.room)
-    implementation(Deps.roomPaging)
-    kapt(Deps.roomCompiler)
+    implementation(libs.paging)
+    implementation(libs.bundles.room)
+    kapt(libs.roomCompiler)
 
-    implementation(Deps.viewpager)
+    implementation(libs.viewpager)
 
-    implementation(Deps.coroutinesCore)
+    implementation(libs.coroutinesCore)
 
-    implementation(Deps.lifecycle)
-    implementation(Deps.lifecycleRuntime)
-    implementation(Deps.lifecycleExtension)
-    implementation(Deps.lifecycleCommon)
-    implementation(Deps.lifecycleViewModel)
+    implementation(libs.lifecycle)
+    implementation(libs.lifecycleRuntime)
+    implementation(libs.lifecycleExtension)
+    implementation(libs.lifecycleCommon)
+    implementation(libs.lifecycleViewModel)
 
-    implementation(Deps.composeUi)
-    implementation(Deps.composeActivity)
-    implementation(Deps.composeToolingPreview)
-    debugImplementation(Deps.composeToolingUi)
-    implementation(Deps.composeFoundation)
-    implementation(Deps.composeMaterial)
-    implementation(Deps.composeMaterialIconsCore)
-    implementation(Deps.composeMaterialIconsExtended)
-    implementation(Deps.composeLiveData)
-    implementation(Deps.composeViewModel)
-    implementation(Deps.composeRuntime)
-    implementation(Deps.composeUiTestManifest)
-    implementation(Deps.composeConstraintLayout)
+    implementation(libs.bundles.compose)
+    implementation(libs.bundles.composeMaterial3)
+    implementation(libs.composeActivity)
+    implementation(libs.composeViewModel)
+    implementation(libs.composeRuntime)
+    implementation(libs.composeConstraintLayout)
+    debugImplementation(libs.composeToolingUi)
 
-    implementation(Deps.worker)
-    implementation(Deps.workerHilt)
+    implementation(libs.worker)
+    implementation(libs.workerHilt)
 
-    implementation(Deps.klaxon)
-    implementation(Deps.timber)
+    implementation(libs.klaxon)
+    implementation(libs.timber)
 
-    implementation(Deps.billing)
+    implementation(libs.billing)
 
-    implementation(Deps.androidChart)
-    implementation(Deps.dotsIndicator)
+    implementation(libs.androidChart)
+    implementation(libs.dotsIndicator)
 }
