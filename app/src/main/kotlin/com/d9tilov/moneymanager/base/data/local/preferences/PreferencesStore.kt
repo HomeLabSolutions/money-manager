@@ -8,12 +8,12 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.d9tilov.android.core.constants.DataConstants.DATA_STORE_NAME
+import com.d9tilov.android.core.constants.DataConstants.PREFERENCE_CLIENT_UID
+import com.d9tilov.android.core.constants.DataConstants.PREFERENCE_LAST_BACKUP_DATE
+import com.d9tilov.android.core.constants.DataConstants.STORE_NAME
 import com.d9tilov.moneymanager.backup.data.entity.BackupData
 import com.d9tilov.moneymanager.backup.data.entity.BackupData.Companion.UNKNOWN_BACKUP_DATE
-import com.d9tilov.moneymanager.core.constants.DataConstants.DATA_STORE_NAME
-import com.d9tilov.moneymanager.core.constants.DataConstants.PREFERENCE_CLIENT_UID
-import com.d9tilov.moneymanager.core.constants.DataConstants.PREFERENCE_LAST_BACKUP_DATE
-import com.d9tilov.moneymanager.core.constants.DataConstants.STORE_NAME
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

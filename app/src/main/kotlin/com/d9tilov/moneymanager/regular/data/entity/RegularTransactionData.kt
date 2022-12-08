@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.regular.data.entity
 
 import android.os.Parcelable
-import com.d9tilov.moneymanager.core.constants.DataConstants
+import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.util.currentDateTime
 import com.d9tilov.moneymanager.regular.domain.entity.ExecutionPeriod
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType

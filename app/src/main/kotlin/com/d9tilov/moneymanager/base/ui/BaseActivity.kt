@@ -18,7 +18,7 @@ import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.currency.data.entity.CurrencyMetaData
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
-import com.d9tilov.moneymanager.core.constants.DataConstants
+import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.util.hideLoadingDialog
 import com.d9tilov.moneymanager.core.util.isNetworkConnected
 import com.d9tilov.moneymanager.core.util.showLoadingDialog

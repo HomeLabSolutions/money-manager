@@ -7,7 +7,7 @@ import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.category.exception.CategoryException
-import com.d9tilov.moneymanager.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
+import com.d9tilov.android.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.util.countDaysRemainingNextFiscalDate
 import com.d9tilov.moneymanager.core.util.currentDate
 import com.d9tilov.moneymanager.core.util.currentDateTime

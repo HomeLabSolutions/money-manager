@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
-import com.d9tilov.moneymanager.core.constants.DataConstants.DATABASE_NAME
+import com.d9tilov.android.core.constants.DataConstants.DATABASE_NAME
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

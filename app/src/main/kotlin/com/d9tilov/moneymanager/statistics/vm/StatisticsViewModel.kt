@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.data.ResultOf
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsNavigator
 import com.d9tilov.moneymanager.billing.domain.BillingInteractor
-import com.d9tilov.moneymanager.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
+import com.d9tilov.android.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import com.d9tilov.moneymanager.statistics.domain.BaseStatisticsMenuType

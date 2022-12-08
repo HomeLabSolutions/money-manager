@@ -3,8 +3,8 @@ package com.d9tilov.moneymanager.transaction.domain.entity
 import android.location.Location
 import android.os.Parcelable
 import com.d9tilov.moneymanager.category.data.entity.Category
-import com.d9tilov.moneymanager.core.constants.DataConstants
-import com.d9tilov.moneymanager.core.constants.DataConstants.NO_ID
+import com.d9tilov.android.core.constants.DataConstants
+import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.moneymanager.core.util.currentDateTime
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction.Companion.ITEM
 import kotlinx.datetime.LocalDateTime

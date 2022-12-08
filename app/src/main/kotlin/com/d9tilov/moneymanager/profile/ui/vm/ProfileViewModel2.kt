@@ -5,7 +5,7 @@ import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
 import com.d9tilov.moneymanager.billing.domain.BillingInteractor
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.budget.domain.entity.BudgetData
-import com.d9tilov.moneymanager.core.constants.DataConstants
+import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.currency.data.entity.CurrencyMetaData
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor

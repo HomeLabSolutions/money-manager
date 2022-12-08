@@ -15,7 +15,7 @@ import androidx.core.view.setPadding
 import androidx.core.widget.TextViewCompat
 import androidx.core.widget.addTextChangedListener
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.core.constants.DataConstants.DEFAULT_CURRENCY_SYMBOL
+import com.d9tilov.android.core.constants.DataConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.DECIMAL_LENGTH
 import com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyConstants.MINUS_SIGN
 import com.d9tilov.moneymanager.core.util.CurrencyUtils.getSymbolByCode

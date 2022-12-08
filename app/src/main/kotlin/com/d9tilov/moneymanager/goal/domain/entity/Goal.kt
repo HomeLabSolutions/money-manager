@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.goal.domain.entity
 
 import android.os.Parcelable
-import com.d9tilov.moneymanager.core.constants.DataConstants
+import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.util.currentDateTime
 import kotlinx.datetime.LocalDateTime
 import kotlinx.parcelize.Parcelize

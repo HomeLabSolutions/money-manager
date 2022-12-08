@@ -8,7 +8,7 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.data.entity.CategoryDbModel
 import com.d9tilov.moneymanager.category.data.local.mapper.CategoryMapper
 import com.d9tilov.moneymanager.category.exception.CategoryException
-import com.d9tilov.moneymanager.core.constants.DataConstants.NO_ID
+import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

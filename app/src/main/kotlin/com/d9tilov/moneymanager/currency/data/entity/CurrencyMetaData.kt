@@ -1,8 +1,8 @@
 package com.d9tilov.moneymanager.currency.data.entity
 
-import com.d9tilov.moneymanager.core.constants.DataConstants
-import com.d9tilov.moneymanager.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
-import com.d9tilov.moneymanager.core.constants.DataConstants.DEFAULT_CURRENCY_SYMBOL
+import com.d9tilov.android.core.constants.DataConstants
+import com.d9tilov.android.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
+import com.d9tilov.android.core.constants.DataConstants.DEFAULT_CURRENCY_SYMBOL
 
 data class CurrencyMetaData(val clientId: String, val code: String, val symbol: String) {
 
