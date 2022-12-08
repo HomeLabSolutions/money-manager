@@ -14,7 +14,7 @@ import com.d9tilov.moneymanager.base.ui.navigator.CategorySetNavigator
 import com.d9tilov.moneymanager.category.domain.entity.CategoryGroup
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryIconsSetAdapter
 import com.d9tilov.moneymanager.category.ui.vm.CategorySetViewModel
-import com.d9tilov.moneymanager.core.constants.DataConstants.NO_ID
+import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.databinding.FragmentCategoryIconSetBinding
 import com.google.android.material.appbar.MaterialToolbar

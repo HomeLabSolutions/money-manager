@@ -1,6 +1,6 @@
 package com.d9tilov.moneymanager.currency.domain
 
-import com.d9tilov.moneymanager.core.constants.DataConstants
+import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.util.divideBy
 import com.d9tilov.moneymanager.core.util.removeScale
 import com.d9tilov.moneymanager.currency.data.entity.Currency

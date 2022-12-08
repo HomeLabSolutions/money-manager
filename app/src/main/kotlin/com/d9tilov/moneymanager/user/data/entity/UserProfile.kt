@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.user.data.entity
 
 import android.net.Uri
-import com.d9tilov.moneymanager.core.constants.DataConstants
+import com.d9tilov.android.core.constants.DataConstants
 
 data class UserProfile(
     val uid: String,

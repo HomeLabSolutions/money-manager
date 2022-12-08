@@ -2,9 +2,9 @@ package com.d9tilov.moneymanager.regular.domain.entity
 
 import android.os.Parcelable
 import com.d9tilov.moneymanager.category.data.entity.Category
-import com.d9tilov.moneymanager.core.constants.DataConstants
-import com.d9tilov.moneymanager.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
-import com.d9tilov.moneymanager.core.constants.DataConstants.DEFAULT_DATA_ID
+import com.d9tilov.android.core.constants.DataConstants
+import com.d9tilov.android.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
+import com.d9tilov.android.core.constants.DataConstants.DEFAULT_DATA_ID
 import com.d9tilov.moneymanager.core.util.currentDate
 import com.d9tilov.moneymanager.core.util.currentDateTime
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType

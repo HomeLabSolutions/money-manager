@@ -1,5 +1,6 @@
 rootProject.name = "MoneyManager"
 include(":app")
+include(":core:common")
 
 pluginManagement {
     includeBuild("build-logic")
@@ -9,3 +10,4 @@ pluginManagement {
         mavenCentral()
     }
 }
+include(":core:mylibrary")

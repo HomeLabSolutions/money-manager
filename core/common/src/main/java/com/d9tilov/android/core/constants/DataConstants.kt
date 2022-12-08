@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.core.constants
+package com.d9tilov.android.core.constants
 
 object DataConstants {
     private const val BASE_NAMESPACE = "com.d9tilov.moneymanager"

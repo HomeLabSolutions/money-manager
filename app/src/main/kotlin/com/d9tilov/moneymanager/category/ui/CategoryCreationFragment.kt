@@ -23,7 +23,7 @@ import com.d9tilov.moneymanager.category.exception.CategoryException
 import com.d9tilov.moneymanager.category.ui.CategoryIconSetFragment.Companion.ARG_CATEGORY_ICON_ID
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryColorAdapter
 import com.d9tilov.moneymanager.category.ui.vm.CategoryCreationViewModel
-import com.d9tilov.moneymanager.core.constants.DataConstants.DEFAULT_DATA_ID
+import com.d9tilov.android.core.constants.DataConstants.DEFAULT_DATA_ID
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.onChange

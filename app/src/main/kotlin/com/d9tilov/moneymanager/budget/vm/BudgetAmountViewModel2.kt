@@ -3,7 +3,7 @@ package com.d9tilov.moneymanager.budget.vm
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.BudgetAmountNavigator
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
-import com.d9tilov.moneymanager.core.constants.DataConstants.DEFAULT_CURRENCY_SYMBOL
+import com.d9tilov.android.core.constants.DataConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.core.util.CurrencyUtils.getSymbolByCode
 import dagger.hilt.android.lifecycle.HiltViewModel

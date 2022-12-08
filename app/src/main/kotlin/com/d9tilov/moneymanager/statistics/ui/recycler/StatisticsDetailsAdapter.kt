@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.core.constants.DataConstants
+import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.DATE_FORMAT
 import com.d9tilov.moneymanager.core.util.createTintDrawable

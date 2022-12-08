@@ -6,7 +6,7 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.data.entity.CategoryDbModel
 import com.d9tilov.moneymanager.category.domain.entity.categoryMap
 import com.d9tilov.moneymanager.category.domain.entity.fromCategoryRes
-import com.d9tilov.moneymanager.core.constants.DataConstants.NO_ID
+import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.moneymanager.core.util.colorMap
 import com.d9tilov.moneymanager.core.util.fromColorRes
 import javax.inject.Inject

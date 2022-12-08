@@ -169,6 +169,7 @@ repositories {
 
 dependencies {
 
+    implementation(project(":core:common"))
     implementation(libs.kotlinJdk)
     implementation(libs.kotlinDatetime)
 

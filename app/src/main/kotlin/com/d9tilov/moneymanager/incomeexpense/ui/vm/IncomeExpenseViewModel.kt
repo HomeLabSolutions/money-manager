@@ -3,7 +3,7 @@ package com.d9tilov.moneymanager.incomeexpense.ui.vm
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeExpenseNavigator
 import com.d9tilov.moneymanager.billing.domain.BillingInteractor
-import com.d9tilov.moneymanager.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
+import com.d9tilov.android.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel

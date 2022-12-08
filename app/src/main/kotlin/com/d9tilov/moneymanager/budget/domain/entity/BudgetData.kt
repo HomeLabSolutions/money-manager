@@ -1,8 +1,9 @@
 package com.d9tilov.moneymanager.budget.domain.entity
 
 import android.os.Parcelable
-import com.d9tilov.moneymanager.core.constants.DataConstants
-import com.d9tilov.moneymanager.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
+import com.d9tilov.android.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
+import com.d9tilov.android.core.constants.DataConstants.DEFAULT_DATA_ID
+import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.moneymanager.core.util.currentDateTime
 import kotlinx.datetime.LocalDateTime
 import kotlinx.parcelize.Parcelize
@@ -21,8 +22,8 @@ data class BudgetData(
 
     companion object {
         val EMPTY = BudgetData(
-            id = DataConstants.DEFAULT_DATA_ID,
-            clientId = DataConstants.NO_ID.toString(),
+            id = DEFAULT_DATA_ID,
+            clientId = NO_ID.toString(),
             currencyCode = DEFAULT_CURRENCY_CODE,
             sum = BigDecimal.ZERO,
             saveSum = BigDecimal.ZERO,

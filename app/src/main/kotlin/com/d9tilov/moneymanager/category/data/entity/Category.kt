@@ -4,8 +4,8 @@ import android.os.Parcelable
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.core.constants.DataConstants.DEFAULT_DATA_ID
-import com.d9tilov.moneymanager.core.constants.DataConstants.NO_ID
+import com.d9tilov.android.core.constants.DataConstants.DEFAULT_DATA_ID
+import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import kotlinx.parcelize.Parcelize
 
