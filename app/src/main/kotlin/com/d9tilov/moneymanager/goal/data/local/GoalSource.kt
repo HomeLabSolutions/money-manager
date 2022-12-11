@@ -1,6 +1,6 @@
 package com.d9tilov.moneymanager.goal.data.local
 
-import com.d9tilov.moneymanager.base.data.Source
+import com.d9tilov.android.core.model.Source
 import com.d9tilov.moneymanager.goal.data.entity.GoalData
 import kotlinx.coroutines.flow.Flow
 

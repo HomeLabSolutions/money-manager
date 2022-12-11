@@ -3,7 +3,7 @@ package com.d9tilov.moneymanager.backup.ui.vm
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.backup.domain.BackupInteractor
-import com.d9tilov.moneymanager.base.data.ResultOf
+import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.moneymanager.base.data.local.exceptions.NetworkException
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsBackupDeletionNavigator

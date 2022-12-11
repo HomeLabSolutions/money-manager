@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.backup.data.entity.BackupData.Companion.UNKNOWN_BACKUP_DATE
+import com.d9tilov.android.datastore.model.BackupData.Companion.UNKNOWN_BACKUP_DATE
 import com.d9tilov.moneymanager.backup.domain.BackupInteractor
 import com.d9tilov.moneymanager.base.data.local.exceptions.NetworkException
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException

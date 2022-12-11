@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.budget.data.local.mapper
 
 import com.d9tilov.moneymanager.budget.domain.entity.BudgetData
-import com.d9tilov.moneymanager.budget.data.entity.BudgetDbModel
+import com.d9tilov.android.database.entity.BudgetDbModel
 
 fun BudgetDbModel.toDataModel(): BudgetData = BudgetData(
     id,

@@ -1,7 +1,5 @@
 package com.d9tilov.moneymanager.statistics.domain
 
-import android.os.Parcelable
-
-interface BaseStatisticsMenuType : Parcelable {
+interface BaseStatisticsMenuType {
     val menuType: StatisticsMenuType
 }

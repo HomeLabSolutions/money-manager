@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.user.data.local.mapper
 
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
-import com.d9tilov.moneymanager.user.data.entity.UserDbModel
+import com.d9tilov.android.database.entity.UserDbModel
 import com.google.firebase.auth.FirebaseAuth
 
 fun UserDbModel.toDataModel(): UserProfile = UserProfile(

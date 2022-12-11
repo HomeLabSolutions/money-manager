@@ -1,7 +1,6 @@
 package com.d9tilov.moneymanager.user.data.local
 
-import com.d9tilov.moneymanager.base.data.Source
-import com.d9tilov.moneymanager.currency.data.entity.CurrencyMetaData
+import com.d9tilov.android.core.model.Source
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import kotlinx.coroutines.flow.Flow
 

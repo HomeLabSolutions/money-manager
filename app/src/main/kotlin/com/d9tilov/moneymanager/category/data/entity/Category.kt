@@ -1,15 +1,12 @@
 package com.d9tilov.moneymanager.category.data.entity
 
-import android.os.Parcelable
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
-import com.d9tilov.moneymanager.R
 import com.d9tilov.android.core.constants.DataConstants.DEFAULT_DATA_ID
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
+import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
 data class Category(
     val id: Long,
     val clientId: String,
@@ -20,7 +17,7 @@ data class Category(
     @DrawableRes val icon: Int,
     @ColorRes val color: Int,
     val usageCount: Int
-) : Parcelable {
+) {
     companion object {
         const val ALL_ITEMS_ID = -555L
         val EMPTY_INCOME = Category(

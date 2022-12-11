@@ -1,6 +1,6 @@
 package com.d9tilov.moneymanager.budget.domain
 
-import com.d9tilov.moneymanager.base.domain.Interactor
+import com.d9tilov.android.core.model.Interactor
 import com.d9tilov.moneymanager.budget.domain.entity.BudgetData
 import kotlinx.coroutines.flow.Flow
 

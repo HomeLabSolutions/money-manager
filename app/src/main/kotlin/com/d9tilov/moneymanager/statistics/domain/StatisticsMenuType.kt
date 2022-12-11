@@ -1,10 +1,6 @@
 package com.d9tilov.moneymanager.statistics.domain
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
-enum class StatisticsMenuType : Parcelable {
+enum class StatisticsMenuType {
     CURRENCY,
     CHART,
     CATEGORY_TYPE,

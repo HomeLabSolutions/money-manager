@@ -1,12 +1,12 @@
 package com.d9tilov.moneymanager.statistics.vm
 
 import androidx.lifecycle.viewModelScope
-import com.d9tilov.moneymanager.base.data.ResultOf
+import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsNavigator
 import com.d9tilov.moneymanager.billing.domain.BillingInteractor
 import com.d9tilov.android.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
-import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
+import com.d9tilov.android.interactor.CurrencyInteractor
 import com.d9tilov.moneymanager.statistics.domain.BaseStatisticsMenuType
 import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuCategoryType
 import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuChartMode
@@ -36,7 +36,7 @@ import javax.inject.Inject
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
     private val transactionInteractor: TransactionInteractor,
-    currencyInteractor: CurrencyInteractor,
+    currencyInteractor: com.d9tilov.android.interactor.CurrencyInteractor,
     billingInteractor: BillingInteractor
 ) : BaseViewModel<StatisticsNavigator>() {
 

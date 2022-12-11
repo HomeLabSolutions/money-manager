@@ -1,12 +1,12 @@
 package com.d9tilov.moneymanager.budget.domain
 
 import com.d9tilov.moneymanager.budget.domain.entity.BudgetData
-import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
+import com.d9tilov.android.interactor.CurrencyInteractor
 import kotlinx.coroutines.flow.firstOrNull
 
 class BudgetInteractorImpl(
     private val budgetRepo: BudgetRepo,
-    private val currencyInteractor: CurrencyInteractor
+    private val currencyInteractor: com.d9tilov.android.interactor.CurrencyInteractor
 ) : BudgetInteractor {
 
     override fun get() = budgetRepo.get()

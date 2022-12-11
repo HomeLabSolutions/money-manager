@@ -1,9 +1,9 @@
 package com.d9tilov.moneymanager.user.di
 
-import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
+import com.d9tilov.android.database.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.user.data.UserDataRepo
-import com.d9tilov.moneymanager.user.data.local.UserDao
+import com.d9tilov.android.database.dao.UserDao
 import com.d9tilov.moneymanager.user.data.local.UserLocalSource
 import com.d9tilov.moneymanager.user.data.local.UserSource
 import com.d9tilov.moneymanager.user.domain.UserInfoInteractor

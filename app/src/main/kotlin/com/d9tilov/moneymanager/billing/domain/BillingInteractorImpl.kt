@@ -9,9 +9,8 @@ import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails
 import com.d9tilov.moneymanager.billing.domain.entity.PremiumEmails
 import com.d9tilov.moneymanager.billing.domain.entity.PremiumInfo
-import com.d9tilov.moneymanager.currency.data.entity.Currency
-import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
-import com.d9tilov.moneymanager.currency.domain.mapper.CurrencyDomainMapper
+import com.d9tilov.android.interactor.model.DomainCurrency
+import com.d9tilov.android.interactor_impl.mapper.CurrencyDomainMapper
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
@@ -27,7 +26,7 @@ import java.io.IOException
 
 class BillingInteractorImpl(
     private val billingRepo: BillingRepo,
-    private val currencyDomainMapper: CurrencyDomainMapper
+    private val currencyDomainMapper: com.d9tilov.android.interactor_impl.mapper.CurrencyDomainMapper
 ) : BillingInteractor {
 
     private val premiumEmailList = MutableStateFlow(listOf<String>())
@@ -56,7 +55,7 @@ class BillingInteractorImpl(
     override fun getPremiumInfo(): Flow<PremiumInfo> {
         val canPurchaseFlow = flowOf(true)
 //            billingRepo.premiumProductDetails.map { productDetails -> productDetails != null }
-        val minPriceFlow = flowOf(DomainCurrency.EMPTY)
+        val minPriceFlow = flowOf(com.d9tilov.android.interactor.model.DomainCurrency.EMPTY)
 //            getSkuDetails().map { list: List<BillingSkuDetails> ->
 //            list.minOfWith({ t1, t2 -> t1.value.compareTo(t2.value) }) { it.price }
 //        }.map { item: Currency -> currencyDomainMapper.toDomain(item, false) }

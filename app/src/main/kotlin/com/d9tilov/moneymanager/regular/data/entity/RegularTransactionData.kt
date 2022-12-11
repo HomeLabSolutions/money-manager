@@ -1,16 +1,12 @@
 package com.d9tilov.moneymanager.regular.data.entity
 
-import android.os.Parcelable
 import com.d9tilov.android.core.constants.DataConstants
-import com.d9tilov.moneymanager.core.util.currentDateTime
-import com.d9tilov.moneymanager.regular.domain.entity.ExecutionPeriod
+import com.d9tilov.android.core.utils.currentDateTime
+import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
-import kotlinx.datetime.LocalDateTime
-import kotlinx.parcelize.Parcelize
-import kotlinx.parcelize.RawValue
 import java.math.BigDecimal
+import kotlinx.datetime.LocalDateTime
 
-@Parcelize
 data class RegularTransactionData(
     val id: Long = DataConstants.DEFAULT_DATA_ID,
     val clientId: String = DataConstants.NO_ID.toString(),
@@ -18,9 +14,9 @@ data class RegularTransactionData(
     val sum: BigDecimal,
     val categoryId: Long,
     val currencyCode: String,
-    val createdDate: @RawValue LocalDateTime = currentDateTime(),
+    val createdDate: LocalDateTime = currentDateTime(),
     val executionPeriod: ExecutionPeriod,
     val description: String,
     val pushEnable: Boolean = true,
     val autoAdd: Boolean = false
-) : Parcelable
+)

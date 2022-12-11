@@ -15,7 +15,7 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.category.ui.CategoryFragmentArgs
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryModifyAdapter
-import com.d9tilov.moneymanager.core.events.OnBackPressed
+import com.d9tilov.android.core.events.OnBackPressed
 import com.d9tilov.moneymanager.core.ui.BaseNavigator
 import com.d9tilov.moneymanager.core.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.moneymanager.databinding.FragmentCategoryBinding

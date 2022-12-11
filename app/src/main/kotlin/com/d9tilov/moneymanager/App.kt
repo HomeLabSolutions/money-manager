@@ -31,8 +31,4 @@ class App : Application() {
         }
         Sync.initialize(context = this)
     }
-
-    companion object {
-        const val TAG = "[MoneyManager]"
-    }
 }

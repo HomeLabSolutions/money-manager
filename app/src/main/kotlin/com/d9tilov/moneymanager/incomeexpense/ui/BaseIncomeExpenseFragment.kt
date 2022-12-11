@@ -6,19 +6,17 @@ import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import androidx.viewbinding.ViewBinding
+import com.d9tilov.android.core.events.OnDialogDismissListener
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.Inflate
 import com.d9tilov.moneymanager.base.ui.navigator.BaseIncomeExpenseNavigator
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.ui.recycler.CategoryAdapter
-import com.d9tilov.moneymanager.core.events.OnDialogDismissListener
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showWithAnimation
@@ -31,7 +29,6 @@ import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.isIncome
 import com.d9tilov.moneymanager.transaction.ui.TransactionAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : ViewBinding>(
@@ -69,25 +66,6 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : Vi
             findNavController().currentBackStackEntry?.savedStateHandle?.remove<Category>(
                 IncomeExpenseFragment.ARG_TRANSACTION_CREATED
             )
-        }
-        (viewModel as BaseIncomeExpenseViewModel<N>).addTransactionEvent().observe(
-            viewLifecycleOwner
-        ) {
-            isTransactionDataEmpty = false
-            hideViewStub()
-            resetMainSum()
-            (requireParentFragment() as IncomeExpenseFragment).closeKeyboard()
-            transactionRvList?.scrollToPosition(0)
-        }
-        lifecycleScope.launch {
-            transactionAdapter
-                .loadStateFlow
-                .collect { loadStates ->
-                    val isDataEmpty =
-                        loadStates.source.refresh is LoadState.NotLoading && loadStates.append.endOfPaginationReached && transactionAdapter.itemCount == 0
-                    isTransactionDataEmpty = isDataEmpty
-                    if (isTransactionDataEmpty) showViewStub() else hideViewStub()
-                }
         }
         transactionRvList?.addOnScrollListener(
             object : RecyclerView.OnScrollListener() {

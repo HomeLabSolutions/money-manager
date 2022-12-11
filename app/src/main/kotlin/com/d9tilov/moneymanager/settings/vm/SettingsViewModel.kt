@@ -3,7 +3,7 @@ package com.d9tilov.moneymanager.settings.vm
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.backup.data.entity.BackupData
+import com.d9tilov.android.datastore.model.BackupData
 import com.d9tilov.moneymanager.backup.domain.BackupInteractor
 import com.d9tilov.moneymanager.base.data.local.exceptions.NetworkException
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
@@ -43,7 +43,7 @@ class SettingsViewModel @Inject constructor(
 
     val backupData = backupInteractor.getBackupData()
         .flowOn(Dispatchers.IO)
-        .stateIn(viewModelScope, SharingStarted.Eagerly, BackupData.EMPTY)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, com.d9tilov.android.datastore.model.BackupData.EMPTY)
 //    val minBillingPrice = billingInteractor.getMinPrice()
 //        .flowOn(Dispatchers.IO + minPriceExceptionHandler)
 //        .stateIn(viewModelScope, SharingStarted.Eagerly, DomainCurrency.EMPTY)

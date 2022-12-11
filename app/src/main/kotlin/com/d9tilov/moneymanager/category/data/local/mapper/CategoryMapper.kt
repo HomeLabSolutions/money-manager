@@ -3,7 +3,7 @@ package com.d9tilov.moneymanager.category.data.local.mapper
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.entity.PrepopulateCategory
 import com.d9tilov.moneymanager.category.data.entity.Category
-import com.d9tilov.moneymanager.category.data.entity.CategoryDbModel
+import com.d9tilov.android.database.entity.CategoryDbModel
 import com.d9tilov.moneymanager.category.domain.entity.categoryMap
 import com.d9tilov.moneymanager.category.domain.entity.fromCategoryRes
 import com.d9tilov.android.core.constants.DataConstants.NO_ID

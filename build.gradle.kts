@@ -25,6 +25,10 @@ allprojects {
     }
 }
 
+extra["compileSdkVersion"] = 33
+extra["minSdkVersion"] = 21
+extra["targetSdkVersion"] = 33
+
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }

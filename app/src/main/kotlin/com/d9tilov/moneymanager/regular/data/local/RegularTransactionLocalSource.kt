@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.regular.data.local
 
+import com.d9tilov.android.database.dao.RegularTransactionDao
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.category.data.entity.Category

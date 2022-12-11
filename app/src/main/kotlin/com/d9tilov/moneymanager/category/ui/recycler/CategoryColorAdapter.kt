@@ -10,7 +10,7 @@ import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.core.events.OnItemClickListener
+import com.d9tilov.android.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.ui.color.ColorManager
 import com.d9tilov.moneymanager.databinding.ItemColorPickerBinding

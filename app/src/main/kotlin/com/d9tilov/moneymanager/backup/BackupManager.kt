@@ -4,14 +4,14 @@ import android.content.Context
 import android.net.Uri
 import com.d9tilov.android.core.constants.DataConstants.DATABASE_NAME
 import com.d9tilov.moneymanager.App
-import com.d9tilov.moneymanager.backup.data.entity.BackupData
-import com.d9tilov.moneymanager.base.data.ResultOf
+import com.d9tilov.android.datastore.model.BackupData
+import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.moneymanager.base.data.local.exceptions.NetworkException
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
-import com.d9tilov.moneymanager.core.util.currentDateTime
+import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.moneymanager.core.util.isNetworkConnected
-import com.d9tilov.moneymanager.core.util.toMillis
+import com.d9tilov.android.core.utils.toMillis
 import com.google.firebase.FirebaseException
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -32,7 +32,7 @@ import kotlin.coroutines.resumeWithException
 
 class BackupManager(private val context: Context, private val preferencesStore: PreferencesStore) {
 
-    suspend fun backupDb(): ResultOf<BackupData> {
+    suspend fun backupDb(): ResultOf<com.d9tilov.android.datastore.model.BackupData> {
         Timber.tag(App.TAG).d("Backup backupDb before")
         val uid = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
         Timber.tag(App.TAG).d("Backup backupDb: $uid")
@@ -61,7 +61,7 @@ class BackupManager(private val context: Context, private val preferencesStore: 
                     if (!continuation.isActive) return@addOnSuccessListener
                     val backupDate = currentDateTime().toMillis()
                     runBlocking { preferencesStore.updateLastBackupDate(backupDate) }
-                    continuation.resume(ResultOf.Success(BackupData.EMPTY.copy(lastBackupTimestamp = backupDate)))
+                    continuation.resume(ResultOf.Success(com.d9tilov.android.datastore.model.BackupData.EMPTY.copy(lastBackupTimestamp = backupDate)))
                     Timber.tag(App.TAG).d("Backup was compete successfully")
                 }
                 .addOnFailureListener {

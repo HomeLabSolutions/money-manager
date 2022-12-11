@@ -49,7 +49,7 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.budget.ui.BudgetScreen
-import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
+import com.d9tilov.android.interactor.model.DomainCurrency
 import com.d9tilov.moneymanager.currency.ui.CurrencyListScreen
 import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.prepopulate.ui.PrepopulateScreen.Companion.fromScreenId
@@ -75,7 +75,7 @@ fun PrepopulateScreen(prepopulateViewModel: PrepopulateViewModel = hiltViewModel
 @Composable
 fun PrepopulateScreen(
     uiState: PrepopulateUiState,
-    clickCallback: (currency: DomainCurrency) -> Unit,
+    clickCallback: (currency: com.d9tilov.android.interactor.model.DomainCurrency) -> Unit,
     onBudgetInputChanged: (String) -> Unit,
     onBudgetSaveAndComplete: () -> Unit
 ) {

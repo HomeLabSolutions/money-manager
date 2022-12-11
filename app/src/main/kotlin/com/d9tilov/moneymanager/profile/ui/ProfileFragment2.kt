@@ -14,8 +14,8 @@ import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
 import com.d9tilov.moneymanager.budget.navigation.budgetScreen
 import com.d9tilov.moneymanager.budget.navigation.navigateToBudgetScreen
-import com.d9tilov.moneymanager.currency.navigation.currencyScreen
-import com.d9tilov.moneymanager.currency.navigation.navigateToCurrencyListScreen
+import com.d9tilov.android.ui.navigation.currencyScreen
+import com.d9tilov.android.ui.navigation.navigateToCurrencyListScreen
 import com.d9tilov.moneymanager.databinding.FragmentProfileBinding
 import com.d9tilov.moneymanager.profile.navigation.profileNavigationRoute
 import com.d9tilov.moneymanager.profile.navigation.profileScreen
