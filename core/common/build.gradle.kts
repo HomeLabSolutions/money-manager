@@ -1,7 +1,9 @@
 plugins {
     id("kotlin")
- }
+}
 
 dependencies {
-    testImplementation(libs.junit)
+
+    implementation(libs.kotlinDatetime)
+    implementation(libs.coroutinesCore)
 }

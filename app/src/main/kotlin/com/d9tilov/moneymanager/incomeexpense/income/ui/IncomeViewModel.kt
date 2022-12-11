@@ -8,8 +8,8 @@ import androidx.paging.map
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeNavigator
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
-import com.d9tilov.moneymanager.core.util.getEndOfDay
-import com.d9tilov.moneymanager.core.util.isSameDay
+import com.d9tilov.android.core.utils.getEndOfDay
+import com.d9tilov.android.core.utils.isSameDay
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
@@ -68,7 +68,6 @@ class IncomeViewModel @Inject constructor(
                         )
                     )
                 }
-                addTransactionEvent.call()
             } else navigator?.showEmptySumError()
         }
     }

@@ -1,6 +1,6 @@
 package com.d9tilov.moneymanager.category.di
 
-import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
+import com.d9tilov.android.database.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.PrepopulateDataManager
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.category.data.CategoryRepoImpl

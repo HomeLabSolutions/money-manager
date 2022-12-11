@@ -9,9 +9,9 @@ import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
 import com.d9tilov.moneymanager.billing.domain.BillingInteractor
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
-import com.d9tilov.moneymanager.core.util.currentDateTime
-import com.d9tilov.moneymanager.core.util.getEndOfDay
-import com.d9tilov.moneymanager.core.util.isSameDay
+import com.d9tilov.android.core.utils.currentDateTime
+import com.d9tilov.android.core.utils.getEndOfDay
+import com.d9tilov.android.core.utils.isSameDay
 import com.d9tilov.moneymanager.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
@@ -127,7 +127,6 @@ class ExpenseViewModel @Inject constructor(
                         )
                     )
                 }
-                addTransactionEvent.call()
             } else navigator?.showEmptySumError()
         }
     }

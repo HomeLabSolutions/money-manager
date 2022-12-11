@@ -1,18 +1,14 @@
 package com.d9tilov.moneymanager.transaction.domain.entity
 
 import android.location.Location
-import android.os.Parcelable
-import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
-import com.d9tilov.moneymanager.core.util.currentDateTime
+import com.d9tilov.android.core.utils.currentDateTime
+import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction.Companion.ITEM
-import kotlinx.datetime.LocalDateTime
-import kotlinx.parcelize.Parcelize
-import kotlinx.parcelize.RawValue
 import java.math.BigDecimal
+import kotlinx.datetime.LocalDateTime
 
-@Parcelize
 data class Transaction(
     val id: Long,
     val clientId: String,
@@ -21,7 +17,7 @@ data class Transaction(
     val currencyCode: String,
     val sum: BigDecimal,
     val usdSum: BigDecimal,
-    val date: @RawValue LocalDateTime,
+    val date: LocalDateTime,
     val description: String,
     val qrCode: String?,
     val isRegular: Boolean,
@@ -29,7 +25,7 @@ data class Transaction(
     val location: Location?,
     val photoUri: String?,
     override val headerPosition: Int
-) : BaseTransaction, Parcelable {
+) : BaseTransaction {
 
     companion object {
         val EMPTY = Transaction(

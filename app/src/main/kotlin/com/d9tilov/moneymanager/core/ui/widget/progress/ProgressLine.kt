@@ -8,7 +8,7 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.core.util.divideBy
+import com.d9tilov.android.core.utils.divideBy
 
 class ProgressLine @JvmOverloads constructor(
     context: Context,

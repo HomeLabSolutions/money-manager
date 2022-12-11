@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.d9tilov.moneymanager.category.domain.entity.CategoryGroupItem
-import com.d9tilov.moneymanager.core.events.OnItemClickListener
+import com.d9tilov.android.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.databinding.ItemCategoryGroupItemBinding
 

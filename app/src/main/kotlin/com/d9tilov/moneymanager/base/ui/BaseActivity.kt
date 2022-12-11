@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.currency.data.entity.CurrencyMetaData
+import com.d9tilov.android.repo.model.CurrencyMetaData
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.util.hideLoadingDialog
@@ -32,7 +32,7 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
     private val contentLayout: ViewGroup by lazy { findViewById<ViewGroup>(android.R.id.content) }
 
     private val preferenceDataStore: PreferencesStore by lazy { PreferencesStore(this) }
-    private var currency = CurrencyMetaData(
+    private var currency = com.d9tilov.android.repo.model.CurrencyMetaData(
         DataConstants.NO_ID.toString(),
         DataConstants.DEFAULT_CURRENCY_CODE,
         DataConstants.DEFAULT_CURRENCY_SYMBOL

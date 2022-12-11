@@ -28,7 +28,10 @@ android {
         }
     }
 
-    compileSdk = 33
+    val compileSdkVersion: Int by rootProject.extra
+    val minSdkVersion: Int by rootProject.extra
+    val targetSdkVersion: Int by rootProject.extra
+    compileSdk = compileSdkVersion
     buildToolsVersion = "33.0.0"
 
     defaultConfig {
@@ -38,12 +41,11 @@ android {
         val versionBuild = 5
 
         applicationId = "com.d9tilov.moneymanager"
-        minSdk = 21
-        targetSdk = 33
+        minSdk = minSdkVersion
+        targetSdk = targetSdkVersion
         versionCode = 1000 * (1000 * versionMajor + 100 * versionMinor + versionPatch) + versionBuild
         versionName = "${versionMajor}.${versionMinor}.${versionPatch}.${versionBuild}"
 
-        buildConfigField("String", "API_KEY", keystoreProperties["currency_api_key"] as String)
         buildConfigField("String", "SALT", keystoreProperties["database_salt"] as String)
         buildConfigField(
             "String",
@@ -170,6 +172,10 @@ repositories {
 dependencies {
 
     implementation(project(":core:common"))
+    implementation(project(":core:common-android"))
+    implementation(project(":core:database"))
+    implementation(project(":core:designsystem"))
+
     implementation(libs.kotlinJdk)
     implementation(libs.kotlinDatetime)
 
@@ -180,8 +186,6 @@ dependencies {
     implementation(libs.constraintLayout)
 
     implementation(libs.fragment)
-
-    implementation(libs.bundles.retrofit)
 
     implementation(libs.firebase)
     implementation(platform(libs.firebaseBom))
@@ -199,11 +203,6 @@ dependencies {
     kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.bundles.navigation)
-
-    implementation(libs.datastore)
-
-    implementation(libs.okHttp)
-    implementation(libs.okHttpInterceptor)
 
     implementation(libs.splashScreen)
 

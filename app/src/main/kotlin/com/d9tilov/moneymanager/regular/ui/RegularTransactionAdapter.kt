@@ -6,13 +6,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.core.events.OnItemClickListener
-import com.d9tilov.moneymanager.core.events.OnItemSwipeListener
+import com.d9tilov.android.core.events.OnItemClickListener
+import com.d9tilov.android.core.events.OnItemSwipeListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.databinding.ItemRegularTransactionBinding
-import com.d9tilov.moneymanager.regular.domain.entity.ExecutionPeriod
-import com.d9tilov.moneymanager.regular.domain.entity.PeriodType
+import com.d9tilov.android.core.model.ExecutionPeriod
+import com.d9tilov.android.core.model.PeriodType
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.regular.domain.entity.WeekDays
 import com.d9tilov.moneymanager.regular.ui.diff.RegularTransactionDiffUtil

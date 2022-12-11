@@ -5,7 +5,7 @@ import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
-import com.d9tilov.moneymanager.base.data.Source
+import com.d9tilov.android.core.model.Source
 import kotlinx.coroutines.flow.Flow
 
 interface BillingSource : Source {

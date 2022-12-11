@@ -1,6 +1,6 @@
 package com.d9tilov.moneymanager.regular.domain
 
-import com.d9tilov.moneymanager.base.domain.Interactor
+import com.d9tilov.android.core.model.Interactor
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType

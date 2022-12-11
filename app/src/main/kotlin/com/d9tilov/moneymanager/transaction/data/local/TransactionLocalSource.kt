@@ -7,8 +7,9 @@ import androidx.paging.map
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.category.data.entity.Category
-import com.d9tilov.moneymanager.core.util.getEndOfDay
-import com.d9tilov.moneymanager.core.util.getStartOfDay
+import com.d9tilov.android.core.utils.getEndOfDay
+import com.d9tilov.android.core.utils.getStartOfDay
+import com.d9tilov.android.database.dao.TransactionDao
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.data.mapper.toDataModel
 import com.d9tilov.moneymanager.transaction.data.mapper.toDbModel

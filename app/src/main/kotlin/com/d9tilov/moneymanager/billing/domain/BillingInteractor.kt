@@ -7,7 +7,6 @@ import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails
 import com.d9tilov.moneymanager.billing.domain.entity.PremiumInfo
-import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
 import kotlinx.coroutines.flow.Flow
 
 interface BillingInteractor {

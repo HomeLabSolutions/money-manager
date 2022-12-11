@@ -50,9 +50,9 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.backup.PeriodicBackupWorker
 import com.d9tilov.moneymanager.core.ui.views.CurrencyTextFieldExtraSmall
 import com.d9tilov.moneymanager.core.ui.views.SimpleDialog
-import com.d9tilov.moneymanager.core.util.CurrencyUtils
-import com.d9tilov.moneymanager.core.util.CurrencyUtils.getSymbolByCode
-import com.d9tilov.moneymanager.core.util.toBudgetCreatedDateStr
+import com.d9tilov.android.core.utils.CurrencyUtils
+import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
+import com.d9tilov.android.core.utils.toBudgetCreatedDateStr
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileUiItem
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileUiState
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileViewModel2

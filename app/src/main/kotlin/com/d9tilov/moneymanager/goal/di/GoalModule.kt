@@ -1,9 +1,9 @@
 package com.d9tilov.moneymanager.goal.di
 
-import com.d9tilov.moneymanager.base.data.local.db.AppDatabase
+import com.d9tilov.android.database.AppDatabase
 import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
-import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
+import com.d9tilov.android.interactor.CurrencyInteractor
 import com.d9tilov.moneymanager.goal.data.GoalRepoImpl
 import com.d9tilov.moneymanager.goal.data.local.GoalLocalSource
 import com.d9tilov.moneymanager.goal.data.local.GoalSource
@@ -32,7 +32,7 @@ class GoalModule {
     @Provides
     fun provideGoalInteractor(
         goalRepo: GoalRepo,
-        currencyInteractor: CurrencyInteractor,
+        currencyInteractor: com.d9tilov.android.interactor.CurrencyInteractor,
         budgetInteractor: BudgetInteractor,
         goalDomainMapper: GoalDomainMapper
     ): GoalInteractor =

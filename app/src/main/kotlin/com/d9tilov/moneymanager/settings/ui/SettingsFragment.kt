@@ -11,8 +11,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.d9tilov.android.core.utils.toBackupDate
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.backup.data.entity.BackupData
+import com.d9tilov.android.datastore.model.BackupData
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
 import com.d9tilov.moneymanager.core.util.debounce
@@ -20,7 +21,6 @@ import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
-import com.d9tilov.moneymanager.core.util.toBackupDate
 import com.d9tilov.moneymanager.databinding.FragmentSettingsBinding
 import com.d9tilov.moneymanager.settings.vm.SettingsViewModel
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
@@ -78,7 +78,7 @@ class SettingsFragment :
                     }
                     launch {
                         viewModel.backupData.collect { data ->
-                            if (data.lastBackupTimestamp == BackupData.UNKNOWN_BACKUP_DATE) {
+                            if (data.lastBackupTimestamp == com.d9tilov.android.datastore.model.BackupData.UNKNOWN_BACKUP_DATE) {
                                 settingsBackupInfo.setText(R.string.settings_backup_empty)
                                 settingsBackupDelete.gone()
                             } else {

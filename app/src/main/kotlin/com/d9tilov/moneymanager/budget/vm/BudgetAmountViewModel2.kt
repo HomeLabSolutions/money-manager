@@ -5,7 +5,7 @@ import com.d9tilov.moneymanager.base.ui.navigator.BudgetAmountNavigator
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.android.core.constants.DataConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
-import com.d9tilov.moneymanager.core.util.CurrencyUtils.getSymbolByCode
+import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

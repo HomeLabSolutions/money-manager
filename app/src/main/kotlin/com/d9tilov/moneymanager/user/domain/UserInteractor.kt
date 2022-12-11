@@ -1,6 +1,6 @@
 package com.d9tilov.moneymanager.user.domain
 
-import com.d9tilov.moneymanager.base.domain.Interactor
+import com.d9tilov.android.core.model.Interactor
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow

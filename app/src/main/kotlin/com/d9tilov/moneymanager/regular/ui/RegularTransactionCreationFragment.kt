@@ -17,6 +17,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.RegularTransactionCreatedNavigator
@@ -25,21 +26,20 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.data.entity.isEmpty
 import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination
 import com.d9tilov.moneymanager.core.util.createTintDrawable
-import com.d9tilov.moneymanager.core.util.currentDate
-import com.d9tilov.moneymanager.core.util.currentDateTime
-import com.d9tilov.moneymanager.core.util.getStartOfDay
+import com.d9tilov.android.core.utils.currentDateTime
+import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hide
 import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.core.util.toBigDecimal
-import com.d9tilov.moneymanager.currency.domain.entity.CurrencyDestination
-import com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency
+import com.d9tilov.android.interactor.model.CurrencyDestination
+import com.d9tilov.android.interactor.model.DomainCurrency
 import com.d9tilov.moneymanager.currency.ui.CurrencyFragment
 import com.d9tilov.moneymanager.databinding.FragmentRegularTransactionCreationBinding
-import com.d9tilov.moneymanager.regular.domain.entity.ExecutionPeriod
-import com.d9tilov.moneymanager.regular.domain.entity.PeriodType
+import com.d9tilov.android.core.model.ExecutionPeriod
+import com.d9tilov.android.core.model.PeriodType
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.regular.domain.entity.WeekDays
 import com.d9tilov.moneymanager.regular.vm.CreatedRegularTransactionViewModel
@@ -95,10 +95,10 @@ class RegularTransactionCreationFragment :
                         updateCategoryIcon()
                         updateSaveButtonState()
                     }
-                getLiveData<DomainCurrency>(CurrencyFragment.ARG_CURRENCY)
+                getLiveData<com.d9tilov.android.interactor.model.DomainCurrency>(CurrencyFragment.ARG_CURRENCY)
                     .observe(viewLifecycleOwner) {
                         localTransaction = localTransaction.copy(currencyCode = it.code)
-                        findNavController().currentBackStackEntry?.savedStateHandle?.remove<DomainCurrency>(
+                        findNavController().currentBackStackEntry?.savedStateHandle?.remove<com.d9tilov.android.interactor.model.DomainCurrency>(
                             CurrencyFragment.ARG_CURRENCY
                         )
                         updateCurrency()
@@ -215,7 +215,7 @@ class RegularTransactionCreationFragment :
     private fun toCurrencyScreen() {
         val action =
             RegularTransactionCreationFragmentDirections.toCurrencyDest(
-                CurrencyDestination.EditRegularTransactionScreen,
+                com.d9tilov.android.interactor.model.CurrencyDestination.EditRegularTransactionScreen,
                 localTransaction.currencyCode
             )
         findNavController().navigate(action)

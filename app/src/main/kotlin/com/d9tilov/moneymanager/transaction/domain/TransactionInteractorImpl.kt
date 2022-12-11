@@ -8,19 +8,19 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.category.exception.CategoryException
 import com.d9tilov.android.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
-import com.d9tilov.moneymanager.core.util.countDaysRemainingNextFiscalDate
-import com.d9tilov.moneymanager.core.util.currentDate
-import com.d9tilov.moneymanager.core.util.currentDateTime
-import com.d9tilov.moneymanager.core.util.divideBy
-import com.d9tilov.moneymanager.core.util.getEndDateOfFiscalPeriod
-import com.d9tilov.moneymanager.core.util.getEndOfDay
-import com.d9tilov.moneymanager.core.util.getStartDateOfFiscalPeriod
-import com.d9tilov.moneymanager.core.util.getStartOfDay
-import com.d9tilov.moneymanager.core.util.isSameDay
-import com.d9tilov.moneymanager.currency.domain.CurrencyInteractor
+import com.d9tilov.android.core.utils.countDaysRemainingNextFiscalDate
+import com.d9tilov.android.core.utils.currentDate
+import com.d9tilov.android.core.utils.currentDateTime
+import com.d9tilov.android.core.utils.divideBy
+import com.d9tilov.android.core.utils.getEndDateOfFiscalPeriod
+import com.d9tilov.android.core.utils.getEndOfDay
+import com.d9tilov.android.core.utils.getStartDateOfFiscalPeriod
+import com.d9tilov.android.core.utils.getStartOfDay
+import com.d9tilov.android.core.utils.isSameDay
+import com.d9tilov.android.interactor.CurrencyInteractor
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
-import com.d9tilov.moneymanager.regular.domain.entity.ExecutionPeriod
-import com.d9tilov.moneymanager.regular.domain.entity.PeriodType
+import com.d9tilov.android.core.model.ExecutionPeriod
+import com.d9tilov.android.core.model.PeriodType
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
@@ -57,7 +57,7 @@ class TransactionInteractorImpl(
     private val regularTransactionInteractor: RegularTransactionInteractor,
     private val categoryInteractor: CategoryInteractor,
     private val userInteractor: UserInteractor,
-    private val currencyInteractor: CurrencyInteractor,
+    private val currencyInteractor: com.d9tilov.android.interactor.CurrencyInteractor,
     private val budgetInteractor: BudgetInteractor
 ) : TransactionInteractor {
 

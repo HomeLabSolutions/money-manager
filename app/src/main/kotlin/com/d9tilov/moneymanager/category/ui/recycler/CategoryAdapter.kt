@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.ui.diff.CategoryDiffUtil
-import com.d9tilov.moneymanager.core.events.OnItemClickListener
+import com.d9tilov.android.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.databinding.ItemCategoryBaseBinding
