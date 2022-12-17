@@ -1,10 +1,10 @@
 package com.d9tilov.moneymanager.budget.domain
 
-import com.d9tilov.android.core.model.Interactor
+
 import com.d9tilov.moneymanager.budget.domain.entity.BudgetData
 import kotlinx.coroutines.flow.Flow
 
-interface BudgetInteractor : Interactor {
+interface BudgetInteractor {
 
     fun get(): Flow<BudgetData>
     suspend fun create()

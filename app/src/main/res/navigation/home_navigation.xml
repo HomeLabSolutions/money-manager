@@ -28,12 +28,6 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-        <action
-            android:id="@+id/to_currency_dest"
-            app:destination="@id/currency_dest"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
     </fragment>
 
@@ -81,7 +75,7 @@
             app:argType="com.d9tilov.moneymanager.category.domain.entity.CategoryDestination" />
         <argument
             android:name="transactionType"
-            app:argType="com.d9tilov.moneymanager.transaction.domain.entity.TransactionType" />
+            app:argType="com.d9tilov.android.core.model.TransactionType" />
     </fragment>
 
     <fragment
@@ -127,7 +121,7 @@
             app:argType="com.d9tilov.moneymanager.category.domain.entity.CategoryDestination" />
         <argument
             android:name="transactionType"
-            app:argType="com.d9tilov.moneymanager.transaction.domain.entity.TransactionType" />
+            app:argType="com.d9tilov.android.core.model.TransactionType" />
         <argument
             android:name="parent_category"
             app:argType="com.d9tilov.moneymanager.category.data.entity.Category" />
@@ -150,16 +144,9 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
-        <action
-            android:id="@+id/to_currency_dest"
-            app:destination="@id/currency_dest"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-
         <argument
             android:name="transactionType"
-            app:argType="com.d9tilov.moneymanager.transaction.domain.entity.TransactionType" />
+            app:argType="com.d9tilov.android.core.model.TransactionType" />
         <argument
             android:name="edited_transaction"
             app:argType="com.d9tilov.moneymanager.transaction.domain.entity.Transaction" />
@@ -230,62 +217,6 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
-    <fragment
-        android:id="@+id/currency_dest"
-        android:name="com.d9tilov.moneymanager.currency.ui.CurrencyFragment"
-        android:label="fragment_title_currency"
-        tools:layout="@layout/fragment_currency">
-
-        <action
-            android:id="@+id/to_edit_transaction_dest"
-            app:destination="@id/edit_transaction_dest"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@+id/edit_transaction_dest"
-            app:popUpToInclusive="true" />
-
-        <action
-            android:id="@+id/to_common_amount_dest"
-            app:destination="@id/budget_amount_dest"
-            app:enterAnim="@anim/slide_up_enter"
-            app:exitAnim="@anim/slide_up_exit"
-            app:popEnterAnim="@anim/slide_down_enter"
-            app:popExitAnim="@anim/slide_down_exit" />
-
-        <action
-            android:id="@+id/to_change_currency_dialog"
-            app:destination="@id/change_currency_dialog"
-            app:enterAnim="@anim/slide_up_enter"
-            app:exitAnim="@anim/slide_up_exit"
-            app:popEnterAnim="@anim/slide_down_enter"
-            app:popExitAnim="@anim/slide_down_exit" />
-
-        <argument
-            android:name="destination"
-            android:defaultValue="@null"
-            app:argType="com.d9tilov.moneymanager.currency.domain.entity.CurrencyDestination"
-            app:nullable="true" />
-
-        <argument
-            android:name="currencyCode"
-            android:defaultValue="@null"
-            app:argType="string"
-            app:nullable="true" />
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/budget_amount_dest"
-        android:name="com.d9tilov.moneymanager.budget.ui.BudgetAmountFragment"
-        android:label="fragment_title_screen"
-        tools:layout="@layout/fragment_budget_amount">
-
-        <argument
-            android:name="destination"
-            app:argType="com.d9tilov.moneymanager.budget.domain.entity.BudgetDestination"/>
-    </fragment>
-
     <dialog
         android:id="@+id/remove_transaction_dialog"
         android:name="com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialog"
@@ -311,7 +242,7 @@
 
         <argument
             android:name="transactionType"
-            app:argType="com.d9tilov.moneymanager.transaction.domain.entity.TransactionType" />
+            app:argType="com.d9tilov.android.core.model.TransactionType" />
         <argument
             android:name="firstCategory"
             app:argType="com.d9tilov.moneymanager.category.data.entity.Category" />
@@ -351,13 +282,4 @@
             app:argType="com.d9tilov.moneymanager.category.data.entity.Category" />
     </dialog>
 
-    <dialog
-        android:id="@+id/change_currency_dialog"
-        android:name="com.d9tilov.moneymanager.currency.ui.CurrencyChangeDialog"
-        tools:layout="@layout/fragment_dialog_change_currency">
-
-        <argument
-            android:name="currency"
-            app:argType="com.d9tilov.moneymanager.currency.domain.entity.DomainCurrency" />
-    </dialog>
 </navigation>

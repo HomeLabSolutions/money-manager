@@ -3,7 +3,6 @@ package com.d9tilov.moneymanager.home.ui
 import android.animation.ObjectAnimator
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import androidx.activity.viewModels

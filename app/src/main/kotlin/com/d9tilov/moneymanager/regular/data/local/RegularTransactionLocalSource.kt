@@ -2,12 +2,12 @@ package com.d9tilov.moneymanager.regular.data.local
 
 import com.d9tilov.android.database.dao.RegularTransactionDao
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
-import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
+import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.regular.data.entity.RegularTransactionData
 import com.d9tilov.moneymanager.regular.data.local.mapper.toDataModel
 import com.d9tilov.moneymanager.regular.data.local.mapper.toDbModel
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
+import com.d9tilov.android.core.model.TransactionType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull

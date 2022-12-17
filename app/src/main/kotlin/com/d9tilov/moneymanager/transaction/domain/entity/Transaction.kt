@@ -1,9 +1,11 @@
 package com.d9tilov.moneymanager.transaction.domain.entity
 
 import android.location.Location
+import com.d9tilov.android.common_android.utils.currentDateTime
+import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
-import com.d9tilov.android.core.utils.currentDateTime
+import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction.Companion.ITEM
 import java.math.BigDecimal
@@ -33,7 +35,7 @@ data class Transaction(
             clientId = NO_ID.toString(),
             type = TransactionType.EXPENSE,
             category = Category.EMPTY_EXPENSE,
-            currencyCode = DataConstants.DEFAULT_CURRENCY_CODE,
+            currencyCode = DEFAULT_CURRENCY_CODE,
             sum = BigDecimal.ZERO,
             usdSum = BigDecimal.ZERO,
             date = currentDateTime(),

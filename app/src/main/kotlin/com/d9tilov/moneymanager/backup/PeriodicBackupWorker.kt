@@ -7,6 +7,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.backup.domain.BackupInteractor
 import com.d9tilov.moneymanager.base.data.local.exceptions.NetworkException
@@ -26,22 +27,22 @@ class PeriodicBackupWorker @AssistedInject constructor(
 ) : CoroutineWorker(context, workerParameters) {
 
     override suspend fun doWork(): Result {
-        Timber.tag(App.TAG).d("Do work...")
+        Timber.tag(TAG).d("Do work...")
         return try {
             backupInteractor.makeBackup()
-            Timber.tag(App.TAG).d("Do work with success")
+            Timber.tag(TAG).d("Do work with success")
             Result.success()
         } catch (ex: NetworkException) {
-            Timber.tag(App.TAG).d("Do work with network exception: $ex")
+            Timber.tag(TAG).d("Do work with network exception: $ex")
             Result.failure()
         } catch (ex: WrongUidException) {
-            Timber.tag(App.TAG).d("Do work with wrong uid exception: $ex")
+            Timber.tag(TAG).d("Do work with wrong uid exception: $ex")
             Result.failure()
         } catch (ex: FileNotFoundException) {
-            Timber.tag(App.TAG).d("Do work with file not found error: $ex")
+            Timber.tag(TAG).d("Do work with file not found error: $ex")
             Result.failure()
         } catch (ex: FirebaseException) {
-            Timber.tag(App.TAG).d("Do work with exception: $ex")
+            Timber.tag(TAG).d("Do work with exception: $ex")
             Result.failure()
         }
     }
@@ -51,7 +52,7 @@ class PeriodicBackupWorker @AssistedInject constructor(
         private const val PERIOD_WORK_IN_HOURS = 24L
 
         fun startPeriodicJob(context: Context) {
-            Timber.tag(App.TAG).d("Start backup periodic job")
+            Timber.tag(TAG).d("Start backup periodic job")
             val recurringWork = PeriodicWorkRequest
                 .Builder(
                     PeriodicBackupWorker::class.java,
@@ -70,7 +71,7 @@ class PeriodicBackupWorker @AssistedInject constructor(
         }
 
         fun stopPeriodicJob(context: Context) {
-            Timber.tag(App.TAG).d("Stop periodic job")
+            Timber.tag(TAG).d("Stop periodic job")
             WorkManager.getInstance(context).cancelAllWorkByTag(LOGIN_WORK_TAG)
         }
     }

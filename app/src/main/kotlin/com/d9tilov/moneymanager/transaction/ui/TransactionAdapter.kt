@@ -9,12 +9,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.d9tilov.moneymanager.R
-import com.d9tilov.android.core.constants.DataConstants
+import com.d9tilov.android.common_android.utils.TRANSACTION_DATE_FORMAT
+import com.d9tilov.android.common_android.utils.formatDate
+import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.events.OnItemClickListener
 import com.d9tilov.android.core.events.OnItemSwipeListener
-import com.d9tilov.android.core.utils.TRANSACTION_DATE_FORMAT
-import com.d9tilov.android.core.utils.formatDate
+import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.ui.recyclerview.StickyAdapter
 import com.d9tilov.moneymanager.core.util.createTintDrawable
@@ -152,9 +152,9 @@ class TransactionAdapter(
                 itemTransactionSum.setValue(transaction.sum, transaction.currencyCode)
                 itemTransactionUsdSum.setValue(
                     transaction.usdSum,
-                    DataConstants.DEFAULT_CURRENCY_CODE
+                    DEFAULT_CURRENCY_CODE
                 )
-                if (transaction.currencyCode != DataConstants.DEFAULT_CURRENCY_CODE) {
+                if (transaction.currencyCode != DEFAULT_CURRENCY_CODE) {
                     itemTransactionUsdSum.show()
                 } else {
                     itemTransactionUsdSum.gone()

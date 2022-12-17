@@ -18,9 +18,6 @@ import com.d9tilov.android.core.events.OnDialogDismissListener
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideWithAnimation
 import com.d9tilov.moneymanager.core.util.showWithAnimation
-import com.d9tilov.android.interactor.model.CurrencyDestination
-import com.d9tilov.android.interactor.model.DomainCurrency
-import com.d9tilov.moneymanager.currency.ui.CurrencyFragment
 import com.d9tilov.moneymanager.databinding.FragmentIncomeExpenseBinding
 import com.d9tilov.moneymanager.incomeexpense.ui.adapter.IncomeExpenseAdapter
 import com.d9tilov.moneymanager.incomeexpense.ui.adapter.IncomeExpenseAdapter.Companion.TAB_COUNT
@@ -109,14 +106,6 @@ class IncomeExpenseFragment :
                         }
                     }
                 }
-            incomeExpenseMainSum.setOnClickListener {
-                val action =
-                    IncomeExpenseFragmentDirections.toCurrencyDest(
-                        com.d9tilov.android.interactor.model.CurrencyDestination.IncomeExpenseScreen,
-                        viewModel.getCurrencyCode()
-                    )
-                findNavController().navigate(action)
-            }
             viewLifecycleOwner.lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     launch {
@@ -137,11 +126,6 @@ class IncomeExpenseFragment :
             }
         }
         findNavController().currentBackStackEntry?.savedStateHandle?.run {
-            getLiveData<com.d9tilov.android.interactor.model.DomainCurrency>(CurrencyFragment.ARG_CURRENCY)
-                .observe(viewLifecycleOwner) {
-                    viewModel.setCurrencyCode(it.code)
-                    remove<com.d9tilov.android.interactor.model.DomainCurrency>(CurrencyFragment.ARG_CURRENCY)
-                }
             getLiveData<Boolean>(TransactionRemoveDialog.ARG_UNDO_REMOVE_LAYOUT_DISMISS)
                 .observe(viewLifecycleOwner) {
                     if (it) {

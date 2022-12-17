@@ -5,7 +5,7 @@ import androidx.annotation.DrawableRes
 import com.d9tilov.android.core.constants.DataConstants.DEFAULT_DATA_ID
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
+import com.d9tilov.android.core.model.TransactionType
 
 data class Category(
     val id: Long,

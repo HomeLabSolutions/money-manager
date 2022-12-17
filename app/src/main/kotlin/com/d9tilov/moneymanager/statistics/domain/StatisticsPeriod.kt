@@ -1,8 +1,8 @@
 package com.d9tilov.moneymanager.statistics.domain
 
-import com.d9tilov.android.core.utils.currentDate
-import com.d9tilov.android.core.utils.getEndOfDay
-import com.d9tilov.android.core.utils.getStartOfDay
+import com.d9tilov.android.common_android.utils.currentDate
+import com.d9tilov.android.common_android.utils.getEndOfDay
+import com.d9tilov.android.common_android.utils.getStartOfDay
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.minus

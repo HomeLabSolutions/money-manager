@@ -1,8 +1,8 @@
 package com.d9tilov.moneymanager.category.di
 
 import com.d9tilov.android.database.AppDatabase
+import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.PrepopulateDataManager
-import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.category.data.CategoryRepoImpl
 import com.d9tilov.moneymanager.category.data.local.CategoryLocalSource
 import com.d9tilov.moneymanager.category.data.local.CategorySource
@@ -18,7 +18,7 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
-class CategoryModule {
+object CategoryModule {
 
     @Provides
     @ActivityRetainedScoped

@@ -8,10 +8,11 @@ include(":core:database")
 include(":core:datastore")
 include(":core:designsystem")
 
-include(":currency:data:repo")
-include(":currency:data:repo-impl")
-include(":currency:domain:interactor")
-include(":currency:domain:interactor-impl")
+include(":currency:currency-di")
+include(":currency:currency-data:currency-data-contract")
+include(":currency:currency-data:currency-data-impl")
+include(":currency:currency-domain:currency-domain-contract")
+include(":currency:currency-domain:currency-domain-impl")
 include(":currency:ui")
 
 pluginManagement {

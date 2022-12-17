@@ -37,14 +37,14 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.d9tilov.android.ui.R
-import com.d9tilov.moneymanager.currency.vm.CurrencyUiState
-import com.d9tilov.moneymanager.currency.vm.CurrencyViewModel2
+import com.d9tilov.android.currency.domain.contract.model.DomainCurrency
+import com.d9tilov.android.core.utils.CurrencyUtils
+import com.d9tilov.android.designsystem.MmTopAppBar
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun CurrencyListRoute(viewModel: CurrencyViewModel2 = hiltViewModel(), clickBack: () -> Unit) {
+fun CurrencyListRoute(viewModel: CurrencyViewModel = hiltViewModel(), clickBack: () -> Unit) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     CurrencyListScreen(
         uiState, showToolbar = true, onChooseCurrency = { currency ->
@@ -61,7 +61,7 @@ fun CurrencyListScreen(
     currencyUiState: CurrencyUiState,
     modifier: Modifier = Modifier,
     showToolbar: Boolean,
-    onChooseCurrency: (currency: com.d9tilov.android.interactor.model.DomainCurrency) -> Unit = {},
+    onChooseCurrency: (currency: DomainCurrency) -> Unit = {},
     onClickBack: () -> Unit = {}
 ) {
     Scaffold(
@@ -105,7 +105,7 @@ fun CurrencyListScreen(
 }
 
 @Composable
-fun CurrencyItem(currency: com.d9tilov.android.interactor.model.DomainCurrency, clickCallback: (currency: com.d9tilov.android.interactor.model.DomainCurrency) -> Unit) {
+fun CurrencyItem(currency: DomainCurrency, clickCallback: (currency: DomainCurrency) -> Unit) {
     Column(Modifier.fillMaxWidth().clickable { clickCallback(currency) }) {
         Row(
             modifier = Modifier.wrapContentHeight(Alignment.CenterVertically).fillMaxWidth()
@@ -149,5 +149,5 @@ fun CurrencyItem(currency: com.d9tilov.android.interactor.model.DomainCurrency, 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreviewCurrencyItem() {
-    CurrencyItem(com.d9tilov.android.interactor.model.DomainCurrency.EMPTY, clickCallback = {})
+    CurrencyItem(DomainCurrency.EMPTY, clickCallback = {})
 }

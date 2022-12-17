@@ -1,21 +1,25 @@
 package com.d9tilov.android.network.di
 
-import com.d9tilov.android.core.constants.CurrencyConstants.TAG
+import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.network.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import java.util.concurrent.TimeUnit
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.concurrent.TimeUnit
-import okhttp3.logging.HttpLoggingInterceptor
 import timber.log.Timber
 
 @Module
 @InstallIn(SingletonComponent::class)
-class NetworkModule {
+object NetworkModule {
+
+    private const val READ_TIMEOUT = 15L
+    private const val WRITE_TIMEOUT = 15L
+    private const val BASE_URL = "https://v6.exchangerate-api.com/v6/"
 
     @Provides
     fun provideOkHttpClient(interceptor: HttpLoggingInterceptor): OkHttpClient =
@@ -44,9 +48,4 @@ class NetworkModule {
             .build()
     }
 
-    companion object {
-        private const val READ_TIMEOUT = 15L
-        private const val WRITE_TIMEOUT = 15L
-        const val BASE_URL = "https://v6.exchangerate-api.com/v6/"
-    }
 }

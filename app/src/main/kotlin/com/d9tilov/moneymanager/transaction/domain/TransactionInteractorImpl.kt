@@ -3,21 +3,19 @@ package com.d9tilov.moneymanager.transaction.domain
 import android.os.StrictMode
 import androidx.paging.PagingData
 import androidx.paging.map
+import com.d9tilov.android.common_android.utils.countDaysRemainingNextFiscalDate
+import com.d9tilov.android.common_android.utils.currentDate
+import com.d9tilov.android.common_android.utils.currentDateTime
+import com.d9tilov.android.common_android.utils.getEndDateOfFiscalPeriod
+import com.d9tilov.android.common_android.utils.getEndOfDay
+import com.d9tilov.android.common_android.utils.getStartDateOfFiscalPeriod
+import com.d9tilov.android.common_android.utils.getStartOfDay
+import com.d9tilov.android.common_android.utils.isSameDay
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.category.exception.CategoryException
-import com.d9tilov.android.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
-import com.d9tilov.android.core.utils.countDaysRemainingNextFiscalDate
-import com.d9tilov.android.core.utils.currentDate
-import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.divideBy
-import com.d9tilov.android.core.utils.getEndDateOfFiscalPeriod
-import com.d9tilov.android.core.utils.getEndOfDay
-import com.d9tilov.android.core.utils.getStartDateOfFiscalPeriod
-import com.d9tilov.android.core.utils.getStartOfDay
-import com.d9tilov.android.core.utils.isSameDay
-import com.d9tilov.android.interactor.CurrencyInteractor
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.PeriodType
@@ -27,8 +25,10 @@ import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionLineChartModel
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionSpendingTodayModel
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
-import com.d9tilov.moneymanager.transaction.domain.entity.isIncome
+import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.core.model.isIncome
+import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
+import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.transaction.domain.mapper.toChartModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDataModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDomainModel
@@ -57,7 +57,7 @@ class TransactionInteractorImpl(
     private val regularTransactionInteractor: RegularTransactionInteractor,
     private val categoryInteractor: CategoryInteractor,
     private val userInteractor: UserInteractor,
-    private val currencyInteractor: com.d9tilov.android.interactor.CurrencyInteractor,
+    private val currencyInteractor: com.d9tilov.android.currency.domain.contract.CurrencyInteractor,
     private val budgetInteractor: BudgetInteractor
 ) : TransactionInteractor {
 

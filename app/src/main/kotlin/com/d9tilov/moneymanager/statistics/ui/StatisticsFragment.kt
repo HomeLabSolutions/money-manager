@@ -18,26 +18,27 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
 import androidx.recyclerview.widget.SnapHelper
-import com.d9tilov.moneymanager.R
+import com.d9tilov.android.common_android.utils.DATE_FORMAT
+import com.d9tilov.android.common_android.utils.TRANSACTION_DATE_FORMAT_SHORT
+import com.d9tilov.android.common_android.utils.currentDate
+import com.d9tilov.android.common_android.utils.currentDateTime
+import com.d9tilov.android.common_android.utils.getEndOfDay
+import com.d9tilov.android.common_android.utils.getStartOfDay
+import com.d9tilov.android.common_android.utils.isSameDay
+import com.d9tilov.android.common_android.utils.toLocalDateTime
+import com.d9tilov.android.common_android.utils.toMillis
 import com.d9tilov.android.core.model.ResultOf
+import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsNavigator
 import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
-import com.d9tilov.android.core.utils.DATE_FORMAT
-import com.d9tilov.android.core.utils.TRANSACTION_DATE_FORMAT_SHORT
-import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.moneymanager.core.util.createTintDrawable
-import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.moneymanager.core.util.getColorFromAttr
-import com.d9tilov.android.core.utils.getEndOfDay
-import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideWithAnimation
-import com.d9tilov.android.core.utils.isSameDay
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showWithAnimation
-import com.d9tilov.android.core.utils.toLocalDateTime
-import com.d9tilov.android.core.utils.toMillis
 import com.d9tilov.moneymanager.databinding.FragmentStatisticsBinding
 import com.d9tilov.moneymanager.databinding.LayoutEmptyStatisticsPlaceholderBinding
 import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuChartMode
@@ -54,7 +55,6 @@ import com.d9tilov.moneymanager.statistics.ui.recycler.StatisticsMenuAdapter
 import com.d9tilov.moneymanager.statistics.vm.StatisticsViewModel
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionLineChartModel
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -72,13 +72,11 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
+import java.util.*
+import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
 
 @AndroidEntryPoint
 class StatisticsFragment :

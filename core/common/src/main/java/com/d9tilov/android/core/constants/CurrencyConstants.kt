@@ -1,8 +1,8 @@
 package com.d9tilov.android.core.constants
 
 object CurrencyConstants {
-
-    const val TAG = "[MoneyManager]"
+    const val DEFAULT_CURRENCY_CODE = "USD"
+    const val DEFAULT_CURRENCY_SYMBOL = "$"
     const val VERSION_NUMBER = 1
     const val FORMAT_STRING = "###,###"
     const val ZERO = "0"

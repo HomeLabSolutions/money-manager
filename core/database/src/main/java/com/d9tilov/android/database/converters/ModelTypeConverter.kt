@@ -1,14 +1,14 @@
 package com.d9tilov.android.database.converters
 
 import androidx.room.TypeConverter
-import com.d9tilov.moneymanager.regular.domain.entity.ExecutionPeriod
-import com.d9tilov.moneymanager.regular.domain.entity.PeriodType
-import com.d9tilov.moneymanager.regular.domain.entity.PeriodType.Companion.DAY_NAME
-import com.d9tilov.moneymanager.regular.domain.entity.PeriodType.Companion.MONTH_NAME
-import com.d9tilov.moneymanager.regular.domain.entity.PeriodType.Companion.WEEK_NAME
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType.Companion.EXPENSE_TRANSACTION_NAME
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType.Companion.INCOME_TRANSACTION_NAME
+import com.d9tilov.android.core.model.ExecutionPeriod
+import com.d9tilov.android.core.model.PeriodType
+import com.d9tilov.android.core.model.PeriodType.Companion.DAY_NAME
+import com.d9tilov.android.core.model.PeriodType.Companion.MONTH_NAME
+import com.d9tilov.android.core.model.PeriodType.Companion.WEEK_NAME
+import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.core.model.TransactionType.Companion.EXPENSE_TRANSACTION_NAME
+import com.d9tilov.android.core.model.TransactionType.Companion.INCOME_TRANSACTION_NAME
 
 object ModelTypeConverter {
 

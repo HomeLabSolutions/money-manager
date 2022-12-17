@@ -4,6 +4,7 @@
 /local.properties
 /.idea
 /build
+/buildSrc
 /build-logic/build
 /captures
 /app/release

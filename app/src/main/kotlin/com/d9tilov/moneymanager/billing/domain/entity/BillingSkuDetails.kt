@@ -1,11 +1,11 @@
 package com.d9tilov.moneymanager.billing.domain.entity
 
-import com.d9tilov.android.repo.model.Currency
+import com.d9tilov.android.currency.data.contract.model.Currency
 
 data class BillingSkuDetails(
     val tag: String,
     val offerToken: String,
-    val price: com.d9tilov.android.repo.model.Currency
+    val price: Currency
 ) {
     companion object {
         const val TAG_ANNUAL = "annual-offer"

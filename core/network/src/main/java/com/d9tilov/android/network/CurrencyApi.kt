@@ -1,6 +1,6 @@
 package com.d9tilov.android.network
 
-import com.d9tilov.android.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
+import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.network.model.CurrencyResponse
 import retrofit2.http.GET
 import retrofit2.http.Path

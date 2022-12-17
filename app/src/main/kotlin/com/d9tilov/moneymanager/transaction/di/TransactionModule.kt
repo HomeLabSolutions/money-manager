@@ -1,10 +1,9 @@
 package com.d9tilov.moneymanager.transaction.di
 
 import com.d9tilov.android.database.AppDatabase
-import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
+import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
-import com.d9tilov.android.interactor.CurrencyInteractor
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
 import com.d9tilov.moneymanager.transaction.data.TransactionDataRepo
 import com.d9tilov.android.database.dao.TransactionDao
@@ -22,7 +21,7 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
-class TransactionModule {
+object TransactionModule {
 
     @Provides
     @ActivityRetainedScoped
@@ -52,7 +51,7 @@ class TransactionModule {
         regularTransactionInteractor: RegularTransactionInteractor,
         categoryInteractor: CategoryInteractor,
         userInteractor: UserInteractor,
-        currencyInteractor: com.d9tilov.android.interactor.CurrencyInteractor,
+        currencyInteractor: com.d9tilov.android.currency.domain.contract.CurrencyInteractor,
         budgetInteractor: BudgetInteractor
     ): TransactionInteractor = TransactionInteractorImpl(
         transactionRepo,

@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.designsystem
+package com.d9tilov.android.designsystem
 
 import androidx.annotation.StringRes
 import androidx.compose.material3.ExperimentalMaterial3Api

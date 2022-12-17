@@ -2,9 +2,10 @@ package com.d9tilov.moneymanager.settings.vm
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
+import com.d9tilov.android.core.constants.DataConstants.TAG
+import com.d9tilov.android.datastore.PreferencesStore.Companion.UNKNOWN_BACKUP_DATE
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.R
-import com.d9tilov.android.datastore.model.BackupData.Companion.UNKNOWN_BACKUP_DATE
 import com.d9tilov.moneymanager.backup.domain.BackupInteractor
 import com.d9tilov.moneymanager.base.data.local.exceptions.NetworkException
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
@@ -100,16 +101,16 @@ class SettingsViewModel2 @Inject constructor(
                 backupInteractor.makeBackup()
                 setMessage(R.string.settings_backup_succeeded)
             } catch (ex: NetworkException) {
-                Timber.tag(App.TAG).d("Do work with network exception: $ex")
+                Timber.tag(TAG).d("Do work with network exception: $ex")
                 setMessage(R.string.settings_backup_network_error)
             } catch (ex: WrongUidException) {
-                Timber.tag(App.TAG).d("Do work with wrong uid exception: $ex")
+                Timber.tag(TAG).d("Do work with wrong uid exception: $ex")
                 setMessage(R.string.settings_backup_user_error)
             } catch (ex: FileNotFoundException) {
-                Timber.tag(App.TAG).d("Do work with file not found error: $ex")
+                Timber.tag(TAG).d("Do work with file not found error: $ex")
                 setMessage(R.string.settings_backup_file_not_found_error)
             } catch (ex: FirebaseException) {
-                Timber.tag(App.TAG).d("Do work with exception: $ex")
+                Timber.tag(TAG).d("Do work with exception: $ex")
                 setMessage(R.string.settings_backup_error)
             }
             _uiState.update { it.copy(backupLoading = false) }

@@ -15,13 +15,13 @@ import androidx.core.view.setPadding
 import androidx.core.widget.TextViewCompat
 import androidx.core.widget.addTextChangedListener
 import com.d9tilov.moneymanager.R
-import com.d9tilov.android.core.constants.DataConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.core.constants.CurrencyConstants.DECIMAL_LENGTH
+import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.core.constants.CurrencyConstants.MINUS_SIGN
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
+import com.d9tilov.android.core.utils.removeScale
+import com.d9tilov.android.core.utils.toBigDecimal
 import com.d9tilov.moneymanager.core.util.gone
-import com.d9tilov.moneymanager.core.util.removeScale
-import com.d9tilov.moneymanager.core.util.toBigDecimal
 import java.math.BigDecimal
 import java.util.Locale
 import kotlin.math.min

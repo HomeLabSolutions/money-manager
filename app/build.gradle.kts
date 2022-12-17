@@ -174,7 +174,14 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
     implementation(project(":core:database"))
+    implementation(project(":core:datastore"))
     implementation(project(":core:designsystem"))
+
+    implementation(project(":currency:currency-di"))
+    implementation(project(":currency:currency-data:currency-data-contract"))
+    implementation(project(":currency:currency-data:currency-data-impl"))
+    implementation(project(":currency:currency-domain:currency-domain-contract"))
+    implementation(project(":currency:ui"))
 
     implementation(libs.kotlinJdk)
     implementation(libs.kotlinDatetime)
@@ -209,6 +216,8 @@ dependencies {
     implementation(libs.glide)
     annotationProcessor(libs.glideCompiler)
     implementation(libs.coil)
+
+    implementation(libs.bundles.retrofit)
 
     implementation(libs.paging)
     implementation(libs.bundles.room)

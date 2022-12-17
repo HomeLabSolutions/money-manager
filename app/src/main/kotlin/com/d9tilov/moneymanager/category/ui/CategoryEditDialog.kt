@@ -5,13 +5,13 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.d9tilov.android.common_android.utils.onChange
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseDialogFragment
 import com.d9tilov.moneymanager.base.ui.navigator.EditCategoryDialogNavigator
 import com.d9tilov.moneymanager.category.exception.CategoryException
 import com.d9tilov.moneymanager.category.subcategory.SubCategoryFragment.Companion.SUB_CATEGORY_TITLE
 import com.d9tilov.moneymanager.category.ui.vm.CategoryGroupEditViewModel
-import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.showKeyboard
 import com.d9tilov.moneymanager.databinding.FragmentDialogEditCategoryBinding
 import dagger.hilt.android.AndroidEntryPoint

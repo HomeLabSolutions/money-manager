@@ -16,10 +16,18 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
 
+    buildFeatures {
+        compose = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.3.2"
+    }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }

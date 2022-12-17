@@ -14,10 +14,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import com.d9tilov.android.currency.data.contract.model.CurrencyMetaData
+import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
+import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
-import com.d9tilov.android.repo.model.CurrencyMetaData
-import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
+import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.util.hideLoadingDialog
 import com.d9tilov.moneymanager.core.util.isNetworkConnected
@@ -32,10 +34,10 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
     private val contentLayout: ViewGroup by lazy { findViewById<ViewGroup>(android.R.id.content) }
 
     private val preferenceDataStore: PreferencesStore by lazy { PreferencesStore(this) }
-    private var currency = com.d9tilov.android.repo.model.CurrencyMetaData(
+    private var currency = CurrencyMetaData(
         DataConstants.NO_ID.toString(),
-        DataConstants.DEFAULT_CURRENCY_CODE,
-        DataConstants.DEFAULT_CURRENCY_SYMBOL
+        DEFAULT_CURRENCY_CODE,
+        DEFAULT_CURRENCY_SYMBOL
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -16,19 +16,30 @@ android {
         minSdk = minSdkVersion
     }
 
+    buildFeatures {
+        compose = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.3.2"
+    }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
 }
 
 dependencies {
-    implementation(project(":currency:domain:interactor"))
+    implementation(project(":core:common"))
+    implementation(project(":core:common-android"))
     implementation(project(":core:designsystem"))
+    implementation(project(":currency:currency-domain:currency-domain-contract"))
 
+    implementation(libs.hiltNavigationCompose)
     implementation(libs.bundles.compose)
     implementation(libs.bundles.composeMaterial3)
     implementation(libs.composeActivity)

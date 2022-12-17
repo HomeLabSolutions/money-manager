@@ -1,9 +1,8 @@
 package com.d9tilov.moneymanager.regular.di
 
 import com.d9tilov.android.database.AppDatabase
-import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
+import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
-import com.d9tilov.android.interactor.CurrencyInteractor
 import com.d9tilov.moneymanager.regular.data.RegularTransactionDataRepo
 import com.d9tilov.moneymanager.regular.data.local.RegularTransactionLocalSource
 import com.d9tilov.moneymanager.regular.data.local.RegularTransactionSource
@@ -17,7 +16,7 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
-class RegularTransactionModule {
+object RegularTransactionModule {
 
     @Provides
     fun provideRegularTransactionSource(
@@ -33,7 +32,7 @@ class RegularTransactionModule {
 
     @Provides
     fun provideRegularTransactionInteractor(
-        currencyInteractor: com.d9tilov.android.interactor.CurrencyInteractor,
+        currencyInteractor: com.d9tilov.android.currency.domain.contract.CurrencyInteractor,
         regularTransactionRepo: RegularTransactionRepo,
         categoryInteractor: CategoryInteractor
     ): RegularTransactionInteractor = RegularTransactionInteractorImpl(

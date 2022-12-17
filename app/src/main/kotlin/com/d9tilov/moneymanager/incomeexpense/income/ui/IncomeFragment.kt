@@ -29,8 +29,8 @@ import com.d9tilov.moneymanager.databinding.FragmentIncomeBinding
 import com.d9tilov.moneymanager.base.ui.currencyCode
 import com.d9tilov.moneymanager.incomeexpense.ui.BaseIncomeExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
-import com.d9tilov.moneymanager.transaction.domain.entity.isIncome
+import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.core.model.isIncome
 import com.d9tilov.moneymanager.transaction.ui.callback.TransactionSwipeToDeleteCallback
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent

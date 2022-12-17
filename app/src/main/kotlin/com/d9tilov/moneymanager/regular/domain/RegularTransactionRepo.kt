@@ -2,7 +2,7 @@ package com.d9tilov.moneymanager.regular.domain
 
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.regular.data.entity.RegularTransactionData
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
+import com.d9tilov.android.core.model.TransactionType
 import kotlinx.coroutines.flow.Flow
 
 interface RegularTransactionRepo {

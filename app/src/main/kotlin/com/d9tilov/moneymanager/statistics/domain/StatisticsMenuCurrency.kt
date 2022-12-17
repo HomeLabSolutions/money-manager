@@ -1,6 +1,6 @@
 package com.d9tilov.moneymanager.statistics.domain
 
-import com.d9tilov.android.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
+import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 
 sealed class StatisticsMenuCurrency(val currencyCode: String) : BaseStatisticsMenuType {
 

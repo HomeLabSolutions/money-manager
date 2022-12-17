@@ -1,10 +1,10 @@
 package com.d9tilov.moneymanager.user.data.local
 
-import com.d9tilov.android.core.model.Source
+
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import kotlinx.coroutines.flow.Flow
 
-interface UserSource : Source {
+interface UserSource {
 
     fun getCurrentUser(): Flow<UserProfile?>
     suspend fun createUserOrRestore(userProfile: UserProfile): UserProfile

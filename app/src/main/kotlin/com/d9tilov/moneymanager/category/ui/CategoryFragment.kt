@@ -18,12 +18,12 @@ import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination
 import com.d9tilov.moneymanager.category.ui.recycler.SimpleItemTouchHelperCallback
 import com.d9tilov.moneymanager.category.ui.vm.CategoryViewModel
 import com.d9tilov.android.core.events.OnItemMoveListener
+import com.d9tilov.android.core.model.isIncome
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.LayoutEmptyListPlaceholderBinding
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragment.Companion.ARG_TRANSACTION_CREATED
-import com.d9tilov.moneymanager.transaction.domain.entity.isIncome
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint

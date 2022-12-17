@@ -13,6 +13,9 @@ val keystoreProperties = Properties()
 keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 
 android {
+    buildFeatures {
+        buildConfig = true
+    }
     namespace = "com.d9tilov.android.network"
     val compileSdkVersion: Int by rootProject.extra
     val minSdkVersion: Int by rootProject.extra
