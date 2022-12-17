@@ -5,8 +5,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.d9tilov.android.core.model.TransactionType
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
-import com.d9tilov.android.database.entity.UserDbModel
 
 @Entity(
     tableName = "categories",

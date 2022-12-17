@@ -5,12 +5,12 @@ import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
+import com.d9tilov.android.currency.data.contract.model.Currency
+import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.moneymanager.billing.data.local.BillingSource
 import com.d9tilov.moneymanager.billing.domain.BillingRepo
 import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails
 import com.d9tilov.moneymanager.billing.domain.exceptions.BillingFailure
-import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
-import com.d9tilov.android.repo.model.Currency
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
@@ -56,7 +56,7 @@ class BillingDataRepo(
                     val formattedPrice =
                         price.priceAmountMicros.toBigDecimal().divide(AMOUNT_DIVIDER.toBigDecimal())
                     val currencyCode = price.priceCurrencyCode
-                    val currency = com.d9tilov.android.repo.model.Currency.EMPTY.copy(
+                    val currency = Currency.EMPTY.copy(
                         code = currencyCode,
                         value = formattedPrice,
                         symbol = currencyCode.getSymbolByCode()

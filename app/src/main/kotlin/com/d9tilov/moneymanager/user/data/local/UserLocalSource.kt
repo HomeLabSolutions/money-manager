@@ -2,7 +2,7 @@ package com.d9tilov.moneymanager.user.data.local
 
 import com.d9tilov.android.database.dao.UserDao
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
-import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
+import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.database.entity.UserDbModel
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.data.local.mapper.toDataModel

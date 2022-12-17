@@ -1,19 +1,19 @@
-package com.d9tilov.moneymanager.currency.vm
+package com.d9tilov.android.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.d9tilov.moneymanager.core.util.ErrorMessage
-import com.d9tilov.android.interactor.CurrencyInteractor
-import com.d9tilov.android.interactor.UpdateCurrencyInteractor
-import com.d9tilov.android.interactor.model.DomainCurrency
+import com.d9tilov.android.core.model.ErrorMessage
+import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
+import com.d9tilov.android.currency.domain.contract.UpdateCurrencyInteractor
+import com.d9tilov.android.currency.domain.contract.model.DomainCurrency
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 sealed interface CurrencyUiState {
     val isLoading: Boolean
@@ -25,16 +25,16 @@ sealed interface CurrencyUiState {
     ) : CurrencyUiState
 
     data class HasCurrencies(
-        val currencyList: List<com.d9tilov.android.interactor.model.DomainCurrency> = emptyList(),
+        val currencyList: List<DomainCurrency> = emptyList(),
         override val isLoading: Boolean,
         override val errorMessages: List<ErrorMessage> = emptyList()
     ) : CurrencyUiState
 }
 
 @HiltViewModel
-class CurrencyViewModel2 @Inject constructor(
-    currencyInteractor: com.d9tilov.android.interactor.CurrencyInteractor,
-    private val updateCurrencyInteractor: com.d9tilov.android.interactor.UpdateCurrencyInteractor
+class CurrencyViewModel @Inject constructor(
+    currencyInteractor: CurrencyInteractor,
+    private val updateCurrencyInteractor: UpdateCurrencyInteractor
 ) : ViewModel() {
 
     val uiState = currencyInteractor.getCurrencies()

@@ -19,7 +19,7 @@ import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentRegularExpenseBinding
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransactionDestination
 import com.d9tilov.moneymanager.regular.vm.RegularExpenseViewModel
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
+import com.d9tilov.android.core.model.TransactionType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch

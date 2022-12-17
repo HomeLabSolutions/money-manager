@@ -1,11 +1,10 @@
 package com.d9tilov.moneymanager.category.domain
 
-import com.d9tilov.android.core.model.Interactor
+import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.moneymanager.category.data.entity.Category
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
 import kotlinx.coroutines.flow.Flow
 
-interface CategoryInteractor : Interactor {
+interface CategoryInteractor {
 
     suspend fun create(category: Category): Long
     suspend fun createDefaultCategories()

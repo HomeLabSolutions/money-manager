@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.transaction.ui
 
 import android.os.Bundle
+import android.text.style.TtsSpan.ARG_CURRENCY
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -8,10 +9,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.d9tilov.android.core.utils.TRANSACTION_DATE_FORMAT
-import com.d9tilov.android.core.utils.currentDateTime
-import com.d9tilov.android.core.utils.toLocalDateTime
-import com.d9tilov.android.core.utils.toMillis
+import com.d9tilov.android.common_android.utils.TRANSACTION_DATE_FORMAT
+import com.d9tilov.android.common_android.utils.currentDateTime
+import com.d9tilov.android.common_android.utils.toLocalDateTime
+import com.d9tilov.android.common_android.utils.toMillis
+import com.d9tilov.android.currency.domain.contract.model.DomainCurrency
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.EditTransactionNavigator
@@ -20,9 +22,6 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.showKeyboard
-import com.d9tilov.android.interactor.model.CurrencyDestination
-import com.d9tilov.android.interactor.model.DomainCurrency
-import com.d9tilov.moneymanager.currency.ui.CurrencyFragment.Companion.ARG_CURRENCY
 import com.d9tilov.moneymanager.databinding.FragmentEditTransactionBinding
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.ui.vm.EditTransactionViewModel
@@ -78,14 +77,14 @@ class EditTransactionFragment : EditTransactionNavigator,
                 ARG_CATEGORY
             )
         }
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<com.d9tilov.android.interactor.model.DomainCurrency>(
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<DomainCurrency>(
             ARG_CURRENCY
         )?.observe(
             viewLifecycleOwner
         ) {
             localTransaction = localTransaction?.copy(currencyCode = it.code)
             updateCurrency()
-            findNavController().currentBackStackEntry?.savedStateHandle?.remove<com.d9tilov.android.interactor.model.DomainCurrency>(
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<DomainCurrency>(
                 ARG_CURRENCY
             )
         }
@@ -138,14 +137,6 @@ class EditTransactionFragment : EditTransactionNavigator,
             editTransactionDelete.setOnClickListener {
                 val action =
                     EditTransactionFragmentDirections.toRemoveTransactionDialog(transaction)
-                findNavController().navigate(action)
-            }
-            editTransactionMainSum.addOnCurrencyClickListener {
-                val action =
-                    EditTransactionFragmentDirections.toCurrencyDest(
-                        com.d9tilov.android.interactor.model.CurrencyDestination.EditTransactionScreen,
-                        localTransaction?.currencyCode
-                    )
                 findNavController().navigate(action)
             }
             editTransactionDescription.setText(transaction.description)

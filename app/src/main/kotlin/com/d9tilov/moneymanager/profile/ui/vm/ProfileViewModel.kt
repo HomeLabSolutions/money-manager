@@ -8,7 +8,7 @@ import com.d9tilov.moneymanager.budget.domain.entity.BudgetData
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
+import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import com.google.firebase.auth.FirebaseAuth

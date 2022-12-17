@@ -1,9 +1,9 @@
 package com.d9tilov.moneymanager.budget.domain.entity
 
-import com.d9tilov.android.core.constants.DataConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.DataConstants.DEFAULT_DATA_ID
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
-import com.d9tilov.android.core.utils.currentDateTime
+import com.d9tilov.android.common_android.utils.currentDateTime
+import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import java.math.BigDecimal
 import kotlinx.datetime.LocalDateTime
 

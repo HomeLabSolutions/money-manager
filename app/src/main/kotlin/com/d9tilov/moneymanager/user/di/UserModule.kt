@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.user.di
 
 import com.d9tilov.android.database.AppDatabase
-import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
+import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.moneymanager.user.data.UserDataRepo
 import com.d9tilov.android.database.dao.UserDao
 import com.d9tilov.moneymanager.user.data.local.UserLocalSource
@@ -18,7 +18,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class UserModule {
+object UserModule {
 
     @Provides
     @Singleton

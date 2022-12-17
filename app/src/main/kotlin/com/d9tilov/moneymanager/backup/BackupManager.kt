@@ -2,16 +2,16 @@ package com.d9tilov.moneymanager.backup
 
 import android.content.Context
 import android.net.Uri
+import com.d9tilov.android.common_android.utils.currentDateTime
+import com.d9tilov.android.common_android.utils.toMillis
 import com.d9tilov.android.core.constants.DataConstants.DATABASE_NAME
+import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.moneymanager.App
-import com.d9tilov.android.datastore.model.BackupData
 import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.moneymanager.base.data.local.exceptions.NetworkException
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
-import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
-import com.d9tilov.android.core.utils.currentDateTime
+import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.moneymanager.core.util.isNetworkConnected
-import com.d9tilov.android.core.utils.toMillis
 import com.google.firebase.FirebaseException
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -33,17 +33,17 @@ import kotlin.coroutines.resumeWithException
 class BackupManager(private val context: Context, private val preferencesStore: PreferencesStore) {
 
     suspend fun backupDb(): ResultOf<com.d9tilov.android.datastore.model.BackupData> {
-        Timber.tag(App.TAG).d("Backup backupDb before")
+        Timber.tag(TAG).d("Backup backupDb before")
         val uid = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
-        Timber.tag(App.TAG).d("Backup backupDb: $uid")
+        Timber.tag(TAG).d("Backup backupDb: $uid")
         return suspendCancellableCoroutine { continuation ->
             if (!isNetworkConnected(context)) {
                 continuation.resumeWithException(NetworkException())
                 return@suspendCancellableCoroutine
             }
-            Timber.tag(App.TAG).d("Backup start")
+            Timber.tag(TAG).d("Backup start")
             if (uid.isNullOrEmpty()) {
-                Timber.tag(App.TAG).d("Empty uid")
+                Timber.tag(TAG).d("Empty uid")
                 continuation.resumeWithException(WrongUidException())
                 return@suspendCancellableCoroutine
             }
@@ -55,19 +55,19 @@ class BackupManager(private val context: Context, private val preferencesStore: 
             val parentPath = "${uid.normalizePath()}/$DATABASE_NAME"
             val fileRef = Firebase.storage.reference.child(parentPath)
             val uploadTask = fileRef.putFile(Uri.fromFile(file))
-            Timber.tag(App.TAG).d("Backup end")
+            Timber.tag(TAG).d("Backup end")
             uploadTask
                 .addOnSuccessListener {
                     if (!continuation.isActive) return@addOnSuccessListener
                     val backupDate = currentDateTime().toMillis()
                     runBlocking { preferencesStore.updateLastBackupDate(backupDate) }
                     continuation.resume(ResultOf.Success(com.d9tilov.android.datastore.model.BackupData.EMPTY.copy(lastBackupTimestamp = backupDate)))
-                    Timber.tag(App.TAG).d("Backup was compete successfully")
+                    Timber.tag(TAG).d("Backup was compete successfully")
                 }
                 .addOnFailureListener {
                     if (!continuation.isActive) return@addOnFailureListener
                     continuation.resumeWithException(FirebaseException("Make backup", it))
-                    Timber.tag(App.TAG).d("Backup was compete with error: $it")
+                    Timber.tag(TAG).d("Backup was compete with error: $it")
                 }
         }
     }
@@ -97,11 +97,11 @@ class BackupManager(private val context: Context, private val preferencesStore: 
                     runBlocking { preferencesStore.updateLastBackupDate(metadata.updatedTimeMillis) }
                 }
                 continuation.resume(ResultOf.Success(Any()))
-                Timber.tag(App.TAG).d("Restore was compete successfully")
+                Timber.tag(TAG).d("Restore was compete successfully")
             }.addOnFailureListener {
                 if (!continuation.isActive) return@addOnFailureListener
                 continuation.resumeWithException(FirebaseException("Restore backup", it))
-                Timber.tag(App.TAG).d("Restore was complete with error: $it")
+                Timber.tag(TAG).d("Restore was complete with error: $it")
             }
         }
     }
@@ -128,11 +128,11 @@ class BackupManager(private val context: Context, private val preferencesStore: 
             deleteTask.addOnSuccessListener {
                 if (!continuation.isActive) return@addOnSuccessListener
                 continuation.resume(ResultOf.Success(Any()))
-                Timber.tag(App.TAG).d("Deleting Firebase file was compete successfully")
+                Timber.tag(TAG).d("Deleting Firebase file was compete successfully")
             }.addOnFailureListener {
                 if (!continuation.isActive) return@addOnFailureListener
                 continuation.resumeWithException(FirebaseException("Delete backup", it))
-                Timber.tag(App.TAG).d("Deleting Firebase file was complete with error: $it")
+                Timber.tag(TAG).d("Deleting Firebase file was complete with error: $it")
             }
         }
     }

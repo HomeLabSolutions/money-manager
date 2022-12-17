@@ -3,17 +3,16 @@ package com.d9tilov.moneymanager.regular.domain
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.category.exception.CategoryException
-import com.d9tilov.android.interactor.CurrencyInteractor
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.regular.domain.mapper.toData
 import com.d9tilov.moneymanager.regular.domain.mapper.toDomain
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
+import com.d9tilov.android.core.model.TransactionType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
 class RegularTransactionInteractorImpl(
-    private val currencyInteractor: com.d9tilov.android.interactor.CurrencyInteractor,
+    private val currencyInteractor: com.d9tilov.android.currency.domain.contract.CurrencyInteractor,
     private val regularTransactionRepo: RegularTransactionRepo,
     private val categoryInteractor: CategoryInteractor,
 ) : RegularTransactionInteractor {

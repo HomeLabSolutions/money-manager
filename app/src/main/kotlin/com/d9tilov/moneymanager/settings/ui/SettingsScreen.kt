@@ -29,9 +29,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.d9tilov.android.designsystem.MmTopAppBar
+import com.d9tilov.android.designsystem.MoneyManagerIcons
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.core.designsystem.MoneyManagerIcons
-import com.d9tilov.moneymanager.designsystem.MmTopAppBar
 import com.d9tilov.moneymanager.settings.vm.SettingsUiState
 import com.d9tilov.moneymanager.settings.vm.SettingsViewModel2
 import com.d9tilov.moneymanager.settings.vm.SubscriptionUiState

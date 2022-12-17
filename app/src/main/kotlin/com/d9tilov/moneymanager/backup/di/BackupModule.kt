@@ -8,7 +8,7 @@ import com.d9tilov.moneymanager.backup.data.local.BackupSource
 import com.d9tilov.moneymanager.backup.domain.BackupInteractor
 import com.d9tilov.moneymanager.backup.domain.BackupInteractorImpl
 import com.d9tilov.moneymanager.backup.domain.BackupRepo
-import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
+import com.d9tilov.android.datastore.PreferencesStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,7 +18,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class BackupModule {
+object BackupModule {
 
     @Provides
     @Singleton

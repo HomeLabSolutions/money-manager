@@ -8,20 +8,20 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.d9tilov.android.common_android.utils.DATE_FORMAT
+import com.d9tilov.android.common_android.utils.toMillis
+import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.R
-import com.d9tilov.android.core.constants.DataConstants
-import com.d9tilov.android.core.utils.DATE_FORMAT
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hide
 import com.d9tilov.moneymanager.core.util.show
-import com.d9tilov.android.core.utils.toMillis
 import com.d9tilov.moneymanager.databinding.ItemTransactionDetailsBinding
 import com.d9tilov.moneymanager.statistics.ui.recycler.diff.StatisticsDetailsDiffUtils
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import java.text.SimpleDateFormat
-import java.util.Locale
+import java.util.*
 
 class StatisticsDetailsAdapter :
     RecyclerView.Adapter<StatisticsDetailsAdapter.TransactionDetailsViewHolder>() {
@@ -105,9 +105,9 @@ class StatisticsDetailsAdapter :
                 itemTransactionSum.setValue(transaction.sum, transaction.currencyCode)
                 itemTransactionUsdSum.setValue(
                     transaction.usdSum,
-                    DataConstants.DEFAULT_CURRENCY_CODE
+                    DEFAULT_CURRENCY_CODE
                 )
-                if (transaction.currencyCode != DataConstants.DEFAULT_CURRENCY_CODE) itemTransactionUsdSum.show()
+                if (transaction.currencyCode != DEFAULT_CURRENCY_CODE) itemTransactionUsdSum.show()
                 else itemTransactionUsdSum.gone()
                 val drawable = createTintDrawable(
                     context,

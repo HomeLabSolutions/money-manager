@@ -5,10 +5,10 @@ import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
-import com.d9tilov.android.core.model.Source
+
 import kotlinx.coroutines.flow.Flow
 
-interface BillingSource : Source {
+interface BillingSource {
 
     val purchases: Flow<List<Purchase>>
     val productWithProductDetails: Flow<Map<String, ProductDetails>>

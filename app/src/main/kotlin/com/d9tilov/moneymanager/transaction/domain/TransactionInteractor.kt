@@ -1,9 +1,9 @@
 package com.d9tilov.moneymanager.transaction.domain
 
 import androidx.paging.PagingData
-import com.d9tilov.android.core.model.Interactor
+
 import com.d9tilov.moneymanager.category.data.entity.Category
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
+import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionLineChartModel
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
 
-interface TransactionInteractor : Interactor {
+interface TransactionInteractor {
 
     fun getTransactionsGroupedByCategory(
         type: TransactionType,

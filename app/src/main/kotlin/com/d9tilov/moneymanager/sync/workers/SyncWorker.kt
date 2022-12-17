@@ -7,7 +7,7 @@ import androidx.work.ForegroundInfo
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkerParameters
-import com.d9tilov.android.interactor.CurrencyInteractor
+import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.google.samples.apps.nowinandroid.sync.initializers.SyncConstraints
 import com.google.samples.apps.nowinandroid.sync.initializers.syncForegroundInfo
 import dagger.assisted.Assisted
@@ -21,7 +21,7 @@ import kotlinx.coroutines.withContext
 class SyncWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted workerParameters: WorkerParameters,
-    private val currencyInteractor: com.d9tilov.android.interactor.CurrencyInteractor
+    private val currencyInteractor: com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 ) : CoroutineWorker(context, workerParameters) {
 
     override suspend fun getForegroundInfo(): ForegroundInfo =

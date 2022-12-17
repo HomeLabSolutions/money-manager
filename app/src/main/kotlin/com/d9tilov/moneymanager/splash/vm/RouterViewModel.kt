@@ -1,12 +1,11 @@
 package com.d9tilov.moneymanager.splash.vm
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.d9tilov.moneymanager.App
+import com.d9tilov.android.core.constants.DataConstants.TAG
+import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.moneymanager.backup.domain.BackupInteractor
 import com.d9tilov.moneymanager.base.data.local.exceptions.NetworkException
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
-import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
@@ -15,14 +14,13 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Lazy
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.io.FileNotFoundException
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.io.FileNotFoundException
-import javax.inject.Inject
 
 @HiltViewModel
 class RouterViewModel @Inject constructor(
@@ -51,13 +49,13 @@ class RouterViewModel @Inject constructor(
                             try {
                                 backupInteractor.restoreBackup()
                             } catch (ex: NetworkException) {
-                                Timber.tag(App.TAG).d("Do work with network exception: $ex")
+                                Timber.tag(TAG).d("Do work with network exception: $ex")
                             } catch (ex: WrongUidException) {
-                                Timber.tag(App.TAG).d("Do work with wrong uid exception: $ex")
+                                Timber.tag(TAG).d("Do work with wrong uid exception: $ex")
                             } catch (ex: FileNotFoundException) {
-                                Timber.tag(App.TAG).d("Do work with file not found error: $ex")
+                                Timber.tag(TAG).d("Do work with file not found error: $ex")
                             } catch (ex: FirebaseException) {
-                                Timber.tag(App.TAG).d("Do work with exception: $ex")
+                                Timber.tag(TAG).d("Do work with exception: $ex")
                             }
                             user = userInteractor.getCurrentUser().firstOrNull()
                             if (user == null || user.showPrepopulate) {

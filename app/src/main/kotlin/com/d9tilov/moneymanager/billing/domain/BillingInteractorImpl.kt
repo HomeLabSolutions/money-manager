@@ -5,12 +5,11 @@ import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
-import com.d9tilov.moneymanager.App
+import com.d9tilov.android.core.constants.DataConstants.TAG
+import com.d9tilov.android.currency.domain.contract.model.DomainCurrency
 import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails
 import com.d9tilov.moneymanager.billing.domain.entity.PremiumEmails
 import com.d9tilov.moneymanager.billing.domain.entity.PremiumInfo
-import com.d9tilov.android.interactor.model.DomainCurrency
-import com.d9tilov.android.interactor_impl.mapper.CurrencyDomainMapper
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
@@ -26,7 +25,6 @@ import java.io.IOException
 
 class BillingInteractorImpl(
     private val billingRepo: BillingRepo,
-    private val currencyDomainMapper: com.d9tilov.android.interactor_impl.mapper.CurrencyDomainMapper
 ) : BillingInteractor {
 
     private val premiumEmailList = MutableStateFlow(listOf<String>())
@@ -42,7 +40,7 @@ class BillingInteractorImpl(
                     val premiumConfig = jsonAdapter.fromJson(config)
                     premiumEmailList.value = premiumConfig?.emails ?: emptyList()
                 } catch (ex: IOException) {
-                    Timber.tag(App.TAG).e("Failed parsing remote config: $ex")
+                    Timber.tag(TAG).e("Failed parsing remote config: $ex")
                 }
             }
         }
@@ -55,7 +53,7 @@ class BillingInteractorImpl(
     override fun getPremiumInfo(): Flow<PremiumInfo> {
         val canPurchaseFlow = flowOf(true)
 //            billingRepo.premiumProductDetails.map { productDetails -> productDetails != null }
-        val minPriceFlow = flowOf(com.d9tilov.android.interactor.model.DomainCurrency.EMPTY)
+        val minPriceFlow = flowOf(DomainCurrency.EMPTY)
 //            getSkuDetails().map { list: List<BillingSkuDetails> ->
 //            list.minOfWith({ t1, t2 -> t1.value.compareTo(t2.value) }) { it.price }
 //        }.map { item: Currency -> currencyDomainMapper.toDomain(item, false) }

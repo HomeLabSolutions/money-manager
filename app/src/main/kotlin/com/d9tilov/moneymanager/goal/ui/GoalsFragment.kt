@@ -23,15 +23,12 @@ import com.d9tilov.moneymanager.base.ui.currencyCode
 import com.d9tilov.moneymanager.base.ui.navigator.GoalsNavigator
 import com.d9tilov.moneymanager.core.ui.recyclerview.MarginItemDecoration
 import com.d9tilov.moneymanager.core.util.gone
-import com.d9tilov.moneymanager.core.util.hideKeyboard
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.FragmentGoalsBinding
 import com.d9tilov.moneymanager.goal.domain.entity.Goal
 import com.d9tilov.moneymanager.goal.domain.entity.GoalDestination
 import com.d9tilov.moneymanager.goal.ui.dialog.GoalRemoveDialog.Companion.ARG_UNDO_REMOVE_LAYOUT_DISMISS
 import com.d9tilov.moneymanager.goal.vm.GoalsViewModel
-import com.d9tilov.moneymanager.prepopulate.ui.ControlsClicked
-import com.d9tilov.moneymanager.prepopulate.ui.PrepopulateActivity
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -42,8 +39,7 @@ class GoalsFragment :
         FragmentGoalsBinding::inflate,
         R.layout.fragment_goals
     ),
-    GoalsNavigator,
-    ControlsClicked {
+    GoalsNavigator {
 
     private val args by navArgs<GoalsFragmentArgs>()
     private val destination by lazy { args.destination }
@@ -130,21 +126,6 @@ class GoalsFragment :
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        if (activity is PrepopulateActivity) {
-            (activity as PrepopulateActivity).controlsClick = this
-        }
-        hideKeyboard()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        if (activity is PrepopulateActivity) {
-            (activity as PrepopulateActivity).controlsClick = null
-        }
-    }
-
     private fun initToolbar() {
         toolbar = viewBinding?.goalsToolbarContainer?.toolbar
         val activity = activity as AppCompatActivity
@@ -158,10 +139,6 @@ class GoalsFragment :
     private fun openCreationGoalScreen(goal: Goal? = null) {
         val action = GoalsFragmentDirections.toGoalsCreationDest(goal)
         findNavController().navigate(action)
-    }
-
-    override fun onNextClick() {
-        viewBinding?.goalsSumPerPeriod?.let { viewModel.savePrepopulateStatusAndSavedSum(it.getValue()) }
     }
 
     override fun save() {

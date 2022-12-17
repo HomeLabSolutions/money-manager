@@ -7,7 +7,7 @@ import androidx.annotation.StringRes
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.entity.PrepopulateCategory
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
+import com.d9tilov.android.core.model.TransactionType
 import javax.inject.Inject
 
 class PrepopulateDataManager @Inject constructor(private val context: Context) {

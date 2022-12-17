@@ -17,7 +17,14 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.d9tilov.android.core.utils.currentDate
+import com.d9tilov.android.common_android.utils.currentDate
+import com.d9tilov.android.common_android.utils.currentDateTime
+import com.d9tilov.android.common_android.utils.getStartOfDay
+import com.d9tilov.android.common_android.utils.onChange
+import com.d9tilov.android.core.model.ExecutionPeriod
+import com.d9tilov.android.core.model.PeriodType
+import com.d9tilov.android.core.model.isIncome
+import com.d9tilov.android.core.utils.toBigDecimal
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.RegularTransactionCreatedNavigator
@@ -26,28 +33,18 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.data.entity.isEmpty
 import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination
 import com.d9tilov.moneymanager.core.util.createTintDrawable
-import com.d9tilov.android.core.utils.currentDateTime
-import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.core.util.hide
-import com.d9tilov.moneymanager.core.util.onChange
 import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.core.util.showKeyboard
-import com.d9tilov.moneymanager.core.util.toBigDecimal
-import com.d9tilov.android.interactor.model.CurrencyDestination
-import com.d9tilov.android.interactor.model.DomainCurrency
-import com.d9tilov.moneymanager.currency.ui.CurrencyFragment
 import com.d9tilov.moneymanager.databinding.FragmentRegularTransactionCreationBinding
-import com.d9tilov.android.core.model.ExecutionPeriod
-import com.d9tilov.android.core.model.PeriodType
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.regular.domain.entity.WeekDays
 import com.d9tilov.moneymanager.regular.vm.CreatedRegularTransactionViewModel
-import com.d9tilov.moneymanager.transaction.domain.entity.isIncome
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RegularTransactionCreationFragment :
@@ -94,14 +91,6 @@ class RegularTransactionCreationFragment :
                         remove<Category>(ARG_CATEGORY)
                         updateCategoryIcon()
                         updateSaveButtonState()
-                    }
-                getLiveData<com.d9tilov.android.interactor.model.DomainCurrency>(CurrencyFragment.ARG_CURRENCY)
-                    .observe(viewLifecycleOwner) {
-                        localTransaction = localTransaction.copy(currencyCode = it.code)
-                        findNavController().currentBackStackEntry?.savedStateHandle?.remove<com.d9tilov.android.interactor.model.DomainCurrency>(
-                            CurrencyFragment.ARG_CURRENCY
-                        )
-                        updateCurrency()
                     }
                 getLiveData<Int>(ARG_DAY_OF_MONTH)
                     .observe(viewLifecycleOwner) { dayOfMonth ->
@@ -197,7 +186,6 @@ class RegularTransactionCreationFragment :
             createdRegularTransactionFriday.setOnClickListener { setWeekdaySelected(WeekDays.FRIDAY.ordinal) }
             createdRegularTransactionSaturday.setOnClickListener { setWeekdaySelected(WeekDays.SATURDAY.ordinal) }
             createdRegularTransactionSunday.setOnClickListener { setWeekdaySelected(WeekDays.SUNDAY.ordinal) }
-            createdRegularTransactionMainSum.addOnCurrencyClickListener { toCurrencyScreen() }
         }
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.defaultTransaction
@@ -210,15 +198,6 @@ class RegularTransactionCreationFragment :
                     initUi()
                 }
         }
-    }
-
-    private fun toCurrencyScreen() {
-        val action =
-            RegularTransactionCreationFragmentDirections.toCurrencyDest(
-                com.d9tilov.android.interactor.model.CurrencyDestination.EditRegularTransactionScreen,
-                localTransaction.currencyCode
-            )
-        findNavController().navigate(action)
     }
 
     private fun toFixedCategoryScreen() {

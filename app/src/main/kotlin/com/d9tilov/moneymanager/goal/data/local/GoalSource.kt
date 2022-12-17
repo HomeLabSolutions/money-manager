@@ -1,10 +1,10 @@
 package com.d9tilov.moneymanager.goal.data.local
 
-import com.d9tilov.android.core.model.Source
+
 import com.d9tilov.moneymanager.goal.data.entity.GoalData
 import kotlinx.coroutines.flow.Flow
 
-interface GoalSource : Source {
+interface GoalSource {
 
     suspend fun insert(goalData: GoalData)
     fun getAll(): Flow<List<GoalData>>

@@ -29,7 +29,8 @@ viewpager = "1.0.0"
 coroutinesCore = "1.6.4"
 lifecycle = "2.5.1"
 lifecycleExtension = "2.2.0"
-compose = "1.3.1"
+compose = "1.3.2"
+composeMaterial = "1.3.1"
 composeConstraintLayout = "1.0.1"
 composeMaterial3 = "1.0.1"
 composeActivity = "1.6.1"
@@ -97,10 +98,10 @@ composeMaterial3WindowSize = { group = "androidx.compose.material3", name = "mat
 composeActivity = { group = "androidx.activity", name = "activity-compose", version.ref = "composeActivity" }
 composeToolingUi = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
 composeToolingPreview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "compose" }
-composeFoundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "compose" }
-composeMaterial = { group = "androidx.compose.material", name = "material", version.ref = "compose" }
-composeMaterialIconsCore = { group = "androidx.compose.material", name = "material-icons-core", version.ref = "compose" }
-composeMaterialIconsExtended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "compose" }
+composeFoundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "composeMaterial" }
+composeMaterial = { group = "androidx.compose.material", name = "material", version.ref = "composeMaterial" }
+composeMaterialIconsCore = { group = "androidx.compose.material", name = "material-icons-core", version.ref = "composeMaterial" }
+composeMaterialIconsExtended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "composeMaterial" }
 composeLiveData = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "compose" }
 composeViewModel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "composeViewModel" }
 composeRuntime = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "composeRuntime" }

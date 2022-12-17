@@ -2,6 +2,7 @@ package com.d9tilov.moneymanager.billing
 
 import android.text.TextUtils
 import android.util.Base64
+import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.BuildConfig
 import timber.log.Timber
@@ -48,14 +49,14 @@ object Security {
         if (TextUtils.isEmpty(signedData) || TextUtils.isEmpty(BASE_64_ENCODED_PUBLIC_KEY) ||
             TextUtils.isEmpty(signature)
         ) {
-            Timber.tag(App.TAG).w("Purchase verification failed: missing data.")
+            Timber.tag(TAG).w("Purchase verification failed: missing data.")
             return false
         }
         return try {
             val key = generatePublicKey(BASE_64_ENCODED_PUBLIC_KEY)
             verify(key, signedData, signature)
         } catch (e: IOException) {
-            Timber.tag(App.TAG).d("Error generating PublicKey from encoded key: %s", e.message)
+            Timber.tag(TAG).d("Error generating PublicKey from encoded key: %s", e.message)
             false
         }
     }
@@ -79,7 +80,7 @@ object Security {
             throw RuntimeException(e)
         } catch (e: InvalidKeySpecException) {
             val msg = "Invalid key specification: $e"
-            Timber.tag(App.TAG).d(msg)
+            Timber.tag(TAG).d(msg)
             throw IOException(msg)
         }
     }
@@ -98,7 +99,7 @@ object Security {
         val signatureBytes: ByteArray = try {
             Base64.decode(signature, Base64.DEFAULT)
         } catch (e: IllegalArgumentException) {
-            Timber.tag(App.TAG).d("Base64 decoding failed.")
+            Timber.tag(TAG).d("Base64 decoding failed.")
             return false
         }
         try {
@@ -106,7 +107,7 @@ object Security {
             signatureAlgorithm.initVerify(publicKey)
             signatureAlgorithm.update(signedData.toByteArray())
             if (!signatureAlgorithm.verify(signatureBytes)) {
-                Timber.tag(App.TAG).d("Signature verification failed...")
+                Timber.tag(TAG).d("Signature verification failed...")
                 return false
             }
             return true
@@ -114,9 +115,9 @@ object Security {
             // "RSA" is guaranteed to be available.
             throw RuntimeException(e)
         } catch (e: InvalidKeyException) {
-            Timber.tag(App.TAG).d("Invalid key specification.")
+            Timber.tag(TAG).d("Invalid key specification.")
         } catch (e: SignatureException) {
-            Timber.tag(App.TAG).d("Signature exception.")
+            Timber.tag(TAG).d("Signature exception.")
         }
         return false
     }

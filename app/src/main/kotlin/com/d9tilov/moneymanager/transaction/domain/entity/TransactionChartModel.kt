@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.transaction.domain.entity
 
 import com.d9tilov.android.core.constants.DataConstants
+import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.moneymanager.category.data.entity.Category
 import java.math.BigDecimal
 

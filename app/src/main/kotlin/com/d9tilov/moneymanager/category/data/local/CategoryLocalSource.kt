@@ -3,14 +3,14 @@ package com.d9tilov.moneymanager.category.data.local
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.PrepopulateDataManager
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongIdException
 import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
-import com.d9tilov.moneymanager.base.data.local.preferences.PreferencesStore
+import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.android.database.entity.CategoryDbModel
 import com.d9tilov.moneymanager.category.data.local.mapper.CategoryMapper
 import com.d9tilov.moneymanager.category.exception.CategoryException
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.android.database.dao.CategoryDao
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
+import com.d9tilov.android.core.model.TransactionType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull

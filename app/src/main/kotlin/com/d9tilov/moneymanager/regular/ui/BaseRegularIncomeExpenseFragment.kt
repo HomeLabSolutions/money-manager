@@ -22,8 +22,8 @@ import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.moneymanager.databinding.LayoutEmptyListPlaceholderBinding
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.regular.vm.BaseRegularIncomeExpenseViewModel
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
-import com.d9tilov.moneymanager.transaction.domain.entity.isIncome
+import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.core.model.isIncome
 import com.d9tilov.moneymanager.transaction.ui.TransactionRemoveDialog
 import com.google.android.material.appbar.MaterialToolbar
 
