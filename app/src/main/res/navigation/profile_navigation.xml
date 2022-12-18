@@ -6,7 +6,7 @@
     app:startDestination="@+id/profile_dest">
     <fragment
         android:id="@+id/profile_dest"
-        android:name="com.d9tilov.moneymanager.profile.ui.ProfileFragment2"
+        android:name="com.d9tilov.moneymanager.profile.ui.ProfileFragment"
         android:label="fragment_title_screen"
         tools:layout="@layout/fragment_profile">
 

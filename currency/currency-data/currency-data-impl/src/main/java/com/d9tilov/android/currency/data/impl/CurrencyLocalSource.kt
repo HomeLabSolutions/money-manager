@@ -3,8 +3,8 @@ package com.d9tilov.android.currency.data.impl
 import com.d9tilov.android.common_android.utils.currentDate
 import com.d9tilov.android.common_android.utils.toLocalDate
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
-import com.d9tilov.android.currency.data.contract.model.Currency
-import com.d9tilov.android.currency.data.contract.model.CurrencyMetaData
+import com.d9tilov.android.currency.data.model.Currency
+import com.d9tilov.android.currency.data.model.CurrencyMetaData
 import com.d9tilov.android.currency.data.impl.mapper.toDataModel
 import com.d9tilov.android.currency.data.impl.mapper.toDbModel
 import com.d9tilov.android.database.dao.CurrencyListDao

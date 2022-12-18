@@ -6,15 +6,20 @@ import com.d9tilov.android.common_android.utils.currentDateTime
 import com.d9tilov.android.common_android.utils.toMillis
 import com.d9tilov.android.core.constants.DataConstants.DATABASE_NAME
 import com.d9tilov.android.core.constants.DataConstants.TAG
-import com.d9tilov.moneymanager.App
+import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.core.model.ResultOf
-import com.d9tilov.moneymanager.base.data.local.exceptions.NetworkException
-import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.android.datastore.PreferencesStore
+import com.d9tilov.android.datastore.model.BackupData
+import com.d9tilov.android.network.exception.NetworkException
 import com.d9tilov.moneymanager.core.util.isNetworkConnected
 import com.google.firebase.FirebaseException
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.InputStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
@@ -22,17 +27,12 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.InputStream
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 class BackupManager(private val context: Context, private val preferencesStore: PreferencesStore) {
 
-    suspend fun backupDb(): ResultOf<com.d9tilov.android.datastore.model.BackupData> {
+    suspend fun backupDb(): ResultOf<BackupData> {
         Timber.tag(TAG).d("Backup backupDb before")
         val uid = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
         Timber.tag(TAG).d("Backup backupDb: $uid")
@@ -61,7 +61,7 @@ class BackupManager(private val context: Context, private val preferencesStore: 
                     if (!continuation.isActive) return@addOnSuccessListener
                     val backupDate = currentDateTime().toMillis()
                     runBlocking { preferencesStore.updateLastBackupDate(backupDate) }
-                    continuation.resume(ResultOf.Success(com.d9tilov.android.datastore.model.BackupData.EMPTY.copy(lastBackupTimestamp = backupDate)))
+                    continuation.resume(ResultOf.Success(BackupData.EMPTY.copy(lastBackupTimestamp = backupDate)))
                     Timber.tag(TAG).d("Backup was compete successfully")
                 }
                 .addOnFailureListener {

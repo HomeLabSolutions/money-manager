@@ -6,7 +6,7 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.d9tilov.android.common_android.utils.getEndOfDay
 import com.d9tilov.android.common_android.utils.getStartOfDay
-import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
+import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.android.database.dao.TransactionDao

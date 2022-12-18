@@ -30,6 +30,7 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
+    implementation(project(":currency:currency-data:currency-data-model"))
     implementation(project(":currency:currency-data:currency-data-contract"))
 
     implementation(libs.coroutinesCore)

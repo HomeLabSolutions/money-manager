@@ -8,10 +8,9 @@ import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.d9tilov.android.core.constants.DataConstants.TAG
-import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.backup.domain.BackupInteractor
-import com.d9tilov.moneymanager.base.data.local.exceptions.NetworkException
-import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
+import com.d9tilov.android.core.exceptions.WrongUidException
+import com.d9tilov.android.network.exception.NetworkException
 import com.google.firebase.FirebaseException
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject

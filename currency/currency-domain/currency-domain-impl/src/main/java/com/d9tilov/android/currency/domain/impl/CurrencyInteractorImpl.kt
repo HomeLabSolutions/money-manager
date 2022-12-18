@@ -4,10 +4,10 @@ import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_COD
 import com.d9tilov.android.core.utils.divideBy
 import com.d9tilov.android.core.utils.removeScale
 import com.d9tilov.android.currency.data.contract.CurrencyRepo
-import com.d9tilov.android.currency.data.contract.model.Currency
-import com.d9tilov.android.currency.data.contract.model.CurrencyMetaData
+import com.d9tilov.android.currency.data.model.Currency
+import com.d9tilov.android.currency.data.model.CurrencyMetaData
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
-import com.d9tilov.android.currency.domain.contract.model.DomainCurrency
+import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.android.currency.domain.impl.mapper.toDomain
 import java.math.BigDecimal
 import kotlinx.coroutines.flow.Flow

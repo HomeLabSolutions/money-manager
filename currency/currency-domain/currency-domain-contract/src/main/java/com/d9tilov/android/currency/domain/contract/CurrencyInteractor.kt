@@ -1,8 +1,8 @@
 package com.d9tilov.android.currency.domain.contract
 
-import com.d9tilov.android.currency.data.contract.model.Currency
-import com.d9tilov.android.currency.data.contract.model.CurrencyMetaData
-import com.d9tilov.android.currency.domain.contract.model.DomainCurrency
+import com.d9tilov.android.currency.data.model.Currency
+import com.d9tilov.android.currency.data.model.CurrencyMetaData
+import com.d9tilov.android.currency.domain.model.DomainCurrency
 import java.math.BigDecimal
 import kotlinx.coroutines.flow.Flow
 

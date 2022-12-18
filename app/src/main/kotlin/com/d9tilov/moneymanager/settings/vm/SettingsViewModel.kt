@@ -1,67 +1,101 @@
 package com.d9tilov.moneymanager.settings.vm
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.core.constants.DataConstants.TAG
+import com.d9tilov.android.datastore.PreferencesStore.Companion.UNKNOWN_BACKUP_DATE
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.backup.domain.BackupInteractor
-import com.d9tilov.moneymanager.base.data.local.exceptions.NetworkException
-import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
+import com.d9tilov.android.core.exceptions.WrongUidException
+import com.d9tilov.android.network.exception.NetworkException
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
 import com.d9tilov.moneymanager.billing.domain.BillingInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
-import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import com.google.firebase.FirebaseException
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.FileNotFoundException
 import javax.inject.Inject
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import timber.log.Timber
+
+data class SettingsUiState(
+    val subscriptionState: SubscriptionUiState? = null,
+    val startPeriodDay: String = "1",
+    val lastBackupTimestamp: Long = UNKNOWN_BACKUP_DATE,
+    val backupLoading: Boolean = false,
+    val showBackupCloseBtn: Boolean = false
+)
+
+data class SubscriptionUiState(
+    @StringRes val title: Int = R.string.settings_subscription_premium_title,
+    @StringRes val description: Int = R.string.settings_subscription_premium_description,
+    val minPrice: SubscriptionPriceUiState? = null
+)
+
+data class SubscriptionPriceUiState(
+    val amount: String = "",
+    val code: String = "",
+    val symbol: String = ""
+)
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val userInteractor: UserInteractor,
     private val backupInteractor: BackupInteractor,
+    private val userInteractor: UserInteractor,
     billingInteractor: BillingInteractor
 ) : BaseViewModel<SettingsNavigator>() {
 
-    private val minPriceExceptionHandler = CoroutineExceptionHandler { _, exception ->
-        Timber.d("Unable to get min price")
+    private val _uiState = MutableStateFlow(SettingsUiState())
+    val uiState = _uiState.asStateFlow()
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            combine(
+                userInteractor.getCurrentUser(),
+                backupInteractor.getBackupData(),
+                billingInteractor.getPremiumInfo()
+            ) { user, backupData, premiumInfo ->
+                val price = if (premiumInfo.isPremium)
+                    SubscriptionPriceUiState(
+                        premiumInfo.minBillingPrice.value.toString(),
+                        premiumInfo.minBillingPrice.code,
+                        premiumInfo.minBillingPrice.symbol
+                    )
+                else null
+                val subscriptionState = if (premiumInfo.canPurchase) {
+                    SubscriptionUiState(
+                        title = if (premiumInfo.isPremium) R.string.settings_subscription_premium_acknowledged_title
+                        else R.string.settings_subscription_premium_title,
+                        description = when (premiumInfo.isPremium) {
+                            true -> if (premiumInfo.hasActiveSku)
+                                R.string.settings_subscription_premium_acknowledged_subtitle_renewing else
+                                R.string.settings_subscription_premium_acknowledged_subtitle_cancel
+                            false -> R.string.settings_subscription_premium_description
+                        },
+                        minPrice = price
+                    )
+                } else null
+                val fiscalDay = user?.fiscalDay ?: 1
+                SettingsUiState(
+                    subscriptionState,
+                    fiscalDay.toString(),
+                    backupData.lastBackupTimestamp,
+                    false,
+                    backupData.lastBackupTimestamp != UNKNOWN_BACKUP_DATE
+                )
+            }.collect { state -> _uiState.update { state } }
+        }
     }
-
-    val userData = userInteractor.getCurrentUser()
-        .flowOn(Dispatchers.IO)
-        .stateIn(viewModelScope, SharingStarted.Eagerly, UserProfile.EMPTY)
-
-    val backupData = backupInteractor.getBackupData()
-        .flowOn(Dispatchers.IO)
-        .stateIn(viewModelScope, SharingStarted.Eagerly, com.d9tilov.android.datastore.model.BackupData.EMPTY)
-//    val minBillingPrice = billingInteractor.getMinPrice()
-//        .flowOn(Dispatchers.IO + minPriceExceptionHandler)
-//        .stateIn(viewModelScope, SharingStarted.Eagerly, DomainCurrency.EMPTY)
-
-    val isPremium = billingInteractor.isPremium()
-        .flowOn(Dispatchers.IO)
-        .shareIn(viewModelScope, SharingStarted.WhileSubscribed())
-
-//    val getActiveSku = billingInteractor.hasRenewablePremium
-//        .flowOn(Dispatchers.IO)
-//        .shareIn(viewModelScope, SharingStarted.WhileSubscribed())
-//
-//    val canPurchase = billingInteractor.canPurchase()
-//        .flowOn(Dispatchers.IO)
-//        .stateIn(viewModelScope, SharingStarted.Lazily, false)
 
     fun backup() {
         viewModelScope.launch(Dispatchers.IO) {
-            setLoading(true)
+            _uiState.update { it.copy(backupLoading = true) }
             try {
                 backupInteractor.makeBackup()
                 setMessage(R.string.settings_backup_succeeded)
@@ -78,14 +112,17 @@ class SettingsViewModel @Inject constructor(
                 Timber.tag(TAG).d("Do work with exception: $ex")
                 setMessage(R.string.settings_backup_error)
             }
-            setLoading(false)
+            _uiState.update { it.copy(backupLoading = false) }
         }
     }
 
-    fun changeFiscalDay(day: Int) {
+    fun changeFiscalDay(day: String) {
+        _uiState.update { it.copy(startPeriodDay = day) }
+    }
+
+    fun save() {
         viewModelScope.launch(Dispatchers.IO) {
-            userInteractor.updateFiscalDay(day)
-            withContext(Dispatchers.Main) { navigator?.save() }
+            userInteractor.updateFiscalDay(_uiState.value.startPeriodDay.toInt())
         }
     }
 }

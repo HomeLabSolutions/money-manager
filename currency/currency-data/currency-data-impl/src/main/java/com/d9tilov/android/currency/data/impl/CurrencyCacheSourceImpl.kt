@@ -1,7 +1,7 @@
 package com.d9tilov.android.currency.data.impl
 
 import com.d9tilov.android.currency.data.contract.CurrencyCacheSource
-import com.d9tilov.android.currency.data.contract.model.CurrencyMetaData
+import com.d9tilov.android.currency.data.model.CurrencyMetaData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 

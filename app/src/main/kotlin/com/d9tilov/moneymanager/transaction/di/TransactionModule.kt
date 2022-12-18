@@ -2,7 +2,7 @@ package com.d9tilov.moneymanager.transaction.di
 
 import com.d9tilov.android.database.AppDatabase
 import com.d9tilov.android.datastore.PreferencesStore
-import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
+import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
 import com.d9tilov.moneymanager.transaction.data.TransactionDataRepo
@@ -52,7 +52,7 @@ object TransactionModule {
         categoryInteractor: CategoryInteractor,
         userInteractor: UserInteractor,
         currencyInteractor: com.d9tilov.android.currency.domain.contract.CurrencyInteractor,
-        budgetInteractor: BudgetInteractor
+        budgetInteractor: com.d9tilov.android.budget.domain.contract.BudgetInteractor
     ): TransactionInteractor = TransactionInteractorImpl(
         transactionRepo,
         regularTransactionInteractor,

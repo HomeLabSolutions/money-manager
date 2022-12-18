@@ -1,0 +1,12 @@
+package com.d9tilov.android.budget.data.contract
+
+import com.d9tilov.android.budget.data.model.BudgetData
+import kotlinx.coroutines.flow.Flow
+
+interface BudgetSource {
+
+    fun get(): Flow<BudgetData>
+    suspend fun createIfNeeded(currencyCode: String)
+    suspend fun update(budgetData: BudgetData)
+    suspend fun delete(budgetData: BudgetData)
+}

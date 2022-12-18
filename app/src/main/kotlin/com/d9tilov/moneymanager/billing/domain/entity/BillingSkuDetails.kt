@@ -1,6 +1,6 @@
 package com.d9tilov.moneymanager.billing.domain.entity
 
-import com.d9tilov.android.currency.data.contract.model.Currency
+import com.d9tilov.android.currency.data.model.Currency
 
 data class BillingSkuDetails(
     val tag: String,

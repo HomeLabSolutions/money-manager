@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import com.d9tilov.android.currency.data.contract.model.CurrencyMetaData
+import com.d9tilov.android.currency.data.model.CurrencyMetaData
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.moneymanager.BuildConfig

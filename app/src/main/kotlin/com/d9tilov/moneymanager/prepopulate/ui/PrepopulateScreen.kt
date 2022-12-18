@@ -47,10 +47,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.d9tilov.android.currency.domain.contract.model.DomainCurrency
+import com.d9tilov.android.budget.ui.BudgetScreen
+import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.android.ui.CurrencyListScreen
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.budget.ui.BudgetScreen
 import com.d9tilov.moneymanager.home.ui.MainActivity
 import com.d9tilov.moneymanager.prepopulate.ui.PrepopulateScreen.Companion.fromScreenId
 

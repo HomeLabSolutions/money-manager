@@ -13,7 +13,7 @@ import com.d9tilov.android.common_android.utils.TRANSACTION_DATE_FORMAT
 import com.d9tilov.android.common_android.utils.currentDateTime
 import com.d9tilov.android.common_android.utils.toLocalDateTime
 import com.d9tilov.android.common_android.utils.toMillis
-import com.d9tilov.android.currency.domain.contract.model.DomainCurrency
+import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.EditTransactionNavigator

@@ -14,8 +14,6 @@
     <string name="title_category_set">Available icons</string>
     <string name="title_category_group_set">Categories</string>
     <string name="title_category_creation_create">Category creation</string>
-    <string name="title_prepopulate_currency">Choose currency</string>
-    <string name="title_prepopulate_budget">Current budget</string>
     <string name="title_prepopulate_regular_incomes">Regular incomes</string>
     <string name="title_prepopulate_regular_income">Regular income</string>
     <string name="title_prepopulate_regular_expenses">Regular expenses</string>

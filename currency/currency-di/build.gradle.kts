@@ -16,27 +16,16 @@ android {
         minSdk = minSdkVersion
     }
 
-    buildFeatures {
-        compose = true
-    }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.2"
-    }
-
     kotlinOptions {
         jvmTarget = "1.8"
     }
 }
 
 dependencies {
-    implementation(project(":core:common"))
-    implementation(project(":core:common-android"))
-    implementation(project(":core:designsystem"))
     implementation(project(":core:network"))
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
@@ -45,8 +34,6 @@ dependencies {
     implementation(project(":currency:currency-domain:currency-domain-contract"))
     implementation(project(":currency:currency-domain:currency-domain-impl"))
 
-    implementation(libs.composeRuntime)
-
     implementation(libs.bundles.retrofit)
 
     implementation(libs.hilt)
@@ -54,5 +41,4 @@ dependencies {
     kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.bundles.room)
-    kapt(libs.roomCompiler)
 }

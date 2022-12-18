@@ -48,14 +48,15 @@ import coil.request.ImageRequest
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.backup.PeriodicBackupWorker
-import com.d9tilov.moneymanager.core.ui.views.CurrencyTextFieldExtraSmall
-import com.d9tilov.moneymanager.core.ui.views.SimpleDialog
+import com.d9tilov.android.designsystem.CurrencyTextFieldExtraSmall
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.common_android.utils.toBudgetCreatedDateStr
+import com.d9tilov.android.common_android.utils.toLocalDateTime
+import com.d9tilov.android.designsystem.SimpleDialog
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileUiItem
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileUiState
-import com.d9tilov.moneymanager.profile.ui.vm.ProfileViewModel2
+import com.d9tilov.moneymanager.profile.ui.vm.ProfileViewModel
 import com.d9tilov.moneymanager.splash.ui.RouterActivity
 import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import dagger.hilt.android.internal.managers.FragmentComponentManager
@@ -63,7 +64,7 @@ import dagger.hilt.android.internal.managers.FragmentComponentManager
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun ProfileRoute(
-    viewModel: ProfileViewModel2 = hiltViewModel(),
+    viewModel: ProfileViewModel = hiltViewModel(),
     navigateToCurrencyListScreen: () -> Unit,
     navigateToBudgetScreen: () -> Unit,
     navigateToSettingsScreen: () -> Unit,
@@ -208,7 +209,7 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
         is ProfileUiItem.BudgetUiItem -> ProfileItemData(
             ImageVector.vectorResource(R.drawable.ic_budget_icon),
             stringResource(R.string.profile_item_budget_title),
-            profileUiItem.budgetData.createdDate.toBudgetCreatedDateStr()
+            profileUiItem.budgetData.createdDate.toLocalDateTime().toBudgetCreatedDateStr()
         )
         is ProfileUiItem.RegularIncomeUiItem -> ProfileItemData(
             ImageVector.vectorResource(R.drawable.ic_regular_income),
