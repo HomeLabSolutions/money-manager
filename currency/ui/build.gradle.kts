@@ -35,18 +35,14 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
-    implementation(project(":core:common-android"))
     implementation(project(":core:designsystem"))
+    implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
 
-    implementation(libs.hiltNavigationCompose)
     implementation(libs.bundles.compose)
     implementation(libs.bundles.composeMaterial3)
-    implementation(libs.composeActivity)
     implementation(libs.composeViewModel)
     implementation(libs.composeRuntime)
-    implementation(libs.composeConstraintLayout)
-    debugImplementation(libs.composeToolingUi)
 
     implementation(libs.hilt)
     implementation(libs.hiltNavigationCompose)

@@ -33,12 +33,12 @@ import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.settings.vm.SettingsUiState
-import com.d9tilov.moneymanager.settings.vm.SettingsViewModel2
+import com.d9tilov.moneymanager.settings.vm.SettingsViewModel
 import com.d9tilov.moneymanager.settings.vm.SubscriptionUiState
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun SettingsRoute(viewModel: SettingsViewModel2 = hiltViewModel(), clickBack: () -> Unit) {
+fun SettingsRoute(viewModel: SettingsViewModel = hiltViewModel(), clickBack: () -> Unit) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     SettingsScreen(
         uiState = uiState,

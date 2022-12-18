@@ -6,7 +6,7 @@ import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.d9tilov.android.core.constants.DataConstants.TAG
-import com.d9tilov.android.currency.domain.contract.model.DomainCurrency
+import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails
 import com.d9tilov.moneymanager.billing.domain.entity.PremiumEmails
 import com.d9tilov.moneymanager.billing.domain.entity.PremiumInfo

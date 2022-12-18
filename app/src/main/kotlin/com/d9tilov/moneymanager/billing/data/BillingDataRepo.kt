@@ -5,7 +5,7 @@ import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
-import com.d9tilov.android.currency.data.contract.model.Currency
+import com.d9tilov.android.currency.data.model.Currency
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.moneymanager.billing.data.local.BillingSource
 import com.d9tilov.moneymanager.billing.domain.BillingRepo

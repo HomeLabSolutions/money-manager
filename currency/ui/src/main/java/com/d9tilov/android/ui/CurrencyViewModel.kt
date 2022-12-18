@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.core.model.ErrorMessage
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.contract.UpdateCurrencyInteractor
-import com.d9tilov.android.currency.domain.contract.model.DomainCurrency
+import com.d9tilov.android.currency.domain.model.DomainCurrency
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers

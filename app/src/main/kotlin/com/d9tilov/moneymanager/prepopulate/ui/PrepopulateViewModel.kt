@@ -2,12 +2,13 @@ package com.d9tilov.moneymanager.prepopulate.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
-import com.d9tilov.moneymanager.budget.vm.BudgetUiState
+import com.d9tilov.android.budget.ui.BudgetUiState
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.ui.CurrencyUiState
 import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.math.BigDecimal
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,8 +17,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
-import javax.inject.Inject
 
 data class PrepopulateUiState(
     val currencyUiState: CurrencyUiState = CurrencyUiState.NoCurrencies(),
@@ -28,7 +27,7 @@ data class PrepopulateUiState(
 class PrepopulateViewModel @Inject constructor(
     private val currencyInteractor: com.d9tilov.android.currency.domain.contract.CurrencyInteractor,
     private val updateCurrencyInteractor: com.d9tilov.android.currency.domain.contract.UpdateCurrencyInteractor,
-    private val budgetInteractor: BudgetInteractor,
+    private val budgetInteractor: com.d9tilov.android.budget.domain.contract.BudgetInteractor,
     private val userInteractor: UserInteractor
 ) : ViewModel() {
 

@@ -1,8 +1,8 @@
 package com.d9tilov.moneymanager.category.data.local
 
 import com.d9tilov.moneymanager.base.data.local.db.prepopulate.PrepopulateDataManager
-import com.d9tilov.moneymanager.base.data.local.exceptions.WrongIdException
-import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
+import com.d9tilov.android.core.exceptions.WrongIdException
+import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.android.database.entity.CategoryDbModel

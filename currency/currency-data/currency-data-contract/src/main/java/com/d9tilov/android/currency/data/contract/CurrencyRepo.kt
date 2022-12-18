@@ -1,7 +1,7 @@
 package com.d9tilov.android.currency.data.contract
 
-import com.d9tilov.android.currency.data.contract.model.Currency
-import com.d9tilov.android.currency.data.contract.model.CurrencyMetaData
+import com.d9tilov.android.currency.data.model.Currency
+import com.d9tilov.android.currency.data.model.CurrencyMetaData
 import kotlinx.coroutines.flow.Flow
 
 interface CurrencyRepo {

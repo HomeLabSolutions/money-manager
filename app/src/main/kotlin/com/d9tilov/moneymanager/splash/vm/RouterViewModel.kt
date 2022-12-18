@@ -2,10 +2,10 @@ package com.d9tilov.moneymanager.splash.vm
 
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.core.constants.DataConstants.TAG
+import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.datastore.PreferencesStore
+import com.d9tilov.android.network.exception.NetworkException
 import com.d9tilov.moneymanager.backup.domain.BackupInteractor
-import com.d9tilov.moneymanager.base.data.local.exceptions.NetworkException
-import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel

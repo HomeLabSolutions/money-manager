@@ -11,7 +11,7 @@ import com.d9tilov.android.common_android.utils.getEndOfDay
 import com.d9tilov.android.common_android.utils.getStartDateOfFiscalPeriod
 import com.d9tilov.android.common_android.utils.getStartOfDay
 import com.d9tilov.android.common_android.utils.isSameDay
-import com.d9tilov.moneymanager.budget.domain.BudgetInteractor
+import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.category.exception.CategoryException
@@ -27,7 +27,6 @@ import com.d9tilov.moneymanager.transaction.domain.entity.TransactionLineChartMo
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionSpendingTodayModel
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.model.isIncome
-import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.transaction.domain.mapper.toChartModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDataModel
@@ -58,7 +57,7 @@ class TransactionInteractorImpl(
     private val categoryInteractor: CategoryInteractor,
     private val userInteractor: UserInteractor,
     private val currencyInteractor: com.d9tilov.android.currency.domain.contract.CurrencyInteractor,
-    private val budgetInteractor: BudgetInteractor
+    private val budgetInteractor: com.d9tilov.android.budget.domain.contract.BudgetInteractor
 ) : TransactionInteractor {
 
     override suspend fun addTransaction(transaction: Transaction) {

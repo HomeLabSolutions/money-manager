@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.d9tilov.moneymanager.R
 import com.d9tilov.android.core.events.OnItemClickListener
 import com.d9tilov.moneymanager.core.ui.BaseViewHolder
-import com.d9tilov.moneymanager.core.ui.color.ColorManager
+import com.d9tilov.android.designsystem.color.ColorManager
 import com.d9tilov.moneymanager.databinding.ItemColorPickerBinding
 
 class CategoryColorAdapter(@ColorRes private var chosenColor: Int?, private val itemClickListener: OnItemClickListener<Int>) :

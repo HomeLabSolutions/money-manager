@@ -15,8 +15,6 @@
     <string name="title_category_set">Доступные иконки</string>
     <string name="title_category_group_set">Категории</string>
     <string name="title_category_creation_create">Создание категории</string>
-    <string name="title_prepopulate_currency">Выберите валюту</string>
-    <string name="title_prepopulate_budget">Текущий бюджет</string>
     <string name="title_prepopulate_regular_incomes">Постоянные доходы</string>
     <string name="title_prepopulate_regular_income">Постоянный доход</string>
     <string name="title_prepopulate_regular_expenses">Постоянные расходы</string>

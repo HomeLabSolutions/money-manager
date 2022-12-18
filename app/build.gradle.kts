@@ -173,15 +173,26 @@ dependencies {
 
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
+    implementation(project(":core:network"))
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
     implementation(project(":core:designsystem"))
 
     implementation(project(":currency:currency-di"))
+    implementation(project(":currency:currency-data:currency-data-model"))
     implementation(project(":currency:currency-data:currency-data-contract"))
     implementation(project(":currency:currency-data:currency-data-impl"))
+    implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
     implementation(project(":currency:ui"))
+
+    implementation(project(":budget:budget-di"))
+    implementation(project(":budget:budget-data:budget-data-model"))
+    implementation(project(":budget:budget-data:budget-data-contract"))
+    implementation(project(":budget:budget-data:budget-data-impl"))
+    implementation(project(":budget:budget-domain:budget-domain-contract"))
+    implementation(project(":budget:budget-domain:budget-domain-impl"))
+    implementation(project(":budget:budget-ui"))
 
     implementation(libs.kotlinJdk)
     implementation(libs.kotlinDatetime)

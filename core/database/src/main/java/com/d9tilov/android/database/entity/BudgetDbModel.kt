@@ -26,5 +26,5 @@ data class BudgetDbModel(
     @ColumnInfo(name = "currency") val currency: String,
     @ColumnInfo(name = "sum") val sum: BigDecimal,
     @ColumnInfo(name = "saveSum") val saveSum: BigDecimal,
-    @ColumnInfo(name = "createdDate") val createdDate: LocalDateTime
+    @ColumnInfo(name = "createdDate") val createdDate: Long
 )

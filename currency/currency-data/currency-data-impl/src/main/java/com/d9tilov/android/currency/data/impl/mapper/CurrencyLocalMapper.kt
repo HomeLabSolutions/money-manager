@@ -1,8 +1,8 @@
 @file:Suppress("PackageNaming")
 package com.d9tilov.android.currency.data.impl.mapper
 
-import com.d9tilov.android.currency.data.contract.model.Currency
-import com.d9tilov.android.currency.data.contract.model.CurrencyMetaData
+import com.d9tilov.android.currency.data.model.Currency
+import com.d9tilov.android.currency.data.model.CurrencyMetaData
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.database.entity.CurrencyDbModel
 import com.d9tilov.android.database.entity.MainCurrencyDbModel

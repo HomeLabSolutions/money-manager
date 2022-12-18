@@ -2,11 +2,11 @@ package com.d9tilov.moneymanager.backup.data.local
 
 import com.d9tilov.moneymanager.backup.BackupManager
 import com.d9tilov.android.core.model.ResultOf
-import com.d9tilov.moneymanager.base.data.local.exceptions.NetworkException
-import com.d9tilov.moneymanager.base.data.local.exceptions.WrongUidException
+import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.datastore.PreferencesStore.Companion.UNKNOWN_BACKUP_DATE
 import com.d9tilov.android.datastore.model.BackupData
+import com.d9tilov.android.network.exception.NetworkException
 import com.google.firebase.FirebaseException
 import kotlinx.coroutines.flow.Flow
 import java.io.FileNotFoundException

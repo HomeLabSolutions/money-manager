@@ -4,8 +4,8 @@ import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.currency.data.contract.CurrencyCacheSource
 import com.d9tilov.android.currency.data.contract.CurrencyRepo
 import com.d9tilov.android.currency.data.contract.CurrencySource
-import com.d9tilov.android.currency.data.contract.model.Currency
-import com.d9tilov.android.currency.data.contract.model.CurrencyMetaData
+import com.d9tilov.android.currency.data.model.Currency
+import com.d9tilov.android.currency.data.model.CurrencyMetaData
 import com.d9tilov.android.currency.data.impl.mapper.toDataModel
 import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.network.CurrencyApi
