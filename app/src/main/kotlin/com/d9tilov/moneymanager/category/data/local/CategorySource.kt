@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.category.data.local
 
 
-import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.database.model.TransactionType
 import com.d9tilov.moneymanager.category.data.entity.Category
 import kotlinx.coroutines.flow.Flow
 

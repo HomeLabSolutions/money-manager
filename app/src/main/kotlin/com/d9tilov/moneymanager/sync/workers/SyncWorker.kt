@@ -21,7 +21,7 @@ import kotlinx.coroutines.withContext
 class SyncWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted workerParameters: WorkerParameters,
-    private val currencyInteractor: com.d9tilov.android.currency.domain.contract.CurrencyInteractor
+    private val currencyInteractor: CurrencyInteractor
 ) : CoroutineWorker(context, workerParameters) {
 
     override suspend fun getForegroundInfo(): ForegroundInfo =

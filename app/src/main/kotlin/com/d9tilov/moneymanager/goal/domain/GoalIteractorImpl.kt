@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.goal.domain
 
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
+import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.moneymanager.goal.domain.entity.Goal
 import com.d9tilov.moneymanager.goal.domain.mapper.GoalDomainMapper
 import kotlinx.coroutines.flow.Flow
@@ -9,8 +10,8 @@ import kotlinx.coroutines.flow.map
 
 class GoalIteractorImpl(
     private val goalRepo: GoalRepo,
-    private val currencyInteractor: com.d9tilov.android.currency.domain.contract.CurrencyInteractor,
-    private val budgetInteractor: com.d9tilov.android.budget.domain.contract.BudgetInteractor,
+    private val currencyInteractor: CurrencyInteractor,
+    private val budgetInteractor: BudgetInteractor,
     private val goalDomainMapper: GoalDomainMapper
 ) : GoalInteractor {
 

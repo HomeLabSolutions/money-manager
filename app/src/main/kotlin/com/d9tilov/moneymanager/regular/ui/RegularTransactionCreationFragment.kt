@@ -23,7 +23,7 @@ import com.d9tilov.android.common_android.utils.getStartOfDay
 import com.d9tilov.android.common_android.utils.onChange
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.PeriodType
-import com.d9tilov.android.core.model.isIncome
+import com.d9tilov.android.database.model.isIncome
 import com.d9tilov.android.core.utils.toBigDecimal
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment

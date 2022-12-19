@@ -8,7 +8,7 @@ import com.d9tilov.android.common_android.utils.toLocalDateTime
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsDetailsNavigator
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
-import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.database.model.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import dagger.hilt.android.lifecycle.HiltViewModel

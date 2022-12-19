@@ -6,7 +6,7 @@ import com.d9tilov.android.common_android.utils.getEndOfDay
 import com.d9tilov.android.common_android.utils.getStartOfDay
 import com.d9tilov.android.common_android.utils.toLocal
 import com.d9tilov.moneymanager.category.data.entity.Category
-import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.database.model.TransactionType
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Instant

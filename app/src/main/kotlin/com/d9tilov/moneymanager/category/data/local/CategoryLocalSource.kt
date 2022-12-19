@@ -10,7 +10,7 @@ import com.d9tilov.moneymanager.category.data.local.mapper.CategoryMapper
 import com.d9tilov.moneymanager.category.exception.CategoryException
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.android.database.dao.CategoryDao
-import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.database.model.TransactionType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull

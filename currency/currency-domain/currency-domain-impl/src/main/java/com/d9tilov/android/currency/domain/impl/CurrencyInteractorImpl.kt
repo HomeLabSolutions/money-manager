@@ -12,6 +12,7 @@ import com.d9tilov.android.currency.domain.impl.mapper.toDomain
 import java.math.BigDecimal
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
 
@@ -28,7 +29,7 @@ class CurrencyInteractorImpl(private val currencyRepo: CurrencyRepo) : CurrencyI
     override fun getMainCurrencyFlow(): Flow<CurrencyMetaData> = currencyRepo.getMainCurrency()
 
     override suspend fun getMainCurrency(): CurrencyMetaData =
-        currencyRepo.getMainCurrency().first()
+        currencyRepo.getMainCurrency().firstOrNull() ?: CurrencyMetaData.EMPTY
 
     override suspend fun getCurrencyByCode(code: String): Currency =
         currencyRepo.getCurrencyByCode(code)

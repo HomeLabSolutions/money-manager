@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.regular.di
 
+import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.database.AppDatabase
 import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
@@ -32,7 +33,7 @@ object RegularTransactionModule {
 
     @Provides
     fun provideRegularTransactionInteractor(
-        currencyInteractor: com.d9tilov.android.currency.domain.contract.CurrencyInteractor,
+        currencyInteractor: CurrencyInteractor,
         regularTransactionRepo: RegularTransactionRepo,
         categoryInteractor: CategoryInteractor
     ): RegularTransactionInteractor = RegularTransactionInteractorImpl(

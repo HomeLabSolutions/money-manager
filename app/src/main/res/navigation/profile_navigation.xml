@@ -102,7 +102,7 @@
 
         <argument
             android:name="transactionType"
-            app:argType="com.d9tilov.android.core.model.TransactionType" />
+            app:argType="com.d9tilov.android.database.model.TransactionType" />
         <argument
             android:name="regular_transaction"
             android:defaultValue="@null"
@@ -182,7 +182,7 @@
             app:argType="com.d9tilov.moneymanager.category.domain.entity.CategoryDestination" />
         <argument
             android:name="transactionType"
-            app:argType="com.d9tilov.android.core.model.TransactionType" />
+            app:argType="com.d9tilov.android.database.model.TransactionType" />
 
         <argument
             android:name="sum"
@@ -229,7 +229,7 @@
             app:argType="com.d9tilov.moneymanager.category.domain.entity.CategoryDestination" />
         <argument
             android:name="transactionType"
-            app:argType="com.d9tilov.android.core.model.TransactionType" />
+            app:argType="com.d9tilov.android.database.model.TransactionType" />
         <argument
             android:name="parent_category"
             app:argType="com.d9tilov.moneymanager.category.data.entity.Category" />
@@ -352,7 +352,7 @@
 
         <argument
             android:name="transactionType"
-            app:argType="com.d9tilov.android.core.model.TransactionType" />
+            app:argType="com.d9tilov.android.database.model.TransactionType" />
         <argument
             android:name="firstCategory"
             app:argType="com.d9tilov.moneymanager.category.data.entity.Category" />

@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.d9tilov.android.core.constants.CurrencyConstants.DECIMAL_LENGTH
-import com.d9tilov.android.core.model.TransactionType
-import com.d9tilov.android.core.model.isIncome
+import com.d9tilov.android.database.model.TransactionType
+import com.d9tilov.android.database.model.isIncome
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.currencyCode
 import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator

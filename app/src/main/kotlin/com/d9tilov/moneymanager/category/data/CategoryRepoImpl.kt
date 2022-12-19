@@ -3,7 +3,7 @@ package com.d9tilov.moneymanager.category.data
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.data.local.CategorySource
 import com.d9tilov.moneymanager.category.domain.CategoryRepo
-import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.database.model.TransactionType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
