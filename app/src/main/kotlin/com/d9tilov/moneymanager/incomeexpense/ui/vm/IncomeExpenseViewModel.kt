@@ -2,6 +2,7 @@ package com.d9tilov.moneymanager.incomeexpense.ui.vm
 
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
+import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.moneymanager.base.ui.navigator.IncomeExpenseNavigator
 import com.d9tilov.moneymanager.billing.domain.BillingInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
@@ -19,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class IncomeExpenseViewModel @Inject constructor(
-    private val currencyInteractor: com.d9tilov.android.currency.domain.contract.CurrencyInteractor,
+    private val currencyInteractor: CurrencyInteractor,
     billingInteractor: BillingInteractor
 ) : BaseViewModel<IncomeExpenseNavigator>() {
 

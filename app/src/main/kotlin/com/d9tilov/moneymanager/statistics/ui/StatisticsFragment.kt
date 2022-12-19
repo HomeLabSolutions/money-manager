@@ -28,7 +28,7 @@ import com.d9tilov.android.common_android.utils.isSameDay
 import com.d9tilov.android.common_android.utils.toLocalDateTime
 import com.d9tilov.android.common_android.utils.toMillis
 import com.d9tilov.android.core.model.ResultOf
-import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.database.model.TransactionType
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsNavigator

@@ -37,8 +37,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.android.core.utils.CurrencyUtils
+import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.android.designsystem.MmTopAppBar
 import kotlinx.coroutines.launch
 
@@ -47,7 +47,9 @@ import kotlinx.coroutines.launch
 fun CurrencyListRoute(viewModel: CurrencyViewModel = hiltViewModel(), clickBack: () -> Unit) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     CurrencyListScreen(
-        uiState, showToolbar = true, onChooseCurrency = { currency ->
+        currencyUiState = uiState,
+        showToolbar = true,
+        onChooseCurrency = { currency ->
             viewModel.changeCurrency(currency.code)
             clickBack.invoke()
         },

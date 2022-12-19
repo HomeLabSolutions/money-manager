@@ -3,6 +3,7 @@ package com.d9tilov.moneymanager.profile.ui
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -70,6 +71,7 @@ fun ProfileRoute(
     navigateToSettingsScreen: () -> Unit,
 ) {
     val uiState: ProfileUiState by viewModel.profileState.collectAsStateWithLifecycle()
+    Log.d("moggot", "ProfileRoute: $uiState")
     val showDialog by viewModel.showDialog.collectAsStateWithLifecycle()
     val context = LocalContext.current
     ProfileScreen(

@@ -6,9 +6,9 @@ import com.d9tilov.android.core.model.PeriodType
 import com.d9tilov.android.core.model.PeriodType.Companion.DAY_NAME
 import com.d9tilov.android.core.model.PeriodType.Companion.MONTH_NAME
 import com.d9tilov.android.core.model.PeriodType.Companion.WEEK_NAME
-import com.d9tilov.android.core.model.TransactionType
-import com.d9tilov.android.core.model.TransactionType.Companion.EXPENSE_TRANSACTION_NAME
-import com.d9tilov.android.core.model.TransactionType.Companion.INCOME_TRANSACTION_NAME
+import com.d9tilov.android.database.model.TransactionType
+import com.d9tilov.android.database.model.TransactionType.Companion.EXPENSE_TRANSACTION_NAME
+import com.d9tilov.android.database.model.TransactionType.Companion.INCOME_TRANSACTION_NAME
 
 object ModelTypeConverter {
 

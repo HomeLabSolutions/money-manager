@@ -7,7 +7,7 @@ import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.regular.data.entity.RegularTransactionData
 import com.d9tilov.moneymanager.regular.data.local.mapper.toDataModel
 import com.d9tilov.moneymanager.regular.data.local.mapper.toDbModel
-import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.database.model.TransactionType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull

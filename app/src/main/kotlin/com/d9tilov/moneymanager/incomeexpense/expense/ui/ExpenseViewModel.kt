@@ -8,7 +8,7 @@ import androidx.paging.map
 import com.d9tilov.android.common_android.utils.currentDateTime
 import com.d9tilov.android.common_android.utils.getEndOfDay
 import com.d9tilov.android.common_android.utils.isSameDay
-import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.database.model.TransactionType
 import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
 import com.d9tilov.moneymanager.billing.domain.BillingInteractor
 import com.d9tilov.moneymanager.category.data.entity.Category

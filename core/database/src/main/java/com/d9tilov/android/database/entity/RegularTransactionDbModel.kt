@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.d9tilov.android.core.model.ExecutionPeriod
-import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.database.model.TransactionType
 import java.math.BigDecimal
 import kotlinx.datetime.LocalDateTime
 

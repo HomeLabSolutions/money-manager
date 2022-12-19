@@ -3,7 +3,7 @@ package com.d9tilov.moneymanager.regular.data.entity
 import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.common_android.utils.currentDateTime
 import com.d9tilov.android.core.model.ExecutionPeriod
-import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.database.model.TransactionType
 import java.math.BigDecimal
 import kotlinx.datetime.LocalDateTime
 

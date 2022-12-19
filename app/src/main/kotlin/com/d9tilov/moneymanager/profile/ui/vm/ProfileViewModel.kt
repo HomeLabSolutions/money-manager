@@ -4,8 +4,9 @@ import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.budget.data.model.BudgetData
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
-import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.database.model.TransactionType
 import com.d9tilov.android.currency.data.model.CurrencyMetaData
+import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
 import com.d9tilov.moneymanager.billing.domain.BillingInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
@@ -59,7 +60,7 @@ data class ProfileUiState(
 class ProfileViewModel @Inject constructor(
     private val firebaseAnalytics: FirebaseAnalytics,
     private val userInfoInteractor: UserInteractor,
-    currencyInteractor: com.d9tilov.android.currency.domain.contract.CurrencyInteractor,
+    currencyInteractor: CurrencyInteractor,
     budgetInteractor: BudgetInteractor,
     regularTransactionInteractor: RegularTransactionInteractor,
     billingInteractor: BillingInteractor,
@@ -67,7 +68,7 @@ class ProfileViewModel @Inject constructor(
 
     private val _showDialog: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val showDialog: StateFlow<Boolean> = _showDialog.asStateFlow()
-    val userCurrencyPair = combine(
+    private val userCurrencyPair = combine(
         userInfoInteractor.getCurrentUser(),
         currencyInteractor.getMainCurrencyFlow()
     ) { userInfo, currency ->

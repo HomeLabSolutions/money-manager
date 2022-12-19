@@ -75,7 +75,7 @@
             app:argType="com.d9tilov.moneymanager.category.domain.entity.CategoryDestination" />
         <argument
             android:name="transactionType"
-            app:argType="com.d9tilov.android.core.model.TransactionType" />
+            app:argType="com.d9tilov.android.database.model.TransactionType" />
     </fragment>
 
     <fragment
@@ -121,7 +121,7 @@
             app:argType="com.d9tilov.moneymanager.category.domain.entity.CategoryDestination" />
         <argument
             android:name="transactionType"
-            app:argType="com.d9tilov.android.core.model.TransactionType" />
+            app:argType="com.d9tilov.android.database.model.TransactionType" />
         <argument
             android:name="parent_category"
             app:argType="com.d9tilov.moneymanager.category.data.entity.Category" />
@@ -146,7 +146,7 @@
 
         <argument
             android:name="transactionType"
-            app:argType="com.d9tilov.android.core.model.TransactionType" />
+            app:argType="com.d9tilov.android.database.model.TransactionType" />
         <argument
             android:name="edited_transaction"
             app:argType="com.d9tilov.moneymanager.transaction.domain.entity.Transaction" />
@@ -242,7 +242,7 @@
 
         <argument
             android:name="transactionType"
-            app:argType="com.d9tilov.android.core.model.TransactionType" />
+            app:argType="com.d9tilov.android.database.model.TransactionType" />
         <argument
             android:name="firstCategory"
             app:argType="com.d9tilov.moneymanager.category.data.entity.Category" />

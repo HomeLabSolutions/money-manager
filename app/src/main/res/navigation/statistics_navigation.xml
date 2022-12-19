@@ -40,6 +40,6 @@
             app:argType="boolean" />
         <argument
             android:name="transactionType"
-            app:argType="com.d9tilov.android.core.model.TransactionType" />
+            app:argType="com.d9tilov.android.database.model.TransactionType" />
     </fragment>
 </navigation>

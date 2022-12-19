@@ -3,6 +3,7 @@ package com.d9tilov.moneymanager.transaction.domain
 import android.os.StrictMode
 import androidx.paging.PagingData
 import androidx.paging.map
+import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.common_android.utils.countDaysRemainingNextFiscalDate
 import com.d9tilov.android.common_android.utils.currentDate
 import com.d9tilov.android.common_android.utils.currentDateTime
@@ -11,27 +12,29 @@ import com.d9tilov.android.common_android.utils.getEndOfDay
 import com.d9tilov.android.common_android.utils.getStartDateOfFiscalPeriod
 import com.d9tilov.android.common_android.utils.getStartOfDay
 import com.d9tilov.android.common_android.utils.isSameDay
-import com.d9tilov.android.budget.domain.contract.BudgetInteractor
+import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
+import com.d9tilov.android.core.model.ExecutionPeriod
+import com.d9tilov.android.core.model.PeriodType
+import com.d9tilov.android.core.utils.divideBy
+import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
+import com.d9tilov.android.database.model.TransactionType
+import com.d9tilov.android.database.model.isIncome
 import com.d9tilov.moneymanager.category.data.entity.Category
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.category.exception.CategoryException
-import com.d9tilov.android.core.utils.divideBy
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
-import com.d9tilov.android.core.model.ExecutionPeriod
-import com.d9tilov.android.core.model.PeriodType
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
 import com.d9tilov.moneymanager.transaction.data.entity.TransactionDataModel
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionLineChartModel
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionSpendingTodayModel
-import com.d9tilov.android.core.model.TransactionType
-import com.d9tilov.android.core.model.isIncome
-import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.moneymanager.transaction.domain.mapper.toChartModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDataModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDomainModel
 import com.d9tilov.moneymanager.user.domain.UserInteractor
+import java.math.BigDecimal
+import java.util.*
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -48,16 +51,14 @@ import kotlinx.datetime.atTime
 import kotlinx.datetime.minus
 import kotlinx.datetime.periodUntil
 import kotlinx.datetime.plus
-import java.math.BigDecimal
-import java.util.*
 
 class TransactionInteractorImpl(
     private val transactionRepo: TransactionRepo,
     private val regularTransactionInteractor: RegularTransactionInteractor,
     private val categoryInteractor: CategoryInteractor,
     private val userInteractor: UserInteractor,
-    private val currencyInteractor: com.d9tilov.android.currency.domain.contract.CurrencyInteractor,
-    private val budgetInteractor: com.d9tilov.android.budget.domain.contract.BudgetInteractor
+    private val currencyInteractor: CurrencyInteractor,
+    private val budgetInteractor: BudgetInteractor
 ) : TransactionInteractor {
 
     override suspend fun addTransaction(transaction: Transaction) {

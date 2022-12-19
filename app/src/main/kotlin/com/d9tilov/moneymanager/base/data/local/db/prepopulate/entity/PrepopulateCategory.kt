@@ -2,7 +2,7 @@ package com.d9tilov.moneymanager.base.data.local.db.prepopulate.entity
 
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
-import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.database.model.TransactionType
 
 data class PrepopulateCategory(
     val id: Long,
