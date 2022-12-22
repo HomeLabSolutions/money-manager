@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.d9tilov.moneymanager">
+
+    <application>
+        <activity
+            android:name="com.d9tilov.android.prepopulate.ui.PrepopulateActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MoneyManager"
+            android:windowSoftInputMode="adjustResize" />
+    </application>
+</manifest>

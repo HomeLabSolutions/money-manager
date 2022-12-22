@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_prepopulate_currency">Выберите валюту</string>
+    <string name="title_prepopulate_budget">Текущий бюджет</string>
+    <string name="toolbar_menu_skip">Пропустить</string>
+</resources>

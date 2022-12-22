@@ -8,10 +8,10 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.backup.domain.BackupInteractor
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.network.exception.NetworkException
+import com.d9tilov.android.user.domain.contract.UserInteractor
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
 import com.d9tilov.moneymanager.billing.domain.BillingInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
-import com.d9tilov.moneymanager.user.domain.UserInteractor
 import com.google.firebase.FirebaseException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

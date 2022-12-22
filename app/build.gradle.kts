@@ -184,7 +184,7 @@ dependencies {
     implementation(project(":currency:currency-data:currency-data-impl"))
     implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
-    implementation(project(":currency:ui"))
+    implementation(project(":currency:currency-ui"))
 
     implementation(project(":budget:budget-di"))
     implementation(project(":budget:budget-data:budget-data-model"))
@@ -193,6 +193,11 @@ dependencies {
     implementation(project(":budget:budget-domain:budget-domain-contract"))
     implementation(project(":budget:budget-domain:budget-domain-impl"))
     implementation(project(":budget:budget-ui"))
+
+    implementation(project(":user-info:user-di"))
+    implementation(project(":user-info:user-data:user-data-model"))
+    implementation(project(":user-info:user-domain:user-domain-contract"))
+    implementation(project(":user-info:user-ui"))
 
     implementation(libs.kotlinJdk)
     implementation(libs.kotlinDatetime)

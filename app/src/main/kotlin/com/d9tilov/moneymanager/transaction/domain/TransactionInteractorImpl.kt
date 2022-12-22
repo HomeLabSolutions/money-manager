@@ -32,7 +32,7 @@ import com.d9tilov.moneymanager.transaction.domain.entity.TransactionSpendingTod
 import com.d9tilov.moneymanager.transaction.domain.mapper.toChartModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDataModel
 import com.d9tilov.moneymanager.transaction.domain.mapper.toDomainModel
-import com.d9tilov.moneymanager.user.domain.UserInteractor
+import com.d9tilov.android.user.domain.contract.UserInteractor
 import java.math.BigDecimal
 import java.util.*
 import kotlinx.coroutines.coroutineScope
@@ -56,7 +56,7 @@ class TransactionInteractorImpl(
     private val transactionRepo: TransactionRepo,
     private val regularTransactionInteractor: RegularTransactionInteractor,
     private val categoryInteractor: CategoryInteractor,
-    private val userInteractor: UserInteractor,
+    private val userInteractor: com.d9tilov.android.user.domain.contract.UserInteractor,
     private val currencyInteractor: CurrencyInteractor,
     private val budgetInteractor: BudgetInteractor
 ) : TransactionInteractor {
