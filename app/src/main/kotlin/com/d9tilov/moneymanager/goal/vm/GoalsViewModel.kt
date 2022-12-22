@@ -3,11 +3,11 @@ package com.d9tilov.moneymanager.goal.vm
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.budget.data.model.BudgetData
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
+import com.d9tilov.android.user.domain.contract.UserInteractor
 import com.d9tilov.moneymanager.base.ui.navigator.GoalsNavigator
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.goal.domain.GoalInteractor
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
-import com.d9tilov.moneymanager.user.domain.UserInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.math.BigDecimal
 import javax.inject.Inject

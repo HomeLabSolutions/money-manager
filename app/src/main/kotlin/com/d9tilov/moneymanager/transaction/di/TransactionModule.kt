@@ -13,7 +13,7 @@ import com.d9tilov.moneymanager.transaction.data.local.TransactionSource
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractorImpl
 import com.d9tilov.moneymanager.transaction.domain.TransactionRepo
-import com.d9tilov.moneymanager.user.domain.UserInteractor
+import com.d9tilov.android.user.domain.contract.UserInteractor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

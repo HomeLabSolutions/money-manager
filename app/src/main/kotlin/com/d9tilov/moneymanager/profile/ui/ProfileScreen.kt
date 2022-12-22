@@ -3,7 +3,6 @@ package com.d9tilov.moneymanager.profile.ui
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -46,20 +45,20 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.d9tilov.android.common_android.utils.toBudgetCreatedDateStr
+import com.d9tilov.android.common_android.utils.toLocalDateTime
+import com.d9tilov.android.core.utils.CurrencyUtils
+import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
+import com.d9tilov.android.designsystem.CurrencyTextFieldExtraSmall
+import com.d9tilov.android.designsystem.SimpleDialog
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.backup.PeriodicBackupWorker
-import com.d9tilov.android.designsystem.CurrencyTextFieldExtraSmall
-import com.d9tilov.android.core.utils.CurrencyUtils
-import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
-import com.d9tilov.android.common_android.utils.toBudgetCreatedDateStr
-import com.d9tilov.android.common_android.utils.toLocalDateTime
-import com.d9tilov.android.designsystem.SimpleDialog
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileUiItem
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileUiState
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileViewModel
+import com.d9tilov.moneymanager.profile.ui.vm.UserUiProfile
 import com.d9tilov.moneymanager.splash.ui.RouterActivity
-import com.d9tilov.moneymanager.user.data.entity.UserProfile
 import dagger.hilt.android.internal.managers.FragmentComponentManager
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
@@ -71,7 +70,6 @@ fun ProfileRoute(
     navigateToSettingsScreen: () -> Unit,
 ) {
     val uiState: ProfileUiState by viewModel.profileState.collectAsStateWithLifecycle()
-    Log.d("moggot", "ProfileRoute: $uiState")
     val showDialog by viewModel.showDialog.collectAsStateWithLifecycle()
     val context = LocalContext.current
     ProfileScreen(
@@ -150,7 +148,7 @@ fun ProfileScreen(
 }
 
 @Composable
-fun ProfileCard(userProfile: UserProfile?) {
+fun ProfileCard(userProfile: UserUiProfile) {
     Column {
         Card(
             modifier = Modifier
@@ -162,8 +160,8 @@ fun ProfileCard(userProfile: UserProfile?) {
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                ProfilePicture(userProfile?.photoUrl)
-                ProfileContent(userProfile?.displayedName)
+                ProfilePicture(userProfile.photo)
+                ProfileContent(userProfile.name)
             }
         }
     }
@@ -365,7 +363,7 @@ data class ProfileItemData(
 @Composable
 fun DefaultPreviewProfile() {
     ProfileScreen(
-        ProfileUiState(userProfile = UserProfile.EMPTY.copy(displayedName = "First name")),
+        ProfileUiState(userProfile = UserUiProfile()),
         false,
         {},
         {},

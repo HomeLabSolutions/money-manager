@@ -5,11 +5,12 @@ import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.network.exception.NetworkException
+import com.d9tilov.android.user.domain.contract.UserInteractor
 import com.d9tilov.moneymanager.backup.domain.BackupInteractor
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
 import com.d9tilov.moneymanager.category.domain.CategoryInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
-import com.d9tilov.moneymanager.user.domain.UserInteractor
+import com.d9tilov.android.user.ui.mapper.toDataModel
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Lazy
@@ -59,7 +60,7 @@ class RouterViewModel @Inject constructor(
                             }
                             user = userInteractor.getCurrentUser().firstOrNull()
                             if (user == null || user.showPrepopulate) {
-                                userInteractor.createUser(auth.currentUser)
+                                userInteractor.createUser(auth.currentUser.toDataModel())
                                 categoryInteractor.get().createDefaultCategories()
                                 withContext(Dispatchers.Main) { navigator?.openPrepopulate() }
                             } else {

@@ -43,4 +43,6 @@ dependencies {
     implementation(libs.composeConstraintLayout)
     implementation(libs.core)
     debugImplementation(libs.composeToolingUi)
+
+    implementation(libs.splashScreen)
 }

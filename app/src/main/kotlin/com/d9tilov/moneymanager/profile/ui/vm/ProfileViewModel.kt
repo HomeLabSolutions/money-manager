@@ -1,23 +1,21 @@
 package com.d9tilov.moneymanager.profile.ui.vm
 
+import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.budget.data.model.BudgetData
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
-import com.d9tilov.android.database.model.TransactionType
 import com.d9tilov.android.currency.data.model.CurrencyMetaData
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
+import com.d9tilov.android.database.model.TransactionType
+import com.d9tilov.android.user.domain.contract.UserInteractor
 import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
 import com.d9tilov.moneymanager.billing.domain.BillingInteractor
 import com.d9tilov.moneymanager.core.ui.BaseViewModel
 import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
 import com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction
-import com.d9tilov.moneymanager.user.data.entity.UserProfile
-import com.d9tilov.moneymanager.user.domain.UserInteractor
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -46,8 +44,13 @@ sealed class ProfileUiItem {
     data class Settings(val isPremium: Boolean = false) : ProfileUiItem()
 }
 
+data class UserUiProfile(
+    val photo: Uri? = null,
+    val name: String? = null
+)
+
 data class ProfileUiState(
-    val userProfile: UserProfile? = null,
+    val userProfile: UserUiProfile = UserUiProfile(),
     val currency: ProfileUiItem = ProfileUiItem.CurrencyUiItem(),
     val budgetData: ProfileUiItem = ProfileUiItem.BudgetUiItem(),
     val regularIncomes: ProfileUiItem = ProfileUiItem.RegularIncomeUiItem(),
@@ -86,7 +89,7 @@ class ProfileViewModel @Inject constructor(
             val currency: CurrencyMetaData = userCurrencyPair.second
             userInfo?.let { user ->
                 ProfileUiState(
-                    userProfile = user,
+                    userProfile = UserUiProfile(Uri.parse(user.photoUrl), user.displayedName),
                     currency = ProfileUiItem.CurrencyUiItem(currency.code),
                     budgetData = ProfileUiItem.BudgetUiItem(budgetData),
                     regularIncomes = ProfileUiItem.RegularIncomeUiItem(regularIncomeList),
@@ -119,6 +122,4 @@ class ProfileViewModel @Inject constructor(
             withContext(Dispatchers.Main) { navigateCallback.invoke() }
         }
     }
-
-    fun getCurrentUser(): FirebaseUser? = FirebaseAuth.getInstance().currentUser
 }

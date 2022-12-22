@@ -29,11 +29,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".prepopulate.ui.PrepopulateActivity2"
-            android:exported="false"
-            android:theme="@style/Theme.MoneyManager"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
             android:name=".home.ui.MainActivity"
             android:exported="false"
             android:screenOrientation="portrait"
