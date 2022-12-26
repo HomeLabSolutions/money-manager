@@ -4,7 +4,10 @@ import com.d9tilov.android.budget.data.contract.BudgetRepo
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.budget.data.model.BudgetData
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
+import kotlinx.coroutines.GlobalScope.coroutineContext
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flatMapMerge
+import kotlin.coroutines.coroutineContext
 
 class BudgetInteractorImpl(
     private val budgetRepo: BudgetRepo,
@@ -12,7 +15,9 @@ class BudgetInteractorImpl(
 ) : BudgetInteractor {
 
     override fun get() = budgetRepo.get()
-    override suspend fun create() = budgetRepo.create(currencyInteractor.getMainCurrency().code)
+    override suspend fun create() {
+        budgetRepo.create(currencyInteractor.getMainCurrency().code)
+    }
 
     override suspend fun update(budgetData: BudgetData) = budgetRepo.update(budgetData)
     override suspend fun updateBudgetWithCurrency(currency: String) {

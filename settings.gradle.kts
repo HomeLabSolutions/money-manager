@@ -15,6 +15,8 @@ include(":currency:currency-data:currency-data-impl")
 include(":currency:currency-domain:currency-domain-model")
 include(":currency:currency-domain:currency-domain-contract")
 include(":currency:currency-domain:currency-domain-impl")
+include(":currency:currency-observer:currency-observer-contract")
+include(":currency:currency-observer:currency-observer-impl")
 include(":currency:currency-ui")
 
 include(":budget:budget-di")
@@ -27,6 +29,7 @@ include(":budget:budget-ui")
 
 include(":prepopulate:prepopulate-ui")
 
+include(":user-info:user-di")
 include(":user-info:user-data:user-data-model")
 include(":user-info:user-data:user-data-contract")
 include(":user-info:user-data:user-data-impl")
@@ -42,4 +45,3 @@ pluginManagement {
         mavenCentral()
     }
 }
-include(":user-info:user-di")

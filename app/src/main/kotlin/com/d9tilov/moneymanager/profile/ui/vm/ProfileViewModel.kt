@@ -88,8 +88,9 @@ class ProfileViewModel @Inject constructor(
             val userInfo = userCurrencyPair.first
             val currency: CurrencyMetaData = userCurrencyPair.second
             userInfo?.let { user ->
+                val photoUri: Uri? = if (user.photoUrl != null) Uri.parse(user.photoUrl) else null
                 ProfileUiState(
-                    userProfile = UserUiProfile(Uri.parse(user.photoUrl), user.displayedName),
+                    userProfile = UserUiProfile(photoUri, user.displayedName),
                     currency = ProfileUiItem.CurrencyUiItem(currency.code),
                     budgetData = ProfileUiItem.BudgetUiItem(budgetData),
                     regularIncomes = ProfileUiItem.RegularIncomeUiItem(regularIncomeList),

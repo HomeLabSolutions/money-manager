@@ -19,6 +19,6 @@ import androidx.room.PrimaryKey
 data class MainCurrencyDbModel(
     @PrimaryKey
     @ColumnInfo(name = "id") val id: Int = 1,
-    @ColumnInfo(name = "code") val code: String,
-    @ColumnInfo(name = "clientId", index = true) val clientId: String
+    @ColumnInfo(name = "clientId", index = true) val clientId: String,
+    @ColumnInfo(name = "code") val code: String
 )

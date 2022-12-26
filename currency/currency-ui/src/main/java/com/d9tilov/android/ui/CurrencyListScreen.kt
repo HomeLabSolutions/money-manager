@@ -39,6 +39,7 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.currency.domain.model.DomainCurrency
+import com.d9tilov.android.currency_ui.R
 import com.d9tilov.android.designsystem.MmTopAppBar
 import kotlinx.coroutines.launch
 

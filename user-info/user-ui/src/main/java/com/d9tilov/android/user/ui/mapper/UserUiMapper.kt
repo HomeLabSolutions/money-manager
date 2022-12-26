@@ -17,9 +17,10 @@ fun FirebaseUser?.toDataModel(): UserProfile {
         return UserProfile.EMPTY.copy(
             displayedName = displayName,
             firstName = parsedFirstName,
-                lastName = parsedSecondName,
-                fiscalDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-            )
+            lastName = parsedSecondName,
+            fiscalDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
+            photoUrl = photoUrl.toString()
+        )
         } ?: return UserProfile.EMPTY.copy(
             uid = DEFAULT_DATA_ID.toString(),
             displayedName = "Name Surname",
