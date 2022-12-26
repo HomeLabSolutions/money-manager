@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.d9tilov.android.ui"
+    namespace = "com.d9tilov.android.prepopulate_ui"
     val compileSdkVersion: Int by rootProject.extra
     val minSdkVersion: Int by rootProject.extra
 
@@ -39,6 +39,7 @@ dependencies {
 
     implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
+    implementation(project(":currency:currency-observer:currency-observer-contract"))
     implementation(project(":currency:currency-ui"))
 
     implementation(project(":budget:budget-data:budget-data-model"))

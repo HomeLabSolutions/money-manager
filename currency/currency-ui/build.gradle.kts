@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.d9tilov.android.ui"
+    namespace = "com.d9tilov.android.currency_ui"
     val compileSdkVersion: Int by rootProject.extra
     val minSdkVersion: Int by rootProject.extra
 
@@ -38,6 +38,7 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
+    implementation(project(":currency:currency-observer:currency-observer-contract"))
 
     implementation(libs.bundles.compose)
     implementation(libs.bundles.composeMaterial3)

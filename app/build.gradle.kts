@@ -199,6 +199,8 @@ dependencies {
     implementation(project(":user-info:user-domain:user-domain-contract"))
     implementation(project(":user-info:user-ui"))
 
+    implementation(project(":prepopulate:prepopulate-ui"))
+
     implementation(libs.kotlinJdk)
     implementation(libs.kotlinDatetime)
 

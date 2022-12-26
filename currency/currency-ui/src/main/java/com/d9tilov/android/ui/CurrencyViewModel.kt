@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.core.model.ErrorMessage
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
-import com.d9tilov.android.currency.domain.contract.UpdateCurrencyInteractor
 import com.d9tilov.android.currency.domain.model.DomainCurrency
+import com.d9tilov.android.currency.observer.contract.CurrencyUpdateObserver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +34,7 @@ sealed interface CurrencyUiState {
 @HiltViewModel
 class CurrencyViewModel @Inject constructor(
     currencyInteractor: CurrencyInteractor,
-    private val updateCurrencyInteractor: UpdateCurrencyInteractor
+    private val currencyUpdateObserver: CurrencyUpdateObserver
 ) : ViewModel() {
 
     val uiState = currencyInteractor.getCurrencies()
@@ -47,6 +47,6 @@ class CurrencyViewModel @Inject constructor(
         )
 
     fun changeCurrency(code: String) = viewModelScope.launch(Dispatchers.IO) {
-        updateCurrencyInteractor.updateCurrency(code)
+        currencyUpdateObserver.updateMainCurrency(code)
     }
 }

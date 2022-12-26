@@ -16,4 +16,4 @@ fun Currency.toDbModel(): CurrencyDbModel =
 fun MainCurrencyDbModel.toDataModel(): CurrencyMetaData =
     CurrencyMetaData(clientId, code, code.getSymbolByCode())
 
-fun CurrencyMetaData.toDbModel(): MainCurrencyDbModel = MainCurrencyDbModel(1, code, clientId)
+fun CurrencyMetaData.toDbModel(): MainCurrencyDbModel = MainCurrencyDbModel(1, clientId, code)
