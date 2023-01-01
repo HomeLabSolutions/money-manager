@@ -27,6 +27,6 @@ data class GoalDbModel(
     @ColumnInfo(name = "currency") val currency: String,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "targetSum") val targetSum: BigDecimal,
-    @ColumnInfo(name = "createdDate") val createdDate: LocalDateTime,
+    @ColumnInfo(name = "createdDate") val createdDate: Long,
     @ColumnInfo(name = "description") val description: String
 )

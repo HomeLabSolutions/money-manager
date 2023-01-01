@@ -201,6 +201,13 @@ dependencies {
 
     implementation(project(":prepopulate:prepopulate-ui"))
 
+    implementation(project(":goals:goals-di"))
+    implementation(project(":goals:goals-data:goals-data-model"))
+    implementation(project(":goals:goals-data:goals-data-contract"))
+    implementation(project(":goals:goals-data:goals-data-impl"))
+    implementation(project(":goals:goals-domain:goals-domain-contract"))
+    implementation(project(":goals:goals-domain:goals-domain-impl"))
+
     implementation(libs.kotlinJdk)
     implementation(libs.kotlinDatetime)
 
