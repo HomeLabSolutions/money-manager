@@ -27,14 +27,6 @@
             app:popExitAnim="@anim/slide_left_exit" />
 
         <action
-            android:id="@+id/to_goals_dest"
-            app:destination="@id/goals_dest"
-            app:enterAnim="@anim/slide_right_enter"
-            app:exitAnim="@anim/slide_right_exit"
-            app:popEnterAnim="@anim/slide_left_enter"
-            app:popExitAnim="@anim/slide_left_exit" />
-
-        <action
             android:id="@+id/to_logout_dialog_dest"
             app:destination="@id/logout_dialog"
             app:enterAnim="@anim/slide_right_enter"
@@ -115,14 +107,6 @@
         android:name="com.d9tilov.moneymanager.regular.ui.RegularExpenseFragment"
         android:label="fragment_title_screen"
         tools:layout="@layout/fragment_regular_expense">
-
-        <action
-            android:id="@+id/to_goals_dest"
-            app:destination="@id/goals_dest"
-            app:enterAnim="@anim/slide_up_enter"
-            app:exitAnim="@anim/slide_up_exit"
-            app:popEnterAnim="@anim/slide_down_enter"
-            app:popExitAnim="@anim/slide_down_exit" />
 
         <action
             android:id="@+id/to_create_regular_transaction_dest"
@@ -292,46 +276,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/goals_dest"
-        android:name="com.d9tilov.moneymanager.goal.ui.GoalsFragment"
-        android:label="fragment_title_screen"
-        tools:layout="@layout/fragment_goals">
-
-        <action
-            android:id="@+id/to_goals_creation_dest"
-            app:destination="@id/goal_creation_dest"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-
-        <action
-            android:id="@+id/to_remove_goal_dialog"
-            app:destination="@id/remove_goal_dialog"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-
-        <argument
-            android:name="destination"
-            app:argType="com.d9tilov.moneymanager.goal.domain.entity.GoalDestination" />
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/goal_creation_dest"
-        android:name="com.d9tilov.moneymanager.goal.ui.GoalCreationFragment"
-        android:label="fragment_title_screen"
-        tools:layout="@layout/fragment_creation_goal">
-
-        <argument
-            android:name="goal"
-            android:defaultValue="@null"
-            app:argType="com.d9tilov.moneymanager.goal.domain.entity.Goal"
-            app:nullable="true" />
-
-    </fragment>
-
-    <fragment
         android:id="@+id/grouped_category_set_dest"
         android:name="com.d9tilov.moneymanager.category.ui.CategoryGroupIconSetFragment"
         android:label="fragment_title_screen"
@@ -408,17 +352,6 @@
             android:defaultValue="@null"
             app:argType="com.d9tilov.moneymanager.regular.domain.entity.RegularTransaction"
             app:nullable="true" />
-    </dialog>
-
-    <dialog
-        android:id="@+id/remove_goal_dialog"
-        android:name="com.d9tilov.moneymanager.goal.ui.dialog.GoalRemoveDialog"
-        tools:layout="@layout/fragment_dialog_remove">
-
-        <argument
-            android:name="goal"
-            app:argType="com.d9tilov.moneymanager.goal.domain.entity.Goal" />
-
     </dialog>
 
     <dialog

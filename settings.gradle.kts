@@ -37,6 +37,14 @@ include(":user-info:user-domain:user-domain-contract")
 include(":user-info:user-domain:user-domain-impl")
 include(":user-info:user-ui")
 
+include(":goals:goals-di")
+include(":goals:goals-data:goals-data-contract")
+include(":goals:goals-data:goals-data-impl")
+include(":goals:goals-data:goals-data-model")
+include(":goals:goals-domain:goals-domain-model")
+include(":goals:goals-domain:goals-domain-contract")
+include(":goals:goals-domain:goals-domain-impl")
+
 pluginManagement {
     includeBuild("build-logic")
     repositories {
