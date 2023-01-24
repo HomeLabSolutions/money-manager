@@ -6,6 +6,7 @@ object BuildPlugins {
     val hilt by lazy { "com.google.dagger:hilt-android-gradle-plugin:${Versions.hilt}" }
     val firebaseCrashlytics by lazy { "com.google.firebase:firebase-crashlytics-gradle:${Versions.firebaseCrashlytics}" }
     val detekt by lazy { "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:${Versions.detekt}" }
+    val dependencies by lazy { "com.github.ben-manes:gradle-versions-plugin:${Versions.dependencies}" }
 }
 
 /**
