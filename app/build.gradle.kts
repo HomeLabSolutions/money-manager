@@ -11,6 +11,7 @@ plugins {
     id("com.google.firebase.crashlytics")
     id("dagger.hilt.android.plugin")
     id("io.gitlab.arturbosch.detekt")
+    id("com.github.ben-manes.versions")
 }
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")
