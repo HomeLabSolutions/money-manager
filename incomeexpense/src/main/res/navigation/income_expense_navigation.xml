@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/income_expense_navigation"
+    app:startDestination="@+id/income_expense_dest">
+
+    <fragment
+        android:id="@+id/income_expense_dest"
+        android:name="com.d9tilov.android.incomeexpense.ui.IncomeExpenseFragment"
+        android:label="fragment_title_screen"
+        tools:layout="@layout/fragment_income_expense">
+        <action
+            android:id="@+id/to_category_dest"
+            app:destination="@id/category_dest"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/to_edit_transaction_dest"
+            app:destination="@id/edit_transaction_dest"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/to_remove_transaction_dialog"
+            app:destination="@id/remove_transaction_dialog"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+    </fragment>
+
+</navigation>

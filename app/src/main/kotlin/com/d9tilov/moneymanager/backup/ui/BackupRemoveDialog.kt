@@ -6,7 +6,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.backup.ui.vm.BackupDeletionViewModel
-import com.d9tilov.moneymanager.base.ui.BaseDialogFragment
+import com.d9tilov.android.common_android.ui.base.BaseDialogFragment
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsBackupDeletionNavigator
 import com.d9tilov.moneymanager.core.util.gone
 import com.d9tilov.moneymanager.databinding.FragmentDialogRemoveBinding

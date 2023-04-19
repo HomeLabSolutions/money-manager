@@ -4,6 +4,6 @@ plugins {
 
 dependencies {
 
-    implementation(libs.kotlinDatetime)
+    api(libs.kotlinDatetime)
     implementation(libs.coroutinesCore)
 }

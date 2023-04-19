@@ -10,8 +10,8 @@ import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.network.exception.NetworkException
 import com.d9tilov.android.user.domain.contract.UserInteractor
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsNavigator
-import com.d9tilov.moneymanager.billing.domain.BillingInteractor
-import com.d9tilov.moneymanager.core.ui.BaseViewModel
+import com.d9tilov.android.billing.domain.contract.BillingInteractor
+import com.d9tilov.android.common_android.ui.base.BaseViewModel
 import com.google.firebase.FirebaseException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -48,7 +48,7 @@ data class SubscriptionPriceUiState(
 class SettingsViewModel @Inject constructor(
     private val backupInteractor: BackupInteractor,
     private val userInteractor: UserInteractor,
-    billingInteractor: BillingInteractor
+    billingInteractor: com.d9tilov.android.billing.domain.contract.BillingInteractor
 ) : BaseViewModel<SettingsNavigator>() {
 
     private val _uiState = MutableStateFlow(SettingsUiState())

@@ -17,10 +17,10 @@ hiltNavigationCompose = "1.0.0"
 hiltCompiler = "1.0.0"
 glide = "4.14.2"
 coil = "2.2.2"
-room = "2.4.3"
+room = "2.5.0"
 paging = "3.1.1"
 firebaseCrashlytics = "2.9.0"
-firebaseBom = "31.1.0"
+firebaseBom = "31.5.0"
 firebaseUi = "8.0.2"
 facebookSdk = "8.0.0"
 twitter = "3.3.0"
@@ -128,9 +128,10 @@ compose = [
     "composeMaterial", "composeMaterialIconsCore", "composeMaterialIconsCore", "composeMaterialIconsExtended",
     "composeLiveData", "composeUiTestManifest"]
 composeMaterial3 = ["composeMaterial3", "composeMaterial3WindowSize"]
-room = ["room", "roomRuntime", "roomPaging"]
+room = ["room", "roomRuntime"]
+pagination = ["roomPaging", "paging"]
 retrofit = ["retrofit", "retrofitMoshi"]
-navigation = ["navigation", "navigationUi", "navigationCompose"]
+navigation = ["navigation", "navigationUi", "navigationCompose", "hiltNavigationCompose"]
 
 [plugins]
 android = { id = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }

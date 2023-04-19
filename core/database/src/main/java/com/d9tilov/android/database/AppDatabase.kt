@@ -6,7 +6,6 @@ import androidx.room.TypeConverters
 import com.d9tilov.android.database.AppDatabase.Companion.VERSION_NUMBER
 import com.d9tilov.android.database.converters.CurrencyConverter
 import com.d9tilov.android.database.converters.DateConverter
-import com.d9tilov.android.database.converters.LocationConverter
 import com.d9tilov.android.database.converters.ModelTypeConverter
 import com.d9tilov.android.database.dao.BudgetDao
 import com.d9tilov.android.database.dao.CategoryDao
@@ -42,8 +41,7 @@ import com.d9tilov.android.database.entity.UserDbModel
 @TypeConverters(
     CurrencyConverter::class,
     DateConverter::class,
-    ModelTypeConverter::class,
-    LocationConverter::class
+    ModelTypeConverter::class
 )
 abstract class AppDatabase : RoomDatabase() {
 

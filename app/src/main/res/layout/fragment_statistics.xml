@@ -135,7 +135,7 @@
             app:layout_constraintStart_toStartOf="@+id/statistics_vertical_guideline"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
+        <com.d9tilov.android.common_android.ui.widget.currencyview.CurrencyView
             android:id="@+id/statistics_spent_in_period_sum"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

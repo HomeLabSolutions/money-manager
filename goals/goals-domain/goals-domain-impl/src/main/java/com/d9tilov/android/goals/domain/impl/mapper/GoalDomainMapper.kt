@@ -1,5 +1,7 @@
 package com.d9tilov.android.goals.domain.impl.mapper
 
+import com.d9tilov.android.core.utils.toLocalDateTime
+import com.d9tilov.android.core.utils.toMillis
 import com.d9tilov.android.goals.data.model.GoalData
 import com.d9tilov.android.goals.domain.model.Goal
 import java.math.BigDecimal
@@ -11,7 +13,7 @@ fun Goal.toData() = with(this) {
         currencyCode,
         name,
         targetSum,
-        createdDate,
+        createdDate.toLocalDateTime(),
         description
     )
 }
@@ -24,7 +26,7 @@ fun GoalData.toDomain(currentSum: BigDecimal) = with(this) {
         name,
         targetSum,
         currentSum,
-        createdDate,
+        createdDate.toMillis(),
         description
     )
 }

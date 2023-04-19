@@ -16,12 +16,14 @@ fun NavGraphBuilder.profileScreen(
     navigateToCurrencyListScreen: () -> Unit,
     navigateToBudgetScreen: () -> Unit,
     navigateToSettingsScreen: () -> Unit,
+    navigateToGoalsScreen: () -> Unit,
 ) {
     composable(route = profileNavigationRoute) {
         ProfileRoute(
             navigateToCurrencyListScreen = navigateToCurrencyListScreen,
             navigateToBudgetScreen = navigateToBudgetScreen,
-            navigateToSettingsScreen = navigateToSettingsScreen
+            navigateToSettingsScreen = navigateToSettingsScreen,
+            navigateToGoalsScreen = navigateToGoalsScreen
         )
     }
 }

@@ -23,14 +23,12 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
-    implementation(project(":core:common-android"))
 
     implementation(libs.bundles.room)
+    implementation(libs.roomPaging)
     kapt(libs.roomCompiler)
 
     implementation(libs.coroutinesCore)
-
-    implementation(libs.kotlinDatetime)
 
     implementation(libs.hilt)
     kapt(libs.hiltCompiler)

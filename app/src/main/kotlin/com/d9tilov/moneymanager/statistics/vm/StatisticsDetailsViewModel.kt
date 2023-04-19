@@ -6,11 +6,11 @@ import com.d9tilov.android.common_android.utils.getEndOfDay
 import com.d9tilov.android.common_android.utils.getStartOfDay
 import com.d9tilov.android.common_android.utils.toLocalDateTime
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsDetailsNavigator
-import com.d9tilov.moneymanager.category.data.entity.Category
-import com.d9tilov.moneymanager.core.ui.BaseViewModel
-import com.d9tilov.android.database.model.TransactionType
+import com.d9tilov.android.category.data.model.Category
+import com.d9tilov.android.common_android.ui.base.BaseViewModel
+import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
-import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
+import com.d9tilov.android.transaction.domain.model.Transaction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

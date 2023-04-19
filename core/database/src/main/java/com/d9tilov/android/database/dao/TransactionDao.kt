@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.d9tilov.android.database.model.TransactionType
 import com.d9tilov.android.database.entity.TransactionDbModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
@@ -19,7 +18,7 @@ interface TransactionDao {
         clientId: String,
         from: LocalDateTime,
         to: LocalDateTime,
-        type: TransactionType
+        type: Int
     ): PagingSource<Int, TransactionDbModel>
 
     @Query("SELECT * FROM transactions WHERE clientId=:clientId AND type = :type AND date >= :from AND date <= :to")
@@ -27,7 +26,7 @@ interface TransactionDao {
         clientId: String,
         from: LocalDateTime,
         to: LocalDateTime,
-        type: TransactionType
+        type: Int
     ): Flow<List<TransactionDbModel>>
 
     @Query("SELECT * FROM transactions WHERE clientId =:uid AND id = :id")
@@ -50,7 +49,7 @@ interface TransactionDao {
     @Query("SELECT count(*) FROM transactions WHERE clientId=:uid AND type=:type AND date >= :from AND date <= :to")
     suspend fun getItemsCountInDay(
         uid: String,
-        type: TransactionType,
+        type: Int,
         from: LocalDateTime,
         to: LocalDateTime
     ): Int

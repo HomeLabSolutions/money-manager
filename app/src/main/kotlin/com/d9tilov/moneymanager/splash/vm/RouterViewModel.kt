@@ -8,8 +8,8 @@ import com.d9tilov.android.network.exception.NetworkException
 import com.d9tilov.android.user.domain.contract.UserInteractor
 import com.d9tilov.moneymanager.backup.domain.BackupInteractor
 import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
-import com.d9tilov.moneymanager.category.domain.CategoryInteractor
-import com.d9tilov.moneymanager.core.ui.BaseViewModel
+import com.d9tilov.android.category.data.contract.CategoryInteractor
+import com.d9tilov.android.common_android.ui.base.BaseViewModel
 import com.d9tilov.android.user.ui.mapper.toDataModel
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
@@ -28,7 +28,7 @@ class RouterViewModel @Inject constructor(
     private val preferencesStore: PreferencesStore,
     private val backupInteractor: BackupInteractor,
     private val userInteractor: UserInteractor,
-    private val categoryInteractor: Lazy<CategoryInteractor>,
+    private val categoryInteractor: Lazy<com.d9tilov.android.category.data.contract.CategoryInteractor>,
 ) : BaseViewModel<SplashNavigator>() {
 
     private val auth = FirebaseAuth.getInstance()

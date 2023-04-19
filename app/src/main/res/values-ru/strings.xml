@@ -8,13 +8,6 @@
 
     <string name="coming_soon">Скоро будет…</string>
 
-    <string name="title_category">Категории</string>
-    <string name="title_transaction">Транзакция</string>
-    <string name="title_sub_category">Категория: %1$s</string>
-    <string name="title_category_creation">Категория</string>
-    <string name="title_category_set">Доступные иконки</string>
-    <string name="title_category_group_set">Категории</string>
-    <string name="title_category_creation_create">Создание категории</string>
     <string name="title_prepopulate_regular_incomes">Постоянные доходы</string>
     <string name="title_prepopulate_regular_income">Постоянный доход</string>
     <string name="title_prepopulate_regular_expenses">Постоянные расходы</string>
@@ -31,116 +24,12 @@
     <string name="currency_change_title">Сменить валюту на %s?</string>
     <string name="currency_change_subtitle">Приложение будет перезапущено.</string>
 
-    <string name="default_category_expense_food">Еда</string>
-    <string name="default_category_expense_cafe">Кафе</string>
-    <string name="default_category_expense_products">Продукты</string>
-    <string name="default_category_expense_car">Автомобиль</string>
-    <string name="default_category_expense_car_fuel">Топливо</string>
-    <string name="default_category_expense_car_service">Сервис</string>
-    <string name="default_category_expense_home">Дом</string>
-    <string name="default_category_expense_relax">Развлечения</string>
-    <string name="default_category_expense_travels">Путешествия</string>
-    <string name="default_category_expense_internet">Интернет</string>
-    <string name="default_category_expense_doctor">Врач</string>
-    <string name="default_category_income_salary">Зарплата</string>
-    <string name="default_category_income_business">Бизнес</string>
-    <string name="default_category_income_sale">Продажи</string>
-    <string name="default_category_income_part_time_job">Подработка</string>
-
     <string name="income_expense_empty_sum_error">Сумма слишком маленькая</string>
 
-    <string name="category_all">Все\nстатьи</string>
-
-    <string name="edit">Редактировать</string>
-    <string name="delete">Удалить</string>
-    <string name="change">Сменить</string>
-    <string name="exit">Выйти</string>
-    <string name="cancel">Отмена</string>
-    <string name="retry">Повторить</string>
-    <string name="next">Далее</string>
-    <string name="save">Сохранить</string>
-    <string name="buy">Купить</string>
-    <string name="add">Добавить</string>
-    <string name="create">Создать</string>
-
-    <string name="transaction_delete_dialog_title">Удаление транзакции</string>
-    <string name="transaction_delete_dialog_subtitle">Вы действительно хотите удалить транзакцию?</string>
-    <string name="transaction_edit_sum_title">Сумма</string>
-    <string name="transaction_edit_description_hint">Описание</string>
-    <string name="transaction_edit_in_statistics">В статистике</string>
     <string name="transaction_empty_placeholder_expense_title">Добавьте расход</string>
     <string name="transaction_empty_placeholder_regular_expense_title">Добавьте постоянный расход</string>
-    <string name="transaction_empty_placeholder_income_title">Добавьте доход</string>
     <string name="transaction_empty_placeholder_regular_income_title">Добавьте постоянный доход</string>
     <string name="transaction_empty_placeholder_subtitle">Введите сумму и выберите категорию</string>
-
-    <string name="category_name_title">Название категории</string>
-    <string name="category_name_hint">Введите название</string>
-    <string name="category_unit_to_group_title">Объединение в группу</string>
-    <string name="category_add_to_group_title">Добавление в группу</string>
-    <string name="category_unit_to_group_subtitle">Добавить категорию \"%1$s\"\ в группу \"%2$s\"\?</string>
-    <string name="category_unit_new_name_subtitle">Введите название новой группы категорий</string>
-    <string name="category_unit_name_group_hint">Название группы</string>
-    <string name="category_unit_name_exist_error">Название группы с таким именем уже существует</string>
-    <string name="category_expense_info_can_spend_today_title">сегодня можно потратить:</string>
-    <string name="category_expense_info_can_spend_today_negate_title">перерасход:</string>
-    <string name="category_expense_info_today_title">потрачено сегодня:</string>
-    <string name="category_expense_info_period_title">потрачено за период:</string>
-    <string name="category_income_info_period_title">заработано за период:</string>
-    <string name="category_group_housing">Жильё</string>
-    <string name="category_group_transportation">Транспорт</string>
-    <string name="category_group_food">Еда</string>
-    <string name="category_group_utilities">Коммунальные услуги</string>
-    <string name="category_group_insurance">Страхование</string>
-    <string name="category_group_medical">Медицина</string>
-    <string name="category_group_sport">Спорт</string>
-    <string name="category_group_investing">Инвестирование</string>
-    <string name="category_group_recreation">Отдых</string>
-    <string name="category_group_clothes">Одежда</string>
-    <string name="category_group_personal">Личное</string>
-    <string name="category_group_others">Другое</string>
-
-    <string name="category_edit_title">Редактирование группы категорий</string>
-    <string name="category_delete_title">Удаление категории</string>
-    <string name="category_delete_sub_title">Так же будут удалены все операции с этой статьёй</string>
-    <string name="category_delete_group_sub_title">Так же будут удалены все подкатегории и операции со статьей</string>
-    <string name="category_empty_placeholder_title">Список категорий пуст</string>
-    <string name="category_empty_placeholder_subtitle">Добавьте хотя бы одну категорию</string>
-
-    <string name="sub_category_delete_title">Удаление подкатегории</string>
-    <string name="sub_category_delete_subtitle">Так же будут удалены все операции с этой статьей</string>
-    <string name="sub_category_delete">Удалить</string>
-    <string name="sub_category_delete_from_group">Удалить из группы</string>
-
-    <string name="regular_transaction_notify">Уведомлять</string>
-    <string name="regular_transaction_auto_add">Добавлять\nавтоматически</string>
-    <string name="regular_transaction_choose_category">Выберите категорию</string>
-    <string name="regular_transaction_repeat_title">Повторять раз в</string>
-    <string name="regular_transaction_repeat_next_date_title">С</string>
-    <string name="regular_transaction_repeat_monday_short">Пн</string>
-    <string name="regular_transaction_repeat_monday">понедельник</string>
-    <string name="regular_transaction_repeat_tuesday_short">Вт</string>
-    <string name="regular_transaction_repeat_tuesday">вторник</string>
-    <string name="regular_transaction_repeat_wednesday_short">Ср</string>
-    <string name="regular_transaction_repeat_wednesday">среда</string>
-    <string name="regular_transaction_repeat_thursday_short">Чт</string>
-    <string name="regular_transaction_repeat_thursday">четверг</string>
-    <string name="regular_transaction_repeat_friday_short">Пт</string>
-    <string name="regular_transaction_repeat_friday">пятница</string>
-    <string name="regular_transaction_repeat_saturday_short">Сб</string>
-    <string name="regular_transaction_repeat_saturday">суббота</string>
-    <string name="regular_transaction_repeat_sunday_short">Вс</string>
-    <string name="regular_transaction_repeat_sunday">воскресенье</string>
-    <string name="regular_transaction_repeat_period_day">каждый день</string>
-    <string name="regular_transaction_repeat_period_week">повторять в: %1$s</string>
-    <string name="regular_transaction_repeat_period_month">%1$sго числа\nкаждого месяца</string>
-    <string name="regular_transaction_repeat_period_month_2">%1$sго числа каждого месяца</string>
-    <string name="regular_transaction_repeat_period_year">каждый год\n%1$s</string>
-    <string-array name="regular_transaction_repeat_list">
-        <item>День</item>
-        <item>Неделю</item>
-        <item>Месяц</item>
-    </string-array>
 
     <string name="goals_remaining_to_spend">Можно потратить в этом периоде</string>
     <string name="goals_empty_placeholder_title">Добавьте цели</string>
@@ -193,9 +82,6 @@
     <string name="notification_action_expense_title">Добавить в расходы</string>
     <string name="notification_channel_income_name">Постоянные доходы</string>
     <string name="notification_channel_expense_name">Постоянные расходы</string>
-
-
-    <string name="day_of_month_title">Выберите день месяца</string>
 
     <string name="statistics_period_day">День</string>
     <string name="statistics_period_week">Неделя</string>

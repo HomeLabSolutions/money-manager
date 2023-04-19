@@ -7,13 +7,12 @@ import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsBillingNavigator
-import com.d9tilov.moneymanager.billing.domain.BillingInteractor
-import com.d9tilov.moneymanager.core.ui.BaseViewModel
+import com.d9tilov.android.billing.domain.contract.BillingInteractor
+import com.d9tilov.android.common_android.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -21,7 +20,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsBillingIntroViewModel @Inject constructor(private val billingInteractor: BillingInteractor) :
+class SettingsBillingIntroViewModel @Inject constructor(private val billingInteractor: com.d9tilov.android.billing.domain.contract.BillingInteractor) :
     BaseViewModel<SettingsBillingNavigator>() {
 
     private var currentPurchases: List<Purchase> = listOf()

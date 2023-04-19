@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_category_expense_food">Еда</string>
+    <string name="default_category_expense_cafe">Кафе</string>
+    <string name="default_category_expense_products">Продукты</string>
+    <string name="default_category_expense_car">Автомобиль</string>
+    <string name="default_category_expense_car_fuel">Топливо</string>
+    <string name="default_category_expense_car_service">Сервис</string>
+    <string name="default_category_expense_home">Дом</string>
+    <string name="default_category_expense_relax">Развлечения</string>
+    <string name="default_category_expense_travels">Путешествия</string>
+    <string name="default_category_expense_internet">Интернет</string>
+    <string name="default_category_expense_doctor">Врач</string>
+    <string name="default_category_income_salary">Зарплата</string>
+    <string name="default_category_income_business">Бизнес</string>
+    <string name="default_category_income_sale">Продажи</string>
+    <string name="default_category_income_part_time_job">Подработка</string>
+</resources>

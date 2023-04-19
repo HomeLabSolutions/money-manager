@@ -10,11 +10,11 @@ import com.bumptech.glide.request.RequestOptions
 import com.d9tilov.moneymanager.R
 import com.d9tilov.android.core.events.OnItemClickListener
 import com.d9tilov.android.core.utils.removeScale
-import com.d9tilov.moneymanager.core.ui.BaseViewHolder
+import com.d9tilov.android.common_android.ui.base.BaseViewHolder
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.databinding.ItemStatisticsBarChartBinding
 import com.d9tilov.moneymanager.statistics.ui.recycler.diff.StatisticsBarCharDiffUtils
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
+import com.d9tilov.android.transaction.domain.model.TransactionChartModel
 import java.math.BigDecimal
 import java.math.RoundingMode
 

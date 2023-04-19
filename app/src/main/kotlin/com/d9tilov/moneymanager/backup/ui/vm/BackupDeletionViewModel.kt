@@ -7,7 +7,7 @@ import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.network.exception.NetworkException
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsBackupDeletionNavigator
-import com.d9tilov.moneymanager.core.ui.BaseViewModel
+import com.d9tilov.android.common_android.ui.base.BaseViewModel
 import com.google.firebase.FirebaseException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

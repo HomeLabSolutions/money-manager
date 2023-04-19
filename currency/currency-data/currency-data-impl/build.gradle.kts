@@ -26,7 +26,6 @@ android {
 dependencies {
 
     implementation(project(":core:common"))
-    implementation(project(":core:common-android"))
     implementation(project(":core:network"))
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
@@ -34,6 +33,4 @@ dependencies {
     implementation(project(":currency:currency-data:currency-data-contract"))
 
     implementation(libs.coroutinesCore)
-
-    implementation(libs.kotlinDatetime)
 }

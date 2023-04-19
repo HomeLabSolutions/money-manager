@@ -7,10 +7,10 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath("com.google.gms:google-services:4.3.14")
+        classpath("com.google.gms:google-services:4.3.15")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.5.3")
         classpath("com.google.dagger:hilt-android-gradle-plugin:2.44.2")
-        classpath("com.google.firebase:firebase-crashlytics-gradle:2.9.2")
+        classpath("com.google.firebase:firebase-crashlytics-gradle:2.9.5")
         classpath("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.20.0")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20")
         // NOTE: Do not place your application dependencies here; they belong
@@ -37,4 +37,6 @@ plugins {
     alias(libs.plugins.android.application) apply false
     id("org.jetbrains.kotlin.android") version "1.7.20" apply false
     id("com.android.library") version "7.3.1" apply false
+    id("com.github.ben-manes.versions") version "0.41.0"
+    id("nl.littlerobots.version-catalog-update") version "0.8.0"
 }

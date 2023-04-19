@@ -28,11 +28,11 @@ import com.d9tilov.android.common_android.utils.isSameDay
 import com.d9tilov.android.common_android.utils.toLocalDateTime
 import com.d9tilov.android.common_android.utils.toMillis
 import com.d9tilov.android.core.model.ResultOf
-import com.d9tilov.android.database.model.TransactionType
+import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsNavigator
-import com.d9tilov.moneymanager.core.ui.recyclerview.ItemSnapHelper
+import com.d9tilov.android.common_android.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.moneymanager.core.util.createTintDrawable
 import com.d9tilov.moneymanager.core.util.getColorFromAttr
 import com.d9tilov.moneymanager.core.util.gone
@@ -53,8 +53,8 @@ import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod.YEAR
 import com.d9tilov.moneymanager.statistics.ui.recycler.StatisticsBarChartAdapter
 import com.d9tilov.moneymanager.statistics.ui.recycler.StatisticsMenuAdapter
 import com.d9tilov.moneymanager.statistics.vm.StatisticsViewModel
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionLineChartModel
+import com.d9tilov.android.transaction.domain.model.TransactionChartModel
+import com.d9tilov.android.transaction.domain.model.TransactionLineChartModel
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis

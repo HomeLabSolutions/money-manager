@@ -15,7 +15,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.backup.PeriodicBackupWorker
-import com.d9tilov.moneymanager.base.ui.BaseActivity
+import com.d9tilov.android.common_android.ui.base.BaseActivity
 import com.d9tilov.moneymanager.base.ui.navigator.HomeNavigator
 import com.d9tilov.android.core.events.OnBackPressed
 import com.d9tilov.moneymanager.core.util.gone

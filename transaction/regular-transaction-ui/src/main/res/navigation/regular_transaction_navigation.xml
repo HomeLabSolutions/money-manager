@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/regular_transaction_navigation"
+    app:startDestination="@id/regular_created_transaction_dest">
+
+    <fragment
+        android:id="@+id/regular_created_transaction_dest"
+        android:name="com.d9tilov.android.regular.transaction.ui.RegularTransactionCreationFragment"
+        tools:layout="@layout/fragment_regular_transaction_creation"
+        android:label="fragment_title_screen">
+
+        <action
+            android:id="@+id/to_fixed_category_dest"
+            app:destination="@id/category_dest"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/fade_out" />
+
+        <action
+            android:id="@+id/to_day_of_month_dest"
+            app:destination="@id/day_of_month_dialog"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit" />
+
+        <argument
+            android:name="transactionType"
+            app:argType="com.d9tilov.android.core.model.TransactionType" />
+        <argument
+            android:name="regular_transaction"
+            android:defaultValue="@null"
+            app:argType="com.d9tilov.android.regular.transaction.domain.model.RegularTransaction"
+            app:nullable="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/regular_expense_dest"
+        android:name="com.d9tilov.android.regular.transaction.ui.RegularExpenseFragment"
+        tools:layout="@layout/fragment_regular_expense"
+        android:label="fragment_title_screen">
+
+        <action
+            android:id="@+id/to_create_regular_transaction_dest"
+            app:destination="@id/regular_created_transaction_dest"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/fade_out" />
+
+        <action
+            android:id="@+id/to_remove_transaction_dialog"
+            app:destination="@id/remove_transaction_dialog"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <argument
+            android:name="destination"
+            app:argType="com.d9tilov.android.regular.transaction.domain.model.RegularTransactionDestination" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/day_of_month_dialog"
+        android:name="com.d9tilov.moneymanager.regular.ui.DayOfMonthDialog"
+        tools:layout="@layout/fragment_dialog_day_of_month_picker">
+
+        <argument
+            android:name="day_of_month"
+            android:defaultValue="1"
+            app:argType="integer" />
+
+    </dialog>
+</navigation>

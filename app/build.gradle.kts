@@ -208,8 +208,11 @@ dependencies {
     implementation(project(":goals:goals-domain:goals-domain-contract"))
     implementation(project(":goals:goals-domain:goals-domain-impl"))
 
+    implementation(project(":category:category-ui"))
+    implementation(project(":transaction:regular-transaction-ui"))
+    implementation(project(":incomeexpense"))
+
     implementation(libs.kotlinJdk)
-    implementation(libs.kotlinDatetime)
 
     implementation(libs.appCompat)
     implementation(libs.material)
@@ -219,18 +222,18 @@ dependencies {
 
     implementation(libs.fragment)
 
+
     implementation(libs.firebase)
-    implementation(platform(libs.firebaseBom))
     implementation(libs.firebaseUi)
     implementation(libs.googlePlayServicesAuth)
 
     implementation(libs.firebaseAnalytics)
+    implementation(platform(libs.firebaseBom))
     implementation(libs.firebaseCrashlytics)
     implementation(libs.firebaseStorage)
     implementation(libs.firebaseConfig)
 
     implementation(libs.hilt)
-    implementation(libs.hiltNavigationCompose)
     kapt(libs.hiltCompiler)
     kapt(libs.hiltAndroidCompiler)
 
@@ -244,7 +247,7 @@ dependencies {
 
     implementation(libs.bundles.retrofit)
 
-    implementation(libs.paging)
+    implementation(libs.bundles.pagination)
     implementation(libs.bundles.room)
     kapt(libs.roomCompiler)
 

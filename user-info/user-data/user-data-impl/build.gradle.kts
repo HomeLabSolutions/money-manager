@@ -32,6 +32,4 @@ dependencies {
     implementation(project(":user-info:user-data:user-data-contract"))
 
     implementation(libs.coroutinesCore)
-
-    implementation(libs.kotlinDatetime)
 }
