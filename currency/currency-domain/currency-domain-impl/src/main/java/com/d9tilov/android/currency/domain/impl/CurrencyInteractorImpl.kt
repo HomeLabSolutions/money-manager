@@ -8,7 +8,7 @@ import com.d9tilov.android.currency.data.model.Currency
 import com.d9tilov.android.currency.data.model.CurrencyMetaData
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.DomainCurrency
-import com.d9tilov.android.currency.domain.impl.mapper.toDomain
+import com.d9tilov.android.currency.domain.contract.mapper.toDomain
 import java.math.BigDecimal
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first

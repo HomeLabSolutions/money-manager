@@ -55,7 +55,8 @@ class ProfileFragment :
                     profileScreen(
                         navigateToCurrencyListScreen = navController::navigateToCurrencyListScreen,
                         navigateToBudgetScreen = navController::navigateToBudgetScreen,
-                        navigateToSettingsScreen = navController::navigateToSettingsScreen
+                        navigateToSettingsScreen = navController::navigateToSettingsScreen,
+                        navigateToGoalsScreen = navController::navigateToSettingsScreen
                     )
                     currencyScreen { navController.popBackStack() }
                     budgetScreen { navController.popBackStack() }

@@ -28,7 +28,7 @@ object CurrencyDataModule {
     )
 
     @Provides
-    fun provideCurrencyApi(  retrofit: Retrofit): CurrencyApi = retrofit.create(CurrencyApi::class.java)
+    fun provideCurrencyApi(retrofit: Retrofit): CurrencyApi = retrofit.create(CurrencyApi::class.java)
 
     @Provides
     fun provideCurrencyRepo(

@@ -8,6 +8,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+inline fun <T1 : Any, T2 : Any, R : Any> let2(p1: T1?, p2: T2?, block: (T1, T2) -> R?): R? {
+    return if (p1 != null && p2 != null) block(p1, p2) else null
+}
+
 inline fun EditText.onChange(crossinline cb: (String) -> Unit) {
     this.addTextChangedListener(object : TextWatcher {
         override fun afterTextChanged(s: Editable?) = cb(s.toString())

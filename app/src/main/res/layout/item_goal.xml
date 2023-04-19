@@ -29,7 +29,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="На машину" />
 
-        <com.d9tilov.moneymanager.core.ui.widget.progress.ProgressLine
+        <com.d9tilov.android.common_android.ui.widget.progress.ProgressLine
             android:id="@+id/item_goal_progress"
             android:layout_width="0dp"
             android:layout_height="36dp"

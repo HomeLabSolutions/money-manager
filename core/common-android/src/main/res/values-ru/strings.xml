@@ -1,0 +1,15 @@
+<resources>
+    <string name="edit">Редактировать</string>
+    <string name="delete">Удалить</string>
+    <string name="change">Сменить</string>
+    <string name="exit">Выйти</string>
+    <string name="cancel">Отмена</string>
+    <string name="retry">Повторить</string>
+    <string name="next">Далее</string>
+    <string name="save">Сохранить</string>
+    <string name="buy">Купить</string>
+    <string name="add">Добавить</string>
+    <string name="create">Создать</string>
+
+    <string name="sub_category_delete_subtitle">Так же будут удалены все операции с этой статьей</string>
+</resources>

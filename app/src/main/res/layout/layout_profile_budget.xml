@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:text="@string/profile_item_budget_title" />
 
-    <com.d9tilov.moneymanager.core.ui.widget.currencyview.CurrencyView
+    <com.d9tilov.android.common_android.ui.widget.currencyview.CurrencyView
         android:id="@+id/profile_item_budget_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

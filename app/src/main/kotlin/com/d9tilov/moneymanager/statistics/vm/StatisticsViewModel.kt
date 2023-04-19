@@ -5,8 +5,8 @@ import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_COD
 import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.moneymanager.base.ui.navigator.StatisticsNavigator
-import com.d9tilov.moneymanager.billing.domain.BillingInteractor
-import com.d9tilov.moneymanager.core.ui.BaseViewModel
+import com.d9tilov.android.billing.domain.contract.BillingInteractor
+import com.d9tilov.android.common_android.ui.base.BaseViewModel
 import com.d9tilov.moneymanager.statistics.domain.BaseStatisticsMenuType
 import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuCategoryType
 import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuChartMode
@@ -17,9 +17,9 @@ import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuType
 import com.d9tilov.moneymanager.statistics.domain.StatisticsPeriod
 import com.d9tilov.moneymanager.statistics.domain.toType
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionLineChartModel
-import com.d9tilov.android.database.model.TransactionType
+import com.d9tilov.android.transaction.domain.model.TransactionChartModel
+import com.d9tilov.android.transaction.domain.model.TransactionLineChartModel
+import com.d9tilov.android.core.model.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,7 +37,7 @@ import javax.inject.Inject
 class StatisticsViewModel @Inject constructor(
     private val transactionInteractor: TransactionInteractor,
     currencyInteractor: CurrencyInteractor,
-    billingInteractor: BillingInteractor
+    billingInteractor: com.d9tilov.android.billing.domain.contract.BillingInteractor
 ) : BaseViewModel<StatisticsNavigator>() {
 
     private val transactions =

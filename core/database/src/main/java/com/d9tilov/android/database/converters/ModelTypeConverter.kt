@@ -6,24 +6,22 @@ import com.d9tilov.android.core.model.PeriodType
 import com.d9tilov.android.core.model.PeriodType.Companion.DAY_NAME
 import com.d9tilov.android.core.model.PeriodType.Companion.MONTH_NAME
 import com.d9tilov.android.core.model.PeriodType.Companion.WEEK_NAME
-import com.d9tilov.android.database.model.TransactionType
-import com.d9tilov.android.database.model.TransactionType.Companion.EXPENSE_TRANSACTION_NAME
-import com.d9tilov.android.database.model.TransactionType.Companion.INCOME_TRANSACTION_NAME
+import com.d9tilov.android.core.model.TransactionType
 
 object ModelTypeConverter {
 
     @TypeConverter
     @JvmStatic
-    fun fromTransactionType(value: TransactionType): String {
-        return value.name
+    fun fromTransactionType(value: TransactionType): Int {
+        return value.value
     }
 
     @TypeConverter
     @JvmStatic
-    fun toTransactionType(value: String): TransactionType {
+    fun toTransactionType(value: Int): TransactionType {
         return when (value) {
-            INCOME_TRANSACTION_NAME -> TransactionType.INCOME
-            EXPENSE_TRANSACTION_NAME -> TransactionType.EXPENSE
+            TransactionType.INCOME.value -> TransactionType.INCOME
+            TransactionType.EXPENSE.value -> TransactionType.EXPENSE
             else -> throw IllegalArgumentException("Wrong transaction type: $value")
         }
     }

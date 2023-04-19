@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.core.ui.BaseViewHolder
+import com.d9tilov.android.common_android.ui.base.BaseViewHolder
 import com.d9tilov.moneymanager.databinding.ItemBillingIntroCardBinding
 
 class DotIndicatorPager2Adapter : RecyclerView.Adapter<ViewHolder>() {

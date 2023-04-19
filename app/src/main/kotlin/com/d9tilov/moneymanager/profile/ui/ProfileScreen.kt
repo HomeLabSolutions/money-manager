@@ -68,6 +68,7 @@ fun ProfileRoute(
     navigateToCurrencyListScreen: () -> Unit,
     navigateToBudgetScreen: () -> Unit,
     navigateToSettingsScreen: () -> Unit,
+    navigateToGoalsScreen: () -> Unit
 ) {
     val uiState: ProfileUiState by viewModel.profileState.collectAsStateWithLifecycle()
     val showDialog by viewModel.showDialog.collectAsStateWithLifecycle()
@@ -79,7 +80,7 @@ fun ProfileRoute(
         onBudgetClicked = navigateToBudgetScreen,
         onRegularIncomeClicked = {},
         onRegularExpenseClicked = {},
-        onGoalsClicked = {},
+        onGoalsClicked = navigateToGoalsScreen,
         onSettingsClicked = navigateToSettingsScreen,
         onLogoutClicked = { viewModel.showDialog() },
         onLogoutConfirmClicked = {
@@ -116,7 +117,7 @@ fun ProfileScreen(
         ProfileSection(state.budgetData, onBudgetClicked)
         ProfileSection(state.regularIncomes)
         ProfileSection(state.regularExpenses)
-        ProfileSection(ProfileUiItem.Goals)
+        ProfileSection(state.goals, onGoalsClicked)
         ProfileSection(state.settings, onSettingsClicked)
         Spacer(modifier = Modifier.weight(1f))
         OutlinedButton(

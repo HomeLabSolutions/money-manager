@@ -11,9 +11,9 @@ import androidx.navigation.fragment.findNavController
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.base.ui.BaseFragment
 import com.d9tilov.moneymanager.base.ui.navigator.SettingsBillingNavigator
-import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails
-import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails.Companion.TAG_ANNUAL
-import com.d9tilov.moneymanager.billing.domain.entity.BillingSkuDetails.Companion.TAG_QUARTERLY
+import com.d9tilov.android.billing.data.model.BillingSkuDetails
+import com.d9tilov.android.billing.data.model.BillingSkuDetails.Companion.TAG_ANNUAL
+import com.d9tilov.android.billing.data.model.BillingSkuDetails.Companion.TAG_QUARTERLY
 import com.d9tilov.moneymanager.core.util.ZoomOutPageTransformer
 import com.d9tilov.moneymanager.databinding.FragmentBillingIntroBinding
 import com.d9tilov.moneymanager.settings.adapter.DotIndicatorPager2Adapter
@@ -63,7 +63,7 @@ class SettingsBillingIntroFragment :
             viewLifecycleOwner.lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     launch {
-                        viewModel.skuDetails.collect { skuDetails: List<BillingSkuDetails> ->
+                        viewModel.skuDetails.collect { skuDetails: List<com.d9tilov.android.billing.data.model.BillingSkuDetails> ->
                             for (sku in skuDetails) {
                                 when (sku.tag) {
                                     TAG_QUARTERLY ->

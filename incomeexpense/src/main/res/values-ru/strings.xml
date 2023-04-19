@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="transaction_empty_placeholder_income_title">Добавьте доход</string>
+</resources>

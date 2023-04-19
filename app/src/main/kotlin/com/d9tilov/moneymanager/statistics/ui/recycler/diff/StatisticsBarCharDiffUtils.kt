@@ -1,7 +1,7 @@
 package com.d9tilov.moneymanager.statistics.ui.recycler.diff
 
 import androidx.recyclerview.widget.DiffUtil
-import com.d9tilov.moneymanager.transaction.domain.entity.TransactionChartModel
+import com.d9tilov.android.transaction.domain.model.TransactionChartModel
 
 class StatisticsBarCharDiffUtils(
     private val oldData: List<TransactionChartModel>,

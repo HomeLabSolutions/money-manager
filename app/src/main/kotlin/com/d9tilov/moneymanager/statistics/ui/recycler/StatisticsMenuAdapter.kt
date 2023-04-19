@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.d9tilov.moneymanager.R
 import com.d9tilov.android.core.events.OnItemClickListener
-import com.d9tilov.moneymanager.core.ui.BaseViewHolder
+import com.d9tilov.android.common_android.ui.base.BaseViewHolder
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.moneymanager.databinding.ItemStatisticsMenuBinding
 import com.d9tilov.moneymanager.databinding.ItemStatisticsMenuCurrencyBinding

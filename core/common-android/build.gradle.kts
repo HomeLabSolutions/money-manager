@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -14,6 +15,14 @@ android {
         minSdk = minSdkVersion
     }
 
+    dataBinding {
+        isEnabled = true
+    }
+
+    buildFeatures {
+        viewBinding = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -25,6 +34,19 @@ android {
 
 dependencies {
 
-    implementation(libs.kotlinDatetime)
+    implementation(project(":core:common"))
+    implementation(project(":core:designsystem"))
+
+    implementation(libs.paging)
+    implementation(libs.appCompat)
+    implementation(libs.material)
+    implementation(libs.lifecycleViewModel)
+    implementation(libs.lifecycleRuntime)
+
     implementation(libs.coroutinesCore)
+
+    implementation(libs.kotlinJdk)
+    implementation(libs.core)
+    implementation(libs.coreRuntime)
+    implementation(libs.constraintLayout)
 }

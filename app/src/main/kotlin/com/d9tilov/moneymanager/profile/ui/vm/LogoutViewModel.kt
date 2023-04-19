@@ -2,7 +2,7 @@ package com.d9tilov.moneymanager.profile.ui.vm
 
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.moneymanager.base.ui.navigator.LogoutDialogNavigator
-import com.d9tilov.moneymanager.core.ui.BaseViewModel
+import com.d9tilov.android.common_android.ui.base.BaseViewModel
 import com.d9tilov.android.user.domain.contract.UserInteractor
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
