@@ -15,29 +15,27 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
-import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.base.ui.navigator.IncomeNavigator
-import com.d9tilov.android.category.ui.navigation.CategoryDestination
 import com.d9tilov.android.category.data.model.Category
+import com.d9tilov.android.category.ui.navigation.CategoryDestination
 import com.d9tilov.android.common_android.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.android.common_android.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.android.common_android.ui.recyclerview.StickyHeaderItemDecorator
-import com.d9tilov.moneymanager.core.util.gone
-import com.d9tilov.moneymanager.core.util.isTablet
-import com.d9tilov.moneymanager.core.util.show
-import com.d9tilov.moneymanager.databinding.FragmentIncomeBinding
-import com.d9tilov.android.common_android.ui.base.currencyCode
-import com.d9tilov.moneymanager.incomeexpense.ui.BaseIncomeExpenseFragment
-import com.d9tilov.android.incomeexpense.ui.IncomeExpenseFragmentDirections
+import com.d9tilov.android.common_android.utils.gone
+import com.d9tilov.android.common_android.utils.isTablet
+import com.d9tilov.android.common_android.utils.show
 import com.d9tilov.android.core.model.TransactionType
-import com.d9tilov.android.database.model.isIncome
-import com.d9tilov.android.transaction.ui.callback.TransactionSwipeToDeleteCallback
+import com.d9tilov.android.core.model.isIncome
+import com.d9tilov.android.incomeexpense.R
+import com.d9tilov.android.incomeexpense.databinding.FragmentIncomeBinding
+import com.d9tilov.android.incomeexpense.navigation.IncomeNavigator
+import com.d9tilov.android.incomeexpense.ui.BaseIncomeExpenseFragment
+import com.d9tilov.android.incomeexpense.ui.IncomeExpenseFragmentDirections
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class IncomeFragment :
@@ -92,7 +90,7 @@ class IncomeFragment :
                     viewModel.earnedInPeriodApprox.collect { sum ->
                         viewBinding?.incomeInfoLayoutInclude?.incomePeriodInfoApproxSum?.setValue(
                             sum,
-                            currencyCode()
+                            getCurrencyCode()
                         )
                     }
                 }

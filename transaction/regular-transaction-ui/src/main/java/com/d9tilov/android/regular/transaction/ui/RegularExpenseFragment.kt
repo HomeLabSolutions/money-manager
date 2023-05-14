@@ -19,7 +19,6 @@ import com.d9tilov.android.regular.transaction.ui.navigator.RegularExpenseNaviga
 import com.d9tilov.android.regular.transaction.ui.vm.RegularExpenseViewModel
 import com.d9tilov.android.regular_transaction_ui.R
 import com.d9tilov.android.regular_transaction_ui.databinding.FragmentRegularExpenseBinding
-import com.d9tilov.android.regular.transaction.ui.RegularExpenseFragmentArgs
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

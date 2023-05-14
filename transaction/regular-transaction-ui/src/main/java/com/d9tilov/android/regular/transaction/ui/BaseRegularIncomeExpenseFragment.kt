@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.viewbinding.ViewBinding
+import com.d9tilov.android.common_android.databinding.LayoutEmptyListPlaceholderBinding
 import com.d9tilov.android.common_android.ui.base.BaseFragment
 import com.d9tilov.android.common_android.ui.base.Inflate
 import com.d9tilov.android.common_android.utils.gone
@@ -21,7 +22,6 @@ import com.d9tilov.android.regular.transaction.domain.model.RegularTransaction
 import com.d9tilov.android.regular.transaction.ui.navigator.BaseRegularIncomeExpenseNavigator
 import com.d9tilov.android.regular.transaction.ui.vm.BaseRegularIncomeExpenseViewModel
 import com.d9tilov.android.regular_transaction_ui.R
-import com.d9tilov.android.regular_transaction_ui.databinding.LayoutEmptyListPlaceholderBinding
 import com.google.android.material.appbar.MaterialToolbar
 
 abstract class BaseRegularIncomeExpenseFragment<N : BaseRegularIncomeExpenseNavigator, VB : ViewBinding>(

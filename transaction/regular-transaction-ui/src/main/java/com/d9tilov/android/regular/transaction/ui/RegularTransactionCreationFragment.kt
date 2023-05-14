@@ -17,33 +17,31 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.d9tilov.android.common_android.utils.currentDate
-import com.d9tilov.android.common_android.utils.currentDateTime
-import com.d9tilov.android.common_android.utils.getStartOfDay
+import com.d9tilov.android.category.data.model.Category
+import com.d9tilov.android.category.data.model.isEmpty
+import com.d9tilov.android.category.ui.BaseCategoryFragment.Companion.ARG_CATEGORY
+import com.d9tilov.android.category.ui.navigation.CategoryDestination
+import com.d9tilov.android.common_android.ui.base.BaseFragment
+import com.d9tilov.android.common_android.utils.createTintDrawable
+import com.d9tilov.android.common_android.utils.gone
+import com.d9tilov.android.common_android.utils.hide
+import com.d9tilov.android.common_android.utils.let2
 import com.d9tilov.android.common_android.utils.onChange
+import com.d9tilov.android.common_android.utils.show
+import com.d9tilov.android.common_android.utils.showKeyboard
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.PeriodType
-import com.d9tilov.android.database.model.isIncome
+import com.d9tilov.android.core.model.isIncome
+import com.d9tilov.android.core.utils.currentDate
+import com.d9tilov.android.core.utils.currentDateTime
+import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.core.utils.toBigDecimal
-import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.base.ui.BaseFragment
-import com.d9tilov.moneymanager.base.ui.navigator.RegularTransactionCreatedNavigator
-import com.d9tilov.moneymanager.category.common.BaseCategoryFragment.Companion.ARG_CATEGORY
-import com.d9tilov.android.category.data.model.Category
-import com.d9tilov.android.common_android.ui.base.BaseFragment
 import com.d9tilov.android.regular.transaction.domain.model.RegularTransaction
+import com.d9tilov.android.regular.transaction.domain.model.WeekDays
 import com.d9tilov.android.regular.transaction.ui.navigator.RegularTransactionCreatedNavigator
+import com.d9tilov.android.regular.transaction.ui.vm.CreatedRegularTransactionViewModel
 import com.d9tilov.android.regular_transaction_ui.R
 import com.d9tilov.android.regular_transaction_ui.databinding.FragmentRegularTransactionCreationBinding
-import com.d9tilov.moneymanager.category.data.entity.isEmpty
-import com.d9tilov.moneymanager.category.domain.entity.CategoryDestination
-import com.d9tilov.moneymanager.core.util.createTintDrawable
-import com.d9tilov.moneymanager.core.util.gone
-import com.d9tilov.moneymanager.core.util.hide
-import com.d9tilov.moneymanager.core.util.show
-import com.d9tilov.moneymanager.core.util.showKeyboard
-import com.d9tilov.moneymanager.databinding.FragmentRegularTransactionCreationBinding
-import com.d9tilov.moneymanager.regular.vm.CreatedRegularTransactionViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.math.BigDecimal
@@ -52,7 +50,10 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class RegularTransactionCreationFragment :
     BaseFragment<RegularTransactionCreatedNavigator, FragmentRegularTransactionCreationBinding>
-    (FragmentRegularTransactionCreationBinding::inflate, R.layout.fragment_regular_transaction_creation),
+        (
+        FragmentRegularTransactionCreationBinding::inflate,
+        R.layout.fragment_regular_transaction_creation
+    ),
     RegularTransactionCreatedNavigator {
 
     private val args by navArgs<RegularTransactionCreationFragmentArgs>()
@@ -139,6 +140,7 @@ class RegularTransactionCreationFragment :
                                     executionPeriod = ExecutionPeriod.EveryDay(currentDate().getStartOfDay())
                                 )
                             }
+
                             PeriodType.WEEK -> {
                                 createdRegularTransactionWeekSelector.show()
                                 createdRegularTransactionRepeatStartsDate.hide()
@@ -150,6 +152,7 @@ class RegularTransactionCreationFragment :
                                     }
                                 )
                             }
+
                             PeriodType.MONTH -> {
                                 createdRegularTransactionWeekSelector.gone()
                                 createdRegularTransactionRepeatStartsDate.show()
@@ -300,12 +303,14 @@ class RegularTransactionCreationFragment :
     private fun updateCategoryIcon() {
         viewBinding?.run {
             if (!localTransaction.category.isEmpty()) {
-                val iconDrawable = createTintDrawable(
-                    requireContext(),
+                val iconDrawable = let2(
                     localTransaction.category.icon,
                     localTransaction.category.color
-                )
-                iconDrawable.setBounds(LEFT_BOUND, TOP_BOUND, RIGHT_BOUND, BOTTOM_BOUND)
+                ) { icon, color ->
+                    createTintDrawable(requireContext(), icon, color)
+                }
+
+                iconDrawable?.setBounds(LEFT_BOUND, TOP_BOUND, RIGHT_BOUND, BOTTOM_BOUND)
                 createdRegularTransactionCategory.setCompoundDrawables(
                     iconDrawable,
                     null,
@@ -313,9 +318,15 @@ class RegularTransactionCreationFragment :
                     null
                 )
                 createdRegularTransactionCategory.text = localTransaction.category.name
-                createdRegularTransactionCategory.setTextColor(
-                    ContextCompat.getColor(requireContext(), localTransaction.category.color)
-                )
+                localTransaction.category.color?.let { color ->
+                    createdRegularTransactionCategory.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            color
+                        )
+                    )
+                }
+
             } else {
                 createdRegularTransactionCategory.text =
                     getString(R.string.regular_transaction_choose_category)
@@ -343,8 +354,8 @@ class RegularTransactionCreationFragment :
         activity.setSupportActionBar(toolbar)
         toolbar?.title =
             getString(
-                if (transactionType.isIncome()) R.string.title_prepopulate_regular_income
-                else R.string.title_prepopulate_regular_expense
+                if (transactionType.isIncome()) R.string.title_prepopulate_regular_incomes
+                else R.string.title_prepopulate_regular_expenses
             )
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity.supportActionBar?.setDisplayShowHomeEnabled(true)

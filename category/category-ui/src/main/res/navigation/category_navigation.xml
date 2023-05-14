@@ -53,10 +53,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/income_expense_dest"
-        android:name="com.d9tilov.android.incomeexpense.ui.IncomeExpenseFragment"/>
-
-    <fragment
         android:id="@+id/sub_category_dest"
         android:name="com.d9tilov.android.category.ui.SubCategoryFragment"
         android:label="SubCategory">

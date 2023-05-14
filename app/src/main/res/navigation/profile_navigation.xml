@@ -38,41 +38,6 @@
             app:popExitAnim="@anim/slide_left_exit" />
     </fragment>
 
-    <fragment
-        android:id="@+id/regular_income_dest"
-        android:name="com.d9tilov.regular.transaction.ui.RegularIncomeFragment"
-        android:label="fragment_title_screen"
-        tools:layout="@layout/fragment_regular_income">
-
-        <action
-            android:id="@+id/to_regular_expense_dest"
-            app:destination="@id/regular_expense_dest"
-            app:enterAnim="@anim/slide_up_enter"
-            app:exitAnim="@anim/slide_up_exit"
-            app:popEnterAnim="@anim/slide_down_enter"
-            app:popExitAnim="@anim/slide_down_exit" />
-
-        <action
-            android:id="@+id/to_create_regular_transaction_dest"
-            app:destination="@id/regular_created_transaction_dest"
-            app:enterAnim="@anim/fade_in"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/fade_out" />
-
-        <action
-            android:id="@+id/to_remove_transaction_dialog"
-            app:destination="@id/remove_transaction_dialog"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-
-        <argument
-            android:name="destination"
-            app:argType="com.d9tilov.moneymanager.regular.domain.entity.RegularTransactionDestination" />
-
-    </fragment>
-
     <dialog
         android:id="@+id/logout_dialog"
         android:name="com.d9tilov.moneymanager.profile.ui.LogoutDialog"

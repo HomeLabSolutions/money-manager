@@ -43,3 +43,4 @@ fun View.hideWithAnimation() {
 }
 
 const val ANIMATION_DURATION = 300L
+const val IMAGE_SIZE_IN_PX = 136

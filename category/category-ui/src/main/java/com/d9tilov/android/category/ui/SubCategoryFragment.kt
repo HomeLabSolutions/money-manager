@@ -13,12 +13,11 @@ import com.d9tilov.android.category.ui.vm.SubCategoryViewModel
 import com.d9tilov.android.category_ui.R
 import com.d9tilov.android.common_android.utils.gone
 import com.d9tilov.android.common_android.utils.show
+import com.d9tilov.android.core.constants.NavigationConstants.ARG_TRANSACTION_CREATED
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SubCategoryFragment :
-    BaseCategoryFragment<SubCategoryNavigator>(),
-    SubCategoryNavigator {
+class SubCategoryFragment : BaseCategoryFragment<SubCategoryNavigator>(), SubCategoryNavigator {
 
     private val args by navArgs<SubCategoryFragmentArgs>()
     private val parentCategory: Category by lazy { args.parentCategory }
@@ -48,8 +47,7 @@ class SubCategoryFragment :
             categoryCreate.gone()
             categoryGroupDelete.setOnClickListener {
                 val action = SubCategoryFragmentDirections.toRemoveCategoryDialog(
-                    CategoryDestination.SubCategoryScreen,
-                    modifiedParentCategory!!
+                    CategoryDestination.SubCategoryScreen, modifiedParentCategory!!
                 )
                 findNavController().navigate(action)
             }
@@ -64,25 +62,26 @@ class SubCategoryFragment :
 
     override fun backToEditTransactionScreen(category: Category) {
         findNavController().getBackStackEntry(R.id.edit_transaction_dest).savedStateHandle.set(
-            ARG_CATEGORY,
-            category
+            ARG_CATEGORY, category
         )
         findNavController().popBackStack(R.id.category_dest, true)
     }
 
     override fun backToEditRegularTransactionScreen(category: Category) {
-        findNavController().getBackStackEntry(R.id.regular_created_transaction_dest).savedStateHandle.set(
-            ARG_CATEGORY,
-            category
+        val regularTransactionIdentifier = resources.getIdentifier(
+            "regular_transaction_nav_graph", "id", requireContext().packageName
         )
+        findNavController().getBackStackEntry(regularTransactionIdentifier).savedStateHandle[ARG_CATEGORY] =
+            category
         findNavController().popBackStack(R.id.category_dest, true)
     }
 
     override fun backToMainScreen(category: Category) {
-        findNavController().navigate(R.id.income_expense_dest).savedStateHandle.set(
-            IncomeExpenseFragment.ARG_TRANSACTION_CREATED,
-            category
+        val incomeExpenseIdentifier = resources.getIdentifier(
+            "income_expense_nav_graph", "id", requireContext().packageName
         )
+        findNavController().getBackStackEntry(incomeExpenseIdentifier).savedStateHandle[ARG_TRANSACTION_CREATED] =
+            category
         findNavController().popBackStack(R.id.category_dest, true)
     }
 

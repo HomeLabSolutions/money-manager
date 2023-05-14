@@ -3,8 +3,6 @@
     <string name="bottom_menu_income_expense">Расход/Доход</string>
     <string name="bottom_menu_chart">Статистика</string>
     <string name="bottom_menu_profile">Профиль</string>
-    <string name="tab_income">Доходы</string>
-    <string name="tab_expense">Расходы</string>
 
     <string name="coming_soon">Скоро будет…</string>
 
@@ -13,8 +11,6 @@
     <string name="title_prepopulate_regular_expenses">Постоянные расходы</string>
     <string name="title_prepopulate_regular_expense">Постоянный расход</string>
     <string name="title_goal">Цели</string>
-    <string name="title_settings">Настройки</string>
-    <string name="title_billing">Подписки</string>
 
     <string name="toolbar_menu_skip">Пропустить</string>
 
@@ -24,12 +20,8 @@
     <string name="currency_change_title">Сменить валюту на %s?</string>
     <string name="currency_change_subtitle">Приложение будет перезапущено.</string>
 
-    <string name="income_expense_empty_sum_error">Сумма слишком маленькая</string>
-
-    <string name="transaction_empty_placeholder_expense_title">Добавьте расход</string>
     <string name="transaction_empty_placeholder_regular_expense_title">Добавьте постоянный расход</string>
     <string name="transaction_empty_placeholder_regular_income_title">Добавьте постоянный доход</string>
-    <string name="transaction_empty_placeholder_subtitle">Введите сумму и выберите категорию</string>
 
     <string name="goals_remaining_to_spend">Можно потратить в этом периоде</string>
     <string name="goals_empty_placeholder_title">Добавьте цели</string>
@@ -45,14 +37,6 @@
     <string name="settings_backup_info">Последняя копия: %1$s</string>
     <string name="settings_backup_empty">Резервная копия еще не создавалась</string>
     <string name="settings_backup_succeeded">Резервное копирование выполнено успешно</string>
-    <string name="settings_backup_error">Ошибка резервного копирования</string>
-    <string name="settings_backup_network_error">Ошибка сети</string>
-    <string name="settings_backup_user_error">Неизвестный пользователь</string>
-    <string name="settings_backup_file_not_found_error">Файл не найден</string>
-    <string name="settings_backup_deleted">Резервная копия удалена</string>
-    <string name="settings_backup_delete_title">Удалить резервную копию?</string>
-    <string name="settings_start_period_day_title">Начало периода:</string>
-    <string name="settings_start_period_day_postfix">день месяца</string>
     <string name="settings_start_period_day_error">День должен быть в интервале от 1 до 31</string>
     <string name="settings_subscription_premium_acknowledged_subtitle_renewing">Подписка будет продлена автоматически</string>
     <string name="settings_subscription_premium_acknowledged_subtitle_cancel">Подписка отменена</string>
@@ -100,10 +84,6 @@
     <string name="statistics_menu_category_type_parent_title">Категории</string>
     <string name="statistics_menu_category_type_child_title">Подкатегории</string>
 
-    <string name="billing_purchase_quarterly">Квартальная</string>
-    <string name="billing_purchase_annual">Годовая</string>
-    <string name="billing_purchase_quarterly_price">%1$s%2$s %3$s/3 месяца</string>
-    <string name="billing_purchase_annual_price">%1$s%2$s %3$s/год</string>
     <string name="billing_intro_1">Контроль расходов</string>
     <string name="billing_intro_2">Регулярные транзакции</string>
     <string name="billing_intro_3">Цели</string>

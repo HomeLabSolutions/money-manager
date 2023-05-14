@@ -1,12 +1,15 @@
 package com.d9tilov.android.category.data.impl
 
 import com.d9tilov.android.category.data.contract.CategoryRepo
+import com.d9tilov.android.category.data.contract.CategorySource
 import com.d9tilov.android.category.data.model.Category
+import com.d9tilov.android.category_data_impl.R
+import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.core.model.TransactionType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class CategoryRepoImpl(private val categoryLocalSource: com.d9tilov.android.category.data.contract.CategorySource) :
+class CategoryRepoImpl(private val categoryLocalSource: CategorySource) :
     CategoryRepo {
 
     override suspend fun createExpenseDefaultCategories() =
@@ -37,4 +40,15 @@ class CategoryRepoImpl(private val categoryLocalSource: com.d9tilov.android.cate
 
     override suspend fun deleteFromGroup(subCategory: Category): Boolean =
         categoryLocalSource.deleteFromGroup(subCategory)
+
+    override fun createAllItemsFolder(categories: List<Category>) = Category.EMPTY_EXPENSE.copy(
+        id = Category.ALL_ITEMS_ID,
+        clientId = DataConstants.NO_ID.toString(),
+        children = categories,
+        type = TransactionType.EXPENSE,
+        name = "",
+        color = R.color.category_all_color,
+        icon = R.drawable.ic_category_folder,
+        usageCount = Integer.MAX_VALUE
+    )
 }

@@ -1,10 +1,10 @@
 package com.d9tilov.android.incomeexpense.ui.vm
 
 import androidx.paging.PagingData
-import com.d9tilov.moneymanager.base.ui.navigator.BaseIncomeExpenseNavigator
 import com.d9tilov.android.category.data.model.Category
 import com.d9tilov.android.common_android.ui.base.BaseViewModel
-import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
+import com.d9tilov.android.incomeexpense.navigation.BaseIncomeExpenseNavigator
+import com.d9tilov.android.transaction.domain.model.BaseTransaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.math.BigDecimal

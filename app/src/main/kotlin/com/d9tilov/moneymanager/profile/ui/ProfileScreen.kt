@@ -53,7 +53,7 @@ import com.d9tilov.android.designsystem.CurrencyTextFieldExtraSmall
 import com.d9tilov.android.designsystem.SimpleDialog
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.backup.PeriodicBackupWorker
+import com.d9tilov.android.backup.ui.PeriodicBackupWorker
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileUiItem
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileUiState
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileViewModel
@@ -85,7 +85,7 @@ fun ProfileRoute(
         onLogoutClicked = { viewModel.showDialog() },
         onLogoutConfirmClicked = {
             viewModel.logout {
-                PeriodicBackupWorker.stopPeriodicJob(context)
+                com.d9tilov.android.backup.ui.PeriodicBackupWorker.stopPeriodicJob(context)
                 context.startActivity(
                     Intent(context, RouterActivity::class.java)
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)

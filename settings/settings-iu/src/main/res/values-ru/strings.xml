@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_settings">Настройки</string>
+    <string name="settings_start_period_day_postfix">день месяца</string>
+    <string name="settings_start_period_day_title">Начало периода:</string>
+    <string name="billing_purchase_quarterly">Квартальная</string>
+    <string name="billing_purchase_annual">Годовая</string>
+    <string name="billing_purchase_quarterly_price">%1$s%2$s %3$s/3 месяца</string>
+    <string name="billing_purchase_annual_price">%1$s%2$s %3$s/год</string>
+    <string name="title_billing">Подписки</string>
+    <string name="settings_subscription_premium_description">контроль расходов\nрасширенные иконки\nрегулярные транзакции\nи многое другое…\n</string>
+</resources>

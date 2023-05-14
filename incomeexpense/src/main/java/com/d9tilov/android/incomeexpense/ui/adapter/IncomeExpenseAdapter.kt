@@ -4,8 +4,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.d9tilov.moneymanager.incomeexpense.expense.ui.ExpenseFragment
-import com.d9tilov.moneymanager.incomeexpense.income.ui.IncomeFragment
+import com.d9tilov.android.incomeexpense.expense.ui.ExpenseFragment
+import com.d9tilov.android.incomeexpense.income.ui.IncomeFragment
 
 class IncomeExpenseAdapter(fa: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fa, lifecycle) {

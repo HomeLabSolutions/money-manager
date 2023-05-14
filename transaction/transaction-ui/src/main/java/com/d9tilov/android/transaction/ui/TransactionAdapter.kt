@@ -9,33 +9,34 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.d9tilov.android.common_android.ui.base.BaseViewHolder
+import com.d9tilov.android.common_android.ui.recyclerview.StickyAdapter
+import com.d9tilov.android.common_android.utils.IMAGE_SIZE_IN_PX
 import com.d9tilov.android.common_android.utils.TRANSACTION_DATE_FORMAT
+import com.d9tilov.android.common_android.utils.createTintDrawable
 import com.d9tilov.android.common_android.utils.formatDate
+import com.d9tilov.android.common_android.utils.gone
+import com.d9tilov.android.common_android.utils.hide
+import com.d9tilov.android.common_android.utils.let2
+import com.d9tilov.android.common_android.utils.show
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.events.OnItemClickListener
 import com.d9tilov.android.core.events.OnItemSwipeListener
-import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.core.ui.BaseViewHolder
-import com.d9tilov.moneymanager.core.ui.recyclerview.StickyAdapter
-import com.d9tilov.moneymanager.core.util.createTintDrawable
-import com.d9tilov.moneymanager.core.util.gone
-import com.d9tilov.moneymanager.core.util.hide
-import com.d9tilov.moneymanager.core.util.show
-import com.d9tilov.moneymanager.databinding.ItemTransactionBinding
-import com.d9tilov.moneymanager.databinding.ItemTransactionHeaderBinding
-import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
-import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction.Companion.HEADER
-import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction.Companion.ITEM
+import com.d9tilov.android.transaction.domain.model.BaseTransaction
+import com.d9tilov.android.transaction.domain.model.BaseTransaction.Companion.HEADER
+import com.d9tilov.android.transaction.domain.model.BaseTransaction.Companion.ITEM
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.domain.model.TransactionHeader
+import com.d9tilov.android.transaction_ui.R
+import com.d9tilov.android.transaction_ui.databinding.ItemTransactionBinding
+import com.d9tilov.android.transaction_ui.databinding.ItemTransactionHeaderBinding
 
 class TransactionAdapter(
     private val itemClickListener: OnItemClickListener<Transaction>,
     private val itemSwipeListener: OnItemSwipeListener<Transaction>
-) :
-    StickyAdapter<BaseTransaction, RecyclerView.ViewHolder, RecyclerView.ViewHolder>(
-        diffCallback
-    ) {
+) : StickyAdapter<BaseTransaction, RecyclerView.ViewHolder, RecyclerView.ViewHolder>(
+    diffCallback
+) {
 
     private var removedItemPosition: Int = 0
 
@@ -54,9 +55,7 @@ class TransactionAdapter(
             }
         } else {
             val viewBinding = ItemTransactionHeaderBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
+                LayoutInflater.from(parent.context), parent, false
             )
             viewHolder = TransactionHeaderViewHolder(viewBinding)
         }
@@ -118,12 +117,11 @@ class TransactionAdapter(
         fun bind(transaction: Transaction) {
             viewBinding.run {
                 itemTransactionCategory.text = transaction.category.name
-                itemTransactionCategory.setTextColor(
-                    ContextCompat.getColor(
-                        context,
-                        transaction.category.color
+                transaction.category.color?.let { color ->
+                    itemTransactionCategory.setTextColor(
+                        ContextCompat.getColor(context, color)
                     )
-                )
+                }
                 if (transaction.isRegular) itemTransactionRegularIcon.show() else itemTransactionRegularIcon.hide()
                 if (!transaction.inStatistics) itemTransactionStatisticsIcon.show() else itemTransactionStatisticsIcon.hide()
                 val description = transaction.description
@@ -151,34 +149,20 @@ class TransactionAdapter(
                 }
                 itemTransactionSum.setValue(transaction.sum, transaction.currencyCode)
                 itemTransactionUsdSum.setValue(
-                    transaction.usdSum,
-                    DEFAULT_CURRENCY_CODE
+                    transaction.usdSum, DEFAULT_CURRENCY_CODE
                 )
                 if (transaction.currencyCode != DEFAULT_CURRENCY_CODE) {
                     itemTransactionUsdSum.show()
                 } else {
                     itemTransactionUsdSum.gone()
                 }
-                val drawable = createTintDrawable(
-                    context,
-                    transaction.category.icon,
-                    transaction.category.color
-                )
-                Glide
-                    .with(context)
-                    .load(drawable)
-                    .apply(
-                        RequestOptions().override(
-                            IMAGE_SIZE_IN_PX,
-                            IMAGE_SIZE_IN_PX
-                        )
-                    )
-                    .into(itemTransactionIcon)
-            }
-        }
 
-        companion object {
-            private const val IMAGE_SIZE_IN_PX = 136
+                val drawable =
+                    let2(transaction.category.icon, transaction.category.color) { icon, color ->
+                        createTintDrawable(context, icon, color)
+                    }
+                Glide.with(context).load(drawable).apply(RequestOptions().override(IMAGE_SIZE_IN_PX, IMAGE_SIZE_IN_PX)).into(itemTransactionIcon)
+            }
         }
     }
 
@@ -186,8 +170,7 @@ class TransactionAdapter(
 
         private val diffCallback = object : DiffUtil.ItemCallback<BaseTransaction>() {
             override fun areItemsTheSame(
-                oldItem: BaseTransaction,
-                newItem: BaseTransaction
+                oldItem: BaseTransaction, newItem: BaseTransaction
             ): Boolean {
                 return if (oldItem is Transaction && newItem is Transaction) {
                     oldItem.id == newItem.id
@@ -200,8 +183,7 @@ class TransactionAdapter(
 
             @SuppressLint("DiffUtilEquals")
             override fun areContentsTheSame(
-                oldItem: BaseTransaction,
-                newItem: BaseTransaction
+                oldItem: BaseTransaction, newItem: BaseTransaction
             ): Boolean {
                 return if (oldItem is Transaction && newItem is Transaction) {
                     oldItem == newItem

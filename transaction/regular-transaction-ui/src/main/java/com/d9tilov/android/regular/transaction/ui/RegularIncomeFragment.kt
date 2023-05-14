@@ -10,16 +10,15 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.base.ui.callback.SwipeToDeleteCallback
-import com.d9tilov.moneymanager.base.ui.navigator.RegularIncomeNavigator
 import com.d9tilov.android.common_android.ui.recyclerview.MarginItemDecoration
-import com.d9tilov.moneymanager.core.util.gone
-import com.d9tilov.moneymanager.core.util.show
-import com.d9tilov.moneymanager.databinding.FragmentRegularIncomeBinding
-import com.d9tilov.android.regular.transaction.domain.model.RegularTransactionDestination
-import com.d9tilov.moneymanager.regular.vm.RegularIncomeViewModel
+import com.d9tilov.android.common_android.ui.recyclerview.SwipeToDeleteCallback
+import com.d9tilov.android.common_android.utils.gone
+import com.d9tilov.android.common_android.utils.show
 import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.regular.transaction.ui.navigator.RegularIncomeNavigator
+import com.d9tilov.android.regular.transaction.ui.vm.RegularIncomeViewModel
+import com.d9tilov.android.regular_transaction_ui.R
+import com.d9tilov.android.regular_transaction_ui.databinding.FragmentRegularIncomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

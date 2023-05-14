@@ -10,11 +10,7 @@ interface CategoryInteractor {
     suspend fun createDefaultCategories()
     suspend fun update(category: Category)
     suspend fun getCategoryById(id: Long): Category
-    fun getGroupedCategoriesByType(
-        allItemFolderColor: Int,
-        allItemFolderIcon: Int,
-        type: TransactionType
-    ): Flow<List<Category>>
+    fun getGroupedCategoriesByType(type: TransactionType): Flow<List<Category>>
     fun getAllCategoriesByType(type: TransactionType): Flow<List<Category>>
     fun getChildrenByParent(parentCategory: Category): Flow<List<Category>>
     suspend fun deleteCategory(category: Category)

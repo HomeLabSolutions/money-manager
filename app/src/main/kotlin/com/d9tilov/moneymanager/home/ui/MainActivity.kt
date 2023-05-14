@@ -14,7 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.backup.PeriodicBackupWorker
+import com.d9tilov.android.backup.ui.PeriodicBackupWorker
 import com.d9tilov.android.common_android.ui.base.BaseActivity
 import com.d9tilov.moneymanager.base.ui.navigator.HomeNavigator
 import com.d9tilov.android.core.events.OnBackPressed
@@ -52,7 +52,7 @@ class MainActivity :
             viewModel.isPremium
                 .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
                 .collect { isPremium ->
-                    if (isPremium) PeriodicBackupWorker.startPeriodicJob(this@MainActivity)
+                    if (isPremium) com.d9tilov.android.backup.ui.PeriodicBackupWorker.startPeriodicJob(this@MainActivity)
                 }
         }
     }

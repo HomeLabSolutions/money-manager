@@ -2,9 +2,7 @@ package com.d9tilov.android.category.domain.impl
 
 import com.d9tilov.android.category.data.contract.CategoryRepo
 import com.d9tilov.android.category.data.model.Category
-import com.d9tilov.android.category.data.model.Category.Companion.ALL_ITEMS_ID
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
-import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.android.core.model.TransactionType
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +14,7 @@ class CategoryInteractorImpl(private val categoryRepo: CategoryRepo) : CategoryI
     override suspend fun create(category: Category) = categoryRepo.create(category)
     override suspend fun createDefaultCategories() {
         coroutineScope {
-            launch { categoryRepo.createExpenseDefaultCategories() }
+            launch(start = ) { categoryRepo.createExpenseDefaultCategories() }
             launch { categoryRepo.createIncomeDefaultCategories() }
         }
     }
@@ -25,13 +23,8 @@ class CategoryInteractorImpl(private val categoryRepo: CategoryRepo) : CategoryI
 
     override suspend fun getCategoryById(id: Long) = categoryRepo.getCategoryById(id)
 
-    override fun getGroupedCategoriesByType(
-        allItemFolderColor: Int,
-        allItemFolderIcon: Int,
-        type: TransactionType
-    ): Flow<List<Category>> {
-        return categoryRepo.getCategoriesByType(type)
-            .map { getAllWithChildrenInSingleList(allItemFolderColor, allItemFolderIcon, it) }
+    override fun getGroupedCategoriesByType(type: TransactionType): Flow<List<Category>> {
+        return categoryRepo.getCategoriesByType(type).map { getAllWithChildrenInSingleList(it) }
     }
 
     override fun getAllCategoriesByType(type: TransactionType): Flow<List<Category>> =
@@ -51,8 +44,6 @@ class CategoryInteractorImpl(private val categoryRepo: CategoryRepo) : CategoryI
         categoryRepo.deleteFromGroup(subCategory)
 
     private fun getAllWithChildrenInSingleList(
-        allItemFolderColor: Int,
-        allItemFolderIcon: Int,
         categories: List<Category>
     ): List<Category> {
         val categoriesAsChild = mutableListOf<Category>()
@@ -60,25 +51,7 @@ class CategoryInteractorImpl(private val categoryRepo: CategoryRepo) : CategoryI
             if (category.children.isNotEmpty()) categoriesAsChild.addAll(category.children)
             else categoriesAsChild.add(category)
         }
-        categoriesAsChild.add(
-            0,
-            createAllItemsFolder(allItemFolderColor, allItemFolderIcon, categories)
-        )
+        categoriesAsChild.add(0, categoryRepo.createAllItemsFolder(categories))
         return categoriesAsChild
     }
-
-    private fun createAllItemsFolder(
-        allItemFolderColor: Int,
-        allItemFolderIcon: Int,
-        categories: List<Category>
-    ) = Category.EMPTY_EXPENSE.copy(
-        id = ALL_ITEMS_ID,
-        clientId = NO_ID.toString(),
-        children = categories,
-        type = TransactionType.EXPENSE,
-        name = "",
-        color = allItemFolderColor,
-        icon = allItemFolderIcon,
-        usageCount = Integer.MAX_VALUE
-    )
 }
