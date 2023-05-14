@@ -5,19 +5,18 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
 import androidx.paging.map
-import com.d9tilov.android.common_android.utils.currentDateTime
-import com.d9tilov.android.common_android.utils.getEndOfDay
-import com.d9tilov.android.common_android.utils.isSameDay
-import com.d9tilov.android.core.model.TransactionType
-import com.d9tilov.moneymanager.base.ui.navigator.ExpenseNavigator
-import BillingInteractor
+import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.data.model.Category
-import CategoryInteractor
+import com.d9tilov.android.category.domain.contract.CategoryInteractor
+import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.core.utils.currentDateTime
+import com.d9tilov.android.core.utils.getEndOfDay
+import com.d9tilov.android.core.utils.isSameDay
+import com.d9tilov.android.incomeexpense.navigation.ExpenseNavigator
 import com.d9tilov.android.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
-import com.d9tilov.moneymanager.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
-import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
-import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
-import com.d9tilov.moneymanager.transaction.domain.entity.ExpenseInfoUiModel
+import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
+import com.d9tilov.android.transaction.domain.model.BaseTransaction
+import com.d9tilov.android.transaction.domain.model.ExpenseInfoUiModel
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.domain.model.TransactionHeader
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,8 +37,8 @@ import kotlinx.coroutines.withContext
 @HiltViewModel
 class ExpenseViewModel @Inject constructor(
     categoryInteractor: CategoryInteractor,
-    private val transactionInteractor: TransactionInteractor,
-    billingInteractor: BillingInteractor
+    billingInteractor: BillingInteractor,
+    private val transactionInteractor: TransactionInteractor
 ) : BaseIncomeExpenseViewModel<ExpenseNavigator>() {
 
     override val transactions: Flow<PagingData<BaseTransaction>> =

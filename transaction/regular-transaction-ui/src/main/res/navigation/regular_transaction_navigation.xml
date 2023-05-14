@@ -2,14 +2,16 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/regular_transaction_navigation"
+    android:id="@+id/regular_transaction_nav_graph"
     app:startDestination="@id/regular_created_transaction_dest">
+
+    <include app:graph="@navigation/category_navigation" />
 
     <fragment
         android:id="@+id/regular_created_transaction_dest"
         android:name="com.d9tilov.android.regular.transaction.ui.RegularTransactionCreationFragment"
-        tools:layout="@layout/fragment_regular_transaction_creation"
-        android:label="fragment_title_screen">
+        android:label="fragment_title_screen"
+        tools:layout="@layout/fragment_regular_transaction_creation">
 
         <action
             android:id="@+id/to_fixed_category_dest"
@@ -17,7 +19,15 @@
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/fade_out" />
+            app:popExitAnim="@anim/fade_out">
+            <argument
+                android:name="destination"
+                app:argType="com.d9tilov.android.category.ui.navigation.CategoryDestination" />
+            <argument
+                android:name="transactionType"
+                app:argType="com.d9tilov.android.core.model.TransactionType" />
+
+        </action>
 
         <action
             android:id="@+id/to_day_of_month_dest"
@@ -40,8 +50,8 @@
     <fragment
         android:id="@+id/regular_expense_dest"
         android:name="com.d9tilov.android.regular.transaction.ui.RegularExpenseFragment"
-        tools:layout="@layout/fragment_regular_expense"
-        android:label="fragment_title_screen">
+        android:label="fragment_title_screen"
+        tools:layout="@layout/fragment_regular_expense">
 
         <action
             android:id="@+id/to_create_regular_transaction_dest"
@@ -63,9 +73,62 @@
             app:argType="com.d9tilov.android.regular.transaction.domain.model.RegularTransactionDestination" />
     </fragment>
 
+    <fragment
+        android:id="@+id/regular_income_dest"
+        android:name="com.d9tilov.android.regular.transaction.ui.RegularIncomeFragment"
+        android:label="fragment_title_screen"
+        tools:layout="@layout/fragment_regular_income">
+
+        <action
+            android:id="@+id/to_regular_expense_dest"
+            app:destination="@id/regular_expense_dest"
+            app:enterAnim="@anim/slide_up_enter"
+            app:exitAnim="@anim/slide_up_exit"
+            app:popEnterAnim="@anim/slide_down_enter"
+            app:popExitAnim="@anim/slide_down_exit" />
+
+        <action
+            android:id="@+id/to_create_regular_transaction_dest"
+            app:destination="@id/regular_created_transaction_dest"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/fade_out" />
+
+        <action
+            android:id="@+id/to_remove_transaction_dialog"
+            app:destination="@id/remove_transaction_dialog"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <argument
+            android:name="destination"
+            app:argType="com.d9tilov.android.regular.transaction.domain.model.RegularTransactionDestination" />
+
+    </fragment>
+
+    <dialog
+        android:id="@+id/remove_transaction_dialog"
+        android:name="com.d9tilov.android.transaction.ui.TransactionRemoveDialog"
+        tools:layout="@layout/fragment_dialog_remove">
+
+        <argument
+            android:name="transaction"
+            android:defaultValue="@null"
+            app:argType="com.d9tilov.android.transaction.domain.model.Transaction"
+            app:nullable="true" />
+
+        <argument
+            android:name="regular_transaction"
+            android:defaultValue="@null"
+            app:argType="com.d9tilov.android.regular.transaction.domain.model.RegularTransaction"
+            app:nullable="true" />
+    </dialog>
+
     <dialog
         android:id="@+id/day_of_month_dialog"
-        android:name="com.d9tilov.moneymanager.regular.ui.DayOfMonthDialog"
+        android:name="com.d9tilov.android.regular.transaction.ui.DayOfMonthDialog"
         tools:layout="@layout/fragment_dialog_day_of_month_picker">
 
         <argument

@@ -12,7 +12,6 @@ import com.d9tilov.android.core.constants.DataConstants.DATA_STORE_NAME
 import com.d9tilov.android.core.constants.DataConstants.PREFERENCE_CLIENT_UID
 import com.d9tilov.android.core.constants.DataConstants.PREFERENCE_LAST_BACKUP_DATE
 import com.d9tilov.android.core.constants.DataConstants.STORE_NAME
-import com.d9tilov.android.datastore.model.BackupData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -31,12 +30,8 @@ class PreferencesStore(context: Context) {
         dataStore.edit { preferences -> preferences[PREFERENCE_CLIENT_UID_KEY] = uid }
     }
 
-    val backupData: Flow<BackupData> =
-        dataStore.data.map { data ->
-            BackupData.EMPTY.copy(
-                lastBackupTimestamp = data[PREFERENCE_LAST_BACKUP_DATE_KEY] ?: UNKNOWN_BACKUP_DATE
-            )
-        }
+    val backupData: Flow<Long> =
+        dataStore.data.map { data -> data[PREFERENCE_LAST_BACKUP_DATE_KEY] ?: -1L }
 
     suspend fun updateLastBackupDate(date: Long) {
         dataStore.edit { preferences -> preferences[PREFERENCE_LAST_BACKUP_DATE_KEY] = date }
@@ -47,7 +42,6 @@ class PreferencesStore(context: Context) {
     }
 
     companion object {
-        const val UNKNOWN_BACKUP_DATE = -1L
         private val PREFERENCE_LAST_BACKUP_DATE_KEY =
             longPreferencesKey(PREFERENCE_LAST_BACKUP_DATE)
         private val PREFERENCE_CLIENT_UID_KEY = stringPreferencesKey(PREFERENCE_CLIENT_UID)

@@ -17,29 +17,28 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.d9tilov.android.category.data.model.Category
 import com.d9tilov.android.category.ui.navigation.CategoryDestination
-import com.d9tilov.android.common_android.ui.base.currencyCode
 import com.d9tilov.android.common_android.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.android.common_android.ui.recyclerview.ItemSnapHelper
 import com.d9tilov.android.common_android.ui.recyclerview.StickyHeaderItemDecorator
+import com.d9tilov.android.common_android.utils.gone
+import com.d9tilov.android.common_android.utils.isTablet
+import com.d9tilov.android.common_android.utils.show
 import com.d9tilov.android.core.constants.CurrencyConstants.DECIMAL_LENGTH
 import com.d9tilov.android.core.model.TransactionType
-import com.d9tilov.android.database.model.isIncome
+import com.d9tilov.android.core.model.isIncome
+import com.d9tilov.android.designsystem.color.getColorFromAttr
 import com.d9tilov.android.incomeexpense.R
 import com.d9tilov.android.incomeexpense.databinding.FragmentExpenseBinding
 import com.d9tilov.android.incomeexpense.navigation.ExpenseNavigator
 import com.d9tilov.android.incomeexpense.ui.BaseIncomeExpenseFragment
-import com.d9tilov.android.transaction.ui.callback.TransactionSwipeToDeleteCallback
-import com.d9tilov.moneymanager.core.util.getColorFromAttr
-import com.d9tilov.moneymanager.core.util.gone
-import com.d9tilov.moneymanager.core.util.isTablet
-import com.d9tilov.moneymanager.core.util.show
 import com.d9tilov.android.incomeexpense.ui.IncomeExpenseFragmentDirections
-import com.d9tilov.moneymanager.transaction.domain.entity.ExpenseInfoUiModel
+import com.d9tilov.android.transaction.domain.model.ExpenseInfoUiModel
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
 import java.math.BigDecimal.ROUND_HALF_UP
+import javax.inject.Inject
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -50,6 +49,9 @@ class ExpenseFragment :
         R.layout.fragment_expense
     ),
     ExpenseNavigator {
+
+    @Inject
+    lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun getNavigator() = this
     override val viewModel by viewModels<ExpenseViewModel>()
@@ -95,7 +97,7 @@ class ExpenseFragment :
                                 val spentInPeriodApprox = model.spentInPeriodSumApprox
                                 expenseInfoLayoutInclude.expensePeriodInfoApproxSum.setValue(
                                     spentInPeriodApprox,
-                                    currencyCode()
+                                    getCurrencyCode()
                                 )
                                 expenseInfoLayoutInclude.expensePeriodInfoApproxSum.show()
 
@@ -106,7 +108,7 @@ class ExpenseFragment :
                                 val spentTodayApprox = model.spentTodaySumApprox
                                 expenseInfoLayoutInclude.expenseTodayInfoApproxSum.setValue(
                                     spentTodayApprox,
-                                    currencyCode()
+                                    getCurrencyCode()
                                 )
                                 expenseInfoLayoutInclude.expenseTodayInfoApproxSum.show()
 
@@ -118,7 +120,7 @@ class ExpenseFragment :
                                                 getString(R.string.category_expense_info_can_spend_today_negate_title)
                                             expenseTodayInfoValue.setValue(
                                                 ableToSpendToday.trSum,
-                                                currencyCode()
+                                                getCurrencyCode()
                                             )
                                             val infoColor = requireContext().getColorFromAttr(R.attr.colorError)
                                             expenseTodayInfoValue.setColor(infoColor)
@@ -127,7 +129,7 @@ class ExpenseFragment :
                                             expenseCanSpendTodayInfoTitle.text =
                                                 getString(R.string.category_expense_info_can_spend_today_title)
                                             expenseTodayInfoValue.run {
-                                                setValue(ableToSpendToday.trSum, currencyCode())
+                                                setValue(ableToSpendToday.trSum, getCurrencyCode())
                                                 setColor(
                                                     requireContext().getColorFromAttr(
                                                         if (ableToSpendToday.trSum.setScale(

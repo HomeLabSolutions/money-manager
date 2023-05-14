@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    kotlin("kapt")
 }
 
 android {
@@ -31,7 +32,7 @@ dependencies {
     implementation(project(":currency:currency-data:currency-data-model"))
 
     implementation(libs.coroutinesCore)
-    implementation(libs.billing)
+    api(libs.billing)
     implementation (libs.timber)
 
 }

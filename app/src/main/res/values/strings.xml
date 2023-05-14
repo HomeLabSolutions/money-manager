@@ -2,18 +2,12 @@
     <string name="bottom_menu_income_expense">Income/Expense</string>
     <string name="bottom_menu_chart">Chart</string>
     <string name="bottom_menu_profile">Profile</string>
-    <string name="tab_income">Income</string>
-    <string name="tab_expense">Expense</string>
 
     <string name="coming_soon">Coming soon…</string>
 
     <string name="title_prepopulate_regular_incomes">Regular incomes</string>
-    <string name="title_prepopulate_regular_income">Regular income</string>
-    <string name="title_prepopulate_regular_expenses">Regular expenses</string>
     <string name="title_prepopulate_regular_expense">Regular expense</string>
     <string name="title_goal">Goals</string>
-    <string name="title_settings">Settings</string>
-    <string name="title_billing">Subscriptions</string>
 
     <string name="toolbar_menu_skip">Skip</string>
 
@@ -23,12 +17,8 @@
     <string name="currency_change_title">Change currency to %s?</string>
     <string name="currency_change_subtitle">The app will restart.</string>
 
-    <string name="income_expense_empty_sum_error">The amount is too small</string>
-
-    <string name="transaction_empty_placeholder_expense_title">Add expense</string>
     <string name="transaction_empty_placeholder_regular_expense_title">Add regular expense</string>
     <string name="transaction_empty_placeholder_regular_income_title">Add regular income</string>
-    <string name="transaction_empty_placeholder_subtitle">Enter the amount and tap on a category</string>
 
     <string name="goals_remaining_to_spend">Can be spend in that period</string>
     <string name="goals_empty_placeholder_title">Add goals</string>
@@ -44,20 +34,11 @@
     <string name="settings_backup_info">Last backup: %1$s</string>
     <string name="settings_backup_empty">Backup hasn\'t been created yet</string>
     <string name="settings_backup_succeeded">Backup succeeded</string>
-    <string name="settings_backup_error">Backup error</string>
-    <string name="settings_backup_network_error">Network error</string>
-    <string name="settings_backup_user_error">Unknown user error</string>
-    <string name="settings_backup_file_not_found_error">File not found</string>
-    <string name="settings_backup_deleted">Backup file was deleted</string>
-    <string name="settings_backup_delete_title">Delete backup?</string>
-    <string name="settings_start_period_day_title">Start of period:</string>
-    <string name="settings_start_period_day_postfix">day of month</string>
     <string name="settings_start_period_day_error">The day should be in interval from 1 to 31</string>
     <string name="settings_subscription_premium_title" translatable="false">Go Premium</string>
     <string name="settings_subscription_premium_acknowledged_title" translatable="false">Premium</string>
     <string name="settings_subscription_premium_acknowledged_subtitle_renewing">Subscription will be renewing automatically</string>
     <string name="settings_subscription_premium_acknowledged_subtitle_cancel">Subscription is cancelled</string>
-    <string name="settings_subscription_premium_description">cost control\nextra icons\nregular transactions\nand much more…\n</string>
     <string name="settings_subscription_premium_min_price">from %1$s%2$s %3$s</string>
 
     <string name="profile_item_currency_title">Currency: </string>
@@ -101,10 +82,6 @@
     <string name="statistics_menu_category_type_parent_title">Categories</string>
     <string name="statistics_menu_category_type_child_title">Subcategories</string>
 
-    <string name="billing_purchase_quarterly">Quarterly</string>
-    <string name="billing_purchase_annual">Annual</string>
-    <string name="billing_purchase_quarterly_price">%1$s%2$s %3$s/3 months</string>
-    <string name="billing_purchase_annual_price">%1$s%2$s %3$s/year</string>
     <string name="billing_intro_1">Expense Assistant</string>
     <string name="billing_intro_2">Regular transactions</string>
     <string name="billing_intro_3">Goals</string>

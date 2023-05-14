@@ -1,12 +1,13 @@
 package com.d9tilov.android.incomeexpense.ui.vm
 
 import androidx.lifecycle.viewModelScope
-import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
-import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
-import com.d9tilov.moneymanager.base.ui.navigator.IncomeExpenseNavigator
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.common_android.ui.base.BaseViewModel
+import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
+import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
+import com.d9tilov.android.incomeexpense.navigation.IncomeExpenseNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -16,12 +17,11 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
 @HiltViewModel
 class IncomeExpenseViewModel @Inject constructor(
     private val currencyInteractor: CurrencyInteractor,
-    billingInteractor: com.d9tilov.android.billing.domain.contract.BillingInteractor
+    billingInteractor: BillingInteractor
 ) : BaseViewModel<IncomeExpenseNavigator>() {
 
     private var currencyCodeStr: MutableStateFlow<String> = MutableStateFlow(DEFAULT_CURRENCY_CODE)

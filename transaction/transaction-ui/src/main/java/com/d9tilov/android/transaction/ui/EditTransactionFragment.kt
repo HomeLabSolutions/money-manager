@@ -172,8 +172,7 @@ class EditTransactionFragment : EditTransactionNavigator,
             localTransaction?.category?.color ?: R.color.category_pink
         )
         iconDrawable.setBounds(LEFT_BOUND, TOP_BOUND, RIGHT_BOUND, BOTTOM_BOUND)
-        viewBinding?.run
-        {
+        viewBinding?.run {
             editTransactionCategory.setCompoundDrawables(iconDrawable, null, null, null)
             editTransactionCategory.text = localTransaction?.category?.name
             val color = localTransaction?.category?.color ?: transaction.category.color

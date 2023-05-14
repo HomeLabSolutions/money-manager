@@ -1,4 +1,4 @@
-plugins {
+    plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("dagger.hilt.android.plugin")
@@ -44,10 +44,13 @@ dependencies {
     implementation(project(":core:common-android"))
     implementation(project(":core:designsystem"))
 
+    implementation(project(":transaction:transaction-domain:transaction-domain-model"))
+    implementation(project(":transaction:transaction-ui"))
     implementation(project(":transaction:regular-transaction-data:regular-transaction-data-contract"))
     implementation(project(":transaction:regular-transaction-data:regular-transaction-data-model"))
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-model"))
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-contract"))
+    implementation(project(":category:category-data:category-data-model"))
     implementation(project(":category:category-ui"))
 
     implementation(libs.bundles.composeMaterial3)

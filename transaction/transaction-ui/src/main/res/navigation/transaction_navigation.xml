@@ -5,6 +5,8 @@
     android:id="@+id/transaction_navigation"
     app:startDestination="@+id/edit_transaction_dest">
 
+    <include app:graph="@navigation/category_navigation" />
+
     <fragment
         android:id="@+id/edit_transaction_dest"
         android:name="com.d9tilov.android.transaction.ui.EditTransactionFragment"
@@ -14,7 +16,15 @@
             app:destination="@id/category_dest"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="destination"
+                app:argType="com.d9tilov.android.category.ui.navigation.CategoryDestination" />
+            <argument
+                android:name="transactionType"
+                app:argType="com.d9tilov.android.core.model.TransactionType" />
+
+        </action>
         <action
             android:id="@+id/to_remove_transaction_dialog"
             app:destination="@id/remove_transaction_dialog"

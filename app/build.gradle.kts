@@ -222,7 +222,6 @@ dependencies {
 
     implementation(libs.fragment)
 
-
     implementation(libs.firebase)
     implementation(libs.firebaseUi)
     implementation(libs.googlePlayServicesAuth)

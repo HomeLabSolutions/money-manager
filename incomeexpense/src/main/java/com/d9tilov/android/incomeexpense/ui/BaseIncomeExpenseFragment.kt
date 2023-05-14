@@ -1,13 +1,12 @@
 package com.d9tilov.android.incomeexpense.ui
 
-import TransactionAdapter
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import androidx.viewbinding.ViewBinding
@@ -17,7 +16,10 @@ import com.d9tilov.android.common_android.databinding.LayoutEmptyListPlaceholder
 import com.d9tilov.android.common_android.ui.base.BaseFragment
 import com.d9tilov.android.common_android.ui.base.Inflate
 import com.d9tilov.android.common_android.utils.gone
+import com.d9tilov.android.common_android.utils.show
 import com.d9tilov.android.common_android.utils.showWithAnimation
+import com.d9tilov.android.common_android.utils.toast
+import com.d9tilov.android.core.constants.NavigationConstants.ARG_TRANSACTION_CREATED
 import com.d9tilov.android.core.events.OnDialogDismissListener
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.model.isIncome
@@ -25,10 +27,8 @@ import com.d9tilov.android.incomeexpense.R
 import com.d9tilov.android.incomeexpense.navigation.BaseIncomeExpenseNavigator
 import com.d9tilov.android.incomeexpense.ui.listeners.OnIncomeExpenseListener
 import com.d9tilov.android.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
-import com.d9tilov.android.transaction.ui.TransactionAdapter
-import com.d9tilov.moneymanager.core.util.show
-import com.d9tilov.moneymanager.core.util.toast
 import com.d9tilov.android.transaction.domain.model.Transaction
+import com.d9tilov.android.transaction.ui.TransactionAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.math.BigDecimal
 
@@ -60,13 +60,10 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : Vi
         initViews()
         initCategoryRecyclerView()
         initTransactionsRecyclerView()
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Category>(
-            IncomeExpenseFragment.ARG_TRANSACTION_CREATED
-        )?.observe(viewLifecycleOwner) {
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Category>(ARG_TRANSACTION_CREATED)
+            ?.observe(viewLifecycleOwner) {
             saveTransaction(it)
-            findNavController().currentBackStackEntry?.savedStateHandle?.remove<Category>(
-                IncomeExpenseFragment.ARG_TRANSACTION_CREATED
-            )
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<Category>(ARG_TRANSACTION_CREATED)
         }
         transactionRvList?.addOnScrollListener(
             object : RecyclerView.OnScrollListener() {
@@ -118,9 +115,7 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : Vi
     }
 
     private fun openRemoveConfirmationDialog(transaction: Transaction) {
-        val action = IncomeExpenseFragmentDirections.toRemoveTransactionDialog(
-            transaction
-        )
+        val action = IncomeExpenseFragmentDirections.toRemoveTransactionDialog(transaction)
         findNavController().navigate(action)
     }
 

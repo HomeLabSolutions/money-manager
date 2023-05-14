@@ -86,6 +86,16 @@ include(":billing:billing-di")
 
 include(":incomeexpense")
 
+include(":settings:settings-iu")
+
+include(":backup:backup-data:backup-data-contract")
+include(":backup:backup-data:backup-data-model")
+include(":backup:backup-data:backup-data-impl")
+include(":backup:backup-domain:backup-domain-contract")
+include(":backup:backup-domain:backup-domain-impl")
+include(":backup:backup-di")
+include(":backup:backup-ui")
+
 pluginManagement {
     includeBuild("build-logic")
     repositories {

@@ -16,4 +16,5 @@ interface CategoryRepo {
     suspend fun deleteCategory(category: Category)
     suspend fun deleteSubcategory(subCategory: Category): Boolean
     suspend fun deleteFromGroup(subCategory: Category): Boolean
+    fun createAllItemsFolder(categories: List<Category>): Category
 }

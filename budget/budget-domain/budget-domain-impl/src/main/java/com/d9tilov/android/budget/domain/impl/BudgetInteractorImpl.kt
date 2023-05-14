@@ -1,13 +1,10 @@
 package com.d9tilov.android.budget.domain.impl
 
 import com.d9tilov.android.budget.data.contract.BudgetRepo
-import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.budget.data.model.BudgetData
+import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
-import kotlinx.coroutines.GlobalScope.coroutineContext
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flatMapMerge
-import kotlin.coroutines.coroutineContext
 
 class BudgetInteractorImpl(
     private val budgetRepo: BudgetRepo,

@@ -44,7 +44,7 @@ timber = "5.0.1"
 ktlint = "0.46.0"
 detekt = "1.20.0"
 datastore = "1.0.0"
-billing = "5.1.0"
+billing = "5.2.0"
 dotsIndicator = "4.3"
 androidChart = "v3.1.0"
 splashScreen = "1.0.0"
@@ -132,6 +132,7 @@ room = ["room", "roomRuntime"]
 pagination = ["roomPaging", "paging"]
 retrofit = ["retrofit", "retrofitMoshi"]
 navigation = ["navigation", "navigationUi", "navigationCompose", "hiltNavigationCompose"]
+worker = ["worker", "workerHilt"]
 
 [plugins]
 android = { id = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
