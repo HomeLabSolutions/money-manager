@@ -33,13 +33,7 @@ interface RemoveGoalNavigator : BaseNavigator {
 
 interface ProfileNavigator : BaseNavigator
 
-interface StatisticsNavigator : BaseNavigator
-interface StatisticsDetailsNavigator : BaseNavigator
-
 interface LogoutDialogNavigator : BaseNavigator {
     fun logout()
 }
 
-interface SettingsNavigator : BaseNavigator {
-    fun save()
-}

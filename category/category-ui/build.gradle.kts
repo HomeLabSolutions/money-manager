@@ -20,7 +20,6 @@ android {
 
     buildFeatures {
         viewBinding = true
-        compose = true
     }
 
     dataBinding {
@@ -55,6 +54,7 @@ dependencies {
 
     implementation(libs.glide)
     annotationProcessor(libs.glideCompiler)
+
     implementation(libs.bundles.navigation)
 
     implementation(libs.material)

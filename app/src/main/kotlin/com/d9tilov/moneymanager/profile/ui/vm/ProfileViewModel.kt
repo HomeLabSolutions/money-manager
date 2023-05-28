@@ -2,18 +2,18 @@ package com.d9tilov.moneymanager.profile.ui.vm
 
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
+import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.budget.data.model.BudgetData
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
+import com.d9tilov.android.common_android.ui.base.BaseViewModel
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
+import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.data.model.CurrencyMetaData
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
-import com.d9tilov.android.core.model.TransactionType
-import com.d9tilov.android.user.domain.contract.UserInteractor
-import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
-import com.d9tilov.android.billing.domain.contract.BillingInteractor
-import com.d9tilov.android.common_android.ui.base.BaseViewModel
 import com.d9tilov.android.regular.transaction.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.regular.transaction.domain.model.RegularTransaction
+import com.d9tilov.android.user.domain.contract.UserInteractor
+import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,10 +34,10 @@ sealed class ProfileUiItem {
         ProfileUiItem()
 
     data class BudgetUiItem(val budgetData: BudgetData = BudgetData.EMPTY) : ProfileUiItem()
-    data class RegularIncomeUiItem(val regularIncomes: List<com.d9tilov.android.regular.transaction.domain.model.RegularTransaction> = emptyList()) :
+    data class RegularIncomeUiItem(val regularIncomes: List<RegularTransaction> = emptyList()) :
         ProfileUiItem()
 
-    data class RegularExpenseUiItem(val regularExpenses: List<com.d9tilov.android.regular.transaction.domain.model.RegularTransaction> = emptyList()) :
+    data class RegularExpenseUiItem(val regularExpenses: List<RegularTransaction> = emptyList()) :
         ProfileUiItem()
 
     object Goals : ProfileUiItem()
@@ -66,8 +66,8 @@ class ProfileViewModel @Inject constructor(
     private val userInfoInteractor: UserInteractor,
     currencyInteractor: CurrencyInteractor,
     budgetInteractor: BudgetInteractor,
-    regularTransactionInteractor: com.d9tilov.android.regular.transaction.domain.contract.RegularTransactionInteractor,
-    billingInteractor: com.d9tilov.android.billing.domain.contract.BillingInteractor,
+    regularTransactionInteractor: RegularTransactionInteractor,
+    billingInteractor: BillingInteractor,
 ) : BaseViewModel<ProfileNavigator>() {
 
     private val _showDialog: MutableStateFlow<Boolean> = MutableStateFlow(false)

@@ -3,8 +3,8 @@ package com.d9tilov.moneymanager.home.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
-import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val transactionInteractor: TransactionInteractor,
-    private val billingInteractor: com.d9tilov.android.billing.domain.contract.BillingInteractor
+    private val billingInteractor: BillingInteractor
 ) : ViewModel() {
 
     private val updateCurrencyExceptionHandler = CoroutineExceptionHandler { _, exception ->

@@ -47,8 +47,6 @@ include(":goals:goals-domain:goals-domain-impl")
 include(":goals:goals-ui")
 
 include(":transaction:transaction-di")
-include(":transaction:transaction-data")
-include(":transaction:transaction-domain")
 include(":transaction:transaction-data:transaction-data-contract")
 include(":transaction:transaction-data:transaction-data-impl")
 include(":transaction:transaction-data:transaction-data-model")
@@ -86,7 +84,7 @@ include(":billing:billing-di")
 
 include(":incomeexpense")
 
-include(":settings:settings-iu")
+include(":settings:settings-ui")
 
 include(":backup:backup-data:backup-data-contract")
 include(":backup:backup-data:backup-data-model")
@@ -95,6 +93,9 @@ include(":backup:backup-domain:backup-domain-contract")
 include(":backup:backup-domain:backup-domain-impl")
 include(":backup:backup-di")
 include(":backup:backup-ui")
+
+include(":statistics:statistics-data:statistics-data-model")
+include(":statistics:statistics-ui")
 
 pluginManagement {
     includeBuild("build-logic")

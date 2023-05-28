@@ -7,7 +7,6 @@
     <string name="coming_soon">Скоро будет…</string>
 
     <string name="title_prepopulate_regular_incomes">Постоянные доходы</string>
-    <string name="title_prepopulate_regular_income">Постоянный доход</string>
     <string name="title_prepopulate_regular_expenses">Постоянные расходы</string>
     <string name="title_prepopulate_regular_expense">Постоянный расход</string>
     <string name="title_goal">Цели</string>
@@ -36,11 +35,7 @@
     <string name="settings_backup">Сделать backup</string>
     <string name="settings_backup_info">Последняя копия: %1$s</string>
     <string name="settings_backup_empty">Резервная копия еще не создавалась</string>
-    <string name="settings_backup_succeeded">Резервное копирование выполнено успешно</string>
     <string name="settings_start_period_day_error">День должен быть в интервале от 1 до 31</string>
-    <string name="settings_subscription_premium_acknowledged_subtitle_renewing">Подписка будет продлена автоматически</string>
-    <string name="settings_subscription_premium_acknowledged_subtitle_cancel">Подписка отменена</string>
-    <string name="settings_subscription_premium_description">контроль расходов\nрасширенные иконки\nрегулярные транзакции\nи многое другое…\n</string>
     <string name="settings_subscription_premium_min_price">от %1$s%2$s %3$s</string>
 
     <string name="profile_item_currency_title">Валюта: </string>
@@ -66,28 +61,4 @@
     <string name="notification_action_expense_title">Добавить в расходы</string>
     <string name="notification_channel_income_name">Постоянные доходы</string>
     <string name="notification_channel_expense_name">Постоянные расходы</string>
-
-    <string name="statistics_period_day">День</string>
-    <string name="statistics_period_week">Неделя</string>
-    <string name="statistics_period_month">Месяц</string>
-    <string name="statistics_period_year">Год</string>
-    <string name="statistics_period_custom">Другой…</string>
-    <string name="statistics_today">Сегодня</string>
-    <string name="statistics_no_data">Недостаточно данных для отображения</string>
-    <string name="statistics_expense_info_period_title">Было потрачено за период: </string>
-    <string name="statistics_menu_in_statistics_title">В статистике</string>
-    <string name="statistics_menu_not_in_statistics_title">Все</string>
-    <string name="statistics_menu_currency_title">Валюта</string>
-    <string name="statistics_menu_incomes_title">Доходы</string>
-    <string name="statistics_menu_expenses_title">Расходы</string>
-    <string name="statistics_menu_chart_type_title">График</string>
-    <string name="statistics_menu_category_type_parent_title">Категории</string>
-    <string name="statistics_menu_category_type_child_title">Подкатегории</string>
-
-    <string name="billing_intro_1">Контроль расходов</string>
-    <string name="billing_intro_2">Регулярные транзакции</string>
-    <string name="billing_intro_3">Цели</string>
-    <string name="billing_intro_4">Дополнительные иконки</string>
-    <string name="billing_intro_5">Дополнительная статистика</string>
-    <string name="billing_intro_6">Автоматический backup</string>
 </resources>

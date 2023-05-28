@@ -1,4 +1,4 @@
-    plugins {
+plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("dagger.hilt.android.plugin")
@@ -20,7 +20,6 @@ android {
 
     buildFeatures {
         viewBinding = true
-        compose = true
     }
     dataBinding {
         isEnabled = true
@@ -62,7 +61,6 @@ dependencies {
     implementation(libs.kotlinJdk)
 
     implementation(libs.hilt)
-    implementation(libs.hiltNavigationCompose)
     kapt(libs.hiltCompiler)
     kapt(libs.hiltAndroidCompiler)
 }
