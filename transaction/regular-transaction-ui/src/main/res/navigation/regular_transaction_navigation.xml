@@ -6,6 +6,7 @@
     app:startDestination="@id/regular_created_transaction_dest">
 
     <include app:graph="@navigation/category_navigation" />
+    <include app:graph="@navigation/transaction_navigation" />
 
     <fragment
         android:id="@+id/regular_created_transaction_dest"
@@ -107,24 +108,6 @@
             app:argType="com.d9tilov.android.regular.transaction.domain.model.RegularTransactionDestination" />
 
     </fragment>
-
-    <dialog
-        android:id="@+id/remove_transaction_dialog"
-        android:name="com.d9tilov.android.transaction.ui.TransactionRemoveDialog"
-        tools:layout="@layout/fragment_dialog_remove">
-
-        <argument
-            android:name="transaction"
-            android:defaultValue="@null"
-            app:argType="com.d9tilov.android.transaction.domain.model.Transaction"
-            app:nullable="true" />
-
-        <argument
-            android:name="regular_transaction"
-            android:defaultValue="@null"
-            app:argType="com.d9tilov.android.regular.transaction.domain.model.RegularTransaction"
-            app:nullable="true" />
-    </dialog>
 
     <dialog
         android:id="@+id/day_of_month_dialog"

@@ -1,16 +1,16 @@
 package com.d9tilov.moneymanager.splash.vm
 
 import androidx.lifecycle.viewModelScope
+import com.d9tilov.android.backup.domain.contract.BackupInteractor
+import com.d9tilov.android.category.domain.contract.CategoryInteractor
+import com.d9tilov.android.common_android.ui.base.BaseViewModel
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.network.exception.NetworkException
 import com.d9tilov.android.user.domain.contract.UserInteractor
-import com.d9tilov.android.backup.domain.contract.BackupInteractor
-import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
-import com.d9tilov.android.category.data.contract.CategoryInteractor
-import com.d9tilov.android.common_android.ui.base.BaseViewModel
 import com.d9tilov.android.user.ui.mapper.toDataModel
+import com.d9tilov.moneymanager.base.ui.navigator.SplashNavigator
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Lazy
@@ -26,9 +26,9 @@ import timber.log.Timber
 @HiltViewModel
 class RouterViewModel @Inject constructor(
     private val preferencesStore: PreferencesStore,
-    private val backupInteractor: com.d9tilov.android.backup.domain.contract.BackupInteractor,
+    private val backupInteractor: BackupInteractor,
     private val userInteractor: UserInteractor,
-    private val categoryInteractor: Lazy<com.d9tilov.android.category.data.contract.CategoryInteractor>,
+    private val categoryInteractor: Lazy<CategoryInteractor>,
 ) : BaseViewModel<SplashNavigator>() {
 
     private val auth = FirebaseAuth.getInstance()

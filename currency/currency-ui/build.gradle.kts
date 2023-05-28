@@ -24,6 +24,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     composeOptions {
         kotlinCompilerExtensionVersion = "1.3.2"
     }
@@ -45,8 +46,13 @@ dependencies {
     implementation(libs.composeViewModel)
     implementation(libs.composeRuntime)
 
+    implementation(libs.startup)
+
     implementation(libs.hilt)
     implementation(libs.hiltNavigationCompose)
     kapt(libs.hiltCompiler)
     kapt(libs.hiltAndroidCompiler)
+
+    implementation(libs.worker)
+    implementation(libs.workerHilt)
 }

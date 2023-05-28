@@ -37,7 +37,7 @@ import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayMode
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
-import java.math.BigDecimal.ROUND_HALF_UP
+import java.math.RoundingMode
 import javax.inject.Inject
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -134,7 +134,7 @@ class ExpenseFragment :
                                                     requireContext().getColorFromAttr(
                                                         if (ableToSpendToday.trSum.setScale(
                                                                 DECIMAL_LENGTH,
-                                                                ROUND_HALF_UP
+                                                                RoundingMode.HALF_UP
                                                             ).signum() > 0
                                                         ) R.attr.colorOnPrimaryContainer
                                                         else R.attr.colorError

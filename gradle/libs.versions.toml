@@ -48,6 +48,7 @@ billing = "5.2.0"
 dotsIndicator = "4.3"
 androidChart = "v3.1.0"
 splashScreen = "1.0.0"
+startup = "1.1.1"
 junit = "4.13.2"
 
 [libraries]
@@ -120,6 +121,7 @@ hiltCompiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = 
 hiltAndroidCompiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hiltNavigationCompose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 splashScreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashScreen" }
+startup = { group = "androidx.startup", name = "startup-runtime", version.ref = "startup" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 
 [bundles]

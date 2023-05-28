@@ -9,13 +9,13 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.viewModels
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.base.ui.BaseFragment
-import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
 import com.d9tilov.android.budget.ui.navigation.budgetScreen
 import com.d9tilov.android.budget.ui.navigation.navigateToBudgetScreen
+import com.d9tilov.android.common_android.ui.base.BaseFragment
 import com.d9tilov.android.ui.navigation.currencyScreen
 import com.d9tilov.android.ui.navigation.navigateToCurrencyListScreen
+import com.d9tilov.moneymanager.R
+import com.d9tilov.moneymanager.base.ui.navigator.ProfileNavigator
 import com.d9tilov.moneymanager.databinding.FragmentProfileBinding
 import com.d9tilov.moneymanager.profile.navigation.profileNavigationRoute
 import com.d9tilov.moneymanager.profile.navigation.profileScreen

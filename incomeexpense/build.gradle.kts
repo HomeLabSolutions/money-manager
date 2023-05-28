@@ -70,7 +70,6 @@ dependencies {
     kapt(libs.hiltCompiler)
     kapt(libs.hiltAndroidCompiler)
 
-
     implementation(libs.firebaseAnalytics)
     implementation(platform(libs.firebaseBom))
 

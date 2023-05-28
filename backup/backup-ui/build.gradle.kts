@@ -16,16 +16,9 @@ android {
         minSdk = minSdkVersion
     }
 
-    buildFeatures {
-        compose = true
-    }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.2"
     }
 
     kotlinOptions {
@@ -42,7 +35,6 @@ dependencies {
 
     implementation(libs.bundles.navigation)
 
-    implementation(libs.bundles.composeMaterial3)
     implementation(libs.hilt)
     kapt(libs.hiltCompiler)
     kapt(libs.hiltAndroidCompiler)

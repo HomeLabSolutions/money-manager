@@ -209,8 +209,23 @@ dependencies {
     implementation(project(":goals:goals-domain:goals-domain-impl"))
 
     implementation(project(":category:category-ui"))
+
+    implementation(project(":transaction:transaction-domain:transaction-domain-contract"))
+    implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-model"))
+    implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-contract"))
     implementation(project(":transaction:regular-transaction-ui"))
+
     implementation(project(":incomeexpense"))
+
+    implementation(project(":statistics:statistics-ui"))
+
+    implementation(project(":settings:settings-ui"))
+
+    implementation(project(":billing:billing-domain:billing-domain-contract"))
+
+    implementation(project(":category:category-domain:category-domain-contract"))
+
+    implementation(project(":backup:backup-domain:backup-domain-contract"))
 
     implementation(libs.kotlinJdk)
 

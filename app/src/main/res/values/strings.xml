@@ -33,12 +33,8 @@
     <string name="settings_backup">Make backup</string>
     <string name="settings_backup_info">Last backup: %1$s</string>
     <string name="settings_backup_empty">Backup hasn\'t been created yet</string>
-    <string name="settings_backup_succeeded">Backup succeeded</string>
     <string name="settings_start_period_day_error">The day should be in interval from 1 to 31</string>
     <string name="settings_subscription_premium_title" translatable="false">Go Premium</string>
-    <string name="settings_subscription_premium_acknowledged_title" translatable="false">Premium</string>
-    <string name="settings_subscription_premium_acknowledged_subtitle_renewing">Subscription will be renewing automatically</string>
-    <string name="settings_subscription_premium_acknowledged_subtitle_cancel">Subscription is cancelled</string>
     <string name="settings_subscription_premium_min_price">from %1$s%2$s %3$s</string>
 
     <string name="profile_item_currency_title">Currency: </string>
@@ -64,28 +60,4 @@
     <string name="notification_action_expense_title">Add to expenses</string>
     <string name="notification_channel_income_name">Regular incomes</string>
     <string name="notification_channel_expense_name">Regular expenses</string>
-
-    <string name="statistics_period_day">Day</string>
-    <string name="statistics_period_week">Week</string>
-    <string name="statistics_period_month">Month</string>
-    <string name="statistics_period_year">Year</string>
-    <string name="statistics_period_custom">Custom…</string>
-    <string name="statistics_today">Today</string>
-    <string name="statistics_no_data">Not enough data on this period for display</string>
-    <string name="statistics_expense_info_period_title">Was spent in period:</string>
-    <string name="statistics_menu_in_statistics_title">In statistics</string>
-    <string name="statistics_menu_not_in_statistics_title">All</string>
-    <string name="statistics_menu_currency_title">Currency</string>
-    <string name="statistics_menu_incomes_title">Incomes</string>
-    <string name="statistics_menu_expenses_title">Expenses</string>
-    <string name="statistics_menu_chart_type_title">Chart type</string>
-    <string name="statistics_menu_category_type_parent_title">Categories</string>
-    <string name="statistics_menu_category_type_child_title">Subcategories</string>
-
-    <string name="billing_intro_1">Expense Assistant</string>
-    <string name="billing_intro_2">Regular transactions</string>
-    <string name="billing_intro_3">Goals</string>
-    <string name="billing_intro_4">Extra icons</string>
-    <string name="billing_intro_5">Extra statistics</string>
-    <string name="billing_intro_6">Automatically backup</string>
 </resources>

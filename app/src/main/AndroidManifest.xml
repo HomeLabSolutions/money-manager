@@ -34,17 +34,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MoneyManager.Home"
             android:windowSoftInputMode="adjustResize" />
-
-        <provider
-            android:name="androidx.startup.InitializationProvider"
-            android:authorities="${applicationId}.androidx-startup"
-            android:exported="false"
-            tools:node="remove">
-            <meta-data
-                android:name="com.d9tilov.moneymanager.sync.initializers.SyncInitializer"
-                android:value="androidx.startup"
-                tools:node="remove" />
-        </provider>
     </application>
 
 </manifest>
