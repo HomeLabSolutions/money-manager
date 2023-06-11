@@ -46,13 +46,6 @@ android {
         versionCode = 1000 * (1000 * versionMajor + 100 * versionMinor + versionPatch) + versionBuild
         versionName = "${versionMajor}.${versionMinor}.${versionPatch}.${versionBuild}"
 
-        buildConfigField("String", "SALT", keystoreProperties["database_salt"] as String)
-        buildConfigField(
-            "String",
-            "BASE64_ENCODED_PUBLIC_KEY",
-            "\"" + keystoreProperties["base64EncodedPublicKey"] as String + "\""
-        )
-
         vectorDrawables.useSupportLibrary = true
 
         javaCompileOptions {
@@ -208,6 +201,8 @@ dependencies {
     implementation(project(":goals:goals-domain:goals-domain-contract"))
     implementation(project(":goals:goals-domain:goals-domain-impl"))
 
+    implementation(project(":category:category-data:category-data-model"))
+    implementation(project(":category:category-domain:category-domain-contract"))
     implementation(project(":category:category-ui"))
 
     implementation(project(":transaction:transaction-domain:transaction-domain-contract"))
@@ -223,9 +218,8 @@ dependencies {
 
     implementation(project(":billing:billing-domain:billing-domain-contract"))
 
-    implementation(project(":category:category-domain:category-domain-contract"))
-
     implementation(project(":backup:backup-domain:backup-domain-contract"))
+    implementation(project(":backup:backup-ui"))
 
     implementation(libs.kotlinJdk)
 

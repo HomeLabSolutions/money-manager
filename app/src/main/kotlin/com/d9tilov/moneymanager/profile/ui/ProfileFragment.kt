@@ -12,6 +12,8 @@ import androidx.navigation.compose.rememberNavController
 import com.d9tilov.android.budget.ui.navigation.budgetScreen
 import com.d9tilov.android.budget.ui.navigation.navigateToBudgetScreen
 import com.d9tilov.android.common_android.ui.base.BaseFragment
+import com.d9tilov.android.settings.ui.navigation.navigateToSettingsScreen
+import com.d9tilov.android.settings.ui.navigation.settingsScreen
 import com.d9tilov.android.ui.navigation.currencyScreen
 import com.d9tilov.android.ui.navigation.navigateToCurrencyListScreen
 import com.d9tilov.moneymanager.R
@@ -20,8 +22,6 @@ import com.d9tilov.moneymanager.databinding.FragmentProfileBinding
 import com.d9tilov.moneymanager.profile.navigation.profileNavigationRoute
 import com.d9tilov.moneymanager.profile.navigation.profileScreen
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileViewModel
-import com.d9tilov.moneymanager.settings.navigation.navigateToSettingsScreen
-import com.d9tilov.moneymanager.settings.navigation.settingsScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
