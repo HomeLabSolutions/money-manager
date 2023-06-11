@@ -2,15 +2,21 @@ package com.d9tilov.moneymanager
 
 import android.app.Application
 import android.os.StrictMode
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.Configuration
 import com.d9tilov.android.ui.sync.initializers.Sync
 import com.google.android.material.color.DynamicColors
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
 @HiltAndroidApp
-class App : Application() {
+class App : Application(), Configuration.Provider {
+
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
 
     override fun onCreate() {
         super.onCreate()
@@ -29,6 +35,15 @@ class App : Application() {
                 .build()
             StrictMode.setVmPolicy(vmPolicy)
         }
-        Sync.initialize(context = this)
+    }
+
+    override fun getWorkManagerConfiguration(): Configuration {
+        return Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
+    }
+
+    companion object {
+        const val TAG = "[MoneyManager]"
     }
 }

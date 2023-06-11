@@ -9,8 +9,13 @@ plugins {
 android {
     namespace = "com.d9tilov.android.database"
     val compileSdkVersion: Int by rootProject.extra
+    val minSdkVersion: Int by rootProject.extra
 
     compileSdk = compileSdkVersion
+
+    defaultConfig {
+        minSdk = minSdkVersion
+    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
