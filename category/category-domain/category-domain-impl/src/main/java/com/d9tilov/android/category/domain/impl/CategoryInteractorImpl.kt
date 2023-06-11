@@ -14,7 +14,7 @@ class CategoryInteractorImpl(private val categoryRepo: CategoryRepo) : CategoryI
     override suspend fun create(category: Category) = categoryRepo.create(category)
     override suspend fun createDefaultCategories() {
         coroutineScope {
-            launch(start = ) { categoryRepo.createExpenseDefaultCategories() }
+            launch { categoryRepo.createExpenseDefaultCategories() }
             launch { categoryRepo.createIncomeDefaultCategories() }
         }
     }

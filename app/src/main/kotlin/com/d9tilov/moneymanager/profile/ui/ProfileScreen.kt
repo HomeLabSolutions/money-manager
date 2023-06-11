@@ -45,15 +45,13 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.d9tilov.android.common_android.utils.toBudgetCreatedDateStr
-import com.d9tilov.android.common_android.utils.toLocalDateTime
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
+import com.d9tilov.android.core.utils.toBudgetCreatedDateStr
 import com.d9tilov.android.designsystem.CurrencyTextFieldExtraSmall
 import com.d9tilov.android.designsystem.SimpleDialog
 import com.d9tilov.moneymanager.BuildConfig
 import com.d9tilov.moneymanager.R
-import com.d9tilov.android.backup.ui.PeriodicBackupWorker
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileUiItem
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileUiState
 import com.d9tilov.moneymanager.profile.ui.vm.ProfileViewModel
@@ -210,18 +208,18 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
         is ProfileUiItem.BudgetUiItem -> ProfileItemData(
             ImageVector.vectorResource(R.drawable.ic_budget_icon),
             stringResource(R.string.profile_item_budget_title),
-            profileUiItem.budgetData.createdDate.toLocalDateTime().toBudgetCreatedDateStr()
+            profileUiItem.budgetData.createdDate.toBudgetCreatedDateStr()
         )
         is ProfileUiItem.RegularIncomeUiItem -> ProfileItemData(
             ImageVector.vectorResource(R.drawable.ic_regular_income),
             stringResource(R.string.profile_item_regular_incomes_title),
-            profileUiItem.regularIncomes.joinToString(separator = ", ") { it.category.name },
+            profileUiItem.regularIncomes.joinToString { it.category.name },
             null
         )
         is ProfileUiItem.RegularExpenseUiItem -> ProfileItemData(
             ImageVector.vectorResource(R.drawable.ic_regular_expense),
             stringResource(R.string.profile_item_regular_expenses_title),
-            profileUiItem.regularExpenses.joinToString(separator = ", ") { it.category.name }
+            profileUiItem.regularExpenses.joinToString { it.category.name }
         )
         is ProfileUiItem.Goals -> ProfileItemData(
             ImageVector.vectorResource(R.drawable.ic_goal),
