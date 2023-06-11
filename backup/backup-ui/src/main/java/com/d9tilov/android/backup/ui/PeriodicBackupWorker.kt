@@ -22,7 +22,7 @@ import timber.log.Timber
 class PeriodicBackupWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted workerParameters: WorkerParameters,
-    private val backupInteractor: BackupInteractor
+    val backupInteractor: BackupInteractor
 ) : CoroutineWorker(context, workerParameters) {
 
     override suspend fun doWork(): Result {
