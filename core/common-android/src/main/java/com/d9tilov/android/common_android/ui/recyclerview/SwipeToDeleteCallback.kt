@@ -35,7 +35,7 @@ abstract class SwipeToDeleteCallback(val context: Context) :
     }
 
     init {
-        textPaint.color = context.getColorFromAttr(R.attr.colorOnPrimary)
+        textPaint.color = context.getColorFromAttr(R.attr.colorOnError)
         textPaint.textSize = textView.textSize
         textPaint.typeface = textView.typeface
     }

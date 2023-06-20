@@ -27,15 +27,15 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.3.2"
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 }
 
@@ -48,8 +48,14 @@ dependencies {
     implementation(project(":category:category-data:category-data-model"))
     implementation(project(":category:category-data:category-data-impl"))
     implementation(project(":category:category-domain:category-domain-model"))
+    implementation(project(":category:category-di"))
+
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-contract"))
     implementation(project(":transaction:transaction-domain:transaction-domain-contract"))
+    implementation(project(":transaction:transaction-di"))
+
+    implementation(project(":transaction:regular-transaction-di"))
+
     implementation(project(":billing:billing-domain:billing-domain-contract"))
 
     implementation(libs.glide)

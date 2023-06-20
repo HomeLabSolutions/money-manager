@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.math.BigDecimal
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,7 +38,7 @@ class GoalsViewModel @Inject constructor(private val budgetInteractor: BudgetInt
     }
 
     fun changeBudgetAmount(amount: String) {
-        _uiState.update { it.copy(budgetSum = amount) }
+//        _uiState.update { it.copy(budgetSum = amount) }
     }
 
     fun saveBudgetAmount() = viewModelScope.launch(Dispatchers.IO) {
@@ -47,7 +46,7 @@ class GoalsViewModel @Inject constructor(private val budgetInteractor: BudgetInt
         budget?.let {
             budgetInteractor.update(
                 budget.copy(
-                    sum = _uiState.value.budgetSum.toBigDecimalOrNull() ?: BigDecimal.ZERO
+//                    sum = _uiState.value.budgetSum.toBigDecimalOrNull() ?: BigDecimal.ZERO
                 )
             )
         }

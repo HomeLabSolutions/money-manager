@@ -18,9 +18,9 @@ import com.d9tilov.android.common_android.utils.show
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.utils.toMillis
 import com.d9tilov.android.statistics.ui.recycler.diff.StatisticsDetailsDiffUtils
+import com.d9tilov.android.statistics_ui.R
+import com.d9tilov.android.statistics_ui.databinding.ItemTransactionDetailsBinding
 import com.d9tilov.android.transaction.domain.model.Transaction
-import com.example.statistics_ui.R
-import com.example.statistics_ui.databinding.ItemTransactionDetailsBinding
 import java.text.SimpleDateFormat
 import java.util.Locale
 

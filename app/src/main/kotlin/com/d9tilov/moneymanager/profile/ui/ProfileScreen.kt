@@ -41,7 +41,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -59,7 +58,6 @@ import com.d9tilov.moneymanager.profile.ui.vm.UserUiProfile
 import com.d9tilov.moneymanager.splash.ui.RouterActivity
 import dagger.hilt.android.internal.managers.FragmentComponentManager
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun ProfileRoute(
     viewModel: ProfileViewModel = hiltViewModel(),

@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="category_item_size">80dp</dimen>
     <dimen name="item_color_picker_size_wrapper">48dp</dimen>
     <dimen name="item_color_picker_size">32dp</dimen>
     <dimen name="statistics_item_group_icon_min_height">60dp</dimen>
+    <dimen name="category_item_size">80dp</dimen>
     <dimen name="category_item_icon_round_size">64dp</dimen>
     <dimen name="category_creation_icon_size">48dp</dimen>
     <dimen name="button_margin_horizontal">16dp</dimen>
     <dimen name="button_margin_vertical">8dp</dimen>
     <dimen name="recycler_view_category_offset">4dp</dimen>
     <dimen name="button_height">56dp</dimen>
+    <dimen name="currency_margin_between_currency_symbol">2dp</dimen>
+    <dimen name="currency_sum_text_size">84sp</dimen>
+    <dimen name="currency_sign_text_size">50sp</dimen>
 </resources>

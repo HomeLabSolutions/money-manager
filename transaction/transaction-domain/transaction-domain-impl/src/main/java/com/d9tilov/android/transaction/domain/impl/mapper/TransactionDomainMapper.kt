@@ -6,6 +6,24 @@ import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
 import java.math.BigDecimal
 
+fun Transaction.toDataModel(): TransactionDataModel = TransactionDataModel(
+    id,
+    clientId,
+    type,
+    category.id,
+    currencyCode,
+    sum,
+    usdSum,
+    date,
+    description,
+    qrCode,
+    isRegular,
+    inStatistics,
+    latitude,
+    longitude,
+    photoUri
+)
+
 fun TransactionDataModel.toDomainModel(category: Category): Transaction =
     Transaction.EMPTY.copy(
         id = id,

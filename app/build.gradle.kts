@@ -1,9 +1,9 @@
 import java.io.FileInputStream
-import java.util.*
+import java.util.Properties
 
 plugins {
     id("com.android.application")
-    kotlin("android")
+    id("kotlin-android")
     kotlin("kapt")
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
@@ -28,11 +28,11 @@ android {
         }
     }
 
+    namespace = "com.d9tilov.moneymanager"
     val compileSdkVersion: Int by rootProject.extra
     val minSdkVersion: Int by rootProject.extra
     val targetSdkVersion: Int by rootProject.extra
     compileSdk = compileSdkVersion
-    buildToolsVersion = "33.0.0"
 
     defaultConfig {
         val versionMajor = 1
@@ -86,12 +86,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     val ktlint by configurations.creating
@@ -171,7 +171,6 @@ dependencies {
     implementation(project(":core:datastore"))
     implementation(project(":core:designsystem"))
 
-    implementation(project(":currency:currency-di"))
     implementation(project(":currency:currency-data:currency-data-model"))
     implementation(project(":currency:currency-data:currency-data-contract"))
     implementation(project(":currency:currency-data:currency-data-impl"))
@@ -179,7 +178,6 @@ dependencies {
     implementation(project(":currency:currency-domain:currency-domain-contract"))
     implementation(project(":currency:currency-ui"))
 
-    implementation(project(":budget:budget-di"))
     implementation(project(":budget:budget-data:budget-data-model"))
     implementation(project(":budget:budget-data:budget-data-contract"))
     implementation(project(":budget:budget-data:budget-data-impl"))
@@ -187,14 +185,12 @@ dependencies {
     implementation(project(":budget:budget-domain:budget-domain-impl"))
     implementation(project(":budget:budget-ui"))
 
-    implementation(project(":user-info:user-di"))
     implementation(project(":user-info:user-data:user-data-model"))
     implementation(project(":user-info:user-domain:user-domain-contract"))
     implementation(project(":user-info:user-ui"))
 
     implementation(project(":prepopulate:prepopulate-ui"))
 
-    implementation(project(":goals:goals-di"))
     implementation(project(":goals:goals-data:goals-data-model"))
     implementation(project(":goals:goals-data:goals-data-contract"))
     implementation(project(":goals:goals-data:goals-data-impl"))
@@ -223,7 +219,7 @@ dependencies {
 
     implementation(libs.kotlinJdk)
 
-    implementation(libs.appCompat)
+    implementation(libs.bundles.appCompat)
     implementation(libs.material)
     implementation(libs.core)
     implementation(libs.coreRuntime)

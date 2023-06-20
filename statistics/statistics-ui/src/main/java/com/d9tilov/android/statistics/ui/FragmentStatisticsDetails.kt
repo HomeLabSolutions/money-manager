@@ -16,8 +16,8 @@ import com.d9tilov.android.common_android.ui.base.BaseFragment
 import com.d9tilov.android.statistics.ui.navigation.StatisticsDetailsNavigator
 import com.d9tilov.android.statistics.ui.recycler.StatisticsDetailsAdapter
 import com.d9tilov.android.statistics.ui.vm.StatisticsDetailsViewModel
-import com.example.statistics_ui.R
-import com.example.statistics_ui.databinding.FragmentStatisticsDetailsBinding
+import com.d9tilov.android.statistics_ui.R
+import com.d9tilov.android.statistics_ui.databinding.FragmentStatisticsDetailsBinding
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
