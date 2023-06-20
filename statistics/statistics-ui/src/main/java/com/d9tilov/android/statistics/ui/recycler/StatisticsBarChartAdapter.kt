@@ -14,9 +14,9 @@ import com.d9tilov.android.common_android.utils.let2
 import com.d9tilov.android.core.events.OnItemClickListener
 import com.d9tilov.android.core.utils.removeScale
 import com.d9tilov.android.statistics.ui.recycler.diff.StatisticsBarCharDiffUtils
+import com.d9tilov.android.statistics_ui.R
+import com.d9tilov.android.statistics_ui.databinding.ItemStatisticsBarChartBinding
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
-import com.example.statistics_ui.R
-import com.example.statistics_ui.databinding.ItemStatisticsBarChartBinding
 import java.math.BigDecimal
 import java.math.RoundingMode
 

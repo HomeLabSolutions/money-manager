@@ -45,11 +45,11 @@ import com.d9tilov.android.statistics.ui.navigation.StatisticsNavigator
 import com.d9tilov.android.statistics.ui.recycler.StatisticsBarChartAdapter
 import com.d9tilov.android.statistics.ui.recycler.StatisticsMenuAdapter
 import com.d9tilov.android.statistics.ui.vm.StatisticsViewModel
+import com.d9tilov.android.statistics_ui.R
+import com.d9tilov.android.statistics_ui.databinding.FragmentStatisticsBinding
+import com.d9tilov.android.statistics_ui.databinding.LayoutEmptyStatisticsPlaceholderBinding
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
 import com.d9tilov.android.transaction.domain.model.TransactionLineChartModel
-import com.example.statistics_ui.R
-import com.example.statistics_ui.databinding.FragmentStatisticsBinding
-import com.example.statistics_ui.databinding.LayoutEmptyStatisticsPlaceholderBinding
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -346,7 +346,7 @@ class StatisticsFragment :
             statisticsPieChart.isHighlightPerTapEnabled = false
 
             statisticsPieChart.animateY(ANIMATION_DURATION, Easing.EaseInOutQuad)
-            statisticsPieChart.setEntryLabelColor(requireContext().getColorFromAttr(android.R.attr.colorBackground))
+            statisticsPieChart.setEntryLabelColor(requireContext().getColorFromAttr(R.attr.colorOnBackground))
             statisticsPieChart.setEntryLabelTypeface(tfRegular)
             statisticsPieChart.setEntryLabelTextSize(PIE_CHART_ENTRY_LABEL_TEXT_SIZE)
             statisticsPieChart.setCenterTextSize(PIE_CHART_CENTER_TEXT_SIZE)

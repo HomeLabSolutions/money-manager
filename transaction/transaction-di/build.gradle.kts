@@ -19,12 +19,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 }
 
@@ -32,10 +32,21 @@ dependencies {
 
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
+
     implementation(project(":transaction:transaction-data:transaction-data-contract"))
     implementation(project(":transaction:transaction-data:transaction-data-impl"))
     implementation(project(":transaction:transaction-domain:transaction-domain-contract"))
     implementation(project(":transaction:transaction-domain:transaction-domain-impl"))
+
+    implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-contract"))
+
+    implementation(project(":category:category-domain:category-domain-contract"))
+
+    implementation(project(":user-info:user-domain:user-domain-contract"))
+
+    implementation(project(":currency:currency-domain:currency-domain-contract"))
+
+    implementation(project(":budget:budget-domain:budget-domain-contract"))
 
     implementation(libs.hilt)
     kapt(libs.hiltCompiler)

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.billing_data_contract"
+    namespace = "com.d9tilov.android.billing_data_contract"
     val compileSdkVersion: Int by rootProject.extra
     val minSdkVersion: Int by rootProject.extra
 
@@ -15,11 +15,11 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 }
 

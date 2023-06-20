@@ -21,23 +21,25 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.3.2"
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 }
 
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:designsystem"))
+
     implementation(project(":budget:budget-data:budget-data-model"))
     implementation(project(":budget:budget-domain:budget-domain-contract"))
+    implementation(project(":budget:budget-di"))
 
     implementation(libs.bundles.compose)
     implementation(libs.bundles.composeMaterial3)

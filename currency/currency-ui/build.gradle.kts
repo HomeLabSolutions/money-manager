@@ -21,8 +21,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     composeOptions {
@@ -30,16 +30,18 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 }
 
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:designsystem"))
+
     implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
     implementation(project(":currency:currency-observer:currency-observer-contract"))
+    implementation(project(":currency:currency-di"))
 
     implementation(libs.bundles.compose)
     implementation(libs.bundles.composeMaterial3)
@@ -53,6 +55,5 @@ dependencies {
     kapt(libs.hiltCompiler)
     kapt(libs.hiltAndroidCompiler)
 
-    implementation(libs.worker)
-    implementation(libs.workerHilt)
+    implementation(libs.bundles.worker)
 }

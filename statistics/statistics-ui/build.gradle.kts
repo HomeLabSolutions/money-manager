@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.statistics_ui"
+    namespace = "com.d9tilov.android.statistics_ui"
     val compileSdkVersion: Int by rootProject.extra
     val minSdkVersion: Int by rootProject.extra
 
@@ -25,8 +25,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     composeOptions {
@@ -34,7 +34,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 }
 
@@ -58,7 +58,7 @@ dependencies {
     implementation(project(":currency:currency-data:currency-data-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
 
-    implementation(libs.appCompat)
+    implementation(libs.bundles.appCompat)
     implementation(libs.material)
     implementation(libs.constraintLayout)
 

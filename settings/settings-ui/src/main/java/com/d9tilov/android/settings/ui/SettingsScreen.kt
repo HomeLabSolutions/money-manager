@@ -27,7 +27,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
@@ -36,7 +35,6 @@ import com.d9tilov.android.settings.ui.vm.SettingsViewModel
 import com.d9tilov.android.settings.ui.vm.SubscriptionUiState
 import com.d9tilov.android.settings_ui.R
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun SettingsRoute(viewModel: SettingsViewModel = hiltViewModel(), clickBack: () -> Unit) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

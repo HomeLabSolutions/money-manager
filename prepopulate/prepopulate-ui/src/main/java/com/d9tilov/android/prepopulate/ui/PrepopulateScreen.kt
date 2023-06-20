@@ -45,7 +45,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.budget.ui.BudgetScreen
 import com.d9tilov.android.currency.domain.model.DomainCurrency
@@ -53,7 +52,6 @@ import com.d9tilov.android.prepopulate.ui.PrepopulateScreen.Companion.fromScreen
 import com.d9tilov.android.prepopulate_ui.R
 import com.d9tilov.android.ui.CurrencyListScreen
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun PrepopulateScreen(prepopulateViewModel: PrepopulateViewModel = hiltViewModel()) {
     val uiState: PrepopulateUiState by prepopulateViewModel.uiState.collectAsStateWithLifecycle()

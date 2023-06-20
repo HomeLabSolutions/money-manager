@@ -16,9 +16,9 @@ import com.d9tilov.android.statistics.data.model.StatisticsMenuTransactionType
 import com.d9tilov.android.statistics.data.model.StatisticsMenuType
 import com.d9tilov.android.statistics.data.model.toType
 import com.d9tilov.android.statistics.ui.recycler.diff.StatisticsMenuItemDiffUtils
-import com.example.statistics_ui.R
-import com.example.statistics_ui.databinding.ItemStatisticsMenuBinding
-import com.example.statistics_ui.databinding.ItemStatisticsMenuCurrencyBinding
+import com.d9tilov.android.statistics_ui.R
+import com.d9tilov.android.statistics_ui.databinding.ItemStatisticsMenuBinding
+import com.d9tilov.android.statistics_ui.databinding.ItemStatisticsMenuCurrencyBinding
 
 class StatisticsMenuAdapter(
     private val chartMenuItemClickListener: OnItemClickListener<StatisticsMenuChartMode>,

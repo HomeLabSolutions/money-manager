@@ -1,40 +1,41 @@
 package com.d9tilov.android.transaction.domain.impl
 
-import android.os.StrictMode
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
-import com.d9tilov.android.common_android.utils.countDaysRemainingNextFiscalDate
-import com.d9tilov.android.common_android.utils.getEndDateOfFiscalPeriod
-import com.d9tilov.android.common_android.utils.getStartOfDay
+import com.d9tilov.android.category.data.model.Category
+import com.d9tilov.android.category.data.model.exception.CategoryException
+import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.PeriodType
-import com.d9tilov.android.core.utils.divideBy
-import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
-import com.d9tilov.android.database.model.isIncome
-import com.d9tilov.android.category.data.model.Category
-import CategoryInteractor
 import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.core.model.isIncome
+import com.d9tilov.android.core.utils.countDaysRemainingNextFiscalDate
 import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.core.utils.currentDateTime
+import com.d9tilov.android.core.utils.divideBy
+import com.d9tilov.android.core.utils.getEndDateOfFiscalPeriod
 import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.getStartDateOfFiscalPeriod
 import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.core.utils.isSameDay
-import com.d9tilov.android.transaction.domain.model.Transaction
-import com.d9tilov.moneymanager.regular.domain.RegularTransactionInteractor
+import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
+import com.d9tilov.android.regular.transaction.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.regular.transaction.domain.model.RegularTransaction
-import com.d9tilov.moneymanager.statistics.domain.StatisticsMenuCurrency.Default.currencyCode
+import com.d9tilov.android.transaction.data.contract.TransactionRepo
+import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
+import com.d9tilov.android.transaction.domain.impl.mapper.toChartModel
+import com.d9tilov.android.transaction.domain.impl.mapper.toDataModel
+import com.d9tilov.android.transaction.domain.impl.mapper.toDomainModel
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
 import com.d9tilov.android.transaction.domain.model.TransactionLineChartModel
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
-import com.d9tilov.moneymanager.transaction.domain.mapper.toChartModel
-import com.d9tilov.moneymanager.transaction.domain.mapper.toDataModel
-import com.d9tilov.moneymanager.transaction.domain.mapper.toDomainModel
+import com.d9tilov.android.user.domain.contract.UserInteractor
 import java.math.BigDecimal
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -103,7 +104,7 @@ class TransactionInteractorImpl(
                         it.map { item ->
                             val category =
                                 categoryList.find { listItem -> item.categoryId == listItem.id }
-                                    ?: throw CategoryNotFoundException("getTransactionsGroupedByCategory Not found category with id: ${item.categoryId}")
+                                    ?: throw CategoryException.CategoryNotFoundException("getTransactionsGroupedByCategory Not found category with id: ${item.categoryId}")
                             item.toChartModel(
                                 category,
                                 currencyCode,
@@ -186,7 +187,7 @@ class TransactionInteractorImpl(
                 .map { tr: com.d9tilov.android.transaction.data.model.TransactionDataModel ->
                     val foundCategory =
                         categoryList.find { listItem -> tr.categoryId == listItem.id }
-                            ?: throw CategoryNotFoundException("getTransactionsByCategory Not found category with id: ${tr.categoryId}")
+                            ?: throw CategoryException.CategoryNotFoundException("getTransactionsByCategory Not found category with id: ${tr.categoryId}")
                     tr.toDomainModel(foundCategory)
                 }
         }
@@ -219,7 +220,7 @@ class TransactionInteractorImpl(
                         it.map { item ->
                             val category =
                                 categoryList.find { listItem -> item.categoryId == listItem.id }
-                                    ?: throw CategoryNotFoundException("getTransactionsByType Not found category with id: ${item.categoryId}")
+                                    ?: throw CategoryException.CategoryNotFoundException("getTransactionsByType Not found category with id: ${item.categoryId}")
                             item.toDomainModel(category)
                         }
                     }
@@ -357,6 +358,7 @@ class TransactionInteractorImpl(
                     tr.currencyCode,
                     currencyInteractor.getMainCurrency().code
                 )
+
                 PeriodType.WEEK -> {
                     var dayOfWeekCount = 0
                     var dateIterator = startDate
@@ -370,6 +372,7 @@ class TransactionInteractorImpl(
                         currencyInteractor.getMainCurrency().code
                     )
                 }
+
                 PeriodType.DAY -> {
                     val countDays = startDate.periodUntil(endDate).days
                     currencyInteractor.toTargetCurrency(
@@ -543,6 +546,7 @@ class TransactionInteractorImpl(
                             }
                         }
                     }
+
                     PeriodType.WEEK -> {
                         var dayIterator = tr.executionPeriod.lastExecutionDateTime.date
                         val executeDay = (tr.executionPeriod as ExecutionPeriod.EveryWeek).dayOfWeek
@@ -569,7 +573,7 @@ class TransactionInteractorImpl(
                                 regularTransactionInteractor.update(
                                     tr.copy(
                                         executionPeriod = ExecutionPeriod.EveryWeek(
-                                            tr.executionPeriod.dayOfWeek,
+                                            (tr.executionPeriod as ExecutionPeriod.EveryWeek).dayOfWeek,
                                             day.getStartOfDay()
                                         )
                                     )
@@ -577,6 +581,7 @@ class TransactionInteractorImpl(
                             }
                         }
                     }
+
                     PeriodType.MONTH -> {
                         var dayIterator = tr.executionPeriod.lastExecutionDateTime.date
                         val executeDay =
@@ -616,7 +621,7 @@ class TransactionInteractorImpl(
                                 regularTransactionInteractor.update(
                                     tr.copy(
                                         executionPeriod = ExecutionPeriod.EveryMonth(
-                                            tr.executionPeriod.dayOfMonth,
+                                            (tr.executionPeriod as ExecutionPeriod.EveryMonth).dayOfMonth,
                                             day.getStartOfDay()
                                         )
                                     )

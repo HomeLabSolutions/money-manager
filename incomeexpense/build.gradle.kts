@@ -29,8 +29,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     composeOptions {
@@ -38,7 +38,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 }
 
@@ -56,8 +56,9 @@ dependencies {
     implementation(project(":transaction:transaction-ui"))
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-model"))
     implementation(project(":billing:billing-domain:billing-domain-contract"))
+    implementation(project(":billing:billing-di"))
 
-    implementation(libs.appCompat)
+    implementation(libs.bundles.appCompat)
     implementation(libs.material)
     implementation(libs.paging)
 
