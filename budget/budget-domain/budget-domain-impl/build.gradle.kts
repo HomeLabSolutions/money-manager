@@ -7,7 +7,8 @@ dependencies {
     implementation(project(":budget:budget-data:budget-data-model"))
     implementation(project(":budget:budget-data:budget-data-contract"))
     implementation(project(":budget:budget-domain:budget-domain-contract"))
-    implementation(project(":currency:currency-data:currency-data-model"))
+    
+    implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
 
     implementation(libs.coroutinesCore)

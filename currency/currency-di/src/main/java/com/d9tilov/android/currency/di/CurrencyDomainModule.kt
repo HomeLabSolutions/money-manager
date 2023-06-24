@@ -1,7 +1,7 @@
 package com.d9tilov.android.currency.di
 
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
-import com.d9tilov.android.currency.data.contract.CurrencyRepo
+import com.d9tilov.android.currency.domain.contract.CurrencyRepo
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.impl.CurrencyInteractorImpl
 import com.d9tilov.android.currency.observer.contract.CurrencyUpdateObserver

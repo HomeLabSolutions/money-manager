@@ -171,7 +171,7 @@ dependencies {
     implementation(project(":core:datastore"))
     implementation(project(":core:designsystem"))
 
-    implementation(project(":currency:currency-data:currency-data-model"))
+    
     implementation(project(":currency:currency-data:currency-data-contract"))
     implementation(project(":currency:currency-data:currency-data-impl"))
     implementation(project(":currency:currency-domain:currency-domain-model"))

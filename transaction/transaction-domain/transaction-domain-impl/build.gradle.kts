@@ -40,7 +40,7 @@ dependencies {
 
     implementation(project(":user-info:user-domain:user-domain-contract"))
 
-    implementation(project(":currency:currency-data:currency-data-model"))
+    implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
 
     implementation(project(":budget:budget-data:budget-data-model"))

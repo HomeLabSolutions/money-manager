@@ -3,10 +3,11 @@ package com.d9tilov.android.currency.data.impl
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.core.utils.toLocalDate
-import com.d9tilov.android.currency.data.model.Currency
-import com.d9tilov.android.currency.data.model.CurrencyMetaData
+import com.d9tilov.android.currency.data.contract.CurrencySource
 import com.d9tilov.android.currency.data.impl.mapper.toDataModel
 import com.d9tilov.android.currency.data.impl.mapper.toDbModel
+import com.d9tilov.android.currency.domain.model.Currency
+import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.database.dao.CurrencyListDao
 import com.d9tilov.android.database.dao.MainCurrencyDao
 import com.d9tilov.android.datastore.PreferencesStore
@@ -20,7 +21,7 @@ class CurrencyLocalSource(
     private val preferencesStore: PreferencesStore,
     private val currencyListDao: CurrencyListDao,
     private val mainCurrencyDao: MainCurrencyDao
-) : com.d9tilov.android.currency.data.contract.CurrencySource {
+) : CurrencySource {
 
     override fun getMainCurrency(): Flow<CurrencyMetaData> =
         preferencesStore.uid

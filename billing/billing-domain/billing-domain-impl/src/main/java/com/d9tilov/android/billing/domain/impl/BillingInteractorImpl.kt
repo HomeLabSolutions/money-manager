@@ -11,8 +11,8 @@ import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.billing.domain.model.PremiumEmails
 import com.d9tilov.android.billing.domain.model.PremiumInfo
 import com.d9tilov.android.core.constants.DataConstants.TAG
-import com.d9tilov.android.currency.data.model.Currency
 import com.d9tilov.android.currency.domain.contract.mapper.toDomain
+import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase

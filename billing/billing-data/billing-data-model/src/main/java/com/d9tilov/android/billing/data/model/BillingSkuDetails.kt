@@ -1,6 +1,7 @@
 package com.d9tilov.android.billing.data.model
 
-import com.d9tilov.android.currency.data.model.Currency
+import com.d9tilov.android.currency.domain.model.Currency
+
 
 data class BillingSkuDetails(
     val tag: String,

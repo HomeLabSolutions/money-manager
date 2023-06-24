@@ -29,7 +29,8 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":billing:billing-data:billing-data-contract"))
     implementation(project(":billing:billing-data:billing-data-model"))
-    implementation(project(":currency:currency-data:currency-data-model"))
+
+    implementation(project(":currency:currency-domain:currency-domain-model"))
 
     implementation(libs.coroutinesCore)
     api(libs.billing)

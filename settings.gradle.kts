@@ -9,7 +9,6 @@ include(":core:datastore")
 include(":core:designsystem")
 
 include(":currency:currency-di")
-include(":currency:currency-data:currency-data-model")
 include(":currency:currency-data:currency-data-contract")
 include(":currency:currency-data:currency-data-impl")
 include(":currency:currency-domain:currency-domain-model")

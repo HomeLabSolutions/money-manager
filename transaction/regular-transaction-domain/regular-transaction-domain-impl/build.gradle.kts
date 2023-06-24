@@ -29,7 +29,7 @@ dependencies {
     implementation(project(":category:category-data:category-data-model"))
     implementation(project(":category:category-domain:category-domain-contract"))
 
-    implementation(project(":currency:currency-data:currency-data-model"))
+    implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
 
     implementation(project(":transaction:regular-transaction-data:regular-transaction-data-model"))
