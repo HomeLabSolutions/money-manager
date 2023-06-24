@@ -6,9 +6,6 @@
 
     <string name="coming_soon">Скоро будет…</string>
 
-    <string name="title_prepopulate_regular_incomes">Постоянные доходы</string>
-    <string name="title_prepopulate_regular_expenses">Постоянные расходы</string>
-    <string name="title_prepopulate_regular_expense">Постоянный расход</string>
     <string name="title_goal">Цели</string>
 
     <string name="toolbar_menu_skip">Пропустить</string>

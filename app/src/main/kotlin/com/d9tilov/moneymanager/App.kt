@@ -13,15 +13,13 @@ import timber.log.Timber
 import timber.log.Timber.DebugTree
 
 @HiltAndroidApp
-class App : Application(), Configuration.Provider {
-
-    @Inject
-    lateinit var workerFactory: HiltWorkerFactory
+class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
         DynamicColors.applyToActivitiesIfAvailable(this)
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
+        Sync.initialize(this)
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
             val threadPolicy = StrictMode.ThreadPolicy.Builder()
@@ -35,12 +33,6 @@ class App : Application(), Configuration.Provider {
                 .build()
             StrictMode.setVmPolicy(vmPolicy)
         }
-    }
-
-    override fun getWorkManagerConfiguration(): Configuration {
-        return Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .build()
     }
 
     companion object {

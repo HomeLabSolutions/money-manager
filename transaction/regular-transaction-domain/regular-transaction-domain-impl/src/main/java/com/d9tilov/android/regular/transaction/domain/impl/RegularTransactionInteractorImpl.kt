@@ -6,6 +6,8 @@ import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.regular.transaction.data.contract.RegularTransactionRepo
 import com.d9tilov.android.regular.transaction.domain.contract.RegularTransactionInteractor
+import com.d9tilov.android.regular.transaction.domain.impl.mapper.toData
+import com.d9tilov.android.regular.transaction.domain.impl.mapper.toDomain
 import com.d9tilov.android.regular.transaction.domain.model.RegularTransaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
