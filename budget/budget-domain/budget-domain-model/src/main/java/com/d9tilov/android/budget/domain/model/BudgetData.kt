@@ -1,4 +1,4 @@
-package com.d9tilov.android.budget.data.model
+package com.d9tilov.android.budget.domain.model
 
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.DataConstants.DEFAULT_DATA_ID

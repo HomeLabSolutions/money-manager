@@ -1,7 +1,7 @@
 package com.d9tilov.android.budget.domain.impl
 
-import com.d9tilov.android.budget.data.contract.BudgetRepo
-import com.d9tilov.android.budget.data.model.BudgetData
+import com.d9tilov.android.budget.domain.contract.BudgetRepo
+import com.d9tilov.android.budget.domain.model.BudgetData
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import kotlinx.coroutines.flow.firstOrNull

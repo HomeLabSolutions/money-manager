@@ -1,7 +1,7 @@
 package com.d9tilov.android.budget.data.impl
 
 import com.d9tilov.android.budget.data.contract.BudgetSource
-import com.d9tilov.android.budget.data.model.BudgetData
+import com.d9tilov.android.budget.domain.model.BudgetData
 import com.d9tilov.android.budget.data.impl.mapper.toDataModel
 import com.d9tilov.android.budget.data.impl.mapper.toDbModel
 import com.d9tilov.android.core.exceptions.WrongUidException
