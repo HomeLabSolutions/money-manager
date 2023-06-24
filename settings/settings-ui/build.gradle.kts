@@ -56,8 +56,7 @@ dependencies {
 
     implementation(project(":user-info:user-data:user-data-model"))
     implementation(project(":user-info:user-domain:user-domain-contract"))
-
-    implementation(project(":currency:currency-data:currency-data-model"))
+    
     implementation(project(":currency:currency-domain:currency-domain-model"))
 
     implementation(libs.appCompat)

@@ -46,15 +46,19 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:common-android"))
+
     implementation(project(":category:category-data:category-data-model"))
     implementation(project(":category:category-domain:category-domain-contract"))
     implementation(project(":category:category-ui"))
-    implementation(project(":currency:currency-data:currency-data-model"))
+    
+    implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
+
     implementation(project(":transaction:transaction-domain:transaction-domain-model"))
     implementation(project(":transaction:transaction-domain:transaction-domain-contract"))
     implementation(project(":transaction:transaction-ui"))
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-model"))
+
     implementation(project(":billing:billing-domain:billing-domain-contract"))
     implementation(project(":billing:billing-di"))
 

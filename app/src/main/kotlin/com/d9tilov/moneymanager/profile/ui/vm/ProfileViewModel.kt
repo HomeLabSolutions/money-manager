@@ -8,8 +8,8 @@ import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.common_android.ui.base.BaseViewModel
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.model.TransactionType
-import com.d9tilov.android.currency.data.model.CurrencyMetaData
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
+import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.regular.transaction.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.regular.transaction.domain.model.RegularTransaction
 import com.d9tilov.android.user.domain.contract.UserInteractor

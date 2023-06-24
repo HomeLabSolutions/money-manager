@@ -1,10 +1,10 @@
 package com.d9tilov.android.currency.data.impl
 
-import com.d9tilov.android.currency.data.contract.CurrencyRepo
 import com.d9tilov.android.currency.data.contract.CurrencySource
 import com.d9tilov.android.currency.data.impl.mapper.toDataModel
-import com.d9tilov.android.currency.data.model.Currency
-import com.d9tilov.android.currency.data.model.CurrencyMetaData
+import com.d9tilov.android.currency.domain.contract.CurrencyRepo
+import com.d9tilov.android.currency.domain.model.Currency
+import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.network.CurrencyApi
 import kotlinx.coroutines.flow.Flow
@@ -31,7 +31,7 @@ class CurrencyDataRepo(
 
     override suspend fun updateMainCurrency(code: String) {
         val uid = preferencesStore.uid.firstOrNull()
-        uid?.let { clientUid -> currencySource.updateMainCurrency(code) }
+        uid?.run { currencySource.updateMainCurrency(code) }
     }
 
     override suspend fun hasAlreadyUpdatedToday(baseCurrency: String): Boolean =

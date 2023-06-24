@@ -1,6 +1,6 @@
 package com.d9tilov.android.currency.di
 
-import com.d9tilov.android.currency.data.contract.CurrencyRepo
+import com.d9tilov.android.currency.domain.contract.CurrencyRepo
 import com.d9tilov.android.currency.data.contract.CurrencySource
 import com.d9tilov.android.currency.data.impl.CurrencyDataRepo
 import com.d9tilov.android.currency.data.impl.CurrencyLocalSource

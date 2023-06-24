@@ -10,7 +10,7 @@ import com.d9tilov.android.billing.data.contract.BillingSource
 import com.d9tilov.android.billing.data.model.BillingSkuDetails
 import com.d9tilov.android.billing.data.model.exceptions.BillingFailure
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
-import com.d9tilov.android.currency.data.model.Currency
+import com.d9tilov.android.currency.domain.model.Currency
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map

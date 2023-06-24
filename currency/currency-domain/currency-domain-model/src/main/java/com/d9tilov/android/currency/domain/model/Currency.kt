@@ -1,4 +1,4 @@
-package com.d9tilov.android.currency.data.model
+package com.d9tilov.android.currency.domain.model
 
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
