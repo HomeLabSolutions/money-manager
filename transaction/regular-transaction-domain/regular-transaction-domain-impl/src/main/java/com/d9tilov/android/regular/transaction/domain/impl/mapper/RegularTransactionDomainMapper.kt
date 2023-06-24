@@ -1,11 +1,11 @@
-package com.d9tilov.android.regular.transaction.domain.impl
+package com.d9tilov.android.regular.transaction.domain.impl.mapper
 
 import com.d9tilov.android.category.data.model.Category
 import com.d9tilov.android.regular.transaction.data.model.RegularTransactionData
 import com.d9tilov.android.regular.transaction.domain.model.RegularTransaction
 
-fun com.d9tilov.android.regular.transaction.domain.model.RegularTransaction.toData(): com.d9tilov.android.regular.transaction.data.model.RegularTransactionData =
-    com.d9tilov.android.regular.transaction.data.model.RegularTransactionData(
+fun RegularTransaction.toData(): RegularTransactionData =
+    RegularTransactionData(
         id,
         clientId,
         type,
@@ -19,7 +19,7 @@ fun com.d9tilov.android.regular.transaction.domain.model.RegularTransaction.toDa
         autoAdd
     )
 
-fun com.d9tilov.android.regular.transaction.data.model.RegularTransactionData.toDomain(category: Category): com.d9tilov.android.regular.transaction.domain.model.RegularTransaction =
+fun RegularTransactionData.toDomain(category: Category): RegularTransaction =
     RegularTransaction(
         id,
         clientId,
