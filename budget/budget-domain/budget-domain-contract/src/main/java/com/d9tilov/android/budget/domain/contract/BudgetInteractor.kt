@@ -1,6 +1,6 @@
 package com.d9tilov.android.budget.domain.contract
 
-import com.d9tilov.android.budget.data.model.BudgetData
+import com.d9tilov.android.budget.domain.model.BudgetData
 import kotlinx.coroutines.flow.Flow
 
 interface BudgetInteractor {

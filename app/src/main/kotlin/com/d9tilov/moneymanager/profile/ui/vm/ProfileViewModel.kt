@@ -3,7 +3,7 @@ package com.d9tilov.moneymanager.profile.ui.vm
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
-import com.d9tilov.android.budget.data.model.BudgetData
+import com.d9tilov.android.budget.domain.model.BudgetData
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.common_android.ui.base.BaseViewModel
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE

@@ -1,6 +1,6 @@
 package com.d9tilov.android.budget.di
 
-import com.d9tilov.android.budget.data.contract.BudgetRepo
+import com.d9tilov.android.budget.domain.contract.BudgetRepo
 import com.d9tilov.android.budget.data.contract.BudgetSource
 import com.d9tilov.android.budget.data.impl.BudgetDataRepo
 import com.d9tilov.android.budget.data.impl.BudgetLocalSource

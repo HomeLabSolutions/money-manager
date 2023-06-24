@@ -42,7 +42,7 @@ dependencies {
     implementation(project(":currency:currency-observer:currency-observer-contract"))
     implementation(project(":currency:currency-ui"))
 
-    implementation(project(":budget:budget-data:budget-data-model"))
+    implementation(project(":budget:budget-domain:budget-domain-model"))
     implementation(project(":budget:budget-domain:budget-domain-contract"))
     implementation(project(":budget:budget-ui"))
     

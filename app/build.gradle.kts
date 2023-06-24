@@ -171,14 +171,14 @@ dependencies {
     implementation(project(":core:datastore"))
     implementation(project(":core:designsystem"))
 
-    
+
     implementation(project(":currency:currency-data:currency-data-contract"))
     implementation(project(":currency:currency-data:currency-data-impl"))
     implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
     implementation(project(":currency:currency-ui"))
 
-    implementation(project(":budget:budget-data:budget-data-model"))
+    implementation(project(":budget:budget-domain:budget-domain-model"))
     implementation(project(":budget:budget-data:budget-data-contract"))
     implementation(project(":budget:budget-data:budget-data-impl"))
     implementation(project(":budget:budget-domain:budget-domain-contract"))
