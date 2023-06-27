@@ -3,7 +3,7 @@ package com.d9tilov.android.category.ui.vm
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
-import com.d9tilov.android.category.data.model.Category
+import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.ui.navigation.CategoryCreationNavigator
 import com.d9tilov.android.common_android.ui.base.BaseViewModel

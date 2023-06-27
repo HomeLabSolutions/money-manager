@@ -98,7 +98,7 @@
             app:argType="com.d9tilov.android.core.model.TransactionType" />
         <argument
             android:name="parent_category"
-            app:argType="com.d9tilov.android.category.data.model.Category" />
+            app:argType="com.d9tilov.android.category.domain.model.Category" />
     </fragment>
 
     <fragment
@@ -149,7 +149,7 @@
 
         <argument
             android:name="category"
-            app:argType="com.d9tilov.android.category.data.model.Category" />
+            app:argType="com.d9tilov.android.category.domain.model.Category" />
     </fragment>
 
     <fragment
@@ -176,10 +176,10 @@
             app:argType="com.d9tilov.android.core.model.TransactionType" />
         <argument
             android:name="firstCategory"
-            app:argType="com.d9tilov.android.category.data.model.Category" />
+            app:argType="com.d9tilov.android.category.domain.model.Category" />
         <argument
             android:name="secondCategory"
-            app:argType="com.d9tilov.android.category.data.model.Category" />
+            app:argType="com.d9tilov.android.category.domain.model.Category" />
     </dialog>
 
     <dialog
@@ -192,7 +192,7 @@
             app:argType="com.d9tilov.android.category.ui.navigation.CategoryDestination" />
         <argument
             android:name="category"
-            app:argType="com.d9tilov.android.category.data.model.Category" />
+            app:argType="com.d9tilov.android.category.domain.model.Category" />
     </dialog>
 
     <dialog
@@ -201,7 +201,7 @@
         tools:layout="@layout/fragment_dialog_triple_remove">
         <argument
             android:name="subcategory"
-            app:argType="com.d9tilov.android.category.data.model.Category" />
+            app:argType="com.d9tilov.android.category.domain.model.Category" />
     </dialog>
 
     <dialog
@@ -210,6 +210,6 @@
         tools:layout="@layout/fragment_dialog_edit_category">
         <argument
             android:name="category"
-            app:argType="com.d9tilov.android.category.data.model.Category" />
+            app:argType="com.d9tilov.android.category.domain.model.Category" />
     </dialog>
 </navigation>

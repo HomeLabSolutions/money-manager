@@ -4,5 +4,5 @@ plugins {
 
 dependencies {
     implementation(project(":core:common"))
-    implementation(project(":category:category-data:category-data-model"))
+    implementation(project(":category:category-domain:category-domain-model"))
 }

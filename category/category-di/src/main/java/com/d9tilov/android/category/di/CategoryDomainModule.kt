@@ -1,6 +1,6 @@
 package com.d9tilov.android.category.di
 
-import com.d9tilov.android.category.data.contract.CategoryRepo
+import com.d9tilov.android.category.domain.contract.CategoryRepo
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.impl.CategoryInteractorImpl
 import dagger.Module

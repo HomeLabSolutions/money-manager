@@ -49,7 +49,7 @@ dependencies {
     implementation(project(":core:designsystem"))
 
     implementation(project(":statistics:statistics-data:statistics-data-model"))
-    implementation(project(":category:category-data:category-data-model"))
+    implementation(project(":category:category-domain:category-domain-model"))
     implementation(project(":billing:billing-domain:billing-domain-contract"))
 
     implementation(project(":transaction:transaction-domain:transaction-domain-model"))

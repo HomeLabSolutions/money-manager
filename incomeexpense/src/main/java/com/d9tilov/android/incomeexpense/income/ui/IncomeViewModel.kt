@@ -5,7 +5,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
 import androidx.paging.map
-import com.d9tilov.android.category.data.model.Category
+import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.getEndOfDay

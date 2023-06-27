@@ -4,7 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.d9tilov.android.category.data.model.Category
+import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDateTime

@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
-import com.d9tilov.android.category.data.model.Category
+import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.ui.navigation.CategoryDestination
 import com.d9tilov.android.common_android.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.android.common_android.ui.recyclerview.ItemSnapHelper

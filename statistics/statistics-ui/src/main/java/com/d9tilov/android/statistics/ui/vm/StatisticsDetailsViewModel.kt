@@ -2,7 +2,7 @@ package com.d9tilov.android.statistics.ui.vm
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.d9tilov.android.category.data.model.Category
+import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.common_android.ui.base.BaseViewModel
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.getEndOfDay

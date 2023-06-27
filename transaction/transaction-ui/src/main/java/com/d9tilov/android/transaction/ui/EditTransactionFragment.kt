@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.d9tilov.android.category.data.model.Category
+import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.ui.BaseCategoryFragment.Companion.ARG_CATEGORY
 import com.d9tilov.android.category.ui.navigation.CategoryDestination
 import com.d9tilov.android.common_android.ui.base.BaseFragment

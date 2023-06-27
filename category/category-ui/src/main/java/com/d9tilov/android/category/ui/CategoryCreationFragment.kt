@@ -12,8 +12,9 @@ import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.d9tilov.android.category.data.model.Category
-import com.d9tilov.android.category.data.model.isEmpty
+import com.d9tilov.android.category.domain.model.Category
+import com.d9tilov.android.category.domain.model.exception.CategoryException
+import com.d9tilov.android.category.domain.model.isEmpty
 import com.d9tilov.android.category.ui.CategoryIconSetFragment.Companion.ARG_CATEGORY_ICON_ID
 import com.d9tilov.android.category.ui.navigation.CategoryCreationNavigator
 import com.d9tilov.android.category.ui.navigation.CategoryDestination
@@ -167,7 +168,7 @@ class CategoryCreationFragment :
     }
 
     override fun showError(error: Throwable) {
-        if (error is com.d9tilov.android.category.data.model.exception.CategoryException.CategoryExistException) {
+        if (error is CategoryException.CategoryExistException) {
             viewBinding?.categoryCreationEtNameLayout?.error =
                 getString(R.string.category_unit_name_exist_error)
         }

@@ -44,8 +44,8 @@ dependencies {
     implementation(project(":core:common-android"))
     implementation(project(":core:designsystem"))
 
-    implementation(project(":category:category-data:category-data-model"))
-    implementation(project(":category:category-data:category-data-model"))
+    implementation(project(":category:category-domain:category-domain-model"))
+    implementation(project(":category:category-domain:category-domain-model"))
     implementation(project(":category:category-ui"))
     implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":transaction:transaction-data:transaction-data-model"))

@@ -35,7 +35,7 @@ dependencies {
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-model"))
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-contract"))
 
-    implementation(project(":category:category-data:category-data-model"))
+    implementation(project(":category:category-domain:category-domain-model"))
     implementation(project(":category:category-domain:category-domain-contract"))
 
     implementation(project(":user-info:user-domain:user-domain-contract"))

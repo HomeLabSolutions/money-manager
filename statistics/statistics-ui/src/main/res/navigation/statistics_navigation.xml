@@ -28,7 +28,7 @@
 
         <argument
             android:name="category"
-            app:argType="com.d9tilov.android.category.data.model.Category" />
+            app:argType="com.d9tilov.android.category.domain.model.Category" />
         <argument
             android:name="start_period"
             app:argType="long" />

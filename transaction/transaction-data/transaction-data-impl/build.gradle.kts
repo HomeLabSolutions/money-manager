@@ -30,7 +30,7 @@ dependencies {
     implementation(project(":core:datastore"))
     implementation(project(":transaction:transaction-data:transaction-data-model"))
     implementation(project(":transaction:transaction-data:transaction-data-contract"))
-    implementation(project(":category:category-data:category-data-model"))
+    implementation(project(":category:category-domain:category-domain-model"))
 
     implementation(libs.roomPaging)
     implementation(libs.coroutinesCore)

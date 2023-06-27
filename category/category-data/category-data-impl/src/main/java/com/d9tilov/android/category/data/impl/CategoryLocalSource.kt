@@ -5,8 +5,7 @@ import com.d9tilov.android.category.data.impl.mapper.toDataModel
 import com.d9tilov.android.category.data.impl.mapper.toDataModelFromPrePopulate
 import com.d9tilov.android.category.data.impl.mapper.toDataParentModel
 import com.d9tilov.android.category.data.impl.mapper.toDbModel
-import com.d9tilov.android.category.data.model.Category
-import com.d9tilov.android.category.data.model.exception.CategoryException
+import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.android.core.exceptions.WrongIdException
 import com.d9tilov.android.core.exceptions.WrongUidException
@@ -60,7 +59,7 @@ class CategoryLocalSource(
         else {
             val count = categoryDao.getCategoriesCountByName(currentUserId, category.name)
             if (count == 0) categoryDao.create(category.copy(clientId = currentUserId).toDbModel())
-            else throw CategoryException.CategoryExistException("Category with name: ${category.name} has already existed")
+            else throw com.d9tilov.android.category.domain.model.exception.CategoryException.CategoryExistException("Category with name: ${category.name} has already existed")
         }
     }
 
@@ -75,7 +74,7 @@ class CategoryLocalSource(
             } else {
                 val count = categoryDao.getCategoriesCountByName(currentUserId, category.name)
                 if (count == 0) categoryDao.update(category.toDbModel())
-                else throw CategoryException.CategoryExistException("Category with name: ${category.name} has already existed")
+                else throw com.d9tilov.android.category.domain.model.exception.CategoryException.CategoryExistException("Category with name: ${category.name} has already existed")
             }
         }
     }
@@ -154,7 +153,7 @@ class CategoryLocalSource(
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
         return when {
             currentUserId == null -> throw WrongUidException()
-            subCategory.parent == null -> throw CategoryException.CategoryNoParentException("Subcategory $subCategory has not parent")
+            subCategory.parent == null -> throw com.d9tilov.android.category.domain.model.exception.CategoryException.CategoryNoParentException("Subcategory $subCategory has not parent")
             else -> {
                 categoryDao.delete(currentUserId, subCategory.id)
                 val list = categoryDao.getByParentId(
@@ -172,7 +171,7 @@ class CategoryLocalSource(
         return when {
             currentUserId == null -> throw WrongUidException()
             subCategory.parent == null ->
-                throw CategoryException.CategoryNoParentException("Subcategory $subCategory has not parent")
+                throw com.d9tilov.android.category.domain.model.exception.CategoryException.CategoryNoParentException("Subcategory $subCategory has not parent")
             else -> {
                 categoryDao.update(subCategory.copy(parent = null).toDbModel())
                 val list = categoryDao.getByParentId(

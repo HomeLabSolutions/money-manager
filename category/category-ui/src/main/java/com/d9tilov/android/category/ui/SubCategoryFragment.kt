@@ -6,7 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.d9tilov.android.category.data.model.Category
+import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.ui.navigation.CategoryDestination
 import com.d9tilov.android.category.ui.navigation.SubCategoryNavigator
 import com.d9tilov.android.category.ui.vm.SubCategoryViewModel
