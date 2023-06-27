@@ -30,7 +30,7 @@ dependencies {
     implementation(project(":core:datastore"))
     implementation(project(":transaction:regular-transaction-data:regular-transaction-data-contract"))
     implementation(project(":transaction:regular-transaction-data:regular-transaction-data-model"))
-    implementation(project(":category:category-data:category-data-model"))
+    implementation(project(":category:category-domain:category-domain-model"))
 
     implementation(libs.coroutinesCore)
 }

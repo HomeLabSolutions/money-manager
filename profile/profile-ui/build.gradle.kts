@@ -57,7 +57,7 @@ dependencies {
 
     implementation(project(":billing:billing-domain:billing-domain-contract"))
 
-    implementation(project(":category:category-data:category-data-model"))
+    implementation(project(":category:category-domain:category-domain-model"))
 
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-model"))
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-contract"))

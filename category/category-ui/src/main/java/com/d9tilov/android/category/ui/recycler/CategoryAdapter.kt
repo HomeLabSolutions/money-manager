@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
-import com.d9tilov.android.category.data.model.Category
+import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.ui.diff.CategoryDiffUtil
 import com.d9tilov.android.category_ui.R
 import com.d9tilov.android.category_ui.databinding.ItemCategoryBaseBinding

@@ -1,4 +1,4 @@
-package com.d9tilov.android.category.data.model
+package com.d9tilov.android.category.domain.model
 
 import com.d9tilov.android.core.model.TransactionType
 

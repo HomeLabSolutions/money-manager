@@ -1,7 +1,7 @@
 package com.d9tilov.android.category.ui.diff
 
 import androidx.recyclerview.widget.DiffUtil
-import com.d9tilov.android.category.data.model.Category
+import com.d9tilov.android.category.domain.model.Category
 
 class CategoryDiffUtil(
     private val oldCategoryList: List<Category>,

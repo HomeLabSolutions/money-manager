@@ -197,7 +197,7 @@ dependencies {
     implementation(project(":goals:goals-domain:goals-domain-contract"))
     implementation(project(":goals:goals-domain:goals-domain-impl"))
 
-    implementation(project(":category:category-data:category-data-model"))
+    implementation(project(":category:category-domain:category-domain-model"))
     implementation(project(":category:category-domain:category-domain-contract"))
     implementation(project(":category:category-ui"))
 

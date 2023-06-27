@@ -1,6 +1,6 @@
 package com.d9tilov.android.transaction.data.impl
 
-import com.d9tilov.android.category.data.model.Category
+import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.transaction.data.contract.TransactionRepo
 import com.d9tilov.android.transaction.data.contract.TransactionSource

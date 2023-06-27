@@ -1,6 +1,6 @@
 package com.d9tilov.android.transaction.domain.model
 
-import com.d9tilov.android.category.data.model.Category
+import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.core.constants.DataConstants.NO_ID

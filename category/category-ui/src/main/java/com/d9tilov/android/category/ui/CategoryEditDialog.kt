@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.d9tilov.android.category.data.model.exception.CategoryException
+import com.d9tilov.android.category.domain.model.exception.CategoryException
 import com.d9tilov.android.category.ui.SubCategoryFragment.Companion.SUB_CATEGORY_TITLE
 import com.d9tilov.android.category.ui.navigation.EditCategoryDialogNavigator
 import com.d9tilov.android.category.ui.vm.CategoryGroupEditViewModel

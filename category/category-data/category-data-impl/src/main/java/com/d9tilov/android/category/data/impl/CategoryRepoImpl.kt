@@ -1,16 +1,15 @@
 package com.d9tilov.android.category.data.impl
 
-import com.d9tilov.android.category.data.contract.CategoryRepo
 import com.d9tilov.android.category.data.contract.CategorySource
-import com.d9tilov.android.category.data.model.Category
+import com.d9tilov.android.category.domain.contract.CategoryRepo
+import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category_data_impl.R
 import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.core.model.TransactionType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class CategoryRepoImpl(private val categoryLocalSource: CategorySource) :
-    CategoryRepo {
+class CategoryRepoImpl(private val categoryLocalSource: CategorySource) : CategoryRepo {
 
     override suspend fun createExpenseDefaultCategories() =
         categoryLocalSource.createExpenseDefaultCategories()

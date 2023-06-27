@@ -7,7 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.d9tilov.android.category.data.model.Category
+import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.ui.diff.CategoryDiffUtil
 import com.d9tilov.android.category_ui.R
 import com.d9tilov.android.category_ui.databinding.ItemCategoryBinding

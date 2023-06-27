@@ -4,7 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import com.d9tilov.android.category.data.model.Category
+import com.d9tilov.android.category.domain.model.Category
+import com.d9tilov.android.category.domain.model.exception.CategoryException
 import com.d9tilov.android.category.ui.navigation.CategoryUnionDialogNavigator
 import com.d9tilov.android.category.ui.vm.CategoryUnionViewModel
 import com.d9tilov.android.category_ui.R
@@ -36,7 +37,7 @@ class CategoryUnitDialog :
     }
 
     override fun showError(error: Throwable) {
-        if (error is com.d9tilov.android.category.data.model.exception.CategoryException.CategoryExistException) {
+        if (error is CategoryException.CategoryExistException) {
             viewBinding?.categoryDialogUnionEtNameLayout?.error =
                 getString(R.string.category_unit_name_exist_error)
         }
@@ -81,7 +82,7 @@ class CategoryUnitDialog :
             }
             categoryDialogUnionConfirm.setOnClickListener {
                 if (secondCategory.children.isEmpty() && categoryDialogUnionEtName.text.toString().isEmpty()) {
-                    showError(com.d9tilov.android.category.data.model.exception.CategoryException.CategoryEmptyNameException())
+                    showError(CategoryException.CategoryEmptyNameException())
                 } else if (secondCategory.children.isNotEmpty()) {
                     viewModel.addToGroup(firstCategory, secondCategory)
                 } else viewModel.createGroup(firstCategory, secondCategory, createUnionCategory())
