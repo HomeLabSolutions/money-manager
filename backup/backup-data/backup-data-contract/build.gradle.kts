@@ -5,7 +5,7 @@ plugins {
 dependencies {
 
     implementation(project(":core:common"))
-    implementation(project(":backup:backup-data:backup-data-model"))
+    implementation(project(":backup:backup-domain:backup-domain-model"))
 
     implementation(libs.coroutinesCore)
 }

@@ -2,7 +2,7 @@ package com.d9tilov.android.backup.data.impl
 
 import com.d9tilov.android.backup.data.contract.BackupManager
 import com.d9tilov.android.backup.data.contract.BackupSource
-import com.d9tilov.android.backup.data.model.BackupData
+import com.d9tilov.android.backup.domain.model.BackupData
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.android.datastore.PreferencesStore

@@ -1,7 +1,7 @@
 package com.d9tilov.android.backup.di
 
-import com.d9tilov.android.backup.data.contract.BackupRepo
 import com.d9tilov.android.backup.domain.contract.BackupInteractor
+import com.d9tilov.android.backup.domain.contract.BackupRepo
 import com.d9tilov.android.backup.domain.impl.BackupInteractorImpl
 import dagger.Module
 import dagger.Provides

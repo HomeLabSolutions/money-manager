@@ -1,8 +1,8 @@
 package com.d9tilov.android.backup.domain.impl
 
-import com.d9tilov.android.backup.data.contract.BackupRepo
-import com.d9tilov.android.backup.data.model.BackupData
 import com.d9tilov.android.backup.domain.contract.BackupInteractor
+import com.d9tilov.android.backup.domain.contract.BackupRepo
+import com.d9tilov.android.backup.domain.model.BackupData
 import com.d9tilov.android.core.model.ResultOf
 import kotlinx.coroutines.flow.Flow
 
