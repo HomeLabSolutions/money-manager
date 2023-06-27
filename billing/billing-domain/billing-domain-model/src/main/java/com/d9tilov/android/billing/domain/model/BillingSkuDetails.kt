@@ -1,4 +1,4 @@
-package com.d9tilov.android.billing.data.model
+package com.d9tilov.android.billing.domain.model
 
 import com.d9tilov.android.currency.domain.model.Currency
 

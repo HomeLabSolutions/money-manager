@@ -26,8 +26,7 @@ android {
 dependencies {
 
     implementation(project(":core:common"))
-    implementation(project(":billing:billing-data:billing-data-model"))
-    implementation(project(":billing:billing-data:billing-data-contract"))
+
     implementation(project(":billing:billing-domain:billing-domain-model"))
     implementation(project(":billing:billing-domain:billing-domain-contract"))
     
