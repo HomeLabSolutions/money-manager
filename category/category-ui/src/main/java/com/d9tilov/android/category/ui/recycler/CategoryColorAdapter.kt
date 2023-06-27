@@ -13,7 +13,7 @@ import com.d9tilov.android.category_ui.R
 import com.d9tilov.android.category_ui.databinding.ItemColorPickerBinding
 import com.d9tilov.android.core.events.OnItemClickListener
 import com.d9tilov.android.common_android.ui.base.BaseViewHolder
-import com.d9tilov.android.designsystem.color.ColorManager
+import com.d9tilov.android.category.data.impl.color.ColorManager
 
 class CategoryColorAdapter(@ColorRes private var chosenColor: Int?, private val itemClickListener: OnItemClickListener<Int>) :
     RecyclerView.Adapter<CategoryColorAdapter.CategoryColorViewHolder>() {

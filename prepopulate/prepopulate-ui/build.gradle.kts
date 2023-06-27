@@ -47,6 +47,7 @@ dependencies {
     implementation(project(":budget:budget-ui"))
     
     implementation(project(":user-info:user-domain:user-domain-contract"))
+    implementation(project(":user-info:user-di"))
 
     implementation(libs.bundles.compose)
     implementation(libs.bundles.composeMaterial3)

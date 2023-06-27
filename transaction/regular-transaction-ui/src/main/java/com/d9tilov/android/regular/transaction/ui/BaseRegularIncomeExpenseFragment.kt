@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.viewbinding.ViewBinding
-import com.d9tilov.android.common_android.databinding.LayoutEmptyListPlaceholderBinding
+import com.d9tilov.android.designsystem.databinding.LayoutEmptyListPlaceholderBinding
 import com.d9tilov.android.common_android.ui.base.BaseFragment
 import com.d9tilov.android.common_android.ui.base.Inflate
 import com.d9tilov.android.common_android.utils.gone

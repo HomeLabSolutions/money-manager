@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.consumedWindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -88,7 +88,7 @@ fun CurrencyListScreen(
                 val coroutineScope = rememberCoroutineScope()
                 LazyColumn(
                     contentPadding = PaddingValues(16.dp),
-                    modifier = modifier.consumedWindowInsets(padding),
+                    modifier = modifier.consumeWindowInsets(padding),
                     state = state
                 ) {
                     items(items = currencyList, key = { item -> item.code }) { item ->

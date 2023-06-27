@@ -6,10 +6,6 @@ import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_DECIMAL_SEPA
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 val String?.toBigDecimal: BigDecimal
     get() {

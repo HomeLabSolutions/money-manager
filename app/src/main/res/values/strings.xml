@@ -9,8 +9,6 @@
 
     <string name="toolbar_menu_skip">Skip</string>
 
-    <string name="profile_logout">Logout</string>
-
     <string name="currency_error">Failed to get currency list</string>
     <string name="currency_change_title">Change currency to %s?</string>
     <string name="currency_change_subtitle">The app will restart.</string>
@@ -35,22 +33,10 @@
     <string name="settings_subscription_premium_title" translatable="false">Go Premium</string>
     <string name="settings_subscription_premium_min_price">from %1$s%2$s %3$s</string>
 
-    <string name="profile_item_currency_title">Currency: </string>
-    <string name="profile_item_budget_title">Budget: </string>
-    <string name="profile_item_regular_incomes_title">Regular incomes</string>
-    <string name="profile_item_regular_expenses_title">Regular expenses</string>
     <string name="profile_item_goals_title">Goals: %1$s</string>
-    <string name="profile_item_goals_title_empty">Goals</string>
-    <string name="profile_item_settings_title">Settings</string>
     <string name="profile_item_current_currency_title">current</string>
     <string name="profile_item_main_currency_title">main</string>
     <string name="profile_item_main_currency_error">You can\'t change main currency</string>
-
-    <string name="budget_date_created">Created: %1$s</string>
-
-    <string name="logout_dialog_title">Logout</string>
-    <string name="logout_dialog_button">Logout</string>
-    <string name="logout_dialog_subtitle">Do you really want to logout?</string>
 
     <string name="notification_income_title">Regular income</string>
     <string name="notification_expense_title">Regular expense</string>

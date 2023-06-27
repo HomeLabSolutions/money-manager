@@ -9,7 +9,7 @@
 
     <fragment
         android:id="@+id/profile_dest"
-        android:name="com.d9tilov.moneymanager.profile.ui.ProfileFragment"
+        android:name="com.d9tilov.android.profile.ui.ProfileFragment"
         android:label="fragment_title_screen"
         tools:layout="@layout/fragment_profile">
 

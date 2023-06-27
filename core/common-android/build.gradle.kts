@@ -35,8 +35,8 @@ android {
 dependencies {
 
     implementation(project(":core:common"))
-    implementation(project(":core:designsystem"))
 
+    api(libs.fragment)
     implementation(libs.paging)
     implementation(libs.bundles.appCompat)
     implementation(libs.material)

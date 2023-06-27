@@ -26,5 +26,5 @@
     <string name="settings_backup_network_error">Network error</string>
     <string name="settings_backup_user_error">Unknown user error</string>
     <string name="settings_backup_file_not_found_error">File not found</string>
-
+    <string name="profile_item_settings_title">Settings</string>
 </resources>

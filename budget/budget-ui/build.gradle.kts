@@ -41,6 +41,8 @@ dependencies {
     implementation(project(":budget:budget-domain:budget-domain-contract"))
     implementation(project(":budget:budget-di"))
 
+    implementation(libs.constraintLayout)
+
     implementation(libs.bundles.compose)
     implementation(libs.bundles.composeMaterial3)
     implementation(libs.composeViewModel)

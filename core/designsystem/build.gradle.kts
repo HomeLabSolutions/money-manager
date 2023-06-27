@@ -16,7 +16,12 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
 
+    dataBinding {
+        isEnabled = true
+    }
+
     buildFeatures {
+        viewBinding = true
         compose = true
     }
 
@@ -34,6 +39,9 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:common"))
+    implementation(project(":core:common-android"))
+
     implementation(libs.material)
     implementation(libs.bundles.compose)
     implementation(libs.bundles.composeMaterial3)

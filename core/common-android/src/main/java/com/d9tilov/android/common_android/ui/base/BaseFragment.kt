@@ -14,8 +14,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
 import com.d9tilov.android.common_android.R
 import com.d9tilov.android.common_android.ui.base.BaseViewModel.Companion.DEFAULT_MESSAGE_ID
+import com.d9tilov.android.common_android.utils.getColorFromAttr
 import com.d9tilov.android.common_android.utils.toast
-import com.d9tilov.android.designsystem.color.getColorFromAttr
 import kotlinx.coroutines.launch
 
 typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T

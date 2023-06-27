@@ -13,7 +13,6 @@
     <dimen name="button_text_size">16sp</dimen>
     <dimen name="button_elevation">8dp</dimen>
     <dimen name="caption_text_size">14sp</dimen>
-    <dimen name="overline_text_size">12sp</dimen>
 
     <dimen name="dialog_title_text_size">18sp</dimen>
     <dimen name="dialog_subtitle_text_size">16sp</dimen>
@@ -42,11 +41,8 @@
     // for floating button
     <dimen name="design_fab_image_size" tools:override="true">56dp</dimen>
 
-    <dimen name="profile_item_height">64dp</dimen>
     <dimen name="profile_item_text_size">18sp</dimen>
     <dimen name="profile_item_text_subtitle_size">12sp</dimen>
-
-    <dimen name="budget_created_date">12sp</dimen>
 
     <dimen name="settings_subscription_card_min_height">100dp</dimen>
     <dimen name="settings_subscription_icon_size">64dp</dimen>

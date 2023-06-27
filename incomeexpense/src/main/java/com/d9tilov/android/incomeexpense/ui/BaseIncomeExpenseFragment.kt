@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import androidx.viewbinding.ViewBinding
 import com.d9tilov.android.category.data.model.Category
 import com.d9tilov.android.category.ui.recycler.CategoryAdapter
-import com.d9tilov.android.common_android.databinding.LayoutEmptyListPlaceholderBinding
+import com.d9tilov.android.designsystem.databinding.LayoutEmptyListPlaceholderBinding
 import com.d9tilov.android.common_android.ui.base.BaseFragment
 import com.d9tilov.android.common_android.ui.base.Inflate
 import com.d9tilov.android.common_android.utils.gone

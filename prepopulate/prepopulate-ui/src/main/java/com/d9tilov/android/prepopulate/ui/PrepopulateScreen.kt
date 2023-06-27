@@ -83,7 +83,7 @@ fun PrepopulateScreen(
         topBar = {
             TopAppBar(
                 title = { Text(text = stringResource(screenTypeId.fromScreenId().title)) },
-                colors = TopAppBarDefaults.smallTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 ),

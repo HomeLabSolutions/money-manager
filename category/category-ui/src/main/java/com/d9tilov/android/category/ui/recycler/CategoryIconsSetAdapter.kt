@@ -10,13 +10,12 @@ import com.d9tilov.android.category_ui.databinding.ItemCategoryIconBinding
 import com.d9tilov.android.core.events.OnItemClickListener
 import com.d9tilov.android.common_android.ui.base.BaseViewHolder
 import com.d9tilov.android.common_android.utils.createTintDrawable
-import com.d9tilov.android.designsystem.color.ColorManager
+import com.d9tilov.android.category.data.impl.color.ColorManager
 
 class CategoryIconsSetAdapter(
     icons: List<Int>,
     private val itemClickListener: OnItemClickListener<Int>
-) :
-    RecyclerView.Adapter<CategoryIconsSetAdapter.CategoryIconViewHolder>() {
+) : RecyclerView.Adapter<CategoryIconsSetAdapter.CategoryIconViewHolder>() {
 
     private val categoryColorMap = mutableListOf<Pair<Int, Int>>()
 

@@ -36,7 +36,7 @@ import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.core.utils.isSameDay
 import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.core.utils.toMillis
-import com.d9tilov.android.designsystem.color.getColorFromAttr
+import com.d9tilov.android.common_android.utils.getColorFromAttr
 import com.d9tilov.android.statistics.data.model.StatisticsMenuChartMode
 import com.d9tilov.android.statistics.data.model.StatisticsMenuInStatistics
 import com.d9tilov.android.statistics.data.model.StatisticsMenuTransactionType

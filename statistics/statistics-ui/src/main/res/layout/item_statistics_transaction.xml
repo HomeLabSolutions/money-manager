@@ -75,7 +75,7 @@
         app:tint="?attr/colorError"
         tools:visibility="visible" />
 
-    <com.d9tilov.android.common_android.ui.widget.currencyview.CurrencyView
+    <com.d9tilov.android.designsystem.CurrencyView
         android:id="@+id/item_transaction_sum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
         app:sumTextStyle="?attr/textAppearanceCurrencySumSmall"
         tools:sumText="15000" />
 
-    <com.d9tilov.android.common_android.ui.widget.currencyview.CurrencyView
+    <com.d9tilov.android.designsystem.CurrencyView
         android:id="@+id/item_transaction_usd_sum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

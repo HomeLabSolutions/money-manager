@@ -33,7 +33,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.d9tilov.android.common_android.ui.widget.currencyview.CurrencyView
+            <com.d9tilov.android.designsystem.CurrencyView
                 android:id="@+id/edit_transaction_main_sum"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

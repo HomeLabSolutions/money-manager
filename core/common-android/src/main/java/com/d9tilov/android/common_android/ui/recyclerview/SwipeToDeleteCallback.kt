@@ -12,8 +12,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.d9tilov.android.common_android.R
+import com.d9tilov.android.common_android.utils.getColorFromAttr
 import com.d9tilov.android.common_android.utils.px
-import com.d9tilov.android.designsystem.color.getColorFromAttr
 import java.util.Locale
 
 abstract class SwipeToDeleteCallback(val context: Context) :

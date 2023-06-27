@@ -61,6 +61,7 @@ dependencies {
 
     implementation(libs.appCompat)
     implementation(libs.material)
+    implementation(libs.constraintLayout)
     implementation(libs.bundles.navigation)
 
     implementation(libs.bundles.compose)
@@ -76,7 +77,7 @@ dependencies {
     kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.glide)
-    annotationProcessor(libs.glideCompiler)
+    kapt(libs.glideCompiler)
 
     implementation(libs.billing)
 

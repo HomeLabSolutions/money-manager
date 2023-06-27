@@ -43,6 +43,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
     implementation(project(":core:designsystem"))
+
     implementation(project(":category:category-data:category-data-model"))
     implementation(project(":category:category-data:category-data-model"))
     implementation(project(":category:category-ui"))
@@ -54,7 +55,7 @@ dependencies {
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-contract"))
 
     implementation(libs.glide)
-    annotationProcessor(libs.glideCompiler)
+    kapt(libs.glideCompiler)
     implementation(libs.bundles.navigation)
 
     implementation(libs.firebaseAnalytics)

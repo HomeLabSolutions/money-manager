@@ -55,7 +55,7 @@ dependencies {
     implementation(libs.bundles.composeMaterial3)
     implementation(libs.bundles.navigation)
     implementation(libs.glide)
-    annotationProcessor(libs.glideCompiler)
+    kapt(libs.glideCompiler)
 
     implementation(libs.material)
     implementation(libs.kotlinJdk)

@@ -16,7 +16,7 @@
         app:layout_constraintBottom_toTopOf="@id/expense_today_info_title"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.d9tilov.android.common_android.ui.widget.currencyview.CurrencyView
+    <com.d9tilov.android.designsystem.CurrencyView
         android:id="@+id/expense_today_info_value"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
         app:layout_constraintStart_toEndOf="@+id/expense_today_info_title"
         app:layout_constraintTop_toTopOf="@+id/expense_today_info_title" />
 
-    <com.d9tilov.android.common_android.ui.widget.currencyview.CurrencyView
+    <com.d9tilov.android.designsystem.CurrencyView
         android:id="@+id/expense_today_info_approx_sum"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -95,7 +95,7 @@
         app:layout_constraintStart_toEndOf="@+id/expense_period_info_title"
         app:layout_constraintTop_toTopOf="@+id/expense_period_info_title" />
 
-    <com.d9tilov.android.common_android.ui.widget.currencyview.CurrencyView
+    <com.d9tilov.android.designsystem.CurrencyView
         android:id="@+id/expense_period_info_approx_sum"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

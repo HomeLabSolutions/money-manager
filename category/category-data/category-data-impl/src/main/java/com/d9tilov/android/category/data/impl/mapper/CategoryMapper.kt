@@ -1,6 +1,8 @@
 package com.d9tilov.android.category.data.impl.mapper
 
 import com.d9tilov.android.category.data.impl.categoryMap
+import com.d9tilov.android.category.data.impl.color.ColorManager.colorMap
+import com.d9tilov.android.category.data.impl.color.ColorManager.fromColorRes
 import com.d9tilov.android.category.data.impl.fromCategoryRes
 import com.d9tilov.android.category.data.model.Category
 import com.d9tilov.android.category.data.model.DefaultCategory
@@ -8,8 +10,6 @@ import com.d9tilov.android.category_data_impl.R
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.android.core.model.toType
 import com.d9tilov.android.database.entity.CategoryDbModel
-import com.d9tilov.android.designsystem.color.colorMap
-import com.d9tilov.android.designsystem.color.fromColorRes
 
 fun CategoryDbModel.toDataModel(parentModel: CategoryDbModel? = null) = with(this) {
     parentModel?.let {

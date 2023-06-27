@@ -31,6 +31,7 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:common-android"))
     implementation(project(":core:designsystem"))
+
     implementation(project(":backup:backup-domain:backup-domain-contract"))
     implementation(project(":backup:backup-domain:backup-domain-impl"))
     implementation(project(":backup:backup-di"))

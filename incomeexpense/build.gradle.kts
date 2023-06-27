@@ -44,8 +44,8 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
-    implementation(project(":core:designsystem"))
     implementation(project(":core:common-android"))
+    implementation(project(":core:designsystem"))
 
     implementation(project(":category:category-data:category-data-model"))
     implementation(project(":category:category-domain:category-domain-contract"))

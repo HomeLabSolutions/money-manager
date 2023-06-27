@@ -43,6 +43,8 @@ dependencies {
 
     implementation(project(":goals:goals-di"))
 
+    implementation(libs.constraintLayout)
+
     implementation(libs.bundles.compose)
     implementation(libs.bundles.composeMaterial3)
     implementation(libs.composeViewModel)

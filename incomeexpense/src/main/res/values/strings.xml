@@ -6,4 +6,6 @@
     <string name="income_expense_empty_sum_error">The amount is too small</string>
     <string name="tab_income">Income</string>
     <string name="tab_expense">Expense</string>
+    <string name="profile_item_regular_incomes_title">Regular incomes</string>
+    <string name="profile_item_regular_expenses_title">Regular expenses</string>
 </resources>

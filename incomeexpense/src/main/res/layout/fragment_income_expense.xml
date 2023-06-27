@@ -13,7 +13,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_height="wrap_content" />
 
-    <com.d9tilov.android.common_android.ui.widget.currencyview.CurrencyView
+    <com.d9tilov.android.designsystem.CurrencyView
         android:id="@+id/income_expense_main_sum"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
