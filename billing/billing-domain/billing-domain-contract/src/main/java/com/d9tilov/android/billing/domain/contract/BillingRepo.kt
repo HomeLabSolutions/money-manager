@@ -1,11 +1,11 @@
-package com.d9tilov.android.billing.data.contract
+package com.d9tilov.android.billing.domain.contract
 
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
-import com.d9tilov.android.billing.data.model.BillingSkuDetails
+import com.d9tilov.android.billing.domain.model.BillingSkuDetails
 import kotlinx.coroutines.flow.Flow
 
 interface BillingRepo {
@@ -17,7 +17,7 @@ interface BillingRepo {
     val billingConnectionReady: Flow<Boolean>
     fun startBillingConnection()
     fun terminateBillingConnection()
-    fun getSkuDetails(): Flow<List<BillingSkuDetails>>
+    fun getSkuDetails(): Flow<List<com.d9tilov.android.billing.domain.model.BillingSkuDetails>>
     fun buySku(
         tag: String,
         productDetails: ProductDetails?,

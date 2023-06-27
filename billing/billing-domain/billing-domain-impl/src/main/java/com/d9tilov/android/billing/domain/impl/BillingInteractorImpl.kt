@@ -5,8 +5,8 @@ import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
-import com.d9tilov.android.billing.data.contract.BillingRepo
-import com.d9tilov.android.billing.data.model.BillingSkuDetails
+import com.d9tilov.android.billing.domain.contract.BillingRepo
+import com.d9tilov.android.billing.domain.model.BillingSkuDetails
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.billing.domain.model.PremiumEmails
 import com.d9tilov.android.billing.domain.model.PremiumInfo

@@ -74,7 +74,6 @@ include(":category:category-ui")
 
 include(":billing:billing-data:billing-data-contract")
 include(":billing:billing-data:billing-data-impl")
-include(":billing:billing-data:billing-data-model")
 include(":billing:billing-domain:billing-domain-contract")
 include(":billing:billing-domain:billing-domain-model")
 include(":billing:billing-domain:billing-domain-impl")

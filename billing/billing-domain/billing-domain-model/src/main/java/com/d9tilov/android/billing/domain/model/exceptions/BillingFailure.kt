@@ -1,4 +1,4 @@
-package com.d9tilov.android.billing.data.model.exceptions
+package com.d9tilov.android.billing.domain.model.exceptions
 
 sealed class BillingFailure(message: String) : Exception(message) {
 

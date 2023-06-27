@@ -8,8 +8,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.d9tilov.android.billing.data.model.BillingSkuDetails.Companion.TAG_ANNUAL
-import com.d9tilov.android.billing.data.model.BillingSkuDetails.Companion.TAG_QUARTERLY
+import com.d9tilov.android.billing.domain.model.BillingSkuDetails
+import com.d9tilov.android.billing.domain.model.BillingSkuDetails.Companion.TAG_ANNUAL
+import com.d9tilov.android.billing.domain.model.BillingSkuDetails.Companion.TAG_QUARTERLY
 import com.d9tilov.android.common_android.ui.base.BaseFragment
 import com.d9tilov.android.common_android.utils.ZoomOutPageTransformer
 import com.d9tilov.android.settings.ui.adapter.DotIndicatorPager2Adapter
@@ -62,7 +63,7 @@ class SettingsBillingIntroFragment :
             viewLifecycleOwner.lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     launch {
-                        viewModel.skuDetails.collect { skuDetails: List<com.d9tilov.android.billing.data.model.BillingSkuDetails> ->
+                        viewModel.skuDetails.collect { skuDetails: List<BillingSkuDetails> ->
                             for (sku in skuDetails) {
                                 when (sku.tag) {
                                     TAG_QUARTERLY ->

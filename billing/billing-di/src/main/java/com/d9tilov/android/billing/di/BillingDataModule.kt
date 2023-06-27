@@ -1,7 +1,7 @@
 package com.d9tilov.android.billing.di
 
 import android.app.Application
-import com.d9tilov.android.billing.data.contract.BillingRepo
+import com.d9tilov.android.billing.domain.contract.BillingRepo
 import com.d9tilov.android.billing.data.contract.BillingSource
 import com.d9tilov.android.billing.data.impl.BillingDataRepo
 import com.d9tilov.android.billing.data.impl.BillingDataSource

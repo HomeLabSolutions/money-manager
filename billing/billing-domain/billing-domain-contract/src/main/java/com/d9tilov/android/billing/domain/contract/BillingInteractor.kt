@@ -5,7 +5,7 @@ import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
-import com.d9tilov.android.billing.data.model.BillingSkuDetails
+import com.d9tilov.android.billing.domain.model.BillingSkuDetails
 import com.d9tilov.android.billing.domain.model.PremiumInfo
 import kotlinx.coroutines.flow.Flow
 
