@@ -7,7 +7,7 @@ import com.d9tilov.android.budget.ui.BudgetUiState
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.observer.contract.CurrencyUpdateObserver
-import com.d9tilov.android.ui.CurrencyUiState
+import com.d9tilov.android.currency.ui.CurrencyUiState
 import com.d9tilov.android.user.domain.contract.UserInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.math.BigDecimal

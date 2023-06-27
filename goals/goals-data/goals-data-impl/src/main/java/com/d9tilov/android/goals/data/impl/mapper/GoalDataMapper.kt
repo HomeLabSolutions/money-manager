@@ -1,7 +1,7 @@
 package com.d9tilov.android.goals.data.impl.mapper
 
 import com.d9tilov.android.database.entity.GoalDbModel
-import com.d9tilov.android.goals.data.model.GoalData
+import com.d9tilov.android.goals.domain.model.GoalData
 
 fun GoalDbModel.toDataModel(): GoalData =
 

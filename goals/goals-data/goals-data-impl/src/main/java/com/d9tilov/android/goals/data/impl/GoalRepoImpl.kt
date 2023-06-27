@@ -1,11 +1,11 @@
 package com.d9tilov.android.goals.data.impl
 
 import com.d9tilov.android.goals.data.contract.GoalSource
-import com.d9tilov.android.goals.data.model.GoalData
+import com.d9tilov.android.goals.domain.contract.GoalRepo
+import com.d9tilov.android.goals.domain.model.GoalData
 import kotlinx.coroutines.flow.Flow
 
-class GoalRepoImpl(private val goalSource: GoalSource) :
-    com.d9tilov.android.goals.data.contract.GoalRepo {
+class GoalRepoImpl(private val goalSource: GoalSource) : GoalRepo {
 
     override suspend fun insert(goalData: GoalData) {
         goalSource.insert(goalData)

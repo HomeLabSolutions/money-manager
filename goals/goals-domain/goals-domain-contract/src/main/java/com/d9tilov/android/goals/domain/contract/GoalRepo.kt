@@ -1,9 +1,9 @@
-package com.d9tilov.android.goals.data.contract
+package com.d9tilov.android.goals.domain.contract
 
 import com.d9tilov.android.goals.domain.model.GoalData
 import kotlinx.coroutines.flow.Flow
 
-interface GoalSource {
+interface GoalRepo {
 
     suspend fun insert(goalData: GoalData)
     fun getAll(): Flow<List<GoalData>>

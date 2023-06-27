@@ -8,8 +8,6 @@ dependencies {
     implementation(project(":currency:currency-domain:currency-domain-contract"))
     implementation(project(":currency:currency-domain:currency-domain-model"))
 
-    implementation(project(":goals:goals-data:goals-data-contract"))
-    implementation(project(":goals:goals-data:goals-data-model"))
     implementation(project(":goals:goals-domain:goals-domain-contract"))
     implementation(project(":goals:goals-domain:goals-domain-model"))
 

@@ -2,7 +2,7 @@ package com.d9tilov.android.goals.domain.impl.mapper
 
 import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.core.utils.toMillis
-import com.d9tilov.android.goals.data.model.GoalData
+import com.d9tilov.android.goals.domain.model.GoalData
 import com.d9tilov.android.goals.domain.model.Goal
 import java.math.BigDecimal
 

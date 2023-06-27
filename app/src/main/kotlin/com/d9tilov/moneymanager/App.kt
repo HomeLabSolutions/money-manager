@@ -2,13 +2,10 @@ package com.d9tilov.moneymanager
 
 import android.app.Application
 import android.os.StrictMode
-import androidx.hilt.work.HiltWorkerFactory
-import androidx.work.Configuration
-import com.d9tilov.android.ui.sync.initializers.Sync
+import com.d9tilov.android.currency.ui.sync.initializers.Sync
 import com.google.android.material.color.DynamicColors
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.HiltAndroidApp
-import javax.inject.Inject
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 

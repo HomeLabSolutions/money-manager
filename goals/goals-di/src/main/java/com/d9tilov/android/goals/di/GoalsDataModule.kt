@@ -2,7 +2,7 @@ package com.d9tilov.android.goals.di
 
 import com.d9tilov.android.database.AppDatabase
 import com.d9tilov.android.datastore.PreferencesStore
-import com.d9tilov.android.goals.data.contract.GoalRepo
+import com.d9tilov.android.goals.domain.contract.GoalRepo
 import com.d9tilov.android.goals.data.contract.GoalSource
 import com.d9tilov.android.goals.data.impl.GoalLocalSource
 import com.d9tilov.android.goals.data.impl.GoalRepoImpl
