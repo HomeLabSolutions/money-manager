@@ -43,5 +43,5 @@
     <dimen name="statistics_period_text_size">12sp</dimen>
 
     <dimen name="transaction_meta_icon_size">12dp</dimen>
-
+    <dimen name="profile_item_height">64dp</dimen>
 </resources>

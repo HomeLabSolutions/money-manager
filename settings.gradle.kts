@@ -34,7 +34,6 @@ include(":user-info:user-data:user-data-contract")
 include(":user-info:user-data:user-data-impl")
 include(":user-info:user-domain:user-domain-contract")
 include(":user-info:user-domain:user-domain-impl")
-include(":user-info:user-ui")
 
 include(":goals:goals-di")
 include(":goals:goals-data:goals-data-contract")
@@ -95,6 +94,10 @@ include(":backup:backup-ui")
 
 include(":statistics:statistics-data:statistics-data-model")
 include(":statistics:statistics-ui")
+
+include(":profile:profile-ui")
+
+include(":splash:splash-ui")
 
 pluginManagement {
     includeBuild("build-logic")

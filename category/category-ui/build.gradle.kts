@@ -59,7 +59,7 @@ dependencies {
     implementation(project(":billing:billing-domain:billing-domain-contract"))
 
     implementation(libs.glide)
-    annotationProcessor(libs.glideCompiler)
+    kapt(libs.glideCompiler)
 
     implementation(libs.bundles.navigation)
 

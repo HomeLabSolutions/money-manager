@@ -32,7 +32,7 @@
         app:layout_constraintTop_toTopOf="@+id/item_statistics_icon"
         tools:text="Cafe" />
 
-    <com.d9tilov.android.common_android.ui.widget.progress.ProgressLine
+    <com.d9tilov.android.designsystem.ProgressLine
         android:id="@+id/item_statistics_progress"
         android:layout_width="0dp"
         android:layout_height="4dp"
@@ -53,7 +53,7 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.75" />
 
-    <com.d9tilov.android.common_android.ui.widget.currencyview.CurrencyView
+    <com.d9tilov.android.designsystem.CurrencyView
         android:id="@+id/item_statistics_sum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

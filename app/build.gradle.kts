@@ -166,6 +166,7 @@ dependencies {
 
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
+
     implementation(project(":core:network"))
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
@@ -187,7 +188,6 @@ dependencies {
 
     implementation(project(":user-info:user-data:user-data-model"))
     implementation(project(":user-info:user-domain:user-domain-contract"))
-    implementation(project(":user-info:user-ui"))
 
     implementation(project(":prepopulate:prepopulate-ui"))
 
@@ -225,8 +225,6 @@ dependencies {
     implementation(libs.coreRuntime)
     implementation(libs.constraintLayout)
 
-    implementation(libs.fragment)
-
     implementation(libs.firebase)
     implementation(libs.firebaseUi)
     implementation(libs.googlePlayServicesAuth)
@@ -243,10 +241,8 @@ dependencies {
 
     implementation(libs.bundles.navigation)
 
-    implementation(libs.splashScreen)
-
     implementation(libs.glide)
-    annotationProcessor(libs.glideCompiler)
+    kapt(libs.glideCompiler)
     implementation(libs.coil)
 
     implementation(libs.bundles.retrofit)

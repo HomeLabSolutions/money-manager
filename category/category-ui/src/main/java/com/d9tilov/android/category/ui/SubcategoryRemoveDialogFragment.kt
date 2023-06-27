@@ -8,7 +8,7 @@ import androidx.navigation.fragment.navArgs
 import com.d9tilov.android.category.ui.navigation.RemoveSubCategoryDialogNavigator
 import com.d9tilov.android.category.ui.vm.SubcategoryRemoveViewModel
 import com.d9tilov.android.category_ui.R
-import com.d9tilov.android.common_android.databinding.FragmentDialogTripleRemoveBinding
+import com.d9tilov.android.designsystem.databinding.FragmentDialogTripleRemoveBinding
 import com.d9tilov.android.common_android.ui.base.BaseDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 

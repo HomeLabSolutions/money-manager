@@ -26,7 +26,7 @@
         app:layout_constraintStart_toEndOf="@+id/income_period_info_title"
         app:layout_constraintTop_toTopOf="@+id/income_period_info_title" />
 
-    <com.d9tilov.android.common_android.ui.widget.currencyview.CurrencyView
+    <com.d9tilov.android.designsystem.CurrencyView
         android:id="@+id/income_period_info_approx_sum"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

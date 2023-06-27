@@ -9,7 +9,7 @@ import com.d9tilov.android.statistics.ui.StatisticsRoute
 
 const val statisticsNavigationRoute = "statistics"
 
-interface StatisticsDetailsNavigator : BaseNavigator
+interface StatisticsDetailsNavigator : StatisticsNavigator
 
 fun NavController.navigateToStatistics(navOptions: NavOptions? = null) {
     this.navigate(statisticsNavigationRoute, navOptions)

@@ -43,6 +43,10 @@ dependencies {
     implementation(project(":currency:currency-observer:currency-observer-contract"))
     implementation(project(":currency:currency-di"))
 
+    implementation(libs.appCompat)
+    implementation(libs.material)
+    implementation(libs.constraintLayout)
+
     implementation(libs.bundles.compose)
     implementation(libs.bundles.composeMaterial3)
     implementation(libs.composeViewModel)

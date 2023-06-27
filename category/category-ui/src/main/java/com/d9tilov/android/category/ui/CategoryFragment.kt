@@ -16,7 +16,7 @@ import com.d9tilov.android.category.ui.navigation.CategoryNavigator
 import com.d9tilov.android.category.ui.recycler.SimpleItemTouchHelperCallback
 import com.d9tilov.android.category.ui.vm.CategoryViewModel
 import com.d9tilov.android.category_ui.R
-import com.d9tilov.android.common_android.databinding.LayoutEmptyListPlaceholderBinding
+import com.d9tilov.android.designsystem.databinding.LayoutEmptyListPlaceholderBinding
 import com.d9tilov.android.common_android.utils.gone
 import com.d9tilov.android.common_android.utils.hideKeyboard
 import com.d9tilov.android.common_android.utils.show

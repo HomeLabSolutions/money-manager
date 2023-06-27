@@ -26,7 +26,7 @@ import com.d9tilov.android.common_android.utils.show
 import com.d9tilov.android.core.constants.CurrencyConstants.DECIMAL_LENGTH
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.model.isIncome
-import com.d9tilov.android.designsystem.color.getColorFromAttr
+import com.d9tilov.android.common_android.utils.getColorFromAttr
 import com.d9tilov.android.incomeexpense.R
 import com.d9tilov.android.incomeexpense.databinding.FragmentExpenseBinding
 import com.d9tilov.android.incomeexpense.navigation.ExpenseNavigator
