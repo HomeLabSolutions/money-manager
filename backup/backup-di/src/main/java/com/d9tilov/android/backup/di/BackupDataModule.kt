@@ -2,11 +2,11 @@ package com.d9tilov.android.backup.di
 
 import android.content.Context
 import com.d9tilov.android.backup.data.contract.BackupManager
-import com.d9tilov.android.backup.data.contract.BackupRepo
 import com.d9tilov.android.backup.data.contract.BackupSource
 import com.d9tilov.android.backup.data.impl.BackupDataRepo
 import com.d9tilov.android.backup.data.impl.BackupLocalSource
 import com.d9tilov.android.backup.data.impl.BackupManagerImpl
+import com.d9tilov.android.backup.domain.contract.BackupRepo
 import com.d9tilov.android.datastore.PreferencesStore
 import dagger.Module
 import dagger.Provides

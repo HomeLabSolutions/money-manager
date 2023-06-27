@@ -1,6 +1,6 @@
 package com.d9tilov.android.backup.data.contract
 
-import com.d9tilov.android.backup.data.model.BackupData
+import com.d9tilov.android.backup.domain.model.BackupData
 import com.d9tilov.android.core.model.ResultOf
 import kotlinx.coroutines.flow.Flow
 

@@ -3,7 +3,7 @@ package com.d9tilov.android.backup.data.impl
 import android.content.Context
 import android.net.Uri
 import com.d9tilov.android.backup.data.contract.BackupManager
-import com.d9tilov.android.backup.data.model.BackupData
+import com.d9tilov.android.backup.domain.model.BackupData
 import com.d9tilov.android.common_android.utils.isNetworkConnected
 import com.d9tilov.android.core.constants.DataConstants.DATABASE_NAME
 import com.d9tilov.android.core.constants.DataConstants.TAG

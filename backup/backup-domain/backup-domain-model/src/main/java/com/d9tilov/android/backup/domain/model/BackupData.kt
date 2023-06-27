@@ -1,4 +1,4 @@
-package com.d9tilov.android.backup.data.model
+package com.d9tilov.android.backup.domain.model
 
 data class BackupData(
     val lastBackupTimestamp: Long
