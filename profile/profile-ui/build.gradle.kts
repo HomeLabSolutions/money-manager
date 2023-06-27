@@ -46,6 +46,7 @@ dependencies {
 
     implementation(project(":user-info:user-data:user-data-model"))
     implementation(project(":user-info:user-domain:user-domain-contract"))
+    implementation(project(":user-info:user-di"))
 
     implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
@@ -61,15 +62,14 @@ dependencies {
 
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-model"))
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-contract"))
+    implementation(project(":transaction:regular-transaction-ui"))
+
+    implementation(project(":analytics:analytics-di"))
 
     implementation(project(":backup:backup-ui"))
-
     implementation(project(":settings:settings-ui"))
-    
     implementation(project(":goals:goals-ui"))
-
     implementation(project(":splash:splash-ui"))
-
     implementation(project(":incomeexpense"))
 
     implementation(libs.appCompat)

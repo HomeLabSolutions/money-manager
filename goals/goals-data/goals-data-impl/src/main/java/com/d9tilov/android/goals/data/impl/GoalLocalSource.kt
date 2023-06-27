@@ -6,7 +6,7 @@ import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.goals.data.contract.GoalSource
 import com.d9tilov.android.goals.data.impl.mapper.toDataModel
 import com.d9tilov.android.goals.data.impl.mapper.toDbModel
-import com.d9tilov.android.goals.data.model.GoalData
+import com.d9tilov.android.goals.domain.model.GoalData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull

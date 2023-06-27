@@ -58,6 +58,8 @@ dependencies {
 
     implementation(project(":billing:billing-domain:billing-domain-contract"))
 
+    implementation(project(":analytics:analytics-di"))
+
     implementation(libs.glide)
     kapt(libs.glideCompiler)
 

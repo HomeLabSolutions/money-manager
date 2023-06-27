@@ -50,7 +50,7 @@ import com.d9tilov.android.budget.ui.BudgetScreen
 import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.android.prepopulate.ui.PrepopulateScreen.Companion.fromScreenId
 import com.d9tilov.android.prepopulate_ui.R
-import com.d9tilov.android.ui.CurrencyListScreen
+import com.d9tilov.android.currency.ui.CurrencyListScreen
 
 @Composable
 fun PrepopulateScreen(prepopulateViewModel: PrepopulateViewModel = hiltViewModel()) {

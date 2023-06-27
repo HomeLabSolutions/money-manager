@@ -8,7 +8,7 @@ import com.d9tilov.android.budget.ui.BudgetRoute
 import com.d9tilov.android.common_android.ui.base.BaseNavigator
 import com.d9tilov.android.profile.ui.ProfileRoute
 import com.d9tilov.android.settings.ui.SettingsRoute
-import com.d9tilov.android.ui.CurrencyListRoute
+import com.d9tilov.android.currency.ui.CurrencyListRoute
 
 const val profileNavigationRoute = "profile"
 const val currencyNavigationRoute = "currency_list"

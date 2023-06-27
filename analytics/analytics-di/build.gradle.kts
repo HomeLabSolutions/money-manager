@@ -1,10 +1,12 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("dagger.hilt.android.plugin")
+    kotlin("kapt")
 }
 
 android {
-    namespace = "com.d9tilov.android.goals_data_impl"
+    namespace = "com.d9tilov.android.analytics_di"
     val compileSdkVersion: Int by rootProject.extra
     val minSdkVersion: Int by rootProject.extra
 
@@ -24,13 +26,13 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:common"))
-    implementation(project(":core:database"))
     implementation(project(":core:datastore"))
 
-    implementation(project(":goals:goals-domain:goals-domain-model"))
-    implementation(project(":goals:goals-domain:goals-domain-contract"))
-    implementation(project(":goals:goals-data:goals-data-contract"))
+    implementation(libs.hilt)
+    kapt(libs.hiltCompiler)
+    kapt(libs.hiltAndroidCompiler)
 
-    implementation(libs.coroutinesCore)
+    implementation(libs.firebaseAnalytics)
+    implementation(platform(libs.firebaseBom))
 }
+

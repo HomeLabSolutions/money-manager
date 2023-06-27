@@ -50,6 +50,7 @@ dependencies {
     implementation(project(":user-info:user-data:user-data-model"))
     implementation(project(":user-info:user-data:user-data-impl"))
     implementation(project(":user-info:user-domain:user-domain-contract"))
+    implementation(project(":user-info:user-di"))
 
     implementation(project(":category:category-domain:category-domain-contract"))
 

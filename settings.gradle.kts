@@ -38,7 +38,6 @@ include(":user-info:user-domain:user-domain-impl")
 include(":goals:goals-di")
 include(":goals:goals-data:goals-data-contract")
 include(":goals:goals-data:goals-data-impl")
-include(":goals:goals-data:goals-data-model")
 include(":goals:goals-domain:goals-domain-model")
 include(":goals:goals-domain:goals-domain-contract")
 include(":goals:goals-domain:goals-domain-impl")
@@ -96,6 +95,8 @@ include(":statistics:statistics-ui")
 include(":profile:profile-ui")
 
 include(":splash:splash-ui")
+
+include(":analytics:analytics-di")
 
 pluginManagement {
     includeBuild("build-logic")

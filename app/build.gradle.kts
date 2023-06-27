@@ -166,69 +166,24 @@ dependencies {
 
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
-
-    implementation(project(":core:network"))
-    implementation(project(":core:database"))
-    implementation(project(":core:datastore"))
     implementation(project(":core:designsystem"))
 
-
-    implementation(project(":currency:currency-data:currency-data-contract"))
-    implementation(project(":currency:currency-data:currency-data-impl"))
-    implementation(project(":currency:currency-domain:currency-domain-model"))
-    implementation(project(":currency:currency-domain:currency-domain-contract"))
-    implementation(project(":currency:currency-ui"))
-
-    implementation(project(":budget:budget-domain:budget-domain-model"))
-    implementation(project(":budget:budget-data:budget-data-contract"))
-    implementation(project(":budget:budget-data:budget-data-impl"))
-    implementation(project(":budget:budget-domain:budget-domain-contract"))
-    implementation(project(":budget:budget-domain:budget-domain-impl"))
-    implementation(project(":budget:budget-ui"))
-
-    implementation(project(":user-info:user-data:user-data-model"))
-    implementation(project(":user-info:user-domain:user-domain-contract"))
-
-    implementation(project(":prepopulate:prepopulate-ui"))
-
-    implementation(project(":goals:goals-data:goals-data-model"))
-    implementation(project(":goals:goals-data:goals-data-contract"))
-    implementation(project(":goals:goals-data:goals-data-impl"))
-    implementation(project(":goals:goals-domain:goals-domain-contract"))
-    implementation(project(":goals:goals-domain:goals-domain-impl"))
-
-    implementation(project(":category:category-domain:category-domain-model"))
-    implementation(project(":category:category-domain:category-domain-contract"))
-    implementation(project(":category:category-ui"))
-
-    implementation(project(":transaction:transaction-domain:transaction-domain-contract"))
-    implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-model"))
-    implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-contract"))
-    implementation(project(":transaction:regular-transaction-ui"))
-
     implementation(project(":incomeexpense"))
-
     implementation(project(":statistics:statistics-ui"))
-
-    implementation(project(":settings:settings-ui"))
+    implementation(project(":currency:currency-ui"))
+    implementation(project(":profile:profile-ui"))
+    implementation(project(":backup:backup-ui"))
 
     implementation(project(":billing:billing-domain:billing-domain-contract"))
 
-    implementation(project(":backup:backup-domain:backup-domain-contract"))
-    implementation(project(":backup:backup-ui"))
-
-    implementation(libs.kotlinJdk)
+    implementation(project(":transaction:transaction-domain:transaction-domain-contract"))
+    implementation(project(":transaction:transaction-domain:transaction-domain-model"))
 
     implementation(libs.bundles.appCompat)
-    implementation(libs.material)
-    implementation(libs.core)
-    implementation(libs.coreRuntime)
-    implementation(libs.constraintLayout)
 
     implementation(libs.firebase)
     implementation(libs.firebaseUi)
     implementation(libs.googlePlayServicesAuth)
-
     implementation(libs.firebaseAnalytics)
     implementation(platform(libs.firebaseBom))
     implementation(libs.firebaseCrashlytics)
@@ -243,40 +198,9 @@ dependencies {
 
     implementation(libs.glide)
     kapt(libs.glideCompiler)
-    implementation(libs.coil)
-
-    implementation(libs.bundles.retrofit)
-
-    implementation(libs.bundles.pagination)
-    implementation(libs.bundles.room)
-    kapt(libs.roomCompiler)
-
-    implementation(libs.viewpager)
-
-    implementation(libs.coroutinesCore)
-
-    implementation(libs.lifecycle)
-    implementation(libs.lifecycleRuntime)
-    implementation(libs.lifecycleExtension)
-    implementation(libs.lifecycleCommon)
-    implementation(libs.lifecycleViewModel)
 
     implementation(libs.bundles.compose)
     implementation(libs.bundles.composeMaterial3)
-    implementation(libs.composeActivity)
-    implementation(libs.composeViewModel)
-    implementation(libs.composeRuntime)
-    implementation(libs.composeConstraintLayout)
-    debugImplementation(libs.composeToolingUi)
 
-    implementation(libs.worker)
-    implementation(libs.workerHilt)
-
-    implementation(libs.klaxon)
     implementation(libs.timber)
-
-    implementation(libs.billing)
-
-    implementation(libs.androidChart)
-    implementation(libs.dotsIndicator)
 }
