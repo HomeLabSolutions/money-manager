@@ -7,8 +7,9 @@ import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.user.data.contract.UserSource
 import com.d9tilov.android.user.data.impl.mapper.toDataModel
 import com.d9tilov.android.user.data.impl.mapper.toDbModel
-import com.d9tilov.android.user.data.model.UserProfile
+import com.d9tilov.android.user.domain.model.UserProfile
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
@@ -60,6 +61,7 @@ class UserLocalSource(
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun getCurrentUser(): Flow<UserProfile?> = preferencesStore.uid
         .filterNotNull()
         .flatMapMerge { uid ->

@@ -2,7 +2,7 @@ package com.d9tilov.android.user.di
 
 import com.d9tilov.android.database.AppDatabase
 import com.d9tilov.android.datastore.PreferencesStore
-import com.d9tilov.android.user.data.contract.UserRepo
+import com.d9tilov.android.user.domain.contract.UserRepo
 import com.d9tilov.android.user.data.contract.UserSource
 import com.d9tilov.android.user.data.impl.UserDataRepo
 import com.d9tilov.android.user.data.impl.UserLocalSource

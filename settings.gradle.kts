@@ -32,6 +32,7 @@ include(":user-info:user-di")
 include(":user-info:user-data:user-data-model")
 include(":user-info:user-data:user-data-contract")
 include(":user-info:user-data:user-data-impl")
+include(":user-info:user-domain:user-domain-model")
 include(":user-info:user-domain:user-domain-contract")
 include(":user-info:user-domain:user-domain-impl")
 

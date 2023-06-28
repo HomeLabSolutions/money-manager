@@ -44,7 +44,7 @@ dependencies {
     implementation(project(":core:common-android"))
     implementation(project(":core:designsystem"))
 
-    implementation(project(":user-info:user-data:user-data-model"))
+    implementation(project(":user-info:user-domain:user-domain-model"))
     implementation(project(":user-info:user-domain:user-domain-contract"))
     implementation(project(":user-info:user-di"))
 

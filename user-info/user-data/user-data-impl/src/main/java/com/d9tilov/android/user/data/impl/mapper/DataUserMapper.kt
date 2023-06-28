@@ -1,7 +1,7 @@
 package com.d9tilov.android.user.data.impl.mapper
 
 import com.d9tilov.android.database.entity.UserDbModel
-import com.d9tilov.android.user.data.model.UserProfile
+import com.d9tilov.android.user.domain.model.UserProfile
 
 fun UserDbModel.toDataModel(): UserProfile =
     UserProfile(
