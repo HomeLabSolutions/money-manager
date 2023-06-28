@@ -16,7 +16,7 @@ import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.transaction.data.contract.TransactionSource
 import com.d9tilov.android.transaction.data.impl.mapper.toDataModel
 import com.d9tilov.android.transaction.data.impl.mapper.toDbModel
-import com.d9tilov.android.transaction.data.model.TransactionDataModel
+import com.d9tilov.android.transaction.domain.model.TransactionDataModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull

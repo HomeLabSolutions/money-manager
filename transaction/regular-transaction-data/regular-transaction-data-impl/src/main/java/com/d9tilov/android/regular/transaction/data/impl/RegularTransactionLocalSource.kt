@@ -8,7 +8,7 @@ import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.regular.transaction.data.contract.RegularTransactionSource
 import com.d9tilov.android.regular.transaction.data.impl.mapper.toDataModel
 import com.d9tilov.android.regular.transaction.data.impl.mapper.toDbModel
-import com.d9tilov.android.regular.transaction.data.model.RegularTransactionData
+import com.d9tilov.android.regular.transaction.domain.model.RegularTransactionData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull

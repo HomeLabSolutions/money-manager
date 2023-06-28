@@ -2,13 +2,14 @@ package com.d9tilov.android.transaction.data.impl
 
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.core.model.TransactionType
-import com.d9tilov.android.transaction.data.contract.TransactionRepo
 import com.d9tilov.android.transaction.data.contract.TransactionSource
-import com.d9tilov.android.transaction.data.model.TransactionDataModel
+import com.d9tilov.android.transaction.domain.contract.TransactionRepo
+import com.d9tilov.android.transaction.domain.model.TransactionDataModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
 
-class TransactionDataRepo(private val transactionSource: TransactionSource) : TransactionRepo {
+class TransactionDataRepo(private val transactionSource: TransactionSource) :
+    TransactionRepo {
 
     override suspend fun addTransaction(transaction: TransactionDataModel) {
         transactionSource.insert(transaction)

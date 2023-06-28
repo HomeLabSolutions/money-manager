@@ -35,7 +35,7 @@ android {
 dependencies {
 
     implementation(project(":core:common"))
-    implementation(project(":transaction:transaction-data:transaction-data-model"))
+    implementation(project(":transaction:transaction-domain:transaction-domain-model"))
     implementation(project(":category:category-domain:category-domain-model"))
 
     implementation(libs.roomPaging)

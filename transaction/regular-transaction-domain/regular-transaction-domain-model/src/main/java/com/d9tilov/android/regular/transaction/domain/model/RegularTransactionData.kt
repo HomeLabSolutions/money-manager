@@ -1,4 +1,4 @@
-package com.d9tilov.android.regular.transaction.data.model
+package com.d9tilov.android.regular.transaction.domain.model
 
 import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.core.model.ExecutionPeriod

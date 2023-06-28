@@ -23,13 +23,14 @@ import com.d9tilov.android.core.utils.isSameDay
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.regular.transaction.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.regular.transaction.domain.model.RegularTransaction
-import com.d9tilov.android.transaction.data.contract.TransactionRepo
+import com.d9tilov.android.transaction.domain.contract.TransactionRepo
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.impl.mapper.toChartModel
 import com.d9tilov.android.transaction.domain.impl.mapper.toDataModel
 import com.d9tilov.android.transaction.domain.impl.mapper.toDomainModel
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
+import com.d9tilov.android.transaction.domain.model.TransactionDataModel
 import com.d9tilov.android.transaction.domain.model.TransactionLineChartModel
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
 import com.d9tilov.android.user.domain.contract.UserInteractor
@@ -157,7 +158,7 @@ class TransactionInteractorImpl(
                 list.map { item -> item.copy(date = item.date.getStartOfDay()) }.toList()
                     .groupBy { item -> item.date }
                     .toSortedMap()
-                    .mapValues { item: Map.Entry<LocalDateTime, List<com.d9tilov.android.transaction.data.model.TransactionDataModel>> ->
+                    .mapValues { item: Map.Entry<LocalDateTime, List<TransactionDataModel>> ->
                         TransactionLineChartModel(
                             currencyCode = currencyCode,
                             sum = item.value.sumOf { model ->
@@ -184,7 +185,7 @@ class TransactionInteractorImpl(
         return categoryList.flatMap { item: Category ->
             transactionRepo.getByCategoryInPeriod(item, from, to, inStatistics)
                 .first()
-                .map { tr: com.d9tilov.android.transaction.data.model.TransactionDataModel ->
+                .map { tr: TransactionDataModel ->
                     val foundCategory =
                         categoryList.find { listItem -> tr.categoryId == listItem.id }
                             ?: throw CategoryException.CategoryNotFoundException("getTransactionsByCategory Not found category with id: ${tr.categoryId}")

@@ -2,10 +2,10 @@ package com.d9tilov.android.transaction.data.impl.mapper
 
 import com.d9tilov.android.core.model.toType
 import com.d9tilov.android.database.entity.TransactionDbModel
-import com.d9tilov.android.transaction.data.model.TransactionDataModel
+import com.d9tilov.android.transaction.domain.model.TransactionDataModel
 
-fun TransactionDbModel.toDataModel(): TransactionDataModel =
-    TransactionDataModel(
+fun TransactionDbModel.toDataModel(): com.d9tilov.android.transaction.domain.model.TransactionDataModel =
+    com.d9tilov.android.transaction.domain.model.TransactionDataModel(
         id,
         clientId,
         type.toType(),
@@ -23,7 +23,7 @@ fun TransactionDbModel.toDataModel(): TransactionDataModel =
         photoUri
     )
 
-fun TransactionDataModel.toDbModel(): TransactionDbModel =
+fun com.d9tilov.android.transaction.domain.model.TransactionDataModel.toDbModel(): TransactionDbModel =
     TransactionDbModel(
         id,
         clientId,

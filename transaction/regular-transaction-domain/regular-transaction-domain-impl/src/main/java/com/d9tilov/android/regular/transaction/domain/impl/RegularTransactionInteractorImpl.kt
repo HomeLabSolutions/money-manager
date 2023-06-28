@@ -4,7 +4,7 @@ import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
-import com.d9tilov.android.regular.transaction.data.contract.RegularTransactionRepo
+import com.d9tilov.android.regular.transaction.domain.contract.RegularTransactionRepo
 import com.d9tilov.android.regular.transaction.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.regular.transaction.domain.impl.mapper.toData
 import com.d9tilov.android.regular.transaction.domain.impl.mapper.toDomain

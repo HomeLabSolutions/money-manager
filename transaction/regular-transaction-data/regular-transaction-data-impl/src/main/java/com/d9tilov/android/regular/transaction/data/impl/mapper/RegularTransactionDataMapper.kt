@@ -1,7 +1,7 @@
 package com.d9tilov.android.regular.transaction.data.impl.mapper
 
 import com.d9tilov.android.database.entity.RegularTransactionDbModel
-import com.d9tilov.android.regular.transaction.data.model.RegularTransactionData
+import com.d9tilov.android.regular.transaction.domain.model.RegularTransactionData
 
 fun RegularTransactionDbModel.toDataModel(): RegularTransactionData =
     RegularTransactionData(
