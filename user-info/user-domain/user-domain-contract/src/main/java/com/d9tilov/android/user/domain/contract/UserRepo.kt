@@ -1,6 +1,6 @@
-package com.d9tilov.android.user.data.contract
+package com.d9tilov.android.user.domain.contract
 
-import com.d9tilov.android.user.data.model.UserProfile
+import com.d9tilov.android.user.domain.model.UserProfile
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepo {

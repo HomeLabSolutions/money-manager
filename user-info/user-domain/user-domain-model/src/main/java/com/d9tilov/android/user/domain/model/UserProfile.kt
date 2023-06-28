@@ -1,4 +1,4 @@
-package com.d9tilov.android.user.data.model
+package com.d9tilov.android.user.domain.model
 
 import com.d9tilov.android.core.constants.DataConstants
 

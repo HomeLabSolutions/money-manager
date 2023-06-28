@@ -1,7 +1,7 @@
 package com.d9tilov.android.user.data.impl.mapper
 
 import com.d9tilov.android.core.constants.DataConstants.DEFAULT_DATA_ID
-import com.d9tilov.android.user.data.model.UserProfile
+import com.d9tilov.android.user.domain.model.UserProfile
 import com.google.firebase.auth.FirebaseUser
 import java.util.Calendar
 
