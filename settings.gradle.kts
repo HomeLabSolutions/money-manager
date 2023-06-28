@@ -90,7 +90,7 @@ include(":backup:backup-domain:backup-domain-impl")
 include(":backup:backup-di")
 include(":backup:backup-ui")
 
-include(":statistics:statistics-data:statistics-data-model")
+include(":statistics:statistics-domain:statistics-domain-model")
 include(":statistics:statistics-ui")
 
 include(":profile:profile-ui")

@@ -47,8 +47,8 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
     implementation(project(":core:designsystem"))
+    implementation(project(":statistics:statistics-domain:statistics-domain-model"))
 
-    implementation(project(":statistics:statistics-data:statistics-data-model"))
     implementation(project(":category:category-domain:category-domain-model"))
     implementation(project(":billing:billing-domain:billing-domain-contract"))
 
