@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<incidents format="6" by="lint 7.4.0" type="partial_results">
+    <map id="NotificationPermission">
+        <entry
+            name="className"
+            string="com/bumptech/glide/request/target/NotificationTarget"/>
+        <location id="class"
+            file="$GRADLE_USER_HOME/caches/transforms-3/5b547328fdc9599d1959c4647e2e05b7/transformed/jetified-glide-4.15.1/jars/classes.jar"/>
+    </map>
+    <map id="UnusedResources">
+        <location id="R.string.profile_item_regular_expenses_title"
+            file="${:incomeexpense*debug*sourceProvider*0*resDir*0}/values/strings.xml"
+            line="10"
+            column="13"
+            startOffset="591"
+            endLine="10"
+            endColumn="55"
+            endOffset="633"/>
+        <location id="R.layout.layout_profile_regular_expenses"
+            file="${:incomeexpense*debug*sourceProvider*0*resDir*0}/layout/layout_profile_regular_expenses.xml"
+            line="2"
+            column="1"
+            startOffset="39"
+            endLine="49"
+            endColumn="53"
+            endOffset="2277"/>
+        <location id="R.drawable.ic_regular_expense"
+            file="${:incomeexpense*debug*sourceProvider*0*resDir*0}/drawable/ic_regular_expense.xml"
+            line="1"
+            column="1"
+            startOffset="0"
+            endLine="24"
+            endColumn="10"
+            endOffset="4262"/>
+        <location id="R.navigation.income_expense_navigation"
+            file="${:incomeexpense*debug*sourceProvider*0*resDir*0}/navigation/income_expense_navigation.xml"
+            line="2"
+            column="1"
+            startOffset="39"
+            endLine="63"
+            endColumn="14"
+            endOffset="2748"/>
+        <entry
+            name="model"
+            string="anim[nav_default_pop_enter_anim(E),nav_default_pop_exit_anim(E),nav_default_exit_anim(E)],attr[colorPrimary(R),colorTertiary(R),colorError(R),textAppearanceCurrencySumSmall(R),textAppearanceCurrencySignSmall(R),textAppearanceBodySmall(R),textAppearanceCurrencySignMedium(R),colorOnSecondary(R),selectableItemBackgroundBorderless(R),colorOnPrimary(R),colorOnPrimaryContainer(R),textAppearanceCurrencySumMedium(R),colorOnSecondaryContainer(R)],dimen[recycler_view_category_offset(R),pin_button_margin_height(U),income_expense_info_sign_text_size(U),profile_item_height(E),income_expense_info_sum_text_size(U),transaction_sum_title_text_size(U),padding_large(R),padding_medium(R),pin_button_width(U),pin_button_height(U),pin_button_margin_width(U)],drawable[ic_backspace(U),ic_regular_expense(D),rv_divider(R),background_sum_border(U),background_round_border(U),ic_wallet_empty(U),ic_regular_income(D),ic_plus(U),ic_keyboard_hide(U)],id[profile_regular_expenses_separator(D),income_expense_view_pager(D),to_edit_transaction_dest(R),income_expense_tab_layout(U),profile_item_regular_expense_subtitle(D),income_period_info_title(U),income_expense_keyboard_layout(U),profile_regular_income_separator(D),keyboard_pin_dot(U),income_expense_dest(U),expense_transaction_layout_include(D),expense_transaction_empty_placeholder_include(D),keyboard_pin_remove(D),edit_transaction_dest(E),income_period_info_approx_sum(D),btn_hide_keyboard(D),income_info_layout_include(D),remove_transaction_dialog(E),expense_period_info_approx_sum(D),pin_keyboard(U),expense_today_info_title(U),profile_item_regular_expense_title(D),expense_transaction_rv_list(D),expense_today_info_approx_sign(U),expense_transaction_btn_add(D),profile_regular_expenses_layout(D),income_transaction_empty_placeholder_include(D),income_period_info_approx_sign(U),expense_can_spend_today_info_title(U),to_category_dest(R),expense_today_info_approx_sum(D),profile_item_regular_income_subtitle(D),expense_info_layout_include(D),income_expense_main_sum_title_right(D),expense_category_rv_list(U),income_transaction_layout_include(D),profile_item_regular_income_title(D),income_category_rv_list(U),profile_regular_incomes_layout(D),transaction_main_content(D),income_expense_nav_graph(D),keyboard_pin_5(U),category_dest(E),keyboard_pin_4(U),keyboard_pin_3(U),keyboard_pin_2(U),keyboard_pin_9(U),keyboard_pin_8(U),expense_period_info_approx_sign(U),keyboard_pin_7(U),keyboard_pin_6(U),to_remove_transaction_dialog(R),keyboard_pin_1(U),keyboard_pin_0(U),expense_period_info_title(U),income_transaction_btn_add(D),income_expense_main_sum(U),income_expense_main_sum_title_left(D),income_transaction_rv_list(D),expense_today_info_value(D)],layout[fragment_expense(U),layout_profile_regular_incomes(D),item_transaction(R),layout_income_info(U),layout_profile_regular_expenses(D),fragment_income(U),layout_expense_transactions(U),layout_income_transactions(U),item_category(R),fragment_income_expense(U),layout_expense_info(U),layout_empty_list_placeholder(R),keyboard_layout(U)],navigation[transaction_navigation(E),income_expense_navigation(D)],string[category_expense_info_can_spend_today_title(R),tab_expense(U),category_expense_info_can_spend_today_negate_title(R),profile_item_regular_expenses_title(D),category_expense_info_today_title(R),approx_sign(R),tab_income(U),category_expense_info_period_title(R),income_expense_empty_sum_error(U),profile_item_regular_incomes_title(D),_dot(R),transaction_edit_sum_title(R),transaction_empty_placeholder_income_title(U),_0(R),_1(R),_2(R),transaction_empty_placeholder_expense_title(U),_3(R),transaction_empty_placeholder_subtitle(U),_4(R),_5(R),_6(R),category_income_info_period_title(R),_7(R),_8(R),_9(R)],style[Widget_MoneyManager_TextView_ProfileItem_Subtitle(E),Widget_MoneyManager_TextView_ProfileItem(E),Widget_MoneyManager_TextView_Info_Label(R),Widget_MoneyManager_TextView_Keyboard(R)];1b^3,1c^3,1e^3,1f^3,21^3,22^a,23^4,60^46^6a^17^68^66^6b,61^13^17^16^78^21^8a^48^89^1d,63^85^8b^74^3^29^3f^f^12^7^14^6,64^13^17^16^72^1c^8a^39^89^1d,65^49^63^17^68^67^6b,66^62^22,67^62^22,69^1f^16^27^3^9^e^1e^7a^8^c^15^5c^2a^6c,6a^16^6f^38^8b^40^12^7^14^6^73^74^d^3b^76^5a^54,6c^b^19^11^1a^18^7d^8c^7e^80^82^83^84^86^87^88^79^7c^1b^23^37,6e^2d^6d^69^4e^2^0^1^31^35;;;"/>
+        <location id="R.layout.layout_profile_regular_incomes"
+            file="${:incomeexpense*debug*sourceProvider*0*resDir*0}/layout/layout_profile_regular_incomes.xml"
+            line="2"
+            column="1"
+            startOffset="39"
+            endLine="50"
+            endColumn="53"
+            endOffset="2326"/>
+        <location id="R.string.profile_item_regular_incomes_title"
+            file="${:incomeexpense*debug*sourceProvider*0*resDir*0}/values/strings.xml"
+            line="9"
+            column="13"
+            startOffset="512"
+            endLine="9"
+            endColumn="54"
+            endOffset="553"/>
+        <location id="R.drawable.ic_regular_income"
+            file="${:incomeexpense*debug*sourceProvider*0*resDir*0}/drawable/ic_regular_income.xml"
+            line="1"
+            column="1"
+            startOffset="0"
+            endLine="48"
+            endColumn="10"
+            endOffset="3553"/>
+    </map>
+
+</incidents>

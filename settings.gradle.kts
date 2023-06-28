@@ -26,8 +26,6 @@ include(":budget:budget-domain:budget-domain-contract")
 include(":budget:budget-domain:budget-domain-impl")
 include(":budget:budget-ui")
 
-include(":prepopulate:prepopulate-ui")
-
 include(":user-info:user-di")
 include(":user-info:user-data:user-data-model")
 include(":user-info:user-data:user-data-contract")
@@ -78,10 +76,6 @@ include(":billing:billing-domain:billing-domain-model")
 include(":billing:billing-domain:billing-domain-impl")
 include(":billing:billing-di")
 
-include(":incomeexpense")
-
-include(":settings:settings-ui")
-
 include(":backup:backup-data:backup-data-contract")
 include(":backup:backup-data:backup-data-impl")
 include(":backup:backup-domain:backup-domain-contract")
@@ -96,6 +90,12 @@ include(":statistics:statistics-ui")
 include(":profile:profile-ui")
 
 include(":splash:splash-ui")
+
+include(":prepopulate:prepopulate-ui")
+
+include(":incomeexpense:incomeexpense-ui")
+
+include(":settings:settings-ui")
 
 include(":analytics:analytics-di")
 

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<incidents format="6" by="lint 7.4.0" type="incidents">
+
+    <incident
+        id="VectorPath"
+        severity="warning"
+        message="Very long vector path (1138 characters), which is bad for performance. Considering reducing precision, removing minor details or rasterizing vector.">
+        <location
+            file="${:incomeexpense*debug*sourceProvider*0*resDir*0}/drawable/ic_regular_expense.xml"
+            line="8"
+            column="27"
+            startOffset="267"
+            endLine="8"
+            endColumn="1165"
+            endOffset="1405"/>
+    </incident>
+
+    <incident
+        id="VectorPath"
+        severity="warning"
+        message="Very long vector path (883 characters), which is bad for performance. Considering reducing precision, removing minor details or rasterizing vector.">
+        <location
+            file="${:incomeexpense*debug*sourceProvider*0*resDir*0}/drawable/ic_regular_expense.xml"
+            line="20"
+            column="27"
+            startOffset="2873"
+            endLine="20"
+            endColumn="910"
+            endOffset="3756"/>
+    </incident>
+
+    <incident
+        id="VectorPath"
+        severity="warning"
+        message="Very long vector path (1376 characters), which is bad for performance. Considering reducing precision, removing minor details or rasterizing vector.">
+        <location
+            file="${:incomeexpense*debug*sourceProvider*0*resDir*0}/drawable/ic_regular_income.xml"
+            line="11"
+            column="27"
+            startOffset="583"
+            endLine="11"
+            endColumn="1403"
+            endOffset="1959"/>
+    </incident>
+
+    <incident
+        id="VectorPath"
+        severity="warning"
+        message="Very long vector path (1494 characters), which is bad for performance. Considering reducing precision, removing minor details or rasterizing vector.">
+        <location
+            file="${:incomeexpense*debug*sourceProvider*0*resDir*0}/drawable/ic_wallet_empty.xml"
+            line="59"
+            column="27"
+            startOffset="6680"
+            endLine="59"
+            endColumn="1521"
+            endOffset="8174"/>
+    </incident>
+
+    <incident
+        id="VectorPath"
+        severity="warning"
+        message="Very long vector path (3670 characters), which is bad for performance. Considering reducing precision, removing minor details or rasterizing vector.">
+        <location
+            file="${:incomeexpense*debug*sourceProvider*0*resDir*0}/drawable/ic_wallet_empty.xml"
+            line="65"
+            column="27"
+            startOffset="8413"
+            endLine="65"
+            endColumn="3697"
+            endOffset="12083"/>
+    </incident>
+
+    <incident
+        id="ContentDescription"
+        severity="warning"
+        message="Missing `contentDescription` attribute on image">
+        <fix-attribute
+            description="Set contentDescription"
+            namespace="http://schemas.android.com/apk/res/android"
+            attribute="contentDescription"
+            value="TODO"
+            dot="4"
+            mark="0"/>
+        <location
+            file="${:incomeexpense*debug*sourceProvider*0*resDir*0}/layout/keyboard_layout.xml"
+            line="235"
+            column="6"
+            startOffset="12181"
+            endLine="235"
+            endColumn="15"
+            endOffset="12190"/>
+    </incident>
+
+    <incident
+        id="ContentDescription"
+        severity="warning"
+        message="Missing `contentDescription` attribute on image">
+        <fix-attribute
+            description="Set contentDescription"
+            namespace="http://schemas.android.com/apk/res/android"
+            attribute="contentDescription"
+            value="TODO"
+            dot="4"
+            mark="0"/>
+        <location
+            file="${:incomeexpense*debug*sourceProvider*0*resDir*0}/layout/layout_expense_transactions.xml"
+            line="18"
+            column="6"
+            startOffset="780"
+            endLine="18"
+            endColumn="75"
+            endOffset="849"/>
+    </incident>
+
+    <incident
+        id="ContentDescription"
+        severity="warning"
+        message="Missing `contentDescription` attribute on image">
+        <fix-attribute
+            description="Set contentDescription"
+            namespace="http://schemas.android.com/apk/res/android"
+            attribute="contentDescription"
+            value="TODO"
+            dot="4"
+            mark="0"/>
+        <location
+            file="${:incomeexpense*debug*sourceProvider*0*resDir*0}/layout/layout_income_transactions.xml"
+            line="18"
+            column="6"
+            startOffset="779"
+            endLine="18"
+            endColumn="75"
+            endOffset="848"/>
+    </incident>
+
+</incidents>

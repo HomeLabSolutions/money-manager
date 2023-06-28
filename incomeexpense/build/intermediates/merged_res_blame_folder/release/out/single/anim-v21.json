@@ -1,0 +1,38 @@
+[
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim-v21/fragment_fast_out_extra_slow_in.xml",
+        "source": "com.d9tilov.android.incomeexpense-fragment-1.6.0-50:/anim-v21/fragment_fast_out_extra_slow_in.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim-v21/mtrl_bottom_sheet_slide_in.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/anim-v21/mtrl_bottom_sheet_slide_in.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim-v21/design_bottom_sheet_slide_out.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/anim-v21/design_bottom_sheet_slide_out.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim-v21/m3_side_sheet_slide_out.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/anim-v21/m3_side_sheet_slide_out.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim-v21/mtrl_bottom_sheet_slide_out.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/anim-v21/mtrl_bottom_sheet_slide_out.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim-v21/m3_bottom_sheet_slide_out.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/anim-v21/m3_bottom_sheet_slide_out.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim-v21/design_bottom_sheet_slide_in.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/anim-v21/design_bottom_sheet_slide_in.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim-v21/m3_bottom_sheet_slide_in.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/anim-v21/m3_bottom_sheet_slide_in.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim-v21/m3_side_sheet_slide_in.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/anim-v21/m3_side_sheet_slide_in.xml"
+    }
+]
