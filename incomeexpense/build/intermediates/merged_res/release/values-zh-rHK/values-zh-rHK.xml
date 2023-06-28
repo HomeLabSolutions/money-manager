@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2" xmlns:ns2="http://schemas.android.com/tools">
+    <plurals name="fui_error_weak_password"> <item quantity="one">密碼安全強度不足。請使用至少 %1$d 個字元並混用字母和數字</item> <item quantity="other">密碼安全強度不足。請使用至少 %1$d 個字元並混用字母和數字</item> </plurals>
+    <plurals name="mtrl_badge_content_description">
+    <item quantity="one">%d 個新通知</item>
+    <item quantity="other">%d 個新通知</item>
+  </plurals>
+    <string msgid="5976598919945601918" name="abc_action_bar_home_description">"瀏覽主頁"</string>
+    <string msgid="8388173803310557296" name="abc_action_bar_up_description">"向上瀏覽"</string>
+    <string msgid="3937310113216875497" name="abc_action_menu_overflow_description">"更多選項"</string>
+    <string msgid="4692188335987374352" name="abc_action_mode_done">"完成"</string>
+    <string msgid="1189761859438369441" name="abc_activity_chooser_view_see_all">"查看全部"</string>
+    <string msgid="2165779757652331008" name="abc_activitychooserview_choose_application">"選擇應用程式"</string>
+    <string msgid="4215997306490295099" name="abc_capital_off">"關閉"</string>
+    <string msgid="884982626291842264" name="abc_capital_on">"開啟"</string>
+    <string msgid="8833365367933412986" name="abc_menu_alt_shortcut_label">"Alt +"</string>
+    <string msgid="2223301931652355242" name="abc_menu_ctrl_shortcut_label">"Ctrl +"</string>
+    <string msgid="838001238306846836" name="abc_menu_delete_shortcut_label">"刪除"</string>
+    <string msgid="7986526966204849475" name="abc_menu_enter_shortcut_label">"Enter 鍵"</string>
+    <string msgid="375214403600139847" name="abc_menu_function_shortcut_label">"Fn +"</string>
+    <string msgid="4192209724446364286" name="abc_menu_meta_shortcut_label">"Meta +"</string>
+    <string msgid="4741552369836443843" name="abc_menu_shift_shortcut_label">"Shift +"</string>
+    <string msgid="5473865519181928982" name="abc_menu_space_shortcut_label">"空白鍵"</string>
+    <string msgid="6180552449598693998" name="abc_menu_sym_shortcut_label">"Sym +"</string>
+    <string msgid="5520303668377388990" name="abc_prepend_shortcut_label">"Menu +"</string>
+    <string msgid="7208076849092622260" name="abc_search_hint">"搜尋…"</string>
+    <string msgid="3741173234950517107" name="abc_searchview_description_clear">"清除查詢"</string>
+    <string msgid="693312494995508443" name="abc_searchview_description_query">"搜尋查詢"</string>
+    <string msgid="3417662926640357176" name="abc_searchview_description_search">"搜尋"</string>
+    <string msgid="1486535517437947103" name="abc_searchview_description_submit">"提交查詢"</string>
+    <string msgid="2293578557972875415" name="abc_searchview_description_voice">"語音搜尋"</string>
+    <string msgid="8875138169939072951" name="abc_shareactionprovider_share_with">"分享對象"</string>
+    <string msgid="9055268688411532828" name="abc_shareactionprovider_share_with_application">"使用「<ns1:g id="APPLICATION_NAME">%s</ns1:g>」分享"</string>
+    <string msgid="1656852541809559762" name="abc_toolbar_collapse_description">"收合"</string>
+    <string msgid="6128938260108474660" name="bottom_sheet_collapse_description">"收合底部功能表"</string>
+    <string msgid="1918297411568599192" name="bottom_sheet_dismiss_description">"關閉底部功能表"</string>
+    <string msgid="7772321844937772780" name="bottom_sheet_drag_handle_description">"拖曳控點"</string>
+    <string msgid="4324434199045499117" name="bottom_sheet_expand_description">"展開底部功能表"</string>
+    <string name="bottomsheet_action_collapse">收合頁底面板</string>
+    <string name="bottomsheet_action_expand">展開頁底面板</string>
+    <string name="bottomsheet_action_expand_halfway">展開一半</string>
+    <string name="bottomsheet_drag_handle_clicked">㩒咗兩下拖曳控點</string>
+    <string name="bottomsheet_drag_handle_content_description">拖曳控點</string>
+    <string msgid="881409763997275156" name="call_notification_answer_action">"接聽"</string>
+    <string msgid="8793775615905189152" name="call_notification_answer_video_action">"視像"</string>
+    <string msgid="3229508546291798546" name="call_notification_decline_action">"拒接"</string>
+    <string msgid="2659457946726154263" name="call_notification_hang_up_action">"掛斷"</string>
+    <string msgid="6107532579223922871" name="call_notification_incoming_text">"來電"</string>
+    <string msgid="8623827134497363134" name="call_notification_ongoing_text">"通話中"</string>
+    <string msgid="59049573811482460" name="call_notification_screening_text">"正在過濾來電"</string>
+    <string name="character_counter_content_description">已輸入 %1$d 個字元 (共 %2$d 個)</string>
+    <string name="character_counter_overflowed_content_description">超出字元限制 %1$d 個字元 (上限 %2$d 個字元)</string>
+    <string name="clear_text_end_icon_content_description">清除文字</string>
+    <string msgid="406453423630273620" name="close_drawer">"閂導覽選單"</string>
+    <string msgid="7573152094250666567" name="close_sheet">"閂表單"</string>
+    <string msgid="5389587048670450460" name="collapsed">"合埋咗"</string>
+    <string msgid="2523291102206661146" name="common_google_play_services_enable_button">啟用</string>
+    <string msgid="227660514972886228" name="common_google_play_services_enable_text">您必須啟用 Google Play 服務，方可執行「%1$s」。</string>
+    <string msgid="5122002158466380389" name="common_google_play_services_enable_title">啟用 Google Play 服務</string>
+    <string msgid="7153882981874058840" name="common_google_play_services_install_button">安裝</string>
+    <string name="common_google_play_services_install_text">您的裝置尚未安裝 Google Play 服務，因此無法執行「%1$s」。</string>
+    <string msgid="7215213145546190223" name="common_google_play_services_install_title">安裝 Google Play 服務</string>
+    <string name="common_google_play_services_notification_channel_name">Google Play 服務的適用範圍</string>
+    <string name="common_google_play_services_notification_ticker">Google Play 服務錯誤</string>
+    <string name="common_google_play_services_unknown_issue">「%1$s」存取 Google Play 服務時發生問題。請稍後再試一次。</string>
+    <string name="common_google_play_services_unsupported_text">您的裝置不支援 Google Play 服務，因此無法執行「%1$s」。</string>
+    <string msgid="6556509956452265614" name="common_google_play_services_update_button">更新</string>
+    <string msgid="9053896323427875356" name="common_google_play_services_update_text">您必須更新「Google Play 服務」，才能執行 %1$s。</string>
+    <string msgid="6006316683626838685" name="common_google_play_services_update_title">更新 Google Play 服務</string>
+    <string name="common_google_play_services_updating_text">正在更新 Google Play 服務，更新完成後方可執行「%1$s」。</string>
+    <string name="common_google_play_services_wear_update_text">需要使用新版本的 Google Play 服務。更新會即將自動開始。</string>
+    <string name="common_open_on_phone">在手機開啟</string>
+    <string name="common_signin_button_text">登入</string>
+    <string name="common_signin_button_text_long">透過 Google 登入</string>
+    <string msgid="3260749812566568062" name="copy_toast_msg">"連結已複製到剪貼簿"</string>
+    <string msgid="3499643850558715142" name="date_input_headline">"已輸入的日期"</string>
+    <string msgid="8562356184193964298" name="date_input_headline_description">"已輸入的日期：%1$s"</string>
+    <string msgid="5281836720766682161" name="date_input_invalid_for_pattern">"日期格式不符：%1$s"</string>
+    <string msgid="6114792992433444995" name="date_input_invalid_not_allowed">"不允許的日期：%1$s"</string>
+    <string msgid="8434112129235255568" name="date_input_invalid_year_range">"日期超出預期的年份範圍：%1$s - %2$s"</string>
+    <string msgid="5194825853981987218" name="date_input_label">"日期"</string>
+    <string msgid="5722931102250207748" name="date_input_no_input_description">"無"</string>
+    <string msgid="3010396677286327048" name="date_input_title">"選取日期"</string>
+    <string msgid="2846784065735639969" name="date_picker_headline">"所選日期"</string>
+    <string msgid="4627306862713137085" name="date_picker_headline_description">"目前選項：%1$s"</string>
+    <string msgid="5152441868029453612" name="date_picker_navigate_to_year_description">"前往 %1$s 年"</string>
+    <string msgid="5724377114289981899" name="date_picker_no_selection_description">"無"</string>
+    <string msgid="8911933542023210271" name="date_picker_scroll_to_earlier_years">"碌去顯示舊啲嘅年份"</string>
+    <string msgid="3226341140390493774" name="date_picker_scroll_to_later_years">"碌去顯示新啲嘅年份"</string>
+    <string msgid="9029369254443419167" name="date_picker_switch_to_calendar_mode">"切換至日曆輸入模式"</string>
+    <string msgid="145089358343568971" name="date_picker_switch_to_day_selection">"滑動可選取年分，或可輕按返回選取日期"</string>
+    <string msgid="1496750567914156598" name="date_picker_switch_to_input_mode">"切換至文字輸入模式"</string>
+    <string msgid="8313783187901412102" name="date_picker_switch_to_next_month">"變更至下個月"</string>
+    <string msgid="7596294429748914881" name="date_picker_switch_to_previous_month">"變更至上個月"</string>
+    <string msgid="3412370019845183965" name="date_picker_switch_to_year_selection">"切換為選取年份"</string>
+    <string msgid="9208721003668059792" name="date_picker_title">"選取日期"</string>
+    <string msgid="4775802721403526937" name="date_picker_today_description">"今天"</string>
+    <string msgid="8140324713311804736" name="date_picker_year_picker_pane_title">"顯示年分挑選器"</string>
+    <string msgid="1891592555781755601" name="date_range_input_invalid_range_input">"輸入的日期範圍無效"</string>
+    <string msgid="2366412111888449406" name="date_range_input_title">"輸入日期"</string>
+    <string msgid="9048690781645835833" name="date_range_picker_day_in_range">"在指定日期範圍內"</string>
+    <string msgid="4766270708882012148" name="date_range_picker_end_headline">"結束日期"</string>
+    <string msgid="51495506931835470" name="date_range_picker_scroll_to_next_month">"碌去顯示下一個月"</string>
+    <string msgid="4371570854614540700" name="date_range_picker_scroll_to_previous_month">"碌去顯示上一個月"</string>
+    <string msgid="5759491386723090559" name="date_range_picker_start_headline">"開始日期"</string>
+    <string msgid="690080476639943577" name="date_range_picker_title">"選取日期"</string>
+    <string msgid="8038256446254964252" name="default_error_message">"輸入嘅資料無效"</string>
+    <string msgid="6312721426453364202" name="default_popup_window_title">"彈出式視窗"</string>
+    <string msgid="4057925834421392736" name="dialog">"對話框"</string>
+    <string msgid="1890207353314751437" name="dropdown_menu">"下拉式選單"</string>
+    <string name="error_icon_content_description">錯誤</string>
+    <string msgid="5974471714631304645" name="expanded">"展開咗"</string>
+    <string name="exposed_dropdown_menu_content_description">顯示下拉式選單</string>
+    <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"複製連結"</string>
+    <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"在瀏覽器中開啟"</string>
+    <string msgid="7145444925855055364" name="fallback_menu_item_share_link">"分享連結"</string>
+    <string name="fui_accessibility_logo">應用程式標誌</string>
+    <string name="fui_auto_verified">已自動驗證電話號碼</string>
+    <string name="fui_button_text_save">儲存</string>
+    <string name="fui_button_text_send">傳送</string>
+    <string name="fui_confirm_recovery_body">請依照傳送至 %1$s 的操作說明，重新取得密碼。</string>
+    <string name="fui_continue">繼續</string>
+    <string name="fui_country_hint">國家/地區</string>
+    <string name="fui_email_account_creation_error">電子郵件帳戶註冊失敗</string>
+    <string name="fui_email_hint">電子郵件</string>
+    <string name="fui_email_link_confirm_email_header">確認電子郵件地址</string>
+    <string name="fui_email_link_confirm_email_message">如要繼續登入，請確認電子郵件地址</string>
+    <string name="fui_email_link_cross_device_linking_text">您原先想將 %1$s 連結至您的電子郵件帳戶，卻在另一部未登入帳戶的裝置上開啟了連結。\n\n如果您仍想連結您的 %1$s 帳戶，請在開始登入程序的同一部裝置上開啟連結。如不想連結帳戶，請輕觸 [繼續] 以在這部裝置上進行登入程序。</string>
+    <string name="fui_email_link_different_anonymous_user_header">工作階段已結束</string>
+    <string name="fui_email_link_different_anonymous_user_message">與這項登入要求相關的工作階段已過期或遭到清除。</string>
+    <string name="fui_email_link_dismiss_button">關閉</string>
+    <string name="fui_email_link_email_sent">系統已將內含額外操作說明的登入電子郵件傳送至 %1$s。請查看您的電子郵件以完成登入程序。</string>
+    <string name="fui_email_link_header">已送出登入電子郵件\n</string>
+    <string name="fui_email_link_invalid_link_header">無法完成登入程序</string>
+    <string name="fui_email_link_invalid_link_message">操作代碼無效。如果代碼已過期、已使用或格式不正確，就有可能發生這種情況。</string>
+    <string name="fui_email_link_resend">重新傳送</string>
+    <string name="fui_email_link_trouble_getting_email_header">沒收到電子郵件嗎？</string>
+    <string name="fui_email_link_trouble_getting_possible_fixes">請試試下列常用的解決方式：\n\u2022檢查該封電子郵件是否被標示為垃圾郵件或已遭系統篩除。\n\u2022檢查您的網際網路連線狀態。\n\u2022檢查電子郵件地址是否拼寫錯誤。\n\u2022確認收件匣的儲存空間是否足夠，或檢查其他與收件匣設定相關的問題。\n</string>
+    <string name="fui_email_link_wrong_device_header">偵測到新的裝置或瀏覽器。</string>
+    <string name="fui_email_link_wrong_device_message">請透過最初登入時使用的裝置或瀏覽器來開啟連結。</string>
+    <string name="fui_enter_confirmation_code">請輸入傳送至以下電話號碼的 6 位數驗證碼</string>
+    <string name="fui_error_email_does_not_exist">找不到與這個電子郵件地址相符的帳戶</string>
+    <string name="fui_error_invalid_password">密碼不正確。</string>
+    <string name="fui_error_quota_exceeded">驗證電話號碼時發生問題</string>
+    <string name="fui_error_session_expired">這個代碼已經失效</string>
+    <string name="fui_error_too_many_attempts">使用這個電話號碼的次數過多</string>
+    <string name="fui_error_unknown">發生不明錯誤。</string>
+    <string name="fui_idp_name_email">電子郵件</string>
+    <string name="fui_idp_name_facebook">Facebook</string>
+    <string name="fui_idp_name_github">GitHub</string>
+    <string name="fui_idp_name_google">Google</string>
+    <string name="fui_idp_name_phone">電話</string>
+    <string name="fui_idp_name_twitter">Twitter</string>
+    <string name="fui_incorrect_code_dialog_body">驗證碼錯誤，請再試一次。</string>
+    <string name="fui_invalid_email_address">電子郵件地址不正確</string>
+    <string name="fui_invalid_phone_number">請輸入有效的電話號碼</string>
+    <string name="fui_missing_email_address">如要繼續，請輸入您的電子郵件地址</string>
+    <string name="fui_missing_first_and_last_name">請輸入姓名。</string>
+    <string name="fui_name_hint">姓氏和名字</string>
+    <string name="fui_new_password_hint">新密碼</string>
+    <string name="fui_next_default">繼續</string>
+    <string name="fui_no_internet" translation_descripition="User message shown when sign-in is attempted while offline.">網路發生錯誤，請檢查您的網際網路連線。</string>
+    <string name="fui_password_hint">密碼</string>
+    <string name="fui_password_recovery_body">這個電子郵件會收到重設密碼的 操作說明。</string>
+    <string name="fui_phone_hint">電話號碼</string>
+    <string name="fui_privacy_policy">隱私權政策</string>
+    <string name="fui_progress_dialog_checking_accounts">正在檢查是否已有帳戶…</string>
+    <string name="fui_progress_dialog_loading">載入中…</string>
+    <string name="fui_progress_dialog_sending">傳送中…</string>
+    <string name="fui_progress_dialog_signing_in">登入中…</string>
+    <string name="fui_progress_dialog_signing_up">註冊中…</string>
+    <string name="fui_required_field">此欄位不可留空。</string>
+    <string name="fui_resend_code">重新傳送驗證碼</string>
+    <string name="fui_resend_code_in">0:%02d 秒後將重新發送驗證碼</string>
+    <string name="fui_sign_in_anonymously">繼續以訪客身分使用</string>
+    <string name="fui_sign_in_default">登入</string>
+    <string name="fui_sign_in_with_apple">使用 Apple 帳戶登入</string>
+    <string name="fui_sign_in_with_email">使用電子郵件地址登入</string>
+    <string name="fui_sign_in_with_facebook">使用 Facebook 帳戶登入</string>
+    <string name="fui_sign_in_with_github">使用 GitHub 登入</string>
+    <string name="fui_sign_in_with_google">使用 Google 帳戶登入</string>
+    <string name="fui_sign_in_with_microsoft">使用 Microsoft 帳戶登入</string>
+    <string name="fui_sign_in_with_phone">使用電話號碼登入</string>
+    <string name="fui_sign_in_with_phone_number">使用電話號碼登入</string>
+    <string name="fui_sign_in_with_twitter">使用 Twitter 帳戶登入</string>
+    <string name="fui_sign_in_with_yahoo">使用 Yahoo 帳戶登入</string>
+    <string name="fui_sms_terms_of_service">輕觸 [%1$s] 後，系統將會傳送一封簡訊。您可能需支付簡訊和數據傳輸費用。</string>
+    <string name="fui_sms_terms_of_service_and_privacy_policy_extended">輕觸 [%1$s] 即表示您同意接受我們的《%2$s》和《%3$s》。系統將會傳送簡訊給您，不過您可能需要支付簡訊和數據傳輸費用。</string>
+    <string name="fui_terms_of_service">服務條款</string>
+    <string name="fui_title_confirm_recover_password">請查看您的電子郵件信箱</string>
+    <string name="fui_title_recover_password_activity">重新取得密碼</string>
+    <string name="fui_title_register_email">註冊</string>
+    <string name="fui_tos_and_pp">選擇繼續即表示您同意接受我們的《%1$s》和《%2$s》。</string>
+    <string name="fui_tos_and_pp_footer">%1$s \u00A0 \u00A0 %2$s</string>
+    <string name="fui_trouble_signing_in">無法登入嗎？</string>
+    <string name="fui_verify_phone_number">驗證電話號碼</string>
+    <string name="fui_verify_phone_number_title">請輸入您的電話號碼</string>
+    <string name="fui_verify_your_phone_title">驗證您的電話號碼</string>
+    <string name="fui_verifying">驗證中…</string>
+    <string name="fui_welcome_back_email_header">歡迎回來！</string>
+    <string name="fui_welcome_back_email_link_header">您已經有帳戶了\n</string>
+    <string name="fui_welcome_back_email_link_prompt_body">您已經使用過 %1$s。只要使用下方的電子郵件連結登入，即可將您的 %2$s 帳戶連結至 %1$s。\n\n如要順利將您的 %2$s 帳戶連結至這個電子郵件，請透過登入時使用的裝置或瀏覽器來開啟連結。</string>
+    <string name="fui_welcome_back_idp_header">您已經有帳戶</string>
+    <string name="fui_welcome_back_idp_prompt">目前您用於登入的帳戶是 %1$s。 如要繼續，請使用 %2$s 帳戶登入。</string>
+    <string name="fui_welcome_back_password_prompt_body">您已使用 %1$s 登入。請輸入這個帳戶的密碼。</string>
+    <string name="icon_content_description">對話框圖示</string>
+    <string msgid="6827826412747255547" name="in_progress">"進行中"</string>
+    <string msgid="7933458017204019916" name="indeterminate">"部分剔咗"</string>
+    <string name="item_view_role_description">分頁</string>
+    <string name="material_clock_toggle_content_description">選擇上午或下午</string>
+    <string name="material_hour_24h_suffix">%1$s 個鐘</string>
+    <string name="material_hour_selection">選取時段</string>
+    <string name="material_hour_suffix">%1$s 點</string>
+    <string name="material_minute_selection">選取分鐘</string>
+    <string name="material_minute_suffix">%1$s 分</string>
+    <string name="material_timepicker_am">AM</string>
+    <string name="material_timepicker_clock_mode_description">切換至時鐘模式即可輸入時間。</string>
+    <string name="material_timepicker_hour">小時</string>
+    <string name="material_timepicker_minute">分鐘</string>
+    <string name="material_timepicker_pm">PM</string>
+    <string name="material_timepicker_select_time">選取時間</string>
+    <string name="material_timepicker_text_input_mode_description">切換至文字輸入模式即可輸入時間。</string>
+    <string name="mtrl_badge_numberless_content_description">新通知</string>
+    <string name="mtrl_chip_close_icon_content_description">移除「%1$s」</string>
+    <string name="mtrl_exceed_max_badge_number_content_description" ns2:ignore="PluralsCandidate">超過 %1$d 則新通知</string>
+    <string name="mtrl_picker_a11y_next_month">變更為下個月</string>
+    <string name="mtrl_picker_a11y_prev_month">變更為上個月</string>
+    <string name="mtrl_picker_announce_current_selection">目前選取：%1$s</string>
+    <string name="mtrl_picker_cancel">取消</string>
+    <string name="mtrl_picker_confirm">確定</string>
+    <string name="mtrl_picker_date_header_selected">%1$s</string>
+    <string name="mtrl_picker_date_header_title">請選擇日期</string>
+    <string name="mtrl_picker_date_header_unselected">已選取日期</string>
+    <string name="mtrl_picker_day_of_week_column_header">日期欄：%1$s</string>
+    <string name="mtrl_picker_invalid_format">格式無效。</string>
+    <string name="mtrl_picker_invalid_format_example">例如：%1$s</string>
+    <string name="mtrl_picker_invalid_format_use">使用：%1$s</string>
+    <string name="mtrl_picker_invalid_range">範圍無效。</string>
+    <string name="mtrl_picker_navigate_to_year_description">瀏覽至 %1$s 年</string>
+    <string name="mtrl_picker_out_of_range">超出範圍：%1$s</string>
+    <string name="mtrl_picker_range_header_only_end_selected">開始日期 – %1$s</string>
+    <string name="mtrl_picker_range_header_only_start_selected">%1$s – 結束日期</string>
+    <string name="mtrl_picker_range_header_selected">%1$s – %2$s</string>
+    <string name="mtrl_picker_range_header_title">請選擇範圍</string>
+    <string name="mtrl_picker_range_header_unselected">開始日期 – 結束日期</string>
+    <string name="mtrl_picker_save">儲存</string>
+    <string name="mtrl_picker_text_input_date_hint">日期</string>
+    <string name="mtrl_picker_text_input_date_range_end_hint">結束日期</string>
+    <string name="mtrl_picker_text_input_date_range_start_hint">開始日期</string>
+    <string name="mtrl_picker_text_input_day_abbr">日</string>
+    <string name="mtrl_picker_text_input_month_abbr">月</string>
+    <string name="mtrl_picker_text_input_year_abbr">年</string>
+    <string name="mtrl_picker_toggle_to_calendar_input_mode">切換至日曆輸入模式</string>
+    <string name="mtrl_picker_toggle_to_day_selection">輕按以切換至選擇日期</string>
+    <string name="mtrl_picker_toggle_to_text_input_mode">切換至文字輸入模式</string>
+    <string name="mtrl_picker_toggle_to_year_selection">輕按以切換至選擇年份</string>
+    <string name="mtrl_timepicker_cancel">取消</string>
+    <string name="mtrl_timepicker_confirm">確定</string>
+    <string msgid="6301633601645100427" name="nav_app_bar_navigate_up_description">"向上導覽"</string>
+    <string msgid="7456070600745802113" name="nav_app_bar_open_drawer_description">"開啟導覽列"</string>
+    <string msgid="542007171693138492" name="navigation_menu">"導覽選單"</string>
+    <string msgid="6610465462668679431" name="not_selected">"未揀"</string>
+    <string msgid="875452955155264703" name="off">"閂"</string>
+    <string msgid="8655164131929253426" name="on">"開"</string>
+    <string name="password_toggle_content_description">顯示密碼</string>
+    <string msgid="5941395253238309765" name="range_end">"範圍結束"</string>
+    <string msgid="7097486360902471446" name="range_start">"範圍開始"</string>
+    <string msgid="6420018528474762666" name="search_bar_search">"搵"</string>
+    <string msgid="6264217191555673260" name="search_menu_title">"搜尋"</string>
+    <string msgid="6043586758067023" name="selected">"揀咗"</string>
+    <string msgid="3962933905051144957" name="snackbar_dismiss">"閂"</string>
+    <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
+    <string msgid="7189888345201419934" name="suggestions_available">"建議如下"</string>
+    <string msgid="2561197295334830845" name="switch_role">"按鈕裝置"</string>
+    <string msgid="1672349317127674378" name="tab">"分頁"</string>
+    <string msgid="5946805113151406391" name="template_percent">"百分之 <ns1:g id="PERCENTAGE">%1$d</ns1:g>。"</string>
+    <string msgid="5096144640014509074" name="time_picker_am">"上午"</string>
+    <string msgid="7241191970823415723" name="time_picker_hour">"小時"</string>
+    <string msgid="4149641012513526783" name="time_picker_hour_24h_suffix">"%1$d 點"</string>
+    <string msgid="6081676287789101196" name="time_picker_hour_selection">"選取小時"</string>
+    <string msgid="6952032626122080528" name="time_picker_hour_suffix">"%1$d 點"</string>
+    <string msgid="5298761125390275834" name="time_picker_hour_text_field">"小時"</string>
+    <string msgid="6116528647594005945" name="time_picker_minute">"分鐘"</string>
+    <string msgid="8494777394375441602" name="time_picker_minute_selection">"選取分鐘"</string>
+    <string msgid="3206486707779478173" name="time_picker_minute_suffix">"%1$d 分鐘"</string>
+    <string msgid="994099543833979061" name="time_picker_minute_text_field">"分鐘"</string>
+    <string msgid="7352665290700284516" name="time_picker_period_toggle_description">"選取上午或下午"</string>
+    <string msgid="2232702812657998674" name="time_picker_pm">"下午"</string>
+    <string msgid="2732804537909054941" name="tooltip_long_press_label">"顯示提示"</string>
+    <string msgid="8191239805703103845" name="tooltip_pane_description">"提示"</string>
+</resources>

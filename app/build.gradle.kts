@@ -168,7 +168,7 @@ dependencies {
     implementation(project(":core:common-android"))
     implementation(project(":core:designsystem"))
 
-    implementation(project(":incomeexpense"))
+    implementation(project(":incomeexpense:incomeexpense-ui"))
     implementation(project(":statistics:statistics-ui"))
     implementation(project(":currency:currency-ui"))
     implementation(project(":profile:profile-ui"))
