@@ -25,8 +25,6 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
-    implementation(project(":transaction:transaction-data:transaction-data-model"))
-    implementation(project(":transaction:transaction-data:transaction-data-contract"))
     implementation(project(":transaction:transaction-domain:transaction-domain-model"))
     implementation(project(":transaction:transaction-domain:transaction-domain-model"))
     implementation(project(":category:category-domain:category-domain-model"))

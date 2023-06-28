@@ -1,8 +1,8 @@
-package com.d9tilov.android.regular.transaction.data.contract
+package com.d9tilov.android.regular.transaction.domain.contract
 
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.core.model.TransactionType
-import com.d9tilov.android.regular.transaction.data.model.RegularTransactionData
+import com.d9tilov.android.regular.transaction.domain.model.RegularTransactionData
 import kotlinx.coroutines.flow.Flow
 
 interface RegularTransactionRepo {

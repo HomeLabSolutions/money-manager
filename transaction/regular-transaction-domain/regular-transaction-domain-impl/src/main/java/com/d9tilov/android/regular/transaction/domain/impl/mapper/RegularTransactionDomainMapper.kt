@@ -1,7 +1,7 @@
 package com.d9tilov.android.regular.transaction.domain.impl.mapper
 
 import com.d9tilov.android.category.domain.model.Category
-import com.d9tilov.android.regular.transaction.data.model.RegularTransactionData
+import com.d9tilov.android.regular.transaction.domain.model.RegularTransactionData
 import com.d9tilov.android.regular.transaction.domain.model.RegularTransaction
 
 fun RegularTransaction.toData(): RegularTransactionData =

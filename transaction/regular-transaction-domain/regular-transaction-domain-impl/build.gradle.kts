@@ -32,8 +32,6 @@ dependencies {
     implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
 
-    implementation(project(":transaction:regular-transaction-data:regular-transaction-data-model"))
-    implementation(project(":transaction:regular-transaction-data:regular-transaction-data-contract"))
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-contract"))
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-model"))
 
