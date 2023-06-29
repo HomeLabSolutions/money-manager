@@ -3,7 +3,6 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":core:common"))
     implementation(project(":budget:budget-domain:budget-domain-model"))
     implementation(project(":budget:budget-domain:budget-domain-contract"))
     
@@ -11,4 +10,5 @@ dependencies {
     implementation(project(":currency:currency-domain:currency-domain-contract"))
 
     implementation(libs.coroutinesCore)
+    implementation(libs.kotlinDatetime)
 }
