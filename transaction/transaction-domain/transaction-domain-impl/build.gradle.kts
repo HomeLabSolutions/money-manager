@@ -47,6 +47,4 @@ dependencies {
 
     implementation(libs.coroutinesCore)
     implementation(libs.paging)
-
-    testImplementation(libs.junit)
 }

@@ -62,7 +62,7 @@ dependencies {
     implementation(project(":billing:billing-domain:billing-domain-contract"))
     implementation(project(":billing:billing-di"))
 
-    implementation(libs.bundles.appCompat)
+    implementation(libs.appCompat)
     implementation(libs.material)
     implementation(libs.paging)
 

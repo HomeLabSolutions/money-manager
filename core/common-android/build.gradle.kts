@@ -38,7 +38,7 @@ dependencies {
 
     api(libs.fragment)
     implementation(libs.paging)
-    implementation(libs.bundles.appCompat)
+    implementation(libs.appCompat)
     implementation(libs.material)
     implementation(libs.lifecycleViewModel)
     implementation(libs.lifecycleRuntime)

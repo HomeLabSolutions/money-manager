@@ -29,7 +29,7 @@ android {
 dependencies {
     implementation(project(":core:common"))
 
-    implementation(libs.bundles.room)
+    implementation(libs.room)
     implementation(libs.roomPaging)
     kapt(libs.roomCompiler)
 

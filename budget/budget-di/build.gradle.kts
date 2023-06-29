@@ -42,5 +42,5 @@ dependencies {
     
     kapt(libs.hiltAndroidCompiler)
 
-    implementation(libs.bundles.room)
+    implementation(libs.room)
 }

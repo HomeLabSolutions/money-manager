@@ -26,7 +26,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:network"))
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
     implementation(project(":transaction:regular-transaction-data:regular-transaction-data-contract"))
@@ -36,11 +35,9 @@ dependencies {
     implementation(project(":currency:currency-domain:currency-domain-contract"))
     implementation(project(":category:category-domain:category-domain-contract"))
 
-    implementation(libs.bundles.retrofit)
-
     implementation(libs.hilt)
     
     kapt(libs.hiltAndroidCompiler)
 
-    implementation(libs.bundles.room)
+    implementation(libs.room)
 }
