@@ -51,7 +51,6 @@ dependencies {
     implementation(project(":billing:billing-domain:billing-domain-model"))
     implementation(project(":billing:billing-domain:billing-domain-contract"))
 
-    implementation(project(":backup:backup-domain:backup-domain-model"))
     implementation(project(":backup:backup-domain:backup-domain-contract"))
 
     implementation(project(":user-info:user-domain:user-domain-model"))
