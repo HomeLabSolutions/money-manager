@@ -29,7 +29,6 @@ dependencies {
     implementation(project(":core:datastore"))
 
     implementation(libs.hilt)
-    kapt(libs.hiltCompiler)
     kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.firebaseAnalytics)

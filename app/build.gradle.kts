@@ -177,12 +177,10 @@ dependencies {
     implementation(project(":billing:billing-domain:billing-domain-contract"))
 
     implementation(project(":transaction:transaction-domain:transaction-domain-contract"))
-    implementation(project(":transaction:transaction-domain:transaction-domain-model"))
 
-    implementation(libs.bundles.appCompat)
+    implementation(libs.appCompat)
 
     implementation(libs.firebase)
-    implementation(libs.firebaseUi)
     implementation(libs.googlePlayServicesAuth)
     implementation(libs.firebaseAnalytics)
     implementation(platform(libs.firebaseBom))
@@ -191,16 +189,16 @@ dependencies {
     implementation(libs.firebaseConfig)
 
     implementation(libs.hilt)
-    kapt(libs.hiltCompiler)
     kapt(libs.hiltAndroidCompiler)
 
-    implementation(libs.bundles.navigation)
+    implementation(libs.navigation)
+    implementation(libs.navigationUi)
 
     implementation(libs.glide)
     kapt(libs.glideCompiler)
 
-    implementation(libs.bundles.compose)
-    implementation(libs.bundles.composeMaterial3)
+    implementation(libs.composeMaterial3)
+    implementation(libs.composeFoundation)
 
     implementation(libs.timber)
 }
