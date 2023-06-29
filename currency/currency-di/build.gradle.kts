@@ -37,11 +37,8 @@ dependencies {
     implementation(project(":currency:currency-observer:currency-observer-impl"))
     implementation(project(":budget:budget-domain:budget-domain-contract"))
 
-    implementation(libs.bundles.retrofit)
+    implementation(libs.retrofit)
 
     implementation(libs.hilt)
-    
     kapt(libs.hiltAndroidCompiler)
-
-    implementation(libs.room)
 }

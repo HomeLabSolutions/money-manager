@@ -45,8 +45,6 @@ dependencies {
     implementation(libs.okHttp)
     implementation(libs.okHttpInterceptor)
 
-    implementation(libs.coroutinesCore)
-
     implementation(libs.timber)
 
     implementation(libs.hilt)
