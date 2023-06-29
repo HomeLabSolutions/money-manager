@@ -40,13 +40,10 @@ dependencies {
     implementation(libs.paging)
     implementation(libs.appCompat)
     implementation(libs.material)
-    implementation(libs.lifecycleViewModel)
     implementation(libs.lifecycleRuntime)
 
     implementation(libs.coroutinesCore)
 
     implementation(libs.kotlinJdk)
     implementation(libs.core)
-    implementation(libs.coreRuntime)
-    implementation(libs.constraintLayout)
 }

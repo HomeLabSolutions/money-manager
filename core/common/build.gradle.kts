@@ -5,5 +5,4 @@ plugins {
 dependencies {
 
     api(libs.kotlinDatetime)
-    implementation(libs.coroutinesCore)
 }
