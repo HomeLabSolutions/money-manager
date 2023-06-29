@@ -66,6 +66,6 @@ dependencies {
     implementation(libs.material)
 
     implementation(libs.hilt)
-    kapt(libs.hiltCompiler)
+    
     kapt(libs.hiltAndroidCompiler)
 }

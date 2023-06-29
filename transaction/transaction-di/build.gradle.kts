@@ -49,7 +49,7 @@ dependencies {
     implementation(project(":budget:budget-domain:budget-domain-contract"))
 
     implementation(libs.hilt)
-    kapt(libs.hiltCompiler)
+    
     kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.bundles.room)

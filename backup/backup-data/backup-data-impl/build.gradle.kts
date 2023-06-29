@@ -33,6 +33,7 @@ dependencies {
 
     implementation(project(":backup:backup-data:backup-data-contract"))
     implementation(project(":backup:backup-domain:backup-domain-contract"))
+    implementation(project(":backup:backup-domain:backup-domain-model"))
 
     implementation(libs.coroutinesCore)
     implementation (libs.timber)

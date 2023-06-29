@@ -28,7 +28,7 @@ dependencies {
     implementation(project(":core:common"))
 
     implementation(libs.hilt)
-    kapt(libs.hiltCompiler)
+    
     kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.datastore)

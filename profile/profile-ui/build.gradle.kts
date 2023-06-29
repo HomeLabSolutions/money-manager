@@ -87,7 +87,7 @@ dependencies {
 
     implementation(libs.hilt)
     implementation(libs.hiltNavigationCompose)
-    kapt(libs.hiltCompiler)
+    
     kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.firebaseAnalytics)

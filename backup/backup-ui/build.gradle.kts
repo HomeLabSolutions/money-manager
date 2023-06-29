@@ -39,7 +39,7 @@ dependencies {
     implementation(libs.bundles.navigation)
 
     implementation(libs.hilt)
-    kapt(libs.hiltCompiler)
+    
     kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.lifecycleViewModel)

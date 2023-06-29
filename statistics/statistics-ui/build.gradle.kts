@@ -68,7 +68,7 @@ dependencies {
     kapt(libs.glideCompiler)
 
     implementation(libs.hilt)
-    kapt(libs.hiltCompiler)
+    
     kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.androidChart)

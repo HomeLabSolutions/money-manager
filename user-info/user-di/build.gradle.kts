@@ -36,7 +36,7 @@ dependencies {
     implementation(libs.bundles.retrofit)
 
     implementation(libs.hilt)
-    kapt(libs.hiltCompiler)
+    
     kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.bundles.room)
