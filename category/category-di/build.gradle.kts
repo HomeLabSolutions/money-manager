@@ -34,10 +34,8 @@ dependencies {
     implementation(project(":category:category-data:category-data-impl"))
     implementation(project(":category:category-domain:category-domain-contract"))
     implementation(project(":category:category-domain:category-domain-impl"))
-    implementation(project(":currency:currency-domain:currency-domain-contract"))
 
     implementation(libs.hilt)
-    
     kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.room)

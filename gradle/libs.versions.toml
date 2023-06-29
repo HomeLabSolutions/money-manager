@@ -4,6 +4,7 @@ kotlin = "1.7.20"
 kotlinDatetime = "0.4.0"
 appCompat = "1.6.1"
 material = "1.9.0"
+androidAnnotation = "1.6.0"
 core = "1.10.1"
 coreRuntime = "2.2.0"
 constraintLayout = "2.1.4"
@@ -55,6 +56,7 @@ kotlinJdk = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk7", versi
 kotlinDatetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinDatetime" }
 appCompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appCompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidAnnotation = { group = "androidx.annotation", name = "annotation", version.ref = "androidAnnotation" }
 core = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
 coreRuntime = { group = "androidx.arch.core", name = "core-runtime", version.ref = "coreRuntime" }
 constraintLayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintLayout" }

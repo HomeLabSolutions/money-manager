@@ -25,8 +25,6 @@ android {
 
 dependencies {
 
-    implementation(project(":billing:billing-domain:billing-domain-model"))
-
     implementation(libs.coroutinesCore)
     implementation(libs.billing)
 }

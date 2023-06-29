@@ -63,13 +63,13 @@ dependencies {
     implementation(libs.glide)
     kapt(libs.glideCompiler)
 
-    implementation(libs.bundles.navigation)
+    implementation(libs.navigation)
+    implementation(libs.navigationUi)
 
     implementation(libs.material)
     implementation(libs.constraintLayout)
 
     implementation(libs.hilt)
-    
     kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.firebaseAnalytics)

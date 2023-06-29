@@ -43,8 +43,12 @@ dependencies {
 
     implementation(libs.constraintLayout)
 
-    implementation(libs.bundles.compose)
-    implementation(libs.bundles.composeMaterial3)
+    implementation(libs.composeUi)
+    implementation(libs.composeToolingPreview)
+    implementation(libs.composeMaterial)
+    implementation(libs.composeUiTestManifest)
+
+    implementation(libs.composeMaterial3)
     implementation(libs.composeViewModel)
     implementation(libs.composeRuntime)
 

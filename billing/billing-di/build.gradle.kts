@@ -34,8 +34,5 @@ dependencies {
     implementation(project(":billing:billing-domain:billing-domain-impl"))
 
     implementation(libs.hilt)
-    
     kapt(libs.hiltAndroidCompiler)
-
-    implementation(libs.room)
 }
