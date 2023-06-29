@@ -56,13 +56,13 @@ dependencies {
 
     implementation(libs.glide)
     kapt(libs.glideCompiler)
-    implementation(libs.bundles.navigation)
+    implementation(libs.navigation)
 
     implementation(libs.firebaseAnalytics)
     implementation(platform(libs.firebaseBom))
 
     implementation(libs.paging)
-    implementation(libs.bundles.appCompat)
+    implementation(libs.appCompat)
     implementation(libs.material)
 
     implementation(libs.hilt)

@@ -33,11 +33,9 @@ dependencies {
     implementation(project(":user-info:user-domain:user-domain-contract"))
     implementation(project(":user-info:user-domain:user-domain-impl"))
 
-    implementation(libs.bundles.retrofit)
-
     implementation(libs.hilt)
     
     kapt(libs.hiltAndroidCompiler)
 
-    implementation(libs.bundles.room)
+    implementation(libs.room)
 }
