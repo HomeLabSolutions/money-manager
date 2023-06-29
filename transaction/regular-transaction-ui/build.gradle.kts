@@ -61,6 +61,6 @@ dependencies {
     implementation(libs.kotlinJdk)
 
     implementation(libs.hilt)
-    kapt(libs.hiltCompiler)
+    
     kapt(libs.hiltAndroidCompiler)
 }

@@ -52,6 +52,7 @@ dependencies {
     implementation(project(":billing:billing-domain:billing-domain-contract"))
 
     implementation(project(":backup:backup-domain:backup-domain-contract"))
+    implementation(project(":backup:backup-domain:backup-domain-model"))
 
     implementation(project(":user-info:user-domain:user-domain-model"))
     implementation(project(":user-info:user-domain:user-domain-contract"))
@@ -72,7 +73,7 @@ dependencies {
 
     implementation(libs.hilt)
     implementation(libs.hiltNavigationCompose)
-    kapt(libs.hiltCompiler)
+    
     kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.glide)

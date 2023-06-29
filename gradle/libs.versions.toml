@@ -14,7 +14,6 @@ googlePlayServicesAuth = "20.5.0"
 navigation = "2.6.0"
 hilt = "2.46.1"
 hiltNavigationCompose = "1.0.0"
-hiltCompiler = "1.0.0"
 glide = "4.15.1"
 coil = "2.4.0"
 room = "2.5.1"
@@ -36,7 +35,6 @@ composeMaterial3 = "1.1.0"
 composeActivity = "1.7.2"
 composeViewModel = "2.6.1"
 composeRuntime = "2.6.1"
-composeExtension = "1.3.2"
 worker = "2.8.1"
 workerHilt = "1.0.0"
 klaxon = "5.6"
@@ -119,7 +117,6 @@ androidChart = { group = "com.github.PhilJay", name = "MPAndroidChart", version.
 dotsIndicator = { group = "com.tbuonomo", name = "dotsindicator", version.ref = "dotsIndicator" }
 billing = { group = "com.android.billingclient", name = "billing-ktx", version.ref = "billing" }
 hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
-hiltCompiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltCompiler" }
 hiltAndroidCompiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hiltNavigationCompose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 splashScreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashScreen" }
@@ -129,7 +126,7 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 [bundles]
 compose = [
     "composeUi", "composeToolingPreview", "composeFoundation",
-    "composeMaterial", "composeMaterialIconsCore", "composeMaterialIconsCore", "composeMaterialIconsExtended",
+    "composeMaterial", "composeMaterialIconsCore", "composeMaterialIconsExtended",
     "composeLiveData", "composeUiTestManifest"]
 appCompat = ["appCompat", "appCompatResources"]
 composeMaterial3 = ["composeMaterial3", "composeMaterial3WindowSize"]

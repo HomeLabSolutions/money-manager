@@ -69,7 +69,7 @@ dependencies {
     implementation(libs.constraintLayout)
 
     implementation(libs.hilt)
-    kapt(libs.hiltCompiler)
+    
     kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.firebaseAnalytics)

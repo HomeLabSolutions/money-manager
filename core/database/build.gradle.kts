@@ -36,6 +36,6 @@ dependencies {
     implementation(libs.coroutinesCore)
 
     implementation(libs.hilt)
-    kapt(libs.hiltCompiler)
+    
     kapt(libs.hiltAndroidCompiler)
 }

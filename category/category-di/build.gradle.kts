@@ -37,7 +37,7 @@ dependencies {
     implementation(project(":currency:currency-domain:currency-domain-contract"))
 
     implementation(libs.hilt)
-    kapt(libs.hiltCompiler)
+    
     kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.bundles.room)
