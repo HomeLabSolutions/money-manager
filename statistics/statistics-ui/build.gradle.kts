@@ -58,11 +58,12 @@ dependencies {
     implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
 
-    implementation(libs.bundles.appCompat)
+    implementation(libs.appCompat)
     implementation(libs.material)
     implementation(libs.constraintLayout)
 
-    implementation(libs.bundles.navigation)
+    implementation(libs.navigation)
+    implementation(libs.navigationCompose)
 
     implementation(libs.glide)
     kapt(libs.glideCompiler)

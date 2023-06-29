@@ -54,7 +54,6 @@ junit = "4.13.2"
 kotlinJdk = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk7", version.ref = "kotlin" }
 kotlinDatetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinDatetime" }
 appCompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appCompat" }
-appCompatResources = { group = "androidx.appcompat", name = "appcompat-resources", version.ref = "appCompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 core = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
 coreRuntime = { group = "androidx.arch.core", name = "core-runtime", version.ref = "coreRuntime" }
@@ -66,7 +65,6 @@ coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofitMoshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
 room = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
-roomRuntime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 roomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 roomPaging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 paging = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "paging" }
@@ -128,9 +126,8 @@ compose = [
     "composeUi", "composeToolingPreview", "composeFoundation",
     "composeMaterial", "composeMaterialIconsCore", "composeMaterialIconsExtended",
     "composeLiveData", "composeUiTestManifest"]
-appCompat = ["appCompat", "appCompatResources"]
 composeMaterial3 = ["composeMaterial3", "composeMaterial3WindowSize"]
-room = ["room", "roomRuntime"]
+room = ["room"]
 pagination = ["roomPaging", "paging"]
 retrofit = ["retrofit", "retrofitMoshi"]
 navigation = ["navigation", "navigationUi", "navigationCompose", "hiltNavigationCompose"]

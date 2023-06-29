@@ -54,7 +54,7 @@ dependencies {
 
     implementation(project(":category:category-domain:category-domain-contract"))
 
-    implementation(libs.bundles.appCompat)
+    implementation(libs.appCompat)
     implementation(libs.bundles.navigation)
 
     implementation(libs.hilt)
