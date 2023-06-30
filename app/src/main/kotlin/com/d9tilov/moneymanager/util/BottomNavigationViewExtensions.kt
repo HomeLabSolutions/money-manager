@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.util // ktlint-disable filename
+package com.d9tilov.moneymanager.util
 
 import android.content.Intent
 import android.util.SparseArray
@@ -16,11 +16,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
  *
  * This sample is a workaround until the Navigation Component supports multiple back stacks.
  */
+@Suppress("filename")
 fun BottomNavigationView.setupWithNavController(
     navGraphIds: List<Int>,
     fragmentManager: FragmentManager,
     containerId: Int,
-    intent: Intent
+    intent: Intent,
 ): LiveData<NavController> {
     // Map of tags
     val graphIdToTagMap = SparseArray<String>()
@@ -38,7 +39,7 @@ fun BottomNavigationView.setupWithNavController(
             fragmentManager,
             fragmentTag,
             navGraphId,
-            containerId
+            containerId,
         )
 
         // Obtain its id
@@ -77,7 +78,7 @@ fun BottomNavigationView.setupWithNavController(
                 // Pop everything above the first fragment (the "fixed start destination")
                 fragmentManager.popBackStack(
                     firstFragmentTag,
-                    FragmentManager.POP_BACK_STACK_INCLUSIVE
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE,
                 )
                 val selectedFragment = fragmentManager.findFragmentByTag(newlySelectedItemTag)
                     as NavHostFragment
@@ -91,7 +92,7 @@ fun BottomNavigationView.setupWithNavController(
                             R.anim.nav_default_enter_anim,
                             R.anim.nav_default_exit_anim,
                             R.anim.nav_default_pop_enter_anim,
-                            R.anim.nav_default_pop_exit_anim
+                            R.anim.nav_default_pop_exit_anim,
                         )
                         .attach(selectedFragment)
                         .setPrimaryNavigationFragment(selectedFragment)
@@ -144,7 +145,7 @@ private fun BottomNavigationView.setupDeepLinks(
     navGraphIds: List<Int>,
     fragmentManager: FragmentManager,
     containerId: Int,
-    intent: Intent
+    intent: Intent,
 ) {
     navGraphIds.forEachIndexed { index, navGraphId ->
         val fragmentTag = getFragmentTag(index)
@@ -154,7 +155,7 @@ private fun BottomNavigationView.setupDeepLinks(
             fragmentManager,
             fragmentTag,
             navGraphId,
-            containerId
+            containerId,
         )
         // Handle Intent
         if (navHostFragment.navController.handleDeepLink(intent) && selectedItemId != navHostFragment.navController.graph.id
@@ -166,7 +167,7 @@ private fun BottomNavigationView.setupDeepLinks(
 
 private fun BottomNavigationView.setupItemReselected(
     graphIdToTagMap: SparseArray<String>,
-    fragmentManager: FragmentManager
+    fragmentManager: FragmentManager,
 ) {
     setOnItemReselectedListener { item ->
         val newlySelectedItemTag = graphIdToTagMap[item.itemId]
@@ -180,7 +181,7 @@ private fun BottomNavigationView.setupItemReselected(
 
 private fun detachNavHostFragment(
     fragmentManager: FragmentManager,
-    navHostFragment: NavHostFragment
+    navHostFragment: NavHostFragment,
 ) {
     fragmentManager.beginTransaction()
         .detach(navHostFragment)
@@ -190,7 +191,7 @@ private fun detachNavHostFragment(
 private fun attachNavHostFragment(
     fragmentManager: FragmentManager,
     navHostFragment: NavHostFragment,
-    isPrimaryNavFragment: Boolean
+    isPrimaryNavFragment: Boolean,
 ) {
     fragmentManager.beginTransaction()
         .attach(navHostFragment)
@@ -206,7 +207,7 @@ private fun obtainNavHostFragment(
     fragmentManager: FragmentManager,
     fragmentTag: String,
     navGraphId: Int,
-    containerId: Int
+    containerId: Int,
 ): NavHostFragment {
     // If the Nav Host fragment exists, return it
     val existingFragment = fragmentManager.findFragmentByTag(fragmentTag) as NavHostFragment?

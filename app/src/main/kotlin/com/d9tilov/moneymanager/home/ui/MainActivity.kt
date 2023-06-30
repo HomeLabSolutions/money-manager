@@ -38,7 +38,7 @@ class MainActivity :
         R.id.chart_dest,
         R.id.profile_dest,
         R.id.logout_dialog,
-        R.id.remove_transaction_dialog
+        R.id.remove_transaction_dialog,
     )
     private val viewModel by viewModels<MainViewModel>()
     override val navHostFragmentId = R.id.nav_host_container
@@ -69,21 +69,24 @@ class MainActivity :
         val navGraphIds = listOf(
             R.navigation.home_navigation,
             R.navigation.statistics_navigation,
-            R.navigation.profile_navigation
+            R.navigation.profile_navigation,
         )
         val controller = viewBinding?.bottomNav?.setupWithNavController(
             navGraphIds = navGraphIds,
             fragmentManager = supportFragmentManager,
             containerId = R.id.nav_host_container,
-            intent = intent
+            intent = intent,
         )
         // Whenever the selected controller changes, setup the action bar.
         controller?.observe(
-            this
+            this,
         ) { navController ->
             navController.addOnDestinationChangedListener { _, destination, _ ->
-                if (setOfShownBottomBar.contains(destination.id)) showBottomBarWithAnimation()
-                else viewBinding?.bottomNav?.gone()
+                if (setOfShownBottomBar.contains(destination.id)) {
+                    showBottomBarWithAnimation()
+                } else {
+                    viewBinding?.bottomNav?.gone()
+                }
             }
         }
         currentNavController = controller
@@ -119,7 +122,7 @@ class MainActivity :
                     bottomNav,
                     View.ALPHA,
                     ALPHA_BAR_MIN,
-                    ALPHA_BAR_MAX
+                    ALPHA_BAR_MAX,
                 ).apply {
                     duration = ANIMATION_DURATION_BAR
                     interpolator = AccelerateInterpolator()
