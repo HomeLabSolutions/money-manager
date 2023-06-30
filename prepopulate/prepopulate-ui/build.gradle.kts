@@ -35,7 +35,6 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
-    implementation(project(":core:designsystem"))
 
     implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
@@ -49,8 +48,14 @@ dependencies {
     implementation(project(":user-info:user-domain:user-domain-contract"))
     implementation(project(":user-info:user-di"))
 
-    implementation(libs.bundles.compose)
-    implementation(libs.bundles.composeMaterial3)
+    implementation(libs.composeUi)
+    implementation(libs.composeToolingPreview)
+    implementation(libs.composeFoundation)
+    implementation(libs.composeMaterialIconsCore)
+    implementation(libs.composeMaterialIconsExtended)
+    implementation(libs.composeUiTestManifest)
+    implementation(libs.composeMaterial3)
+
     implementation(libs.composeViewModel)
     implementation(libs.composeRuntime)
 

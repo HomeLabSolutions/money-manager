@@ -43,7 +43,6 @@ android {
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:network"))
-    implementation(project(":core:datastore"))
     implementation(project(":core:common-android"))
     implementation(project(":core:designsystem"))
 
@@ -61,10 +60,13 @@ dependencies {
     implementation(libs.appCompat)
     implementation(libs.material)
     implementation(libs.constraintLayout)
-    implementation(libs.bundles.navigation)
+    implementation(libs.navigation)
 
-    implementation(libs.bundles.compose)
-    implementation(libs.bundles.composeMaterial3)
+    implementation(libs.composeUi)
+    implementation(libs.composeToolingPreview)
+    implementation(libs.composeFoundation)
+    implementation(libs.composeUiTestManifest)
+    implementation(libs.composeMaterial3)
     implementation(libs.composeViewModel)
     implementation(libs.composeRuntime)
 
@@ -72,7 +74,6 @@ dependencies {
 
     implementation(libs.hilt)
     implementation(libs.hiltNavigationCompose)
-    
     kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.glide)
