@@ -72,8 +72,8 @@ dependencies {
 
     implementation(libs.timber)
 
-    implementation(libs.hilt)
     implementation(libs.hiltNavigationCompose)
+    implementation(libs.hilt)
     kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.glide)

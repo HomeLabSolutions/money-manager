@@ -33,7 +33,6 @@ dependencies {
     implementation(project(":backup:backup-domain:backup-domain-impl"))
 
     implementation(libs.hilt)
-    
     kapt(libs.hiltAndroidCompiler)
 
 }

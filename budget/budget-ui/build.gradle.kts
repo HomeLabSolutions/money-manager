@@ -52,8 +52,7 @@ dependencies {
     implementation(libs.composeViewModel)
     implementation(libs.composeRuntime)
 
-    implementation(libs.hilt)
     implementation(libs.hiltNavigationCompose)
-    
+    implementation(libs.hilt)
     kapt(libs.hiltAndroidCompiler)
 }
