@@ -58,6 +58,5 @@ dependencies {
     implementation(libs.kotlinJdk)
 
     implementation(libs.hilt)
-    
     kapt(libs.hiltAndroidCompiler)
 }

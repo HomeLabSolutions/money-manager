@@ -71,8 +71,6 @@ dependencies {
     implementation(libs.timber)
 
     implementation(libs.hilt)
-    implementation(libs.hiltNavigationCompose)
-    
     kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.firebaseAnalytics)

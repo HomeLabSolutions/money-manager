@@ -46,7 +46,6 @@ dependencies {
 
     implementation(project(":user-info:user-domain:user-domain-model"))
     implementation(project(":user-info:user-domain:user-domain-contract"))
-    implementation(project(":user-info:user-di"))
 
     implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
@@ -64,8 +63,6 @@ dependencies {
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-contract"))
     implementation(project(":transaction:regular-transaction-ui"))
 
-    implementation(project(":analytics:analytics-di"))
-
     implementation(project(":backup:backup-ui"))
     implementation(project(":settings:settings-ui"))
     implementation(project(":goals:goals-ui"))
@@ -78,10 +75,13 @@ dependencies {
     implementation(libs.composeConstraintLayout)
     implementation(libs.coil)
 
-    implementation(libs.bundles.navigation)
+    implementation(libs.composeUi)
+    implementation(libs.composeToolingPreview)
+    implementation(libs.composeFoundation)
+    implementation(libs.composeMaterial)
+    implementation(libs.composeUiTestManifest)
+    implementation(libs.composeMaterial3)
 
-    implementation(libs.bundles.composeMaterial3)
-    implementation(libs.bundles.compose)
     implementation(libs.composeViewModel)
     implementation(libs.composeRuntime)
 
