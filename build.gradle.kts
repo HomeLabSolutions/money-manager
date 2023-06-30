@@ -10,8 +10,8 @@ buildscript {
         classpath("com.google.gms:google-services:4.3.15")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.5.3")
         classpath("com.google.dagger:hilt-android-gradle-plugin:2.44.2")
-        classpath("com.google.firebase:firebase-crashlytics-gradle:2.9.5")
-        classpath("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.22.0")
+        classpath("com.google.firebase:firebase-crashlytics-gradle:2.9.6")
+        classpath("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.0")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20")
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
