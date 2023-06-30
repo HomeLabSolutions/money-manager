@@ -179,6 +179,7 @@ dependencies {
     implementation(project(":transaction:transaction-domain:transaction-domain-contract"))
 
     implementation(libs.appCompat)
+    implementation(libs.material)
 
     implementation(libs.firebase)
     implementation(libs.googlePlayServicesAuth)
@@ -192,7 +193,6 @@ dependencies {
     kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.navigation)
-    implementation(libs.navigationUi)
 
     implementation(libs.glide)
     kapt(libs.glideCompiler)
