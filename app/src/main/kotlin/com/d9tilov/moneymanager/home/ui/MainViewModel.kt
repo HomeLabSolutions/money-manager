@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val transactionInteractor: TransactionInteractor,
-    private val billingInteractor: BillingInteractor
+    private val billingInteractor: BillingInteractor,
 ) : ViewModel() {
 
     private val updateCurrencyExceptionHandler = CoroutineExceptionHandler { _, exception ->
