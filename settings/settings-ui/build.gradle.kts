@@ -48,7 +48,6 @@ dependencies {
     implementation(project(":core:designsystem"))
 
     implementation(project(":billing:billing-domain:billing-domain-model"))
-    implementation(project(":billing:billing-domain:billing-domain-model"))
     implementation(project(":billing:billing-domain:billing-domain-contract"))
 
     implementation(project(":backup:backup-domain:backup-domain-contract"))
@@ -78,8 +77,6 @@ dependencies {
 
     implementation(libs.glide)
     kapt(libs.glideCompiler)
-
-    implementation(libs.billing)
 
     implementation(libs.dotsIndicator)
 

@@ -34,8 +34,5 @@ dependencies {
     implementation(project(":user-info:user-domain:user-domain-impl"))
 
     implementation(libs.hilt)
-    
     kapt(libs.hiltAndroidCompiler)
-
-    implementation(libs.room)
 }

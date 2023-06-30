@@ -49,8 +49,5 @@ dependencies {
     implementation(project(":budget:budget-domain:budget-domain-contract"))
 
     implementation(libs.hilt)
-    
     kapt(libs.hiltAndroidCompiler)
-
-    implementation(libs.room)
 }

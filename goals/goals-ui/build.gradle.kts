@@ -34,7 +34,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:common"))
     implementation(project(":core:designsystem"))
 
     implementation(project(":budget:budget-domain:budget-domain-model"))
@@ -43,12 +42,12 @@ dependencies {
 
     implementation(project(":goals:goals-di"))
 
+    implementation(libs.kotlinDatetime)
     implementation(libs.constraintLayout)
 
-    implementation(libs.bundles.compose)
-    implementation(libs.bundles.composeMaterial3)
+    implementation(libs.composeUiTestManifest)
+
     implementation(libs.composeViewModel)
-    implementation(libs.composeRuntime)
 
     implementation(libs.hilt)
     implementation(libs.hiltNavigationCompose)

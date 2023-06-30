@@ -34,7 +34,6 @@ dependencies {
     implementation(project(":currency:currency-domain:currency-domain-contract"))
 
     implementation(libs.coroutinesCore)
-    implementation(libs.billing)
     implementation(libs.timber)
     implementation(libs.retrofitMoshi)
 

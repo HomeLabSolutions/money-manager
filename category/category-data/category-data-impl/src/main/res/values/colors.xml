@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="category_all_color">?colorPrimary</color>
+    <color name="category_all_color">#9A4525</color>
     <color name="category_red">#f44336</color>
     <color name="category_red_theme">#c62828</color>
     <color name="category_pink">#e91e63</color>
