@@ -66,7 +66,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.paging)
 
-    implementation(libs.bundles.navigation)
+    implementation(libs.navigation)
 
     implementation(libs.timber)
 

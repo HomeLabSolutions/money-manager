@@ -35,16 +35,12 @@ dependencies {
     implementation(project(":backup:backup-domain:backup-domain-contract"))
     implementation(project(":backup:backup-di"))
 
-    implementation(libs.appCompat)
-    implementation(libs.navigation)
-
     implementation(libs.hilt)
-    
     kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.lifecycleViewModel)
 
-    implementation(libs.bundles.worker)
+    implementation(libs.worker)
 
     implementation(libs.startup)
 

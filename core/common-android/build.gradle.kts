@@ -37,8 +37,8 @@ dependencies {
     implementation(project(":core:common"))
 
     api(libs.fragment)
+    api(libs.appCompat)
     implementation(libs.paging)
-    implementation(libs.appCompat)
     implementation(libs.material)
     implementation(libs.lifecycleRuntime)
 

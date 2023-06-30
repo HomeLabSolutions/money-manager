@@ -29,13 +29,12 @@ android {
 dependencies {
     implementation(project(":core:common"))
 
-    implementation(libs.room)
+    api(libs.room)
     implementation(libs.roomPaging)
     kapt(libs.roomCompiler)
 
     implementation(libs.coroutinesCore)
 
     implementation(libs.hilt)
-    
     kapt(libs.hiltAndroidCompiler)
 }

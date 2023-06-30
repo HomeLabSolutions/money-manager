@@ -34,7 +34,6 @@ dependencies {
     implementation(project(":currency:currency-domain:currency-domain-model"))
 
     implementation(libs.coroutinesCore)
-    api(libs.billing)
     implementation (libs.timber)
 
 }

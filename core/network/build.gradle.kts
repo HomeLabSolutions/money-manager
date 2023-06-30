@@ -48,6 +48,5 @@ dependencies {
     implementation(libs.timber)
 
     implementation(libs.hilt)
-    
     kapt(libs.hiltAndroidCompiler)
 }
