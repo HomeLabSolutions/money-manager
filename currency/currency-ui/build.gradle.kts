@@ -54,9 +54,8 @@ dependencies {
 
     implementation(libs.startup)
 
-    implementation(libs.hilt)
     implementation(libs.hiltNavigationCompose)
-    
+    implementation(libs.hilt)
     kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.bundles.worker)
