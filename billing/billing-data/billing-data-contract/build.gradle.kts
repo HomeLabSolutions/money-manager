@@ -26,4 +26,5 @@ android {
 dependencies {
 
     implementation(libs.coroutinesCore)
+    implementation(libs.billing)
 }

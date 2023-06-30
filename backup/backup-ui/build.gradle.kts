@@ -40,7 +40,7 @@ dependencies {
 
     implementation(libs.lifecycleViewModel)
 
-    implementation(libs.worker)
+    implementation(libs.bundles.worker)
 
     implementation(libs.startup)
 

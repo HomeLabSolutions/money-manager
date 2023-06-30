@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.paging)
 
     implementation(libs.navigation)
+    implementation(libs.navigationCompose)
 
     implementation(libs.timber)
 
