@@ -4,9 +4,7 @@ import android.content.Context
 import android.util.TypedValue
 import android.widget.TextView
 import androidx.annotation.AttrRes
-import androidx.annotation.ColorRes
 import androidx.core.widget.TextViewCompat
-import com.d9tilov.android.common_android.R
 
 fun Context.getColorFromAttr(
     @AttrRes attrColor: Int,
