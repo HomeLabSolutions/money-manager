@@ -93,7 +93,6 @@ include(":settings:settings-ui")
 include(":analytics:analytics-di")
 
 pluginManagement {
-    includeBuild("build-logic")
     repositories {
         gradlePluginPortal()
         google()
