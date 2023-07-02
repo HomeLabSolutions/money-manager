@@ -31,7 +31,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.2"
+        kotlinCompilerExtensionVersion = "1.4.4"
     }
 
     kotlinOptions {
