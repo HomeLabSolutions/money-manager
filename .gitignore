@@ -5,7 +5,7 @@
 /.idea
 /build
 /buildSrc
-/build-logic/build
+/buildSrc/build
 /captures
 /app/release
 .externalNativeBuild
