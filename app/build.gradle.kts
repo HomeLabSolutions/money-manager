@@ -11,6 +11,7 @@ plugins {
     id("com.google.firebase.crashlytics")
     id("dagger.hilt.android.plugin")
     id("io.gitlab.arturbosch.detekt")
+    id("kotlinx-serialization")
 }
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -203,4 +204,5 @@ dependencies {
     implementation(libs.composeFoundation)
 
     implementation(libs.timber)
+    implementation(libs.serializationKotlin)
 }

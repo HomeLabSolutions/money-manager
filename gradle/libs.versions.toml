@@ -50,10 +50,13 @@ androidChart = "v3.1.0"
 splashScreen = "1.0.1"
 startup = "1.1.1"
 junit = "4.13.2"
+serialization = "1.8.10"
+serializationKotlin = "1.5.1"
 
 [libraries]
 kotlinJdk = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk7", version.ref = "kotlin" }
 kotlinDatetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinDatetime" }
+serializationKotlin = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serializationKotlin" }
 appCompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appCompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidAnnotation = { group = "androidx.annotation", name = "annotation", version.ref = "androidAnnotation" }
@@ -147,3 +150,4 @@ hilt = { id = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hil
 firebaseCrashlytics = { id = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebaseCrashlytics" }
 detekt = { id = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 deps = { id = "com.autonomousapps.dependency-analysis", version.ref = "autonomousapps" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }
