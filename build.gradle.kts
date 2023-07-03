@@ -7,13 +7,12 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath("com.google.gms:google-services:4.3.15")
-        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.5.3")
-        classpath("com.google.dagger:hilt-android-gradle-plugin:2.44.2")
-        classpath("com.google.firebase:firebase-crashlytics-gradle:2.9.6")
-        classpath("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.0")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20")
-        classpath("org.jlleitschuh.gradle:ktlint-gradle:11.4.2")
+        classpath(libs.googlePlayServicesPlugin)
+        classpath(libs.navigationArgsPlugin)
+        classpath(libs.hiltPlugin)
+        classpath(libs.firebaseCrashlyticsPlgin)
+        classpath(libs.detektPlugin)
+        classpath(libs.kotlinPlugin)
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -39,5 +38,6 @@ plugins {
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.serialization) apply false
-    alias(libs.plugins.deps) apply true                 //./gradlew buildHealth
+    alias(libs.plugins.ktlint) apply true
+    alias(libs.plugins.deps) apply true // ./gradlew buildHealth
 }

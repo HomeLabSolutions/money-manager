@@ -1,6 +1,6 @@
 [versions]
 gradlePlugin = "8.0.2"
-kotlin = "1.8.10"
+kotlin = "1.8.22"
 kotlinDatetime = "0.4.0"
 appCompat = "1.6.1"
 material = "1.9.0"
@@ -10,16 +10,19 @@ coreRuntime = "2.2.0"
 constraintLayout = "2.1.4"
 fragment = "1.6.0"
 retrofit = "2.9.0"
-googlePlayServices = "4.3.10"
+googlePlayServices = "4.3.1"
 googlePlayServicesAuth = "20.6.0"
 navigation = "2.6.0"
+navigationArgs = "2.5.3"
 hilt = "2.46.1"
 hiltNavigationCompose = "1.0.0"
+hiltPlugin = "2.44.2"
 glide = "4.15.1"
 coil = "2.4.0"
 room = "2.5.2"
 paging = "3.1.1"
 firebaseCrashlytics = "2.9.0"
+firebaseCrashlyticsPlugin = "2.9.6"
 firebaseBom = "32.1.1"
 firebaseUi = "8.0.2"
 facebookSdk = "8.0.0"
@@ -41,6 +44,8 @@ workerHilt = "1.0.0"
 klaxon = "5.6"
 timber = "5.0.1"
 detekt = "1.20.0"
+detektPlugin = "1.23.0"
+ktlint = "11.4.2"
 autonomousapps = "1.20.0"
 datastore = "1.0.0"
 billing = "6.0.1"
@@ -123,6 +128,13 @@ hiltNavigationCompose = { group = "androidx.hilt", name = "hilt-navigation-compo
 splashScreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashScreen" }
 startup = { group = "androidx.startup", name = "startup-runtime", version.ref = "startup" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+#plugins
+googlePlayServicesPlugin = { group = "com.google.gms", name = "google-services", version.ref = "googlePlayServices" }
+navigationArgsPlugin = { group = "androidx.navigation", name = "navigation-safe-args-gradle-plugin", version.ref = "navigationArgs" }
+hiltPlugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hiltPlugin" }
+firebaseCrashlyticsPlgin = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsPlugin" }
+detektPlugin = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detektPlugin" }
+kotlinPlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 
 [bundles]
 compose = [
@@ -141,11 +153,6 @@ android-application = { id = "com.android.application", version.ref = "gradlePlu
 android-library = { id = "com.android.library", version.ref = "gradlePlugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android = { id = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
-kotlin = { id = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-googlePlayServices = { id = "com.google.gms:google-services", version.ref = "googlePlayServices" }
-navigation = { id = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "navigation" }
-hilt = { id = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
-firebaseCrashlytics = { id = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebaseCrashlytics" }
-detekt = { id = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 deps = { id = "com.autonomousapps.dependency-analysis", version.ref = "autonomousapps" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }

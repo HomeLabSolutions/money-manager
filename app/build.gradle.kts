@@ -12,7 +12,6 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("io.gitlab.arturbosch.detekt")
     id("kotlinx-serialization")
-    id("org.jlleitschuh.gradle.ktlint")
 }
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -111,7 +110,7 @@ android {
         }
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.4"
+        kotlinCompilerExtensionVersion = "1.4.8"
     }
 
     kapt {
