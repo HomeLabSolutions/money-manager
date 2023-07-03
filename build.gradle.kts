@@ -13,6 +13,7 @@ buildscript {
         classpath("com.google.firebase:firebase-crashlytics-gradle:2.9.6")
         classpath("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.0")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20")
+        classpath("org.jlleitschuh.gradle:ktlint-gradle:11.4.2")
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
