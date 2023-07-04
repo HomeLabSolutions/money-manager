@@ -45,13 +45,12 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:network"))
 
-    implementation(project(":backup:backup-domain:backup-domain-contract"))
-
     implementation(project(":user-info:user-domain:user-domain-model"))
     implementation(project(":user-info:user-data:user-data-impl"))
     implementation(project(":user-info:user-domain:user-domain-contract"))
     implementation(project(":user-info:user-di"))
 
+    implementation(project(":backup:backup-domain:backup-domain-contract"))
     implementation(project(":category:category-domain:category-domain-contract"))
 
     implementation(libs.appCompat)

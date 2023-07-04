@@ -28,7 +28,7 @@ class RouterViewModel @Inject constructor(
     private val preferencesStore: PreferencesStore,
     private val backupInteractor: BackupInteractor,
     private val userInteractor: UserInteractor,
-    private val categoryInteractor: Lazy<CategoryInteractor>,
+    private val categoryInteractor: Lazy<CategoryInteractor>
 ) : BaseViewModel<SplashNavigator>() {
 
     private val auth = FirebaseAuth.getInstance()
@@ -77,9 +77,30 @@ class RouterViewModel @Inject constructor(
         }
     }
 
-    fun updateUid() {
+    fun updateData() {
+        Timber.tag(TAG).d("Update data")
         viewModelScope.launch(Dispatchers.IO) {
-            auth.currentUser?.let { firebaseUser -> preferencesStore.updateUid(firebaseUser.uid) }
+            auth.currentUser?.let { firebaseUser ->
+                Timber.tag(TAG).d("Update data. FirebaseUser: $firebaseUser")
+                preferencesStore.updateUid(firebaseUser.uid) // need for dataBase decryption
+                try {
+                    backupInteractor.restoreBackup()
+                } catch (ex: NetworkException) {
+                    Timber.tag(TAG).d("Do work with network exception: $ex")
+                } catch (ex: WrongUidException) {
+                    Timber.tag(TAG).d("Do work with wrong uid exception: $ex")
+                } catch (ex: FileNotFoundException) {
+                    Timber.tag(TAG).d("Do work with file not found error: $ex")
+                } catch (ex: FirebaseException) {
+                    Timber.tag(TAG).d("Do work with exception: $ex")
+                }
+                val user = userInteractor.getCurrentUser().firstOrNull()
+                if (user == null || user.showPrepopulate) {
+                    userInteractor.createUser(auth.currentUser.toDataModel())
+                    categoryInteractor.get().createDefaultCategories()
+                    withContext(Dispatchers.Main) { navigator?.openPrepopulate() }
+                } else withContext(Dispatchers.Main) { navigator?.openHomeScreen() }
+            }
         }
     }
 }
