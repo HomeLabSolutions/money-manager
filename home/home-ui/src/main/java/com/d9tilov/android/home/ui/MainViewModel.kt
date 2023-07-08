@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.home.ui
+package com.d9tilov.android.home.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

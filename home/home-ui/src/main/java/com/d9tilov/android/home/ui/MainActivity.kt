@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.home.ui
+package com.d9tilov.android.home.ui
 
 import android.animation.ObjectAnimator
 import android.content.DialogInterface
@@ -13,16 +13,16 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import com.d9tilov.android.backup.ui.PeriodicBackupWorker
+import com.d9tilov.android.backup.data.impl.PeriodicBackupWorker
 import com.d9tilov.android.common_android.ui.base.BaseActivity
 import com.d9tilov.android.common_android.utils.gone
 import com.d9tilov.android.common_android.utils.hideKeyboard
+import com.d9tilov.android.common_android.utils.setupWithNavController
 import com.d9tilov.android.common_android.utils.show
 import com.d9tilov.android.core.events.OnBackPressed
-import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.databinding.ActivityMainBinding
-import com.d9tilov.moneymanager.navigation.HomeNavigator
-import com.d9tilov.moneymanager.util.setupWithNavController
+import com.d9tilov.android.home.ui.navigation.HomeNavigator
+import com.d9tilov.android.home_ui.R
+import com.d9tilov.android.home_ui.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

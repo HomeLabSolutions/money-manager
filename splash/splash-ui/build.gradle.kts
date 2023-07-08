@@ -51,7 +51,13 @@ dependencies {
     implementation(project(":user-info:user-di"))
 
     implementation(project(":backup:backup-domain:backup-domain-contract"))
+    implementation(project(":backup:backup-di"))
+
     implementation(project(":category:category-domain:category-domain-contract"))
+    implementation(project(":category:category-di"))
+
+    implementation(project(":prepopulate:prepopulate-ui"))
+    implementation(project(":home:home-ui"))
 
     implementation(libs.appCompat)
     implementation(libs.navigation)

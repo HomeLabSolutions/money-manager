@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.util
+package com.d9tilov.android.common_android.utils
 
 import android.content.Intent
 import android.util.SparseArray
@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import com.d9tilov.moneymanager.R
+import com.d9tilov.android.common_android.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 /**

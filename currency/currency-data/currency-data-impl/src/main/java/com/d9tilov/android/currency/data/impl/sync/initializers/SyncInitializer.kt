@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.d9tilov.android.currency.ui.sync.initializers
+package com.d9tilov.android.currency.data.impl.sync.initializers
 
 import android.content.Context
 import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkManager
-import com.d9tilov.android.currency.ui.sync.workers.CurrencySyncWorker
+import com.d9tilov.android.currency.data.impl.sync.workers.CurrencySyncWorker
 
 object Sync {
     // This method is a workaround to manually initialize the sync process instead of relying on

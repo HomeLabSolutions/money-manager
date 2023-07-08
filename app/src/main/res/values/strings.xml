@@ -1,8 +1,4 @@
 <resources>
-    <string name="bottom_menu_income_expense">Income/Expense</string>
-    <string name="bottom_menu_chart">Chart</string>
-    <string name="bottom_menu_profile">Profile</string>
-
     <string name="coming_soon">Coming soon…</string>
 
     <string name="title_goal">Goals</string>

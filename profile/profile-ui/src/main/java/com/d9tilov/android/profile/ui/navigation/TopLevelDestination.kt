@@ -1,8 +1,8 @@
-package com.d9tilov.moneymanager.navigation
+package com.d9tilov.android.profile.ui.navigation
 
 import com.d9tilov.android.designsystem.Icon
 import com.d9tilov.android.designsystem.MoneyManagerIcons
-import com.d9tilov.moneymanager.R
+import com.d9tilov.android.profile_ui.R
 
 enum class TopLevelDestination(
     val selectedIcon: Icon,

@@ -4,7 +4,6 @@ import java.util.Properties
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    kotlin("kapt")
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.gms.google-services")
@@ -12,6 +11,7 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("io.gitlab.arturbosch.detekt")
     id("kotlinx-serialization")
+    kotlin("kapt")
 }
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -126,25 +126,13 @@ android {
     tasks.getByPath("detekt").onlyIf { gradle.startParameter.taskNames.contains("detekt") }
 }
 
-repositories {
-    maven(url = "https://jitpack.io")
-}
-
 dependencies {
 
-    implementation(project(":core:common"))
     implementation(project(":core:common-android"))
     implementation(project(":core:designsystem"))
 
-    implementation(project(":incomeexpense:incomeexpense-ui"))
-    implementation(project(":statistics:statistics-ui"))
-    implementation(project(":currency:currency-ui"))
-    implementation(project(":profile:profile-ui"))
-    implementation(project(":backup:backup-ui"))
-
-    implementation(project(":billing:billing-domain:billing-domain-contract"))
-
-    implementation(project(":transaction:transaction-domain:transaction-domain-contract"))
+    implementation(project(":currency:currency-data:currency-data-impl"))
+    implementation(project(":splash:splash-ui"))
 
     implementation(libs.appCompat)
     implementation(libs.material)
@@ -159,11 +147,6 @@ dependencies {
 
     implementation(libs.hilt)
     kapt(libs.hiltAndroidCompiler)
-
-    implementation(libs.navigation)
-
-    implementation(libs.glide)
-    kapt(libs.glideCompiler)
 
     implementation(libs.composeMaterial3)
     implementation(libs.composeFoundation)

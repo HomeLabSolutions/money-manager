@@ -1,4 +1,4 @@
-package com.d9tilov.android.currency.ui.sync.workers
+package com.d9tilov.android.currency.data.impl.sync.workers
 
 import android.content.Context
 import androidx.hilt.work.HiltWorker
@@ -8,8 +8,8 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkerParameters
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
-import com.d9tilov.android.currency.ui.sync.initializers.SyncConstraints
-import com.d9tilov.android.currency.ui.sync.initializers.syncForegroundInfo
+import com.d9tilov.android.currency.data.impl.sync.initializers.SyncConstraints
+import com.d9tilov.android.currency.data.impl.sync.initializers.syncForegroundInfo
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers

@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="bottom_menu_income_expense">Расход/Доход</string>
-    <string name="bottom_menu_chart">Статистика</string>
-    <string name="bottom_menu_profile">Профиль</string>
-
     <string name="coming_soon">Скоро будет…</string>
 
     <string name="title_goal">Цели</string>

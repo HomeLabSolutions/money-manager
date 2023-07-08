@@ -44,6 +44,8 @@ dependencies {
     implementation(project(":core:common-android"))
     implementation(project(":core:designsystem"))
 
+    implementation(project(":backup:backup-data:backup-data-impl"))
+
     implementation(project(":user-info:user-domain:user-domain-model"))
     implementation(project(":user-info:user-domain:user-domain-contract"))
 
@@ -63,7 +65,6 @@ dependencies {
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-contract"))
     implementation(project(":transaction:regular-transaction-ui"))
 
-    implementation(project(":backup:backup-ui"))
     implementation(project(":settings:settings-ui"))
     implementation(project(":goals:goals-ui"))
     implementation(project(":splash:splash-ui"))

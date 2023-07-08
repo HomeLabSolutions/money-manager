@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import com.d9tilov.android.backup.ui.PeriodicBackupWorker
+import com.d9tilov.android.backup.data.impl.PeriodicBackupWorker
 import com.d9tilov.android.common_android.ui.base.BaseDialogFragment
 import com.d9tilov.android.profile.ui.navigation.LogoutDialogNavigator
 import com.d9tilov.android.profile.ui.vm.LogoutViewModel

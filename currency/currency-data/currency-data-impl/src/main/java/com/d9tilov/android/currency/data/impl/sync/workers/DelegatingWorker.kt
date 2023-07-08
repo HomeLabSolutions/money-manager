@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.d9tilov.android.currency.ui.sync.workers
+package com.d9tilov.android.currency.data.impl.sync.workers
 
 import android.content.Context
 import androidx.hilt.work.HiltWorkerFactory
