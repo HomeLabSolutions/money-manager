@@ -40,10 +40,6 @@ dependencies {
 
     implementation(libs.lifecycleViewModel)
 
-    implementation(libs.bundles.worker)
-
-    implementation(libs.startup)
-
     implementation(platform(libs.firebaseBom))
     implementation(libs.firebaseStorage)
     implementation(libs.firebaseConfig)

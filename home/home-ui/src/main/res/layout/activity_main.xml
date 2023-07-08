@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".home.ui.MainActivity">
+    tools:context="com.d9tilov.android.home.ui.MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_container"

@@ -3,11 +3,12 @@ package com.d9tilov.android.splash.ui
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.d9tilov.android.core.constants.DataConstants.TAG
+import com.d9tilov.android.home.ui.MainActivity
+import com.d9tilov.android.prepopulate.ui.PrepopulateActivity
 import com.d9tilov.android.splash.ui.navigation.SplashNavigator
 import com.d9tilov.android.splash.ui.vm.RouterViewModel
 import com.d9tilov.android.splash_ui.R
@@ -40,14 +41,13 @@ class RouterActivity : AppCompatActivity(), SplashNavigator {
     }
 
     override fun openHomeScreen() {
-        val intent = Intent()
-        intent.setClassName(this, "com.d9tilov.moneymanager.home.ui.MainActivity")
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
         this.finish()
     }
 
     override fun openPrepopulate() {
-        val intent = Intent()
-        intent.setClassName(this, "com.d9tilov.android.prepopulate.ui.PrepopulateActivity")
+        val intent = Intent(this, PrepopulateActivity::class.java)
         startActivity(intent)
         this.finish()
     }

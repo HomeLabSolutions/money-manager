@@ -2,6 +2,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
+    kotlin("kapt")
 }
 
 android {
@@ -44,6 +45,11 @@ dependencies {
 
     implementation(libs.coroutinesCore)
 
-    implementation(libs.kotlinJdk)
+    implementation(libs.glide)
+    kapt(libs.glideCompiler)
+
     implementation(libs.core)
+
+    implementation(libs.navigation)
+    implementation(libs.navigationUi)
 }

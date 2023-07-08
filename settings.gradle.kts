@@ -90,6 +90,7 @@ include(":splash:splash-ui")
 include(":prepopulate:prepopulate-ui")
 include(":incomeexpense:incomeexpense-ui")
 include(":settings:settings-ui")
+include(":home:home-ui")
 include(":analytics:analytics-di")
 
 pluginManagement {

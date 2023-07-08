@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.util.glide
+package com.d9tilov.android.common_android.utils
 
 import android.app.ActivityManager
 import android.content.Context

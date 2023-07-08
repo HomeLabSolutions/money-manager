@@ -37,6 +37,9 @@ dependencies {
     implementation(libs.coroutinesCore)
     implementation (libs.timber)
 
+    implementation(libs.worker)
+    implementation(libs.workerHilt)
+
     implementation(platform(libs.firebaseBom))
     implementation(libs.firebaseStorage)
     implementation(libs.firebaseConfig)

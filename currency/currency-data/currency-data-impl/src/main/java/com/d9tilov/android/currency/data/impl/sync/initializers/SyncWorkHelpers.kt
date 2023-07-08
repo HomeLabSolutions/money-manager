@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.d9tilov.android.currency.ui.sync.initializers
+package com.d9tilov.android.currency.data.impl.sync.initializers
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -25,7 +25,7 @@ import androidx.core.app.NotificationCompat
 import androidx.work.Constraints
 import androidx.work.ForegroundInfo
 import androidx.work.NetworkType
-import com.d9tilov.android.currency_ui.R
+import com.d9tilov.android.currency_data_impl.R
 
 private const val SyncNotificationId = 0
 private const val SyncNotificationChannelID = "SyncNotificationChannel"

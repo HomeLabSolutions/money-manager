@@ -52,11 +52,7 @@ dependencies {
     implementation(libs.composeViewModel)
     implementation(libs.composeRuntime)
 
-    implementation(libs.startup)
-
     implementation(libs.hiltNavigationCompose)
     implementation(libs.hilt)
     kapt(libs.hiltAndroidCompiler)
-
-    implementation(libs.bundles.worker)
 }

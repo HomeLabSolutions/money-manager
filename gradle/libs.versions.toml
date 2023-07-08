@@ -58,7 +58,6 @@ serialization = "1.8.10"
 serializationKotlin = "1.5.1"
 
 [libraries]
-kotlinJdk = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk7", version.ref = "kotlin" }
 kotlinDatetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinDatetime" }
 serializationKotlin = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serializationKotlin" }
 appCompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appCompat" }

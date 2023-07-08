@@ -2,7 +2,7 @@ package com.d9tilov.moneymanager
 
 import android.app.Application
 import android.os.StrictMode
-import com.d9tilov.android.currency.ui.sync.initializers.Sync
+import com.d9tilov.android.currency.data.impl.sync.initializers.Sync
 import com.google.android.material.color.DynamicColors
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.HiltAndroidApp
