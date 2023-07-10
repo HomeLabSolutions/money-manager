@@ -67,7 +67,6 @@ dependencies {
 
     implementation(project(":settings:settings-ui"))
     implementation(project(":goals:goals-ui"))
-    implementation(project(":splash:splash-ui"))
     implementation(project(":incomeexpense:incomeexpense-ui"))
 
     implementation(libs.appCompat)

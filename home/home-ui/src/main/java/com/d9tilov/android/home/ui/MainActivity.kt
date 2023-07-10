@@ -37,7 +37,6 @@ class MainActivity :
         R.id.income_expense_dest,
         R.id.chart_dest,
         R.id.profile_dest,
-        R.id.logout_dialog,
         R.id.remove_transaction_dialog,
     )
     private val viewModel by viewModels<MainViewModel>()

@@ -33,17 +33,17 @@ android {
     val compileSdkVersion: Int by rootProject.extra
     val minSdkVersion: Int by rootProject.extra
     val targetSdkVersion: Int by rootProject.extra
-    compileSdk = compileSdkVersion
 
     defaultConfig {
-        val versionMajor = 1
-        val versionMinor = 0
-        val versionPatch = 3
-        val versionBuild = 5
 
         applicationId = "com.d9tilov.moneymanager"
         minSdk = minSdkVersion
         targetSdk = targetSdkVersion
+        compileSdk = compileSdkVersion
+        val versionMajor: Int by rootProject.extra
+        val versionMinor: Int by rootProject.extra
+        val versionPatch: Int by rootProject.extra
+        val versionBuild: Int by rootProject.extra
         versionCode = 1000 * (1000 * versionMajor + 100 * versionMinor + versionPatch) + versionBuild
         versionName = "$versionMajor.$versionMinor.$versionPatch.$versionBuild"
 

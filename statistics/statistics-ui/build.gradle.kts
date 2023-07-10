@@ -38,10 +38,6 @@ android {
     }
 }
 
-repositories {
-    maven(url = "https://jitpack.io")
-}
-
 dependencies {
 
     implementation(project(":core:common"))

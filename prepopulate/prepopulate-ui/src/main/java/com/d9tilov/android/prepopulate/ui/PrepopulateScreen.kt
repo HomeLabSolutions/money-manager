@@ -48,9 +48,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.budget.ui.BudgetScreen
 import com.d9tilov.android.currency.domain.model.DomainCurrency
+import com.d9tilov.android.currency.ui.CurrencyListScreen
 import com.d9tilov.android.prepopulate.ui.PrepopulateScreen.Companion.fromScreenId
 import com.d9tilov.android.prepopulate_ui.R
-import com.d9tilov.android.currency.ui.CurrencyListScreen
 
 @Composable
 fun PrepopulateScreen(prepopulateViewModel: PrepopulateViewModel = hiltViewModel()) {
@@ -112,10 +112,10 @@ fun PrepopulateScreen(
                     clickCallback
                 )
                 PrepopulateScreen.BudgetScreen -> BudgetScreen(
-                    uiState = uiState.budgetUiState,
-                    showInPrepopulate = true,
-                    onBudgetInputChanged = onBudgetInputChanged
-                )
+                        uiState = uiState.budgetUiState,
+                        showInPrepopulate = true,
+                        onBudgetInputChanged = onBudgetInputChanged
+                    )
             }
         }
     }
@@ -135,7 +135,10 @@ fun BottomNavigationBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         var progress by remember { mutableStateOf((screenType.id + 1f) / PrepopulateScreen.SCREEN_COUNT) }
-        ProgressIndicator(progress, Modifier.padding(16.dp).fillMaxWidth(0.5f))
+        ProgressIndicator(progress,
+            Modifier
+                .padding(16.dp)
+                .fillMaxWidth(0.5f))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
