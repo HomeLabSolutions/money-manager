@@ -90,17 +90,17 @@ class IncomeExpenseFragment :
                 object : PinKeyboard.ClickPinButton {
                     override fun onPinClick(button: PinButton?) {
                         when (button?.id) {
-                            R.id.keyboard_pin_0 -> onHandleInput(getString(R.string._0))
-                            R.id.keyboard_pin_1 -> onHandleInput(getString(R.string._1))
-                            R.id.keyboard_pin_2 -> onHandleInput(getString(R.string._2))
-                            R.id.keyboard_pin_3 -> onHandleInput(getString(R.string._3))
-                            R.id.keyboard_pin_4 -> onHandleInput(getString(R.string._4))
-                            R.id.keyboard_pin_5 -> onHandleInput(getString(R.string._5))
-                            R.id.keyboard_pin_6 -> onHandleInput(getString(R.string._6))
-                            R.id.keyboard_pin_7 -> onHandleInput(getString(R.string._7))
-                            R.id.keyboard_pin_8 -> onHandleInput(getString(R.string._8))
-                            R.id.keyboard_pin_9 -> onHandleInput(getString(R.string._9))
-                            R.id.keyboard_pin_dot -> onHandleInput(getString(R.string._dot))
+                            R.id.keyboard_pin_0 -> onHandleInput(getString(com.d9tilov.android.common_android.R.string._0))
+                            R.id.keyboard_pin_1 -> onHandleInput(getString(com.d9tilov.android.common_android.R.string._1))
+                            R.id.keyboard_pin_2 -> onHandleInput(getString(com.d9tilov.android.common_android.R.string._2))
+                            R.id.keyboard_pin_3 -> onHandleInput(getString(com.d9tilov.android.common_android.R.string._3))
+                            R.id.keyboard_pin_4 -> onHandleInput(getString(com.d9tilov.android.common_android.R.string._4))
+                            R.id.keyboard_pin_5 -> onHandleInput(getString(com.d9tilov.android.common_android.R.string._5))
+                            R.id.keyboard_pin_6 -> onHandleInput(getString(com.d9tilov.android.common_android.R.string._6))
+                            R.id.keyboard_pin_7 -> onHandleInput(getString(com.d9tilov.android.common_android.R.string._7))
+                            R.id.keyboard_pin_8 -> onHandleInput(getString(com.d9tilov.android.common_android.R.string._8))
+                            R.id.keyboard_pin_9 -> onHandleInput(getString(com.d9tilov.android.common_android.R.string._9))
+                            R.id.keyboard_pin_dot -> onHandleInput(getString(com.d9tilov.android.common_android.R.string._dot))
                             else -> onHandleInput(null)
                         }
                     }
@@ -136,8 +136,8 @@ class IncomeExpenseFragment :
     }
 
     private fun onHandleInput(str: String?) {
-        val dot = getString(R.string._dot)
-        val zero = getString(R.string._0)
+        val dot = getString(com.d9tilov.android.common_android.R.string._dot)
+        val zero = getString(com.d9tilov.android.common_android.R.string._0)
         var input = viewBinding?.incomeExpenseMainSum?.moneyEditText?.text.toString()
         when (str) {
             dot -> {
@@ -156,7 +156,7 @@ class IncomeExpenseFragment :
                     input.removeRange(input.length - 1, input.length)
             else -> input = input.plus(str)
         }
-        if (input.isEmpty()) input = getString(R.string._0)
+        if (input.isEmpty()) input = getString(com.d9tilov.android.common_android.R.string._0)
         viewBinding?.incomeExpenseMainSum?.moneyEditText?.setText(input)
     }
 

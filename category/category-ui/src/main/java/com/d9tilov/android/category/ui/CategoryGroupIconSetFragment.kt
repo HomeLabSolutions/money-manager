@@ -98,7 +98,7 @@ class CategoryGroupIconSetFragment :
                 categoryGroupSetRvCategory.context,
                 layoutManager.orientation
             )
-            val dividerDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.rv_divider)
+            val dividerDrawable = ContextCompat.getDrawable(requireContext(), com.d9tilov.android.designsystem.R.drawable.rv_divider)
             dividerDrawable?.let { divider -> dividerItemDecoration.setDrawable(divider) }
             categoryGroupSetRvCategory.addItemDecoration(dividerItemDecoration)
             toolbar = categoryGroupSetToolbarContainer.toolbar

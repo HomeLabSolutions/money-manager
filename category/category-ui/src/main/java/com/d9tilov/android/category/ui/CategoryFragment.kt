@@ -117,7 +117,7 @@ class CategoryFragment :
             it.emptyPlaceholderIcon.setImageDrawable(
                 ContextCompat.getDrawable(
                     requireContext(),
-                    R.drawable.ic_categories_empty
+                    com.d9tilov.android.category_data_impl.R.drawable.ic_categories_empty
                 )
             )
             it.emptyPlaceholderTitle.text =

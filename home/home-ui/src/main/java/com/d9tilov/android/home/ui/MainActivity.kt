@@ -34,10 +34,10 @@ class MainActivity :
 
     private var currentNavController: LiveData<NavController>? = null
     private val setOfShownBottomBar = setOf(
-        R.id.income_expense_dest,
-        R.id.chart_dest,
-        R.id.profile_dest,
-        R.id.remove_transaction_dialog,
+        com.d9tilov.android.incomeexpense_ui.R.id.income_expense_dest,
+        com.d9tilov.android.statistics_ui.R.id.chart_dest,
+        com.d9tilov.android.profile_ui.R.id.profile_dest,
+        com.d9tilov.android.transaction_ui.R.id.remove_transaction_dialog,
     )
     private val viewModel by viewModels<MainViewModel>()
     override val navHostFragmentId = R.id.nav_host_container
@@ -67,8 +67,8 @@ class MainActivity :
     private fun setupBottomNavigationBar() {
         val navGraphIds = listOf(
             R.navigation.home_navigation,
-            R.navigation.statistics_navigation,
-            R.navigation.profile_navigation,
+            com.d9tilov.android.statistics_ui.R.navigation.statistics_navigation,
+            com.d9tilov.android.profile_ui.R.navigation.profile_navigation,
         )
         val controller = viewBinding?.bottomNav?.setupWithNavController(
             navGraphIds = navGraphIds,

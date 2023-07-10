@@ -84,7 +84,7 @@ abstract class BaseFragment<N : BaseNavigator, VB : ViewBinding>(
 
     protected fun showSnackBar(text: String, gravityCenter: Boolean = false) {
         baseActivity?.let {
-            val backgroundTint = requireContext().getColorFromAttr(R.attr.colorPrimary)
+            val backgroundTint = requireContext().getColorFromAttr(androidx.appcompat.R.attr.colorPrimary)
             it.showSnackBar(text, backgroundTint, snackBarAnchorView)
         }
     }

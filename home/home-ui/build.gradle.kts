@@ -46,6 +46,7 @@ dependencies {
     implementation(project(":statistics:statistics-ui"))
     implementation(project(":profile:profile-ui"))
     implementation(project(":category:category-ui"))
+    implementation(project(":transaction:transaction-ui"))
     implementation(project(":incomeexpense:incomeexpense-ui"))
 
     implementation(libs.appCompat)

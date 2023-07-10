@@ -57,7 +57,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
             categoryRv.addItemDecoration(
                 GridSpaceItemDecoration(
                     spanCount = SPAN_COUNT,
-                    spacing = resources.getDimension(R.dimen.recycler_view_category_offset)
+                    spacing = resources.getDimension(com.d9tilov.android.common_android.R.dimen.recycler_view_category_offset)
                         .toInt()
                 )
             )

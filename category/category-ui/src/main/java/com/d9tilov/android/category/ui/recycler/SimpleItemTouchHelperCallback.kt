@@ -78,7 +78,7 @@ class SimpleItemTouchHelperCallback(
                     // that an item will be dropped into it upon release
                     folderPosition = recyclerView.getChildAdapterPosition(child)
                     folder?.background =
-                        (ContextCompat.getDrawable(recyclerView.context, R.drawable.round_view))
+                        (ContextCompat.getDrawable(recyclerView.context, com.d9tilov.android.common_android.R.drawable.round_view))
                     break
                 }
             }

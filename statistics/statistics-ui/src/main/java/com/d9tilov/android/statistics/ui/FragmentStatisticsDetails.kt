@@ -51,7 +51,7 @@ class FragmentStatisticsDetails :
                 layoutManager.orientation
             )
             statisticsDetailsRv.layoutManager = layoutManager
-            val dividerDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.rv_divider)
+            val dividerDrawable = ContextCompat.getDrawable(requireContext(), com.d9tilov.android.designsystem.R.drawable.rv_divider)
             dividerDrawable?.let { dividerItemDecoration.setDrawable(it) }
             statisticsDetailsRv.addItemDecoration(dividerItemDecoration)
         }

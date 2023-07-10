@@ -35,7 +35,7 @@ abstract class SwipeToDeleteCallback(val context: Context) :
     }
 
     init {
-        textPaint.color = context.getColorFromAttr(R.attr.colorOnError)
+        textPaint.color = context.getColorFromAttr(com.google.android.material.R.attr.colorOnError)
         textPaint.textSize = textView.textSize
         textPaint.typeface = textView.typeface
     }
@@ -72,7 +72,7 @@ abstract class SwipeToDeleteCallback(val context: Context) :
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
             return
         }
-        val backgroundColor = context.getColorFromAttr(R.attr.colorError)
+        val backgroundColor = context.getColorFromAttr(androidx.appcompat.R.attr.colorError)
         background.color = backgroundColor
         background.setBounds(
             itemView.right + dX.toInt(),

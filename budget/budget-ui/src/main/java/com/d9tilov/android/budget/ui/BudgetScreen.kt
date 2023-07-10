@@ -62,8 +62,8 @@ fun BudgetScreen(
             Text(
                 text = stringResource(R.string.budget_sum_title),
                 modifier = Modifier.padding(
-                    start = dimensionResource(R.dimen.padding_large),
-                    top = dimensionResource(R.dimen.padding_large),
+                    start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
+                    top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
                 ),
                 style = MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.secondary)
             )
@@ -74,7 +74,7 @@ fun BudgetScreen(
                 true,
                 Modifier.fillMaxWidth()
                     .padding(
-                        horizontal = dimensionResource(R.dimen.padding_medium),
+                        horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
                     )
             ) { s ->
                 text = s
@@ -85,7 +85,7 @@ fun BudgetScreen(
                 FilledButton(
                     onClick = onSave,
                     modifier = Modifier
-                        .padding(dimensionResource(R.dimen.padding_medium))
+                        .padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium))
                         .fillMaxWidth()
                 ) {
                     Text(
