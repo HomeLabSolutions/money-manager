@@ -22,12 +22,17 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven(url = "https://jitpack.io")
     }
 }
 
 extra["compileSdkVersion"] = 33
 extra["minSdkVersion"] = 21
 extra["targetSdkVersion"] = 33
+extra["versionMajor"] = 1
+extra["versionMinor"] = 0
+extra["versionPatch"] = 3
+extra["versionBuild"] = 5
 
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)

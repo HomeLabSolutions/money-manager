@@ -55,8 +55,8 @@ import com.d9tilov.android.profile.ui.vm.ProfileUiState
 import com.d9tilov.android.profile.ui.vm.ProfileViewModel
 import com.d9tilov.android.profile.ui.vm.UserUiProfile
 import com.d9tilov.android.profile_ui.R
-import com.d9tilov.android.splash.ui.RouterActivity
 import dagger.hilt.android.internal.managers.FragmentComponentManager
+import com.d9tilov.android.profile_ui.BuildConfig
 
 @Composable
 fun ProfileRoute(
@@ -82,11 +82,12 @@ fun ProfileRoute(
         onLogoutConfirmClicked = {
             viewModel.logout {
                 PeriodicBackupWorker.stopPeriodicJob(context)
-                context.startActivity(
-                    Intent(context, RouterActivity::class.java)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                )
-                (FragmentComponentManager.findActivity(context) as Activity).finish()
+                val intent = context.packageManager.getLaunchIntentForPackage(if (BuildConfig.DEBUG) "com.d9tilov.moneymanager.debug" else "com.d9tilov.moneymanager")
+                if (intent != null) {
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    context.startActivity(intent)
+                    (FragmentComponentManager.findActivity(context) as Activity).finish()
+                }
             }
         },
         onLogoutDismissClicked = { viewModel.dismissDialog() }
