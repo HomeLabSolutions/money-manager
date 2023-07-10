@@ -168,7 +168,7 @@ class EditTransactionFragment : EditTransactionNavigator,
     private fun updateIcon() {
         val iconDrawable = createTintDrawable(
             requireContext(),
-            localTransaction?.category?.icon ?: R.drawable.ic_category_cafe,
+            localTransaction?.category?.icon ?: com.d9tilov.android.common_android.R.drawable.ic_category_cafe,
             localTransaction?.category?.color ?: R.color.category_pink
         )
         iconDrawable.setBounds(LEFT_BOUND, TOP_BOUND, RIGHT_BOUND, BOTTOM_BOUND)

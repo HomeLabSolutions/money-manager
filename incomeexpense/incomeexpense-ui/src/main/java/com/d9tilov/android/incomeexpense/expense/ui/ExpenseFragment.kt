@@ -117,17 +117,18 @@ class ExpenseFragment :
                                     when (ableToSpendToday) {
                                         is TransactionSpendingTodayModel.OVERSPENDING -> {
                                             expenseCanSpendTodayInfoTitle.text =
-                                                getString(R.string.category_expense_info_can_spend_today_negate_title)
+                                                getString(com.d9tilov.android.category_ui.R.string.category_expense_info_can_spend_today_negate_title)
                                             expenseTodayInfoValue.setValue(
                                                 ableToSpendToday.trSum,
                                                 getCurrencyCode()
                                             )
-                                            val infoColor = requireContext().getColorFromAttr(R.attr.colorError)
+                                            val infoColor = requireContext().getColorFromAttr(
+                                                androidx.appcompat.R.attr.colorError)
                                             expenseTodayInfoValue.setColor(infoColor)
                                         }
                                         is TransactionSpendingTodayModel.NORMAL -> {
                                             expenseCanSpendTodayInfoTitle.text =
-                                                getString(R.string.category_expense_info_can_spend_today_title)
+                                                getString(com.d9tilov.android.category_ui.R.string.category_expense_info_can_spend_today_title)
                                             expenseTodayInfoValue.run {
                                                 setValue(ableToSpendToday.trSum, getCurrencyCode())
                                                 setColor(
@@ -136,8 +137,8 @@ class ExpenseFragment :
                                                                 DECIMAL_LENGTH,
                                                                 RoundingMode.HALF_UP
                                                             ).signum() > 0
-                                                        ) R.attr.colorOnPrimaryContainer
-                                                        else R.attr.colorError
+                                                        ) com.google.android.material.R.attr.colorOnPrimaryContainer
+                                                        else androidx.appcompat.R.attr.colorError
                                                     )
                                                 )
                                             }
@@ -167,7 +168,7 @@ class ExpenseFragment :
             expenseCategoryRvList.addItemDecoration(
                 GridSpaceItemDecoration(
                     SPAN_COUNT,
-                    resources.getDimension(R.dimen.recycler_view_category_offset).toInt(),
+                    resources.getDimension(com.d9tilov.android.common_android.R.dimen.recycler_view_category_offset).toInt(),
                     HORIZONTAL
                 )
             )
@@ -187,7 +188,7 @@ class ExpenseFragment :
                 expenseTransactionRvList.context,
                 layoutManager.orientation
             )
-            val dividerDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.rv_divider)
+            val dividerDrawable = ContextCompat.getDrawable(requireContext(), com.d9tilov.android.designsystem.R.drawable.rv_divider)
             dividerDrawable?.let { dividerItemDecoration.setDrawable(it) }
             expenseTransactionRvList.addItemDecoration(dividerItemDecoration)
             ItemTouchHelper(object : com.d9tilov.android.transaction.ui.callback.TransactionSwipeToDeleteCallback(requireContext()) {

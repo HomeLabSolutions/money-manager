@@ -70,7 +70,7 @@ fun SettingsScreen(
                 SubscriptionLayout(
                     uiState = subscriptionState,
                     modifier = Modifier
-                        .padding(dimensionResource(R.dimen.padding_medium))
+                        .padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium))
                         .fillMaxWidth(),
                     onClick = onClickSubscription
                 )
@@ -78,7 +78,7 @@ fun SettingsScreen(
             StartOfPeriodLayout(
                 day = uiState.startPeriodDay,
                 modifier = Modifier.fillMaxWidth().padding(
-                    dimensionResource(R.dimen.padding_medium)
+                    dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)
                 ),
                 onPeriodDateChanged = onPeriodDateChanged
             )
@@ -97,13 +97,13 @@ fun StartOfPeriodLayout(day: String, modifier: Modifier, onPeriodDateChanged: (S
         Box(modifier = Modifier.width(64.dp)) {
             OutlinedTextField(
                 value = day,
-                modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_small)),
+                modifier = Modifier.padding(start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small)),
                 onValueChange = onPeriodDateChanged
             )
         }
         Text(
             text = stringResource(R.string.settings_start_period_day_postfix),
-            modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_small))
+            modifier = Modifier.padding(start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small))
         )
     }
 }
@@ -117,19 +117,19 @@ fun SubscriptionLayout(
     Card(
         modifier = modifier.clickable { onClick() },
         elevation = CardDefaults.cardElevation(8.dp),
-        shape = RoundedCornerShape(dimensionResource(R.dimen.card_view_corner_radius)),
+        shape = RoundedCornerShape(dimensionResource(com.d9tilov.android.designsystem.R.dimen.card_view_corner_radius)),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
-                modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_medium)),
+                modifier = Modifier.padding(start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
                 painter = painterResource(id = MoneyManagerIcons.Subscription),
                 contentDescription = "Subscription Icon"
             )
             Column(
                 modifier = Modifier.padding(
-                    start = dimensionResource(R.dimen.padding_large),
-                    top = dimensionResource(R.dimen.padding_medium)
+                    start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
+                    top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)
                 )
             ) {
                 SubscriptionTitle(stringResource(uiState.title))
@@ -154,7 +154,7 @@ fun SubscriptionTitle(title: String) {
 fun SubscriptionDescription(subtitle: String) {
     Text(
         text = subtitle,
-        modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_small)),
+        modifier = Modifier.padding(top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small)),
         style = MaterialTheme.typography.bodyMedium.copy(
             color = MaterialTheme.colorScheme.onSecondaryContainer
         )

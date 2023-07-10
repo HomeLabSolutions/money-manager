@@ -313,7 +313,7 @@ class StatisticsFragment :
                 sb.append(SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(toMillis))
                 sb.toString()
             }
-        val centerColor = requireContext().getColorFromAttr(R.attr.colorOnBackground)
+        val centerColor = requireContext().getColorFromAttr(com.google.android.material.R.attr.colorOnBackground)
         viewBinding?.statisticsPieChart?.setCenterTextColor(centerColor)
         viewBinding?.statisticsPieChart?.invalidate()
     }
@@ -346,7 +346,7 @@ class StatisticsFragment :
             statisticsPieChart.isHighlightPerTapEnabled = false
 
             statisticsPieChart.animateY(ANIMATION_DURATION, Easing.EaseInOutQuad)
-            statisticsPieChart.setEntryLabelColor(requireContext().getColorFromAttr(R.attr.colorOnBackground))
+            statisticsPieChart.setEntryLabelColor(requireContext().getColorFromAttr(com.google.android.material.R.attr.colorOnBackground))
             statisticsPieChart.setEntryLabelTypeface(tfRegular)
             statisticsPieChart.setEntryLabelTextSize(PIE_CHART_ENTRY_LABEL_TEXT_SIZE)
             statisticsPieChart.setCenterTextSize(PIE_CHART_CENTER_TEXT_SIZE)
@@ -392,7 +392,7 @@ class StatisticsFragment :
         val pieData = PieData(dataSet)
         pieData.setValueFormatter(PercentFormatter(viewBinding?.statisticsPieChart))
         pieData.setValueTextSize(PIE_CHART_VALUE_TEXT_SIZE)
-        pieData.setValueTextColor(requireContext().getColorFromAttr(R.attr.backgroundColor))
+        pieData.setValueTextColor(requireContext().getColorFromAttr(com.google.android.material.R.attr.backgroundColor))
         viewBinding?.statisticsPieChart?.data = pieData
 
         viewBinding?.statisticsPieChart?.highlightValues(null)
@@ -408,14 +408,14 @@ class StatisticsFragment :
             statisticsLineChart.setMaxVisibleValueCount(LINE_CHART_MAX_VISIBLE_VALUE_COUNT)
             statisticsLineChart.description.isEnabled = false
             val xAxis: XAxis = statisticsLineChart.xAxis
-            xAxis.textColor = requireContext().getColorFromAttr(R.attr.colorPrimary)
+            xAxis.textColor = requireContext().getColorFromAttr(androidx.appcompat.R.attr.colorPrimary)
             xAxis.enableGridDashedLine(
                 LINE_CHART_LINE_LENGTH,
                 LINE_CHART_SPACE_LENGTH_AXIS,
                 LINE_CHART_PHASE
             )
             val yAxis: YAxis = statisticsLineChart.axisLeft
-            yAxis.textColor = requireContext().getColorFromAttr(R.attr.colorPrimary)
+            yAxis.textColor = requireContext().getColorFromAttr(androidx.appcompat.R.attr.colorPrimary)
             yAxis.enableGridDashedLine(
                 LINE_CHART_LINE_LENGTH,
                 LINE_CHART_SPACE_LENGTH_AXIS,
@@ -441,7 +441,7 @@ class StatisticsFragment :
             lineDataSet.circleRadius = LINE_CHART_DATA_CIRCLE_RADIUS
             lineDataSet.formSize = LINE_CHART_DATA_FORM_SIZE
             lineDataSet.valueTextSize = LINE_CHART_DATA_LABEL_TEXT_SIZE
-            lineDataSet.valueTextColor = requireContext().getColorFromAttr(R.attr.colorPrimary)
+            lineDataSet.valueTextColor = requireContext().getColorFromAttr(androidx.appcompat.R.attr.colorPrimary)
             lineDataSet.enableDashedHighlightLine(
                 LINE_CHART_LINE_LENGTH,
                 LINE_CHART_SPACE_LENGTH,

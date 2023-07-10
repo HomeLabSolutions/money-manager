@@ -21,7 +21,7 @@ class CategoryColorAdapter(@ColorRes private var chosenColor: Int?, private val 
     private var selectedPosition = -1
 
     init {
-        if (chosenColor == null) chosenColor = R.color.category_pink
+        if (chosenColor == null) chosenColor = com.d9tilov.android.category_data_impl.R.color.category_pink
         selectedPosition = ColorManager.colorList.indexOf(chosenColor!!)
     }
 

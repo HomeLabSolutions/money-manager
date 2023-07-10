@@ -60,7 +60,7 @@ class CurrencyView @JvmOverloads constructor(
         }
 
     var marginBetweenCurrencySymbol =
-        resources.getDimensionPixelSize(R.dimen.currency_margin_between_currency_symbol)
+        resources.getDimensionPixelSize(com.d9tilov.android.common_android.R.dimen.currency_margin_between_currency_symbol)
         private set
     val moneyEditText = MoneyEditText(context)
     val currencySymbolTextView: TextView = TextView(context)
@@ -103,7 +103,7 @@ class CurrencyView @JvmOverloads constructor(
 
                 marginBetweenCurrencySymbol = getDimensionPixelSize(
                     R.styleable.CurrencyView_marginBetweenSign,
-                    resources.getDimensionPixelSize(R.dimen.currency_margin_between_currency_symbol)
+                    resources.getDimensionPixelSize(com.d9tilov.android.common_android.R.dimen.currency_margin_between_currency_symbol)
                 )
                 recycle()
             }
@@ -135,9 +135,9 @@ class CurrencyView @JvmOverloads constructor(
             if (sumTextStyle == DEFAULT) {
                 setTextSize(
                     TypedValue.COMPLEX_UNIT_PX,
-                    resources.getDimensionPixelSize(R.dimen.currency_sum_text_size).toFloat()
+                    resources.getDimensionPixelSize(com.d9tilov.android.common_android.R.dimen.currency_sum_text_size).toFloat()
                 )
-                setTextColor(R.attr.colorOnBackground)
+                setTextColor(com.google.android.material.R.attr.colorOnBackground)
             } else TextViewCompat.setTextAppearance(this, sumTextStyle)
             if (sumTextColor != DEFAULT) setTextColor(sumTextColor)
             if (sumTextSize != DEFAULT) setTextSize(
@@ -160,9 +160,9 @@ class CurrencyView @JvmOverloads constructor(
             if (sumTextStyle == DEFAULT) {
                 setTextSize(
                     TypedValue.COMPLEX_UNIT_PX,
-                    resources.getDimensionPixelSize(R.dimen.currency_sum_text_size).toFloat()
+                    resources.getDimensionPixelSize(com.d9tilov.android.common_android.R.dimen.currency_sum_text_size).toFloat()
                 )
-                setTextColor(R.attr.colorOnBackground)
+                setTextColor(com.google.android.material.R.attr.colorOnBackground)
             } else TextViewCompat.setTextAppearance(this, sumTextStyle)
             if (sumTextColor != DEFAULT) setTextColor(sumTextColor)
             if (sumTextSize != DEFAULT) setTextSize(
@@ -186,9 +186,9 @@ class CurrencyView @JvmOverloads constructor(
             if (signTextStyle == DEFAULT) {
                 setTextSize(
                     TypedValue.COMPLEX_UNIT_PX,
-                    resources.getDimensionPixelSize(R.dimen.currency_sign_text_size).toFloat()
+                    resources.getDimensionPixelSize(com.d9tilov.android.common_android.R.dimen.currency_sign_text_size).toFloat()
                 )
-                setTextColor(R.attr.colorOnBackground)
+                setTextColor(com.google.android.material.R.attr.colorOnBackground)
             } else TextViewCompat.setTextAppearance(this, signTextStyle)
             if (signTextColor != DEFAULT) setTextColor(signTextColor)
             if (signTextSize != DEFAULT) setTextSize(

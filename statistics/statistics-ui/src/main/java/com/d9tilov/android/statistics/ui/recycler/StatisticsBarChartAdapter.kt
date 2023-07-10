@@ -73,12 +73,12 @@ class StatisticsBarChartAdapter(private val transactionClickListener: OnItemClic
                 itemStatisticsCategoryName.text = item.category.name
                 val percent = item.percent.setScale(1, RoundingMode.HALF_UP).removeScale
                 itemStatisticsPercent.text = context.getString(
-                    R.string.number_with_percent,
+                    com.d9tilov.android.common_android.R.string.number_with_percent,
                     when {
                         percent < BigDecimal(STATISTICAL_ERROR) -> "<1"
                         percent > BigDecimal(MAX_PERCENT_AMOUNT - STATISTICAL_ERROR) && percent < BigDecimal(
                             MAX_PERCENT_AMOUNT
-                        ) -> "${context.getString(R.string.approx_sign)}100"
+                        ) -> "${context.getString(com.d9tilov.android.common_android.R.string.approx_sign)}100"
                         else -> percent.toString()
                     }
                 )

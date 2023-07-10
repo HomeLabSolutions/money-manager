@@ -21,7 +21,7 @@ import java.util.Locale
 abstract class TransactionSwipeToDeleteCallback(val context: Context) :
     ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
-    private val deleteIcon = ContextCompat.getDrawable(context, R.drawable.ic_delete_swipe)
+    private val deleteIcon = ContextCompat.getDrawable(context, com.d9tilov.android.common_android.R.drawable.ic_delete_swipe)
     private var intrinsicWidth = deleteIcon?.intrinsicWidth ?: 0
     private var intrinsicHeight = deleteIcon?.intrinsicHeight ?: 0
     private val background = ColorDrawable()
@@ -37,8 +37,8 @@ abstract class TransactionSwipeToDeleteCallback(val context: Context) :
     }
 
     init {
-        context.setTextAppearanceFromAttr(textView, R.attr.textAppearanceLabelLarge)
-        textPaint.color = context.getColorFromAttr(R.attr.colorOnPrimary)
+        context.setTextAppearanceFromAttr(textView, com.google.android.material.R.attr.textAppearanceLabelLarge)
+        textPaint.color = context.getColorFromAttr(com.google.android.material.R.attr.colorOnPrimary)
         textPaint.textSize = textView.textSize
         textPaint.typeface = textView.typeface
     }
@@ -83,7 +83,7 @@ abstract class TransactionSwipeToDeleteCallback(val context: Context) :
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
             return
         }
-        val backgroundColor = context.getColorFromAttr(R.attr.colorError)
+        val backgroundColor = context.getColorFromAttr(androidx.appcompat.R.attr.colorError)
         background.color = backgroundColor
         background.setBounds(
             itemView.right + dX.toInt(),

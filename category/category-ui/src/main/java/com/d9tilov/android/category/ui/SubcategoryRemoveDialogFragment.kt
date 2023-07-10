@@ -31,7 +31,7 @@ class SubcategoryRemoveDialogFragment :
             tripleRemoveDialogButtonAction1.text = getString(R.string.sub_category_delete)
             tripleRemoveDialogButtonAction2.text =
                 getString(R.string.sub_category_delete_from_group)
-            tripleRemoveDialogButtonCancel.text = getString(R.string.cancel)
+            tripleRemoveDialogButtonCancel.text = getString(com.d9tilov.android.common_android.R.string.cancel)
             tripleRemoveDialogTitle.text = getString(R.string.sub_category_delete_title)
             tripleRemoveDialogButtonAction1.setOnClickListener { viewModel.remove(subCategory) }
             tripleRemoveDialogButtonAction2.setOnClickListener { viewModel.removeFromGroup(subCategory) }

@@ -184,7 +184,7 @@ class StatisticsMenuAdapter(
                         context.getString(R.string.statistics_menu_in_statistics_title)
                 }
                 StatisticsMenuInStatistics.All -> {
-                    viewBinding.statisticsMenuIcon.setImageResource(R.drawable.ic_not_in_statistics)
+                    viewBinding.statisticsMenuIcon.setImageResource(com.d9tilov.android.designsystem.R.drawable.ic_not_in_statistics)
                     viewBinding.statisticsMenuTitle.text =
                         context.getString(R.string.statistics_menu_not_in_statistics_title)
                 }

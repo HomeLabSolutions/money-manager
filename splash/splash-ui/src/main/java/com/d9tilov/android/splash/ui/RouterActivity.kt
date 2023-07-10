@@ -56,8 +56,8 @@ class RouterActivity : AppCompatActivity(), SplashNavigator {
         startForResult.launch(
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
-                .setLogo(R.drawable.ic_money_manager_logo)
-                .setTheme(R.style.Theme_Login)
+                .setLogo(com.d9tilov.android.designsystem.R.drawable.ic_money_manager_logo)
+                .setTheme(com.d9tilov.android.designsystem.R.style.Theme_Login)
                 .setAvailableProviders(providers)
                 .setIsSmartLockEnabled(false)
                 .build()

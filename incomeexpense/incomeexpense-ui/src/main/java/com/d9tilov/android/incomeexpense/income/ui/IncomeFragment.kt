@@ -112,7 +112,7 @@ class IncomeFragment :
             incomeCategoryRvList.addItemDecoration(
                 GridSpaceItemDecoration(
                     SPAN_COUNT,
-                    resources.getDimension(R.dimen.recycler_view_category_offset).toInt(),
+                    resources.getDimension(com.d9tilov.android.common_android.R.dimen.recycler_view_category_offset).toInt(),
                     HORIZONTAL
                 )
             )
@@ -133,7 +133,7 @@ class IncomeFragment :
                 incomeTransactionRvList.context,
                 layoutManager.orientation
             )
-            val dividerDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.rv_divider)
+            val dividerDrawable = ContextCompat.getDrawable(requireContext(), com.d9tilov.android.designsystem.R.drawable.rv_divider)
             dividerDrawable?.let { dividerItemDecoration.setDrawable(it) }
             incomeTransactionRvList.addItemDecoration(dividerItemDecoration)
             ItemTouchHelper(object : com.d9tilov.android.transaction.ui.callback.TransactionSwipeToDeleteCallback(requireContext()) {

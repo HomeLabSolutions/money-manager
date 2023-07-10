@@ -138,7 +138,7 @@ class CategoryCreationFragment :
 
     private fun invalidateItemCircleColor() {
         viewBinding?.categoryCreationColor?.colorCircle?.backgroundTintList =
-            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), localCategory.color?: R.color.category_all_color))
+            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), localCategory.color?: com.d9tilov.android.category_data_impl.R.color.category_all_color))
     }
 
     private fun updateIcon(@DrawableRes iconId: Int?) {

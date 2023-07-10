@@ -118,7 +118,7 @@ fun ProfileScreen(
         ProfileSection(state.settings, onSettingsClicked)
         Spacer(modifier = Modifier.weight(1f))
         OutlinedButton(
-            modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_medium)),
+            modifier = Modifier.padding(top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
             onClick = { onLogoutClicked() },
             shape = RoundedCornerShape(50),
             colors = ButtonDefaults.outlinedButtonColors(backgroundColor = MaterialTheme.colorScheme.error)
@@ -130,14 +130,14 @@ fun ProfileScreen(
         }
         Text(
             text = "",
-            modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium)),
+            modifier = Modifier.padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
             style = MaterialTheme.typography.bodySmall,
         )
         SimpleDialog(
             show = showDialog,
             title = stringResource(R.string.logout_dialog_title),
             subtitle = stringResource(R.string.logout_dialog_subtitle),
-            dismissButton = stringResource(R.string.cancel),
+            dismissButton = stringResource(com.d9tilov.android.common_android.R.string.cancel),
             confirmButton = stringResource(R.string.logout_dialog_button),
             onConfirm = { onLogoutConfirmClicked() },
             onDismiss = { onLogoutDismissClicked() }
@@ -190,7 +190,7 @@ fun ProfilePicture(uri: Uri?) {
 fun ProfileContent(name: String?) {
     Text(
         name ?: "",
-        modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium)),
+        modifier = Modifier.padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
         style = MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.onPrimaryContainer)
     )
 }
@@ -205,45 +205,45 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
             null
         )
         is ProfileUiItem.BudgetUiItem -> ProfileItemData(
-            ImageVector.vectorResource(R.drawable.ic_budget_icon),
-            stringResource(R.string.profile_item_budget_title),
+            ImageVector.vectorResource(com.d9tilov.android.budget_ui.R.drawable.ic_budget_icon),
+            stringResource(com.d9tilov.android.budget_ui.R.string.profile_item_budget_title),
             profileUiItem.budgetData.createdDate.toBudgetCreatedDateStr()
         )
         is ProfileUiItem.RegularIncomeUiItem -> ProfileItemData(
-            ImageVector.vectorResource(R.drawable.ic_regular_income),
-            stringResource(R.string.profile_item_regular_incomes_title),
+            ImageVector.vectorResource(com.d9tilov.android.incomeexpense_ui.R.drawable.ic_regular_income),
+            stringResource(com.d9tilov.android.incomeexpense_ui.R.string.profile_item_regular_incomes_title),
             profileUiItem.regularIncomes.joinToString { it.category.name },
             null
         )
         is ProfileUiItem.RegularExpenseUiItem -> ProfileItemData(
-            ImageVector.vectorResource(R.drawable.ic_regular_expense),
-            stringResource(R.string.profile_item_regular_expenses_title),
+            ImageVector.vectorResource(com.d9tilov.android.incomeexpense_ui.R.drawable.ic_regular_expense),
+            stringResource(com.d9tilov.android.incomeexpense_ui.R.string.profile_item_regular_expenses_title),
             profileUiItem.regularExpenses.joinToString { it.category.name }
         )
         is ProfileUiItem.Goals -> ProfileItemData(
-            ImageVector.vectorResource(R.drawable.ic_goal),
-            stringResource(R.string.profile_item_goals_title_empty),
+            ImageVector.vectorResource(com.d9tilov.android.goals_ui.R.drawable.ic_goal),
+            stringResource(com.d9tilov.android.goals_ui.R.string.profile_item_goals_title_empty),
             null,
         )
         is ProfileUiItem.Settings -> ProfileItemData(
-            ImageVector.vectorResource(R.drawable.ic_settings),
-            stringResource(R.string.profile_item_settings_title),
+            ImageVector.vectorResource(com.d9tilov.android.settings_ui.R.drawable.ic_settings),
+            stringResource(com.d9tilov.android.settings_ui.R.string.profile_item_settings_title),
             null,
         )
     }
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = if (profileUiItem is ProfileUiItem.CurrencyUiItem) dimensionResource(R.dimen.padding_large) else 0.dp)
-            .height(dimensionResource(R.dimen.profile_item_height))
+            .padding(top = if (profileUiItem is ProfileUiItem.CurrencyUiItem) dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large) else 0.dp)
+            .height(dimensionResource(com.d9tilov.android.designsystem.R.dimen.profile_item_height))
             .clickable(onClick = navigationCallback)
     ) {
         val (idIcon, idTitle, idData, idSubtitle, idDivider) = createRefs()
         Icon(
             modifier = Modifier
                 .padding(
-                    start = dimensionResource(R.dimen.padding_large),
-                    end = dimensionResource(R.dimen.padding_medium)
+                    start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
+                    end = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)
                 )
                 .constrainAs(idIcon) {
                     top.linkTo(parent.top)
@@ -305,11 +305,11 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
                     ) else
                     Triple(
                         MaterialTheme.colorScheme.tertiaryContainer,
-                        stringResource(R.string.settings_subscription_premium_title),
+                        stringResource(com.d9tilov.android.settings_ui.R.string.settings_subscription_premium_title),
                         MaterialTheme.colorScheme.onTertiaryContainer
                     )
                 Text(
-                    modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_large))
+                    modifier = Modifier.padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large))
                         .constrainAs(idData) {
                             baseline.linkTo(idTitle.baseline)
                             start.linkTo(idTitle.end)
@@ -320,7 +320,7 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
                         )
                         .padding(all = 8.dp),
                     style = MaterialTheme.typography.labelMedium.copy(
-                        fontSize = dimensionResource(R.dimen.billing_premium_label_text_size).value.sp,
+                        fontSize = dimensionResource(com.d9tilov.android.settings_ui.R.dimen.billing_premium_label_text_size).value.sp,
                         color = textColor
                     ),
                     text = text
@@ -342,7 +342,7 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
         }
         Divider(
             modifier = Modifier
-                .padding(horizontal = dimensionResource(R.dimen.padding_medium))
+                .padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium))
                 .constrainAs(idDivider) { bottom.linkTo(parent.bottom) },
             thickness = 1.dp,
             color = MaterialTheme.colorScheme.primaryContainer

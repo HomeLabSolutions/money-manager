@@ -63,7 +63,7 @@ class CategoryUnitDialog :
                     secondCategory.name
                 )
                 categoryDialogUnionEtNameLayout.gone()
-                categoryDialogUnionConfirm.text = getString(R.string.add)
+                categoryDialogUnionConfirm.text = getString(com.d9tilov.android.common_android.R.string.add)
                 categoryDialogCurrentFolder.categoryDialogUnionItem1.setImageDrawable(
                     firstDrawable
                 )
@@ -77,7 +77,7 @@ class CategoryUnitDialog :
                     createTintDrawable(requireContext(), icon, color)
                 }
                 categoryDialogUnionFolder.categoryDialogUnionItem2.setImageDrawable(secondDrawable)
-                categoryDialogUnionConfirm.text = getString(R.string.save)
+                categoryDialogUnionConfirm.text = getString(com.d9tilov.android.common_android.R.string.save)
                 categoryDialogUnionFolder.root.show()
             }
             categoryDialogUnionConfirm.setOnClickListener {
@@ -99,8 +99,8 @@ class CategoryUnitDialog :
         return Category.EMPTY_EXPENSE.copy(
             type = transactionType,
             name = viewBinding?.categoryDialogUnionEtName?.text.toString(),
-            color = R.color.category_all_color,
-            icon = R.drawable.ic_category_folder
+            color = com.d9tilov.android.category_data_impl.R.color.category_all_color,
+            icon = com.d9tilov.android.common_android.R.drawable.ic_category_folder
         )
     }
 

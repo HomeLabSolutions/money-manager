@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title_prepopulate_currency">Choose currency</string>
     <string name="profile_item_currency_title">Currency: </string>
 </resources>
