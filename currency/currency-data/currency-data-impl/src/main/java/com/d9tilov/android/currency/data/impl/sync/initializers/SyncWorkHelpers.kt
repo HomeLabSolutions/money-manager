@@ -30,7 +30,7 @@ import com.d9tilov.android.currency_data_impl.R
 private const val SyncNotificationId = 0
 private const val SyncNotificationChannelID = "SyncNotificationChannel"
 
-// All sync work needs an internet connectionS
+// All sync work needs an internet connections
 val SyncConstraints
     get() = Constraints.Builder()
         .setRequiredNetworkType(NetworkType.CONNECTED)

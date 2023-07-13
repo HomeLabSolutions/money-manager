@@ -94,12 +94,6 @@ class RouterViewModel @Inject constructor(
                 } catch (ex: FirebaseException) {
                     Timber.tag(TAG).d("Do work with exception: $ex")
                 }
-                val user = userInteractor.getCurrentUser().firstOrNull()
-                if (user == null || user.showPrepopulate) {
-                    userInteractor.createUser(auth.currentUser.toDataModel())
-                    categoryInteractor.get().createDefaultCategories()
-                    withContext(Dispatchers.Main) { navigator?.openPrepopulate() }
-                } else withContext(Dispatchers.Main) { navigator?.openHomeScreen() }
             }
         }
     }

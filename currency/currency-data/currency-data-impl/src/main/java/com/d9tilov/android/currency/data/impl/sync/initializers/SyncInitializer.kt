@@ -19,13 +19,16 @@ package com.d9tilov.android.currency.data.impl.sync.initializers
 import android.content.Context
 import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkManager
+import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.currency.data.impl.sync.workers.CurrencySyncWorker
+import timber.log.Timber
 
 object Sync {
     // This method is a workaround to manually initialize the sync process instead of relying on
     // automatic initialization with Androidx Startup. It is called from the app module's
     // Application.onCreate() and should be only done once.
     fun initialize(context: Context) {
+        Timber.tag(TAG).d("Initialize currency sync worker")
         WorkManager.getInstance(context).apply {
             // Run sync on app startup and ensure only one sync worker runs at any time
             enqueueUniqueWork(
