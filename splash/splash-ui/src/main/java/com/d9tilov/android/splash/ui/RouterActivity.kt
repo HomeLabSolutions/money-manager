@@ -47,6 +47,7 @@ class RouterActivity : AppCompatActivity(), SplashNavigator {
     }
 
     override fun openPrepopulate() {
+        Timber.tag(TAG).d("openPrepopulate")
         val intent = Intent(this, PrepopulateActivity::class.java)
         startActivity(intent)
         this.finish()

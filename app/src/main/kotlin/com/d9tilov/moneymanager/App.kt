@@ -14,9 +14,6 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        DynamicColors.applyToActivitiesIfAvailable(this)
-        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
-        Sync.initialize(this)
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
             val threadPolicy = StrictMode.ThreadPolicy.Builder()
@@ -30,9 +27,8 @@ class App : Application() {
                 .build()
             StrictMode.setVmPolicy(vmPolicy)
         }
-    }
-
-    companion object {
-        const val TAG = "[MoneyManager]"
+        DynamicColors.applyToActivitiesIfAvailable(this)
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
+        Sync.initialize(this)
     }
 }
