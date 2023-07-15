@@ -2,16 +2,16 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    id("com.android.application")
+    id("moneymanager.android.application")
+    id("moneymanager.android.hilt")
+    id("moneymanager.android.application.compose")
     id("kotlin-android")
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
-    id("dagger.hilt.android.plugin")
     id("io.gitlab.arturbosch.detekt")
     id("kotlinx-serialization")
-    kotlin("kapt")
 }
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -30,16 +30,10 @@ android {
     }
 
     namespace = "com.d9tilov.moneymanager"
-    val compileSdkVersion: Int by rootProject.extra
-    val minSdkVersion: Int by rootProject.extra
-    val targetSdkVersion: Int by rootProject.extra
 
     defaultConfig {
 
         applicationId = "com.d9tilov.moneymanager"
-        minSdk = minSdkVersion
-        targetSdk = targetSdkVersion
-        compileSdk = compileSdkVersion
         val versionMajor: Int by rootProject.extra
         val versionMinor: Int by rootProject.extra
         val versionPatch: Int by rootProject.extra
@@ -80,37 +74,21 @@ android {
 
     buildFeatures {
         viewBinding = true
-        compose = true
     }
     dataBinding {
         isEnabled = true
     }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-
-    packagingOptions {
-        resources {
-            excludes += listOf(
-                "META-INF/DEPENDENCIES",
-                "META-INF/LICENSE",
-                "META-INF/LICENSE.txt",
-                "META-INF/license.txt",
-                "META-INF/NOTICE",
-                "META-INF/NOTICE.txt",
-                "META-INF/notice.txt",
-                "META-INF/ASL2.0"
-            )
+    configure<com.android.build.gradle.BaseExtension> {
+        packagingOptions {
+            exclude("META-INF/DEPENDENCIES")
+            exclude("META-INF/LICENSE")
+            exclude("META-INF/LICENSE.txt")
+            exclude("META-INF/license.txt")
+            exclude("META-INF/NOTICE")
+            exclude("META-INF/NOTICE.txt")
+            exclude("META-INF/notice.txt")
+            exclude("META-INF/ASL2.0")
         }
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.8"
     }
 
     kapt {
@@ -144,9 +122,6 @@ dependencies {
     implementation(libs.firebaseCrashlytics)
     implementation(libs.firebaseStorage)
     implementation(libs.firebaseConfig)
-
-    implementation(libs.hilt)
-    kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.composeMaterial3)
     implementation(libs.composeFoundation)

@@ -1,38 +1,13 @@
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-    id("dagger.hilt.android.plugin")
+    id("moneymanager.android.library")
+    id("moneymanager.android.hilt")
+    id("moneymanager.android.library.viewbinding")
     id("androidx.navigation.safeargs.kotlin")
     id("kotlin-parcelize")
-    kotlin("kapt")
 }
 
 android {
     namespace = "com.d9tilov.android.regular_transaction_ui"
-    val compileSdkVersion: Int by rootProject.extra
-    val minSdkVersion: Int by rootProject.extra
-
-    compileSdk = compileSdkVersion
-
-    defaultConfig {
-        minSdk = minSdkVersion
-    }
-
-    buildFeatures {
-        viewBinding = true
-    }
-    dataBinding {
-        isEnabled = true
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
 }
 
 dependencies {
@@ -53,6 +28,6 @@ dependencies {
 
     implementation(libs.material)
 
-    implementation(libs.hilt)
-    kapt(libs.hiltAndroidCompiler)
+    
+    
 }

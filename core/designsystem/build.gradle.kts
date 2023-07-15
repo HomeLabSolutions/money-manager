@@ -1,40 +1,14 @@
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    id("moneymanager.android.library")
+    id("moneymanager.android.library.compose")
+    id("moneymanager.android.library.viewbinding")
 }
 
 android {
     namespace = "com.d9tilov.android.designsystem"
-    val compileSdkVersion: Int by rootProject.extra
-    val minSdkVersion: Int by rootProject.extra
-
-    compileSdk = compileSdkVersion
 
     defaultConfig {
-        minSdk = minSdkVersion
-
         vectorDrawables.useSupportLibrary = true
-    }
-
-    dataBinding {
-        isEnabled = true
-    }
-
-    buildFeatures {
-        viewBinding = true
-        compose = true
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.8"
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 }
 

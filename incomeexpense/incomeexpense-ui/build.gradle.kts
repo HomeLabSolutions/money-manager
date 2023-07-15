@@ -1,44 +1,16 @@
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-    id("dagger.hilt.android.plugin")
+    id("moneymanager.android.library")
+    id("moneymanager.android.hilt")
+    id("moneymanager.android.library.compose")
+    id("moneymanager.android.library.viewbinding")
     id("androidx.navigation.safeargs.kotlin")
-    kotlin("kapt")
 }
 
 android {
     namespace = "com.d9tilov.android.incomeexpense_ui"
-    val compileSdkVersion: Int by rootProject.extra
-    val minSdkVersion: Int by rootProject.extra
-
-    compileSdk = compileSdkVersion
 
     defaultConfig {
-        minSdk = minSdkVersion
-
         vectorDrawables.useSupportLibrary = true
-    }
-
-    buildFeatures {
-        viewBinding = true
-        compose = true
-    }
-
-    dataBinding {
-        isEnabled = true
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.8"
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 }
 
@@ -70,9 +42,6 @@ dependencies {
     implementation(libs.navigationCompose)
 
     implementation(libs.timber)
-
-    implementation(libs.hilt)
-    kapt(libs.hiltAndroidCompiler)
 
     implementation(libs.firebaseAnalytics)
     implementation(platform(libs.firebaseBom))
