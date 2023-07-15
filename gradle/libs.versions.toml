@@ -1,6 +1,9 @@
 [versions]
 gradlePlugin = "8.0.2"
 kotlin = "1.8.22"
+ksp = "1.8.22-1.0.11"
+javaPoet = "1.13.0"
+javaVersion = "17"
 kotlinDatetime = "0.4.0"
 appCompat = "1.6.1"
 material = "1.9.0"
@@ -39,6 +42,7 @@ composeMaterial3 = "1.1.1"
 composeActivity = "1.7.2"
 composeViewModel = "2.6.1"
 composeRuntime = "2.6.1"
+androidxComposeCompiler = "1.4.8"
 worker = "2.8.1"
 workerHilt = "1.0.0"
 klaxon = "5.6"
@@ -136,6 +140,11 @@ firebaseCrashlyticsPlgin = { group = "com.google.firebase", name = "firebase-cra
 detektPlugin = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detektPlugin" }
 kotlinPlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 
+# Dependencies of the included build-logic
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "gradlePlugin" }
+ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+java-poet = { group = "com.squareup", name = "javapoet", version.ref = "javaPoet" }
+
 [bundles]
 compose = [
     "composeUi", "composeToolingPreview", "composeFoundation",
@@ -152,6 +161,8 @@ worker = ["worker", "workerHilt"]
 android-application = { id = "com.android.application", version.ref = "gradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "gradlePlugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 android = { id = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
 deps = { id = "com.autonomousapps.dependency-analysis", version.ref = "autonomousapps" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }
