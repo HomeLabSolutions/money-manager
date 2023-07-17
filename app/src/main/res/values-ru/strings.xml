@@ -4,8 +4,6 @@
 
     <string name="title_goal">Цели</string>
 
-    <string name="toolbar_menu_skip">Пропустить</string>
-
     <string name="currency_error">Не удалось получить список валют</string>
     <string name="currency_change_title">Сменить валюту на %s?</string>
     <string name="currency_change_subtitle">Приложение будет перезапущено.</string>
@@ -40,4 +38,8 @@
     <string name="notification_action_expense_title">Добавить в расходы</string>
     <string name="notification_channel_income_name">Постоянные доходы</string>
     <string name="notification_channel_expense_name">Постоянные расходы</string>
+
+    <string name="title_prepopulate_currency">Выберите валюту</string>
+    <string name="title_prepopulate_budget">Текущий бюджет</string>
+    <string name="toolbar_menu_skip">Пропустить</string>
 </resources>

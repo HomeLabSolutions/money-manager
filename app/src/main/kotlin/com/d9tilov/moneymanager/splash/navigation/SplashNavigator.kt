@@ -1,4 +1,4 @@
-package com.d9tilov.android.splash.ui.navigation
+package com.d9tilov.moneymanager.splash.navigation
 
 import com.d9tilov.android.common_android.ui.base.BaseNavigator
 

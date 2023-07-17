@@ -86,8 +86,6 @@ include(":statistics:statistics-domain:statistics-domain-model")
 include(":statistics:statistics-ui")
 
 include(":profile:profile-ui")
-include(":splash:splash-ui")
-include(":prepopulate:prepopulate-ui")
 include(":incomeexpense:incomeexpense-ui")
 include(":settings:settings-ui")
 include(":home:home-ui")

@@ -4,8 +4,8 @@
     android:id="@+id/income_expense"
     app:startDestination="@+id/income_expense_dest">
 
-    <include app:graph="@navigation/category_navigation" />
     <include app:graph="@navigation/income_expense_navigation" />
+    <include app:graph="@navigation/category_navigation" />
     <include app:graph="@navigation/profile_navigation" />
 
 </navigation>
