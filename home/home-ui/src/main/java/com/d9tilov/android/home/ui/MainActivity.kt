@@ -24,6 +24,7 @@ import com.d9tilov.android.home.ui.navigation.HomeNavigator
 import com.d9tilov.android.home_ui.R
 import com.d9tilov.android.home_ui.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.ActivityRetainedLifecycle
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint

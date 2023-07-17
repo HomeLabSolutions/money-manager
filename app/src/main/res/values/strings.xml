@@ -3,8 +3,6 @@
 
     <string name="title_goal">Goals</string>
 
-    <string name="toolbar_menu_skip">Skip</string>
-
     <string name="currency_error">Failed to get currency list</string>
     <string name="currency_change_title">Change currency to %s?</string>
     <string name="currency_change_subtitle">The app will restart.</string>
@@ -40,4 +38,8 @@
     <string name="notification_action_expense_title">Add to expenses</string>
     <string name="notification_channel_income_name">Regular incomes</string>
     <string name="notification_channel_expense_name">Regular expenses</string>
+
+    <string name="title_prepopulate_currency">Choose currency</string>
+    <string name="title_prepopulate_budget">Current budget</string>
+    <string name="toolbar_menu_skip">Skip</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.d9tilov.android.prepopulate.ui
+package com.d9tilov.moneymanager.prepopulate
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

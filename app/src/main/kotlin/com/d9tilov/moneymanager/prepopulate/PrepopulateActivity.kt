@@ -1,4 +1,4 @@
-package com.d9tilov.android.prepopulate.ui
+package com.d9tilov.moneymanager.prepopulate
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.d9tilov.android.prepopulate_ui.R
+import com.d9tilov.moneymanager.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

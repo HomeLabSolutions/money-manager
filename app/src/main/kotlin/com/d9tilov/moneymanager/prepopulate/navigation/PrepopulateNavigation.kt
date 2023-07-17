@@ -1,4 +1,4 @@
-package com.d9tilov.android.prepopulate.ui.navigation
+package com.d9tilov.moneymanager.prepopulate.navigation
 
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController

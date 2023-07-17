@@ -106,16 +106,40 @@ android {
 
 dependencies {
 
+    implementation(project(":core:common"))
     implementation(project(":core:common-android"))
     implementation(project(":core:designsystem"))
+    implementation(project(":core:datastore"))
+    implementation(project(":core:network"))
 
     implementation(project(":currency:currency-data:currency-data-impl"))
-    implementation(project(":splash:splash-ui"))
+    implementation(project(":currency:currency-domain:currency-domain-model"))
+    implementation(project(":currency:currency-domain:currency-domain-contract"))
+    implementation(project(":currency:currency-observer:currency-observer-contract"))
+
+    implementation(project(":backup:backup-domain:backup-domain-contract"))
+    implementation(project(":backup:backup-di"))
+
+    implementation(project(":user-info:user-domain:user-domain-model"))
+    implementation(project(":user-info:user-domain:user-domain-contract"))
+    implementation(project(":user-info:user-data:user-data-impl"))
+    implementation(project(":user-info:user-di"))
+
+    implementation(project(":budget:budget-domain:budget-domain-model"))
+    implementation(project(":budget:budget-domain:budget-domain-contract"))
+
+    implementation(project(":category:category-domain:category-domain-contract"))
+
+    implementation(project(":home:home-ui"))
+    implementation(project(":budget:budget-ui"))
+    implementation(project(":currency:currency-ui"))
 
     implementation(libs.appCompat)
     implementation(libs.material)
+    implementation(libs.navigation)
 
     implementation(libs.firebase)
+    implementation(libs.firebaseUi)
     implementation(libs.googlePlayServicesAuth)
     implementation(libs.firebaseAnalytics)
     implementation(platform(libs.firebaseBom))
@@ -123,9 +147,18 @@ dependencies {
     implementation(libs.firebaseStorage)
     implementation(libs.firebaseConfig)
 
+    implementation(libs.composeUi)
+    implementation(libs.composeViewModel)
     implementation(libs.composeMaterial3)
     implementation(libs.composeFoundation)
+    implementation(libs.composeToolingPreview)
+    implementation(libs.hiltNavigationCompose)
+    implementation(libs.composeMaterialIconsCore)
+    implementation(libs.composeMaterialIconsExtended)
+    implementation(libs.composeRuntime)
 
     implementation(libs.timber)
     implementation(libs.serializationKotlin)
+
+    implementation(libs.splashScreen)
 }

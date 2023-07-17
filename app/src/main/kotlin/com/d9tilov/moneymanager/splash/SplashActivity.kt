@@ -1,4 +1,4 @@
-package com.d9tilov.android.splash.ui
+package com.d9tilov.moneymanager.splash
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,24 +8,24 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.home.ui.MainActivity
-import com.d9tilov.android.prepopulate.ui.PrepopulateActivity
-import com.d9tilov.android.splash.ui.navigation.SplashNavigator
-import com.d9tilov.android.splash.ui.vm.RouterViewModel
-import com.d9tilov.android.splash_ui.R
+import com.d9tilov.moneymanager.prepopulate.PrepopulateActivity
+import com.d9tilov.moneymanager.R
+import com.d9tilov.moneymanager.splash.navigation.SplashNavigator
+import com.d9tilov.moneymanager.splash.vm.SplashViewModel
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class RouterActivity : AppCompatActivity(), SplashNavigator {
+class SplashActivity : AppCompatActivity(), SplashNavigator {
 
     private val providers = arrayListOf(
         AuthUI.IdpConfig.PhoneBuilder().build(),
         AuthUI.IdpConfig.GoogleBuilder().build()
     )
 
-    private val viewModel by viewModels<RouterViewModel>()
+    private val viewModel by viewModels<SplashViewModel>()
     private val startForResult: ActivityResultLauncher<Intent> =
         registerForActivityResult(FirebaseAuthUIActivityResultContract()) { result ->
             Timber.tag(TAG).d("Sign in result: $result")
@@ -47,7 +47,6 @@ class RouterActivity : AppCompatActivity(), SplashNavigator {
     }
 
     override fun openPrepopulate() {
-        Timber.tag(TAG).d("openPrepopulate")
         val intent = Intent(this, PrepopulateActivity::class.java)
         startActivity(intent)
         this.finish()

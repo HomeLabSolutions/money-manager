@@ -1,4 +1,4 @@
-package com.d9tilov.android.prepopulate.ui
+package com.d9tilov.moneymanager.prepopulate
 
 import android.app.Activity
 import android.content.Intent
@@ -49,8 +49,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.budget.ui.BudgetScreen
 import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.android.currency.ui.CurrencyListScreen
-import com.d9tilov.android.prepopulate.ui.PrepopulateScreen.Companion.fromScreenId
-import com.d9tilov.android.prepopulate_ui.R
+import com.d9tilov.android.home.ui.MainActivity
+import com.d9tilov.moneymanager.prepopulate.PrepopulateScreen.Companion.fromScreenId
+import com.d9tilov.moneymanager.R
 
 @Composable
 fun PrepopulateScreen(prepopulateViewModel: PrepopulateViewModel = hiltViewModel()) {
@@ -62,8 +63,7 @@ fun PrepopulateScreen(prepopulateViewModel: PrepopulateViewModel = hiltViewModel
         { budget -> prepopulateViewModel.changeBudgetAmount(budget) },
         {
             prepopulateViewModel.saveBudgetAmountAndComplete()
-            val intent = Intent()
-            intent.setClassName(context, "com.d9tilov.moneymanager.home.ui.MainActivity")
+            val intent = Intent(context, MainActivity::class.java)
             context.startActivity(intent)
             (context as Activity).finish()
         }
@@ -105,7 +105,8 @@ fun PrepopulateScreen(
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
             when (screenTypeId.fromScreenId()) {
-                PrepopulateScreen.CurrencyScreen -> CurrencyListScreen(
+                PrepopulateScreen.CurrencyScreen ->
+                    CurrencyListScreen(
                     uiState.currencyUiState,
                     Modifier.weight(1f),
                     false,

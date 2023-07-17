@@ -1,4 +1,4 @@
-package com.d9tilov.android.splash.ui.vm
+package com.d9tilov.moneymanager.splash.vm
 
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.backup.domain.contract.BackupInteractor
@@ -8,9 +8,9 @@ import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.network.exception.NetworkException
-import com.d9tilov.android.splash.ui.navigation.SplashNavigator
 import com.d9tilov.android.user.data.impl.mapper.toDataModel
 import com.d9tilov.android.user.domain.contract.UserInteractor
+import com.d9tilov.moneymanager.splash.navigation.SplashNavigator
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Lazy
@@ -24,7 +24,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 @HiltViewModel
-class RouterViewModel @Inject constructor(
+class SplashViewModel @Inject constructor(
     private val preferencesStore: PreferencesStore,
     private val backupInteractor: BackupInteractor,
     private val userInteractor: UserInteractor,
