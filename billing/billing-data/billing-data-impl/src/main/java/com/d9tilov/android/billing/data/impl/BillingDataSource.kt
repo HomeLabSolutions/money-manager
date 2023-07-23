@@ -57,7 +57,9 @@ class BillingDataSource(context: Context) :
                     queryPurchases()
                     queryProductDetails()
                     _billingConnectionReady.value = true
-                } else Timber.tag(TAG).e(billingResult.debugMessage)
+                } else {
+                    Timber.tag(TAG).e(billingResult.debugMessage)
+                }
             }
 
             override fun onBillingServiceDisconnected() {
@@ -84,9 +86,14 @@ class BillingDataSource(context: Context) :
             QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.SUBS).build()
         ) { billingResult, purchaseList ->
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                if (purchaseList.isNotEmpty()) _purchases.value = purchaseList
-                else _purchases.value = emptyList()
-            } else Timber.tag(TAG).e(billingResult.debugMessage)
+                if (purchaseList.isNotEmpty()) {
+                    _purchases.value = purchaseList
+                } else {
+                    _purchases.value = emptyList()
+                }
+            } else {
+                Timber.tag(TAG).e(billingResult.debugMessage)
+            }
         }
     }
 

@@ -7,16 +7,17 @@ import androidx.fragment.app.viewModels
 import com.d9tilov.android.backup.ui.navigator.SettingsBackupDeletionNavigator
 import com.d9tilov.android.backup.ui.vm.BackupDeletionViewModel
 import com.d9tilov.android.backup_ui.R
+import com.d9tilov.android.common.android.ui.base.BaseDialogFragment
+import com.d9tilov.android.common.android.utils.gone
 import com.d9tilov.android.designsystem.databinding.FragmentDialogRemoveBinding
-import com.d9tilov.android.common_android.ui.base.BaseDialogFragment
-import com.d9tilov.android.common_android.utils.gone
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class BackupRemoveDialog :
     BaseDialogFragment<SettingsBackupDeletionNavigator, FragmentDialogRemoveBinding>(
         FragmentDialogRemoveBinding::inflate
-    ), SettingsBackupDeletionNavigator {
+    ),
+    SettingsBackupDeletionNavigator {
 
     override fun getNavigator() = this
     override val viewModel by viewModels<BackupDeletionViewModel>()

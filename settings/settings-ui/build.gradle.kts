@@ -25,7 +25,7 @@ dependencies {
 
     implementation(project(":user-info:user-domain:user-domain-model"))
     implementation(project(":user-info:user-domain:user-domain-contract"))
-    
+
     implementation(project(":currency:currency-domain:currency-domain-model"))
 
     implementation(libs.appCompat)
@@ -52,4 +52,3 @@ dependencies {
     implementation(platform(libs.firebaseBom))
     implementation(libs.firebaseConfig)
 }
-

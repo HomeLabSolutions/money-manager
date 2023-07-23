@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.d9tilov.android.database.entity.UserDbModel
 import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
 

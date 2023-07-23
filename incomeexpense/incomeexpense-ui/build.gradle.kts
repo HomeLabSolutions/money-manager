@@ -22,7 +22,7 @@ dependencies {
     implementation(project(":category:category-domain:category-domain-model"))
     implementation(project(":category:category-domain:category-domain-contract"))
     implementation(project(":category:category-ui"))
-    
+
     implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
 
@@ -45,5 +45,4 @@ dependencies {
 
     implementation(libs.firebaseAnalytics)
     implementation(platform(libs.firebaseBom))
-
 }

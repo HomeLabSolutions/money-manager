@@ -22,13 +22,13 @@ import com.d9tilov.android.category.ui.recycler.CategoryColorAdapter
 import com.d9tilov.android.category.ui.vm.CategoryCreationViewModel
 import com.d9tilov.android.category_ui.R
 import com.d9tilov.android.category_ui.databinding.FragmentCreationCategoryBinding
-import com.d9tilov.android.common_android.ui.base.BaseFragment
-import com.d9tilov.android.common_android.utils.createTintDrawable
-import com.d9tilov.android.common_android.utils.gone
-import com.d9tilov.android.common_android.utils.let2
-import com.d9tilov.android.common_android.utils.onChange
-import com.d9tilov.android.common_android.utils.show
-import com.d9tilov.android.common_android.utils.showKeyboard
+import com.d9tilov.android.common.android.ui.base.BaseFragment
+import com.d9tilov.android.common.android.utils.createTintDrawable
+import com.d9tilov.android.common.android.utils.gone
+import com.d9tilov.android.common.android.utils.let2
+import com.d9tilov.android.common.android.utils.onChange
+import com.d9tilov.android.common.android.utils.show
+import com.d9tilov.android.common.android.utils.showKeyboard
 import com.d9tilov.android.core.constants.DataConstants.DEFAULT_DATA_ID
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -89,11 +89,17 @@ class CategoryCreationFragment :
                 categoryCreationEtNameLayout.error = null
                 localCategory = localCategory.copy(name = text)
             }
-            if (localCategory.id == DEFAULT_DATA_ID) categoryCreationDelete.gone()
-            else categoryCreationDelete.show()
+            if (localCategory.id == DEFAULT_DATA_ID) {
+                categoryCreationDelete.gone()
+            } else {
+                categoryCreationDelete.show()
+            }
             categoryCreationIconLayout.setOnClickListener {
-                val action = if (viewModel.isPremium) CategoryCreationFragmentDirections.toGroupedCategorySetDest()
-                else CategoryCreationFragmentDirections.toCategorySetDest(com.d9tilov.android.category.domain.model.CategoryGroup.UNKNOWN)
+                val action = if (viewModel.isPremium) {
+                    CategoryCreationFragmentDirections.toGroupedCategorySetDest()
+                } else {
+                    CategoryCreationFragmentDirections.toCategorySetDest(com.d9tilov.android.category.domain.model.CategoryGroup.UNKNOWN)
+                }
                 findNavController().navigate(action)
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
                     param(FirebaseAnalytics.Param.ITEM_ID, "open_category_set_screen")
@@ -138,7 +144,7 @@ class CategoryCreationFragment :
 
     private fun invalidateItemCircleColor() {
         viewBinding?.categoryCreationColor?.colorCircle?.backgroundTintList =
-            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), localCategory.color?: com.d9tilov.android.category_data_impl.R.color.category_all_color))
+            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), localCategory.color ?: com.d9tilov.android.category_data_impl.R.color.category_all_color))
     }
 
     private fun updateIcon(@DrawableRes iconId: Int?) {

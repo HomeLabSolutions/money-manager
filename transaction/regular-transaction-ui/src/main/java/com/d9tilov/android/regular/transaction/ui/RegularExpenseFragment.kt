@@ -10,10 +10,10 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.d9tilov.android.common_android.ui.recyclerview.MarginItemDecoration
-import com.d9tilov.android.common_android.ui.recyclerview.SwipeToDeleteCallback
-import com.d9tilov.android.common_android.utils.gone
-import com.d9tilov.android.common_android.utils.show
+import com.d9tilov.android.common.android.ui.recyclerview.MarginItemDecoration
+import com.d9tilov.android.common.android.ui.recyclerview.SwipeToDeleteCallback
+import com.d9tilov.android.common.android.utils.gone
+import com.d9tilov.android.common.android.utils.show
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.regular.transaction.ui.navigator.RegularExpenseNavigator
 import com.d9tilov.android.regular.transaction.ui.vm.RegularExpenseViewModel

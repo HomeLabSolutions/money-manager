@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.map
 class RegularTransactionInteractorImpl(
     private val currencyInteractor: CurrencyInteractor,
     private val regularTransactionRepo: RegularTransactionRepo,
-    private val categoryInteractor: CategoryInteractor,
+    private val categoryInteractor: CategoryInteractor
 ) : RegularTransactionInteractor {
 
     override fun createDefault(): Flow<RegularTransaction> =

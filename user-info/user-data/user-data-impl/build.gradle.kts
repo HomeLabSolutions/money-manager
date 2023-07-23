@@ -4,8 +4,6 @@ plugins {
 
 android {
     namespace = "com.d9tilov.android.user_data_impl"
-
-    
 }
 
 dependencies {

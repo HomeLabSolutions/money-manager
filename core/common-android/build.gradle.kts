@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.d9tilov.android.common_android"
+    namespace = "com.d9tilov.android.common.android"
 }
 
 dependencies {

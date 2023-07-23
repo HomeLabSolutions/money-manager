@@ -29,7 +29,9 @@ class UserLocalSource(
         return if (dbUser == null) {
             userDao.insert(userProfile.toDbModel().copy(uid = currentUserId))
             userProfile
-        } else dbUser.toDataModel()
+        } else {
+            dbUser.toDataModel()
+        }
     }
 
     override suspend fun updateFiscalDay(fiscalDay: Int) {
@@ -41,8 +43,11 @@ class UserLocalSource(
 
     override suspend fun showPrepopulate(): Boolean {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
-        return if (currentUserId == null) throw WrongUidException()
-        else userDao.showPrepopulate(currentUserId)
+        return if (currentUserId == null) {
+            throw WrongUidException()
+        } else {
+            userDao.showPrepopulate(currentUserId)
+        }
     }
 
     override suspend fun prepopulateCompleted() {
@@ -54,8 +59,9 @@ class UserLocalSource(
 
     override suspend fun getFiscalDay(): Int {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
-        return if (currentUserId == null) 1
-        else {
+        return if (currentUserId == null) {
+            1
+        } else {
             val fiscalDay = userDao.getFiscalDay(currentUserId)
             if (fiscalDay == 0) 1 else fiscalDay
         }
@@ -70,8 +76,9 @@ class UserLocalSource(
 
     override suspend fun deleteUser() {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
-        if (currentUserId == null) throw WrongUidException()
-        else {
+        if (currentUserId == null) {
+            throw WrongUidException()
+        } else {
             preferencesStore.clearAllData()
             userDao.deleteUser(currentUserId)
         }

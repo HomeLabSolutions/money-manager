@@ -14,17 +14,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.d9tilov.android.backup.data.impl.PeriodicBackupWorker
-import com.d9tilov.android.common_android.ui.base.BaseActivity
-import com.d9tilov.android.common_android.utils.gone
-import com.d9tilov.android.common_android.utils.hideKeyboard
-import com.d9tilov.android.common_android.utils.setupWithNavController
-import com.d9tilov.android.common_android.utils.show
+import com.d9tilov.android.common.android.ui.base.BaseActivity
+import com.d9tilov.android.common.android.utils.gone
+import com.d9tilov.android.common.android.utils.hideKeyboard
+import com.d9tilov.android.common.android.utils.setupWithNavController
+import com.d9tilov.android.common.android.utils.show
 import com.d9tilov.android.core.events.OnBackPressed
 import com.d9tilov.android.home.ui.navigation.HomeNavigator
 import com.d9tilov.android.home_ui.R
 import com.d9tilov.android.home_ui.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.ActivityRetainedLifecycle
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -38,7 +37,7 @@ class MainActivity :
         com.d9tilov.android.incomeexpense_ui.R.id.income_expense_dest,
         com.d9tilov.android.statistics_ui.R.id.chart_dest,
         com.d9tilov.android.profile_ui.R.id.profile_dest,
-        com.d9tilov.android.transaction_ui.R.id.remove_transaction_dialog,
+        com.d9tilov.android.transaction_ui.R.id.remove_transaction_dialog
     )
     private val viewModel by viewModels<MainViewModel>()
     override val navHostFragmentId = R.id.nav_host_container
@@ -69,17 +68,17 @@ class MainActivity :
         val navGraphIds = listOf(
             R.navigation.home_navigation,
             com.d9tilov.android.statistics_ui.R.navigation.statistics_navigation,
-            com.d9tilov.android.profile_ui.R.navigation.profile_navigation,
+            com.d9tilov.android.profile_ui.R.navigation.profile_navigation
         )
         val controller = viewBinding?.bottomNav?.setupWithNavController(
             navGraphIds = navGraphIds,
             fragmentManager = supportFragmentManager,
             containerId = R.id.nav_host_container,
-            intent = intent,
+            intent = intent
         )
         // Whenever the selected controller changes, setup the action bar.
         controller?.observe(
-            this,
+            this
         ) { navController ->
             navController.addOnDestinationChangedListener { _, destination, _ ->
                 if (setOfShownBottomBar.contains(destination.id)) {
@@ -122,7 +121,7 @@ class MainActivity :
                     bottomNav,
                     View.ALPHA,
                     ALPHA_BAR_MIN,
-                    ALPHA_BAR_MAX,
+                    ALPHA_BAR_MAX
                 ).apply {
                     duration = ANIMATION_DURATION_BAR
                     interpolator = AccelerateInterpolator()

@@ -1,8 +1,8 @@
 package com.d9tilov.android.category.ui.vm
 
 import com.d9tilov.android.category.domain.model.Category
-import com.d9tilov.android.common_android.ui.base.BaseNavigator
-import com.d9tilov.android.common_android.ui.base.BaseViewModel
+import com.d9tilov.android.common.android.ui.base.BaseNavigator
+import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import kotlinx.coroutines.flow.SharedFlow
 
 abstract class BaseCategoryViewModel<T : BaseNavigator> : BaseViewModel<T>() {

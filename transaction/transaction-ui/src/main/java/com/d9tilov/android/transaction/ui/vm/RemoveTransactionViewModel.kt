@@ -1,7 +1,7 @@
 package com.d9tilov.android.transaction.ui.vm
 
 import androidx.lifecycle.viewModelScope
-import com.d9tilov.android.common_android.ui.base.BaseViewModel
+import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.regular.transaction.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.regular.transaction.domain.model.RegularTransaction
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor

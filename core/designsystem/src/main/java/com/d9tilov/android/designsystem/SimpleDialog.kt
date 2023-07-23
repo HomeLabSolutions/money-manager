@@ -19,12 +19,10 @@ fun SimpleDialog(
     AlertDialog(
         onDismissRequest = { onDismiss() },
         confirmButton = {
-            TextButton(onClick = { onConfirm() })
-            { Text(text = confirmButton) }
+            TextButton(onClick = { onConfirm() }) { Text(text = confirmButton) }
         },
         dismissButton = {
-            TextButton(onClick = { onDismiss() })
-            { Text(text = dismissButton) }
+            TextButton(onClick = { onDismiss() }) { Text(text = dismissButton) }
         },
         title = { Text(text = title) },
         text = { Text(text = subtitle) }

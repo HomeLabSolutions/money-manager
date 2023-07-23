@@ -12,7 +12,7 @@ dependencies {
 
     implementation(project(":billing:billing-domain:billing-domain-model"))
     implementation(project(":billing:billing-domain:billing-domain-contract"))
-    
+
     implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
 

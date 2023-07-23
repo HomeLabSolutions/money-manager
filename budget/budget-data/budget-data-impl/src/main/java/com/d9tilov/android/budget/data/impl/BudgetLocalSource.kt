@@ -22,8 +22,9 @@ class BudgetLocalSource(
 
     override suspend fun createIfNeeded(currencyCode: String) {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
-        if (currentUserId == null) throw WrongUidException()
-        else {
+        if (currentUserId == null) {
+            throw WrongUidException()
+        } else {
             val budget = budgetDao.get(currentUserId).firstOrNull()
             if (budget == null) {
                 budgetDao.insert(
@@ -43,13 +44,19 @@ class BudgetLocalSource(
 
     override suspend fun update(budgetData: BudgetData) {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
-        if (currentUserId == null) throw WrongUidException()
-        else budgetDao.update(budgetData.toDbModel().copy(clientId = currentUserId))
+        if (currentUserId == null) {
+            throw WrongUidException()
+        } else {
+            budgetDao.update(budgetData.toDbModel().copy(clientId = currentUserId))
+        }
     }
 
     override suspend fun delete(budgetData: BudgetData) {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
-        if (currentUserId == null) throw WrongUidException()
-        else budgetDao.delete(budgetData.toDbModel())
+        if (currentUserId == null) {
+            throw WrongUidException()
+        } else {
+            budgetDao.delete(budgetData.toDbModel())
+        }
     }
 }

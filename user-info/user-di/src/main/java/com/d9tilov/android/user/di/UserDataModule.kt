@@ -18,7 +18,7 @@ class UserDataModule {
     @Provides
     fun provideUserSource(
         appDatabase: AppDatabase,
-        preferencesStore: PreferencesStore,
+        preferencesStore: PreferencesStore
     ): UserSource = UserLocalSource(preferencesStore, appDatabase.userDao())
 
     @Provides

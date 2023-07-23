@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.d9tilov.android.designsystem.MoneyManagerIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,6 +60,6 @@ fun TopAppBarPreview() {
     MmTopAppBar(
         titleRes = android.R.string.untitled,
         navigationIcon = MoneyManagerIcons.ArrowBack,
-        actionIcon = MoneyManagerIcons.ActionAdd,
+        actionIcon = MoneyManagerIcons.ActionAdd
     )
 }

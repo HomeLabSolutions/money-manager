@@ -54,9 +54,9 @@ import com.d9tilov.android.profile.ui.vm.ProfileUiItem
 import com.d9tilov.android.profile.ui.vm.ProfileUiState
 import com.d9tilov.android.profile.ui.vm.ProfileViewModel
 import com.d9tilov.android.profile.ui.vm.UserUiProfile
+import com.d9tilov.android.profile_ui.BuildConfig
 import com.d9tilov.android.profile_ui.R
 import dagger.hilt.android.internal.managers.FragmentComponentManager
-import com.d9tilov.android.profile_ui.BuildConfig
 
 @Composable
 fun ProfileRoute(
@@ -106,7 +106,7 @@ fun ProfileScreen(
     onSettingsClicked: () -> Unit,
     onLogoutClicked: () -> Unit,
     onLogoutConfirmClicked: () -> Unit,
-    onLogoutDismissClicked: () -> Unit,
+    onLogoutDismissClicked: () -> Unit
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         ProfileCard(state.userProfile)
@@ -131,13 +131,13 @@ fun ProfileScreen(
         Text(
             text = "",
             modifier = Modifier.padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodySmall
         )
         SimpleDialog(
             show = showDialog,
             title = stringResource(R.string.logout_dialog_title),
             subtitle = stringResource(R.string.logout_dialog_subtitle),
-            dismissButton = stringResource(com.d9tilov.android.common_android.R.string.cancel),
+            dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
             confirmButton = stringResource(R.string.logout_dialog_button),
             onConfirm = { onLogoutConfirmClicked() },
             onDismiss = { onLogoutDismissClicked() }
@@ -223,12 +223,12 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
         is ProfileUiItem.Goals -> ProfileItemData(
             ImageVector.vectorResource(com.d9tilov.android.goals_ui.R.drawable.ic_goal),
             stringResource(com.d9tilov.android.goals_ui.R.string.profile_item_goals_title_empty),
-            null,
+            null
         )
         is ProfileUiItem.Settings -> ProfileItemData(
             ImageVector.vectorResource(com.d9tilov.android.settings_ui.R.drawable.ic_settings),
             stringResource(com.d9tilov.android.settings_ui.R.string.profile_item_settings_title),
-            null,
+            null
         )
     }
     ConstraintLayout(
@@ -261,7 +261,7 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
                 top.linkTo(idIcon.top)
                 bottom.linkTo(idIcon.bottom)
             },
-            style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.primary),
+            style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.primary)
         )
         when (profileUiItem) {
             is ProfileUiItem.CurrencyUiItem -> {
@@ -297,17 +297,19 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
             )
             is ProfileUiItem.Settings -> {
                 val isPremium = profileUiItem.isPremium
-                val (backgroundColor, text, textColor) = if (isPremium)
+                val (backgroundColor, text, textColor) = if (isPremium) {
                     Triple(
                         MaterialTheme.colorScheme.secondaryContainer,
                         stringResource(R.string.settings_subscription_premium_acknowledged_title),
                         MaterialTheme.colorScheme.onSecondaryContainer
-                    ) else
+                    )
+                } else {
                     Triple(
                         MaterialTheme.colorScheme.tertiaryContainer,
                         stringResource(com.d9tilov.android.settings_ui.R.string.settings_subscription_premium_title),
                         MaterialTheme.colorScheme.onTertiaryContainer
                     )
+                }
                 Text(
                     modifier = Modifier.padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large))
                         .constrainAs(idData) {
@@ -337,7 +339,7 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
                     top.linkTo(idTitle.bottom)
                     bottom.linkTo(idDivider.top)
                 },
-                style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.tertiary),
+                style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.tertiary)
             )
         }
         Divider(
@@ -371,5 +373,6 @@ fun DefaultPreviewProfile() {
         {},
         {},
         {},
-        {})
+        {}
+    )
 }

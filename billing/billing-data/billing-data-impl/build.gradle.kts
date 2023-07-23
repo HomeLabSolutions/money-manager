@@ -1,12 +1,9 @@
 plugins {
     id("moneymanager.android.library")
-    
 }
 
 android {
     namespace = "com.d9tilov.android.billing_data_impl"
-
-    
 }
 
 dependencies {
@@ -19,6 +16,5 @@ dependencies {
     implementation(project(":currency:currency-domain:currency-domain-model"))
 
     implementation(libs.coroutinesCore)
-    implementation (libs.timber)
-
+    implementation(libs.timber)
 }

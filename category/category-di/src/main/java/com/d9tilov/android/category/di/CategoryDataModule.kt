@@ -1,11 +1,11 @@
 package com.d9tilov.android.category.di
 
 import android.content.Context
-import com.d9tilov.android.category.domain.contract.CategoryRepo
 import com.d9tilov.android.category.data.contract.CategorySource
 import com.d9tilov.android.category.data.impl.CategoryLocalSource
 import com.d9tilov.android.category.data.impl.CategoryRepoImpl
 import com.d9tilov.android.category.data.impl.DefaultCategoriesManager
+import com.d9tilov.android.category.domain.contract.CategoryRepo
 import com.d9tilov.android.database.AppDatabase
 import com.d9tilov.android.datastore.PreferencesStore
 import dagger.Module

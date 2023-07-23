@@ -12,10 +12,10 @@ import androidx.navigation.fragment.navArgs
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.ui.BaseCategoryFragment.Companion.ARG_CATEGORY
 import com.d9tilov.android.category.ui.navigation.CategoryDestination
-import com.d9tilov.android.common_android.ui.base.BaseFragment
-import com.d9tilov.android.common_android.utils.TRANSACTION_DATE_FORMAT
-import com.d9tilov.android.common_android.utils.createTintDrawable
-import com.d9tilov.android.common_android.utils.showKeyboard
+import com.d9tilov.android.common.android.ui.base.BaseFragment
+import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_FORMAT
+import com.d9tilov.android.common.android.utils.createTintDrawable
+import com.d9tilov.android.common.android.utils.showKeyboard
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.core.utils.toMillis
@@ -168,7 +168,7 @@ class EditTransactionFragment : EditTransactionNavigator,
     private fun updateIcon() {
         val iconDrawable = createTintDrawable(
             requireContext(),
-            localTransaction?.category?.icon ?: com.d9tilov.android.common_android.R.drawable.ic_category_cafe,
+            localTransaction?.category?.icon ?: com.d9tilov.android.common.android.R.drawable.ic_category_cafe,
             localTransaction?.category?.color ?: R.color.category_pink
         )
         iconDrawable.setBounds(LEFT_BOUND, TOP_BOUND, RIGHT_BOUND, BOTTOM_BOUND)

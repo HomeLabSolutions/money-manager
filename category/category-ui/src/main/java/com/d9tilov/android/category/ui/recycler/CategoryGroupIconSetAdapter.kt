@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.d9tilov.android.category.domain.model.CategoryGroupItem
 import com.d9tilov.android.category_ui.databinding.ItemCategoryGroupItemBinding
+import com.d9tilov.android.common.android.ui.base.BaseViewHolder
 import com.d9tilov.android.core.events.OnItemClickListener
-import com.d9tilov.android.common_android.ui.base.BaseViewHolder
 
 class CategoryGroupIconSetAdapter(
     private val groups: List<CategoryGroupItem>,

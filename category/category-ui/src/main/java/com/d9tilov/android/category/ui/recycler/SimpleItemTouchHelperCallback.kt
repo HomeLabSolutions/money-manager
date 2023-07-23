@@ -7,8 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.d9tilov.android.category_ui.R
-import com.d9tilov.android.common_android.ui.recyclerview.ItemTouchHelperCallback
+import com.d9tilov.android.common.android.ui.recyclerview.ItemTouchHelperCallback
 
 class SimpleItemTouchHelperCallback(
     private val callback: ItemTouchHelperCallback
@@ -78,7 +77,7 @@ class SimpleItemTouchHelperCallback(
                     // that an item will be dropped into it upon release
                     folderPosition = recyclerView.getChildAdapterPosition(child)
                     folder?.background =
-                        (ContextCompat.getDrawable(recyclerView.context, com.d9tilov.android.common_android.R.drawable.round_view))
+                        (ContextCompat.getDrawable(recyclerView.context, com.d9tilov.android.common.android.R.drawable.round_view))
                     break
                 }
             }

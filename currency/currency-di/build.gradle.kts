@@ -1,13 +1,10 @@
 plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
-    
 }
 
 android {
     namespace = "com.d9tilov.android.currency_di"
-
-    
 }
 
 dependencies {
@@ -23,7 +20,4 @@ dependencies {
     implementation(project(":budget:budget-domain:budget-domain-contract"))
 
     implementation(libs.retrofit)
-
-    
-    
 }

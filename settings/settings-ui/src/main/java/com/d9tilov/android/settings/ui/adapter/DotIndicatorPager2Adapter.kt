@@ -7,7 +7,7 @@ import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
-import com.d9tilov.android.common_android.ui.base.BaseViewHolder
+import com.d9tilov.android.common.android.ui.base.BaseViewHolder
 import com.d9tilov.android.settings_ui.R
 import com.d9tilov.android.settings_ui.databinding.ItemBillingIntroCardBinding
 

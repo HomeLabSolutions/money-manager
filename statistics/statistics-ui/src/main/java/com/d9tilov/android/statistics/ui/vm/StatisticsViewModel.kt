@@ -2,7 +2,7 @@ package com.d9tilov.android.statistics.ui.vm
 
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
-import com.d9tilov.android.common_android.ui.base.BaseViewModel
+import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.android.core.model.TransactionType
@@ -21,7 +21,6 @@ import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
 import com.d9tilov.android.transaction.domain.model.TransactionLineChartModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -32,6 +31,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
+import javax.inject.Inject
 
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
@@ -181,7 +181,7 @@ class StatisticsViewModel @Inject constructor(
 
     private fun updateItemInList(item: BaseStatisticsMenuType) {
         val index = item.menuType.ordinal
-        menuItemList[index] = item 
+        menuItemList[index] = item
     }
 
     fun getTransactions(): StateFlow<ResultOf<List<TransactionChartModel>>> = transactions

@@ -5,10 +5,10 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.d9tilov.android.budget.ui.BudgetRoute
-import com.d9tilov.android.common_android.ui.base.BaseNavigator
+import com.d9tilov.android.common.android.ui.base.BaseNavigator
+import com.d9tilov.android.currency.ui.CurrencyListRoute
 import com.d9tilov.android.profile.ui.ProfileRoute
 import com.d9tilov.android.settings.ui.SettingsRoute
-import com.d9tilov.android.currency.ui.CurrencyListRoute
 
 const val profileNavigationRoute = "profile"
 const val currencyNavigationRoute = "currency_list"
@@ -45,7 +45,7 @@ fun NavGraphBuilder.profileScreen(
     navigateToCurrencyListScreen: () -> Unit,
     navigateToBudgetScreen: () -> Unit,
     navigateToSettingsScreen: () -> Unit,
-    navigateToGoalsScreen: () -> Unit,
+    navigateToGoalsScreen: () -> Unit
 ) {
     composable(route = profileNavigationRoute) {
         ProfileRoute(

@@ -1,13 +1,10 @@
 plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
-    
 }
 
 android {
     namespace = "com.d9tilov.android.currency_data_impl"
-
-    
 }
 
 dependencies {
@@ -25,7 +22,6 @@ dependencies {
     implementation(libs.coroutinesCore)
     implementation(libs.startup)
 
-    
     implementation(libs.worker)
     implementation(libs.workerHilt)
     kapt(libs.workerHiltCompiler)

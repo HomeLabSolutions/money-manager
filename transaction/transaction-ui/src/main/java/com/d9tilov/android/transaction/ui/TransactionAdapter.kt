@@ -9,16 +9,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.d9tilov.android.common_android.ui.base.BaseViewHolder
-import com.d9tilov.android.common_android.ui.recyclerview.StickyAdapter
-import com.d9tilov.android.common_android.utils.IMAGE_SIZE_IN_PX
-import com.d9tilov.android.common_android.utils.TRANSACTION_DATE_FORMAT
-import com.d9tilov.android.common_android.utils.createTintDrawable
-import com.d9tilov.android.common_android.utils.formatDate
-import com.d9tilov.android.common_android.utils.gone
-import com.d9tilov.android.common_android.utils.hide
-import com.d9tilov.android.common_android.utils.let2
-import com.d9tilov.android.common_android.utils.show
+import com.d9tilov.android.common.android.ui.base.BaseViewHolder
+import com.d9tilov.android.common.android.ui.recyclerview.StickyAdapter
+import com.d9tilov.android.common.android.utils.IMAGE_SIZE_IN_PX
+import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_FORMAT
+import com.d9tilov.android.common.android.utils.createTintDrawable
+import com.d9tilov.android.common.android.utils.formatDate
+import com.d9tilov.android.common.android.utils.gone
+import com.d9tilov.android.common.android.utils.hide
+import com.d9tilov.android.common.android.utils.let2
+import com.d9tilov.android.common.android.utils.show
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.events.OnItemClickListener
 import com.d9tilov.android.core.events.OnItemSwipeListener
@@ -55,7 +55,9 @@ class TransactionAdapter(
             }
         } else {
             val viewBinding = ItemTransactionHeaderBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
+                LayoutInflater.from(parent.context),
+                parent,
+                false
             )
             viewHolder = TransactionHeaderViewHolder(viewBinding)
         }
@@ -149,7 +151,8 @@ class TransactionAdapter(
                 }
                 itemTransactionSum.setValue(transaction.sum, transaction.currencyCode)
                 itemTransactionUsdSum.setValue(
-                    transaction.usdSum, DEFAULT_CURRENCY_CODE
+                    transaction.usdSum,
+                    DEFAULT_CURRENCY_CODE
                 )
                 if (transaction.currencyCode != DEFAULT_CURRENCY_CODE) {
                     itemTransactionUsdSum.show()
@@ -170,7 +173,8 @@ class TransactionAdapter(
 
         private val diffCallback = object : DiffUtil.ItemCallback<BaseTransaction>() {
             override fun areItemsTheSame(
-                oldItem: BaseTransaction, newItem: BaseTransaction
+                oldItem: BaseTransaction,
+                newItem: BaseTransaction
             ): Boolean {
                 return if (oldItem is Transaction && newItem is Transaction) {
                     oldItem.id == newItem.id
@@ -183,7 +187,8 @@ class TransactionAdapter(
 
             @SuppressLint("DiffUtilEquals")
             override fun areContentsTheSame(
-                oldItem: BaseTransaction, newItem: BaseTransaction
+                oldItem: BaseTransaction,
+                newItem: BaseTransaction
             ): Boolean {
                 return if (oldItem is Transaction && newItem is Transaction) {
                     oldItem == newItem

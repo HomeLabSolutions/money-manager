@@ -67,13 +67,13 @@ fun CurrencyListScreen(
 ) {
     Scaffold(
         topBar = {
-            if (showToolbar)
+            if (showToolbar) {
                 MmTopAppBar(
                     titleRes = R.string.title_prepopulate_currency,
                     onNavigationClick = onClickBack
                 )
-
-        },
+            }
+        }
     ) { padding ->
         if (currencyUiState.isLoading) {
             Box(modifier = modifier.fillMaxSize()) {
@@ -110,7 +110,7 @@ fun CurrencyItem(currency: DomainCurrency, clickCallback: (currency: DomainCurre
     Column(Modifier.fillMaxWidth().clickable { clickCallback(currency) }) {
         Row(
             modifier = Modifier.wrapContentHeight(Alignment.CenterVertically).fillMaxWidth()
-                .height(60.dp),
+                .height(60.dp)
         ) {
             Text(
                 text = CurrencyUtils.getCurrencyIcon(currency.code),

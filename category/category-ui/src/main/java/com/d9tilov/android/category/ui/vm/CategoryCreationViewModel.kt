@@ -3,13 +3,12 @@ package com.d9tilov.android.category.ui.vm
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
-import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
+import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.ui.navigation.CategoryCreationNavigator
-import com.d9tilov.android.common_android.ui.base.BaseViewModel
+import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.core.constants.DataConstants.DEFAULT_DATA_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,6 +16,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 @HiltViewModel
 class CategoryCreationViewModel @Inject constructor(
@@ -46,7 +46,9 @@ class CategoryCreationViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO + saveCategoryExceptionHandler) {
             if (receivedCategory == null || receivedCategory.id == DEFAULT_DATA_ID) {
                 categoryInteractor.create(category)
-            } else categoryInteractor.update(category)
+            } else {
+                categoryInteractor.update(category)
+            }
             withContext(Dispatchers.Main) { navigator?.save() }
         }
     }

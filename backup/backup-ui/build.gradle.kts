@@ -1,14 +1,10 @@
 plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
-    
 }
 
 android {
     namespace = "com.d9tilov.android.backup_ui"
-
-
-    
 }
 
 dependencies {
@@ -28,4 +24,3 @@ dependencies {
 
     implementation(libs.timber)
 }
-

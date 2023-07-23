@@ -8,15 +8,16 @@ import androidx.navigation.fragment.navArgs
 import com.d9tilov.android.category.ui.navigation.RemoveSubCategoryDialogNavigator
 import com.d9tilov.android.category.ui.vm.SubcategoryRemoveViewModel
 import com.d9tilov.android.category_ui.R
+import com.d9tilov.android.common.android.ui.base.BaseDialogFragment
 import com.d9tilov.android.designsystem.databinding.FragmentDialogTripleRemoveBinding
-import com.d9tilov.android.common_android.ui.base.BaseDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SubcategoryRemoveDialogFragment :
     BaseDialogFragment<RemoveSubCategoryDialogNavigator, FragmentDialogTripleRemoveBinding>(
         FragmentDialogTripleRemoveBinding::inflate
-    ), RemoveSubCategoryDialogNavigator {
+    ),
+    RemoveSubCategoryDialogNavigator {
 
     private val args by navArgs<SubcategoryRemoveDialogFragmentArgs>()
     private val subCategory by lazy { args.subcategory }
@@ -31,7 +32,7 @@ class SubcategoryRemoveDialogFragment :
             tripleRemoveDialogButtonAction1.text = getString(R.string.sub_category_delete)
             tripleRemoveDialogButtonAction2.text =
                 getString(R.string.sub_category_delete_from_group)
-            tripleRemoveDialogButtonCancel.text = getString(com.d9tilov.android.common_android.R.string.cancel)
+            tripleRemoveDialogButtonCancel.text = getString(com.d9tilov.android.common.android.R.string.cancel)
             tripleRemoveDialogTitle.text = getString(R.string.sub_category_delete_title)
             tripleRemoveDialogButtonAction1.setOnClickListener { viewModel.remove(subCategory) }
             tripleRemoveDialogButtonAction2.setOnClickListener { viewModel.removeFromGroup(subCategory) }

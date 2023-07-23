@@ -48,8 +48,11 @@ class CategoryInteractorImpl(private val categoryRepo: CategoryRepo) : CategoryI
     ): List<Category> {
         val categoriesAsChild = mutableListOf<Category>()
         for (category in categories) {
-            if (category.children.isNotEmpty()) categoriesAsChild.addAll(category.children)
-            else categoriesAsChild.add(category)
+            if (category.children.isNotEmpty()) {
+                categoriesAsChild.addAll(category.children)
+            } else {
+                categoriesAsChild.add(category)
+            }
         }
         categoriesAsChild.add(0, categoryRepo.createAllItemsFolder(categories))
         return categoriesAsChild

@@ -21,14 +21,14 @@ import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.domain.model.isEmpty
 import com.d9tilov.android.category.ui.BaseCategoryFragment.Companion.ARG_CATEGORY
 import com.d9tilov.android.category.ui.navigation.CategoryDestination
-import com.d9tilov.android.common_android.ui.base.BaseFragment
-import com.d9tilov.android.common_android.utils.createTintDrawable
-import com.d9tilov.android.common_android.utils.gone
-import com.d9tilov.android.common_android.utils.hide
-import com.d9tilov.android.common_android.utils.let2
-import com.d9tilov.android.common_android.utils.onChange
-import com.d9tilov.android.common_android.utils.show
-import com.d9tilov.android.common_android.utils.showKeyboard
+import com.d9tilov.android.common.android.ui.base.BaseFragment
+import com.d9tilov.android.common.android.utils.createTintDrawable
+import com.d9tilov.android.common.android.utils.gone
+import com.d9tilov.android.common.android.utils.hide
+import com.d9tilov.android.common.android.utils.let2
+import com.d9tilov.android.common.android.utils.onChange
+import com.d9tilov.android.common.android.utils.show
+import com.d9tilov.android.common.android.utils.showKeyboard
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.PeriodType
 import com.d9tilov.android.core.model.isIncome
@@ -49,8 +49,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RegularTransactionCreationFragment :
-    BaseFragment<RegularTransactionCreatedNavigator, FragmentRegularTransactionCreationBinding>
-        (
+    BaseFragment<RegularTransactionCreatedNavigator, FragmentRegularTransactionCreationBinding>(
         FragmentRegularTransactionCreationBinding::inflate,
         R.layout.fragment_regular_transaction_creation
     ),
@@ -182,8 +181,11 @@ class RegularTransactionCreationFragment :
             createdRegularTransactionRepeatStartsDate.setOnClickListener { toDayOfMonthDialog() }
             createdRegularTransactionCategoryLayout.setOnClickListener { toFixedCategoryScreen() }
             createdRegularTransactionSave.setOnClickListener { view ->
-                if (view.isSelected) viewModel.saveOrUpdate(localTransaction)
-                else shakeError()
+                if (view.isSelected) {
+                    viewModel.saveOrUpdate(localTransaction)
+                } else {
+                    shakeError()
+                }
             }
             createdRegularTransactionMonday.setOnClickListener { setWeekdaySelected(WeekDays.MONDAY.ordinal) }
             createdRegularTransactionTuesday.setOnClickListener { setWeekdaySelected(WeekDays.TUESDAY.ordinal) }
@@ -326,7 +328,6 @@ class RegularTransactionCreationFragment :
                         )
                     )
                 }
-
             } else {
                 createdRegularTransactionCategory.text =
                     getString(R.string.regular_transaction_choose_category)
@@ -354,8 +355,11 @@ class RegularTransactionCreationFragment :
         activity.setSupportActionBar(toolbar)
         toolbar?.title =
             getString(
-                if (transactionType.isIncome()) R.string.title_prepopulate_regular_incomes
-                else R.string.title_prepopulate_regular_expenses
+                if (transactionType.isIncome()) {
+                    R.string.title_prepopulate_regular_incomes
+                } else {
+                    R.string.title_prepopulate_regular_expenses
+                }
             )
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity.supportActionBar?.setDisplayShowHomeEnabled(true)

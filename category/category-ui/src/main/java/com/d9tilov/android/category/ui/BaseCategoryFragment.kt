@@ -16,10 +16,10 @@ import com.d9tilov.android.category.ui.recycler.CategoryModifyAdapter
 import com.d9tilov.android.category.ui.vm.BaseCategoryViewModel
 import com.d9tilov.android.category_ui.R
 import com.d9tilov.android.category_ui.databinding.FragmentCategoryBinding
-import com.d9tilov.android.common_android.ui.base.BaseFragment
+import com.d9tilov.android.common.android.ui.base.BaseFragment
+import com.d9tilov.android.common.android.ui.base.BaseNavigator
+import com.d9tilov.android.common.android.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.android.core.events.OnBackPressed
-import com.d9tilov.android.common_android.ui.base.BaseNavigator
-import com.d9tilov.android.common_android.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.android.core.model.TransactionType
 import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.coroutines.launch
@@ -57,7 +57,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
             categoryRv.addItemDecoration(
                 GridSpaceItemDecoration(
                     spanCount = SPAN_COUNT,
-                    spacing = resources.getDimension(com.d9tilov.android.common_android.R.dimen.recycler_view_category_offset)
+                    spacing = resources.getDimension(com.d9tilov.android.common.android.R.dimen.recycler_view_category_offset)
                         .toInt()
                 )
             )
@@ -116,7 +116,9 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
         return if (categoryAdapter.editModeEnable) {
             categoryAdapter.enableEditMode(false)
             false
-        } else true
+        } else {
+            true
+        }
     }
 
     companion object {

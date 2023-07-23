@@ -3,7 +3,7 @@ package com.d9tilov.android.category.ui.navigation
 import androidx.annotation.DrawableRes
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.domain.model.CategoryGroupItem
-import com.d9tilov.android.common_android.ui.base.BaseNavigator
+import com.d9tilov.android.common.android.ui.base.BaseNavigator
 
 interface CategoryCreationNavigator : BaseNavigator {
     fun save()

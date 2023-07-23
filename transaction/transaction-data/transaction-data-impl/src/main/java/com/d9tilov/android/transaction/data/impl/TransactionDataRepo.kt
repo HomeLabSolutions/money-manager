@@ -61,4 +61,3 @@ class TransactionDataRepo(private val transactionSource: TransactionSource) :
         transactionSource.clearAll()
     }
 }
-

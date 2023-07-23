@@ -1,13 +1,10 @@
 plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
-    
 }
 
 android {
     namespace = "com.d9tilov.android.goals_di"
-
-    
 }
 
 dependencies {
@@ -18,7 +15,4 @@ dependencies {
     implementation(project(":goals:goals-domain:goals-domain-contract"))
     implementation(project(":goals:goals-domain:goals-domain-impl"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
-
-    
-    
 }

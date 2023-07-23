@@ -2,19 +2,19 @@ package com.d9tilov.android.category.ui.vm
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
+import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.ui.navigation.CategoryDestination
 import com.d9tilov.android.category.ui.navigation.CategoryNavigator
 import com.d9tilov.android.core.model.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted.Companion.Eagerly
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
+import javax.inject.Inject
 
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
@@ -32,8 +32,9 @@ class CategoryViewModel @Inject constructor(
 
     override fun onCategoryClicked(category: Category) {
         val destination = savedStateHandle.get<CategoryDestination>("destination")
-        if (category.children.isNotEmpty()) navigator?.openSubCategoryScreen(category)
-        else {
+        if (category.children.isNotEmpty()) {
+            navigator?.openSubCategoryScreen(category)
+        } else {
             when (destination) {
                 CategoryDestination.EditTransactionScreen -> navigator?.backToEditTransactionScreen(category)
                 CategoryDestination.EditRegularTransactionScreen -> navigator?.backToEditRegularTransactionScreen(

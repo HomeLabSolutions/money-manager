@@ -1,7 +1,7 @@
 package com.d9tilov.android.billing.di
 
-import com.d9tilov.android.billing.domain.contract.BillingRepo
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
+import com.d9tilov.android.billing.domain.contract.BillingRepo
 import com.d9tilov.android.billing.domain.impl.BillingInteractorImpl
 import dagger.Module
 import dagger.Provides

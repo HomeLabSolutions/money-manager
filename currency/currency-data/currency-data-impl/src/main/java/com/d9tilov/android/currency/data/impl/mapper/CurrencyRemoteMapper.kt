@@ -1,4 +1,3 @@
-@file:Suppress("PackageNaming")
 package com.d9tilov.android.currency.data.impl.mapper
 
 import com.d9tilov.android.currency.domain.model.Currency

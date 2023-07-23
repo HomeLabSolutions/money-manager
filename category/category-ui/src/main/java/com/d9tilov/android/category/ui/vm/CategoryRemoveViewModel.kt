@@ -1,21 +1,21 @@
 package com.d9tilov.android.category.ui.vm
 
 import androidx.lifecycle.viewModelScope
-import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
+import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.ui.navigation.RemoveCategoryDialogNavigator
-import com.d9tilov.android.common_android.ui.base.BaseViewModel
+import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.regular.transaction.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 @HiltViewModel
 class CategoryRemoveViewModel @Inject constructor(

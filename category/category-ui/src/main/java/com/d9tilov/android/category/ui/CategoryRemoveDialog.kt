@@ -9,14 +9,14 @@ import com.d9tilov.android.category.ui.navigation.CategoryDestination
 import com.d9tilov.android.category.ui.navigation.RemoveCategoryDialogNavigator
 import com.d9tilov.android.category.ui.vm.CategoryRemoveViewModel
 import com.d9tilov.android.category_ui.R
+import com.d9tilov.android.common.android.ui.base.BaseDialogFragment
 import com.d9tilov.android.designsystem.databinding.FragmentDialogRemoveBinding
-import com.d9tilov.android.common_android.ui.base.BaseDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class CategoryRemoveDialog :
     BaseDialogFragment<RemoveCategoryDialogNavigator,
-            FragmentDialogRemoveBinding>(FragmentDialogRemoveBinding::inflate),
+        FragmentDialogRemoveBinding>(FragmentDialogRemoveBinding::inflate),
     RemoveCategoryDialogNavigator {
 
     private val args by navArgs<CategoryRemoveDialogArgs>()
@@ -32,8 +32,11 @@ class CategoryRemoveDialog :
             removeDialogTitle.text = getString(R.string.category_delete_title)
             removeDialogSubtitle.text =
                 getString(
-                    if (category.children.isEmpty()) R.string.category_delete_sub_title
-                    else R.string.category_delete_group_sub_title
+                    if (category.children.isEmpty()) {
+                        R.string.category_delete_sub_title
+                    } else {
+                        R.string.category_delete_group_sub_title
+                    }
                 )
             removeButtonConfirm.setOnClickListener { viewModel.remove(category) }
             removeButtonCancel.setOnClickListener { dismiss() }

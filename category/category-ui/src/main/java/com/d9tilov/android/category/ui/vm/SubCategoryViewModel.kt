@@ -2,8 +2,8 @@ package com.d9tilov.android.category.ui.vm
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
+import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.ui.navigation.CategoryDestination
 import com.d9tilov.android.category.ui.navigation.SubCategoryNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel

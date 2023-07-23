@@ -1,16 +1,16 @@
 package com.d9tilov.android.profile.ui.vm
 
 import androidx.lifecycle.viewModelScope
-import com.d9tilov.android.common_android.ui.base.BaseViewModel
+import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.profile.ui.navigation.LogoutDialogNavigator
 import com.d9tilov.android.user.domain.contract.UserInteractor
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 @HiltViewModel
 class LogoutViewModel @Inject constructor(

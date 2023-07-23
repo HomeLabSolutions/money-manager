@@ -6,7 +6,7 @@ import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.model.CategoryGroup
 import com.d9tilov.android.category.ui.navigation.CategorySetNavigator
 import com.d9tilov.android.category_ui.R
-import com.d9tilov.android.common_android.ui.base.BaseViewModel
+import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlinx.coroutines.flow.launchIn
 
 @HiltViewModel
 class CategorySetViewModel @Inject constructor(
@@ -46,7 +45,7 @@ class CategorySetViewModel @Inject constructor(
             com.d9tilov.android.designsystem.R.drawable.ic_category_food,
             com.d9tilov.android.category_data_impl.R.drawable.ic_category_beer,
             com.d9tilov.android.category_data_impl.R.drawable.ic_category_barista,
-            com.d9tilov.android.common_android.R.drawable.ic_category_cafe,
+            com.d9tilov.android.common.android.R.drawable.ic_category_cafe,
             com.d9tilov.android.category_data_impl.R.drawable.ic_category_coffee,
             com.d9tilov.android.category_data_impl.R.drawable.ic_category_coffee2,
             com.d9tilov.android.category_data_impl.R.drawable.ic_category_fastfood,

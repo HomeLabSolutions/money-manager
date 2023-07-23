@@ -45,7 +45,7 @@ fun CurrencyTextFieldExtraSmall(
     style: TextStyle = MaterialTheme.typography.bodyLarge
         .copy(
             fontSize = dimensionResource(R.dimen.currency_extra_small_text_size).value.sp,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.primary
         ),
     inputValueChanged: (String) -> Unit = {}
 ) {
@@ -69,7 +69,7 @@ fun CurrencyTextFieldSmall(
     style: TextStyle = MaterialTheme.typography.bodyLarge
         .copy(
             fontSize = dimensionResource(R.dimen.currency_sum_small_text_size).value.sp,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.primary
         ),
     inputValueChanged: (String) -> Unit = {}
 ) {
@@ -93,7 +93,7 @@ fun CurrencyTextFieldMedium(
     style: TextStyle = MaterialTheme.typography.bodyLarge
         .copy(
             fontSize = dimensionResource(R.dimen.currency_sum_medium_text_size).value.sp,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.primary
         ),
     inputValueChanged: (String) -> Unit = {}
 ) {
@@ -117,7 +117,7 @@ fun CurrencyTextFieldBig(
     style: TextStyle = MaterialTheme.typography.bodyLarge
         .copy(
             fontSize = dimensionResource(R.dimen.currency_sum_big_text_size).value.sp,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.primary
         ),
     inputValueChanged: (String) -> Unit = {}
 ) {
@@ -141,7 +141,7 @@ fun CurrencyTextFieldExtraBig(
     style: TextStyle = MaterialTheme.typography.bodyLarge
         .copy(
             fontSize = dimensionResource(R.dimen.currency_sum_extra_big_text_size).value.sp,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.primary
         ),
     inputValueChanged: (String) -> Unit = {}
 ) {
@@ -214,11 +214,14 @@ private fun CurrencyTextField(
                                     null -> text
                                     else -> {
                                         val number = input.toBigDecimal()
-                                        if (number.scale() > DECIMAL_SIZE) input.substring(
-                                            0,
-                                            input.indexOf(DELIMITER) + DECIMAL_SIZE + 1
-                                        )
-                                        else input
+                                        if (number.scale() > DECIMAL_SIZE) {
+                                            input.substring(
+                                                0,
+                                                input.indexOf(DELIMITER) + DECIMAL_SIZE + 1
+                                            )
+                                        } else {
+                                            input
+                                        }
                                     }
                                 }
                             }
@@ -256,15 +259,15 @@ private fun CurrencyTextField(
                 modifier = Modifier.alignByBaseline(),
                 style = TextStyle(
                     color = style.color,
-                    fontSize = style.fontSize * 0.6,
-                ),
+                    fontSize = style.fontSize * 0.6
+                )
             )
             Text(
                 text = amount,
                 modifier = Modifier.alignByBaseline(),
                 style = TextStyle(
                     color = style.color,
-                    fontSize = style.fontSize,
+                    fontSize = style.fontSize
                 )
             )
         }

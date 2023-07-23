@@ -10,10 +10,10 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.d9tilov.android.common_android.ui.recyclerview.MarginItemDecoration
-import com.d9tilov.android.common_android.ui.recyclerview.SwipeToDeleteCallback
-import com.d9tilov.android.common_android.utils.gone
-import com.d9tilov.android.common_android.utils.show
+import com.d9tilov.android.common.android.ui.recyclerview.MarginItemDecoration
+import com.d9tilov.android.common.android.ui.recyclerview.SwipeToDeleteCallback
+import com.d9tilov.android.common.android.utils.gone
+import com.d9tilov.android.common.android.utils.show
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.regular.transaction.ui.navigator.RegularIncomeNavigator
 import com.d9tilov.android.regular.transaction.ui.vm.RegularIncomeViewModel
@@ -44,11 +44,7 @@ class RegularIncomeFragment :
             regularIncomeRvList.adapter = regularTransactionAdapter
             val layoutManager = LinearLayoutManager(requireContext())
             regularIncomeRvList.layoutManager = layoutManager
-            regularIncomeRvList.addItemDecoration(
-                MarginItemDecoration(
-                    resources.getDimension(R.dimen.recycler_view_regular_category_margin).toInt()
-                )
-            )
+            regularIncomeRvList.addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.recycler_view_regular_category_margin).toInt()))
             ItemTouchHelper(object : SwipeToDeleteCallback(requireContext()) {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     regularTransactionAdapter.deleteItem(viewHolder.bindingAdapterPosition)

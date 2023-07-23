@@ -16,18 +16,18 @@ import com.d9tilov.android.category.ui.navigation.CategoryNavigator
 import com.d9tilov.android.category.ui.recycler.SimpleItemTouchHelperCallback
 import com.d9tilov.android.category.ui.vm.CategoryViewModel
 import com.d9tilov.android.category_ui.R
-import com.d9tilov.android.designsystem.databinding.LayoutEmptyListPlaceholderBinding
-import com.d9tilov.android.common_android.utils.gone
-import com.d9tilov.android.common_android.utils.hideKeyboard
-import com.d9tilov.android.common_android.utils.show
+import com.d9tilov.android.common.android.utils.gone
+import com.d9tilov.android.common.android.utils.hideKeyboard
+import com.d9tilov.android.common.android.utils.show
 import com.d9tilov.android.core.constants.NavigationConstants.ARG_TRANSACTION_CREATED
 import com.d9tilov.android.core.events.OnItemMoveListener
 import com.d9tilov.android.core.model.isIncome
+import com.d9tilov.android.designsystem.databinding.LayoutEmptyListPlaceholderBinding
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CategoryFragment :
@@ -92,8 +92,11 @@ class CategoryFragment :
         toolbar?.title = getString(R.string.title_category)
         viewBinding?.categoryCreate?.setOnClickListener {
             val action = CategoryFragmentDirections.toCategoryCreationDest(
-                if (transactionType.isIncome()) Category.EMPTY_INCOME
-                else Category.EMPTY_EXPENSE
+                if (transactionType.isIncome()) {
+                    Category.EMPTY_INCOME
+                } else {
+                    Category.EMPTY_EXPENSE
+                }
             )
             findNavController().navigate(action)
         }
@@ -101,8 +104,11 @@ class CategoryFragment :
             viewModel.categories
                 .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
                 .collect { list ->
-                    if (list.isEmpty()) showViewStub()
-                    else hideViewStub()
+                    if (list.isEmpty()) {
+                        showViewStub()
+                    } else {
+                        hideViewStub()
+                    }
                 }
         }
         val callback = SimpleItemTouchHelperCallback(categoryAdapter)

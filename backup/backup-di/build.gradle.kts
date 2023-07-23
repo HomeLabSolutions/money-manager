@@ -1,13 +1,10 @@
 plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
-    
 }
 
 android {
     namespace = "com.d9tilov.android.backup_di"
-
-    
 }
 
 dependencies {
@@ -16,8 +13,4 @@ dependencies {
     implementation(project(":backup:backup-data:backup-data-impl"))
     implementation(project(":backup:backup-domain:backup-domain-contract"))
     implementation(project(":backup:backup-domain:backup-domain-impl"))
-
-    
-    
-
 }

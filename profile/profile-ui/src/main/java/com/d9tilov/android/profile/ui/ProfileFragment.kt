@@ -9,7 +9,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.viewModels
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.d9tilov.android.common_android.ui.base.BaseFragment
+import com.d9tilov.android.common.android.ui.base.BaseFragment
 import com.d9tilov.android.profile.ui.navigation.ProfileNavigator
 import com.d9tilov.android.profile.ui.navigation.budgetScreen
 import com.d9tilov.android.profile.ui.navigation.currencyScreen
@@ -66,4 +66,3 @@ class ProfileFragment :
         }
     }
 }
-

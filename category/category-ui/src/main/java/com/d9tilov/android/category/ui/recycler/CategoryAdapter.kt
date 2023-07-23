@@ -14,8 +14,8 @@ import com.d9tilov.android.category.ui.diff.CategoryDiffUtil
 import com.d9tilov.android.category_ui.R
 import com.d9tilov.android.category_ui.databinding.ItemCategoryBaseBinding
 import com.d9tilov.android.category_ui.databinding.ItemCategoryBinding
-import com.d9tilov.android.common_android.ui.base.BaseViewHolder
-import com.d9tilov.android.common_android.utils.createTintDrawable
+import com.d9tilov.android.common.android.ui.base.BaseViewHolder
+import com.d9tilov.android.common.android.utils.createTintDrawable
 import com.d9tilov.android.core.events.OnItemClickListener
 
 class CategoryAdapter(private val itemClickListener: OnItemClickListener<Category>) :
@@ -28,11 +28,13 @@ class CategoryAdapter(private val itemClickListener: OnItemClickListener<Categor
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-        val viewBinding = if (viewType == ALL) ItemCategoryBaseBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        ) else {
+        val viewBinding = if (viewType == ALL) {
+            ItemCategoryBaseBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        } else {
             ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         }
         val viewHolder = CategoryViewHolder(viewBinding)
@@ -91,7 +93,6 @@ class CategoryAdapter(private val itemClickListener: OnItemClickListener<Categor
                             }
                         }
                         categoryItemSubtitle.text = category.parent?.name
-
                     }
                 }
                 is ItemCategoryBaseBinding -> {
