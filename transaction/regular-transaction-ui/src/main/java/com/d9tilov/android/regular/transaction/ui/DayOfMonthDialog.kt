@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.d9tilov.android.common_android.ui.base.BaseDialogFragment
+import com.d9tilov.android.common.android.ui.base.BaseDialogFragment
 import com.d9tilov.android.regular.transaction.domain.model.MonthDays
 import com.d9tilov.android.regular.transaction.ui.RegularTransactionCreationFragment.Companion.ARG_DAY_OF_MONTH
 import com.d9tilov.android.regular.transaction.ui.navigator.DayOfMonthDialogNavigator

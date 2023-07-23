@@ -6,8 +6,8 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.TransactionType
-import java.math.BigDecimal
 import kotlinx.datetime.LocalDateTime
+import java.math.BigDecimal
 
 @Entity(
     tableName = "regularTransaction",

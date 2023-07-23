@@ -4,8 +4,6 @@ plugins {
 
 android {
     namespace = "com.d9tilov.android.backup_data_impl"
-
-    
 }
 
 dependencies {
@@ -20,7 +18,7 @@ dependencies {
     implementation(project(":backup:backup-domain:backup-domain-model"))
 
     implementation(libs.coroutinesCore)
-    implementation (libs.timber)
+    implementation(libs.timber)
 
     implementation(libs.worker)
     implementation(libs.workerHilt)
@@ -29,4 +27,3 @@ dependencies {
     implementation(libs.firebaseStorage)
     implementation(libs.firebaseConfig)
 }
-

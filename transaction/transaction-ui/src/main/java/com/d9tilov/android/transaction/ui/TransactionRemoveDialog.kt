@@ -7,7 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.d9tilov.android.designsystem.databinding.FragmentDialogRemoveBinding
-import com.d9tilov.android.common_android.ui.base.BaseDialogFragment
+import com.d9tilov.android.common.android.ui.base.BaseDialogFragment
 import com.d9tilov.android.transaction.ui.navigation.RemoveTransactionDialogNavigator
 import com.d9tilov.android.transaction.ui.vm.RemoveTransactionViewModel
 import com.d9tilov.android.transaction_ui.R

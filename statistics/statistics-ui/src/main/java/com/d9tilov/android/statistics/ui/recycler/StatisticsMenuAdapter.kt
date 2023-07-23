@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.d9tilov.android.common_android.ui.base.BaseViewHolder
+import com.d9tilov.android.common.android.ui.base.BaseViewHolder
 import com.d9tilov.android.core.events.OnItemClickListener
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.statistics.data.model.BaseStatisticsMenuType

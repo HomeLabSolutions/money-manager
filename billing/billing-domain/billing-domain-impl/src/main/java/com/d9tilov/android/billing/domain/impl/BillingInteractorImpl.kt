@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.map
 import timber.log.Timber
 
 class BillingInteractorImpl(
-    private val billingRepo: BillingRepo,
+    private val billingRepo: BillingRepo
 ) : BillingInteractor {
 
     private val premiumEmailList = MutableStateFlow(listOf<String>())

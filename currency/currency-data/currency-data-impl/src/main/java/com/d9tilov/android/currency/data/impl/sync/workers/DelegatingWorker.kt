@@ -59,7 +59,7 @@ internal fun KClass<out CoroutineWorker>.delegatedData() =
  */
 class DelegatingWorker(
     appContext: Context,
-    workerParams: WorkerParameters,
+    workerParams: WorkerParameters
 ) : CoroutineWorker(appContext, workerParams) {
 
     private val workerClassName =

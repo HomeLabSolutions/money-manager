@@ -1,6 +1,6 @@
 package com.d9tilov.android.regular.transaction.ui.navigator
 
-import com.d9tilov.android.common_android.ui.base.BaseNavigator
+import com.d9tilov.android.common.android.ui.base.BaseNavigator
 
 interface BaseRegularIncomeExpenseNavigator : BaseNavigator
 
@@ -12,4 +12,3 @@ interface RegularTransactionCreatedNavigator : BaseNavigator {
 }
 
 interface DayOfMonthDialogNavigator : BaseNavigator
-

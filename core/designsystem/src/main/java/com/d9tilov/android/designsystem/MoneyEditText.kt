@@ -68,7 +68,9 @@ class MoneyEditText @JvmOverloads constructor(
                             Character.isWhitespace(ch) ||
                             allowableSymbols.contains(ch.toString())
                         )
-                    ) return ""
+                    ) {
+                        return ""
+                    }
                 }
                 return null
             }
@@ -92,7 +94,9 @@ class MoneyEditText @JvmOverloads constructor(
         if (s.isNotEmpty()) {
             isFormatting = true
             formatInput(s.toString(), start, lengthAfter)
-        } else hint = ZERO
+        } else {
+            hint = ZERO
+        }
         isFormatting = false
     }
 

@@ -1,16 +1,12 @@
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
 
 plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
-    
 }
 
 android {
     namespace = "com.d9tilov.android.transaction_di"
-
-
-    
 }
 
 dependencies {
@@ -32,7 +28,4 @@ dependencies {
     implementation(project(":currency:currency-domain:currency-domain-contract"))
 
     implementation(project(":budget:budget-domain:budget-domain-contract"))
-
-    
-    
 }

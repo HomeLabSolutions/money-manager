@@ -35,8 +35,11 @@ class CurrencySyncWorker @AssistedInject constructor(
         val syncedSuccessfully = awaitAll(async { currencyInteractor.updateCurrencyRates() })
             .all { it }
 
-        if (syncedSuccessfully) Result.success()
-        else Result.retry()
+        if (syncedSuccessfully) {
+            Result.success()
+        } else {
+            Result.retry()
+        }
     }
 
     companion object {

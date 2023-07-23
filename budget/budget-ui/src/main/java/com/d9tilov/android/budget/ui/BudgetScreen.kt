@@ -50,20 +50,20 @@ fun BudgetScreen(
 ) {
     Scaffold(
         topBar = {
-            if (!showInPrepopulate)
+            if (!showInPrepopulate) {
                 MmTopAppBar(
                     titleRes = R.string.title_prepopulate_budget,
                     onNavigationClick = onClickBack
                 )
-
-        },
+            }
+        }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
             Text(
                 text = stringResource(R.string.budget_sum_title),
                 modifier = Modifier.padding(
                     start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
-                    top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
+                    top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large)
                 ),
                 style = MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.secondary)
             )
@@ -74,7 +74,7 @@ fun BudgetScreen(
                 true,
                 Modifier.fillMaxWidth()
                     .padding(
-                        horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                        horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)
                     )
             ) { s ->
                 text = s

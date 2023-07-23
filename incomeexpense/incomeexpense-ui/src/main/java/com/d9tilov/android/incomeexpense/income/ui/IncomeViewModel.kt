@@ -5,8 +5,8 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
 import androidx.paging.map
-import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
+import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.isSameDay
@@ -17,8 +17,6 @@ import com.d9tilov.android.transaction.domain.model.BaseTransaction
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.domain.model.TransactionHeader
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.math.BigDecimal
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -30,6 +28,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.math.BigDecimal
+import javax.inject.Inject
 
 @HiltViewModel
 class IncomeViewModel @Inject constructor(
@@ -68,7 +68,9 @@ class IncomeViewModel @Inject constructor(
                         )
                     )
                 }
-            } else navigator?.showEmptySumError()
+            } else {
+                navigator?.showEmptySumError()
+            }
         }
     }
 
@@ -96,7 +98,9 @@ class IncomeViewModel @Inject constructor(
                             after.currencyCode
                         )
                         header
-                    } else null
+                    } else {
+                        null
+                    }
                 }.map { item: BaseTransaction ->
                     var newItem: BaseTransaction = item
                     if (item is TransactionHeader) {

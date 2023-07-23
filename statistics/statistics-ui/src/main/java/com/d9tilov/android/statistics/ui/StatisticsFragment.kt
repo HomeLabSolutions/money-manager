@@ -17,16 +17,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
 import androidx.recyclerview.widget.SnapHelper
-import com.d9tilov.android.common_android.ui.base.BaseFragment
-import com.d9tilov.android.common_android.ui.recyclerview.ItemSnapHelper
-import com.d9tilov.android.common_android.utils.DATE_FORMAT
-import com.d9tilov.android.common_android.utils.TRANSACTION_DATE_FORMAT_SHORT
-import com.d9tilov.android.common_android.utils.createTintDrawable
-import com.d9tilov.android.common_android.utils.gone
-import com.d9tilov.android.common_android.utils.hideWithAnimation
-import com.d9tilov.android.common_android.utils.let2
-import com.d9tilov.android.common_android.utils.show
-import com.d9tilov.android.common_android.utils.showWithAnimation
+import com.d9tilov.android.common.android.ui.base.BaseFragment
+import com.d9tilov.android.common.android.ui.recyclerview.ItemSnapHelper
+import com.d9tilov.android.common.android.utils.DATE_FORMAT
+import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_FORMAT_SHORT
+import com.d9tilov.android.common.android.utils.createTintDrawable
+import com.d9tilov.android.common.android.utils.getColorFromAttr
+import com.d9tilov.android.common.android.utils.gone
+import com.d9tilov.android.common.android.utils.hideWithAnimation
+import com.d9tilov.android.common.android.utils.let2
+import com.d9tilov.android.common.android.utils.show
+import com.d9tilov.android.common.android.utils.showWithAnimation
 import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDate
@@ -36,7 +37,6 @@ import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.core.utils.isSameDay
 import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.core.utils.toMillis
-import com.d9tilov.android.common_android.utils.getColorFromAttr
 import com.d9tilov.android.statistics.data.model.StatisticsMenuChartMode
 import com.d9tilov.android.statistics.data.model.StatisticsMenuInStatistics
 import com.d9tilov.android.statistics.data.model.StatisticsMenuTransactionType
@@ -67,20 +67,21 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
-import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDateTime
 
 @AndroidEntryPoint
 class StatisticsFragment :
     BaseFragment<StatisticsNavigator, FragmentStatisticsBinding>(
         FragmentStatisticsBinding::inflate,
         R.layout.fragment_statistics
-    ), StatisticsNavigator {
+    ),
+    StatisticsNavigator {
 
     override fun getNavigator() = this
     override val viewModel by viewModels<StatisticsViewModel>()
@@ -166,7 +167,9 @@ class StatisticsFragment :
                                         val newList = list.map { item ->
                                             if (item.category.children.isNotEmpty()) {
                                                 item.copy(category = item.category.copy(color = item.category.children[0].color))
-                                            } else item
+                                            } else {
+                                                item
+                                            }
                                         }
                                         statisticsBarChartAdapter.updateItems(newList)
                                         statisticsSpentInPeriodSum.setValue(
@@ -191,8 +194,11 @@ class StatisticsFragment :
                     }
                     launch {
                         viewModel.isPremium.collect { isPremium ->
-                            if (isPremium) statisticsMenu.show()
-                            else statisticsMenu.gone()
+                            if (isPremium) {
+                                statisticsMenu.show()
+                            } else {
+                                statisticsMenu.gone()
+                            }
                         }
                     }
                 }
@@ -266,11 +272,17 @@ class StatisticsFragment :
         val timezone = TimeZone.getDefault()
         val period = viewModel.chartPeriod
         val startDateSelection =
-            if (period is StatisticsPeriod.CUSTOM) period.from.toMillis()
-            else currentDate().getStartOfDay().toMillis()
+            if (period is StatisticsPeriod.CUSTOM) {
+                period.from.toMillis()
+            } else {
+                currentDate().getStartOfDay().toMillis()
+            }
         val endDateSelection =
-            if (period is StatisticsPeriod.CUSTOM) period.to.toMillis()
-            else currentDate().getEndOfDay().toMillis()
+            if (period is StatisticsPeriod.CUSTOM) {
+                period.to.toMillis()
+            } else {
+                currentDate().getEndOfDay().toMillis()
+            }
         val startSelectionMillis = startDateSelection + timezone.getOffset(startDateSelection)
         val endSelectionMillis = endDateSelection + timezone.getOffset(endDateSelection)
         builderRange
@@ -303,8 +315,9 @@ class StatisticsFragment :
         val toLocalDateTime = viewModel.chartPeriod.to
         val fromLocalDateTime = viewModel.chartPeriod.from
         viewBinding?.statisticsPieChart?.centerText =
-            if (toLocalDateTime.isSameDay(fromLocalDateTime)) getString(R.string.statistics_today)
-            else {
+            if (toLocalDateTime.isSameDay(fromLocalDateTime)) {
+                getString(R.string.statistics_today)
+            } else {
                 val fromMillis = Date(fromLocalDateTime.toMillis())
                 val toMillis = Date(toLocalDateTime.getEndOfDay().toMillis())
                 val sb = StringBuilder()
@@ -367,8 +380,12 @@ class StatisticsFragment :
                     val displayName = if (tr.percent > PERCENT_LIMIT_TO_SHOW_LABEL) {
                         if (categoryName.length > MAX_CATEGORY_NAME_LENGTH) {
                             "${categoryName.dropLast(categoryName.length - MAX_CATEGORY_NAME_LENGTH)}..."
-                        } else categoryName
-                    } else ""
+                        } else {
+                            categoryName
+                        }
+                    } else {
+                        ""
+                    }
                     let2(tr.category.icon, tr.category.color) { icon, color ->
                         PieEntry(
                             tr.sum.toFloat(),

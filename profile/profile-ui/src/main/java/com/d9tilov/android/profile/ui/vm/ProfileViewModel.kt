@@ -3,9 +3,9 @@ package com.d9tilov.android.profile.ui.vm
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
-import com.d9tilov.android.budget.domain.model.BudgetData
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
-import com.d9tilov.android.common_android.ui.base.BaseViewModel
+import com.d9tilov.android.budget.domain.model.BudgetData
+import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
@@ -17,7 +17,6 @@ import com.d9tilov.android.user.domain.contract.UserInteractor
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -28,6 +27,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 sealed class ProfileUiItem {
     data class CurrencyUiItem(val currencyCode: String = DEFAULT_CURRENCY_CODE) :
@@ -67,7 +67,7 @@ class ProfileViewModel @Inject constructor(
     currencyInteractor: CurrencyInteractor,
     budgetInteractor: BudgetInteractor,
     regularTransactionInteractor: RegularTransactionInteractor,
-    billingInteractor: BillingInteractor,
+    billingInteractor: BillingInteractor
 ) : BaseViewModel<ProfileNavigator>() {
 
     private val _showDialog: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -84,7 +84,7 @@ class ProfileViewModel @Inject constructor(
             budgetInteractor.get(),
             regularTransactionInteractor.getAll(TransactionType.INCOME),
             regularTransactionInteractor.getAll(TransactionType.EXPENSE),
-            billingInteractor.isPremium(),
+            billingInteractor.isPremium()
         ) { userCurrencyPair, budgetData, regularIncomeList, regularExpenseList, isPremium ->
             val userInfo = userCurrencyPair.first
             val currency: CurrencyMetaData = userCurrencyPair.second

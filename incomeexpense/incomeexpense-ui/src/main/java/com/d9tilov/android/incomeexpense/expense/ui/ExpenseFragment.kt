@@ -17,16 +17,16 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.ui.navigation.CategoryDestination
-import com.d9tilov.android.common_android.ui.recyclerview.GridSpaceItemDecoration
-import com.d9tilov.android.common_android.ui.recyclerview.ItemSnapHelper
-import com.d9tilov.android.common_android.ui.recyclerview.StickyHeaderItemDecorator
-import com.d9tilov.android.common_android.utils.gone
-import com.d9tilov.android.common_android.utils.isTablet
-import com.d9tilov.android.common_android.utils.show
+import com.d9tilov.android.common.android.ui.recyclerview.GridSpaceItemDecoration
+import com.d9tilov.android.common.android.ui.recyclerview.ItemSnapHelper
+import com.d9tilov.android.common.android.ui.recyclerview.StickyHeaderItemDecorator
+import com.d9tilov.android.common.android.utils.getColorFromAttr
+import com.d9tilov.android.common.android.utils.gone
+import com.d9tilov.android.common.android.utils.isTablet
+import com.d9tilov.android.common.android.utils.show
 import com.d9tilov.android.core.constants.CurrencyConstants.DECIMAL_LENGTH
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.model.isIncome
-import com.d9tilov.android.common_android.utils.getColorFromAttr
 import com.d9tilov.android.incomeexpense.navigation.ExpenseNavigator
 import com.d9tilov.android.incomeexpense.ui.BaseIncomeExpenseFragment
 import com.d9tilov.android.incomeexpense.ui.IncomeExpenseFragmentDirections
@@ -37,10 +37,10 @@ import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayMode
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
-import java.math.RoundingMode
-import javax.inject.Inject
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.math.RoundingMode
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ExpenseFragment :
@@ -91,8 +91,11 @@ class ExpenseFragment :
                             if (model != null) {
                                 if (isKeyboardOpen()) expenseInfoLayoutInclude.root.show()
                                 val spentInPeriod = model.spentInPeriodSum
-                                if (spentInPeriod.signum() == 0) expenseInfoLayoutInclude.expensePeriodInfoApproxSign.gone()
-                                else expenseInfoLayoutInclude.expensePeriodInfoApproxSign.show()
+                                if (spentInPeriod.signum() == 0) {
+                                    expenseInfoLayoutInclude.expensePeriodInfoApproxSign.gone()
+                                } else {
+                                    expenseInfoLayoutInclude.expensePeriodInfoApproxSign.show()
+                                }
 
                                 val spentInPeriodApprox = model.spentInPeriodSumApprox
                                 expenseInfoLayoutInclude.expensePeriodInfoApproxSum.setValue(
@@ -102,8 +105,11 @@ class ExpenseFragment :
                                 expenseInfoLayoutInclude.expensePeriodInfoApproxSum.show()
 
                                 val spentToday = model.spentTodaySum
-                                if (spentToday.signum() == 0) expenseInfoLayoutInclude.expenseTodayInfoApproxSign.gone()
-                                else expenseInfoLayoutInclude.expenseTodayInfoApproxSign.show()
+                                if (spentToday.signum() == 0) {
+                                    expenseInfoLayoutInclude.expenseTodayInfoApproxSign.gone()
+                                } else {
+                                    expenseInfoLayoutInclude.expenseTodayInfoApproxSign.show()
+                                }
 
                                 val spentTodayApprox = model.spentTodaySumApprox
                                 expenseInfoLayoutInclude.expenseTodayInfoApproxSum.setValue(
@@ -123,7 +129,8 @@ class ExpenseFragment :
                                                 getCurrencyCode()
                                             )
                                             val infoColor = requireContext().getColorFromAttr(
-                                                androidx.appcompat.R.attr.colorError)
+                                                androidx.appcompat.R.attr.colorError
+                                            )
                                             expenseTodayInfoValue.setColor(infoColor)
                                         }
                                         is TransactionSpendingTodayModel.NORMAL -> {
@@ -137,8 +144,11 @@ class ExpenseFragment :
                                                                 DECIMAL_LENGTH,
                                                                 RoundingMode.HALF_UP
                                                             ).signum() > 0
-                                                        ) com.google.android.material.R.attr.colorOnPrimaryContainer
-                                                        else androidx.appcompat.R.attr.colorError
+                                                        ) {
+                                                            com.google.android.material.R.attr.colorOnPrimaryContainer
+                                                        } else {
+                                                            androidx.appcompat.R.attr.colorError
+                                                        }
                                                     )
                                                 )
                                             }
@@ -168,7 +178,7 @@ class ExpenseFragment :
             expenseCategoryRvList.addItemDecoration(
                 GridSpaceItemDecoration(
                     SPAN_COUNT,
-                    resources.getDimension(com.d9tilov.android.common_android.R.dimen.recycler_view_category_offset).toInt(),
+                    resources.getDimension(com.d9tilov.android.common.android.R.dimen.recycler_view_category_offset).toInt(),
                     HORIZONTAL
                 )
             )

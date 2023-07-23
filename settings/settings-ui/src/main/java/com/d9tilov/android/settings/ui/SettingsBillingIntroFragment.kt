@@ -11,8 +11,8 @@ import androidx.navigation.fragment.findNavController
 import com.d9tilov.android.billing.domain.model.BillingSkuDetails
 import com.d9tilov.android.billing.domain.model.BillingSkuDetails.Companion.TAG_ANNUAL
 import com.d9tilov.android.billing.domain.model.BillingSkuDetails.Companion.TAG_QUARTERLY
-import com.d9tilov.android.common_android.ui.base.BaseFragment
-import com.d9tilov.android.common_android.utils.ZoomOutPageTransformer
+import com.d9tilov.android.common.android.ui.base.BaseFragment
+import com.d9tilov.android.common.android.utils.ZoomOutPageTransformer
 import com.d9tilov.android.settings.ui.adapter.DotIndicatorPager2Adapter
 import com.d9tilov.android.settings.ui.navigation.SettingsBillingNavigator
 import com.d9tilov.android.settings.ui.vm.SettingsBillingIntroViewModel

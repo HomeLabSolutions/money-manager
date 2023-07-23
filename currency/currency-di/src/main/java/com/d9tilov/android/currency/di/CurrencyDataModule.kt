@@ -1,9 +1,9 @@
 package com.d9tilov.android.currency.di
 
-import com.d9tilov.android.currency.domain.contract.CurrencyRepo
 import com.d9tilov.android.currency.data.contract.CurrencySource
 import com.d9tilov.android.currency.data.impl.CurrencyDataRepo
 import com.d9tilov.android.currency.data.impl.CurrencyLocalSource
+import com.d9tilov.android.currency.domain.contract.CurrencyRepo
 import com.d9tilov.android.database.AppDatabase
 import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.network.CurrencyApi
@@ -20,7 +20,7 @@ object CurrencyDataModule {
     @Provides
     fun provideCurrencySource(
         appDatabase: AppDatabase,
-        preferencesStore: PreferencesStore,
+        preferencesStore: PreferencesStore
     ): CurrencySource = CurrencyLocalSource(
         preferencesStore,
         appDatabase.currencyDao(),

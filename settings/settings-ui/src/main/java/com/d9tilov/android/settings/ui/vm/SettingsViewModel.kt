@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.backup.domain.contract.BackupInteractor
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
-import com.d9tilov.android.common_android.ui.base.BaseViewModel
+import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.network.exception.NetworkException
@@ -13,8 +13,6 @@ import com.d9tilov.android.settings_ui.R
 import com.d9tilov.android.user.domain.contract.UserInteractor
 import com.google.firebase.FirebaseException
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.io.FileNotFoundException
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,6 +20,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.io.FileNotFoundException
+import javax.inject.Inject
 
 private const val UNKNOWN_BACKUP_DATE = -1L
 
@@ -62,27 +62,36 @@ class SettingsViewModel @Inject constructor(
                 backupInteractor.getBackupData(),
                 billingInteractor.getPremiumInfo()
             ) { user, backupData, premiumInfo ->
-                val price = if (premiumInfo.isPremium)
+                val price = if (premiumInfo.isPremium) {
                     SubscriptionPriceUiState(
                         premiumInfo.minBillingPrice.value.toString(),
                         premiumInfo.minBillingPrice.code,
                         premiumInfo.minBillingPrice.symbol
                     )
-                else null
+                } else {
+                    null
+                }
                 val subscriptionState = if (premiumInfo.canPurchase) {
                     SubscriptionUiState(
-                        title = if (premiumInfo.isPremium) R.string.settings_subscription_premium_acknowledged_title
-                        else R.string.settings_subscription_premium_title,
+                        title = if (premiumInfo.isPremium) {
+                            R.string.settings_subscription_premium_acknowledged_title
+                        } else {
+                            R.string.settings_subscription_premium_title
+                        },
                         description = when (premiumInfo.isPremium) {
-                            true -> if (premiumInfo.hasActiveSku)
-                                R.string.settings_subscription_premium_acknowledged_subtitle_renewing else
+                            true -> if (premiumInfo.hasActiveSku) {
+                                R.string.settings_subscription_premium_acknowledged_subtitle_renewing
+                            } else {
                                 R.string.settings_subscription_premium_acknowledged_subtitle_cancel
+                            }
 
                             false -> R.string.settings_subscription_premium_description
                         },
                         minPrice = price
                     )
-                } else null
+                } else {
+                    null
+                }
                 val fiscalDay = user?.fiscalDay ?: 1
                 SettingsUiState(
                     subscriptionState,

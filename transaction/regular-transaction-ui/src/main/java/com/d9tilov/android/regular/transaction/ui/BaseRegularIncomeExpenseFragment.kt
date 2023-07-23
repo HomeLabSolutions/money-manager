@@ -12,10 +12,10 @@ import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.viewbinding.ViewBinding
 import com.d9tilov.android.designsystem.databinding.LayoutEmptyListPlaceholderBinding
-import com.d9tilov.android.common_android.ui.base.BaseFragment
-import com.d9tilov.android.common_android.ui.base.Inflate
-import com.d9tilov.android.common_android.utils.gone
-import com.d9tilov.android.common_android.utils.show
+import com.d9tilov.android.common.android.ui.base.BaseFragment
+import com.d9tilov.android.common.android.ui.base.Inflate
+import com.d9tilov.android.common.android.utils.gone
+import com.d9tilov.android.common.android.utils.show
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.model.isIncome
 import com.d9tilov.android.regular.transaction.domain.model.RegularTransaction
@@ -44,7 +44,7 @@ abstract class BaseRegularIncomeExpenseFragment<N : BaseRegularIncomeExpenseNavi
     protected var emptyViewStub: LayoutEmptyListPlaceholderBinding? = null
 
     private fun openRemoveConfirmationDialog(transaction: RegularTransaction) {
-        //need to implement
+        // need to implement
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -93,8 +93,11 @@ abstract class BaseRegularIncomeExpenseFragment<N : BaseRegularIncomeExpenseNavi
             )
             it.emptyPlaceholderTitle.text =
                 getString(
-                    if (transactionType.isIncome()) R.string.transaction_empty_placeholder_regular_income_title
-                    else R.string.transaction_empty_placeholder_regular_expense_title
+                    if (transactionType.isIncome()) {
+                        R.string.transaction_empty_placeholder_regular_income_title
+                    } else {
+                        R.string.transaction_empty_placeholder_regular_expense_title
+                    }
                 )
             it.emptyPlaceholderSubtitle.show()
         }

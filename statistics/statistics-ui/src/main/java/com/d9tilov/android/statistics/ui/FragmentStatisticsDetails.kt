@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.d9tilov.android.common_android.ui.base.BaseFragment
+import com.d9tilov.android.common.android.ui.base.BaseFragment
 import com.d9tilov.android.statistics.ui.navigation.StatisticsDetailsNavigator
 import com.d9tilov.android.statistics.ui.recycler.StatisticsDetailsAdapter
 import com.d9tilov.android.statistics.ui.vm.StatisticsDetailsViewModel

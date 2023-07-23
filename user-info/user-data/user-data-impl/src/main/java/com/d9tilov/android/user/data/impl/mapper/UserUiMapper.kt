@@ -21,11 +21,11 @@ fun FirebaseUser?.toDataModel(): UserProfile {
             fiscalDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
             photoUrl = photoUrl.toString()
         )
-        } ?: return UserProfile.EMPTY.copy(
-            uid = DEFAULT_DATA_ID.toString(),
-            displayedName = "Name Surname",
-            firstName = "Name",
-            lastName = "Surname",
-            fiscalDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-        )
-    }
+    } ?: return UserProfile.EMPTY.copy(
+        uid = DEFAULT_DATA_ID.toString(),
+        displayedName = "Name Surname",
+        firstName = "Name",
+        lastName = "Surname",
+        fiscalDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+    )
+}

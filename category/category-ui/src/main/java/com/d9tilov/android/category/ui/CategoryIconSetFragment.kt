@@ -14,8 +14,8 @@ import com.d9tilov.android.category.ui.recycler.CategoryIconsSetAdapter
 import com.d9tilov.android.category.ui.vm.CategorySetViewModel
 import com.d9tilov.android.category_ui.R
 import com.d9tilov.android.category_ui.databinding.FragmentCategoryIconSetBinding
-import com.d9tilov.android.common_android.ui.base.BaseFragment
-import com.d9tilov.android.common_android.ui.recyclerview.GridSpaceItemDecoration
+import com.d9tilov.android.common.android.ui.base.BaseFragment
+import com.d9tilov.android.common.android.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +25,8 @@ class CategoryIconSetFragment :
     BaseFragment<CategorySetNavigator, FragmentCategoryIconSetBinding>(
         FragmentCategoryIconSetBinding::inflate,
         R.layout.fragment_category_icon_set
-    ), CategorySetNavigator {
+    ),
+    CategorySetNavigator {
     private val args by navArgs<CategoryIconSetFragmentArgs>()
     private val groupId: CategoryGroup by lazy { args.groupId }
     private val title: Int by lazy { if (args.title.toLong() == NO_ID) R.string.title_category_set else args.title }
@@ -55,7 +56,7 @@ class CategoryIconSetFragment :
             categorySetRvCategory.addItemDecoration(
                 GridSpaceItemDecoration(
                     spanCount = SPAN_COUNT,
-                    spacing = resources.getDimension(com.d9tilov.android.common_android.R.dimen.recycler_view_category_offset)
+                    spacing = resources.getDimension(com.d9tilov.android.common.android.R.dimen.recycler_view_category_offset)
                         .toInt()
                 )
             )
@@ -76,11 +77,14 @@ class CategoryIconSetFragment :
             ARG_CATEGORY_ICON_ID,
             icon
         )
-        if (viewModel.isPremium) findNavController().popBackStack(
-            R.id.grouped_category_set_dest,
-            true
-        )
-        else findNavController().popBackStack()
+        if (viewModel.isPremium) {
+            findNavController().popBackStack(
+                R.id.grouped_category_set_dest,
+                true
+            )
+        } else {
+            findNavController().popBackStack()
+        }
     }
 
     companion object {

@@ -2,7 +2,6 @@ package com.d9tilov.android.billing.domain.model
 
 import com.d9tilov.android.currency.domain.model.Currency
 
-
 data class BillingSkuDetails(
     val tag: String,
     val offerToken: String,

@@ -53,6 +53,9 @@ import com.d9tilov.android.home.ui.MainActivity
 import com.d9tilov.moneymanager.prepopulate.PrepopulateScreen.Companion.fromScreenId
 import com.d9tilov.moneymanager.R
 
+private const val SHAPE_RADIUS = 10
+private const val FRACTION = 0.5f
+
 @Composable
 fun PrepopulateScreen(prepopulateViewModel: PrepopulateViewModel = hiltViewModel()) {
     val uiState: PrepopulateUiState by prepopulateViewModel.uiState.collectAsStateWithLifecycle()
@@ -139,7 +142,7 @@ fun BottomNavigationBar(
         ProgressIndicator(progress,
             Modifier
                 .padding(16.dp)
-                .fillMaxWidth(0.5f))
+                .fillMaxWidth(FRACTION))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
@@ -159,7 +162,7 @@ fun BottomNavigationBar(
                     .border(
                         1.dp,
                         MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(10)
+                        shape = RoundedCornerShape(SHAPE_RADIUS)
                     )
                     .size(40.dp)
             ) {
@@ -186,7 +189,7 @@ fun BottomNavigationBar(
                     .height(height = 40.dp)
                     .wrapContentWidth(),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-                shape = RoundedCornerShape(10),
+                shape = RoundedCornerShape(SHAPE_RADIUS),
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {

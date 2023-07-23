@@ -11,11 +11,11 @@ import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.ui.diff.CategoryDiffUtil
 import com.d9tilov.android.category_ui.R
 import com.d9tilov.android.category_ui.databinding.ItemCategoryBinding
-import com.d9tilov.android.common_android.ui.base.BaseViewHolder
-import com.d9tilov.android.common_android.ui.recyclerview.ItemTouchHelperCallback
-import com.d9tilov.android.common_android.utils.createTintDrawable
-import com.d9tilov.android.common_android.utils.gone
-import com.d9tilov.android.common_android.utils.show
+import com.d9tilov.android.common.android.ui.base.BaseViewHolder
+import com.d9tilov.android.common.android.ui.recyclerview.ItemTouchHelperCallback
+import com.d9tilov.android.common.android.utils.createTintDrawable
+import com.d9tilov.android.common.android.utils.gone
+import com.d9tilov.android.common.android.utils.show
 import com.d9tilov.android.core.events.OnItemClickListener
 import com.d9tilov.android.core.events.OnItemMoveListener
 

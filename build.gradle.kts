@@ -5,6 +5,7 @@ buildscript {
         google()
         mavenCentral()
         gradlePluginPortal()
+        maven("https://plugins.gradle.org/m2/")
     }
     dependencies {
         classpath(libs.googlePlayServicesPlugin)
@@ -12,17 +13,23 @@ buildscript {
         classpath(libs.hiltPlugin)
         classpath(libs.firebaseCrashlyticsPlgin)
         classpath(libs.detektPlugin)
+        classpath(libs.ktlintPlugin)
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
 allprojects {
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
     repositories {
         google()
         mavenCentral()
         maven(url = "https://jitpack.io")
     }
+}
+
+repositories {
+    mavenCentral()
 }
 
 extra["compileSdkVersion"] = 34
@@ -39,6 +46,5 @@ tasks.register("clean", Delete::class) {
 
 plugins {
     alias(libs.plugins.serialization) apply false
-    alias(libs.plugins.ktlint) apply true
     alias(libs.plugins.deps) apply true // ./gradlew buildHealth
 }

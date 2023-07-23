@@ -2,7 +2,7 @@ package com.d9tilov.android.incomeexpense.ui.vm
 
 import androidx.paging.PagingData
 import com.d9tilov.android.category.domain.model.Category
-import com.d9tilov.android.common_android.ui.base.BaseViewModel
+import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.incomeexpense.navigation.BaseIncomeExpenseNavigator
 import com.d9tilov.android.transaction.domain.model.BaseTransaction
 import kotlinx.coroutines.flow.Flow

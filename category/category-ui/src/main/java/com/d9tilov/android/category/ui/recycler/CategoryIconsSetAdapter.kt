@@ -6,11 +6,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.d9tilov.android.category_ui.databinding.ItemCategoryIconBinding
-import com.d9tilov.android.core.events.OnItemClickListener
-import com.d9tilov.android.common_android.ui.base.BaseViewHolder
-import com.d9tilov.android.common_android.utils.createTintDrawable
 import com.d9tilov.android.category.data.impl.color.ColorManager
+import com.d9tilov.android.category_ui.databinding.ItemCategoryIconBinding
+import com.d9tilov.android.common.android.ui.base.BaseViewHolder
+import com.d9tilov.android.common.android.utils.createTintDrawable
+import com.d9tilov.android.core.events.OnItemClickListener
 
 class CategoryIconsSetAdapter(
     icons: List<Int>,

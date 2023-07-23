@@ -109,20 +109,26 @@ class TransactionInteractorImpl(
                             item.toChartModel(
                                 category,
                                 currencyCode,
-                                if (currencyCode == DEFAULT_CURRENCY_CODE) item.usdSum
-                                else currencyInteractor.toTargetCurrency(
-                                    item.sum,
-                                    item.currencyCode,
-                                    currencyInteractor.getMainCurrency().code
-                                )
+                                if (currencyCode == DEFAULT_CURRENCY_CODE) {
+                                    item.usdSum
+                                } else {
+                                    currencyInteractor.toTargetCurrency(
+                                        item.sum,
+                                        item.currencyCode,
+                                        currencyInteractor.getMainCurrency().code
+                                    )
+                                }
                             )
                         }
                     }
                     .map { list ->
                         val sum = list.sumOf { tr -> tr.sum }
                         list.groupBy { tr ->
-                            if (onlySubcategories) tr.category
-                            else tr.category.parent ?: tr.category
+                            if (onlySubcategories) {
+                                tr.category
+                            } else {
+                                tr.category.parent ?: tr.category
+                            }
                         }
                             .mapKeys { entry ->
                                 val category = entry.key
@@ -162,12 +168,15 @@ class TransactionInteractorImpl(
                         TransactionLineChartModel(
                             currencyCode = currencyCode,
                             sum = item.value.sumOf { model ->
-                                if (currencyCode == DEFAULT_CURRENCY_CODE) model.usdSum
-                                else currencyInteractor.toTargetCurrency(
-                                    model.sum,
-                                    model.currencyCode,
-                                    currencyInteractor.getMainCurrency().code
-                                )
+                                if (currencyCode == DEFAULT_CURRENCY_CODE) {
+                                    model.usdSum
+                                } else {
+                                    currencyInteractor.toTargetCurrency(
+                                        model.sum,
+                                        model.currencyCode,
+                                        currencyInteractor.getMainCurrency().code
+                                    )
+                                }
                             }
                         )
                     }
@@ -243,9 +252,11 @@ class TransactionInteractorImpl(
         ) { numerator, countDaysSinceFiscalDate, expensesPerCurrentDay ->
             if (numerator.minus(expensesPerCurrentDay).signum() < 0) {
                 TransactionSpendingTodayModel.OVERSPENDING(numerator.minus(expensesPerCurrentDay))
-            } else TransactionSpendingTodayModel.NORMAL(
-                numerator.divideBy(countDaysSinceFiscalDate).minus(expensesPerCurrentDay)
-            )
+            } else {
+                TransactionSpendingTodayModel.NORMAL(
+                    numerator.divideBy(countDaysSinceFiscalDate).minus(expensesPerCurrentDay)
+                )
+            }
         }
     }
 
@@ -400,8 +411,11 @@ class TransactionInteractorImpl(
                     val currencies = mutableSetOf<String>()
                     list.forEach { tr -> currencies.add(tr.currencyCode) }
                     val currencyCode = currency.code
-                    if ((currencies.size == 1 && currencies.contains(currencyCode)) || currencyCode == DEFAULT_CURRENCY_CODE) BigDecimal.ZERO
-                    else list.sumOf { it.usdSum }
+                    if ((currencies.size == 1 && currencies.contains(currencyCode)) || currencyCode == DEFAULT_CURRENCY_CODE) {
+                        BigDecimal.ZERO
+                    } else {
+                        list.sumOf { it.usdSum }
+                    }
                 }
             }
     }
@@ -466,8 +480,11 @@ class TransactionInteractorImpl(
             val currencies = mutableSetOf<String>()
             list.forEach { tr -> currencies.add(tr.currencyCode) }
             val currencyCode = currency.code
-            if ((currencies.size == 1 && currencies.contains(currencyCode)) || currencyCode == DEFAULT_CURRENCY_CODE) BigDecimal.ZERO
-            else list.sumOf { it.usdSum }
+            if ((currencies.size == 1 && currencies.contains(currencyCode)) || currencyCode == DEFAULT_CURRENCY_CODE) {
+                BigDecimal.ZERO
+            } else {
+                list.sumOf { it.usdSum }
+            }
         }
 
     override fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<BigDecimal> {
@@ -483,8 +500,9 @@ class TransactionInteractorImpl(
                 ).map { list ->
                     list.sumOf { tr ->
                         val currencyCode = currency.code
-                        if (tr.currencyCode == currencyCode) tr.sum
-                        else {
+                        if (tr.currencyCode == currencyCode) {
+                            tr.sum
+                        } else {
                             val trCurrency = currencyInteractor.getCurrencyByCode(currencyCode)
                             trCurrency.value.multiply(tr.usdSum)
                         }
@@ -504,8 +522,9 @@ class TransactionInteractorImpl(
         ) { list, currency ->
             list.sumOf { tr ->
                 val currencyCode = currency.code
-                if (tr.currencyCode == currencyCode) tr.sum
-                else {
+                if (tr.currencyCode == currencyCode) {
+                    tr.sum
+                } else {
                     val trCurrency = currencyInteractor.getCurrencyByCode(currencyCode)
                     trCurrency.value.multiply(tr.usdSum)
                 }

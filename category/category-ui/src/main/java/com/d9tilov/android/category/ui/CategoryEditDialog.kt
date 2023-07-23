@@ -11,9 +11,9 @@ import com.d9tilov.android.category.ui.navigation.EditCategoryDialogNavigator
 import com.d9tilov.android.category.ui.vm.CategoryGroupEditViewModel
 import com.d9tilov.android.category_ui.R
 import com.d9tilov.android.category_ui.databinding.FragmentDialogEditCategoryBinding
-import com.d9tilov.android.common_android.ui.base.BaseDialogFragment
-import com.d9tilov.android.common_android.utils.onChange
-import com.d9tilov.android.common_android.utils.showKeyboard
+import com.d9tilov.android.common.android.ui.base.BaseDialogFragment
+import com.d9tilov.android.common.android.utils.onChange
+import com.d9tilov.android.common.android.utils.showKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

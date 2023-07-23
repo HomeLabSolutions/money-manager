@@ -62,8 +62,7 @@ fun SettingsScreen(
                 titleRes = R.string.title_settings,
                 onNavigationClick = onClickBack
             )
-
-        },
+        }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
             uiState.subscriptionState?.let { subscriptionState ->
@@ -166,5 +165,6 @@ fun SubscriptionDescription(subtitle: String) {
 fun DefaultSubscriptionPreview() {
     SettingsScreen(
         SettingsUiState(SubscriptionUiState(), startPeriodDay = 30.toString()),
-        onPeriodDateChanged = {})
+        onPeriodDateChanged = {}
+    )
 }

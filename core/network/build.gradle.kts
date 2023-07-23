@@ -4,7 +4,6 @@ import java.util.*
 plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
-    
 }
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -17,9 +16,6 @@ android {
     defaultConfig {
         buildConfigField("String", "API_KEY", keystoreProperties["currency_api_key"] as String)
     }
-
-    
-    
 }
 
 dependencies {
@@ -31,7 +27,4 @@ dependencies {
     implementation(libs.okHttpInterceptor)
 
     implementation(libs.timber)
-
-    
-    
 }

@@ -10,13 +10,13 @@ import com.d9tilov.android.category.ui.navigation.CategoryUnionDialogNavigator
 import com.d9tilov.android.category.ui.vm.CategoryUnionViewModel
 import com.d9tilov.android.category_ui.R
 import com.d9tilov.android.category_ui.databinding.FragmentDialogCategoryUnionBinding
-import com.d9tilov.android.common_android.ui.base.BaseDialogFragment
-import com.d9tilov.android.common_android.utils.createTintDrawable
-import com.d9tilov.android.common_android.utils.gone
-import com.d9tilov.android.common_android.utils.let2
-import com.d9tilov.android.common_android.utils.onChange
-import com.d9tilov.android.common_android.utils.show
-import com.d9tilov.android.common_android.utils.showKeyboard
+import com.d9tilov.android.common.android.ui.base.BaseDialogFragment
+import com.d9tilov.android.common.android.utils.createTintDrawable
+import com.d9tilov.android.common.android.utils.gone
+import com.d9tilov.android.common.android.utils.let2
+import com.d9tilov.android.common.android.utils.onChange
+import com.d9tilov.android.common.android.utils.show
+import com.d9tilov.android.common.android.utils.showKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -63,7 +63,7 @@ class CategoryUnitDialog :
                     secondCategory.name
                 )
                 categoryDialogUnionEtNameLayout.gone()
-                categoryDialogUnionConfirm.text = getString(com.d9tilov.android.common_android.R.string.add)
+                categoryDialogUnionConfirm.text = getString(com.d9tilov.android.common.android.R.string.add)
                 categoryDialogCurrentFolder.categoryDialogUnionItem1.setImageDrawable(
                     firstDrawable
                 )
@@ -77,7 +77,7 @@ class CategoryUnitDialog :
                     createTintDrawable(requireContext(), icon, color)
                 }
                 categoryDialogUnionFolder.categoryDialogUnionItem2.setImageDrawable(secondDrawable)
-                categoryDialogUnionConfirm.text = getString(com.d9tilov.android.common_android.R.string.save)
+                categoryDialogUnionConfirm.text = getString(com.d9tilov.android.common.android.R.string.save)
                 categoryDialogUnionFolder.root.show()
             }
             categoryDialogUnionConfirm.setOnClickListener {
@@ -85,7 +85,9 @@ class CategoryUnitDialog :
                     showError(CategoryException.CategoryEmptyNameException())
                 } else if (secondCategory.children.isNotEmpty()) {
                     viewModel.addToGroup(firstCategory, secondCategory)
-                } else viewModel.createGroup(firstCategory, secondCategory, createUnionCategory())
+                } else {
+                    viewModel.createGroup(firstCategory, secondCategory, createUnionCategory())
+                }
             }
             categoryDialogUnionEtName.onChange { text ->
                 val isNameEmpty = text.isEmpty()
@@ -100,7 +102,7 @@ class CategoryUnitDialog :
             type = transactionType,
             name = viewBinding?.categoryDialogUnionEtName?.text.toString(),
             color = com.d9tilov.android.category_data_impl.R.color.category_all_color,
-            icon = com.d9tilov.android.common_android.R.drawable.ic_category_folder
+            icon = com.d9tilov.android.common.android.R.drawable.ic_category_folder
         )
     }
 

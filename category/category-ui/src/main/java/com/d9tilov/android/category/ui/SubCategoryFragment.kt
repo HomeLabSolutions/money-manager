@@ -11,8 +11,8 @@ import com.d9tilov.android.category.ui.navigation.CategoryDestination
 import com.d9tilov.android.category.ui.navigation.SubCategoryNavigator
 import com.d9tilov.android.category.ui.vm.SubCategoryViewModel
 import com.d9tilov.android.category_ui.R
-import com.d9tilov.android.common_android.utils.gone
-import com.d9tilov.android.common_android.utils.show
+import com.d9tilov.android.common.android.utils.gone
+import com.d9tilov.android.common.android.utils.show
 import com.d9tilov.android.core.constants.NavigationConstants.ARG_TRANSACTION_CREATED
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -47,7 +47,8 @@ class SubCategoryFragment : BaseCategoryFragment<SubCategoryNavigator>(), SubCat
             categoryCreate.gone()
             categoryGroupDelete.setOnClickListener {
                 val action = SubCategoryFragmentDirections.toRemoveCategoryDialog(
-                    CategoryDestination.SubCategoryScreen, modifiedParentCategory!!
+                    CategoryDestination.SubCategoryScreen,
+                    modifiedParentCategory!!
                 )
                 findNavController().navigate(action)
             }
@@ -62,14 +63,17 @@ class SubCategoryFragment : BaseCategoryFragment<SubCategoryNavigator>(), SubCat
 
     override fun backToEditTransactionScreen(category: Category) {
         findNavController().getBackStackEntry(R.id.edit_transaction_dest).savedStateHandle.set(
-            ARG_CATEGORY, category
+            ARG_CATEGORY,
+            category
         )
         findNavController().popBackStack(R.id.category_dest, true)
     }
 
     override fun backToEditRegularTransactionScreen(category: Category) {
         val regularTransactionIdentifier = resources.getIdentifier(
-            "regular_transaction_nav_graph", "id", requireContext().packageName
+            "regular_transaction_nav_graph",
+            "id",
+            requireContext().packageName
         )
         findNavController().getBackStackEntry(regularTransactionIdentifier).savedStateHandle[ARG_CATEGORY] =
             category
@@ -78,7 +82,9 @@ class SubCategoryFragment : BaseCategoryFragment<SubCategoryNavigator>(), SubCat
 
     override fun backToMainScreen(category: Category) {
         val incomeExpenseIdentifier = resources.getIdentifier(
-            "income_expense_nav_graph", "id", requireContext().packageName
+            "income_expense_nav_graph",
+            "id",
+            requireContext().packageName
         )
         findNavController().getBackStackEntry(incomeExpenseIdentifier).savedStateHandle[ARG_TRANSACTION_CREATED] =
             category

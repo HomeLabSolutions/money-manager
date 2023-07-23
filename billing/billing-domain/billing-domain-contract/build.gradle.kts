@@ -4,8 +4,6 @@ plugins {
 
 android {
     namespace = "com.d9tilov.android.billing_domain_contract"
-
-    
 }
 
 dependencies {

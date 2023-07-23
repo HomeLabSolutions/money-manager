@@ -1,7 +1,7 @@
 package com.d9tilov.android.regular.transaction.ui.vm
 
 import androidx.lifecycle.viewModelScope
-import com.d9tilov.android.common_android.ui.base.BaseViewModel
+import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.regular.transaction.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.regular.transaction.ui.navigator.RegularTransactionCreatedNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel

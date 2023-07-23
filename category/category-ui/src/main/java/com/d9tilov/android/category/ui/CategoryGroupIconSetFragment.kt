@@ -16,7 +16,7 @@ import com.d9tilov.android.category.ui.recycler.CategoryGroupIconSetAdapter
 import com.d9tilov.android.category.ui.vm.CategoryGroupSetViewModel
 import com.d9tilov.android.category_ui.R
 import com.d9tilov.android.category_ui.databinding.FragmentGroupCategoryIconSetBinding
-import com.d9tilov.android.common_android.ui.base.BaseFragment
+import com.d9tilov.android.common.android.ui.base.BaseFragment
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 

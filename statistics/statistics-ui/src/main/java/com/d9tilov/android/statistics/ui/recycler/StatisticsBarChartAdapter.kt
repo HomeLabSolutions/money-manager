@@ -7,14 +7,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.d9tilov.android.common_android.ui.base.BaseViewHolder
-import com.d9tilov.android.common_android.utils.IMAGE_SIZE_IN_PX
-import com.d9tilov.android.common_android.utils.createTintDrawable
-import com.d9tilov.android.common_android.utils.let2
+import com.d9tilov.android.common.android.ui.base.BaseViewHolder
+import com.d9tilov.android.common.android.utils.IMAGE_SIZE_IN_PX
+import com.d9tilov.android.common.android.utils.createTintDrawable
+import com.d9tilov.android.common.android.utils.let2
 import com.d9tilov.android.core.events.OnItemClickListener
 import com.d9tilov.android.core.utils.removeScale
 import com.d9tilov.android.statistics.ui.recycler.diff.StatisticsBarCharDiffUtils
-import com.d9tilov.android.statistics_ui.R
 import com.d9tilov.android.statistics_ui.databinding.ItemStatisticsBarChartBinding
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
 import java.math.BigDecimal
@@ -73,17 +72,17 @@ class StatisticsBarChartAdapter(private val transactionClickListener: OnItemClic
                 itemStatisticsCategoryName.text = item.category.name
                 val percent = item.percent.setScale(1, RoundingMode.HALF_UP).removeScale
                 itemStatisticsPercent.text = context.getString(
-                    com.d9tilov.android.common_android.R.string.number_with_percent,
+                    com.d9tilov.android.common.android.R.string.number_with_percent,
                     when {
                         percent < BigDecimal(STATISTICAL_ERROR) -> "<1"
                         percent > BigDecimal(MAX_PERCENT_AMOUNT - STATISTICAL_ERROR) && percent < BigDecimal(
                             MAX_PERCENT_AMOUNT
-                        ) -> "${context.getString(com.d9tilov.android.common_android.R.string.approx_sign)}100"
+                        ) -> "${context.getString(com.d9tilov.android.common.android.R.string.approx_sign)}100"
                         else -> percent.toString()
                     }
                 )
                 itemStatisticsSum.setValue(item.sum, item.currencyCode)
-                val drawable = let2( item.category.icon, item.category.color) { icon, color ->
+                val drawable = let2(item.category.icon, item.category.color) { icon, color ->
                     itemStatisticsCategoryName.setTextColor(ContextCompat.getColor(context, color))
                     itemStatisticsProgress.setProgress(item.percent.toFloat(), ContextCompat.getColor(context, color))
                     createTintDrawable(context, icon, color)

@@ -17,12 +17,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.ui.navigation.CategoryDestination
-import com.d9tilov.android.common_android.ui.recyclerview.GridSpaceItemDecoration
-import com.d9tilov.android.common_android.ui.recyclerview.ItemSnapHelper
-import com.d9tilov.android.common_android.ui.recyclerview.StickyHeaderItemDecorator
-import com.d9tilov.android.common_android.utils.gone
-import com.d9tilov.android.common_android.utils.isTablet
-import com.d9tilov.android.common_android.utils.show
+import com.d9tilov.android.common.android.ui.recyclerview.GridSpaceItemDecoration
+import com.d9tilov.android.common.android.ui.recyclerview.ItemSnapHelper
+import com.d9tilov.android.common.android.ui.recyclerview.StickyHeaderItemDecorator
+import com.d9tilov.android.common.android.utils.gone
+import com.d9tilov.android.common.android.utils.isTablet
+import com.d9tilov.android.common.android.utils.show
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.model.isIncome
 import com.d9tilov.android.incomeexpense.navigation.IncomeNavigator
@@ -33,9 +33,9 @@ import com.d9tilov.android.incomeexpense_ui.databinding.FragmentIncomeBinding
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class IncomeFragment :
@@ -82,8 +82,11 @@ class IncomeFragment :
                 launch { viewModel.transactions.collectLatest { transactionAdapter.submitData(it) } }
                 launch {
                     viewModel.earnedInPeriod.collect { sum ->
-                        if (sum.signum() == 0) viewBinding?.incomeInfoLayoutInclude?.incomePeriodInfoApproxSign?.gone()
-                        else viewBinding?.incomeInfoLayoutInclude?.incomePeriodInfoApproxSign?.show()
+                        if (sum.signum() == 0) {
+                            viewBinding?.incomeInfoLayoutInclude?.incomePeriodInfoApproxSign?.gone()
+                        } else {
+                            viewBinding?.incomeInfoLayoutInclude?.incomePeriodInfoApproxSign?.show()
+                        }
                     }
                 }
                 launch {
@@ -112,7 +115,7 @@ class IncomeFragment :
             incomeCategoryRvList.addItemDecoration(
                 GridSpaceItemDecoration(
                     SPAN_COUNT,
-                    resources.getDimension(com.d9tilov.android.common_android.R.dimen.recycler_view_category_offset).toInt(),
+                    resources.getDimension(com.d9tilov.android.common.android.R.dimen.recycler_view_category_offset).toInt(),
                     HORIZONTAL
                 )
             )

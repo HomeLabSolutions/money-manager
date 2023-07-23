@@ -27,7 +27,4 @@ dependencies {
     kapt(libs.glideCompiler)
 
     implementation(libs.material)
-
-    
-    
 }

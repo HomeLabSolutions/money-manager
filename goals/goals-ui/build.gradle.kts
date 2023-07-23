@@ -25,6 +25,4 @@ dependencies {
     implementation(libs.composeViewModel)
 
     implementation(libs.hiltNavigationCompose)
-    
-    
 }

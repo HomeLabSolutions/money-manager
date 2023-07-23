@@ -17,7 +17,8 @@ object RegularTransactionDataModule {
 
     @Provides
     fun provideRegularTransactionSource(
-        preferencesStore: PreferencesStore, appDatabase: AppDatabase
+        preferencesStore: PreferencesStore,
+        appDatabase: AppDatabase
     ): RegularTransactionSource =
         RegularTransactionLocalSource(preferencesStore, appDatabase.regularTransactionDao())
 

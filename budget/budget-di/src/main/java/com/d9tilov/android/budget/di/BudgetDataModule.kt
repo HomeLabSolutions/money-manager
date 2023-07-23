@@ -1,9 +1,9 @@
 package com.d9tilov.android.budget.di
 
-import com.d9tilov.android.budget.domain.contract.BudgetRepo
 import com.d9tilov.android.budget.data.contract.BudgetSource
 import com.d9tilov.android.budget.data.impl.BudgetDataRepo
 import com.d9tilov.android.budget.data.impl.BudgetLocalSource
+import com.d9tilov.android.budget.domain.contract.BudgetRepo
 import com.d9tilov.android.database.AppDatabase
 import com.d9tilov.android.datastore.PreferencesStore
 import dagger.Module
@@ -22,7 +22,7 @@ object BudgetDataModule {
         preferencesStore: PreferencesStore,
         database: AppDatabase
     ): BudgetSource =
-       BudgetLocalSource(
+        BudgetLocalSource(
             preferencesStore,
             database.budgetDao()
         )

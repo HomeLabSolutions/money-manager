@@ -10,10 +10,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
-import com.d9tilov.android.common_android.ui.base.BaseFragment
-import com.d9tilov.android.common_android.utils.gone
-import com.d9tilov.android.common_android.utils.hideWithAnimation
-import com.d9tilov.android.common_android.utils.showWithAnimation
+import com.d9tilov.android.common.android.ui.base.BaseFragment
+import com.d9tilov.android.common.android.utils.gone
+import com.d9tilov.android.common.android.utils.hideWithAnimation
+import com.d9tilov.android.common.android.utils.showWithAnimation
 import com.d9tilov.android.core.events.OnBackPressed
 import com.d9tilov.android.core.events.OnDialogDismissListener
 import com.d9tilov.android.incomeexpense.keyboard.PinButton
@@ -29,9 +29,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import javax.inject.Inject
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class IncomeExpenseFragment :
@@ -74,8 +74,11 @@ class IncomeExpenseFragment :
                     firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
                         param(FirebaseAnalytics.Param.ITEM_ID, if (position == 0) "expense" else "income")
                     }
-                    if (isKeyboardOpen) openKeyboard()
-                    else closeKeyboard()
+                    if (isKeyboardOpen) {
+                        openKeyboard()
+                    } else {
+                        closeKeyboard()
+                    }
                 }
             })
 
@@ -90,17 +93,17 @@ class IncomeExpenseFragment :
                 object : PinKeyboard.ClickPinButton {
                     override fun onPinClick(button: PinButton?) {
                         when (button?.id) {
-                            R.id.keyboard_pin_0 -> onHandleInput(getString(com.d9tilov.android.common_android.R.string._0))
-                            R.id.keyboard_pin_1 -> onHandleInput(getString(com.d9tilov.android.common_android.R.string._1))
-                            R.id.keyboard_pin_2 -> onHandleInput(getString(com.d9tilov.android.common_android.R.string._2))
-                            R.id.keyboard_pin_3 -> onHandleInput(getString(com.d9tilov.android.common_android.R.string._3))
-                            R.id.keyboard_pin_4 -> onHandleInput(getString(com.d9tilov.android.common_android.R.string._4))
-                            R.id.keyboard_pin_5 -> onHandleInput(getString(com.d9tilov.android.common_android.R.string._5))
-                            R.id.keyboard_pin_6 -> onHandleInput(getString(com.d9tilov.android.common_android.R.string._6))
-                            R.id.keyboard_pin_7 -> onHandleInput(getString(com.d9tilov.android.common_android.R.string._7))
-                            R.id.keyboard_pin_8 -> onHandleInput(getString(com.d9tilov.android.common_android.R.string._8))
-                            R.id.keyboard_pin_9 -> onHandleInput(getString(com.d9tilov.android.common_android.R.string._9))
-                            R.id.keyboard_pin_dot -> onHandleInput(getString(com.d9tilov.android.common_android.R.string._dot))
+                            R.id.keyboard_pin_0 -> onHandleInput(getString(com.d9tilov.android.common.android.R.string._0))
+                            R.id.keyboard_pin_1 -> onHandleInput(getString(com.d9tilov.android.common.android.R.string._1))
+                            R.id.keyboard_pin_2 -> onHandleInput(getString(com.d9tilov.android.common.android.R.string._2))
+                            R.id.keyboard_pin_3 -> onHandleInput(getString(com.d9tilov.android.common.android.R.string._3))
+                            R.id.keyboard_pin_4 -> onHandleInput(getString(com.d9tilov.android.common.android.R.string._4))
+                            R.id.keyboard_pin_5 -> onHandleInput(getString(com.d9tilov.android.common.android.R.string._5))
+                            R.id.keyboard_pin_6 -> onHandleInput(getString(com.d9tilov.android.common.android.R.string._6))
+                            R.id.keyboard_pin_7 -> onHandleInput(getString(com.d9tilov.android.common.android.R.string._7))
+                            R.id.keyboard_pin_8 -> onHandleInput(getString(com.d9tilov.android.common.android.R.string._8))
+                            R.id.keyboard_pin_9 -> onHandleInput(getString(com.d9tilov.android.common.android.R.string._9))
+                            R.id.keyboard_pin_dot -> onHandleInput(getString(com.d9tilov.android.common.android.R.string._dot))
                             else -> onHandleInput(null)
                         }
                     }
@@ -136,27 +139,35 @@ class IncomeExpenseFragment :
     }
 
     private fun onHandleInput(str: String?) {
-        val dot = getString(com.d9tilov.android.common_android.R.string._dot)
-        val zero = getString(com.d9tilov.android.common_android.R.string._0)
+        val dot = getString(com.d9tilov.android.common.android.R.string._dot)
+        val zero = getString(com.d9tilov.android.common.android.R.string._0)
         var input = viewBinding?.incomeExpenseMainSum?.moneyEditText?.text.toString()
         when (str) {
             dot -> {
                 if (input.contains(dot) ||
                     input.isEmpty() ||
                     input[input.length - 1].toString() == dot
-                ) return
-                else input = input.plus(str)
+                ) {
+                    return
+                } else {
+                    input = input.plus(str)
+                }
             }
             zero -> {
-                if (input.length == 1 && input[0].toString() == zero) return
-                else input = input.plus(str)
+                if (input.length == 1 && input[0].toString() == zero) {
+                    return
+                } else {
+                    input = input.plus(str)
+                }
             }
             null ->
-                if (input.isNotEmpty()) input =
-                    input.removeRange(input.length - 1, input.length)
+                if (input.isNotEmpty()) {
+                    input =
+                        input.removeRange(input.length - 1, input.length)
+                }
             else -> input = input.plus(str)
         }
-        if (input.isEmpty()) input = getString(com.d9tilov.android.common_android.R.string._0)
+        if (input.isEmpty()) input = getString(com.d9tilov.android.common.android.R.string._0)
         viewBinding?.incomeExpenseMainSum?.moneyEditText?.setText(input)
     }
 
@@ -217,7 +228,9 @@ class IncomeExpenseFragment :
         return if (isKeyboardOpen) {
             closeKeyboard()
             false
-        } else true
+        } else {
+            true
+        }
     }
 
     override fun onDestroyView() {

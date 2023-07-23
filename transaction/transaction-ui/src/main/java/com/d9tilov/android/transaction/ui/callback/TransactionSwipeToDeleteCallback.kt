@@ -11,9 +11,9 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.d9tilov.android.common_android.utils.px
-import com.d9tilov.android.common_android.utils.getColorFromAttr
-import com.d9tilov.android.common_android.utils.setTextAppearanceFromAttr
+import com.d9tilov.android.common.android.utils.getColorFromAttr
+import com.d9tilov.android.common.android.utils.px
+import com.d9tilov.android.common.android.utils.setTextAppearanceFromAttr
 import com.d9tilov.android.transaction.domain.model.BaseTransaction
 import com.d9tilov.android.transaction_ui.R
 import java.util.Locale
@@ -21,7 +21,7 @@ import java.util.Locale
 abstract class TransactionSwipeToDeleteCallback(val context: Context) :
     ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
-    private val deleteIcon = ContextCompat.getDrawable(context, com.d9tilov.android.common_android.R.drawable.ic_delete_swipe)
+    private val deleteIcon = ContextCompat.getDrawable(context, com.d9tilov.android.common.android.R.drawable.ic_delete_swipe)
     private var intrinsicWidth = deleteIcon?.intrinsicWidth ?: 0
     private var intrinsicHeight = deleteIcon?.intrinsicHeight ?: 0
     private val background = ColorDrawable()

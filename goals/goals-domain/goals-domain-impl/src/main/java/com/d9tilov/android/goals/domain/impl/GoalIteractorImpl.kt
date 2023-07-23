@@ -8,7 +8,7 @@ import com.d9tilov.android.goals.domain.model.Goal
 
 class GoalIteractorImpl(
     private val goalRepo: GoalRepo,
-    private val currencyInteractor: CurrencyInteractor,
+    private val currencyInteractor: CurrencyInteractor
 ) : GoalInteractor {
 
     override suspend fun insert(goal: Goal) {

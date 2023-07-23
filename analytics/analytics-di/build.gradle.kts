@@ -13,4 +13,3 @@ dependencies {
     implementation(libs.firebaseAnalytics)
     implementation(platform(libs.firebaseBom))
 }
-

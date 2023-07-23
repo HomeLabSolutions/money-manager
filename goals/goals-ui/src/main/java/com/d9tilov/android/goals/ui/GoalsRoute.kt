@@ -9,7 +9,5 @@ fun GoalsRoute(viewModel: BudgetAmountViewModel = hiltViewModel(), clickBack: ()
 }
 
 @Composable
-fun GoalsScreen(
-) {
-
+fun GoalsScreen() {
 }

@@ -22,8 +22,11 @@ class GoalLocalSource(
 
     override suspend fun insert(goalData: GoalData) {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
-        if (currentUserId == null) throw WrongUidException()
-        else goalDao.insert(goalData.copy(clientId = currentUserId).toDbModel())
+        if (currentUserId == null) {
+            throw WrongUidException()
+        } else {
+            goalDao.insert(goalData.copy(clientId = currentUserId).toDbModel())
+        }
     }
 
     override fun getAll(): Flow<List<GoalData>> =
@@ -35,13 +38,19 @@ class GoalLocalSource(
 
     override suspend fun update(goalData: GoalData) {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
-        if (currentUserId == null) throw WrongUidException()
-        else goalDao.update(goalData.toDbModel())
+        if (currentUserId == null) {
+            throw WrongUidException()
+        } else {
+            goalDao.update(goalData.toDbModel())
+        }
     }
 
     override suspend fun delete(goalData: GoalData) {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
-        if (currentUserId == null) throw WrongUidException()
-        else goalDao.delete(goalData.toDbModel())
+        if (currentUserId == null) {
+            throw WrongUidException()
+        } else {
+            goalDao.delete(goalData.toDbModel())
+        }
     }
 }

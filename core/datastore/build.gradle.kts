@@ -5,8 +5,6 @@ plugins {
 
 android {
     namespace = "com.d9tilov.android.datastore"
-
-    
 }
 
 dependencies {

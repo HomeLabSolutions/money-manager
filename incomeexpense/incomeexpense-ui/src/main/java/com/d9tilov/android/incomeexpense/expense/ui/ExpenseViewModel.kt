@@ -6,8 +6,8 @@ import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
 import androidx.paging.map
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
-import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
+import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getEndOfDay
@@ -20,8 +20,6 @@ import com.d9tilov.android.transaction.domain.model.ExpenseInfoUiModel
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.domain.model.TransactionHeader
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.math.BigDecimal
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -33,6 +31,8 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.math.BigDecimal
+import javax.inject.Inject
 
 @HiltViewModel
 class ExpenseViewModel @Inject constructor(
@@ -47,22 +47,27 @@ class ExpenseViewModel @Inject constructor(
                 var itemPosition = -1
                 var itemHeaderPosition = itemPosition
                 pagingData.insertSeparators { before: Transaction?, after: Transaction? ->
-                    if (before == null && after == null) null
-                    else if (before != null && after == null) null
-                    else if (before == null && after != null) {
+                    if (before == null && after == null) {
+                        null
+                    } else if (before != null && after == null) {
+                        null
+                    } else if (before == null && after != null) {
                         val header = TransactionHeader(
                             after.date.getEndOfDay(),
                             after.currencyCode
                         )
                         header
-                    } else if (before != null && after != null && before.date.isSameDay(after.date)) null
-                    else if (before != null && after != null && !before.date.isSameDay(after.date)) {
+                    } else if (before != null && after != null && before.date.isSameDay(after.date)) {
+                        null
+                    } else if (before != null && after != null && !before.date.isSameDay(after.date)) {
                         val header = TransactionHeader(
                             after.date.getEndOfDay(),
                             after.currencyCode
                         )
                         header
-                    } else null
+                    } else {
+                        null
+                    }
                 }.map { item: BaseTransaction ->
                     var newItem: BaseTransaction = item
                     if (item is TransactionHeader) {
@@ -102,8 +107,11 @@ class ExpenseViewModel @Inject constructor(
         billingInteractor.isPremium(),
         _expenseSpendingInfo
     ) { isPremium, info ->
-        if (isPremium) info
-        else null
+        if (isPremium) {
+            info
+        } else {
+            null
+        }
     }
         .flowOn(Dispatchers.IO)
         .shareIn(viewModelScope, SharingStarted.WhileSubscribed())
@@ -127,7 +135,9 @@ class ExpenseViewModel @Inject constructor(
                         )
                     )
                 }
-            } else navigator?.showEmptySumError()
+            } else {
+                navigator?.showEmptySumError()
+            }
         }
     }
 }

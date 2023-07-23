@@ -14,7 +14,7 @@ import android.widget.TextView
 import androidx.core.view.setPadding
 import androidx.core.widget.TextViewCompat
 import androidx.core.widget.addTextChangedListener
-import com.d9tilov.android. common_android.utils.gone
+import com.d9tilov.android.common.android.utils.gone
 import com.d9tilov.android.core.constants.CurrencyConstants.DECIMAL_LENGTH
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.core.constants.CurrencyConstants.MINUS_SIGN
@@ -60,7 +60,7 @@ class CurrencyView @JvmOverloads constructor(
         }
 
     var marginBetweenCurrencySymbol =
-        resources.getDimensionPixelSize(com.d9tilov.android.common_android.R.dimen.currency_margin_between_currency_symbol)
+        resources.getDimensionPixelSize(com.d9tilov.android.common.android.R.dimen.currency_margin_between_currency_symbol)
         private set
     val moneyEditText = MoneyEditText(context)
     val currencySymbolTextView: TextView = TextView(context)
@@ -103,7 +103,7 @@ class CurrencyView @JvmOverloads constructor(
 
                 marginBetweenCurrencySymbol = getDimensionPixelSize(
                     R.styleable.CurrencyView_marginBetweenSign,
-                    resources.getDimensionPixelSize(com.d9tilov.android.common_android.R.dimen.currency_margin_between_currency_symbol)
+                    resources.getDimensionPixelSize(com.d9tilov.android.common.android.R.dimen.currency_margin_between_currency_symbol)
                 )
                 recycle()
             }
@@ -116,11 +116,14 @@ class CurrencyView @JvmOverloads constructor(
         minusSignText = if (value.signum() < 0) MINUS_SIGN else ""
         return when {
             showShortDecimalPart -> {
-                if (value.scale() == 0) String.format(Locale.getDefault(), value.toString())
-                else String.format(
-                    Locale.getDefault(),
-                    value.setScale(DECIMAL_LENGTH, BigDecimal.ROUND_HALF_UP).toString()
-                )
+                if (value.scale() == 0) {
+                    String.format(Locale.getDefault(), value.toString())
+                } else {
+                    String.format(
+                        Locale.getDefault(),
+                        value.setScale(DECIMAL_LENGTH, BigDecimal.ROUND_HALF_UP).toString()
+                    )
+                }
             }
             showDecimalPart -> String.format(Locale.getDefault(), value.removeScale.toString())
             else -> String.format(
@@ -135,15 +138,19 @@ class CurrencyView @JvmOverloads constructor(
             if (sumTextStyle == DEFAULT) {
                 setTextSize(
                     TypedValue.COMPLEX_UNIT_PX,
-                    resources.getDimensionPixelSize(com.d9tilov.android.common_android.R.dimen.currency_sum_text_size).toFloat()
+                    resources.getDimensionPixelSize(com.d9tilov.android.common.android.R.dimen.currency_sum_text_size).toFloat()
                 )
                 setTextColor(com.google.android.material.R.attr.colorOnBackground)
-            } else TextViewCompat.setTextAppearance(this, sumTextStyle)
+            } else {
+                TextViewCompat.setTextAppearance(this, sumTextStyle)
+            }
             if (sumTextColor != DEFAULT) setTextColor(sumTextColor)
-            if (sumTextSize != DEFAULT) setTextSize(
-                TypedValue.COMPLEX_UNIT_PX,
-                sumTextSize.toFloat()
-            )
+            if (sumTextSize != DEFAULT) {
+                setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    sumTextSize.toFloat()
+                )
+            }
             if (!showUnderline) background = null
             isSingleLine = true
             gravity = currencyGravity
@@ -160,15 +167,19 @@ class CurrencyView @JvmOverloads constructor(
             if (sumTextStyle == DEFAULT) {
                 setTextSize(
                     TypedValue.COMPLEX_UNIT_PX,
-                    resources.getDimensionPixelSize(com.d9tilov.android.common_android.R.dimen.currency_sum_text_size).toFloat()
+                    resources.getDimensionPixelSize(com.d9tilov.android.common.android.R.dimen.currency_sum_text_size).toFloat()
                 )
                 setTextColor(com.google.android.material.R.attr.colorOnBackground)
-            } else TextViewCompat.setTextAppearance(this, sumTextStyle)
+            } else {
+                TextViewCompat.setTextAppearance(this, sumTextStyle)
+            }
             if (sumTextColor != DEFAULT) setTextColor(sumTextColor)
-            if (sumTextSize != DEFAULT) setTextSize(
-                TypedValue.COMPLEX_UNIT_PX,
-                sumTextSize.toFloat()
-            )
+            if (sumTextSize != DEFAULT) {
+                setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    sumTextSize.toFloat()
+                )
+            }
             if (!showUnderline) background = null
             isSingleLine = true
             gravity = currencyGravity
@@ -186,15 +197,19 @@ class CurrencyView @JvmOverloads constructor(
             if (signTextStyle == DEFAULT) {
                 setTextSize(
                     TypedValue.COMPLEX_UNIT_PX,
-                    resources.getDimensionPixelSize(com.d9tilov.android.common_android.R.dimen.currency_sign_text_size).toFloat()
+                    resources.getDimensionPixelSize(com.d9tilov.android.common.android.R.dimen.currency_sign_text_size).toFloat()
                 )
                 setTextColor(com.google.android.material.R.attr.colorOnBackground)
-            } else TextViewCompat.setTextAppearance(this, signTextStyle)
+            } else {
+                TextViewCompat.setTextAppearance(this, signTextStyle)
+            }
             if (signTextColor != DEFAULT) setTextColor(signTextColor)
-            if (signTextSize != DEFAULT) setTextSize(
-                TypedValue.COMPLEX_UNIT_PX,
-                signTextSize.toFloat()
-            )
+            if (signTextSize != DEFAULT) {
+                setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    signTextSize.toFloat()
+                )
+            }
             if (!showCurrencySymbol) gone()
             text = currencySymbolText
             gravity = currencyGravity
@@ -296,11 +311,17 @@ class CurrencyView @JvmOverloads constructor(
                 )
                 if (showCurrencySymbol) {
                     currencySymbolTextView.layout(
-                        if (showCurrencySymbolBeforeValue) (wholeLength - paddingLeft - paddingRight) / 2 - valueEditTextWidth / 2 - marginBetweenCurrencySymbol - currencySymbolTextViewWidth
-                        else ((wholeLength - paddingLeft - paddingRight) / 2 - valueEditTextWidth / 2 + valueEditTextWidth + marginBetweenCurrencySymbol),
+                        if (showCurrencySymbolBeforeValue) {
+                            (wholeLength - paddingLeft - paddingRight) / 2 - valueEditTextWidth / 2 - marginBetweenCurrencySymbol - currencySymbolTextViewWidth
+                        } else {
+                            ((wholeLength - paddingLeft - paddingRight) / 2 - valueEditTextWidth / 2 + valueEditTextWidth + marginBetweenCurrencySymbol)
+                        },
                         centerY + currencySymbolBaseLineMargin + halfValueSize - valueBaseLineMargin - currencySymbolTextViewHeight,
-                        if (showCurrencySymbolBeforeValue) (wholeLength - paddingLeft - paddingRight) / 2 - valueEditTextWidth / 2 - marginBetweenCurrencySymbol
-                        else ((wholeLength - paddingLeft - paddingRight) / 2 - valueEditTextWidth / 2 + valueEditTextWidth + marginBetweenCurrencySymbol + currencySymbolTextViewWidth),
+                        if (showCurrencySymbolBeforeValue) {
+                            (wholeLength - paddingLeft - paddingRight) / 2 - valueEditTextWidth / 2 - marginBetweenCurrencySymbol
+                        } else {
+                            ((wholeLength - paddingLeft - paddingRight) / 2 - valueEditTextWidth / 2 + valueEditTextWidth + marginBetweenCurrencySymbol + currencySymbolTextViewWidth)
+                        },
                         centerY + currencySymbolBaseLineMargin + halfValueSize - valueBaseLineMargin
                     )
                 }
@@ -320,20 +341,32 @@ class CurrencyView @JvmOverloads constructor(
                 )
                 if (showCurrencySymbol) {
                     currencySymbolTextView.layout(
-                        if (showCurrencySymbolBeforeValue) right - left - paddingRight - valueEditTextWidth - marginBetweenCurrencySymbol - currencySymbolTextViewWidth
-                        else right - left - paddingRight - currencySymbolTextViewWidth,
+                        if (showCurrencySymbolBeforeValue) {
+                            right - left - paddingRight - valueEditTextWidth - marginBetweenCurrencySymbol - currencySymbolTextViewWidth
+                        } else {
+                            right - left - paddingRight - currencySymbolTextViewWidth
+                        },
                         centerY + currencySymbolBaseLineMargin + halfValueSize - valueBaseLineMargin - currencySymbolTextViewHeight,
-                        if (showCurrencySymbolBeforeValue) right - left - paddingRight - valueEditTextWidth - marginBetweenCurrencySymbol
-                        else right - left - paddingRight,
+                        if (showCurrencySymbolBeforeValue) {
+                            right - left - paddingRight - valueEditTextWidth - marginBetweenCurrencySymbol
+                        } else {
+                            right - left - paddingRight
+                        },
                         centerY + currencySymbolBaseLineMargin + halfValueSize - valueBaseLineMargin
                     )
                 }
                 moneyEditText.layout(
-                    if (showCurrencySymbolBeforeValue) right - left - paddingRight - valueEditTextWidth
-                    else right - left - paddingRight - currencySymbolTextViewWidth - marginBetweenCurrencySymbol - valueEditTextWidth,
+                    if (showCurrencySymbolBeforeValue) {
+                        right - left - paddingRight - valueEditTextWidth
+                    } else {
+                        right - left - paddingRight - currencySymbolTextViewWidth - marginBetweenCurrencySymbol - valueEditTextWidth
+                    },
                     centerY - halfValueSize,
-                    if (showCurrencySymbolBeforeValue) right - left - paddingRight
-                    else right - left - paddingRight - currencySymbolTextViewWidth - marginBetweenCurrencySymbol,
+                    if (showCurrencySymbolBeforeValue) {
+                        right - left - paddingRight
+                    } else {
+                        right - left - paddingRight - currencySymbolTextViewWidth - marginBetweenCurrencySymbol
+                    },
                     centerY - halfValueSize + valueEditTextHeight
                 )
             }

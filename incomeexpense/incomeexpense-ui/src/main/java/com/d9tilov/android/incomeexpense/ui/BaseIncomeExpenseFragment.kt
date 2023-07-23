@@ -12,21 +12,21 @@ import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import androidx.viewbinding.ViewBinding
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.ui.recycler.CategoryAdapter
-import com.d9tilov.android.designsystem.databinding.LayoutEmptyListPlaceholderBinding
-import com.d9tilov.android.common_android.ui.base.BaseFragment
-import com.d9tilov.android.common_android.ui.base.Inflate
-import com.d9tilov.android.common_android.utils.gone
-import com.d9tilov.android.common_android.utils.show
-import com.d9tilov.android.common_android.utils.showWithAnimation
-import com.d9tilov.android.common_android.utils.toast
+import com.d9tilov.android.common.android.ui.base.BaseFragment
+import com.d9tilov.android.common.android.ui.base.Inflate
+import com.d9tilov.android.common.android.utils.gone
+import com.d9tilov.android.common.android.utils.show
+import com.d9tilov.android.common.android.utils.showWithAnimation
+import com.d9tilov.android.common.android.utils.toast
 import com.d9tilov.android.core.constants.NavigationConstants.ARG_TRANSACTION_CREATED
 import com.d9tilov.android.core.events.OnDialogDismissListener
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.model.isIncome
+import com.d9tilov.android.designsystem.databinding.LayoutEmptyListPlaceholderBinding
 import com.d9tilov.android.incomeexpense.navigation.BaseIncomeExpenseNavigator
 import com.d9tilov.android.incomeexpense.ui.listeners.OnIncomeExpenseListener
-import com.d9tilov.android.incomeexpense_ui.R
 import com.d9tilov.android.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
+import com.d9tilov.android.incomeexpense_ui.R
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.TransactionAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -42,8 +42,11 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : Vi
 
     protected val categoryAdapter =
         CategoryAdapter { item, _ ->
-            if (item.id == Category.ALL_ITEMS_ID) (viewModel as BaseIncomeExpenseViewModel<N>).openAllCategories()
-            else saveTransaction(item)
+            if (item.id == Category.ALL_ITEMS_ID) {
+                (viewModel as BaseIncomeExpenseViewModel<N>).openAllCategories()
+            } else {
+                saveTransaction(item)
+            }
         }
     protected val transactionAdapter = TransactionAdapter(
         itemClickListener = { item, _ ->
@@ -62,9 +65,9 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : Vi
         initTransactionsRecyclerView()
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Category>(ARG_TRANSACTION_CREATED)
             ?.observe(viewLifecycleOwner) {
-            saveTransaction(it)
-            findNavController().currentBackStackEntry?.savedStateHandle?.remove<Category>(ARG_TRANSACTION_CREATED)
-        }
+                saveTransaction(it)
+                findNavController().currentBackStackEntry?.savedStateHandle?.remove<Category>(ARG_TRANSACTION_CREATED)
+            }
         transactionRvList?.addOnScrollListener(
             object : RecyclerView.OnScrollListener() {
                 private val fab = transactionBtnAdd
@@ -102,8 +105,11 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : Vi
         )
         emptyViewStub?.emptyPlaceholderTitle?.text =
             getString(
-                if (getType().isIncome()) R.string.transaction_empty_placeholder_income_title
-                else R.string.transaction_empty_placeholder_expense_title
+                if (getType().isIncome()) {
+                    R.string.transaction_empty_placeholder_income_title
+                } else {
+                    R.string.transaction_empty_placeholder_expense_title
+                }
             )
         emptyViewStub?.emptyPlaceholderSubtitle?.show()
         emptyViewStub?.emptyPlaceholderSubtitle?.text =

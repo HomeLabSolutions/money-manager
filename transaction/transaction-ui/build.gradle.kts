@@ -35,7 +35,4 @@ dependencies {
     implementation(libs.paging)
     implementation(libs.appCompat)
     implementation(libs.material)
-
-    
-    
 }

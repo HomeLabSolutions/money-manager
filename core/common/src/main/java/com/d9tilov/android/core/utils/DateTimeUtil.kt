@@ -1,10 +1,7 @@
 @file:Suppress("TooManyFunctions", "PackageNaming")
+
 package com.d9tilov.android.core.utils
 
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
@@ -18,6 +15,10 @@ import kotlinx.datetime.offsetAt
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 const val DATE_FORMAT = "dd.MM.yyyy"
 const val BACKUP_DATE = "dd.MM.yyyy HH:mm"
@@ -96,6 +97,9 @@ fun LocalDateTime.getEndDateOfFiscalPeriod(fiscalDay: Int): LocalDateTime {
 
 fun LocalDateTime.countDaysRemainingNextFiscalDate(fiscalDay: Int): Int {
     val fiscalDate = LocalDate(this.year, this.month, fiscalDay)
-    return if (this.date < fiscalDate) this.date.daysUntil(fiscalDate)
-    else this.date.daysUntil(fiscalDate.plus(1, DateTimeUnit.MONTH))
+    return if (this.date < fiscalDate) {
+        this.date.daysUntil(fiscalDate)
+    } else {
+        this.date.daysUntil(fiscalDate.plus(1, DateTimeUnit.MONTH))
+    }
 }

@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.d9tilov.android.common_android.ui.base.BaseViewHolder
-import com.d9tilov.android.common_android.utils.DATE_FORMAT
-import com.d9tilov.android.common_android.utils.createTintDrawable
-import com.d9tilov.android.common_android.utils.gone
-import com.d9tilov.android.common_android.utils.hide
-import com.d9tilov.android.common_android.utils.let2
-import com.d9tilov.android.common_android.utils.show
+import com.d9tilov.android.common.android.ui.base.BaseViewHolder
+import com.d9tilov.android.common.android.utils.DATE_FORMAT
+import com.d9tilov.android.common.android.utils.createTintDrawable
+import com.d9tilov.android.common.android.utils.gone
+import com.d9tilov.android.common.android.utils.hide
+import com.d9tilov.android.common.android.utils.let2
+import com.d9tilov.android.common.android.utils.show
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.utils.toMillis
 import com.d9tilov.android.statistics.ui.recycler.diff.StatisticsDetailsDiffUtils
@@ -34,16 +34,20 @@ class StatisticsDetailsAdapter :
     }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup, viewType: Int
+        parent: ViewGroup,
+        viewType: Int
     ): TransactionDetailsViewHolder {
         val viewBinding = ItemTransactionDetailsBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
+            LayoutInflater.from(parent.context),
+            parent,
+            false
         )
         return TransactionDetailsViewHolder(viewBinding)
     }
 
     override fun onBindViewHolder(
-        holder: TransactionDetailsViewHolder, position: Int
+        holder: TransactionDetailsViewHolder,
+        position: Int
     ) {
         holder.bind(transactions[position])
     }
@@ -70,8 +74,11 @@ class StatisticsDetailsAdapter :
                     itemTransactionCategory.setTextColor(ContextCompat.getColor(context, color))
                 }
                 if (transaction.isRegular) itemTransactionRegularIcon.show() else itemTransactionRegularIcon.hide()
-                if (!transaction.inStatistics) itemTransactionStatisticsIcon.show()
-                else itemTransactionStatisticsIcon.hide()
+                if (!transaction.inStatistics) {
+                    itemTransactionStatisticsIcon.show()
+                } else {
+                    itemTransactionStatisticsIcon.hide()
+                }
                 val description = transaction.description
                 itemTransactionDescription.text = transaction.description
                 if (description.isNotEmpty()) {
@@ -97,21 +104,27 @@ class StatisticsDetailsAdapter :
                 }
                 itemTransactionSum.setValue(transaction.sum, transaction.currencyCode)
                 itemTransactionUsdSum.setValue(
-                    transaction.usdSum, DEFAULT_CURRENCY_CODE
+                    transaction.usdSum,
+                    DEFAULT_CURRENCY_CODE
                 )
-                if (transaction.currencyCode != DEFAULT_CURRENCY_CODE) itemTransactionUsdSum.show()
-                else itemTransactionUsdSum.gone()
-                val drawable = let2( transaction.category.icon, transaction.category.color) { icon, color ->
+                if (transaction.currencyCode != DEFAULT_CURRENCY_CODE) {
+                    itemTransactionUsdSum.show()
+                } else {
+                    itemTransactionUsdSum.gone()
+                }
+                val drawable = let2(transaction.category.icon, transaction.category.color) { icon, color ->
                     createTintDrawable(context, icon, color)
                 }
                 itemTransactionDate.text = SimpleDateFormat(
-                    DATE_FORMAT, Locale.getDefault()
+                    DATE_FORMAT,
+                    Locale.getDefault()
                 ).format(transaction.date.toMillis())
                 Glide.with(context).load(drawable).apply(
-                        RequestOptions().override(
-                            IMAGE_SIZE_IN_PX, IMAGE_SIZE_IN_PX
-                        )
-                    ).into(itemTransactionIcon)
+                    RequestOptions().override(
+                        IMAGE_SIZE_IN_PX,
+                        IMAGE_SIZE_IN_PX
+                    )
+                ).into(itemTransactionIcon)
             }
         }
 
