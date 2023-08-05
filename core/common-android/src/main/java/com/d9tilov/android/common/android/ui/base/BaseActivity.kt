@@ -11,9 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import com.d9tilov.android.common.android.utils.showLoadingDialog
-import com.d9tilov.android.common.android.utils.hideLoadingDialog
 import com.d9tilov.android.common.android.BuildConfig
+import com.d9tilov.android.common.android.utils.hideLoadingDialog
+import com.d9tilov.android.common.android.utils.showLoadingDialog
 import com.google.android.material.snackbar.Snackbar
 
 abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {

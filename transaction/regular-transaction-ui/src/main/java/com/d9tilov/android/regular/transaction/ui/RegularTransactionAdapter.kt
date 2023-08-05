@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.d9tilov.android.core.events.OnItemClickListener
-import com.d9tilov.android.core.events.OnItemSwipeListener
 import com.d9tilov.android.common.android.ui.base.BaseViewHolder
 import com.d9tilov.android.common.android.utils.createTintDrawable
 import com.d9tilov.android.common.android.utils.let2
+import com.d9tilov.android.core.events.OnItemClickListener
+import com.d9tilov.android.core.events.OnItemSwipeListener
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.PeriodType
 import com.d9tilov.android.regular.transaction.domain.model.RegularTransaction

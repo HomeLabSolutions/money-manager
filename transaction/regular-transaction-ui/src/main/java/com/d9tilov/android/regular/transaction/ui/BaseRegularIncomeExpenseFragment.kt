@@ -11,13 +11,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.viewbinding.ViewBinding
-import com.d9tilov.android.designsystem.databinding.LayoutEmptyListPlaceholderBinding
 import com.d9tilov.android.common.android.ui.base.BaseFragment
 import com.d9tilov.android.common.android.ui.base.Inflate
 import com.d9tilov.android.common.android.utils.gone
 import com.d9tilov.android.common.android.utils.show
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.model.isIncome
+import com.d9tilov.android.designsystem.databinding.LayoutEmptyListPlaceholderBinding
 import com.d9tilov.android.regular.transaction.domain.model.RegularTransaction
 import com.d9tilov.android.regular.transaction.ui.navigator.BaseRegularIncomeExpenseNavigator
 import com.d9tilov.android.regular.transaction.ui.vm.BaseRegularIncomeExpenseViewModel

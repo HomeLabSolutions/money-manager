@@ -44,8 +44,8 @@ import com.d9tilov.android.regular_transaction_ui.R
 import com.d9tilov.android.regular_transaction_ui.databinding.FragmentRegularTransactionCreationBinding
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
-import java.math.BigDecimal
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 
 @AndroidEntryPoint
 class RegularTransactionCreationFragment :
