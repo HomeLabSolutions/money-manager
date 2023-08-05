@@ -23,8 +23,8 @@ import com.d9tilov.android.core.utils.isSameDay
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.regular.transaction.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.regular.transaction.domain.model.RegularTransaction
-import com.d9tilov.android.transaction.domain.contract.TransactionRepo
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
+import com.d9tilov.android.transaction.domain.contract.TransactionRepo
 import com.d9tilov.android.transaction.domain.impl.mapper.toChartModel
 import com.d9tilov.android.transaction.domain.impl.mapper.toDataModel
 import com.d9tilov.android.transaction.domain.impl.mapper.toDomainModel
@@ -34,9 +34,6 @@ import com.d9tilov.android.transaction.domain.model.TransactionDataModel
 import com.d9tilov.android.transaction.domain.model.TransactionLineChartModel
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
 import com.d9tilov.android.user.domain.contract.UserInteractor
-import java.math.BigDecimal
-import java.util.Calendar
-import java.util.GregorianCalendar
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -53,6 +50,9 @@ import kotlinx.datetime.atTime
 import kotlinx.datetime.minus
 import kotlinx.datetime.periodUntil
 import kotlinx.datetime.plus
+import java.math.BigDecimal
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 class TransactionInteractorImpl(
     private val transactionRepo: TransactionRepo,

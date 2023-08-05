@@ -4,8 +4,8 @@ import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDateTime
-import java.math.BigDecimal
 import kotlinx.datetime.LocalDateTime
+import java.math.BigDecimal
 
 data class RegularTransactionData(
     val id: Long = DataConstants.DEFAULT_DATA_ID,

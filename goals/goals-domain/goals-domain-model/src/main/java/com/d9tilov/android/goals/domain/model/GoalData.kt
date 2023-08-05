@@ -3,8 +3,8 @@ package com.d9tilov.android.goals.domain.model
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.core.utils.currentDateTime
-import java.math.BigDecimal
 import kotlinx.datetime.LocalDateTime
+import java.math.BigDecimal
 
 data class GoalData(
     val id: Long = DataConstants.DEFAULT_DATA_ID,

@@ -1,7 +1,7 @@
 package com.d9tilov.android.currency.data.impl.mapper
 
-import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
+import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.network.model.CurrencyResponse
 import java.math.BigDecimal
 

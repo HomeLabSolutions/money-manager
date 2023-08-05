@@ -8,8 +8,8 @@ import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.core.utils.currentDateTime
-import java.math.BigDecimal
 import kotlinx.datetime.LocalDateTime
+import java.math.BigDecimal
 
 data class RegularTransaction(
     val id: Long,

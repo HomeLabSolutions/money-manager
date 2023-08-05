@@ -5,9 +5,9 @@ import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
+import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.billing.domain.contract.BillingRepo
 import com.d9tilov.android.billing.domain.model.BillingSkuDetails
-import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.billing.domain.model.PremiumEmails
 import com.d9tilov.android.billing.domain.model.PremiumInfo
 import com.d9tilov.android.core.constants.DataConstants.TAG
@@ -19,13 +19,13 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
-import java.io.IOException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
+import java.io.IOException
 
 class BillingInteractorImpl(
     private val billingRepo: BillingRepo

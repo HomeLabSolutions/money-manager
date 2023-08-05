@@ -3,8 +3,8 @@ package com.d9tilov.android.currency.domain.contract
 import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.currency.domain.model.DomainCurrency
-import java.math.BigDecimal
 import kotlinx.coroutines.flow.Flow
+import java.math.BigDecimal
 
 interface CurrencyInteractor {
 

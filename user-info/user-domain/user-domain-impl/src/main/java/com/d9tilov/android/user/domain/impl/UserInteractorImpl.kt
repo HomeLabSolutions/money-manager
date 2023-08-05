@@ -1,8 +1,8 @@
 package com.d9tilov.android.user.domain.impl
 
+import com.d9tilov.android.user.domain.contract.UserInteractor
 import com.d9tilov.android.user.domain.contract.UserRepo
 import com.d9tilov.android.user.domain.model.UserProfile
-import com.d9tilov.android.user.domain.contract.UserInteractor
 import kotlinx.coroutines.flow.Flow
 
 class UserInteractorImpl(private val userRepo: UserRepo) : UserInteractor {

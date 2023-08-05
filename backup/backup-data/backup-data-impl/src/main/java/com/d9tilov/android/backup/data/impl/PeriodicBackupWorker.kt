@@ -14,9 +14,9 @@ import com.d9tilov.android.network.exception.NetworkException
 import com.google.firebase.FirebaseException
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import timber.log.Timber
 import java.io.FileNotFoundException
 import java.util.concurrent.TimeUnit
-import timber.log.Timber
 
 @HiltWorker
 class PeriodicBackupWorker @AssistedInject constructor(

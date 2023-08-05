@@ -1,9 +1,9 @@
 package com.d9tilov.android.transaction.domain.impl.mapper
 
 import com.d9tilov.android.category.domain.model.Category
-import com.d9tilov.android.transaction.domain.model.TransactionDataModel
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
+import com.d9tilov.android.transaction.domain.model.TransactionDataModel
 import java.math.BigDecimal
 
 fun Transaction.toDataModel(): TransactionDataModel = TransactionDataModel(
