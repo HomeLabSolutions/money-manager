@@ -11,7 +11,6 @@ plugins {
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("io.gitlab.arturbosch.detekt")
-    id("kotlinx-serialization")
 }
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")

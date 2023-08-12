@@ -15,8 +15,7 @@ fragment = "1.6.1"
 retrofit = "2.9.0"
 googlePlayServices = "4.3.15"
 googlePlayServicesAuth = "20.6.0"
-navigation = "2.6.0"
-navigationArgs = "2.6.0"
+navigation = "2.7.0"
 hilt = "2.46.1"
 hiltNavigationCompose = "1.0.0"
 hiltPlugin = "2.44.2"
@@ -26,21 +25,20 @@ room = "2.5.2"
 paging = "3.2.0"
 firebaseCrashlytics = "18.4.0"
 firebaseAnalytics = "21.3.0"
-firebaseCrashlyticsPlugin = "2.9.7"
+firebaseCrashlyticsPlugin = "2.9.8"
 firebaseStorage = "20.2.1"
 firebaseConfig = "21.4.1"
-firebaseBom = "32.2.0"
+firebaseBom = "32.2.2"
 firebaseUi = "8.0.2"
-firebaseAuth = "22.1.0"
+firebaseAuth = "22.1.1"
 facebookSdk = "8.0.0"
 twitter = "3.3.0"
-okhttp = "4.10.0"
+okhttp = "4.11.0"
 viewpager = "1.0.0"
 coroutinesCore = "1.7.2"
 lifecycle = "2.6.1"
 lifecycleExtension = "2.2.0"
-compose = "1.4.3"
-composeMaterial = "1.4.3"
+compose = "1.5.0"
 composeConstraintLayout = "1.0.1"
 composeMaterial3 = "1.1.1"
 composeActivity = "1.7.2"
@@ -112,10 +110,10 @@ composeMaterial3WindowSize = { group = "androidx.compose.material3", name = "mat
 composeActivity = { group = "androidx.activity", name = "activity-compose", version.ref = "composeActivity" }
 composeToolingUi = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
 composeToolingPreview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "compose" }
-composeFoundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "composeMaterial" }
-composeMaterial = { group = "androidx.compose.material", name = "material", version.ref = "composeMaterial" }
-composeMaterialIconsCore = { group = "androidx.compose.material", name = "material-icons-core", version.ref = "composeMaterial" }
-composeMaterialIconsExtended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "composeMaterial" }
+composeFoundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "compose" }
+composeMaterial = { group = "androidx.compose.material", name = "material", version.ref = "compose" }
+composeMaterialIconsCore = { group = "androidx.compose.material", name = "material-icons-core", version.ref = "compose" }
+composeMaterialIconsExtended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "compose" }
 composeLiveData = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "compose" }
 composeViewModel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "composeViewModel" }
 composeRuntime = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "composeRuntime" }
@@ -137,7 +135,7 @@ startup = { group = "androidx.startup", name = "startup-runtime", version.ref = 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 #plugins
 googlePlayServicesPlugin = { group = "com.google.gms", name = "google-services", version.ref = "googlePlayServices" }
-navigationArgsPlugin = { group = "androidx.navigation", name = "navigation-safe-args-gradle-plugin", version.ref = "navigationArgs" }
+navigationArgsPlugin = { group = "androidx.navigation", name = "navigation-safe-args-gradle-plugin", version.ref = "navigation" }
 hiltPlugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hiltPlugin" }
 firebaseCrashlyticsPlgin = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsPlugin" }
 detektPlugin = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detektPlugin" }
