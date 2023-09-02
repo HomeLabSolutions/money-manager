@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.d9tilov.android.common.android.ui.base.BaseDialogFragment
 import com.d9tilov.android.designsystem.databinding.FragmentDialogRemoveBinding
 import com.d9tilov.android.transaction.ui.navigation.RemoveTransactionDialogNavigator
@@ -20,10 +19,6 @@ class TransactionRemoveDialog :
     ),
     RemoveTransactionDialogNavigator {
 
-    private val args by navArgs<TransactionRemoveDialogArgs>()
-    private val transaction by lazy { args.transaction }
-    private val regularTransaction by lazy { args.regularTransaction }
-
     override fun getNavigator() = this
     override val viewModel by viewModels<RemoveTransactionViewModel>()
 
@@ -33,10 +28,7 @@ class TransactionRemoveDialog :
             removeDialogTitle.text = getString(R.string.transaction_delete_dialog_title)
             removeDialogSubtitle.text =
                 getString(R.string.transaction_delete_dialog_subtitle)
-            removeButtonConfirm.setOnClickListener {
-                transaction?.let { viewModel.removeTransaction(it) }
-                regularTransaction?.let { viewModel.removeRegularTransaction(it) }
-            }
+            removeButtonConfirm.setOnClickListener { viewModel.remove() }
             removeButtonCancel.setOnClickListener {
                 dismiss()
                 findNavController().previousBackStackEntry?.savedStateHandle?.set(

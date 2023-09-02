@@ -1,5 +1,6 @@
 package com.d9tilov.android.category.ui.vm
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.model.Category
@@ -13,33 +14,46 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class CategoryRemoveViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val categoryInteractor: CategoryInteractor,
     private val transactionInteractor: TransactionInteractor,
     private val regularTransactionInteractor: RegularTransactionInteractor,
     private val firebaseAnalytics: FirebaseAnalytics
 ) : BaseViewModel<RemoveCategoryDialogNavigator>() {
 
-    fun remove(category: Category) = viewModelScope.launch(Dispatchers.IO) {
-        awaitAll(
-            async { transactionInteractor.removeAllByCategory(category) },
-            async { regularTransactionInteractor.removeAllByCategory(category) }
-        )
-        category.children.forEach { child ->
+    private val categoryId: Long = checkNotNull(savedStateHandle["category_id"])
+    private val _category = MutableStateFlow(Category.EMPTY_INCOME)
+    val category: StateFlow<Category> = _category
+
+    init {
+        viewModelScope.launch { _category.value = categoryInteractor.getCategoryById(categoryId) }
+    }
+
+    fun remove() = viewModelScope.launch(Dispatchers.IO) {
+        category.value.let { category ->
             awaitAll(
-                async { transactionInteractor.removeAllByCategory(child) },
-                async { regularTransactionInteractor.removeAllByCategory(child) }
+                async { transactionInteractor.removeAllByCategory(category) },
+                async { regularTransactionInteractor.removeAllByCategory(category) }
             )
-        }
-        categoryInteractor.deleteCategory(category)
-        withContext(Dispatchers.Main) { navigator?.closeDialog() }
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-            param("delete_category", "name: " + category.name)
+            category.children.forEach { child ->
+                awaitAll(
+                    async { transactionInteractor.removeAllByCategory(child) },
+                    async { regularTransactionInteractor.removeAllByCategory(child) }
+                )
+            }
+            categoryInteractor.deleteCategory(category)
+            withContext(Dispatchers.Main) { navigator?.closeDialog() }
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                param("delete_category", "name: " + category.name)
+            }
         }
     }
 }

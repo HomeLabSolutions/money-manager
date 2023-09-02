@@ -48,8 +48,8 @@
             android:name="destination"
             app:argType="com.d9tilov.android.category.ui.navigation.CategoryDestination" />
         <argument
-            android:name="transactionType"
-            app:argType="com.d9tilov.android.core.model.TransactionType" />
+            android:name="transaction_type"
+            app:argType="integer" />
     </fragment>
 
     <fragment
@@ -94,11 +94,11 @@
             android:name="destination"
             app:argType="com.d9tilov.android.category.ui.navigation.CategoryDestination" />
         <argument
-            android:name="transactionType"
-            app:argType="com.d9tilov.android.core.model.TransactionType" />
+            android:name="transaction_type"
+            app:argType="integer" />
         <argument
-            android:name="parent_category"
-            app:argType="com.d9tilov.android.category.domain.model.Category" />
+            android:name="parent_category_id"
+            app:argType="long" />
     </fragment>
 
     <fragment
@@ -148,8 +148,8 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
         <argument
-            android:name="category"
-            app:argType="com.d9tilov.android.category.domain.model.Category" />
+            android:name="category_id"
+            app:argType="long" />
     </fragment>
 
     <fragment
@@ -172,14 +172,14 @@
         tools:layout="@layout/fragment_dialog_category_union">
 
         <argument
-            android:name="transactionType"
-            app:argType="com.d9tilov.android.core.model.TransactionType" />
+            android:name="transaction_type"
+            app:argType="integer" />
         <argument
-            android:name="firstCategory"
-            app:argType="com.d9tilov.android.category.domain.model.Category" />
+            android:name="first_category_id"
+            app:argType="long" />
         <argument
-            android:name="secondCategory"
-            app:argType="com.d9tilov.android.category.domain.model.Category" />
+            android:name="second_category_id"
+            app:argType="long" />
     </dialog>
 
     <dialog
@@ -191,8 +191,8 @@
             android:name="destination"
             app:argType="com.d9tilov.android.category.ui.navigation.CategoryDestination" />
         <argument
-            android:name="category"
-            app:argType="com.d9tilov.android.category.domain.model.Category" />
+            android:name="category_id"
+            app:argType="long" />
     </dialog>
 
     <dialog
@@ -200,8 +200,8 @@
         android:name="com.d9tilov.android.category.ui.SubcategoryRemoveDialogFragment"
         tools:layout="@layout/fragment_dialog_triple_remove">
         <argument
-            android:name="subcategory"
-            app:argType="com.d9tilov.android.category.domain.model.Category" />
+            android:name="subcategory_id"
+            app:argType="long" />
     </dialog>
 
     <dialog
@@ -209,7 +209,7 @@
         android:name="com.d9tilov.android.category.ui.CategoryEditDialog"
         tools:layout="@layout/fragment_dialog_edit_category">
         <argument
-            android:name="category"
-            app:argType="com.d9tilov.android.category.domain.model.Category" />
+            android:name="category_id"
+            app:argType="long" />
     </dialog>
 </navigation>

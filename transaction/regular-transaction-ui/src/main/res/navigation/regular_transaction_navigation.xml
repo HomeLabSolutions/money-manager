@@ -25,8 +25,8 @@
                 android:name="destination"
                 app:argType="com.d9tilov.android.category.ui.navigation.CategoryDestination" />
             <argument
-                android:name="transactionType"
-                app:argType="com.d9tilov.android.core.model.TransactionType" />
+                android:name="transaction_type"
+                app:argType="integer" />
 
         </action>
 
@@ -39,13 +39,12 @@
             app:popExitAnim="@anim/slide_left_exit" />
 
         <argument
-            android:name="transactionType"
-            app:argType="com.d9tilov.android.core.model.TransactionType" />
+            android:name="transaction_type"
+            app:argType="integer" />
         <argument
-            android:name="regular_transaction"
-            android:defaultValue="@null"
-            app:argType="com.d9tilov.android.regular.transaction.domain.model.RegularTransaction"
-            app:nullable="true" />
+            android:name="regular_transaction_id"
+            android:defaultValue="-1L"
+            app:argType="long" />
     </fragment>
 
     <fragment

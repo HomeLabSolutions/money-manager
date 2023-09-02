@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.domain.model.exception.CategoryException
@@ -42,13 +41,10 @@ class CategoryCreationFragment :
     (FragmentCreationCategoryBinding::inflate, R.layout.fragment_creation_category),
     CategoryCreationNavigator {
 
-    private val args by navArgs<CategoryCreationFragmentArgs>()
-    private val category by lazy { args.category }
-
     private var toolbar: MaterialToolbar? = null
     private var localCategory: Category = Category.EMPTY_EXPENSE
     private val categoryColorAdapter by lazy {
-        CategoryColorAdapter(category.color) { item, _ ->
+        CategoryColorAdapter(viewModel.category.value?.color) { item, _ ->
             viewBinding?.run {
                 categoryCreationRvColorPicker.gone()
                 updateColor(item)
@@ -74,7 +70,7 @@ class CategoryCreationFragment :
                 )
             }
         viewBinding?.run {
-            if (localCategory.isEmpty()) localCategory = category
+            if (localCategory.isEmpty()) localCategory = viewModel.category.value ?: Category.EMPTY_INCOME
             val colorLayoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             categoryCreationRvColorPicker.layoutManager = colorLayoutManager
@@ -117,11 +113,11 @@ class CategoryCreationFragment :
                     return@setOnClickListener
                 }
                 val action: NavDirections = if (localCategory.parent != null) {
-                    CategoryCreationFragmentDirections.toRemoveSubCategoryDialog(localCategory)
+                    CategoryCreationFragmentDirections.toRemoveSubCategoryDialog(localCategory.id)
                 } else {
                     CategoryCreationFragmentDirections.toRemoveCategoryDialog(
                         CategoryDestination.CategoryCreationScreen,
-                        localCategory
+                        localCategory.id
                     )
                 }
                 findNavController().navigate(action)

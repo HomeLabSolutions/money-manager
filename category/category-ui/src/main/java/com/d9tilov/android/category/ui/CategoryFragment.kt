@@ -22,6 +22,7 @@ import com.d9tilov.android.common.android.utils.show
 import com.d9tilov.android.core.constants.NavigationConstants.ARG_TRANSACTION_CREATED
 import com.d9tilov.android.core.events.OnItemMoveListener
 import com.d9tilov.android.core.model.isIncome
+import com.d9tilov.android.core.model.toType
 import com.d9tilov.android.designsystem.databinding.LayoutEmptyListPlaceholderBinding
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
@@ -45,20 +46,20 @@ class CategoryFragment :
         val action = CategoryFragmentDirections.toSubCategoryDest(
             destination,
             transactionType,
-            category
+            category.id
         )
         findNavController().navigate(action)
     }
 
     override fun openCreateCategoryScreen(category: Category) {
-        val action = CategoryFragmentDirections.toCategoryCreationDest(category)
+        val action = CategoryFragmentDirections.toCategoryCreationDest(category.id)
         findNavController().navigate(action)
     }
 
     override fun openRemoveDialog(category: Category) {
         val action = CategoryFragmentDirections.toRemoveCategoryDialog(
             CategoryDestination.CategoryScreen,
-            category
+            category.id
         )
         findNavController().navigate(action)
     }
@@ -92,11 +93,11 @@ class CategoryFragment :
         toolbar?.title = getString(R.string.title_category)
         viewBinding?.categoryCreate?.setOnClickListener {
             val action = CategoryFragmentDirections.toCategoryCreationDest(
-                if (transactionType.isIncome()) {
+                if (transactionType.toType().isIncome()) {
                     Category.EMPTY_INCOME
                 } else {
                     Category.EMPTY_EXPENSE
-                }
+                }.id
             )
             findNavController().navigate(action)
         }
@@ -152,8 +153,8 @@ class CategoryFragment :
         ) {
             val action = CategoryFragmentDirections.toCreateGroupDialog(
                 transactionType,
-                childItem,
-                parentItem
+                childItem.id,
+                parentItem.id
             )
             findNavController().navigate(action)
             categoryAdapter.enableEditMode(false)
@@ -173,8 +174,8 @@ class CategoryFragment :
         ) {
             val action = CategoryFragmentDirections.toCreateGroupDialog(
                 transactionType,
-                firstItem,
-                secondItem
+                firstItem.id,
+                secondItem.id
             )
             findNavController().navigate(action)
             categoryAdapter.enableEditMode(false)

@@ -4,15 +4,18 @@ import android.content.Context
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import com.d9tilov.android.category.data.contract.DefaultCategoriesManager
 import com.d9tilov.android.category.domain.model.DefaultCategory
 import com.d9tilov.android.category_data_impl.R
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.android.core.model.TransactionType
+import javax.inject.Inject
 
-class DefaultCategoriesManager(private val context: Context) {
+class DefaultCategoriesManagerImpl @Inject constructor(private val context: Context) :
+    DefaultCategoriesManager {
 
     @Suppress("MagicNumber")
-    fun createDefaultExpenseCategories(): List<DefaultCategory> {
+    override fun createDefaultExpenseCategories(): List<DefaultCategory> {
         return listOf(
             createCategory(
                 1,
@@ -106,7 +109,7 @@ class DefaultCategoriesManager(private val context: Context) {
     }
 
     @Suppress("MagicNumber")
-    fun createDefaultIncomeCategories(): List<DefaultCategory> {
+    override fun createDefaultIncomeCategories(): List<DefaultCategory> {
         return listOf(
             createCategory(
                 12,

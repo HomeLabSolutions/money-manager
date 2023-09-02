@@ -16,7 +16,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.domain.model.isEmpty
 import com.d9tilov.android.category.ui.BaseCategoryFragment.Companion.ARG_CATEGORY
@@ -55,9 +54,6 @@ class RegularTransactionCreationFragment :
     ),
     RegularTransactionCreatedNavigator {
 
-    private val args by navArgs<RegularTransactionCreationFragmentArgs>()
-    private val transactionType by lazy { args.transactionType }
-    private val regularTransaction: RegularTransaction? by lazy { args.regularTransaction }
     private val spinnerPeriodMap = arrayMapOf(
         PeriodType.DAY to 0,
         PeriodType.WEEK to 1,
@@ -196,22 +192,16 @@ class RegularTransactionCreationFragment :
             createdRegularTransactionSunday.setOnClickListener { setWeekdaySelected(WeekDays.SUNDAY.ordinal) }
         }
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.defaultTransaction
+            viewModel.regularTransaction
                 .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-                .collect { defaultTransaction ->
-                    if (localTransaction == RegularTransaction.EMPTY) {
-                        localTransaction = regularTransaction ?: defaultTransaction
-                    }
-                    localTransaction = localTransaction.copy(type = transactionType)
-                    initUi()
-                }
+                .collect { _ -> initUi() }
         }
     }
 
     private fun toFixedCategoryScreen() {
         val action = RegularTransactionCreationFragmentDirections.toFixedCategoryDest(
             destination = CategoryDestination.EditRegularTransactionScreen,
-            transactionType = transactionType
+            transactionType = viewModel.transactionType.value
         )
         findNavController().navigate(action)
     }
@@ -355,7 +345,7 @@ class RegularTransactionCreationFragment :
         activity.setSupportActionBar(toolbar)
         toolbar?.title =
             getString(
-                if (transactionType.isIncome()) {
+                if (viewModel.transactionType.isIncome()) {
                     R.string.title_prepopulate_regular_incomes
                 } else {
                     R.string.title_prepopulate_regular_expenses

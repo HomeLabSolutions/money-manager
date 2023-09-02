@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.ui.navigation.CategoryDestination
@@ -19,8 +18,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SubCategoryFragment : BaseCategoryFragment<SubCategoryNavigator>(), SubCategoryNavigator {
 
-    private val args by navArgs<SubCategoryFragmentArgs>()
-    private val parentCategory: Category by lazy { args.parentCategory }
     private var modifiedParentCategory: Category? = null
 
     override fun getNavigator() = this
@@ -28,7 +25,7 @@ class SubCategoryFragment : BaseCategoryFragment<SubCategoryNavigator>(), SubCat
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        modifiedParentCategory = parentCategory
+        modifiedParentCategory = viewModel.parentCategory.value
         toolbar?.title = getString(R.string.title_sub_category, modifiedParentCategory?.name)
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Category>(
             SUB_CATEGORY_TITLE
@@ -48,13 +45,13 @@ class SubCategoryFragment : BaseCategoryFragment<SubCategoryNavigator>(), SubCat
             categoryGroupDelete.setOnClickListener {
                 val action = SubCategoryFragmentDirections.toRemoveCategoryDialog(
                     CategoryDestination.SubCategoryScreen,
-                    modifiedParentCategory!!
+                    modifiedParentCategory?.id!!
                 )
                 findNavController().navigate(action)
             }
             categoryGroupEdit.setOnClickListener {
                 val action =
-                    SubCategoryFragmentDirections.toEditCategoryDialog(modifiedParentCategory!!)
+                    SubCategoryFragmentDirections.toEditCategoryDialog(modifiedParentCategory?.id!!)
                 findNavController().navigate(action)
             }
             (categoryRv.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
@@ -92,12 +89,12 @@ class SubCategoryFragment : BaseCategoryFragment<SubCategoryNavigator>(), SubCat
     }
 
     override fun openCreateCategoryScreen(category: Category) {
-        val action = SubCategoryFragmentDirections.toCategoryCreationDest(category)
+        val action = SubCategoryFragmentDirections.toCategoryCreationDest(category.id)
         findNavController().navigate(action)
     }
 
     override fun openRemoveDialog(subCategory: Category) {
-        val action = SubCategoryFragmentDirections.toRemoveSubCategoryDialog(subCategory)
+        val action = SubCategoryFragmentDirections.toRemoveSubCategoryDialog(subCategory.id)
         findNavController().navigate(action)
     }
 

@@ -22,8 +22,8 @@
                 android:name="destination"
                 app:argType="com.d9tilov.android.category.ui.navigation.CategoryDestination" />
             <argument
-                android:name="transactionType"
-                app:argType="com.d9tilov.android.core.model.TransactionType" />
+                android:name="transaction_type"
+                app:argType="integer" />
 
         </action>
         <action
@@ -33,11 +33,11 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim">
             <argument
-                android:name="transactionType"
-                app:argType="com.d9tilov.android.core.model.TransactionType" />
+                android:name="transaction_type"
+                app:argType="integer" />
             <argument
-                android:name="edited_transaction"
-                app:argType="com.d9tilov.android.transaction.domain.model.Transaction" />
+                android:name="edited_transaction_id"
+                app:argType="long" />
         </action>
         <action
             android:id="@+id/to_remove_transaction_dialog"
@@ -46,16 +46,14 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim">
             <argument
-                android:name="transaction"
-                android:defaultValue="@null"
-                app:argType="com.d9tilov.android.transaction.domain.model.Transaction"
-                app:nullable="true" />
+                android:name="transaction_id"
+                android:defaultValue="-1L"
+                app:argType="long" />
 
             <argument
-                android:name="regular_transaction"
-                android:defaultValue="@null"
-                app:argType="com.d9tilov.android.regular.transaction.domain.model.RegularTransaction"
-                app:nullable="true" />
+                android:name="regular_transaction_id"
+                android:defaultValue="-1L"
+                app:argType="long" />
         </action>
 
     </fragment>

@@ -8,8 +8,9 @@ import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.core.model.TransactionType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class CategoryRepoImpl(private val categoryLocalSource: CategorySource) : CategoryRepo {
+class CategoryRepoImpl @Inject constructor(private val categoryLocalSource: CategorySource) : CategoryRepo {
 
     override suspend fun createExpenseDefaultCategories() =
         categoryLocalSource.createExpenseDefaultCategories()

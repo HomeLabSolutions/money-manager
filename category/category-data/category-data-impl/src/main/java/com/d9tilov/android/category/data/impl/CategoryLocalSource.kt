@@ -1,11 +1,13 @@
 package com.d9tilov.android.category.data.impl
 
 import com.d9tilov.android.category.data.contract.CategorySource
+import com.d9tilov.android.category.data.contract.DefaultCategoriesManager
 import com.d9tilov.android.category.data.impl.mapper.toDataModel
 import com.d9tilov.android.category.data.impl.mapper.toDataModelFromPrePopulate
 import com.d9tilov.android.category.data.impl.mapper.toDataParentModel
 import com.d9tilov.android.category.data.impl.mapper.toDbModel
 import com.d9tilov.android.category.domain.model.Category
+import com.d9tilov.android.category.domain.model.exception.CategoryException
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.android.core.exceptions.WrongIdException
 import com.d9tilov.android.core.exceptions.WrongUidException
@@ -13,6 +15,9 @@ import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.database.dao.CategoryDao
 import com.d9tilov.android.database.entity.CategoryDbModel
 import com.d9tilov.android.datastore.PreferencesStore
+import com.d9tilov.android.network.dispatchers.Dispatcher
+import com.d9tilov.android.network.dispatchers.MoneyManagerDispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
@@ -20,15 +25,17 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class CategoryLocalSource(
+class CategoryLocalSource @Inject constructor(
+    @Dispatcher(MoneyManagerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
     private val preferencesStore: PreferencesStore,
     private val defaultCategoriesManager: DefaultCategoriesManager,
     private val categoryDao: CategoryDao
 ) : CategorySource {
 
-    override suspend fun createExpenseDefaultCategories() {
-        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+    override suspend fun createExpenseDefaultCategories() = withContext(dispatcher) {
+        val currentUserId = preferencesStore.uid.first()
         if (currentUserId == null) {
             throw WrongUidException()
         } else {
@@ -43,8 +50,8 @@ class CategoryLocalSource(
         }
     }
 
-    override suspend fun createIncomeDefaultCategories() {
-        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+    override suspend fun createIncomeDefaultCategories() = withContext(dispatcher) {
+        val currentUserId = preferencesStore.uid.first()
         if (currentUserId == null) {
             throw WrongUidException()
         } else {
@@ -55,22 +62,24 @@ class CategoryLocalSource(
         }
     }
 
-    override suspend fun create(category: Category): Long {
-        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
-        return if (currentUserId == null) {
+    override suspend fun create(category: Category): Long = withContext(dispatcher) {
+        val currentUserId = preferencesStore.uid.first()
+        if (currentUserId == null) {
             throw WrongUidException()
         } else {
             val count = categoryDao.getCategoriesCountByName(currentUserId, category.name)
             if (count == 0) {
                 categoryDao.create(category.copy(clientId = currentUserId).toDbModel())
             } else {
-                throw com.d9tilov.android.category.domain.model.exception.CategoryException.CategoryExistException("Category with name: ${category.name} has already existed")
+                throw CategoryException.CategoryExistException(
+                    "Category with name: ${category.name} has already existed"
+                )
             }
         }
     }
 
-    override suspend fun update(category: Category) {
-        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+    override suspend fun update(category: Category) = withContext(dispatcher) {
+        val currentUserId = preferencesStore.uid.first()
         if (currentUserId == null) {
             throw WrongUidException()
         } else {
@@ -83,13 +92,13 @@ class CategoryLocalSource(
                 if (count == 0) {
                     categoryDao.update(category.toDbModel())
                 } else {
-                    throw com.d9tilov.android.category.domain.model.exception.CategoryException.CategoryExistException("Category with name: ${category.name} has already existed")
+                    throw CategoryException.CategoryExistException("Category with name: ${category.name} has already existed")
                 }
             }
         }
     }
 
-    override suspend fun getById(id: Long): Category {
+    override suspend fun getById(id: Long): Category = withContext(dispatcher) {
         val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
         if (currentUserId == null) {
             throw WrongUidException()
@@ -100,7 +109,7 @@ class CategoryLocalSource(
             val childrenCategories = getByParentId(id).first()
             val newCategory: Category =
                 category.toDataModel(if (parentCategory.id == NO_ID) null else parentCategory)
-            return newCategory.copy(children = childrenCategories)
+            newCategory.copy(children = childrenCategories)
         }
     }
 
@@ -153,8 +162,8 @@ class CategoryLocalSource(
         return categories
     }
 
-    override suspend fun delete(category: Category) {
-        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
+    override suspend fun delete(category: Category) = withContext(dispatcher) {
+        val currentUserId = preferencesStore.uid.first()
         if (currentUserId == null) {
             throw WrongUidException()
         } else {
@@ -163,29 +172,31 @@ class CategoryLocalSource(
         }
     }
 
-    override suspend fun deleteSubcategory(subCategory: Category): Boolean {
-        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
-        return when {
-            currentUserId == null -> throw WrongUidException()
-            subCategory.parent == null -> throw com.d9tilov.android.category.domain.model.exception.CategoryException.CategoryNoParentException("Subcategory $subCategory has not parent")
-            else -> {
-                categoryDao.delete(currentUserId, subCategory.id)
-                val list = categoryDao.getByParentId(
-                    currentUserId,
-                    subCategory.parent?.id!!
-                ).first()
-                if (list.isEmpty()) categoryDao.delete(currentUserId, subCategory.parent?.id!!)
-                list.isEmpty()
+    override suspend fun deleteSubcategory(subCategory: Category): Boolean =
+        withContext(dispatcher) {
+            val currentUserId = preferencesStore.uid.first()
+            when {
+                currentUserId == null -> throw WrongUidException()
+                subCategory.parent == null -> throw CategoryException.CategoryNoParentException("Subcategory $subCategory has not parent")
+                else -> {
+                    categoryDao.delete(currentUserId, subCategory.id)
+                    val list = categoryDao.getByParentId(
+                        currentUserId,
+                        subCategory.parent?.id!!
+                    ).first()
+                    if (list.isEmpty()) categoryDao.delete(currentUserId, subCategory.parent?.id!!)
+                    list.isEmpty()
+                }
             }
         }
-    }
 
-    override suspend fun deleteFromGroup(subCategory: Category): Boolean {
-        val currentUserId = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
-        return when {
+    override suspend fun deleteFromGroup(subCategory: Category): Boolean = withContext(dispatcher) {
+        val currentUserId = preferencesStore.uid.first()
+        when {
             currentUserId == null -> throw WrongUidException()
             subCategory.parent == null ->
-                throw com.d9tilov.android.category.domain.model.exception.CategoryException.CategoryNoParentException("Subcategory $subCategory has not parent")
+                throw CategoryException.CategoryNoParentException("Subcategory $subCategory has not parent")
+
             else -> {
                 categoryDao.update(subCategory.copy(parent = null).toDbModel())
                 val list = categoryDao.getByParentId(

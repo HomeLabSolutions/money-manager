@@ -20,7 +20,6 @@ import com.d9tilov.android.common.android.ui.base.BaseFragment
 import com.d9tilov.android.common.android.ui.base.BaseNavigator
 import com.d9tilov.android.common.android.ui.recyclerview.GridSpaceItemDecoration
 import com.d9tilov.android.core.events.OnBackPressed
-import com.d9tilov.android.core.model.TransactionType
 import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.coroutines.launch
 
@@ -33,7 +32,7 @@ abstract class BaseCategoryFragment<N : BaseNavigator> :
 
     private val args by navArgs<CategoryFragmentArgs>()
     protected val destination: CategoryDestination by lazy { args.destination }
-    protected val transactionType: TransactionType by lazy { args.transactionType }
+    protected val transactionType by lazy { args.transactionType }
     protected var toolbar: MaterialToolbar? = null
     protected val categoryAdapter: CategoryModifyAdapter =
         CategoryModifyAdapter(

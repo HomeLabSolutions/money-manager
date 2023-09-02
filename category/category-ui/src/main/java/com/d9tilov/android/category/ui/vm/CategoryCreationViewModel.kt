@@ -11,7 +11,9 @@ import com.d9tilov.android.core.constants.DataConstants.DEFAULT_DATA_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
@@ -20,10 +22,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CategoryCreationViewModel @Inject constructor(
-    private val categoryInteractor: CategoryInteractor,
     private val savedStateHandle: SavedStateHandle,
+    private val categoryInteractor: CategoryInteractor,
     private val billingInteractor: BillingInteractor
 ) : BaseViewModel<CategoryCreationNavigator>() {
+
+    private val categoryId: Long = checkNotNull(savedStateHandle["category_id"])
+    private val _category = MutableStateFlow(Category.EMPTY_INCOME)
+    val category: StateFlow<Category> = _category
 
     private val saveCategoryExceptionHandler = CoroutineExceptionHandler { _, exception ->
         viewModelScope.launch(Dispatchers.Main) { navigator?.showError(exception) }
@@ -34,17 +40,19 @@ class CategoryCreationViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            billingInteractor.isPremium()
-                .flowOn(Dispatchers.IO)
-                .shareIn(viewModelScope, SharingStarted.WhileSubscribed())
-                .collect { this@CategoryCreationViewModel.isPremium = it }
+            launch { _category.value = categoryInteractor.getCategoryById(categoryId) }
+            launch {
+                billingInteractor.isPremium()
+                    .flowOn(Dispatchers.IO)
+                    .shareIn(viewModelScope, SharingStarted.WhileSubscribed())
+                    .collect { this@CategoryCreationViewModel.isPremium = it }
+            }
         }
     }
 
     fun save(category: Category) {
-        val receivedCategory = savedStateHandle.get<Category>("category")
         viewModelScope.launch(Dispatchers.IO + saveCategoryExceptionHandler) {
-            if (receivedCategory == null || receivedCategory.id == DEFAULT_DATA_ID) {
+            if (categoryId == DEFAULT_DATA_ID) {
                 categoryInteractor.create(category)
             } else {
                 categoryInteractor.update(category)

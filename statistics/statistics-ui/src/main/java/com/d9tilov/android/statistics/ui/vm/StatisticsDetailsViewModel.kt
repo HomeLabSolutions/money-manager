@@ -2,6 +2,7 @@ package com.d9tilov.android.statistics.ui.vm
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.core.model.TransactionType
@@ -20,27 +21,32 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StatisticsDetailsViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
-    private val transactionInteractor: TransactionInteractor
+    savedStateHandle: SavedStateHandle,
+    private val transactionInteractor: TransactionInteractor,
+    private val categoryInteractor: CategoryInteractor
 ) : BaseViewModel<StatisticsDetailsNavigator>() {
 
-    private val transactions = MutableStateFlow<List<Transaction>>(emptyList())
+    private val categoryId: Long = checkNotNull(savedStateHandle["category_id"])
+    private val transactionType: TransactionType =
+        checkNotNull(savedStateHandle["transaction_type"])
+    private val startPeriod: Long = checkNotNull(savedStateHandle["start_period"])
+    private val endPeriod: Long = checkNotNull(savedStateHandle["end_period"])
+    private val inStatistics: Boolean = checkNotNull(savedStateHandle["in_statistics"])
+    private val _category = MutableStateFlow(Category.EMPTY_INCOME)
+    private val _transactions = MutableStateFlow<List<Transaction>>(emptyList())
+    val category: StateFlow<Category> = _category
+    val transactions: StateFlow<List<Transaction>> = _transactions
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            transactions.value = transactionInteractor.getTransactionsByCategory(
-                savedStateHandle.get<TransactionType>("transactionType")
-                    ?: throw IllegalArgumentException("TransactionType is null"),
-                savedStateHandle.get<Category>("category")
-                    ?: throw IllegalArgumentException("Category is null"),
-                savedStateHandle.get<Long>("start_period")?.toLocalDateTime()?.getStartOfDay()
-                    ?: throw IllegalArgumentException("Start period is null"),
-                savedStateHandle.get<Long>("end_period")?.toLocalDateTime()?.getEndOfDay()
-                    ?: throw IllegalArgumentException("End period is null"),
-                savedStateHandle.get<Boolean>("in_statistics") ?: true
+            _category.value = categoryInteractor.getCategoryById(categoryId)
+            _transactions.value = transactionInteractor.getTransactionsByCategory(
+                transactionType,
+                _category.value,
+                startPeriod.toLocalDateTime().getStartOfDay(),
+                endPeriod.toLocalDateTime().getEndOfDay(),
+                inStatistics
             ).sortedByDescending { item -> item.date }
         }
     }
-
-    fun getTransactions(): StateFlow<List<Transaction>> = transactions
 }

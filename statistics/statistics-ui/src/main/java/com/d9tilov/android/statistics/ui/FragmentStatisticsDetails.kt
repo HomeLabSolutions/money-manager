@@ -9,7 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d9tilov.android.common.android.ui.base.BaseFragment
@@ -29,9 +28,6 @@ class FragmentStatisticsDetails :
         R.layout.fragment_statistics_details
     ),
     StatisticsDetailsNavigator {
-
-    private val args by navArgs<FragmentStatisticsDetailsArgs>()
-    private val category by lazy { args.category }
 
     private val adapter = StatisticsDetailsAdapter()
     private var toolbar: MaterialToolbar? = null
@@ -56,7 +52,7 @@ class FragmentStatisticsDetails :
             statisticsDetailsRv.addItemDecoration(dividerItemDecoration)
         }
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.getTransactions()
+            viewModel.transactions
                 .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
                 .collect { list -> adapter.updateItems(list) }
         }
@@ -65,6 +61,6 @@ class FragmentStatisticsDetails :
     private fun initToolbar(toolbar: Toolbar?) {
         val activity = activity as AppCompatActivity
         activity.setSupportActionBar(toolbar)
-        toolbar?.title = category.name
+        toolbar?.title = viewModel.category.value.name
     }
 }

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.d9tilov.android.category.domain.model.exception.CategoryException
 import com.d9tilov.android.category.ui.SubCategoryFragment.Companion.SUB_CATEGORY_TITLE
 import com.d9tilov.android.category.ui.navigation.EditCategoryDialogNavigator
@@ -21,22 +20,20 @@ class CategoryEditDialog :
     BaseDialogFragment<EditCategoryDialogNavigator, FragmentDialogEditCategoryBinding>(FragmentDialogEditCategoryBinding::inflate),
     EditCategoryDialogNavigator {
 
-    private val args by navArgs<CategoryEditDialogArgs>()
-    private val category by lazy { args.category }
     override fun getNavigator() = this
     override val viewModel by viewModels<CategoryGroupEditViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewBinding?.run {
-            categoryDialogEditEtName.setText(category.name)
+            categoryDialogEditEtName.setText(viewModel.category.value.name)
             categoryDialogEditEtName.onChange { text ->
                 val isNameEmpty = text.isEmpty()
                 categoryEditButtonConfirm.isEnabled = !isNameEmpty
                 categoryDialogEditEtNameLayout.error = null
             }
             categoryEditButtonConfirm.setOnClickListener {
-                viewModel.save(category.copy(name = categoryDialogEditEtName.text.toString()))
+                viewModel.save(viewModel.category.value.copy(name = categoryDialogEditEtName.text.toString()))
             }
             categoryEditButtonCancel.setOnClickListener { dismiss() }
         }
@@ -57,7 +54,7 @@ class CategoryEditDialog :
     override fun save() {
         findNavController().previousBackStackEntry?.savedStateHandle?.set(
             SUB_CATEGORY_TITLE,
-            category.copy(name = viewBinding?.categoryDialogEditEtName?.text.toString())
+            viewModel.category.value.copy(name = viewBinding?.categoryDialogEditEtName?.text.toString())
         )
         dismiss()
     }
