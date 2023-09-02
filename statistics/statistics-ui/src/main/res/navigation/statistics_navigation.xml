@@ -27,8 +27,8 @@
         tools:layout="@layout/fragment_statistics_details">
 
         <argument
-            android:name="category"
-            app:argType="com.d9tilov.android.category.domain.model.Category" />
+            android:name="category_id"
+            app:argType="long" />
         <argument
             android:name="start_period"
             app:argType="long" />
@@ -39,7 +39,7 @@
             android:name="in_statistics"
             app:argType="boolean" />
         <argument
-            android:name="transactionType"
-            app:argType="com.d9tilov.android.core.model.TransactionType" />
+            android:name="transaction_type"
+            app:argType="integer" />
     </fragment>
 </navigation>

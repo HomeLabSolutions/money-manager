@@ -20,7 +20,6 @@ class CategoryRemoveDialog :
     RemoveCategoryDialogNavigator {
 
     private val args by navArgs<CategoryRemoveDialogArgs>()
-    private val category by lazy { args.category }
     private val destination by lazy { args.destination }
 
     override fun getNavigator() = this
@@ -32,13 +31,13 @@ class CategoryRemoveDialog :
             removeDialogTitle.text = getString(R.string.category_delete_title)
             removeDialogSubtitle.text =
                 getString(
-                    if (category.children.isEmpty()) {
+                    if (viewModel.category.value.children.isEmpty()) {
                         R.string.category_delete_sub_title
                     } else {
                         R.string.category_delete_group_sub_title
                     }
                 )
-            removeButtonConfirm.setOnClickListener { viewModel.remove(category) }
+            removeButtonConfirm.setOnClickListener { viewModel.remove() }
             removeButtonCancel.setOnClickListener { dismiss() }
         }
     }

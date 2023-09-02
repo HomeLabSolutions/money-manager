@@ -50,7 +50,7 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : Vi
         }
     protected val transactionAdapter = TransactionAdapter(
         itemClickListener = { item, _ ->
-            val action = IncomeExpenseFragmentDirections.toEditTransactionDest(item.type, item)
+            val action = IncomeExpenseFragmentDirections.toEditTransactionDest(item.type.value, item.id)
             findNavController().navigate(action)
         },
         itemSwipeListener = { item, _ -> openRemoveConfirmationDialog(item) }
@@ -121,7 +121,7 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : Vi
     }
 
     private fun openRemoveConfirmationDialog(transaction: Transaction) {
-        val action = IncomeExpenseFragmentDirections.toRemoveTransactionDialog(transaction)
+        val action = IncomeExpenseFragmentDirections.toRemoveTransactionDialog(transaction.id)
         findNavController().navigate(action)
     }
 

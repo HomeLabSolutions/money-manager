@@ -88,13 +88,13 @@ class StatisticsFragment :
     private val statisticsBarChartAdapter: StatisticsBarChartAdapter =
         StatisticsBarChartAdapter { item, _ ->
             val action = StatisticsFragmentDirections.toStatisticsDetailsDest(
-                item.category,
+                item.category.id,
                 viewModel.chartPeriod.from.toMillis(),
                 viewModel.chartPeriod.to.toMillis(),
                 viewModel.inStatistics == StatisticsMenuInStatistics.InStatistics,
                 when (viewModel.transactionType) {
-                    StatisticsMenuTransactionType.Expense -> TransactionType.EXPENSE
-                    StatisticsMenuTransactionType.Income -> TransactionType.INCOME
+                    StatisticsMenuTransactionType.Expense -> TransactionType.EXPENSE.value
+                    StatisticsMenuTransactionType.Income -> TransactionType.INCOME.value
                 }
             )
             findNavController().navigate(action)

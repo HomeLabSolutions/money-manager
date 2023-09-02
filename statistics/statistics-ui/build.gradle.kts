@@ -22,6 +22,7 @@ dependencies {
     implementation(project(":statistics:statistics-domain:statistics-domain-model"))
 
     implementation(project(":category:category-domain:category-domain-model"))
+    implementation(project(":category:category-domain:category-domain-contract"))
     implementation(project(":billing:billing-domain:billing-domain-contract"))
 
     implementation(project(":transaction:transaction-domain:transaction-domain-model"))

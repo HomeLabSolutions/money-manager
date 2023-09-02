@@ -18,12 +18,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
-    categoryInteractor: CategoryInteractor,
-    private val savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    categoryInteractor: CategoryInteractor
 ) : BaseCategoryViewModel<CategoryNavigator>() {
 
-    val transactionType: TransactionType =
-        savedStateHandle.get<TransactionType>("transactionType") ?: TransactionType.EXPENSE
+    private val transactionType: TransactionType =
+        checkNotNull(savedStateHandle["transaction_type"])
+    private val destination: CategoryDestination = checkNotNull(savedStateHandle["destination"])
     override val categories: SharedFlow<List<Category>> =
         categoryInteractor.getAllCategoriesByType(transactionType)
             .flowOn(Dispatchers.IO)
@@ -31,7 +32,6 @@ class CategoryViewModel @Inject constructor(
             .shareIn(viewModelScope, Eagerly, 1)
 
     override fun onCategoryClicked(category: Category) {
-        val destination = savedStateHandle.get<CategoryDestination>("destination")
         if (category.children.isNotEmpty()) {
             navigator?.openSubCategoryScreen(category)
         } else {
@@ -40,12 +40,13 @@ class CategoryViewModel @Inject constructor(
                 CategoryDestination.EditRegularTransactionScreen -> navigator?.backToEditRegularTransactionScreen(
                     category
                 )
+
                 CategoryDestination.MainWithSumScreen -> navigator?.backToMainScreen(category)
                 CategoryDestination.MainScreen,
                 CategoryDestination.CategoryCreationScreen,
                 CategoryDestination.CategoryScreen,
-                CategoryDestination.SubCategoryScreen,
-                null -> navigator?.openCreateCategoryScreen(category)
+                CategoryDestination.SubCategoryScreen
+                -> navigator?.openCreateCategoryScreen(category)
             }
         }
     }

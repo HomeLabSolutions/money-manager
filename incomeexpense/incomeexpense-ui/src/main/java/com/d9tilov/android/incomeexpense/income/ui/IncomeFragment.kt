@@ -156,12 +156,12 @@ class IncomeFragment :
             val action = if (inputSum.signum() > 0) {
                 IncomeExpenseFragmentDirections.toCategoryDest(
                     destination = CategoryDestination.MainWithSumScreen,
-                    transactionType = TransactionType.INCOME
+                    transactionType = TransactionType.INCOME.value
                 )
             } else {
                 IncomeExpenseFragmentDirections.toCategoryDest(
                     destination = CategoryDestination.MainScreen,
-                    transactionType = TransactionType.INCOME
+                    transactionType = TransactionType.INCOME.value
                 )
             }
             findNavController().navigate(action)

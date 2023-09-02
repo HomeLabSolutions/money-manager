@@ -8,44 +8,58 @@ import com.d9tilov.android.category.ui.navigation.CategoryDestination
 import com.d9tilov.android.category.ui.navigation.SubCategoryNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SubCategoryViewModel @Inject constructor(
-    categoryInteractor: CategoryInteractor,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    categoryInteractor: CategoryInteractor
 ) : BaseCategoryViewModel<SubCategoryNavigator>() {
 
-    private val parentCategory: Category? = savedStateHandle.get<Category>("parent_category")
+    private val categoryDestination: CategoryDestination =
+        checkNotNull(savedStateHandle["destination"])
+    private val parentCategoryId: Long = checkNotNull(savedStateHandle["parent_category_id"])
+    private val _parentCategory = MutableStateFlow(Category.EMPTY_INCOME)
+    val parentCategory = _parentCategory
+
     override val categories: SharedFlow<List<Category>> =
-        categoryInteractor.getChildrenByParent(parentCategory!!)
+        categoryInteractor.getChildrenByParent(parentCategory.value)
             .flowOn(Dispatchers.IO)
             .distinctUntilChanged()
             .shareIn(viewModelScope, SharingStarted.Eagerly, 1)
 
     init {
-        if (parentCategory == null || parentCategory.children.isEmpty()) {
-            throw IllegalArgumentException("Parent category mustn't have at least one child")
+        viewModelScope.launch {
+            _parentCategory.value = categoryInteractor.getCategoryById(parentCategoryId)
+            if (parentCategory.value.children.isEmpty()) {
+                throw IllegalArgumentException("Parent category mustn't have at least one child")
+            }
         }
     }
 
     override fun onCategoryClicked(category: Category) {
-        when (savedStateHandle.get<CategoryDestination>("destination")) {
-            CategoryDestination.EditTransactionScreen -> navigator?.backToEditTransactionScreen(category)
+        when (categoryDestination) {
+            CategoryDestination.EditTransactionScreen -> navigator?.backToEditTransactionScreen(
+                category
+            )
+
             CategoryDestination.EditRegularTransactionScreen -> navigator?.backToEditRegularTransactionScreen(
                 category
             )
+
             CategoryDestination.MainWithSumScreen -> navigator?.backToMainScreen(category)
             CategoryDestination.MainScreen,
             CategoryDestination.CategoryCreationScreen,
             CategoryDestination.CategoryScreen,
-            CategoryDestination.SubCategoryScreen,
-            null -> navigator?.openCreateCategoryScreen(category)
+            CategoryDestination.SubCategoryScreen
+            -> navigator?.openCreateCategoryScreen(category)
         }
     }
 

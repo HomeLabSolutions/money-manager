@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.d9tilov.android.category.ui.navigation.RemoveSubCategoryDialogNavigator
 import com.d9tilov.android.category.ui.vm.SubcategoryRemoveViewModel
 import com.d9tilov.android.category_ui.R
@@ -19,9 +18,6 @@ class SubcategoryRemoveDialogFragment :
     ),
     RemoveSubCategoryDialogNavigator {
 
-    private val args by navArgs<SubcategoryRemoveDialogFragmentArgs>()
-    private val subCategory by lazy { args.subcategory }
-
     override fun getNavigator() = this
 
     override val viewModel by viewModels<SubcategoryRemoveViewModel>()
@@ -32,10 +28,11 @@ class SubcategoryRemoveDialogFragment :
             tripleRemoveDialogButtonAction1.text = getString(R.string.sub_category_delete)
             tripleRemoveDialogButtonAction2.text =
                 getString(R.string.sub_category_delete_from_group)
-            tripleRemoveDialogButtonCancel.text = getString(com.d9tilov.android.common.android.R.string.cancel)
+            tripleRemoveDialogButtonCancel.text =
+                getString(com.d9tilov.android.common.android.R.string.cancel)
             tripleRemoveDialogTitle.text = getString(R.string.sub_category_delete_title)
-            tripleRemoveDialogButtonAction1.setOnClickListener { viewModel.remove(subCategory) }
-            tripleRemoveDialogButtonAction2.setOnClickListener { viewModel.removeFromGroup(subCategory) }
+            tripleRemoveDialogButtonAction1.setOnClickListener { viewModel.remove() }
+            tripleRemoveDialogButtonAction2.setOnClickListener { viewModel.removeFromGroup() }
             tripleRemoveDialogButtonCancel.setOnClickListener { dismiss() }
         }
     }
