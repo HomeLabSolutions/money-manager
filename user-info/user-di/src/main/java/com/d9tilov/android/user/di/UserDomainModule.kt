@@ -10,7 +10,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-class UserDomainModule {
+object UserDomainModule {
 
     @Provides
     fun provideUserInteractor(userRepo: UserRepo): UserInteractor = UserInteractorImpl(userRepo)

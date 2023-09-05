@@ -7,10 +7,13 @@ import com.d9tilov.android.currency.domain.contract.CurrencyRepo
 import com.d9tilov.android.database.AppDatabase
 import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.network.CurrencyApi
+import com.d9tilov.android.network.dispatchers.Dispatcher
+import com.d9tilov.android.network.dispatchers.MoneyManagerDispatchers
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
 import retrofit2.Retrofit
 
 @Module
@@ -19,9 +22,11 @@ object CurrencyDataModule {
 
     @Provides
     fun provideCurrencySource(
+        @Dispatcher(MoneyManagerDispatchers.IO) dispatcher: CoroutineDispatcher,
         appDatabase: AppDatabase,
         preferencesStore: PreferencesStore
     ): CurrencySource = CurrencyLocalSource(
+        dispatcher,
         preferencesStore,
         appDatabase.currencyDao(),
         appDatabase.mainCurrencyDao()

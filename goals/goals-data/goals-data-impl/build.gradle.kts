@@ -1,5 +1,6 @@
 plugins {
     id("moneymanager.android.library")
+    id("moneymanager.android.hilt")
 }
 
 android {
@@ -10,6 +11,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
+    implementation(project(":core:network"))
 
     implementation(project(":goals:goals-domain:goals-domain-model"))
     implementation(project(":goals:goals-domain:goals-domain-contract"))

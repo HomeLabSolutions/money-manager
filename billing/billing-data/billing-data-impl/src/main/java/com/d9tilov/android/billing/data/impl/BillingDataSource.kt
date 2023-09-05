@@ -17,8 +17,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import timber.log.Timber
+import javax.inject.Inject
 
-class BillingDataSource(context: Context) :
+class BillingDataSource @Inject constructor(context: Context) :
     PurchasesUpdatedListener,
     ProductDetailsResponseListener,
     BillingSource {

@@ -11,6 +11,7 @@ dependencies {
 
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
+    implementation(project(":core:network"))
 
     implementation(project(":budget:budget-data:budget-data-contract"))
     implementation(project(":budget:budget-data:budget-data-impl"))
