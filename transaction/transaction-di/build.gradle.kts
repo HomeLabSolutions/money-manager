@@ -13,6 +13,7 @@ dependencies {
 
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
+    implementation(project(":core:network"))
 
     implementation(project(":transaction:transaction-data:transaction-data-contract"))
     implementation(project(":transaction:transaction-data:transaction-data-impl"))

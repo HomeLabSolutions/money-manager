@@ -12,11 +12,13 @@ import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.toMillis
 import com.d9tilov.android.datastore.PreferencesStore
+import com.d9tilov.android.network.dispatchers.Dispatcher
+import com.d9tilov.android.network.dispatchers.MoneyManagerDispatchers
 import com.d9tilov.android.network.exception.NetworkException
 import com.google.firebase.FirebaseException
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
@@ -28,19 +30,21 @@ import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.InputStream
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-class BackupManagerImpl(
+class BackupManagerImpl @Inject constructor(
+    @Dispatcher(MoneyManagerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
     private val context: Context,
     private val preferencesStore: PreferencesStore
 ) : BackupManager {
 
-    override suspend fun backupDb(): ResultOf<BackupData> {
+    override suspend fun backupDb(): ResultOf<BackupData> = withContext(dispatcher) {
         Timber.tag(TAG).d("Backup backupDb before")
-        val uid = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
+        val uid = preferencesStore.uid.firstOrNull()
         Timber.tag(TAG).d("Backup backupDb: $uid")
-        return suspendCancellableCoroutine { continuation ->
+        suspendCancellableCoroutine { continuation ->
             if (!isNetworkConnected(context)) {
                 continuation.resumeWithException(NetworkException())
                 return@suspendCancellableCoroutine
@@ -76,9 +80,9 @@ class BackupManagerImpl(
         }
     }
 
-    override suspend fun restoreDb(): ResultOf<Any> {
-        val uid = withContext(Dispatchers.IO) { preferencesStore.uid.firstOrNull() }
-        return suspendCancellableCoroutine { continuation ->
+    override suspend fun restoreDb(): ResultOf<Any> = withContext(dispatcher) {
+        val uid = preferencesStore.uid.firstOrNull()
+        suspendCancellableCoroutine { continuation ->
             if (!isNetworkConnected(context)) continuation.resumeWithException(NetworkException())
             if (uid.isNullOrEmpty()) continuation.resumeWithException(WrongUidException())
             val parentPath = "${uid?.normalizePath()}/$DATABASE_NAME"
@@ -110,9 +114,9 @@ class BackupManagerImpl(
         }
     }
 
-    override suspend fun deleteBackup(): ResultOf<Any> {
-        val uid = withContext(Dispatchers.IO) { preferencesStore.uid.first() }
-        return suspendCancellableCoroutine { continuation ->
+    override suspend fun deleteBackup(): ResultOf<Any> = withContext(dispatcher) {
+        val uid = preferencesStore.uid.first()
+        suspendCancellableCoroutine { continuation ->
             if (!isNetworkConnected(context)) {
                 continuation.resumeWithException(NetworkException())
                 return@suspendCancellableCoroutine

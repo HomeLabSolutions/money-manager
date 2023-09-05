@@ -4,8 +4,9 @@ import com.d9tilov.android.goals.data.contract.GoalSource
 import com.d9tilov.android.goals.domain.contract.GoalRepo
 import com.d9tilov.android.goals.domain.model.GoalData
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class GoalRepoImpl(private val goalSource: GoalSource) : GoalRepo {
+class GoalRepoImpl @Inject constructor(private val goalSource: GoalSource) : GoalRepo {
 
     override suspend fun insert(goalData: GoalData) {
         goalSource.insert(goalData)

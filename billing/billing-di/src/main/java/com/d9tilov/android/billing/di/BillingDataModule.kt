@@ -1,27 +1,24 @@
 package com.d9tilov.android.billing.di
 
-import android.app.Application
 import com.d9tilov.android.billing.data.contract.BillingSource
 import com.d9tilov.android.billing.data.impl.BillingDataRepo
 import com.d9tilov.android.billing.data.impl.BillingDataSource
 import com.d9tilov.android.billing.domain.contract.BillingRepo
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object BillingDataModule {
+interface BillingDataModule {
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideBillingLocalSource(application: Application): BillingSource =
-        BillingDataSource(application)
+    fun provideBillingLocalSource(billingDataSource: BillingDataSource): BillingSource
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideBillingRepo(billingSource: BillingSource): BillingRepo =
-        BillingDataRepo(billingSource)
+    fun provideBillingRepo(billingDataRepo: BillingDataRepo): BillingRepo
 }

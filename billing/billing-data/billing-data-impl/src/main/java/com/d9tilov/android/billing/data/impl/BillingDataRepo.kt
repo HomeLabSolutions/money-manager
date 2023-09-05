@@ -12,10 +12,9 @@ import com.d9tilov.android.currency.domain.model.Currency
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class BillingDataRepo(
-    private val billingSource: BillingSource
-) : BillingRepo {
+class BillingDataRepo @Inject constructor(private val billingSource: BillingSource) : BillingRepo {
 
     override val currentPurchases: Flow<List<Purchase>> = billingSource.purchases
     override val billingConnectionReady: Flow<Boolean> = billingSource.billingConnectionReady

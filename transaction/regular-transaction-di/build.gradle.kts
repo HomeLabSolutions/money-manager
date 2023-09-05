@@ -10,6 +10,7 @@ android {
 dependencies {
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
+    implementation(project(":core:network"))
     implementation(project(":transaction:regular-transaction-data:regular-transaction-data-contract"))
     implementation(project(":transaction:regular-transaction-data:regular-transaction-data-impl"))
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-contract"))
