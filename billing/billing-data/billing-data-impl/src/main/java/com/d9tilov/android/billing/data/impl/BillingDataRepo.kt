@@ -7,14 +7,22 @@ import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.d9tilov.android.billing.data.contract.BillingSource
 import com.d9tilov.android.billing.domain.contract.BillingRepo
+import com.d9tilov.android.billing.domain.model.BillingSkuDetails
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.currency.domain.model.Currency
+import com.d9tilov.android.network.dispatchers.Dispatcher
+import com.d9tilov.android.network.dispatchers.MoneyManagerDispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class BillingDataRepo @Inject constructor(private val billingSource: BillingSource) : BillingRepo {
+class BillingDataRepo @Inject constructor(
+    @Dispatcher(MoneyManagerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
+    private val billingSource: BillingSource
+) : BillingRepo {
 
     override val currentPurchases: Flow<List<Purchase>> = billingSource.purchases
     override val billingConnectionReady: Flow<Boolean> = billingSource.billingConnectionReady
@@ -24,13 +32,14 @@ class BillingDataRepo @Inject constructor(private val billingSource: BillingSour
         billingSource.productWithProductDetails.filter {
             it.containsKey(PREMIUM_SUB)
         }.map { it[PREMIUM_SUB] }
+            .flowOn(dispatcher)
 
     // Set to true when a purchase is acknowledged.
     override val isNewPurchaseAcknowledged: Flow<Boolean> = billingSource.isNewPurchaseAcknowledged
 
     override fun startBillingConnection() = billingSource.startBillingConnection()
     override fun terminateBillingConnection() = billingSource.terminateBillingConnection()
-    override fun getSkuDetails(): Flow<List<com.d9tilov.android.billing.domain.model.BillingSkuDetails>> {
+    override fun getSkuDetails(): Flow<List<BillingSkuDetails>> {
         return billingSource.productWithProductDetails.map { details: Map<String, ProductDetails> -> details.toList() }
             .filter { it.isNotEmpty() }
             .map { list: List<Pair<String, ProductDetails>> -> list.first() }
@@ -65,6 +74,7 @@ class BillingDataRepo @Inject constructor(private val billingSource: BillingSour
                     )
                 } ?: throw com.d9tilov.android.billing.domain.model.exceptions.BillingFailure.SubscriptionNotFoundException(product)
             }
+            .flowOn(dispatcher)
     }
 
     override fun buySku(
@@ -82,6 +92,7 @@ class BillingDataRepo @Inject constructor(private val billingSource: BillingSour
             purchase.products.contains(PREMIUM_SUB) && purchase.isAutoRenewing
         }
     }
+        .flowOn(dispatcher)
 
     companion object {
         // List of subscription product offerings

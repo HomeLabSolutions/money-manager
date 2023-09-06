@@ -9,6 +9,7 @@ android {
 dependencies {
 
     implementation(project(":core:common"))
+    implementation(project(":core:network"))
     implementation(project(":billing:billing-data:billing-data-contract"))
     implementation(project(":billing:billing-domain:billing-domain-contract"))
     implementation(project(":billing:billing-domain:billing-domain-model"))

@@ -7,9 +7,7 @@ import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.android.currency.observer.contract.CurrencyUpdateObserver
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -39,14 +37,13 @@ class CurrencyViewModel @Inject constructor(
 
     val uiState = currencyInteractor.getCurrencies()
         .map { CurrencyUiState.HasCurrencies(it, false) }
-        .flowOn(Dispatchers.IO)
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
             initialValue = CurrencyUiState.NoCurrencies()
         )
 
-    fun changeCurrency(code: String) = viewModelScope.launch(Dispatchers.IO) {
+    fun changeCurrency(code: String) = viewModelScope.launch {
         currencyUpdateObserver.updateMainCurrency(code)
     }
 }

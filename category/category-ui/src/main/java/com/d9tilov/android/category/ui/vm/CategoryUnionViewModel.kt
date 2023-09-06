@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CategoryUnionViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
     private val categoryInteractor: CategoryInteractor,
     private val firebaseAnalytics: FirebaseAnalytics
 ) : BaseViewModel<CategoryUnionDialogNavigator>() {
@@ -40,21 +40,21 @@ class CategoryUnionViewModel @Inject constructor(
     }
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             launch { _firstCategory.value = categoryInteractor.getCategoryById(firstCategoryId) }
             launch { _secondCategory.value = categoryInteractor.getCategoryById(secondCategoryId) }
         }
     }
 
     fun addToGroup(categoryItem: Category, parentCategory: Category) {
-        viewModelScope.launch(Dispatchers.IO + saveCategoryExceptionHandler) {
+        viewModelScope.launch(saveCategoryExceptionHandler) {
             categoryInteractor.update(categoryItem.copy(parent = parentCategory))
             withContext(Dispatchers.Main) { navigator?.accept() }
         }
     }
 
     fun createGroup(categoryItem1: Category, categoryItem2: Category, groupedCategory: Category) {
-        viewModelScope.launch(Dispatchers.IO + saveCategoryExceptionHandler) {
+        viewModelScope.launch(saveCategoryExceptionHandler) {
             val parentId = categoryInteractor.create(groupedCategory)
             val category = categoryInteractor.getCategoryById(parentId)
             awaitAll(

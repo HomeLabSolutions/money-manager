@@ -73,7 +73,7 @@ class StatisticsViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             currencyCode = currencyInteractor.getMainCurrency().code
             currencyType = StatisticsMenuCurrency.Current(currencyCode)
             menuItemList[currencyType.menuType.ordinal] = currencyType
@@ -155,7 +155,6 @@ class StatisticsViewModel @Inject constructor(
                 categoryType == StatisticsMenuCategoryType.Child
             )
                 .map { list -> list.sortedByDescending { tr -> tr.sum } }
-                .flowOn(Dispatchers.IO)
                 .catch { transactionsInCurrentPeriod.value = ResultOf.Failure(it) }
                 .collect { transactions.value = ResultOf.Success(it) }
         }
@@ -173,7 +172,6 @@ class StatisticsViewModel @Inject constructor(
                 currencyType.currencyCode,
                 inStatistics == StatisticsMenuInStatistics.InStatistics
             )
-                .flowOn(Dispatchers.IO)
                 .catch { transactionsInCurrentPeriod.value = ResultOf.Failure(it) }
                 .collect { transactionsInCurrentPeriod.value = ResultOf.Success(it) }
         }

@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -131,6 +132,7 @@ class CategoryLocalSource @Inject constructor(
                 categoryDao.getByParentId(uid, id)
                     .map { it.map { item -> item.toDataParentModel() } }
             }
+            .flowOn(dispatcher)
 
     override fun getCategoriesByType(type: TransactionType): Flow<List<Category>> =
         preferencesStore.uid
@@ -138,6 +140,7 @@ class CategoryLocalSource @Inject constructor(
             .flatMapMerge { uid ->
                 categoryDao.getAllByType(uid, type.value).map { groupChildrenWithParent(it) }
             }
+            .flowOn(dispatcher)
 
     private fun groupChildrenWithParent(list: List<CategoryDbModel>): List<Category> {
         val childrenOfOneParent = list.groupBy { it.parentId }

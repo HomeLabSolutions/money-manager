@@ -13,7 +13,6 @@ import com.d9tilov.android.statistics.ui.navigation.StatisticsDetailsNavigator
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.model.Transaction
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -38,7 +37,7 @@ class StatisticsDetailsViewModel @Inject constructor(
     val transactions: StateFlow<List<Transaction>> = _transactions
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _category.value = categoryInteractor.getCategoryById(categoryId)
             _transactions.value = transactionInteractor.getTransactionsByCategory(
                 transactionType,

@@ -8,11 +8,9 @@ import com.d9tilov.android.category.ui.navigation.CategoryDestination
 import com.d9tilov.android.category.ui.navigation.CategoryNavigator
 import com.d9tilov.android.core.model.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted.Companion.Eagerly
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
 import javax.inject.Inject
 
@@ -27,7 +25,6 @@ class CategoryViewModel @Inject constructor(
     private val destination: CategoryDestination = checkNotNull(savedStateHandle["destination"])
     override val categories: SharedFlow<List<Category>> =
         categoryInteractor.getAllCategoriesByType(transactionType)
-            .flowOn(Dispatchers.IO)
             .distinctUntilChanged()
             .shareIn(viewModelScope, Eagerly, 1)
 

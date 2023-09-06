@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CategoryCreationViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
     private val categoryInteractor: CategoryInteractor,
     private val billingInteractor: BillingInteractor
 ) : BaseViewModel<CategoryCreationNavigator>() {
@@ -51,7 +51,7 @@ class CategoryCreationViewModel @Inject constructor(
     }
 
     fun save(category: Category) {
-        viewModelScope.launch(Dispatchers.IO + saveCategoryExceptionHandler) {
+        viewModelScope.launch(saveCategoryExceptionHandler) {
             if (categoryId == DEFAULT_DATA_ID) {
                 categoryInteractor.create(category)
             } else {

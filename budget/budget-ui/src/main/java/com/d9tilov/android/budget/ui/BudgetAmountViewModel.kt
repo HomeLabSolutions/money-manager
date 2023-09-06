@@ -6,7 +6,6 @@ import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
@@ -29,7 +28,7 @@ class BudgetAmountViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             budgetInteractor.get()
                 .collect { budget ->
                     _uiState.update {
@@ -46,7 +45,7 @@ class BudgetAmountViewModel @Inject constructor(
         _uiState.update { it.copy(budgetSum = amount) }
     }
 
-    fun saveBudgetAmount() = viewModelScope.launch(Dispatchers.IO) {
+    fun saveBudgetAmount() = viewModelScope.launch {
         val budget = budgetInteractor.get().firstOrNull()
         budget?.let {
             budgetInteractor.update(

@@ -34,7 +34,7 @@ class CategoryGroupEditViewModel @Inject constructor(
     }
 
     fun save(category: Category) {
-        viewModelScope.launch(Dispatchers.IO + saveCategoryExceptionHandler) {
+        viewModelScope.launch(saveCategoryExceptionHandler) {
             categoryInteractor.update(category)
             withContext(Dispatchers.Main) { navigator?.save() }
         }
