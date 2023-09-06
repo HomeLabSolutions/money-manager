@@ -7,12 +7,10 @@ import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.ui.navigation.CategoryDestination
 import com.d9tilov.android.category.ui.navigation.SubCategoryNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,7 +29,6 @@ class SubCategoryViewModel @Inject constructor(
 
     override val categories: SharedFlow<List<Category>> =
         categoryInteractor.getChildrenByParent(parentCategory.value)
-            .flowOn(Dispatchers.IO)
             .distinctUntilChanged()
             .shareIn(viewModelScope, SharingStarted.Eagerly, 1)
 

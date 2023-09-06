@@ -13,7 +13,6 @@ import com.d9tilov.android.settings_ui.R
 import com.d9tilov.android.user.domain.contract.UserInteractor
 import com.google.firebase.FirebaseException
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -56,7 +55,7 @@ class SettingsViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             combine(
                 userInteractor.getCurrentUser(),
                 backupInteractor.getBackupData(),
@@ -105,7 +104,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun backup() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _uiState.update { it.copy(backupLoading = true) }
             try {
                 backupInteractor.makeBackup()
@@ -132,7 +131,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun save() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             userInteractor.updateFiscalDay(_uiState.value.startPeriodDay.toInt())
         }
     }

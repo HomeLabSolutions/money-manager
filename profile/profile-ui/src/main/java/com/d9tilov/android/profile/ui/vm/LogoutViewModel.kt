@@ -19,7 +19,7 @@ class LogoutViewModel @Inject constructor(
 ) : BaseViewModel<LogoutDialogNavigator>() {
 
     fun logout() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             userInteractor.deleteUser()
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN) {
                 param(FirebaseAnalytics.Param.ITEM_CATEGORY, "logout")

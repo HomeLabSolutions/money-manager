@@ -37,7 +37,7 @@ class CategoryRemoveViewModel @Inject constructor(
         viewModelScope.launch { _category.value = categoryInteractor.getCategoryById(categoryId) }
     }
 
-    fun remove() = viewModelScope.launch(Dispatchers.IO) {
+    fun remove() = viewModelScope.launch {
         category.value.let { category ->
             awaitAll(
                 async { transactionInteractor.removeAllByCategory(category) },

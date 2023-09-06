@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
@@ -24,7 +23,7 @@ class GoalsViewModel @Inject constructor(private val budgetInteractor: BudgetInt
     val uiState = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             budgetInteractor.get()
                 .collect { budget ->
                     _uiState.update {
@@ -41,7 +40,7 @@ class GoalsViewModel @Inject constructor(private val budgetInteractor: BudgetInt
 //        _uiState.update { it.copy(budgetSum = amount) }
     }
 
-    fun saveBudgetAmount() = viewModelScope.launch(Dispatchers.IO) {
+    fun saveBudgetAmount() = viewModelScope.launch {
         val budget = budgetInteractor.get().firstOrNull()
         budget?.let {
             budgetInteractor.update(
