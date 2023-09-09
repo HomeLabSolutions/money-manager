@@ -49,7 +49,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.budget.ui.BudgetScreen
 import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.android.currency.ui.CurrencyListScreen
-import com.d9tilov.android.home.ui.MainActivity
+import com.d9tilov.moneymanager.home.MainActivity
 import com.d9tilov.moneymanager.prepopulate.PrepopulateScreen.Companion.fromScreenId
 import com.d9tilov.moneymanager.R
 

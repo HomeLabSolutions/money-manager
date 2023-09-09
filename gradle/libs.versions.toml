@@ -1,12 +1,13 @@
 [versions]
-gradlePlugin = "8.1.0"
-kotlin = "1.8.22"
-ksp = "1.8.22-1.0.11"
+gradlePlugin = "8.1.1"
+kotlin = "1.9.10"
+ksp = "1.9.10-1.0.13"
 javaPoet = "1.13.0"
 javaVersion = "17"
 kotlinDatetime = "0.4.0"
 appCompat = "1.6.1"
 material = "1.9.0"
+activity = "1.8.0-beta01"
 androidAnnotation = "1.6.0"
 core = "1.10.1"
 coreRuntime = "2.2.0"
@@ -14,24 +15,24 @@ constraintLayout = "2.1.4"
 fragment = "1.6.1"
 retrofit = "2.9.0"
 googlePlayServices = "4.3.15"
-googlePlayServicesAuth = "20.6.0"
-navigation = "2.7.0"
-hilt = "2.46.1"
+googlePlayServicesAuth = "20.7.0"
+navigation = "2.7.1"
+hilt = "2.47"
 hiltNavigationCompose = "1.0.0"
-hiltPlugin = "2.44.2"
+hiltPlugin = "2.47"
 glide = "4.15.1"
 coil = "2.4.0"
-room = "2.5.2"
-paging = "3.2.0"
-firebaseCrashlytics = "18.4.0"
+room = "2.6.0-beta01"
+paging = "3.2.1"
+firebaseCrashlytics = "18.4.1"
 firebaseAnalytics = "21.3.0"
-firebaseCrashlyticsPlugin = "2.9.8"
+firebaseCrashlyticsPlugin = "2.9.9"
 firebaseStorage = "20.2.1"
 firebaseConfig = "21.4.1"
-firebaseBom = "32.2.2"
+firebaseBom = "32.2.3"
 firebaseUi = "8.0.2"
 firebaseAuth = "22.1.1"
-facebookSdk = "8.0.0"
+facebookSdk = "16.0.1"
 twitter = "3.3.0"
 okhttp = "4.11.0"
 viewpager = "1.0.0"
@@ -44,13 +45,14 @@ composeMaterial3 = "1.1.1"
 composeActivity = "1.7.2"
 composeViewModel = "2.6.1"
 composeRuntime = "2.6.1"
-androidxComposeCompiler = "1.4.8"
+androidxComposeCompiler = "1.5.3"
+androidxTracing = "1.1.0"
 worker = "2.8.1"
 workerHilt = "1.0.0"
 klaxon = "5.6"
 timber = "5.0.1"
 detektPlugin = "1.23.1"
-ktlint = "11.5.0"
+ktlint = "11.5.1"
 autonomousapps = "1.20.0"
 datastore = "1.0.0"
 billing = "6.0.1"
@@ -58,7 +60,7 @@ dotsIndicator = "4.3"
 androidChart = "v3.1.0"
 splashScreen = "1.0.1"
 startup = "1.1.1"
-junit = "4.13.2"
+junit = "4.101"
 serialization = "1.8.10"
 serializationKotlin = "1.5.1"
 
@@ -67,6 +69,7 @@ kotlinDatetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", v
 serializationKotlin = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serializationKotlin" }
 appCompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appCompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+activity = { group = "androidx.activity", name = "activity-ktx", version.ref = "activity" }
 androidAnnotation = { group = "androidx.annotation", name = "annotation", version.ref = "androidAnnotation" }
 core = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
 coreRuntime = { group = "androidx.arch.core", name = "core-runtime", version.ref = "coreRuntime" }
@@ -79,6 +82,7 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 retrofitMoshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
 room = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 roomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+roomRuntime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 roomPaging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 paging = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "paging" }
 navigation = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
@@ -119,6 +123,7 @@ composeViewModel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-c
 composeRuntime = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "composeRuntime" }
 composeUiTestManifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "compose" }
 composeConstraintLayout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "composeConstraintLayout" }
+androidx-tracing-ktx = { group = "androidx.tracing", name = "tracing-ktx", version.ref = "androidxTracing" }
 worker = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "worker" }
 workerHilt = { group = "androidx.hilt", name = "hilt-work", version.ref = "workerHilt" }
 workerHiltCompiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "workerHilt" }

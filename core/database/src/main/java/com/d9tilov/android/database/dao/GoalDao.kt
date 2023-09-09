@@ -16,9 +16,7 @@ interface GoalDao {
     suspend fun insert(goal: GoalDbModel)
 
     @Query("SELECT * FROM goal WHERE clientId=:uid")
-    fun getAll(
-        uid: String
-    ): Flow<List<GoalDbModel>>
+    fun getAll(uid: String): Flow<List<GoalDbModel>>
 
     @Update
     suspend fun update(goal: GoalDbModel)
