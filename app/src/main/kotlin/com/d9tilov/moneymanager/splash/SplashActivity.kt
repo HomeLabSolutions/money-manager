@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.d9tilov.android.core.constants.DataConstants.TAG
-import com.d9tilov.android.home.ui.MainActivity
+import com.d9tilov.moneymanager.home.MainActivity
 import com.d9tilov.moneymanager.prepopulate.PrepopulateActivity
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.splash.navigation.SplashNavigator

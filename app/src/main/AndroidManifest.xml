@@ -19,7 +19,7 @@
             android:value="false" />
 
         <activity
-            android:name="com.d9tilov.moneymanager.splash.SplashActivity"
+            android:name="com.d9tilov.moneymanager.home.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.App.Starting">
             <intent-filter>

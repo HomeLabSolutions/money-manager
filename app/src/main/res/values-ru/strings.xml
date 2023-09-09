@@ -42,4 +42,7 @@
     <string name="title_prepopulate_currency">Выберите валюту</string>
     <string name="title_prepopulate_budget">Текущий бюджет</string>
     <string name="toolbar_menu_skip">Пропустить</string>
+
+    <string name="bottom_menu_chart">Статистика</string>
+    <string name="bottom_menu_profile">Профиль</string>
 </resources>

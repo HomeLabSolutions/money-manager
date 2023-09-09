@@ -13,7 +13,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
 }
 
-val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystorePropertiesFile: File = rootProject.file("keystore.properties")
 val keystoreProperties = Properties()
 keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 
@@ -111,6 +111,8 @@ dependencies {
     implementation(project(":core:datastore"))
     implementation(project(":core:network"))
 
+    implementation(project(":transaction:transaction-domain:transaction-domain-contract"))
+
     implementation(project(":currency:currency-data:currency-data-impl"))
     implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
@@ -127,15 +129,20 @@ dependencies {
     implementation(project(":budget:budget-domain:budget-domain-model"))
     implementation(project(":budget:budget-domain:budget-domain-contract"))
 
+    implementation(project(":billing:billing-domain:billing-domain-contract"))
+
     implementation(project(":category:category-domain:category-domain-contract"))
 
-    implementation(project(":home:home-ui"))
     implementation(project(":budget:budget-ui"))
     implementation(project(":currency:currency-ui"))
+    implementation(project(":incomeexpense:incomeexpense-ui"))
+    implementation(project(":statistics:statistics-ui"))
+    implementation(project(":profile:profile-ui"))
 
     implementation(libs.appCompat)
     implementation(libs.material)
     implementation(libs.navigation)
+    implementation(libs.activity)
 
     implementation(libs.firebase)
     implementation(libs.firebaseUi)
@@ -149,12 +156,15 @@ dependencies {
     implementation(libs.composeUi)
     implementation(libs.composeViewModel)
     implementation(libs.composeMaterial3)
+    implementation(libs.composeMaterial3WindowSize)
     implementation(libs.composeFoundation)
     implementation(libs.composeToolingPreview)
     implementation(libs.hiltNavigationCompose)
     implementation(libs.composeMaterialIconsCore)
     implementation(libs.composeMaterialIconsExtended)
     implementation(libs.composeRuntime)
+
+    implementation(libs.androidx.tracing.ktx)
 
     implementation(libs.timber)
     implementation(libs.serializationKotlin)

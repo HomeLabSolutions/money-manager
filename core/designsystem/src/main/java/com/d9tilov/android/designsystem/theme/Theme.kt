@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.theme
+package com.d9tilov.android.designsystem.theme
 
 import android.app.Activity
 import android.os.Build
@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import com.d9tilov.moneymanager.theme.Color
 
 private val LightColorScheme = lightColorScheme(
     primary = Color.md_theme_light_primary,
@@ -98,7 +99,7 @@ fun MoneyManagerTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = MmTypography,
         content = content,
     )
 }

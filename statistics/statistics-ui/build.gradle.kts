@@ -1,6 +1,7 @@
 plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
+    id("moneymanager.android.library.compose")
     id("moneymanager.android.library.viewbinding")
     id("androidx.navigation.safeargs.kotlin")
     id("kotlin-parcelize")
