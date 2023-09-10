@@ -2,6 +2,7 @@ package com.d9tilov.moneymanager.prepopulate
 
 import android.app.Activity
 import android.content.Intent
+import androidx.annotation.StringRes
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -9,6 +10,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -33,7 +35,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -49,9 +52,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.budget.ui.BudgetScreen
 import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.android.currency.ui.CurrencyListScreen
+import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.home.MainActivity
 import com.d9tilov.moneymanager.prepopulate.PrepopulateScreen.Companion.fromScreenId
-import com.d9tilov.moneymanager.R
 
 private const val SHAPE_RADIUS = 10
 private const val FRACTION = 0.5f
@@ -81,7 +84,7 @@ fun PrepopulateScreen(
     onBudgetInputChanged: (String) -> Unit,
     onBudgetSaveAndComplete: () -> Unit
 ) {
-    var screenTypeId by rememberSaveable { mutableStateOf(0) }
+    var screenTypeId by rememberSaveable { mutableIntStateOf(0) }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -105,7 +108,7 @@ fun PrepopulateScreen(
                 onBudgetSave = onBudgetSaveAndComplete
             ) { newScreen -> screenTypeId = newScreen.id }
         }
-    ) { padding ->
+    ) { padding: PaddingValues ->
         Column(modifier = Modifier.padding(padding)) {
             when (screenTypeId.fromScreenId()) {
                 PrepopulateScreen.CurrencyScreen ->
@@ -138,7 +141,7 @@ fun BottomNavigationBar(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        var progress by remember { mutableStateOf((screenType.id + 1f) / PrepopulateScreen.SCREEN_COUNT) }
+        var progress by remember { mutableFloatStateOf((screenType.id + 1f) / PrepopulateScreen.SCREEN_COUNT) }
         ProgressIndicator(progress,
             Modifier
                 .padding(16.dp)
@@ -209,11 +212,27 @@ fun BottomNavigationBar(
 fun ProgressIndicator(indicatorProgress: Float, modifier: Modifier) {
     val progressAnimation by animateFloatAsState(
         targetValue = indicatorProgress,
-        animationSpec = tween(durationMillis = 1500, easing = FastOutSlowInEasing)
+        animationSpec = tween(durationMillis = 1500, easing = FastOutSlowInEasing), label = ""
     )
     LinearProgressIndicator(
         modifier = modifier
             .clip(RoundedCornerShape(20.dp)), // Rounded edges
         progress = progressAnimation
     )
+}
+
+sealed class PrepopulateScreen(val id: Int, @StringRes val title: Int) {
+
+    data object CurrencyScreen : PrepopulateScreen(0, R.string.title_prepopulate_currency)
+    data object BudgetScreen : PrepopulateScreen(1, R.string.title_prepopulate_budget)
+
+    companion object {
+        const val SCREEN_COUNT = 2
+
+        fun Int.fromScreenId() = when (this) {
+            0 -> CurrencyScreen
+            1 -> BudgetScreen
+            else -> throw IllegalArgumentException("Wrong screen id: $this")
+        }
+    }
 }

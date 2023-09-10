@@ -28,11 +28,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.d9tilov.moneymanager.prepopulate.PrepopulateActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MoneyManager"
-            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
