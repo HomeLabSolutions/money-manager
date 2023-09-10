@@ -27,7 +27,6 @@ include(":budget:budget-domain:budget-domain-impl")
 include(":budget:budget-ui")
 
 include(":user-info:user-di")
-include(":user-info:user-data:user-data-model")
 include(":user-info:user-data:user-data-contract")
 include(":user-info:user-data:user-data-impl")
 include(":user-info:user-domain:user-domain-model")
