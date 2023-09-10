@@ -1,11 +1,13 @@
 package com.d9tilov.moneymanager.home
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -18,18 +20,33 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
+import com.d9tilov.moneymanager.prepopulate.PrepopulateScreen
 import com.d9tilov.moneymanager.ui.MmApp
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels()
+
+    private val providers = arrayListOf(
+        AuthUI.IdpConfig.PhoneBuilder().build(),
+        AuthUI.IdpConfig.GoogleBuilder().build()
+    )
+    private val startForResult: ActivityResultLauncher<Intent> =
+        registerForActivityResult(FirebaseAuthUIActivityResultContract()) { result ->
+            Timber.tag(DataConstants.TAG).d("Sign in result: $result")
+            viewModel.updateData()
+        }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -40,12 +57,27 @@ class MainActivity : ComponentActivity() {
         // Update the uiState
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState
-                    .onEach {
-                        System.out.println("uistate")
-                        uiState = it
+                viewModel.uiState.collectLatest { state ->
+                    uiState = state
+                    when (uiState) {
+                        is MainActivityUiState.Success.Auth -> {
+                            viewModel.setToLoadingState()
+                            startForResult.launch(
+                                AuthUI.getInstance()
+                                    .createSignInIntentBuilder()
+                                    .setLogo(com.d9tilov.android.designsystem.R.drawable.ic_money_manager_logo)
+                                    .setTheme(com.d9tilov.android.designsystem.R.style.Theme_Login)
+                                    .setAvailableProviders(providers)
+                                    .setIsSmartLockEnabled(false)
+                                    .build()
+                            )
+                        }
+
+                        is MainActivityUiState.Success.Main -> runMain()
+                        is MainActivityUiState.Success.Prepopulate -> setContent { MoneyManagerTheme { PrepopulateScreen() } }
+                        else -> {}
                     }
-                    .collect()
+                }
             }
         }
 
@@ -53,20 +85,20 @@ class MainActivity : ComponentActivity() {
         // evaluated each time the app needs to be redrawn so it should be fast to avoid blocking
         // the UI.
         splashScreen.setKeepOnScreenCondition {
-            System.out.println("splash")
             when (uiState) {
-                MainActivityUiState.Loading -> true
+                is MainActivityUiState.Loading -> true
                 is MainActivityUiState.Success -> false
             }
         }
 
+    }
+
+    private fun runMain() {
         // Turn off the decor fitting system windows, which allows us to handle insets,
         // including IME animations, and go edge-to-edge
         // This also sets up the initial system bar style based on the platform theme
         enableEdgeToEdge()
-
         setContent {
-            System.out.println("setContent")
             val darkTheme = isSystemInDarkTheme()
 
             // Update the edge to edge configuration to match the theme

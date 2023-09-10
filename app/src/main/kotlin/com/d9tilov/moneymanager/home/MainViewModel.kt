@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.home
 
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.backup.domain.contract.BackupInteractor
@@ -19,8 +20,10 @@ import dagger.Lazy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOn
@@ -48,46 +51,48 @@ class MainViewModel @Inject constructor(
         Timber.d("Unable to update currency: $exception")
     }
 
-    val uiState: StateFlow<MainActivityUiState> = preferencesStore.uid.map { uid ->
-        val firebaseUid = auth.currentUser?.uid
-        if (firebaseUid == null) {
-            MainActivityUiState.Success.Auth
-        } else {
-            if (firebaseUid != uid) {
-                if (uid != null) userInteractor.deleteUser()
-                auth.signOut()
-                MainActivityUiState.Success.Auth
-            } else {
-                var user = userInteractor.getCurrentUser().firstOrNull()
-                if (user == null) {
-                    try {
-                        backupInteractor.restoreBackup()
-                    } catch (ex: NetworkException) {
-                        Timber.tag(DataConstants.TAG).d("Do work with network exception: $ex")
-                    } catch (ex: WrongUidException) {
-                        Timber.tag(DataConstants.TAG).d("Do work with wrong uid exception: $ex")
-                    } catch (ex: FileNotFoundException) {
-                        Timber.tag(DataConstants.TAG).d("Do work with file not found error: $ex")
-                    } catch (ex: FirebaseException) {
-                        Timber.tag(DataConstants.TAG).d("Do work with exception: $ex")
-                    }
-                    user = userInteractor.getCurrentUser().firstOrNull()
-                    if (user == null || user.showPrepopulate) {
-                        userInteractor.createUser(auth.currentUser.toDataModel())
-                        categoryInteractor.get().createDefaultCategories()
-                        MainActivityUiState.Success.Prepopulate
-                    } else MainActivityUiState.Success.Main
+    private val _uiState: MutableStateFlow<MainActivityUiState> = MutableStateFlow(MainActivityUiState.Loading)
+    val uiState: StateFlow<MainActivityUiState> = _uiState
+    init {
+        viewModelScope.launch {
+            preferencesStore.uid.map { uid ->
+                val firebaseUid = auth.currentUser?.uid
+                if (firebaseUid == null) {
+                    MainActivityUiState.Success.Auth
                 } else {
-                    if (userInteractor.showPrepopulate()) MainActivityUiState.Success.Prepopulate
-                    else MainActivityUiState.Success.Main
+                    if (firebaseUid != uid) {
+                        if (uid != null) userInteractor.deleteUser()
+                        auth.signOut()
+                        MainActivityUiState.Success.Auth
+                    } else {
+                        var user = userInteractor.getCurrentUser().firstOrNull()
+                        if (user == null) {
+                            try {
+                                backupInteractor.restoreBackup()
+                            } catch (ex: NetworkException) {
+                                Timber.tag(DataConstants.TAG).d("Do work with network exception: $ex")
+                            } catch (ex: WrongUidException) {
+                                Timber.tag(DataConstants.TAG).d("Do work with wrong uid exception: $ex")
+                            } catch (ex: FileNotFoundException) {
+                                Timber.tag(DataConstants.TAG).d("Do work with file not found error: $ex")
+                            } catch (ex: FirebaseException) {
+                                Timber.tag(DataConstants.TAG).d("Do work with exception: $ex")
+                            }
+                            user = userInteractor.getCurrentUser().firstOrNull()
+                            if (user == null || user.showPrepopulate) {
+                                userInteractor.createUser(auth.currentUser.toDataModel())
+                                categoryInteractor.get().createDefaultCategories()
+                                MainActivityUiState.Success.Prepopulate
+                            } else MainActivityUiState.Success.Main
+                        } else {
+                            if (userInteractor.showPrepopulate()) MainActivityUiState.Success.Prepopulate
+                            else MainActivityUiState.Success.Main
+                        }
+                    }
                 }
-            }
+            }.collectLatest { state -> _uiState.value = state }
         }
-    }.stateIn(
-        scope = viewModelScope,
-        initialValue = MainActivityUiState.Loading,
-        started = SharingStarted.WhileSubscribed(5_000),
-    )
+    }
 
     fun updateData() {
         Timber.tag(DataConstants.TAG).d("Update data")
@@ -130,6 +135,10 @@ class MainViewModel @Inject constructor(
 
     override fun onCleared() {
         billingInteractor.terminateBillingConnection()
+    }
+
+    fun setToLoadingState() {
+        _uiState.value = MainActivityUiState.Loading
     }
 }
 
