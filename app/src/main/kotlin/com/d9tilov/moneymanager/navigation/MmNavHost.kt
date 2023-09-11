@@ -5,10 +5,13 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import com.d9tilov.android.incomeexpense.navigation.incomeExpenseNavigationRoute
 import com.d9tilov.android.incomeexpense.navigation.incomeExpenseScreen
+import com.d9tilov.android.profile.ui.navigation.budgetScreen
+import com.d9tilov.android.profile.ui.navigation.currencyScreen
 import com.d9tilov.android.profile.ui.navigation.navigateToBudgetScreen
 import com.d9tilov.android.profile.ui.navigation.navigateToCurrencyListScreen
 import com.d9tilov.android.profile.ui.navigation.navigateToSettingsScreen
 import com.d9tilov.android.profile.ui.navigation.profileScreen
+import com.d9tilov.android.profile.ui.navigation.settingsScreen
 import com.d9tilov.android.statistics.ui.navigation.statisticsScreen
 import com.d9tilov.moneymanager.ui.MmAppState
 
@@ -34,5 +37,8 @@ fun MmNavHost(
             navigateToSettingsScreen = navController::navigateToSettingsScreen,
             navigateToGoalsScreen = { /* no-op */ }
         )
+        currencyScreen { navController.popBackStack() }
+        budgetScreen { navController.popBackStack() }
+        settingsScreen { navController.popBackStack() }
     }
 }

@@ -24,6 +24,7 @@ import com.d9tilov.android.budget_ui.R
 import com.d9tilov.android.designsystem.CurrencyTextFieldExtraBig
 import com.d9tilov.android.designsystem.FilledButton
 import com.d9tilov.android.designsystem.MmTopAppBar
+import com.d9tilov.android.designsystem.SaveButton
 
 @Composable
 fun BudgetRoute(viewModel: BudgetAmountViewModel = hiltViewModel(), clickBack: () -> Unit) {
@@ -57,8 +58,8 @@ fun BudgetScreen(
                 )
             }
         }
-    ) { padding ->
-        Column(modifier = Modifier.padding(padding)) {
+    ) { _ ->
+        Column {
             Text(
                 text = stringResource(R.string.budget_sum_title),
                 modifier = Modifier.padding(
@@ -72,7 +73,8 @@ fun BudgetScreen(
                 uiState.budgetSum,
                 uiState.currencySymbol,
                 true,
-                Modifier.fillMaxWidth()
+                Modifier
+                    .fillMaxWidth()
                     .padding(
                         horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)
                     )
@@ -82,16 +84,7 @@ fun BudgetScreen(
             }
             Spacer(modifier = Modifier.weight(1f))
             if (!showInPrepopulate) {
-                FilledButton(
-                    onClick = onSave,
-                    modifier = Modifier
-                        .padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium))
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        text = stringResource(R.string.save)
-                    )
-                }
+                SaveButton(onClick = onSave)
             }
         }
     }
@@ -100,5 +93,5 @@ fun BudgetScreen(
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreviewBudget() {
-    BudgetRoute {}
+    BudgetScreen(uiState = BudgetUiState(), onBudgetInputChanged = {})
 }

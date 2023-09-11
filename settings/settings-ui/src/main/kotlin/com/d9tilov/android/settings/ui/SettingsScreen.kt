@@ -4,10 +4,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,6 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
+import com.d9tilov.android.designsystem.SaveButton
 import com.d9tilov.android.settings.ui.vm.SettingsUiState
 import com.d9tilov.android.settings.ui.vm.SettingsViewModel
 import com.d9tilov.android.settings.ui.vm.SubscriptionUiState
@@ -41,7 +45,10 @@ fun SettingsRoute(viewModel: SettingsViewModel = hiltViewModel(), clickBack: () 
     SettingsScreen(
         uiState = uiState,
         onPeriodDateChanged = viewModel::changeFiscalDay,
-        onSave = viewModel::save,
+        onSave = {
+            viewModel.save()
+            clickBack.invoke()
+        },
         onClickBack = clickBack
     )
 }
@@ -64,11 +71,12 @@ fun SettingsScreen(
             )
         }
     ) { padding ->
-        Column(modifier = Modifier.padding(padding)) {
+        Column(modifier = modifier) {
             uiState.subscriptionState?.let { subscriptionState ->
                 SubscriptionLayout(
                     uiState = subscriptionState,
                     modifier = Modifier
+                        .padding(padding)
                         .padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium))
                         .fillMaxWidth(),
                     onClick = onClickSubscription
@@ -76,16 +84,17 @@ fun SettingsScreen(
             }
             StartOfPeriodLayout(
                 day = uiState.startPeriodDay,
-                modifier = Modifier.fillMaxWidth().padding(
-                    dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)
-                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
                 onPeriodDateChanged = onPeriodDateChanged
             )
+            Spacer(modifier = Modifier.weight(1f))
+            SaveButton(onClick = onSave)
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StartOfPeriodLayout(day: String, modifier: Modifier, onPeriodDateChanged: (String) -> Unit) {
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
@@ -97,7 +106,11 @@ fun StartOfPeriodLayout(day: String, modifier: Modifier, onPeriodDateChanged: (S
             OutlinedTextField(
                 value = day,
                 modifier = Modifier.padding(start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small)),
-                onValueChange = onPeriodDateChanged
+                maxLines = 1,
+                onValueChange = { text: String ->
+                    if (isInputDateValid(text)) onPeriodDateChanged.invoke(text)
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
         }
         Text(
@@ -107,11 +120,21 @@ fun StartOfPeriodLayout(day: String, modifier: Modifier, onPeriodDateChanged: (S
     }
 }
 
+private fun isInputDateValid(input: String): Boolean {
+    if (input.isEmpty()) return false
+    return try {
+        val num = input.toInt()
+        num in 1..31
+    } catch (ex: NumberFormatException) {
+        false
+    }
+}
+
 @Composable
 fun SubscriptionLayout(
     uiState: SubscriptionUiState,
     modifier: Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Card(
         modifier = modifier.clickable { onClick() },

@@ -15,10 +15,12 @@
  */
 
 import com.android.build.api.dsl.ApplicationExtension
+import com.android.moneymanager.extensions.buildLibs
 import com.android.moneymanager.extensions.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.extra
 
 class AndroidApplicationConventionPlugin : Plugin<Project> {
@@ -32,6 +34,9 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = rootProject.extra.get("targetSdkVersion") as Int
+            }
+            dependencies {
+                "implementation"(buildLibs.findLibrary("timber").get())
             }
         }
     }
