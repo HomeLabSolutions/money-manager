@@ -36,11 +36,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.android.currency_ui.R
 import com.d9tilov.android.designsystem.MmTopAppBar
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Composable
 fun CurrencyListRoute(viewModel: CurrencyViewModel = hiltViewModel(), clickBack: () -> Unit) {
@@ -87,7 +89,7 @@ fun CurrencyListScreen(
                 val state = rememberLazyListState()
                 val coroutineScope = rememberCoroutineScope()
                 LazyColumn(
-                    contentPadding = PaddingValues(16.dp),
+                    contentPadding = padding,
                     modifier = modifier.consumeWindowInsets(padding),
                     state = state
                 ) {
@@ -97,8 +99,9 @@ fun CurrencyListScreen(
                 }
                 LaunchedEffect(true) {
                     val checkedIndex = currencyList.indexOfFirst { it.isBase }
-                    if (checkedIndex == -1) return@LaunchedEffect
-                    coroutineScope.launch { state.scrollToItem(checkedIndex) }
+                    Timber.tag(TAG).d("Position: $checkedIndex")
+                    if (checkedIndex <= 0) return@LaunchedEffect
+                    coroutineScope.launch { state.scrollToItem(checkedIndex - 1) }
                 }
             }
         }
@@ -107,18 +110,27 @@ fun CurrencyListScreen(
 
 @Composable
 fun CurrencyItem(currency: DomainCurrency, clickCallback: (currency: DomainCurrency) -> Unit) {
-    Column(Modifier.fillMaxWidth().clickable { clickCallback(currency) }) {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .clickable { clickCallback(currency) }) {
         Row(
-            modifier = Modifier.wrapContentHeight(Alignment.CenterVertically).fillMaxWidth()
+            modifier = Modifier
+                .wrapContentHeight(Alignment.CenterVertically)
+                .fillMaxWidth()
                 .height(60.dp)
         ) {
             Text(
                 text = CurrencyUtils.getCurrencyIcon(currency.code),
-                modifier = Modifier.align(Alignment.CenterVertically).padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(horizontal = 16.dp),
                 fontSize = 30.sp
             )
             Column(
-                modifier = Modifier.align(Alignment.CenterVertically).fillMaxWidth(0.85f)
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .fillMaxWidth(0.85f)
             ) {
                 Text(
                     text = CurrencyUtils.getCurrencyFullName(currency.code),
@@ -132,7 +144,8 @@ fun CurrencyItem(currency: DomainCurrency, clickCallback: (currency: DomainCurre
                 )
             }
             Icon(
-                modifier = Modifier.align(Alignment.CenterVertically)
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
                     .alpha(if (currency.isBase) 1f else 0f),
                 imageVector = Icons.Default.Check,
                 contentDescription = "content description",

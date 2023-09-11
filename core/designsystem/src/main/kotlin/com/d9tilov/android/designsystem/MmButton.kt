@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
@@ -13,10 +14,13 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.ProvideTextStyle
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -55,8 +59,30 @@ fun FilledButton(
         colors = colors,
         contentPadding = contentPadding,
         content = {
-            ProvideTextStyle(value = MaterialTheme.typography.labelSmall) {
+            ProvideTextStyle(value = MaterialTheme.typography.labelLarge) {
                 content()
+            }
+        }
+    )
+}
+
+@Composable
+fun SaveButton(
+    onClick: () -> Unit,
+    text: String = stringResource(R.string.save),
+    enabled: Boolean = true,
+) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .padding(dimensionResource(R.dimen.padding_medium))
+            .fillMaxWidth(),
+        enabled = enabled,
+        colors = MoneyManagerButtonDefaults.filledButtonColors(),
+        contentPadding = MoneyManagerButtonDefaults.buttonContentPadding(small = false),
+        content = {
+            ProvideTextStyle(value = MaterialTheme.typography.labelLarge) {
+                Text(text = text)
             }
         }
     )
