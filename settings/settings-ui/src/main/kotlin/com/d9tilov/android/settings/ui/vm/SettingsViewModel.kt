@@ -7,6 +7,7 @@ import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.exceptions.WrongUidException
+import com.d9tilov.android.core.utils.toBackupDate
 import com.d9tilov.android.network.exception.NetworkException
 import com.d9tilov.android.settings.ui.navigation.SettingsNavigator
 import com.d9tilov.android.settings_ui.R
@@ -27,21 +28,25 @@ private const val UNKNOWN_BACKUP_DATE = -1L
 data class SettingsUiState(
     val subscriptionState: SubscriptionUiState? = null,
     val startPeriodDay: String = "1",
-    val lastBackupTimestamp: Long = UNKNOWN_BACKUP_DATE,
+    val backupState: BackupState = BackupState(),
+)
+
+data class BackupState(
+    val lastBackupTimestamp: String = "",
     val backupLoading: Boolean = false,
-    val showBackupCloseBtn: Boolean = false
+    val showBackupCloseBtn: Boolean = false,
 )
 
 data class SubscriptionUiState(
     @StringRes val title: Int = R.string.settings_subscription_premium_title,
     @StringRes val description: Int = R.string.settings_subscription_premium_description,
-    val minPrice: SubscriptionPriceUiState? = null
+    val minPrice: SubscriptionPriceUiState? = null,
 )
 
 data class SubscriptionPriceUiState(
     val amount: String = "",
     val code: String = "",
-    val symbol: String = ""
+    val symbol: String = "",
 )
 
 @HiltViewModel
@@ -92,20 +97,25 @@ class SettingsViewModel @Inject constructor(
                     null
                 }
                 val fiscalDay = user?.fiscalDay ?: 1
-                SettingsUiState(
-                    subscriptionState,
-                    fiscalDay.toString(),
-                    backupData.lastBackupTimestamp,
-                    false,
-                    backupData.lastBackupTimestamp != UNKNOWN_BACKUP_DATE
+                val curValue = _uiState.value
+                curValue.copy(
+                    subscriptionState = subscriptionState,
+                    startPeriodDay = fiscalDay.toString(),
+                    backupState = curValue.backupState.copy(
+                        lastBackupTimestamp = backupData.lastBackupTimestamp.toBackupDate(),
+                        showBackupCloseBtn = backupData.lastBackupTimestamp != UNKNOWN_BACKUP_DATE
+                    )
                 )
-            }.collect { state -> _uiState.update { state } }
+            }.collect { state ->
+                _uiState.update { state }
+                Timber.tag(TAG).d("Backup completed3: ${_uiState.value}")
+            }
         }
     }
 
     fun backup() {
         viewModelScope.launch {
-            _uiState.update { it.copy(backupLoading = true) }
+            _uiState.update { state -> state.copy(backupState = state.backupState.copy(backupLoading = true)) }
             try {
                 backupInteractor.makeBackup()
                 setMessage(R.string.settings_backup_succeeded)
@@ -122,7 +132,9 @@ class SettingsViewModel @Inject constructor(
                 Timber.tag(TAG).d("Do work with exception: $ex")
                 setMessage(R.string.settings_backup_error)
             }
-            _uiState.update { it.copy(backupLoading = false) }
+            Timber.tag(TAG).d("Backup completed1: ${_uiState.value}")
+            _uiState.update { state -> state.copy(backupState = state.backupState.copy(backupLoading = false)) }
+            Timber.tag(TAG).d("Backup completed2: ${_uiState.value}")
         }
     }
 

@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AddTask
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.BarChart
+import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.List
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -16,6 +17,8 @@ object MoneyManagerIcons {
     val ArrowBack = Icons.Rounded.ArrowBack
     val ActionAdd = Icons.Rounded.AddTask
     val Subscription = R.drawable.ic_money_manager_logo
+    val Backup = R.drawable.ic_refresh
+    val Close = Icons.Rounded.Clear
 }
 
 sealed class Icon {
