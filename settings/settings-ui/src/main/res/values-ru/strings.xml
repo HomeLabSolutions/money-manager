@@ -24,4 +24,7 @@
     <string name="settings_backup_user_error">Неизвестный пользователь</string>
     <string name="settings_backup_file_not_found_error">Файл не найден</string>
     <string name="profile_item_settings_title">Настройки</string>
+
+    <string name="settings_backup">Сделать backup</string>
+    <string name="settings_backup_info">Последняя копия: %1$s</string>
 </resources>
