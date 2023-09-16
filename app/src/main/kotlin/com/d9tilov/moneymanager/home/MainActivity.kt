@@ -126,5 +126,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Suppress("MagicNumber")
 private val lightScrim = Color.argb(0xe6, 0xFF, 0xFF, 0xFF)
+@Suppress("MagicNumber")
 private val darkScrim = Color.argb(0x80, 0x1b, 0x1b, 0x1b)

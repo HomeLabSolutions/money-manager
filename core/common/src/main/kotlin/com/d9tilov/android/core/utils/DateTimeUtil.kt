@@ -2,6 +2,7 @@
 
 package com.d9tilov.android.core.utils
 
+import com.d9tilov.android.core.constants.DataConstants.UNKNOWN_BACKUP_DATE
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
@@ -28,7 +29,7 @@ private const val SECONDS_MINUS_ONE = 59
 private const val HOURS_MINUS_ONE = 23
 
 fun Long.toBackupDate(): String {
-    return SimpleDateFormat(BACKUP_DATE, Locale.getDefault()).format(Date(this))
+    return if (this == UNKNOWN_BACKUP_DATE) "-" else SimpleDateFormat(BACKUP_DATE, Locale.getDefault()).format(Date(this))
 }
 
 fun LocalDateTime.toBudgetCreatedDateStr(): String {

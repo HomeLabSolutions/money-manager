@@ -21,22 +21,4 @@ class BackupDeletionViewModel @Inject constructor(
     private val backupInteractor: BackupInteractor
 ) : BaseViewModel<SettingsBackupDeletionNavigator>() {
 
-    fun deleteBackup() {
-        viewModelScope.launch(Dispatchers.IO) {
-            when (val result = backupInteractor.deleteBackup()) {
-                is ResultOf.Success -> setMessage(R.string.settings_backup_deleted)
-                is ResultOf.Failure -> {
-                    when (result.throwable) {
-                        is NetworkException -> setMessage(R.string.settings_backup_network_error)
-                        is WrongUidException -> setMessage(R.string.settings_backup_user_error)
-                        is FileNotFoundException -> setMessage(R.string.settings_backup_file_not_found_error)
-                        is FirebaseException -> setMessage(R.string.settings_backup_error)
-                        else -> setMessage(R.string.settings_backup_user_error)
-                    }
-                }
-                else -> {}
-            }
-            withContext(Dispatchers.Main) { navigator?.dismiss() }
-        }
-    }
 }

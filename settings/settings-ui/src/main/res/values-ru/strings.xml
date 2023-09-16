@@ -27,4 +27,6 @@
 
     <string name="settings_backup">Сделать backup</string>
     <string name="settings_backup_info">Последняя копия: %1$s</string>
+    <string name="settings_backup_delete_title">Удалить резервную копию?</string>
+    <string name="settings_backup_deleted">Резервная копия удалена</string>
 </resources>
