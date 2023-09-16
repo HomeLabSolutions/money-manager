@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 fun SimpleDialog(
     show: Boolean,
     title: String,
-    subtitle: String,
+    subtitle: String = "",
     confirmButton: String,
     dismissButton: String,
     onDismiss: () -> Unit,

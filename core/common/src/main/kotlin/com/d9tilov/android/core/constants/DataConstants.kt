@@ -11,5 +11,6 @@ object DataConstants {
     const val PREFERENCE_LAST_BACKUP_DATE = BASE_NAMESPACE + "last.backup.date"
     const val DEFAULT_DATA_ID = 0L
     const val NO_ID = -1L
+    const val UNKNOWN_BACKUP_DATE = -1L
     const val NO_RES_ID = -1
 }

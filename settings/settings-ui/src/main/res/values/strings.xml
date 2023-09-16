@@ -30,4 +30,6 @@
 
     <string name="settings_backup">Make backup</string>
     <string name="settings_backup_info">Last backup: %1$s</string>
+    <string name="settings_backup_delete_title">Delete backup?</string>
+    <string name="settings_backup_deleted">Backup file was deleted</string>
 </resources>

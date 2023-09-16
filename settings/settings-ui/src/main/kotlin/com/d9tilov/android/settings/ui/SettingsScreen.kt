@@ -1,6 +1,8 @@
 package com.d9tilov.android.settings.ui
 
-import androidx.compose.animation.core.LinearEasing
+import android.widget.Space
+import android.widget.Toast
+import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -26,10 +28,14 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -42,6 +48,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
 import com.d9tilov.android.designsystem.SaveButton
+import com.d9tilov.android.designsystem.SimpleDialog
 import com.d9tilov.android.settings.ui.vm.BackupState
 import com.d9tilov.android.settings.ui.vm.SettingsUiState
 import com.d9tilov.android.settings.ui.vm.SettingsViewModel
@@ -51,6 +58,13 @@ import com.d9tilov.android.settings_ui.R
 @Composable
 fun SettingsRoute(viewModel: SettingsViewModel = hiltViewModel(), clickBack: () -> Unit) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        viewModel.errorMessage
+            .collect { message -> Toast.makeText(context, message, Toast.LENGTH_SHORT)
+                .show()
+            }
+    }
     SettingsScreen(
         uiState = uiState,
         onPeriodDateChanged = viewModel::changeFiscalDay,
@@ -59,7 +73,7 @@ fun SettingsRoute(viewModel: SettingsViewModel = hiltViewModel(), clickBack: () 
             clickBack.invoke()
         },
         onBackupClick = viewModel::backup,
-        onClearBackupClick = viewModel::backup,
+        onClearBackupClick = viewModel::deleteBackup,
         onClickBack = clickBack
     )
 }
@@ -84,6 +98,7 @@ fun SettingsScreen(
             )
         }
     ) { padding ->
+        val openAlertDialog = remember { mutableStateOf(false) }
         Column(modifier = modifier) {
             uiState.subscriptionState?.let { subscriptionState ->
                 SubscriptionLayout(
@@ -108,10 +123,21 @@ fun SettingsScreen(
                     .fillMaxWidth()
                     .padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
                 onBackupClick = onBackupClick,
-                onClearBackupClick = onClearBackupClick,
+                onClearBackupClick = { openAlertDialog.value = true },
             )
             Spacer(modifier = Modifier.weight(1f))
             SaveButton(onClick = onSave)
+            SimpleDialog(
+                show = openAlertDialog.value,
+                title = stringResource(R.string.settings_backup_delete_title),
+                dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
+                confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
+                onConfirm = {
+                    openAlertDialog.value = false
+                    onClearBackupClick.invoke()
+                },
+                onDismiss = { openAlertDialog.value = false }
+            )
         }
     }
 }
@@ -154,7 +180,7 @@ fun BackupLayout(
         initialValue = 0f,
         targetValue = 360f,
         animationSpec = infiniteRepeatable(
-            animation = tween(2000, easing = LinearEasing),
+            animation = tween(2000, easing = FastOutLinearInEasing),
             repeatMode = RepeatMode.Restart
         ), label = ""
     )
@@ -187,15 +213,19 @@ fun BackupLayout(
                 contentDescription = "Backup"
             )
         }
-        IconButton(
-            modifier = Modifier.weight(1f),
-            onClick = onClearBackupClick
-        ) {
-            Icon(
-                imageVector = MoneyManagerIcons.Close,
-                contentDescription = "Close",
-                tint = MaterialTheme.colorScheme.error
-            )
+        if (backupState.showBackupCloseBtn) {
+            IconButton(
+                modifier = Modifier.weight(1f),
+                onClick = onClearBackupClick
+            ) {
+                Icon(
+                    imageVector = MoneyManagerIcons.Close,
+                    contentDescription = "Close",
+                    tint = MaterialTheme.colorScheme.error
+                )
+            }
+        } else {
+            Spacer(modifier = Modifier.weight(1f))
         }
     }
 }

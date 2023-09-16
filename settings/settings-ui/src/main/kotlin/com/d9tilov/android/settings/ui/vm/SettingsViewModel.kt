@@ -1,20 +1,23 @@
 package com.d9tilov.android.settings.ui.vm
 
 import androidx.annotation.StringRes
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.backup.domain.contract.BackupInteractor
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
-import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.core.constants.DataConstants.TAG
+import com.d9tilov.android.core.constants.DataConstants.UNKNOWN_BACKUP_DATE
 import com.d9tilov.android.core.exceptions.WrongUidException
+import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.android.core.utils.toBackupDate
 import com.d9tilov.android.network.exception.NetworkException
-import com.d9tilov.android.settings.ui.navigation.SettingsNavigator
 import com.d9tilov.android.settings_ui.R
 import com.d9tilov.android.user.domain.contract.UserInteractor
 import com.google.firebase.FirebaseException
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
@@ -22,8 +25,6 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.FileNotFoundException
 import javax.inject.Inject
-
-private const val UNKNOWN_BACKUP_DATE = -1L
 
 data class SettingsUiState(
     val subscriptionState: SubscriptionUiState? = null,
@@ -54,10 +55,12 @@ class SettingsViewModel @Inject constructor(
     private val backupInteractor: BackupInteractor,
     private val userInteractor: UserInteractor,
     billingInteractor: BillingInteractor
-) : BaseViewModel<SettingsNavigator>() {
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SettingsUiState())
     val uiState = _uiState.asStateFlow()
+    private val _errorMessage = MutableSharedFlow<Int>()
+    val errorMessage = _errorMessage.asSharedFlow()
 
     init {
         viewModelScope.launch {
@@ -118,23 +121,41 @@ class SettingsViewModel @Inject constructor(
             _uiState.update { state -> state.copy(backupState = state.backupState.copy(backupLoading = true)) }
             try {
                 backupInteractor.makeBackup()
-                setMessage(R.string.settings_backup_succeeded)
+                _errorMessage.emit(R.string.settings_backup_succeeded)
             } catch (ex: NetworkException) {
                 Timber.tag(TAG).d("Do work with network exception: $ex")
-                setMessage(R.string.settings_backup_network_error)
+                _errorMessage.emit(R.string.settings_backup_network_error)
             } catch (ex: WrongUidException) {
                 Timber.tag(TAG).d("Do work with wrong uid exception: $ex")
-                setMessage(R.string.settings_backup_user_error)
+                _errorMessage.emit(R.string.settings_backup_user_error)
             } catch (ex: FileNotFoundException) {
                 Timber.tag(TAG).d("Do work with file not found error: $ex")
-                setMessage(R.string.settings_backup_file_not_found_error)
+                _errorMessage.emit(R.string.settings_backup_file_not_found_error)
             } catch (ex: FirebaseException) {
                 Timber.tag(TAG).d("Do work with exception: $ex")
-                setMessage(R.string.settings_backup_error)
+                _errorMessage.emit(R.string.settings_backup_error)
             }
             Timber.tag(TAG).d("Backup completed1: ${_uiState.value}")
             _uiState.update { state -> state.copy(backupState = state.backupState.copy(backupLoading = false)) }
             Timber.tag(TAG).d("Backup completed2: ${_uiState.value}")
+        }
+    }
+
+    fun deleteBackup() {
+        viewModelScope.launch {
+            when (val result = backupInteractor.deleteBackup()) {
+                is ResultOf.Success -> _errorMessage.emit(R.string.settings_backup_deleted)
+                is ResultOf.Failure -> {
+                    when (result.throwable) {
+                        is NetworkException -> _errorMessage.emit(R.string.settings_backup_network_error)
+                        is WrongUidException -> _errorMessage.emit(R.string.settings_backup_user_error)
+                        is FileNotFoundException -> _errorMessage.emit(R.string.settings_backup_file_not_found_error)
+                        is FirebaseException -> _errorMessage.emit(R.string.settings_backup_error)
+                        else -> _errorMessage.emit(R.string.settings_backup_user_error)
+                    }
+                }
+                else -> {}
+            }
         }
     }
 

@@ -27,5 +27,4 @@ dependencies {
     implementation(libs.roomPaging)
     kapt(libs.roomCompiler)
     implementation(libs.coroutinesCore)
-
 }
