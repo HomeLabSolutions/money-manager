@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -49,7 +51,10 @@ fun MmApp(
         val snackbarHostState = remember { SnackbarHostState() }
 
         Scaffold(
-            modifier = Modifier.semantics {
+            modifier = Modifier
+                .statusBarsPadding()
+                .systemBarsPadding()
+                .semantics {
                 testTagsAsResourceId = true
             },
             containerColor = Color.Transparent,
@@ -79,13 +84,16 @@ fun MmApp(
                     ),
             ) {
                 Column(Modifier.fillMaxSize()) {
-                    MmNavHost(appState = appState, onShowSnackbar = { message, action ->
-                        snackbarHostState.showSnackbar(
-                            message = message,
-                            actionLabel = action,
-                            duration = SnackbarDuration.Short,
-                        ) == SnackbarResult.ActionPerformed
-                    })
+                    MmNavHost(
+                        appState = appState,
+                        onShowSnackbar = { message, action ->
+                            snackbarHostState.showSnackbar(
+                                message = message,
+                                actionLabel = action,
+                                duration = SnackbarDuration.Short,
+                            ) == SnackbarResult.ActionPerformed
+                        },
+                    )
                 }
             }
         }

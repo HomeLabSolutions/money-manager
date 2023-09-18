@@ -1,6 +1,5 @@
 package com.d9tilov.android.settings.ui
 
-import android.widget.Space
 import android.widget.Toast
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.RepeatMode
@@ -49,6 +48,7 @@ import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
 import com.d9tilov.android.designsystem.SaveButton
 import com.d9tilov.android.designsystem.SimpleDialog
+import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.android.settings.ui.vm.BackupState
 import com.d9tilov.android.settings.ui.vm.SettingsUiState
 import com.d9tilov.android.settings.ui.vm.SettingsViewModel
@@ -295,9 +295,11 @@ fun SubscriptionDescription(subtitle: String) {
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultSubscriptionPreview() {
-    SettingsScreen(
-        SettingsUiState(SubscriptionUiState(), startPeriodDay = 30.toString()),
-        onPeriodDateChanged = {}
-    )
+fun DefaultSettingsPreview() {
+    MoneyManagerTheme {
+        SettingsScreen(
+            SettingsUiState(SubscriptionUiState(), startPeriodDay = 30.toString()),
+            onPeriodDateChanged = {}
+        )
+    }
 }

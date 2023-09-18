@@ -17,7 +17,7 @@ interface BillingRepo {
     val billingConnectionReady: Flow<Boolean>
     fun startBillingConnection()
     fun terminateBillingConnection()
-    fun getSkuDetails(): Flow<List<com.d9tilov.android.billing.domain.model.BillingSkuDetails>>
+    fun getSkuDetails(): Flow<List<BillingSkuDetails>>
     fun buySku(
         tag: String,
         productDetails: ProductDetails?,
