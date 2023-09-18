@@ -152,8 +152,8 @@ abstract class BaseIncomeExpenseFragment<N : BaseIncomeExpenseNavigator, VB : Vi
         (requireParentFragment() as IncomeExpenseFragment).isKeyboardOpen
 
     protected fun getSum(): BigDecimal = (requireParentFragment() as IncomeExpenseFragment).getSum()
-    protected fun getCurrencyCode(): String =
-        (requireParentFragment() as IncomeExpenseFragment).getCurrencyCode()
+    protected fun getCurrencyCode(): String = ""
+//        (requireParentFragment() as IncomeExpenseFragment).getCurrencyCode()
 
     private fun resetMainSum() {
         (requireParentFragment() as IncomeExpenseFragment).resetSum()

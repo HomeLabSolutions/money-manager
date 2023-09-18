@@ -40,6 +40,12 @@ dependencies {
 
     implementation(libs.navigation)
     implementation(libs.navigationCompose)
+    implementation(libs.hiltNavigationCompose)
+    implementation(libs.composeRuntime)
+    implementation(libs.composeToolingPreview)
+    implementation(libs.accompanistPager)
+    implementation(libs.accompanistPagerIndicator)
+    implementation(libs.composeMaterial3)
 
     implementation(libs.timber)
 

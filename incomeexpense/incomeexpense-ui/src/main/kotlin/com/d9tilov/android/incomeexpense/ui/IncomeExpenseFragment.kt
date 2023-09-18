@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.d9tilov.android.common.android.ui.base.BaseFragment
+import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.common.android.utils.gone
 import com.d9tilov.android.common.android.utils.hideWithAnimation
 import com.d9tilov.android.common.android.utils.showWithAnimation
@@ -22,7 +22,6 @@ import com.d9tilov.android.incomeexpense.navigation.IncomeExpenseNavigator
 import com.d9tilov.android.incomeexpense.ui.adapter.IncomeExpenseAdapter
 import com.d9tilov.android.incomeexpense.ui.adapter.IncomeExpenseAdapter.Companion.TAB_COUNT
 import com.d9tilov.android.incomeexpense.ui.listeners.OnIncomeExpenseListener
-import com.d9tilov.android.incomeexpense.ui.vm.IncomeExpenseViewModel
 import com.d9tilov.android.incomeexpense_ui.R
 import com.d9tilov.android.incomeexpense_ui.databinding.FragmentIncomeExpenseBinding
 import com.google.android.material.tabs.TabLayoutMediator
@@ -40,7 +39,9 @@ class IncomeExpenseFragment :
     OnBackPressed {
 
     override fun getNavigator() = this
-    override val viewModel by viewModels<IncomeExpenseViewModel>()
+    override val viewModel: BaseViewModel<IncomeExpenseNavigator>
+        get() = TODO("Not yet implemented")
+//    override val viewModel by viewModels<IncomeExpenseViewModel>()
 
     private var incomeExpenseAdapter: IncomeExpenseAdapter? = null
     private var pageIndex = -1
@@ -111,18 +112,18 @@ class IncomeExpenseFragment :
             viewLifecycleOwner.lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     launch {
-                        viewModel.isPremium.collect { isPremium ->
-                            this@IncomeExpenseFragment.isPremium = isPremium
-                        }
+//                        viewModel.isPremium.collect { isPremium ->
+//                            this@IncomeExpenseFragment.isPremium = isPremium
+//                        }
                     }
                     launch {
-                        viewModel.getCurrencyCodeAsync()
-                            .collect {
-                                incomeExpenseMainSum.setValue(
-                                    incomeExpenseMainSum.getValue(),
-                                    it
-                                )
-                            }
+//                        viewModel.getCurrencyCodeAsync()
+//                            .collect {
+//                                incomeExpenseMainSum.setValue(
+//                                    incomeExpenseMainSum.getValue(),
+//                                    it
+//                                )
+//                            }
                     }
                 }
             }
@@ -202,14 +203,14 @@ class IncomeExpenseFragment :
 
     fun isKeyboardOpened(): Boolean = isKeyboardOpen
     fun getSum(): BigDecimal = viewBinding?.incomeExpenseMainSum?.getValue() ?: BigDecimal.ZERO
-    fun getCurrencyCode(): String = viewModel.getCurrencyCode()
+//    fun getCurrencyCode(): String = viewModel.getCurrencyCode()
 
     fun resetSum() {
-        viewBinding?.incomeExpenseMainSum?.setValue(
-            BigDecimal.ZERO,
-            viewModel.getCurrencyCode()
-        )
-        viewModel.setDefaultCurrencyCode()
+//        viewBinding?.incomeExpenseMainSum?.setValue(
+//            BigDecimal.ZERO,
+//            viewModel.getCurrencyCode()
+//        )
+//        viewModel.setDefaultCurrencyCode()
         onHandleInput("")
     }
 
