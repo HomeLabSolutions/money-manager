@@ -19,6 +19,7 @@ object MoneyManagerIcons {
     val Subscription = R.drawable.ic_money_manager_logo
     val Backup = R.drawable.ic_refresh
     val Close = Icons.Rounded.Clear
+    val BackSpace = R.drawable.ic_backspace
 }
 
 sealed class Icon {

@@ -22,7 +22,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.budget_ui.R
 import com.d9tilov.android.designsystem.CurrencyTextFieldExtraBig
-import com.d9tilov.android.designsystem.FilledButton
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.SaveButton
 
@@ -58,7 +57,7 @@ fun BudgetScreen(
                 )
             }
         }
-    ) { _ ->
+    ) { padding ->
         Column {
             Text(
                 text = stringResource(R.string.budget_sum_title),
