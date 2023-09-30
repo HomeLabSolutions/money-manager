@@ -81,11 +81,11 @@ class IncomeFragment :
                 }
                 launch { viewModel.transactions.collectLatest { transactionAdapter.submitData(it) } }
                 launch {
-                    viewModel.earnedInPeriod.collect { sum ->
-                        if (sum.signum() == 0) {
-                            viewBinding?.incomeInfoLayoutInclude?.incomePeriodInfoApproxSign?.gone()
-                        } else {
+                    viewModel.isEarnedInPeriodApprox.collect { isApprox ->
+                        if (isApprox) {
                             viewBinding?.incomeInfoLayoutInclude?.incomePeriodInfoApproxSign?.show()
+                        } else {
+                            viewBinding?.incomeInfoLayoutInclude?.incomePeriodInfoApproxSign?.gone()
                         }
                     }
                 }

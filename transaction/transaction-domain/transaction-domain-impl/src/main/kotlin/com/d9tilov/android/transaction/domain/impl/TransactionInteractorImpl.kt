@@ -397,28 +397,13 @@ class TransactionInteractorImpl(
         }
     }
 
-    override fun getSumInFiscalPeriodInUsd(type: TransactionType): Flow<BigDecimal> {
-        return currencyInteractor.getMainCurrencyFlow()
-            .flatMapMerge { currency ->
-                val fiscalDay = userInteractor.getFiscalDay()
+    override fun isSpendInPeriodApprox(type: TransactionType): Flow<Boolean> =
+        flow<Int> { userInteractor.getFiscalDay() }
+            .flatMapMerge { fiscalDay ->
                 val endDate = currentDateTime()
                 val startDate = getStartDateOfFiscalPeriod(fiscalDay)
-                transactionRepo.getTransactionsByTypeInPeriod(
-                    startDate,
-                    endDate,
-                    type
-                ).map { list ->
-                    val currencies = mutableSetOf<String>()
-                    list.forEach { tr -> currencies.add(tr.currencyCode) }
-                    val currencyCode = currency.code
-                    if ((currencies.size == 1 && currencies.contains(currencyCode)) || currencyCode == DEFAULT_CURRENCY_CODE) {
-                        BigDecimal.ZERO
-                    } else {
-                        list.sumOf { it.usdSum }
-                    }
-                }
+                isApprox(type, startDate, endDate)
             }
-    }
 
     override fun getSumInFiscalPeriod(): Flow<BigDecimal> {
         val incomesFlow =
@@ -468,11 +453,18 @@ class TransactionInteractorImpl(
         ) { income, expense -> income.minus(expense) }
     }
 
-    override fun getSumTodayInUsd(type: TransactionType): Flow<BigDecimal> =
+    override fun isSpendTodayApprox(type: TransactionType): Flow<Boolean> =
+        isApprox(type, currentDateTime().getStartOfDay(), currentDateTime().getEndOfDay())
+
+    private fun isApprox(
+        type: TransactionType,
+        from: LocalDateTime,
+        to: LocalDateTime,
+    ): Flow<Boolean> =
         combine(
             transactionRepo.getTransactionsByTypeInPeriod(
-                currentDateTime().getStartOfDay(),
-                currentDateTime().getEndOfDay(),
+                from,
+                to,
                 type
             ),
             currencyInteractor.getMainCurrencyFlow()
@@ -480,11 +472,7 @@ class TransactionInteractorImpl(
             val currencies = mutableSetOf<String>()
             list.forEach { tr -> currencies.add(tr.currencyCode) }
             val currencyCode = currency.code
-            if ((currencies.size == 1 && currencies.contains(currencyCode)) || currencyCode == DEFAULT_CURRENCY_CODE) {
-                BigDecimal.ZERO
-            } else {
-                list.sumOf { it.usdSum }
-            }
+            !((currencies.size == 1 && currencies.contains(currencyCode)) || currencyCode == DEFAULT_CURRENCY_CODE)
         }
 
     override fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<BigDecimal> {

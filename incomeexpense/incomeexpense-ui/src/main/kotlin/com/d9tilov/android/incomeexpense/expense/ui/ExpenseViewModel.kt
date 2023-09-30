@@ -87,16 +87,16 @@ class ExpenseViewModel @Inject constructor(
 
     private val _expenseSpendingInfo: Flow<ExpenseInfoUiModel> = combine(
         transactionInteractor.ableToSpendToday(),
-        transactionInteractor.getSumTodayInUsd(TransactionType.EXPENSE),
+        transactionInteractor.isSpendTodayApprox(TransactionType.EXPENSE),
         transactionInteractor.getApproxSumTodayCurrentCurrency(TransactionType.EXPENSE),
-        transactionInteractor.getSumInFiscalPeriodInUsd(TransactionType.EXPENSE),
+        transactionInteractor.isSpendInPeriodApprox(TransactionType.EXPENSE),
         transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.EXPENSE)
-    ) { ableToSpendToday, spentToday, spentTodayApprox, spentInPeriod, spentInPeriodApprox ->
+    ) { ableToSpendToday, isTodayApprox, spentTodayApprox, isSpendInPeriodApprox, spentInPeriodApprox ->
         ExpenseInfoUiModel(
             ableToSpendToday,
-            spentToday,
+            isTodayApprox,
             spentTodayApprox,
-            spentInPeriod,
+            isSpendInPeriodApprox,
             spentInPeriodApprox
         )
     }

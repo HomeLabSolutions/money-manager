@@ -2,6 +2,7 @@ package com.d9tilov.android.category.domain.model
 
 import com.d9tilov.android.core.constants.DataConstants.DEFAULT_DATA_ID
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
+import com.d9tilov.android.core.constants.DataConstants.NO_RES_ID
 import com.d9tilov.android.core.model.TransactionType
 
 data class Category(
@@ -11,8 +12,8 @@ data class Category(
     val children: List<Category>,
     val type: TransactionType,
     val name: String,
-    val icon: Int?,
-    val color: Int?,
+    val icon: Int,
+    val color: Int,
     val usageCount: Int
 ) {
     companion object {
@@ -24,8 +25,8 @@ data class Category(
             children = emptyList(),
             type = TransactionType.INCOME,
             name = "",
-            icon = null,
-            color = null,
+            icon = NO_RES_ID,
+            color = NO_RES_ID,
             usageCount = 0
         )
         val EMPTY_EXPENSE = Category(
@@ -35,8 +36,8 @@ data class Category(
             children = emptyList(),
             type = TransactionType.EXPENSE,
             name = "",
-            icon = null,
-            color = null,
+            icon = NO_RES_ID,
+            color = NO_RES_ID,
             usageCount = 0
         )
     }

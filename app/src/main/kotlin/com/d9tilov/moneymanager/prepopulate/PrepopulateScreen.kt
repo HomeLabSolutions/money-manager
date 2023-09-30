@@ -104,6 +104,7 @@ fun PrepopulateScreen(
         },
         bottomBar = {
             BottomNavigationBar(
+                modifier = Modifier.fillMaxWidth(),
                 screenType = screenTypeId.fromScreenId(),
                 onBudgetSave = onBudgetSaveAndComplete
             ) { newScreen -> screenTypeId = newScreen.id }
@@ -130,22 +131,24 @@ fun PrepopulateScreen(
 
 @Composable
 fun BottomNavigationBar(
+    modifier: Modifier,
     screenType: PrepopulateScreen,
     onBudgetSave: () -> Unit,
     onScreenChanged: (PrepopulateScreen) -> Unit
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
             .padding(vertical = 16.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
         var progress by remember { mutableFloatStateOf((screenType.id + 1f) / PrepopulateScreen.SCREEN_COUNT) }
-        ProgressIndicator(progress,
-            Modifier
+        ProgressIndicator(
+            indicatorProgress = progress,
+            modifier = Modifier
                 .padding(16.dp)
-                .fillMaxWidth(FRACTION))
+                .fillMaxWidth(FRACTION)
+        )
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
