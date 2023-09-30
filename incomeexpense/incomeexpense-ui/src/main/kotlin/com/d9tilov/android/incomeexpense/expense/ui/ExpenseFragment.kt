@@ -90,11 +90,10 @@ class ExpenseFragment :
                         viewModel.expenseSpendingInfoPremium.collect { model: ExpenseInfoUiModel? ->
                             if (model != null) {
                                 if (isKeyboardOpen()) expenseInfoLayoutInclude.root.show()
-                                val spentInPeriod = model.spentInPeriodSum
-                                if (spentInPeriod.signum() == 0) {
-                                    expenseInfoLayoutInclude.expensePeriodInfoApproxSign.gone()
-                                } else {
+                                if (model.isSpendInPeriodApprox) {
                                     expenseInfoLayoutInclude.expensePeriodInfoApproxSign.show()
+                                } else {
+                                    expenseInfoLayoutInclude.expensePeriodInfoApproxSign.gone()
                                 }
 
                                 val spentInPeriodApprox = model.spentInPeriodSumApprox
@@ -104,11 +103,10 @@ class ExpenseFragment :
                                 )
                                 expenseInfoLayoutInclude.expensePeriodInfoApproxSum.show()
 
-                                val spentToday = model.spentTodaySum
-                                if (spentToday.signum() == 0) {
-                                    expenseInfoLayoutInclude.expenseTodayInfoApproxSign.gone()
-                                } else {
+                                if (model.isSpendTodayApprox) {
                                     expenseInfoLayoutInclude.expenseTodayInfoApproxSign.show()
+                                } else {
+                                    expenseInfoLayoutInclude.expenseTodayInfoApproxSign.gone()
                                 }
 
                                 val spentTodayApprox = model.spentTodaySumApprox

@@ -43,6 +43,7 @@ dependencies {
     implementation(libs.hiltNavigationCompose)
     implementation(libs.composeRuntime)
     implementation(libs.composeToolingPreview)
+    implementation(libs.composeConstraintLayout)
     implementation(libs.accompanistPager)
     implementation(libs.accompanistPagerIndicator)
     implementation(libs.composeMaterial3)

@@ -41,9 +41,9 @@ class IncomeViewModel @Inject constructor(
         Timber.d("Unable to update currency: $exception")
     }
 
-    val earnedInPeriod = transactionInteractor.getSumInFiscalPeriodInUsd(TransactionType.INCOME)
+    val isEarnedInPeriodApprox = transactionInteractor.isSpendInPeriodApprox(TransactionType.INCOME)
         .flowOn(Dispatchers.IO + updateCurrencyExceptionHandler)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), BigDecimal.ZERO)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
 
     val earnedInPeriodApprox =
         transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.INCOME)

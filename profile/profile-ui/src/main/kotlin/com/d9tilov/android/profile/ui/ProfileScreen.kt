@@ -233,8 +233,14 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
     }
     ConstraintLayout(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = if (profileUiItem is ProfileUiItem.CurrencyUiItem) dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large) else 0.dp)
+            .then(
+                if (profileUiItem is ProfileUiItem.CurrencyUiItem) Modifier
+                    .fillMaxWidth()
+                    .padding(top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large))
+                else Modifier
+                    .fillMaxWidth()
+                    .padding(0.dp)
+            )
             .height(dimensionResource(com.d9tilov.android.designsystem.R.dimen.profile_item_height))
             .clickable(onClick = navigationCallback)
     ) {
@@ -268,7 +274,8 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
                 val currencyIcon = CurrencyUtils.getCurrencyIcon(profileUiItem.currencyCode)
                 val (idCurrencyIcon, idCurrencySymbol) = createRefs()
                 Text(
-                    modifier = Modifier.padding(horizontal = 4.dp)
+                    modifier = Modifier
+                        .padding(horizontal = 4.dp)
                         .constrainAs(idCurrencyIcon) {
                             baseline.linkTo(idTitle.baseline)
                             start.linkTo(idTitle.end)
@@ -289,10 +296,12 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
             is ProfileUiItem.BudgetUiItem -> CurrencyTextFieldExtraSmall(
                 amount = profileUiItem.budgetData.sum.toString(),
                 currencyCode = profileUiItem.budgetData.currencyCode.getSymbolByCode(),
-                modifier = Modifier.padding(horizontal = 4.dp).constrainAs(idData) {
-                    baseline.linkTo(idTitle.baseline)
-                    start.linkTo(idTitle.end)
-                },
+                modifier = Modifier
+                    .padding(horizontal = 4.dp)
+                    .constrainAs(idData) {
+                        baseline.linkTo(idTitle.baseline)
+                        start.linkTo(idTitle.end)
+                    },
                 style = MaterialTheme.typography.titleMedium
             )
             is ProfileUiItem.Settings -> {
@@ -311,7 +320,8 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
                     )
                 }
                 Text(
-                    modifier = Modifier.padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large))
+                    modifier = Modifier
+                        .padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large))
                         .constrainAs(idData) {
                             baseline.linkTo(idTitle.baseline)
                             start.linkTo(idTitle.end)

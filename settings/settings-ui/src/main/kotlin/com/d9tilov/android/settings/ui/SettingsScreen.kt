@@ -208,7 +208,7 @@ fun BackupLayout(
             onClick = onBackupClick
         ) {
             Icon(
-                modifier = if (backupState.backupLoading) Modifier.rotate(angle) else Modifier,
+                modifier = Modifier.then(if (backupState.backupLoading) Modifier.rotate(angle) else Modifier),
                 painter = painterResource(id = MoneyManagerIcons.Backup),
                 contentDescription = "Backup"
             )

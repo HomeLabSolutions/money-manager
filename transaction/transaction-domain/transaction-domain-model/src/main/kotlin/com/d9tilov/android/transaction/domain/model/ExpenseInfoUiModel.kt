@@ -4,8 +4,8 @@ import java.math.BigDecimal
 
 data class ExpenseInfoUiModel(
     val ableToSpendTodayModel: TransactionSpendingTodayModel,
-    val spentTodaySum: BigDecimal,
+    val isSpendTodayApprox: Boolean,
     val spentTodaySumApprox: BigDecimal,
-    val spentInPeriodSum: BigDecimal,
+    val isSpendInPeriodApprox: Boolean,
     val spentInPeriodSumApprox: BigDecimal
 )
