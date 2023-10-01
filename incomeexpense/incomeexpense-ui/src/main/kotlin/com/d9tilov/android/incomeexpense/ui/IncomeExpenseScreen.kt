@@ -37,6 +37,7 @@ import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AddCircle
+import androidx.compose.material3.Divider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -47,6 +48,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -186,9 +188,9 @@ fun TransactionItem(modifier: Modifier, transaction: Transaction) {
     ConstraintLayout(
         modifier = modifier
             .height(72.dp)
-            .padding(start = 32.dp)
+            .padding(horizontal = 32.dp)
     ) {
-        val (idIcon, idTitle, idDescription, idRegularIcon, idInStatisticsIcon, idSum) = createRefs()
+        val (idIcon, idTitle, idDescription, idRegularIcon, idInStatisticsIcon, idSum, idDivider) = createRefs()
         Icon(
             modifier = Modifier
                 .constrainAs(idIcon) {
@@ -261,7 +263,6 @@ fun TransactionItem(modifier: Modifier, transaction: Transaction) {
         Column(
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(end = 32.dp)
                 .constrainAs(idSum) {
                     end.linkTo(parent.end)
                     top.linkTo(parent.top)
@@ -283,6 +284,16 @@ fun TransactionItem(modifier: Modifier, transaction: Transaction) {
                 symbolSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sign_extra_small_text_size).value.sp
             )
         }
+        Divider(
+            color = MaterialTheme.colorScheme.primary,
+            thickness = 1.dp,
+            modifier = Modifier.alpha(0.2f)
+                .constrainAs(idDivider) {
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                }
+        )
     }
 }
 
