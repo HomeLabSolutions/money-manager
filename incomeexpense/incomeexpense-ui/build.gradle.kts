@@ -37,6 +37,7 @@ dependencies {
     implementation(libs.appCompat)
     implementation(libs.material)
     implementation(libs.paging)
+    implementation(libs.pagingCompose)
 
     implementation(libs.navigation)
     implementation(libs.navigationCompose)

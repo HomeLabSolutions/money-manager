@@ -89,6 +89,7 @@ roomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = 
 roomRuntime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 roomPaging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 paging = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "paging" }
+pagingCompose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
 navigation = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
 navigationUi = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
 navigationCompose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }

@@ -21,6 +21,8 @@ object MoneyManagerIcons {
     val Close = Icons.Rounded.Clear
     val BackSpace = R.drawable.ic_backspace
     val HideKeyboard = R.drawable.ic_keyboard_hide
+    val RegularTransaction = R.drawable.ic_repeat
+    val InStatisticsTransaction = R.drawable.ic_not_in_statistics
 }
 
 sealed class Icon {
