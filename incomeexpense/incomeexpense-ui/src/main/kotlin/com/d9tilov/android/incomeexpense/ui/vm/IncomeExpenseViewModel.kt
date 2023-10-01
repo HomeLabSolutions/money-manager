@@ -2,6 +2,7 @@ package com.d9tilov.android.incomeexpense.ui.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.model.Category
@@ -17,9 +18,11 @@ import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -40,7 +43,7 @@ data class IncomeExpenseUiState(
 
 data class ExpenseUiState(
     val expenseCategoryList: List<Category> = emptyList(),
-    val expenseTransactions: List<Transaction> = emptyList(),
+    val expenseTransactions: Flow<PagingData<Transaction>> = flowOf(),
     val expenseInfo: ExpenseInfo? = null,
 ) {
     companion object {
@@ -50,7 +53,7 @@ data class ExpenseUiState(
 
 data class IncomeUiState(
     val incomeCategoryList: List<Category> = emptyList(),
-    val incomeTransactions: List<Transaction> = emptyList(),
+    val incomeTransactions: Flow<PagingData<Transaction>> = flowOf(),
     val incomeInfo: IncomeInfo? = null,
 ) {
     companion object {
@@ -120,8 +123,21 @@ class IncomeExpenseViewModel @Inject constructor(
     }
 
     init {
-        Timber.tag(TAG).d("init")
         viewModelScope.launch(updateCurrencyExceptionHandler) {
+//            launch {
+//                val category = categoryInteractor.getCategoryById(2)
+//                for(i in 0..100) {
+//                    transactionInteractor.addTransaction(
+//                        Transaction.EMPTY.copy(
+//                            type = TransactionType.EXPENSE,
+//                            sum = BigDecimal(Random.nextInt(100)),
+//                            category = category,
+//                            currencyCode = DEFAULT_CURRENCY_CODE
+//                        )
+//                    )
+//                }
+//            }
+
             launch {
                 currencyInteractor.getMainCurrencyFlow()
                     .collect { currencyData ->
@@ -137,7 +153,14 @@ class IncomeExpenseViewModel @Inject constructor(
                     .collect { list ->
                         _uiState.update { state ->
                             Timber.tag(TAG).d("launch2: $list")
-                            state.copy(incomeUiState = state.incomeUiState.copy(incomeCategoryList = list))
+                            state.copy(
+                                incomeUiState = state.incomeUiState.copy(
+                                    incomeCategoryList = list,
+                                    incomeTransactions = transactionInteractor.getTransactionsByType(
+                                        TransactionType.INCOME
+                                    )
+                                )
+                            )
                         }
                     }
             }
@@ -148,7 +171,10 @@ class IncomeExpenseViewModel @Inject constructor(
                             Timber.tag(TAG).d("launch3: $list")
                             state.copy(
                                 expenseUiState = state.expenseUiState.copy(
-                                    expenseCategoryList = list
+                                    expenseCategoryList = list,
+                                    expenseTransactions = transactionInteractor.getTransactionsByType(
+                                        TransactionType.EXPENSE
+                                    ),
                                 )
                             )
                         }

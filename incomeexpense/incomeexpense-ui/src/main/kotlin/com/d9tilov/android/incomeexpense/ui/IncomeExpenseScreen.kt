@@ -8,24 +8,26 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Tab
@@ -36,6 +38,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -62,11 +65,19 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.core.constants.CurrencyConstants
+import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.core.constants.DataConstants.TAG
+import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.KeyPress
 import com.d9tilov.android.core.utils.toKeyPress
+import com.d9tilov.android.designsystem.ComposeCurrencyView
 import com.d9tilov.android.designsystem.MoneyManagerIcons
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.android.incomeexpense.ui.vm.EditMode
@@ -81,8 +92,11 @@ import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.INCOME
 import com.d9tilov.android.incomeexpense.ui.vm.TransactionSpendingTodayPrice
 import com.d9tilov.android.incomeexpense.ui.vm.toScreenType
 import com.d9tilov.android.incomeexpense_ui.R
+import com.d9tilov.android.transaction.domain.model.Transaction
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.math.BigDecimal
 import java.math.RoundingMode
 
 
@@ -136,24 +150,137 @@ fun IncomeExpenseScreen(
 fun MainPriceInput(price: Price, modifier: Modifier) {
     Surface(
         modifier = modifier,
-        border = BorderStroke(1.dp, MaterialTheme.colors.primary),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
         shape = RoundedCornerShape(50),
     ) {
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        ComposeCurrencyView(symbol = price.currency, value = price.value)
+    }
+}
+
+@Composable
+fun TransactionListLayout(modifier: Modifier, transactions: Flow<PagingData<Transaction>>) {
+    val lazyTransactionItems: LazyPagingItems<Transaction> = transactions.collectAsLazyPagingItems()
+
+    if (lazyTransactionItems.loadState.refresh is LoadState.Error) {
+        // handle error
+    }
+    val state = rememberLazyListState()
+    LazyColumn(state = state) {
+        items(
+            count = lazyTransactionItems.itemCount,
+            key = lazyTransactionItems.itemKey { it.id }) { index ->
+            val transaction: Transaction? = lazyTransactionItems[index]
+            transaction?.let { tr -> TransactionItem(modifier = Modifier.fillMaxWidth(), tr) }
+        }
+        item {
+            if (lazyTransactionItems.loadState.append is LoadState.Loading) {
+                // handle loading
+            }
+        }
+    }
+}
+
+@Composable
+fun TransactionItem(modifier: Modifier, transaction: Transaction) {
+    val context = LocalContext.current
+    ConstraintLayout(
+        modifier = modifier
+            .height(72.dp)
+            .padding(start = 32.dp)
+    ) {
+        val (idIcon, idTitle, idDescription, idRegularIcon, idInStatisticsIcon, idSum) = createRefs()
+        Icon(
+            modifier = Modifier
+                .constrainAs(idIcon) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                }
+                .size(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.category_item_icon_size)),
+            painter = painterResource(id = transaction.category.icon),
+            contentDescription = "Transaction",
+            tint = Color(ContextCompat.getColor(context, transaction.category.color))
+        )
+        Text(
+            modifier = Modifier
+                .padding(start = 16.dp)
+                .constrainAs(idTitle) {
+                    top.linkTo(idIcon.top)
+                    bottom.linkTo(idIcon.bottom)
+                    start.linkTo(idIcon.end)
+                },
+            text = transaction.category.name,
+            style = MaterialTheme.typography.displayLarge,
+            fontSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.income_expense_name_text_size).value.sp,
+            maxLines = 1,
+            color = Color(ContextCompat.getColor(context, transaction.category.color)),
+            overflow = TextOverflow.Ellipsis
+        )
+        if (transaction.description.isNotEmpty()) {
             Text(
-                modifier = Modifier.padding(top = 8.dp, end = 4.dp),
-                text = price.currency,
-                color = MaterialTheme.colors.primary,
-                fontSize = 18.sp
+                modifier = Modifier
+                    .padding(start = 16.dp, bottom = 4.dp)
+                    .constrainAs(idDescription) {
+                        top.linkTo(idTitle.bottom)
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(idTitle.start)
+                    },
+                text = transaction.description,
+                style = MaterialTheme.typography.bodySmall,
+                fontSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.income_expense_name_description_text_size).value.sp,
+                color = MaterialTheme.colorScheme.onTertiary
             )
-            Text(
-                text = price.value,
-                color = MaterialTheme.colors.primary,
-                fontSize = 34.sp,
-                maxLines = 1
+        }
+        if (transaction.isRegular) {
+            Icon(
+                modifier = Modifier
+                    .constrainAs(idRegularIcon) {
+                        top.linkTo(idIcon.top)
+                        end.linkTo(idIcon.start)
+                    }
+                    .size(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.transaction_meta_icon_size)),
+                painter = painterResource(MoneyManagerIcons.RegularTransaction),
+                contentDescription = "RegularTransaction",
+                tint = MaterialTheme.colorScheme.tertiary
+            )
+        }
+        if (!transaction.inStatistics) {
+            Icon(
+                modifier = Modifier
+                    .padding(top = 4.dp)
+                    .constrainAs(idInStatisticsIcon) {
+                        top.linkTo(idRegularIcon.bottom)
+                        end.linkTo(idIcon.start)
+                    }
+                    .size(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.transaction_meta_icon_size)),
+                painter = painterResource(MoneyManagerIcons.InStatisticsTransaction),
+                contentDescription = "InStatisticsTransaction",
+                tint = MaterialTheme.colorScheme.error
+            )
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(end = 32.dp)
+                .constrainAs(idSum) {
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                },
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.End
+        ) {
+            ComposeCurrencyView(
+                value = transaction.sum.toString(),
+                valueSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sum_small_text_size).value.sp,
+                symbol = transaction.currencyCode.getSymbolByCode(),
+                symbolSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sign_small_text_size).value.sp
+            )
+            ComposeCurrencyView(
+                value = transaction.usdSum.toString(),
+                valueSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_extra_small_text_size).value.sp,
+                symbol = DEFAULT_CURRENCY_SYMBOL,
+                symbolSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sign_extra_small_text_size).value.sp
             )
         }
     }
@@ -199,19 +326,20 @@ fun HomeTabs(
                                 EXPENSE -> stringResource(R.string.tab_expense)
                                 INCOME -> stringResource(R.string.tab_income)
                             },
-                            style = MaterialTheme.typography.body2
                         )
                     }
                 )
             }
         }
-        MainPriceInput(
-            price = uiState.price,
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(32.dp),
-        )
-        Spacer(modifier = Modifier.weight(1f))
+        if (uiState.editMode == EditMode.KEYBOARD) {
+            MainPriceInput(
+                price = uiState.price,
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(32.dp),
+            )
+            Spacer(modifier = Modifier.weight(1f))
+        }
         HorizontalPager(state = pagerState) { tabIndex: Int ->
             if (uiState.editMode == EditMode.KEYBOARD) {
                 Column(Modifier.fillMaxWidth()) {
@@ -229,6 +357,12 @@ fun HomeTabs(
                         onItemClicked = onCategoryClicked
                     )
                 }
+            } else {
+                TransactionListLayout(
+                    Modifier.fillMaxSize(),
+                    if (tabIndex.toScreenType() == INCOME) uiState.incomeUiState.incomeTransactions
+                    else uiState.expenseUiState.expenseTransactions
+                )
             }
 
         }
@@ -245,7 +379,7 @@ fun HomeTabs(
 @Composable
 fun HomeTabIndicator(
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colors.onSurface,
+    color: Color = MaterialTheme.colorScheme.onSurface,
 ) {
     Spacer(
         modifier
@@ -276,7 +410,7 @@ fun KeyBoardLayout(
                     ClickableText(
                         text = AnnotatedString(item),
                         style = TextStyle.Default.copy(
-                            color = MaterialTheme.colors.primary,
+                            color = MaterialTheme.colorScheme.primary,
                             fontSize = 32.sp,
                             textAlign = TextAlign.Center
                         ),
@@ -287,7 +421,7 @@ fun KeyBoardLayout(
                         Icon(
                             painter = painterResource(id = MoneyManagerIcons.BackSpace),
                             contentDescription = "Backup",
-                            tint = MaterialTheme.colors.primary
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                 }
@@ -302,7 +436,7 @@ fun KeyBoardLayout(
             Icon(
                 painter = painterResource(id = MoneyManagerIcons.HideKeyboard),
                 contentDescription = "HideKeyboard",
-                tint = MaterialTheme.colors.primary
+                tint = MaterialTheme.colorScheme.primary
             )
         }
     }
@@ -315,13 +449,13 @@ fun ExpenseInfoLayout(
 ) {
     var ableToSpendTodayTitle = remember { "" }
     var ableToSpendPrice: Price? = remember { Price.EMPTY }
-    var ableToSpendColor = MaterialTheme.colors.onPrimary
+    var ableToSpendColor = MaterialTheme.colorScheme.onPrimary
     when (info.ableToSpendToday) {
         is TransactionSpendingTodayPrice.OVERSPENDING -> {
             ableToSpendTodayTitle =
                 stringResource(id = com.d9tilov.android.category_ui.R.string.category_expense_info_can_spend_today_negate_title)
             ableToSpendPrice = info.ableToSpendToday.trSum
-            ableToSpendColor = MaterialTheme.colors.error
+            ableToSpendColor = MaterialTheme.colorScheme.error
         }
 
         is TransactionSpendingTodayPrice.NORMAL -> {
@@ -333,8 +467,8 @@ fun ExpenseInfoLayout(
                         CurrencyConstants.DECIMAL_LENGTH,
                         RoundingMode.HALF_UP
                     ).signum() > 0
-                ) MaterialTheme.colors.onPrimary
-                else MaterialTheme.colors.error
+                ) MaterialTheme.colorScheme.onPrimary
+                else MaterialTheme.colorScheme.error
         }
     }
     ConstraintLayout(modifier = modifier.padding(start = 48.dp)) {
@@ -343,7 +477,12 @@ fun ExpenseInfoLayout(
             idApproxSignSpendToday, isApproxSignSpendInPeriod,
             idAbleToSpendValue, idSpendTodayValue, idSpendInPeriodValue,
         ) = createRefs()
-        createVerticalChain(idAbleToSpendTitle, idSpendTodayTitle, idSpendInPeriodTitle, chainStyle = ChainStyle.Spread)
+        createVerticalChain(
+            idAbleToSpendTitle,
+            idSpendTodayTitle,
+            idSpendInPeriodTitle,
+            chainStyle = ChainStyle.Spread
+        )
         InfoLabel(
             modifier = Modifier.constrainAs(idAbleToSpendTitle) {
                 top.linkTo(parent.top)
@@ -429,12 +568,12 @@ fun InfoLabel(modifier: Modifier, text: String) {
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(50))
-            .background(MaterialTheme.colors.primary)
+            .background(MaterialTheme.colorScheme.primary)
     ) {
         Text(
             modifier = Modifier.padding(6.dp),
             text = text,
-            color = MaterialTheme.colors.onPrimary
+            color = MaterialTheme.colorScheme.onPrimary
         )
     }
 }
@@ -479,39 +618,58 @@ fun CategoryListLayout(
     }
 }
 
-
 @Composable
 @Preview
+fun TransactionListItemPreview() {
+    MoneyManagerTheme {
+        TransactionItem(
+            modifier = Modifier.fillMaxWidth(),
+            transaction = Transaction.EMPTY.copy(
+                sum = BigDecimal.TEN,
+                usdSum = BigDecimal(5),
+                currencyCode = "RUB",
+                isRegular = true,
+                inStatistics = true,
+                description = "description",
+                category = mockCategory(2, "Cafe")
+            )
+        )
+    }
+}
+
+@Composable
+//@Preview
 fun PreviewIncomeExpenseScreen() {
     MoneyManagerTheme {
-        IncomeExpenseScreen(IncomeExpenseUiState.EMPTY.copy(
-            incomeUiState = IncomeUiState(
-                incomeCategoryList = listOf(
-                    mockCategory(1L, "Category1"),
-                    mockCategory(2L, "Category2"),
-                    mockCategory(3L, "Category3"),
-                    mockCategory(4L, "Category4"),
-                    mockCategory(5L, "Category5"),
-                    mockCategory(6L, "Category6"),
-                    mockCategory(7L, "Category7"),
-                    mockCategory(8L, "Category8"),
-                    mockCategory(9L, "Category9"),
-                    mockCategory(10L, "Category10"),
-                    mockCategory(11L, "Category11"),
-                    mockCategory(12L, "Category12"),
-                    mockCategory(13L, "Category13"),
-                    mockCategory(14L, "Category14"),
-                    mockCategory(15L, "Category15"),
+        IncomeExpenseScreen(
+            IncomeExpenseUiState.EMPTY.copy(
+                incomeUiState = IncomeUiState(
+                    incomeCategoryList = listOf(
+                        mockCategory(1L, "Category1"),
+                        mockCategory(2L, "Category2"),
+                        mockCategory(3L, "Category3"),
+                        mockCategory(4L, "Category4"),
+                        mockCategory(5L, "Category5"),
+                        mockCategory(6L, "Category6"),
+                        mockCategory(7L, "Category7"),
+                        mockCategory(8L, "Category8"),
+                        mockCategory(9L, "Category9"),
+                        mockCategory(10L, "Category10"),
+                        mockCategory(11L, "Category11"),
+                        mockCategory(12L, "Category12"),
+                        mockCategory(13L, "Category13"),
+                        mockCategory(14L, "Category14"),
+                        mockCategory(15L, "Category15"),
+                    ),
                 ),
-            ),
-            expenseUiState = ExpenseUiState.EMPTY.copy(
-                expenseInfo = ExpenseInfo(
-                    ableToSpendToday = TransactionSpendingTodayPrice.NORMAL(Price("42", "$")),
-                    wasSpendToday = Price("43", "$", true),
-                    wasSpendInPeriod = Price("44", "$")
+                expenseUiState = ExpenseUiState.EMPTY.copy(
+                    expenseInfo = ExpenseInfo(
+                        ableToSpendToday = TransactionSpendingTodayPrice.NORMAL(Price("42", "$")),
+                        wasSpendToday = Price("43", "$", true),
+                        wasSpendInPeriod = Price("44", "$")
+                    )
                 )
-            )
-        ), {}, {}, {}, {})
+            ), {}, {}, {}, {})
     }
 }
 
@@ -519,5 +677,5 @@ private fun mockCategory(id: Long, name: String) = Category.EMPTY_INCOME.copy(
     id = id,
     name = name,
     icon = R.drawable.ic_category_beach,
-    color = android.R.color.holo_red_dark,
+    color = android.R.color.holo_blue_light,
 )
