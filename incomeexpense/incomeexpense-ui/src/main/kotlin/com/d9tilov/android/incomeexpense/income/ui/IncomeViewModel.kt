@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
-import androidx.paging.map
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.core.model.TransactionType
@@ -101,18 +100,6 @@ class IncomeViewModel @Inject constructor(
                     } else {
                         null
                     }
-                }.map { item: BaseTransaction ->
-                    var newItem: BaseTransaction = item
-                    if (item is TransactionHeader) {
-                        itemPosition++
-                        itemHeaderPosition = itemPosition
-                        newItem = item.copy(headerPosition = itemHeaderPosition)
-                    }
-                    if (item is Transaction) {
-                        itemPosition++
-                        newItem = item.copy(headerPosition = itemHeaderPosition)
-                    }
-                    newItem
                 }
             }
             .cachedIn(viewModelScope)

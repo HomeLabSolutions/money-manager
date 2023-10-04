@@ -81,7 +81,7 @@ class TransactionAdapter(
     }
 
     override fun getHeaderPositionForItem(itemPosition: Int): Int {
-        return getItem(itemPosition)?.headerPosition ?: 0
+        return 0
     }
 
     override fun onBindHeaderViewHolder(holder: RecyclerView.ViewHolder, headerPosition: Int) {
@@ -119,7 +119,7 @@ class TransactionAdapter(
         fun bind(transaction: Transaction) {
             viewBinding.run {
                 itemTransactionCategory.text = transaction.category.name
-                transaction.category.color?.let { color ->
+                transaction.category.color.let { color ->
                     itemTransactionCategory.setTextColor(
                         ContextCompat.getColor(context, color)
                     )

@@ -3,6 +3,7 @@ package com.d9tilov.android.incomeexpense.ui.vm
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.insertSeparators
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.model.Category
@@ -11,10 +12,14 @@ import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.KeyPress
 import com.d9tilov.android.core.utils.MainPriceFieldParser
+import com.d9tilov.android.core.utils.getEndOfDay
+import com.d9tilov.android.core.utils.isSameDay
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
+import com.d9tilov.android.transaction.domain.model.BaseTransaction
 import com.d9tilov.android.transaction.domain.model.Transaction
+import com.d9tilov.android.transaction.domain.model.TransactionHeader
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -23,6 +28,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -43,7 +49,7 @@ data class IncomeExpenseUiState(
 
 data class ExpenseUiState(
     val expenseCategoryList: List<Category> = emptyList(),
-    val expenseTransactions: Flow<PagingData<Transaction>> = flowOf(),
+    val expenseTransactions: Flow<PagingData<BaseTransaction>> = flowOf(),
     val expenseInfo: ExpenseInfo? = null,
 ) {
     companion object {
@@ -53,7 +59,7 @@ data class ExpenseUiState(
 
 data class IncomeUiState(
     val incomeCategoryList: List<Category> = emptyList(),
-    val incomeTransactions: Flow<PagingData<Transaction>> = flowOf(),
+    val incomeTransactions: Flow<PagingData<BaseTransaction>> = flowOf(),
     val incomeInfo: IncomeInfo? = null,
 ) {
     companion object {
@@ -127,11 +133,13 @@ class IncomeExpenseViewModel @Inject constructor(
 //            launch {
 //                val category = categoryInteractor.getCategoryById(2)
 //                for(i in 0..100) {
+//                    val day = i / 5
 //                    transactionInteractor.addTransaction(
 //                        Transaction.EMPTY.copy(
 //                            type = TransactionType.EXPENSE,
 //                            sum = BigDecimal(Random.nextInt(100)),
 //                            category = category,
+//                            date = LocalDate(2023,9,29).minus(day, DateTimeUnit.DAY).getStartOfDay(),
 //                            currencyCode = DEFAULT_CURRENCY_CODE
 //                        )
 //                    )
@@ -156,9 +164,7 @@ class IncomeExpenseViewModel @Inject constructor(
                             state.copy(
                                 incomeUiState = state.incomeUiState.copy(
                                     incomeCategoryList = list,
-                                    incomeTransactions = transactionInteractor.getTransactionsByType(
-                                        TransactionType.INCOME
-                                    )
+                                    incomeTransactions = mapWithStickyHeaders(transactionInteractor.getTransactionsByType(TransactionType.INCOME))
                                 )
                             )
                         }
@@ -172,9 +178,7 @@ class IncomeExpenseViewModel @Inject constructor(
                             state.copy(
                                 expenseUiState = state.expenseUiState.copy(
                                     expenseCategoryList = list,
-                                    expenseTransactions = transactionInteractor.getTransactionsByType(
-                                        TransactionType.EXPENSE
-                                    ),
+                                    expenseTransactions = mapWithStickyHeaders(transactionInteractor.getTransactionsByType(TransactionType.EXPENSE))
                                 )
                             )
                         }
@@ -255,6 +259,27 @@ class IncomeExpenseViewModel @Inject constructor(
             val newPriceStr = MainPriceFieldParser.parse(state.price.value, btn)
             val newPrice = state.price.copy(value = newPriceStr)
             state.copy(price = newPrice)
+        }
+    }
+
+    private fun mapWithStickyHeaders(flow: Flow<PagingData<Transaction>>): Flow<PagingData<BaseTransaction>> {
+        return flow.map { pagingData ->
+            pagingData.insertSeparators { before: Transaction?, after: Transaction? ->
+                if (before == null && after == null) null
+                else if (before != null && after == null) null
+                else if (before == null && after != null)
+                    TransactionHeader(
+                        after.date.getEndOfDay(),
+                        after.currencyCode
+                    )
+                else if (before != null && after != null && before.date.isSameDay(after.date)) null
+                else if (before != null && after != null && !before.date.isSameDay(after.date))
+                    TransactionHeader(
+                        after.date.getEndOfDay(),
+                        after.currencyCode
+                    )
+                else null
+            }
         }
     }
 }
