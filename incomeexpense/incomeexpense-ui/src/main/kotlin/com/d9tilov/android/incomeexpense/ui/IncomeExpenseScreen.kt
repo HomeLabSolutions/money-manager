@@ -2,6 +2,7 @@ package com.d9tilov.android.incomeexpense.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -35,8 +36,6 @@ import androidx.compose.material.TabPosition
 import androidx.compose.material.TabRow
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.material3.Divider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -51,10 +50,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -134,7 +135,7 @@ fun IncomeExpenseScreen(
                     modifier = Modifier.navigationBarsPadding()
                 ) {
                     Icon(
-                        imageVector = Icons.Rounded.AddCircle,
+                        imageVector = MoneyManagerIcons.AddCircle,
                         contentDescription = "Add transaction"
                     )
                 }
@@ -230,7 +231,7 @@ fun TransactionItem(modifier: Modifier, transaction: Transaction) {
                     start.linkTo(parent.start)
                 }
                 .size(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.category_item_icon_size)),
-            painter = painterResource(id = transaction.category.icon),
+            imageVector = ImageVector.vectorResource(id = transaction.category.icon),
             contentDescription = "Transaction",
             tint = Color(ContextCompat.getColor(context, transaction.category.color))
         )
@@ -272,7 +273,7 @@ fun TransactionItem(modifier: Modifier, transaction: Transaction) {
                         end.linkTo(idIcon.start)
                     }
                     .size(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.transaction_meta_icon_size)),
-                painter = painterResource(MoneyManagerIcons.RegularTransaction),
+                imageVector = ImageVector.vectorResource(MoneyManagerIcons.RegularTransaction),
                 contentDescription = "RegularTransaction",
                 tint = MaterialTheme.colorScheme.tertiary
             )
@@ -286,7 +287,7 @@ fun TransactionItem(modifier: Modifier, transaction: Transaction) {
                         end.linkTo(idIcon.start)
                     }
                     .size(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.transaction_meta_icon_size)),
-                painter = painterResource(MoneyManagerIcons.InStatisticsTransaction),
+                imageVector = ImageVector.vectorResource(MoneyManagerIcons.InStatisticsTransaction),
                 contentDescription = "InStatisticsTransaction",
                 tint = MaterialTheme.colorScheme.error
             )
@@ -462,7 +463,7 @@ fun KeyBoardLayout(
                 } else {
                     IconButton(onClick = { onNumberClicked.invoke(keyPress) }) {
                         Icon(
-                            painter = painterResource(id = MoneyManagerIcons.BackSpace),
+                            imageVector = ImageVector.vectorResource(id = MoneyManagerIcons.BackSpace),
                             contentDescription = "Backup",
                             tint = MaterialTheme.colorScheme.primary
                         )
@@ -477,7 +478,7 @@ fun KeyBoardLayout(
             onClick = onHideKeyboardClicked
         ) {
             Icon(
-                painter = painterResource(id = MoneyManagerIcons.HideKeyboard),
+                imageVector = ImageVector.vectorResource(id = MoneyManagerIcons.HideKeyboard),
                 contentDescription = "HideKeyboard",
                 tint = MaterialTheme.colorScheme.primary
             )
@@ -647,7 +648,7 @@ fun CategoryListLayout(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon(
-                    painter = painterResource(id = item.icon),
+                    imageVector = ImageVector.vectorResource(id = item.icon),
                     contentDescription = "Backup",
                     tint = Color(ContextCompat.getColor(context, item.color))
                 )

@@ -5,7 +5,7 @@ import kotlinx.datetime.LocalDateTime
 
 data class TransactionHeader(
     override val date: LocalDateTime,
-    val currency: String,
+    val currency: String
 ) : BaseTransaction {
     override val itemType: Int = HEADER
 }

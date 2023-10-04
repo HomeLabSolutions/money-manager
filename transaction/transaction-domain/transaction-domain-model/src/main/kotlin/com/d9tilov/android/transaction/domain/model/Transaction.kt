@@ -25,7 +25,7 @@ data class Transaction(
     val inStatistics: Boolean,
     val latitude: Double,
     val longitude: Double,
-    val photoUri: String?,
+    val photoUri: String?
 ) : BaseTransaction {
 
     companion object {

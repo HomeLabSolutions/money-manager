@@ -52,6 +52,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.budget.ui.BudgetScreen
 import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.android.currency.ui.CurrencyListScreen
+import com.d9tilov.android.designsystem.MoneyManagerIcons
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.home.MainActivity
 import com.d9tilov.moneymanager.prepopulate.PrepopulateScreen.Companion.fromScreenId
@@ -173,7 +174,7 @@ fun BottomNavigationBar(
                     .size(40.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Default.ArrowDropDown,
+                    imageVector = MoneyManagerIcons.ArrowDropDown,
                     contentDescription = "content description",
                     tint = MaterialTheme.colorScheme.primary
                 )
@@ -201,7 +202,7 @@ fun BottomNavigationBar(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(text = "Next")
                     Icon(
-                        Icons.Default.ArrowDropUp,
+                        imageVector = MoneyManagerIcons.ArrowDropUp,
                         contentDescription = "content description",
                         tint = MaterialTheme.colorScheme.primary
                     )

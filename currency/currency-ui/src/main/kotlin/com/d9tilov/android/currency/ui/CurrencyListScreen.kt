@@ -41,6 +41,7 @@ import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.android.currency_ui.R
 import com.d9tilov.android.designsystem.MmTopAppBar
+import com.d9tilov.android.designsystem.MoneyManagerIcons
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -147,7 +148,7 @@ fun CurrencyItem(currency: DomainCurrency, clickCallback: (currency: DomainCurre
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .alpha(if (currency.isBase) 1f else 0f),
-                imageVector = Icons.Default.Check,
+                imageVector = MoneyManagerIcons.Check,
                 contentDescription = "content description",
                 tint = MaterialTheme.colorScheme.primary
             )
