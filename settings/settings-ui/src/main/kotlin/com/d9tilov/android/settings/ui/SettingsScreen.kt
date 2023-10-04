@@ -34,10 +34,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -209,7 +211,7 @@ fun BackupLayout(
         ) {
             Icon(
                 modifier = Modifier.then(if (backupState.backupLoading) Modifier.rotate(angle) else Modifier),
-                painter = painterResource(id = MoneyManagerIcons.Backup),
+                imageVector = ImageVector.vectorResource(id = MoneyManagerIcons.Backup),
                 contentDescription = "Backup"
             )
         }
@@ -255,7 +257,7 @@ fun SubscriptionLayout(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 modifier = Modifier.padding(start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
-                painter = painterResource(id = MoneyManagerIcons.Subscription),
+                imageVector = ImageVector.vectorResource(id = MoneyManagerIcons.Subscription),
                 contentDescription = "Subscription Icon"
             )
             Column(

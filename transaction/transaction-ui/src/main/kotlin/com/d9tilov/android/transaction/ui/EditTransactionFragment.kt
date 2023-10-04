@@ -158,17 +158,15 @@ class EditTransactionFragment : EditTransactionNavigator,
     private fun updateIcon() {
         val iconDrawable = createTintDrawable(
             requireContext(),
-            viewModel.editedTransaction.value.category.icon
-                ?: com.d9tilov.android.common.android.R.drawable.ic_category_cafe,
-            viewModel.editedTransaction.value.category.color ?: R.color.category_pink
+            viewModel.editedTransaction.value.category.icon,
+            viewModel.editedTransaction.value.category.color
         )
         iconDrawable.setBounds(LEFT_BOUND, TOP_BOUND, RIGHT_BOUND, BOTTOM_BOUND)
         viewBinding?.run {
             editTransactionCategory.setCompoundDrawables(iconDrawable, null, null, null)
             editTransactionCategory.text = viewModel.editedTransaction.value.category.name
             val color = viewModel.editedTransaction.value.category.color
-                ?: viewModel.editedTransaction.value.category.color
-            color?.let { c ->
+            color.let { c ->
                 editTransactionCategory.setTextColor(ContextCompat.getColor(requireContext(), c))
             }
         }
