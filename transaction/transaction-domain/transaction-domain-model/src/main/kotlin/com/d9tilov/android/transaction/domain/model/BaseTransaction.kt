@@ -1,9 +1,11 @@
 package com.d9tilov.android.transaction.domain.model
 
+import kotlinx.datetime.LocalDateTime
+
 interface BaseTransaction {
 
     val itemType: Int
-    val headerPosition: Int
+    val date: LocalDateTime
 
     companion object {
         const val HEADER = 0

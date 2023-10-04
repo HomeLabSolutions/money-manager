@@ -71,13 +71,15 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemKey
 import com.d9tilov.android.category.domain.model.Category
+import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_FORMAT
+import com.d9tilov.android.common.android.utils.formatDate
 import com.d9tilov.android.core.constants.CurrencyConstants
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.KeyPress
+import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.core.utils.toKeyPress
 import com.d9tilov.android.designsystem.ComposeCurrencyView
 import com.d9tilov.android.designsystem.MoneyManagerIcons
@@ -94,6 +96,7 @@ import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.INCOME
 import com.d9tilov.android.incomeexpense.ui.vm.TransactionSpendingTodayPrice
 import com.d9tilov.android.incomeexpense.ui.vm.toScreenType
 import com.d9tilov.android.incomeexpense_ui.R
+import com.d9tilov.android.transaction.domain.model.BaseTransaction
 import com.d9tilov.android.transaction.domain.model.Transaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -159,21 +162,49 @@ fun MainPriceInput(price: Price, modifier: Modifier) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TransactionListLayout(modifier: Modifier, transactions: Flow<PagingData<Transaction>>) {
-    val lazyTransactionItems: LazyPagingItems<Transaction> = transactions.collectAsLazyPagingItems()
+fun TransactionListLayout(modifier: Modifier, transactions: Flow<PagingData<BaseTransaction>>) {
+    val lazyTransactionItems: LazyPagingItems<BaseTransaction> =
+        transactions.collectAsLazyPagingItems()
 
     if (lazyTransactionItems.loadState.refresh is LoadState.Error) {
         // handle error
     }
     val state = rememberLazyListState()
-    LazyColumn(state = state) {
-        items(
-            count = lazyTransactionItems.itemCount,
-            key = lazyTransactionItems.itemKey { it.id }) { index ->
-            val transaction: Transaction? = lazyTransactionItems[index]
-            transaction?.let { tr -> TransactionItem(modifier = Modifier.fillMaxWidth(), tr) }
+    LazyColumn(modifier = modifier, state = state) {
+        for (index in 0 until lazyTransactionItems.itemCount) {
+            val currentItem = lazyTransactionItems.peek(index)
+            currentItem?.let { tr ->
+                if (tr.itemType == BaseTransaction.HEADER) {
+                    stickyHeader {
+                        Surface(
+                            modifier = Modifier.fillParentMaxWidth(),
+                            color = MaterialTheme.colorScheme.primaryContainer
+                        ) {
+                            Text(
+                                modifier = Modifier.padding(start = 24.dp),
+                                text = formatDate(currentItem.date, TRANSACTION_DATE_FORMAT),
+                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
+                        }
+                    }
+                } else {
+                    item {
+                        TransactionItem(
+                            modifier = Modifier.fillMaxWidth(),
+                            transaction = currentItem as Transaction
+                        )
+                    }
+                }
+            }
         }
+//        items(
+//            count = lazyTransactionItems.itemCount,
+//            key = lazyTransactionItems.itemKey { it.id }) { index ->
+//            val transaction: Transaction? = lazyTransactionItems[index]
+//            transaction?.let { tr -> TransactionItem(modifier = Modifier.fillMaxWidth(), tr) }
+//        }
         item {
             if (lazyTransactionItems.loadState.append is LoadState.Loading) {
                 // handle loading
@@ -287,7 +318,8 @@ fun TransactionItem(modifier: Modifier, transaction: Transaction) {
         Divider(
             color = MaterialTheme.colorScheme.primary,
             thickness = 1.dp,
-            modifier = Modifier.alpha(0.2f)
+            modifier = Modifier
+                .alpha(0.2f)
                 .constrainAs(idDivider) {
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
