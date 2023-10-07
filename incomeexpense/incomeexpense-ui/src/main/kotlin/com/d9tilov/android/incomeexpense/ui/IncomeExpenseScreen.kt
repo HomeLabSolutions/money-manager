@@ -1,5 +1,8 @@
 package com.d9tilov.android.incomeexpense.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -18,6 +21,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -40,6 +44,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -80,7 +85,6 @@ import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYM
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.KeyPress
-import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.core.utils.toKeyPress
 import com.d9tilov.android.designsystem.ComposeCurrencyView
 import com.d9tilov.android.designsystem.MoneyManagerIcons
@@ -92,6 +96,7 @@ import com.d9tilov.android.incomeexpense.ui.vm.IncomeExpenseUiState
 import com.d9tilov.android.incomeexpense.ui.vm.IncomeExpenseViewModel
 import com.d9tilov.android.incomeexpense.ui.vm.IncomeUiState
 import com.d9tilov.android.incomeexpense.ui.vm.Price
+import com.d9tilov.android.incomeexpense.ui.vm.ScreenType
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.EXPENSE
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.INCOME
 import com.d9tilov.android.incomeexpense.ui.vm.TransactionSpendingTodayPrice
@@ -104,7 +109,6 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.math.BigDecimal
 import java.math.RoundingMode
-
 
 @Composable
 fun IncomeExpenseRoute(viewModel: IncomeExpenseViewModel = hiltViewModel()) {
@@ -126,29 +130,61 @@ fun IncomeExpenseScreen(
     onHideKeyboardClicked: () -> Unit,
     onCategoryClicked: (Category) -> Unit,
 ) {
-
+    val listState = rememberLazyListState()
     Scaffold(
         floatingActionButton = {
             if (uiState.editMode == EditMode.LIST) {
-                FloatingActionButton(
-                    onClick = onAddBtnClicked,
-                    modifier = Modifier.navigationBarsPadding()
-                ) {
-                    Icon(
-                        imageVector = MoneyManagerIcons.AddCircle,
-                        contentDescription = "Add transaction"
-                    )
-                }
+                AnimatedFloatingActionButton(listState, onClick = onAddBtnClicked)
             }
         }
     ) { paddingValues ->
         HomeTabs(
+            listState = listState,
             uiState = uiState,
             modifier = Modifier.padding(paddingValues),
             onNumberClicked = onNumberClicked,
             onHideKeyboardClicked = onHideKeyboardClicked,
             onCategoryClicked = onCategoryClicked
         )
+    }
+}
+
+@Composable
+fun LazyListState.isScrollingUp(): Boolean {
+    var prevIndex by remember(this) { mutableIntStateOf(firstVisibleItemIndex) }
+    var prevScrollOffset by remember(this) { mutableIntStateOf(firstVisibleItemScrollOffset) }
+    return remember(this) {
+        derivedStateOf {
+            if (prevIndex != firstVisibleItemIndex) {
+                prevIndex > firstVisibleItemIndex
+            } else {
+                prevScrollOffset >= firstVisibleItemScrollOffset
+            }.also {
+                prevIndex = firstVisibleItemIndex
+                prevScrollOffset = firstVisibleItemScrollOffset
+            }
+        }
+    }.value
+}
+
+@Composable
+fun AnimatedFloatingActionButton(listState: LazyListState, onClick: () -> Unit) {
+    AnimatedVisibility(
+        visible = listState.isScrollingUp(),
+        enter = scaleIn(),
+        exit = scaleOut(),
+    ) {
+        FloatingActionButton(
+            onClick = onClick,
+            modifier = Modifier.navigationBarsPadding(),
+            backgroundColor = MaterialTheme.colorScheme.secondary
+        ) {
+            Icon(
+                imageVector = MoneyManagerIcons.AddCircle,
+                contentDescription = "Add transaction",
+                tint = MaterialTheme.colorScheme.onSecondary
+            )
+        }
     }
 }
 
@@ -165,15 +201,23 @@ fun MainPriceInput(price: Price, modifier: Modifier) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TransactionListLayout(modifier: Modifier, transactions: Flow<PagingData<BaseTransaction>>) {
+fun TransactionListLayout(
+    listState: LazyListState,
+    modifier: Modifier,
+    transactions: Flow<PagingData<BaseTransaction>>,
+    screenType: ScreenType,
+) {
     val lazyTransactionItems: LazyPagingItems<BaseTransaction> =
         transactions.collectAsLazyPagingItems()
+    if (lazyTransactionItems.loadState.refresh is LoadState.NotLoading && lazyTransactionItems.itemCount == 0) {
+        EmptyTransactionListPlaceholder(Modifier.fillMaxSize(), screenType)
+        return
+    }
 
     if (lazyTransactionItems.loadState.refresh is LoadState.Error) {
         // handle error
     }
-    val state = rememberLazyListState()
-    LazyColumn(modifier = modifier, state = state) {
+    LazyColumn(modifier = modifier, state = listState) {
         for (index in 0 until lazyTransactionItems.itemCount) {
             val currentItem = lazyTransactionItems.peek(index)
             currentItem?.let { tr ->
@@ -200,12 +244,6 @@ fun TransactionListLayout(modifier: Modifier, transactions: Flow<PagingData<Base
                 }
             }
         }
-//        items(
-//            count = lazyTransactionItems.itemCount,
-//            key = lazyTransactionItems.itemKey { it.id }) { index ->
-//            val transaction: Transaction? = lazyTransactionItems[index]
-//            transaction?.let { tr -> TransactionItem(modifier = Modifier.fillMaxWidth(), tr) }
-//        }
         item {
             if (lazyTransactionItems.loadState.append is LoadState.Loading) {
                 // handle loading
@@ -330,9 +368,36 @@ fun TransactionItem(modifier: Modifier, transaction: Transaction) {
     }
 }
 
+@Composable
+fun EmptyTransactionListPlaceholder(modifier: Modifier, screenType: ScreenType) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Image(
+            painter = painterResource(id = MoneyManagerIcons.EmptyPlaceholder),
+            contentDescription = "No transactions",
+        )
+        Text(
+            modifier = Modifier.padding(top = 16.dp),
+            text = when (screenType) {
+                EXPENSE -> stringResource(id = R.string.transaction_empty_placeholder_expense_title)
+                INCOME -> stringResource(id = R.string.transaction_empty_placeholder_income_title)
+            },
+            style = MaterialTheme.typography.titleLarge
+        )
+        Text(
+            text = stringResource(id = R.string.transaction_empty_placeholder_subtitle),
+            style = MaterialTheme.typography.bodyMedium
+        )
+    }
+}
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeTabs(
+    listState: LazyListState,
     uiState: IncomeExpenseUiState,
     modifier: Modifier = Modifier,
     onNumberClicked: (KeyPress) -> Unit,
@@ -403,9 +468,11 @@ fun HomeTabs(
                 }
             } else {
                 TransactionListLayout(
+                    listState,
                     Modifier.fillMaxSize(),
                     if (tabIndex.toScreenType() == INCOME) uiState.incomeUiState.incomeTransactions
-                    else uiState.expenseUiState.expenseTransactions
+                    else uiState.expenseUiState.expenseTransactions,
+                    tabIndex.toScreenType()
                 )
             }
 

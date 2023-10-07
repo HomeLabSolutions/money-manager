@@ -31,6 +31,7 @@ object MoneyManagerIcons {
     val HideKeyboard = R.drawable.ic_keyboard_hide
     val RegularTransaction = R.drawable.ic_repeat
     val InStatisticsTransaction = R.drawable.ic_not_in_statistics
+    val EmptyPlaceholder = R.drawable.ic_categories_empty
 }
 
 sealed class Icon {
