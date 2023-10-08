@@ -49,6 +49,7 @@ class MainActivity : ComponentActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
@@ -97,7 +98,6 @@ class MainActivity : ComponentActivity() {
         // Turn off the decor fitting system windows, which allows us to handle insets,
         // including IME animations, and go edge-to-edge
         // This also sets up the initial system bar style based on the platform theme
-        enableEdgeToEdge()
         setContent {
             val darkTheme = isSystemInDarkTheme()
 

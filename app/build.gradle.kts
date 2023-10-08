@@ -163,6 +163,7 @@ dependencies {
     implementation(libs.composeMaterialIconsCore)
     implementation(libs.composeMaterialIconsExtended)
     implementation(libs.composeRuntime)
+    implementation(libs.accompanistPagerIndicator)
 
     implementation(libs.androidx.tracing.ktx)
 
