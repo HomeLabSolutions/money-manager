@@ -6,8 +6,8 @@ javaPoet = "1.13.0"
 javaVersion = "17"
 kotlinDatetime = "0.4.0"
 appCompat = "1.6.1"
-material = "1.9.0"
-activity = "1.8.0-rc01"
+material = "1.10.0"
+activity = "1.8.0"
 androidAnnotation = "1.7.0"
 core = "1.12.0"
 coreRuntime = "2.2.0"
@@ -16,7 +16,7 @@ fragment = "1.6.1"
 retrofit = "2.9.0"
 googlePlayServices = "4.4.0"
 googlePlayServicesAuth = "20.7.0"
-navigation = "2.7.3"
+navigation = "2.7.4"
 hilt = "2.47"
 hiltNavigationCompose = "1.0.0"
 hiltPlugin = "2.47"
@@ -39,15 +39,14 @@ viewpager = "1.0.0"
 coroutinesCore = "1.7.3"
 lifecycle = "2.6.2"
 lifecycleExtension = "2.2.0"
-compose = "1.5.2"
+compose = "1.5.3"
 composeConstraintLayout = "1.0.1"
 composeMaterial3 = "1.1.2"
-composeActivity = "1.7.2"
+composeActivity = "1.8.0"
 composeViewModel = "2.6.2"
 composeRuntime = "2.6.2"
 androidxComposeCompiler = "1.5.3"
-accompanistPager = "0.32.0"
-accompanistPagerIndicator = "0.32.0"
+accompanist = "0.32.0"
 androidxTracing = "1.1.0"
 worker = "2.8.1"
 workerHilt = "1.0.0"
@@ -128,8 +127,9 @@ composeViewModel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-c
 composeRuntime = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "composeRuntime" }
 composeUiTestManifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "compose" }
 composeConstraintLayout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "composeConstraintLayout" }
-accompanistPager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanistPager" }
-accompanistPagerIndicator = { group = "com.google.accompanist", name = "accompanist-pager-indicators", version.ref = "accompanistPagerIndicator" }
+accompanistPager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanist" }
+accompanistSystemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist" }
+accompanistPagerIndicator = { group = "com.google.accompanist", name = "accompanist-pager-indicators", version.ref = "accompanist" }
 androidx-tracing-ktx = { group = "androidx.tracing", name = "tracing-ktx", version.ref = "androidxTracing" }
 worker = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "worker" }
 workerHilt = { group = "androidx.hilt", name = "hilt-work", version.ref = "workerHilt" }

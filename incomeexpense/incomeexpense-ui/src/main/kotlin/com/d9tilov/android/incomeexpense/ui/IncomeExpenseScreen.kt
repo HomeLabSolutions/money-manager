@@ -1,5 +1,6 @@
 package com.d9tilov.android.incomeexpense.ui
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
@@ -44,9 +45,11 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -100,6 +103,7 @@ import com.d9tilov.android.incomeexpense.ui.vm.ScreenType
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.EXPENSE
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.INCOME
 import com.d9tilov.android.incomeexpense.ui.vm.TransactionSpendingTodayPrice
+import com.d9tilov.android.incomeexpense.ui.vm.screenTypes
 import com.d9tilov.android.incomeexpense.ui.vm.toScreenType
 import com.d9tilov.android.incomeexpense_ui.R
 import com.d9tilov.android.transaction.domain.model.BaseTransaction
@@ -113,38 +117,55 @@ import java.math.RoundingMode
 @Composable
 fun IncomeExpenseRoute(viewModel: IncomeExpenseViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var editMode by remember { mutableStateOf(EditMode.KEYBOARD) }
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        viewModel.errorMessage
+            .collect { message -> Toast.makeText(context, message, Toast.LENGTH_SHORT)
+                .show()
+            }
+    }
     IncomeExpenseScreen(
         uiState = uiState,
-        onAddBtnClicked = { viewModel.changeEditMode() },
+        editMode = editMode,
         onNumberClicked = { viewModel.addNumber(it) },
-        onHideKeyboardClicked = { viewModel.changeEditMode() },
-        onCategoryClicked = {}
+        onCategoryClicked = { category, screenType ->
+            val res = viewModel.addTransaction(
+                screenType,
+                category
+            )
+            if (res) editMode = EditMode.LIST
+        },
+        onEditModeChanged = { mode -> editMode = mode }
     )
 }
 
 @Composable
 fun IncomeExpenseScreen(
     uiState: IncomeExpenseUiState,
-    onAddBtnClicked: () -> Unit,
+    editMode: EditMode,
     onNumberClicked: (KeyPress) -> Unit,
-    onHideKeyboardClicked: () -> Unit,
-    onCategoryClicked: (Category) -> Unit,
+    onCategoryClicked: (Category, ScreenType) -> Unit,
+    onEditModeChanged: (EditMode) -> Unit,
 ) {
     val listState = rememberLazyListState()
     Scaffold(
         floatingActionButton = {
-            if (uiState.editMode == EditMode.LIST) {
-                AnimatedFloatingActionButton(listState, onClick = onAddBtnClicked)
+            if (editMode == EditMode.LIST) {
+                AnimatedFloatingActionButton(
+                    listState,
+                    onClick = { onEditModeChanged.invoke(EditMode.KEYBOARD) })
             }
         }
     ) { paddingValues ->
         HomeTabs(
             listState = listState,
+            editMode = editMode,
             uiState = uiState,
             modifier = Modifier.padding(paddingValues),
             onNumberClicked = onNumberClicked,
-            onHideKeyboardClicked = onHideKeyboardClicked,
-            onCategoryClicked = onCategoryClicked
+            onCategoryClicked = onCategoryClicked,
+            onKeyboardClicked = { onEditModeChanged.invoke(EditMode.LIST) }
         )
     }
 }
@@ -195,7 +216,7 @@ fun MainPriceInput(price: Price, modifier: Modifier) {
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
         shape = RoundedCornerShape(50),
     ) {
-        ComposeCurrencyView(symbol = price.currency, value = price.value)
+        ComposeCurrencyView(symbol = price.currencyCode.getSymbolByCode(), value = price.value)
     }
 }
 
@@ -398,18 +419,19 @@ fun EmptyTransactionListPlaceholder(modifier: Modifier, screenType: ScreenType) 
 @Composable
 fun HomeTabs(
     listState: LazyListState,
+    editMode: EditMode,
     uiState: IncomeExpenseUiState,
     modifier: Modifier = Modifier,
     onNumberClicked: (KeyPress) -> Unit,
-    onHideKeyboardClicked: () -> Unit,
-    onCategoryClicked: (Category) -> Unit,
+    onCategoryClicked: (Category, ScreenType) -> Unit,
+    onKeyboardClicked: () -> Unit,
 ) {
     Timber.tag(TAG).d("uistate: $uiState")
     var tabIndex by remember { mutableIntStateOf(0) }
     val pagerState = rememberPagerState(
         initialPage = 0,
         initialPageOffsetFraction = 0f
-    ) { uiState.screenTypes.size }
+    ) { screenTypes.size }
     val coroutineScope = rememberCoroutineScope()
     val indicator = @Composable { tabPositions: List<TabPosition> ->
         HomeTabIndicator(Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]))
@@ -418,9 +440,10 @@ fun HomeTabs(
         TabRow(
             selectedTabIndex = pagerState.currentPage,
             indicator = indicator,
-            modifier = modifier
+            modifier = modifier,
+            backgroundColor = MaterialTheme.colorScheme.primary
         ) {
-            uiState.screenTypes.forEachIndexed { index, type ->
+            screenTypes.forEachIndexed { index, type ->
                 Tab(
                     selected = tabIndex == index,
                     onClick = {
@@ -436,11 +459,13 @@ fun HomeTabs(
                                 INCOME -> stringResource(R.string.tab_income)
                             },
                         )
-                    }
+                    },
+                    selectedContentColor = MaterialTheme.colorScheme.onPrimary,
+                    unselectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
         }
-        if (uiState.editMode == EditMode.KEYBOARD) {
+        if (editMode == EditMode.KEYBOARD) {
             MainPriceInput(
                 price = uiState.price,
                 modifier = modifier
@@ -450,7 +475,7 @@ fun HomeTabs(
             Spacer(modifier = Modifier.weight(1f))
         }
         HorizontalPager(state = pagerState) { tabIndex: Int ->
-            if (uiState.editMode == EditMode.KEYBOARD) {
+            if (editMode == EditMode.KEYBOARD) {
                 Column(Modifier.fillMaxWidth()) {
                     uiState.expenseUiState.expenseInfo?.let {
                         ExpenseInfoLayout(
@@ -458,12 +483,18 @@ fun HomeTabs(
                             Modifier.fillMaxWidth()
                         )
                     }
+                    val screenType = tabIndex.toScreenType()
                     CategoryListLayout(
                         categoryList =
-                        if (tabIndex.toScreenType() == INCOME) uiState.incomeUiState.incomeCategoryList
+                        if (screenType == INCOME) uiState.incomeUiState.incomeCategoryList
                         else uiState.expenseUiState.expenseCategoryList,
                         modifier = Modifier.fillMaxWidth(),
-                        onItemClicked = onCategoryClicked
+                        onItemClicked = { category ->
+                            onCategoryClicked.invoke(
+                                category,
+                                screenType
+                            )
+                        }
                     )
                 }
             } else {
@@ -477,11 +508,11 @@ fun HomeTabs(
             }
 
         }
-        if (uiState.editMode == EditMode.KEYBOARD) {
+        if (editMode == EditMode.KEYBOARD) {
             KeyBoardLayout(
                 modifier = Modifier.fillMaxWidth(),
                 onNumberClicked = onNumberClicked,
-                onHideKeyboardClicked = onHideKeyboardClicked
+                onKeyboardClicked = onKeyboardClicked
             )
         }
     }
@@ -490,7 +521,7 @@ fun HomeTabs(
 @Composable
 fun HomeTabIndicator(
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.onSurface,
+    color: Color = MaterialTheme.colorScheme.onPrimary,
 ) {
     Spacer(
         modifier
@@ -503,8 +534,8 @@ fun HomeTabIndicator(
 @Composable
 fun KeyBoardLayout(
     modifier: Modifier,
+    onKeyboardClicked: () -> Unit,
     onNumberClicked: (KeyPress) -> Unit,
-    onHideKeyboardClicked: () -> Unit,
 ) {
     val data: List<String> = KeyPress.values().map { it.value }
     Box(modifier = modifier.padding(bottom = 8.dp)) {
@@ -542,7 +573,7 @@ fun KeyBoardLayout(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(end = 8.dp),
-            onClick = onHideKeyboardClicked
+            onClick = onKeyboardClicked
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = MoneyManagerIcons.HideKeyboard),
@@ -610,7 +641,7 @@ fun ExpenseInfoLayout(
                     bottom.linkTo(idAbleToSpendTitle.bottom)
                     start.linkTo(idAbleToSpendTitle.end)
                 },
-            text = ableToSpendPrice.currency + ableToSpendPrice.value
+            text = ableToSpendPrice.currencyCode.getSymbolByCode() + ableToSpendPrice.value
         )
         val padding = 8.dp
         InfoLabel(
@@ -641,7 +672,7 @@ fun ExpenseInfoLayout(
                     bottom.linkTo(idApproxSignSpendToday.bottom)
                     start.linkTo(idApproxSignSpendToday.end)
                 },
-            text = info.wasSpendToday.currency + info.wasSpendToday.value
+            text = info.wasSpendToday.currencyCode.getSymbolByCode() + info.wasSpendToday.value
         )
         InfoLabel(
             modifier = Modifier.constrainAs(idSpendInPeriodTitle) {
@@ -669,7 +700,7 @@ fun ExpenseInfoLayout(
                     bottom.linkTo(isApproxSignSpendInPeriod.bottom)
                     start.linkTo(isApproxSignSpendInPeriod.end)
                 },
-            text = info.wasSpendInPeriod.currency + info.wasSpendInPeriod.value
+            text = info.wasSpendInPeriod.currencyCode.getSymbolByCode() + info.wasSpendInPeriod.value
         )
     }
 }
@@ -752,8 +783,7 @@ fun TransactionListItemPreview() {
 //@Preview
 fun PreviewIncomeExpenseScreen() {
     MoneyManagerTheme {
-        IncomeExpenseScreen(
-            IncomeExpenseUiState.EMPTY.copy(
+        IncomeExpenseScreen(uiState = IncomeExpenseUiState.EMPTY.copy(
                 incomeUiState = IncomeUiState(
                     incomeCategoryList = listOf(
                         mockCategory(1L, "Category1"),
@@ -780,7 +810,11 @@ fun PreviewIncomeExpenseScreen() {
                         wasSpendInPeriod = Price("44", "$")
                     )
                 )
-            ), {}, {}, {}, {})
+            ),
+            editMode = EditMode.KEYBOARD,
+            onNumberClicked = {},
+            onCategoryClicked = { category: Category, screenType: ScreenType -> },
+            onEditModeChanged = {})
     }
 }
 

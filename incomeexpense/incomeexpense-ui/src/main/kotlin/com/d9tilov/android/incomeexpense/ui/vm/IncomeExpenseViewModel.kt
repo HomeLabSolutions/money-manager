@@ -7,7 +7,7 @@ import androidx.paging.insertSeparators
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.model.Category
-import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
+import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.KeyPress
@@ -16,6 +16,7 @@ import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.isSameDay
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
+import com.d9tilov.android.incomeexpense_ui.R
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.model.BaseTransaction
 import com.d9tilov.android.transaction.domain.model.Transaction
@@ -24,7 +25,9 @@ import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayMode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
@@ -36,8 +39,6 @@ import java.math.BigDecimal
 import javax.inject.Inject
 
 data class IncomeExpenseUiState(
-    val screenTypes: List<ScreenType> = ScreenType.values().asList(),
-    val editMode: EditMode = EditMode.KEYBOARD,
     val price: Price = Price.EMPTY,
     val expenseUiState: ExpenseUiState = ExpenseUiState.EMPTY,
     val incomeUiState: IncomeUiState = IncomeUiState.EMPTY,
@@ -69,7 +70,7 @@ data class IncomeUiState(
 
 data class Price(
     val value: String = "0",
-    val currency: String = DEFAULT_CURRENCY_SYMBOL,
+    val currencyCode: String = DEFAULT_CURRENCY_CODE,
     val isApprox: Boolean = false,
 ) {
     companion object {
@@ -81,7 +82,7 @@ data class ExpenseInfo(
     val ableToSpendToday: TransactionSpendingTodayPrice = TransactionSpendingTodayPrice.NORMAL(
         Price(
             BigDecimal.ZERO.toString(),
-            DEFAULT_CURRENCY_SYMBOL
+            DEFAULT_CURRENCY_CODE
         )
     ),
     val wasSpendToday: Price = Price.EMPTY,
@@ -97,6 +98,8 @@ enum class ScreenType {
     EXPENSE,
     INCOME;
 }
+
+val screenTypes = ScreenType.values().asList()
 
 fun Int.toScreenType(): ScreenType = ScreenType.values()[this]
 
@@ -114,15 +117,17 @@ sealed interface TransactionSpendingTodayPrice {
 
 @HiltViewModel
 class IncomeExpenseViewModel @Inject constructor(
+    billingInteractor: BillingInteractor,
     private val currencyInteractor: CurrencyInteractor,
     private val categoryInteractor: CategoryInteractor,
-    billingInteractor: BillingInteractor,
-    transactionInteractor: TransactionInteractor,
+    private val transactionInteractor: TransactionInteractor,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(IncomeExpenseUiState.EMPTY)
     val uiState = _uiState.asStateFlow()
     private val _mainCurrency = MutableStateFlow(CurrencyMetaData.EMPTY)
+    private val _errorMessage = MutableSharedFlow<Int>()
+    val errorMessage = _errorMessage.asSharedFlow()
 
     private val updateCurrencyExceptionHandler = CoroutineExceptionHandler { _, exception ->
         Timber.d("Unable to update currency: $exception")
@@ -150,7 +155,7 @@ class IncomeExpenseViewModel @Inject constructor(
                 currencyInteractor.getMainCurrencyFlow()
                     .collect { currencyData ->
                         _uiState.update { state ->
-                            state.copy(price = Price(KeyPress.Zero.value, currencyData.symbol))
+                            state.copy(price = Price(KeyPress.Zero.value, currencyData.code))
                         }
                         _mainCurrency.value = currencyData
                         Timber.tag(TAG).d("launch1")
@@ -192,19 +197,19 @@ class IncomeExpenseViewModel @Inject constructor(
                     transactionInteractor.isSpendInPeriodApprox(TransactionType.EXPENSE),
                     transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.EXPENSE)
                 ) { ableToSpendToday, isSpendTodayApprox, spentTodayApprox, isSpendInPeriodApprox, spentInPeriodApprox ->
-                    val currencySymbol = _mainCurrency.value.symbol
+                    val currencyCode = _mainCurrency.value.code
                     ExpenseInfo(
                         when (ableToSpendToday) {
                             is TransactionSpendingTodayModel.NORMAL -> TransactionSpendingTodayPrice.NORMAL(
-                                Price(ableToSpendToday.trSum.toString(), currencySymbol)
+                                Price(ableToSpendToday.trSum.toString(), currencyCode)
                             )
 
                             is TransactionSpendingTodayModel.OVERSPENDING -> TransactionSpendingTodayPrice.OVERSPENDING(
-                                Price(ableToSpendToday.trSum.toString(), currencySymbol)
+                                Price(ableToSpendToday.trSum.toString(), currencyCode)
                             )
                         },
-                        Price(spentTodayApprox.toString(), currencySymbol, isSpendTodayApprox),
-                        Price(spentInPeriodApprox.toString(), currencySymbol, isSpendInPeriodApprox)
+                        Price(spentTodayApprox.toString(), currencyCode, isSpendTodayApprox),
+                        Price(spentInPeriodApprox.toString(), currencyCode, isSpendInPeriodApprox)
                     )
                 }
                 combine(
@@ -223,10 +228,10 @@ class IncomeExpenseViewModel @Inject constructor(
                     transactionInteractor.isSpendInPeriodApprox(TransactionType.INCOME),
                     transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.INCOME)
                 ) { sum, approxSum ->
-                    val currencySymbol = _mainCurrency.value.symbol
+                    val currencyCode = _mainCurrency.value.code
                     IncomeInfo(
-                        Price(sum.toString(), currencySymbol),
-                        Price(approxSum.toString(), currencySymbol),
+                        Price(sum.toString(), currencyCode),
+                        Price(approxSum.toString(), currencyCode),
                     )
                 }
                     .collect { info ->
@@ -243,23 +248,39 @@ class IncomeExpenseViewModel @Inject constructor(
         }
     }
 
-    fun changeEditMode() {
-        _uiState.update { state ->
-            state.copy(
-                editMode = when (state.editMode) {
-                    EditMode.KEYBOARD -> EditMode.LIST
-                    EditMode.LIST -> EditMode.KEYBOARD
-                }
-            )
-        }
-    }
-
     fun addNumber(btn: KeyPress) {
         _uiState.update { state ->
             val newPriceStr = MainPriceFieldParser.parse(state.price.value, btn)
             val newPrice = state.price.copy(value = newPriceStr)
             state.copy(price = newPrice)
         }
+    }
+
+    fun addTransaction(screenType: ScreenType, category: Category): Boolean {
+        if (_uiState.value.price.value.toBigDecimal().signum() == 0) {
+            viewModelScope.launch { _errorMessage.emit(R.string.income_expense_empty_sum_error) }
+            return false
+        }
+        _uiState.value.run {
+            viewModelScope.launch {
+                transactionInteractor.addTransaction(
+                    Transaction.EMPTY.copy(
+                        sum = price.value.toBigDecimal(),
+                        category = category,
+                        currencyCode = price.currencyCode,
+                        type = when (screenType) {
+                            ScreenType.EXPENSE -> TransactionType.EXPENSE
+                            ScreenType.INCOME -> TransactionType.INCOME
+                        }
+                    )
+                )
+            }
+        }
+        _uiState.update { state ->
+            val price = state.price.copy(value = BigDecimal.ZERO.toString())
+            state.copy(price = price)
+        }
+        return true
     }
 
     private fun mapWithStickyHeaders(flow: Flow<PagingData<Transaction>>): Flow<PagingData<BaseTransaction>> {
