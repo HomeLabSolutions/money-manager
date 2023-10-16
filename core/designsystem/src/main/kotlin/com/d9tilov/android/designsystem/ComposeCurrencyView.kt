@@ -37,7 +37,6 @@ fun ComposeCurrencyView(
             color = symbolColor,
             fontSize = symbolSize,
             style = symbolStyle,
-
             maxLines = 1
         )
         Text(

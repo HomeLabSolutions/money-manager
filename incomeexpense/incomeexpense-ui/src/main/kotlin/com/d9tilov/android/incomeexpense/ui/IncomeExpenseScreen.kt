@@ -90,6 +90,7 @@ import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYM
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.KeyPress
+import com.d9tilov.android.core.utils.removeScale
 import com.d9tilov.android.core.utils.toKeyPress
 import com.d9tilov.android.designsystem.ComposeCurrencyView
 import com.d9tilov.android.designsystem.MoneyManagerIcons
@@ -370,13 +371,13 @@ fun TransactionItem(modifier: Modifier, transaction: Transaction) {
             horizontalAlignment = Alignment.End
         ) {
             ComposeCurrencyView(
-                value = transaction.sum.toString(),
+                value = transaction.sum.removeScale.toString(),
                 valueSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sum_small_text_size).value.sp,
                 symbol = transaction.currencyCode.getSymbolByCode(),
                 symbolSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sign_small_text_size).value.sp
             )
             ComposeCurrencyView(
-                value = transaction.usdSum.toString(),
+                value = transaction.usdSum.removeScale.toString(),
                 valueSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_extra_small_text_size).value.sp,
                 symbol = DEFAULT_CURRENCY_SYMBOL,
                 symbolSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sign_extra_small_text_size).value.sp
