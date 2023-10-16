@@ -32,6 +32,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
@@ -81,6 +82,7 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.d9tilov.android.category.domain.model.Category
+import com.d9tilov.android.category.domain.model.Category.Companion.ALL_ITEMS_ID
 import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_FORMAT
 import com.d9tilov.android.common.android.utils.formatDate
 import com.d9tilov.android.core.constants.CurrencyConstants
@@ -115,7 +117,7 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 @Composable
-fun IncomeExpenseRoute(viewModel: IncomeExpenseViewModel = hiltViewModel()) {
+fun IncomeExpenseRoute(viewModel: IncomeExpenseViewModel = hiltViewModel(), onCurrencyClicked: () -> Unit) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var editMode by remember { mutableStateOf(EditMode.KEYBOARD) }
     val context = LocalContext.current
@@ -136,7 +138,8 @@ fun IncomeExpenseRoute(viewModel: IncomeExpenseViewModel = hiltViewModel()) {
             )
             if (res) editMode = EditMode.LIST
         },
-        onEditModeChanged = { mode -> editMode = mode }
+        onEditModeChanged = { mode -> editMode = mode },
+        onCurrencyClicked = onCurrencyClicked
     )
 }
 
@@ -147,6 +150,7 @@ fun IncomeExpenseScreen(
     onNumberClicked: (KeyPress) -> Unit,
     onCategoryClicked: (Category, ScreenType) -> Unit,
     onEditModeChanged: (EditMode) -> Unit,
+    onCurrencyClicked: () -> Unit
 ) {
     val listState = rememberLazyListState()
     Scaffold(
@@ -165,7 +169,8 @@ fun IncomeExpenseScreen(
             modifier = Modifier.padding(paddingValues),
             onNumberClicked = onNumberClicked,
             onCategoryClicked = onCategoryClicked,
-            onKeyboardClicked = { onEditModeChanged.invoke(EditMode.LIST) }
+            onKeyboardClicked = { onEditModeChanged.invoke(EditMode.LIST) },
+            onCurrencyClicked = onCurrencyClicked
         )
     }
 }
@@ -209,10 +214,12 @@ fun AnimatedFloatingActionButton(listState: LazyListState, onClick: () -> Unit) 
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MainPriceInput(price: Price, modifier: Modifier) {
+fun MainPriceInput(price: Price, modifier: Modifier, onCurrencyClicked: () -> Unit) {
     Surface(
         modifier = modifier,
+        onClick = onCurrencyClicked,
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
         shape = RoundedCornerShape(50),
     ) {
@@ -425,6 +432,7 @@ fun HomeTabs(
     onNumberClicked: (KeyPress) -> Unit,
     onCategoryClicked: (Category, ScreenType) -> Unit,
     onKeyboardClicked: () -> Unit,
+    onCurrencyClicked: () -> Unit
 ) {
     Timber.tag(TAG).d("uistate: $uiState")
     var tabIndex by remember { mutableIntStateOf(0) }
@@ -471,6 +479,7 @@ fun HomeTabs(
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(32.dp),
+                onCurrencyClicked = onCurrencyClicked
             )
             Spacer(modifier = Modifier.weight(1f))
         }
@@ -595,14 +604,14 @@ fun ExpenseInfoLayout(
     when (info.ableToSpendToday) {
         is TransactionSpendingTodayPrice.OVERSPENDING -> {
             ableToSpendTodayTitle =
-                stringResource(id = com.d9tilov.android.category_ui.R.string.category_expense_info_can_spend_today_negate_title)
+                stringResource(id = R.string.category_expense_info_can_spend_today_negate_title)
             ableToSpendPrice = info.ableToSpendToday.trSum
             ableToSpendColor = MaterialTheme.colorScheme.error
         }
 
         is TransactionSpendingTodayPrice.NORMAL -> {
             ableToSpendTodayTitle =
-                stringResource(id = com.d9tilov.android.category_ui.R.string.category_expense_info_can_spend_today_title)
+                stringResource(id = R.string.category_expense_info_can_spend_today_title)
             ableToSpendPrice = info.ableToSpendToday.trSum
             ableToSpendColor =
                 if (info.wasSpendToday.value.toBigDecimal().setScale(
@@ -652,7 +661,7 @@ fun ExpenseInfoLayout(
                     bottom.linkTo(idSpendInPeriodTitle.top)
                     start.linkTo(parent.start)
                 },
-            text = stringResource(id = com.d9tilov.android.category_ui.R.string.category_expense_info_today_title)
+            text = stringResource(id = R.string.category_expense_info_today_title)
         )
         Text(
             modifier = Modifier
@@ -751,7 +760,7 @@ fun CategoryListLayout(
                     tint = Color(ContextCompat.getColor(context, item.color))
                 )
                 Text(
-                    text = item.name,
+                    text = if (item.id == ALL_ITEMS_ID) stringResource(id = R.string.category_all) else item.name,
                     color = Color(ContextCompat.getColor(context, item.color)),
                     overflow = TextOverflow.Ellipsis
                 )
@@ -814,7 +823,9 @@ fun PreviewIncomeExpenseScreen() {
             editMode = EditMode.KEYBOARD,
             onNumberClicked = {},
             onCategoryClicked = { category: Category, screenType: ScreenType -> },
-            onEditModeChanged = {})
+            onEditModeChanged = {},
+            onCurrencyClicked = {}
+        )
     }
 }
 

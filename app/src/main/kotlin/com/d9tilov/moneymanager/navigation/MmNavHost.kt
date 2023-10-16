@@ -29,7 +29,7 @@ fun MmNavHost(
         startDestination = startDestination,
         modifier = modifier,
     ) {
-        incomeExpenseScreen()
+        incomeExpenseScreen(onCurrencyClick = navController::navigateToCurrencyListScreen)
         statisticsScreen()
         profileScreen(
             navigateToCurrencyListScreen = navController::navigateToCurrencyListScreen,

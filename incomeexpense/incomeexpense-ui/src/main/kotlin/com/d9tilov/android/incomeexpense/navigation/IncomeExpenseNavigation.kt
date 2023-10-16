@@ -24,6 +24,6 @@ fun NavController.navigateToIncomeExpense(navOptions: NavOptions? = null) {
     this.navigate(incomeExpenseNavigationRoute, navOptions)
 }
 
-fun NavGraphBuilder.incomeExpenseScreen() {
-    composable(route = incomeExpenseNavigationRoute) { IncomeExpenseRoute() }
+fun NavGraphBuilder.incomeExpenseScreen(onCurrencyClick: () -> Unit) {
+    composable(route = incomeExpenseNavigationRoute) { IncomeExpenseRoute(onCurrencyClicked = onCurrencyClick) }
 }
