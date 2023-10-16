@@ -162,7 +162,7 @@ class IncomeExpenseViewModel @Inject constructor(
                     }
             }
             launch {
-                categoryInteractor.getAllCategoriesByType(TransactionType.INCOME)
+                categoryInteractor.getGroupedCategoriesByType(TransactionType.INCOME)
                     .collect { list ->
                         _uiState.update { state ->
                             Timber.tag(TAG).d("launch2: $list")
@@ -176,7 +176,7 @@ class IncomeExpenseViewModel @Inject constructor(
                     }
             }
             launch {
-                categoryInteractor.getAllCategoriesByType(TransactionType.EXPENSE)
+                categoryInteractor.getGroupedCategoriesByType(TransactionType.EXPENSE)
                     .collect { list ->
                         _uiState.update { state ->
                             Timber.tag(TAG).d("launch3: $list")
