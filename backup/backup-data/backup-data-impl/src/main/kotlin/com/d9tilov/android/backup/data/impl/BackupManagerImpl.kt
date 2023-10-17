@@ -19,7 +19,6 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -115,7 +114,7 @@ class BackupManagerImpl @Inject constructor(
     }
 
     override suspend fun deleteBackup(): ResultOf<Any> = withContext(dispatcher) {
-        val uid = preferencesStore.uid.first()
+        val uid = preferencesStore.uid.firstOrNull()
         suspendCancellableCoroutine { continuation ->
             if (!isNetworkConnected(context)) {
                 continuation.resumeWithException(NetworkException())

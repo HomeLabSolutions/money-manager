@@ -25,6 +25,5 @@ dependencies {
     implementation(libs.bundles.composeMaterial3)
     implementation(libs.composeViewModel)
     implementation(libs.composeRuntime)
-
     implementation(libs.hiltNavigationCompose)
 }

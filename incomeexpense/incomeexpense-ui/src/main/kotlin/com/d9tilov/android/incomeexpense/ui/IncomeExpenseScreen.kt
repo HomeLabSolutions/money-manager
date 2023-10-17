@@ -88,6 +88,7 @@ import com.d9tilov.android.common.android.utils.formatDate
 import com.d9tilov.android.core.constants.CurrencyConstants
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.core.constants.DataConstants.TAG
+import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.KeyPress
 import com.d9tilov.android.core.utils.removeScale
@@ -118,14 +119,19 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 @Composable
-fun IncomeExpenseRoute(viewModel: IncomeExpenseViewModel = hiltViewModel(), onCurrencyClicked: () -> Unit) {
+fun IncomeExpenseRoute(
+    viewModel: IncomeExpenseViewModel = hiltViewModel(),
+    onCurrencyClicked: () -> Unit,
+    onAllCategoryClicked: (ScreenType) -> Unit,
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var editMode by remember { mutableStateOf(EditMode.KEYBOARD) }
     val context = LocalContext.current
     LaunchedEffect(Unit) {
         viewModel.errorMessage
-            .collect { message -> Toast.makeText(context, message, Toast.LENGTH_SHORT)
-                .show()
+            .collect { message ->
+                Toast.makeText(context, message, Toast.LENGTH_SHORT)
+                    .show()
             }
     }
     IncomeExpenseScreen(
@@ -140,7 +146,8 @@ fun IncomeExpenseRoute(viewModel: IncomeExpenseViewModel = hiltViewModel(), onCu
             if (res) editMode = EditMode.LIST
         },
         onEditModeChanged = { mode -> editMode = mode },
-        onCurrencyClicked = onCurrencyClicked
+        onCurrencyClicked = onCurrencyClicked,
+        onAllCategoryClicked = onAllCategoryClicked
     )
 }
 
@@ -151,7 +158,8 @@ fun IncomeExpenseScreen(
     onNumberClicked: (KeyPress) -> Unit,
     onCategoryClicked: (Category, ScreenType) -> Unit,
     onEditModeChanged: (EditMode) -> Unit,
-    onCurrencyClicked: () -> Unit
+    onCurrencyClicked: () -> Unit,
+    onAllCategoryClicked: (ScreenType) -> Unit,
 ) {
     val listState = rememberLazyListState()
     Scaffold(
@@ -171,7 +179,8 @@ fun IncomeExpenseScreen(
             onNumberClicked = onNumberClicked,
             onCategoryClicked = onCategoryClicked,
             onKeyboardClicked = { onEditModeChanged.invoke(EditMode.LIST) },
-            onCurrencyClicked = onCurrencyClicked
+            onCurrencyClicked = onCurrencyClicked,
+            onAllCategoryClicked = onAllCategoryClicked
         )
     }
 }
@@ -433,9 +442,9 @@ fun HomeTabs(
     onNumberClicked: (KeyPress) -> Unit,
     onCategoryClicked: (Category, ScreenType) -> Unit,
     onKeyboardClicked: () -> Unit,
-    onCurrencyClicked: () -> Unit
+    onCurrencyClicked: () -> Unit,
+    onAllCategoryClicked: (ScreenType) -> Unit,
 ) {
-    Timber.tag(TAG).d("uistate: $uiState")
     var tabIndex by remember { mutableIntStateOf(0) }
     val pagerState = rememberPagerState(
         initialPage = 0,
@@ -499,12 +508,8 @@ fun HomeTabs(
                         if (screenType == INCOME) uiState.incomeUiState.incomeCategoryList
                         else uiState.expenseUiState.expenseCategoryList,
                         modifier = Modifier.fillMaxWidth(),
-                        onItemClicked = { category ->
-                            onCategoryClicked.invoke(
-                                category,
-                                screenType
-                            )
-                        }
+                        onItemClicked = { category -> onCategoryClicked.invoke(category, screenType) },
+                        onAllCategoryClicked = { onAllCategoryClicked.invoke(screenType) }
                     )
                 }
             } else {
@@ -735,6 +740,7 @@ fun CategoryListLayout(
     categoryList: List<Category>,
     modifier: Modifier,
     onItemClicked: (Category) -> Unit,
+    onAllCategoryClicked: () -> Unit,
 ) {
     Timber.tag(TAG).d("categoryList: $categoryList")
     val context = LocalContext.current
@@ -751,7 +757,11 @@ fun CategoryListLayout(
                 modifier = Modifier
                     .size(dimensionResource(id = R.dimen.category_item_size))
                     .padding(8.dp)
-                    .clickable { onItemClicked.invoke(item) },
+                    .clickable {
+                        if (item.id == ALL_ITEMS_ID) onAllCategoryClicked.invoke() else onItemClicked.invoke(
+                            item
+                        )
+                    },
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -820,12 +830,13 @@ fun PreviewIncomeExpenseScreen() {
                         wasSpendInPeriod = Price("44", "$")
                     )
                 )
-            ),
+        ),
             editMode = EditMode.KEYBOARD,
             onNumberClicked = {},
             onCategoryClicked = { category: Category, screenType: ScreenType -> },
             onEditModeChanged = {},
-            onCurrencyClicked = {}
+            onCurrencyClicked = {},
+            onAllCategoryClicked = {}
         )
     }
 }

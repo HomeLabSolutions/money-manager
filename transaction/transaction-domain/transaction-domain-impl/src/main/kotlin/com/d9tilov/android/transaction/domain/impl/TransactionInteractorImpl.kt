@@ -37,7 +37,7 @@ import com.d9tilov.android.user.domain.contract.UserInteractor
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
@@ -76,7 +76,7 @@ class TransactionInteractorImpl(
                 categoryInteractor.update(category.copy(usageCount = count))
             }
             launch {
-                val budget = budgetInteractor.get().first()
+                val budget = checkNotNull(budgetInteractor.get().firstOrNull())
                 var budgetSum = budget.sum
                 budgetSum += currencyInteractor.toTargetCurrency(
                     if (transaction.type.isIncome()) transaction.sum else transaction.sum.negate(),
@@ -136,7 +136,8 @@ class TransactionInteractorImpl(
                             }
                             .map { entry: Map.Entry<Category, List<TransactionChartModel>> ->
                                 val currencySum: BigDecimal = entry.value.sumOf { item -> item.sum }
-                                val transaction: TransactionChartModel = entry.value.first()
+                                val transaction: TransactionChartModel =
+                                    checkNotNull(entry.value.firstOrNull())
                                 val category = entry.key
                                 TransactionChartModel(
                                     transaction.clientId,
@@ -193,13 +194,13 @@ class TransactionInteractorImpl(
         val categoryList: List<Category> = category.children.ifEmpty { listOf(category) }
         return categoryList.flatMap { item: Category ->
             transactionRepo.getByCategoryInPeriod(item, from, to, inStatistics)
-                .first()
-                .map { tr: TransactionDataModel ->
+                .firstOrNull()
+                ?.map { tr: TransactionDataModel ->
                     val foundCategory =
                         categoryList.find { listItem -> tr.categoryId == listItem.id }
                             ?: throw CategoryException.CategoryNotFoundException("getTransactionsByCategory Not found category with id: ${tr.categoryId}")
                     tr.toDomainModel(foundCategory)
-                }
+                } ?: emptyList()
         }
     }
 
@@ -639,7 +640,7 @@ class TransactionInteractorImpl(
                     }
                 }
             }
-        }.first()
+        }.firstOrNull()
     }
 
     override suspend fun update(transaction: Transaction) {
@@ -650,8 +651,9 @@ class TransactionInteractorImpl(
                 transactionRepo.update(transaction.toDataModel().copy(usdSum = usdSumValue))
             }
             launch {
-                val oldTransaction = transactionRepo.getTransactionById(transaction.id).first()
-                val budget = budgetInteractor.get().first()
+                val oldTransaction =
+                    checkNotNull(transactionRepo.getTransactionById(transaction.id).firstOrNull())
+                val budget = checkNotNull(budgetInteractor.get().firstOrNull())
                 var budgetSum = budget.sum
                 budgetSum += currencyInteractor.toTargetCurrency(
                     if (oldTransaction.type.isIncome()) oldTransaction.sum.negate() else oldTransaction.sum,
@@ -672,7 +674,7 @@ class TransactionInteractorImpl(
         coroutineScope {
             launch { transactionRepo.removeTransaction(transaction.toDataModel()) }
             launch {
-                val budget = budgetInteractor.get().first()
+                val budget = checkNotNull(budgetInteractor.get().firstOrNull())
                 var budgetSum = budget.sum
                 budgetSum += currencyInteractor.toTargetCurrency(
                     if (transaction.type.isIncome()) transaction.sum.negate() else transaction.sum,
