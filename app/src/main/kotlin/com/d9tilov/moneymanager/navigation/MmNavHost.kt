@@ -3,6 +3,8 @@ package com.d9tilov.moneymanager.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
+import com.d9tilov.android.category.ui.navigation.categoryListScreen
+import com.d9tilov.android.category.ui.navigation.navigateToCategoryListScreen
 import com.d9tilov.android.incomeexpense.navigation.incomeExpenseNavigationRoute
 import com.d9tilov.android.incomeexpense.navigation.incomeExpenseScreen
 import com.d9tilov.android.profile.ui.navigation.budgetScreen
@@ -29,7 +31,11 @@ fun MmNavHost(
         startDestination = startDestination,
         modifier = modifier,
     ) {
-        incomeExpenseScreen(onCurrencyClick = navController::navigateToCurrencyListScreen)
+        incomeExpenseScreen(
+            onCurrencyClick = navController::navigateToCurrencyListScreen,
+            onAllCategoryClick = navController::navigateToCategoryListScreen
+        )
+        categoryListScreen()
         statisticsScreen()
         profileScreen(
             navigateToCurrencyListScreen = navController::navigateToCurrencyListScreen,

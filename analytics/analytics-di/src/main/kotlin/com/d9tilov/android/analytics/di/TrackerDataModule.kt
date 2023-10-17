@@ -9,8 +9,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.scopes.ActivityRetainedScoped
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
@@ -19,10 +20,11 @@ object TrackerDataModule {
     @Provides
     @ActivityRetainedScoped
     fun provideFirebaseTracker(
+        coroutineScope: CoroutineScope,
         preferencesStore: PreferencesStore
     ): FirebaseAnalytics {
         val tracker: FirebaseAnalytics = Firebase.analytics
-        runBlocking { tracker.setUserId(preferencesStore.uid.first()) }
+        coroutineScope.launch { tracker.setUserId(preferencesStore.uid.firstOrNull()) }
         return tracker
     }
 }

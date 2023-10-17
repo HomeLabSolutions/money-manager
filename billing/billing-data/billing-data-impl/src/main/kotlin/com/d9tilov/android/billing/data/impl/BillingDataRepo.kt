@@ -8,6 +8,7 @@ import com.android.billingclient.api.Purchase
 import com.d9tilov.android.billing.data.contract.BillingSource
 import com.d9tilov.android.billing.domain.contract.BillingRepo
 import com.d9tilov.android.billing.domain.model.BillingSkuDetails
+import com.d9tilov.android.billing.domain.model.exceptions.BillingFailure
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.network.dispatchers.Dispatcher
@@ -15,6 +16,7 @@ import com.d9tilov.android.network.dispatchers.MoneyManagerDispatchers
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -42,7 +44,8 @@ class BillingDataRepo @Inject constructor(
     override fun getSkuDetails(): Flow<List<BillingSkuDetails>> {
         return billingSource.productWithProductDetails.map { details: Map<String, ProductDetails> -> details.toList() }
             .filter { it.isNotEmpty() }
-            .map { list: List<Pair<String, ProductDetails>> -> list.first() }
+            .map { list: List<Pair<String, ProductDetails>> -> list.firstOrNull() }
+            .filterNotNull()
             .map { item ->
                 Pair<String, List<ProductDetails.SubscriptionOfferDetails>?>(
                     item.first,
@@ -53,12 +56,12 @@ class BillingDataRepo @Inject constructor(
                 val product: String = pair.first
                 pair.second?.map { details: ProductDetails.SubscriptionOfferDetails ->
                     val offerTags = details.offerTags
-                    if (offerTags.isEmpty()) throw com.d9tilov.android.billing.domain.model.exceptions.BillingFailure.TagNotFoundException(product)
-                    val tag = offerTags.first()
+                    if (offerTags.isEmpty()) throw BillingFailure.TagNotFoundException(product)
+                    val tag = checkNotNull(offerTags.firstOrNull())
                     val offerToken = details.offerToken
                     val pricingList = details.pricingPhases.pricingPhaseList
-                    if (pricingList.isEmpty()) throw com.d9tilov.android.billing.domain.model.exceptions.BillingFailure.PriceNotFoundException(product)
-                    val price = pricingList.first()
+                    if (pricingList.isEmpty()) throw BillingFailure.PriceNotFoundException(product)
+                    val price = checkNotNull(pricingList.firstOrNull())
                     val formattedPrice =
                         price.priceAmountMicros.toBigDecimal().divide(AMOUNT_DIVIDER.toBigDecimal())
                     val currencyCode = price.priceCurrencyCode
@@ -67,12 +70,12 @@ class BillingDataRepo @Inject constructor(
                         value = formattedPrice,
                         symbol = currencyCode.getSymbolByCode()
                     )
-                    com.d9tilov.android.billing.domain.model.BillingSkuDetails(
+                    BillingSkuDetails(
                         tag,
                         offerToken,
                         currency
                     )
-                } ?: throw com.d9tilov.android.billing.domain.model.exceptions.BillingFailure.SubscriptionNotFoundException(product)
+                } ?: throw BillingFailure.SubscriptionNotFoundException(product)
             }
             .flowOn(dispatcher)
     }

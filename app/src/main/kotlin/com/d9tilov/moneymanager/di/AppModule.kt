@@ -7,6 +7,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import javax.inject.Singleton
 
 @Module
@@ -20,4 +22,8 @@ object AppModule {
     @Provides
     @Singleton
     fun provideApplication(application: Application): App = application as App
+
+    @Provides
+    @Singleton
+    fun providesApplicationScope(): CoroutineScope = CoroutineScope(SupervisorJob())
 }

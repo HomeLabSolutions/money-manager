@@ -57,7 +57,6 @@ fun MmApp(
                 .semantics {
                 testTagsAsResourceId = true
             },
-            containerColor = Color.Transparent,
             contentColor = MaterialTheme.colorScheme.onBackground,
             contentWindowInsets = WindowInsets(0, 0, 0, 0),
             snackbarHost = { SnackbarHost(snackbarHostState) },
