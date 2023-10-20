@@ -87,5 +87,5 @@ fun NavGraphBuilder.categoryListScreen() {
         arguments = listOf(
             navArgument(transactionTypeArg) { type = NavType.IntType },
         )
-    ) { CategoryListRoute() }
+    ) { CategoryListRoute(onBackClicked = {}, onCreateClicked = {}) }
 }

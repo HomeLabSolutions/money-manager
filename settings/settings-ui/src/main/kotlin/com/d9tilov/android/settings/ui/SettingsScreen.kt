@@ -37,7 +37,6 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -48,7 +47,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
-import com.d9tilov.android.designsystem.SaveButton
+import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.SimpleDialog
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.android.settings.ui.vm.BackupState
@@ -128,7 +127,7 @@ fun SettingsScreen(
                 onClearBackupClick = { openAlertDialog.value = true },
             )
             Spacer(modifier = Modifier.weight(1f))
-            SaveButton(onClick = onSave)
+            BottomActionButton(onClick = onSave)
             SimpleDialog(
                 show = openAlertDialog.value,
                 title = stringResource(R.string.settings_backup_delete_title),

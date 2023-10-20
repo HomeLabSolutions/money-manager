@@ -23,7 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.budget_ui.R
 import com.d9tilov.android.designsystem.CurrencyTextFieldExtraBig
 import com.d9tilov.android.designsystem.MmTopAppBar
-import com.d9tilov.android.designsystem.SaveButton
+import com.d9tilov.android.designsystem.BottomActionButton
 
 @Composable
 fun BudgetRoute(viewModel: BudgetAmountViewModel = hiltViewModel(), clickBack: () -> Unit) {
@@ -83,7 +83,7 @@ fun BudgetScreen(
             }
             Spacer(modifier = Modifier.weight(1f))
             if (!showInPrepopulate) {
-                SaveButton(onClick = onSave)
+                BottomActionButton(onClick = onSave)
             }
         }
     }

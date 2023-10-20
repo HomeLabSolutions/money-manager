@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="category_all">Все\nстатьи</string>
-    <string name="delete">Удаляй</string>
+    <string name="delete">Удалить</string>
+    <string name="create">Создать</string>
     <string name="category_name_title">Название категории</string>
     <string name="category_name_hint">Введите название</string>
     <string name="title_category_set">Доступные иконки</string>
