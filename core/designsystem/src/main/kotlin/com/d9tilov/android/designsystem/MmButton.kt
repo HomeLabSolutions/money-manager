@@ -67,7 +67,7 @@ fun FilledButton(
 }
 
 @Composable
-fun SaveButton(
+fun BottomActionButton(
     onClick: () -> Unit,
     text: String = stringResource(R.string.save),
     enabled: Boolean = true,

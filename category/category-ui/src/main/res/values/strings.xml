@@ -2,6 +2,7 @@
 <resources>
     <string name="category_all">All\nitems</string>
     <string name="delete">Delete</string>
+    <string name="create">Create</string>
     <string name="category_name_title">Category name</string>
     <string name="category_name_hint">Enter name</string>
     <string name="title_category_set">Available icons</string>
