@@ -1,10 +1,12 @@
 package com.d9tilov.android.category.ui.vm
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.model.Category
+import com.d9tilov.android.category.ui.navigation.CategoryArgs
 import com.d9tilov.android.category.ui.navigation.CategoryCreationNavigator
 import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.core.constants.DataConstants.DEFAULT_DATA_ID
@@ -27,7 +29,9 @@ class CategoryCreationViewModel @Inject constructor(
     private val billingInteractor: BillingInteractor
 ) : BaseViewModel<CategoryCreationNavigator>() {
 
-    private val categoryId: Long = checkNotNull(savedStateHandle["category_id"])
+    private val categoryArgs: CategoryArgs.CategoryCreationArgs =
+        CategoryArgs.CategoryCreationArgs(savedStateHandle)
+    private val categoryId: Long = categoryArgs.categoryId
     private val _category = MutableStateFlow(Category.EMPTY_INCOME)
     val category: StateFlow<Category> = _category
 

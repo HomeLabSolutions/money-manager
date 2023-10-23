@@ -30,8 +30,8 @@ fun NavController.navigateToSettingsScreen(navOptions: NavOptions? = null) {
     this.navigate(settingsNavigationRoute, navOptions)
 }
 
-fun NavGraphBuilder.settingsScreen(clickBack: () -> Unit) {
-    composable(route = settingsNavigationRoute) { SettingsRoute(clickBack = clickBack) }
+fun NavGraphBuilder.settingsScreen(clickBack: () -> Unit, onShowSnackBar: suspend (String, String?) -> Boolean) {
+    composable(route = settingsNavigationRoute) { SettingsRoute(clickBack = clickBack, onShowSnackBar = onShowSnackBar) }
 }
 
 fun NavGraphBuilder.currencyScreen(clickBack: () -> Unit) {

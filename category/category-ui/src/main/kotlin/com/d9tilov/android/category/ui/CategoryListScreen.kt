@@ -3,8 +3,6 @@ package com.d9tilov.android.category.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -41,12 +39,14 @@ import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 @Composable
 fun CategoryListRoute(
     viewModel: CategoryListViewModel = hiltViewModel(),
-    onBackClicked: () -> Unit,
     onCreateClicked: () -> Unit,
+    clickBack: () -> Unit,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     CategoryListScreen(
-        uiState = state, onBackClicked = onBackClicked, onCreateClicked = onCreateClicked
+        uiState = state,
+        onBackClicked = clickBack,
+        onCreateClicked = onCreateClicked,
     )
 }
 
@@ -60,7 +60,8 @@ fun CategoryListScreen(
     val context = LocalContext.current
     Scaffold(topBar = {
         MmTopAppBar(
-            titleRes = R.string.title_category, onNavigationClick = onBackClicked
+            titleRes = R.string.title_category,
+            onNavigationClick = onBackClicked
         )
     }) { padding ->
         Column(

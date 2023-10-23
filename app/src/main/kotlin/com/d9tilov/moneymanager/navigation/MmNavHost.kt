@@ -20,7 +20,7 @@ import com.d9tilov.moneymanager.ui.MmAppState
 @Composable
 fun MmNavHost(
     appState: MmAppState,
-    onShowSnackbar: suspend (String, String?) -> Boolean,
+    onShowSnackBar: suspend (String, String?) -> Boolean,
     modifier: Modifier = Modifier,
     startDestination: String = incomeExpenseNavigationRoute,
 ) {
@@ -35,7 +35,7 @@ fun MmNavHost(
             onCurrencyClick = navController::navigateToCurrencyListScreen,
             onAllCategoryClick = navController::navigateToCategoryListScreen
         )
-        categoryListScreen()
+        categoryListScreen { navController.popBackStack() }
         statisticsScreen()
         profileScreen(
             navigateToCurrencyListScreen = navController::navigateToCurrencyListScreen,
@@ -45,6 +45,6 @@ fun MmNavHost(
         )
         currencyScreen { navController.popBackStack() }
         budgetScreen { navController.popBackStack() }
-        settingsScreen { navController.popBackStack() }
+        settingsScreen(clickBack = { navController.popBackStack() }, onShowSnackBar = onShowSnackBar)
     }
 }

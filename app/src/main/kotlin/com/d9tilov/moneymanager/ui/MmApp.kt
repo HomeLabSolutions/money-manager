@@ -26,7 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -48,18 +47,18 @@ fun MmApp(
     ),
 ) {
     MmBackground {
-        val snackbarHostState = remember { SnackbarHostState() }
+        val snackBarHostState = remember { SnackbarHostState() }
 
         Scaffold(
             modifier = Modifier
                 .statusBarsPadding()
                 .systemBarsPadding()
                 .semantics {
-                testTagsAsResourceId = true
-            },
+                    testTagsAsResourceId = true
+                },
             contentColor = MaterialTheme.colorScheme.onBackground,
             contentWindowInsets = WindowInsets(0, 0, 0, 0),
-            snackbarHost = { SnackbarHost(snackbarHostState) },
+            snackbarHost = { SnackbarHost(snackBarHostState) },
             bottomBar = {
                 if (appState.shouldShowBottomBar) {
                     MmBottomBar(
@@ -85,8 +84,8 @@ fun MmApp(
                 Column(Modifier.fillMaxSize()) {
                     MmNavHost(
                         appState = appState,
-                        onShowSnackbar = { message, action ->
-                            snackbarHostState.showSnackbar(
+                        onShowSnackBar = { message, action ->
+                            snackBarHostState.showSnackbar(
                                 message = message,
                                 actionLabel = action,
                                 duration = SnackbarDuration.Short,
