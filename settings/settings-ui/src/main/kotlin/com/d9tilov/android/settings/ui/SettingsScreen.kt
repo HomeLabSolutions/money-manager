@@ -1,6 +1,5 @@
 package com.d9tilov.android.settings.ui
 
-import android.widget.Toast
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -45,9 +44,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
-import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.SimpleDialog
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.android.settings.ui.vm.BackupState
@@ -57,18 +56,17 @@ import com.d9tilov.android.settings.ui.vm.SubscriptionUiState
 import com.d9tilov.android.settings_ui.R
 
 @Composable
-fun SettingsRoute(viewModel: SettingsViewModel = hiltViewModel(), clickBack: () -> Unit) {
+fun SettingsRoute(
+    viewModel: SettingsViewModel = hiltViewModel(),
+    clickBack: () -> Unit,
+    onShowSnackBar: suspend (String, String?) -> Boolean,
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    LaunchedEffect(Unit) {
-        viewModel.errorMessage
-            .collect { message -> Toast.makeText(context, message, Toast.LENGTH_SHORT)
-                .show()
-            }
-    }
     SettingsScreen(
         uiState = uiState,
         onPeriodDateChanged = viewModel::changeFiscalDay,
+        messageId = viewModel.message,
+        onShowSnackBar = onShowSnackBar,
         onSave = {
             viewModel.save()
             clickBack.invoke()
@@ -85,12 +83,18 @@ fun SettingsScreen(
     uiState: SettingsUiState,
     modifier: Modifier = Modifier,
     onPeriodDateChanged: (String) -> Unit,
+    messageId: Int? = null,
+    onShowSnackBar: suspend (String, String?) -> Boolean,
     onSave: () -> Unit = {},
     onClickSubscription: () -> Unit = {},
     onBackupClick: () -> Unit = {},
     onClearBackupClick: () -> Unit = {},
     onClickBack: () -> Unit = {},
 ) {
+    messageId?.let { id ->
+        val message = stringResource(id = id)
+        LaunchedEffect(messageId) { onShowSnackBar(message, null) }
+    }
     Scaffold(
         topBar = {
             MmTopAppBar(
@@ -300,7 +304,8 @@ fun DefaultSettingsPreview() {
     MoneyManagerTheme {
         SettingsScreen(
             SettingsUiState(SubscriptionUiState(), startPeriodDay = 30.toString()),
-            onPeriodDateChanged = {}
+            onPeriodDateChanged = {},
+            onShowSnackBar = { _,_ -> true }
         )
     }
 }

@@ -67,11 +67,19 @@ interface CategoryGroupSetNavigator : BaseNavigator {
 }
 
 const val categoryNavigationRoute = "category"
-internal const val transactionTypeArg = "transactionType"
+internal const val transactionTypeArg = "transaction_type"
+internal const val categoryIdArg = "category_id"
 
-internal class CategoryArgs(val transactionType: TransactionType) {
-    constructor(savedStateHandle: SavedStateHandle) :
-            this((checkNotNull(savedStateHandle[transactionTypeArg]) as Int).toType())
+internal sealed class CategoryArgs {
+    class CategoryListArgs(val transactionType: TransactionType) {
+        constructor(savedStateHandle: SavedStateHandle) :
+                this((checkNotNull(savedStateHandle[transactionTypeArg]) as Int).toType())
+    }
+
+    class CategoryCreationArgs(val categoryId: Long) {
+        constructor(savedStateHandle: SavedStateHandle) :
+                this(checkNotNull(savedStateHandle[categoryIdArg])as Long)
+    }
 }
 
 fun NavController.navigateToCategoryListScreen(
@@ -81,11 +89,11 @@ fun NavController.navigateToCategoryListScreen(
     this.navigate("$categoryNavigationRoute${transactionType.value}", navOptions)
 }
 
-fun NavGraphBuilder.categoryListScreen() {
+fun NavGraphBuilder.categoryListScreen(clickBack: () -> Unit) {
     composable(
         route = "$categoryNavigationRoute{$transactionTypeArg}",
         arguments = listOf(
             navArgument(transactionTypeArg) { type = NavType.IntType },
         )
-    ) { CategoryListRoute(onBackClicked = {}, onCreateClicked = {}) }
+    ) { CategoryListRoute(onCreateClicked = {}, clickBack = clickBack) }
 }
