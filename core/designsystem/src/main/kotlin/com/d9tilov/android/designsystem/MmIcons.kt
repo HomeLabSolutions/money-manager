@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.material.icons.rounded.AddTask
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowRight
 import androidx.compose.material.icons.rounded.BarChart
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.List
@@ -24,6 +25,7 @@ object MoneyManagerIcons {
     val Check = Icons.Default.Check
     val ActionAdd = Icons.Rounded.AddTask
     val AddCircle = Icons.Rounded.AddCircle
+    val ArrowRight = Icons.Rounded.ArrowRight
     val Subscription = R.drawable.ic_money_manager_logo
     val Backup = R.drawable.ic_refresh
     val Close = Icons.Rounded.Clear

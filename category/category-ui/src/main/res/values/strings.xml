@@ -3,7 +3,7 @@
     <string name="category_all">All\nitems</string>
     <string name="delete">Delete</string>
     <string name="create">Create</string>
-    <string name="category_name_title">Category name</string>
+    <string name="category_name_title">Name</string>
     <string name="category_name_hint">Enter name</string>
     <string name="title_category_set">Available icons</string>
     <string name="category_edit_title">Edit category group</string>
@@ -43,7 +43,7 @@
 
     <string name="title_category">Categories</string>
     <string name="title_sub_category">Category: %1$s</string>
-    <string name="title_category_creation">Category</string>
+    <string name="title_category_edit">Category</string>
     <string name="title_category_group_set">Categories</string>
-    <string name="title_category_creation_create">Category creation</string>
+    <string name="title_category_creation">Category creation</string>
 </resources>

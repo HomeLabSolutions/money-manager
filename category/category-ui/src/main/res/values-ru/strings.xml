@@ -3,7 +3,7 @@
     <string name="category_all">Все\nстатьи</string>
     <string name="delete">Удалить</string>
     <string name="create">Создать</string>
-    <string name="category_name_title">Название категории</string>
+    <string name="category_name_title">Название</string>
     <string name="category_name_hint">Введите название</string>
     <string name="title_category_set">Доступные иконки</string>
     <string name="category_edit_title">Редактирование группы категорий</string>
@@ -43,7 +43,7 @@
 
     <string name="title_category">Категории</string>
     <string name="title_sub_category">Категория: %1$s</string>
-    <string name="title_category_creation">Категория</string>
+    <string name="title_category_edit">Категория</string>
     <string name="title_category_group_set">Категории</string>
-    <string name="title_category_creation_create">Создание категории</string>
+    <string name="title_category_creation">Создание категории</string>
 </resources>

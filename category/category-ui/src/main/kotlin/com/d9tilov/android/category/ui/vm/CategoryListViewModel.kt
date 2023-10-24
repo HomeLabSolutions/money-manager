@@ -9,6 +9,7 @@ import com.d9tilov.android.category.domain.model.Category.Companion.ALL_ITEMS_ID
 import com.d9tilov.android.category.ui.navigation.CategoryArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
@@ -26,7 +27,7 @@ class CategoryListViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val categoryArgs: CategoryArgs.CategoryListArgs = CategoryArgs.CategoryListArgs(savedStateHandle)
-    private val transactionType = checkNotNull(categoryArgs.transactionType)
+    val transactionType = checkNotNull(categoryArgs.transactionType)
     private val _uiState = categoryInteractor.getGroupedCategoriesByType(transactionType)
         .map { list -> CategoryUiState(list.filter { it.id != ALL_ITEMS_ID }) }
         .stateIn(
@@ -34,5 +35,5 @@ class CategoryListViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(),
             initialValue = CategoryUiState.EMPTY
         )
-    val uiState = _uiState
+    val uiState: StateFlow<CategoryUiState> = _uiState
 }
