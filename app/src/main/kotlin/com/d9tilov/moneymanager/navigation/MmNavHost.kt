@@ -3,7 +3,9 @@ package com.d9tilov.moneymanager.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
+import com.d9tilov.android.category.ui.navigation.categoryCreationScreen
 import com.d9tilov.android.category.ui.navigation.categoryListScreen
+import com.d9tilov.android.category.ui.navigation.navigateToCategoryCreationScreen
 import com.d9tilov.android.category.ui.navigation.navigateToCategoryListScreen
 import com.d9tilov.android.incomeexpense.navigation.incomeExpenseNavigationRoute
 import com.d9tilov.android.incomeexpense.navigation.incomeExpenseScreen
@@ -35,7 +37,14 @@ fun MmNavHost(
             onCurrencyClick = navController::navigateToCurrencyListScreen,
             onAllCategoryClick = navController::navigateToCategoryListScreen
         )
-        categoryListScreen { navController.popBackStack() }
+        categoryListScreen(
+            clickBack = navController::popBackStack,
+            openCategory = navController::navigateToCategoryCreationScreen
+        )
+        categoryCreationScreen(
+            clickBack = navController::popBackStack,
+            clickSave = navController::popBackStack
+        )
         statisticsScreen()
         profileScreen(
             navigateToCurrencyListScreen = navController::navigateToCurrencyListScreen,
@@ -45,6 +54,6 @@ fun MmNavHost(
         )
         currencyScreen { navController.popBackStack() }
         budgetScreen { navController.popBackStack() }
-        settingsScreen(clickBack = { navController.popBackStack() }, onShowSnackBar = onShowSnackBar)
+        settingsScreen(clickBack = navController::popBackStack, onShowSnackBar = onShowSnackBar)
     }
 }

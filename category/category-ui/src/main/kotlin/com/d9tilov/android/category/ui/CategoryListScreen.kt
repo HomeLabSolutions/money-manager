@@ -1,5 +1,6 @@
 package com.d9tilov.android.category.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -32,6 +33,8 @@ import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.ui.vm.CategoryListViewModel
 import com.d9tilov.android.category.ui.vm.CategoryUiState
 import com.d9tilov.android.category_ui.R
+import com.d9tilov.android.core.constants.DataConstants.NO_ID
+import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
@@ -39,14 +42,15 @@ import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 @Composable
 fun CategoryListRoute(
     viewModel: CategoryListViewModel = hiltViewModel(),
-    onCreateClicked: () -> Unit,
+    openCategory: (Long, TransactionType) -> Unit,
     clickBack: () -> Unit,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     CategoryListScreen(
         uiState = state,
         onBackClicked = clickBack,
-        onCreateClicked = onCreateClicked,
+        onCategoryClicked = { category -> openCategory.invoke(category.id, viewModel.transactionType) },
+        onCreateClicked = { openCategory.invoke(NO_ID, viewModel.transactionType) }
     )
 }
 
@@ -56,6 +60,7 @@ fun CategoryListScreen(
     uiState: CategoryUiState,
     onBackClicked: () -> Unit,
     onCreateClicked: () -> Unit,
+    onCategoryClicked: (Category) -> Unit,
 ) {
     val context = LocalContext.current
     Scaffold(topBar = {
@@ -79,7 +84,8 @@ fun CategoryListScreen(
                     Column(
                         modifier = Modifier
                             .size(dimensionResource(id = R.dimen.category_item_size))
-                            .padding(8.dp),
+                            .padding(8.dp)
+                            .clickable { onCategoryClicked.invoke(item) },
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -98,7 +104,8 @@ fun CategoryListScreen(
             }
             Spacer(modifier = Modifier.weight(1f))
             BottomActionButton(
-                onClick = onCreateClicked, text = stringResource(id = R.string.create)
+                onClick = onCreateClicked,
+                text = stringResource(id = R.string.create)
             )
         }
     }
@@ -106,27 +113,28 @@ fun CategoryListScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultSettingsPreview() {
+fun DefaultCategoryListPreview() {
     MoneyManagerTheme {
-        CategoryListScreen(CategoryUiState(
-            listOf(
-                mockCategory(1L, "Category1"),
-                mockCategory(2L, "Category2"),
-                mockCategory(3L, "Category3"),
-                mockCategory(4L, "Category4"),
-                mockCategory(5L, "Category5"),
-                mockCategory(6L, "Category6"),
-                mockCategory(7L, "Category7"),
-                mockCategory(8L, "Category8"),
-                mockCategory(9L, "Category9"),
-                mockCategory(10L, "Category10"),
-                mockCategory(11L, "Category11"),
-                mockCategory(12L, "Category12"),
-                mockCategory(13L, "Category13"),
-                mockCategory(14L, "Category14"),
-                mockCategory(15L, "Category15"),
-            )
-        ), {}, {})
+        CategoryListScreen(
+            CategoryUiState(
+                listOf(
+                    mockCategory(1L, "Category1"),
+                    mockCategory(2L, "Category2"),
+                    mockCategory(3L, "Category3"),
+                    mockCategory(4L, "Category4"),
+                    mockCategory(5L, "Category5"),
+                    mockCategory(6L, "Category6"),
+                    mockCategory(7L, "Category7"),
+                    mockCategory(8L, "Category8"),
+                    mockCategory(9L, "Category9"),
+                    mockCategory(10L, "Category10"),
+                    mockCategory(11L, "Category11"),
+                    mockCategory(12L, "Category12"),
+                    mockCategory(13L, "Category13"),
+                    mockCategory(14L, "Category14"),
+                    mockCategory(15L, "Category15"),
+                )
+            ), {}, {}, {})
     }
 }
 
