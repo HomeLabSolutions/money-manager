@@ -68,13 +68,14 @@ fun FilledButton(
 
 @Composable
 fun BottomActionButton(
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
     text: String = stringResource(R.string.save),
     enabled: Boolean = true,
 ) {
     Button(
         onClick = onClick,
-        modifier = Modifier
+        modifier = modifier
             .padding(dimensionResource(R.dimen.padding_medium))
             .fillMaxWidth(),
         enabled = enabled,

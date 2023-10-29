@@ -1,10 +1,17 @@
 package com.d9tilov.android.category.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -14,12 +21,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
@@ -27,18 +38,22 @@ import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.d9tilov.android.category.data.impl.color.ColorManager
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.ui.vm.CategoryCreationUiState
 import com.d9tilov.android.category.ui.vm.CategoryCreationViewModel
 import com.d9tilov.android.category_ui.R
 import com.d9tilov.android.core.model.ItemState
+import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
 import com.d9tilov.android.designsystem.OutlineCircle
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun CategoryCreationRoute(
@@ -69,6 +84,7 @@ fun CategoryCreationScreen(
     onSaveClicked: () -> Unit,
 ) {
     val context = LocalContext.current
+    var colorListShow by remember { mutableStateOf(false) }
     Scaffold(topBar = {
         MmTopAppBar(
             titleRes =
@@ -135,15 +151,84 @@ fun CategoryCreationScreen(
                     tint = Color(ContextCompat.getColor(context, uiState.category.color))
                 )
             }
-            OutlineCircle(
-                modifier = Modifier.padding(
-                    horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                    vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                ),
-                size = dimensionResource(id = com.d9tilov.android.common.android.R.dimen.item_color_picker_size),
-                color = Color(ContextCompat.getColor(context, uiState.category.color))
+            if (colorListShow) {
+                val colorList = ColorManager.colorList
+                val state = rememberLazyListState()
+                val coroutineScope = rememberCoroutineScope()
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                        ),
+                    state = state,
+                ) {
+                    items(items = colorList, key = { item -> item }) { colorRes ->
+                        val isSelected = colorRes == uiState.category.color
+                        ColorListSelectorItem(
+                            size = dimensionResource(id = com.d9tilov.android.common.android.R.dimen.item_color_picker_size),
+                            color = colorRes,
+                            selected = isSelected,
+                            onClick = {
+                                onCategoryUpdated.invoke(uiState.category.copy(color = colorRes))
+                                colorListShow = !colorListShow
+                            }
+                        )
+                    }
+                }
+                LaunchedEffect(true) {
+                    val checkedIndex = colorList.indexOfFirst { it == uiState.category.color }
+                    System.out.println("moggot index: $checkedIndex")
+                    if (checkedIndex <= 0) return@LaunchedEffect
+                    coroutineScope.launch { state.scrollToItem(checkedIndex - 1) }
+                }
+            } else {
+                OutlineCircle(
+                    modifier = Modifier.padding(
+                        horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                        vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                    ),
+                    size = dimensionResource(id = com.d9tilov.android.common.android.R.dimen.item_color_picker_size),
+                    color = Color(ContextCompat.getColor(context, uiState.category.color)),
+                    onClick = { colorListShow = !colorListShow }
+                )
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            BottomActionButton(
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .imePadding(),
+                onClick = onSaveClicked
             )
         }
+    }
+}
+
+@Composable
+fun ColorListSelectorItem(
+    size: Dp = dimensionResource(id = com.d9tilov.android.common.android.R.dimen.item_color_picker_size),
+    color: Int,
+    selected: Boolean,
+    onClick: (Int) -> Unit,
+) {
+    val context = LocalContext.current
+    Column(
+        modifier = Modifier
+            .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_extra_small)),
+        verticalArrangement = Arrangement.Center
+    ) {
+        val scale = if (selected) 1.5f else 1f
+        OutlineCircle(
+            modifier = Modifier
+                .graphicsLayer {
+                    scaleX = scale
+                    scaleY = scale
+                },
+            size = size,
+            color = Color(ContextCompat.getColor(context, color)),
+            showOutline = selected,
+            onClick = { onClick.invoke(color) }
+        )
     }
 }
 
@@ -157,7 +242,7 @@ fun DefaultCategoryCreationPreview() {
                     id = 1L,
                     name = "Relax",
                     icon = com.d9tilov.android.category_data_impl.R.drawable.ic_category_beach,
-                    color = android.R.color.holo_blue_light,
+                    color = com.d9tilov.android.category_data_impl.R.color.category_red_theme,
                 ),
                 isPremium = true
             ),

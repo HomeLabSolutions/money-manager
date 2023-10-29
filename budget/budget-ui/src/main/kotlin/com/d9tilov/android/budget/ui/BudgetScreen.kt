@@ -3,6 +3,8 @@ package com.d9tilov.android.budget.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -83,7 +85,11 @@ fun BudgetScreen(
             }
             Spacer(modifier = Modifier.weight(1f))
             if (!showInPrepopulate) {
-                BottomActionButton(onClick = onSave)
+                BottomActionButton(
+                    modifier = Modifier
+                        .navigationBarsPadding()
+                        .imePadding(),
+                    onClick = onSave)
             }
         }
     }
