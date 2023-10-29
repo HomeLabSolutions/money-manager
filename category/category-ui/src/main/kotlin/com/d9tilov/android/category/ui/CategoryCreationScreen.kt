@@ -1,5 +1,6 @@
 package com.d9tilov.android.category.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -42,6 +43,7 @@ import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 @Composable
 fun CategoryCreationRoute(
     viewModel: CategoryCreationViewModel = hiltViewModel(),
+    clickOnCategoryIcon: () -> Unit,
     clickSave: () -> Unit,
     clickBack: () -> Unit,
 ) {
@@ -50,6 +52,7 @@ fun CategoryCreationRoute(
         uiState = state,
         onBackClicked = clickBack,
         onSaveClicked = clickSave,
+        clickOnCategoryIcon = clickOnCategoryIcon,
         onCategoryUpdated = viewModel::updateCategory,
         onHideError = viewModel::hideError
     )
@@ -60,6 +63,7 @@ fun CategoryCreationRoute(
 fun CategoryCreationScreen(
     uiState: CategoryCreationUiState,
     onCategoryUpdated: (Category) -> Unit,
+    clickOnCategoryIcon: () -> Unit,
     onHideError: () -> Unit,
     onBackClicked: () -> Unit,
     onSaveClicked: () -> Unit,
@@ -114,9 +118,10 @@ fun CategoryCreationScreen(
             }
 
             Row(
-                modifier = Modifier.padding(
-                    horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large))
+                    .clickable { clickOnCategoryIcon.invoke() },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
@@ -159,7 +164,8 @@ fun DefaultCategoryCreationPreview() {
             onBackClicked = { },
             onSaveClicked = {},
             onCategoryUpdated = {},
-            onHideError = {}
+            onHideError = {},
+            clickOnCategoryIcon = {}
         )
     }
 }

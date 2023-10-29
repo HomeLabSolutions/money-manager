@@ -11,6 +11,7 @@ import androidx.navigation.navArgument
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.domain.model.CategoryGroupItem
 import com.d9tilov.android.category.ui.CategoryCreationRoute
+import com.d9tilov.android.category.ui.CategoryGroupIconListRoute
 import com.d9tilov.android.category.ui.CategoryListRoute
 import com.d9tilov.android.common.android.ui.base.BaseNavigator
 import com.d9tilov.android.core.model.TransactionType
@@ -64,8 +65,10 @@ interface CategoryGroupSetNavigator : BaseNavigator {
 
 const val categoryNavigationRoute = "category"
 const val categoryCreationNavigationRoute = "category_creation"
+const val categoryIconListNavigationRoute = "category_icon_list"
 internal const val transactionTypeArg = "transaction_type"
 internal const val categoryIdArg = "category_id"
+internal const val categoryGroupId = "category_group_id"
 
 internal sealed class CategoryArgs {
     class CategoryListArgs(val transactionType: TransactionType) {
@@ -104,12 +107,38 @@ fun NavController.navigateToCategoryCreationScreen(
     this.navigate("$categoryCreationNavigationRoute/${categoryId}/${transactionType.value}", navOptions)
 }
 
-fun NavGraphBuilder.categoryCreationScreen(clickBack: () -> Unit, clickSave: () -> Unit) {
+fun NavGraphBuilder.categoryCreationScreen(
+    clickBack: () -> Unit,
+    clickOnCategoryIcon: () -> Unit,
+    clickSave: () -> Unit,
+) {
     composable(
         route = "$categoryCreationNavigationRoute/{$categoryIdArg}/{${transactionTypeArg}}",
         arguments = listOf(
             navArgument(categoryIdArg) { type = NavType.LongType },
             navArgument(transactionTypeArg) { type = NavType.IntType },
         )
-    ) { CategoryCreationRoute(clickSave = clickSave, clickBack = clickBack) }
+    ) {
+        CategoryCreationRoute(
+            clickSave = clickSave,
+            clickBack = clickBack,
+            clickOnCategoryIcon = clickOnCategoryIcon
+        )
+    }
+}
+
+fun NavController.navigateToCategoryIconListScreen(navOptions: NavOptions? = null) {
+    this.navigate(categoryIconListNavigationRoute, navOptions)
+}
+
+fun NavGraphBuilder.categoryIconListScreen(
+    clickBack: () -> Unit,
+    onItemClick: (CategoryGroupItem) -> Unit,
+) {
+    composable(route = categoryIconListNavigationRoute) {
+        CategoryGroupIconListRoute(
+            onItemClick = onItemClick,
+            clickBack = clickBack
+        )
+    }
 }
