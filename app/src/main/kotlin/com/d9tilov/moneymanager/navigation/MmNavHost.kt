@@ -4,9 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import com.d9tilov.android.category.ui.navigation.categoryCreationScreen
+import com.d9tilov.android.category.ui.navigation.categoryIconGridScreen
 import com.d9tilov.android.category.ui.navigation.categoryIconListScreen
 import com.d9tilov.android.category.ui.navigation.categoryListScreen
 import com.d9tilov.android.category.ui.navigation.navigateToCategoryCreationScreen
+import com.d9tilov.android.category.ui.navigation.navigateToCategoryIconGridScreen
 import com.d9tilov.android.category.ui.navigation.navigateToCategoryIconListScreen
 import com.d9tilov.android.category.ui.navigation.navigateToCategoryListScreen
 import com.d9tilov.android.incomeexpense.navigation.incomeExpenseNavigationRoute
@@ -50,7 +52,11 @@ fun MmNavHost(
         )
         categoryIconListScreen(
             clickBack = navController::popBackStack,
-            onItemClick = {}
+            onItemClick = navController::navigateToCategoryIconGridScreen
+        )
+        categoryIconGridScreen(
+            clickBack = navController::popBackStack,
+            onIconClick = {}
         )
         statisticsScreen()
         profileScreen(

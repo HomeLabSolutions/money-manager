@@ -21,6 +21,7 @@
     <string name="category_expense_info_today_title">потрачено сегодня:</string>
     <string name="category_expense_info_period_title">потрачено за период:</string>
     <string name="category_income_info_period_title">заработано за период:</string>
+    <string name="category_group_free">Иконки</string>
     <string name="category_group_housing">Жильё</string>
     <string name="category_group_transportation">Транспорт</string>
     <string name="category_group_food">Еда</string>

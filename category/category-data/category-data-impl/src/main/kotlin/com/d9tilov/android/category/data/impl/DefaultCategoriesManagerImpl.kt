@@ -22,7 +22,7 @@ class DefaultCategoriesManagerImpl @Inject constructor(private val context: Cont
                 NO_ID,
                 TransactionType.EXPENSE,
                 R.string.default_category_expense_food,
-                R.drawable.ic_category_folder,
+                R.drawable.ic_category_food,
                 R.color.category_all_color
             ),
             createCategory(
@@ -46,7 +46,7 @@ class DefaultCategoriesManagerImpl @Inject constructor(private val context: Cont
                 NO_ID,
                 TransactionType.EXPENSE,
                 R.string.default_category_expense_car,
-                R.drawable.ic_category_folder,
+                R.drawable.ic_category_car,
                 R.color.category_all_color
             ),
             createCategory(
