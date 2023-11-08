@@ -1,26 +1,35 @@
 package com.d9tilov.android.category.ui.vm
 
 import androidx.annotation.DrawableRes
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.model.CategoryGroup
-import com.d9tilov.android.category.ui.navigation.CategorySetNavigator
+import com.d9tilov.android.category.ui.model.categoryGroupItemMap
+import com.d9tilov.android.category.ui.navigation.CategoryArgs
 import com.d9tilov.android.category_ui.R
-import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
-@HiltViewModel
-class CategorySetViewModel @Inject constructor(
-    private val billingInteractor: BillingInteractor
-) : BaseViewModel<CategorySetNavigator>() {
+data class CategoryIconGridUiState(
+    val title: Int = com.d9tilov.android.category_ui.R.string.category_group_free,
+    val icons: List<Int> = emptyList(),
+) {
+    companion object {
+        val EMPTY = CategoryIconGridUiState()
+    }
+}
 
-    private val groupedIcons = mapOf(
+@HiltViewModel
+class CategoryIconGridViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+) : ViewModel() {
+
+    private val groupedPaidIcons = mapOf(
         CategoryGroup.HOUSING to listOf(
             com.d9tilov.android.category_data_impl.R.drawable.ic_category_electricity,
             com.d9tilov.android.category_data_impl.R.drawable.ic_category_electricity2,
@@ -179,25 +188,32 @@ class CategorySetViewModel @Inject constructor(
             com.d9tilov.android.category_data_impl.R.drawable.ic_category_public_transport,
             com.d9tilov.android.category_data_impl.R.drawable.ic_category_relax,
             com.d9tilov.android.category_data_impl.R.drawable.ic_category_salary,
-            com.d9tilov.android.category_data_impl.R.drawable.ic_category_sports3
+            com.d9tilov.android.category_data_impl.R.drawable.ic_category_sports3,
+            com.d9tilov.android.category_data_impl.R.drawable.ic_category_cafe,
+            com.d9tilov.android.category_data_impl.R.drawable.ic_category_car_service,
+            com.d9tilov.android.category_data_impl.R.drawable.ic_category_home,
+            com.d9tilov.android.category_data_impl.R.drawable.ic_category_travels,
+            com.d9tilov.android.category_data_impl.R.drawable.ic_category_business,
+            com.d9tilov.android.category_data_impl.R.drawable.ic_category_sale,
         )
     )
 
-    var isPremium: Boolean = false
-        private set
+    private val categoryArgs: CategoryArgs.CategoryIconsArgs =
+        CategoryArgs.CategoryIconsArgs(savedStateHandle)
+    private val iconGroup = checkNotNull(categoryArgs.groupId)
 
-    init {
-        viewModelScope.launch {
-            billingInteractor.isPremium()
-                .flowOn(Dispatchers.IO)
-                .shareIn(viewModelScope, SharingStarted.WhileSubscribed())
-                .collect { this@CategorySetViewModel.isPremium = it }
-        }
-    }
-
-    fun getIconsByGroupId(groupId: CategoryGroup): List<Int> = groupedIcons[groupId]!!
+    val uiState: StateFlow<CategoryIconGridUiState> = flowOf(
+        CategoryIconGridUiState(
+            categoryGroupItemMap[iconGroup] ?: R.string.category_group_free,
+            groupedPaidIcons[iconGroup] ?: emptyList()
+        )
+    )
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = CategoryIconGridUiState.EMPTY
+        )
 
     fun save(@DrawableRes categoryIcon: Int) {
-        navigator?.save(categoryIcon)
     }
 }

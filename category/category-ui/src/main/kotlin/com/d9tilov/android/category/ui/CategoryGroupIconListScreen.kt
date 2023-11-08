@@ -24,7 +24,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.d9tilov.android.category.domain.model.CategoryGroupItem
+import com.d9tilov.android.category.domain.model.CategoryGroup
+import com.d9tilov.android.category.ui.model.categoryGroupItemMap
 import com.d9tilov.android.category.ui.vm.CategoryGroupSetViewModel
 import com.d9tilov.android.category.ui.vm.CategoryIconListUiState
 import com.d9tilov.android.category_ui.R
@@ -34,7 +35,7 @@ import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 @Composable
 fun CategoryGroupIconListRoute(
     viewModel: CategoryGroupSetViewModel = hiltViewModel(),
-    onItemClick: (CategoryGroupItem) -> Unit,
+    onItemClick: (Int) -> Unit,
     clickBack: () -> Unit,
 ) {
     val state: CategoryIconListUiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -46,7 +47,7 @@ fun CategoryGroupIconListRoute(
 fun CategoryGroupIconListScreen(
     state: CategoryIconListUiState,
     onBackClicked: () -> Unit,
-    onItemClick: (CategoryGroupItem) -> Unit,
+    onItemClick: (Int) -> Unit,
 ) {
     Scaffold(topBar = {
         MmTopAppBar(
@@ -58,7 +59,7 @@ fun CategoryGroupIconListScreen(
             contentPadding = padding,
             modifier = Modifier.fillMaxSize(),
         ) {
-            items(items = state.groups, key = { item -> item.groupId }) { item ->
+            items(items = state.groups, key = { item -> item }) { item ->
                 CategoryIconListItem(item, onItemClick)
             }
         }
@@ -67,23 +68,22 @@ fun CategoryGroupIconListScreen(
 
 @Composable
 fun CategoryIconListItem(
-    group: CategoryGroupItem,
-    clickCallback: (group: CategoryGroupItem) -> Unit,
+    group: CategoryGroup,
+    clickCallback: (group: Int) -> Unit,
 ) {
     Column(
         modifier = Modifier
             .height(dimensionResource(id = R.dimen.category_group_item_height))
             .fillMaxWidth()
-            .clickable { clickCallback(group) },
+            .clickable { clickCallback(group.ordinal) },
         verticalArrangement = Arrangement.Center
     ) {
         Text(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large)),
-            text = stringResource(id = group.name),
-
-            )
+            text = stringResource(id = categoryGroupItemMap[group] ?: R.string.category_group_free)
+        )
         Divider(
             color = MaterialTheme.colorScheme.primary,
             thickness = 1.dp,

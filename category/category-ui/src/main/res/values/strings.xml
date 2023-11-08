@@ -21,6 +21,7 @@
     <string name="category_expense_info_today_title">was spent today:</string>
     <string name="category_expense_info_period_title">was spent in period:</string>
     <string name="category_income_info_period_title">was earned in period:</string>
+    <string name="category_group_free">Icons</string>
     <string name="category_group_housing">Housing</string>
     <string name="category_group_transportation">Transportation</string>
     <string name="category_group_food">Food</string>

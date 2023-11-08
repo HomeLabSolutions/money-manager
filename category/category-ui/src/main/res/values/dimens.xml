@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="category_item_size">80dp</dimen>
+    <dimen name="category_grid_item_size">64dp</dimen>
     <dimen name="category_group_item_height">60dp</dimen>
 </resources>

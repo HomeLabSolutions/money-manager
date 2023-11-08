@@ -178,7 +178,6 @@ fun CategoryCreationScreen(
                 }
                 LaunchedEffect(true) {
                     val checkedIndex = colorList.indexOfFirst { it == uiState.category.color }
-                    System.out.println("moggot index: $checkedIndex")
                     if (checkedIndex <= 0) return@LaunchedEffect
                     coroutineScope.launch { state.scrollToItem(checkedIndex - 1) }
                 }
