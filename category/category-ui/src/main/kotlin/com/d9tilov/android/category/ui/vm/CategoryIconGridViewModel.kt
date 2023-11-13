@@ -201,6 +201,7 @@ class CategoryIconGridViewModel @Inject constructor(
     private val categoryArgs: CategoryArgs.CategoryIconsArgs =
         CategoryArgs.CategoryIconsArgs(savedStateHandle)
     private val iconGroup = checkNotNull(categoryArgs.groupId)
+    val route = ""
 
     val uiState: StateFlow<CategoryIconGridUiState> = flowOf(
         CategoryIconGridUiState(

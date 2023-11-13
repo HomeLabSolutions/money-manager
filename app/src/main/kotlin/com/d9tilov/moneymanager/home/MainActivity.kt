@@ -73,10 +73,7 @@ class MainActivity : ComponentActivity() {
                                     .build()
                             )
                         }
-
-                        is MainActivityUiState.Success.Main -> runMain()
-                        is MainActivityUiState.Success.Prepopulate -> setContent { MoneyManagerTheme { PrepopulateScreen() } }
-                        else -> {}
+                        else -> openScreen(uiState)
                     }
                 }
             }
@@ -94,7 +91,7 @@ class MainActivity : ComponentActivity() {
 
     }
 
-    private fun runMain() {
+    private fun openScreen(state: MainActivityUiState) {
         // Turn off the decor fitting system windows, which allows us to handle insets,
         // including IME animations, and go edge-to-edge
         // This also sets up the initial system bar style based on the platform theme
@@ -120,7 +117,11 @@ class MainActivity : ComponentActivity() {
             }
 
             MoneyManagerTheme(darkTheme = darkTheme) {
-                MmApp(windowSizeClass = calculateWindowSizeClass(this))
+                when (state) {
+                    is MainActivityUiState.Success.Main -> MmApp(windowSizeClass = calculateWindowSizeClass(this))
+                    is MainActivityUiState.Success.Prepopulate -> PrepopulateScreen()
+                    else -> {}
+                }
             }
         }
     }

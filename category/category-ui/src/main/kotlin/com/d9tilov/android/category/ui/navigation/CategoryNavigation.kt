@@ -14,7 +14,9 @@ import com.d9tilov.android.category.ui.CategoryCreationRoute
 import com.d9tilov.android.category.ui.CategoryGroupIconListRoute
 import com.d9tilov.android.category.ui.CategoryIconGridRoute
 import com.d9tilov.android.category.ui.CategoryListRoute
+import com.d9tilov.android.category.ui.vm.CategorySharedViewModel
 import com.d9tilov.android.common.android.ui.base.BaseNavigator
+import com.d9tilov.android.common.android.utils.sharedViewModel
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.model.toType
 
@@ -56,12 +58,12 @@ interface CategoryNavigator : BaseNavigator {
     fun backToMainScreen(category: Category)
 }
 
+const val categoryIdArg = "category_id"
 const val categoryNavigationRoute = "category"
 const val categoryCreationNavigationRoute = "category_creation"
 const val categoryIconListNavigationRoute = "category_icon_list"
 const val categoryIconGridNavigationRoute = "category_icon_grid"
 internal const val transactionTypeArg = "transaction_type"
-internal const val categoryIdArg = "category_id"
 internal const val categoryGroup = "category_group"
 
 internal sealed class CategoryArgs {
@@ -80,7 +82,9 @@ internal sealed class CategoryArgs {
 
     class CategoryIconsArgs(val groupId: CategoryGroup) {
         constructor(savedStateHandle: SavedStateHandle) :
-                this((checkNotNull(savedStateHandle[categoryGroup]) as Int).toGroupId())
+                this(
+                    (checkNotNull(savedStateHandle[categoryGroup]) as Int).toGroupId()
+                )
     }
 }
 
@@ -103,22 +107,27 @@ fun NavController.navigateToCategoryCreationScreen(
     transactionType: TransactionType,
     navOptions: NavOptions? = null,
 ) {
-    this.navigate("$categoryCreationNavigationRoute/${categoryId}/${transactionType.value}", navOptions)
+    val route = "$categoryCreationNavigationRoute/$categoryId/${transactionType.value}"
+    this.navigate(route, navOptions)
 }
 
 fun NavGraphBuilder.categoryCreationScreen(
+    navController: NavController,
     clickBack: () -> Unit,
     clickOnCategoryIcon: () -> Unit,
     clickSave: () -> Unit,
 ) {
+    val route = "$categoryCreationNavigationRoute/{$categoryIdArg}/{${transactionTypeArg}}"
     composable(
-        route = "$categoryCreationNavigationRoute/{$categoryIdArg}/{${transactionTypeArg}}",
+        route = route,
         arguments = listOf(
             navArgument(categoryIdArg) { type = NavType.LongType },
             navArgument(transactionTypeArg) { type = NavType.IntType },
         )
-    ) {
+    ) { entry ->
+        val sharedViewModel = entry.sharedViewModel<CategorySharedViewModel>(navController)
         CategoryCreationRoute(
+            sharedViewModel = sharedViewModel,
             clickSave = clickSave,
             clickBack = clickBack,
             clickOnCategoryIcon = clickOnCategoryIcon
@@ -142,19 +151,25 @@ fun NavGraphBuilder.categoryIconListScreen(
     }
 }
 
-fun NavController.navigateToCategoryIconGridScreen(groupItem: Int, navOptions: NavOptions? = null) {
+fun NavController.navigateToCategoryIconGridScreen(
+    groupItem: Int,
+    navOptions: NavOptions? = null,
+) {
     this.navigate("$categoryIconGridNavigationRoute/$groupItem", navOptions)
 }
 
 fun NavGraphBuilder.categoryIconGridScreen(
+    navController: NavController,
     clickBack: () -> Unit,
-    onIconClick: (Int) -> Unit,
+    onIconClick: (String, Int) -> Unit,
 ) {
     composable(
         route = "$categoryIconGridNavigationRoute/{$categoryGroup}",
         arguments = listOf(navArgument(categoryGroup) { type = NavType.IntType })
-    ) {
+    ) { entry ->
+        val sharedViewModel = entry.sharedViewModel<CategorySharedViewModel>(navController)
         CategoryIconGridRoute(
+            sharedViewModel = sharedViewModel,
             clickBack = clickBack,
             onIconClick = onIconClick,
         )

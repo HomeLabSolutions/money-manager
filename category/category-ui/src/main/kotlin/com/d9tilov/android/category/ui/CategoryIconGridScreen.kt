@@ -24,18 +24,27 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.category.ui.vm.CategoryIconGridUiState
 import com.d9tilov.android.category.ui.vm.CategoryIconGridViewModel
+import com.d9tilov.android.category.ui.vm.CategorySharedViewModel
 import com.d9tilov.android.category_ui.R
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 
 @Composable
 fun CategoryIconGridRoute(
+    sharedViewModel: CategorySharedViewModel,
     viewModel: CategoryIconGridViewModel = hiltViewModel(),
-    onIconClick: (Int) -> Unit,
+    onIconClick: (String, Int) -> Unit,
     clickBack: () -> Unit,
 ) {
     val state: CategoryIconGridUiState by viewModel.uiState.collectAsStateWithLifecycle()
-    CategoryIconGridScreen(uiState = state, onBackClicked = clickBack, onIconClicked = onIconClick)
+    CategoryIconGridScreen(
+        uiState = state,
+        onBackClicked = clickBack,
+        onIconClicked = { id ->
+            sharedViewModel.setId(id)
+            onIconClick.invoke("", id)
+        }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

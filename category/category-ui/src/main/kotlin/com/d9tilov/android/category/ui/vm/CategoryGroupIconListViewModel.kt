@@ -1,8 +1,10 @@
 package com.d9tilov.android.category.ui.vm
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.category.domain.model.CategoryGroup
+import com.d9tilov.android.category.ui.navigation.CategoryArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -32,7 +34,11 @@ data class CategoryIconListUiState(
 }
 
 @HiltViewModel
-class CategoryGroupSetViewModel @Inject constructor() : ViewModel() {
+class CategoryGroupIconListViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+) : ViewModel() {
+
+    val route = ""
 
     val uiState: StateFlow<CategoryIconListUiState> = flowOf(CategoryIconListUiState.EMPTY)
         .stateIn(

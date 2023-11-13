@@ -46,7 +46,9 @@ import com.d9tilov.android.category.data.impl.color.ColorManager
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.ui.vm.CategoryCreationUiState
 import com.d9tilov.android.category.ui.vm.CategoryCreationViewModel
+import com.d9tilov.android.category.ui.vm.CategorySharedViewModel
 import com.d9tilov.android.category_ui.R
+import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.core.model.ItemState
 import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.MmTopAppBar
@@ -57,12 +59,15 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun CategoryCreationRoute(
+    sharedViewModel: CategorySharedViewModel,
     viewModel: CategoryCreationViewModel = hiltViewModel(),
     clickOnCategoryIcon: () -> Unit,
     clickSave: () -> Unit,
     clickBack: () -> Unit,
 ) {
     val state: CategoryCreationUiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val id: Int by sharedViewModel.categoryIconId.collectAsStateWithLifecycle()
+    if (id != DataConstants.NO_RES_ID) viewModel.updateCategory(state.category.copy(icon = id))
     CategoryCreationScreen(
         uiState = state,
         onBackClicked = clickBack,

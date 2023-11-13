@@ -53,9 +53,7 @@ fun MmApp(
             modifier = Modifier
                 .statusBarsPadding()
                 .systemBarsPadding()
-                .semantics {
-                    testTagsAsResourceId = true
-                },
+                .semantics { testTagsAsResourceId = true },
             contentColor = MaterialTheme.colorScheme.onBackground,
             contentWindowInsets = WindowInsets(0, 0, 0, 0),
             snackbarHost = { SnackbarHost(snackBarHostState) },
