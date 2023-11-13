@@ -2,8 +2,8 @@ package com.d9tilov.android.core.model
 
 sealed class TransactionType(open val value: Int) {
 
-    object INCOME : TransactionType(0)
-    object EXPENSE : TransactionType(1)
+    data object INCOME : TransactionType(0)
+    data object EXPENSE : TransactionType(1)
 }
 
 fun TransactionType.isIncome() = this is TransactionType.INCOME

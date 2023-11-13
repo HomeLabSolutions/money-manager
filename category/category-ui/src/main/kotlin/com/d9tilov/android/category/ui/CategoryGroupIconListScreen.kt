@@ -26,7 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.category.domain.model.CategoryGroup
 import com.d9tilov.android.category.ui.model.categoryGroupItemMap
-import com.d9tilov.android.category.ui.vm.CategoryGroupSetViewModel
+import com.d9tilov.android.category.ui.vm.CategoryGroupIconListViewModel
 import com.d9tilov.android.category.ui.vm.CategoryIconListUiState
 import com.d9tilov.android.category_ui.R
 import com.d9tilov.android.designsystem.MmTopAppBar
@@ -34,7 +34,7 @@ import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 
 @Composable
 fun CategoryGroupIconListRoute(
-    viewModel: CategoryGroupSetViewModel = hiltViewModel(),
+    viewModel: CategoryGroupIconListViewModel = hiltViewModel(),
     onItemClick: (Int) -> Unit,
     clickBack: () -> Unit,
 ) {

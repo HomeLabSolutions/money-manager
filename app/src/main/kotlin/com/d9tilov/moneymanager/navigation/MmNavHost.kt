@@ -3,6 +3,7 @@ package com.d9tilov.moneymanager.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.navigation
 import com.d9tilov.android.category.ui.navigation.categoryCreationScreen
 import com.d9tilov.android.category.ui.navigation.categoryIconGridScreen
 import com.d9tilov.android.category.ui.navigation.categoryIconListScreen
@@ -28,45 +29,54 @@ fun MmNavHost(
     appState: MmAppState,
     onShowSnackBar: suspend (String, String?) -> Boolean,
     modifier: Modifier = Modifier,
-    startDestination: String = incomeExpenseNavigationRoute,
 ) {
 
     val navController = appState.navController
     NavHost(
         navController = navController,
-        startDestination = startDestination,
+        startDestination = HOME_DESTINATION,
         modifier = modifier,
     ) {
-        incomeExpenseScreen(
-            onCurrencyClick = navController::navigateToCurrencyListScreen,
-            onAllCategoryClick = navController::navigateToCategoryListScreen
-        )
-        categoryListScreen(
-            clickBack = navController::popBackStack,
-            openCategory = navController::navigateToCategoryCreationScreen
-        )
-        categoryCreationScreen(
-            clickBack = navController::popBackStack,
-            clickOnCategoryIcon = navController::navigateToCategoryIconListScreen,
-            clickSave = navController::popBackStack
-        )
-        categoryIconListScreen(
-            clickBack = navController::popBackStack,
-            onItemClick = navController::navigateToCategoryIconGridScreen
-        )
-        categoryIconGridScreen(
-            clickBack = navController::popBackStack,
-            onIconClick = {}
-        )
-        statisticsScreen()
-        profileScreen(
-            navigateToCurrencyListScreen = navController::navigateToCurrencyListScreen,
-            navigateToBudgetScreen = navController::navigateToBudgetScreen,
-            navigateToSettingsScreen = navController::navigateToSettingsScreen,
-            navigateToGoalsScreen = { /* no-op */ }
-        )
-        currencyScreen { navController.popBackStack() }
-        budgetScreen { navController.popBackStack() }
-        settingsScreen(clickBack = navController::popBackStack, onShowSnackBar = onShowSnackBar)
+        navigation(startDestination = incomeExpenseNavigationRoute, route = HOME_DESTINATION) {
+            incomeExpenseScreen(
+                onCurrencyClick = navController::navigateToCurrencyListScreen,
+                onAllCategoryClick = navController::navigateToCategoryListScreen
+            )
+            categoryListScreen(
+                clickBack = navController::popBackStack,
+                openCategory = navController::navigateToCategoryCreationScreen
+            )
+
+            categoryCreationScreen(
+                navController = navController,
+                clickBack = navController::popBackStack,
+                clickOnCategoryIcon = navController::navigateToCategoryIconListScreen,
+                clickSave = {}
+            )
+            categoryIconListScreen(
+                clickBack = navController::popBackStack,
+                onItemClick = navController::navigateToCategoryIconGridScreen
+            )
+            categoryIconGridScreen(
+                navController = navController,
+                clickBack = navController::popBackStack,
+                onIconClick = { route, id ->
+                    navController.popBackStack()
+                    navController.popBackStack()
+                }
+            )
+            statisticsScreen()
+            profileScreen(
+                navigateToCurrencyListScreen = navController::navigateToCurrencyListScreen,
+                navigateToBudgetScreen = navController::navigateToBudgetScreen,
+                navigateToSettingsScreen = navController::navigateToSettingsScreen,
+                navigateToGoalsScreen = { /* no-op */ }
+            )
+            currencyScreen { navController.popBackStack() }
+            budgetScreen { navController.popBackStack() }
+            settingsScreen(clickBack = navController::popBackStack, onShowSnackBar = onShowSnackBar)
+        }
     }
 }
+
+private const val HOME_DESTINATION = "home"
