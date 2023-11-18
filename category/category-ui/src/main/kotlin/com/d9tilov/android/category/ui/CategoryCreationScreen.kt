@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
@@ -41,9 +42,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.category.data.impl.color.ColorManager
 import com.d9tilov.android.category.domain.model.Category
+import com.d9tilov.android.category.domain.model.exception.CategoryException
 import com.d9tilov.android.category.ui.vm.CategoryCreationUiState
 import com.d9tilov.android.category.ui.vm.CategoryCreationViewModel
 import com.d9tilov.android.category.ui.vm.CategorySharedViewModel
@@ -71,7 +74,7 @@ fun CategoryCreationRoute(
     CategoryCreationScreen(
         uiState = state,
         onBackClicked = clickBack,
-        onSaveClicked = clickSave,
+        onSaveClicked = viewModel::save,
         clickOnCategoryIcon = clickOnCategoryIcon,
         onCategoryUpdated = viewModel::updateCategory,
         onHideError = viewModel::hideError
@@ -90,6 +93,10 @@ fun CategoryCreationScreen(
 ) {
     val context = LocalContext.current
     var colorListShow by remember { mutableStateOf(false) }
+    val currentState = LocalLifecycleOwner.current.lifecycle.currentState
+    if (currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+        if (uiState.saveStatus?.isSuccess == true) onBackClicked.invoke()
+    }
     Scaffold(topBar = {
         MmTopAppBar(
             titleRes =
@@ -123,9 +130,16 @@ fun CategoryCreationScreen(
                 },
                 label = { Text(text = stringResource(id = R.string.category_name_title)) },
                 supportingText = {
-                    uiState.error?.let { errorState ->
+                    uiState.saveStatus?.onFailure { ex: Throwable ->
+                        val messageId = when (ex) {
+                            is CategoryException.CategoryEmptyNameException -> R.string.category_unit_name_exist_error
+                            is CategoryException.CategoryExistException -> R.string.category_name_exist_error
+                            is CategoryException.CategoryNotFoundException -> R.string.category_not_found_error
+                            is CategoryException.CategoryNoParentException -> R.string.category_parent_not_found_error
+                            else -> com.d9tilov.android.common.android.R.string.unknown_error
+                        }
                         Text(
-                            text = stringResource(id = errorState.errorMessageId),
+                            text = stringResource(id = messageId),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.error
                         )
@@ -206,6 +220,13 @@ fun CategoryCreationScreen(
             )
         }
     }
+}
+
+fun isValid(str: String): Boolean {
+    for (ch in str.toCharArray()) {
+        if (ch.isUpperCase()) return false
+    }
+    return true
 }
 
 @Composable

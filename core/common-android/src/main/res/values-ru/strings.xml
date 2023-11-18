@@ -12,4 +12,5 @@
     <string name="create">Создать</string>
 
     <string name="sub_category_delete_subtitle">Так же будут удалены все операции с этой статьей</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
 </resources>

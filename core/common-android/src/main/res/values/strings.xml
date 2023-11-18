@@ -12,4 +12,5 @@
     <string name="create">Create</string>
 
     <string name="sub_category_delete_subtitle">All operations with this category will also be deleted.</string>
+    <string name="unknown_error">Unknown error</string>
 </resources>
