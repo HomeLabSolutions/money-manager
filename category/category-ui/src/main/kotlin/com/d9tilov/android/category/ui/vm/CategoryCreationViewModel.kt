@@ -1,6 +1,5 @@
 package com.d9tilov.android.category.ui.vm
 
-import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,8 +7,7 @@ import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.ui.navigation.CategoryArgs
-import com.d9tilov.android.category_ui.R
-import com.d9tilov.android.core.constants.DataConstants.DEFAULT_DATA_ID
+import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.android.core.model.ItemState
 import com.d9tilov.android.core.model.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,14 +30,12 @@ data class CategoryCreationUiState(
     val itemState: ItemState = ItemState.UNKNOWN,
     val isPremium: Boolean = false,
     val type: TransactionType = TransactionType.EXPENSE,
-    val error: ErrorUiState? = null,
+    val saveStatus: Result<Unit>? = null,
 ) {
     companion object {
         val EMPTY = CategoryCreationUiState()
     }
 }
-
-data class ErrorUiState(@StringRes val errorMessageId: Int = R.string.category_unit_name_exist_error)
 
 @HiltViewModel
 class CategoryCreationViewModel @Inject constructor(
@@ -96,16 +92,15 @@ class CategoryCreationViewModel @Inject constructor(
         }
     }
 
-    fun save(category: Category) {
-        val saveCategoryExceptionHandler = CoroutineExceptionHandler { _, exception ->
-            viewModelScope.launch(Dispatchers.Main) { }
+    fun save() {
+        val saveCategoryExceptionHandler = CoroutineExceptionHandler { _, ex ->
+            _uiState.update { state -> state.copy(saveStatus = Result.failure(ex)) }
         }
         viewModelScope.launch(saveCategoryExceptionHandler) {
-            if (categoryId == DEFAULT_DATA_ID) {
-                categoryInteractor.create(category)
-            } else {
-                categoryInteractor.update(category)
-            }
+            hideError()
+            if (categoryId == NO_ID) categoryInteractor.create(_uiState.value.category)
+            else categoryInteractor.update(_uiState.value.category)
+            _uiState.update { state -> state.copy(saveStatus = Result.success(Unit)) }
         }
     }
 
@@ -114,6 +109,6 @@ class CategoryCreationViewModel @Inject constructor(
     }
 
     fun hideError() {
-        _uiState.update { state -> state.copy(error = null) }
+        _uiState.update { state -> state.copy(saveStatus = null) }
     }
 }

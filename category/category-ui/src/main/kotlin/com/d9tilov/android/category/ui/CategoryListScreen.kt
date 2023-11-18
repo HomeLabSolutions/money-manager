@@ -3,7 +3,7 @@ package com.d9tilov.android.category.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -71,25 +71,27 @@ fun CategoryListScreen(
     }) { padding ->
         Column(
             modifier = Modifier
-                .padding(top = padding.calculateTopPadding())
+                .fillMaxSize()
+                .padding(top = padding.calculateTopPadding()),
         ) {
             LazyVerticalGrid(
                 modifier = Modifier
-                    .padding(top = 16.dp, start = 8.dp, end = 8.dp),
+                    .weight(1f)
+//                    .fillMaxHeight(1f)
+                    .padding(top = 16.dp, start = 8.dp, end = 8.dp, bottom = 16.dp),
                 columns = GridCells.Fixed(4),
-                horizontalArrangement = Arrangement.Start,
-                verticalArrangement = Arrangement.Top,
             ) {
                 items(uiState.categories, { it.id }) { item ->
                     Column(
                         modifier = Modifier
-                            .size(dimensionResource(id = R.dimen.category_item_size))
                             .padding(8.dp)
                             .clickable { onCategoryClicked.invoke(item) },
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Icon(
+                            modifier = Modifier
+                                .size(dimensionResource(id = R.dimen.category_creation_item_size)),
                             imageVector = ImageVector.vectorResource(id = item.icon),
                             contentDescription = "Backup",
                             tint = Color(ContextCompat.getColor(context, item.color))
@@ -102,7 +104,6 @@ fun CategoryListScreen(
                     }
                 }
             }
-            Spacer(modifier = Modifier.weight(1f))
             BottomActionButton(
                 onClick = onCreateClicked,
                 text = stringResource(id = R.string.create)
@@ -133,6 +134,25 @@ fun DefaultCategoryListPreview() {
                     mockCategory(13L, "Category13"),
                     mockCategory(14L, "Category14"),
                     mockCategory(15L, "Category15"),
+                    mockCategory(16L, "Category15"),
+                    mockCategory(17L, "Category15"),
+                    mockCategory(18L, "Category15"),
+                    mockCategory(19L, "Category15"),
+                    mockCategory(20L, "Category15"),
+                    mockCategory(21L, "Category15"),
+                    mockCategory(22L, "Category15"),
+                    mockCategory(23L, "Category15"),
+                    mockCategory(24L, "Category15"),
+                    mockCategory(25L, "Category15"),
+                    mockCategory(26L, "Category15"),
+                    mockCategory(27L, "Category15"),
+                    mockCategory(28L, "Category15"),
+                    mockCategory(29L, "Category15"),
+                    mockCategory(30L, "Category15"),
+                    mockCategory(31L, "Category15"),
+                    mockCategory(32L, "Category15"),
+                    mockCategory(33L, "Category15"),
+                    mockCategory(34L, "Category15"),
                 )
             ), {}, {}, {})
     }

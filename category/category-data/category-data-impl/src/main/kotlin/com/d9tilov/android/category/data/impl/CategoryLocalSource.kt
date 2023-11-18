@@ -20,7 +20,6 @@ import com.d9tilov.android.network.dispatchers.MoneyManagerDispatchers
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flowOn
@@ -54,6 +53,7 @@ class CategoryLocalSource @Inject constructor(
     }
 
     override suspend fun create(category: Category): Long = withContext(dispatcher) {
+        if (category.name.isEmpty()) throw CategoryException.CategoryEmptyNameException()
         val currentUserId = preferencesStore.uid.firstOrNull() ?: throw WrongUidException()
         val count = categoryDao.getCategoriesCountByName(currentUserId, category.name)
         if (count == 0) {
@@ -66,6 +66,7 @@ class CategoryLocalSource @Inject constructor(
     }
 
     override suspend fun update(category: Category) = withContext(dispatcher) {
+        if (category.name.isEmpty()) throw CategoryException.CategoryEmptyNameException()
         val currentUserId = preferencesStore.uid.firstOrNull() ?: throw WrongUidException()
         val categoryById =
             categoryDao.getById(currentUserId, category.id) ?: throw WrongIdException()
@@ -73,11 +74,8 @@ class CategoryLocalSource @Inject constructor(
             categoryDao.update(category.toDbModel())
         } else {
             val count = categoryDao.getCategoriesCountByName(currentUserId, category.name)
-            if (count == 0) {
-                categoryDao.update(category.toDbModel())
-            } else {
-                throw CategoryException.CategoryExistException("Category with name: ${category.name} has already existed")
-            }
+            if (count == 0) categoryDao.update(category.toDbModel())
+            else throw CategoryException.CategoryExistException("Category with name: ${category.name} has already existed")
         }
     }
 

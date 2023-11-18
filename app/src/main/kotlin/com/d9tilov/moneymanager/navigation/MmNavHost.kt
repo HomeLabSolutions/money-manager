@@ -51,7 +51,7 @@ fun MmNavHost(
                 navController = navController,
                 clickBack = navController::popBackStack,
                 clickOnCategoryIcon = navController::navigateToCategoryIconListScreen,
-                clickSave = {}
+                clickSave = navController::popBackStack
             )
             categoryIconListScreen(
                 clickBack = navController::popBackStack,
@@ -60,10 +60,10 @@ fun MmNavHost(
             categoryIconGridScreen(
                 navController = navController,
                 clickBack = navController::popBackStack,
-                onIconClick = { route, id ->
-                    navController.popBackStack()
-                    navController.popBackStack()
-                }
+                onIconClick = {
+                    val destination = navController.previousBackStackEntry?.destination?.id
+                    destination?.let { id -> navController.popBackStack(id, inclusive = true) } }
+
             )
             statisticsScreen()
             profileScreen(

@@ -16,6 +16,9 @@
     <string name="category_unit_new_name_subtitle">Enter name of new group</string>
     <string name="category_unit_to_group_subtitle">Add category \"%1$s\"\ to group %2$s?</string>
     <string name="category_unit_name_exist_error">Name of this group already exists</string>
+    <string name="category_name_exist_error">Name of the category already exists</string>
+    <string name="category_not_found_error">Category not found</string>
+    <string name="category_parent_not_found_error">Category\'s parent not found</string>
     <string name="category_expense_info_can_spend_today_title">you can spend today:</string>
     <string name="category_expense_info_can_spend_today_negate_title">overspending:</string>
     <string name="category_expense_info_today_title">was spent today:</string>
