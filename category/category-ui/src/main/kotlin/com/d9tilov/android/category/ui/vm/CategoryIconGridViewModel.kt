@@ -1,18 +1,24 @@
 package com.d9tilov.android.category.ui.vm
 
-import androidx.annotation.DrawableRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.model.CategoryGroup
 import com.d9tilov.android.category.ui.model.categoryGroupItemMap
 import com.d9tilov.android.category.ui.navigation.CategoryArgs
 import com.d9tilov.android.category_ui.R
+import com.d9tilov.android.core.constants.DataConstants
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class CategoryIconGridUiState(
@@ -26,6 +32,7 @@ data class CategoryIconGridUiState(
 
 @HiltViewModel
 class CategoryIconGridViewModel @Inject constructor(
+    private val billingInteractor: BillingInteractor,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -203,6 +210,11 @@ class CategoryIconGridViewModel @Inject constructor(
     private val iconGroup = checkNotNull(categoryArgs.groupId)
     val route = ""
 
+    private val _categoryIconId = MutableStateFlow(DataConstants.NO_RES_ID)
+    private val _isPremium = MutableStateFlow(false)
+    val categoryIconId: StateFlow<Int> = _categoryIconId
+    val isPremium: StateFlow<Boolean> = _isPremium
+
     val uiState: StateFlow<CategoryIconGridUiState> = flowOf(
         CategoryIconGridUiState(
             categoryGroupItemMap[iconGroup] ?: R.string.category_group_free,
@@ -215,6 +227,12 @@ class CategoryIconGridViewModel @Inject constructor(
             initialValue = CategoryIconGridUiState.EMPTY
         )
 
-    fun save(@DrawableRes categoryIcon: Int) {
+    init {
+        viewModelScope.launch {
+            billingInteractor.isPremium().flowOn(Dispatchers.IO)
+                .shareIn(viewModelScope, SharingStarted.WhileSubscribed()).collect {
+                    _isPremium.value = it
+                }
+        }
     }
 }

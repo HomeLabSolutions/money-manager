@@ -380,7 +380,7 @@ fun TransactionItem(modifier: Modifier, transaction: Transaction) {
             horizontalAlignment = Alignment.End
         ) {
             ComposeCurrencyView(
-                value = transaction.sum.removeScale.toString(),
+                value = transaction.sum.toString(),
                 valueSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sum_small_text_size).value.sp,
                 symbol = transaction.currencyCode.getSymbolByCode(),
                 symbolSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sign_small_text_size).value.sp

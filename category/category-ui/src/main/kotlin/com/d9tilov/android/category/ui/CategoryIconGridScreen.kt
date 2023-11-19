@@ -33,7 +33,7 @@ import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 fun CategoryIconGridRoute(
     sharedViewModel: CategorySharedViewModel,
     viewModel: CategoryIconGridViewModel = hiltViewModel(),
-    onIconClick: () -> Unit,
+    onIconClick: (Boolean) -> Unit,
     clickBack: () -> Unit,
 ) {
     val state: CategoryIconGridUiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -42,7 +42,7 @@ fun CategoryIconGridRoute(
         onBackClicked = clickBack,
         onIconClicked = { id ->
             sharedViewModel.setId(id)
-            onIconClick.invoke()
+            onIconClick.invoke(viewModel.isPremium.value)
         }
     )
 }
