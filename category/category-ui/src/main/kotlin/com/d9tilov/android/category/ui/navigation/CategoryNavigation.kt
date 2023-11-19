@@ -114,8 +114,8 @@ fun NavController.navigateToCategoryCreationScreen(
 fun NavGraphBuilder.categoryCreationScreen(
     navController: NavController,
     clickBack: () -> Unit,
-    clickOnCategoryIcon: () -> Unit,
-    clickSave: () -> Unit,
+    openCategoryGroupIconList: () -> Unit,
+    openCategoryIconGrid: () -> Unit,
 ) {
     val route = "$categoryCreationNavigationRoute/{$categoryIdArg}/{${transactionTypeArg}}"
     composable(
@@ -128,9 +128,9 @@ fun NavGraphBuilder.categoryCreationScreen(
         val sharedViewModel = entry.sharedViewModel<CategorySharedViewModel>(navController)
         CategoryCreationRoute(
             sharedViewModel = sharedViewModel,
-            clickSave = clickSave,
-            clickBack = clickBack,
-            clickOnCategoryIcon = clickOnCategoryIcon
+            openCategoryGroupIconList = openCategoryGroupIconList,
+            openCategoryIconGrid = openCategoryIconGrid,
+            clickBack = clickBack
         )
     }
 }
