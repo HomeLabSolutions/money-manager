@@ -9,6 +9,7 @@
     <string name="category_edit_title">Edit category group</string>
     <string name="category_unit_name_group_hint">Name of group</string>
     <string name="category_delete_title">Remove category?</string>
+    <string name="category_delete_subtitle">Category %1$s will be removed</string>
     <string name="category_delete_sub_title">All operations with this category will also be deleted.</string>
     <string name="category_delete_group_sub_title">All subcategories will also be deleted.\n\nAll operations with this category will be deleted too.</string>
     <string name="category_unit_to_group_title">Grouping</string>

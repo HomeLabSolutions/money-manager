@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class CategoryUiState(val categories: List<Category> = emptyList()) {
@@ -23,7 +24,7 @@ data class CategoryUiState(val categories: List<Category> = emptyList()) {
 @HiltViewModel
 class CategoryListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    categoryInteractor: CategoryInteractor
+    private val categoryInteractor: CategoryInteractor
 ) : ViewModel() {
 
     private val categoryArgs: CategoryArgs.CategoryListArgs = CategoryArgs.CategoryListArgs(savedStateHandle)
@@ -36,4 +37,8 @@ class CategoryListViewModel @Inject constructor(
             initialValue = CategoryUiState.EMPTY
         )
     val uiState: StateFlow<CategoryUiState> = _uiState
+
+    fun remove(category: Category) = viewModelScope.launch {
+        categoryInteractor.deleteCategory(category)
+    }
 }
