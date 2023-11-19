@@ -64,8 +64,8 @@ import kotlinx.coroutines.launch
 fun CategoryCreationRoute(
     sharedViewModel: CategorySharedViewModel,
     viewModel: CategoryCreationViewModel = hiltViewModel(),
-    clickOnCategoryIcon: () -> Unit,
-    clickSave: () -> Unit,
+    openCategoryGroupIconList: () -> Unit,
+    openCategoryIconGrid: () -> Unit,
     clickBack: () -> Unit,
 ) {
     val state: CategoryCreationUiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -75,7 +75,10 @@ fun CategoryCreationRoute(
         uiState = state,
         onBackClicked = clickBack,
         onSaveClicked = viewModel::save,
-        clickOnCategoryIcon = clickOnCategoryIcon,
+        clickOnCategoryIcon = {
+            if (viewModel.uiState.value.isPremium) openCategoryGroupIconList.invoke()
+            else openCategoryIconGrid.invoke()
+        },
         onCategoryUpdated = viewModel::updateCategory,
         onHideError = viewModel::hideError
     )

@@ -50,8 +50,8 @@ fun MmNavHost(
             categoryCreationScreen(
                 navController = navController,
                 clickBack = navController::popBackStack,
-                clickOnCategoryIcon = navController::navigateToCategoryIconListScreen,
-                clickSave = navController::popBackStack
+                openCategoryGroupIconList = navController::navigateToCategoryIconListScreen,
+                openCategoryIconGrid = { navController.navigateToCategoryIconGridScreen(-1) }
             )
             categoryIconListScreen(
                 clickBack = navController::popBackStack,

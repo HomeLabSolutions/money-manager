@@ -75,7 +75,7 @@ fun CategoryIconListItem(
         modifier = Modifier
             .height(dimensionResource(id = R.dimen.category_group_item_height))
             .fillMaxWidth()
-            .clickable { clickCallback(group.ordinal) },
+            .clickable { clickCallback(group.value) },
         verticalArrangement = Arrangement.Center
     ) {
         Text(
