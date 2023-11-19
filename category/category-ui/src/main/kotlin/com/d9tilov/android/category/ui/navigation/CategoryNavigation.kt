@@ -161,7 +161,7 @@ fun NavController.navigateToCategoryIconGridScreen(
 fun NavGraphBuilder.categoryIconGridScreen(
     navController: NavController,
     clickBack: () -> Unit,
-    onIconClick: () -> Unit,
+    onIconClick: (Boolean) -> Unit,
 ) {
     composable(
         route = "$categoryIconGridNavigationRoute/{$categoryGroup}",

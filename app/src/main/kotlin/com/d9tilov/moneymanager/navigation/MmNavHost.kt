@@ -60,10 +60,10 @@ fun MmNavHost(
             categoryIconGridScreen(
                 navController = navController,
                 clickBack = navController::popBackStack,
-                onIconClick = {
+                onIconClick = { isPremium ->
                     val destination = navController.previousBackStackEntry?.destination?.id
-                    destination?.let { id -> navController.popBackStack(id, inclusive = true) } }
-
+                    destination?.let { id -> navController.popBackStack(id, inclusive = isPremium) }
+                }
             )
             statisticsScreen()
             profileScreen(
