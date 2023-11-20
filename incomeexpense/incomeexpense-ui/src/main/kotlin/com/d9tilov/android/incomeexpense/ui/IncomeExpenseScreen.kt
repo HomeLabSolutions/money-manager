@@ -88,7 +88,6 @@ import com.d9tilov.android.common.android.utils.formatDate
 import com.d9tilov.android.core.constants.CurrencyConstants
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.core.constants.DataConstants.TAG
-import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.KeyPress
 import com.d9tilov.android.core.utils.removeScale
@@ -121,12 +120,14 @@ import java.math.RoundingMode
 @Composable
 fun IncomeExpenseRoute(
     viewModel: IncomeExpenseViewModel = hiltViewModel(),
+    currencyCode: String?,
     onCurrencyClicked: () -> Unit,
     onAllCategoryClicked: (ScreenType) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var editMode by remember { mutableStateOf(EditMode.KEYBOARD) }
     val context = LocalContext.current
+    currencyCode?.let { code -> viewModel.updateCurrencyCode(code) }
     LaunchedEffect(Unit) {
         viewModel.errorMessage
             .collect { message ->
