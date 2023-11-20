@@ -12,12 +12,13 @@ import com.d9tilov.android.category.ui.navigation.navigateToCategoryCreationScre
 import com.d9tilov.android.category.ui.navigation.navigateToCategoryIconGridScreen
 import com.d9tilov.android.category.ui.navigation.navigateToCategoryIconListScreen
 import com.d9tilov.android.category.ui.navigation.navigateToCategoryListScreen
+import com.d9tilov.android.currency.domain.model.CurrencyArgs.currencyCodeArgs
+import com.d9tilov.android.currency.ui.navigation.currencyScreen
+import com.d9tilov.android.currency.ui.navigation.navigateToCurrencyListScreen
 import com.d9tilov.android.incomeexpense.navigation.incomeExpenseNavigationRoute
 import com.d9tilov.android.incomeexpense.navigation.incomeExpenseScreen
 import com.d9tilov.android.profile.ui.navigation.budgetScreen
-import com.d9tilov.android.profile.ui.navigation.currencyScreen
 import com.d9tilov.android.profile.ui.navigation.navigateToBudgetScreen
-import com.d9tilov.android.profile.ui.navigation.navigateToCurrencyListScreen
 import com.d9tilov.android.profile.ui.navigation.navigateToSettingsScreen
 import com.d9tilov.android.profile.ui.navigation.profileScreen
 import com.d9tilov.android.profile.ui.navigation.settingsScreen
@@ -67,12 +68,19 @@ fun MmNavHost(
             )
             statisticsScreen()
             profileScreen(
-                navigateToCurrencyListScreen = navController::navigateToCurrencyListScreen,
+                navigateToCurrencyListScreen = { navController.navigateToCurrencyListScreen(true) },
                 navigateToBudgetScreen = navController::navigateToBudgetScreen,
                 navigateToSettingsScreen = navController::navigateToSettingsScreen,
                 navigateToGoalsScreen = { /* no-op */ }
             )
-            currencyScreen { navController.popBackStack() }
+            currencyScreen(
+                clickBack = navController::popBackStack,
+                onChooseCurrency = { currencyCode ->
+                    navController.previousBackStackEntry
+                        ?.savedStateHandle
+                        ?.set(currencyCodeArgs, currencyCode)
+                    navController.popBackStack()
+                })
             budgetScreen { navController.popBackStack() }
             settingsScreen(clickBack = navController::popBackStack, onShowSnackBar = onShowSnackBar)
         }

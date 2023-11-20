@@ -12,6 +12,7 @@ import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.KeyPress
 import com.d9tilov.android.core.utils.MainPriceFieldParser
+import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.isSameDay
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
@@ -268,6 +269,7 @@ class IncomeExpenseViewModel @Inject constructor(
                         sum = price.value.toBigDecimal(),
                         category = category,
                         currencyCode = price.currencyCode,
+                        date = currentDateTime(),
                         type = when (screenType) {
                             ScreenType.EXPENSE -> TransactionType.EXPENSE
                             ScreenType.INCOME -> TransactionType.INCOME
@@ -281,6 +283,13 @@ class IncomeExpenseViewModel @Inject constructor(
             state.copy(price = price)
         }
         return true
+    }
+
+    fun updateCurrencyCode(code: String) {
+        _uiState.update { state ->
+            val price = state.price.copy(currencyCode = code)
+            state.copy(price = price)
+        }
     }
 
     private fun mapWithStickyHeaders(flow: Flow<PagingData<Transaction>>): Flow<PagingData<BaseTransaction>> {

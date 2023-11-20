@@ -1,11 +1,13 @@
 package com.d9tilov.android.currency.ui
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.core.model.ErrorMessage
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.android.currency.observer.contract.CurrencyUpdateObserver
+import com.d9tilov.android.currency.ui.navigation.CurrencyArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -31,9 +33,14 @@ sealed interface CurrencyUiState {
 
 @HiltViewModel
 class CurrencyViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     currencyInteractor: CurrencyInteractor,
     private val currencyUpdateObserver: CurrencyUpdateObserver
 ) : ViewModel() {
+
+    private val currencyArgs: CurrencyArgs.CurrencyScreenArgs =
+        CurrencyArgs.CurrencyScreenArgs(savedStateHandle)
+    private val changeGlobally:Boolean = checkNotNull(currencyArgs.changeGlobally)
 
     val uiState = currencyInteractor.getCurrencies()
         .map { CurrencyUiState.HasCurrencies(it, false) }
@@ -44,6 +51,6 @@ class CurrencyViewModel @Inject constructor(
         )
 
     fun changeCurrency(code: String) = viewModelScope.launch {
-        currencyUpdateObserver.updateMainCurrency(code)
+        if (changeGlobally) currencyUpdateObserver.updateMainCurrency(code)
     }
 }

@@ -43,14 +43,15 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @Composable
-fun CurrencyListRoute(viewModel: CurrencyViewModel = hiltViewModel(), clickBack: () -> Unit) {
+fun CurrencyListRoute(viewModel: CurrencyViewModel = hiltViewModel(), clickBack: () -> Unit, onChooseCurrency: (currencyCode: String) -> Unit) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     CurrencyListScreen(
         currencyUiState = uiState,
         showToolbar = true,
         onChooseCurrency = { currency ->
-            viewModel.changeCurrency(currency.code)
-            clickBack.invoke()
+            val code = currency.code
+            viewModel.changeCurrency(code)
+            onChooseCurrency.invoke(code)
         },
         onClickBack = clickBack
     )

@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.accompanistPager)
     implementation(libs.accompanistPagerIndicator)
     implementation(libs.composeMaterial3)
+    implementation(libs.composeLiveData)
 
     implementation(libs.timber)
 
