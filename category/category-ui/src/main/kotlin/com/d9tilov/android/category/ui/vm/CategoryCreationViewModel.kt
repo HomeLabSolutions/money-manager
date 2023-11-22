@@ -54,7 +54,7 @@ class CategoryCreationViewModel @Inject constructor(
 
     init {
         val categoryExceptionHandler = CoroutineExceptionHandler { _, _ ->
-            viewModelScope.launch(Dispatchers.Main) {
+            viewModelScope.launch {
                 _uiState.update { state: CategoryCreationUiState ->
                     state.copy(
                         category = when (transactionType) {

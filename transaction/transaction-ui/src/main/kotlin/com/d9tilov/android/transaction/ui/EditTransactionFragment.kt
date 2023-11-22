@@ -20,7 +20,7 @@ import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.core.utils.toMillis
 import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.android.transaction.ui.navigation.EditTransactionNavigator
-import com.d9tilov.android.transaction.ui.vm.EditTransactionViewModel
+import com.d9tilov.android.transaction.ui.vm.TransactionCreationViewModel
 import com.d9tilov.android.transaction_ui.R
 import com.d9tilov.android.transaction_ui.databinding.FragmentEditTransactionBinding
 import com.google.android.material.appbar.MaterialToolbar
@@ -50,7 +50,7 @@ class EditTransactionFragment : EditTransactionNavigator,
 
     override fun getNavigator() = this
 
-    override val viewModel by viewModels<EditTransactionViewModel>()
+    override val viewModel by viewModels<TransactionCreationViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

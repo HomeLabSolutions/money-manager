@@ -121,6 +121,7 @@ import java.math.RoundingMode
 fun IncomeExpenseRoute(
     viewModel: IncomeExpenseViewModel = hiltViewModel(),
     currencyCode: String?,
+    onTransactionClicked: (Transaction) -> Unit,
     onCurrencyClicked: () -> Unit,
     onAllCategoryClicked: (ScreenType) -> Unit,
 ) {
@@ -138,6 +139,7 @@ fun IncomeExpenseRoute(
     IncomeExpenseScreen(
         uiState = uiState,
         editMode = editMode,
+        onTransactionClicked = onTransactionClicked,
         onNumberClicked = { viewModel.addNumber(it) },
         onCategoryClicked = { category, screenType ->
             val res = viewModel.addTransaction(
@@ -157,6 +159,7 @@ fun IncomeExpenseScreen(
     uiState: IncomeExpenseUiState,
     editMode: EditMode,
     onNumberClicked: (KeyPress) -> Unit,
+    onTransactionClicked: (Transaction) -> Unit,
     onCategoryClicked: (Category, ScreenType) -> Unit,
     onEditModeChanged: (EditMode) -> Unit,
     onCurrencyClicked: () -> Unit,
@@ -181,7 +184,8 @@ fun IncomeExpenseScreen(
             onCategoryClicked = onCategoryClicked,
             onKeyboardClicked = { onEditModeChanged.invoke(EditMode.LIST) },
             onCurrencyClicked = onCurrencyClicked,
-            onAllCategoryClicked = onAllCategoryClicked
+            onAllCategoryClicked = onAllCategoryClicked,
+            onTransactionClicked = onTransactionClicked
         )
     }
 }
@@ -245,6 +249,7 @@ fun TransactionListLayout(
     modifier: Modifier,
     transactions: Flow<PagingData<BaseTransaction>>,
     screenType: ScreenType,
+    onTransactionClicked: (Transaction) -> Unit
 ) {
     val lazyTransactionItems: LazyPagingItems<BaseTransaction> =
         transactions.collectAsLazyPagingItems()
@@ -275,9 +280,10 @@ fun TransactionListLayout(
                     }
                 } else {
                     item {
+                        val item = currentItem as Transaction
                         TransactionItem(
-                            modifier = Modifier.fillMaxWidth(),
-                            transaction = currentItem as Transaction
+                            modifier = Modifier.fillMaxWidth().clickable { onTransactionClicked.invoke(item) },
+                            transaction = item
                         )
                     }
                 }
@@ -440,6 +446,7 @@ fun HomeTabs(
     editMode: EditMode,
     uiState: IncomeExpenseUiState,
     modifier: Modifier = Modifier,
+    onTransactionClicked: (Transaction) -> Unit,
     onNumberClicked: (KeyPress) -> Unit,
     onCategoryClicked: (Category, ScreenType) -> Unit,
     onKeyboardClicked: () -> Unit,
@@ -519,7 +526,8 @@ fun HomeTabs(
                     Modifier.fillMaxSize(),
                     if (tabIndex.toScreenType() == INCOME) uiState.incomeUiState.incomeTransactions
                     else uiState.expenseUiState.expenseTransactions,
-                    tabIndex.toScreenType()
+                    tabIndex.toScreenType(),
+                    onTransactionClicked = onTransactionClicked
                 )
             }
 
@@ -837,7 +845,8 @@ fun PreviewIncomeExpenseScreen() {
             onCategoryClicked = { category: Category, screenType: ScreenType -> },
             onEditModeChanged = {},
             onCurrencyClicked = {},
-            onAllCategoryClicked = {}
+            onAllCategoryClicked = {},
+            onTransactionClicked = {}
         )
     }
 }
