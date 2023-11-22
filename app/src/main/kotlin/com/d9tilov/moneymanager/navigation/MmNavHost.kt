@@ -41,7 +41,8 @@ fun MmNavHost(
         navigation(startDestination = incomeExpenseNavigationRoute, route = HOME_DESTINATION) {
             incomeExpenseScreen(
                 onCurrencyClick = navController::navigateToCurrencyListScreen,
-                onAllCategoryClick = navController::navigateToCategoryListScreen
+                onAllCategoryClick = navController::navigateToCategoryListScreen,
+                onTransactionClick = navController::navigateToCategoryListScreen,
             )
             categoryListScreen(
                 clickBack = navController::popBackStack,

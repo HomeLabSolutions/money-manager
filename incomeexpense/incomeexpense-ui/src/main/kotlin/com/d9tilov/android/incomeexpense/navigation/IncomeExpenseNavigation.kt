@@ -1,6 +1,5 @@
 package com.d9tilov.android.incomeexpense.navigation
 
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -9,8 +8,9 @@ import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.model.CurrencyArgs.currencyCodeArgs
 import com.d9tilov.android.incomeexpense.ui.IncomeExpenseRoute
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType
+import com.d9tilov.android.transaction.domain.model.Transaction
 
-const val incomeExpenseNavigationRoute = "income_expense"
+const val incomeExpenseNavigationRoute = "income_expense_screen"
 
 fun NavController.navigateToIncomeExpense(navOptions: NavOptions? = null) {
     this.navigate(incomeExpenseNavigationRoute, navOptions)
@@ -19,6 +19,7 @@ fun NavController.navigateToIncomeExpense(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.incomeExpenseScreen(
     onCurrencyClick: () -> Unit,
     onAllCategoryClick: (TransactionType) -> Unit,
+    onTransactionClick: (Transaction) -> Unit,
 ) {
     composable(route = incomeExpenseNavigationRoute) { entry ->
         IncomeExpenseRoute(
@@ -29,7 +30,8 @@ fun NavGraphBuilder.incomeExpenseScreen(
                     ScreenType.EXPENSE -> onAllCategoryClick.invoke(TransactionType.EXPENSE)
                     ScreenType.INCOME -> onAllCategoryClick.invoke(TransactionType.INCOME)
                 }
-            }
+            },
+            onTransactionClicked = onTransactionClick
         )
     }
 }

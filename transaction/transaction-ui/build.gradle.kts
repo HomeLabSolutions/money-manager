@@ -1,6 +1,7 @@
 plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
+    id("moneymanager.android.library.compose")
     id("moneymanager.android.library.viewbinding")
     id("androidx.navigation.safeargs.kotlin")
     id("kotlin-parcelize")
@@ -28,6 +29,13 @@ dependencies {
     implementation(libs.glide)
     kapt(libs.glideCompiler)
     implementation(libs.navigation)
+    implementation(libs.navigationCompose)
+    implementation(libs.hiltNavigationCompose)
+
+    implementation(libs.composeViewModel)
+    implementation(libs.composeRuntime)
+    implementation(libs.bundles.compose)
+    implementation(libs.bundles.composeMaterial3)
 
     implementation(libs.firebaseAnalytics)
     implementation(platform(libs.firebaseBom))
