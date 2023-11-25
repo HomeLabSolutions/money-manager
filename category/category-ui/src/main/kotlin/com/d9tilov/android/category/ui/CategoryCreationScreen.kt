@@ -154,7 +154,6 @@ fun CategoryCreationScreen(
                     focusRequester.requestFocus()
                 }
             }
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

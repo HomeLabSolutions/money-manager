@@ -28,13 +28,14 @@ private const val MILLISECONDS_MINUS_ONE = 999
 private const val SECONDS_MINUS_ONE = 59
 private const val HOURS_MINUS_ONE = 23
 
-fun Long.toBackupDate(): String {
-    return if (this == UNKNOWN_BACKUP_DATE) "-" else SimpleDateFormat(BACKUP_DATE, Locale.getDefault()).format(Date(this))
-}
+fun Long.toBackupDate(): String =
+    if (this == UNKNOWN_BACKUP_DATE) "-" else SimpleDateFormat(
+        BACKUP_DATE,
+        Locale.getDefault()
+    ).format(Date(this))
 
-fun LocalDateTime.toBudgetCreatedDateStr(): String {
-    return SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(Date(this.toMillis()))
-}
+fun LocalDateTime.toBudgetCreatedDateStr(): String =
+    SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(Date(this.toMillis()))
 
 fun currentDateTime(): LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 fun currentDate(): LocalDate = currentDateTime().date
