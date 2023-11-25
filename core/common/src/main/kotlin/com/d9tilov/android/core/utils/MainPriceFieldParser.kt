@@ -2,6 +2,8 @@ package com.d9tilov.android.core.utils
 
 object MainPriceFieldParser {
 
+    private const val MAX_PRICE_LENGTH = 11
+
     fun parse(priceStr: String, btn: KeyPress): String {
         return if (btn == KeyPress.Del) {
             if (priceStr.length == 1) {
@@ -36,7 +38,19 @@ object MainPriceFieldParser {
         }
     }
 
-    private const val MAX_PRICE_LENGTH = 11
+    fun isInputValid(str: String): Boolean {
+        if (str.isEmpty()) return false
+        else {
+            if (str[0] == '.') return false
+            if (str.length > 1 && str[0] == '0' && str[1] != '.') return false
+        }
+        return try {
+            str.toBigDecimal()
+            true
+        } catch (ex: NumberFormatException) {
+            false
+        }
+    }
 }
 
 enum class KeyPress(val value: String) {

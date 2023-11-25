@@ -112,6 +112,8 @@ dependencies {
     implementation(project(":core:network"))
 
     implementation(project(":transaction:transaction-domain:transaction-domain-contract"))
+    implementation(project(":transaction:transaction-domain:transaction-domain-model"))
+    implementation(project(":transaction:transaction-ui"))
 
     implementation(project(":currency:currency-data:currency-data-impl"))
     implementation(project(":currency:currency-domain:currency-domain-model"))

@@ -23,6 +23,8 @@ import com.d9tilov.android.profile.ui.navigation.navigateToSettingsScreen
 import com.d9tilov.android.profile.ui.navigation.profileScreen
 import com.d9tilov.android.profile.ui.navigation.settingsScreen
 import com.d9tilov.android.statistics.ui.navigation.statisticsScreen
+import com.d9tilov.android.transaction.ui.navigation.navigateToTransactionScreen
+import com.d9tilov.android.transaction.ui.navigation.transactionCreationScreen
 import com.d9tilov.moneymanager.ui.MmAppState
 
 @Composable
@@ -42,7 +44,11 @@ fun MmNavHost(
             incomeExpenseScreen(
                 onCurrencyClick = navController::navigateToCurrencyListScreen,
                 onAllCategoryClick = navController::navigateToCategoryListScreen,
-                onTransactionClick = navController::navigateToCategoryListScreen,
+                onTransactionClick = { navController.navigateToTransactionScreen(transactionId = it.id) }
+            )
+            transactionCreationScreen(
+                clickBack = navController::popBackStack,
+                onCategoryClick = navController::navigateToCategoryListScreen
             )
             categoryListScreen(
                 clickBack = navController::popBackStack,
