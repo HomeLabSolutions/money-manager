@@ -42,6 +42,7 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.category.domain.model.Category
+import com.d9tilov.android.category.domain.model.CategoryDestination
 import com.d9tilov.android.category.ui.vm.CategoryListViewModel
 import com.d9tilov.android.category.ui.vm.CategoryUiState
 import com.d9tilov.android.category_ui.R
@@ -59,6 +60,7 @@ import kotlin.random.Random
 fun CategoryListRoute(
     viewModel: CategoryListViewModel = hiltViewModel(),
     openCategory: (Long, TransactionType) -> Unit,
+    onCategoryClickAndBack: (Category) -> Unit,
     clickBack: () -> Unit,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -66,10 +68,15 @@ fun CategoryListRoute(
         uiState = state,
         onBackClicked = clickBack,
         onCategoryClicked = { category ->
-            openCategory.invoke(
-                category.id,
-                viewModel.transactionType
-            )
+            when (viewModel.destination) {
+                CategoryDestination.MAIN_SCREEN -> openCategory.invoke(category.id, viewModel.transactionType)
+                CategoryDestination.MAIN_WITH_SUM_SCREEN,
+                CategoryDestination.EDIT_TRANSACTION_SCREEN,
+                CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN -> onCategoryClickAndBack(category)
+                CategoryDestination.CATEGORY_CREATION_SCREEN -> TODO()
+                CategoryDestination.CATEGORY_SCREEN -> TODO()
+                CategoryDestination.SUB_CATEGORY_SCREEN -> TODO()
+            }
         },
         onCreateClicked = { openCategory.invoke(NO_ID, viewModel.transactionType) },
         onRemoveClicked = { category -> viewModel.remove(category) }

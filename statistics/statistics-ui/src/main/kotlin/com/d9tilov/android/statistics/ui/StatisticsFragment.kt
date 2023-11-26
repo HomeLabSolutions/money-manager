@@ -87,17 +87,17 @@ class StatisticsFragment :
     override val viewModel by viewModels<StatisticsViewModel>()
     private val statisticsBarChartAdapter: StatisticsBarChartAdapter =
         StatisticsBarChartAdapter { item, _ ->
-            val action = StatisticsFragmentDirections.toStatisticsDetailsDest(
-                item.category.id,
-                viewModel.chartPeriod.from.toMillis(),
-                viewModel.chartPeriod.to.toMillis(),
-                viewModel.inStatistics == StatisticsMenuInStatistics.InStatistics,
-                when (viewModel.transactionType) {
-                    StatisticsMenuTransactionType.Expense -> TransactionType.EXPENSE.value
-                    StatisticsMenuTransactionType.Income -> TransactionType.INCOME.value
-                }
-            )
-            findNavController().navigate(action)
+//            val action = StatisticsFragmentDirections.toStatisticsDetailsDest(
+//                item.category.id,
+//                viewModel.chartPeriod.from.toMillis(),
+//                viewModel.chartPeriod.to.toMillis(),
+//                viewModel.inStatistics == StatisticsMenuInStatistics.InStatistics,
+//                when (viewModel.transactionType) {
+//                    StatisticsMenuTransactionType.Expense -> TransactionType.EXPENSE.value
+//                    StatisticsMenuTransactionType.Income -> TransactionType.INCOME.value
+//                }
+//            )
+//            findNavController().navigate(action)
         }
     private val statisticsMenuAdapter: StatisticsMenuAdapter by lazy {
         StatisticsMenuAdapter(

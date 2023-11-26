@@ -83,10 +83,12 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.domain.model.Category.Companion.ALL_ITEMS_ID
+import com.d9tilov.android.category.domain.model.CategoryDestination
 import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_FORMAT
 import com.d9tilov.android.common.android.utils.formatDate
 import com.d9tilov.android.core.constants.CurrencyConstants
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
+import com.d9tilov.android.core.constants.CurrencyConstants.ZERO
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.KeyPress
@@ -123,7 +125,7 @@ fun IncomeExpenseRoute(
     currencyCode: String?,
     onTransactionClicked: (Transaction) -> Unit,
     onCurrencyClicked: () -> Unit,
-    onAllCategoryClicked: (ScreenType) -> Unit,
+    onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var editMode by remember { mutableStateOf(EditMode.KEYBOARD) }
@@ -163,7 +165,7 @@ fun IncomeExpenseScreen(
     onCategoryClicked: (Category, ScreenType) -> Unit,
     onEditModeChanged: (EditMode) -> Unit,
     onCurrencyClicked: () -> Unit,
-    onAllCategoryClicked: (ScreenType) -> Unit,
+    onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
 ) {
     val listState = rememberLazyListState()
     Scaffold(
@@ -282,7 +284,9 @@ fun TransactionListLayout(
                     item {
                         val item = currentItem as Transaction
                         TransactionItem(
-                            modifier = Modifier.fillMaxWidth().clickable { onTransactionClicked.invoke(item) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { onTransactionClicked.invoke(item) },
                             transaction = item
                         )
                     }
@@ -345,7 +349,7 @@ fun TransactionItem(modifier: Modifier, transaction: Transaction) {
                 text = transaction.description,
                 style = MaterialTheme.typography.bodySmall,
                 fontSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.income_expense_name_description_text_size).value.sp,
-                color = MaterialTheme.colorScheme.onTertiary
+                color = MaterialTheme.colorScheme.tertiary
             )
         }
         if (transaction.isRegular) {
@@ -451,7 +455,7 @@ fun HomeTabs(
     onCategoryClicked: (Category, ScreenType) -> Unit,
     onKeyboardClicked: () -> Unit,
     onCurrencyClicked: () -> Unit,
-    onAllCategoryClicked: (ScreenType) -> Unit,
+    onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
 ) {
     var tabIndex by remember { mutableIntStateOf(0) }
     val pagerState = rememberPagerState(
@@ -516,8 +520,19 @@ fun HomeTabs(
                         if (screenType == INCOME) uiState.incomeUiState.incomeCategoryList
                         else uiState.expenseUiState.expenseCategoryList,
                         modifier = Modifier.fillMaxWidth(),
-                        onItemClicked = { category -> onCategoryClicked.invoke(category, screenType) },
-                        onAllCategoryClicked = { onAllCategoryClicked.invoke(screenType) }
+                        onItemClicked = { category ->
+                            onCategoryClicked.invoke(
+                                category,
+                                screenType
+                            )
+                        },
+                        onAllCategoryClicked = {
+                            onAllCategoryClicked.invoke(
+                                screenType,
+                                if (uiState.price.value == ZERO) CategoryDestination.MAIN_SCREEN
+                                else CategoryDestination.MAIN_WITH_SUM_SCREEN
+                            )
+                        }
                     )
                 }
             } else {
@@ -845,7 +860,7 @@ fun PreviewIncomeExpenseScreen() {
             onCategoryClicked = { category: Category, screenType: ScreenType -> },
             onEditModeChanged = {},
             onCurrencyClicked = {},
-            onAllCategoryClicked = {},
+            onAllCategoryClicked = { _, _ -> },
             onTransactionClicked = {}
         )
     }

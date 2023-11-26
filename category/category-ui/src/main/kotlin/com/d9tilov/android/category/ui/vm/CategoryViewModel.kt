@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.model.Category
-import com.d9tilov.android.category.ui.navigation.CategoryDestination
+import com.d9tilov.android.category.domain.model.CategoryDestination
 import com.d9tilov.android.category.ui.navigation.CategoryNavigator
 import com.d9tilov.android.core.model.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,16 +33,16 @@ class CategoryViewModel @Inject constructor(
             navigator?.openSubCategoryScreen(category)
         } else {
             when (destination) {
-                CategoryDestination.EditTransactionScreen -> navigator?.backToEditTransactionScreen(category)
-                CategoryDestination.EditRegularTransactionScreen -> navigator?.backToEditRegularTransactionScreen(
+                CategoryDestination.EDIT_TRANSACTION_SCREEN -> navigator?.backToEditTransactionScreen(category)
+                CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN -> navigator?.backToEditRegularTransactionScreen(
                     category
                 )
 
-                CategoryDestination.MainWithSumScreen -> navigator?.backToMainScreen(category)
-                CategoryDestination.MainScreen,
-                CategoryDestination.CategoryCreationScreen,
-                CategoryDestination.CategoryScreen,
-                CategoryDestination.SubCategoryScreen
+                CategoryDestination.MAIN_WITH_SUM_SCREEN -> navigator?.backToMainScreen(category)
+                CategoryDestination.MAIN_SCREEN,
+                CategoryDestination.CATEGORY_CREATION_SCREEN,
+                CategoryDestination.CATEGORY_SCREEN,
+                CategoryDestination.SUB_CATEGORY_SCREEN
                 -> navigator?.openCreateCategoryScreen(category)
             }
         }

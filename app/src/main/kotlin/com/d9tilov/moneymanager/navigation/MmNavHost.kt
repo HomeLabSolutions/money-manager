@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.navigation
+import com.d9tilov.android.category.domain.model.CategoryArgs.categoryIdArgs
 import com.d9tilov.android.category.ui.navigation.categoryCreationScreen
 import com.d9tilov.android.category.ui.navigation.categoryIconGridScreen
 import com.d9tilov.android.category.ui.navigation.categoryIconListScreen
@@ -48,13 +49,19 @@ fun MmNavHost(
             )
             transactionCreationScreen(
                 clickBack = navController::popBackStack,
-                onCategoryClick = navController::navigateToCategoryListScreen
+                onCategoryClick = navController::navigateToCategoryListScreen,
+                onCurrencyClick = navController::navigateToCurrencyListScreen
             )
             categoryListScreen(
                 clickBack = navController::popBackStack,
-                openCategory = navController::navigateToCategoryCreationScreen
+                openCategory = navController::navigateToCategoryCreationScreen,
+                onCategoryClickAndBack = { category ->
+                    navController.previousBackStackEntry
+                        ?.savedStateHandle
+                        ?.set(categoryIdArgs, category.id)
+                    navController.popBackStack()
+                }
             )
-
             categoryCreationScreen(
                 navController = navController,
                 clickBack = navController::popBackStack,

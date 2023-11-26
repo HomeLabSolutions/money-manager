@@ -136,22 +136,6 @@ class IncomeExpenseViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(updateCurrencyExceptionHandler) {
-//            launch {
-//                val category = categoryInteractor.getCategoryById(2)
-//                for(i in 0..100) {
-//                    val day = i / 5
-//                    transactionInteractor.addTransaction(
-//                        Transaction.EMPTY.copy(
-//                            type = TransactionType.EXPENSE,
-//                            sum = BigDecimal(Random.nextInt(100)),
-//                            category = category,
-//                            date = LocalDate(2023,9,29).minus(day, DateTimeUnit.DAY).getStartOfDay(),
-//                            currencyCode = DEFAULT_CURRENCY_CODE
-//                        )
-//                    )
-//                }
-//            }
-
             launch {
                 currencyInteractor.getMainCurrencyFlow()
                     .collect { currencyData ->

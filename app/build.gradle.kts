@@ -134,6 +134,7 @@ dependencies {
     implementation(project(":billing:billing-domain:billing-domain-contract"))
 
     implementation(project(":category:category-domain:category-domain-contract"))
+    implementation(project(":category:category-domain:category-domain-model"))
     implementation(project(":category:category-ui"))
 
     implementation(project(":budget:budget-ui"))
