@@ -7,8 +7,11 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.d9tilov.android.category.domain.model.CategoryArgs
+import com.d9tilov.android.category.domain.model.CategoryDestination
 import com.d9tilov.android.common.android.ui.base.BaseNavigator
 import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.currency.domain.model.CurrencyArgs
 import com.d9tilov.android.transaction.ui.TransactionCreationRoute
 
 interface RemoveTransactionDialogNavigator : BaseNavigator {
@@ -34,13 +37,20 @@ fun NavController.navigateToTransactionScreen(transactionId: Long, navOptions: N
 
 fun NavGraphBuilder.transactionCreationScreen(
     clickBack: () -> Unit,
-    onCategoryClick: (TransactionType) -> Unit,
+    onCategoryClick: (TransactionType, CategoryDestination) -> Unit,
+    onCurrencyClick: () -> Unit
 ) {
     val route = "$transactionNavigationRoute/{$transactionIdArg}"
     composable(
         route = route,
         arguments = listOf(navArgument(transactionIdArg) { type = NavType.LongType })
     ) { entry ->
-        TransactionCreationRoute(clickBack = clickBack)
+        TransactionCreationRoute(
+            currencyCode = entry.savedStateHandle.get<String>(CurrencyArgs.currencyCodeArgs),
+            categoryId = entry.savedStateHandle.get<Long>(CategoryArgs.categoryIdArgs),
+            clickBack = clickBack,
+            clickCurrency = onCurrencyClick,
+            clickCategory = onCategoryClick
+        )
     }
 }

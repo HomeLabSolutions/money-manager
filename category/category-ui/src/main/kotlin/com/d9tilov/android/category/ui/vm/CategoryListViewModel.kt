@@ -3,6 +3,7 @@ package com.d9tilov.android.category.ui.vm
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.d9tilov.android.category.domain.model.CategoryDestination
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.domain.model.Category.Companion.ALL_ITEMS_ID
@@ -29,6 +30,7 @@ class CategoryListViewModel @Inject constructor(
 
     private val categoryArgs: CategoryArgs.CategoryListArgs = CategoryArgs.CategoryListArgs(savedStateHandle)
     val transactionType = checkNotNull(categoryArgs.transactionType)
+    val destination: CategoryDestination = checkNotNull(categoryArgs.destination)
     private val _uiState = categoryInteractor.getGroupedCategoriesByType(transactionType)
         .map { list -> CategoryUiState(list.filter { it.id != ALL_ITEMS_ID }) }
         .stateIn(

@@ -2,7 +2,7 @@ package com.d9tilov.android.core.utils
 
 object MainPriceFieldParser {
 
-    private const val MAX_PRICE_LENGTH = 11
+    const val MAX_PRICE_LENGTH = 11
 
     fun parse(priceStr: String, btn: KeyPress): String {
         return if (btn == KeyPress.Del) {
@@ -40,8 +40,11 @@ object MainPriceFieldParser {
 
     fun isInputValid(str: String): Boolean {
         if (str.isEmpty()) return false
+        if (str.length > MAX_PRICE_LENGTH) return false
         else {
             if (str[0] == '.') return false
+            if (str[0] == '0' && str.length == 1) return false
+            if (str.length == 2 && str[0] == '0' && str[1] == '.') return false
             if (str.length > 1 && str[0] == '0' && str[1] != '.') return false
         }
         return try {

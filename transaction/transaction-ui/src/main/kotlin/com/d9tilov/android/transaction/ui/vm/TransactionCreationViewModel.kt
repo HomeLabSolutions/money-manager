@@ -3,13 +3,11 @@ package com.d9tilov.android.transaction.ui.vm
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.model.Category
-import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_FORMAT
-import com.d9tilov.android.common.android.utils.formatDate
-import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
-import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
-import com.d9tilov.android.core.utils.currentDateTime
+import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
+import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.navigation.TransactionArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -21,11 +19,10 @@ import javax.inject.Inject
 
 data class TransactionUiState(
     val amount: String = "0",
-    val currency: String = DEFAULT_CURRENCY_SYMBOL,
-    val inStatistics: Boolean = true,
-    val description: String = "",
-    val category: Category = Category.EMPTY_EXPENSE,
-    val date: String = formatDate(currentDateTime(), TRANSACTION_DATE_FORMAT),
+    val transaction: Transaction = Transaction.EMPTY.copy(category = Category.EMPTY_EXPENSE.copy(
+        color = android.R.color.transparent,
+        icon = com.d9tilov.android.designsystem.R.drawable.ic_category_food
+    ))
 ) {
     companion object {
         val EMPTY = TransactionUiState()
@@ -35,7 +32,8 @@ data class TransactionUiState(
 @HiltViewModel
 class TransactionCreationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val transactionInteractor: TransactionInteractor
+    private val transactionInteractor: TransactionInteractor,
+    private val categoryInteractor: CategoryInteractor,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TransactionUiState.EMPTY)
@@ -49,18 +47,46 @@ class TransactionCreationViewModel @Inject constructor(
         viewModelScope.launch(transactionExceptionHandler) {
             launch {
                 transactionInteractor.getTransactionById(transactionId).collect { tr ->
-                    _uiState.update { state: TransactionUiState -> state.copy(
-                        amount = tr.sum.toString(),
-                        currency = tr.currencyCode.getSymbolByCode(),
-                        description = tr.description,
-                        inStatistics = tr.inStatistics,
-                        category = tr.category,
-                        date = formatDate(tr.date, TRANSACTION_DATE_FORMAT),
-                    ) }
+                    _uiState.update { state: TransactionUiState -> state.copy(amount = tr.sum.toString(), transaction = tr) }
                 }
             }
         }
     }
 
-    fun updateAmount(amount: String)= _uiState.update { state -> state.copy(amount = amount) }
+    fun updateAmount(amount: String) = _uiState.update { state -> state.copy(amount = amount) }
+
+    fun updateDescription(description: String) =
+        _uiState.update { state ->
+            val tr = state.transaction
+            state.copy(transaction = tr.copy(description = description))
+        }
+
+    fun updateDate(date: Long) =
+        _uiState.update { state ->
+            val tr = state.transaction
+            state.copy(transaction = tr.copy(date = date.toLocalDateTime()))
+        }
+
+    fun updateInStatistics(inStatistics: Boolean) =
+        _uiState.update { state ->
+            val tr = state.transaction
+            state.copy(transaction = tr.copy(inStatistics = inStatistics))
+        }
+
+    fun updateCurrencyCode(code: String) = _uiState.update { state ->
+        val tr = state.transaction
+        state.copy(transaction = tr.copy(currencyCode = code))
+    }
+
+    fun updateCategory(id: Long) = viewModelScope.launch {
+        val category = categoryInteractor.getCategoryById(id)
+        _uiState.update { state ->
+            val tr = state.transaction
+            state.copy(transaction = tr.copy(category = category))
+        }
+    }
+
+    fun save() = viewModelScope.launch {
+        transactionInteractor.update(_uiState.value.transaction.copy(sum = _uiState.value.amount.toBigDecimal()))
+    }
 }

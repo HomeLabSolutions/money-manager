@@ -218,7 +218,12 @@ class TransactionInteractorImpl(
                     usdSum = transactionDataModel.usdSum,
                     date = transactionDataModel.date,
                     description = transactionDataModel.description,
-                    qrCode = transactionDataModel.qrCode
+                    qrCode = transactionDataModel.qrCode,
+                    inStatistics = transactionDataModel.inStatistics,
+                    isRegular = transactionDataModel.isRegular,
+                    latitude = transactionDataModel.latitude,
+                    longitude = transactionDataModel.longitude,
+                    photoUri = transactionDataModel.photoUri
                 )
             }
     }

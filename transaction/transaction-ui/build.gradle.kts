@@ -17,8 +17,7 @@ dependencies {
     implementation(project(":core:designsystem"))
 
     implementation(project(":category:category-domain:category-domain-model"))
-    implementation(project(":category:category-domain:category-domain-model"))
-    implementation(project(":category:category-ui"))
+    implementation(project(":category:category-domain:category-domain-contract"))
     implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":transaction:transaction-domain:transaction-domain-model"))
     implementation(project(":transaction:transaction-domain:transaction-domain-contract"))

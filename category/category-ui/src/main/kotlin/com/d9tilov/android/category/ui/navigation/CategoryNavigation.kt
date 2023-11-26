@@ -8,7 +8,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.d9tilov.android.category.domain.model.Category
+import com.d9tilov.android.category.domain.model.CategoryDestination
 import com.d9tilov.android.category.domain.model.CategoryGroup
+import com.d9tilov.android.category.domain.model.toDestination
 import com.d9tilov.android.category.domain.model.toGroupId
 import com.d9tilov.android.category.ui.CategoryCreationRoute
 import com.d9tilov.android.category.ui.CategoryGroupIconListRoute
@@ -59,6 +61,7 @@ interface CategoryNavigator : BaseNavigator {
 }
 
 const val categoryIdArg = "category_id"
+const val categoryDestinationArg = "category_destination"
 const val categoryNavigationRoute = "category"
 const val categoryCreationNavigationRoute = "category_creation"
 const val categoryIconListNavigationRoute = "category_icon_list"
@@ -67,9 +70,15 @@ internal const val transactionTypeArg = "transaction_type"
 internal const val categoryGroup = "category_group"
 
 internal sealed class CategoryArgs {
-    class CategoryListArgs(val transactionType: TransactionType) {
+    class CategoryListArgs(
+        val transactionType: TransactionType,
+        val destination: CategoryDestination?,
+    ) {
         constructor(savedStateHandle: SavedStateHandle) :
-                this((checkNotNull(savedStateHandle[transactionTypeArg]) as Int).toType())
+                this(
+                    (checkNotNull(savedStateHandle[transactionTypeArg]) as Int).toType(),
+                    (checkNotNull(savedStateHandle[categoryDestinationArg]) as Int).toDestination()
+                )
     }
 
     class CategoryCreationArgs(val categoryId: Long, val transactionType: TransactionType) {
@@ -90,16 +99,25 @@ internal sealed class CategoryArgs {
 
 fun NavController.navigateToCategoryListScreen(
     transactionType: TransactionType,
+    destination: CategoryDestination,
     navOptions: NavOptions? = null,
 ) {
-    this.navigate("$categoryNavigationRoute/${transactionType.value}", navOptions)
+    this.navigate("$categoryNavigationRoute/${transactionType.value}/${destination.ordinal}", navOptions)
 }
 
-fun NavGraphBuilder.categoryListScreen(clickBack: () -> Unit, openCategory: (Long, TransactionType) -> Unit) {
+fun NavGraphBuilder.categoryListScreen(clickBack: () -> Unit, openCategory: (Long, TransactionType) -> Unit, onCategoryClickAndBack: (Category) -> Unit) {
     composable(
-        route = "$categoryNavigationRoute/{$transactionTypeArg}",
-        arguments = listOf(navArgument(transactionTypeArg) { type = NavType.IntType })
-    ) { CategoryListRoute(openCategory = openCategory, clickBack = clickBack) }
+        route = "$categoryNavigationRoute/{$transactionTypeArg}/{$categoryDestinationArg}",
+        arguments = listOf(
+            navArgument(transactionTypeArg) { type = NavType.IntType },
+            navArgument(categoryDestinationArg) { type = NavType.IntType }
+        )
+    ) {
+        CategoryListRoute(openCategory = openCategory,
+            clickBack = clickBack,
+            onCategoryClickAndBack = onCategoryClickAndBack
+        )
+    }
 }
 
 fun NavController.navigateToCategoryCreationScreen(
