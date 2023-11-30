@@ -1,5 +1,6 @@
 package com.d9tilov.android.transaction.ui.navigation
 
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -13,6 +14,7 @@ import com.d9tilov.android.common.android.ui.base.BaseNavigator
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.model.CurrencyArgs
 import com.d9tilov.android.transaction.ui.TransactionCreationRoute
+import com.d9tilov.android.transaction.ui.vm.TransactionCreationViewModel
 
 interface RemoveTransactionDialogNavigator : BaseNavigator {
     fun remove()
@@ -38,16 +40,26 @@ fun NavController.navigateToTransactionScreen(transactionId: Long, navOptions: N
 fun NavGraphBuilder.transactionCreationScreen(
     clickBack: () -> Unit,
     onCategoryClick: (TransactionType, CategoryDestination) -> Unit,
-    onCurrencyClick: () -> Unit
+    onCurrencyClick: (String) -> Unit
 ) {
     val route = "$transactionNavigationRoute/{$transactionIdArg}"
     composable(
         route = route,
         arguments = listOf(navArgument(transactionIdArg) { type = NavType.LongType })
     ) { entry ->
+        val viewModel: TransactionCreationViewModel = hiltViewModel()
+        val categoryId = entry.savedStateHandle.get<Long>(CategoryArgs.categoryIdArgs)
+        categoryId?.let { id ->
+            viewModel.updateCategory(id)
+            entry.savedStateHandle.remove<Long>(CategoryArgs.categoryIdArgs)
+        }
+        val currencyCode = entry.savedStateHandle.get<String>(CurrencyArgs.currencyCodeArgs)
+        currencyCode?.let { code ->
+            viewModel.updateCurrencyCode(code)
+            entry.savedStateHandle.remove<String>(CurrencyArgs.currencyCodeArgs)
+        }
         TransactionCreationRoute(
-            currencyCode = entry.savedStateHandle.get<String>(CurrencyArgs.currencyCodeArgs),
-            categoryId = entry.savedStateHandle.get<Long>(CategoryArgs.categoryIdArgs),
+            viewModel = viewModel,
             clickBack = clickBack,
             clickCurrency = onCurrencyClick,
             clickCategory = onCategoryClick

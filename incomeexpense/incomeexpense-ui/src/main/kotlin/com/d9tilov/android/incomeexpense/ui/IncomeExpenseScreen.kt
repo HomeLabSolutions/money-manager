@@ -50,7 +50,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -122,15 +121,12 @@ import java.math.RoundingMode
 @Composable
 fun IncomeExpenseRoute(
     viewModel: IncomeExpenseViewModel = hiltViewModel(),
-    currencyCode: String?,
     onTransactionClicked: (Transaction) -> Unit,
-    onCurrencyClicked: () -> Unit,
+    onCurrencyClicked: (String) -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    var editMode by remember { mutableStateOf(EditMode.KEYBOARD) }
     val context = LocalContext.current
-    currencyCode?.let { code -> viewModel.updateCurrencyCode(code) }
     LaunchedEffect(Unit) {
         viewModel.errorMessage
             .collect { message ->
@@ -140,18 +136,11 @@ fun IncomeExpenseRoute(
     }
     IncomeExpenseScreen(
         uiState = uiState,
-        editMode = editMode,
         onTransactionClicked = onTransactionClicked,
         onNumberClicked = { viewModel.addNumber(it) },
-        onCategoryClicked = { category, screenType ->
-            val res = viewModel.addTransaction(
-                screenType,
-                category
-            )
-            if (res) editMode = EditMode.LIST
-        },
-        onEditModeChanged = { mode -> editMode = mode },
-        onCurrencyClicked = onCurrencyClicked,
+        onCategoryClicked = { category -> viewModel.addTransaction(category.id) },
+        onEditModeChanged = { mode -> viewModel.updateMode(mode) },
+        onCurrencyClicked = { onCurrencyClicked.invoke(uiState.price.currencyCode) },
         onAllCategoryClicked = onAllCategoryClicked
     )
 }
@@ -159,10 +148,9 @@ fun IncomeExpenseRoute(
 @Composable
 fun IncomeExpenseScreen(
     uiState: IncomeExpenseUiState,
-    editMode: EditMode,
     onNumberClicked: (KeyPress) -> Unit,
     onTransactionClicked: (Transaction) -> Unit,
-    onCategoryClicked: (Category, ScreenType) -> Unit,
+    onCategoryClicked: (Category) -> Unit,
     onEditModeChanged: (EditMode) -> Unit,
     onCurrencyClicked: () -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
@@ -170,7 +158,7 @@ fun IncomeExpenseScreen(
     val listState = rememberLazyListState()
     Scaffold(
         floatingActionButton = {
-            if (editMode == EditMode.LIST) {
+            if (uiState.mode == EditMode.LIST) {
                 AnimatedFloatingActionButton(
                     listState,
                     onClick = { onEditModeChanged.invoke(EditMode.KEYBOARD) })
@@ -179,7 +167,6 @@ fun IncomeExpenseScreen(
     ) { paddingValues ->
         HomeTabs(
             listState = listState,
-            editMode = editMode,
             uiState = uiState,
             modifier = Modifier.padding(paddingValues),
             onNumberClicked = onNumberClicked,
@@ -447,12 +434,11 @@ fun EmptyTransactionListPlaceholder(modifier: Modifier, screenType: ScreenType) 
 @Composable
 fun HomeTabs(
     listState: LazyListState,
-    editMode: EditMode,
     uiState: IncomeExpenseUiState,
     modifier: Modifier = Modifier,
     onTransactionClicked: (Transaction) -> Unit,
     onNumberClicked: (KeyPress) -> Unit,
-    onCategoryClicked: (Category, ScreenType) -> Unit,
+    onCategoryClicked: (Category) -> Unit,
     onKeyboardClicked: () -> Unit,
     onCurrencyClicked: () -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
@@ -495,7 +481,7 @@ fun HomeTabs(
                 )
             }
         }
-        if (editMode == EditMode.KEYBOARD) {
+        if (uiState.mode == EditMode.KEYBOARD) {
             MainPriceInput(
                 price = uiState.price,
                 modifier = modifier
@@ -506,7 +492,7 @@ fun HomeTabs(
             Spacer(modifier = Modifier.weight(1f))
         }
         HorizontalPager(state = pagerState) { tabIndex: Int ->
-            if (editMode == EditMode.KEYBOARD) {
+            if (uiState.mode == EditMode.KEYBOARD) {
                 Column(Modifier.fillMaxWidth()) {
                     uiState.expenseUiState.expenseInfo?.let {
                         ExpenseInfoLayout(
@@ -520,12 +506,7 @@ fun HomeTabs(
                         if (screenType == INCOME) uiState.incomeUiState.incomeCategoryList
                         else uiState.expenseUiState.expenseCategoryList,
                         modifier = Modifier.fillMaxWidth(),
-                        onItemClicked = { category ->
-                            onCategoryClicked.invoke(
-                                category,
-                                screenType
-                            )
-                        },
+                        onItemClicked = { category -> onCategoryClicked.invoke(category) },
                         onAllCategoryClicked = {
                             onAllCategoryClicked.invoke(
                                 screenType,
@@ -547,7 +528,7 @@ fun HomeTabs(
             }
 
         }
-        if (editMode == EditMode.KEYBOARD) {
+        if (uiState.mode == EditMode.KEYBOARD) {
             KeyBoardLayout(
                 modifier = Modifier.fillMaxWidth(),
                 onNumberClicked = onNumberClicked,
@@ -855,9 +836,8 @@ fun PreviewIncomeExpenseScreen() {
                     )
                 )
         ),
-            editMode = EditMode.KEYBOARD,
             onNumberClicked = {},
-            onCategoryClicked = { category: Category, screenType: ScreenType -> },
+            onCategoryClicked = {},
             onEditModeChanged = {},
             onCurrencyClicked = {},
             onAllCategoryClicked = { _, _ -> },

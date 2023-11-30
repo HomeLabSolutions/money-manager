@@ -9,9 +9,9 @@ import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.android.currency.observer.contract.CurrencyUpdateObserver
 import com.d9tilov.android.currency.ui.navigation.CurrencyArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -40,17 +40,29 @@ class CurrencyViewModel @Inject constructor(
 
     private val currencyArgs: CurrencyArgs.CurrencyScreenArgs =
         CurrencyArgs.CurrencyScreenArgs(savedStateHandle)
-    private val changeGlobally:Boolean = checkNotNull(currencyArgs.changeGlobally)
+    private val selectedCurrency: String? = currencyArgs.currencyCode
 
-    val uiState = currencyInteractor.getCurrencies()
-        .map { CurrencyUiState.HasCurrencies(it, false) }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = CurrencyUiState.NoCurrencies()
-        )
+    private val _uiState: MutableStateFlow<CurrencyUiState> =
+        MutableStateFlow(CurrencyUiState.NoCurrencies())
+    val uiState = _uiState
+
+    init {
+        viewModelScope.launch {
+            currencyInteractor.getCurrencies()
+                .map { CurrencyUiState.HasCurrencies(it, false) }
+                .collect { newState: CurrencyUiState.HasCurrencies ->
+                    _uiState.update { state ->
+                        if (selectedCurrency != null) {
+                            val list =
+                                newState.currencyList.map { item -> item.copy(isBase = item.code == selectedCurrency) }
+                            newState.copy(currencyList = list)
+                        } else newState
+                    }
+                }
+        }
+    }
 
     fun changeCurrency(code: String) = viewModelScope.launch {
-        if (changeGlobally) currencyUpdateObserver.updateMainCurrency(code)
+        if (selectedCurrency == null) currencyUpdateObserver.updateMainCurrency(code)
     }
 }

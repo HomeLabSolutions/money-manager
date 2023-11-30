@@ -82,7 +82,7 @@ fun MmNavHost(
             )
             statisticsScreen()
             profileScreen(
-                navigateToCurrencyListScreen = { navController.navigateToCurrencyListScreen(true) },
+                navigateToCurrencyListScreen = navController::navigateToCurrencyListScreen,
                 navigateToBudgetScreen = navController::navigateToBudgetScreen,
                 navigateToSettingsScreen = navController::navigateToSettingsScreen,
                 navigateToGoalsScreen = { /* no-op */ }

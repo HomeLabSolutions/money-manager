@@ -40,6 +40,7 @@ import java.math.BigDecimal
 import javax.inject.Inject
 
 data class IncomeExpenseUiState(
+    val mode: EditMode = EditMode.KEYBOARD,
     val price: Price = Price.EMPTY,
     val expenseUiState: ExpenseUiState = ExpenseUiState.EMPTY,
     val incomeUiState: IncomeUiState = IncomeUiState.EMPTY,
@@ -241,23 +242,22 @@ class IncomeExpenseViewModel @Inject constructor(
         }
     }
 
-    fun addTransaction(screenType: ScreenType, category: Category): Boolean {
+    fun addTransaction(categoryId: Long) {
         if (_uiState.value.price.value.toBigDecimal().signum() == 0) {
             viewModelScope.launch { _errorMessage.emit(R.string.income_expense_empty_sum_error) }
-            return false
+            return
         }
+        updateMode(EditMode.LIST)
         _uiState.value.run {
             viewModelScope.launch {
+                val category = categoryInteractor.getCategoryById(categoryId)
                 transactionInteractor.addTransaction(
                     Transaction.EMPTY.copy(
                         sum = price.value.toBigDecimal(),
                         category = category,
                         currencyCode = price.currencyCode,
                         date = currentDateTime(),
-                        type = when (screenType) {
-                            ScreenType.EXPENSE -> TransactionType.EXPENSE
-                            ScreenType.INCOME -> TransactionType.INCOME
-                        }
+                        type = category.type
                     )
                 )
             }
@@ -266,7 +266,6 @@ class IncomeExpenseViewModel @Inject constructor(
             val price = state.price.copy(value = BigDecimal.ZERO.toString())
             state.copy(price = price)
         }
-        return true
     }
 
     fun updateCurrencyCode(code: String) {
@@ -274,6 +273,10 @@ class IncomeExpenseViewModel @Inject constructor(
             val price = state.price.copy(currencyCode = code)
             state.copy(price = price)
         }
+    }
+
+    fun updateMode(mode: EditMode) {
+        _uiState.update { state -> state.copy(mode = mode) }
     }
 
     private fun mapWithStickyHeaders(flow: Flow<PagingData<Transaction>>): Flow<PagingData<BaseTransaction>> {
