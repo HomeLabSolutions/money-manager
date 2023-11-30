@@ -67,16 +67,12 @@ import java.util.Locale
 @Composable
 fun TransactionCreationRoute(
     viewModel: TransactionCreationViewModel = hiltViewModel(),
-    categoryId: Long?,
-    currencyCode: String?,
     clickBack: () -> Unit,
-    clickCurrency: () -> Unit,
+    clickCurrency: (String) -> Unit,
     clickCategory: (TransactionType, CategoryDestination) -> Unit,
 ) {
 
     val state: TransactionUiState by viewModel.uiState.collectAsStateWithLifecycle()
-    currencyCode?.let { code -> viewModel.updateCurrencyCode(code) }
-    categoryId?.let { id -> viewModel.updateCategory(id) }
     TransactionCreationScreen(
         uiState = state,
         onBackClicked = clickBack,
@@ -101,7 +97,7 @@ fun TransactionCreationScreen(
     onInStatisticsChanged: (Boolean) -> Unit,
     onDescriptionChanged: (String) -> Unit,
     onBackClicked: () -> Unit,
-    onCurrencyClicked: () -> Unit,
+    onCurrencyClicked: (String) -> Unit,
     onCategoryClicked: (TransactionType, CategoryDestination) -> Unit,
     onDateClicked: (Long) -> Unit,
     onSaveClicked: () -> Unit,
@@ -143,7 +139,7 @@ fun TransactionCreationScreen(
                     Text(
                         modifier = Modifier
                             .alignByBaseline()
-                            .clickable(onClick = onCurrencyClicked::invoke),
+                            .clickable(onClick = { onCurrencyClicked.invoke(uiState.transaction.currencyCode) }),
                         text = uiState.transaction.currencyCode.getSymbolByCode(),
                         style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.primary,
