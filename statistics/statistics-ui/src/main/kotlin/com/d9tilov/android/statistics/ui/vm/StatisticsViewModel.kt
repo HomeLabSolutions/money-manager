@@ -58,7 +58,7 @@ class StatisticsViewModel @Inject constructor(
     var transactionType: StatisticsMenuTransactionType = StatisticsMenuTransactionType.Expense
         private set
 
-    val menuItemList = MutableList(StatisticsMenuType.values().size) { index ->
+    val menuItemList = MutableList(StatisticsMenuType.entries.size) { index ->
         when (toType(index)) {
             StatisticsMenuType.CURRENCY -> currencyType
             StatisticsMenuType.STATISTICS -> inStatistics

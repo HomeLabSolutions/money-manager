@@ -2,6 +2,8 @@ package com.d9tilov.android.incomeexpense.ui
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.BorderStroke
@@ -42,14 +44,22 @@ import androidx.compose.material.TabPosition
 import androidx.compose.material.TabRow
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material3.DismissDirection
+import androidx.compose.material3.DismissValue
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SwipeToDismiss
+import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -57,6 +67,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -88,13 +99,13 @@ import com.d9tilov.android.common.android.utils.formatDate
 import com.d9tilov.android.core.constants.CurrencyConstants
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.core.constants.CurrencyConstants.ZERO
-import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.KeyPress
 import com.d9tilov.android.core.utils.removeScale
 import com.d9tilov.android.core.utils.toKeyPress
 import com.d9tilov.android.designsystem.ComposeCurrencyView
 import com.d9tilov.android.designsystem.MoneyManagerIcons
+import com.d9tilov.android.designsystem.SimpleDialog
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.android.incomeexpense.ui.vm.EditMode
 import com.d9tilov.android.incomeexpense.ui.vm.ExpenseInfo
@@ -114,7 +125,6 @@ import com.d9tilov.android.transaction.domain.model.BaseTransaction
 import com.d9tilov.android.transaction.domain.model.Transaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -141,7 +151,8 @@ fun IncomeExpenseRoute(
         onCategoryClicked = { category -> viewModel.addTransaction(category.id) },
         onEditModeChanged = { mode -> viewModel.updateMode(mode) },
         onCurrencyClicked = { onCurrencyClicked.invoke(uiState.price.currencyCode) },
-        onAllCategoryClicked = onAllCategoryClicked
+        onAllCategoryClicked = onAllCategoryClicked,
+        onDeleteTransactionConfirmClicked = viewModel::deleteTransaction
     )
 }
 
@@ -153,6 +164,7 @@ fun IncomeExpenseScreen(
     onCategoryClicked: (Category) -> Unit,
     onEditModeChanged: (EditMode) -> Unit,
     onCurrencyClicked: () -> Unit,
+    onDeleteTransactionConfirmClicked: (Transaction) -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
 ) {
     val listState = rememberLazyListState()
@@ -174,7 +186,8 @@ fun IncomeExpenseScreen(
             onKeyboardClicked = { onEditModeChanged.invoke(EditMode.LIST) },
             onCurrencyClicked = onCurrencyClicked,
             onAllCategoryClicked = onAllCategoryClicked,
-            onTransactionClicked = onTransactionClicked
+            onTransactionClicked = onTransactionClicked,
+            onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked
         )
     }
 }
@@ -231,14 +244,18 @@ fun MainPriceInput(price: Price, modifier: Modifier, onCurrencyClicked: () -> Un
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(
+    ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterialApi::class
+)
 @Composable
 fun TransactionListLayout(
     listState: LazyListState,
     modifier: Modifier,
     transactions: Flow<PagingData<BaseTransaction>>,
     screenType: ScreenType,
-    onTransactionClicked: (Transaction) -> Unit
+    onTransactionClicked: (Transaction) -> Unit,
+    onDeleteTransactionConfirmClicked: (Transaction) -> Unit,
 ) {
     val lazyTransactionItems: LazyPagingItems<BaseTransaction> =
         transactions.collectAsLazyPagingItems()
@@ -246,16 +263,16 @@ fun TransactionListLayout(
         EmptyTransactionListPlaceholder(Modifier.fillMaxSize(), screenType)
         return
     }
-
     if (lazyTransactionItems.loadState.refresh is LoadState.Error) {
         // handle error
     }
+    val openAlertDialog = remember { mutableStateOf<Transaction?>(null) }
     LazyColumn(modifier = modifier, state = listState) {
         for (index in 0 until lazyTransactionItems.itemCount) {
             val currentItem = lazyTransactionItems.peek(index)
             currentItem?.let { tr ->
                 if (tr.itemType == BaseTransaction.HEADER) {
-                    stickyHeader {
+                    stickyHeader(tr.date.hashCode()) {
                         Surface(
                             modifier = Modifier.fillParentMaxWidth(),
                             color = MaterialTheme.colorScheme.primaryContainer
@@ -268,14 +285,69 @@ fun TransactionListLayout(
                         }
                     }
                 } else {
-                    item {
-                        val item = currentItem as Transaction
-                        TransactionItem(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { onTransactionClicked.invoke(item) },
-                            transaction = item
+                    val item = tr as Transaction
+                    item(item.id) {
+                        val dismissState = rememberDismissState(
+                            positionalThreshold = { _ -> 0.dp.toPx() },
+                            confirmValueChange = {
+                                if (it == DismissValue.DismissedToStart) {
+                                    openAlertDialog.value = item
+                                }
+                                true
+                            }
                         )
+                        if (openAlertDialog.value == null) LaunchedEffect(Unit) { dismissState.reset() }
+                        SwipeToDismiss(
+                            state = dismissState,
+                            directions = setOf(DismissDirection.EndToStart),
+                            background = {
+                                val backgroundColor by animateColorAsState(
+                                    when (dismissState.targetValue) {
+                                        DismissValue.DismissedToStart -> MaterialTheme.colorScheme.error
+                                        else -> Color.Transparent
+                                    }, label = ""
+                                )
+                                val iconScale by animateFloatAsState(
+                                    targetValue = if (dismissState.targetValue == DismissValue.Default) 0.0f else 1.3f,
+                                    label = ""
+                                )
+                                Box(
+                                    Modifier
+                                        .fillMaxSize()
+                                        .background(color = backgroundColor)
+                                        .padding(start = 16.dp, end = 16.dp), // inner padding
+                                    contentAlignment = Alignment.CenterEnd
+                                ) {
+                                    Icon(
+                                        modifier = Modifier.scale(iconScale),
+                                        imageVector = Icons.Outlined.Delete,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.onError
+                                    )
+                                }
+                            },
+                            dismissContent = {
+                                TransactionItem(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable { onTransactionClicked.invoke(item) },
+                                    transaction = item
+                                )
+                                SimpleDialog(
+                                    show = openAlertDialog.value != null,
+                                    title = stringResource(R.string.transaction_delete_dialog_title),
+                                    subtitle = stringResource(R.string.transaction_delete_dialog_subtitle),
+                                    dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
+                                    confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
+                                    onConfirm = {
+                                        openAlertDialog.value?.let { transactionToDelete ->
+                                            onDeleteTransactionConfirmClicked.invoke(transactionToDelete)
+                                            openAlertDialog.value = null
+                                        }
+                                    },
+                                    onDismiss = { openAlertDialog.value = null }
+                                )
+                            })
                     }
                 }
             }
@@ -441,6 +513,7 @@ fun HomeTabs(
     onCategoryClicked: (Category) -> Unit,
     onKeyboardClicked: () -> Unit,
     onCurrencyClicked: () -> Unit,
+    onDeleteTransactionConfirmClicked: (Transaction) -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
 ) {
     var tabIndex by remember { mutableIntStateOf(0) }
@@ -523,7 +596,8 @@ fun HomeTabs(
                     if (tabIndex.toScreenType() == INCOME) uiState.incomeUiState.incomeTransactions
                     else uiState.expenseUiState.expenseTransactions,
                     tabIndex.toScreenType(),
-                    onTransactionClicked = onTransactionClicked
+                    onTransactionClicked = onTransactionClicked,
+                    onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked
                 )
             }
 
@@ -557,7 +631,7 @@ fun KeyBoardLayout(
     onKeyboardClicked: () -> Unit,
     onNumberClicked: (KeyPress) -> Unit,
 ) {
-    val data: List<String> = KeyPress.values().map { it.value }
+    val data: List<String> = KeyPress.entries.map { it.value }
     Box(modifier = modifier.padding(bottom = 8.dp)) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
@@ -747,7 +821,6 @@ fun CategoryListLayout(
     onItemClicked: (Category) -> Unit,
     onAllCategoryClicked: () -> Unit,
 ) {
-    Timber.tag(TAG).d("categoryList: $categoryList")
     val context = LocalContext.current
     LazyHorizontalGrid(
         modifier = modifier
@@ -841,7 +914,8 @@ fun PreviewIncomeExpenseScreen() {
             onEditModeChanged = {},
             onCurrencyClicked = {},
             onAllCategoryClicked = { _, _ -> },
-            onTransactionClicked = {}
+            onTransactionClicked = {},
+            onDeleteTransactionConfirmClicked = {}
         )
     }
 }

@@ -143,7 +143,7 @@ class StatisticsMenuAdapter(
 
     override fun getItemId(position: Int) = menuItems[position].menuType.ordinal.toLong()
     override fun getItemCount(): Int = menuItems.size
-    override fun getItemViewType(position: Int): Int = StatisticsMenuType.values()[position].ordinal
+    override fun getItemViewType(position: Int): Int = StatisticsMenuType.entries[position].ordinal
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         when (toType(holder.itemViewType)) {

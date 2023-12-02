@@ -142,7 +142,7 @@ class TransactionLocalSource(
         if (currentUserId == null) {
             throw WrongUidException()
         } else {
-            transactionDao.delete(currentUserId, transaction.toDbModel().id)
+            transactionDao.delete(currentUserId, transaction.id)
         }
     }
 

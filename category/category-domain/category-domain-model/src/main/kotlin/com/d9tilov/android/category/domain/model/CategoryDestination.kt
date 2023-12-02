@@ -10,4 +10,4 @@ enum class CategoryDestination {
     SUB_CATEGORY_SCREEN
 }
 
-fun Int.toDestination() = CategoryDestination.values().firstOrNull { it.ordinal == this }
+fun Int.toDestination() = CategoryDestination.entries.firstOrNull { it.ordinal == this }
