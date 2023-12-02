@@ -63,7 +63,7 @@ class MmAppState(
     val shouldShowBottomBar: Boolean =
         windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
 
-    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().asList()
+    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.entries
 
     fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestination) {
         trace("Navigation: ${topLevelDestination.name}") {

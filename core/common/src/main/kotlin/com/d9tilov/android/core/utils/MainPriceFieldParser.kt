@@ -71,4 +71,4 @@ enum class KeyPress(val value: String) {
     Del("del")
 }
 
-fun String.toKeyPress(): KeyPress? = KeyPress.values().firstOrNull { it.value == this }
+fun String.toKeyPress(): KeyPress? = KeyPress.entries.firstOrNull { it.value == this }

@@ -14,4 +14,4 @@ enum class CategoryGroup(val value: Int) {
     PERSONAL(9),
     OTHERS(10)
 }
-fun Int.toGroupId(): CategoryGroup = CategoryGroup.values().firstOrNull { it.value == this } ?: CategoryGroup.UNKNOWN
+fun Int.toGroupId(): CategoryGroup = CategoryGroup.entries.firstOrNull { it.value == this } ?: CategoryGroup.UNKNOWN

@@ -48,7 +48,7 @@ class MainViewModel @Inject constructor(
     private val auth = FirebaseAuth.getInstance()
 
     private val updateCurrencyExceptionHandler = CoroutineExceptionHandler { _, exception ->
-        Timber.d("Unable to update currency: $exception")
+        Timber.tag(TAG).d("Unable to update currency: $exception")
     }
 
     private val _uiState: MutableStateFlow<MainActivityUiState> = MutableStateFlow(MainActivityUiState.Loading)

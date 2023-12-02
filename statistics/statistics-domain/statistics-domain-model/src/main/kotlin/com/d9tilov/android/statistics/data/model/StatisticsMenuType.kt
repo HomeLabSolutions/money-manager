@@ -8,4 +8,4 @@ enum class StatisticsMenuType {
     STATISTICS
 }
 
-fun toType(number: Int) = StatisticsMenuType.values()[number]
+fun toType(number: Int) = StatisticsMenuType.entries[number]

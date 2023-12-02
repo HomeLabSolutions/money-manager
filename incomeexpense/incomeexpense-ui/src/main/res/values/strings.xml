@@ -3,6 +3,8 @@
     <string name="transaction_empty_placeholder_income_title">Add income</string>
     <string name="transaction_empty_placeholder_expense_title">Add expense</string>
     <string name="transaction_empty_placeholder_subtitle">Enter the amount and tap on a category</string>
+    <string name="transaction_delete_dialog_title">Delete this transaction?</string>
+    <string name="transaction_delete_dialog_subtitle">Do you really want to delete the transaction?</string>
 
     <string name="income_expense_empty_sum_error">The amount is too small</string>
 

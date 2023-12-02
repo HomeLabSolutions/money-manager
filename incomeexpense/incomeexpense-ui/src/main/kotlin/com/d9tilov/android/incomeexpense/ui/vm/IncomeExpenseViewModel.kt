@@ -101,9 +101,9 @@ enum class ScreenType {
     INCOME;
 }
 
-val screenTypes = ScreenType.values().asList()
+val screenTypes = ScreenType.entries
 
-fun Int.toScreenType(): ScreenType = ScreenType.values()[this]
+fun Int.toScreenType(): ScreenType = ScreenType.entries[this]
 
 enum class EditMode {
     KEYBOARD,
@@ -131,11 +131,10 @@ class IncomeExpenseViewModel @Inject constructor(
     private val _errorMessage = MutableSharedFlow<Int>()
     val errorMessage = _errorMessage.asSharedFlow()
 
-    private val updateCurrencyExceptionHandler = CoroutineExceptionHandler { _, exception ->
-        Timber.d("Unable to update currency: $exception")
-    }
-
     init {
+        val updateCurrencyExceptionHandler = CoroutineExceptionHandler { _, exception ->
+            Timber.tag(TAG).d("Unable to update currency: $exception")
+        }
         viewModelScope.launch(updateCurrencyExceptionHandler) {
             launch {
                 currencyInteractor.getMainCurrencyFlow()
@@ -144,14 +143,12 @@ class IncomeExpenseViewModel @Inject constructor(
                             state.copy(price = Price(KeyPress.Zero.value, currencyData.code))
                         }
                         _mainCurrency.value = currencyData
-                        Timber.tag(TAG).d("launch1")
                     }
             }
             launch {
                 categoryInteractor.getGroupedCategoriesByType(TransactionType.INCOME)
                     .collect { list ->
                         _uiState.update { state ->
-                            Timber.tag(TAG).d("launch2: $list")
                             state.copy(
                                 incomeUiState = state.incomeUiState.copy(
                                     incomeCategoryList = list,
@@ -165,15 +162,18 @@ class IncomeExpenseViewModel @Inject constructor(
                 categoryInteractor.getGroupedCategoriesByType(TransactionType.EXPENSE)
                     .collect { list ->
                         _uiState.update { state ->
-                            Timber.tag(TAG).d("launch3: $list")
-                            state.copy(
-                                expenseUiState = state.expenseUiState.copy(
-                                    expenseCategoryList = list,
-                                    expenseTransactions = mapWithStickyHeaders(transactionInteractor.getTransactionsByType(TransactionType.EXPENSE))
-                                )
-                            )
+                            state.copy(expenseUiState = state.expenseUiState.copy(expenseCategoryList = list))
                         }
                     }
+            }
+            launch {
+                _uiState.update { state ->
+                    state.copy(
+                        expenseUiState = state.expenseUiState.copy(
+                            expenseTransactions = mapWithStickyHeaders(transactionInteractor.getTransactionsByType(TransactionType.EXPENSE))
+                        )
+                    )
+                }
             }
             launch {
                 val expenseSpendingExpenseInfoFlow = combine(
@@ -277,6 +277,15 @@ class IncomeExpenseViewModel @Inject constructor(
 
     fun updateMode(mode: EditMode) {
         _uiState.update { state -> state.copy(mode = mode) }
+    }
+
+    fun deleteTransaction(transaction: Transaction) {
+        val deleteTransactionExceptionHandler = CoroutineExceptionHandler { _, exception ->
+            Timber.tag(TAG).d("Delete: $exception")
+        }
+        viewModelScope.launch(deleteTransactionExceptionHandler) {
+            transactionInteractor.removeTransaction(transaction)
+        }
     }
 
     private fun mapWithStickyHeaders(flow: Flow<PagingData<Transaction>>): Flow<PagingData<BaseTransaction>> {

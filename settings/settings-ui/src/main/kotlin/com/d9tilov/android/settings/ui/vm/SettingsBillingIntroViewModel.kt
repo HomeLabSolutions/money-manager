@@ -27,7 +27,7 @@ class SettingsBillingIntroViewModel @Inject constructor(private val billingInter
     private var productDetails: ProductDetails? = null
 
     private val skuExceptionHandler = CoroutineExceptionHandler { _, _ ->
-        Timber.d("Unable to get sku")
+        Timber.tag(TAG).d("Unable to get sku")
     }
 
     init {
