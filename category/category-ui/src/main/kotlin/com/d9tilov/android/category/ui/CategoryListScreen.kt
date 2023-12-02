@@ -117,7 +117,7 @@ fun CategoryListScreen(
             onNavigationClick = onBackClicked
         )
     }) { padding ->
-        val openAlertDialog = remember { mutableStateOf(false) }
+        val openAlertDialog = remember { mutableStateOf<Category?>(null) }
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -131,15 +131,6 @@ fun CategoryListScreen(
             ) {
                 items(uiState.categories, { it.id }) { item ->
                     Box {
-                        if (isRemoveState) {
-                            Icon(
-                                modifier = Modifier
-                                    .size(16.dp),
-                                imageVector = ImageVector.vectorResource(MoneyManagerIcons.Cross),
-                                tint = MaterialTheme.colorScheme.error,
-                                contentDescription = ""
-                            )
-                        }
                         Column(
                             modifier = Modifier
                                 .padding(8.dp)
@@ -151,7 +142,7 @@ fun CategoryListScreen(
                                 }
                                 .combinedClickable(
                                     onClick = {
-                                        if (isRemoveState) openAlertDialog.value = true
+                                        if (isRemoveState) openAlertDialog.value = item
                                         else onCategoryClicked.invoke(item)
                                         isRemoveState = false
                                     },
@@ -173,19 +164,33 @@ fun CategoryListScreen(
                                 overflow = TextOverflow.Ellipsis
                             )
                         }
+                        if (isRemoveState) {
+                            Icon(
+                                modifier = Modifier
+                                    .size(32.dp),
+                                imageVector = ImageVector.vectorResource(MoneyManagerIcons.Cross),
+                                tint = MaterialTheme.colorScheme.error,
+                                contentDescription = ""
+                            )
+                        }
                     }
-                    SimpleDialog(
-                        show = openAlertDialog.value,
-                        title = stringResource(R.string.category_delete_title),
-                        subtitle = stringResource(R.string.category_delete_subtitle, item.name),
-                        dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
-                        confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
-                        onConfirm = {
-                            openAlertDialog.value = false
-                            onRemoveClicked.invoke(item)
-                        },
-                        onDismiss = { openAlertDialog.value = false }
-                    )
+                    openAlertDialog.value?.let { categoryToRemove ->
+                        SimpleDialog(
+                            show = openAlertDialog.value != null,
+                            title = stringResource(R.string.category_delete_title),
+                            subtitle = stringResource(
+                                R.string.category_delete_subtitle,
+                                categoryToRemove.name
+                            ),
+                            dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
+                            confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
+                            onConfirm = {
+                                onRemoveClicked.invoke(categoryToRemove)
+                                openAlertDialog.value = null
+                            },
+                            onDismiss = { openAlertDialog.value = null }
+                        )
+                    }
                 }
             }
             BottomActionButton(
@@ -245,6 +250,6 @@ fun DefaultCategoryListPreview() {
 private fun mockCategory(id: Long, name: String) = Category.EMPTY_INCOME.copy(
     id = id,
     name = name,
-    icon = com.d9tilov.android.category_data_impl.R.drawable.ic_category_beach,
+    icon = com.d9tilov.android.category_data_impl.R.drawable.ic_category_food,
     color = android.R.color.holo_blue_light,
 )
