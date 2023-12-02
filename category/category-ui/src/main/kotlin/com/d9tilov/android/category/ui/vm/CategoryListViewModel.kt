@@ -3,17 +3,24 @@ package com.d9tilov.android.category.ui.vm
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.d9tilov.android.category.domain.model.CategoryDestination
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.domain.model.Category.Companion.ALL_ITEMS_ID
+import com.d9tilov.android.category.domain.model.CategoryDestination
 import com.d9tilov.android.category.ui.navigation.CategoryArgs
+import com.d9tilov.android.core.constants.DataConstants
+import com.d9tilov.android.regular.transaction.domain.contract.RegularTransactionInteractor
+import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 data class CategoryUiState(val categories: List<Category> = emptyList()) {
@@ -25,7 +32,9 @@ data class CategoryUiState(val categories: List<Category> = emptyList()) {
 @HiltViewModel
 class CategoryListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val categoryInteractor: CategoryInteractor
+    private val categoryInteractor: CategoryInteractor,
+    private val transactionInteractor: TransactionInteractor,
+    private val regularTransactionInteractor: RegularTransactionInteractor
 ) : ViewModel() {
 
     private val categoryArgs: CategoryArgs.CategoryListArgs = CategoryArgs.CategoryListArgs(savedStateHandle)
@@ -40,7 +49,22 @@ class CategoryListViewModel @Inject constructor(
         )
     val uiState: StateFlow<CategoryUiState> = _uiState
 
-    fun remove(category: Category) = viewModelScope.launch {
-        categoryInteractor.deleteCategory(category)
+    fun remove(category: Category) {
+        val categoryExceptionHandler = CoroutineExceptionHandler { _, exception ->
+            val a = exception
+        }
+        viewModelScope.launch(categoryExceptionHandler) {
+            awaitAll(
+                async { transactionInteractor.removeAllByCategory(category) },
+                async { regularTransactionInteractor.removeAllByCategory(category) }
+            )
+            category.children.forEach { child ->
+                awaitAll(
+                    async { transactionInteractor.removeAllByCategory(child) },
+                    async { regularTransactionInteractor.removeAllByCategory(child) }
+                )
+            }
+            categoryInteractor.deleteCategory(category)
+        }
     }
 }

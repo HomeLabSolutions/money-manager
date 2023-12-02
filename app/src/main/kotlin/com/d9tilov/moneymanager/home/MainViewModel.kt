@@ -7,6 +7,7 @@ import com.d9tilov.android.backup.domain.contract.BackupInteractor
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.core.constants.DataConstants
+import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.datastore.PreferencesStore
