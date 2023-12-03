@@ -126,7 +126,10 @@ fun CategoryListScreen(
             LazyVerticalGrid(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(top = 16.dp, start = 8.dp, end = 8.dp, bottom = 16.dp),
+                    .padding(
+                        vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                        horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium)
+                    ),
                 columns = GridCells.Fixed(4),
             ) {
                 items(uiState.categories, { it.id }) { item ->
