@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.d9tilov.android.backup_ui.test.backup-ui-mergeDebugAndroidTestResources-88:/values-port/values-port.xml",
+            "map": [
+                {
+                    "source": "/home/toor/.gradle/caches/transforms-3/f9f07ffb91e6f70c2bafb2693ac5eb54/transformed/appcompat-1.6.1/res/values-port/values-port.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "55",
+                        "endOffsets": "106"
+                    }
+                }
+            ]
+        }
+    ]
+}

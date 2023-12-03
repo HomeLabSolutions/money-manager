@@ -63,8 +63,10 @@ fun ProfileRoute(
     viewModel: ProfileViewModel = hiltViewModel(),
     navigateToCurrencyListScreen: () -> Unit,
     navigateToBudgetScreen: () -> Unit,
+    navigateToRegularIncomeScreen: () -> Unit,
+    navigateToRegularExpenseScreen: () -> Unit,
+    navigateToGoalsScreen: () -> Unit,
     navigateToSettingsScreen: () -> Unit,
-    navigateToGoalsScreen: () -> Unit
 ) {
     val uiState: ProfileUiState by viewModel.profileState.collectAsStateWithLifecycle()
     val showDialog by viewModel.showDialog.collectAsStateWithLifecycle()
@@ -74,8 +76,8 @@ fun ProfileRoute(
         showDialog = showDialog,
         onCurrencyClicked = navigateToCurrencyListScreen,
         onBudgetClicked = navigateToBudgetScreen,
-        onRegularIncomeClicked = {},
-        onRegularExpenseClicked = {},
+        onRegularIncomeClicked = navigateToRegularIncomeScreen,
+        onRegularExpenseClicked = navigateToRegularExpenseScreen,
         onGoalsClicked = navigateToGoalsScreen,
         onSettingsClicked = navigateToSettingsScreen,
         onLogoutClicked = { viewModel.showDialog() },
@@ -205,29 +207,29 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
             null
         )
         is ProfileUiItem.BudgetUiItem -> ProfileItemData(
-            ImageVector.vectorResource(com.d9tilov.android.budget_ui.R.drawable.ic_budget_icon),
-            stringResource(com.d9tilov.android.budget_ui.R.string.profile_item_budget_title),
+            ImageVector.vectorResource(R.drawable.ic_budget_icon),
+            stringResource(R.string.profile_item_budget_title),
             profileUiItem.budgetData.createdDate.toBudgetCreatedDateStr()
         )
         is ProfileUiItem.RegularIncomeUiItem -> ProfileItemData(
-            ImageVector.vectorResource(com.d9tilov.android.incomeexpense_ui.R.drawable.ic_regular_income),
-            stringResource(com.d9tilov.android.incomeexpense_ui.R.string.profile_item_regular_incomes_title),
+            ImageVector.vectorResource(R.drawable.ic_regular_income),
+            stringResource(R.string.profile_item_regular_incomes_title),
             profileUiItem.regularIncomes.joinToString { it.category.name },
             null
         )
         is ProfileUiItem.RegularExpenseUiItem -> ProfileItemData(
-            ImageVector.vectorResource(com.d9tilov.android.incomeexpense_ui.R.drawable.ic_regular_expense),
-            stringResource(com.d9tilov.android.incomeexpense_ui.R.string.profile_item_regular_expenses_title),
+            ImageVector.vectorResource(R.drawable.ic_regular_expense),
+            stringResource(R.string.profile_item_regular_expenses_title),
             profileUiItem.regularExpenses.joinToString { it.category.name }
         )
         is ProfileUiItem.Goals -> ProfileItemData(
-            ImageVector.vectorResource(com.d9tilov.android.goals_ui.R.drawable.ic_goal),
-            stringResource(com.d9tilov.android.goals_ui.R.string.profile_item_goals_title_empty),
+            ImageVector.vectorResource(R.drawable.ic_goal),
+            stringResource(R.string.profile_item_goals_title_empty),
             null
         )
         is ProfileUiItem.Settings -> ProfileItemData(
-            ImageVector.vectorResource(com.d9tilov.android.settings_ui.R.drawable.ic_settings),
-            stringResource(com.d9tilov.android.settings_ui.R.string.profile_item_settings_title),
+            ImageVector.vectorResource(R.drawable.ic_settings),
+            stringResource(R.string.profile_item_settings_title),
             null
         )
     }
@@ -315,7 +317,7 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
                 } else {
                     Triple(
                         MaterialTheme.colorScheme.tertiaryContainer,
-                        stringResource(com.d9tilov.android.settings_ui.R.string.settings_subscription_premium_title),
+                        stringResource(R.string.settings_subscription_premium_title),
                         MaterialTheme.colorScheme.onTertiaryContainer
                     )
                 }
@@ -332,7 +334,7 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
                         )
                         .padding(all = 8.dp),
                     style = MaterialTheme.typography.labelMedium.copy(
-                        fontSize = dimensionResource(com.d9tilov.android.settings_ui.R.dimen.billing_premium_label_text_size).value.sp,
+                        fontSize = dimensionResource(R.dimen.billing_premium_label_text_size).value.sp,
                         color = textColor
                     ),
                     text = text

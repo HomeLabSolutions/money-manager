@@ -1,6 +1,5 @@
 package com.d9tilov.android.category.ui.vm
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.category.domain.model.CategoryGroup
@@ -33,9 +32,7 @@ data class CategoryIconListUiState(
 }
 
 @HiltViewModel
-class CategoryGroupIconListViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
-) : ViewModel() {
+class CategoryGroupIconListViewModel @Inject constructor() : ViewModel() {
 
     val route = ""
 

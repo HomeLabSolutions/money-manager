@@ -22,7 +22,6 @@
 
     <string name="settings_backup_empty">Backup hasn\'t been created yet</string>
     <string name="settings_start_period_day_error">The day should be in interval from 1 to 31</string>
-    <string name="settings_subscription_premium_title" translatable="false">Go Premium</string>
     <string name="settings_subscription_premium_min_price">from %1$s%2$s %3$s</string>
 
     <string name="profile_item_goals_title">Goals: %1$s</string>

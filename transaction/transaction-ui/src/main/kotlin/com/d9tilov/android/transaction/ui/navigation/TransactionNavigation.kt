@@ -10,19 +10,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.d9tilov.android.category.domain.model.CategoryArgs
 import com.d9tilov.android.category.domain.model.CategoryDestination
-import com.d9tilov.android.common.android.ui.base.BaseNavigator
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.model.CurrencyArgs
 import com.d9tilov.android.transaction.ui.TransactionCreationRoute
 import com.d9tilov.android.transaction.ui.vm.TransactionCreationViewModel
-
-interface RemoveTransactionDialogNavigator : BaseNavigator {
-    fun remove()
-}
-
-interface EditTransactionNavigator : BaseNavigator {
-    fun save()
-}
 
 const val transactionNavigationRoute = "transaction_screen"
 const val transactionIdArg = "transaction_id"

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_backup_delete_title">Удалить резервную копию?</string>
+    <string name="settings_backup_deleted">Резервная копия удалена</string>
+    <string name="settings_backup_error">Ошибка резервного копирования</string>
+    <string name="settings_backup_file_not_found_error">Файл не найден</string>
+    <string name="settings_backup_network_error">Ошибка сети</string>
+    <string name="settings_backup_user_error">Неизвестный пользователь</string>
+</resources>

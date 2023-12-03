@@ -11,9 +11,6 @@
     <string name="tab_income">Income</string>
     <string name="tab_expense">Expense</string>
 
-    <string name="profile_item_regular_incomes_title">Regular incomes</string>
-    <string name="profile_item_regular_expenses_title">Regular expenses</string>
-
     <string name="category_all">All items</string>
     <string name="category_expense_info_can_spend_today_negate_title">overspending:</string>
     <string name="category_expense_info_can_spend_today_title">you can spend today:</string>

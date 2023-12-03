@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "com.d9tilov.android.backup_ui.backup-ui-merged_res-88:/color-night-v8/material_timepicker_clockface.xml",
+        "source": "com.d9tilov.android.backup_ui.backup-ui-material-1.10.0-49:/color-night-v8/material_timepicker_clockface.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.backup_ui.backup-ui-merged_res-88:/color-night-v8/material_timepicker_modebutton_tint.xml",
+        "source": "com.d9tilov.android.backup_ui.backup-ui-material-1.10.0-49:/color-night-v8/material_timepicker_modebutton_tint.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.backup_ui.backup-ui-merged_res-88:/color-night-v8/material_timepicker_button_stroke.xml",
+        "source": "com.d9tilov.android.backup_ui.backup-ui-material-1.10.0-49:/color-night-v8/material_timepicker_button_stroke.xml"
+    }
+]

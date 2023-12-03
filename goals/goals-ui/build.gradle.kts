@@ -13,7 +13,6 @@ dependencies {
 
     implementation(project(":budget:budget-domain:budget-domain-model"))
     implementation(project(":budget:budget-domain:budget-domain-contract"))
-    implementation(project(":budget:budget-ui"))
 
     implementation(project(":goals:goals-di"))
 

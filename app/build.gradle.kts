@@ -141,7 +141,9 @@ dependencies {
     implementation(project(":currency:currency-ui"))
     implementation(project(":incomeexpense:incomeexpense-ui"))
     implementation(project(":statistics:statistics-ui"))
+    implementation(project(":transaction:regular-transaction-ui"))
     implementation(project(":profile:profile-ui"))
+    implementation(project(":settings:settings-ui"))
 
     implementation(libs.appCompat)
     implementation(libs.material)

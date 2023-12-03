@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.d9tilov.android.backup_ui.backup-ui-merged_res-88:/animator-v21/m3_appbar_state_list_animator.xml",
+        "source": "com.d9tilov.android.backup_ui.backup-ui-material-1.10.0-49:/animator-v21/m3_appbar_state_list_animator.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.backup_ui.backup-ui-merged_res-88:/animator-v21/design_appbar_state_list_animator.xml",
+        "source": "com.d9tilov.android.backup_ui.backup-ui-material-1.10.0-49:/animator-v21/design_appbar_state_list_animator.xml"
+    }
+]
