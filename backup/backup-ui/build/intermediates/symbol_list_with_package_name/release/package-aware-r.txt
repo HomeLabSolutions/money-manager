@@ -1,0 +1,5 @@
+com.d9tilov.android.backup_ui
+string settings_backup_error
+string settings_backup_file_not_found_error
+string settings_backup_network_error
+string settings_backup_user_error

@@ -1,16 +1,15 @@
 package com.d9tilov.android.profile.ui.vm
 
 import android.net.Uri
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.budget.domain.model.BudgetData
-import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
-import com.d9tilov.android.profile.ui.navigation.ProfileNavigator
 import com.d9tilov.android.regular.transaction.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.regular.transaction.domain.model.RegularTransaction
 import com.d9tilov.android.user.domain.contract.UserInteractor
@@ -68,7 +67,7 @@ class ProfileViewModel @Inject constructor(
     budgetInteractor: BudgetInteractor,
     regularTransactionInteractor: RegularTransactionInteractor,
     billingInteractor: BillingInteractor
-) : BaseViewModel<ProfileNavigator>() {
+) : ViewModel() {
 
     private val _showDialog: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val showDialog: StateFlow<Boolean> = _showDialog.asStateFlow()

@@ -13,5 +13,5 @@ fun NavController.navigateToGoalsScreen(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.goalsScreen(clickBack: () -> Unit) {
-    composable(route = goalsNavigationRoute) { GoalsRoute(clickBack = clickBack) }
+    composable(route = goalsNavigationRoute) { GoalsRoute() }
 }

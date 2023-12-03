@@ -22,11 +22,9 @@ dependencies {
 
     implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
-    implementation(project(":currency:currency-ui"))
 
     implementation(project(":budget:budget-domain:budget-domain-model"))
     implementation(project(":budget:budget-domain:budget-domain-contract"))
-    implementation(project(":budget:budget-ui"))
 
     implementation(project(":billing:billing-domain:billing-domain-contract"))
 
@@ -34,11 +32,6 @@ dependencies {
 
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-model"))
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-contract"))
-    implementation(project(":transaction:regular-transaction-ui"))
-
-    implementation(project(":settings:settings-ui"))
-    implementation(project(":goals:goals-ui"))
-    implementation(project(":incomeexpense:incomeexpense-ui"))
 
     implementation(libs.appCompat)
     implementation(libs.material)

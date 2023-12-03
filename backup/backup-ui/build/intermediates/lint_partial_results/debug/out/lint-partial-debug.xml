@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<incidents format="6" by="lint 8.1.2" type="partial_results">
+    <map id="NotificationPermission">
+        <entry
+            name="className"
+            string="com/bumptech/glide/request/target/NotificationTarget"/>
+        <location id="class"
+            file="$GRADLE_USER_HOME/caches/transforms-3/28821141c53057ffc642553291f0ecc3/transformed/jetified-glide-4.15.1/jars/classes.jar"/>
+    </map>
+    <map id="UnusedResources">
+        <location id="R.string.settings_backup_network_error"
+            file="${:backup:backup-ui*debug*sourceProvider*0*resDir*0}/values/strings.xml"
+            line="4"
+            column="13"
+            startOffset="64"
+            endLine="4"
+            endColumn="49"
+            endOffset="100"/>
+        <entry
+            name="model"
+            string="string[settings_backup_network_error(D),settings_backup_error(D),settings_backup_user_error(D),settings_backup_file_not_found_error(D)];;;;"/>
+        <location id="R.string.settings_backup_file_not_found_error"
+            file="${:backup:backup-ui*debug*sourceProvider*0*resDir*0}/values/strings.xml"
+            line="6"
+            column="13"
+            startOffset="210"
+            endLine="6"
+            endColumn="56"
+            endOffset="253"/>
+        <location id="R.string.settings_backup_user_error"
+            file="${:backup:backup-ui*debug*sourceProvider*0*resDir*0}/values/strings.xml"
+            line="5"
+            column="13"
+            startOffset="136"
+            endLine="5"
+            endColumn="46"
+            endOffset="169"/>
+        <location id="R.string.settings_backup_error"
+            file="${:backup:backup-ui*debug*sourceProvider*0*resDir*0}/values/strings.xml"
+            line="7"
+            column="13"
+            startOffset="290"
+            endLine="7"
+            endColumn="41"
+            endOffset="318"/>
+    </map>
+
+</incidents>

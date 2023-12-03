@@ -17,48 +17,10 @@ import com.d9tilov.android.category.ui.CategoryGroupIconListRoute
 import com.d9tilov.android.category.ui.CategoryIconGridRoute
 import com.d9tilov.android.category.ui.CategoryListRoute
 import com.d9tilov.android.category.ui.vm.CategorySharedViewModel
-import com.d9tilov.android.common.android.ui.base.BaseNavigator
 import com.d9tilov.android.common.android.utils.sharedViewModel
+import com.d9tilov.android.core.constants.NavigationConstants.transactionTypeArg
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.model.toType
-
-interface SubCategoryNavigator : BaseNavigator {
-    fun backToEditTransactionScreen(category: Category)
-    fun backToEditRegularTransactionScreen(category: Category)
-    fun backToMainScreen(category: Category)
-    fun openCreateCategoryScreen(category: Category)
-    fun openRemoveDialog(subCategory: Category)
-}
-
-interface RemoveCategoryDialogNavigator : BaseNavigator {
-    fun closeDialog()
-}
-
-interface CategoryUnionDialogNavigator : BaseNavigator {
-    fun accept()
-    fun showError(error: Throwable)
-    fun cancel()
-}
-
-interface EditCategoryDialogNavigator : BaseNavigator {
-    fun showError(error: Throwable)
-    fun save()
-    fun closeDialog()
-}
-
-interface RemoveSubCategoryDialogNavigator : BaseNavigator {
-    fun closeDialog()
-    fun closeDialogAndGoToCategory()
-}
-
-interface CategoryNavigator : BaseNavigator {
-    fun openSubCategoryScreen(category: Category)
-    fun openCreateCategoryScreen(category: Category)
-    fun openRemoveDialog(category: Category)
-    fun backToEditTransactionScreen(category: Category)
-    fun backToEditRegularTransactionScreen(category: Category)
-    fun backToMainScreen(category: Category)
-}
 
 const val categoryIdArg = "category_id"
 const val categoryDestinationArg = "category_destination"
@@ -66,7 +28,6 @@ const val categoryNavigationRoute = "category"
 const val categoryCreationNavigationRoute = "category_creation"
 const val categoryIconListNavigationRoute = "category_icon_list"
 const val categoryIconGridNavigationRoute = "category_icon_grid"
-internal const val transactionTypeArg = "transaction_type"
 internal const val categoryGroup = "category_group"
 
 internal sealed class CategoryArgs {

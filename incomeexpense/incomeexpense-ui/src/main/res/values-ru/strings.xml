@@ -11,9 +11,6 @@
     <string name="tab_income">Доходы</string>
     <string name="tab_expense">Расходы</string>
 
-    <string name="profile_item_regular_incomes_title">Постоянные доходы</string>
-    <string name="profile_item_regular_expenses_title">Постоянные расходы</string>
-
     <string name="category_all">Все статьи</string>
     <string name="category_expense_info_can_spend_today_negate_title">перерасход:</string>
     <string name="category_expense_info_can_spend_today_title">сегодня можно потратить:</string>

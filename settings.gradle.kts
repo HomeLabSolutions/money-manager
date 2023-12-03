@@ -79,15 +79,14 @@ include(":backup:backup-domain:backup-domain-contract")
 include(":backup:backup-domain:backup-domain-model")
 include(":backup:backup-domain:backup-domain-impl")
 include(":backup:backup-di")
-include(":backup:backup-ui")
 
 include(":statistics:statistics-domain:statistics-domain-model")
 include(":statistics:statistics-ui")
 
+include(":analytics:analytics-di")
 include(":profile:profile-ui")
 include(":incomeexpense:incomeexpense-ui")
 include(":settings:settings-ui")
-include(":analytics:analytics-di")
 
 pluginManagement {
     repositories {
