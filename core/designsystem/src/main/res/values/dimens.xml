@@ -4,6 +4,7 @@
     <dimen name="card_view_corner_radius">16dp</dimen>
 
     <dimen name="category_item_icon_size">48dp</dimen>
+    <dimen name="category_item_icon_small_size">32dp</dimen>
     <dimen name="category_item_name_parent_text_size">12sp</dimen>
     <dimen name="category_item_name_text_size">14sp</dimen>
 

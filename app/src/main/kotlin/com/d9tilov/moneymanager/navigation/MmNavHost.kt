@@ -15,16 +15,17 @@ import com.d9tilov.android.category.ui.navigation.navigateToCategoryCreationScre
 import com.d9tilov.android.category.ui.navigation.navigateToCategoryIconGridScreen
 import com.d9tilov.android.category.ui.navigation.navigateToCategoryIconListScreen
 import com.d9tilov.android.category.ui.navigation.navigateToCategoryListScreen
+import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.model.CurrencyArgs.currencyCodeArgs
 import com.d9tilov.android.currency.ui.navigation.currencyScreen
 import com.d9tilov.android.currency.ui.navigation.navigateToCurrencyListScreen
 import com.d9tilov.android.incomeexpense.navigation.incomeExpenseNavigationRoute
 import com.d9tilov.android.incomeexpense.navigation.incomeExpenseScreen
 import com.d9tilov.android.profile.ui.navigation.profileScreen
-import com.d9tilov.android.regular.transaction.ui.navigator.navigateToRegularExpenseListScreen
-import com.d9tilov.android.regular.transaction.ui.navigator.navigateToRegularIncomeListScreen
-import com.d9tilov.android.regular.transaction.ui.navigator.regularExpenseScreen
-import com.d9tilov.android.regular.transaction.ui.navigator.regularIncomeScreen
+import com.d9tilov.android.regular.transaction.ui.navigator.navigateToRegularTransactionCreationScreen
+import com.d9tilov.android.regular.transaction.ui.navigator.navigateToRegularTransactionListScreen
+import com.d9tilov.android.regular.transaction.ui.navigator.regularTransactionCreationScreen
+import com.d9tilov.android.regular.transaction.ui.navigator.regularTransactionListScreen
 import com.d9tilov.android.settings.ui.navigation.navigateToSettingsScreen
 import com.d9tilov.android.settings.ui.navigation.settingsScreen
 import com.d9tilov.android.statistics.ui.navigation.statisticsScreen
@@ -88,8 +89,8 @@ fun MmNavHost(
             profileScreen(
                 navigateToCurrencyListScreen = navController::navigateToCurrencyListScreen,
                 navigateToBudgetScreen = navController::navigateToBudgetScreen,
-                navigateToRegularIncomeScreen = navController::navigateToRegularIncomeListScreen,
-                navigateToRegularExpenseScreen = navController::navigateToRegularExpenseListScreen,
+                navigateToRegularIncomeScreen = { navController.navigateToRegularTransactionListScreen(transactionType = TransactionType.INCOME) },
+                navigateToRegularExpenseScreen = { navController.navigateToRegularTransactionListScreen(transactionType = TransactionType.EXPENSE) },
                 navigateToGoalsScreen = { /* no-op */ },
                 navigateToSettingsScreen = navController::navigateToSettingsScreen,
             )
@@ -102,8 +103,11 @@ fun MmNavHost(
                     navController.popBackStack()
                 })
             budgetScreen { navController.popBackStack() }
-            regularIncomeScreen { navController.popBackStack() }
-            regularExpenseScreen { navController.popBackStack() }
+            regularTransactionListScreen(
+                openCreationTransaction = navController::navigateToRegularTransactionCreationScreen,
+                clickBack = navController::popBackStack
+            )
+            regularTransactionCreationScreen(clickBack = navController::popBackStack)
             settingsScreen(clickBack = navController::popBackStack, onShowSnackBar = onShowSnackBar)
         }
     }
