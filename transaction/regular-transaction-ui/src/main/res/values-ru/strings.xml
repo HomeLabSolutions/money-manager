@@ -34,6 +34,12 @@
     <string name="regular_transaction_repeat_period_month">%1$sго числа\nкаждого месяца</string>
     <string name="regular_transaction_repeat_period_month_2">%1$sго числа каждого месяца</string>
     <string name="regular_transaction_repeat_period_year">каждый год\n%1$s</string>
+    <string name="regular_transaction_income_title">Регулярный доход</string>
+    <string name="regular_transaction_expense_title">Регулярный расход</string>
+
+    <string name="profile_item_regular_incomes_title">Постоянные доходы</string>
+    <string name="profile_item_regular_expenses_title">Постоянные расходы</string>
+
     <string-array name="regular_transaction_repeat_list">
         <item>День</item>
         <item>Неделю</item>

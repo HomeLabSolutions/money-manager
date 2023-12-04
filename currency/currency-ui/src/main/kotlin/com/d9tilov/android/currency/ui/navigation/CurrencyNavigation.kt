@@ -22,7 +22,10 @@ internal sealed class CurrencyArgs {
 fun NavGraphBuilder.currencyScreen(clickBack: () -> Unit, onChooseCurrency: (String) -> Unit) {
     composable(
         route = "$currencyNavigationRoute?{$currencyCodeArg}",
-        arguments = listOf(navArgument(currencyCodeArg) { nullable = true })
+        arguments = listOf(navArgument(currencyCodeArg) {
+            type = NavType.StringType
+            nullable = true
+        })
     ) { CurrencyListRoute(clickBack = clickBack, onChooseCurrency = onChooseCurrency) }
 }
 fun NavController.navigateToCurrencyListScreen(currencyCode: String? = null, navOptions: NavOptions? = null) {
