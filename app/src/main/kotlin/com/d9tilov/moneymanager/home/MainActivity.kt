@@ -22,6 +22,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
+import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.prepopulate.PrepopulateScreen
 import com.d9tilov.moneymanager.ui.MmApp
 import com.firebase.ui.auth.AuthUI
@@ -67,7 +68,7 @@ class MainActivity : ComponentActivity() {
                                 AuthUI.getInstance()
                                     .createSignInIntentBuilder()
                                     .setLogo(com.d9tilov.android.designsystem.R.drawable.ic_money_manager_logo)
-                                    .setTheme(com.d9tilov.android.designsystem.R.style.Theme_Login)
+                                    .setTheme(R.style.Theme_MoneyManager)
                                     .setAvailableProviders(providers)
                                     .setIsSmartLockEnabled(false)
                                     .build()

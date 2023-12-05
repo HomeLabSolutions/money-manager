@@ -8,7 +8,6 @@
 
     <TextView
         android:id="@+id/triple_remove_dialog_title"
-        style="@style/Theme.MoneyManager.MaterialDialog.Title.Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/padding_large"

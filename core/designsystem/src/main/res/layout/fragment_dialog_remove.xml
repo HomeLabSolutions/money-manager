@@ -6,7 +6,6 @@
     android:layout_height="wrap_content">
 
     <TextView
-        style="@style/Theme.MoneyManager.MaterialDialog.Title.Text"
         android:id="@+id/remove_dialog_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -18,7 +17,6 @@
         tools:text="Delete this transaction?" />
 
     <TextView
-        style="@style/Theme.MoneyManager.MaterialDialog.Body.Text"
         android:id="@+id/remove_dialog_subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -30,7 +28,6 @@
         tools:text="Do you really want to delete the transaction?" />
 
     <TextView
-        style="@style/Theme.MoneyManager.MaterialDialog.Button.Text"
         android:id="@+id/remove_button_cancel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -40,7 +37,6 @@
         app:layout_constraintTop_toBottomOf="@+id/remove_dialog_subtitle" />
 
     <TextView
-        style="@style/Theme.MoneyManager.MaterialDialog.Button.Text"
         android:id="@+id/remove_button_confirm"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

@@ -11,7 +11,6 @@
         android:layout_width="@dimen/statistics_period_width"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        style="@style/Widget.MoneyManager.TextView.Statistics"
         android:background="@drawable/background_statistics_left_selector"
         android:paddingHorizontal="@dimen/statistics_padding_horizontal"
         android:paddingVertical="@dimen/statistics_padding_vertical"
@@ -25,7 +24,6 @@
         android:id="@+id/statistics_week"
         android:layout_width="@dimen/statistics_period_width"
         android:layout_height="wrap_content"
-        style="@style/Widget.MoneyManager.TextView.Statistics"
         android:background="@drawable/background_statistics_selector"
         android:paddingHorizontal="@dimen/statistics_padding_horizontal"
         android:paddingVertical="@dimen/statistics_padding_vertical"
@@ -40,7 +38,6 @@
         android:id="@+id/statistics_month"
         android:layout_width="@dimen/statistics_period_width"
         android:layout_height="wrap_content"
-        style="@style/Widget.MoneyManager.TextView.Statistics"
         android:background="@drawable/background_statistics_selector"
         android:paddingHorizontal="@dimen/statistics_padding_horizontal"
         android:paddingVertical="@dimen/statistics_padding_vertical"
@@ -55,7 +52,6 @@
         android:layout_width="@dimen/statistics_period_width"
         android:layout_height="wrap_content"
         android:background="@drawable/background_statistics_selector"
-        style="@style/Widget.MoneyManager.TextView.Statistics"
         android:paddingHorizontal="@dimen/statistics_padding_horizontal"
         android:paddingVertical="@dimen/statistics_padding_vertical"
         android:text="@string/statistics_period_year"
@@ -70,7 +66,6 @@
         android:layout_width="@dimen/statistics_period_width"
         android:layout_height="wrap_content"
         android:background="@drawable/background_statistics_right_selector"
-        style="@style/Widget.MoneyManager.TextView.Statistics"
         android:paddingHorizontal="@dimen/statistics_padding_horizontal"
         android:paddingVertical="@dimen/statistics_padding_vertical"
         android:text="@string/statistics_period_custom"
@@ -135,7 +130,7 @@
             app:layout_constraintStart_toStartOf="@+id/statistics_vertical_guideline"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.d9tilov.android.designsystem.CurrencyView
+        <TextView
             android:id="@+id/statistics_spent_in_period_sum"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -145,16 +140,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@+id/statistics_spent_in_period"
-            app:layout_constraintTop_toTopOf="@+id/statistics_spent_in_period"
-            app:scaleEnabled="true"
-            app:showDecimalPart="true"
-            app:signTextSize="@dimen/statistics_spent_in_period_sign"
-            app:sumTextColor="?attr/colorPrimary"
-            app:signTextColor="?attr/colorPrimary"
-            app:signTextStyle="?attr/textAppearanceCurrencySignExtraSmall"
-            app:sum="300"
-            app:sumTextSize="@dimen/statistics_spent_in_period"
-            app:sumTextStyle="?attr/textAppearanceCurrencySumExtraSmall" />
+            app:layout_constraintTop_toTopOf="@+id/statistics_spent_in_period" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView

@@ -70,7 +70,7 @@ class StatisticsDetailsAdapter :
         fun bind(transaction: Transaction) {
             viewBinding.run {
                 itemTransactionCategory.text = transaction.category.name
-                transaction.category.color?.let { color ->
+                transaction.category.color.let { color ->
                     itemTransactionCategory.setTextColor(ContextCompat.getColor(context, color))
                 }
                 if (transaction.isRegular) itemTransactionRegularIcon.show() else itemTransactionRegularIcon.hide()
@@ -102,11 +102,11 @@ class StatisticsDetailsAdapter :
                     )
                     constraintSet.applyTo(viewBinding.root)
                 }
-                itemTransactionSum.setValue(transaction.sum, transaction.currencyCode)
-                itemTransactionUsdSum.setValue(
-                    transaction.usdSum,
-                    DEFAULT_CURRENCY_CODE
-                )
+//                itemTransactionSum.setValue(transaction.sum, transaction.currencyCode)
+//                itemTransactionUsdSum.setValue(
+//                    transaction.usdSum,
+//                    DEFAULT_CURRENCY_CODE
+//                )
                 if (transaction.currencyCode != DEFAULT_CURRENCY_CODE) {
                     itemTransactionUsdSum.show()
                 } else {
