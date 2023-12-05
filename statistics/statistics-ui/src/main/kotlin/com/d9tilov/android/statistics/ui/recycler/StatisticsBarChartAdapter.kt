@@ -81,7 +81,7 @@ class StatisticsBarChartAdapter(private val transactionClickListener: OnItemClic
                         else -> percent.toString()
                     }
                 )
-                itemStatisticsSum.setValue(item.sum, item.currencyCode)
+//                itemStatisticsSum.setValue(item.sum, item.currencyCode)
                 val drawable = let2(item.category.icon, item.category.color) { icon, color ->
                     itemStatisticsCategoryName.setTextColor(ContextCompat.getColor(context, color))
                     itemStatisticsProgress.setProgress(item.percent.toFloat(), ContextCompat.getColor(context, color))

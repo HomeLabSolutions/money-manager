@@ -53,7 +53,7 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.75" />
 
-    <com.d9tilov.android.designsystem.CurrencyView
+    <TextView
         android:id="@+id/item_statistics_sum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,15 +62,7 @@
         app:layout_constraintBottom_toTopOf="@+id/item_statistics_percent"
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintStart_toStartOf="@+id/item_statistics_vertical_guideline"
-        app:layout_constraintTop_toTopOf="parent"
-        app:showDecimalPart="true"
-        app:signTextSize="@dimen/statistics_bar_chart_sign_text_size"
-        app:sumTextSize="@dimen/statistics_bar_chart_sum_text_size"
-        app:signTextColor="?attr/colorSecondary"
-        app:sumTextColor="?attr/colorSecondary"
-        app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
-        app:sumTextStyle="?attr/textAppearanceCurrencySumSmall"
-        tools:sumText="15000" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/item_statistics_percent"

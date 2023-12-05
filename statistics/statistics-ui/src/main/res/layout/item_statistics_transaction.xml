@@ -75,7 +75,7 @@
         app:tint="?attr/colorError"
         tools:visibility="visible" />
 
-    <com.d9tilov.android.designsystem.CurrencyView
+    <TextView
         android:id="@+id/item_transaction_sum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -83,30 +83,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="4dp"
-        app:showDecimalPart="true"
-        app:signTextColor="?attr/colorSecondary"
-        app:sumTextColor="?attr/colorSecondary"
         app:layout_constraintBottom_toTopOf="@+id/item_transaction_usd_sum"
-        app:layout_constraintVertical_chainStyle="spread"
-        app:signTextStyle="?attr/textAppearanceCurrencySignSmall"
-        app:sumTextStyle="?attr/textAppearanceCurrencySumSmall"
-        tools:sumText="15000" />
+        app:layout_constraintVertical_chainStyle="spread" />
 
-    <com.d9tilov.android.designsystem.CurrencyView
+    <TextView
         android:id="@+id/item_transaction_usd_sum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:visibility="gone"
         tools:visibility="visible"
-        app:signTextColor="?attr/colorTertiary"
-        app:sumTextColor="?attr/colorTertiary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/item_transaction_sum"
         app:layout_constraintTop_toBottomOf="@+id/item_transaction_sum"
-        app:layout_constraintVertical_chainStyle="spread"
-        app:showDecimalPart="true"
-        app:signTextStyle="?attr/textAppearanceCurrencySignExtraSmall"
-        app:sumTextStyle="?attr/textAppearanceCurrencySumExtraSmall"
-        tools:sumText="15000" />
+        app:layout_constraintVertical_chainStyle="spread"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

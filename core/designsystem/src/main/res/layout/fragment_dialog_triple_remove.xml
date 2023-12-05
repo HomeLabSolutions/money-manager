@@ -8,7 +8,6 @@
 
     <TextView
         android:id="@+id/triple_remove_dialog_title"
-        style="@style/Theme.MoneyManager.MaterialDialog.Title.Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/padding_large"
@@ -20,7 +19,6 @@
 
     <TextView
         android:id="@+id/triple_remove_dialog_subtitle"
-        style="@style/Theme.MoneyManager.MaterialDialog.Body.Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/padding_large"
@@ -32,7 +30,6 @@
 
     <TextView
         android:id="@+id/triple_remove_dialog_button_action1"
-        style="@style/Theme.MoneyManager.MaterialDialog.Button.Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
@@ -43,7 +40,6 @@
 
     <TextView
         android:id="@+id/triple_remove_dialog_button_action2"
-        style="@style/Theme.MoneyManager.MaterialDialog.Button.Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -53,7 +49,6 @@
 
     <TextView
         android:id="@+id/triple_remove_dialog_button_cancel"
-        style="@style/Theme.MoneyManager.MaterialDialog.Button.Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

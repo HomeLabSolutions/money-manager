@@ -172,10 +172,10 @@ class StatisticsFragment :
                                             }
                                         }
                                         statisticsBarChartAdapter.updateItems(newList)
-                                        statisticsSpentInPeriodSum.setValue(
-                                            newList.sumOf { it.sum },
-                                            viewModel.currencyType.currencyCode
-                                        )
+//                                        statisticsSpentInPeriodSum.setValue(
+//                                            newList.sumOf { it.sum },
+//                                            viewModel.currencyType.currencyCode
+//                                        )
                                         statisticsBarChart.scrollToPosition(0)
                                         setPieChartData(newList)
                                     }
