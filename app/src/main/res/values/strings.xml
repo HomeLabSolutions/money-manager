@@ -7,9 +7,6 @@
     <string name="currency_change_title">Change currency to %s?</string>
     <string name="currency_change_subtitle">The app will restart.</string>
 
-    <string name="transaction_empty_placeholder_regular_expense_title">Add regular expense</string>
-    <string name="transaction_empty_placeholder_regular_income_title">Add regular income</string>
-
     <string name="goals_remaining_to_spend">Can be spend in that period</string>
     <string name="goals_empty_placeholder_title">Add goals</string>
     <string name="goals_empty_placeholder_subtitle">Add a goal you want to accumulate</string>

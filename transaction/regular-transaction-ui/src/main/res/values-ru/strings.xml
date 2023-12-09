@@ -31,11 +31,21 @@
     <string name="regular_transaction_repeat_sunday">воскресенье</string>
     <string name="regular_transaction_repeat_period_day">каждый день</string>
     <string name="regular_transaction_repeat_period_week">повторять в: %1$s</string>
-    <string name="regular_transaction_repeat_period_month">%1$sго числа\nкаждого месяца</string>
+    <string name="regular_transaction_repeat_period_month">%1$sго числа каждого месяца</string>
     <string name="regular_transaction_repeat_period_month_2">%1$sго числа каждого месяца</string>
     <string name="regular_transaction_repeat_period_year">каждый год\n%1$s</string>
     <string name="regular_transaction_income_title">Регулярный доход</string>
     <string name="regular_transaction_expense_title">Регулярный расход</string>
+    <string name="regular_transaction_edit_sum_title">Сумма</string>
+    <string name="regular_transaction_invalid_amount">Пожалуйста, введите корректную сумму</string>
+    <string name="regular_transaction_repeat_every_month_on">Каждый месяц %1$sго числа</string>
+    <string name="regular_transaction_repeat_list_day">День</string>
+    <string name="regular_transaction_repeat_list_week">Неделя</string>
+    <string name="regular_transaction_repeat_list_month">Месяц</string>
+    <string name="regular_transaction_repeat_day_of_month">День месяца</string>
+    <string name="regular_transaction_edit_description_hint">Описание</string>
+    <string name="regular_transaction_delete_dialog_title">Удаление транзакции</string>
+    <string name="regular_transaction_delete_dialog_subtitle">Вы действительно хотите удалить транзакцию?</string>
 
     <string name="profile_item_regular_incomes_title">Постоянные доходы</string>
     <string name="profile_item_regular_expenses_title">Постоянные расходы</string>

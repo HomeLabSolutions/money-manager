@@ -34,6 +34,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
@@ -163,6 +164,7 @@ fun CategoryListScreen(
                             )
                             Text(
                                 text = item.name,
+                                textAlign = TextAlign.Center,
                                 color = Color(ContextCompat.getColor(context, item.color)),
                                 overflow = TextOverflow.Ellipsis
                             )
@@ -171,7 +173,7 @@ fun CategoryListScreen(
                             Icon(
                                 modifier = Modifier
                                     .size(32.dp),
-                                imageVector = ImageVector.vectorResource(MoneyManagerIcons.Cross),
+                                imageVector = MoneyManagerIcons.Cross,
                                 tint = MaterialTheme.colorScheme.error,
                                 contentDescription = ""
                             )

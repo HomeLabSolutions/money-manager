@@ -20,6 +20,8 @@ dependencies {
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-model"))
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-contract"))
     implementation(project(":category:category-domain:category-domain-model"))
+    implementation(project(":category:category-domain:category-domain-contract"))
+    implementation(project(":currency:currency-domain:currency-domain-model"))
 
     implementation(libs.navigation)
     implementation(libs.glide)

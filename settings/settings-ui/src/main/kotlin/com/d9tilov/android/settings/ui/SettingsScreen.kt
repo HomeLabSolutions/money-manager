@@ -214,7 +214,7 @@ fun BackupLayout(
         ) {
             Icon(
                 modifier = Modifier.then(if (backupState.backupLoading) Modifier.rotate(angle) else Modifier),
-                imageVector = ImageVector.vectorResource(id = MoneyManagerIcons.Backup),
+                imageVector = MoneyManagerIcons.Backup,
                 contentDescription = "Backup"
             )
         }

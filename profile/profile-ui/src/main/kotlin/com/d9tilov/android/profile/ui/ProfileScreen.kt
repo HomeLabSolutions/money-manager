@@ -116,7 +116,7 @@ fun ProfileScreen(
         ProfileSection(state.budgetData, onBudgetClicked)
         ProfileSection(state.regularIncomes, onRegularIncomeClicked)
         ProfileSection(state.regularExpenses, onRegularExpenseClicked)
-        ProfileSection(state.goals, onGoalsClicked)
+//        ProfileSection(state.goals, onGoalsClicked)
         ProfileSection(state.settings, onSettingsClicked)
         Spacer(modifier = Modifier.weight(1f))
         OutlinedButton(

@@ -104,6 +104,7 @@ import com.d9tilov.android.core.utils.KeyPress
 import com.d9tilov.android.core.utils.removeScale
 import com.d9tilov.android.core.utils.toKeyPress
 import com.d9tilov.android.designsystem.ComposeCurrencyView
+import com.d9tilov.android.designsystem.EmptyListPlaceholder
 import com.d9tilov.android.designsystem.MoneyManagerIcons
 import com.d9tilov.android.designsystem.SimpleDialog
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
@@ -260,13 +261,21 @@ fun TransactionListLayout(
     val lazyTransactionItems: LazyPagingItems<BaseTransaction> =
         transactions.collectAsLazyPagingItems()
     if (lazyTransactionItems.loadState.refresh is LoadState.NotLoading && lazyTransactionItems.itemCount == 0) {
-        EmptyTransactionListPlaceholder(Modifier.fillMaxSize(), screenType)
+        EmptyListPlaceholder(
+            modifier = Modifier.fillMaxSize(),
+            icon = painterResource(id = MoneyManagerIcons.EmptyPlaceholder),
+            title = when (screenType) {
+                EXPENSE -> stringResource(id = R.string.transaction_empty_placeholder_expense_title)
+                INCOME -> stringResource(id = R.string.transaction_empty_placeholder_income_title)
+            },
+            subtitle = stringResource(id = R.string.transaction_empty_placeholder_subtitle)
+        )
         return
     }
     if (lazyTransactionItems.loadState.refresh is LoadState.Error) {
         // handle error
     }
-    val openAlertDialog = remember { mutableStateOf<Transaction?>(null) }
+    val openRemoveDialog = remember { mutableStateOf<Transaction?>(null) }
     LazyColumn(modifier = modifier, state = listState) {
         for (index in 0 until lazyTransactionItems.itemCount) {
             val currentItem = lazyTransactionItems.peek(index)
@@ -291,12 +300,12 @@ fun TransactionListLayout(
                             positionalThreshold = { _ -> 0.dp.toPx() },
                             confirmValueChange = {
                                 if (it == DismissValue.DismissedToStart) {
-                                    openAlertDialog.value = item
+                                    openRemoveDialog.value = item
                                 }
                                 true
                             }
                         )
-                        if (openAlertDialog.value == null) LaunchedEffect(Unit) { dismissState.reset() }
+                        if (openRemoveDialog.value == null) LaunchedEffect(Unit) { dismissState.reset() }
                         SwipeToDismiss(
                             state = dismissState,
                             directions = setOf(DismissDirection.EndToStart),
@@ -315,7 +324,7 @@ fun TransactionListLayout(
                                     Modifier
                                         .fillMaxSize()
                                         .background(color = backgroundColor)
-                                        .padding(start = 16.dp, end = 16.dp), // inner padding
+                                        .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium)),
                                     contentAlignment = Alignment.CenterEnd
                                 ) {
                                     Icon(
@@ -334,18 +343,18 @@ fun TransactionListLayout(
                                     transaction = item
                                 )
                                 SimpleDialog(
-                                    show = openAlertDialog.value != null,
+                                    show = openRemoveDialog.value != null,
                                     title = stringResource(R.string.transaction_delete_dialog_title),
                                     subtitle = stringResource(R.string.transaction_delete_dialog_subtitle),
                                     dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
                                     confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
                                     onConfirm = {
-                                        openAlertDialog.value?.let { transactionToDelete ->
+                                        openRemoveDialog.value?.let { transactionToDelete ->
                                             onDeleteTransactionConfirmClicked.invoke(transactionToDelete)
-                                            openAlertDialog.value = null
+                                            openRemoveDialog.value = null
                                         }
                                     },
-                                    onDismiss = { openAlertDialog.value = null }
+                                    onDismiss = { openRemoveDialog.value = null }
                                 )
                             })
                     }
@@ -419,7 +428,7 @@ fun TransactionItem(modifier: Modifier, transaction: Transaction) {
                         end.linkTo(idIcon.start)
                     }
                     .size(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.transaction_meta_icon_size)),
-                imageVector = ImageVector.vectorResource(MoneyManagerIcons.RegularTransaction),
+                imageVector = MoneyManagerIcons.Repeat,
                 contentDescription = "RegularTransaction",
                 tint = MaterialTheme.colorScheme.tertiary
             )
@@ -472,32 +481,6 @@ fun TransactionItem(modifier: Modifier, transaction: Transaction) {
                     bottom.linkTo(parent.bottom)
                     start.linkTo(parent.start)
                 }
-        )
-    }
-}
-
-@Composable
-fun EmptyTransactionListPlaceholder(modifier: Modifier, screenType: ScreenType) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Image(
-            painter = painterResource(id = MoneyManagerIcons.EmptyPlaceholder),
-            contentDescription = "No transactions",
-        )
-        Text(
-            modifier = Modifier.padding(top = 16.dp),
-            text = when (screenType) {
-                EXPENSE -> stringResource(id = R.string.transaction_empty_placeholder_expense_title)
-                INCOME -> stringResource(id = R.string.transaction_empty_placeholder_income_title)
-            },
-            style = MaterialTheme.typography.titleLarge
-        )
-        Text(
-            text = stringResource(id = R.string.transaction_empty_placeholder_subtitle),
-            style = MaterialTheme.typography.bodyMedium
         )
     }
 }
@@ -655,8 +638,8 @@ fun KeyBoardLayout(
                 } else {
                     IconButton(onClick = { onNumberClicked.invoke(keyPress) }) {
                         Icon(
-                            imageVector = ImageVector.vectorResource(id = MoneyManagerIcons.BackSpace),
-                            contentDescription = "Backup",
+                            imageVector = MoneyManagerIcons.BackSpace,
+                            contentDescription = "BackSpace",
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }
@@ -670,9 +653,9 @@ fun KeyBoardLayout(
             onClick = onKeyboardClicked
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(id = MoneyManagerIcons.HideKeyboard),
+                imageVector = MoneyManagerIcons.HideKeyboard,
+                tint = MaterialTheme.colorScheme.secondary,
                 contentDescription = "HideKeyboard",
-                tint = MaterialTheme.colorScheme.primary
             )
         }
     }
@@ -859,7 +842,7 @@ fun CategoryListLayout(
 }
 
 @Composable
-@Preview
+//@Preview
 fun TransactionListItemPreview() {
     MoneyManagerTheme {
         TransactionItem(
@@ -878,9 +861,8 @@ fun TransactionListItemPreview() {
 }
 
 @Composable
-//@Preview
+@Preview
 fun PreviewIncomeExpenseScreen() {
-    MoneyManagerTheme {
         IncomeExpenseScreen(uiState = IncomeExpenseUiState.EMPTY.copy(
                 incomeUiState = IncomeUiState(
                     incomeCategoryList = listOf(
@@ -917,7 +899,6 @@ fun PreviewIncomeExpenseScreen() {
             onTransactionClicked = {},
             onDeleteTransactionConfirmClicked = {}
         )
-    }
 }
 
 private fun mockCategory(id: Long, name: String) = Category.EMPTY_INCOME.copy(

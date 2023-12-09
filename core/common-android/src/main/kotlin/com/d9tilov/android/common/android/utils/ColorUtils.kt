@@ -15,12 +15,3 @@ fun Context.getColorFromAttr(
     return typedValue.data
 }
 
-fun Context.setTextAppearanceFromAttr(
-    textView: TextView,
-    @AttrRes attrTextAppearance: Int
-) {
-    val styleId = TypedValue()
-    if (theme.resolveAttribute(attrTextAppearance, styleId, true)) {
-        TextViewCompat.setTextAppearance(textView, styleId.data)
-    }
-}

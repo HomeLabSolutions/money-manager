@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.theme
+package com.d9tilov.android.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
