@@ -56,11 +56,11 @@ import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.CheckboxWithLabel
 import com.d9tilov.android.designsystem.DottedDivider
 import com.d9tilov.android.designsystem.MmTopAppBar
-import com.d9tilov.android.designsystem.R
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.vm.TransactionCreationViewModel
 import com.d9tilov.android.transaction.ui.vm.TransactionUiState
+import com.d9tilov.android.transaction_ui.R
 import java.math.BigDecimal
 import java.util.Locale
 
@@ -125,15 +125,16 @@ fun TransactionCreationScreen(
             ) {
                 Text(
                     modifier = Modifier.padding(
-                        start = dimensionResource(id = R.dimen.padding_large),
-                        end = dimensionResource(id = R.dimen.padding_large),
-                        top = dimensionResource(id = R.dimen.padding_small),
+                        start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                        end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                        top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
                     ),
                     text = stringResource(id = com.d9tilov.android.transaction_ui.R.string.transaction_edit_sum_title),
-                    style = MaterialTheme.typography.labelLarge
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.primary
                 )
                 Row(
-                    modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_large)),
+                    modifier = Modifier.padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large)),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
@@ -143,7 +144,7 @@ fun TransactionCreationScreen(
                         text = uiState.transaction.currencyCode.getSymbolByCode(),
                         style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.primary,
-                        fontSize = dimensionResource(id = R.dimen.currency_sign_big_text_size).value.sp
+                        fontSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sign_big_text_size).value.sp
                     )
                     AutoSizeTextField(
                         modifier = Modifier.alignByBaseline(),
@@ -157,7 +158,7 @@ fun TransactionCreationScreen(
                 }
                 Row(
                     modifier = Modifier
-                        .padding(horizontal = dimensionResource(id = R.dimen.padding_large)),
+                        .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large)),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(
@@ -181,7 +182,7 @@ fun TransactionCreationScreen(
                             )
                         )
                         Text(
-                            modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_small)),
+                            modifier = Modifier.padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)),
                             text = uiState.transaction.category.name,
                             color = Color(
                                 ContextCompat.getColor(
@@ -195,7 +196,7 @@ fun TransactionCreationScreen(
                     Spacer(modifier = Modifier.weight(1f))
                     Text(
                         modifier = Modifier
-                            .padding(horizontal = dimensionResource(id = R.dimen.padding_small))
+                            .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small))
                             .clickable { showDatePickerDialog.value = true },
                         text = formatDate(uiState.transaction.date, TRANSACTION_DATE_FORMAT),
                         color = MaterialTheme.colorScheme.secondary,
@@ -204,8 +205,8 @@ fun TransactionCreationScreen(
                 }
                 CheckboxWithLabel(
                     modifier = Modifier.padding(
-                        horizontal = dimensionResource(id = R.dimen.padding_medium),
-                        vertical = dimensionResource(id = R.dimen.padding_large)
+                        horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                        vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large)
                     ),
                     value = uiState.transaction.inStatistics,
                     label = stringResource(id = com.d9tilov.android.transaction_ui.R.string.transaction_edit_in_statistics),
@@ -213,20 +214,20 @@ fun TransactionCreationScreen(
                 )
                 DottedDivider(
                     modifier = Modifier.padding(
-                        start = dimensionResource(id = R.dimen.padding_large),
-                        end = dimensionResource(id = R.dimen.padding_large),
-                        top = dimensionResource(id = R.dimen.padding_large)
+                        start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                        end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                        top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large)
                     )
                 )
                 TextField(
                     modifier = Modifier.padding(
-                        horizontal = dimensionResource(id = R.dimen.padding_large),
-                        vertical = dimensionResource(id = R.dimen.padding_small)
+                        horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                        vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)
                     ),
                     value = uiState.transaction.description,
                     onValueChange = onDescriptionChanged,
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                    placeholder = { Text(text = stringResource(id = com.d9tilov.android.transaction_ui.R.string.transaction_edit_description_hint)) }
+                    placeholder = { Text(text = stringResource(id = R.string.transaction_edit_description_hint)) }
                 )
             }
             BottomActionButton(
@@ -273,7 +274,7 @@ fun TransactionCreationScreen(
 @Composable
 fun ShowError() {
     Text(
-        text = "Please, enter correct number",
+        text = stringResource(id = com.d9tilov.android.transaction_ui.R.string.transaction_invalid_amount),
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.error
     )
@@ -289,7 +290,7 @@ fun DefaultTransactionCreationPreview() {
                     sum = BigDecimal(42),
                     category = Category.EMPTY_EXPENSE.copy(
                         name = "My category",
-                        icon = R.drawable.ic_category_food,
+                        icon = com.d9tilov.android.designsystem.R.drawable.ic_category_food,
                         color = android.R.color.holo_red_dark
                     )
                 ),

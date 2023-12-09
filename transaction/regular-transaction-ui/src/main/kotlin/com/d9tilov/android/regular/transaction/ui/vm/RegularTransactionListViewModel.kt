@@ -49,4 +49,8 @@ class RegularTransactionListViewModel @Inject constructor(
                 }
         }
     }
+
+    fun removeTransaction(transaction: RegularTransaction) = viewModelScope.launch {
+        regularTransactionInteractor.delete(transaction)
+    }
 }

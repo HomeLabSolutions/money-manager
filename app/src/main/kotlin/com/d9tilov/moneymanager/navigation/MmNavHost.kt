@@ -107,7 +107,12 @@ fun MmNavHost(
                 openCreationTransaction = navController::navigateToRegularTransactionCreationScreen,
                 clickBack = navController::popBackStack
             )
-            regularTransactionCreationScreen(clickBack = navController::popBackStack)
+            regularTransactionCreationScreen(
+                clickBack = navController::popBackStack,
+                onCategoryClick = navController::navigateToCategoryListScreen,
+                onCurrencyClick = navController::navigateToCurrencyListScreen,
+                onSaveClick = navController::popBackStack
+            )
             settingsScreen(clickBack = navController::popBackStack, onShowSnackBar = onShowSnackBar)
         }
     }

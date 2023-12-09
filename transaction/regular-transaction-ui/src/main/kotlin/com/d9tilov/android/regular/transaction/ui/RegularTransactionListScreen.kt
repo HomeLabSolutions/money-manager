@@ -1,13 +1,18 @@
 package com.d9tilov.android.regular.transaction.ui
 
+import android.content.Context
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -15,18 +20,30 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Card
+import androidx.compose.material3.DismissDirection
+import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,26 +54,36 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
+import com.d9tilov.android.core.model.ExecutionPeriod
+import com.d9tilov.android.core.model.PeriodType
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.designsystem.ComposeCurrencyView
+import com.d9tilov.android.designsystem.EmptyListPlaceholder
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
+import com.d9tilov.android.designsystem.SimpleDialog
 import com.d9tilov.android.regular.transaction.domain.model.RegularTransaction
+import com.d9tilov.android.regular.transaction.domain.model.WeekDays
 import com.d9tilov.android.regular.transaction.ui.vm.RegularTransactionListState
 import com.d9tilov.android.regular.transaction.ui.vm.RegularTransactionListViewModel
+import com.d9tilov.android.regular_transaction_ui.R
 
 
 @Composable
 fun RegularTransactionListRoute(
     viewModel: RegularTransactionListViewModel = hiltViewModel(),
     onAddClicked: (TransactionType, Long) -> Unit,
+    onItemClicked: (RegularTransaction) -> Unit,
     clickBack: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     RegularTransactionListScreen(
         uiState = uiState,
-        onAddClicked = { onAddClicked.invoke(uiState.transactionType, NO_ID) }
+        onAddClicked = { onAddClicked.invoke(uiState.transactionType, NO_ID) },
+        onTransactionClicked = onItemClicked,
+        onDeleteTransactionConfirmClicked = viewModel::removeTransaction,
+        onBackClicked = clickBack
     )
 }
 
@@ -65,26 +92,96 @@ fun RegularTransactionListRoute(
 fun RegularTransactionListScreen(
     uiState: RegularTransactionListState,
     onTransactionClicked: (currency: RegularTransaction) -> Unit = {},
-    onAddClicked: () -> Unit
+    onDeleteTransactionConfirmClicked: (RegularTransaction) -> Unit,
+    onAddClicked: () -> Unit,
+    onBackClicked: () -> Unit
 ) {
+    val openRemoveDialog = remember { mutableStateOf<RegularTransaction?>(null) }
     Scaffold(
         topBar = {
             MmTopAppBar(
                 titleRes = when (uiState.transactionType) {
-                    TransactionType.EXPENSE -> com.d9tilov.android.regular_transaction_ui.R.string.profile_item_regular_expenses_title
-                    TransactionType.INCOME -> com.d9tilov.android.regular_transaction_ui.R.string.profile_item_regular_incomes_title
+                    TransactionType.EXPENSE -> R.string.profile_item_regular_expenses_title
+                    TransactionType.INCOME -> R.string.profile_item_regular_incomes_title
                 },
+                onNavigationClick = onBackClicked,
                 actionIcon = MoneyManagerIcons.ActionAdd,
                 onActionClick = onAddClicked
             )
         },
     ) { padding: PaddingValues ->
+        if (uiState.regularTransactions.isEmpty()) {
+            EmptyListPlaceholder(
+                modifier = Modifier.fillMaxSize(),
+                icon = painterResource(id = MoneyManagerIcons.EmptyRegularPlaceholder),
+                title = when (uiState.transactionType) {
+                    TransactionType.EXPENSE -> stringResource(id = R.string.transaction_empty_placeholder_regular_expense_title)
+                    TransactionType.INCOME -> stringResource(id = R.string.transaction_empty_placeholder_regular_income_title)
+                },
+            )
+            return@Scaffold
+        }
         LazyColumn(
             contentPadding = padding,
             modifier = Modifier.consumeWindowInsets(padding),
         ) {
             items(items = uiState.regularTransactions, key = { item -> item.id }) { item ->
-                RegularTransactionItem(item, onTransactionClicked)
+                val dismissState = rememberDismissState(
+                    positionalThreshold = { _ -> 0.dp.toPx() },
+                    confirmValueChange = {
+                        if (it == DismissValue.DismissedToStart) {
+                            openRemoveDialog.value = item
+                        }
+                        true
+                    }
+                )
+                if (openRemoveDialog.value == null) LaunchedEffect(Unit) { dismissState.reset() }
+                SwipeToDismiss(
+                    state = dismissState,
+                    directions = setOf(DismissDirection.EndToStart),
+                    background = {
+                        val backgroundColor by animateColorAsState(
+                            when (dismissState.targetValue) {
+                                DismissValue.DismissedToStart -> MaterialTheme.colorScheme.error
+                                else -> Color.Transparent
+                            }, label = ""
+                        )
+                        val iconScale by animateFloatAsState(
+                            targetValue = if (dismissState.targetValue == DismissValue.Default) 0.0f else 1.3f,
+                            label = ""
+                        )
+                        Box(
+                            Modifier
+                                .fillMaxSize()
+                                .background(color = backgroundColor)
+                                .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium)),
+                            contentAlignment = Alignment.CenterEnd
+                        ) {
+                            Icon(
+                                modifier = Modifier.scale(iconScale),
+                                imageVector = Icons.Outlined.Delete,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onError
+                            )
+                        }
+                    },
+                    dismissContent = {
+                        RegularTransactionItem(item, onTransactionClicked)
+                        SimpleDialog(
+                            show = openRemoveDialog.value != null,
+                            title = stringResource(R.string.regular_transaction_delete_dialog_title),
+                            subtitle = stringResource(R.string.regular_transaction_delete_dialog_subtitle),
+                            dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
+                            confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
+                            onConfirm = {
+                                openRemoveDialog.value?.let { transactionToDelete ->
+                                    onDeleteTransactionConfirmClicked.invoke(transactionToDelete)
+                                    openRemoveDialog.value = null
+                                }
+                            },
+                            onDismiss = { openRemoveDialog.value = null }
+                        )
+                    })
             }
         }
     }
@@ -93,7 +190,7 @@ fun RegularTransactionListScreen(
 @Composable
 fun RegularTransactionItem(
     transaction: RegularTransaction,
-    clickCallback: (currency: RegularTransaction) -> Unit,
+    onItemClicked: (currency: RegularTransaction) -> Unit,
 ) {
     val context = LocalContext.current
     Card(
@@ -101,19 +198,18 @@ fun RegularTransactionItem(
             .fillMaxWidth()
             .padding(
                 vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_extra_small),
-                horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_extra_small)
+                horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)
             )
-            .clickable { clickCallback(transaction) }) {
+            .clickable { onItemClicked(transaction) }) {
         Row(
             modifier = Modifier
                 .wrapContentHeight(Alignment.CenterVertically)
-                .fillMaxWidth()
-                .height(84.dp),
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Row(
-                    modifier = Modifier.padding(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)),
+                    modifier = Modifier.padding(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium)),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
@@ -123,18 +219,41 @@ fun RegularTransactionItem(
                         contentDescription = "Transaction",
                         tint = Color(ContextCompat.getColor(context, transaction.category.color))
                     )
-                    androidx.compose.material.Text(
+                    Text(
                         modifier = Modifier
                             .padding(start = 16.dp),
                         text = transaction.category.name,
                         style = MaterialTheme.typography.displayLarge,
-                        fontSize = dimensionResource(id = com.d9tilov.android.regular_transaction_ui.R.dimen.regular_transaction_category_name_text_size).value.sp,
+                        fontSize = dimensionResource(id = R.dimen.regular_transaction_category_name_text_size).value.sp,
                         maxLines = 1,
                         color = Color(ContextCompat.getColor(context, transaction.category.color)),
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                Text(text = transaction.executionPeriod.toString())
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                            bottom = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)
+                        ),
+                    text = when (transaction.executionPeriod.periodType) {
+                        PeriodType.DAY -> context.getString(R.string.regular_transaction_repeat_period_day)
+                        PeriodType.WEEK -> context.getString(
+                            R.string.regular_transaction_repeat_period_week,
+                            getWeekDayString(context, (transaction.executionPeriod as ExecutionPeriod.EveryWeek).dayOfWeek)
+                        )
+
+                        PeriodType.MONTH -> {
+                            val dayOfMonth = (transaction.executionPeriod as ExecutionPeriod.EveryMonth).dayOfMonth
+                            context.getString(
+                                R.string.regular_transaction_repeat_period_month,
+                                dayOfMonth.toString()
+                            )
+                        }
+                    },
+                    maxLines = 1
+                )
             }
             ComposeCurrencyView(
                 modifier = Modifier.padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large)),
@@ -145,6 +264,17 @@ fun RegularTransactionItem(
             )
         }
     }
+}
+
+private fun getWeekDayString(context: Context, day: Int) = when (day) {
+    WeekDays.MONDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_monday)
+    WeekDays.TUESDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_tuesday)
+    WeekDays.WEDNESDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_wednesday)
+    WeekDays.THURSDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_thursday)
+    WeekDays.FRIDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_friday)
+    WeekDays.SATURDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_saturday)
+    WeekDays.SUNDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_sunday)
+    else -> throw IllegalArgumentException("Unknown day of week: $day")
 }
 
 @Preview(showBackground = true)
@@ -175,7 +305,9 @@ fun DefaultRegularTransactionListPreview() {
             )
         ),
         onAddClicked = {},
-        onTransactionClicked = {}
+        onTransactionClicked = {},
+        onBackClicked = {},
+        onDeleteTransactionConfirmClicked = {}
     )
 }
 
