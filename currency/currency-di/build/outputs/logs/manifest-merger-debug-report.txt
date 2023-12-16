@@ -1,0 +1,16 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/ddeviatilov/projects/android/money-manager/currency/currency-di/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest7836361672244425792.xml:2:13-83
+INJECTED from /Users/ddeviatilov/projects/android/money-manager/currency/currency-di/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest7836361672244425792.xml:2:13-83
+	package
+		INJECTED from /Users/ddeviatilov/projects/android/money-manager/currency/currency-di/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest7836361672244425792.xml
+	xmlns:android
+		ADDED from /Users/ddeviatilov/projects/android/money-manager/currency/currency-di/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest7836361672244425792.xml:2:23-81
+uses-sdk
+INJECTED from /Users/ddeviatilov/projects/android/money-manager/currency/currency-di/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest7836361672244425792.xml reason: use-sdk injection requested
+INJECTED from /Users/ddeviatilov/projects/android/money-manager/currency/currency-di/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest7836361672244425792.xml
+INJECTED from /Users/ddeviatilov/projects/android/money-manager/currency/currency-di/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest7836361672244425792.xml
+	android:targetSdkVersion
+		INJECTED from /Users/ddeviatilov/projects/android/money-manager/currency/currency-di/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest7836361672244425792.xml
+	android:minSdkVersion
+		INJECTED from /Users/ddeviatilov/projects/android/money-manager/currency/currency-di/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest7836361672244425792.xml

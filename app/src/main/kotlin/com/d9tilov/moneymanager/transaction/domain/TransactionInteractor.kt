@@ -41,6 +41,7 @@ interface TransactionInteractor : Interactor {
 
     fun getTransactionById(id: Long): Flow<Transaction>
     fun getTransactionsByType(type: TransactionType): Flow<PagingData<Transaction>>
+    fun getTransactionsByType2(type: TransactionType): Flow<List<Transaction>>
     fun ableToSpendToday(): Flow<TransactionSpendingTodayModel>
     fun ableToSpendInFiscalPeriod(): Flow<BigDecimal>
     fun getSumInFiscalPeriodInUsd(type: TransactionType): Flow<BigDecimal>

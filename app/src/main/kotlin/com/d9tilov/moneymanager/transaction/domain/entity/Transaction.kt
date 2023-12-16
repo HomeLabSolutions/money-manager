@@ -7,28 +7,32 @@ import com.d9tilov.moneymanager.core.constants.DataConstants
 import com.d9tilov.moneymanager.core.constants.DataConstants.NO_ID
 import com.d9tilov.moneymanager.core.util.currentDateTime
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction.Companion.ITEM
+import com.fasterxml.jackson.annotation.JsonFormat
+import com.google.gson.annotations.SerializedName
 import kotlinx.datetime.LocalDateTime
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
+import java.io.Serializable
 import java.math.BigDecimal
 
 @Parcelize
 data class Transaction(
-    val id: Long,
-    val clientId: String,
-    val type: TransactionType,
-    val category: Category,
-    val currencyCode: String,
-    val sum: BigDecimal,
-    val usdSum: BigDecimal,
-    val date: @RawValue LocalDateTime,
-    val description: String,
-    val qrCode: String?,
-    val isRegular: Boolean,
-    val inStatistics: Boolean,
-    val location: Location?,
-    val photoUri: String?,
-    override val headerPosition: Int
+    @SerializedName("id") val id: Long,
+    @SerializedName("clientId") val clientId: String,
+    @SerializedName("type") val type: TransactionType,
+    @SerializedName("category") val category: Category,
+    @SerializedName("currencyCode") val currencyCode: String,
+    @SerializedName("sum") val sum: BigDecimal,
+    @SerializedName("usdSum") val usdSum: BigDecimal,
+    @SerializedName("date") val date: @RawValue  LocalDateTime,
+    @SerializedName("description") val description: String,
+    @SerializedName("qrCode") val qrCode: String?,
+    @SerializedName("isRegular") val isRegular: Boolean,
+    @SerializedName("inStatistics") val inStatistics: Boolean,
+    @SerializedName("location") val location: Location?,
+    @SerializedName("photoUri") val photoUri: String?,
+    @SerializedName("headerPosition") override val headerPosition: Int
 ) : BaseTransaction, Parcelable {
 
     companion object {

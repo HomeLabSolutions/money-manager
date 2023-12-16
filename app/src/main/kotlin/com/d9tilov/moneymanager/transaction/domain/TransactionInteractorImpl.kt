@@ -222,6 +222,21 @@ class TransactionInteractorImpl(
             }
     }
 
+    override fun getTransactionsByType2(type: TransactionType): Flow<List<Transaction>> {
+        return categoryInteractor.getGroupedCategoriesByType(type)
+            .flatMapLatest { categoryList ->
+                transactionRepo.getTransactionsByType2(transactionType = type)
+                    .map {
+                        it.map { item ->
+                            val category =
+                                categoryList.find { listItem -> item.categoryId == listItem.id }
+                                    ?: throw CategoryException.CategoryNotFoundException("getTransactionsByType Not found category with id: ${item.categoryId}")
+                            item.toDomainModel(category)
+                        }
+                    }
+            }
+    }
+
     override fun ableToSpendToday(): Flow<TransactionSpendingTodayModel> {
         StrictMode.noteSlowCall("ableToSpendToday")
         val countDaysSinceFiscalDateFlow: Flow<BigDecimal> =

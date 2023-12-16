@@ -1,0 +1,6 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <size
+        android:width="@dimen/item_color_picker_size"
+        android:height="@dimen/item_color_picker_size" />
+</shape>

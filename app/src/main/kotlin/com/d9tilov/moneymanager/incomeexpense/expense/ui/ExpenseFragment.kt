@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.incomeexpense.expense.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
@@ -32,17 +33,28 @@ import com.d9tilov.moneymanager.databinding.FragmentExpenseBinding
 import com.d9tilov.moneymanager.incomeexpense.ui.BaseIncomeExpenseFragment
 import com.d9tilov.moneymanager.incomeexpense.ui.IncomeExpenseFragmentDirections
 import com.d9tilov.moneymanager.transaction.domain.entity.ExpenseInfoUiModel
+import com.d9tilov.moneymanager.transaction.domain.entity.LocalDateTimeDeserializer
+import com.d9tilov.moneymanager.transaction.domain.entity.LocalDateTimeSerializer
+import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionSpendingTodayModel
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionTypeDeserializer
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionTypeSerializer
 import com.d9tilov.moneymanager.transaction.domain.entity.isIncome
 import com.d9tilov.moneymanager.transaction.ui.callback.TransactionSwipeToDeleteCallback
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
+import java.io.IOException
+import java.io.OutputStreamWriter
 import java.math.BigDecimal.ROUND_HALF_UP
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class ExpenseFragment :
@@ -150,8 +162,36 @@ class ExpenseFragment :
                             }
                         }
                     }
+                    launch {
+                        viewModel.getTrAsString().collect { list ->
+                            val builder = GsonBuilder()
+                            builder.registerTypeAdapter(TransactionType::class.java, TransactionTypeSerializer())
+                            builder.registerTypeAdapter(TransactionType::class.java, TransactionTypeDeserializer())
+                            builder.registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeSerializer())
+                            builder.registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
+                            val gson = builder.create()
+                            System.out.println("moggot incomes: " + list.size)
+                            val res = gson.toJson(list)
+                            System.out.println("moggot incomes res: " + res)
+                            val itemType = object : TypeToken<List<Transaction>>() {}.type
+                            val res2 = gson.fromJson<List<Transaction>>(res, itemType)
+                            writeToFile(res, requireContext())
+                            System.out.println("moggot incomes res2: " + res2)
+                        }
+                    }
                 }
             }
+        }
+    }
+
+    private fun writeToFile(data: String, context: Context) {
+        try {
+            val outputStreamWriter =
+                OutputStreamWriter(context.openFileOutput("config.txt", Context.MODE_PRIVATE))
+            outputStreamWriter.write(data)
+            outputStreamWriter.close()
+        } catch (e: IOException) {
+            System.out.println("moggot File write failed: $e")
         }
     }
 

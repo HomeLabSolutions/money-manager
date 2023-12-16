@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/settings_billing_intro_toolbar_container"
+        layout="@layout/common_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/settings_billing_intro_viewpager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/settings_billing_intro_dots"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_billing_intro_toolbar_container" />
+
+    <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
+        android:id="@+id/settings_billing_intro_dots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:dotsColor="?attr/colorPrimaryContainer"
+        app:dotsStrokeColor="?attr/colorPrimaryContainer"
+        app:dotsSize="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/settings_billing_intro_horizontal_guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:stiffness="300" />
+
+    <RadioGroup
+        android:id="@+id/settings_billing_intro_radio_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/padding_large"
+        app:layout_constraintBottom_toTopOf="@+id/settings_billing_intro_buy"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_billing_intro_dots">
+
+        <RadioButton
+            android:id="@+id/settings_billing_intro_radio_quarterly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:layout_marginBottom="8dp"
+            android:text="@string/billing_purchase_quarterly" />
+
+        <RadioButton
+            android:id="@+id/settings_billing_intro_radio_annual"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/billing_purchase_annual" />
+    </RadioGroup>
+
+    <Space
+        android:id="@+id/settings_billing_intro_spacer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/settings_billing_intro_radio_group"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/settings_billing_intro_radio_group" />
+
+    <TextView
+        android:id="@+id/settings_billing_intro_radio_quarterly_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/padding_large"
+        android:layout_marginBottom="4dp"
+        android:textColor="?attr/colorSecondary"
+        app:layout_constraintBottom_toBottomOf="@+id/settings_billing_intro_spacer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/settings_billing_intro_radio_group"
+        tools:text="$299/3 months" />
+
+    <TextView
+        android:id="@+id/settings_billing_intro_radio_annual_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="@dimen/padding_large"
+        android:textColor="?attr/colorSecondary"
+        app:layout_constraintBottom_toBottomOf="@+id/settings_billing_intro_radio_group"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/settings_billing_intro_spacer"
+        tools:text="$999/year" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/settings_billing_intro_horizontal_guideline"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.55" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/settings_billing_intro_buy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/button_margin_horizontal"
+        android:layout_marginVertical="@dimen/button_margin_vertical"
+        android:text="@string/buy"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

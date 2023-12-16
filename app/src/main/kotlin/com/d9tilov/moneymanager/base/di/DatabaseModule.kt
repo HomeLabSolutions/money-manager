@@ -30,7 +30,7 @@ class DatabaseModule {
         val factory = SupportFactory(passphrase)
         var builder = Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
             .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
-        if (!BuildConfig.DEBUG) builder = builder.openHelperFactory(factory)
+        builder = builder.openHelperFactory(factory)
         return builder.build()
     }
 }

@@ -22,6 +22,12 @@ interface TransactionRepo {
         transactionType: TransactionType
     ): Flow<PagingData<TransactionDataModel>>
 
+    fun getTransactionsByType2(
+        from: LocalDateTime = Instant.fromEpochMilliseconds(0).toLocal(),
+        to: LocalDateTime = currentDateTime().getStartOfDay(),
+        transactionType: TransactionType
+    ): Flow<List<TransactionDataModel>>
+
     fun getTransactionsByTypeInPeriod(
         from: LocalDateTime = Instant.fromEpochMilliseconds(0).toLocal(),
         to: LocalDateTime = currentDateTime().getEndOfDay(),

@@ -16,9 +16,15 @@ import com.d9tilov.moneymanager.incomeexpense.ui.vm.BaseIncomeExpenseViewModel
 import com.d9tilov.moneymanager.transaction.domain.TransactionInteractor
 import com.d9tilov.moneymanager.transaction.domain.entity.BaseTransaction
 import com.d9tilov.moneymanager.transaction.domain.entity.ExpenseInfoUiModel
+import com.d9tilov.moneymanager.transaction.domain.entity.LocalDateTimeDeserializer
+import com.d9tilov.moneymanager.transaction.domain.entity.LocalDateTimeSerializer
 import com.d9tilov.moneymanager.transaction.domain.entity.Transaction
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionHeader
 import com.d9tilov.moneymanager.transaction.domain.entity.TransactionType
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionTypeDeserializer
+import com.d9tilov.moneymanager.transaction.domain.entity.TransactionTypeSerializer
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -31,15 +37,34 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
 import javax.inject.Inject
+
 
 @HiltViewModel
 class ExpenseViewModel @Inject constructor(
     categoryInteractor: CategoryInteractor,
     private val transactionInteractor: TransactionInteractor,
-    billingInteractor: BillingInteractor
-) : BaseIncomeExpenseViewModel<ExpenseNavigator>() {
+    billingInteractor: BillingInteractor,
+
+    ) : BaseIncomeExpenseViewModel<ExpenseNavigator>() {
+
+    init {
+        viewModelScope.launch {
+            launch {
+                transactionInteractor.getTransactionsByType2(TransactionType.EXPENSE)
+                    .collect { list: List<Transaction> ->
+                        System.out.println("moggot expenses: " + list.size)
+
+                    }
+            }
+        }
+    }
+
+    fun getTrAsString(): Flow<List<Transaction>> {
+        return transactionInteractor.getTransactionsByType2(TransactionType.INCOME)
+    }
 
     override val transactions: Flow<PagingData<BaseTransaction>> =
         transactionInteractor.getTransactionsByType(TransactionType.EXPENSE)

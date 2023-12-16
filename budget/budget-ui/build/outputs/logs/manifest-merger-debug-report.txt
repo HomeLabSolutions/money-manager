@@ -1,0 +1,16 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/ddeviatilov/projects/android/money-manager/budget/budget-ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10656928989610414373.xml:2:13-83
+INJECTED from /Users/ddeviatilov/projects/android/money-manager/budget/budget-ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10656928989610414373.xml:2:13-83
+	package
+		INJECTED from /Users/ddeviatilov/projects/android/money-manager/budget/budget-ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10656928989610414373.xml
+	xmlns:android
+		ADDED from /Users/ddeviatilov/projects/android/money-manager/budget/budget-ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10656928989610414373.xml:2:23-81
+uses-sdk
+INJECTED from /Users/ddeviatilov/projects/android/money-manager/budget/budget-ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10656928989610414373.xml reason: use-sdk injection requested
+INJECTED from /Users/ddeviatilov/projects/android/money-manager/budget/budget-ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10656928989610414373.xml
+INJECTED from /Users/ddeviatilov/projects/android/money-manager/budget/budget-ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10656928989610414373.xml
+	android:targetSdkVersion
+		INJECTED from /Users/ddeviatilov/projects/android/money-manager/budget/budget-ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10656928989610414373.xml
+	android:minSdkVersion
+		INJECTED from /Users/ddeviatilov/projects/android/money-manager/budget/budget-ui/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest10656928989610414373.xml

@@ -74,7 +74,7 @@ android {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
             isMinifyEnabled = false
-            manifestPlaceholders["appName"] = "Money Manager1"
+            manifestPlaceholders["appName"] = "Money Manager debug"
         }
     }
 
@@ -230,4 +230,8 @@ dependencies {
 
     implementation(Deps.androidChart)
     implementation(Deps.dotsIndicator)
+    implementation("com.google.code.gson:gson:2.10")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.13.4")
+    implementation("com.fasterxml.jackson.core:jackson-annotations:2.13.4")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.4.2")
 }

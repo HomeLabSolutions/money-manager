@@ -1,0 +1,5 @@
+int drawable ic_currency_icon 0x0
+int string profile_item_currency_title 0x0
+int string sync_notification_channel_description 0x0
+int string sync_notification_channel_name 0x0
+int string sync_notification_title 0x0

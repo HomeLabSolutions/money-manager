@@ -1,0 +1,7 @@
+R_DEF: Internal format may change without notice
+local
+drawable ic_currency_icon
+string profile_item_currency_title
+string sync_notification_channel_description
+string sync_notification_channel_name
+string sync_notification_title

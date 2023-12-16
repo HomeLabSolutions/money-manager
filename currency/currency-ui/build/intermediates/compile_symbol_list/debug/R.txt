@@ -1,0 +1,1 @@
+int string title_prepopulate_currency 0x0

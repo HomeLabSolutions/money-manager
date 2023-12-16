@@ -1,0 +1,6 @@
+int dimen budget_created_date 0x0
+int dimen overline_text_size 0x0
+int string budget_date_created 0x0
+int string budget_sum_title 0x0
+int string save 0x0
+int string title_prepopulate_budget 0x0

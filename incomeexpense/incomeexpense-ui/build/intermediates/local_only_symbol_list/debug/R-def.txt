@@ -1,0 +1,29 @@
+R_DEF: Internal format may change without notice
+local
+dimen category_item_size
+dimen income_expense_info_sign_text_size
+dimen income_expense_info_sum_text_size
+dimen pin_button_height
+dimen pin_button_margin_height
+dimen pin_button_margin_width
+dimen pin_button_width
+dimen transaction_sum_title_text_size
+drawable background_round_border
+drawable background_sum_border
+drawable ic_backspace
+drawable ic_category_beach
+drawable ic_keyboard_hide
+drawable ic_plus
+drawable ic_wallet_empty
+string category_all
+string category_expense_info_can_spend_today_negate_title
+string category_expense_info_can_spend_today_title
+string category_expense_info_today_title
+string income_expense_empty_sum_error
+string tab_expense
+string tab_income
+string transaction_delete_dialog_subtitle
+string transaction_delete_dialog_title
+string transaction_empty_placeholder_expense_title
+string transaction_empty_placeholder_income_title
+string transaction_empty_placeholder_subtitle

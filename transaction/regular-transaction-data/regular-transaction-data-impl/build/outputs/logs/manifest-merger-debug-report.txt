@@ -1,0 +1,16 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/ddeviatilov/projects/android/money-manager/transaction/regular-transaction-data/regular-transaction-data-impl/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest13510792186631924069.xml:2:13-83
+INJECTED from /Users/ddeviatilov/projects/android/money-manager/transaction/regular-transaction-data/regular-transaction-data-impl/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest13510792186631924069.xml:2:13-83
+	package
+		INJECTED from /Users/ddeviatilov/projects/android/money-manager/transaction/regular-transaction-data/regular-transaction-data-impl/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest13510792186631924069.xml
+	xmlns:android
+		ADDED from /Users/ddeviatilov/projects/android/money-manager/transaction/regular-transaction-data/regular-transaction-data-impl/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest13510792186631924069.xml:2:23-81
+uses-sdk
+INJECTED from /Users/ddeviatilov/projects/android/money-manager/transaction/regular-transaction-data/regular-transaction-data-impl/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest13510792186631924069.xml reason: use-sdk injection requested
+INJECTED from /Users/ddeviatilov/projects/android/money-manager/transaction/regular-transaction-data/regular-transaction-data-impl/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest13510792186631924069.xml
+INJECTED from /Users/ddeviatilov/projects/android/money-manager/transaction/regular-transaction-data/regular-transaction-data-impl/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest13510792186631924069.xml
+	android:targetSdkVersion
+		INJECTED from /Users/ddeviatilov/projects/android/money-manager/transaction/regular-transaction-data/regular-transaction-data-impl/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest13510792186631924069.xml
+	android:minSdkVersion
+		INJECTED from /Users/ddeviatilov/projects/android/money-manager/transaction/regular-transaction-data/regular-transaction-data-impl/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest13510792186631924069.xml

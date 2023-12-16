@@ -1,0 +1,1 @@
+com.d9tilov.android.transaction_domain_impl

@@ -23,6 +23,18 @@ class TransactionDataRepo(private val transactionSource: TransactionSource) : Tr
         transactionType: TransactionType
     ) = transactionSource.getAllByTypePaging(from, to, transactionType)
 
+    override fun getTransactionsByType2(
+        from: LocalDateTime,
+        to: LocalDateTime,
+        transactionType: TransactionType
+    ) = transactionSource.getAllByTypeInPeriod(
+        from = from,
+        to = to,
+        transactionType = transactionType,
+        onlyInStatistics = false,
+        withRegular = true
+    )
+
     override fun getTransactionsByTypeInPeriod(
         from: LocalDateTime,
         to: LocalDateTime,

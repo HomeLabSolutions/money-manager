@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="days_of_month">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+    </string-array>
+    <dimen name="button_height">56dp</dimen>
+    <dimen name="button_margin_horizontal">16dp</dimen>
+    <dimen name="button_margin_vertical">8dp</dimen>
+    <dimen name="category_creation_icon_size">48dp</dimen>
+    <dimen name="category_item_icon_round_size">64dp</dimen>
+    <dimen name="category_item_size">80dp</dimen>
+    <dimen name="currency_margin_between_currency_symbol">2dp</dimen>
+    <dimen name="currency_sign_text_size">50sp</dimen>
+    <dimen name="currency_sum_text_size">84sp</dimen>
+    <dimen name="item_color_picker_size">32dp</dimen>
+    <dimen name="item_color_picker_size_wrapper">48dp</dimen>
+    <dimen name="recycler_view_category_offset">4dp</dimen>
+    <dimen name="statistics_item_group_icon_min_height">60dp</dimen>
+    <string name="_0">0</string>
+    <string name="_1">1</string>
+    <string name="_2">2</string>
+    <string name="_3">3</string>
+    <string name="_4">4</string>
+    <string name="_5">5</string>
+    <string name="_6">6</string>
+    <string name="_7">7</string>
+    <string name="_8">8</string>
+    <string name="_9">9</string>
+    <string name="_dot">.</string>
+    <string name="add">Add</string>
+    <string name="approx_sign">≈</string>
+    <string name="buy">Buy</string>
+    <string name="cancel">Cancel</string>
+    <string name="change">Change</string>
+    <string name="create">Create</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="exit">Exit</string>
+    <string name="minus_sign">-</string>
+    <string name="next">Next</string>
+    <string name="number_with_percent">%1$s%%</string>
+    <string name="ok">OK</string>
+    <string name="percent_sign">%</string>
+    <string name="plus_sign">+</string>
+    <string name="prepopulate_progress">%1$s/%2$s</string>
+    <string name="retry">Retry</string>
+    <string name="ruble_code">RUB</string>
+    <string name="ruble_sign">₽</string>
+    <string name="save">Save</string>
+    <string name="sub_category_delete_subtitle">All operations with this category will also be deleted.</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="usd_code">USD</string>
+    <string name="usd_sign">$</string>
+</resources>

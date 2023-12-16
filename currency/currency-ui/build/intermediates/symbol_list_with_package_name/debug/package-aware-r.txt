@@ -1,0 +1,2 @@
+com.d9tilov.android.currency_ui
+string title_prepopulate_currency

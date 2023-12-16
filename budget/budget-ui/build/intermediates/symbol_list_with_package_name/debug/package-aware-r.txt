@@ -1,0 +1,7 @@
+com.d9tilov.android.budget_ui
+dimen budget_created_date
+dimen overline_text_size
+string budget_date_created
+string budget_sum_title
+string save
+string title_prepopulate_budget

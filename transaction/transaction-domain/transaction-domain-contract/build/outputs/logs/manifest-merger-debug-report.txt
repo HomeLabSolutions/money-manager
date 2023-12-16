@@ -1,0 +1,16 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/ddeviatilov/projects/android/money-manager/transaction/transaction-domain/transaction-domain-contract/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest587560331251845894.xml:2:13-83
+INJECTED from /Users/ddeviatilov/projects/android/money-manager/transaction/transaction-domain/transaction-domain-contract/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest587560331251845894.xml:2:13-83
+	package
+		INJECTED from /Users/ddeviatilov/projects/android/money-manager/transaction/transaction-domain/transaction-domain-contract/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest587560331251845894.xml
+	xmlns:android
+		ADDED from /Users/ddeviatilov/projects/android/money-manager/transaction/transaction-domain/transaction-domain-contract/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest587560331251845894.xml:2:23-81
+uses-sdk
+INJECTED from /Users/ddeviatilov/projects/android/money-manager/transaction/transaction-domain/transaction-domain-contract/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest587560331251845894.xml reason: use-sdk injection requested
+INJECTED from /Users/ddeviatilov/projects/android/money-manager/transaction/transaction-domain/transaction-domain-contract/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest587560331251845894.xml
+INJECTED from /Users/ddeviatilov/projects/android/money-manager/transaction/transaction-domain/transaction-domain-contract/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest587560331251845894.xml
+	android:targetSdkVersion
+		INJECTED from /Users/ddeviatilov/projects/android/money-manager/transaction/transaction-domain/transaction-domain-contract/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest587560331251845894.xml
+	android:minSdkVersion
+		INJECTED from /Users/ddeviatilov/projects/android/money-manager/transaction/transaction-domain/transaction-domain-contract/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest587560331251845894.xml

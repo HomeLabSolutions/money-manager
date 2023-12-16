@@ -1,0 +1,11 @@
+R_DEF: Internal format may change without notice
+local
+color category_pink
+string delete
+string title_transaction
+string transaction_delete_dialog_subtitle
+string transaction_delete_dialog_title
+string transaction_edit_description_hint
+string transaction_edit_in_statistics
+string transaction_edit_sum_title
+string transaction_invalid_amount

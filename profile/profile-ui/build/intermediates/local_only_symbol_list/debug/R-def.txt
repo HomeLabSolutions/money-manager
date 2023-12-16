@@ -1,0 +1,24 @@
+R_DEF: Internal format may change without notice
+local
+dimen billing_premium_label_text_size
+drawable ic_budget_icon
+drawable ic_currency_icon
+drawable ic_goal
+drawable ic_regular_expense
+drawable ic_regular_income
+drawable ic_settings
+string bottom_menu_chart
+string bottom_menu_income_expense
+string bottom_menu_profile
+string logout_dialog_button
+string logout_dialog_subtitle
+string logout_dialog_title
+string profile_item_budget_title
+string profile_item_currency_title
+string profile_item_goals_title_empty
+string profile_item_regular_expenses_title
+string profile_item_regular_incomes_title
+string profile_item_settings_title
+string profile_logout
+string settings_subscription_premium_acknowledged_title
+string settings_subscription_premium_title

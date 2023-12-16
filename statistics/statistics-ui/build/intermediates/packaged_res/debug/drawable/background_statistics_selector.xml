@@ -1,0 +1,4 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/background_rectangle_border_statistics" android:state_selected="false" />
+    <item android:drawable="@drawable/background_rectangle_border_statistics_enabled" android:state_selected="true" />
+</selector>
