@@ -76,7 +76,6 @@ class UserLocalSource(
     override fun getCurrentUser(): Flow<UserProfile?> = preferencesStore.uid
         .filterNotNull()
         .flatMapMerge { uid ->
-            System.out.println("moggot id: $uid")
             userDao.getById(uid).map { user: UserDbModel? -> user?.toDataModel() }
         }
         .flowOn(dispatcher)

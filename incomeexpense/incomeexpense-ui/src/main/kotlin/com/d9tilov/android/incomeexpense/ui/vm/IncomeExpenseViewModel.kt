@@ -294,30 +294,29 @@ class IncomeExpenseViewModel @Inject constructor(
     fun saveIncome(list: List<Transaction2>) {
         if (!isInit) {
             isInit = true
-            return
-        }
-        viewModelScope.launch(Dispatchers.IO) {
-            for (item in list) {
-                System.out.println("moggot ${item.category}")
-//                transactionInteractor.addTransaction(
-//                    Transaction(
-//                        id = item.id,
-//                        clientId = item.clientId,
-//                        type = item.type,
-//                        category = item.category,
-//                        currencyCode = item.currencyCode,
-//                        sum = item.sum,
-//                        usdSum = item.usdSum,
-//                        date = item.date,
-//                        description = item.description,
-//                        qrCode = null,
-//                        isRegular = item.isRegular,
-//                        inStatistics = item.inStatistics,
-//                        latitude = 0.0,
-//                        longitude = 0.0,
-//                        photoUri = null,
-//                    )
-//                )
+            viewModelScope.launch(Dispatchers.IO) {
+                for (item in list) {
+                    System.out.println("moggot category ${item.category}")
+                    transactionInteractor.addTransaction(
+                        Transaction(
+                            id = item.id,
+                            clientId = item.clientId,
+                            type = item.type,
+                            category = item.category,
+                            currencyCode = item.currencyCode,
+                            sum = item.sum,
+                            usdSum = item.usdSum,
+                            date = item.date,
+                            description = item.description,
+                            qrCode = null,
+                            isRegular = item.isRegular,
+                            inStatistics = item.inStatistics,
+                            latitude = 0.0,
+                            longitude = 0.0,
+                            photoUri = null,
+                        )
+                    )
+                }
             }
         }
     }
@@ -329,8 +328,21 @@ class IncomeExpenseViewModel @Inject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             for (item in list) {
-                System.out.println("moggot name: ${item.name}")
+//                System.out.println("moggot name: ${item.name}")
 //                categoryInteractor.create(item)
+            }
+        }
+    }
+
+    fun saveExpenseCategories(list: List<Category>) {
+        if (!isInit) {
+            isInit = true
+            return
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            for (item in list) {
+                System.out.println("moggot name: ${item.name}")
+                categoryInteractor.create(item)
             }
         }
     }
