@@ -44,7 +44,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ExpenseViewModel @Inject constructor(
-    categoryInteractor: CategoryInteractor,
+    private val categoryInteractor: CategoryInteractor,
     private val transactionInteractor: TransactionInteractor,
     billingInteractor: BillingInteractor,
 
@@ -64,6 +64,10 @@ class ExpenseViewModel @Inject constructor(
 
     fun getTrAsString(): Flow<List<Transaction>> {
         return transactionInteractor.getTransactionsByType2(TransactionType.INCOME)
+    }
+
+    fun getCategoriesAsString(): Flow<List<Category>> {
+        return categoryInteractor.getAllCategoriesByType(TransactionType.INCOME)
     }
 
     override val transactions: Flow<PagingData<BaseTransaction>> =
