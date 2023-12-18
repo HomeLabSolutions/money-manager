@@ -48,8 +48,8 @@ fun CategoryDbModel.toDataParentModel(): Category =
 
 fun Category.toDbModel() =
     with(this) {
-        val iconNameOrdinal = fromCategoryRes(icon)
-        val colorNameOrdinal = fromColorRes(color)
+        val iconNameOrdinal = 0
+        val colorNameOrdinal = 0
         CategoryDbModel(
             id = id,
             uid = clientId,

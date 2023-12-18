@@ -177,7 +177,8 @@ fun IncomeExpenseRoute(
     val itemType = object : TypeToken<List<Transaction2>>() {}.type
     val res2: List<Transaction2> = gson.fromJson(str, itemType)
     System.out.println("moggot res2: $res2")
-//    viewModel.saveIncome(res2)
+//    viewModel.saveIncomeCategories(res2)
+    viewModel.saveIncome(res2)
 }
 
 fun convertStreamToString(stream: InputStream): String {
@@ -192,7 +193,7 @@ fun convertStreamToString(stream: InputStream): String {
 }
 
 private fun getStringFromFile(): String {
-    val fl = File("/data/data/com.d9tilov.moneymanager.debug/files/config.txt")
+    val fl = File("/data/data/com.d9tilov.moneymanager.debug/files/category_income.txt")
     val fin = FileInputStream(fl)
     val ret: String = convertStreamToString(fin)
     //Make sure you close all streams.
