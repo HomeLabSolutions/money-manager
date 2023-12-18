@@ -8,7 +8,6 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -99,6 +98,7 @@ import com.d9tilov.android.common.android.utils.formatDate
 import com.d9tilov.android.core.constants.CurrencyConstants
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.core.constants.CurrencyConstants.ZERO
+import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.KeyPress
 import com.d9tilov.android.core.utils.removeScale
@@ -108,6 +108,9 @@ import com.d9tilov.android.designsystem.EmptyListPlaceholder
 import com.d9tilov.android.designsystem.MoneyManagerIcons
 import com.d9tilov.android.designsystem.SimpleDialog
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
+import com.d9tilov.android.incomeexpense.LocalDateTimeDeserializer
+import com.d9tilov.android.incomeexpense.Transaction2
+import com.d9tilov.android.incomeexpense.TransactionTypeDeserializer
 import com.d9tilov.android.incomeexpense.ui.vm.EditMode
 import com.d9tilov.android.incomeexpense.ui.vm.ExpenseInfo
 import com.d9tilov.android.incomeexpense.ui.vm.ExpenseUiState
@@ -124,10 +127,19 @@ import com.d9tilov.android.incomeexpense.ui.vm.toScreenType
 import com.d9tilov.android.incomeexpense_ui.R
 import com.d9tilov.android.transaction.domain.model.BaseTransaction
 import com.d9tilov.android.transaction.domain.model.Transaction
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
+import java.io.BufferedReader
+import java.io.File
+import java.io.FileInputStream
+import java.io.InputStream
+import java.io.InputStreamReader
 import java.math.BigDecimal
 import java.math.RoundingMode
+
 
 @Composable
 fun IncomeExpenseRoute(
@@ -144,6 +156,7 @@ fun IncomeExpenseRoute(
                 Toast.makeText(context, message, Toast.LENGTH_SHORT)
                     .show()
             }
+
     }
     IncomeExpenseScreen(
         uiState = uiState,
@@ -155,6 +168,36 @@ fun IncomeExpenseRoute(
         onAllCategoryClicked = onAllCategoryClicked,
         onDeleteTransactionConfirmClicked = viewModel::deleteTransaction
     )
+    val str = getStringFromFile()
+    System.out.println("moggot str: $str")
+    val builder = GsonBuilder()
+    builder.registerTypeAdapter(TransactionType::class.java, TransactionTypeDeserializer())
+    builder.registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
+    val gson = builder.create()
+    val itemType = object : TypeToken<List<Transaction2>>() {}.type
+    val res2: List<Transaction2> = gson.fromJson(str, itemType)
+    System.out.println("moggot res2: $res2")
+//    viewModel.saveIncome(res2)
+}
+
+fun convertStreamToString(stream: InputStream): String {
+    val reader = BufferedReader(InputStreamReader(stream))
+    val sb = StringBuilder()
+    var line: String? = null
+    while (reader.readLine().also { line = it } != null) {
+        sb.append(line)
+    }
+    reader.close()
+    return sb.toString()
+}
+
+private fun getStringFromFile(): String {
+    val fl = File("/data/data/com.d9tilov.moneymanager.debug/files/config.txt")
+    val fin = FileInputStream(fl)
+    val ret: String = convertStreamToString(fin)
+    //Make sure you close all streams.
+    fin.close()
+    return ret
 }
 
 @Composable

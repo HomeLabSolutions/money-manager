@@ -17,6 +17,7 @@ import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.isSameDay
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
+import com.d9tilov.android.incomeexpense.Transaction2
 import com.d9tilov.android.incomeexpense_ui.R
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.model.BaseTransaction
@@ -25,6 +26,7 @@ import com.d9tilov.android.transaction.domain.model.TransactionHeader
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -130,6 +132,7 @@ class IncomeExpenseViewModel @Inject constructor(
     private val _mainCurrency = MutableStateFlow(CurrencyMetaData.EMPTY)
     private val _errorMessage = MutableSharedFlow<Int>()
     val errorMessage = _errorMessage.asSharedFlow()
+    private var isInit = false
 
     init {
         val updateCurrencyExceptionHandler = CoroutineExceptionHandler { _, exception ->
@@ -285,6 +288,36 @@ class IncomeExpenseViewModel @Inject constructor(
         }
         viewModelScope.launch(deleteTransactionExceptionHandler) {
             transactionInteractor.removeTransaction(transaction)
+        }
+    }
+
+    fun saveIncome(list: List<Transaction2>) {
+        if (!isInit) {
+            isInit = true
+            return
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            for (item in list) {
+                transactionInteractor.addTransaction(
+                    Transaction(
+                        id = item.id,
+                        clientId = item.clientId,
+                        type = item.type,
+                        category = item.category,
+                        currencyCode = item.currencyCode,
+                        sum = item.sum,
+                        usdSum = item.usdSum,
+                        date = item.date,
+                        description = item.description,
+                        qrCode = null,
+                        isRegular = item.isRegular,
+                        inStatistics = item.inStatistics,
+                        latitude = 0.0,
+                        longitude = 0.0,
+                        photoUri = null,
+                    )
+                )
+            }
         }
     }
 
