@@ -176,12 +176,12 @@ fun IncomeExpenseRoute(
     builder.registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
     builder.registerTypeAdapter(Category::class.java, CategoryDeserializer())
     val gson = builder.create()
-    val itemType = object : TypeToken<List<Category>>() {}.type
-    val res2: List<Category> = gson.fromJson(str, itemType)
+    val itemType = object : TypeToken<List<Transaction2>>() {}.type
+    val res2: List<Transaction2> = gson.fromJson(str, itemType)
 //    System.out.println("moggot res2: ${res2.size}")
 //    viewModel.saveIncomeCategories(res2)
 //    viewModel.saveIncome(res2)
-    viewModel.saveExpenseCategories(res2)
+//    viewModel.saveExpenseCategories(res2)
 }
 
 fun convertStreamToString(stream: InputStream): String {
@@ -196,7 +196,7 @@ fun convertStreamToString(stream: InputStream): String {
 }
 
 private fun getStringFromFile(): String {
-    val fl = File("/data/data/com.d9tilov.moneymanager.debug/files/income.txt")
+    val fl = File("/data/data/com.d9tilov.moneymanager.debug/files/expense.txt")
     val fin = FileInputStream(fl)
     val ret: String = convertStreamToString(fin)
     //Make sure you close all streams.
