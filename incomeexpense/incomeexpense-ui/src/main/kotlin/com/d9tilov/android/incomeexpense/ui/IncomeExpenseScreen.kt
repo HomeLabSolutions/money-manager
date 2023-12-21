@@ -181,7 +181,6 @@ fun IncomeExpenseRoute(
 //    System.out.println("moggot res2: ${res2.size}")
 //    viewModel.saveIncomeCategories(res2)
 //    viewModel.saveIncome(res2)
-//    viewModel.saveExpenseCategories(res2)
 }
 
 fun convertStreamToString(stream: InputStream): String {

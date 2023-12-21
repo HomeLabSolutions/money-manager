@@ -335,18 +335,6 @@ class IncomeExpenseViewModel @Inject constructor(
         }
     }
 
-    fun saveExpenseCategories(list: List<Category>) {
-        if (!isInit) {
-            isInit = true
-            viewModelScope.launch(Dispatchers.IO) {
-                for (item in list) {
-                    System.out.println("moggot name: ${item.name}")
-                    categoryInteractor.create(item)
-                }
-            }
-        }
-    }
-
     private fun mapWithStickyHeaders(flow: Flow<PagingData<Transaction>>): Flow<PagingData<BaseTransaction>> {
         return flow.map { pagingData ->
             pagingData.insertSeparators { before: Transaction?, after: Transaction? ->
