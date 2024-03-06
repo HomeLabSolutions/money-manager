@@ -8,7 +8,6 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -35,25 +34,23 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Tab
-import androidx.compose.material.TabPosition
-import androidx.compose.material.TabRow
-import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material3.DismissDirection
-import androidx.compose.material3.DismissValue
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SwipeToDismiss
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabPosition
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -64,6 +61,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -126,6 +124,8 @@ import com.d9tilov.android.incomeexpense_ui.R
 import com.d9tilov.android.transaction.domain.model.BaseTransaction
 import com.d9tilov.android.transaction.domain.model.Transaction
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -222,7 +222,7 @@ fun AnimatedFloatingActionButton(listState: LazyListState, onClick: () -> Unit) 
         FloatingActionButton(
             onClick = onClick,
             modifier = Modifier.navigationBarsPadding(),
-            backgroundColor = MaterialTheme.colorScheme.secondary
+            containerColor = MaterialTheme.colorScheme.secondary
         ) {
             Icon(
                 imageVector = MoneyManagerIcons.AddCircle,
@@ -246,10 +246,7 @@ fun MainPriceInput(price: Price, modifier: Modifier, onCurrencyClicked: () -> Un
     }
 }
 
-@OptIn(
-    ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterialApi::class
-)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionListLayout(
     listState: LazyListState,
@@ -277,12 +274,18 @@ fun TransactionListLayout(
         // handle error
     }
     val openRemoveDialog = remember { mutableStateOf<Transaction?>(null) }
+    val scrollTo = remember { mutableIntStateOf(0) }
+    LaunchedEffect(key1 = listState) {
+        snapshotFlow { listState.firstVisibleItemIndex }
+            .debounce(500L)
+            .collectLatest { scrollTo.value = it }
+    }
     LazyColumn(modifier = modifier, state = listState) {
         for (index in 0 until lazyTransactionItems.itemCount) {
             val currentItem = lazyTransactionItems.peek(index)
             currentItem?.let { tr ->
                 if (tr.itemType == BaseTransaction.HEADER) {
-                    stickyHeader(tr.date.hashCode()) {
+                    stickyHeader(key = tr.date.hashCode()) {
                         Surface(
                             modifier = Modifier.fillParentMaxWidth(),
                             color = MaterialTheme.colorScheme.primaryContainer
@@ -295,10 +298,10 @@ fun TransactionListLayout(
                         }
                     }
                 } else {
-                    val item = tr as Transaction
-                    item(item.id) {
+                    val item = lazyTransactionItems[index] as Transaction
+                    item(key = item.id) {
                         val dismissState = rememberSwipeToDismissBoxState(
-                            positionalThreshold = { _ -> 0.dp.value },
+                            positionalThreshold = { _ -> 0.3f },
                             confirmValueChange = {
                                 if (it == SwipeToDismissBoxValue.EndToStart) {
                                     openRemoveDialog.value = item
@@ -307,10 +310,10 @@ fun TransactionListLayout(
                             }
                         )
                         if (openRemoveDialog.value == null) LaunchedEffect(Unit) { dismissState.reset() }
-                        SwipeToDismiss(
+                        SwipeToDismissBox(
                             state = dismissState,
-                            directions = setOf(SwipeToDismissBoxValue.EndToStart),
-                            background = {
+                            enableDismissFromStartToEnd = false,
+                            backgroundContent = {
                                 val backgroundColor by animateColorAsState(
                                     when (dismissState.targetValue) {
                                         SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.error
@@ -318,7 +321,7 @@ fun TransactionListLayout(
                                     }, label = ""
                                 )
                                 val iconScale by animateFloatAsState(
-                                    targetValue = if (dismissState.targetValue == SwipeToDismissBoxValue.EndToStart) 0.0f else 1.3f,
+                                    targetValue = if (dismissState.targetValue == SwipeToDismissBoxValue.Settled) 0.0f else 1.3f,
                                     label = ""
                                 )
                                 Box(
@@ -336,7 +339,7 @@ fun TransactionListLayout(
                                     )
                                 }
                             },
-                            dismissContent = {
+                            content = {
                                 TransactionItem(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -472,7 +475,7 @@ fun TransactionItem(modifier: Modifier, transaction: Transaction) {
                 symbolSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sign_extra_small_text_size).value.sp
             )
         }
-        Divider(
+        HorizontalDivider(
             color = MaterialTheme.colorScheme.primary,
             thickness = 1.dp,
             modifier = Modifier
@@ -514,7 +517,7 @@ fun HomeTabs(
             selectedTabIndex = pagerState.currentPage,
             indicator = indicator,
             modifier = modifier,
-            backgroundColor = MaterialTheme.colorScheme.primary
+            containerColor = MaterialTheme.colorScheme.primary
         ) {
             screenTypes.forEachIndexed { index, type ->
                 Tab(
