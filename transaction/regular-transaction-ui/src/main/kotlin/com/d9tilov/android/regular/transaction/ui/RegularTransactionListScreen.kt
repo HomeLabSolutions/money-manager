@@ -23,13 +23,12 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Card
-import androidx.compose.material3.DismissDirection
-import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SwipeToDismiss
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDismissState
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -126,10 +125,10 @@ fun RegularTransactionListScreen(
             modifier = Modifier.consumeWindowInsets(padding),
         ) {
             items(items = uiState.regularTransactions, key = { item -> item.id }) { item ->
-                val dismissState = rememberDismissState(
-                    positionalThreshold = { _ -> 0.dp.toPx() },
+                val dismissState = rememberSwipeToDismissBoxState(
+                    positionalThreshold = { _ -> 0.dp.value },
                     confirmValueChange = {
-                        if (it == DismissValue.DismissedToStart) {
+                        if (it == SwipeToDismissBoxValue.EndToStart) {
                             openRemoveDialog.value = item
                         }
                         true
@@ -138,16 +137,16 @@ fun RegularTransactionListScreen(
                 if (openRemoveDialog.value == null) LaunchedEffect(Unit) { dismissState.reset() }
                 SwipeToDismiss(
                     state = dismissState,
-                    directions = setOf(DismissDirection.EndToStart),
+                    directions = setOf(SwipeToDismissBoxValue.EndToStart),
                     background = {
                         val backgroundColor by animateColorAsState(
                             when (dismissState.targetValue) {
-                                DismissValue.DismissedToStart -> MaterialTheme.colorScheme.error
+                                SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.error
                                 else -> Color.Transparent
                             }, label = ""
                         )
                         val iconScale by animateFloatAsState(
-                            targetValue = if (dismissState.targetValue == DismissValue.Default) 0.0f else 1.3f,
+                            targetValue = if (dismissState.targetValue == SwipeToDismissBoxValue.EndToStart) 0.0f else 1.3f,
                             label = ""
                         )
                         Box(

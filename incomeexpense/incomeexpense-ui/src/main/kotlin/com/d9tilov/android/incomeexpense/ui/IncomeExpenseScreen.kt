@@ -53,7 +53,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SwipeToDismiss
-import androidx.compose.material3.rememberDismissState
+import androidx.compose.material3.SwipeToDismissBoxValue
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -296,10 +297,10 @@ fun TransactionListLayout(
                 } else {
                     val item = tr as Transaction
                     item(item.id) {
-                        val dismissState = rememberDismissState(
-                            positionalThreshold = { _ -> 0.dp.toPx() },
+                        val dismissState = rememberSwipeToDismissBoxState(
+                            positionalThreshold = { _ -> 0.dp.value },
                             confirmValueChange = {
-                                if (it == DismissValue.DismissedToStart) {
+                                if (it == SwipeToDismissBoxValue.EndToStart) {
                                     openRemoveDialog.value = item
                                 }
                                 true
@@ -308,16 +309,16 @@ fun TransactionListLayout(
                         if (openRemoveDialog.value == null) LaunchedEffect(Unit) { dismissState.reset() }
                         SwipeToDismiss(
                             state = dismissState,
-                            directions = setOf(DismissDirection.EndToStart),
+                            directions = setOf(SwipeToDismissBoxValue.EndToStart),
                             background = {
                                 val backgroundColor by animateColorAsState(
                                     when (dismissState.targetValue) {
-                                        DismissValue.DismissedToStart -> MaterialTheme.colorScheme.error
+                                        SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.error
                                         else -> Color.Transparent
                                     }, label = ""
                                 )
                                 val iconScale by animateFloatAsState(
-                                    targetValue = if (dismissState.targetValue == DismissValue.Default) 0.0f else 1.3f,
+                                    targetValue = if (dismissState.targetValue == SwipeToDismissBoxValue.EndToStart) 0.0f else 1.3f,
                                     label = ""
                                 )
                                 Box(
@@ -863,42 +864,42 @@ fun TransactionListItemPreview() {
 @Composable
 @Preview
 fun PreviewIncomeExpenseScreen() {
-        IncomeExpenseScreen(uiState = IncomeExpenseUiState.EMPTY.copy(
-                incomeUiState = IncomeUiState(
-                    incomeCategoryList = listOf(
-                        mockCategory(1L, "Category1"),
-                        mockCategory(2L, "Category2"),
-                        mockCategory(3L, "Category3"),
-                        mockCategory(4L, "Category4"),
-                        mockCategory(5L, "Category5"),
-                        mockCategory(6L, "Category6"),
-                        mockCategory(7L, "Category7"),
-                        mockCategory(8L, "Category8"),
-                        mockCategory(9L, "Category9"),
-                        mockCategory(10L, "Category10"),
-                        mockCategory(11L, "Category11"),
-                        mockCategory(12L, "Category12"),
-                        mockCategory(13L, "Category13"),
-                        mockCategory(14L, "Category14"),
-                        mockCategory(15L, "Category15"),
-                    ),
-                ),
-                expenseUiState = ExpenseUiState.EMPTY.copy(
-                    expenseInfo = ExpenseInfo(
-                        ableToSpendToday = TransactionSpendingTodayPrice.NORMAL(Price("42", "$")),
-                        wasSpendToday = Price("43", "$", true),
-                        wasSpendInPeriod = Price("44", "$")
-                    )
-                )
+    IncomeExpenseScreen(uiState = IncomeExpenseUiState.EMPTY.copy(
+        incomeUiState = IncomeUiState(
+            incomeCategoryList = listOf(
+                mockCategory(1L, "Category1"),
+                mockCategory(2L, "Category2"),
+                mockCategory(3L, "Category3"),
+                mockCategory(4L, "Category4"),
+                mockCategory(5L, "Category5"),
+                mockCategory(6L, "Category6"),
+                mockCategory(7L, "Category7"),
+                mockCategory(8L, "Category8"),
+                mockCategory(9L, "Category9"),
+                mockCategory(10L, "Category10"),
+                mockCategory(11L, "Category11"),
+                mockCategory(12L, "Category12"),
+                mockCategory(13L, "Category13"),
+                mockCategory(14L, "Category14"),
+                mockCategory(15L, "Category15"),
+            ),
         ),
-            onNumberClicked = {},
-            onCategoryClicked = {},
-            onEditModeChanged = {},
-            onCurrencyClicked = {},
-            onAllCategoryClicked = { _, _ -> },
-            onTransactionClicked = {},
-            onDeleteTransactionConfirmClicked = {}
+        expenseUiState = ExpenseUiState.EMPTY.copy(
+            expenseInfo = ExpenseInfo(
+                ableToSpendToday = TransactionSpendingTodayPrice.NORMAL(Price("42", "$")),
+                wasSpendToday = Price("43", "$", true),
+                wasSpendInPeriod = Price("44", "$")
+            )
         )
+    ),
+        onNumberClicked = {},
+        onCategoryClicked = {},
+        onEditModeChanged = {},
+        onCurrencyClicked = {},
+        onAllCategoryClicked = { _, _ -> },
+        onTransactionClicked = {},
+        onDeleteTransactionConfirmClicked = {}
+    )
 }
 
 private fun mockCategory(id: Long, name: String) = Category.EMPTY_INCOME.copy(
