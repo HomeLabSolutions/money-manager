@@ -105,7 +105,7 @@ fun TransactionCreationScreen(
     val context = LocalContext.current
     var showError by remember { mutableStateOf(false) }
     val showDatePickerDialog = remember { mutableStateOf(false) }
-    val datePickerState: DatePickerState = rememberDatePickerState().also { it.setSelection(uiState.transaction.date.toMillis()) }
+    val datePickerState: DatePickerState = rememberDatePickerState().also { it.selectedDateMillis = uiState.transaction.date.toMillis() }
     Scaffold(topBar = {
         MmTopAppBar(
             titleRes = com.d9tilov.android.transaction_ui.R.string.title_transaction,
