@@ -126,7 +126,7 @@ fun RegularTransactionListScreen(
         ) {
             items(items = uiState.regularTransactions, key = { item -> item.id }) { item ->
                 val dismissState = rememberSwipeToDismissBoxState(
-                    positionalThreshold = { _ -> 0.dp.value },
+                    positionalThreshold = { _ -> 0.3f },
                     confirmValueChange = {
                         if (it == SwipeToDismissBoxValue.EndToStart) {
                             openRemoveDialog.value = item
@@ -146,7 +146,7 @@ fun RegularTransactionListScreen(
                             }, label = ""
                         )
                         val iconScale by animateFloatAsState(
-                            targetValue = if (dismissState.targetValue == SwipeToDismissBoxValue.EndToStart) 0.0f else 1.3f,
+                            targetValue = if (dismissState.targetValue == SwipeToDismissBoxValue.Settled) 0.0f else 1.3f,
                             label = ""
                         )
                         Box(

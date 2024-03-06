@@ -1,5 +1,7 @@
 package com.d9tilov.android.incomeexpense.ui.vm
 
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -9,11 +11,14 @@ import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.DataConstants.TAG
+import com.d9tilov.android.core.model.PeriodType
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.KeyPress
 import com.d9tilov.android.core.utils.MainPriceFieldParser
+import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getEndOfDay
+import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.core.utils.isSameDay
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
@@ -35,9 +40,13 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 import timber.log.Timber
 import java.math.BigDecimal
 import javax.inject.Inject
+import kotlin.random.Random
 
 data class IncomeExpenseUiState(
     val mode: EditMode = EditMode.KEYBOARD,
@@ -50,6 +59,7 @@ data class IncomeExpenseUiState(
     }
 }
 
+@Stable
 data class ExpenseUiState(
     val expenseCategoryList: List<Category> = emptyList(),
     val expenseTransactions: Flow<PagingData<BaseTransaction>> = flowOf(),
@@ -60,6 +70,7 @@ data class ExpenseUiState(
     }
 }
 
+@Stable
 data class IncomeUiState(
     val incomeCategoryList: List<Category> = emptyList(),
     val incomeTransactions: Flow<PagingData<BaseTransaction>> = flowOf(),
@@ -232,6 +243,20 @@ class IncomeExpenseViewModel @Inject constructor(
                     }
             }
         }
+//        for (i in 1..200) {
+//            viewModelScope.launch {
+//                val category = categoryInteractor.getCategoryById(5)
+//                transactionInteractor.addTransaction(
+//                    Transaction.EMPTY.copy(
+//                        sum = Random.nextInt(0, 100).toBigDecimal(),
+//                        category = category,
+//                        currencyCode = "THB",
+//                        date = currentDate().minus(Random.nextInt(0, 30),  DateTimeUnit.DAY).getStartOfDay(),
+//                        type = TransactionType.EXPENSE
+//                    )
+//                )
+//            }
+//        }
     }
 
     fun addNumber(btn: KeyPress) {
