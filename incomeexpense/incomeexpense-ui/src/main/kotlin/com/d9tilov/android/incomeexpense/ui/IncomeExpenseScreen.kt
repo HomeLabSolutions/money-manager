@@ -61,7 +61,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -124,8 +123,6 @@ import com.d9tilov.android.incomeexpense_ui.R
 import com.d9tilov.android.transaction.domain.model.BaseTransaction
 import com.d9tilov.android.transaction.domain.model.Transaction
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -274,12 +271,6 @@ fun TransactionListLayout(
         // handle error
     }
     val openRemoveDialog = remember { mutableStateOf<Transaction?>(null) }
-    val scrollTo = remember { mutableIntStateOf(0) }
-    LaunchedEffect(key1 = listState) {
-        snapshotFlow { listState.firstVisibleItemIndex }
-            .debounce(500L)
-            .collectLatest { scrollTo.value = it }
-    }
     LazyColumn(modifier = modifier, state = listState) {
         for (index in 0 until lazyTransactionItems.itemCount) {
             val currentItem = lazyTransactionItems.peek(index)
