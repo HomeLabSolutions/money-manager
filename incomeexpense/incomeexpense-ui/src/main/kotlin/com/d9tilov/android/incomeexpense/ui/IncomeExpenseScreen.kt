@@ -34,25 +34,24 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Tab
-import androidx.compose.material.TabPosition
-import androidx.compose.material.TabRow
-import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material3.DismissDirection
-import androidx.compose.material3.DismissValue
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SwipeToDismiss
-import androidx.compose.material3.rememberDismissState
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabPosition
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -267,7 +266,7 @@ fun AnimatedFloatingActionButton(listState: LazyListState, onClick: () -> Unit) 
         FloatingActionButton(
             onClick = onClick,
             modifier = Modifier.navigationBarsPadding(),
-            backgroundColor = MaterialTheme.colorScheme.secondary
+            containerColor = MaterialTheme.colorScheme.secondary
         ) {
             Icon(
                 imageVector = MoneyManagerIcons.AddCircle,
@@ -291,10 +290,7 @@ fun MainPriceInput(price: Price, modifier: Modifier, onCurrencyClicked: () -> Un
     }
 }
 
-@OptIn(
-    ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterialApi::class
-)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionListLayout(
     listState: LazyListState,
@@ -327,7 +323,7 @@ fun TransactionListLayout(
             val currentItem = lazyTransactionItems.peek(index)
             currentItem?.let { tr ->
                 if (tr.itemType == BaseTransaction.HEADER) {
-                    stickyHeader(tr.date.hashCode()) {
+                    stickyHeader(key = tr.date.hashCode()) {
                         Surface(
                             modifier = Modifier.fillParentMaxWidth(),
                             color = MaterialTheme.colorScheme.primaryContainer
@@ -340,30 +336,30 @@ fun TransactionListLayout(
                         }
                     }
                 } else {
-                    val item = tr as Transaction
-                    item(item.id) {
-                        val dismissState = rememberDismissState(
-                            positionalThreshold = { _ -> 0.dp.toPx() },
+                    val item = lazyTransactionItems[index] as Transaction
+                    item(key = item.id) {
+                        val dismissState = rememberSwipeToDismissBoxState(
+                            positionalThreshold = { _ -> 0.3f },
                             confirmValueChange = {
-                                if (it == DismissValue.DismissedToStart) {
+                                if (it == SwipeToDismissBoxValue.EndToStart) {
                                     openRemoveDialog.value = item
                                 }
                                 true
                             }
                         )
                         if (openRemoveDialog.value == null) LaunchedEffect(Unit) { dismissState.reset() }
-                        SwipeToDismiss(
+                        SwipeToDismissBox(
                             state = dismissState,
-                            directions = setOf(DismissDirection.EndToStart),
-                            background = {
+                            enableDismissFromStartToEnd = false,
+                            backgroundContent = {
                                 val backgroundColor by animateColorAsState(
                                     when (dismissState.targetValue) {
-                                        DismissValue.DismissedToStart -> MaterialTheme.colorScheme.error
+                                        SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.error
                                         else -> Color.Transparent
                                     }, label = ""
                                 )
                                 val iconScale by animateFloatAsState(
-                                    targetValue = if (dismissState.targetValue == DismissValue.Default) 0.0f else 1.3f,
+                                    targetValue = if (dismissState.targetValue == SwipeToDismissBoxValue.Settled) 0.0f else 1.3f,
                                     label = ""
                                 )
                                 Box(
@@ -381,7 +377,7 @@ fun TransactionListLayout(
                                     )
                                 }
                             },
-                            dismissContent = {
+                            content = {
                                 TransactionItem(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -517,7 +513,7 @@ fun TransactionItem(modifier: Modifier, transaction: Transaction) {
                 symbolSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sign_extra_small_text_size).value.sp
             )
         }
-        Divider(
+        HorizontalDivider(
             color = MaterialTheme.colorScheme.primary,
             thickness = 1.dp,
             modifier = Modifier
@@ -559,7 +555,7 @@ fun HomeTabs(
             selectedTabIndex = pagerState.currentPage,
             indicator = indicator,
             modifier = modifier,
-            backgroundColor = MaterialTheme.colorScheme.primary
+            containerColor = MaterialTheme.colorScheme.primary
         ) {
             screenTypes.forEachIndexed { index, type ->
                 Tab(
@@ -909,42 +905,42 @@ fun TransactionListItemPreview() {
 @Composable
 @Preview
 fun PreviewIncomeExpenseScreen() {
-        IncomeExpenseScreen(uiState = IncomeExpenseUiState.EMPTY.copy(
-                incomeUiState = IncomeUiState(
-                    incomeCategoryList = listOf(
-                        mockCategory(1L, "Category1"),
-                        mockCategory(2L, "Category2"),
-                        mockCategory(3L, "Category3"),
-                        mockCategory(4L, "Category4"),
-                        mockCategory(5L, "Category5"),
-                        mockCategory(6L, "Category6"),
-                        mockCategory(7L, "Category7"),
-                        mockCategory(8L, "Category8"),
-                        mockCategory(9L, "Category9"),
-                        mockCategory(10L, "Category10"),
-                        mockCategory(11L, "Category11"),
-                        mockCategory(12L, "Category12"),
-                        mockCategory(13L, "Category13"),
-                        mockCategory(14L, "Category14"),
-                        mockCategory(15L, "Category15"),
-                    ),
-                ),
-                expenseUiState = ExpenseUiState.EMPTY.copy(
-                    expenseInfo = ExpenseInfo(
-                        ableToSpendToday = TransactionSpendingTodayPrice.NORMAL(Price("42", "$")),
-                        wasSpendToday = Price("43", "$", true),
-                        wasSpendInPeriod = Price("44", "$")
-                    )
-                )
+    IncomeExpenseScreen(uiState = IncomeExpenseUiState.EMPTY.copy(
+        incomeUiState = IncomeUiState(
+            incomeCategoryList = listOf(
+                mockCategory(1L, "Category1"),
+                mockCategory(2L, "Category2"),
+                mockCategory(3L, "Category3"),
+                mockCategory(4L, "Category4"),
+                mockCategory(5L, "Category5"),
+                mockCategory(6L, "Category6"),
+                mockCategory(7L, "Category7"),
+                mockCategory(8L, "Category8"),
+                mockCategory(9L, "Category9"),
+                mockCategory(10L, "Category10"),
+                mockCategory(11L, "Category11"),
+                mockCategory(12L, "Category12"),
+                mockCategory(13L, "Category13"),
+                mockCategory(14L, "Category14"),
+                mockCategory(15L, "Category15"),
+            ),
         ),
-            onNumberClicked = {},
-            onCategoryClicked = {},
-            onEditModeChanged = {},
-            onCurrencyClicked = {},
-            onAllCategoryClicked = { _, _ -> },
-            onTransactionClicked = {},
-            onDeleteTransactionConfirmClicked = {}
+        expenseUiState = ExpenseUiState.EMPTY.copy(
+            expenseInfo = ExpenseInfo(
+                ableToSpendToday = TransactionSpendingTodayPrice.NORMAL(Price("42", "$")),
+                wasSpendToday = Price("43", "$", true),
+                wasSpendInPeriod = Price("44", "$")
+            )
         )
+    ),
+        onNumberClicked = {},
+        onCategoryClicked = {},
+        onEditModeChanged = {},
+        onCurrencyClicked = {},
+        onAllCategoryClicked = { _, _ -> },
+        onTransactionClicked = {},
+        onDeleteTransactionConfirmClicked = {}
+    )
 }
 
 private fun mockCategory(id: Long, name: String) = Category.EMPTY_INCOME.copy(
