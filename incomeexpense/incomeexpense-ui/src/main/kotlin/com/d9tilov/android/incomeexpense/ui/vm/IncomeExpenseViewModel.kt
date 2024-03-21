@@ -1,6 +1,5 @@
 package com.d9tilov.android.incomeexpense.ui.vm
 
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,14 +10,11 @@ import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.DataConstants.TAG
-import com.d9tilov.android.core.model.PeriodType
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.KeyPress
 import com.d9tilov.android.core.utils.MainPriceFieldParser
-import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getEndOfDay
-import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.core.utils.isSameDay
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
@@ -42,13 +38,9 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.minus
-import kotlinx.datetime.plus
 import timber.log.Timber
 import java.math.BigDecimal
 import javax.inject.Inject
-import kotlin.random.Random
 
 data class IncomeExpenseUiState(
     val mode: EditMode = EditMode.KEYBOARD,
@@ -348,7 +340,7 @@ class IncomeExpenseViewModel @Inject constructor(
         }
     }
 
-    fun saveIncomeCategories(list: List<Category>) {
+    fun saveRestoredCategories(list: List<Category>) {
         if (!isInit) {
             isInit = true
             viewModelScope.launch(Dispatchers.IO) {

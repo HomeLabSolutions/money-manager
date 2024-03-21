@@ -84,7 +84,9 @@ class BackupManagerImpl @Inject constructor(
         suspendCancellableCoroutine { continuation ->
             if (!isNetworkConnected(context)) continuation.resumeWithException(NetworkException())
             if (uid.isNullOrEmpty()) continuation.resumeWithException(WrongUidException())
+            Timber.tag(TAG).d("Restore DB with uid: $uid")
             val parentPath = "${uid?.normalizePath()}/$DATABASE_NAME"
+            Timber.tag(TAG).d("Restore DB from path: $parentPath")
             val fileRef = Firebase.storage.reference.child(parentPath)
             val localFile = File.createTempFile(DATABASE_NAME, "db")
             fileRef.getFile(localFile).addOnSuccessListener {
@@ -108,7 +110,7 @@ class BackupManagerImpl @Inject constructor(
             }.addOnFailureListener {
                 if (!continuation.isActive) return@addOnFailureListener
                 continuation.resumeWithException(FirebaseException("Restore backup", it))
-                Timber.tag(TAG).d("Restore was complete with error: $it")
+                Timber.tag(TAG).e("Restore was complete with error: $it")
             }
         }
     }
