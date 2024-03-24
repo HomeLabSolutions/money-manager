@@ -41,6 +41,7 @@ class TransactionLocalSource(
         if (currentUserId == null) {
             throw WrongUidException()
         } else {
+            System.out.println("moggot insert: $transaction")
             transactionDao.insert(transaction.copy(clientId = currentUserId).toDbModel())
         }
     }

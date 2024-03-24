@@ -30,7 +30,7 @@ class CategoryDeserializer: JsonDeserializer<Category> {
             icon = icon,
             name = name,
             usageCount = count,
-            type = TransactionType.EXPENSE,
+            type = TransactionType.INCOME,
             children = emptyList(),
             parent = null
         )

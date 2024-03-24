@@ -28,6 +28,7 @@ import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayMode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -311,10 +312,10 @@ class IncomeExpenseViewModel @Inject constructor(
     fun saveIncome(list: List<Transaction2>) {
         if (!isInit) {
             isInit = true
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch {
                 for (item in list) {
                     System.out.println("moggot tr: $item")
-                    launch {
+                    async(Dispatchers.IO) {
                         transactionInteractor.addTransaction(
                             Transaction(
                                 id = item.id,
@@ -334,7 +335,7 @@ class IncomeExpenseViewModel @Inject constructor(
                                 photoUri = null,
                             )
                         )
-                    }
+                    }.await()
                 }
             }
         }
