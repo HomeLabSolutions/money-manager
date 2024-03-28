@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="settings_backup_delete_title">Delete backup?</string>
-    <string name="settings_backup_deleted">Backup file was deleted</string>
-    <string name="settings_backup_error">Backup error</string>
-    <string name="settings_backup_file_not_found_error">File not found</string>
-    <string name="settings_backup_network_error">Network error</string>
-    <string name="settings_backup_user_error">Unknown user error</string>
-</resources>

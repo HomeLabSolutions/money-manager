@@ -1,6 +1,0 @@
-int string settings_backup_delete_title 0x0
-int string settings_backup_deleted 0x0
-int string settings_backup_error 0x0
-int string settings_backup_file_not_found_error 0x0
-int string settings_backup_network_error 0x0
-int string settings_backup_user_error 0x0
