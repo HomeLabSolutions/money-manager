@@ -1,0 +1,210 @@
+[
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/btn_radio_to_off_mtrl_ring_outer_animation.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/btn_radio_to_off_mtrl_ring_outer_animation.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/design_snackbar_out.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/anim/design_snackbar_out.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/btn_radio_to_on_mtrl_dot_group_animation.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/btn_radio_to_on_mtrl_dot_group_animation.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/abc_grow_fade_in_from_bottom.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/abc_grow_fade_in_from_bottom.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/slide_up_enter.xml",
+        "source": "com.d9tilov.android.incomeexpense-packaged_res-104:/anim/slide_up_enter.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/abc_popup_exit.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/abc_popup_exit.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/abc_slide_in_top.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/abc_slide_in_top.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/abc_popup_enter.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/abc_popup_enter.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/linear_indeterminate_line2_head_interpolator.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/anim/linear_indeterminate_line2_head_interpolator.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/abc_slide_in_bottom.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/abc_slide_in_bottom.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/abc_slide_out_bottom.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/abc_slide_out_bottom.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/btn_radio_to_on_mtrl_ring_outer_animation.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/btn_radio_to_on_mtrl_ring_outer_animation.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/fade_out.xml",
+        "source": "com.d9tilov.android.incomeexpense-packaged_res-104:/anim/fade_out.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/nav_default_pop_exit_anim.xml",
+        "source": "com.d9tilov.android.incomeexpense-navigation-ui-2.6.0-71:/anim/nav_default_pop_exit_anim.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/slide_right_exit.xml",
+        "source": "com.d9tilov.android.incomeexpense-packaged_res-104:/anim/slide_right_exit.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/slide_left_exit.xml",
+        "source": "com.d9tilov.android.incomeexpense-packaged_res-104:/anim/slide_left_exit.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/abc_slide_out_top.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/abc_slide_out_top.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/m3_motion_fade_exit.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/anim/m3_motion_fade_exit.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/btn_checkbox_to_unchecked_icon_null_animation.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/btn_checkbox_to_unchecked_icon_null_animation.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/nav_default_pop_enter_anim.xml",
+        "source": "com.d9tilov.android.incomeexpense-navigation-ui-2.6.0-71:/anim/nav_default_pop_enter_anim.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/slide_down_enter.xml",
+        "source": "com.d9tilov.android.incomeexpense-packaged_res-104:/anim/slide_down_enter.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/abc_shrink_fade_out_from_bottom.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/abc_shrink_fade_out_from_bottom.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/btn_radio_to_on_mtrl_ring_outer_path_animation.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/btn_radio_to_on_mtrl_ring_outer_path_animation.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/animation_shake_infitite.xml",
+        "source": "com.d9tilov.android.incomeexpense-packaged_res-100:/anim/animation_shake_infitite.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/abc_tooltip_exit.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/abc_tooltip_exit.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/btn_checkbox_to_unchecked_box_inner_merged_animation.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/btn_checkbox_to_unchecked_box_inner_merged_animation.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/animation_shake.xml",
+        "source": "com.d9tilov.android.incomeexpense-packaged_res-104:/anim/animation_shake.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/fade_in.xml",
+        "source": "com.d9tilov.android.incomeexpense-packaged_res-104:/anim/fade_in.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/slide_up_exit.xml",
+        "source": "com.d9tilov.android.incomeexpense-packaged_res-104:/anim/slide_up_exit.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/linear_indeterminate_line1_tail_interpolator.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/anim/linear_indeterminate_line1_tail_interpolator.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/slide_left_enter.xml",
+        "source": "com.d9tilov.android.incomeexpense-packaged_res-104:/anim/slide_left_enter.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/slide_down_exit.xml",
+        "source": "com.d9tilov.android.incomeexpense-packaged_res-104:/anim/slide_down_exit.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/btn_checkbox_to_unchecked_check_path_merged_animation.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/btn_checkbox_to_unchecked_check_path_merged_animation.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/nav_default_enter_anim.xml",
+        "source": "com.d9tilov.android.incomeexpense-navigation-ui-2.6.0-71:/anim/nav_default_enter_anim.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/nav_default_exit_anim.xml",
+        "source": "com.d9tilov.android.incomeexpense-navigation-ui-2.6.0-71:/anim/nav_default_exit_anim.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/linear_indeterminate_line2_tail_interpolator.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/anim/linear_indeterminate_line2_tail_interpolator.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/abc_fade_out.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/abc_fade_out.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/btn_checkbox_to_checked_box_outer_merged_animation.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/btn_checkbox_to_checked_box_outer_merged_animation.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/fui_slide_out_left.xml",
+        "source": "com.d9tilov.android.incomeexpense-jetified-firebase-ui-auth-8.0.2-90:/anim/fui_slide_out_left.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/btn_radio_to_off_mtrl_ring_outer_path_animation.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/btn_radio_to_off_mtrl_ring_outer_path_animation.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/btn_radio_to_off_mtrl_dot_group_animation.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/btn_radio_to_off_mtrl_dot_group_animation.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/fui_slide_in_right.xml",
+        "source": "com.d9tilov.android.incomeexpense-jetified-firebase-ui-auth-8.0.2-90:/anim/fui_slide_in_right.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/btn_checkbox_to_checked_box_inner_merged_animation.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/btn_checkbox_to_checked_box_inner_merged_animation.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/btn_checkbox_to_checked_icon_null_animation.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/btn_checkbox_to_checked_icon_null_animation.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/rotate.xml",
+        "source": "com.d9tilov.android.incomeexpense-packaged_res-104:/anim/rotate.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/slide_right_enter.xml",
+        "source": "com.d9tilov.android.incomeexpense-packaged_res-104:/anim/slide_right_enter.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/design_snackbar_in.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/anim/design_snackbar_in.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/abc_tooltip_enter.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/abc_tooltip_enter.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/abc_fade_in.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/anim/abc_fade_in.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/m3_motion_fade_enter.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/anim/m3_motion_fade_enter.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/linear_indeterminate_line1_head_interpolator.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/anim/linear_indeterminate_line1_head_interpolator.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/anim/mtrl_card_lowers_interpolator.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/anim/mtrl_card_lowers_interpolator.xml"
+    }
+]

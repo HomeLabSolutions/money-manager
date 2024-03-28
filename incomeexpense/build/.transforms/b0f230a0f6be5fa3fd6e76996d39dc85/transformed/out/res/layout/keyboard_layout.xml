@@ -1,0 +1,245 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.d9tilov.android.incomeexpense.keyboard.PinKeyboard
+        android:id="@+id/pin_keyboard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.d9tilov.android.incomeexpense.keyboard.PinButton
+                android:id="@+id/keyboard_pin_1"
+                android:layout_width="@dimen/pin_button_width"
+                android:layout_height="@dimen/pin_button_height"
+                android:layout_marginTop="@dimen/pin_button_margin_height"
+                android:layout_marginEnd="@dimen/pin_button_margin_width"
+                android:layout_marginBottom="@dimen/pin_button_margin_height"
+                android:background="?selectableItemBackgroundBorderless">
+
+                <TextView
+                    style="@style/Widget.MoneyManager.TextView.Keyboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_1" />
+            </com.d9tilov.android.incomeexpense.keyboard.PinButton>
+
+            <com.d9tilov.android.incomeexpense.keyboard.PinButton
+                android:id="@+id/keyboard_pin_2"
+                android:layout_width="@dimen/pin_button_width"
+                android:layout_height="@dimen/pin_button_height"
+                android:layout_marginStart="@dimen/pin_button_margin_width"
+                android:layout_marginTop="@dimen/pin_button_margin_height"
+                android:layout_marginEnd="@dimen/pin_button_margin_width"
+                android:layout_marginBottom="@dimen/pin_button_margin_height"
+                android:background="?selectableItemBackgroundBorderless">
+
+                <TextView
+                    style="@style/Widget.MoneyManager.TextView.Keyboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_2" />
+            </com.d9tilov.android.incomeexpense.keyboard.PinButton>
+
+            <com.d9tilov.android.incomeexpense.keyboard.PinButton
+                android:id="@+id/keyboard_pin_3"
+                android:layout_width="@dimen/pin_button_width"
+                android:layout_height="@dimen/pin_button_height"
+                android:layout_marginStart="@dimen/pin_button_margin_width"
+                android:layout_marginTop="@dimen/pin_button_margin_height"
+                android:layout_marginBottom="@dimen/pin_button_margin_height"
+                android:background="?selectableItemBackgroundBorderless">
+
+                <TextView
+                    style="@style/Widget.MoneyManager.TextView.Keyboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_3" />
+            </com.d9tilov.android.incomeexpense.keyboard.PinButton>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.d9tilov.android.incomeexpense.keyboard.PinButton
+                android:id="@+id/keyboard_pin_4"
+                android:layout_width="@dimen/pin_button_width"
+                android:layout_height="@dimen/pin_button_height"
+                android:layout_marginTop="@dimen/pin_button_margin_height"
+                android:layout_marginEnd="@dimen/pin_button_margin_width"
+                android:layout_marginBottom="@dimen/pin_button_margin_height"
+                android:background="?selectableItemBackgroundBorderless">
+
+                <TextView
+                    style="@style/Widget.MoneyManager.TextView.Keyboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_4" />
+            </com.d9tilov.android.incomeexpense.keyboard.PinButton>
+
+            <com.d9tilov.android.incomeexpense.keyboard.PinButton
+                android:id="@+id/keyboard_pin_5"
+                android:layout_width="@dimen/pin_button_width"
+                android:layout_height="@dimen/pin_button_height"
+                android:layout_marginStart="@dimen/pin_button_margin_width"
+                android:layout_marginTop="@dimen/pin_button_margin_height"
+                android:layout_marginEnd="@dimen/pin_button_margin_width"
+                android:layout_marginBottom="@dimen/pin_button_margin_height"
+                android:background="?selectableItemBackgroundBorderless">
+
+                <TextView
+                    style="@style/Widget.MoneyManager.TextView.Keyboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_5" />
+            </com.d9tilov.android.incomeexpense.keyboard.PinButton>
+
+            <com.d9tilov.android.incomeexpense.keyboard.PinButton
+                android:id="@+id/keyboard_pin_6"
+                android:layout_width="@dimen/pin_button_width"
+                android:layout_height="@dimen/pin_button_height"
+                android:layout_marginStart="@dimen/pin_button_margin_width"
+                android:layout_marginTop="@dimen/pin_button_margin_height"
+                android:layout_marginBottom="@dimen/pin_button_margin_height"
+                android:background="?selectableItemBackgroundBorderless">
+
+                <TextView
+                    style="@style/Widget.MoneyManager.TextView.Keyboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_6" />
+            </com.d9tilov.android.incomeexpense.keyboard.PinButton>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.d9tilov.android.incomeexpense.keyboard.PinButton
+                android:id="@+id/keyboard_pin_7"
+                android:layout_width="@dimen/pin_button_width"
+                android:layout_height="@dimen/pin_button_height"
+                android:layout_marginTop="@dimen/pin_button_margin_height"
+                android:layout_marginEnd="@dimen/pin_button_margin_width"
+                android:layout_marginBottom="@dimen/pin_button_margin_height"
+                android:background="?selectableItemBackgroundBorderless">
+
+                <TextView
+                    style="@style/Widget.MoneyManager.TextView.Keyboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_7" />
+            </com.d9tilov.android.incomeexpense.keyboard.PinButton>
+
+            <com.d9tilov.android.incomeexpense.keyboard.PinButton
+                android:id="@+id/keyboard_pin_8"
+                android:layout_width="@dimen/pin_button_width"
+                android:layout_height="@dimen/pin_button_height"
+                android:layout_marginStart="@dimen/pin_button_margin_width"
+                android:layout_marginTop="@dimen/pin_button_margin_height"
+                android:layout_marginEnd="@dimen/pin_button_margin_width"
+                android:layout_marginBottom="@dimen/pin_button_margin_height"
+                android:background="?selectableItemBackgroundBorderless">
+
+                <TextView
+                    style="@style/Widget.MoneyManager.TextView.Keyboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_8" />
+            </com.d9tilov.android.incomeexpense.keyboard.PinButton>
+
+            <com.d9tilov.android.incomeexpense.keyboard.PinButton
+                android:id="@+id/keyboard_pin_9"
+                android:layout_width="@dimen/pin_button_width"
+                android:layout_height="@dimen/pin_button_height"
+                android:layout_marginStart="@dimen/pin_button_margin_width"
+                android:layout_marginTop="@dimen/pin_button_margin_height"
+                android:layout_marginBottom="@dimen/pin_button_margin_height"
+                android:background="?selectableItemBackgroundBorderless">
+
+                <TextView
+                    style="@style/Widget.MoneyManager.TextView.Keyboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_9" />
+            </com.d9tilov.android.incomeexpense.keyboard.PinButton>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.d9tilov.android.incomeexpense.keyboard.PinButton
+                android:id="@+id/keyboard_pin_dot"
+                android:layout_width="@dimen/pin_button_width"
+                android:layout_height="@dimen/pin_button_height"
+                android:layout_marginTop="@dimen/pin_button_margin_height"
+                android:layout_marginEnd="@dimen/pin_button_margin_width"
+                android:layout_marginBottom="@dimen/pin_button_margin_height"
+                android:background="?selectableItemBackgroundBorderless">
+
+                <TextView
+                    style="@style/Widget.MoneyManager.TextView.Keyboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_dot" />
+            </com.d9tilov.android.incomeexpense.keyboard.PinButton>
+
+            <com.d9tilov.android.incomeexpense.keyboard.PinButton
+                android:id="@+id/keyboard_pin_0"
+                android:layout_width="@dimen/pin_button_width"
+                android:layout_height="@dimen/pin_button_height"
+                android:layout_marginStart="@dimen/pin_button_margin_width"
+                android:layout_marginTop="@dimen/pin_button_margin_height"
+                android:layout_marginEnd="@dimen/pin_button_margin_width"
+                android:layout_marginBottom="@dimen/pin_button_margin_height"
+                android:background="?selectableItemBackgroundBorderless">
+
+                <TextView
+                    style="@style/Widget.MoneyManager.TextView.Keyboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_0" />
+            </com.d9tilov.android.incomeexpense.keyboard.PinButton>
+
+            <com.d9tilov.android.incomeexpense.keyboard.PinButton
+                android:id="@+id/keyboard_pin_remove"
+                android:layout_width="@dimen/pin_button_width"
+                android:layout_height="@dimen/pin_button_height"
+                android:layout_marginStart="@dimen/pin_button_margin_width"
+                android:layout_marginTop="@dimen/pin_button_margin_height"
+                android:layout_marginBottom="@dimen/pin_button_margin_height"
+                android:background="?selectableItemBackgroundBorderless">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/ic_backspace"
+                    android:duplicateParentState="true" />
+            </com.d9tilov.android.incomeexpense.keyboard.PinButton>
+        </TableRow>
+    </com.d9tilov.android.incomeexpense.keyboard.PinKeyboard>
+
+    <ImageView
+        android:id="@+id/btn_hide_keyboard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_keyboard_hide"
+        android:padding="16dp"
+        android:background="?selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="@+id/pin_keyboard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/pin_keyboard" />
+</androidx.constraintlayout.widget.ConstraintLayout>

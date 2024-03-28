@@ -1,0 +1,25 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /home/toor/android/projects/money-manager2/incomeexpense/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest11754783165847308819.xml:2:13-83
+INJECTED from /home/toor/android/projects/money-manager2/incomeexpense/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest11754783165847308819.xml:2:13-83
+INJECTED from /home/toor/android/projects/money-manager2/incomeexpense/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest11754783165847308819.xml:2:13-83
+	package
+		INJECTED from /home/toor/android/projects/money-manager2/incomeexpense/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest11754783165847308819.xml
+		ADDED from /home/toor/android/projects/money-manager2/incomeexpense/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest11754783165847308819.xml:2:13-83
+		INJECTED from /home/toor/android/projects/money-manager2/incomeexpense/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest11754783165847308819.xml
+	xmlns:android
+		ADDED from /home/toor/android/projects/money-manager2/incomeexpense/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest11754783165847308819.xml:2:23-81
+uses-sdk
+INJECTED from /home/toor/android/projects/money-manager2/incomeexpense/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest11754783165847308819.xml reason: use-sdk injection requested
+INJECTED from /home/toor/android/projects/money-manager2/incomeexpense/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest11754783165847308819.xml
+INJECTED from /home/toor/android/projects/money-manager2/incomeexpense/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest11754783165847308819.xml
+INJECTED from /home/toor/android/projects/money-manager2/incomeexpense/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest11754783165847308819.xml
+INJECTED from /home/toor/android/projects/money-manager2/incomeexpense/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest11754783165847308819.xml
+	android:targetSdkVersion
+		INJECTED from /home/toor/android/projects/money-manager2/incomeexpense/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest11754783165847308819.xml
+		ADDED from /home/toor/android/projects/money-manager2/incomeexpense/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest11754783165847308819.xml
+		INJECTED from /home/toor/android/projects/money-manager2/incomeexpense/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest11754783165847308819.xml
+	android:minSdkVersion
+		INJECTED from /home/toor/android/projects/money-manager2/incomeexpense/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest11754783165847308819.xml
+		ADDED from /home/toor/android/projects/money-manager2/incomeexpense/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest11754783165847308819.xml
+		INJECTED from /home/toor/android/projects/money-manager2/incomeexpense/build/intermediates/tmp/ProcessLibraryManifest/release/tempAndroidManifest11754783165847308819.xml

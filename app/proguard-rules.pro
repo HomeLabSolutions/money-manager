@@ -33,9 +33,9 @@
   *** rewind();
 }
 
--keep class com.d9tilov.moneymanager.billing.domain.entity.** { *; }
--keepclassmembers class com.d9tilov.moneymanager.billing.domain.entity.** { *; }
--keepnames @kotlin.Metadata class com.d9tilov.moneymanager.billing.domain.entity.** { *; }
+-keep class com.d9tilov.android.billing.domain.model.** { *; }
+-keepclassmembers class com.d9tilov.android.billing.domain.model.** { *; }
+-keepnames @kotlin.Metadata class com.d9tilov.android.billing.domain.model.** { *; }
 
 -keep class com.d9tilov.moneymanager.backup.data.entity.** { *; }
 -keepclassmembers class com.d9tilov.moneymanager.backup.data.entity.** { *; }
@@ -106,6 +106,9 @@
 
 -keepattributes *Annotation*
 -keepnames class * extends android.os.Parcelable
+-keep class * implements android.os.Parcelable {
+     public static final android.os.Parcelable$Creator *;
+ }
 -keepnames class * extends java.io.Serializable
 -keep class persistence.** {
   *;
@@ -130,10 +133,6 @@
 -keep class kotlin.reflect.jvm.internal.** { *; }
 
 -keep interface javax.annotation.Nullable
-
--keep class com.google.android.gms.** { *; }
--dontwarn com.google.android.gms.*
--keep class com.google.api.client.** {*;}
 
 -dontwarn android.arch.util.paging.CountedDataSource
 -dontwarn android.arch.persistence.room.paging.LimitOffsetDataSource
