@@ -13,14 +13,12 @@ buildscript {
         classpath(libs.hiltPlugin)
         classpath(libs.firebaseCrashlyticsPlgin)
         classpath(libs.detektPlugin)
-        classpath(libs.ktlintPlugin)
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
 allprojects {
-    apply(plugin = "org.jlleitschuh.gradle.ktlint")
     repositories {
         google()
         mavenCentral()

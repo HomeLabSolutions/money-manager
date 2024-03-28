@@ -21,6 +21,7 @@
     <string name="settings_backup_empty">Резервная копия еще не создавалась</string>
     <string name="settings_start_period_day_error">День должен быть в интервале от 1 до 31</string>
     <string name="settings_subscription_premium_min_price">от %1$s%2$s %3$s</string>
+    <string name="settings_privacy_policy"><a href="https://pages.flycricket.io/moneymanager-0/privacy.html">Политика конфиденциальности</a></string>
 
     <string name="profile_item_goals_title">Цели: %1$s</string>
     <string name="profile_item_current_currency_title">текущий</string>

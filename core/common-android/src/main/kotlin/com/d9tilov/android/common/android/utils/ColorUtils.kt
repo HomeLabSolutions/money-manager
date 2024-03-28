@@ -2,9 +2,7 @@ package com.d9tilov.android.common.android.utils // ktlint-disable filename
 
 import android.content.Context
 import android.util.TypedValue
-import android.widget.TextView
 import androidx.annotation.AttrRes
-import androidx.core.widget.TextViewCompat
 
 fun Context.getColorFromAttr(
     @AttrRes attrColor: Int,
