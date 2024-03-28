@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/created_regular_transaction_toolbar_container"
+        layout="@layout/common_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/created_regular_transaction_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true">
+
+            <TextView
+                android:id="@+id/created_regular_transaction_main_sum_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_large"
+                android:layout_marginTop="16dp"
+                android:textAppearance="?attr/textAppearanceTitleLarge"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/created_regular_transaction_main_sum"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/padding_large"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/created_regular_transaction_main_sum_title"
+                app:layout_constraintTop_toBottomOf="@+id/created_regular_transaction_main_sum_title"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/created_regular_transaction_category_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="@dimen/padding_large"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/created_regular_transaction_main_sum_title"
+                app:layout_constraintTop_toBottomOf="@+id/created_regular_transaction_main_sum">
+
+                <TextView
+                    android:id="@+id/created_regular_transaction_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:drawablePadding="@dimen/padding_medium"
+                    android:ellipsize="end"
+                    android:gravity="start|center_vertical"
+                    android:maxLines="1"
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:drawableStartCompat="@drawable/ic_category_expense_food"
+                    tools:text="@string/regular_transaction_choose_category" />
+
+                <ImageView
+                    android:id="@+id/created_regular_transaction_category_arrow"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="8dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/created_regular_transaction_category"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/created_regular_transaction_category"
+                    app:srcCompat="@drawable/ic_arrow_forward"
+                    app:tint="?attr/colorPrimary"
+                    tools:visibility="visible" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:id="@+id/created_regular_transaction_repeat_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_repeat"
+                app:layout_constraintBottom_toBottomOf="@+id/created_regular_transaction_repeat_title"
+                app:layout_constraintStart_toStartOf="@+id/created_regular_transaction_category_layout"
+                app:layout_constraintTop_toTopOf="@+id/created_regular_transaction_repeat_title" />
+
+            <TextView
+                android:id="@+id/created_regular_transaction_repeat_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="44dp"
+                android:text="@string/regular_transaction_repeat_title"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                app:layout_constraintStart_toEndOf="@+id/created_regular_transaction_repeat_icon"
+                app:layout_constraintTop_toBottomOf="@+id/created_regular_transaction_category_layout" />
+
+            <Spinner
+                android:id="@+id/created_regular_transaction_repeat_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:entries="@array/regular_transaction_repeat_list"
+                app:layout_constraintBottom_toBottomOf="@+id/created_regular_transaction_repeat_title"
+                app:layout_constraintStart_toEndOf="@+id/created_regular_transaction_repeat_title"
+                app:layout_constraintTop_toTopOf="@+id/created_regular_transaction_repeat_title" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/created_regular_transaction_week_selector"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/created_regular_transaction_repeat_spinner"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/created_regular_transaction_sunday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:text="@string/regular_transaction_repeat_sunday_short"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/created_regular_transaction_monday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:text="@string/regular_transaction_repeat_monday_short"
+                    app:layout_constraintStart_toEndOf="@+id/created_regular_transaction_sunday"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/created_regular_transaction_tuesday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:text="@string/regular_transaction_repeat_tuesday_short"
+                    app:layout_constraintStart_toEndOf="@+id/created_regular_transaction_monday"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/created_regular_transaction_wednesday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:text="@string/regular_transaction_repeat_wednesday_short"
+                    app:layout_constraintStart_toEndOf="@+id/created_regular_transaction_tuesday"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/created_regular_transaction_thursday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:text="@string/regular_transaction_repeat_thursday_short"
+                    app:layout_constraintStart_toEndOf="@+id/created_regular_transaction_wednesday"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/created_regular_transaction_friday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:text="@string/regular_transaction_repeat_friday_short"
+                    app:layout_constraintStart_toEndOf="@+id/created_regular_transaction_thursday"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/created_regular_transaction_saturday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:text="@string/regular_transaction_repeat_saturday_short"
+                    app:layout_constraintStart_toEndOf="@+id/created_regular_transaction_friday"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/created_regular_transaction_repeat_starts_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/regular_transaction_repeat_next_date_title"
+                android:visibility="invisible"
+                android:textAppearance="?attr/textAppearanceTitleSmall"
+                tools:visibility="visible"
+                android:textColor="?attr/colorSecondary"
+                app:layout_constraintStart_toStartOf="@+id/created_regular_transaction_repeat_title"
+                app:layout_constraintTop_toBottomOf="@+id/created_regular_transaction_week_selector" />
+
+            <TextView
+                android:id="@+id/created_regular_transaction_repeat_starts_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:visibility="invisible"
+                android:textAppearance="?attr/textAppearanceTitleSmall"
+                tools:visibility="visible"
+                android:layout_marginEnd="@dimen/padding_large"
+                android:textColor="?attr/colorSecondary"
+                app:layout_constraintBottom_toBottomOf="@+id/created_regular_transaction_repeat_starts_title"
+                app:layout_constraintStart_toEndOf="@+id/created_regular_transaction_repeat_starts_title"
+                app:layout_constraintTop_toTopOf="@+id/created_regular_transaction_repeat_starts_title"
+                tools:text="27.04.2020" />
+
+            <CheckBox
+                android:id="@+id/created_regular_transaction_notify_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
+                android:text="@string/regular_transaction_notify"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@+id/created_regular_transaction_repeat_icon"
+                app:layout_constraintTop_toBottomOf="@+id/created_regular_transaction_repeat_icon" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/created_regular_transaction_barrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="created_regular_transaction_week_selector, created_regular_transaction_repeat_starts_title" />
+
+            <EditText
+                android:id="@+id/created_regular_transaction_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
+                android:gravity="top"
+                android:importantForAutofill="no"
+                android:inputType="textCapSentences|textMultiLine"
+                android:minHeight="48dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/created_regular_transaction_barrier" />
+
+            <TextView
+                android:id="@+id/created_regular_transaction_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="160dp"
+                android:text="@string/delete"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/created_regular_transaction_description"
+                tools:visibility="visible" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/created_regular_transaction_save"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:text="@string/save"
+        android:layout_marginHorizontal="@dimen/button_margin_horizontal"
+        android:layout_marginVertical="@dimen/button_margin_vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</LinearLayout>

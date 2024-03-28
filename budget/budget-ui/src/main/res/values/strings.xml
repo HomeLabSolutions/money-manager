@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_prepopulate_budget">Current budget</string>
+    <string name="budget_sum_title">Amount</string>
+    <string name="save">Save</string>
+    <string name="budget_date_created">Created: %1$s</string>
+</resources>

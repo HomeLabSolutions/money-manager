@@ -2,25 +2,18 @@ package com.d9tilov.moneymanager
 
 import android.app.Application
 import android.os.StrictMode
-import androidx.hilt.work.HiltWorkerFactory
-import androidx.work.Configuration
+import com.d9tilov.android.currency.data.impl.sync.initializers.Sync
 import com.google.android.material.color.DynamicColors
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import timber.log.Timber.DebugTree
-import javax.inject.Inject
 
 @HiltAndroidApp
-class App : Application(), Configuration.Provider {
-
-    @Inject
-    lateinit var workerFactory: HiltWorkerFactory
+class App : Application(){
 
     override fun onCreate() {
         super.onCreate()
-        DynamicColors.applyToActivitiesIfAvailable(this)
-        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
             val threadPolicy = StrictMode.ThreadPolicy.Builder()
@@ -34,15 +27,8 @@ class App : Application(), Configuration.Provider {
                 .build()
             StrictMode.setVmPolicy(vmPolicy)
         }
-    }
-
-    override fun getWorkManagerConfiguration(): Configuration {
-        return Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .build()
-    }
-
-    companion object {
-        const val TAG = "[MoneyManager]"
+        DynamicColors.applyToActivitiesIfAvailable(this)
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
+        Sync.initialize(this)
     }
 }

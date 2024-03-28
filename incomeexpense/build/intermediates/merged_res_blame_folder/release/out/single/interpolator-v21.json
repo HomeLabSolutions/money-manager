@@ -1,0 +1,42 @@
+[
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/interpolator-v21/m3_sys_motion_easing_standard_decelerate.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/interpolator-v21/m3_sys_motion_easing_standard_decelerate.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/interpolator-v21/m3_sys_motion_easing_emphasized.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/interpolator-v21/m3_sys_motion_easing_emphasized.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/interpolator-v21/mtrl_linear_out_slow_in.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/interpolator-v21/mtrl_linear_out_slow_in.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/interpolator-v21/m3_sys_motion_easing_linear.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/interpolator-v21/m3_sys_motion_easing_linear.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/interpolator-v21/m3_sys_motion_easing_emphasized_decelerate.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/interpolator-v21/m3_sys_motion_easing_emphasized_decelerate.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/interpolator-v21/m3_sys_motion_easing_emphasized_accelerate.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/interpolator-v21/m3_sys_motion_easing_emphasized_accelerate.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/interpolator-v21/m3_sys_motion_easing_standard_accelerate.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/interpolator-v21/m3_sys_motion_easing_standard_accelerate.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/interpolator-v21/mtrl_fast_out_slow_in.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/interpolator-v21/mtrl_fast_out_slow_in.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/interpolator-v21/mtrl_fast_out_linear_in.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/interpolator-v21/mtrl_fast_out_linear_in.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/interpolator-v21/m3_sys_motion_easing_standard.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/interpolator-v21/m3_sys_motion_easing_standard.xml"
+    }
+]

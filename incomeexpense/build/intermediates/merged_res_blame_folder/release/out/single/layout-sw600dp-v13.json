@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/layout-sw600dp-v13/design_layout_snackbar.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/layout-sw600dp-v13/design_layout_snackbar.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/layout-sw600dp-v13/mtrl_layout_snackbar.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/layout-sw600dp-v13/mtrl_layout_snackbar.xml"
+    }
+]

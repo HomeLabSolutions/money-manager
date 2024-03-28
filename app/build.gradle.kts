@@ -2,19 +2,18 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    id("com.android.application")
-    kotlin("android")
-    kotlin("kapt")
+    id("moneymanager.android.application")
+    id("moneymanager.android.hilt")
+    id("moneymanager.android.application.compose")
+    id("kotlin-android")
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
-    id("dagger.hilt.android.plugin")
     id("io.gitlab.arturbosch.detekt")
-    id("com.github.ben-manes.versions")
 }
 
-val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystorePropertiesFile: File = rootProject.file("keystore.properties")
 val keystoreProperties = Properties()
 keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 
@@ -29,23 +28,17 @@ android {
         }
     }
 
-    compileSdk = ConfigData.compileSdkVersion
-    buildToolsVersion = ConfigData.buildToolsVersion
+    namespace = "com.d9tilov.moneymanager"
 
     defaultConfig {
-        applicationId = "com.d9tilov.moneymanager"
-        minSdk = ConfigData.minSdkVersion
-        targetSdk = ConfigData.targetSdkVersion
-        versionCode = ConfigData.versionCode
-        versionName = ConfigData.versionName
 
-        buildConfigField("String", "API_KEY", keystoreProperties["currency_api_key"] as String)
-        buildConfigField("String", "SALT", keystoreProperties["database_salt"] as String)
-        buildConfigField(
-            "String",
-            "BASE64_ENCODED_PUBLIC_KEY",
-            "\"" + keystoreProperties["base64EncodedPublicKey"] as String + "\""
-        )
+        applicationId = "com.d9tilov.moneymanager"
+        val versionMajor: Int by rootProject.extra
+        val versionMinor: Int by rootProject.extra
+        val versionPatch: Int by rootProject.extra
+        val versionBuild: Int by rootProject.extra
+        versionCode = 1000 * (1000 * versionMajor + 100 * versionMinor + versionPatch) + versionBuild
+        versionName = "$versionMajor.$versionMinor.$versionPatch.$versionBuild"
 
         vectorDrawables.useSupportLibrary = true
 
@@ -74,7 +67,7 @@ android {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
             isMinifyEnabled = false
-            manifestPlaceholders["appName"] = "Money Manager1"
+            manifestPlaceholders["appName"] = "Money Manager debug"
         }
     }
 
@@ -84,61 +77,16 @@ android {
     dataBinding {
         isEnabled = true
     }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
-    }
-
-    val ktlint by configurations.creating
-
-    dependencies {
-        ktlint(Deps.ktlint) {
-            attributes {
-                attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
-            }
-        }
-    }
-
-    val outputDir = "${project.buildDir}/reports/ktlint/"
-    val inputFiles = project.fileTree(mapOf("dir" to "src", "include" to "**/*.kt"))
-
-    val ktlintCheck by tasks.creating(JavaExec::class) {
-        inputs.files(inputFiles)
-        outputs.dir(outputDir)
-
-        description = "Check Kotlin code style."
-        classpath = ktlint
-        mainClass.set("com.pinterest.ktlint.Main")
-        args = listOf("src/**/*.kt")
-    }
-
-    val ktlintFormat by tasks.creating(JavaExec::class) {
-        inputs.files(inputFiles)
-        outputs.dir(outputDir)
-
-        description = "Fix Kotlin code style deviations."
-        classpath = ktlint
-        mainClass.set("com.pinterest.ktlint.Main")
-        args = listOf("-F", "src/**/*.kt")
-    }
-
-    packagingOptions {
-        resources {
-            excludes += listOf(
-                "META-INF/DEPENDENCIES",
-                "META-INF/LICENSE",
-                "META-INF/LICENSE.txt",
-                "META-INF/license.txt",
-                "META-INF/NOTICE",
-                "META-INF/NOTICE.txt",
-                "META-INF/notice.txt",
-                "META-INF/ASL2.0"
-            )
+    configure<com.android.build.gradle.BaseExtension> {
+        packagingOptions {
+            exclude("META-INF/DEPENDENCIES")
+            exclude("META-INF/LICENSE")
+            exclude("META-INF/LICENSE.txt")
+            exclude("META-INF/license.txt")
+            exclude("META-INF/NOTICE")
+            exclude("META-INF/NOTICE.txt")
+            exclude("META-INF/notice.txt")
+            exclude("META-INF/ASL2.0")
         }
     }
 
@@ -152,82 +100,81 @@ android {
         aaptOptions.cruncherEnabled = false
     }
 
-}
-
-repositories {
-    maven(url = "https://jitpack.io")
+    tasks.getByPath("detekt").onlyIf { gradle.startParameter.taskNames.contains("detekt") }
 }
 
 dependencies {
 
-    implementation(Deps.kotlinJdk)
-    implementation(Deps.kotlinDatetime)
+    implementation(project(":core:common"))
+    implementation(project(":core:common-android"))
+    implementation(project(":core:designsystem"))
+    implementation(project(":core:datastore"))
+    implementation(project(":core:network"))
 
-    implementation(Deps.appCompat)
-    implementation(Deps.material)
-    implementation(Deps.core)
-    implementation(Deps.coreRuntime)
-    implementation(Deps.constraintLayout)
+    implementation(project(":transaction:transaction-domain:transaction-domain-contract"))
+    implementation(project(":transaction:transaction-domain:transaction-domain-model"))
+    implementation(project(":transaction:transaction-ui"))
 
-    implementation(Deps.fragment)
+    implementation(project(":currency:currency-data:currency-data-impl"))
+    implementation(project(":currency:currency-domain:currency-domain-model"))
+    implementation(project(":currency:currency-domain:currency-domain-contract"))
+    implementation(project(":currency:currency-observer:currency-observer-contract"))
 
-    implementation(Deps.retrofit)
-    implementation(Deps.retrofitMoshi)
+    implementation(project(":backup:backup-domain:backup-domain-contract"))
+    implementation(project(":backup:backup-di"))
 
-    implementation(Deps.firebase)
-    implementation(platform(Deps.firebaseBom))
-    implementation(Deps.firebaseUi)
-    implementation(Deps.googlePlayServicesAuth)
+    implementation(project(":user-info:user-domain:user-domain-model"))
+    implementation(project(":user-info:user-domain:user-domain-contract"))
+    implementation(project(":user-info:user-data:user-data-impl"))
+    implementation(project(":user-info:user-di"))
 
-    implementation(Deps.firebaseAnalytics)
-    implementation(Deps.firebaseCrashlytics)
-    implementation(Deps.firebaseStorage)
-    implementation(Deps.firebaseConfig)
+    implementation(project(":budget:budget-domain:budget-domain-model"))
+    implementation(project(":budget:budget-domain:budget-domain-contract"))
 
-    implementation(Deps.hilt)
-    kapt(Deps.hiltCompiler)
-    kapt(Deps.hiltAndroidCompiler)
+    implementation(project(":billing:billing-domain:billing-domain-contract"))
 
-    implementation(Deps.navigation)
-    implementation(Deps.navigationUi)
+    implementation(project(":category:category-domain:category-domain-contract"))
+    implementation(project(":category:category-domain:category-domain-model"))
+    implementation(project(":category:category-ui"))
 
-    implementation(Deps.datastore)
+    implementation(project(":budget:budget-ui"))
+    implementation(project(":currency:currency-ui"))
+    implementation(project(":incomeexpense:incomeexpense-ui"))
+    implementation(project(":statistics:statistics-ui"))
+    implementation(project(":transaction:regular-transaction-ui"))
+    implementation(project(":profile:profile-ui"))
+    implementation(project(":settings:settings-ui"))
 
-    implementation(Deps.okHttp)
-    implementation(Deps.okHttpInterceptor)
+    implementation(libs.appCompat)
+    implementation(libs.material)
+    implementation(libs.navigation)
+    implementation(libs.activity)
 
-    implementation(Deps.splashScreen)
+    implementation(libs.firebase)
+    implementation(libs.firebaseUi)
+    implementation(libs.googlePlayServicesAuth)
+    implementation(libs.firebaseAnalytics)
+    implementation(platform(libs.firebaseBom))
+    implementation(libs.firebaseCrashlytics)
+    implementation(libs.firebaseStorage)
+    implementation(libs.firebaseConfig)
 
-    implementation(Deps.glide)
-    annotationProcessor(Deps.glideCompiler)
+    implementation(libs.composeUi)
+    implementation(libs.composeViewModel)
+    implementation(libs.composeMaterial3)
+    implementation(libs.composeMaterial3WindowSize)
+    implementation(libs.composeFoundation)
+    implementation(libs.composeToolingPreview)
+    implementation(libs.hiltNavigationCompose)
+    implementation(libs.composeMaterialIconsCore)
+    implementation(libs.composeMaterialIconsExtended)
+    implementation(libs.composeRuntime)
+    implementation(libs.accompanistPagerIndicator)
 
-    implementation(Deps.paging)
-    implementation(Deps.roomRuntime)
-    implementation(Deps.room)
-    implementation(Deps.roomPaging)
-    kapt(Deps.roomCompiler)
+    implementation(libs.androidx.tracing.ktx)
 
-    implementation(Deps.sql)
-    implementation(Deps.sqlCipher)
+    implementation(libs.timber)
+    implementation(libs.serializationKotlin)
 
-    implementation(Deps.viewpager)
-
-    implementation(Deps.coroutinesCore)
-
-    implementation(Deps.lifecycle)
-    implementation(Deps.lifecycleRuntime)
-    implementation(Deps.lifecycleExtension)
-    implementation(Deps.lifecycleCommon)
-    implementation(Deps.lifecycleViewModel)
-
-    implementation(Deps.worker)
-    implementation(Deps.workerHilt)
-
-    implementation(Deps.klaxon)
-    implementation(Deps.timber)
-
-    implementation(Deps.billing)
-
-    implementation(Deps.androidChart)
-    implementation(Deps.dotsIndicator)
+    implementation(libs.splashScreen)
 }

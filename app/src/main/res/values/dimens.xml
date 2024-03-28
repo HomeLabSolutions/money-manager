@@ -13,68 +13,24 @@
     <dimen name="button_text_size">16sp</dimen>
     <dimen name="button_elevation">8dp</dimen>
     <dimen name="caption_text_size">14sp</dimen>
-    <dimen name="overline_text_size">12sp</dimen>
 
     <dimen name="dialog_title_text_size">18sp</dimen>
     <dimen name="dialog_subtitle_text_size">16sp</dimen>
 
-    <dimen name="label_text_size">16sp</dimen>
-
-    <dimen name="currency_sum_extra_big_text_size">96sp</dimen>
-    <dimen name="currency_sign_extra_big_text_size">50sp</dimen>
-    <dimen name="currency_sum_big_text_size">60sp</dimen>
-    <dimen name="currency_sign_big_text_size">32sp</dimen>
-    <dimen name="currency_sum_medium_text_size">34sp</dimen>
-    <dimen name="currency_sign_medium_text_size">18sp</dimen>
-    <dimen name="currency_sum_small_text_size">24sp</dimen>
-    <dimen name="currency_sign_small_text_size">14sp</dimen>
-    <dimen name="currency_extra_small_text_size">14sp</dimen>
-    <dimen name="currency_sign_extra_small_text_size">10sp</dimen>
-    <dimen name="currency_margin_between_currency_symbol">2dp</dimen>
-    <dimen name="currency_sum_text_size">84sp</dimen>
-    <dimen name="currency_sign_text_size">50sp</dimen>
-
-    <dimen name="standard_top_margin">16dp</dimen>
-    <dimen name="standard_bottom_margin">16dp</dimen>
-    <dimen name="standard_left_margin">32dp</dimen>
-    <dimen name="standard_half_left_margin">16dp</dimen>
-    <dimen name="standard_right_margin">32dp</dimen>
-    <dimen name="standard_half_right_margin">16dp</dimen>
-    <dimen name="standard_padding">16dp</dimen>
-    <dimen name="standard_margin">16dp</dimen>
-    <dimen name="card_view_corner_radius">16dp</dimen>
-
-    <dimen name="recycler_view_category_offset">4dp</dimen>
-    <dimen name="recycler_view_regular_category_margin">16dp</dimen>
-
-    <dimen name="category_item_size">80dp</dimen>
-    <dimen name="category_item_icon_size">48dp</dimen>
-    <dimen name="category_item_icon_round_size">64dp</dimen>
     <dimen name="category_item_name_text_size">14sp</dimen>
     <dimen name="category_item_name_parent_text_size">12sp</dimen>
-    <dimen name="statistics_item_group_icon_min_height">60dp</dimen>
+
     <dimen name="statistics_item_group_icon_text_size">16sp</dimen>
     <dimen name="category_creation_name_text_size">24sp</dimen>
-    <dimen name="category_creation_icon_size">48dp</dimen>
 
     <dimen name="button_margin_horizontal">16dp</dimen>
     <dimen name="button_margin_vertical">8dp</dimen>
-    <dimen name="button_height">56dp</dimen>
     <dimen name="button_prepopulate_height">36dp</dimen>
 
-    <dimen name="transaction_sum_title_text_size">12sp</dimen>
-    <dimen name="transaction_meta_icon_size">12dp</dimen>
-
-    <dimen name="regular_transaction_item_title_text_size">24sp</dimen>
-    <dimen name="regular_transaction_item_description_text_size">12sp</dimen>
-
-    <dimen name="item_color_picker_size_wrapper">48dp</dimen>
-    <dimen name="item_color_picker_size">32dp</dimen>
     <dimen name="item_weekday_size">36dp</dimen>
 
     //It is a TextView
     <dimen name="currency_icon_size">30sp</dimen>
-    <dimen name="goal_progress_line_bar_width">32dp</dimen>
     <dimen name="goal_progress_percent_text_size">10sp</dimen>
     <dimen name="goal_value_text_size">12sp</dimen>
     <dimen name="goal_period_save_value_text_size">54sp</dimen>
@@ -85,50 +41,11 @@
     // for floating button
     <dimen name="design_fab_image_size" tools:override="true">56dp</dimen>
 
-    <dimen name="profile_item_height">64dp</dimen>
     <dimen name="profile_item_text_size">18sp</dimen>
     <dimen name="profile_item_text_subtitle_size">12sp</dimen>
 
-    <dimen name="budget_created_date">12sp</dimen>
-
-    //keyboard
-    <dimen name="pin_button_width">56dp</dimen>
-    <dimen name="pin_button_height">56dp</dimen>
-    <dimen name="pin_button_margin_width">24dp</dimen>
-    <dimen name="pin_button_margin_height">0dp</dimen>
-    <dimen name="pin_text_size">32sp</dimen>
-
-    <dimen name="statistics_padding_vertical">8dp</dimen>
-    <dimen name="statistics_padding_horizontal">0dp</dimen>
-    <dimen name="statistics_period_width">72dp</dimen>
-    <dimen name="statistics_period_text_size">12sp</dimen>
-    <dimen name="statistics_item_icon_size">32dp</dimen>
-    <dimen name="statistics_item_text_size">16sp</dimen>
-    <dimen name="statistics_item_min_height">60dp</dimen>
-    <dimen name="statistics_bar_chart_sum_text_size">20sp</dimen>
-    <dimen name="statistics_bar_chart_sign_text_size">12sp</dimen>
-    <dimen name="statistics_spent_in_period">16sp</dimen>
-    <dimen name="statistics_spent_in_period_sum">16sp</dimen>
-    <dimen name="statistics_spent_in_period_sign">12sp</dimen>
-    <dimen name="statistics_menu_item_height">56dp</dimen>
-    <dimen name="statistics_menu_item_width">72dp</dimen>
-    <dimen name="statistics_menu_item_icon_size">32dp</dimen>
-    <dimen name="statistics_menu_item_text_size">12sp</dimen>
-    <dimen name="statistics_currency_icon_size">25sp</dimen>
-    <dimen name="statistics_details_date_text_size">10sp</dimen>
-
-    <dimen name="income_expense_info_sum_text_size">16sp</dimen>
-    <dimen name="income_expense_info_sign_text_size">10sp</dimen>
-    <dimen name="income_expense_name_text_size">20sp</dimen>
-    <dimen name="income_expense_name_description_text_size">12sp</dimen>
-
-    <dimen name="settings_subscription_card_min_height">64dp</dimen>
+    <dimen name="settings_subscription_card_min_height">100dp</dimen>
     <dimen name="settings_subscription_icon_size">64dp</dimen>
     <dimen name="settings_subscription_title_text_size">20sp</dimen>
     <dimen name="settings_subscription_price_text_size">14sp</dimen>
-
-    <dimen name="billing_subscription_title_text_size">20sp</dimen>
-    <dimen name="billing_subscription_radio_button_text_size">16sp</dimen>
-    <dimen name="billing_premium_label_text_size">11sp</dimen>
-    <dimen name="billing_intro_card_description_text_size">14sp</dimen>
 </resources>
