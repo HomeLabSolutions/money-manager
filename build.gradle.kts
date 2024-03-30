@@ -35,8 +35,8 @@ extra["minSdkVersion"] = 21
 extra["targetSdkVersion"] = 34
 extra["versionMajor"] = 1
 extra["versionMinor"] = 0
-extra["versionPatch"] = 3
-extra["versionBuild"] = 5
+extra["versionPatch"] = 4
+extra["versionBuild"] = 1
 
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)

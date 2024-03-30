@@ -289,8 +289,8 @@ fun TransactionListLayout(
                         }
                     }
                 } else {
-                    val item = lazyTransactionItems[index] as Transaction
-                    item(key = item.id) {
+                    item(key = index) {
+                        val item = lazyTransactionItems[index] as Transaction
                         val dismissState = rememberSwipeToDismissBoxState(
                             positionalThreshold = { _ -> 0.3f },
                             confirmValueChange = {
