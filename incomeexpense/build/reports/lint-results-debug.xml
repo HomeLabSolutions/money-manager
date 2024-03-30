@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 7.4.0">
+
+    <issue
+        id="VectorPath"
+        severity="Warning"
+        message="Very long vector path (1138 characters), which is bad for performance. Considering reducing precision, removing minor details or rasterizing vector."
+        category="Performance"
+        priority="5"
+        summary="Long vector paths"
+        explanation="Using long vector paths is bad for performance. There are several ways to make the `pathData` shorter:&#xA;* Using less precision&#xA;* Removing some minor details&#xA;* Using the Android Studio vector conversion tool&#xA;* Rasterizing the image (converting to PNG)"
+        errorLine1="        android:pathData=&quot;m479.887,267.631h-21.893v-90.258c0,-6.949 -5.653,-12.603 -12.602,-12.603h-40.616c-6.949,0 -12.602,5.654 -12.602,12.603v90.258h-46.496v-124.545c0,-6.949 -5.653,-12.602 -12.602,-12.602h-40.616c-6.949,0 -12.603,5.653 -12.603,12.602v124.545h-26.701v-95.148c0,-9.204 -7.488,-16.692 -16.692,-16.692h-3.105v-46.989c0,-6.953 -5.652,-12.61 -12.6,-12.61h-40.62c-6.948,0 -12.6,5.657 -12.6,12.61v46.989h-46.49v-81.279c0,-6.947 -5.657,-12.6 -12.61,-12.6h-40.61c-6.953,0 -12.61,5.652 -12.61,12.6v81.278h-13.914c-9.204,0 -16.692,7.488 -16.692,16.692v59.586c0,4.142 3.358,7.5 7.5,7.5s7.5,-3.358 7.5,-7.5v-59.586c0,-0.933 0.759,-1.692 1.692,-1.692h195.158c0.933,0 1.692,0.759 1.692,1.692v286.16c0,0.933 -0.759,1.692 -1.692,1.692h-195.158c-0.933,0 -1.692,-0.759 -1.692,-1.692v-191.574c0,-4.142 -3.358,-7.5 -7.5,-7.5s-7.5,3.358 -7.5,7.5v191.575c0,9.204 7.488,16.692 16.692,16.692h195.158c9.204,0 16.692,-7.488 16.692,-16.692v-176.012h226.731c4.142,0 7.5,-3.358 7.5,-7.5 0.001,-4.142 -3.357,-7.5 -7.499,-7.5zM182.538,111.192h35.82v44.598h-35.82zM70.219,76.912h35.83v78.878h-35.83zM407.173,179.77h35.821v87.861h-35.821zM294.856,145.483h35.821v122.148h-35.821z&quot; />"
+        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="/home/toor/android/projects/money-manager2/incomeexpense/src/main/res/drawable/ic_regular_expense.xml"
+            line="8"
+            column="27"/>
+    </issue>
+
+    <issue
+        id="VectorPath"
+        severity="Warning"
+        message="Very long vector path (883 characters), which is bad for performance. Considering reducing precision, removing minor details or rasterizing vector."
+        category="Performance"
+        priority="5"
+        summary="Long vector paths"
+        explanation="Using long vector paths is bad for performance. There are several ways to make the `pathData` shorter:&#xA;* Using less precision&#xA;* Removing some minor details&#xA;* Using the Android Studio vector conversion tool&#xA;* Rasterizing the image (converting to PNG)"
+        errorLine1="        android:pathData=&quot;m364.858,480.532c4.142,0 7.5,-3.358 7.5,-7.5v-6.069c10.835,-2.098 19.337,-9.823 21.14,-19.923 1.592,-8.914 -2.49,-20.579 -18.731,-26.562 -7.46,-2.748 -13.965,-5.019 -18.242,-7.349 -2.097,-1.142 -2.209,-3.252 -2.09,-4.408 0.245,-2.371 1.954,-5.341 6.015,-6.564 9.726,-2.927 18.664,4.158 18.898,4.347 3.17,2.633 7.876,2.215 10.532,-0.944 2.665,-3.17 2.255,-7.902 -0.915,-10.567 -0.407,-0.343 -7.015,-5.785 -16.607,-7.805v-6.225c0,-4.142 -3.358,-7.5 -7.5,-7.5s-7.5,3.358 -7.5,7.5v6.495c-0.41,0.106 -0.821,0.212 -1.235,0.337 -9.157,2.758 -15.676,10.367 -16.608,19.384 -0.832,8.039 2.938,15.367 9.836,19.124 13.755,7.49 31.025,8.89 29.381,18.1 -0.715,4.005 -5.512,8.147 -12.301,8.147 -6.783,0 -13.318,-2.743 -17.481,-7.336 -2.781,-3.069 -7.524,-3.303 -10.594,-0.521 -3.069,2.781 -3.303,7.524 -0.521,10.594 5.007,5.525 11.948,9.436 19.524,11.202v6.544c-0.001,4.141 3.357,7.499 7.499,7.499z&quot; />"
+        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="/home/toor/android/projects/money-manager2/incomeexpense/src/main/res/drawable/ic_regular_expense.xml"
+            line="20"
+            column="27"/>
+    </issue>
+
+    <issue
+        id="VectorPath"
+        severity="Warning"
+        message="Very long vector path (1376 characters), which is bad for performance. Considering reducing precision, removing minor details or rasterizing vector."
+        category="Performance"
+        priority="5"
+        summary="Long vector paths"
+        explanation="Using long vector paths is bad for performance. There are several ways to make the `pathData` shorter:&#xA;* Using less precision&#xA;* Removing some minor details&#xA;* Using the Android Studio vector conversion tool&#xA;* Rasterizing the image (converting to PNG)"
+        errorLine1="        android:pathData=&quot;m54,15c-0.426,0 -0.847,0.039 -1.263,0.098 -1.389,-8.107 -8.393,-14.098 -16.737,-14.098 -6.857,0 -13.018,4.139 -15.654,10.405 -0.751,-0.266 -1.546,-0.405 -2.346,-0.405 -2.773,0 -5.27,1.672 -6.381,4.154 -0.526,-0.096 -1.066,-0.154 -1.619,-0.154 -4.963,0 -9,4.038 -9,9 0,1.869 0.588,3.691 1.666,5.208 -1.049,1.685 -1.666,3.665 -1.666,5.792 0,5.616 4.233,10.254 9.674,10.912l-8.088,8.088 5.414,5.414 11,-11 5,5 20,-20 4.707,4.707 0.732,-5.121h4.561c4.963,0 9,-4.038 9,-9s-4.037,-9 -9,-9zM3,35c0,-4.962 4.037,-9 9,-9s9,4.038 9,9 -4.037,9 -9,9 -9,-4.038 -9,-9zM22.809,33h10.777l-9.586,9.586 -2.336,-2.336c0.851,-1.561 1.336,-3.35 1.336,-5.25 0,-0.684 -0.071,-1.35 -0.191,-2zM44,30.586 L24,50.586 19,45.586 8,56.586 5.414,54 13.534,45.88c2.807,-0.394 5.279,-1.841 6.991,-3.941l3.475,3.475 17.414,-17.414 -3.293,-3.293 10.7,-1.528 -1.528,10.7zM54,31h-4.276l1.454,-10.179 -17.3,2.472 4.708,4.707 -3,3h-13.35c-1.605,-4.091 -5.583,-7 -10.236,-7 -3.177,0 -6.034,1.362 -8.044,3.522 -0.621,-1.064 -0.956,-2.28 -0.956,-3.522 0,-3.86 3.141,-7 7,-7s7,3.14 7,7h2c0,-3.701 -2.247,-6.886 -5.448,-8.267 0.842,-1.643 2.555,-2.733 4.448,-2.733 0.844,0 1.679,0.216 2.416,0.624l1.039,0.575 0.39,-1.121c2.096,-6.028 7.785,-10.078 14.155,-10.078 7.415,0 13.629,5.362 14.792,12.592 -0.999,0.381 -1.93,0.939 -2.745,1.658l1.324,1.499c1.277,-1.128 2.922,-1.749 4.629,-1.749 3.859,0 7,3.14 7,7s-3.141,7 -7,7z&quot; />"
+        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="/home/toor/android/projects/money-manager2/incomeexpense/src/main/res/drawable/ic_regular_income.xml"
+            line="11"
+            column="27"/>
+    </issue>
+
+    <issue
+        id="VectorPath"
+        severity="Warning"
+        message="Very long vector path (1494 characters), which is bad for performance. Considering reducing precision, removing minor details or rasterizing vector."
+        category="Performance"
+        priority="5"
+        summary="Long vector paths"
+        explanation="Using long vector paths is bad for performance. There are several ways to make the `pathData` shorter:&#xA;* Using less precision&#xA;* Removing some minor details&#xA;* Using the Android Studio vector conversion tool&#xA;* Rasterizing the image (converting to PNG)"
+        errorLine1="        android:pathData=&quot;M426.915,452.035v27.539c0,0.014 0,0.029 0,0.043c-0.004,2.32 -1.947,4.174 -4.267,4.174H40.435c-13.879,0 -25.13,-11.251 -25.13,-25.13v20.914c0,13.879 11.251,25.13 25.13,25.13h361.35h45.718c0.496,0 0.988,-0.018 1.477,-0.047c0.153,-0.009 0.304,-0.023 0.456,-0.035c0.341,-0.026 0.68,-0.057 1.017,-0.097c0.167,-0.019 0.334,-0.041 0.501,-0.064c0.335,-0.046 0.667,-0.1 0.998,-0.159c0.147,-0.026 0.294,-0.05 0.44,-0.079c0.468,-0.092 0.932,-0.194 1.389,-0.311c0,0 0.001,0 0.002,0c0.201,-0.052 0.398,-0.113 0.596,-0.169c0.994,-0.282 1.966,-0.617 2.905,-1.014c0.376,-0.159 0.747,-0.327 1.113,-0.503s0.727,-0.362 1.084,-0.555l0.001,-0.001c0.711,-0.386 1.402,-0.806 2.07,-1.257l0.001,-0.001l0.001,-0.001c0.569,-0.384 1.117,-0.796 1.651,-1.224c0.025,-0.02 0.051,-0.04 0.076,-0.06c0.541,-0.437 1.062,-0.898 1.565,-1.378l0,0l0,0c0.592,-0.565 1.156,-1.158 1.691,-1.778v-0.001c0.836,-0.97 1.6,-2.002 2.282,-3.092c0.019,-0.029 0.038,-0.058 0.056,-0.088c0.251,-0.405 0.494,-0.815 0.722,-1.235c0,-0.001 0.001,-0.002 0.002,-0.003v-0.001c0.607,-1.119 1.129,-2.29 1.564,-3.503c0.05,-0.138 0.094,-0.279 0.142,-0.418c0.105,-0.31 0.205,-0.622 0.298,-0.938c0.047,-0.16 0.093,-0.321 0.137,-0.482c0.086,-0.317 0.166,-0.637 0.24,-0.958c0.034,-0.147 0.071,-0.293 0.102,-0.441c0.098,-0.464 0.187,-0.93 0.26,-1.403c0,-0.003 0.001,-0.005 0.001,-0.008c0,-0.001 0,-0.003 0,-0.004c0.084,-0.552 0.144,-1.112 0.191,-1.675c0.012,-0.143 0.023,-0.285 0.033,-0.428c0.038,-0.569 0.065,-1.141 0.065,-1.719l0,0v-20.913v-6.626h-45.717V452.035z&quot; />"
+        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="/home/toor/android/projects/money-manager2/incomeexpense/src/main/res/drawable/ic_wallet_empty.xml"
+            line="59"
+            column="27"/>
+    </issue>
+
+    <issue
+        id="VectorPath"
+        severity="Warning"
+        message="Very long vector path (3670 characters), which is bad for performance. Considering reducing precision, removing minor details or rasterizing vector."
+        category="Performance"
+        priority="5"
+        summary="Long vector paths"
+        explanation="Using long vector paths is bad for performance. There are several ways to make the `pathData` shorter:&#xA;* Using less precision&#xA;* Removing some minor details&#xA;* Using the Android Studio vector conversion tool&#xA;* Rasterizing the image (converting to PNG)"
+        errorLine1="        android:pathData=&quot;M487.59,299.894h-7.662v-41.475V230.88c0,-10.926 -5.438,-20.6 -13.743,-26.478l0,0v-9.397c0,-13.631 -11.089,-24.72 -24.72,-24.72h-5.721l21.889,-32.12c7.337,-10.766 4.547,-25.495 -6.219,-32.833L302.883,4.111c-5.215,-3.555 -11.501,-4.867 -17.705,-3.69c-6.201,1.175 -11.574,4.694 -15.128,9.91L141.849,198.454h-35.675l8.607,-87.13c0.097,-0.982 0.735,-1.833 1.625,-2.168c11.089,-4.181 20.699,-11.989 27.059,-21.985c0.501,-0.787 1.446,-1.237 2.424,-1.138l55.955,5.528c4.012,0.389 7.581,-2.533 7.977,-6.543c0.396,-4.01 -2.533,-7.581 -6.543,-7.977l-55.955,-5.528c-6.495,-0.636 -12.689,2.357 -16.169,7.825c-4.676,7.35 -11.742,13.09 -19.895,16.164c-6.137,2.314 -10.351,7.826 -10.999,14.387l-8.748,88.564h-9.303L95.821,60.649c0.49,-4.96 4.917,-8.604 9.883,-8.107l113.074,11.17c4.01,0.387 7.581,-2.533 7.977,-6.543c0.396,-4.01 -2.533,-7.581 -6.543,-7.977l-113.074,-11.17C94.174,36.743 82.581,46.248 81.3,59.214l-10.972,111.07H51.643c-13.63,0 -24.72,11.089 -24.72,24.72v6.41c-11.151,5.134 -18.915,16.406 -18.915,29.465v27.539v193.616v27.539c0,17.88 14.546,32.426 32.427,32.426h407.067c17.88,0 32.426,-14.546 32.426,-32.426v-27.539V410.56h7.662c9.044,0 16.401,-7.357 16.401,-16.4v-77.865C503.992,307.251 496.634,299.894 487.59,299.894zM441.465,184.875c5.586,0 10.129,4.544 10.129,10.13v3.717c-1.342,-0.17 -2.705,-0.267 -4.092,-0.267h-30.955l9.253,-13.579h15.665V184.875zM282.107,18.547c1.36,-1.995 3.415,-3.341 5.787,-3.791c0.567,-0.107 1.136,-0.161 1.701,-0.161c1.797,0 3.553,0.538 5.071,1.572l148.531,101.22c4.118,2.807 5.186,8.441 2.38,12.559l-46.686,68.506h-11.204l22.889,-33.587c3.712,-5.447 4.018,-12.379 0.796,-18.092c-4.282,-7.59 -6.018,-16.527 -4.888,-25.166c0.84,-6.427 -1.988,-12.701 -7.38,-16.375L322.106,52.76c-5.393,-3.675 -12.267,-4.012 -17.941,-0.879c-7.625,4.21 -16.578,5.863 -25.208,4.655c-6.4,-0.898 -12.891,1.992 -16.548,7.357l-91.699,134.56h-11.204L282.107,18.547zM285.32,142.438c-31.771,0 -57.851,24.773 -59.976,56.015h-36.979L274.464,72.11c0.001,0 0.001,0 0.001,0c0.489,-0.719 1.3,-1.147 2.133,-1.147c0.111,0 0.222,0.008 0.333,0.023c11.738,1.642 23.913,-0.604 34.285,-6.331c0.816,-0.452 1.864,-0.387 2.672,0.163l76.999,52.473c0.806,0.55 1.249,1.502 1.129,2.426c-1.537,11.749 0.825,23.903 6.648,34.225c0.467,0.829 0.41,1.891 -0.144,2.706l-28.488,41.804h-24.733C343.172,167.211 317.093,142.438 285.32,142.438zM330.668,198.454h-90.695c2.09,-23.189 21.624,-41.424 45.347,-41.424C309.044,157.029 328.579,175.265 330.668,198.454zM41.514,195.004c0,-5.586 4.543,-10.13 10.129,-10.13h17.244l0,0l-1.341,13.579H41.514V195.004zM22.599,230.879c0,-9.834 8.001,-17.835 17.836,-17.835h407.067c9.835,0 17.835,8.001 17.835,17.835v20.244H22.599V230.879zM465.337,444.74H108.655c-4.03,0 -7.295,3.266 -7.295,7.295s3.266,7.295 7.295,7.295h356.682v20.244c0,9.834 -8,17.835 -17.835,17.835H40.435c-9.835,0 -17.836,-8.001 -17.836,-17.835V459.33h39.342c4.03,0 7.295,-3.266 7.295,-7.295s-3.266,-7.295 -7.295,-7.295H22.599V265.714h442.738v34.18h-69.366h-0.001c-21.856,0 -40.788,12.74 -49.773,31.181c-0.03,0.062 -0.064,0.122 -0.095,0.184c-0.076,0.157 -0.142,0.32 -0.216,0.478c-1.07,2.273 -2,4.626 -2.757,7.054c-0.002,0.007 -0.004,0.013 -0.006,0.02c-1.615,5.189 -2.486,10.702 -2.486,16.416l0,0l0,0c0,30.511 24.822,55.333 55.332,55.333h0.001h69.366v34.18H465.337zM489.401,394.159c0,0.998 -0.812,1.81 -1.811,1.81h-14.958h-76.661c-15.445,0 -28.911,-8.639 -35.818,-21.338c-0.314,-0.577 -0.614,-1.163 -0.901,-1.756c-0.573,-1.187 -1.09,-2.406 -1.547,-3.654c-1.602,-4.366 -2.476,-9.08 -2.476,-13.994s0.875,-9.628 2.476,-13.994c0.458,-1.247 0.975,-2.466 1.547,-3.654c0.287,-0.593 0.587,-1.179 0.901,-1.756c6.907,-12.699 20.373,-21.338 35.818,-21.338h76.661h14.958c0.998,0 1.811,0.812 1.811,1.81V394.159z&quot; />"
+        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="/home/toor/android/projects/money-manager2/incomeexpense/src/main/res/drawable/ic_wallet_empty.xml"
+            line="65"
+            column="27"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource `R.drawable.ic_regular_expense` appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Unused resources"
+        explanation="Unused resources make applications larger and slow down builds.&#xA;&#xA;&#xA;The unused resource check can ignore tests. If you want to include resources that are only referenced from tests, consider packaging them in a test source set instead.&#xA;&#xA;You can include test sources in the unused resource check by setting the system property lint.unused-resources.include-tests =true, and to exclude them (usually for performance reasons), use lint.unused-resources.exclude-tests =true.&#xA;,"
+        errorLine1="&lt;vector xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
+        errorLine2="^">
+        <location
+            file="/home/toor/android/projects/money-manager2/incomeexpense/src/main/res/drawable/ic_regular_expense.xml"
+            line="1"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource `R.drawable.ic_regular_income` appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Unused resources"
+        explanation="Unused resources make applications larger and slow down builds.&#xA;&#xA;&#xA;The unused resource check can ignore tests. If you want to include resources that are only referenced from tests, consider packaging them in a test source set instead.&#xA;&#xA;You can include test sources in the unused resource check by setting the system property lint.unused-resources.include-tests =true, and to exclude them (usually for performance reasons), use lint.unused-resources.exclude-tests =true.&#xA;,"
+        errorLine1="&lt;vector xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
+        errorLine2="^">
+        <location
+            file="/home/toor/android/projects/money-manager2/incomeexpense/src/main/res/drawable/ic_regular_income.xml"
+            line="1"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource `R.navigation.income_expense_navigation` appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Unused resources"
+        explanation="Unused resources make applications larger and slow down builds.&#xA;&#xA;&#xA;The unused resource check can ignore tests. If you want to include resources that are only referenced from tests, consider packaging them in a test source set instead.&#xA;&#xA;You can include test sources in the unused resource check by setting the system property lint.unused-resources.include-tests =true, and to exclude them (usually for performance reasons), use lint.unused-resources.exclude-tests =true.&#xA;,"
+        errorLine1="&lt;navigation xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
+        errorLine2="^">
+        <location
+            file="/home/toor/android/projects/money-manager2/incomeexpense/src/main/res/navigation/income_expense_navigation.xml"
+            line="2"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource `R.layout.layout_profile_regular_expenses` appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Unused resources"
+        explanation="Unused resources make applications larger and slow down builds.&#xA;&#xA;&#xA;The unused resource check can ignore tests. If you want to include resources that are only referenced from tests, consider packaging them in a test source set instead.&#xA;&#xA;You can include test sources in the unused resource check by setting the system property lint.unused-resources.include-tests =true, and to exclude them (usually for performance reasons), use lint.unused-resources.exclude-tests =true.&#xA;,"
+        errorLine1="&lt;androidx.constraintlayout.widget.ConstraintLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
+        errorLine2="^">
+        <location
+            file="/home/toor/android/projects/money-manager2/incomeexpense/src/main/res/layout/layout_profile_regular_expenses.xml"
+            line="2"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource `R.layout.layout_profile_regular_incomes` appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Unused resources"
+        explanation="Unused resources make applications larger and slow down builds.&#xA;&#xA;&#xA;The unused resource check can ignore tests. If you want to include resources that are only referenced from tests, consider packaging them in a test source set instead.&#xA;&#xA;You can include test sources in the unused resource check by setting the system property lint.unused-resources.include-tests =true, and to exclude them (usually for performance reasons), use lint.unused-resources.exclude-tests =true.&#xA;,"
+        errorLine1="&lt;androidx.constraintlayout.widget.ConstraintLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
+        errorLine2="^">
+        <location
+            file="/home/toor/android/projects/money-manager2/incomeexpense/src/main/res/layout/layout_profile_regular_incomes.xml"
+            line="2"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource `R.string.profile_item_regular_incomes_title` appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Unused resources"
+        explanation="Unused resources make applications larger and slow down builds.&#xA;&#xA;&#xA;The unused resource check can ignore tests. If you want to include resources that are only referenced from tests, consider packaging them in a test source set instead.&#xA;&#xA;You can include test sources in the unused resource check by setting the system property lint.unused-resources.include-tests =true, and to exclude them (usually for performance reasons), use lint.unused-resources.exclude-tests =true.&#xA;,"
+        errorLine1="    &lt;string name=&quot;profile_item_regular_incomes_title&quot;>Regular incomes&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="/home/toor/android/projects/money-manager2/incomeexpense/src/main/res/values/strings.xml"
+            line="9"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        severity="Warning"
+        message="The resource `R.string.profile_item_regular_expenses_title` appears to be unused"
+        category="Performance"
+        priority="3"
+        summary="Unused resources"
+        explanation="Unused resources make applications larger and slow down builds.&#xA;&#xA;&#xA;The unused resource check can ignore tests. If you want to include resources that are only referenced from tests, consider packaging them in a test source set instead.&#xA;&#xA;You can include test sources in the unused resource check by setting the system property lint.unused-resources.include-tests =true, and to exclude them (usually for performance reasons), use lint.unused-resources.exclude-tests =true.&#xA;,"
+        errorLine1="    &lt;string name=&quot;profile_item_regular_expenses_title&quot;>Regular expenses&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="/home/toor/android/projects/money-manager2/incomeexpense/src/main/res/values/strings.xml"
+            line="10"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        severity="Warning"
+        message="Missing `contentDescription` attribute on image"
+        category="Accessibility"
+        priority="3"
+        summary="Image without `contentDescription`"
+        explanation="Non-textual widgets like ImageViews and ImageButtons should use the `contentDescription` attribute to specify a textual description of the widget such that screen readers and other accessibility tools can adequately describe the user interface.&#xA;&#xA;Note that elements in application screens that are purely decorative and do not provide any content or enable a user action should not have accessibility content descriptions. In this case, just suppress the lint warning with a tools:ignore=&quot;ContentDescription&quot; attribute.&#xA;&#xA;Note that for text fields, you should not set both the `hint` and the `contentDescription` attributes since the hint will never be shown. Just set the `hint`."
+        url="https://developer.android.com/guide/topics/ui/accessibility/apps#special-cases"
+        urls="https://developer.android.com/guide/topics/ui/accessibility/apps#special-cases"
+        errorLine1="    &lt;ImageView"
+        errorLine2="     ~~~~~~~~~">
+        <location
+            file="/home/toor/android/projects/money-manager2/incomeexpense/src/main/res/layout/keyboard_layout.xml"
+            line="235"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        severity="Warning"
+        message="Missing `contentDescription` attribute on image"
+        category="Accessibility"
+        priority="3"
+        summary="Image without `contentDescription`"
+        explanation="Non-textual widgets like ImageViews and ImageButtons should use the `contentDescription` attribute to specify a textual description of the widget such that screen readers and other accessibility tools can adequately describe the user interface.&#xA;&#xA;Note that elements in application screens that are purely decorative and do not provide any content or enable a user action should not have accessibility content descriptions. In this case, just suppress the lint warning with a tools:ignore=&quot;ContentDescription&quot; attribute.&#xA;&#xA;Note that for text fields, you should not set both the `hint` and the `contentDescription` attributes since the hint will never be shown. Just set the `hint`."
+        url="https://developer.android.com/guide/topics/ui/accessibility/apps#special-cases"
+        urls="https://developer.android.com/guide/topics/ui/accessibility/apps#special-cases"
+        errorLine1="    &lt;com.google.android.material.floatingactionbutton.FloatingActionButton"
+        errorLine2="     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="/home/toor/android/projects/money-manager2/incomeexpense/src/main/res/layout/layout_expense_transactions.xml"
+            line="18"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        severity="Warning"
+        message="Missing `contentDescription` attribute on image"
+        category="Accessibility"
+        priority="3"
+        summary="Image without `contentDescription`"
+        explanation="Non-textual widgets like ImageViews and ImageButtons should use the `contentDescription` attribute to specify a textual description of the widget such that screen readers and other accessibility tools can adequately describe the user interface.&#xA;&#xA;Note that elements in application screens that are purely decorative and do not provide any content or enable a user action should not have accessibility content descriptions. In this case, just suppress the lint warning with a tools:ignore=&quot;ContentDescription&quot; attribute.&#xA;&#xA;Note that for text fields, you should not set both the `hint` and the `contentDescription` attributes since the hint will never be shown. Just set the `hint`."
+        url="https://developer.android.com/guide/topics/ui/accessibility/apps#special-cases"
+        urls="https://developer.android.com/guide/topics/ui/accessibility/apps#special-cases"
+        errorLine1="    &lt;com.google.android.material.floatingactionbutton.FloatingActionButton"
+        errorLine2="     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="/home/toor/android/projects/money-manager2/incomeexpense/src/main/res/layout/layout_income_transactions.xml"
+            line="18"
+            column="6"/>
+    </issue>
+
+</issues>

@@ -1,33 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="bottom_menu_income_expense">Расход/Доход</string>
+    <string name="coming_soon">Скоро будет…</string>
+
+    <string name="title_goal">Цели</string>
+
+    <string name="currency_error">Не удалось получить список валют</string>
+    <string name="currency_change_title">Сменить валюту на %s?</string>
+    <string name="currency_change_subtitle">Приложение будет перезапущено.</string>
+
+    <string name="goals_remaining_to_spend">Можно потратить в этом периоде</string>
+    <string name="goals_empty_placeholder_title">Добавьте цели</string>
+    <string name="goals_empty_placeholder_subtitle">Добавьте цель, на которую хотите накопить</string>
+    <string name="goals_target_name_hint">Название цели</string>
+    <string name="goals_description_hint">Описание цели</string>
+    <string name="goals_remove_dialog_title">Удаление цели</string>
+    <string name="goals_remove_dialog_subtitle">Вы действительно хотите удалить цель?</string>
+    <string name="goals_sum_title">Стоимость цели</string>
+    <string name="goals_sum_per_period_title">Откладывать каждый период</string>
+
+    <string name="settings_backup_empty">Резервная копия еще не создавалась</string>
+    <string name="settings_start_period_day_error">День должен быть в интервале от 1 до 31</string>
+    <string name="settings_subscription_premium_min_price">от %1$s%2$s %3$s</string>
+    <string name="settings_privacy_policy"><a href="https://pages.flycricket.io/moneymanager-0/privacy.html">Политика конфиденциальности</a></string>
+
+    <string name="profile_item_goals_title">Цели: %1$s</string>
+    <string name="profile_item_current_currency_title">текущий</string>
+    <string name="profile_item_main_currency_title">основной</string>
+    <string name="profile_item_main_currency_error">Вы не можете изменить основную валюту</string>
+
+    <string name="notification_income_title">Постоянный доход</string>
+    <string name="notification_expense_title">Постоянный расход</string>
+    <string name="notification_action_income_title">Добавить в доходы</string>
+    <string name="notification_action_expense_title">Добавить в расходы</string>
+    <string name="notification_channel_income_name">Постоянные доходы</string>
+    <string name="notification_channel_expense_name">Постоянные расходы</string>
+
+    <string name="title_prepopulate_currency">Выберите валюту</string>
+    <string name="title_prepopulate_budget">Текущий бюджет</string>
+    <string name="toolbar_menu_skip">Пропустить</string>
+
     <string name="bottom_menu_chart">Статистика</string>
-    <string name="bottom_menu_settings">Настройки</string>
-    <string name="tab_income">Доходы</string>
-    <string name="tab_expense">Расходы</string>
-
-    <string name="title_category">Категории</string>
-    <string name="title_sub_category">Категория: %1$s</string>
-
-    <string name="settings_login">Войти</string>
-    <string name="settings_logout">Выйти</string>
-    <string name="settings_app_version">Версия %s</string>
-    <string name="settings_backup">Сделать бэкап</string>
-    <string name="settings_backup_success">База данных была успешно сохранена</string>
-    <string name="settings_backup_failed">При сохраненни базы дынных возникла ошибка</string>
-
-    <string name="default_category_food">Еда</string>
-    <string name="default_category_cafe">Кафе</string>
-    <string name="default_category_car">Автомобиль</string>
-    <string name="default_category_home">Дом</string>
-    <string name="default_category_entertainment">Развлечения</string>
-    <string name="default_category_travels">Путешествия</string>
-    <string name="default_category_internet">Интернет</string>
-    <string name="default_category_doctor">Врач</string>
-
-    <string name="expense_daily_sum_to_spend_title">сегодня можно потратить</string>
-    <string name="expense_spent_title">всего потрачено</string>
-    <string name="expense_left_to_title">осталось потратить</string>
-
-    <string name="category_all">Все статьи</string>
+    <string name="bottom_menu_profile">Профиль</string>
 </resources>

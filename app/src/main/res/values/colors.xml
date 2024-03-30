@@ -1,22 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary_color">#241B0D</color>
-    <color name="primary_dark_color">#E4DBBF</color>
-    <color name="accent_color">#70AB8F</color>
-    <color name="secondary_color">#DC5B21</color>
-    <color name="neutral_dark_color">#383127</color>
-    <color name="neutral_normal_color">#808080</color>
-    <color name="neutral_light_color">#f4f3ee</color>
-    <color name="error_color">#df4f60</color>
-    <color name="success_color">#5c9a75</color>
-
-    <color name="category_light_green_a200">#9DEA4F</color>
-    <color name="category_teal_100">#A7D8DC</color>
-    <color name="category_pink_300">#FB7C83</color>
-    <color name="category_deep_purple_a100">#C8A3FF</color>
-    <color name="category_yellow_400">#EFFD5F</color>
-    <color name="category_pink_a200">#FC44AA</color>
-    <color name="category_teal_600">#008080</color>
-    <color name="blue_grey_400">#828F89</color>
-
+    <color name="splash_screen_background">#2d2d2d</color>
 </resources>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="category_all">All\nitems</string>
+    <string name="delete">Delete</string>
+    <string name="create">Create</string>
+    <string name="category_name_title">Name</string>
+    <string name="category_name_hint">Enter name</string>
+    <string name="title_category_set">Available icons</string>
+    <string name="category_edit_title">Edit category group</string>
+    <string name="category_unit_name_group_hint">Name of group</string>
+    <string name="category_delete_title">Remove category?</string>
+    <string name="category_delete_subtitle">Category %1$s will be removed</string>
+    <string name="category_delete_sub_title">All operations with this category will also be deleted.</string>
+    <string name="category_delete_group_sub_title">All subcategories will also be deleted.\n\nAll operations with this category will be deleted too.</string>
+    <string name="category_unit_to_group_title">Grouping</string>
+    <string name="category_add_to_group_title">Add to group</string>
+    <string name="category_unit_new_name_subtitle">Enter name of new group</string>
+    <string name="category_unit_to_group_subtitle">Add category \"%1$s\"\ to group %2$s?</string>
+    <string name="category_unit_name_exist_error">Name of this group already exists</string>
+    <string name="category_name_exist_error">Name of the category already exists</string>
+    <string name="category_not_found_error">Category not found</string>
+    <string name="category_parent_not_found_error">Category\'s parent not found</string>
+    <string name="category_expense_info_can_spend_today_title">you can spend today:</string>
+    <string name="category_expense_info_can_spend_today_negate_title">overspending:</string>
+    <string name="category_expense_info_today_title">was spent today:</string>
+    <string name="category_expense_info_period_title">was spent in period:</string>
+    <string name="category_income_info_period_title">was earned in period:</string>
+    <string name="category_group_free">Icons</string>
+    <string name="category_group_housing">Housing</string>
+    <string name="category_group_transportation">Transportation</string>
+    <string name="category_group_food">Food</string>
+    <string name="category_group_utilities">Utilities</string>
+    <string name="category_group_insurance">Insurance</string>
+    <string name="category_group_medical">Medical &amp; Healthcare</string>
+    <string name="category_group_sport">Sport</string>
+    <string name="category_group_investing">Investing</string>
+    <string name="category_group_recreation">Recreation</string>
+    <string name="category_group_clothes">Clothes</string>
+    <string name="category_group_personal">Clothes</string>
+    <string name="category_group_others">Others</string>
+
+    <string name="category_empty_placeholder_title">Category list is empty</string>
+    <string name="category_empty_placeholder_subtitle">Add at least one category</string>
+
+    <string name="sub_category_delete_title">Delete subcategory?</string>
+    <string name="sub_category_delete">Delete</string>
+    <string name="sub_category_delete_from_group">Delete from group</string>
+
+    <string name="title_category">Categories</string>
+    <string name="title_sub_category">Category: %1$s</string>
+    <string name="title_category_edit">Category</string>
+    <string name="title_category_group_set">Categories</string>
+    <string name="title_category_creation">Category creation</string>
+</resources>

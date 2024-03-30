@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_prepopulate_budget">Текущий бюджет</string>
+    <string name="budget_sum_title">Сумма</string>
+    <string name="save">Сохранить</string>
+    <string name="budget_date_created">Создан: %1$s</string>
+</resources>

@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/color-night-v8/material_timepicker_modebutton_tint.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/color-night-v8/material_timepicker_modebutton_tint.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/color-night-v8/material_timepicker_button_stroke.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/color-night-v8/material_timepicker_button_stroke.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/color-night-v8/material_timepicker_clockface.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/color-night-v8/material_timepicker_clockface.xml"
+    }
+]

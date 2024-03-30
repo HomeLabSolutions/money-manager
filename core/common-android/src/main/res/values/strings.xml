@@ -1,0 +1,17 @@
+<resources>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="change">Change</string>
+    <string name="exit">Exit</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="retry">Retry</string>
+    <string name="next">Next</string>
+    <string name="save">Save</string>
+    <string name="buy">Buy</string>
+    <string name="add">Add</string>
+    <string name="create">Create</string>
+
+    <string name="sub_category_delete_subtitle">All operations with this category will also be deleted.</string>
+    <string name="unknown_error">Unknown error</string>
+</resources>

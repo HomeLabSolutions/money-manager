@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_category_expense_food">Food</string>
+    <string name="default_category_expense_cafe">Cafe</string>
+    <string name="default_category_expense_products">Products</string>
+    <string name="default_category_expense_car">Car</string>
+    <string name="default_category_expense_car_fuel">Fuel</string>
+    <string name="default_category_expense_car_service">Car service</string>
+    <string name="default_category_expense_home">Home</string>
+    <string name="default_category_expense_relax">Relax</string>
+    <string name="default_category_expense_travels">Travels</string>
+    <string name="default_category_expense_internet">Internet</string>
+    <string name="default_category_expense_doctor">Doctor</string>
+    <string name="default_category_income_salary">Salary</string>
+    <string name="default_category_income_business">Business</string>
+    <string name="default_category_income_sale">Sale</string>
+    <string name="default_category_income_part_time_job">Part-time job</string>
+</resources>

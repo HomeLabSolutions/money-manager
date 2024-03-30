@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="delete">Delete</string>
+    <string name="transaction_delete_dialog_title">Delete this transaction?</string>
+    <string name="transaction_delete_dialog_subtitle">Do you really want to delete the transaction?</string>
+    <string name="transaction_edit_description_hint">Description</string>
+    <string name="transaction_edit_in_statistics">In statistics</string>
+    <string name="title_transaction">Transaction</string>
+    <string name="transaction_edit_sum_title">Amount</string>
+    <string name="transaction_invalid_amount">Please, enter the correct amount</string>
+</resources>

@@ -1,33 +1,43 @@
 <resources>
-    <string name="bottom_menu_income_expense">Income/Expense</string>
+    <string name="coming_soon">Coming soon…</string>
+
+    <string name="title_goal">Goals</string>
+
+    <string name="currency_error">Failed to get currency list</string>
+    <string name="currency_change_title">Change currency to %s?</string>
+    <string name="currency_change_subtitle">The app will restart.</string>
+
+    <string name="goals_remaining_to_spend">Can be spend in that period</string>
+    <string name="goals_empty_placeholder_title">Add goals</string>
+    <string name="goals_empty_placeholder_subtitle">Add a goal you want to accumulate</string>
+    <string name="goals_target_name_hint">Goal name</string>
+    <string name="goals_description_hint">Goal description</string>
+    <string name="goals_remove_dialog_title">Delete this goal?</string>
+    <string name="goals_remove_dialog_subtitle">Do you really want to delete the goal?</string>
+    <string name="goals_sum_title">Price of goal</string>
+    <string name="goals_sum_per_period_title">Save every period</string>
+
+    <string name="settings_backup_empty">Backup hasn\'t been created yet</string>
+    <string name="settings_start_period_day_error">The day should be in interval from 1 to 31</string>
+    <string name="settings_subscription_premium_min_price">from %1$s%2$s %3$s</string>
+    <string name="settings_privacy_policy"><a href="https://pages.flycricket.io/moneymanager-0/privacy.html">Privacy Policy</a></string>
+
+    <string name="profile_item_goals_title">Goals: %1$s</string>
+    <string name="profile_item_current_currency_title">current</string>
+    <string name="profile_item_main_currency_title">main</string>
+    <string name="profile_item_main_currency_error">You can\'t change main currency</string>
+
+    <string name="notification_income_title">Regular income</string>
+    <string name="notification_expense_title">Regular expense</string>
+    <string name="notification_action_income_title">Add to incomes</string>
+    <string name="notification_action_expense_title">Add to expenses</string>
+    <string name="notification_channel_income_name">Regular incomes</string>
+    <string name="notification_channel_expense_name">Regular expenses</string>
+
+    <string name="title_prepopulate_currency">Choose currency</string>
+    <string name="title_prepopulate_budget">Current budget</string>
+    <string name="toolbar_menu_skip">Skip</string>
+
     <string name="bottom_menu_chart">Chart</string>
-    <string name="bottom_menu_settings">Settings</string>
-    <string name="tab_income">Income</string>
-    <string name="tab_expense">Expense</string>
-
-    <string name="title_category">Categories</string>
-    <string name="title_sub_category">Category: %1$s</string>
-
-    <string name="settings_login">Login</string>
-    <string name="settings_logout">Logout</string>
-    <string name="settings_app_version">Version %s</string>
-    <string name="settings_backup">Backup database</string>
-    <string name="settings_backup_success">Database was successfully backup</string>
-    <string name="settings_backup_failed">Database backup failed</string>
-
-    <string name="default_category_food">Food</string>
-    <string name="default_category_cafe">Cafe</string>
-    <string name="default_category_car">Car</string>
-    <string name="default_category_home">Home</string>
-    <string name="default_category_entertainment">Entertainment</string>
-    <string name="default_category_travels">Travels</string>
-    <string name="default_category_internet">Internet</string>
-    <string name="default_category_doctor">Doctor</string>
-
-    <string name="expense_daily_sum_to_spend_title">you can spend</string>
-    <string name="expense_spent_title">spent</string>
-    <string name="expense_left_to_title">left ot spent</string>
-
-    <string name="category_all">All items</string>
-
+    <string name="bottom_menu_profile">Profile</string>
 </resources>

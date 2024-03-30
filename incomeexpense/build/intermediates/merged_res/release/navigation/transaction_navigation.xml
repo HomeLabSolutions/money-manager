@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/transaction_navigation"
+    app:startDestination="@+id/edit_transaction_dest">
+
+    <include app:graph="@navigation/category_navigation" />
+
+    <fragment
+        android:id="@+id/edit_transaction_dest"
+        android:name="com.d9tilov.android.transaction.ui.EditTransactionFragment"
+        android:label="EditTransaction">
+        <action
+            android:id="@+id/to_category_dest"
+            app:destination="@id/category_dest"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="destination"
+                app:argType="com.d9tilov.android.category.ui.navigation.CategoryDestination" />
+            <argument
+                android:name="transactionType"
+                app:argType="com.d9tilov.android.core.model.TransactionType" />
+
+        </action>
+        <action
+            android:id="@+id/to_remove_transaction_dialog"
+            app:destination="@id/remove_transaction_dialog"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <argument
+            android:name="transactionType"
+            app:argType="com.d9tilov.android.core.model.TransactionType" />
+        <argument
+            android:name="edited_transaction"
+            app:argType="com.d9tilov.android.transaction.domain.model.Transaction" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/remove_transaction_dialog"
+        android:name="com.d9tilov.android.transaction.ui.TransactionRemoveDialog"
+        tools:layout="@layout/fragment_dialog_remove">
+
+        <argument
+            android:name="transaction"
+            android:defaultValue="@null"
+            app:argType="com.d9tilov.android.transaction.domain.model.Transaction"
+            app:nullable="true" />
+
+        <argument
+            android:name="regular_transaction"
+            android:defaultValue="@null"
+            app:argType="com.d9tilov.android.regular.transaction.domain.model.RegularTransaction"
+            app:nullable="true" />
+    </dialog>
+</navigation>

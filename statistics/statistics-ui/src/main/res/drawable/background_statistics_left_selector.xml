@@ -1,0 +1,4 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/background_left_round_corner" android:state_selected="false" />
+    <item android:drawable="@drawable/background_left_round_corner_enable" android:state_selected="true" />
+</selector>

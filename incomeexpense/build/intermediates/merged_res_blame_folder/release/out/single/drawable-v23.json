@@ -1,0 +1,42 @@
+[
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/drawable-v23/m3_tabs_background.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/drawable-v23/m3_tabs_background.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/drawable-v23/mtrl_popupmenu_background_overlay.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/drawable-v23/mtrl_popupmenu_background_overlay.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/drawable-v23/compat_splash_screen_no_icon_background.xml",
+        "source": "com.d9tilov.android.incomeexpense-jetified-core-splashscreen-1.0.1-38:/drawable-v23/compat_splash_screen_no_icon_background.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/drawable-v23/abc_control_background_material.xml",
+        "source": "com.d9tilov.android.incomeexpense-appcompat-1.6.1-29:/drawable-v23/abc_control_background_material.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/drawable-v23/m3_tabs_transparent_background.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/drawable-v23/m3_tabs_transparent_background.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/drawable-v23/m3_radiobutton_ripple.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/drawable-v23/m3_radiobutton_ripple.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/drawable-v23/m3_appbar_background.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/drawable-v23/m3_appbar_background.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/drawable-v23/compat_splash_screen.xml",
+        "source": "com.d9tilov.android.incomeexpense-jetified-core-splashscreen-1.0.1-38:/drawable-v23/compat_splash_screen.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/drawable-v23/m3_selection_control_ripple.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/drawable-v23/m3_selection_control_ripple.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/drawable-v23/m3_popupmenu_background_overlay.xml",
+        "source": "com.d9tilov.android.incomeexpense-material-1.9.0-0:/drawable-v23/m3_popupmenu_background_overlay.xml"
+    }
+]

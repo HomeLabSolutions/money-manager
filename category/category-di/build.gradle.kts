@@ -1,0 +1,18 @@
+plugins {
+    id("moneymanager.android.library")
+    id("moneymanager.android.hilt")
+}
+
+android {
+    namespace = "com.d9tilov.android.category_di"
+}
+
+dependencies {
+
+    implementation(project(":core:database"))
+    implementation(project(":core:datastore"))
+    implementation(project(":category:category-data:category-data-contract"))
+    implementation(project(":category:category-data:category-data-impl"))
+    implementation(project(":category:category-domain:category-domain-contract"))
+    implementation(project(":category:category-domain:category-domain-impl"))
+}

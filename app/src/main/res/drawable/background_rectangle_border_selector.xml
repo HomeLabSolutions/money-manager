@@ -1,0 +1,4 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:alpha="0.38" android:drawable="@drawable/background_rectangle_border_disable" android:state_enabled="false" />
+    <item android:drawable="@drawable/background_rectangle_border" android:state_enabled="true" />
+</selector>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="transaction_empty_placeholder_income_title">Add income</string>
+    <string name="transaction_empty_placeholder_expense_title">Add expense</string>
+    <string name="transaction_empty_placeholder_subtitle">Enter the amount and tap on a category</string>
+    <string name="transaction_delete_dialog_title">Delete this transaction</string>
+    <string name="transaction_delete_dialog_subtitle">Do you really want to delete the transaction?</string>
+
+    <string name="income_expense_empty_sum_error">The amount is too small</string>
+
+    <string name="tab_income">Income</string>
+    <string name="tab_expense">Expense</string>
+
+    <string name="category_all">All items</string>
+    <string name="category_expense_info_can_spend_today_negate_title">overspending:</string>
+    <string name="category_expense_info_can_spend_today_title">you can spend today:</string>
+    <string name="category_expense_info_today_title">was spent today:</string>
+</resources>

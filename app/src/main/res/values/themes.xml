@@ -1,80 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<!--
+     Copyright 2021 The Android Open Source Project
 
-    <style name="Base.V19.Theme.MoneyManager" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/primary_color</item>
-        <item name="colorAccent">@color/accent_color</item>
-        <item name="colorSecondary">@color/secondary_color</item>
-        <item name="colorError">@color/error_color</item>
-        <item name="android:textColorPrimary">@color/primary_color</item>
-        <item name="android:textColorSecondary">@color/neutral_dark_color</item>
-        <item name="android:textColorTertiary">@color/neutral_normal_color</item>
-        <item name="textAppearanceHeadline1">@style/TextAppearance.MoneyManager.H1</item>
-        <item name="textAppearanceHeadline4">@style/TextAppearance.MoneyManager.H4</item>
-        <item name="textAppearanceHeadline5">@style/TextAppearance.MoneyManager.H5</item>
-        <item name="textAppearanceHeadline6">@style/TextAppearance.MoneyManager.H6</item>
-        <item name="textAppearanceSubtitle1">@style/TextAppearance.MoneyManager.Subtitle1</item>
-        <item name="textAppearanceSubtitle2">@style/TextAppearance.MoneyManager.Subtitle2</item>
-        <item name="textAppearanceBody1">@style/TextAppearance.MoneyManager.Body1</item>
-        <item name="textAppearanceBody2">@style/TextAppearance.MoneyManager.Body2</item>
-        <item name="textAppearanceButton">@style/TextAppearance.MoneyManager.Button</item>
-        <item name="textAppearanceCaption">@style/TextAppearance.MoneyManager.Caption</item>
-        <item name="textAppearanceOverline">@style/TextAppearance.MoneyManager.Overline</item>
-        <item name="appBarLayoutStyle">@style/Widget.MoneyManager.AppBarLayout</item>
-        <item name="bottomNavigationStyle">@style/Widget.MoneyManager.BottomNavigationStyle</item>
-        <item name="tabStyle">@style/Widget.MoneyManager.TabLayout</item>
-        <item name="textAppearanceCurrencySignBig">
-            @style/TextAppearance.MoneyManager.CurrencySign.Big
-        </item>
-        <item name="textAppearanceCurrencySignMedium">
-            @style/TextAppearance.MoneyManager.CurrencySign.Medium
-        </item>
-        <item name="textAppearanceCurrencySignSmall">
-            @style/TextAppearance.MoneyManager.CurrencySign.Small
-        </item>
-        <item name="textAppearanceCurrencySignExtraSmall">
-            @style/TextAppearance.MoneyManager.Overline
-        </item>
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Allows us to override night specific attributes in the
+         values-night folder. -->
+    <style name="NightAdjusted.Theme.MoneyManager" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!-- The final theme we use -->
+    <style name="Theme.MoneyManager" parent="NightAdjusted.Theme.MoneyManager" />
+
+    <style name="NightAdjusted.Theme.Splash" parent="Theme.SplashScreen">
+        <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
     </style>
 
-    <style name="Theme.MoneyManager" parent="Base.V19.Theme.MoneyManager">
-        <item name="colorPrimaryDark">@color/primary_dark_color</item>
-    </style>
-
-    <style name="ThemeOverlay.MoneyManager.Toolbar" parent="">
-        <item name="android:textColorPrimary">@color/primary_dark_color</item>
-        <item name="android:textColorSecondary">@color/secondary_color</item>
-        <item name="actionMenuTextColor">@color/primary_dark_color</item>
-    </style>
-
-    <style name="Theme.MoneyManager.Auth" />
-
-    <style name="Theme.MoneyManager.Home" parent="Theme.MoneyManager">
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
-        <item name="android:windowActionBarOverlay">true</item>
-        <item name="android:windowActionModeOverlay">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-    </style>
-
-    <style name="Theme.Splash" parent="Theme.MoneyManager">
-        <item name="android:windowBackground">@drawable/splash_screen_background</item>
-        <item name="colorPrimaryDark">?attr/colorPrimary</item>
-    </style>
-
-    <style name="ThemeOverlay.MoneyManager.CurrencyView.Big" parent="">
-        <item name="android:textColorPrimary">@color/accent_color</item>
-        <item name="android:textColorSecondary">@color/neutral_normal_color</item>
-    </style>
-
-    <style name="ThemeOverlay.MoneyManager.CurrencyView.Medium" parent="">
-        <item name="android:textColorPrimary">?attr/colorPrimary</item>
-        <item name="android:textColorSecondary">@color/neutral_normal_color</item>
-    </style>
-
-    <style name="ThemeOverlay.MoneyManager.CurrencyView.Small" parent="">
-        <item name="android:textColorPrimary">@color/primary_color</item>
-        <item name="android:textColorSecondary">@color/primary_color</item>
+    <style name="Theme.MoneyManager.Splash" parent="NightAdjusted.Theme.Splash">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="windowSplashScreenBackground">@color/splash_screen_background</item>
+        <item name="postSplashScreenTheme">@style/Theme.MoneyManager</item>
     </style>
 
 </resources>
