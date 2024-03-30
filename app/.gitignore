@@ -1,1 +1,4 @@
 /build
+*.log
+private_key.pepk
+money_manager_keystore.jks

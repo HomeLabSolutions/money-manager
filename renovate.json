@@ -1,6 +1,11 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
-  ]
+    "config:gradle"
+  ],
+  "interval": "hourly",
+  "labels": [
+    "android",
+    "dependencies"
+  ],
+  "baseBranches": ["develop"]
 }

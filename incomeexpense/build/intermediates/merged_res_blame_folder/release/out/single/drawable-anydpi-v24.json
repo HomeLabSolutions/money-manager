@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/drawable-anydpi-v24/ic_category_phone.xml",
+        "source": "com.d9tilov.android.incomeexpense-packaged_res-98:/drawable-anydpi-v24/ic_category_phone.xml"
+    },
+    {
+        "merged": "com.d9tilov.android.incomeexpense-merged_res-110:/drawable-anydpi-v24/ic_category_contract.xml",
+        "source": "com.d9tilov.android.incomeexpense-packaged_res-98:/drawable-anydpi-v24/ic_category_contract.xml"
+    }
+]

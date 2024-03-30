@@ -1,0 +1,9 @@
+[
+  {
+    "name": "income_expense_navigation",
+    "navigationXmlIds": [
+      "transaction_navigation"
+    ],
+    "deepLinks": []
+  }
+]
