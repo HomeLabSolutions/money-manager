@@ -537,7 +537,7 @@ fun HomeTabs(
                 price = uiState.price,
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(32.dp),
+                    .padding(horizontal = 32.dp, vertical = 16.dp),
                 onCurrencyClicked = onCurrencyClicked
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -614,7 +614,7 @@ fun KeyBoardLayout(
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
             horizontalArrangement = Arrangement.Center,
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             userScrollEnabled = false,
             contentPadding = PaddingValues(start = 40.dp, end = 40.dp)
         ) {
