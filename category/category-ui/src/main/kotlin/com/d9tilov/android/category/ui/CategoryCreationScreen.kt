@@ -41,7 +41,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -53,7 +52,7 @@ import com.d9tilov.android.category.ui.vm.CategoryCreationUiState
 import com.d9tilov.android.category.ui.vm.CategoryCreationViewModel
 import com.d9tilov.android.category.ui.vm.CategorySharedViewModel
 import com.d9tilov.android.category_ui.R
-import com.d9tilov.android.core.constants.DataConstants
+import com.d9tilov.android.core.constants.DataConstants.NO_RES_ID
 import com.d9tilov.android.core.model.ItemState
 import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.MmTopAppBar
@@ -72,14 +71,17 @@ fun CategoryCreationRoute(
 ) {
     val state: CategoryCreationUiState by viewModel.uiState.collectAsStateWithLifecycle()
     val id: Int by sharedViewModel.categoryIconId.collectAsStateWithLifecycle()
-    if (id != DataConstants.NO_RES_ID) viewModel.updateCategory(state.category.copy(icon = id))
+    if (id != NO_RES_ID) viewModel.updateCategory(state.category.copy(icon = id))
     CategoryCreationScreen(
         uiState = state,
         onBackClicked = clickBack,
-        onSaveClicked = viewModel::save,
+        onSaveClicked = {
+            viewModel.save()
+            sharedViewModel.setId(NO_RES_ID)
+        },
         clickOnCategoryIcon = {
-            if (viewModel.uiState.value.isPremium) openCategoryGroupIconList.invoke()
-            else openCategoryIconGrid.invoke()
+            if (viewModel.uiState.value.isPremium) openCategoryGroupIconList()
+            else openCategoryIconGrid()
         },
         onCategoryUpdated = viewModel::updateCategory,
         onHideError = viewModel::hideError

@@ -305,6 +305,10 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
                         start.linkTo(idTitle.end)
                     },
                 style = MaterialTheme.typography.titleMedium
+                    .copy(
+                        fontSize = dimensionResource(com.d9tilov.android.designsystem.R.dimen.currency_extra_small_text_size).value.sp,
+                        color = MaterialTheme.colorScheme.tertiary
+                    )
             )
             is ProfileUiItem.Settings -> {
                 val isPremium = profileUiItem.isPremium

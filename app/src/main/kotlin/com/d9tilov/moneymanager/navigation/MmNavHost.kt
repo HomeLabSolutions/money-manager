@@ -16,7 +16,7 @@ import com.d9tilov.android.category.ui.navigation.navigateToCategoryIconGridScre
 import com.d9tilov.android.category.ui.navigation.navigateToCategoryIconListScreen
 import com.d9tilov.android.category.ui.navigation.navigateToCategoryListScreen
 import com.d9tilov.android.core.model.TransactionType
-import com.d9tilov.android.currency.domain.model.CurrencyArgs.currencyCodeArgs
+import com.d9tilov.android.currency.domain.model.CurrencyArgs.CURRENCY_CODE_ARGS
 import com.d9tilov.android.currency.ui.navigation.currencyScreen
 import com.d9tilov.android.currency.ui.navigation.navigateToCurrencyListScreen
 import com.d9tilov.android.incomeexpense.navigation.incomeExpenseNavigationRoute
@@ -99,7 +99,7 @@ fun MmNavHost(
                 onChooseCurrency = { currencyCode ->
                     navController.previousBackStackEntry
                         ?.savedStateHandle
-                        ?.set(currencyCodeArgs, currencyCode)
+                        ?.set(CURRENCY_CODE_ARGS, currencyCode)
                     navController.popBackStack()
                 })
             budgetScreen { navController.popBackStack() }

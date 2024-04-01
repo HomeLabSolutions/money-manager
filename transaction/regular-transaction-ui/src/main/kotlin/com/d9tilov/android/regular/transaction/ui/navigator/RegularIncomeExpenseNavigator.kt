@@ -109,10 +109,10 @@ fun NavGraphBuilder.regularTransactionCreationScreen(
             viewModel.updateCategory(id)
             entry.savedStateHandle.remove<Long>(CategoryArgs.categoryIdArgs)
         }
-        val currencyCode = entry.savedStateHandle.get<String>(CurrencyArgs.currencyCodeArgs)
+        val currencyCode = entry.savedStateHandle.get<String>(CurrencyArgs.CURRENCY_CODE_ARGS)
         currencyCode?.let { code ->
             viewModel.updateCurrencyCode(code)
-            entry.savedStateHandle.remove<String>(CurrencyArgs.currencyCodeArgs)
+            entry.savedStateHandle.remove<String>(CurrencyArgs.CURRENCY_CODE_ARGS)
         }
         RegularTransactionCreationRoute(
             viewModel = viewModel,
