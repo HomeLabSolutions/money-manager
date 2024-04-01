@@ -7,6 +7,7 @@ import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.regular.transaction.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.regular.transaction.domain.model.RegularTransaction
 import com.d9tilov.android.regular.transaction.ui.navigator.RegularTransactionArgs
@@ -52,6 +53,7 @@ class RegularTransactionCreationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val regularTransactionInteractor: RegularTransactionInteractor,
     private val categoryInteractor: CategoryInteractor,
+    private val currencyInteractor: CurrencyInteractor
 ) : ViewModel() {
 
     private val regTransactionArgs: RegularTransactionArgs.RegularTransactionCreationArgs =
@@ -71,7 +73,7 @@ class RegularTransactionCreationViewModel @Inject constructor(
                         amount = tr.sum.toString(),
                         transaction = tr.copy(type = transactionType)
                     )
-                } else state.copy(transaction = tr.copy(type = transactionType))
+                } else state.copy(transaction = tr.copy(type = transactionType, currencyCode = currencyInteractor.getMainCurrency().code))
             }
         }
     }

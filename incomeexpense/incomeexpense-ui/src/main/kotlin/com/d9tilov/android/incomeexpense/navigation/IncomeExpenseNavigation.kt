@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import com.d9tilov.android.category.domain.model.CategoryArgs
 import com.d9tilov.android.category.domain.model.CategoryDestination
 import com.d9tilov.android.core.model.TransactionType
-import com.d9tilov.android.currency.domain.model.CurrencyArgs.currencyCodeArgs
+import com.d9tilov.android.currency.domain.model.CurrencyArgs.CURRENCY_CODE_ARGS
 import com.d9tilov.android.incomeexpense.ui.IncomeExpenseRoute
 import com.d9tilov.android.incomeexpense.ui.vm.IncomeExpenseViewModel
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType
@@ -32,10 +32,10 @@ fun NavGraphBuilder.incomeExpenseScreen(
             viewModel.addTransaction(id)
             entry.savedStateHandle.remove<Long>(CategoryArgs.categoryIdArgs)
         }
-        val currencyCode =  entry.savedStateHandle.get<String>(currencyCodeArgs)
+        val currencyCode =  entry.savedStateHandle.get<String>(CURRENCY_CODE_ARGS)
         currencyCode?.let { code ->
             viewModel.updateCurrencyCode(code)
-            entry.savedStateHandle.remove<String>(currencyCodeArgs)
+            entry.savedStateHandle.remove<String>(CURRENCY_CODE_ARGS)
         }
         IncomeExpenseRoute(
             viewModel = viewModel,

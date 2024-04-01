@@ -22,6 +22,7 @@ dependencies {
     implementation(project(":category:category-domain:category-domain-model"))
     implementation(project(":category:category-domain:category-domain-contract"))
     implementation(project(":currency:currency-domain:currency-domain-model"))
+    implementation(project(":currency:currency-domain:currency-domain-contract"))
 
     implementation(libs.navigation)
     implementation(libs.glide)

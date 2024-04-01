@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -50,11 +50,11 @@ class CategoryCreationViewModel @Inject constructor(
     private val transactionType: TransactionType = categoryArgs.transactionType
     private val _uiState = MutableStateFlow(CategoryCreationUiState.EMPTY)
     val uiState: StateFlow<CategoryCreationUiState> = _uiState
-
+    private val categoryExceptionHandler = CoroutineExceptionHandler { _, _ -> }
 
     init {
-        val categoryExceptionHandler = CoroutineExceptionHandler { _, _ ->
-            viewModelScope.launch {
+        viewModelScope.launch(categoryExceptionHandler) {
+            launch {
                 _uiState.update { state: CategoryCreationUiState ->
                     state.copy(
                         category = when (transactionType) {
@@ -73,8 +73,6 @@ class CategoryCreationViewModel @Inject constructor(
                     )
                 }
             }
-        }
-        viewModelScope.launch(categoryExceptionHandler) {
             launch {
                 _uiState.update { state: CategoryCreationUiState ->
                     state.copy(
@@ -85,7 +83,7 @@ class CategoryCreationViewModel @Inject constructor(
             }
             launch {
                 billingInteractor.isPremium().flowOn(Dispatchers.IO)
-                    .shareIn(viewModelScope, SharingStarted.WhileSubscribed()).collect {
+                    .stateIn(viewModelScope, SharingStarted.Eagerly, false).collect {
                         _uiState.update { state: CategoryCreationUiState -> state.copy(isPremium = it) }
                     }
             }

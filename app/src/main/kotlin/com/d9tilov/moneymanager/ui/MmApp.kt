@@ -1,7 +1,6 @@
 package com.d9tilov.moneymanager.ui
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -10,8 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -38,22 +35,16 @@ import com.d9tilov.android.designsystem.component.MmNavigationBarItem
 import com.d9tilov.moneymanager.navigation.MmNavHost
 import com.d9tilov.moneymanager.navigation.TopLevelDestination
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MmApp(
     windowSizeClass: WindowSizeClass,
-    appState: MmAppState = rememberMmAppState(
-        windowSizeClass = windowSizeClass,
-    ),
+    appState: MmAppState = rememberMmAppState(windowSizeClass = windowSizeClass),
 ) {
     MmBackground {
         val snackBarHostState = remember { SnackbarHostState() }
-
         Scaffold(
-            modifier = Modifier
-                .statusBarsPadding()
-                .systemBarsPadding()
-                .semantics { testTagsAsResourceId = true },
+            modifier = Modifier.semantics { testTagsAsResourceId = true },
             contentColor = MaterialTheme.colorScheme.onBackground,
             contentWindowInsets = WindowInsets(0, 0, 0, 0),
             snackbarHost = { SnackbarHost(snackBarHostState) },
