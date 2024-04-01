@@ -89,8 +89,9 @@ class BillingInteractorImpl(
     }
 
     override fun isPremium(): Flow<Boolean> {
-        val isPremiumEmailExists =
+        val isPremiumEmailExists: Flow<Boolean> =
             premiumEmailList.map { it.contains(Firebase.auth.currentUser?.email) }
+
         return combine(
             isPremiumEmailExists,
             currentPurchases.map { it.isNotEmpty() }

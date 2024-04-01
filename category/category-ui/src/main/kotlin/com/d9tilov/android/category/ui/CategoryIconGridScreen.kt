@@ -42,7 +42,7 @@ fun CategoryIconGridRoute(
         onBackClicked = clickBack,
         onIconClicked = { id ->
             sharedViewModel.setId(id)
-            onIconClick.invoke(viewModel.isPremium.value)
+            onIconClick(viewModel.isPremium.value)
         }
     )
 }

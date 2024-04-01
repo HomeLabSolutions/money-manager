@@ -42,11 +42,7 @@ fun CurrencyTextFieldExtraSmall(
     currencyCode: String,
     isEditable: Boolean = false,
     modifier: Modifier = Modifier,
-    style: TextStyle = MaterialTheme.typography.bodyLarge
-        .copy(
-            fontSize = dimensionResource(R.dimen.currency_extra_small_text_size).value.sp,
-            color = MaterialTheme.colorScheme.primary
-        ),
+    style: TextStyle,
     inputValueChanged: (String) -> Unit = {}
 ) {
     CurrencyTextField(

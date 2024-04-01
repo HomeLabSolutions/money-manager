@@ -50,7 +50,6 @@ class MainActivity : ComponentActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
@@ -89,7 +88,7 @@ class MainActivity : ComponentActivity() {
                 is MainActivityUiState.Success -> false
             }
         }
-
+        enableEdgeToEdge()
     }
 
     private fun openScreen(state: MainActivityUiState) {

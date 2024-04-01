@@ -33,6 +33,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
@@ -508,7 +509,7 @@ fun HomeTabs(
             selectedTabIndex = pagerState.currentPage,
             indicator = indicator,
             modifier = modifier,
-            containerColor = MaterialTheme.colorScheme.primary
+            containerColor = MaterialTheme.colorScheme.background
         ) {
             screenTypes.forEachIndexed { index, type ->
                 Tab(
@@ -527,8 +528,8 @@ fun HomeTabs(
                             },
                         )
                     },
-                    selectedContentColor = MaterialTheme.colorScheme.onPrimary,
-                    unselectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    selectedContentColor = MaterialTheme.colorScheme.onBackground,
+                    unselectedContentColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ContentAlpha.medium)
                 )
             }
         }
@@ -593,7 +594,7 @@ fun HomeTabs(
 @Composable
 fun HomeTabIndicator(
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.onPrimary,
+    color: Color = MaterialTheme.colorScheme.onBackground,
 ) {
     Spacer(
         modifier
