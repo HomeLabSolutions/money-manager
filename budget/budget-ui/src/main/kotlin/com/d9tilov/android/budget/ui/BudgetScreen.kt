@@ -60,7 +60,7 @@ fun BudgetScreen(
             }
         }
     ) { padding ->
-        Column {
+        Column(modifier = Modifier.padding(padding)) {
             Text(
                 text = stringResource(R.string.budget_sum_title),
                 modifier = Modifier.padding(
