@@ -69,7 +69,7 @@ fun SettingsRoute(
         onShowSnackBar = onShowSnackBar,
         onSave = {
             viewModel.save()
-            clickBack.invoke()
+            clickBack()
         },
         onBackupClick = viewModel::backup,
         onClearBackupClick = viewModel::deleteBackup,
@@ -139,7 +139,7 @@ fun SettingsScreen(
                 confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
                 onConfirm = {
                     openAlertDialog.value = false
-                    onClearBackupClick.invoke()
+                    onClearBackupClick()
                 },
                 onDismiss = { openAlertDialog.value = false }
             )
@@ -160,7 +160,7 @@ fun StartOfPeriodLayout(day: String, modifier: Modifier, onPeriodDateChanged: (S
                 modifier = Modifier.padding(start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small)),
                 maxLines = 1,
                 onValueChange = { text: String ->
-                    if (isInputDateValid(text)) onPeriodDateChanged.invoke(text)
+                    if (isInputDateValid(text)) onPeriodDateChanged(text)
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )

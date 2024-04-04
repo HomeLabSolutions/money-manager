@@ -74,7 +74,7 @@ fun NavGraphBuilder.regularTransactionListScreen(
         RegularTransactionListRoute(
             clickBack = clickBack,
             onAddClicked = openCreationTransaction,
-            onItemClicked = { tr -> openCreationTransaction.invoke(tr.type, tr.id) }
+            onItemClicked = { tr -> openCreationTransaction(tr.type, tr.id) }
         )
     }
 }

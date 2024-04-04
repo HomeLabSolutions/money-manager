@@ -2,8 +2,7 @@ package com.d9tilov.android.database.dao
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
+import androidx.room.Upsert
 import androidx.room.Query
 import androidx.room.Update
 import com.d9tilov.android.database.entity.TransactionDbModel
@@ -43,7 +42,7 @@ interface TransactionDao {
         to: LocalDateTime
     ): Flow<List<TransactionDbModel>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun insert(transaction: TransactionDbModel)
 
     @Query("SELECT count(*) FROM transactions WHERE clientId=:uid AND type=:type AND date >= :from AND date <= :to")

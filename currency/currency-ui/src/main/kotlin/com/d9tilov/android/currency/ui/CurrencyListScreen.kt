@@ -51,7 +51,7 @@ fun CurrencyListRoute(viewModel: CurrencyViewModel = hiltViewModel(), clickBack:
         onChooseCurrency = { currency ->
             val code = currency.code
             viewModel.changeCurrency(code)
-            onChooseCurrency.invoke(code)
+            onChooseCurrency(code)
         },
         onClickBack = clickBack
     )

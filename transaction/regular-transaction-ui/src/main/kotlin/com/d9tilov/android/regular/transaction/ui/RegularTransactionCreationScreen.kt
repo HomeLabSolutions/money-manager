@@ -84,7 +84,7 @@ fun RegularTransactionCreationRoute(
         onBackClicked = clickBack,
         onSaveClicked = {
             viewModel.saveOrUpdate()
-            onSaveClicked.invoke()
+            onSaveClicked()
         },
         onSumChanged = viewModel::updateAmount,
         onCategoryClicked = clickCategory,
@@ -151,7 +151,7 @@ fun RegularTransactionCreationScreen(
                     Text(
                         modifier = Modifier
                             .alignByBaseline()
-                            .clickable(onClick = { onCurrencyClicked.invoke(uiState.transaction.currencyCode) }),
+                            .clickable(onClick = { onCurrencyClicked(uiState.transaction.currencyCode) }),
                         text = uiState.transaction.currencyCode.getSymbolByCode(),
                         style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.primary,
@@ -163,7 +163,7 @@ fun RegularTransactionCreationScreen(
                         inputValueChanged = { text ->
                             showError = !MainPriceFieldParser.isInputValid(text)
                             saveBtnEnabled = !showError
-                            onSumChanged.invoke(text)
+                            onSumChanged(text)
                         },
                         showError = { if (showError) ShowError() }
                     )
@@ -172,7 +172,7 @@ fun RegularTransactionCreationScreen(
                     modifier = Modifier
                         .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large))
                         .clickable {
-                            onCategoryClicked.invoke(
+                            onCategoryClicked(
                                 uiState.transaction.type,
                                 CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN
                             )
@@ -317,7 +317,7 @@ fun RegularTransactionCreationScreen(
                     uiState.curDayOfMonth,
                     onDismiss = { openDayOfMonthDialog = false },
                     onDayClicked = {
-                        onDayOfMonthClicked.invoke(it)
+                        onDayOfMonthClicked(it)
                         openDayOfMonthDialog = false
                     })
             }
@@ -364,7 +364,7 @@ fun DayInMonthDialog(
                                     MaterialTheme.colorScheme.secondary,
                                     CircleShape
                                 )
-                                .clickable { onDayClicked.invoke(item) }
+                                .clickable { onDayClicked(item) }
                                 .background(
                                     color = if (item == selectedDay) MaterialTheme.colorScheme.secondary
                                     else MaterialTheme.colorScheme.background,
@@ -436,7 +436,7 @@ fun DropdownPeriodMenu(
                     },
                     onClick = {
                         curValue = item
-                        onMenuItemClick.invoke(item)
+                        onMenuItemClick(item)
                         isExpanded = false
                     }
                 )
@@ -465,7 +465,7 @@ fun DaysOfWeek(
                     .aspectRatio(1f)
                     .clip(CircleShape)
                     .border(1.dp, MaterialTheme.colorScheme.secondary, CircleShape)
-                    .clickable { onDayClicked.invoke(item) }
+                    .clickable { onDayClicked(item) }
                     .background(
                         color = if (item == selected) MaterialTheme.colorScheme.secondary
                         else MaterialTheme.colorScheme.background,

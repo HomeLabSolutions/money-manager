@@ -186,7 +186,7 @@ fun BottomNavigationBar(
                     val newScreenType = when (screenType) {
                         PrepopulateScreen.CurrencyScreen -> PrepopulateScreen.BudgetScreen
                         else -> {
-                            onBudgetSave.invoke()
+                            onBudgetSave()
                             PrepopulateScreen.BudgetScreen
                         }
                     }

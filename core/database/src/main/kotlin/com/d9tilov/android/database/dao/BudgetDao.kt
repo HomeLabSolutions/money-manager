@@ -2,8 +2,7 @@ package com.d9tilov.android.database.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
+import androidx.room.Upsert
 import androidx.room.Query
 import androidx.room.Update
 import com.d9tilov.android.database.entity.BudgetDbModel
@@ -12,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface BudgetDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun insert(budget: BudgetDbModel)
 
     @Query("SELECT * FROM budget WHERE clientId=:uid")

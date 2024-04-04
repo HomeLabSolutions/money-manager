@@ -86,7 +86,7 @@ fun AutoSizeTextField(
             textStyle = TextStyle.Default.copy(fontSize = shrunkFontSize, color = fontColor),
             singleLine = true,
             onValueChange = { text -> if (text.text.length <= MainPriceFieldParser.MAX_PRICE_LENGTH) inputValueChanged(text.text) },
-            supportingText = { showError.invoke() }
+            supportingText = { showError() }
         )
         LaunchedEffect(Unit) { focusRequester.requestFocus() }
     }

@@ -35,7 +35,7 @@ fun BudgetRoute(viewModel: BudgetAmountViewModel = hiltViewModel(), clickBack: (
         onBudgetInputChanged = viewModel::changeBudgetAmount,
         onSave = {
             viewModel.saveBudgetAmount()
-            clickBack.invoke()
+            clickBack()
         },
         onClickBack = clickBack
     )
@@ -81,7 +81,7 @@ fun BudgetScreen(
                     )
             ) { s ->
                 text = s
-                onBudgetInputChanged.invoke(s)
+                onBudgetInputChanged(s)
             }
             Spacer(modifier = Modifier.weight(1f))
             if (!showInPrepopulate) {

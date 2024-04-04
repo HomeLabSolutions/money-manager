@@ -79,7 +79,7 @@ fun TransactionCreationRoute(
         onSumChanged = viewModel::updateAmount,
         onSaveClicked = {
             viewModel.save()
-            clickBack.invoke()
+            clickBack()
         },
         onInStatisticsChanged = viewModel::updateInStatistics,
         onDescriptionChanged = viewModel::updateDescription,
@@ -140,7 +140,7 @@ fun TransactionCreationScreen(
                     Text(
                         modifier = Modifier
                             .alignByBaseline()
-                            .clickable(onClick = { onCurrencyClicked.invoke(uiState.transaction.currencyCode) }),
+                            .clickable(onClick = { onCurrencyClicked(uiState.transaction.currencyCode) }),
                         text = uiState.transaction.currencyCode.getSymbolByCode(),
                         style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.primary,
@@ -151,7 +151,7 @@ fun TransactionCreationScreen(
                         inputValue = uiState.amount,
                         inputValueChanged = { text ->
                             showError = !isInputValid(text)
-                            onSumChanged.invoke(text)
+                            onSumChanged(text)
                         },
                         showError = { if (showError) ShowError() }
                     )
@@ -163,7 +163,7 @@ fun TransactionCreationScreen(
                 ) {
                     Row(
                         modifier = Modifier.clickable {
-                            onCategoryClicked.invoke(
+                            onCategoryClicked(
                                 uiState.transaction.type,
                                 CategoryDestination.EDIT_TRANSACTION_SCREEN
                             )
@@ -210,7 +210,7 @@ fun TransactionCreationScreen(
                     ),
                     value = uiState.transaction.inStatistics,
                     label = stringResource(id = com.d9tilov.android.transaction_ui.R.string.transaction_edit_in_statistics),
-                    onCheckChanged = { onInStatisticsChanged.invoke(it) }
+                    onCheckChanged = { onInStatisticsChanged(it) }
                 )
                 DottedDivider(
                     modifier = Modifier.padding(
@@ -243,7 +243,7 @@ fun TransactionCreationScreen(
                     confirmButton = {
                         TextButton(
                             onClick = {
-                                onDateClicked.invoke(datePickerState.selectedDateMillis ?: currentDateTime().toMillis())
+                                onDateClicked(datePickerState.selectedDateMillis ?: currentDateTime().toMillis())
                                 showDatePickerDialog.value = false
                             }
                         ) {

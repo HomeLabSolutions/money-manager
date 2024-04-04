@@ -31,7 +31,7 @@ fun OutlineCircle(
             .padding(1.dp)
             .clip(CircleShape)
             .background(color)
-            .clickable { onClick.invoke(color) }
+            .clickable { onClick(color) }
             .then(
                 if (showOutline) Modifier
                     .border(2.dp, MaterialTheme.colorScheme.secondary, CircleShape)

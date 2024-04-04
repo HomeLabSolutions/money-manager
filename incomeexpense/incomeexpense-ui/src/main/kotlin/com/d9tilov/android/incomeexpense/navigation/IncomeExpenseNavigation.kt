@@ -42,8 +42,8 @@ fun NavGraphBuilder.incomeExpenseScreen(
             onCurrencyClicked = onCurrencyClick,
             onAllCategoryClicked = { type, destination ->
                 when (type) {
-                    ScreenType.EXPENSE -> onAllCategoryClick.invoke(TransactionType.EXPENSE, destination)
-                    ScreenType.INCOME -> onAllCategoryClick.invoke(TransactionType.INCOME, destination)
+                    ScreenType.EXPENSE -> onAllCategoryClick(TransactionType.EXPENSE, destination)
+                    ScreenType.INCOME -> onAllCategoryClick(TransactionType.INCOME, destination)
                 }
             },
             onTransactionClicked = onTransactionClick
