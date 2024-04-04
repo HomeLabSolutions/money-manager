@@ -26,7 +26,7 @@ fun CheckboxWithLabel(
                 checkedColor = MaterialTheme.colorScheme.primary,
                 uncheckedColor = MaterialTheme.colorScheme.primary,
             ),
-            onCheckedChange = { isChecked -> onCheckChanged.invoke(isChecked) }
+            onCheckedChange = { isChecked -> onCheckChanged(isChecked) }
         )
         Text(
             text = label,

@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit
 class PeriodicBackupWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted workerParameters: WorkerParameters,
-    val backupInteractor: BackupInteractor
+    private val backupInteractor: BackupInteractor
 ) : CoroutineWorker(context, workerParameters) {
 
     override suspend fun doWork(): Result {

@@ -76,7 +76,7 @@ fun CategoryIconGridScreen(
                         modifier = Modifier
                             .size(dimensionResource(id = R.dimen.category_grid_item_size))
                             .padding(8.dp)
-                            .clickable { onIconClicked.invoke(id) },
+                            .clickable { onIconClicked(id) },
                         imageVector = ImageVector.vectorResource(id = id),
                         contentDescription = "Icon",
                         tint = MaterialTheme.colorScheme.primary

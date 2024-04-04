@@ -150,7 +150,7 @@ fun IncomeExpenseRoute(
         onNumberClicked = { viewModel.addNumber(it) },
         onCategoryClicked = { category -> viewModel.addTransaction(category.id) },
         onEditModeChanged = { mode -> viewModel.updateMode(mode) },
-        onCurrencyClicked = { onCurrencyClicked.invoke(uiState.price.currencyCode) },
+        onCurrencyClicked = { onCurrencyClicked(uiState.price.currencyCode) },
         onAllCategoryClicked = onAllCategoryClicked,
         onDeleteTransactionConfirmClicked = viewModel::deleteTransaction
     )
@@ -173,7 +173,7 @@ fun IncomeExpenseScreen(
             if (uiState.mode == EditMode.LIST) {
                 AnimatedFloatingActionButton(
                     listState,
-                    onClick = { onEditModeChanged.invoke(EditMode.KEYBOARD) })
+                    onClick = { onEditModeChanged(EditMode.KEYBOARD) })
             }
         }
     ) { paddingValues ->
@@ -183,7 +183,7 @@ fun IncomeExpenseScreen(
             modifier = Modifier.padding(paddingValues),
             onNumberClicked = onNumberClicked,
             onCategoryClicked = onCategoryClicked,
-            onKeyboardClicked = { onEditModeChanged.invoke(EditMode.LIST) },
+            onKeyboardClicked = { onEditModeChanged(EditMode.LIST) },
             onCurrencyClicked = onCurrencyClicked,
             onAllCategoryClicked = onAllCategoryClicked,
             onTransactionClicked = onTransactionClicked,
@@ -335,7 +335,7 @@ fun TransactionListLayout(
                                 TransactionItem(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .clickable { onTransactionClicked.invoke(item) },
+                                        .clickable { onTransactionClicked(item) },
                                     transaction = item
                                 )
                                 SimpleDialog(
@@ -346,7 +346,7 @@ fun TransactionListLayout(
                                     confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
                                     onConfirm = {
                                         openRemoveDialog.value?.let { transactionToDelete ->
-                                            onDeleteTransactionConfirmClicked.invoke(transactionToDelete)
+                                            onDeleteTransactionConfirmClicked(transactionToDelete)
                                             openRemoveDialog.value = null
                                         }
                                     },
@@ -558,9 +558,9 @@ fun HomeTabs(
                         if (screenType == INCOME) uiState.incomeUiState.incomeCategoryList
                         else uiState.expenseUiState.expenseCategoryList,
                         modifier = Modifier.fillMaxWidth(),
-                        onItemClicked = { category -> onCategoryClicked.invoke(category) },
+                        onItemClicked = { category -> onCategoryClicked(category) },
                         onAllCategoryClicked = {
-                            onAllCategoryClicked.invoke(
+                            onAllCategoryClicked(
                                 screenType,
                                 if (uiState.price.value == ZERO) CategoryDestination.MAIN_SCREEN
                                 else CategoryDestination.MAIN_WITH_SUM_SCREEN
@@ -629,10 +629,10 @@ fun KeyBoardLayout(
                             fontSize = 32.sp,
                             textAlign = TextAlign.Center
                         ),
-                        onClick = { onNumberClicked.invoke(keyPress) }
+                        onClick = { onNumberClicked(keyPress) }
                     )
                 } else {
-                    IconButton(onClick = { onNumberClicked.invoke(keyPress) }) {
+                    IconButton(onClick = { onNumberClicked(keyPress) }) {
                         Icon(
                             imageVector = MoneyManagerIcons.BackSpace,
                             contentDescription = "BackSpace",
@@ -815,9 +815,8 @@ fun CategoryListLayout(
                     .size(dimensionResource(id = R.dimen.category_item_size))
                     .padding(8.dp)
                     .clickable {
-                        if (item.id == ALL_ITEMS_ID) onAllCategoryClicked.invoke() else onItemClicked.invoke(
-                            item
-                        )
+                        if (item.id == ALL_ITEMS_ID) onAllCategoryClicked() 
+                        else onItemClicked(item)
                     },
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -838,7 +837,7 @@ fun CategoryListLayout(
 }
 
 @Composable
-//@Preview
+@Preview
 fun TransactionListItemPreview() {
     MoneyManagerTheme {
         TransactionItem(

@@ -102,7 +102,7 @@ fun CategoryCreationScreen(
     var colorListShow by remember { mutableStateOf(false) }
     val currentState = LocalLifecycleOwner.current.lifecycle.currentState
     if (currentState.isAtLeast(Lifecycle.State.RESUMED)) {
-        if (uiState.saveStatus?.isSuccess == true) onBackClicked.invoke()
+        if (uiState.saveStatus?.isSuccess == true) onBackClicked()
     }
     Scaffold(topBar = {
         MmTopAppBar(
@@ -131,8 +131,8 @@ fun CategoryCreationScreen(
                 maxLines = 1,
                 onValueChange = { text ->
                     if (text.length <= maxNameLength) {
-                        onCategoryUpdated.invoke(uiState.category.copy(name = text))
-                        onHideError.invoke()
+                        onCategoryUpdated(uiState.category.copy(name = text))
+                        onHideError()
                     }
                 },
                 label = { Text(text = stringResource(id = R.string.category_name_title)) },
@@ -162,7 +162,7 @@ fun CategoryCreationScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large))
-                    .clickable { clickOnCategoryIcon.invoke() },
+                    .clickable { clickOnCategoryIcon() },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
@@ -196,7 +196,7 @@ fun CategoryCreationScreen(
                             color = colorRes,
                             selected = isSelected,
                             onClick = {
-                                onCategoryUpdated.invoke(uiState.category.copy(color = colorRes))
+                                onCategoryUpdated(uiState.category.copy(color = colorRes))
                                 colorListShow = !colorListShow
                             }
                         )
@@ -259,7 +259,7 @@ fun ColorListSelectorItem(
             size = size,
             color = Color(ContextCompat.getColor(context, color)),
             showOutline = selected,
-            onClick = { onClick.invoke(color) }
+            onClick = { onClick(color) }
         )
     }
 }

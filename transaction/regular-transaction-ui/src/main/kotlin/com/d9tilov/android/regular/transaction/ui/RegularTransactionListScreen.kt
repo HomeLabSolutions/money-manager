@@ -79,7 +79,7 @@ fun RegularTransactionListRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     RegularTransactionListScreen(
         uiState = uiState,
-        onAddClicked = { onAddClicked.invoke(uiState.transactionType, NO_ID) },
+        onAddClicked = { onAddClicked(uiState.transactionType, NO_ID) },
         onTransactionClicked = onItemClicked,
         onDeleteTransactionConfirmClicked = viewModel::removeTransaction,
         onBackClicked = clickBack
@@ -174,7 +174,7 @@ fun RegularTransactionListScreen(
                             confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
                             onConfirm = {
                                 openRemoveDialog.value?.let { transactionToDelete ->
-                                    onDeleteTransactionConfirmClicked.invoke(transactionToDelete)
+                                    onDeleteTransactionConfirmClicked(transactionToDelete)
                                     openRemoveDialog.value = null
                                 }
                             },
