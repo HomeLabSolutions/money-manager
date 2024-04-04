@@ -528,8 +528,8 @@ fun HomeTabs(
                             },
                         )
                     },
-                    selectedContentColor = MaterialTheme.colorScheme.onBackground,
-                    unselectedContentColor = MaterialTheme.colorScheme.onBackground.copy(alpha = ContentAlpha.medium)
+                    selectedContentColor = MaterialTheme.colorScheme.primary,
+                    unselectedContentColor = MaterialTheme.colorScheme.primary.copy(alpha = ContentAlpha.medium)
                 )
             }
         }
@@ -594,7 +594,7 @@ fun HomeTabs(
 @Composable
 fun HomeTabIndicator(
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.onBackground,
+    color: Color = MaterialTheme.colorScheme.primary,
 ) {
     Spacer(
         modifier

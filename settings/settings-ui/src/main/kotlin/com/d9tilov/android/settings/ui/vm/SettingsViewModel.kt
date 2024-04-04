@@ -1,5 +1,6 @@
 package com.d9tilov.android.settings.ui.vm
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,6 +43,7 @@ data class BackupState(
 data class SubscriptionUiState(
     @StringRes val title: Int = R.string.settings_subscription_premium_title,
     @StringRes val description: Int = R.string.settings_subscription_premium_description,
+    @DrawableRes val icon: Int = com.d9tilov.android.designsystem.R.drawable.ic_money_manager_logo,
     val minPrice: SubscriptionPriceUiState? = null,
 )
 
@@ -69,6 +71,7 @@ class SettingsViewModel @Inject constructor(
                 backupInteractor.getBackupData(),
                 billingInteractor.getPremiumInfo()
             ) { user, backupData, premiumInfo ->
+                Timber.tag(TAG).d("PremiumInfo: $premiumInfo")
                 val price = if (premiumInfo.isPremium) {
                     SubscriptionPriceUiState(
                         premiumInfo.minBillingPrice.value.toString(),
