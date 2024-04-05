@@ -801,6 +801,7 @@ fun CategoryListLayout(
     onAllCategoryClicked: () -> Unit,
 ) {
     val context = LocalContext.current
+
     LazyHorizontalGrid(
         modifier = modifier
             .height(200.dp)
@@ -815,7 +816,7 @@ fun CategoryListLayout(
                     .size(dimensionResource(id = R.dimen.category_item_size))
                     .padding(8.dp)
                     .clickable {
-                        if (item.id == ALL_ITEMS_ID) onAllCategoryClicked() 
+                        if (item.id == ALL_ITEMS_ID) onAllCategoryClicked()
                         else onItemClicked(item)
                     },
                 verticalArrangement = Arrangement.Center,

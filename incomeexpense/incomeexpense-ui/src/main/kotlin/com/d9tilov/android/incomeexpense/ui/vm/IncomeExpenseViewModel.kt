@@ -1,6 +1,5 @@
 package com.d9tilov.android.incomeexpense.ui.vm
 
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,14 +10,11 @@ import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.DataConstants.TAG
-import com.d9tilov.android.core.model.PeriodType
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.KeyPress
 import com.d9tilov.android.core.utils.MainPriceFieldParser
-import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getEndOfDay
-import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.core.utils.isSameDay
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
@@ -30,6 +26,7 @@ import com.d9tilov.android.transaction.domain.model.TransactionHeader
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,16 +34,13 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.minus
-import kotlinx.datetime.plus
 import timber.log.Timber
 import java.math.BigDecimal
 import javax.inject.Inject
-import kotlin.random.Random
 
 data class IncomeExpenseUiState(
     val mode: EditMode = EditMode.KEYBOARD,
@@ -157,31 +151,37 @@ class IncomeExpenseViewModel @Inject constructor(
                     }
             }
             launch {
-                categoryInteractor.getGroupedCategoriesByType(TransactionType.INCOME)
-                    .collect { list ->
-                        _uiState.update { state ->
-                            state.copy(
-                                incomeUiState = state.incomeUiState.copy(
-                                    incomeCategoryList = list,
-                                    incomeTransactions = mapWithStickyHeaders(transactionInteractor.getTransactionsByType(TransactionType.INCOME))
-                                )
-                            )
-                        }
+                getSortedCategories(TransactionType.EXPENSE).collect{ list ->
+                    _uiState.update { state ->
+                        state.copy(expenseUiState = state.expenseUiState.copy(expenseCategoryList = list))
                     }
+                }
             }
             launch {
-                categoryInteractor.getGroupedCategoriesByType(TransactionType.EXPENSE)
-                    .collect { list ->
-                        _uiState.update { state ->
-                            state.copy(expenseUiState = state.expenseUiState.copy(expenseCategoryList = list))
-                        }
+                getSortedCategories(TransactionType.INCOME).collect{ list ->
+                    _uiState.update { state ->
+                        state.copy(incomeUiState = state.incomeUiState.copy(incomeCategoryList = list))
                     }
+                }
             }
             launch {
                 _uiState.update { state ->
                     state.copy(
                         expenseUiState = state.expenseUiState.copy(
                             expenseTransactions = mapWithStickyHeaders(transactionInteractor.getTransactionsByType(TransactionType.EXPENSE))
+                        )
+                    )
+                }
+            }
+            launch {
+                _uiState.update { state ->
+                    state.copy(
+                        incomeUiState = state.incomeUiState.copy(
+                            incomeTransactions = mapWithStickyHeaders(
+                                transactionInteractor.getTransactionsByType(
+                                    TransactionType.INCOME
+                                )
+                            )
                         )
                     )
                 }
@@ -257,6 +257,13 @@ class IncomeExpenseViewModel @Inject constructor(
 //                )
 //            }
 //        }
+    }
+
+    private fun getSortedCategories(type: TransactionType): Flow<List<Category>> {
+        return categoryInteractor.getGroupedCategoriesByType(type)
+            .flowOn(Dispatchers.IO)
+            .map { list -> list.sortedByDescending { it.usageCount } }
+            .flowOn(Dispatchers.Default)
     }
 
     fun addNumber(btn: KeyPress) {
