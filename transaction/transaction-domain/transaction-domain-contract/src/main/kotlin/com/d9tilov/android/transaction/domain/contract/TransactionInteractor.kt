@@ -42,9 +42,7 @@ interface TransactionInteractor {
     fun getTransactionsByType(type: TransactionType): Flow<PagingData<Transaction>>
     fun ableToSpendToday(): Flow<TransactionSpendingTodayModel>
     fun ableToSpendInFiscalPeriod(): Flow<BigDecimal>
-    fun isSpendInPeriodApprox(type: TransactionType): Flow<Boolean>
     fun getSumInFiscalPeriod(): Flow<BigDecimal>
-    fun isSpendTodayApprox(type: TransactionType): Flow<Boolean>
     fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<BigDecimal>
     fun getApproxSumTodayCurrentCurrency(type: TransactionType): Flow<BigDecimal>
     suspend fun removeAllByCategory(category: Category)

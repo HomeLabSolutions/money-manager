@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,7 +35,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.ContentAlpha
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -81,7 +81,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -95,12 +94,10 @@ import com.d9tilov.android.category.domain.model.Category.Companion.ALL_ITEMS_ID
 import com.d9tilov.android.category.domain.model.CategoryDestination
 import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_FORMAT
 import com.d9tilov.android.common.android.utils.formatDate
-import com.d9tilov.android.core.constants.CurrencyConstants
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.core.constants.CurrencyConstants.ZERO
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.KeyPress
-import com.d9tilov.android.core.utils.removeScale
 import com.d9tilov.android.core.utils.toKeyPress
 import com.d9tilov.android.designsystem.ComposeCurrencyView
 import com.d9tilov.android.designsystem.EmptyListPlaceholder
@@ -112,12 +109,13 @@ import com.d9tilov.android.incomeexpense.ui.vm.ExpenseInfo
 import com.d9tilov.android.incomeexpense.ui.vm.ExpenseUiState
 import com.d9tilov.android.incomeexpense.ui.vm.IncomeExpenseUiState
 import com.d9tilov.android.incomeexpense.ui.vm.IncomeExpenseViewModel
+import com.d9tilov.android.incomeexpense.ui.vm.IncomeInfo
 import com.d9tilov.android.incomeexpense.ui.vm.IncomeUiState
+import com.d9tilov.android.incomeexpense.ui.vm.MainPrice
 import com.d9tilov.android.incomeexpense.ui.vm.Price
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.EXPENSE
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.INCOME
-import com.d9tilov.android.incomeexpense.ui.vm.TransactionSpendingTodayPrice
 import com.d9tilov.android.incomeexpense.ui.vm.screenTypes
 import com.d9tilov.android.incomeexpense.ui.vm.toScreenType
 import com.d9tilov.android.incomeexpense_ui.R
@@ -126,7 +124,6 @@ import com.d9tilov.android.transaction.domain.model.Transaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
-import java.math.RoundingMode
 
 @Composable
 fun IncomeExpenseRoute(
@@ -231,9 +228,8 @@ fun AnimatedFloatingActionButton(listState: LazyListState, onClick: () -> Unit) 
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MainPriceInput(price: Price, modifier: Modifier, onCurrencyClicked: () -> Unit) {
+fun MainPriceInput(price: MainPrice, modifier: Modifier, onCurrencyClicked: () -> Unit) {
     Surface(
         modifier = modifier,
         onClick = onCurrencyClicked,
@@ -461,7 +457,7 @@ fun TransactionItem(modifier: Modifier, transaction: Transaction) {
                 symbolSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sign_small_text_size).value.sp
             )
             ComposeCurrencyView(
-                value = transaction.usdSum.removeScale.toString(),
+                value = transaction.usdSum.toString(),
                 valueSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_extra_small_text_size).value.sp,
                 symbol = DEFAULT_CURRENCY_SYMBOL,
                 symbolSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sign_extra_small_text_size).value.sp
@@ -538,21 +534,33 @@ fun HomeTabs(
                 price = uiState.price,
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 32.dp, vertical = 16.dp),
+                    .padding(horizontal = 32.dp),
                 onCurrencyClicked = onCurrencyClicked
             )
             Spacer(modifier = Modifier.weight(1f))
         }
         HorizontalPager(state = pagerState) { tabIndex: Int ->
             if (uiState.mode == EditMode.KEYBOARD) {
-                Column(Modifier.fillMaxWidth()) {
-                    uiState.expenseUiState.expenseInfo?.let {
-                        ExpenseInfoLayout(
-                            it,
-                            Modifier.fillMaxWidth()
+                Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.Center) {
+                    val screenType = tabIndex.toScreenType()
+                    if (screenType == INCOME) uiState.incomeUiState.incomeInfo?.let {
+                        IncomeInfoBlock(
+                            Modifier
+                                .fillMaxWidth()
+                                .height(120.dp)
+                                .padding(start = 32.dp),
+                            it
+                        )
+                    } else uiState.expenseUiState.expenseInfo?.let {
+                        ExpenseInfoBlock(
+                            Modifier
+                                .fillMaxWidth()
+                                .height(120.dp)
+                                .padding(start = 32.dp),
+                            it
                         )
                     }
-                    val screenType = tabIndex.toScreenType()
+
                     CategoryListLayout(
                         categoryList =
                         if (screenType == INCOME) uiState.incomeUiState.incomeCategoryList
@@ -658,128 +666,35 @@ fun KeyBoardLayout(
 }
 
 @Composable
-fun ExpenseInfoLayout(
-    info: ExpenseInfo,
-    modifier: Modifier,
-) {
-    var ableToSpendTodayTitle = remember { "" }
-    var ableToSpendPrice: Price? = remember { Price.EMPTY }
-    var ableToSpendColor = MaterialTheme.colorScheme.onPrimary
-    when (info.ableToSpendToday) {
-        is TransactionSpendingTodayPrice.OVERSPENDING -> {
-            ableToSpendTodayTitle =
-                stringResource(id = R.string.category_expense_info_can_spend_today_negate_title)
-            ableToSpendPrice = info.ableToSpendToday.trSum
-            ableToSpendColor = MaterialTheme.colorScheme.error
-        }
-
-        is TransactionSpendingTodayPrice.NORMAL -> {
-            ableToSpendTodayTitle =
-                stringResource(id = R.string.category_expense_info_can_spend_today_title)
-            ableToSpendPrice = info.ableToSpendToday.trSum
-            ableToSpendColor =
-                if (info.wasSpendToday.value.toBigDecimal().setScale(
-                        CurrencyConstants.DECIMAL_LENGTH,
-                        RoundingMode.HALF_UP
-                    ).signum() > 0
-                ) MaterialTheme.colorScheme.onPrimary
-                else MaterialTheme.colorScheme.error
-        }
+fun ExpenseInfoBlock(modifier: Modifier, info: ExpenseInfo) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.Center) {
+        InfoLabel(info.ableToSpendToday)
+        InfoLabel(info.wasSpendToday)
+        InfoLabel(info.wasSpendInPeriod)
     }
-    ConstraintLayout(modifier = modifier.padding(start = 48.dp)) {
-        val (
-            idAbleToSpendTitle, idSpendTodayTitle, idSpendInPeriodTitle,
-            idApproxSignSpendToday, isApproxSignSpendInPeriod,
-            idAbleToSpendValue, idSpendTodayValue, idSpendInPeriodValue,
-        ) = createRefs()
-        createVerticalChain(
-            idAbleToSpendTitle,
-            idSpendTodayTitle,
-            idSpendInPeriodTitle,
-            chainStyle = ChainStyle.Spread
-        )
-        InfoLabel(
-            modifier = Modifier.constrainAs(idAbleToSpendTitle) {
-                top.linkTo(parent.top)
-                bottom.linkTo(idSpendTodayTitle.top)
-                start.linkTo(idSpendTodayTitle.start)
-            },
-            text = ableToSpendTodayTitle
-        )
+}
+
+@Composable
+fun IncomeInfoBlock(modifier: Modifier, info: IncomeInfo) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.Center) {
+        InfoLabel(info.wasEarnedInPeriod)
+    }
+}
+
+@Composable
+fun InfoLabel(price: Price) {
+    Row(Modifier.padding(bottom = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+        InfoLabelTitle(text = stringResource(id = price.label))
         Text(
-            modifier = Modifier
-                .padding(start = 4.dp)
-                .constrainAs(idAbleToSpendValue) {
-                    top.linkTo(idAbleToSpendTitle.top)
-                    bottom.linkTo(idAbleToSpendTitle.bottom)
-                    start.linkTo(idAbleToSpendTitle.end)
-                },
-            text = ableToSpendPrice.currencyCode.getSymbolByCode() + ableToSpendPrice.value
-        )
-        val padding = 8.dp
-        InfoLabel(
-            modifier = Modifier
-                .padding(vertical = padding)
-                .constrainAs(idSpendTodayTitle) {
-                    top.linkTo(idAbleToSpendTitle.bottom)
-                    bottom.linkTo(idSpendInPeriodTitle.top)
-                    start.linkTo(parent.start)
-                },
-            text = stringResource(id = R.string.category_expense_info_today_title)
-        )
-        Text(
-            modifier = Modifier
-                .padding(start = 4.dp)
-                .constrainAs(idApproxSignSpendToday) {
-                    top.linkTo(idSpendTodayTitle.bottom)
-                    bottom.linkTo(idSpendTodayTitle.top)
-                    start.linkTo(idSpendTodayTitle.end)
-                },
-            text = stringResource(id = com.d9tilov.android.common.android.R.string.approx_sign)
-        )
-        Text(
-            modifier = Modifier
-                .padding(start = 4.dp)
-                .constrainAs(idSpendTodayValue) {
-                    top.linkTo(idApproxSignSpendToday.top)
-                    bottom.linkTo(idApproxSignSpendToday.bottom)
-                    start.linkTo(idApproxSignSpendToday.end)
-                },
-            text = info.wasSpendToday.currencyCode.getSymbolByCode() + info.wasSpendToday.value
-        )
-        InfoLabel(
-            modifier = Modifier.constrainAs(idSpendInPeriodTitle) {
-                top.linkTo(idSpendTodayTitle.bottom)
-                bottom.linkTo(parent.bottom)
-                start.linkTo(idSpendTodayTitle.start)
-            },
-            text = "bottom"
-        )
-        Text(
-            modifier = Modifier
-                .padding(start = 4.dp)
-                .constrainAs(isApproxSignSpendInPeriod) {
-                    top.linkTo(idSpendInPeriodTitle.bottom)
-                    bottom.linkTo(idSpendInPeriodTitle.top)
-                    start.linkTo(idSpendInPeriodTitle.end)
-                },
-            text = stringResource(id = com.d9tilov.android.common.android.R.string.approx_sign)
-        )
-        Text(
-            modifier = Modifier
-                .padding(start = 4.dp)
-                .constrainAs(idSpendInPeriodValue) {
-                    top.linkTo(isApproxSignSpendInPeriod.top)
-                    bottom.linkTo(isApproxSignSpendInPeriod.bottom)
-                    start.linkTo(isApproxSignSpendInPeriod.end)
-                },
-            text = info.wasSpendInPeriod.currencyCode.getSymbolByCode() + info.wasSpendInPeriod.value
+            modifier = Modifier.padding(start = 4.dp),
+            text = price.value,
+            style = MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.primary)
         )
     }
 }
 
 @Composable
-fun InfoLabel(modifier: Modifier, text: String) {
+fun InfoLabelTitle(modifier: Modifier = Modifier, text: String) {
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(50))
@@ -788,7 +703,7 @@ fun InfoLabel(modifier: Modifier, text: String) {
         Text(
             modifier = Modifier.padding(6.dp),
             text = text,
-            color = MaterialTheme.colorScheme.onPrimary
+            style = MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.onPrimary)
         )
     }
 }
@@ -859,42 +774,61 @@ fun TransactionListItemPreview() {
 @Composable
 @Preview
 fun PreviewIncomeExpenseScreen() {
-    IncomeExpenseScreen(uiState = IncomeExpenseUiState.EMPTY.copy(
-        incomeUiState = IncomeUiState(
-            incomeCategoryList = listOf(
-                mockCategory(1L, "Category1"),
-                mockCategory(2L, "Category2"),
-                mockCategory(3L, "Category3"),
-                mockCategory(4L, "Category4"),
-                mockCategory(5L, "Category5"),
-                mockCategory(6L, "Category6"),
-                mockCategory(7L, "Category7"),
-                mockCategory(8L, "Category8"),
-                mockCategory(9L, "Category9"),
-                mockCategory(10L, "Category10"),
-                mockCategory(11L, "Category11"),
-                mockCategory(12L, "Category12"),
-                mockCategory(13L, "Category13"),
-                mockCategory(14L, "Category14"),
-                mockCategory(15L, "Category15"),
+    MoneyManagerTheme {
+        IncomeExpenseScreen(uiState = IncomeExpenseUiState.EMPTY.copy(
+            incomeUiState = IncomeUiState(
+                incomeCategoryList = listOf(
+                    mockCategory(1L, "Category1"),
+                    mockCategory(2L, "Category2"),
+                    mockCategory(3L, "Category3"),
+                    mockCategory(4L, "Category4"),
+                    mockCategory(5L, "Category5"),
+                    mockCategory(6L, "Category6"),
+                    mockCategory(7L, "Category7"),
+                    mockCategory(8L, "Category8"),
+                    mockCategory(9L, "Category9"),
+                    mockCategory(10L, "Category10"),
+                    mockCategory(11L, "Category11"),
+                    mockCategory(12L, "Category12"),
+                    mockCategory(13L, "Category13"),
+                    mockCategory(14L, "Category14"),
+                    mockCategory(15L, "Category15"),
+                ),
             ),
+            expenseUiState = ExpenseUiState.EMPTY.copy(
+                expenseInfo = ExpenseInfo(
+                    ableToSpendToday = Price(
+                        R.string.expense_info_can_spend_today_title,
+                        "$42"
+                    ),
+                    wasSpendToday = Price(R.string.expense_info_today_title, "$43"),
+                    wasSpendInPeriod = Price(R.string.expense_info_period_title, "$44")
+                )
+            )
         ),
-        expenseUiState = ExpenseUiState.EMPTY.copy(
-            expenseInfo = ExpenseInfo(
-                ableToSpendToday = TransactionSpendingTodayPrice.NORMAL(Price("42", "$")),
-                wasSpendToday = Price("43", "$", true),
-                wasSpendInPeriod = Price("44", "$")
+            onNumberClicked = {},
+            onCategoryClicked = {},
+            onEditModeChanged = {},
+            onCurrencyClicked = {},
+            onAllCategoryClicked = { _, _ -> },
+            onTransactionClicked = {},
+            onDeleteTransactionConfirmClicked = {}
+        )
+    }
+}
+
+@Composable
+@Preview
+fun InfoLabelPreview() {
+    MoneyManagerTheme {
+        ExpenseInfoBlock(
+            Modifier, ExpenseInfo(
+                ableToSpendToday = Price(R.string.expense_info_can_spend_today_title, "$41"),
+                wasSpendToday = Price(R.string.expense_info_today_title, "$42"),
+                wasSpendInPeriod = Price(R.string.expense_info_period_title, "$43"),
             )
         )
-    ),
-        onNumberClicked = {},
-        onCategoryClicked = {},
-        onEditModeChanged = {},
-        onCurrencyClicked = {},
-        onAllCategoryClicked = { _, _ -> },
-        onTransactionClicked = {},
-        onDeleteTransactionConfirmClicked = {}
-    )
+    }
 }
 
 private fun mockCategory(id: Long, name: String) = Category.EMPTY_INCOME.copy(

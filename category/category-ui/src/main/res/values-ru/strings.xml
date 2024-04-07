@@ -20,11 +20,6 @@
     <string name="category_name_exist_error">Название категории с таким именем уже существует</string>
     <string name="category_not_found_error">Категория не найдена</string>
     <string name="category_parent_not_found_error">Родительская категория не найдена</string>
-    <string name="category_expense_info_can_spend_today_title">сегодня можно потратить:</string>
-    <string name="category_expense_info_can_spend_today_negate_title">перерасход:</string>
-    <string name="category_expense_info_today_title">потрачено сегодня:</string>
-    <string name="category_expense_info_period_title">потрачено за период:</string>
-    <string name="category_income_info_period_title">заработано за период:</string>
     <string name="category_group_free">Иконки</string>
     <string name="category_group_housing">Жильё</string>
     <string name="category_group_transportation">Транспорт</string>
