@@ -12,7 +12,9 @@
     <string name="tab_expense">Expense</string>
 
     <string name="category_all">All items</string>
-    <string name="category_expense_info_can_spend_today_negate_title">overspending:</string>
-    <string name="category_expense_info_can_spend_today_title">you can spend today:</string>
-    <string name="category_expense_info_today_title">was spent today:</string>
+    <string name="expense_info_can_spend_today_title">you can spend today:</string>
+    <string name="expense_info_today_title">was spent today:</string>
+    <string name="expense_info_can_spend_today_negate_title">overspending:</string>
+    <string name="expense_info_period_title">was spent in period:</string>
+    <string name="income_info_period_title">was earned in period:</string>
 </resources>

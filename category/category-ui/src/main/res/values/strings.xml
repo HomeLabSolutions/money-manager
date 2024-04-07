@@ -20,11 +20,6 @@
     <string name="category_name_exist_error">Name of the category already exists</string>
     <string name="category_not_found_error">Category not found</string>
     <string name="category_parent_not_found_error">Category\'s parent not found</string>
-    <string name="category_expense_info_can_spend_today_title">you can spend today:</string>
-    <string name="category_expense_info_can_spend_today_negate_title">overspending:</string>
-    <string name="category_expense_info_today_title">was spent today:</string>
-    <string name="category_expense_info_period_title">was spent in period:</string>
-    <string name="category_income_info_period_title">was earned in period:</string>
     <string name="category_group_free">Icons</string>
     <string name="category_group_housing">Housing</string>
     <string name="category_group_transportation">Transportation</string>

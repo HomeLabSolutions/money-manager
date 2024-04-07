@@ -12,7 +12,9 @@
     <string name="tab_expense">Расходы</string>
 
     <string name="category_all">Все статьи</string>
-    <string name="category_expense_info_can_spend_today_negate_title">перерасход:</string>
-    <string name="category_expense_info_can_spend_today_title">сегодня можно потратить:</string>
-    <string name="category_expense_info_today_title">потрачено сегодня:</string>
+    <string name="expense_info_can_spend_today_title">сегодня можно потратить:</string>
+    <string name="expense_info_can_spend_today_negate_title">перерасход:</string>
+    <string name="expense_info_today_title">потрачено сегодня:</string>
+    <string name="expense_info_period_title">потрачено за период:</string>
+    <string name="income_info_period_title">заработано за период:</string>
 </resources>
