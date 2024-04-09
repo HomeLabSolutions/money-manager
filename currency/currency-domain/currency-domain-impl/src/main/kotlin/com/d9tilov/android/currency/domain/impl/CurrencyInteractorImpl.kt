@@ -2,7 +2,7 @@ package com.d9tilov.android.currency.domain.impl
 
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.utils.divideBy
-import com.d9tilov.android.core.utils.removeScale
+import com.d9tilov.android.core.utils.reduceScale
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.contract.CurrencyRepo
 import com.d9tilov.android.currency.domain.contract.mapper.toDomain
@@ -43,7 +43,7 @@ class CurrencyInteractorImpl(private val currencyRepo: CurrencyRepo) : CurrencyI
         val sourceCurrency = getCurrencyByCode(sourceCurrencyCode)
         val mainAbsoluteAmount = targetCurrency.value
         val currentAbsoluteAmount = sourceCurrency.value
-        return amount.multiply(mainAbsoluteAmount.divideBy(currentAbsoluteAmount)).removeScale
+        return amount.multiply(mainAbsoluteAmount.divideBy(currentAbsoluteAmount)).reduceScale()
     }
 
     override suspend fun toUsd(amount: BigDecimal, currencyCode: String): BigDecimal {
