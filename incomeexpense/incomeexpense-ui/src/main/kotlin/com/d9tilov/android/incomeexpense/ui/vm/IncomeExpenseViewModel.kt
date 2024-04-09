@@ -18,6 +18,7 @@ import com.d9tilov.android.core.utils.MainPriceFieldParser
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.isSameDay
+import com.d9tilov.android.core.utils.reduceScale
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.incomeexpense_ui.R
@@ -199,22 +200,22 @@ class IncomeExpenseViewModel @Inject constructor(
                             is TransactionSpendingTodayModel.NORMAL ->
                                 Price(
                                     R.string.expense_info_can_spend_today_title,
-                                    "${currencyCode.getSymbolByCode()}${ableToSpendToday.trSum}"
+                                    "${currencyCode.getSymbolByCode()}${ableToSpendToday.trSum.reduceScale(true)}"
                                 )
 
                             is TransactionSpendingTodayModel.OVERSPENDING ->
                                 Price(
                                     R.string.expense_info_can_spend_today_negate_title,
-                                    "${currencyCode.getSymbolByCode()}${ableToSpendToday.trSum}"
+                                    "${currencyCode.getSymbolByCode()}${ableToSpendToday.trSum.reduceScale(true)}"
                                 )
                         },
                         Price(
                             R.string.expense_info_today_title,
-                            "${currencyCode.getSymbolByCode()}$spentTodayApprox"
+                            "${currencyCode.getSymbolByCode()}${spentTodayApprox.reduceScale(true)}"
                         ),
                         Price(
                             R.string.expense_info_period_title,
-                            "${currencyCode.getSymbolByCode()}$spentInPeriodApprox"
+                            "${currencyCode.getSymbolByCode()}${spentInPeriodApprox.reduceScale(true)}"
                         )
                     )
                 }

@@ -20,7 +20,7 @@ import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.getStartDateOfFiscalPeriod
 import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.core.utils.isSameDay
-import com.d9tilov.android.core.utils.removeScale
+import com.d9tilov.android.core.utils.reduceScale
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.regular.transaction.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.regular.transaction.domain.model.RegularTransaction
@@ -258,10 +258,10 @@ class TransactionInteractorImpl(
             expensesPerCurrentDayFlow
         ) { numerator, countDaysSinceFiscalDate, expensesPerCurrentDay ->
             if (numerator.minus(expensesPerCurrentDay).signum() < 0) {
-                TransactionSpendingTodayModel.OVERSPENDING(numerator.minus(expensesPerCurrentDay).removeScale)
+                TransactionSpendingTodayModel.OVERSPENDING(numerator.minus(expensesPerCurrentDay).reduceScale())
             } else {
                 TransactionSpendingTodayModel.NORMAL(
-                    numerator.divideBy(countDaysSinceFiscalDate).minus(expensesPerCurrentDay).removeScale
+                    numerator.divideBy(countDaysSinceFiscalDate).minus(expensesPerCurrentDay).reduceScale()
                 )
             }
         }
@@ -271,7 +271,7 @@ class TransactionInteractorImpl(
         return combine(
             getNumerator(),
             getExpensesPerCurrentDay()
-        ) { numerator, expensesPerCurrentDay -> numerator.minus(expensesPerCurrentDay).removeScale }
+        ) { numerator, expensesPerCurrentDay -> numerator.minus(expensesPerCurrentDay).reduceScale() }
     }
 
     private fun getExpensesPerCurrentDay(): Flow<BigDecimal> =
@@ -471,7 +471,7 @@ class TransactionInteractorImpl(
                             val trCurrency = currencyInteractor.getCurrencyByCode(currencyCode)
                             trCurrency.value.multiply(tr.usdSum)
                         }
-                    }.removeScale
+                    }.reduceScale()
                 }
             }
     }
@@ -493,7 +493,7 @@ class TransactionInteractorImpl(
                     val trCurrency = currencyInteractor.getCurrencyByCode(currencyCode)
                     trCurrency.value.multiply(tr.usdSum)
                 }
-            }.removeScale
+            }.reduceScale()
         }
 
     override suspend fun executeRegularIfNeeded(type: TransactionType) {

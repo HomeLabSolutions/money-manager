@@ -29,13 +29,14 @@ val String?.toBigDecimal: BigDecimal
         return result
     }
 
-val BigDecimal?.removeScale: BigDecimal
-    get() {
+fun BigDecimal?.reduceScale(fully: Boolean = false): BigDecimal {
         if (this == null || this.signum() == 0) {
             return BigDecimal.ZERO
         }
         if (scale() == 0) return this
-        val newNum = this.setScale(DECIMAL_LENGTH, RoundingMode.HALF_UP).stripTrailingZeros()
+    val newNum =
+        this.setScale(if (fully) 0 else DECIMAL_LENGTH, RoundingMode.HALF_UP).stripTrailingZeros()
         if (newNum.signum() == 0) return BigDecimal.ZERO
         return newNum
     }
+

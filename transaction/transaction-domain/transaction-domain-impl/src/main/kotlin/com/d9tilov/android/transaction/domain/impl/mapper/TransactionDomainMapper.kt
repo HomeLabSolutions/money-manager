@@ -1,7 +1,7 @@
 package com.d9tilov.android.transaction.domain.impl.mapper
 
 import com.d9tilov.android.category.domain.model.Category
-import com.d9tilov.android.core.utils.removeScale
+import com.d9tilov.android.core.utils.reduceScale
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
 import com.d9tilov.android.transaction.domain.model.TransactionDataModel
@@ -32,8 +32,8 @@ fun TransactionDataModel.toDomainModel(category: Category): Transaction =
         type = type,
         category = category,
         currencyCode = currencyCode,
-        sum = sum.removeScale,
-        usdSum = usdSum.removeScale,
+        sum = sum.reduceScale(),
+        usdSum = usdSum.reduceScale(),
         date = date,
         description = description,
         qrCode = qrCode,
