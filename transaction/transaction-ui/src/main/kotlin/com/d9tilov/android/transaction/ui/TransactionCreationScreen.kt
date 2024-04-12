@@ -226,8 +226,19 @@ fun TransactionCreationScreen(
                     ),
                     value = uiState.transaction.description,
                     onValueChange = onDescriptionChanged,
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                    placeholder = { Text(text = stringResource(id = R.string.transaction_edit_description_hint)) }
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = Color.Transparent,
+                        textColor = MaterialTheme.colorScheme.tertiary,
+                        cursorColor = MaterialTheme.colorScheme.tertiary,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
+                        unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f),
+                    ),
+                    placeholder = {
+                        Text(
+                            text = stringResource(id = R.string.transaction_edit_description_hint),
+                            color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f)
+                        )
+                    }
                 )
             }
             BottomActionButton(
