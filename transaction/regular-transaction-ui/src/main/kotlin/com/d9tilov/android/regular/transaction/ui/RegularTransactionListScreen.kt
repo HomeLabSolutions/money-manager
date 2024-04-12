@@ -86,7 +86,7 @@ fun RegularTransactionListRoute(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegularTransactionListScreen(
     uiState: RegularTransactionListState,

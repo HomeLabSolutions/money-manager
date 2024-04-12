@@ -31,6 +31,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuItemColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -346,7 +347,8 @@ fun DayInMonthDialog(
             ) {
                 Text(
                     text = stringResource(id = R.string.regular_transaction_repeat_day_of_month),
-                    modifier = Modifier.padding(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small))
+                    modifier = Modifier.padding(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)),
+                    color = MaterialTheme.colorScheme.primary
                 )
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(5),
@@ -386,7 +388,6 @@ fun DayInMonthDialog(
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DropdownPeriodMenu(
     modifier: Modifier = Modifier,
@@ -416,6 +417,7 @@ fun DropdownPeriodMenu(
             tint = MaterialTheme.colorScheme.primary
         )
         DropdownMenu(
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.tertiaryContainer),
             expanded = isExpanded,
             onDismissRequest = {
                 isExpanded = false
@@ -430,7 +432,7 @@ fun DropdownPeriodMenu(
                                 PeriodMenuItem.WEEK -> stringResource(id = R.string.regular_transaction_repeat_list_week)
                                 PeriodMenuItem.MONTH -> stringResource(id = R.string.regular_transaction_repeat_list_month)
                             },
-                            color = MaterialTheme.colorScheme.primary,
+                            color = MaterialTheme.colorScheme.onTertiaryContainer,
                             style = MaterialTheme.typography.bodyLarge
                         )
                     },

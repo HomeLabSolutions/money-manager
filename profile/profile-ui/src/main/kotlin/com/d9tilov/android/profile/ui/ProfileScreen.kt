@@ -72,8 +72,7 @@ fun ProfileRoute(
     val uiState: ProfileUiState by viewModel.profileState.collectAsStateWithLifecycle()
     val showDialog by viewModel.showDialog.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    Scaffold(
-    ) { paddingValues ->
+    Scaffold { paddingValues ->
         ProfileScreen(
             modifier = Modifier.padding(paddingValues),
             state = uiState,
