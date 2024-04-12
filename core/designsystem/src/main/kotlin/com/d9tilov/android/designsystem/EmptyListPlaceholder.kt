@@ -31,12 +31,14 @@ fun EmptyListPlaceholder(
         Text(
             modifier = Modifier.padding(top = 16.dp),
             text = title,
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.primary
         )
         subtitle?.let { str ->
             Text(
                 text = str,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.tertiary
             )
         }
 
