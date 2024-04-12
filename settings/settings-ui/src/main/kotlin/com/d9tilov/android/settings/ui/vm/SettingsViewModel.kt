@@ -112,10 +112,7 @@ class SettingsViewModel @Inject constructor(
                         showBackupCloseBtn = backupData.lastBackupTimestamp != UNKNOWN_BACKUP_DATE
                     )
                 )
-            }.collect { state ->
-                _uiState.update { state }
-                Timber.tag(TAG).d("Backup completed3: ${_uiState.value}")
-            }
+            }.collect { state -> _uiState.update { state } }
         }
     }
 

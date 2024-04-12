@@ -1,5 +1,6 @@
 plugins {
     id("moneymanager.android.library")
+    id("moneymanager.android.hilt")
 }
 
 android {
@@ -22,6 +23,7 @@ dependencies {
 
     implementation(libs.worker)
     implementation(libs.workerHilt)
+    kapt(libs.workerHiltCompiler)
 
     implementation(platform(libs.firebaseBom))
     implementation(libs.firebaseStorage)
