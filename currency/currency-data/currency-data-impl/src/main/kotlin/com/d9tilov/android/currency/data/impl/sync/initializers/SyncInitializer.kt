@@ -41,4 +41,4 @@ object Sync {
 }
 
 // This name should not be changed otherwise the app may have concurrent sync requests running
-internal const val SyncWorkName = "SyncWorkName"
+internal const val SyncWorkName = "currency_sync_work_name"

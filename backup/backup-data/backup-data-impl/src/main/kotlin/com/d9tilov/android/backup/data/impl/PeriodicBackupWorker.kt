@@ -4,10 +4,15 @@ import android.content.Context
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.ForegroundInfo
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.d9tilov.android.backup.domain.contract.BackupInteractor
+import com.d9tilov.android.common.android.worker.DelegatingWorker
+import com.d9tilov.android.common.android.worker.SyncConstraints
+import com.d9tilov.android.common.android.worker.delegatedData
+import com.d9tilov.android.common.android.worker.syncForegroundInfo
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.network.exception.NetworkException
@@ -25,9 +30,13 @@ class PeriodicBackupWorker @AssistedInject constructor(
     private val backupInteractor: BackupInteractor
 ) : CoroutineWorker(context, workerParameters) {
 
+    override suspend fun getForegroundInfo(): ForegroundInfo =
+        context.syncForegroundInfo()
+
     override suspend fun doWork(): Result {
         Timber.tag(TAG).d("Do work...")
         return try {
+            setForeground(context.syncForegroundInfo())
             backupInteractor.makeBackup()
             Timber.tag(TAG).d("Do work with success")
             Result.success()
@@ -47,6 +56,7 @@ class PeriodicBackupWorker @AssistedInject constructor(
     }
 
     companion object {
+        private const val BACKUP_WORK_NAME = "backup_work_name"
         private const val LOGIN_WORK_TAG = "periodic_backup"
         private const val PERIOD_WORK_IN_HOURS = 24L
 
@@ -54,16 +64,18 @@ class PeriodicBackupWorker @AssistedInject constructor(
             Timber.tag(TAG).d("Start backup periodic job")
             val recurringWork = PeriodicWorkRequest
                 .Builder(
-                    PeriodicBackupWorker::class.java,
+                    DelegatingWorker::class.java,
                     PERIOD_WORK_IN_HOURS,
                     TimeUnit.HOURS
                 )
                 .addTag(LOGIN_WORK_TAG)
+                .setConstraints(SyncConstraints)
+                .setInputData(PeriodicBackupWorker::class.delegatedData())
                 .build()
 
             val workManager = WorkManager.getInstance(context)
             workManager.enqueueUniquePeriodicWork(
-                PeriodicBackupWorker::class.java.name,
+                BACKUP_WORK_NAME,
                 ExistingPeriodicWorkPolicy.KEEP,
                 recurringWork
             )
