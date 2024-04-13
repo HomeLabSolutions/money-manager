@@ -27,13 +27,18 @@ fun MmTopAppBar(
     onActionClick: () -> Unit = {}
 ) {
     TopAppBar(
-        title = { Text(text = stringResource(id = titleRes)) },
+        title = {
+            Text(
+                text = stringResource(id = titleRes),
+                color = MaterialTheme.colorScheme.tertiary
+            )
+        },
         navigationIcon = {
             IconButton(onClick = onNavigationClick) {
                 Icon(
                     imageVector = navigationIcon,
                     contentDescription = "Navigation Icon",
-                    tint = MaterialTheme.colorScheme.onSurface
+                    tint = MaterialTheme.colorScheme.tertiary
                 )
             }
         },
@@ -43,7 +48,7 @@ fun MmTopAppBar(
                     Icon(
                         imageVector = actionIcon,
                         contentDescription = "Action Icon",
-                        tint = MaterialTheme.colorScheme.onSurface
+                        tint = MaterialTheme.colorScheme.tertiary
                     )
                 }
             }

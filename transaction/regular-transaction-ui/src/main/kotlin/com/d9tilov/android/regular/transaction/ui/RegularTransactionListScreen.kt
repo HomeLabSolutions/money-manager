@@ -7,7 +7,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -18,14 +17,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SwipeToDismiss
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
@@ -61,6 +58,7 @@ import com.d9tilov.android.designsystem.ComposeCurrencyView
 import com.d9tilov.android.designsystem.EmptyListPlaceholder
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
+import com.d9tilov.android.designsystem.MoneyManagerIcons.Delete
 import com.d9tilov.android.designsystem.SimpleDialog
 import com.d9tilov.android.regular.transaction.domain.model.RegularTransaction
 import com.d9tilov.android.regular.transaction.domain.model.WeekDays
@@ -135,10 +133,10 @@ fun RegularTransactionListScreen(
                     }
                 )
                 if (openRemoveDialog.value == null) LaunchedEffect(Unit) { dismissState.reset() }
-                SwipeToDismiss(
+                SwipeToDismissBox(
                     state = dismissState,
-                    directions = setOf(SwipeToDismissBoxValue.EndToStart),
-                    background = {
+                    enableDismissFromStartToEnd = false,
+                    backgroundContent = {
                         val backgroundColor by animateColorAsState(
                             when (dismissState.targetValue) {
                                 SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.error
@@ -158,13 +156,13 @@ fun RegularTransactionListScreen(
                         ) {
                             Icon(
                                 modifier = Modifier.scale(iconScale),
-                                imageVector = Icons.Outlined.Delete,
+                                imageVector = Delete,
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.onError
                             )
                         }
                     },
-                    dismissContent = {
+                    content = {
                         RegularTransactionItem(item, onTransactionClicked)
                         SimpleDialog(
                             show = openRemoveDialog.value != null,
@@ -276,7 +274,7 @@ private fun getWeekDayString(context: Context, day: Int) = when (day) {
     else -> throw IllegalArgumentException("Unknown day of week: $day")
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 fun DefaultRegularTransactionListPreview() {
     RegularTransactionListScreen(

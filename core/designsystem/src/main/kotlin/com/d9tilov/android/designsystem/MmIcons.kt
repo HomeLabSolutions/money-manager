@@ -3,19 +3,17 @@ package com.d9tilov.android.designsystem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.ArrowRight
+import androidx.compose.material.icons.automirrored.rounded.Backspace
 import androidx.compose.material.icons.automirrored.rounded.List
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.material.icons.rounded.AddTask
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ArrowRight
-import androidx.compose.material.icons.rounded.Backspace
 import androidx.compose.material.icons.rounded.BarChart
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.KeyboardHide
-import androidx.compose.material.icons.rounded.List
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.RemoveCircle
 import androidx.compose.material.icons.rounded.Repeat
@@ -35,11 +33,12 @@ object MoneyManagerIcons {
     val Subscription = R.drawable.ic_money_manager_logo
     val Backup = Icons.Rounded.Refresh
     val Close = Icons.Rounded.Clear
-    val BackSpace = Icons.Rounded.Backspace
+    val BackSpace = Icons.AutoMirrored.Rounded.Backspace
     val HideKeyboard = Icons.Rounded.KeyboardHide
     val Repeat = Icons.Rounded.Repeat
     val InStatisticsTransaction = R.drawable.ic_not_in_statistics
     val EmptyPlaceholder = R.drawable.ic_categories_empty
     val EmptyRegularPlaceholder = R.drawable.ic_wallet_empty
     val Cross = Icons.Rounded.RemoveCircle
+    val Delete = Icons.Outlined.Delete
 }

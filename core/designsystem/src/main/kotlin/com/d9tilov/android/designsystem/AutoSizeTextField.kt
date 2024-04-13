@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
@@ -35,7 +34,6 @@ import com.d9tilov.android.core.utils.MainPriceFieldParser
 
 private const val TEXT_SCALE_REDUCTION_INTERVAL = 0.8f
 
-@ExperimentalMaterialApi
 @Composable
 fun AutoSizeTextField(
     inputValue: String,
