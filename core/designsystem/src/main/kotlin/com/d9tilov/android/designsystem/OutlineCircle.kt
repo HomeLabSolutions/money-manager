@@ -43,5 +43,5 @@ fun OutlineCircle(
 @Preview(showBackground = true)
 @Composable
 fun DefaultCategoryCreationPreview() {
-    MoneyManagerTheme { OutlineCircle(Modifier, Color.Red, 100.dp, true, {}) }
+    MoneyManagerTheme { OutlineCircle(Modifier, Color.Red, 100.dp, true) {} }
 }

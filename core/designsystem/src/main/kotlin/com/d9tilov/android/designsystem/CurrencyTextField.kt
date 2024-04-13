@@ -5,11 +5,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,13 +34,12 @@ private const val TEXT_SCALE_REDUCTION_INTERVAL = 0.9f
 private const val DECIMAL_SIZE = 2
 private const val DELIMITER = "."
 
-@ExperimentalMaterialApi
 @Composable
 fun CurrencyTextFieldExtraSmall(
+    modifier: Modifier = Modifier,
     amount: String,
     currencyCode: String,
     isEditable: Boolean = false,
-    modifier: Modifier = Modifier,
     style: TextStyle,
     inputValueChanged: (String) -> Unit = {}
 ) {
@@ -55,13 +53,12 @@ fun CurrencyTextFieldExtraSmall(
     )
 }
 
-@ExperimentalMaterialApi
 @Composable
 fun CurrencyTextFieldSmall(
+    modifier: Modifier = Modifier,
     amount: String,
     currencyCode: String,
     isEditable: Boolean = false,
-    modifier: Modifier = Modifier,
     style: TextStyle = MaterialTheme.typography.bodyLarge
         .copy(
             fontSize = dimensionResource(R.dimen.currency_sum_small_text_size).value.sp,
@@ -79,13 +76,12 @@ fun CurrencyTextFieldSmall(
     )
 }
 
-@ExperimentalMaterialApi
 @Composable
 fun CurrencyTextFieldMedium(
+    modifier: Modifier = Modifier,
     amount: String,
     currencyCode: String,
     isEditable: Boolean = false,
-    modifier: Modifier = Modifier,
     style: TextStyle = MaterialTheme.typography.bodyLarge
         .copy(
             fontSize = dimensionResource(R.dimen.currency_sum_medium_text_size).value.sp,
@@ -103,13 +99,12 @@ fun CurrencyTextFieldMedium(
     )
 }
 
-@ExperimentalMaterialApi
 @Composable
 fun CurrencyTextFieldBig(
+    modifier: Modifier = Modifier,
     amount: String,
     currencyCode: String,
     isEditable: Boolean = false,
-    modifier: Modifier = Modifier,
     style: TextStyle = MaterialTheme.typography.bodyLarge
         .copy(
             fontSize = dimensionResource(R.dimen.currency_sum_big_text_size).value.sp,
@@ -127,13 +122,12 @@ fun CurrencyTextFieldBig(
     )
 }
 
-@ExperimentalMaterialApi
 @Composable
 fun CurrencyTextFieldExtraBig(
+    modifier: Modifier = Modifier,
     amount: String,
     currencyCode: String,
     isEditable: Boolean = false,
-    modifier: Modifier = Modifier,
     style: TextStyle = MaterialTheme.typography.bodyLarge
         .copy(
             fontSize = dimensionResource(R.dimen.currency_sum_extra_big_text_size).value.sp,
@@ -151,7 +145,6 @@ fun CurrencyTextFieldExtraBig(
     )
 }
 
-@ExperimentalMaterialApi
 @Composable
 private fun CurrencyTextField(
     amount: String,
@@ -238,11 +231,12 @@ private fun CurrencyTextField(
                         color = style.color
                     ),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                    colors = TextFieldDefaults.textFieldColors(
-                        placeholderColor = MaterialTheme.colorScheme.error,
-                        backgroundColor = Color.Transparent,
+                    colors = TextFieldDefaults.colors().copy(
+                        focusedPlaceholderColor = MaterialTheme.colorScheme.error,
                         focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent
                     ),
                     singleLine = true
                 )
@@ -270,7 +264,6 @@ private fun CurrencyTextField(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreviewCurrencyTextField() {

@@ -23,17 +23,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuItemColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -96,7 +93,7 @@ fun RegularTransactionCreationRoute(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegularTransactionCreationScreen(
     uiState: RegularTransactionCreationUiState,
@@ -302,7 +299,6 @@ fun RegularTransactionCreationScreen(
                     ),
                     value = uiState.transaction.description,
                     onValueChange = onDescriptionChanged,
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                     placeholder = { Text(text = stringResource(id = R.string.regular_transaction_edit_description_hint)) }
                 )
             }

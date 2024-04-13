@@ -11,9 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
@@ -23,6 +20,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -89,7 +88,7 @@ fun TransactionCreationRoute(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionCreationScreen(
     uiState: TransactionUiState,
@@ -108,7 +107,7 @@ fun TransactionCreationScreen(
     val datePickerState: DatePickerState = rememberDatePickerState().also { it.selectedDateMillis = uiState.transaction.date.toMillis() }
     Scaffold(topBar = {
         MmTopAppBar(
-            titleRes = com.d9tilov.android.transaction_ui.R.string.title_transaction,
+            titleRes = R.string.title_transaction,
             onNavigationClick = onBackClicked
         )
     }) { padding ->
@@ -129,7 +128,7 @@ fun TransactionCreationScreen(
                         end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
                         top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
                     ),
-                    text = stringResource(id = com.d9tilov.android.transaction_ui.R.string.transaction_edit_sum_title),
+                    text = stringResource(id = R.string.transaction_edit_sum_title),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -209,7 +208,7 @@ fun TransactionCreationScreen(
                         vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large)
                     ),
                     value = uiState.transaction.inStatistics,
-                    label = stringResource(id = com.d9tilov.android.transaction_ui.R.string.transaction_edit_in_statistics),
+                    label = stringResource(id = R.string.transaction_edit_in_statistics),
                     onCheckChanged = { onInStatisticsChanged(it) }
                 )
                 DottedDivider(
@@ -226,9 +225,10 @@ fun TransactionCreationScreen(
                     ),
                     value = uiState.transaction.description,
                     onValueChange = onDescriptionChanged,
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = Color.Transparent,
-                        textColor = MaterialTheme.colorScheme.tertiary,
+                    colors = TextFieldDefaults.colors().copy(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        focusedTextColor = MaterialTheme.colorScheme.tertiary,
                         cursorColor = MaterialTheme.colorScheme.tertiary,
                         focusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
                         unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f),
@@ -285,7 +285,7 @@ fun TransactionCreationScreen(
 @Composable
 fun ShowError() {
     Text(
-        text = stringResource(id = com.d9tilov.android.transaction_ui.R.string.transaction_invalid_amount),
+        text = stringResource(id = R.string.transaction_invalid_amount),
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.error
     )

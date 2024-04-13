@@ -17,12 +17,11 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.OutlinedButton
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -129,7 +128,7 @@ fun ProfileScreen(
             modifier = Modifier.padding(top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
             onClick = { onLogoutClicked() },
             shape = RoundedCornerShape(50),
-            colors = ButtonDefaults.outlinedButtonColors(backgroundColor = MaterialTheme.colorScheme.error)
+            colors = ButtonDefaults.outlinedButtonColors().copy(containerColor = MaterialTheme.colorScheme.error)
         ) {
             Text(
                 text = stringResource(R.string.profile_logout),
@@ -203,7 +202,6 @@ fun ProfileContent(name: String?) {
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit = {}) {
     val (icon, title, subtitle) = when (profileUiItem) {
@@ -364,7 +362,7 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
                 style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.tertiary)
             )
         }
-        Divider(
+        HorizontalDivider(
             modifier = Modifier
                 .padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium))
                 .constrainAs(idDivider) { bottom.linkTo(parent.bottom) },

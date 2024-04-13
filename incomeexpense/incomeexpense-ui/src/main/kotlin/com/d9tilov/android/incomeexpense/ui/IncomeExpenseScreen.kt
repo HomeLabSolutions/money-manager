@@ -34,9 +34,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -321,7 +318,7 @@ fun TransactionListLayout(
                                 ) {
                                     Icon(
                                         modifier = Modifier.scale(iconScale),
-                                        imageVector = Icons.Outlined.Delete,
+                                        imageVector = MoneyManagerIcons.Delete,
                                         contentDescription = null,
                                         tint = MaterialTheme.colorScheme.onError
                                     )
@@ -525,7 +522,7 @@ fun HomeTabs(
                         )
                     },
                     selectedContentColor = MaterialTheme.colorScheme.primary,
-                    unselectedContentColor = MaterialTheme.colorScheme.primary.copy(alpha = ContentAlpha.medium)
+                    unselectedContentColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
                 )
             }
         }
