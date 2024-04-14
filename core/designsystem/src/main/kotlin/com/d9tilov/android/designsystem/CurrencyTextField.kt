@@ -79,7 +79,7 @@ fun CurrencyTextFieldSmall(
 @Composable
 fun CurrencyTextFieldMedium(
     modifier: Modifier = Modifier,
-    amount: String,
+    value: String,
     currencyCode: String,
     isEditable: Boolean = false,
     style: TextStyle = MaterialTheme.typography.bodyLarge
@@ -90,7 +90,7 @@ fun CurrencyTextFieldMedium(
     inputValueChanged: (String) -> Unit = {}
 ) {
     CurrencyTextField(
-        amount = amount,
+        amount = value,
         currencyCode = currencyCode,
         isEditable = isEditable,
         modifier = modifier,

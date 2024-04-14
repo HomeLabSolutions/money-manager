@@ -3,7 +3,6 @@
     <string name="delete">Удалить</string>
     <string name="transaction_delete_dialog_title">Удаление транзакции</string>
     <string name="transaction_delete_dialog_subtitle">Вы действительно хотите удалить транзакцию?</string>
-    <string name="transaction_edit_description_hint">Описание</string>
     <string name="transaction_edit_in_statistics">В статистике</string>
     <string name="title_transaction">Транзакция</string>
     <string name="transaction_edit_sum_title">Сумма</string>

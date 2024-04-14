@@ -20,8 +20,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -53,6 +51,7 @@ import com.d9tilov.android.core.utils.toMillis
 import com.d9tilov.android.designsystem.AutoSizeTextField
 import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.CheckboxWithLabel
+import com.d9tilov.android.designsystem.DescriptionTextField
 import com.d9tilov.android.designsystem.DottedDivider
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
@@ -218,27 +217,13 @@ fun TransactionCreationScreen(
                         top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large)
                     )
                 )
-                TextField(
+                DescriptionTextField(
                     modifier = Modifier.padding(
                         horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
                         vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)
                     ),
                     value = uiState.transaction.description,
-                    onValueChange = onDescriptionChanged,
-                    colors = TextFieldDefaults.colors().copy(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        focusedTextColor = MaterialTheme.colorScheme.tertiary,
-                        cursorColor = MaterialTheme.colorScheme.tertiary,
-                        focusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
-                        unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f),
-                    ),
-                    placeholder = {
-                        Text(
-                            text = stringResource(id = R.string.transaction_edit_description_hint),
-                            color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f)
-                        )
-                    }
+                    onValueChange = onDescriptionChanged
                 )
             }
             BottomActionButton(

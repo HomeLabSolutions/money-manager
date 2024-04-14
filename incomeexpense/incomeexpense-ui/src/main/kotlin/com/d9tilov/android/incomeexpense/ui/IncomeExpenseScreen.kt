@@ -286,7 +286,6 @@ fun TransactionListLayout(
                     item(key = index) {
                         val item = lazyTransactionItems[index] as Transaction
                         val dismissState = rememberSwipeToDismissBoxState(
-                            positionalThreshold = { _ -> 0.3f },
                             confirmValueChange = {
                                 if (it == SwipeToDismissBoxValue.EndToStart) {
                                     openRemoveDialog.value = item
@@ -331,20 +330,6 @@ fun TransactionListLayout(
                                         .clickable { onTransactionClicked(item) },
                                     transaction = item
                                 )
-                                SimpleDialog(
-                                    show = openRemoveDialog.value != null,
-                                    title = stringResource(R.string.transaction_delete_dialog_title),
-                                    subtitle = stringResource(R.string.transaction_delete_dialog_subtitle),
-                                    dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
-                                    confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
-                                    onConfirm = {
-                                        openRemoveDialog.value?.let { transactionToDelete ->
-                                            onDeleteTransactionConfirmClicked(transactionToDelete)
-                                            openRemoveDialog.value = null
-                                        }
-                                    },
-                                    onDismiss = { openRemoveDialog.value = null }
-                                )
                             })
                     }
                 }
@@ -356,6 +341,20 @@ fun TransactionListLayout(
             }
         }
     }
+    SimpleDialog(
+        show = openRemoveDialog.value != null,
+        title = stringResource(R.string.transaction_delete_dialog_title),
+        subtitle = stringResource(R.string.transaction_delete_dialog_subtitle),
+        dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
+        confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
+        onConfirm = {
+            openRemoveDialog.value?.let { transactionToDelete ->
+                onDeleteTransactionConfirmClicked(transactionToDelete)
+                openRemoveDialog.value = null
+            }
+        },
+        onDismiss = { openRemoveDialog.value = null }
+    )
 }
 
 @Composable

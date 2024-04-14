@@ -43,7 +43,6 @@
     <string name="regular_transaction_repeat_list_week">Неделя</string>
     <string name="regular_transaction_repeat_list_month">Месяц</string>
     <string name="regular_transaction_repeat_day_of_month">День месяца</string>
-    <string name="regular_transaction_edit_description_hint">Описание</string>
     <string name="regular_transaction_delete_dialog_title">Удаление транзакции</string>
     <string name="regular_transaction_delete_dialog_subtitle">Вы действительно хотите удалить транзакцию?</string>
 
