@@ -54,7 +54,7 @@ import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.PeriodType
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
-import com.d9tilov.android.designsystem.ComposeCurrencyView
+import com.d9tilov.android.designsystem.CurrencyTextFieldMedium
 import com.d9tilov.android.designsystem.EmptyListPlaceholder
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
@@ -124,7 +124,6 @@ fun RegularTransactionListScreen(
         ) {
             items(items = uiState.regularTransactions, key = { item -> item.id }) { item ->
                 val dismissState = rememberSwipeToDismissBoxState(
-                    positionalThreshold = { _ -> 0.3f },
                     confirmValueChange = {
                         if (it == SwipeToDismissBoxValue.EndToStart) {
                             openRemoveDialog.value = item
@@ -162,26 +161,24 @@ fun RegularTransactionListScreen(
                             )
                         }
                     },
-                    content = {
-                        RegularTransactionItem(item, onTransactionClicked)
-                        SimpleDialog(
-                            show = openRemoveDialog.value != null,
-                            title = stringResource(R.string.regular_transaction_delete_dialog_title),
-                            subtitle = stringResource(R.string.regular_transaction_delete_dialog_subtitle),
-                            dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
-                            confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
-                            onConfirm = {
-                                openRemoveDialog.value?.let { transactionToDelete ->
-                                    onDeleteTransactionConfirmClicked(transactionToDelete)
-                                    openRemoveDialog.value = null
-                                }
-                            },
-                            onDismiss = { openRemoveDialog.value = null }
-                        )
-                    })
+                    content = { RegularTransactionItem(item, onTransactionClicked) })
             }
         }
     }
+    SimpleDialog(
+        show = openRemoveDialog.value != null,
+        title = stringResource(R.string.regular_transaction_delete_dialog_title),
+        subtitle = stringResource(R.string.regular_transaction_delete_dialog_subtitle),
+        dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
+        confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
+        onConfirm = {
+            openRemoveDialog.value?.let { transactionToDelete ->
+                onDeleteTransactionConfirmClicked(transactionToDelete)
+                openRemoveDialog.value = null
+            }
+        },
+        onDismiss = { openRemoveDialog.value = null }
+    )
 }
 
 @Composable
@@ -211,7 +208,7 @@ fun RegularTransactionItem(
                 ) {
                     Icon(
                         modifier = Modifier
-                            .size(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.category_item_icon_small_size)),
+                            .size(dimensionResource(id = R.dimen.regular_category_item_icon_small_size)),
                         imageVector = ImageVector.vectorResource(id = transaction.category.icon),
                         contentDescription = "Transaction",
                         tint = Color(ContextCompat.getColor(context, transaction.category.color))
@@ -252,12 +249,10 @@ fun RegularTransactionItem(
                     maxLines = 1
                 )
             }
-            ComposeCurrencyView(
+            CurrencyTextFieldMedium(
                 modifier = Modifier.padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large)),
                 value = transaction.sum.toString(),
-                valueSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sum_small_text_size).value.sp,
-                symbol = transaction.currencyCode.getSymbolByCode(),
-                symbolSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sign_small_text_size).value.sp
+                currencyCode = transaction.currencyCode.getSymbolByCode(),
             )
         }
     }

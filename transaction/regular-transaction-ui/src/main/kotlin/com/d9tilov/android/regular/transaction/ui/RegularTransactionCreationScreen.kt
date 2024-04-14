@@ -30,7 +30,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -58,6 +57,7 @@ import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.MainPriceFieldParser
 import com.d9tilov.android.designsystem.AutoSizeTextField
 import com.d9tilov.android.designsystem.BottomActionButton
+import com.d9tilov.android.designsystem.DescriptionTextField
 import com.d9tilov.android.designsystem.DottedDivider
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
@@ -292,14 +292,13 @@ fun RegularTransactionCreationScreen(
                         top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large)
                     )
                 )
-                TextField(
+                DescriptionTextField(
                     modifier = Modifier.padding(
                         horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
                         vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)
                     ),
                     value = uiState.transaction.description,
-                    onValueChange = onDescriptionChanged,
-                    placeholder = { Text(text = stringResource(id = R.string.regular_transaction_edit_description_hint)) }
+                    onValueChange = onDescriptionChanged
                 )
             }
             BottomActionButton(
