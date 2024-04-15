@@ -14,18 +14,19 @@ import com.d9tilov.android.incomeexpense.ui.vm.IncomeExpenseViewModel
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType
 import com.d9tilov.android.transaction.domain.model.Transaction
 
-const val incomeExpenseNavigationRoute = "income_expense_screen"
+const val INCOME_EXPENSE_NAVIGATION_ROUTE = "income_expense_route"
 
 fun NavController.navigateToIncomeExpense(navOptions: NavOptions? = null) {
-    this.navigate(incomeExpenseNavigationRoute, navOptions)
+    this.navigate(INCOME_EXPENSE_NAVIGATION_ROUTE, navOptions)
 }
 
 fun NavGraphBuilder.incomeExpenseScreen(
+    route: String,
     onCurrencyClick: (String) -> Unit,
     onAllCategoryClick: (TransactionType, CategoryDestination) -> Unit,
     onTransactionClick: (Transaction) -> Unit,
 ) {
-    composable(route = incomeExpenseNavigationRoute) { entry ->
+    composable(route = route) { entry ->
         val viewModel: IncomeExpenseViewModel = hiltViewModel()
         val categoryId = entry.savedStateHandle.get<Long>(CategoryArgs.categoryIdArgs)
         categoryId?.let { id ->
