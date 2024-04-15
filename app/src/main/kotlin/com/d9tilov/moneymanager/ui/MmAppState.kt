@@ -13,12 +13,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
-import com.d9tilov.android.incomeexpense.navigation.incomeExpenseNavigationRoute
+import com.d9tilov.android.incomeexpense.navigation.INCOME_EXPENSE_NAVIGATION_ROUTE
 import com.d9tilov.android.incomeexpense.navigation.navigateToIncomeExpense
 import com.d9tilov.android.profile.ui.navigation.navigateToProfile
-import com.d9tilov.android.profile.ui.navigation.profileNavigationRoute
+import com.d9tilov.android.profile.ui.navigation.PROFILE_NAVIGATION_ROUTE
 import com.d9tilov.android.statistics.ui.navigation.navigateToStatistics
-import com.d9tilov.android.statistics.ui.navigation.statisticsNavigationRoute
+import com.d9tilov.android.statistics.ui.navigation.STATISTICS_NAVIGATION_ROUTE
 import com.d9tilov.moneymanager.navigation.TopLevelDestination
 import kotlinx.coroutines.CoroutineScope
 
@@ -54,9 +54,9 @@ class MmAppState(
 
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when (currentDestination?.route) {
-            incomeExpenseNavigationRoute -> TopLevelDestination.INCOME_EXPENSE
-            statisticsNavigationRoute -> TopLevelDestination.STATISTICS
-            profileNavigationRoute -> TopLevelDestination.PROFILE
+            INCOME_EXPENSE_NAVIGATION_ROUTE -> TopLevelDestination.INCOME_EXPENSE
+            STATISTICS_NAVIGATION_ROUTE -> TopLevelDestination.STATISTICS
+            PROFILE_NAVIGATION_ROUTE -> TopLevelDestination.PROFILE
             else -> null
         }
 

@@ -14,7 +14,7 @@ import com.d9tilov.android.common.android.ui.base.BaseNavigator
 import com.d9tilov.android.core.constants.NavigationConstants
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.model.toType
-import com.d9tilov.android.currency.domain.model.CurrencyArgs
+import com.d9tilov.android.currency.domain.model.CurrencyArgs.CURRENCY_CODE_ARGS
 import com.d9tilov.android.regular.transaction.ui.RegularTransactionCreationRoute
 import com.d9tilov.android.regular.transaction.ui.RegularTransactionListRoute
 import com.d9tilov.android.regular.transaction.ui.vm.RegularTransactionCreationViewModel
@@ -24,9 +24,9 @@ interface BaseRegularIncomeExpenseNavigator : BaseNavigator
 interface RegularExpenseNavigator : BaseRegularIncomeExpenseNavigator
 interface RegularIncomeNavigator : BaseRegularIncomeExpenseNavigator
 
-const val regularTransactionIdArgs = "regular_transaction_id"
-const val regularTransactionListNavigationRoute = "regular_transaction_list_route"
-const val regularTransactionCreationNavigationRoute = "regular_transaction_creation_route"
+const val REGULAR_TRANSACTION_ID_ARGS = "regular_transaction_id"
+const val REGULAR_TRANSACTION_LIST_NAVIGATION_ROUTE = "regular_transaction_list_route"
+const val REGULAR_TRANSACTION_CREATION_NAVIGATION_ROUTE = "regular_transaction_creation_route"
 
 interface DayOfMonthDialogNavigator : BaseNavigator
 
@@ -45,7 +45,7 @@ internal sealed class RegularTransactionArgs {
         constructor(savedStateHandle: SavedStateHandle) :
                 this(
                     (checkNotNull(savedStateHandle[NavigationConstants.transactionTypeArg]) as Int).toType(),
-                    (checkNotNull(savedStateHandle[regularTransactionIdArgs]) as Long)
+                    (checkNotNull(savedStateHandle[REGULAR_TRANSACTION_ID_ARGS]) as Long)
                 )
     }
 }
@@ -56,17 +56,18 @@ fun NavController.navigateToRegularTransactionListScreen(
     transactionType: TransactionType,
 ) {
     this.navigate(
-        "$regularTransactionListNavigationRoute/${transactionType.value}",
+        "$REGULAR_TRANSACTION_LIST_NAVIGATION_ROUTE/${transactionType.value}",
         navOptions
     )
 }
 
 fun NavGraphBuilder.regularTransactionListScreen(
+    route: String,
     clickBack: () -> Unit,
     openCreationTransaction: (TransactionType, Long) -> Unit,
 ) {
     composable(
-        route = "$regularTransactionListNavigationRoute/{${NavigationConstants.transactionTypeArg}}",
+        route = route,
         arguments = listOf(
             navArgument(NavigationConstants.transactionTypeArg) { type = NavType.IntType },
         )
@@ -85,22 +86,23 @@ fun NavController.navigateToRegularTransactionCreationScreen(
     navOptions: NavOptions? = null,
 ) {
     this.navigate(
-        "$regularTransactionCreationNavigationRoute/${transactionType.value}/${transactionId}",
+        "$REGULAR_TRANSACTION_CREATION_NAVIGATION_ROUTE/${transactionType.value}/${transactionId}",
         navOptions
     )
 }
 
 fun NavGraphBuilder.regularTransactionCreationScreen(
+    route: String,
     onCategoryClick: (TransactionType, CategoryDestination) -> Unit,
     onCurrencyClick: (String) -> Unit,
     onSaveClick: () -> Unit,
     clickBack: () -> Unit,
 ) {
     composable(
-        route = "$regularTransactionCreationNavigationRoute/{${NavigationConstants.transactionTypeArg}}/{$regularTransactionIdArgs}",
+        route = route,
         arguments = listOf(
             navArgument(NavigationConstants.transactionTypeArg) { type = NavType.IntType },
-            navArgument(regularTransactionIdArgs) { type = NavType.LongType }
+            navArgument(REGULAR_TRANSACTION_ID_ARGS) { type = NavType.LongType }
         )
     ) { entry ->
         val viewModel: RegularTransactionCreationViewModel = hiltViewModel()
@@ -109,10 +111,10 @@ fun NavGraphBuilder.regularTransactionCreationScreen(
             viewModel.updateCategory(id)
             entry.savedStateHandle.remove<Long>(CategoryArgs.categoryIdArgs)
         }
-        val currencyCode = entry.savedStateHandle.get<String>(CurrencyArgs.CURRENCY_CODE_ARGS)
+        val currencyCode = entry.savedStateHandle.get<String>(CURRENCY_CODE_ARGS)
         currencyCode?.let { code ->
             viewModel.updateCurrencyCode(code)
-            entry.savedStateHandle.remove<String>(CurrencyArgs.CURRENCY_CODE_ARGS)
+            entry.savedStateHandle.remove<String>(CURRENCY_CODE_ARGS)
         }
         RegularTransactionCreationRoute(
             viewModel = viewModel,

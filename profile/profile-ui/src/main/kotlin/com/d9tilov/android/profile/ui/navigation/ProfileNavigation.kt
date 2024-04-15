@@ -7,13 +7,14 @@ import androidx.navigation.compose.composable
 import com.d9tilov.android.common.android.ui.base.BaseNavigator
 import com.d9tilov.android.profile.ui.ProfileRoute
 
-const val profileNavigationRoute = "profile_route"
+const val PROFILE_NAVIGATION_ROUTE = "profile_route"
 
 fun NavController.navigateToProfile(navOptions: NavOptions? = null) {
-    this.navigate(profileNavigationRoute, navOptions)
+    this.navigate(PROFILE_NAVIGATION_ROUTE, navOptions)
 }
 
 fun NavGraphBuilder.profileScreen(
+    route: String,
     navigateToCurrencyListScreen: () -> Unit,
     navigateToBudgetScreen: () -> Unit,
     navigateToRegularIncomeScreen: () -> Unit,
@@ -21,7 +22,7 @@ fun NavGraphBuilder.profileScreen(
     navigateToGoalsScreen: () -> Unit,
     navigateToSettingsScreen: () -> Unit,
 ) {
-    composable(route = profileNavigationRoute) {
+    composable(route = route) {
         ProfileRoute(
             navigateToCurrencyListScreen = navigateToCurrencyListScreen,
             navigateToBudgetScreen = navigateToBudgetScreen,
