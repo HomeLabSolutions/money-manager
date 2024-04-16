@@ -7,27 +7,27 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.d9tilov.android.currency.domain.model.CurrencyArgs.CURRENCY_CODE_ARGS
 import com.d9tilov.android.currency.ui.CurrencyListRoute
 
-const val currencyNavigationRoute = "currency_list"
-internal const val currencyCodeArg = "currency_code"
+const val CURRENCY_LIST_NAVIGATION_ROUTE = "currency_list_route"
 
 internal sealed class CurrencyArgs {
     class CurrencyScreenArgs(val currencyCode: String?) {
         constructor(savedStateHandle: SavedStateHandle) :
-                this(savedStateHandle.get(currencyCodeArg) as? String)
+                this(savedStateHandle.get(CURRENCY_CODE_ARGS) as? String)
     }
 }
 
-fun NavGraphBuilder.currencyScreen(clickBack: () -> Unit, onChooseCurrency: (String) -> Unit) {
+fun NavGraphBuilder.currencyScreen(route: String, clickBack: () -> Unit, onChooseCurrency: (String) -> Unit) {
     composable(
-        route = "$currencyNavigationRoute?{$currencyCodeArg}",
-        arguments = listOf(navArgument(currencyCodeArg) {
+        route = route,
+        arguments = listOf(navArgument(CURRENCY_CODE_ARGS) {
             type = NavType.StringType
             nullable = true
         })
     ) { CurrencyListRoute(clickBack = clickBack, onChooseCurrency = onChooseCurrency) }
 }
 fun NavController.navigateToCurrencyListScreen(currencyCode: String? = null, navOptions: NavOptions? = null) {
-    this.navigate("$currencyNavigationRoute?$currencyCode", navOptions)
+    this.navigate("$CURRENCY_LIST_NAVIGATION_ROUTE?$currencyCode", navOptions)
 }

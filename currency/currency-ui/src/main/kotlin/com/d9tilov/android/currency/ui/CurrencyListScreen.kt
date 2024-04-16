@@ -3,7 +3,6 @@ package com.d9tilov.android.currency.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,8 +14,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -51,13 +50,13 @@ fun CurrencyListRoute(viewModel: CurrencyViewModel = hiltViewModel(), clickBack:
         onChooseCurrency = { currency ->
             val code = currency.code
             viewModel.changeCurrency(code)
-            onChooseCurrency.invoke(code)
+            onChooseCurrency(code)
         },
         onClickBack = clickBack
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CurrencyListScreen(
     currencyUiState: CurrencyUiState,
@@ -151,7 +150,7 @@ fun CurrencyItem(currency: DomainCurrency, clickCallback: (currency: DomainCurre
                 tint = MaterialTheme.colorScheme.primary
             )
         }
-        Divider(
+        HorizontalDivider(
             color = MaterialTheme.colorScheme.primary,
             thickness = 1.dp,
             modifier = Modifier.alpha(0.2f)

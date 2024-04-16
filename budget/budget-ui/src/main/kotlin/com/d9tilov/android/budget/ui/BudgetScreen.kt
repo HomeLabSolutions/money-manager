@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -23,9 +22,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.budget_ui.R
+import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.CurrencyTextFieldExtraBig
 import com.d9tilov.android.designsystem.MmTopAppBar
-import com.d9tilov.android.designsystem.BottomActionButton
 
 @Composable
 fun BudgetRoute(viewModel: BudgetAmountViewModel = hiltViewModel(), clickBack: () -> Unit) {
@@ -35,13 +34,13 @@ fun BudgetRoute(viewModel: BudgetAmountViewModel = hiltViewModel(), clickBack: (
         onBudgetInputChanged = viewModel::changeBudgetAmount,
         onSave = {
             viewModel.saveBudgetAmount()
-            clickBack.invoke()
+            clickBack()
         },
         onClickBack = clickBack
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BudgetScreen(
     uiState: BudgetUiState,
@@ -60,7 +59,7 @@ fun BudgetScreen(
             }
         }
     ) { padding ->
-        Column {
+        Column(modifier = Modifier.padding(padding)) {
             Text(
                 text = stringResource(R.string.budget_sum_title),
                 modifier = Modifier.padding(
@@ -71,17 +70,15 @@ fun BudgetScreen(
             )
             var text by rememberSaveable { mutableStateOf("") }
             CurrencyTextFieldExtraBig(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
                 uiState.budgetSum,
                 uiState.currencySymbol,
                 true,
-                Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)
-                    )
-            ) { s ->
+                ) { s ->
                 text = s
-                onBudgetInputChanged.invoke(s)
+                onBudgetInputChanged(s)
             }
             Spacer(modifier = Modifier.weight(1f))
             if (!showInPrepopulate) {

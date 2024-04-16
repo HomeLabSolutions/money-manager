@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.d9tilov.android.currency.data.impl.sync.workers
+package com.d9tilov.android.common.android.worker
 
 import android.content.Context
 import androidx.hilt.work.HiltWorkerFactory
@@ -43,7 +43,7 @@ private const val WORKER_CLASS_NAME = "RouterWorkerDelegateClassName"
  * Adds metadata to a WorkRequest to identify what [CoroutineWorker] the [DelegatingWorker] should
  * delegate to
  */
-internal fun KClass<out CoroutineWorker>.delegatedData() =
+fun KClass<out CoroutineWorker>.delegatedData() =
     Data.Builder()
         .putString(WORKER_CLASS_NAME, qualifiedName)
         .build()

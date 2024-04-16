@@ -9,6 +9,11 @@ plugins {
 
 android {
     namespace = "com.d9tilov.android.settings_ui"
+
+    defaultConfig {
+
+        vectorDrawables.useSupportLibrary = true
+    }
 }
 
 dependencies {

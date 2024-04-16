@@ -210,7 +210,7 @@ class BillingDataSource @Inject constructor(context: Context) :
                 )
             }
             billingParams?.let { params ->
-                if (billingClient.isReady) result.invoke(billingClient, params.build())
+                if (billingClient.isReady) result(billingClient, params.build())
             }
         }
     }

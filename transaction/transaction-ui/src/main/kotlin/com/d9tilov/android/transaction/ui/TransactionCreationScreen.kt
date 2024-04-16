@@ -11,9 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
@@ -54,6 +51,7 @@ import com.d9tilov.android.core.utils.toMillis
 import com.d9tilov.android.designsystem.AutoSizeTextField
 import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.CheckboxWithLabel
+import com.d9tilov.android.designsystem.DescriptionTextField
 import com.d9tilov.android.designsystem.DottedDivider
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
@@ -79,7 +77,7 @@ fun TransactionCreationRoute(
         onSumChanged = viewModel::updateAmount,
         onSaveClicked = {
             viewModel.save()
-            clickBack.invoke()
+            clickBack()
         },
         onInStatisticsChanged = viewModel::updateInStatistics,
         onDescriptionChanged = viewModel::updateDescription,
@@ -89,7 +87,7 @@ fun TransactionCreationRoute(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionCreationScreen(
     uiState: TransactionUiState,
@@ -108,7 +106,7 @@ fun TransactionCreationScreen(
     val datePickerState: DatePickerState = rememberDatePickerState().also { it.selectedDateMillis = uiState.transaction.date.toMillis() }
     Scaffold(topBar = {
         MmTopAppBar(
-            titleRes = com.d9tilov.android.transaction_ui.R.string.title_transaction,
+            titleRes = R.string.title_transaction,
             onNavigationClick = onBackClicked
         )
     }) { padding ->
@@ -129,7 +127,7 @@ fun TransactionCreationScreen(
                         end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
                         top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
                     ),
-                    text = stringResource(id = com.d9tilov.android.transaction_ui.R.string.transaction_edit_sum_title),
+                    text = stringResource(id = R.string.transaction_edit_sum_title),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -140,7 +138,7 @@ fun TransactionCreationScreen(
                     Text(
                         modifier = Modifier
                             .alignByBaseline()
-                            .clickable(onClick = { onCurrencyClicked.invoke(uiState.transaction.currencyCode) }),
+                            .clickable(onClick = { onCurrencyClicked(uiState.transaction.currencyCode) }),
                         text = uiState.transaction.currencyCode.getSymbolByCode(),
                         style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.primary,
@@ -151,7 +149,7 @@ fun TransactionCreationScreen(
                         inputValue = uiState.amount,
                         inputValueChanged = { text ->
                             showError = !isInputValid(text)
-                            onSumChanged.invoke(text)
+                            onSumChanged(text)
                         },
                         showError = { if (showError) ShowError() }
                     )
@@ -163,7 +161,7 @@ fun TransactionCreationScreen(
                 ) {
                     Row(
                         modifier = Modifier.clickable {
-                            onCategoryClicked.invoke(
+                            onCategoryClicked(
                                 uiState.transaction.type,
                                 CategoryDestination.EDIT_TRANSACTION_SCREEN
                             )
@@ -209,8 +207,8 @@ fun TransactionCreationScreen(
                         vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large)
                     ),
                     value = uiState.transaction.inStatistics,
-                    label = stringResource(id = com.d9tilov.android.transaction_ui.R.string.transaction_edit_in_statistics),
-                    onCheckChanged = { onInStatisticsChanged.invoke(it) }
+                    label = stringResource(id = R.string.transaction_edit_in_statistics),
+                    onCheckChanged = { onInStatisticsChanged(it) }
                 )
                 DottedDivider(
                     modifier = Modifier.padding(
@@ -219,15 +217,13 @@ fun TransactionCreationScreen(
                         top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large)
                     )
                 )
-                TextField(
+                DescriptionTextField(
                     modifier = Modifier.padding(
                         horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
                         vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)
                     ),
                     value = uiState.transaction.description,
-                    onValueChange = onDescriptionChanged,
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                    placeholder = { Text(text = stringResource(id = R.string.transaction_edit_description_hint)) }
+                    onValueChange = onDescriptionChanged
                 )
             }
             BottomActionButton(
@@ -243,7 +239,7 @@ fun TransactionCreationScreen(
                     confirmButton = {
                         TextButton(
                             onClick = {
-                                onDateClicked.invoke(datePickerState.selectedDateMillis ?: currentDateTime().toMillis())
+                                onDateClicked(datePickerState.selectedDateMillis ?: currentDateTime().toMillis())
                                 showDatePickerDialog.value = false
                             }
                         ) {
@@ -274,7 +270,7 @@ fun TransactionCreationScreen(
 @Composable
 fun ShowError() {
     Text(
-        text = stringResource(id = com.d9tilov.android.transaction_ui.R.string.transaction_invalid_amount),
+        text = stringResource(id = R.string.transaction_invalid_amount),
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.error
     )

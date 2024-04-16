@@ -20,6 +20,7 @@ import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.getStartDateOfFiscalPeriod
 import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.core.utils.isSameDay
+import com.d9tilov.android.core.utils.reduceScale
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.regular.transaction.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.regular.transaction.domain.model.RegularTransaction
@@ -257,10 +258,10 @@ class TransactionInteractorImpl(
             expensesPerCurrentDayFlow
         ) { numerator, countDaysSinceFiscalDate, expensesPerCurrentDay ->
             if (numerator.minus(expensesPerCurrentDay).signum() < 0) {
-                TransactionSpendingTodayModel.OVERSPENDING(numerator.minus(expensesPerCurrentDay))
+                TransactionSpendingTodayModel.OVERSPENDING(numerator.minus(expensesPerCurrentDay).reduceScale())
             } else {
                 TransactionSpendingTodayModel.NORMAL(
-                    numerator.divideBy(countDaysSinceFiscalDate).minus(expensesPerCurrentDay)
+                    numerator.divideBy(countDaysSinceFiscalDate).minus(expensesPerCurrentDay).reduceScale()
                 )
             }
         }
@@ -270,7 +271,7 @@ class TransactionInteractorImpl(
         return combine(
             getNumerator(),
             getExpensesPerCurrentDay()
-        ) { numerator, expensesPerCurrentDay -> numerator.minus(expensesPerCurrentDay) }
+        ) { numerator, expensesPerCurrentDay -> numerator.minus(expensesPerCurrentDay).reduceScale() }
     }
 
     private fun getExpensesPerCurrentDay(): Flow<BigDecimal> =
@@ -403,14 +404,6 @@ class TransactionInteractorImpl(
         }
     }
 
-    override fun isSpendInPeriodApprox(type: TransactionType): Flow<Boolean> =
-        flow<Int> { userInteractor.getFiscalDay() }
-            .flatMapMerge { fiscalDay ->
-                val endDate = currentDateTime()
-                val startDate = getStartDateOfFiscalPeriod(fiscalDay)
-                isApprox(type, startDate, endDate)
-            }
-
     override fun getSumInFiscalPeriod(): Flow<BigDecimal> {
         val incomesFlow =
             flow { emit(userInteractor.getFiscalDay()) }
@@ -459,28 +452,6 @@ class TransactionInteractorImpl(
         ) { income, expense -> income.minus(expense) }
     }
 
-    override fun isSpendTodayApprox(type: TransactionType): Flow<Boolean> =
-        isApprox(type, currentDateTime().getStartOfDay(), currentDateTime().getEndOfDay())
-
-    private fun isApprox(
-        type: TransactionType,
-        from: LocalDateTime,
-        to: LocalDateTime,
-    ): Flow<Boolean> =
-        combine(
-            transactionRepo.getTransactionsByTypeInPeriod(
-                from,
-                to,
-                type
-            ),
-            currencyInteractor.getMainCurrencyFlow()
-        ) { list, currency ->
-            val currencies = mutableSetOf<String>()
-            list.forEach { tr -> currencies.add(tr.currencyCode) }
-            val currencyCode = currency.code
-            !((currencies.size == 1 && currencies.contains(currencyCode)) || currencyCode == DEFAULT_CURRENCY_CODE)
-        }
-
     override fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<BigDecimal> {
         return currencyInteractor.getMainCurrencyFlow()
             .flatMapMerge { currency ->
@@ -500,7 +471,7 @@ class TransactionInteractorImpl(
                             val trCurrency = currencyInteractor.getCurrencyByCode(currencyCode)
                             trCurrency.value.multiply(tr.usdSum)
                         }
-                    }
+                    }.reduceScale()
                 }
             }
     }
@@ -522,7 +493,7 @@ class TransactionInteractorImpl(
                     val trCurrency = currencyInteractor.getCurrencyByCode(currencyCode)
                     trCurrency.value.multiply(tr.usdSum)
                 }
-            }
+            }.reduceScale()
         }
 
     override suspend fun executeRegularIfNeeded(type: TransactionType) {

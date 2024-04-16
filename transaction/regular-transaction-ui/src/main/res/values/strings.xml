@@ -43,7 +43,6 @@
     <string name="regular_transaction_repeat_list_week">Week</string>
     <string name="regular_transaction_repeat_list_month">Month</string>
     <string name="regular_transaction_repeat_day_of_month">Day of month</string>
-    <string name="regular_transaction_edit_description_hint">Description</string>
     <string name="regular_transaction_delete_dialog_title">Delete this transaction</string>
     <string name="regular_transaction_delete_dialog_subtitle">Do you really want to delete the transaction?</string>
 

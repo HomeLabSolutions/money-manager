@@ -17,14 +17,14 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.OutlinedButton
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -71,33 +71,38 @@ fun ProfileRoute(
     val uiState: ProfileUiState by viewModel.profileState.collectAsStateWithLifecycle()
     val showDialog by viewModel.showDialog.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    ProfileScreen(
-        state = uiState,
-        showDialog = showDialog,
-        onCurrencyClicked = navigateToCurrencyListScreen,
-        onBudgetClicked = navigateToBudgetScreen,
-        onRegularIncomeClicked = navigateToRegularIncomeScreen,
-        onRegularExpenseClicked = navigateToRegularExpenseScreen,
-        onGoalsClicked = navigateToGoalsScreen,
-        onSettingsClicked = navigateToSettingsScreen,
-        onLogoutClicked = { viewModel.showDialog() },
-        onLogoutConfirmClicked = {
-            viewModel.logout {
-                PeriodicBackupWorker.stopPeriodicJob(context)
-                val intent = context.packageManager.getLaunchIntentForPackage(if (BuildConfig.DEBUG) "com.d9tilov.moneymanager.debug" else "com.d9tilov.moneymanager")
-                if (intent != null) {
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    context.startActivity(intent)
-                    (FragmentComponentManager.findActivity(context) as Activity).finish()
+    Scaffold { paddingValues ->
+        ProfileScreen(
+            modifier = Modifier.padding(paddingValues),
+            state = uiState,
+            showDialog = showDialog,
+            onCurrencyClicked = navigateToCurrencyListScreen,
+            onBudgetClicked = navigateToBudgetScreen,
+            onRegularIncomeClicked = navigateToRegularIncomeScreen,
+            onRegularExpenseClicked = navigateToRegularExpenseScreen,
+            onGoalsClicked = navigateToGoalsScreen,
+            onSettingsClicked = navigateToSettingsScreen,
+            onLogoutClicked = { viewModel.showDialog() },
+            onLogoutConfirmClicked = {
+                viewModel.logout {
+                    PeriodicBackupWorker.stopPeriodicJob(context)
+                    val intent =
+                        context.packageManager.getLaunchIntentForPackage(if (BuildConfig.DEBUG) "com.d9tilov.moneymanager.debug" else "com.d9tilov.moneymanager")
+                    if (intent != null) {
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        context.startActivity(intent)
+                        (FragmentComponentManager.findActivity(context) as Activity).finish()
+                    }
                 }
-            }
-        },
-        onLogoutDismissClicked = { viewModel.dismissDialog() }
-    )
+            },
+            onLogoutDismissClicked = { viewModel.dismissDialog() }
+        )
+    }
 }
 
 @Composable
 fun ProfileScreen(
+    modifier: Modifier,
     state: ProfileUiState,
     showDialog: Boolean,
     onCurrencyClicked: () -> Unit,
@@ -108,9 +113,9 @@ fun ProfileScreen(
     onSettingsClicked: () -> Unit,
     onLogoutClicked: () -> Unit,
     onLogoutConfirmClicked: () -> Unit,
-    onLogoutDismissClicked: () -> Unit
+    onLogoutDismissClicked: () -> Unit,
 ) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         ProfileCard(state.userProfile)
         ProfileSection(state.currency, onCurrencyClicked)
         ProfileSection(state.budgetData, onBudgetClicked)
@@ -123,7 +128,7 @@ fun ProfileScreen(
             modifier = Modifier.padding(top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
             onClick = { onLogoutClicked() },
             shape = RoundedCornerShape(50),
-            colors = ButtonDefaults.outlinedButtonColors(backgroundColor = MaterialTheme.colorScheme.error)
+            colors = ButtonDefaults.outlinedButtonColors().copy(containerColor = MaterialTheme.colorScheme.error)
         ) {
             Text(
                 text = stringResource(R.string.profile_logout),
@@ -197,7 +202,6 @@ fun ProfileContent(name: String?) {
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit = {}) {
     val (icon, title, subtitle) = when (profileUiItem) {
@@ -358,7 +362,7 @@ fun ProfileSection(profileUiItem: ProfileUiItem, navigationCallback: () -> Unit 
                 style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.tertiary)
             )
         }
-        Divider(
+        HorizontalDivider(
             modifier = Modifier
                 .padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium))
                 .constrainAs(idDivider) { bottom.linkTo(parent.bottom) },
@@ -379,6 +383,7 @@ data class ProfileItemData(
 @Composable
 fun DefaultPreviewProfile() {
     ProfileScreen(
+        modifier = Modifier,
         ProfileUiState(userProfile = UserUiProfile()),
         false,
         {},

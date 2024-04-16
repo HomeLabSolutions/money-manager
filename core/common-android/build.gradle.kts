@@ -2,6 +2,7 @@ plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.library.compose")
     id("moneymanager.android.library.viewbinding")
+    id("moneymanager.android.hilt")
     id("kotlin-parcelize")
     kotlin("kapt")
 }
@@ -29,6 +30,10 @@ dependencies {
 
     implementation(libs.navigation)
     implementation(libs.navigationUi)
+
+    implementation(libs.worker)
+    implementation(libs.workerHilt)
+    kapt(libs.workerHiltCompiler)
 
     implementation(libs.bundles.compose)
     implementation(libs.bundles.composeMaterial3)

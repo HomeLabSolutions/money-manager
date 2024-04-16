@@ -31,7 +31,7 @@ fun OutlineCircle(
             .padding(1.dp)
             .clip(CircleShape)
             .background(color)
-            .clickable { onClick.invoke(color) }
+            .clickable { onClick(color) }
             .then(
                 if (showOutline) Modifier
                     .border(2.dp, MaterialTheme.colorScheme.secondary, CircleShape)
@@ -43,5 +43,5 @@ fun OutlineCircle(
 @Preview(showBackground = true)
 @Composable
 fun DefaultCategoryCreationPreview() {
-    MoneyManagerTheme { OutlineCircle(Modifier, Color.Red, 100.dp, true, {}) }
+    MoneyManagerTheme { OutlineCircle(Modifier, Color.Red, 100.dp, true) {} }
 }

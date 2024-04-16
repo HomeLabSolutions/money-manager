@@ -1,8 +1,7 @@
 package com.d9tilov.android.database.dao
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
+import androidx.room.Upsert
 import androidx.room.Query
 import androidx.room.Update
 import com.d9tilov.android.database.entity.CategoryDbModel
@@ -23,7 +22,7 @@ interface CategoryDao {
     @Query("SELECT * FROM categories WHERE clientId=:uid AND parentId=:id")
     fun getByParentId(uid: String, id: Long): Flow<List<CategoryDbModel>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun create(category: CategoryDbModel): Long
 
     @Update

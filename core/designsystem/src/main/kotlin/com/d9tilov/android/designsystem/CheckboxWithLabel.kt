@@ -1,8 +1,8 @@
 package com.d9tilov.android.designsystem
 
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material.Checkbox
-import androidx.compose.material.CheckboxDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +26,7 @@ fun CheckboxWithLabel(
                 checkedColor = MaterialTheme.colorScheme.primary,
                 uncheckedColor = MaterialTheme.colorScheme.primary,
             ),
-            onCheckedChange = { isChecked -> onCheckChanged.invoke(isChecked) }
+            onCheckedChange = { isChecked -> onCheckChanged(isChecked) }
         )
         Text(
             text = label,

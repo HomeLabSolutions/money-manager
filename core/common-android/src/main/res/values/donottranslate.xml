@@ -7,7 +7,6 @@
     <string name="plus_sign">+</string>
     <string name="percent_sign">%</string>
     <string name="minus_sign">-</string>
-    <string name="approx_sign">≈</string>
     <string name="number_with_percent">%1$s%%</string>
     <string name="prepopulate_progress">%1$s/%2$s</string>
 
@@ -56,4 +55,8 @@
         <item>30</item>
         <item>31</item>
     </string-array>
+
+    <string name="sync_notification_title">Money Manager</string>
+    <string name="sync_notification_channel_name">Sync</string>
+    <string name="sync_notification_channel_description">Background tasks for MoneyManager</string>
 </resources>

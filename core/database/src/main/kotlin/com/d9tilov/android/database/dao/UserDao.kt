@@ -1,8 +1,7 @@
 package com.d9tilov.android.database.dao
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
+import androidx.room.Upsert
 import androidx.room.Query
 import androidx.room.Update
 import com.d9tilov.android.database.entity.UserDbModel
@@ -20,7 +19,7 @@ interface UserDao {
     @Query("SELECT showPrepopulate FROM Users WHERE uid = :id")
     suspend fun showPrepopulate(id: String): Boolean
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun insert(user: UserDbModel)
 
     @Update

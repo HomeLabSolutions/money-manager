@@ -15,8 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -70,7 +70,7 @@ fun CategoryListRoute(
         onBackClicked = clickBack,
         onCategoryClicked = { category ->
             when (viewModel.destination) {
-                CategoryDestination.MAIN_SCREEN -> openCategory.invoke(category.id, viewModel.transactionType)
+                CategoryDestination.MAIN_SCREEN -> openCategory(category.id, viewModel.transactionType)
                 CategoryDestination.MAIN_WITH_SUM_SCREEN,
                 CategoryDestination.EDIT_TRANSACTION_SCREEN,
                 CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN -> onCategoryClickAndBack(category)
@@ -79,7 +79,7 @@ fun CategoryListRoute(
                 CategoryDestination.SUB_CATEGORY_SCREEN -> TODO()
             }
         },
-        onCreateClicked = { openCategory.invoke(NO_ID, viewModel.transactionType) },
+        onCreateClicked = { openCategory(NO_ID, viewModel.transactionType) },
         onRemoveClicked = { category -> viewModel.remove(category) }
     )
 }
@@ -98,7 +98,7 @@ fun CategoryListScreen(
     var isRemoveState by remember { mutableStateOf(false) }
     BackHandler {
         if (isRemoveState) isRemoveState = false
-        else onBackClicked.invoke()
+        else onBackClicked()
     }
     LaunchedEffect(isRemoveState) {
         var i = 0
@@ -147,7 +147,7 @@ fun CategoryListScreen(
                                 .combinedClickable(
                                     onClick = {
                                         if (isRemoveState) openAlertDialog.value = item
-                                        else onCategoryClicked.invoke(item)
+                                        else onCategoryClicked(item)
                                         isRemoveState = false
                                     },
                                     onLongClick = { isRemoveState = true },
@@ -190,7 +190,7 @@ fun CategoryListScreen(
                             dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
                             confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
                             onConfirm = {
-                                onRemoveClicked.invoke(categoryToRemove)
+                                onRemoveClicked(categoryToRemove)
                                 openAlertDialog.value = null
                             },
                             onDismiss = { openAlertDialog.value = null }

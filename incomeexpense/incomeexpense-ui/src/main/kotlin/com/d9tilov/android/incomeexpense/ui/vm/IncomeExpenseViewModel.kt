@@ -1,6 +1,6 @@
 package com.d9tilov.android.incomeexpense.ui.vm
 
-import androidx.compose.runtime.Immutable
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,15 +11,14 @@ import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.DataConstants.TAG
-import com.d9tilov.android.core.model.PeriodType
 import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.KeyPress
 import com.d9tilov.android.core.utils.MainPriceFieldParser
-import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getEndOfDay
-import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.core.utils.isSameDay
+import com.d9tilov.android.core.utils.reduceScale
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.incomeexpense_ui.R
@@ -30,6 +29,7 @@ import com.d9tilov.android.transaction.domain.model.TransactionHeader
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,20 +37,17 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.minus
-import kotlinx.datetime.plus
 import timber.log.Timber
 import java.math.BigDecimal
 import javax.inject.Inject
-import kotlin.random.Random
 
 data class IncomeExpenseUiState(
     val mode: EditMode = EditMode.KEYBOARD,
-    val price: Price = Price.EMPTY,
+    val price: MainPrice = MainPrice.EMPTY,
     val expenseUiState: ExpenseUiState = ExpenseUiState.EMPTY,
     val incomeUiState: IncomeUiState = IncomeUiState.EMPTY,
 ) {
@@ -81,10 +78,19 @@ data class IncomeUiState(
     }
 }
 
-data class Price(
+data class MainPrice(
     val value: String = "0",
     val currencyCode: String = DEFAULT_CURRENCY_CODE,
     val isApprox: Boolean = false,
+) {
+    companion object {
+        val EMPTY = MainPrice()
+    }
+}
+
+data class Price(
+    @StringRes val label: Int = R.string.expense_info_can_spend_today_title,
+    val value: String = "${BigDecimal.ZERO}$DEFAULT_CURRENCY_CODE",
 ) {
     companion object {
         val EMPTY = Price()
@@ -92,20 +98,12 @@ data class Price(
 }
 
 data class ExpenseInfo(
-    val ableToSpendToday: TransactionSpendingTodayPrice = TransactionSpendingTodayPrice.NORMAL(
-        Price(
-            BigDecimal.ZERO.toString(),
-            DEFAULT_CURRENCY_CODE
-        )
-    ),
+    val ableToSpendToday: Price = Price.EMPTY,
     val wasSpendToday: Price = Price.EMPTY,
     val wasSpendInPeriod: Price = Price.EMPTY,
 )
 
-data class IncomeInfo(
-    val wasEarnedInPeriod: Price? = null,
-    val wasEarnedInPeriodApprox: Price? = null,
-)
+data class IncomeInfo(val wasEarnedInPeriod: Price = Price.EMPTY)
 
 enum class ScreenType {
     EXPENSE,
@@ -119,13 +117,6 @@ fun Int.toScreenType(): ScreenType = ScreenType.entries[this]
 enum class EditMode {
     KEYBOARD,
     LIST
-}
-
-sealed interface TransactionSpendingTodayPrice {
-
-    data class OVERSPENDING(val trSum: Price) : TransactionSpendingTodayPrice
-
-    data class NORMAL(val trSum: Price) : TransactionSpendingTodayPrice
 }
 
 @HiltViewModel
@@ -151,31 +142,29 @@ class IncomeExpenseViewModel @Inject constructor(
                 currencyInteractor.getMainCurrencyFlow()
                     .collect { currencyData ->
                         _uiState.update { state ->
-                            state.copy(price = Price(KeyPress.Zero.value, currencyData.code))
+                            state.copy(
+                                price = MainPrice(
+                                    BigDecimal.ZERO.toString(),
+                                    currencyData.code
+                                )
+                            )
                         }
                         _mainCurrency.value = currencyData
                     }
             }
             launch {
-                categoryInteractor.getGroupedCategoriesByType(TransactionType.INCOME)
-                    .collect { list ->
-                        _uiState.update { state ->
-                            state.copy(
-                                incomeUiState = state.incomeUiState.copy(
-                                    incomeCategoryList = list,
-                                    incomeTransactions = mapWithStickyHeaders(transactionInteractor.getTransactionsByType(TransactionType.INCOME))
-                                )
-                            )
-                        }
+                getSortedCategories(TransactionType.EXPENSE).collect{ list ->
+                    _uiState.update { state ->
+                        state.copy(expenseUiState = state.expenseUiState.copy(expenseCategoryList = list))
                     }
+                }
             }
             launch {
-                categoryInteractor.getGroupedCategoriesByType(TransactionType.EXPENSE)
-                    .collect { list ->
-                        _uiState.update { state ->
-                            state.copy(expenseUiState = state.expenseUiState.copy(expenseCategoryList = list))
-                        }
+                getSortedCategories(TransactionType.INCOME).collect{ list ->
+                    _uiState.update { state ->
+                        state.copy(incomeUiState = state.incomeUiState.copy(incomeCategoryList = list))
                     }
+                }
             }
             launch {
                 _uiState.update { state ->
@@ -187,26 +176,47 @@ class IncomeExpenseViewModel @Inject constructor(
                 }
             }
             launch {
+                _uiState.update { state ->
+                    state.copy(
+                        incomeUiState = state.incomeUiState.copy(
+                            incomeTransactions = mapWithStickyHeaders(
+                                transactionInteractor.getTransactionsByType(
+                                    TransactionType.INCOME
+                                )
+                            )
+                        )
+                    )
+                }
+            }
+            launch {
                 val expenseSpendingExpenseInfoFlow = combine(
                     transactionInteractor.ableToSpendToday(),
-                    transactionInteractor.isSpendTodayApprox(TransactionType.EXPENSE),
                     transactionInteractor.getApproxSumTodayCurrentCurrency(TransactionType.EXPENSE),
-                    transactionInteractor.isSpendInPeriodApprox(TransactionType.EXPENSE),
                     transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.EXPENSE)
-                ) { ableToSpendToday, isSpendTodayApprox, spentTodayApprox, isSpendInPeriodApprox, spentInPeriodApprox ->
+                ) { ableToSpendToday, spentTodayApprox, spentInPeriodApprox ->
                     val currencyCode = _mainCurrency.value.code
                     ExpenseInfo(
                         when (ableToSpendToday) {
-                            is TransactionSpendingTodayModel.NORMAL -> TransactionSpendingTodayPrice.NORMAL(
-                                Price(ableToSpendToday.trSum.toString(), currencyCode)
-                            )
+                            is TransactionSpendingTodayModel.NORMAL ->
+                                Price(
+                                    R.string.expense_info_can_spend_today_title,
+                                    "${currencyCode.getSymbolByCode()}${ableToSpendToday.trSum.reduceScale(true)}"
+                                )
 
-                            is TransactionSpendingTodayModel.OVERSPENDING -> TransactionSpendingTodayPrice.OVERSPENDING(
-                                Price(ableToSpendToday.trSum.toString(), currencyCode)
-                            )
+                            is TransactionSpendingTodayModel.OVERSPENDING ->
+                                Price(
+                                    R.string.expense_info_can_spend_today_negate_title,
+                                    "${currencyCode.getSymbolByCode()}${ableToSpendToday.trSum.reduceScale(true)}"
+                                )
                         },
-                        Price(spentTodayApprox.toString(), currencyCode, isSpendTodayApprox),
-                        Price(spentInPeriodApprox.toString(), currencyCode, isSpendInPeriodApprox)
+                        Price(
+                            R.string.expense_info_today_title,
+                            "${currencyCode.getSymbolByCode()}${spentTodayApprox.reduceScale(true)}"
+                        ),
+                        Price(
+                            R.string.expense_info_period_title,
+                            "${currencyCode.getSymbolByCode()}${spentInPeriodApprox.reduceScale(true)}"
+                        )
                     )
                 }
                 combine(
@@ -222,16 +232,19 @@ class IncomeExpenseViewModel @Inject constructor(
             }
             launch {
                 combine(
-                    transactionInteractor.isSpendInPeriodApprox(TransactionType.INCOME),
+                    billingInteractor.isPremium(),
                     transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.INCOME)
-                ) { sum, approxSum ->
-                    val currencyCode = _mainCurrency.value.code
-                    IncomeInfo(
-                        Price(sum.toString(), currencyCode),
-                        Price(approxSum.toString(), currencyCode),
-                    )
-                }
-                    .collect { info ->
+                ) { isPremium: Boolean, approxSum: BigDecimal ->
+                    if (isPremium) {
+                        val currencyCode = _mainCurrency.value.code
+                        IncomeInfo(
+                            Price(
+                                R.string.income_info_period_title,
+                                "${currencyCode.getSymbolByCode()}$approxSum"
+                            )
+                        )
+                    } else null
+                }.collect { info ->
                         val incomeInfo = _uiState.value.incomeUiState
                         _uiState.update { state ->
                             state.copy(
@@ -243,20 +256,13 @@ class IncomeExpenseViewModel @Inject constructor(
                     }
             }
         }
-//        for (i in 1..200) {
-//            viewModelScope.launch {
-//                val category = categoryInteractor.getCategoryById(5)
-//                transactionInteractor.addTransaction(
-//                    Transaction.EMPTY.copy(
-//                        sum = Random.nextInt(0, 100).toBigDecimal(),
-//                        category = category,
-//                        currencyCode = "THB",
-//                        date = currentDate().minus(Random.nextInt(0, 30),  DateTimeUnit.DAY).getStartOfDay(),
-//                        type = TransactionType.EXPENSE
-//                    )
-//                )
-//            }
-//        }
+    }
+
+    private fun getSortedCategories(type: TransactionType): Flow<List<Category>> {
+        return categoryInteractor.getGroupedCategoriesByType(type)
+            .flowOn(Dispatchers.IO)
+            .map { list -> list.sortedByDescending { it.usageCount } }
+            .flowOn(Dispatchers.Default)
     }
 
     fun addNumber(btn: KeyPress) {
