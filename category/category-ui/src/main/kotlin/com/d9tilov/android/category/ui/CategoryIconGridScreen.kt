@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -76,7 +76,7 @@ fun CategoryIconGridScreen(
                         modifier = Modifier
                             .size(dimensionResource(id = R.dimen.category_grid_item_size))
                             .padding(8.dp)
-                            .clickable { onIconClicked.invoke(id) },
+                            .clickable { onIconClicked(id) },
                         imageVector = ImageVector.vectorResource(id = id),
                         contentDescription = "Icon",
                         tint = MaterialTheme.colorScheme.primary

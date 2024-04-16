@@ -9,12 +9,12 @@ import com.d9tilov.android.settings.ui.SettingsRoute
 
 interface SettingsBillingNavigator : BaseNavigator
 
-const val settingsNavigationRoute = "settings_route"
+const val SETTINGS_NAVIGATION_ROUTE = "settings_route"
 
 fun NavController.navigateToSettingsScreen(navOptions: NavOptions? = null) {
-    this.navigate(settingsNavigationRoute, navOptions)
+    this.navigate(SETTINGS_NAVIGATION_ROUTE, navOptions)
 }
 
-fun NavGraphBuilder.settingsScreen(clickBack: () -> Unit, onShowSnackBar: suspend (String, String?) -> Boolean) {
-    composable(route = settingsNavigationRoute) { SettingsRoute(clickBack = clickBack, onShowSnackBar = onShowSnackBar) }
+fun NavGraphBuilder.settingsScreen(route: String, clickBack: () -> Unit, onShowSnackBar: suspend (String, String?) -> Boolean) {
+    composable(route = route) { SettingsRoute(clickBack = clickBack, onShowSnackBar = onShowSnackBar) }
 }

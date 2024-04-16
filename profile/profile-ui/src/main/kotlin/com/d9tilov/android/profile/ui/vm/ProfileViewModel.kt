@@ -120,7 +120,7 @@ class ProfileViewModel @Inject constructor(
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN) {
                 param(FirebaseAnalytics.Param.ITEM_CATEGORY, "logout")
             }
-            withContext(Dispatchers.Main) { navigateCallback.invoke() }
+            withContext(Dispatchers.Main) { navigateCallback() }
         }
     }
 }

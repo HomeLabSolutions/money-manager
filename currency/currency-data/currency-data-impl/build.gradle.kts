@@ -14,6 +14,7 @@ dependencies {
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
     implementation(project(":core:designsystem"))
+    implementation(project(":core:common-android"))
 
     implementation(project(":currency:currency-data:currency-data-contract"))
     implementation(project(":currency:currency-domain:currency-domain-model"))

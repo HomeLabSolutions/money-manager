@@ -120,6 +120,7 @@ dependencies {
     implementation(project(":currency:currency-domain:currency-domain-contract"))
     implementation(project(":currency:currency-observer:currency-observer-contract"))
 
+    implementation(project(":backup:backup-data:backup-data-impl"))
     implementation(project(":backup:backup-domain:backup-domain-contract"))
     implementation(project(":backup:backup-di"))
 

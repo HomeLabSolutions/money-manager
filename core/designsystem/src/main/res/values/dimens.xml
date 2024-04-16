@@ -4,7 +4,6 @@
     <dimen name="card_view_corner_radius">16dp</dimen>
 
     <dimen name="category_item_icon_size">48dp</dimen>
-    <dimen name="category_item_icon_small_size">32dp</dimen>
     <dimen name="category_item_name_parent_text_size">12sp</dimen>
     <dimen name="category_item_name_text_size">14sp</dimen>
 
@@ -12,11 +11,11 @@
     <dimen name="currency_sign_extra_big_text_size">50sp</dimen>
     <dimen name="currency_sign_big_text_size">32sp</dimen>
     <dimen name="currency_sign_medium_text_size">18sp</dimen>
-    <dimen name="currency_sign_extra_small_text_size">10sp</dimen>
     <dimen name="currency_sign_small_text_size">14sp</dimen>
+    <dimen name="currency_sign_extra_small_text_size">10sp</dimen>
     <dimen name="currency_sum_extra_big_text_size">96sp</dimen>
     <dimen name="currency_sum_big_text_size">60sp</dimen>
-    <dimen name="currency_sum_medium_text_size">34sp</dimen>
+    <dimen name="currency_sum_medium_text_size">30sp</dimen>
     <dimen name="currency_sum_small_text_size">24sp</dimen>
 
     <dimen name="dialog_subtitle_text_size">16sp</dimen>

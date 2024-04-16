@@ -11,32 +11,32 @@ import androidx.navigation.navArgument
 import com.d9tilov.android.category.domain.model.CategoryArgs
 import com.d9tilov.android.category.domain.model.CategoryDestination
 import com.d9tilov.android.core.model.TransactionType
-import com.d9tilov.android.currency.domain.model.CurrencyArgs
+import com.d9tilov.android.currency.domain.model.CurrencyArgs.CURRENCY_CODE_ARGS
 import com.d9tilov.android.transaction.ui.TransactionCreationRoute
 import com.d9tilov.android.transaction.ui.vm.TransactionCreationViewModel
 
-const val transactionNavigationRoute = "transaction_screen"
-const val transactionIdArg = "transaction_id"
+const val TRANSACTION_NAVIGATION_ROUTE = "transaction_route"
+const val TRANSACTION_ID_ARG = "transaction_id"
 
 internal sealed class TransactionArgs {
     class TransactionCreationArgs(val transactionId: Long) {
         constructor(savedStateHandle: SavedStateHandle) :
-                this((checkNotNull(savedStateHandle[transactionIdArg]) as Long))
+                this((checkNotNull(savedStateHandle[TRANSACTION_ID_ARG]) as Long))
     }
 }
 fun NavController.navigateToTransactionScreen(transactionId: Long, navOptions: NavOptions? = null) {
-    this.navigate("$transactionNavigationRoute/$transactionId", navOptions)
+    this.navigate("$TRANSACTION_NAVIGATION_ROUTE/$transactionId", navOptions)
 }
 
 fun NavGraphBuilder.transactionCreationScreen(
+    route: String,
     clickBack: () -> Unit,
     onCategoryClick: (TransactionType, CategoryDestination) -> Unit,
     onCurrencyClick: (String) -> Unit
 ) {
-    val route = "$transactionNavigationRoute/{$transactionIdArg}"
     composable(
         route = route,
-        arguments = listOf(navArgument(transactionIdArg) { type = NavType.LongType })
+        arguments = listOf(navArgument(TRANSACTION_ID_ARG) { type = NavType.LongType })
     ) { entry ->
         val viewModel: TransactionCreationViewModel = hiltViewModel()
         val categoryId = entry.savedStateHandle.get<Long>(CategoryArgs.categoryIdArgs)
@@ -44,10 +44,10 @@ fun NavGraphBuilder.transactionCreationScreen(
             viewModel.updateCategory(id)
             entry.savedStateHandle.remove<Long>(CategoryArgs.categoryIdArgs)
         }
-        val currencyCode = entry.savedStateHandle.get<String>(CurrencyArgs.CURRENCY_CODE_ARGS)
+        val currencyCode = entry.savedStateHandle.get<String>(CURRENCY_CODE_ARGS)
         currencyCode?.let { code ->
             viewModel.updateCurrencyCode(code)
-            entry.savedStateHandle.remove<String>(CurrencyArgs.CURRENCY_CODE_ARGS)
+            entry.savedStateHandle.remove<String>(CURRENCY_CODE_ARGS)
         }
         TransactionCreationRoute(
             viewModel = viewModel,

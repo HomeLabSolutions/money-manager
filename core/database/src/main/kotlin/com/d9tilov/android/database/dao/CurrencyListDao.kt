@@ -1,17 +1,16 @@
 package com.d9tilov.android.database.dao
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import com.d9tilov.android.database.entity.CurrencyDbModel
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CurrencyListDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun insert(list: List<CurrencyDbModel>)
 
     @Update

@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -84,7 +84,7 @@ fun CategoryIconListItem(
                 .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large)),
             text = stringResource(id = categoryGroupItemMap[group] ?: R.string.category_group_free)
         )
-        Divider(
+        HorizontalDivider(
             color = MaterialTheme.colorScheme.primary,
             thickness = 1.dp,
             modifier = Modifier.alpha(0.2f)

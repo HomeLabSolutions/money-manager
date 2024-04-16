@@ -23,10 +23,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -60,6 +57,7 @@ import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.MainPriceFieldParser
 import com.d9tilov.android.designsystem.AutoSizeTextField
 import com.d9tilov.android.designsystem.BottomActionButton
+import com.d9tilov.android.designsystem.DescriptionTextField
 import com.d9tilov.android.designsystem.DottedDivider
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
@@ -84,7 +82,7 @@ fun RegularTransactionCreationRoute(
         onBackClicked = clickBack,
         onSaveClicked = {
             viewModel.saveOrUpdate()
-            onSaveClicked.invoke()
+            onSaveClicked()
         },
         onSumChanged = viewModel::updateAmount,
         onCategoryClicked = clickCategory,
@@ -95,7 +93,7 @@ fun RegularTransactionCreationRoute(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegularTransactionCreationScreen(
     uiState: RegularTransactionCreationUiState,
@@ -151,7 +149,7 @@ fun RegularTransactionCreationScreen(
                     Text(
                         modifier = Modifier
                             .alignByBaseline()
-                            .clickable(onClick = { onCurrencyClicked.invoke(uiState.transaction.currencyCode) }),
+                            .clickable(onClick = { onCurrencyClicked(uiState.transaction.currencyCode) }),
                         text = uiState.transaction.currencyCode.getSymbolByCode(),
                         style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.primary,
@@ -163,7 +161,7 @@ fun RegularTransactionCreationScreen(
                         inputValueChanged = { text ->
                             showError = !MainPriceFieldParser.isInputValid(text)
                             saveBtnEnabled = !showError
-                            onSumChanged.invoke(text)
+                            onSumChanged(text)
                         },
                         showError = { if (showError) ShowError() }
                     )
@@ -172,7 +170,7 @@ fun RegularTransactionCreationScreen(
                     modifier = Modifier
                         .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large))
                         .clickable {
-                            onCategoryClicked.invoke(
+                            onCategoryClicked(
                                 uiState.transaction.type,
                                 CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN
                             )
@@ -294,15 +292,13 @@ fun RegularTransactionCreationScreen(
                         top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large)
                     )
                 )
-                TextField(
+                DescriptionTextField(
                     modifier = Modifier.padding(
                         horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
                         vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)
                     ),
                     value = uiState.transaction.description,
-                    onValueChange = onDescriptionChanged,
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                    placeholder = { Text(text = stringResource(id = R.string.regular_transaction_edit_description_hint)) }
+                    onValueChange = onDescriptionChanged
                 )
             }
             BottomActionButton(
@@ -317,7 +313,7 @@ fun RegularTransactionCreationScreen(
                     uiState.curDayOfMonth,
                     onDismiss = { openDayOfMonthDialog = false },
                     onDayClicked = {
-                        onDayOfMonthClicked.invoke(it)
+                        onDayOfMonthClicked(it)
                         openDayOfMonthDialog = false
                     })
             }
@@ -346,7 +342,8 @@ fun DayInMonthDialog(
             ) {
                 Text(
                     text = stringResource(id = R.string.regular_transaction_repeat_day_of_month),
-                    modifier = Modifier.padding(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small))
+                    modifier = Modifier.padding(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)),
+                    color = MaterialTheme.colorScheme.primary
                 )
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(5),
@@ -364,7 +361,7 @@ fun DayInMonthDialog(
                                     MaterialTheme.colorScheme.secondary,
                                     CircleShape
                                 )
-                                .clickable { onDayClicked.invoke(item) }
+                                .clickable { onDayClicked(item) }
                                 .background(
                                     color = if (item == selectedDay) MaterialTheme.colorScheme.secondary
                                     else MaterialTheme.colorScheme.background,
@@ -386,7 +383,6 @@ fun DayInMonthDialog(
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DropdownPeriodMenu(
     modifier: Modifier = Modifier,
@@ -416,6 +412,7 @@ fun DropdownPeriodMenu(
             tint = MaterialTheme.colorScheme.primary
         )
         DropdownMenu(
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.tertiaryContainer),
             expanded = isExpanded,
             onDismissRequest = {
                 isExpanded = false
@@ -430,13 +427,13 @@ fun DropdownPeriodMenu(
                                 PeriodMenuItem.WEEK -> stringResource(id = R.string.regular_transaction_repeat_list_week)
                                 PeriodMenuItem.MONTH -> stringResource(id = R.string.regular_transaction_repeat_list_month)
                             },
-                            color = MaterialTheme.colorScheme.primary,
+                            color = MaterialTheme.colorScheme.onTertiaryContainer,
                             style = MaterialTheme.typography.bodyLarge
                         )
                     },
                     onClick = {
                         curValue = item
-                        onMenuItemClick.invoke(item)
+                        onMenuItemClick(item)
                         isExpanded = false
                     }
                 )
@@ -465,7 +462,7 @@ fun DaysOfWeek(
                     .aspectRatio(1f)
                     .clip(CircleShape)
                     .border(1.dp, MaterialTheme.colorScheme.secondary, CircleShape)
-                    .clickable { onDayClicked.invoke(item) }
+                    .clickable { onDayClicked(item) }
                     .background(
                         color = if (item == selected) MaterialTheme.colorScheme.secondary
                         else MaterialTheme.colorScheme.background,

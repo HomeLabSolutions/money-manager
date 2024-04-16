@@ -7,16 +7,16 @@ import androidx.navigation.compose.composable
 import com.d9tilov.android.common.android.ui.base.BaseNavigator
 import com.d9tilov.android.statistics.ui.StatisticsRoute
 
-const val statisticsNavigationRoute = "statistics"
+const val STATISTICS_NAVIGATION_ROUTE = "statistics_route"
 
 interface StatisticsNavigator : BaseNavigator
 
 interface StatisticsDetailsNavigator : StatisticsNavigator
 
 fun NavController.navigateToStatistics(navOptions: NavOptions? = null) {
-    this.navigate(statisticsNavigationRoute, navOptions)
+    this.navigate(STATISTICS_NAVIGATION_ROUTE, navOptions)
 }
 
-fun NavGraphBuilder.statisticsScreen() {
-    composable(route = statisticsNavigationRoute) { StatisticsRoute() }
+fun NavGraphBuilder.statisticsScreen(route: String) {
+    composable(route = route) { StatisticsRoute() }
 }
