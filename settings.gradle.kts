@@ -76,6 +76,8 @@ include(":statistics:statistics-domain:statistics-domain-model")
 include(":statistics:statistics-ui")
 
 include(":analytics:analytics-di")
+include(":analytics:analytics-data:analytics-data-impl")
+
 include(":profile:profile-ui")
 include(":incomeexpense:incomeexpense-ui")
 include(":settings:settings-ui")

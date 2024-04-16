@@ -86,6 +86,7 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.d9tilov.android.analytics.data.impl.TrackScreenEvent
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.domain.model.Category.Companion.ALL_ITEMS_ID
 import com.d9tilov.android.category.domain.model.CategoryDestination
@@ -161,6 +162,7 @@ fun IncomeExpenseScreen(
     onDeleteTransactionConfirmClicked: (Transaction) -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
 ) {
+    TrackScreenEvent(SCREEN_NAME)
     val listState = rememberLazyListState()
     Scaffold(
         floatingActionButton = {
@@ -833,3 +835,5 @@ private fun mockCategory(id: Long, name: String) = Category.EMPTY_INCOME.copy(
     icon = R.drawable.ic_category_beach,
     color = android.R.color.holo_blue_light,
 )
+
+private const val SCREEN_NAME = "income_expense_screen"
