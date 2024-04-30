@@ -15,6 +15,8 @@
  */
 
 import com.android.moneymanager.extensions.buildLibs
+import com.android.moneymanager.extensions.implementation
+import com.android.moneymanager.extensions.kapt
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
@@ -30,8 +32,8 @@ class AndroidHiltConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-                "implementation"(buildLibs.findLibrary("hilt").get())
-                "kapt"(buildLibs.findLibrary("hiltAndroidCompiler").get())
+                implementation(buildLibs.hilt)
+                kapt(buildLibs.hiltAndroidCompiler)
             }
         }
     }
