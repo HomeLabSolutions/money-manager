@@ -35,8 +35,8 @@ internal fun Project.configureKotlinAndroid(
         }
 
         compileOptions {
-            sourceCompatibility(buildLibs.findVersion("javaVersion").get())
-            targetCompatibility(buildLibs.findVersion("javaVersion").get())
+            sourceCompatibility(buildLibs.versions.javaVersion.get())
+            targetCompatibility(buildLibs.versions.javaVersion.get())
         }
     }
 
@@ -54,7 +54,7 @@ private fun Project.configureKotlin() {
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
             // Set JVM target to 11
-            jvmTarget = buildLibs.findVersion("javaVersion").get().toString()
+            jvmTarget = buildLibs.versions.javaVersion.get()
         }
     }
 }
