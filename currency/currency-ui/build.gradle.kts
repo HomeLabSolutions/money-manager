@@ -2,6 +2,7 @@ plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
     id("moneymanager.android.library.compose")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -22,8 +23,10 @@ dependencies {
     implementation(libs.constraintLayout)
 
     implementation(libs.bundles.compose)
-    implementation(libs.bundles.composeMaterial3)
+    
     implementation(libs.composeViewModel)
+    implementation(libs.composeMaterial3)
+    implementation(libs.composeMaterial3WindowSize)
     implementation(libs.composeRuntime)
     implementation(libs.hiltNavigationCompose)
 }

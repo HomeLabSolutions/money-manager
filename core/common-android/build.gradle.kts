@@ -36,7 +36,7 @@ dependencies {
     kapt(libs.workerHiltCompiler)
 
     implementation(libs.bundles.compose)
-    implementation(libs.bundles.composeMaterial3)
+    
     implementation(libs.composeViewModel)
     implementation(libs.composeRuntime)
     implementation(libs.hiltNavigationCompose)
