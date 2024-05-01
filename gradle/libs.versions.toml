@@ -1,7 +1,7 @@
 [versions]
 gradlePlugin = "8.2.2"
 kotlin = "1.9.23"
-ksp = "1.9.22-1.0.18"
+ksp = "1.9.23-1.0.20"
 javaPoet = "1.13.0"
 javaVersion = "17"
 kotlinDatetime = "0.4.1"

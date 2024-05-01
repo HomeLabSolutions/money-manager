@@ -90,10 +90,6 @@ android {
         }
     }
 
-    kapt {
-        correctErrorTypes = true
-    }
-
     if (project.hasProperty("devBuild")) {
         splits.abi.isEnable = false
         splits.density.isEnable = false

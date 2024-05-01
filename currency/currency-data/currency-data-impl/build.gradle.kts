@@ -25,6 +25,6 @@ dependencies {
 
     implementation(libs.worker)
     implementation(libs.workerHilt)
-    kapt(libs.workerHiltCompiler)
+    ksp(libs.workerHiltCompiler)
     implementation(libs.timber)
 }
