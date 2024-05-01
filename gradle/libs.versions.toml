@@ -136,7 +136,6 @@ compose = [
     "composeUi", "composeToolingPreview", "composeFoundation",
     "composeMaterial", "composeMaterialIconsCore", "composeMaterialIconsExtended",
     "composeLiveData", "composeUiTestManifest"]
-composeMaterial3 = ["composeMaterial3", "composeMaterial3WindowSize"]
 
 [plugins]
 deps = { id = "com.autonomousapps.dependency-analysis", version.ref = "autonomousapps" }

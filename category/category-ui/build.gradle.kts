@@ -43,8 +43,8 @@ dependencies {
     implementation(libs.constraintLayout)
 
     implementation(libs.bundles.compose)
-    implementation(libs.bundles.composeMaterial3)
     implementation(libs.composeViewModel)
+    implementation(libs.composeMaterial3)
     implementation(libs.composeRuntime)
     implementation(libs.hiltNavigationCompose)
 
