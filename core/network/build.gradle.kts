@@ -22,7 +22,8 @@ dependencies {
 
     implementation(project(":core:common"))
 
-    implementation(libs.bundles.retrofit)
+    implementation(libs.retrofit)
+    implementation(libs.retrofitMoshi)
     implementation(libs.okHttp)
     implementation(libs.okHttpInterceptor)
 

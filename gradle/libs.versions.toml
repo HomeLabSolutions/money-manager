@@ -137,7 +137,6 @@ compose = [
     "composeMaterial", "composeMaterialIconsCore", "composeMaterialIconsExtended",
     "composeLiveData", "composeUiTestManifest"]
 composeMaterial3 = ["composeMaterial3", "composeMaterial3WindowSize"]
-retrofit = ["retrofit", "retrofitMoshi"]
 
 [plugins]
 deps = { id = "com.autonomousapps.dependency-analysis", version.ref = "autonomousapps" }
