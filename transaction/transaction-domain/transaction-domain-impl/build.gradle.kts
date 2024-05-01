@@ -28,6 +28,6 @@ dependencies {
     implementation(project(":budget:budget-domain:budget-domain-model"))
     implementation(project(":budget:budget-domain:budget-domain-contract"))
 
-    implementation(libs.coroutinesCore)
-    implementation(libs.paging)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.paging.runtime)
 }

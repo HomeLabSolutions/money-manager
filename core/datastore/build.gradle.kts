@@ -11,5 +11,5 @@ dependencies {
     implementation(project(":core:common"))
 
     implementation(libs.datastore)
-    implementation(libs.coroutinesCore)
+    implementation(libs.kotlinx.coroutines.core)
 }

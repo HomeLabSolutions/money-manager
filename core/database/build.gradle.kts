@@ -22,8 +22,8 @@ android {
 dependencies {
     implementation(project(":core:common"))
 
-    api(libs.room)
-    implementation(libs.roomPaging)
-    ksp(libs.roomCompiler)
-    implementation(libs.coroutinesCore)
+    api(libs.room.ktx)
+    implementation(libs.room.paging)
+    ksp(libs.room.compiler)
+    implementation(libs.kotlinx.coroutines.core)
 }

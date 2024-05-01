@@ -8,5 +8,5 @@ dependencies {
     implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
 
-    implementation(libs.coroutinesCore)
+    implementation(libs.kotlinx.coroutines.core)
 }

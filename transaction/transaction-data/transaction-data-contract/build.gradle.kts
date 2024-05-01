@@ -23,7 +23,7 @@ dependencies {
     implementation(project(":transaction:transaction-domain:transaction-domain-model"))
     implementation(project(":category:category-domain:category-domain-model"))
 
-    implementation(libs.roomPaging)
+    implementation(libs.room.paging)
 
-    implementation(libs.coroutinesCore)
+    implementation(libs.kotlinx.coroutines.core)
 }

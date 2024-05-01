@@ -7,15 +7,15 @@ plugins {
 
 buildscript {
     dependencies {
-        classpath(libs.kotlinPlugin)
+        classpath(libs.kotlin.gradle.plugin)
     }
 }
 
 dependencies {
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
-    implementation(libs.android.gradlePlugin)
-    implementation(libs.kotlinPlugin)
-    implementation(libs.ksp.gradlePlugin)
+    implementation(libs.android.gradle.plugin)
+    implementation(libs.kotlin.gradle.plugin)
+    implementation(libs.ksp.gradle.plugin)
     implementation(libs.java.poet)
 }
 

@@ -4,6 +4,6 @@ plugins {
 
 dependencies {
 
-    api(libs.kotlinDatetime)
+    api(libs.kotlinx.datetime)
     testImplementation(libs.junit)
 }

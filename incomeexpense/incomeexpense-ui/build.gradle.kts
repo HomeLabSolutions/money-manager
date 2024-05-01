@@ -3,7 +3,7 @@ plugins {
     id("moneymanager.android.hilt")
     id("moneymanager.android.library.compose")
     id("moneymanager.android.library.viewbinding")
-    id("androidx.navigation.safeargs.kotlin")
+    
 }
 
 android {
@@ -32,24 +32,24 @@ dependencies {
     implementation(project(":billing:billing-domain:billing-domain-contract"))
     implementation(project(":billing:billing-di"))
 
-    implementation(libs.appCompat)
+    implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(libs.paging)
-    implementation(libs.pagingCompose)
+    implementation(libs.paging.runtime)
+    implementation(libs.paging.compose)
 
-    implementation(libs.navigation)
-    implementation(libs.navigationCompose)
-    implementation(libs.hiltNavigationCompose)
-    implementation(libs.composeRuntime)
-    implementation(libs.composeToolingPreview)
-    implementation(libs.composeConstraintLayout)
-    implementation(libs.accompanistPager)
-    implementation(libs.accompanistPagerIndicator)
-    implementation(libs.composeMaterial3)
-    implementation(libs.composeLiveData)
+    
+    implementation(libs.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.constraintlayout.compose)
+    implementation(libs.accompanist.pager)
+
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.runtime.livedata)
 
     implementation(libs.timber)
 
-    implementation(libs.firebaseAnalytics)
-    implementation(platform(libs.firebaseBom))
+    implementation(libs.firebase.analytics)
+    implementation(platform(libs.firebase.bom))
 }

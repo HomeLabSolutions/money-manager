@@ -3,7 +3,7 @@ plugins {
     id("moneymanager.android.hilt")
     id("moneymanager.android.library.compose")
     id("moneymanager.android.library.viewbinding")
-    id("androidx.navigation.safeargs.kotlin")
+    
     id("kotlin-parcelize")
 }
 
@@ -32,15 +32,13 @@ dependencies {
     implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
 
-    implementation(libs.appCompat)
+    implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(libs.constraintLayout)
+    
 
-    implementation(libs.navigation)
-    implementation(libs.navigationCompose)
+    
+    implementation(libs.navigation.compose)
 
     implementation(libs.glide)
-    ksp(libs.glideCompiler)
-
-    implementation(libs.androidChart)
+    ksp(libs.glide.compiler)
 }

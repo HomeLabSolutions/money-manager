@@ -5,5 +5,5 @@ plugins {
 dependencies {
     implementation(project(":user-info:user-domain:user-domain-model"))
 
-    implementation(libs.coroutinesCore)
+    implementation(libs.kotlinx.coroutines.core)
 }

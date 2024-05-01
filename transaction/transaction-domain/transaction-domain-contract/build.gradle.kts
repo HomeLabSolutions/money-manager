@@ -12,6 +12,6 @@ dependencies {
     implementation(project(":transaction:transaction-domain:transaction-domain-model"))
     implementation(project(":category:category-domain:category-domain-model"))
 
-    implementation(libs.coroutinesCore)
-    implementation(libs.paging)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.paging.runtime)
 }
