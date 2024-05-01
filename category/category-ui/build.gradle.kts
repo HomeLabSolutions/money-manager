@@ -42,9 +42,10 @@ dependencies {
     implementation(libs.material)
     implementation(libs.constraintLayout)
 
-    implementation(libs.bundles.compose)
+    implementation(libs.composeUi)
     implementation(libs.composeViewModel)
     implementation(libs.composeMaterial3)
+    implementation(libs.composeToolingPreview)
     implementation(libs.composeRuntime)
     implementation(libs.hiltNavigationCompose)
 

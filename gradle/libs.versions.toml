@@ -131,12 +131,6 @@ android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", ver
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 java-poet = { group = "com.squareup", name = "javapoet", version.ref = "javaPoet" }
 
-[bundles]
-compose = [
-    "composeUi", "composeToolingPreview", "composeFoundation",
-    "composeMaterial", "composeMaterialIconsCore", "composeMaterialIconsExtended",
-    "composeLiveData", "composeUiTestManifest"]
-
 [plugins]
 deps = { id = "com.autonomousapps.dependency-analysis", version.ref = "autonomousapps" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }
