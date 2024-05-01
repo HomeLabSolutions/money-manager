@@ -35,7 +35,7 @@ dependencies {
     implementation(libs.workerHilt)
     kapt(libs.workerHiltCompiler)
 
-    implementation(libs.bundles.compose)
+    implementation(libs.composeUi)
     
     implementation(libs.composeViewModel)
     implementation(libs.composeRuntime)

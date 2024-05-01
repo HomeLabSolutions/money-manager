@@ -22,11 +22,12 @@ dependencies {
     implementation(libs.material)
     implementation(libs.constraintLayout)
 
-    implementation(libs.bundles.compose)
+    implementation(libs.composeUi)
     
     implementation(libs.composeViewModel)
     implementation(libs.composeMaterial3)
     implementation(libs.composeMaterial3WindowSize)
     implementation(libs.composeRuntime)
+    implementation(libs.composeToolingPreview)
     implementation(libs.hiltNavigationCompose)
 }

@@ -31,11 +31,13 @@ dependencies {
     implementation(libs.material)
 
     implementation(libs.composeMaterial3)
+    implementation(libs.composeFoundation)
+    implementation(libs.composeToolingPreview)
     implementation(libs.navigationCompose)
     implementation(libs.hiltNavigationCompose)
 
     implementation(libs.composeViewModel)
     implementation(libs.composeRuntime)
-    implementation(libs.bundles.compose)
+    implementation(libs.composeUi)
     
 }
