@@ -23,7 +23,6 @@ dependencies {
     implementation(project(":core:common"))
 
     api(libs.room)
-    api(libs.roomRuntime)
     implementation(libs.roomPaging)
     kapt(libs.roomCompiler)
     implementation(libs.coroutinesCore)

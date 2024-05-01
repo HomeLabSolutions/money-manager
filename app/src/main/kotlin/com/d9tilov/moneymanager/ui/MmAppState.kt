@@ -6,13 +6,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.util.trace
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import androidx.tracing.trace
 import com.d9tilov.android.incomeexpense.navigation.INCOME_EXPENSE_NAVIGATION_ROUTE
 import com.d9tilov.android.incomeexpense.navigation.navigateToIncomeExpense
 import com.d9tilov.android.profile.ui.navigation.navigateToProfile
@@ -45,7 +45,7 @@ fun rememberMmAppState(
 class MmAppState(
     val navController: NavHostController,
     val coroutineScope: CoroutineScope,
-    val windowSizeClass: WindowSizeClass,
+    windowSizeClass: WindowSizeClass,
 ) {
 
     val currentDestination: NavDestination?

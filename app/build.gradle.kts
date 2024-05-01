@@ -172,7 +172,7 @@ dependencies {
     implementation(libs.composeRuntime)
     implementation(libs.accompanistPagerIndicator)
 
-    implementation(libs.androidx.tracing.ktx)
+    implementation(libs.androidx.tracing)
 
     implementation(libs.timber)
     implementation(libs.serializationKotlin)
