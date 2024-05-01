@@ -3,8 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":user-info:user-domain:user-domain-model"))
     implementation(project(":user-info:user-domain:user-domain-contract"))
-
+    implementation(project(":user-info:user-domain:user-domain-model"))
     implementation(libs.kotlinx.coroutines.core)
 }

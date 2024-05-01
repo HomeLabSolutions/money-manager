@@ -9,23 +9,15 @@ android {
 }
 
 dependencies {
+    implementation(project(":budget:budget-domain:budget-domain-contract"))
+    implementation(project(":budget:budget-domain:budget-domain-model"))
     implementation(project(":core:common"))
     implementation(project(":core:designsystem"))
-
-    implementation(project(":budget:budget-domain:budget-domain-model"))
-    implementation(project(":budget:budget-domain:budget-domain-contract"))
-    implementation(project(":budget:budget-di"))
-
-    
-
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material)
-    implementation(libs.androidx.compose.ui.test.manifest)
-
     implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.test.manifest)
+    implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 }

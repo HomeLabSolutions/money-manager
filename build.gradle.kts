@@ -1,3 +1,5 @@
+import com.android.moneymanager.extensions.buildLibs
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
 
@@ -34,7 +36,7 @@ extra["minSdkVersion"] = 21
 extra["targetSdkVersion"] = 34
 extra["versionMajor"] = 1
 extra["versionMinor"] = 0
-extra["versionPatch"] = 17
+extra["versionPatch"] = 22
 extra["versionBuild"] = 1
 
 tasks.register("clean", Delete::class) {
@@ -44,4 +46,9 @@ tasks.register("clean", Delete::class) {
 plugins {
     alias(libs.plugins.serialization) apply false
     alias(libs.plugins.deps) apply true // ./gradlew buildHealth
+    alias(libs.plugins.deps.sorting) apply false
+}
+
+subprojects {
+    apply(plugin = "com.squareup.sort-dependencies")
 }

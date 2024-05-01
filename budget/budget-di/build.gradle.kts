@@ -8,15 +8,12 @@ android {
 }
 
 dependencies {
-
-    implementation(project(":core:database"))
-    implementation(project(":core:datastore"))
-    implementation(project(":core:network"))
-
     implementation(project(":budget:budget-data:budget-data-contract"))
     implementation(project(":budget:budget-data:budget-data-impl"))
     implementation(project(":budget:budget-domain:budget-domain-contract"))
     implementation(project(":budget:budget-domain:budget-domain-impl"))
-
+    implementation(project(":core:database"))
+    implementation(project(":core:datastore"))
+    implementation(project(":core:network"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
 }

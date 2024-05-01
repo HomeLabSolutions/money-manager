@@ -20,19 +20,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-#glide
--keep public class * implements com.bumptech.glide.module.GlideModule
--keep class * extends com.bumptech.glide.module.AppGlideModule {
- <init>(...);
-}
--keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
-  **[] $VALUES;
-  public *;
-}
--keep class com.bumptech.glide.load.data.ParcelFileDescriptorRewinder$InternalRewinder {
-  *** rewind();
-}
-
 -keep class com.d9tilov.android.billing.domain.model.** { *; }
 -keepclassmembers class com.d9tilov.android.billing.domain.model.** { *; }
 -keepnames @kotlin.Metadata class com.d9tilov.android.billing.domain.model.** { *; }
@@ -224,3 +211,14 @@
 -keepclassmembers class <1>.<2> {
   <1>.<2>$Companion Companion;
 }
+-dontwarn kotlinx.serialization.KSerializer
+-dontwarn kotlinx.serialization.SealedClassSerializer
+-dontwarn kotlinx.serialization.Serializable
+-dontwarn kotlinx.serialization.descriptors.ClassSerialDescriptorBuilder
+-dontwarn kotlinx.serialization.descriptors.PrimitiveKind$STRING
+-dontwarn kotlinx.serialization.descriptors.PrimitiveKind
+-dontwarn kotlinx.serialization.descriptors.SerialDescriptor
+-dontwarn kotlinx.serialization.descriptors.SerialDescriptorsKt
+-dontwarn kotlinx.serialization.internal.AbstractPolymorphicSerializer
+-dontwarn kotlinx.serialization.internal.IntSerializer
+-dontwarn kotlinx.serialization.internal.LongSerializer

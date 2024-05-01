@@ -11,5 +11,6 @@ dependencies {
     implementation(project(":core:common"))
 
     implementation(libs.datastore)
+    implementation(libs.hilt.android)
     implementation(libs.kotlinx.coroutines.core)
 }
