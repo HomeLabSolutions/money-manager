@@ -3,7 +3,7 @@ plugins {
     id("moneymanager.android.hilt")
     id("moneymanager.android.library.compose")
     id("moneymanager.android.library.viewbinding")
-    id("androidx.navigation.safeargs.kotlin")
+    
     id("kotlin-parcelize")
 }
 
@@ -33,27 +33,25 @@ dependencies {
 
     implementation(project(":currency:currency-domain:currency-domain-model"))
 
-    implementation(libs.appCompat)
+    implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(libs.constraintLayout)
-    implementation(libs.navigation)
+    
+    
 
-    implementation(libs.composeUi)
-    implementation(libs.composeToolingPreview)
-    implementation(libs.composeFoundation)
-    implementation(libs.composeUiTestManifest)
-    implementation(libs.composeMaterial3)
-    implementation(libs.composeViewModel)
-    implementation(libs.composeRuntime)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.ui.test.manifest)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
     implementation(libs.timber)
 
-    implementation(libs.hiltNavigationCompose)
+    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.glide)
-    ksp(libs.glideCompiler)
+    ksp(libs.glide.compiler)
 
-    implementation(libs.dotsIndicator)
-
-    implementation(platform(libs.firebaseBom))
-    implementation(libs.firebaseConfig)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.config)
 }

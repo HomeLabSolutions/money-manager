@@ -18,6 +18,6 @@ dependencies {
     implementation(project(":transaction:transaction-data:transaction-data-contract"))
     implementation(project(":category:category-domain:category-domain-model"))
 
-    implementation(libs.roomPaging)
-    implementation(libs.coroutinesCore)
+    implementation(libs.room.paging)
+    implementation(libs.kotlinx.coroutines.core)
 }

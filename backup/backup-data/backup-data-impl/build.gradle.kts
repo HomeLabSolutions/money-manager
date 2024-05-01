@@ -18,14 +18,14 @@ dependencies {
     implementation(project(":backup:backup-domain:backup-domain-contract"))
     implementation(project(":backup:backup-domain:backup-domain-model"))
 
-    implementation(libs.coroutinesCore)
+    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.timber)
 
-    implementation(libs.worker)
-    implementation(libs.workerHilt)
-    ksp(libs.workerHiltCompiler)
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.hilt.android.compiler)
 
-    implementation(platform(libs.firebaseBom))
-    implementation(libs.firebaseStorage)
-    implementation(libs.firebaseConfig)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.storage)
+    implementation(libs.firebase.config)
 }

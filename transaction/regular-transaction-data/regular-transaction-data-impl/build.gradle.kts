@@ -18,5 +18,5 @@ dependencies {
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-model"))
     implementation(project(":category:category-domain:category-domain-model"))
 
-    implementation(libs.coroutinesCore)
+    implementation(libs.kotlinx.coroutines.core)
 }

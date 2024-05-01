@@ -8,6 +8,6 @@ android {
 
 dependencies {
 
-    implementation(libs.coroutinesCore)
+    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.billing)
 }

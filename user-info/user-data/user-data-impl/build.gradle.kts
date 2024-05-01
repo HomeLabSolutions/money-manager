@@ -17,7 +17,7 @@ dependencies {
     implementation(project(":user-info:user-domain:user-domain-contract"))
     implementation(project(":user-info:user-data:user-data-contract"))
 
-    implementation(libs.coroutinesCore)
+    implementation(libs.kotlinx.coroutines.core)
 
-    implementation(libs.firebaseUi)
+    implementation(libs.firebase.ui.auth)
 }

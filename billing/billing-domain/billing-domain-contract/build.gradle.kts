@@ -10,6 +10,6 @@ dependencies {
 
     implementation(project(":billing:billing-domain:billing-domain-model"))
 
-    implementation(libs.coroutinesCore)
+    implementation(libs.kotlinx.coroutines.core)
     api(libs.billing)
 }

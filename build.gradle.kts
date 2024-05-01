@@ -8,11 +8,10 @@ buildscript {
         maven("https://plugins.gradle.org/m2/")
     }
     dependencies {
-        classpath(libs.googlePlayServicesPlugin)
-        classpath(libs.navigationArgsPlugin)
-        classpath(libs.hiltPlugin)
-        classpath(libs.firebaseCrashlyticsPlgin)
-        classpath(libs.detektPlugin)
+        classpath(libs.google.services)
+        classpath(libs.hilt.android.gradle.plugin)
+        classpath(libs.firebase.crashlytics.gradle)
+        classpath(libs.detekt.gradle.plugin)
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }

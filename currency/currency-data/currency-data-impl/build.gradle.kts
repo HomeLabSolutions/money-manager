@@ -20,11 +20,11 @@ dependencies {
     implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
 
-    implementation(libs.coroutinesCore)
+    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.startup)
 
-    implementation(libs.worker)
-    implementation(libs.workerHilt)
-    ksp(libs.workerHiltCompiler)
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.hilt.android.compiler)
     implementation(libs.timber)
 }

@@ -15,29 +15,28 @@ dependencies {
 
     implementation(project(":core:common"))
 
-    api(libs.fragment)
-    api(libs.appCompat)
-    implementation(libs.paging)
+    api(libs.appcompat)
+    implementation(libs.paging.runtime)
     implementation(libs.material)
-    implementation(libs.lifecycleRuntime)
+    implementation(libs.lifecycle.runtime)
 
-    implementation(libs.coroutinesCore)
+    implementation(libs.kotlinx.coroutines.core)
 
     implementation(libs.glide)
-    ksp(libs.glideCompiler)
+    ksp(libs.glide.compiler)
 
     implementation(libs.core)
 
-    implementation(libs.navigation)
-    implementation(libs.navigationUi)
-
-    implementation(libs.worker)
-    implementation(libs.workerHilt)
-    ksp(libs.workerHiltCompiler)
-
-    implementation(libs.composeUi)
     
-    implementation(libs.composeViewModel)
-    implementation(libs.composeRuntime)
-    implementation(libs.hiltNavigationCompose)
+    implementation(libs.navigation.ui)
+
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.hilt.android.compiler)
+
+    implementation(libs.androidx.compose.ui)
+    
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
 }

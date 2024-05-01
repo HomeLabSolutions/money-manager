@@ -18,16 +18,16 @@ dependencies {
     implementation(project(":currency:currency-observer:currency-observer-contract"))
     implementation(project(":currency:currency-di"))
 
-    implementation(libs.appCompat)
+    implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(libs.constraintLayout)
-
-    implementation(libs.composeUi)
     
-    implementation(libs.composeViewModel)
-    implementation(libs.composeMaterial3)
-    implementation(libs.composeMaterial3WindowSize)
-    implementation(libs.composeRuntime)
-    implementation(libs.composeToolingPreview)
-    implementation(libs.hiltNavigationCompose)
+
+    implementation(libs.androidx.compose.ui)
+    
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material3.window.size)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.hilt.navigation.compose)
 }

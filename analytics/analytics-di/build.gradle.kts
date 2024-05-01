@@ -10,6 +10,6 @@ android {
 dependencies {
     implementation(project(":core:datastore"))
 
-    implementation(libs.firebaseAnalytics)
-    implementation(platform(libs.firebaseBom))
+    implementation(libs.firebase.analytics)
+    implementation(platform(libs.firebase.bom))
 }

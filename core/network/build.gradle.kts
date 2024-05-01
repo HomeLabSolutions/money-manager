@@ -23,9 +23,9 @@ dependencies {
     implementation(project(":core:common"))
 
     implementation(libs.retrofit)
-    implementation(libs.retrofitMoshi)
-    implementation(libs.okHttp)
-    implementation(libs.okHttpInterceptor)
+    implementation(libs.retrofit.moshi)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
 
     implementation(libs.timber)
 }

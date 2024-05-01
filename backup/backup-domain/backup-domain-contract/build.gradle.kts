@@ -7,5 +7,5 @@ dependencies {
 
     implementation(project(":backup:backup-domain:backup-domain-model"))
 
-    implementation(libs.coroutinesCore)
+    implementation(libs.kotlinx.coroutines.core)
 }

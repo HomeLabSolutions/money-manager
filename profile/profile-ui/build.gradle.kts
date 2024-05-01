@@ -3,7 +3,7 @@ plugins {
     id("moneymanager.android.hilt")
     id("moneymanager.android.library.compose")
     id("moneymanager.android.library.viewbinding")
-    id("androidx.navigation.safeargs.kotlin")
+    
 }
 
 android {
@@ -33,26 +33,26 @@ dependencies {
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-model"))
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-contract"))
 
-    implementation(libs.appCompat)
+    implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(libs.constraintLayout)
-    implementation(libs.composeConstraintLayout)
+    
+    implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.coil)
 
-    implementation(libs.composeUi)
-    implementation(libs.composeToolingPreview)
-    implementation(libs.composeFoundation)
-    implementation(libs.composeMaterial)
-    implementation(libs.composeUiTestManifest)
-    implementation(libs.composeMaterial3)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.ui.test.manifest)
+    implementation(libs.androidx.compose.material3)
 
-    implementation(libs.composeViewModel)
-    implementation(libs.composeRuntime)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
-    implementation(libs.hiltNavigationCompose)
-    implementation(libs.firebaseAnalytics)
-    implementation(platform(libs.firebaseBom))
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.firebase.analytics)
+    implementation(platform(libs.firebase.bom))
 
-    implementation(libs.firebaseUi)
-    implementation(libs.googlePlayServicesAuth)
+    implementation(libs.firebase.ui.auth)
+    implementation(libs.play.services.auth)
 }
