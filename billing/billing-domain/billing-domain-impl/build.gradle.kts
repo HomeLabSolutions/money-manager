@@ -7,25 +7,21 @@ android {
 }
 
 dependencies {
-
-    implementation(project(":core:common"))
-
-    implementation(project(":billing:billing-domain:billing-domain-model"))
-    implementation(project(":billing:billing-domain:billing-domain-contract"))
-
-    implementation(project(":currency:currency-domain:currency-domain-model"))
-    implementation(project(":currency:currency-domain:currency-domain-contract"))
-
-    implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.timber)
-    implementation(libs.retrofit.moshi)
-
-    implementation(libs.firebase.auth)
     implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.ui.auth)
-    implementation(libs.play.services.auth)
+    implementation(project(":billing:billing-domain:billing-domain-contract"))
+    implementation(project(":billing:billing-domain:billing-domain-model"))
+    implementation(project(":core:common"))
+    implementation(project(":currency:currency-domain:currency-domain-contract"))
+    implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(libs.firebase.analytics)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.config)
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.storage)
-    implementation(libs.firebase.config)
+    implementation(libs.firebase.ui.auth)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.moshi)
+    implementation(libs.moshi.kotlin)
+    implementation(libs.play.services.auth)
+    implementation(libs.timber)
 }

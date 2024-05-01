@@ -37,7 +37,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 defaultConfig.targetSdk = rootProject.extra.get("targetSdkVersion") as Int
             }
             dependencies {
-                implementation(buildLibs.timber)
             }
         }
     }

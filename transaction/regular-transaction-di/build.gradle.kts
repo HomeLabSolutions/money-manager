@@ -8,13 +8,14 @@ android {
 }
 
 dependencies {
+    implementation(project(":category:category-domain:category-domain-contract"))
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
     implementation(project(":core:network"))
+    implementation(project(":currency:currency-domain:currency-domain-contract"))
     implementation(project(":transaction:regular-transaction-data:regular-transaction-data-contract"))
     implementation(project(":transaction:regular-transaction-data:regular-transaction-data-impl"))
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-contract"))
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-impl"))
-    implementation(project(":currency:currency-domain:currency-domain-contract"))
-    implementation(project(":category:category-domain:category-domain-contract"))
+    implementation(libs.hilt.android)
 }

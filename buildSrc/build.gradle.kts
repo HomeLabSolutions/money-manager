@@ -41,9 +41,5 @@ gradlePlugin {
             id = "moneymanager.android.library.compose"
             implementationClass = "AndroidLibraryComposeConventionPlugin"
         }
-        register("androidLibraryViewBinding") {
-            id = "moneymanager.android.library.viewbinding"
-            implementationClass = "AndroidViewBindingConventionPlugin"
-        }
     }
 }

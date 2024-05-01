@@ -7,7 +7,6 @@ android {
 }
 
 dependencies {
-
-    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.billing)
+    implementation(libs.kotlinx.coroutines.core)
 }

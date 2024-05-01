@@ -8,8 +8,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:datastore"))
-    implementation(project(":core:network"))
     implementation(project(":backup:backup-data:backup-data-contract"))
     implementation(project(":backup:backup-data:backup-data-impl"))
     implementation(project(":backup:backup-domain:backup-domain-contract"))

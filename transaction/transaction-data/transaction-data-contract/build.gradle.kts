@@ -18,12 +18,9 @@ android {
 }
 
 dependencies {
-
+    implementation(project(":category:category-domain:category-domain-model"))
     implementation(project(":core:common"))
     implementation(project(":transaction:transaction-domain:transaction-domain-model"))
-    implementation(project(":category:category-domain:category-domain-model"))
-
-    implementation(libs.room.paging)
-
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.paging.common)
 }

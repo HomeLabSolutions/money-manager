@@ -1,6 +1,6 @@
 plugins {
     id("moneymanager.android.library")
-    id("moneymanager.android.hilt")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -8,24 +8,21 @@ android {
 }
 
 dependencies {
+    ksp(libs.hilt.android.compiler)
 
+    implementation(platform(libs.firebase.bom))
+    implementation(project(":backup:backup-data:backup-data-contract"))
+    implementation(project(":backup:backup-domain:backup-domain-contract"))
+    implementation(project(":backup:backup-domain:backup-domain-model"))
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
     implementation(project(":core:datastore"))
     implementation(project(":core:network"))
-
-    implementation(project(":backup:backup-data:backup-data-contract"))
-    implementation(project(":backup:backup-domain:backup-domain-contract"))
-    implementation(project(":backup:backup-domain:backup-domain-model"))
-
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.dagger)
+    implementation(libs.firebase.config)
+    implementation(libs.firebase.storage)
+    implementation(libs.hilt.common)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.timber)
-
-    implementation(libs.androidx.work.runtime)
-    implementation(libs.androidx.hilt.work)
-    ksp(libs.hilt.android.compiler)
-
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.storage)
-    implementation(libs.firebase.config)
 }
