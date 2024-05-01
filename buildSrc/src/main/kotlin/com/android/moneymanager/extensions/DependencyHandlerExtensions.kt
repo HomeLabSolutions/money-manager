@@ -8,5 +8,5 @@ val Project.buildLibs get() = extensions.getByName("libs") as LibrariesForLibs
 fun DependencyHandler.implementation(dependencyNotation: Any) =
     add("implementation", dependencyNotation)
 
-fun DependencyHandler.kapt(dependencyNotation: Any) =
-    add("kapt", dependencyNotation)
+fun DependencyHandler.ksp(dependencyNotation: Any) =
+    add("ksp", dependencyNotation)

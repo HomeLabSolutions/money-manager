@@ -24,6 +24,6 @@ dependencies {
 
     api(libs.room)
     implementation(libs.roomPaging)
-    kapt(libs.roomCompiler)
+    ksp(libs.roomCompiler)
     implementation(libs.coroutinesCore)
 }

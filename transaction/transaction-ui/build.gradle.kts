@@ -26,7 +26,7 @@ dependencies {
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-contract"))
 
     implementation(libs.glide)
-    kapt(libs.glideCompiler)
+    ksp(libs.glideCompiler)
     implementation(libs.navigation)
     implementation(libs.navigationCompose)
     implementation(libs.hiltNavigationCompose)

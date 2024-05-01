@@ -40,7 +40,7 @@ dependencies {
     implementation(libs.navigationCompose)
 
     implementation(libs.glide)
-    kapt(libs.glideCompiler)
+    ksp(libs.glideCompiler)
 
     implementation(libs.androidChart)
 }

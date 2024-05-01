@@ -4,7 +4,7 @@ plugins {
     id("moneymanager.android.library.viewbinding")
     id("moneymanager.android.hilt")
     id("kotlin-parcelize")
-    kotlin("kapt")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -24,7 +24,7 @@ dependencies {
     implementation(libs.coroutinesCore)
 
     implementation(libs.glide)
-    kapt(libs.glideCompiler)
+    ksp(libs.glideCompiler)
 
     implementation(libs.core)
 
@@ -33,7 +33,7 @@ dependencies {
 
     implementation(libs.worker)
     implementation(libs.workerHilt)
-    kapt(libs.workerHiltCompiler)
+    ksp(libs.workerHiltCompiler)
 
     implementation(libs.composeUi)
     

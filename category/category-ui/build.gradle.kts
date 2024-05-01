@@ -33,7 +33,7 @@ dependencies {
     implementation(project(":analytics:analytics-di"))
 
     implementation(libs.glide)
-    kapt(libs.glideCompiler)
+    ksp(libs.glideCompiler)
 
     implementation(libs.navigation)
     implementation(libs.navigationUi)

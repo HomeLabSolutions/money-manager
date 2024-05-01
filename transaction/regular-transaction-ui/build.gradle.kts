@@ -26,7 +26,7 @@ dependencies {
 
     implementation(libs.navigation)
     implementation(libs.glide)
-    kapt(libs.glideCompiler)
+    ksp(libs.glideCompiler)
 
     implementation(libs.material)
 

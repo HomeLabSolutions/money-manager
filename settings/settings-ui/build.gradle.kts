@@ -50,7 +50,7 @@ dependencies {
 
     implementation(libs.hiltNavigationCompose)
     implementation(libs.glide)
-    kapt(libs.glideCompiler)
+    ksp(libs.glideCompiler)
 
     implementation(libs.dotsIndicator)
 
