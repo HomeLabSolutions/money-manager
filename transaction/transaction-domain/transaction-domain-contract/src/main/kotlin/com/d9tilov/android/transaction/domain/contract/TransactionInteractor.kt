@@ -43,6 +43,13 @@ interface TransactionInteractor {
     fun ableToSpendToday(): Flow<TransactionSpendingTodayModel>
     fun ableToSpendInFiscalPeriod(): Flow<BigDecimal>
     fun getSumInFiscalPeriod(): Flow<BigDecimal>
+    fun getSumInPeriod(
+        type: TransactionType,
+        from: LocalDateTime,
+        to: LocalDateTime,
+        inStatistics: Boolean,
+        withRegular: Boolean,
+    ): Flow<BigDecimal>
     fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<BigDecimal>
     fun getApproxSumTodayCurrentCurrency(type: TransactionType): Flow<BigDecimal>
     suspend fun removeAllByCategory(category: Category)

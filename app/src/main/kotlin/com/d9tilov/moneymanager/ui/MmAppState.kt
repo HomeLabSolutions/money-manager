@@ -52,14 +52,6 @@ class MmAppState(
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
-    val currentTopLevelDestination: TopLevelDestination?
-        @Composable get() = when (currentDestination?.route) {
-            INCOME_EXPENSE_NAVIGATION_ROUTE -> TopLevelDestination.INCOME_EXPENSE
-            STATISTICS_NAVIGATION_ROUTE -> TopLevelDestination.STATISTICS
-            PROFILE_NAVIGATION_ROUTE -> TopLevelDestination.PROFILE
-            else -> null
-        }
-
     val shouldShowBottomBar: Boolean =
         windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
 
