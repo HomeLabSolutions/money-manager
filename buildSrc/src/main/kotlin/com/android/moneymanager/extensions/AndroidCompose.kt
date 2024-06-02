@@ -30,12 +30,9 @@ internal fun Project.configureAndroidCompose(
     commonExtension: CommonExtension<*, *, *, *, *>,
 ) {
     commonExtension.apply {
+        project.plugins.apply(buildLibs.plugins.compose.compiler.get().pluginId)
         buildFeatures {
             compose = true
-        }
-
-        composeOptions {
-            kotlinCompilerExtensionVersion = buildLibs.versions.androidxComposeCompiler.get()
         }
 
         dependencies {
@@ -43,8 +40,10 @@ internal fun Project.configureAndroidCompose(
     }
 
     tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
-            freeCompilerArgs = freeCompilerArgs + buildComposeMetricsParameters()
+        compilerOptions {
+            for (param in buildComposeMetricsParameters()) {
+                freeCompilerArgs.add(param)
+            }
         }
     }
 }

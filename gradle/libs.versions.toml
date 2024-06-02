@@ -1,29 +1,29 @@
 [versions]
 activity = "1.9.0"
 androidxComposeCompiler = "1.5.12"
-appCompat = "1.6.1"
-autonomousapps = "1.31.0"
+appCompat = "1.7.0"
+autonomousapps = "1.32.0"
 autonomousappsSorting = "0.6"
-billing = "6.2.1"
+billing = "7.0.0"
 coil = "2.6.0"
-compose = "1.6.6"
+compose = "1.7.0-beta02"
+composePlugin = "2.0.0"
 composeConstraintLayout = "1.0.1"
 composeMaterial3 = "1.2.1"
-composeRuntime = "2.7.0"
-composeViewModel = "2.7.0"
-core = "1.13.0"
+composeRuntime = "2.8.1"
+composeViewModel = "2.8.1"
+core = "1.13.1"
 coroutinesCore = "1.8.0"
-datastore = "1.1.0"
+datastore = "1.1.1"
 detektPlugin = "1.23.6"
-firebaseAnalytics = "21.6.2"
-firebaseAuth = "22.3.1"
-firebaseBom = "32.8.1"
-firebaseConfig = "21.6.3"
-firebaseCrashlytics = "18.6.4"
-firebaseCrashlyticsPlugin = "2.9.9"
-firebaseStorage = "20.3.0"
+firebaseAnalytics = "22.0.1"
+firebaseAuth = "23.0.0"
+firebaseConfig = "22.0.0"
+firebaseCrashlytics = "19.0.1"
+firebaseCrashlyticsPlugin = "3.0.1"
+firebaseStorage = "21.0.0"
 firebaseUi = "8.0.2"
-googlePlayServices = "4.4.1"
+googlePlayServices = "4.4.2"
 googlePlayServicesAuth = "20.7.0"
 gradlePlugin = "8.2.2"
 hilt = "2.51"
@@ -34,17 +34,17 @@ javaPoet = "1.13.0"
 javaxInject = "1"
 javaVersion = "17"
 junit = "4.13.2"
-kotlin = "1.9.23"
+kotlin = "2.0.0"
 kotlinDatetime = "0.4.1"
-ksp = "1.9.23-1.0.20"
-material = "1.11.0"
-moshi = "1.15.0"
+ksp = "2.0.0-1.0.21"
+material = "1.12.0"
+moshi = "1.15.1"
 navigation = "2.7.7"
 okhttp = "4.12.0"
-paging = "3.2.1"
+paging = "3.3.0"
 retrofit = "2.9.0"
 room = "2.6.1"
-serialization = "1.9.22"
+serialization = "2.0.0"
 splashScreen = "1.0.1"
 startup = "1.1.1"
 timber = "5.0.1"
@@ -79,7 +79,6 @@ datastore = { group = "androidx.datastore", name = "datastore-preferences", vers
 detekt-gradle-plugin = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detektPlugin" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-config = { group = "com.google.firebase", name = "firebase-config", version.ref = "firebaseConfig" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 firebase-crashlytics-gradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsPlugin" }
@@ -121,3 +120,5 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 deps = { id = "com.autonomousapps.dependency-analysis", version.ref = "autonomousapps" }
 deps-sorting = { id = "com.squareup.sort-dependencies", version.ref = "autonomousappsSorting" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

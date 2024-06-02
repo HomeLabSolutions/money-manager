@@ -7,7 +7,7 @@ android {
 }
 
 dependencies {
-    implementation(platform(libs.firebase.bom))
+    
     implementation(project(":billing:billing-domain:billing-domain-contract"))
     implementation(project(":billing:billing-domain:billing-domain-model"))
     implementation(project(":core:common"))

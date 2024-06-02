@@ -94,7 +94,7 @@ android {
 }
 
 dependencies {
-    implementation(platform(libs.firebase.bom))
+    
     implementation(project(":analytics:analytics-di"))
     implementation(project(":backup:backup-data:backup-data-impl"))
     implementation(project(":backup:backup-di"))

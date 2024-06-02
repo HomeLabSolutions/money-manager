@@ -10,7 +10,7 @@ android {
 dependencies {
     ksp(libs.hilt.android.compiler)
 
-    implementation(platform(libs.firebase.bom))
+    
     implementation(project(":backup:backup-data:backup-data-contract"))
     implementation(project(":backup:backup-domain:backup-domain-contract"))
     implementation(project(":backup:backup-domain:backup-domain-model"))
