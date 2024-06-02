@@ -11,7 +11,7 @@ android {
 }
 
 dependencies {
-    implementation(platform(libs.firebase.bom))
+    
     implementation(project(":backup:backup-data:backup-data-impl"))
     implementation(project(":billing:billing-domain:billing-domain-contract"))
     implementation(project(":budget:budget-domain:budget-domain-contract"))

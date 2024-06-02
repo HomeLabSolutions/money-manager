@@ -2,8 +2,6 @@ plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
     id("moneymanager.android.library.compose")
-    
-    
     id("kotlin-parcelize")
 }
 
@@ -17,7 +15,7 @@ android {
 }
 
 dependencies {
-    implementation(platform(libs.firebase.bom))
+    
     implementation(project(":backup:backup-domain:backup-domain-contract"))
     implementation(project(":backup:backup-domain:backup-domain-model"))
     implementation(project(":billing:billing-domain:billing-domain-contract"))

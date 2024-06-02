@@ -1,5 +1,3 @@
-import com.android.moneymanager.extensions.buildLibs
-
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
 
@@ -32,11 +30,11 @@ repositories {
 }
 
 extra["compileSdkVersion"] = 34
-extra["minSdkVersion"] = 21
+extra["minSdkVersion"] = 23
 extra["targetSdkVersion"] = 34
 extra["versionMajor"] = 1
 extra["versionMinor"] = 0
-extra["versionPatch"] = 22
+extra["versionPatch"] = 24
 extra["versionBuild"] = 1
 
 tasks.register("clean", Delete::class) {
@@ -47,8 +45,23 @@ plugins {
     alias(libs.plugins.serialization) apply false
     alias(libs.plugins.deps) apply true // ./gradlew buildHealth
     alias(libs.plugins.deps.sorting) apply false
+    alias(libs.plugins.compose.compiler) apply false
 }
 
 subprojects {
     apply(plugin = "com.squareup.sort-dependencies")
+}
+
+dependencyAnalysis {
+    issues {
+        all {
+            onUnusedDependencies { severity("fail") }
+            onUsedTransitiveDependencies { severity("ignore") }
+            onIncorrectConfiguration { severity("ignore") }
+            onCompileOnly { severity("ignore") }
+            onRuntimeOnly { severity("ignore") }
+            onUnusedAnnotationProcessors { severity("ignore") }
+            onRedundantPlugins { severity("ignore") }
+        }
+    }
 }
