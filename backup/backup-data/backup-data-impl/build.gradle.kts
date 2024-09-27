@@ -23,6 +23,7 @@ dependencies {
     implementation(libs.firebase.config)
     implementation(libs.firebase.storage)
     implementation(libs.hilt.common)
+
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.timber)
 }
