@@ -11,7 +11,8 @@ android {
 }
 
 dependencies {
-    
+
+
     implementation(project(":backup:backup-data:backup-data-impl"))
     implementation(project(":billing:billing-domain:billing-domain-contract"))
     implementation(project(":budget:budget-domain:budget-domain-contract"))
@@ -26,6 +27,7 @@ dependencies {
     implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-model"))
     implementation(project(":user-info:user-domain:user-domain-contract"))
     implementation(project(":user-info:user-domain:user-domain-model"))
+    implementation(project(":backup:backup-domain:backup-domain-impl"))
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
@@ -40,4 +42,23 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.ui.auth)
     implementation(libs.play.services.auth)
+}
+
+dependencyAnalysis {
+    val fail = "fail"
+    val ignore = "ignore"
+    issues {
+        onUnusedDependencies {
+            severity(fail)
+            exclude(
+                "",
+            )
+        }
+        onUsedTransitiveDependencies { severity(ignore) }
+        onIncorrectConfiguration { severity(ignore) }
+        onCompileOnly { severity(ignore) }
+        onRuntimeOnly { severity(ignore) }
+        onUnusedAnnotationProcessors { severity(ignore) }
+        onRedundantPlugins { severity(ignore) }
+    }
 }
