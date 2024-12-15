@@ -14,6 +14,7 @@ dependencies {
     implementation(libs.kotlin.gradle.plugin)
     implementation(libs.ksp.gradle.plugin)
     implementation(libs.java.poet)
+    implementation(libs.unused.deps)
 }
 
 gradlePlugin {
@@ -37,6 +38,10 @@ gradlePlugin {
         register("androidLibraryCompose") {
             id = "moneymanager.android.library.compose"
             implementationClass = "AndroidLibraryComposeConventionPlugin"
+        }
+        register("kotlinLibrary") {
+            id = "moneymanager.android.library.kotlin"
+            implementationClass = "KotlinLibraryConventionPlugin"
         }
     }
 }

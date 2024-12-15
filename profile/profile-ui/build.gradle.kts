@@ -2,8 +2,7 @@ plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
     id("moneymanager.android.library.compose")
-    
-    
+    id("com.autonomousapps.dependency-analysis")
 }
 
 android {
@@ -11,7 +10,8 @@ android {
 }
 
 dependencies {
-    
+
+
     implementation(project(":backup:backup-data:backup-data-impl"))
     implementation(project(":billing:billing-domain:billing-domain-contract"))
     implementation(project(":budget:budget-domain:budget-domain-contract"))
@@ -40,4 +40,23 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.ui.auth)
     implementation(libs.play.services.auth)
+}
+
+dependencyAnalysis {
+    val fail = "fail"
+    val ignore = "ignore"
+    issues {
+        onUnusedDependencies {
+            severity(fail)
+            exclude(
+                "",
+            )
+        }
+        onUsedTransitiveDependencies { severity(ignore) }
+        onIncorrectConfiguration { severity(ignore) }
+        onCompileOnly { severity(ignore) }
+        onRuntimeOnly { severity(ignore) }
+        onUnusedAnnotationProcessors { severity(ignore) }
+        onRedundantPlugins { severity(ignore) }
+    }
 }
