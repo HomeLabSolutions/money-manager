@@ -8,8 +8,6 @@ android {
 }
 
 dependencies {
-    ksp(libs.hilt.android.compiler)
-
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
     implementation(project(":core:database"))
@@ -24,6 +22,8 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.startup)
     implementation(libs.timber)
+
+    ksp(libs.hilt.android.compiler)
 }
 
 dependencyAnalysis {
