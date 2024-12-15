@@ -50,9 +50,7 @@ class CategoryListViewModel @Inject constructor(
     val uiState: StateFlow<CategoryUiState> = _uiState
 
     fun remove(category: Category) {
-        val categoryExceptionHandler = CoroutineExceptionHandler { _, exception ->
-            val a = exception
-        }
+        val categoryExceptionHandler = CoroutineExceptionHandler { _, _ -> }
         viewModelScope.launch(categoryExceptionHandler) {
             awaitAll(
                 async { transactionInteractor.removeAllByCategory(category) },

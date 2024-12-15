@@ -19,6 +19,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 /**
@@ -35,8 +36,8 @@ internal fun Project.configureKotlinAndroid(
         }
 
         compileOptions {
-            sourceCompatibility(buildLibs.findVersion("javaVersion").get())
-            targetCompatibility(buildLibs.findVersion("javaVersion").get())
+            sourceCompatibility(buildLibs.versions.javaVersion.get())
+            targetCompatibility(buildLibs.versions.javaVersion.get())
         }
     }
 
@@ -52,9 +53,8 @@ internal fun Project.configureKotlinAndroid(
 private fun Project.configureKotlin() {
     // Use withType to workaround https://youtrack.jetbrains.com/issue/KT-55947
     tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
-            // Set JVM target to 11
-            jvmTarget = buildLibs.findVersion("javaVersion").get().toString()
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
         }
     }
 }

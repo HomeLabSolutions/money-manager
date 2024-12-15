@@ -1,6 +1,5 @@
 plugins {
     id("moneymanager.android.library")
-    id("moneymanager.android.hilt")
 }
 
 android {
@@ -8,15 +7,31 @@ android {
 }
 
 dependencies {
-
+    implementation(project(":budget:budget-data:budget-data-contract"))
+    implementation(project(":budget:budget-domain:budget-domain-contract"))
+    implementation(project(":budget:budget-domain:budget-domain-model"))
     implementation(project(":core:common"))
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
     implementation(project(":core:network"))
+    implementation(libs.kotlinx.coroutines.core)
+}
 
-    implementation(project(":budget:budget-data:budget-data-contract"))
-    implementation(project(":budget:budget-domain:budget-domain-model"))
-    implementation(project(":budget:budget-domain:budget-domain-contract"))
-
-    implementation(libs.coroutinesCore)
+dependencyAnalysis {
+    val fail = "fail"
+    val ignore = "ignore"
+    issues {
+        onUnusedDependencies {
+            severity(fail)
+            exclude(
+                "",
+            )
+        }
+        onUsedTransitiveDependencies { severity(ignore) }
+        onIncorrectConfiguration { severity(ignore) }
+        onCompileOnly { severity(ignore) }
+        onRuntimeOnly { severity(ignore) }
+        onUnusedAnnotationProcessors { severity(ignore) }
+        onRedundantPlugins { severity(ignore) }
+    }
 }

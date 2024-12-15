@@ -9,7 +9,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import timber.log.Timber.DebugTree
-import javax.inject.Inject
 
 @HiltAndroidApp
 class App : Application() {

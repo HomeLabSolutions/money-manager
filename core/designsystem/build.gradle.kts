@@ -1,7 +1,7 @@
 plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.library.compose")
-    id("moneymanager.android.library.viewbinding")
+    
 }
 
 android {
@@ -14,19 +14,34 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
-    implementation(project(":core:common-android"))
-
-    implementation(libs.material)
-    implementation(libs.composeUi)
-    implementation(libs.composeToolingPreview)
-    implementation(libs.composeFoundation)
-    implementation(libs.composeMaterial)
-    implementation(libs.composeMaterialIconsCore)
-    implementation(libs.composeMaterialIconsExtended)
-    implementation(libs.composeUiTestManifest)
-    implementation(libs.composeMaterial3)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.material.icons.core)
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.test.manifest)
+    implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.core)
-    debugImplementation(libs.composeToolingUi)
+    implementation(libs.material)
 
-    implementation(libs.splashScreen)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+}
+
+dependencyAnalysis {
+    val fail = "fail"
+    val ignore = "ignore"
+    issues {
+        onUnusedDependencies {
+            severity(fail)
+            exclude(
+                "",
+            )
+        }
+        onUsedTransitiveDependencies { severity(ignore) }
+        onIncorrectConfiguration { severity(ignore) }
+        onCompileOnly { severity(ignore) }
+        onRuntimeOnly { severity(ignore) }
+        onUnusedAnnotationProcessors { severity(ignore) }
+        onRedundantPlugins { severity(ignore) }
+    }
 }

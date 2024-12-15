@@ -2,8 +2,6 @@ plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
     id("moneymanager.android.library.compose")
-    id("moneymanager.android.library.viewbinding")
-    id("androidx.navigation.safeargs.kotlin")
     id("kotlin-parcelize")
 }
 
@@ -12,29 +10,41 @@ android {
 }
 
 dependencies {
+    implementation(project(":category:category-domain:category-domain-contract"))
+    implementation(project(":category:category-domain:category-domain-model"))
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
     implementation(project(":core:designsystem"))
-
-    implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-model"))
-    implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-model"))
-    implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-contract"))
-    implementation(project(":category:category-domain:category-domain-model"))
-    implementation(project(":category:category-domain:category-domain-contract"))
-    implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
-
-    implementation(libs.navigation)
-    implementation(libs.glide)
-    kapt(libs.glideCompiler)
-
+    implementation(project(":currency:currency-domain:currency-domain-model"))
+    implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-contract"))
+    implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-model"))
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.material)
+    implementation(libs.navigation.compose)
+}
 
-    implementation(libs.navigationCompose)
-    implementation(libs.hiltNavigationCompose)
-
-    implementation(libs.composeViewModel)
-    implementation(libs.composeRuntime)
-    implementation(libs.bundles.compose)
-    implementation(libs.bundles.composeMaterial3)
+dependencyAnalysis {
+    val fail = "fail"
+    val ignore = "ignore"
+    issues {
+        onUnusedDependencies {
+            severity(fail)
+            exclude(
+                "",
+            )
+        }
+        onUsedTransitiveDependencies { severity(ignore) }
+        onIncorrectConfiguration { severity(ignore) }
+        onCompileOnly { severity(ignore) }
+        onRuntimeOnly { severity(ignore) }
+        onUnusedAnnotationProcessors { severity(ignore) }
+        onRedundantPlugins { severity(ignore) }
+    }
 }

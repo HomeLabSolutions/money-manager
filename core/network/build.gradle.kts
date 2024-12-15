@@ -19,12 +19,30 @@ android {
 }
 
 dependencies {
-
     implementation(project(":core:common"))
-
-    implementation(libs.bundles.retrofit)
-    implementation(libs.okHttp)
-    implementation(libs.okHttpInterceptor)
-
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.moshi)
     implementation(libs.timber)
+}
+
+dependencyAnalysis {
+    val fail = "fail"
+    val ignore = "ignore"
+    issues {
+        onUnusedDependencies {
+            severity(fail)
+            exclude(
+                "",
+            )
+        }
+        onUsedTransitiveDependencies { severity(ignore) }
+        onIncorrectConfiguration { severity(ignore) }
+        onCompileOnly { severity(ignore) }
+        onRuntimeOnly { severity(ignore) }
+        onUnusedAnnotationProcessors { severity(ignore) }
+        onRedundantPlugins { severity(ignore) }
+    }
 }

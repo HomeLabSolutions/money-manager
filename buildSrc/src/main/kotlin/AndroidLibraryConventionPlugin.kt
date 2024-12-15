@@ -15,7 +15,6 @@
  */
 
 import com.android.build.gradle.LibraryExtension
-import com.android.moneymanager.extensions.buildLibs
 import com.android.moneymanager.extensions.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -29,6 +28,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
+                apply("com.autonomousapps.dependency-analysis")
             }
 
             extensions.configure<LibraryExtension> {
@@ -36,7 +36,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 defaultConfig.targetSdk = rootProject.extra.get("targetSdkVersion") as Int
             }
             dependencies {
-                "implementation"(buildLibs.findLibrary("timber").get())
             }
         }
     }
