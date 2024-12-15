@@ -76,3 +76,4 @@ affectedModuleDetector {
 subprojects {
     apply(plugin = "com.squareup.sort-dependencies")
 }
+
