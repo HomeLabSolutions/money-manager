@@ -2,7 +2,7 @@
 activity = "1.9.0"
 androidxComposeCompiler = "1.5.12"
 appCompat = "1.7.0"
-autonomousapps = "1.32.0"
+autonomousapps = "2.6.0"
 autonomousappsSorting = "0.6"
 billing = "7.0.0"
 coil = "2.6.0"
@@ -51,6 +51,7 @@ startup = "1.1.1"
 timber = "5.0.1"
 worker = "2.9.0"
 workerHilt = "1.2.0"
+unusedDeps = "2.6.1"
 
 [libraries]
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
@@ -116,9 +117,9 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 startup = { group = "androidx.startup", name = "startup-runtime", version.ref = "startup" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+unused-deps = { group = "com.autonomousapps", name = "dependency-analysis-gradle-plugin", version.ref = "unusedDeps" }
 
 [plugins]
-deps = { id = "com.autonomousapps.dependency-analysis", version.ref = "autonomousapps" }
 deps-sorting = { id = "com.squareup.sort-dependencies", version.ref = "autonomousappsSorting" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

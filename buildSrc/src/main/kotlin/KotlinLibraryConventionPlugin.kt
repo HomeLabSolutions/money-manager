@@ -22,18 +22,12 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.extra
 
-class AndroidLibraryConventionPlugin : Plugin<Project> {
+class KotlinLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("com.android.library")
-                apply("org.jetbrains.kotlin.android")
+                apply("kotlin")
                 apply("com.autonomousapps.dependency-analysis")
-            }
-
-            extensions.configure<LibraryExtension> {
-                configureKotlinAndroid(this)
-                defaultConfig.targetSdk = rootProject.extra.get("targetSdkVersion") as Int
             }
             dependencies {
             }

@@ -48,7 +48,6 @@ tasks.register("clean", Delete::class) {
 
 plugins {
     alias(libs.plugins.serialization) apply false
-    alias(libs.plugins.deps) apply true // ./gradlew buildHealth
     alias(libs.plugins.deps.sorting) apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.module.detector) apply true
@@ -76,18 +75,4 @@ affectedModuleDetector {
 
 subprojects {
     apply(plugin = "com.squareup.sort-dependencies")
-}
-
-dependencyAnalysis {
-    issues {
-        all {
-            onUnusedDependencies { severity("fail") }
-            onUsedTransitiveDependencies { severity("ignore") }
-            onIncorrectConfiguration { severity("ignore") }
-            onCompileOnly { severity("ignore") }
-            onRuntimeOnly { severity("ignore") }
-            onUnusedAnnotationProcessors { severity("ignore") }
-            onRedundantPlugins { severity("ignore") }
-        }
-    }
 }
