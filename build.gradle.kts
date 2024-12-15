@@ -1,3 +1,6 @@
+import com.android.moneymanager.DetektOptions.applyDetektOptions
+import com.dropbox.affectedmoduledetector.AffectedModuleConfiguration
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
 
@@ -16,6 +19,8 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
+
+applyDetektOptions()
 
 allprojects {
     repositories {
@@ -43,25 +48,31 @@ tasks.register("clean", Delete::class) {
 
 plugins {
     alias(libs.plugins.serialization) apply false
-    alias(libs.plugins.deps) apply true // ./gradlew buildHealth
     alias(libs.plugins.deps.sorting) apply false
     alias(libs.plugins.compose.compiler) apply false
+    alias(libs.plugins.module.detector) apply true
+}
+
+affectedModuleDetector {
+    baseDir = "${project.rootDir}"
+    pathsAffectingAllModules = setOf()
+    logFilename = "output.log"
+    logFolder = "${project.rootDir}/output"
+    compareFrom = "PreviousCommit" //default is PreviousCommit
+    excludedModules = setOf()
+    specifiedBranch = "develop"
+    ignoredFiles = setOf()
+    includeUncommitted = false
+    top = "HEAD"
+    customTasks = setOf(
+        AffectedModuleConfiguration.CustomTask(
+            "runDetektByImpact",
+            "projectHealth",
+            "Run projectHealth task for current module"
+        )
+    )
 }
 
 subprojects {
     apply(plugin = "com.squareup.sort-dependencies")
-}
-
-dependencyAnalysis {
-    issues {
-        all {
-            onUnusedDependencies { severity("fail") }
-            onUsedTransitiveDependencies { severity("ignore") }
-            onIncorrectConfiguration { severity("ignore") }
-            onCompileOnly { severity("ignore") }
-            onRuntimeOnly { severity("ignore") }
-            onUnusedAnnotationProcessors { severity("ignore") }
-            onRedundantPlugins { severity("ignore") }
-        }
-    }
 }

@@ -29,6 +29,7 @@ class BillingDataRepo @Inject constructor(
     override val currentPurchases: Flow<List<Purchase>> = billingSource.purchases
     override val billingConnectionReady: Flow<Boolean> = billingSource.billingConnectionReady
 
+
     // ProductDetails for the premium subscription.
     override val premiumProductDetails: Flow<ProductDetails?> =
         billingSource.productWithProductDetails.filter {
