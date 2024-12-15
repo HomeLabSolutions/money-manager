@@ -15,26 +15,22 @@
  */
 
 import com.android.build.gradle.LibraryExtension
+import com.android.moneymanager.extensions.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.extra
 
-class AndroidViewBindingConventionPlugin : Plugin<Project> {
+class KotlinLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                pluginManager.apply("com.android.library")
-                extensions.getByType<LibraryExtension>().apply {
-                    buildFeatures {
-                        viewBinding = true
-                    }
-                    dataBinding {
-                        isEnabled = true
-                    }
-                }
+                apply("kotlin")
+                apply("com.autonomousapps.dependency-analysis")
+            }
+            dependencies {
             }
         }
     }
-
 }

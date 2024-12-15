@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import timber.log.Timber
 import java.io.IOException
 
@@ -37,7 +38,9 @@ class BillingInteractorImpl(
         Firebase.remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val config = Firebase.remoteConfig.getValue("premium_list").asString()
-                val moshi: Moshi = Moshi.Builder().build()
+                val moshi: Moshi = Moshi.Builder()
+                    .add(KotlinJsonAdapterFactory())
+                    .build()
                 val jsonAdapter: JsonAdapter<PremiumEmails> =
                     moshi.adapter(PremiumEmails::class.java)
                 try {

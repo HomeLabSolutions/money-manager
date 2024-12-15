@@ -1,21 +1,20 @@
-import org.gradle.kotlin.dsl.`kotlin-dsl`
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     `kotlin-dsl`
 }
 
 buildscript {
     dependencies {
-        classpath(libs.kotlinPlugin)
+        classpath(libs.kotlin.gradle.plugin)
     }
 }
 
 dependencies {
-    implementation(libs.android.gradlePlugin)
-    implementation(libs.kotlinPlugin)
-    implementation(libs.ksp.gradlePlugin)
+    implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
+    implementation(libs.android.gradle.plugin)
+    implementation(libs.kotlin.gradle.plugin)
+    implementation(libs.ksp.gradle.plugin)
     implementation(libs.java.poet)
+    implementation(libs.unused.deps)
 }
 
 gradlePlugin {
@@ -40,9 +39,9 @@ gradlePlugin {
             id = "moneymanager.android.library.compose"
             implementationClass = "AndroidLibraryComposeConventionPlugin"
         }
-        register("androidLibraryViewBinding") {
-            id = "moneymanager.android.library.viewbinding"
-            implementationClass = "AndroidViewBindingConventionPlugin"
+        register("kotlinLibrary") {
+            id = "moneymanager.android.library.kotlin"
+            implementationClass = "KotlinLibraryConventionPlugin"
         }
     }
 }

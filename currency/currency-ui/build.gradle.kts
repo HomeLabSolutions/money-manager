@@ -2,6 +2,7 @@ plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
     id("moneymanager.android.library.compose")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -11,19 +12,33 @@ android {
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:designsystem"))
-
-    implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
+    implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(project(":currency:currency-observer:currency-observer-contract"))
-    implementation(project(":currency:currency-di"))
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.timber)
+}
 
-    implementation(libs.appCompat)
-    implementation(libs.material)
-    implementation(libs.constraintLayout)
-
-    implementation(libs.bundles.compose)
-    implementation(libs.bundles.composeMaterial3)
-    implementation(libs.composeViewModel)
-    implementation(libs.composeRuntime)
-    implementation(libs.hiltNavigationCompose)
+dependencyAnalysis {
+    val fail = "fail"
+    val ignore = "ignore"
+    issues {
+        onUnusedDependencies {
+            severity(fail)
+            exclude(
+                "",
+            )
+        }
+        onUsedTransitiveDependencies { severity(ignore) }
+        onIncorrectConfiguration { severity(ignore) }
+        onCompileOnly { severity(ignore) }
+        onRuntimeOnly { severity(ignore) }
+        onUnusedAnnotationProcessors { severity(ignore) }
+        onRedundantPlugins { severity(ignore) }
+    }
 }

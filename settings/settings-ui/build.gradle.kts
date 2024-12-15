@@ -2,8 +2,6 @@ plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
     id("moneymanager.android.library.compose")
-    id("moneymanager.android.library.viewbinding")
-    id("androidx.navigation.safeargs.kotlin")
     id("kotlin-parcelize")
 }
 
@@ -17,43 +15,45 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:common"))
-    implementation(project(":core:network"))
-    implementation(project(":core:common-android"))
-    implementation(project(":core:designsystem"))
-
-    implementation(project(":billing:billing-domain:billing-domain-model"))
-    implementation(project(":billing:billing-domain:billing-domain-contract"))
-
+    
     implementation(project(":backup:backup-domain:backup-domain-contract"))
     implementation(project(":backup:backup-domain:backup-domain-model"))
-
-    implementation(project(":user-info:user-domain:user-domain-model"))
-    implementation(project(":user-info:user-domain:user-domain-contract"))
-
+    implementation(project(":billing:billing-domain:billing-domain-contract"))
+    implementation(project(":billing:billing-domain:billing-domain-model"))
+    implementation(project(":core:common"))
+    implementation(project(":core:common-android"))
+    implementation(project(":core:designsystem"))
+    implementation(project(":core:network"))
     implementation(project(":currency:currency-domain:currency-domain-model"))
-
-    implementation(libs.appCompat)
-    implementation(libs.material)
-    implementation(libs.constraintLayout)
-    implementation(libs.navigation)
-
-    implementation(libs.composeUi)
-    implementation(libs.composeToolingPreview)
-    implementation(libs.composeFoundation)
-    implementation(libs.composeUiTestManifest)
-    implementation(libs.composeMaterial3)
-    implementation(libs.composeViewModel)
-    implementation(libs.composeRuntime)
-
+    implementation(project(":user-info:user-domain:user-domain-contract"))
+    implementation(project(":user-info:user-domain:user-domain-model"))
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.test.manifest)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.firebase.config)
     implementation(libs.timber)
+}
 
-    implementation(libs.hiltNavigationCompose)
-    implementation(libs.glide)
-    kapt(libs.glideCompiler)
-
-    implementation(libs.dotsIndicator)
-
-    implementation(platform(libs.firebaseBom))
-    implementation(libs.firebaseConfig)
+dependencyAnalysis {
+    val fail = "fail"
+    val ignore = "ignore"
+    issues {
+        onUnusedDependencies {
+            severity(fail)
+            exclude(
+                "",
+            )
+        }
+        onUsedTransitiveDependencies { severity(ignore) }
+        onIncorrectConfiguration { severity(ignore) }
+        onCompileOnly { severity(ignore) }
+        onRuntimeOnly { severity(ignore) }
+        onUnusedAnnotationProcessors { severity(ignore) }
+        onRedundantPlugins { severity(ignore) }
+    }
 }

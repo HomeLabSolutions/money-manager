@@ -9,23 +9,34 @@ android {
 }
 
 dependencies {
+    implementation(project(":budget:budget-domain:budget-domain-contract"))
+    implementation(project(":budget:budget-domain:budget-domain-model"))
     implementation(project(":core:common"))
     implementation(project(":core:designsystem"))
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.test.manifest)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+}
 
-    implementation(project(":budget:budget-domain:budget-domain-model"))
-    implementation(project(":budget:budget-domain:budget-domain-contract"))
-    implementation(project(":budget:budget-di"))
-
-    implementation(libs.constraintLayout)
-
-    implementation(libs.composeUi)
-    implementation(libs.composeToolingPreview)
-    implementation(libs.composeMaterial)
-    implementation(libs.composeUiTestManifest)
-
-    implementation(libs.composeMaterial3)
-    implementation(libs.composeViewModel)
-    implementation(libs.composeRuntime)
-
-    implementation(libs.hiltNavigationCompose)
+dependencyAnalysis {
+    val fail = "fail"
+    val ignore = "ignore"
+    issues {
+        onUnusedDependencies {
+            severity(fail)
+            exclude(
+                "",
+            )
+        }
+        onUsedTransitiveDependencies { severity(ignore) }
+        onIncorrectConfiguration { severity(ignore) }
+        onCompileOnly { severity(ignore) }
+        onRuntimeOnly { severity(ignore) }
+        onUnusedAnnotationProcessors { severity(ignore) }
+        onRedundantPlugins { severity(ignore) }
+    }
 }

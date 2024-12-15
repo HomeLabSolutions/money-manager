@@ -20,11 +20,31 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:common"))
+    ksp(libs.room.compiler)
 
-    api(libs.room)
-    api(libs.roomRuntime)
-    implementation(libs.roomPaging)
-    kapt(libs.roomCompiler)
-    implementation(libs.coroutinesCore)
+    api(libs.room.ktx)
+
+    implementation(project(":core:common"))
+    implementation(libs.hilt.android)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.room.paging)
+}
+
+dependencyAnalysis {
+    val fail = "fail"
+    val ignore = "ignore"
+    issues {
+        onUnusedDependencies {
+            severity(fail)
+            exclude(
+                "",
+            )
+        }
+        onUsedTransitiveDependencies { severity(ignore) }
+        onIncorrectConfiguration { severity(ignore) }
+        onCompileOnly { severity(ignore) }
+        onRuntimeOnly { severity(ignore) }
+        onUnusedAnnotationProcessors { severity(ignore) }
+        onRedundantPlugins { severity(ignore) }
+    }
 }

@@ -1,6 +1,6 @@
 plugins {
     id("moneymanager.android.library")
-    id("moneymanager.android.hilt")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -8,24 +8,41 @@ android {
 }
 
 dependencies {
+    ksp(libs.hilt.android.compiler)
 
+    
+    implementation(project(":backup:backup-data:backup-data-contract"))
+    implementation(project(":backup:backup-domain:backup-domain-contract"))
+    implementation(project(":backup:backup-domain:backup-domain-model"))
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
     implementation(project(":core:datastore"))
     implementation(project(":core:network"))
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.dagger)
+    implementation(libs.firebase.config)
+    implementation(libs.firebase.storage)
+    implementation(libs.hilt.common)
 
-    implementation(project(":backup:backup-data:backup-data-contract"))
-    implementation(project(":backup:backup-domain:backup-domain-contract"))
-    implementation(project(":backup:backup-domain:backup-domain-model"))
-
-    implementation(libs.coroutinesCore)
+    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.timber)
+}
 
-    implementation(libs.worker)
-    implementation(libs.workerHilt)
-    kapt(libs.workerHiltCompiler)
-
-    implementation(platform(libs.firebaseBom))
-    implementation(libs.firebaseStorage)
-    implementation(libs.firebaseConfig)
+dependencyAnalysis {
+    val fail = "fail"
+    val ignore = "ignore"
+    issues {
+        onUnusedDependencies {
+            severity(fail)
+            exclude(
+                "",
+            )
+        }
+        onUsedTransitiveDependencies { severity(ignore) }
+        onIncorrectConfiguration { severity(ignore) }
+        onCompileOnly { severity(ignore) }
+        onRuntimeOnly { severity(ignore) }
+        onUnusedAnnotationProcessors { severity(ignore) }
+        onRedundantPlugins { severity(ignore) }
+    }
 }
