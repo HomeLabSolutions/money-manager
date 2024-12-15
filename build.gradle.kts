@@ -46,3 +46,4 @@ plugins {
     alias(libs.plugins.serialization) apply false
     alias(libs.plugins.deps) apply true // ./gradlew buildHealth
 }
+
