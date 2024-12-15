@@ -20,14 +20,14 @@ android {
 }
 
 dependencies {
-    ksp(libs.room.compiler)
-
     api(libs.room.ktx)
 
     implementation(project(":core:common"))
     implementation(libs.hilt.android)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.room.paging)
+
+    ksp(libs.room.compiler)
 }
 
 dependencyAnalysis {
