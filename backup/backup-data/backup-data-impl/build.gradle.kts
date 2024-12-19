@@ -8,9 +8,6 @@ android {
 }
 
 dependencies {
-    ksp(libs.hilt.android.compiler)
-
-    
     implementation(project(":backup:backup-data:backup-data-contract"))
     implementation(project(":backup:backup-domain:backup-domain-contract"))
     implementation(project(":backup:backup-domain:backup-domain-model"))
@@ -23,9 +20,10 @@ dependencies {
     implementation(libs.firebase.config)
     implementation(libs.firebase.storage)
     implementation(libs.hilt.common)
-
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.timber)
+
+    ksp(libs.hilt.android.compiler)
 }
 
 dependencyAnalysis {
