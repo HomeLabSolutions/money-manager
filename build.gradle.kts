@@ -39,7 +39,7 @@ extra["minSdkVersion"] = 23
 extra["targetSdkVersion"] = 35
 extra["versionMajor"] = 1
 extra["versionMinor"] = 0
-extra["versionPatch"] = 25
+extra["versionPatch"] = 26
 extra["versionBuild"] = 1
 
 tasks.register("clean", Delete::class) {
