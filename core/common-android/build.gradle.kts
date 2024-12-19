@@ -11,8 +11,6 @@ android {
 }
 
 dependencies {
-    ksp(libs.hilt.android.compiler)
-
     api(libs.appcompat)
 
     implementation(project(":core:common"))
@@ -24,6 +22,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.navigation.common)
     implementation(libs.navigation.runtime)
+
+    ksp(libs.hilt.android.compiler)
 }
 
 dependencyAnalysis {
