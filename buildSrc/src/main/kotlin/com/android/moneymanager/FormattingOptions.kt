@@ -1,4 +1,4 @@
-package com.agoda.gradle
+package com.android.moneymanager
 
 import org.gradle.api.Project
 import org.gradle.api.attributes.Bundling
