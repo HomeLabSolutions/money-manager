@@ -3,8 +3,8 @@ package com.d9tilov.android.designsystem
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,17 +31,18 @@ fun ComposeCurrencyView(
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            modifier = Modifier
-                .alignByBaseline()
-                .padding(end = dimensionResource(id = (R.dimen.padding_extra_small))),
+            modifier =
+                Modifier
+                    .alignByBaseline()
+                    .padding(end = dimensionResource(id = (R.dimen.padding_extra_small))),
             text = symbol,
             color = symbolColor,
             fontSize = symbolSize,
             style = symbolStyle,
-            maxLines = 1
+            maxLines = 1,
         )
         Text(
             modifier = Modifier.alignByBaseline(),
@@ -49,7 +50,7 @@ fun ComposeCurrencyView(
             color = valueColor,
             fontSize = valueSize,
             style = valueStyle,
-            maxLines = 1
+            maxLines = 1,
         )
     }
 }
@@ -60,7 +61,7 @@ fun ComposeCurrencyViewPreview() {
     MaterialTheme {
         ComposeCurrencyView(
             symbol = CurrencyConstants.DEFAULT_CURRENCY_SYMBOL,
-            value = "42"
+            value = "42",
         )
     }
 }

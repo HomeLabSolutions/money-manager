@@ -15,7 +15,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 interface BackupDataModule {
-
     @Binds
     @Singleton
     fun provideBackupRepo(backupDataRepo: BackupDataRepo): BackupRepo

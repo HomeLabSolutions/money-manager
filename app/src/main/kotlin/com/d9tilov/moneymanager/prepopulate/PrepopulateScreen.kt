@@ -8,6 +8,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,7 +20,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -44,6 +44,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -71,7 +72,7 @@ fun PrepopulateScreen(prepopulateViewModel: PrepopulateViewModel = hiltViewModel
             val intent = Intent(context, MainActivity::class.java)
             context.startActivity(intent)
             (context as Activity).finish()
-        }
+        },
     )
 }
 
@@ -81,7 +82,7 @@ fun PrepopulateScreen(
     uiState: PrepopulateUiState,
     clickCallback: (currency: DomainCurrency) -> Unit,
     onBudgetInputChanged: (String) -> Unit,
-    onBudgetSaveAndComplete: () -> Unit
+    onBudgetSaveAndComplete: () -> Unit,
 ) {
     var screenTypeId by rememberSaveable { mutableIntStateOf(0) }
     Scaffold(
@@ -89,40 +90,45 @@ fun PrepopulateScreen(
         topBar = {
             TopAppBar(
                 title = { Text(text = stringResource(screenTypeId.fromScreenId().title)) },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                    titleContentColor = MaterialTheme.colorScheme.onBackground
-                ),
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                        titleContentColor = MaterialTheme.colorScheme.onBackground,
+                    ),
                 actions = {
-                    ClickableText(
-                        text = AnnotatedString(stringResource(R.string.toolbar_menu_skip)),
-                        modifier = Modifier.padding(8.dp),
-                        onClick = { onBudgetSaveAndComplete() },
+                    Text(
+                        text = buildAnnotatedString { AnnotatedString(stringResource(R.string.toolbar_menu_skip)) },
+                        modifier =
+                            Modifier
+                                .padding(8.dp)
+                                .clickable { onBudgetSaveAndComplete() },
                     )
-                }
+                },
             )
         },
         bottomBar = {
             BottomNavigationBar(
                 modifier = Modifier.fillMaxWidth(),
                 screenType = screenTypeId.fromScreenId(),
-                onBudgetSave = onBudgetSaveAndComplete
+                onBudgetSave = onBudgetSaveAndComplete,
             ) { newScreen -> screenTypeId = newScreen.id }
-        }
+        },
     ) { padding: PaddingValues ->
         Column(modifier = Modifier.padding(padding)) {
             when (screenTypeId.fromScreenId()) {
                 PrepopulateScreen.CurrencyScreen ->
                     CurrencyListScreen(
-                    uiState.currencyUiState,
-                    Modifier.weight(1f),
-                    false,
-                    clickCallback
-                )
-                PrepopulateScreen.BudgetScreen -> BudgetScreen(
+                        uiState.currencyUiState,
+                        Modifier.weight(1f),
+                        false,
+                        clickCallback,
+                    )
+
+                PrepopulateScreen.BudgetScreen ->
+                    BudgetScreen(
                         uiState = uiState.budgetUiState,
                         showInPrepopulate = true,
-                        onBudgetInputChanged = onBudgetInputChanged
+                        onBudgetInputChanged = onBudgetInputChanged,
                     )
             }
         }
@@ -134,76 +140,84 @@ fun BottomNavigationBar(
     modifier: Modifier,
     screenType: PrepopulateScreen,
     onBudgetSave: () -> Unit,
-    onScreenChanged: (PrepopulateScreen) -> Unit
+    onScreenChanged: (PrepopulateScreen) -> Unit,
 ) {
     Row(
-        modifier = modifier
-            .padding(vertical = 16.dp),
+        modifier =
+            modifier
+                .padding(vertical = 16.dp),
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         var progress by remember { mutableFloatStateOf((screenType.id + 1f) / PrepopulateScreen.SCREEN_COUNT) }
         ProgressIndicator(
             indicatorProgress = progress,
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(FRACTION)
+            modifier =
+                Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(FRACTION),
         )
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             IconButton(
                 onClick = {
-                    val newScreenType = when (screenType) {
-                        is PrepopulateScreen.BudgetScreen -> PrepopulateScreen.CurrencyScreen
-                        else -> PrepopulateScreen.CurrencyScreen
-                    }
-                    progress =
-                        (newScreenType.id * 1.0f + 1) / PrepopulateScreen.SCREEN_COUNT
-                    onScreenChanged(newScreenType)
-                }, modifier = Modifier
-                    .padding(horizontal = 4.dp)
-                    .border(
-                        1.dp,
-                        MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(SHAPE_RADIUS)
-                    )
-                    .size(40.dp)
-            ) {
-                Icon(
-                    imageVector = MoneyManagerIcons.ArrowDropDown,
-                    contentDescription = "content description",
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
-            OutlinedButton(
-                onClick = {
-                    val newScreenType = when (screenType) {
-                        PrepopulateScreen.CurrencyScreen -> PrepopulateScreen.BudgetScreen
-                        else -> {
-                            onBudgetSave()
-                            PrepopulateScreen.BudgetScreen
+                    val newScreenType =
+                        when (screenType) {
+                            is PrepopulateScreen.BudgetScreen -> PrepopulateScreen.BudgetScreen
+                            is PrepopulateScreen.CurrencyScreen -> PrepopulateScreen.CurrencyScreen
                         }
-                    }
                     progress =
                         (newScreenType.id * 1.0f + 1) / PrepopulateScreen.SCREEN_COUNT
                     onScreenChanged(newScreenType)
                 },
-                modifier = Modifier
-                    .height(height = 40.dp)
-                    .wrapContentWidth(),
+                modifier =
+                    Modifier
+                        .padding(horizontal = 4.dp)
+                        .border(
+                            1.dp,
+                            MaterialTheme.colorScheme.primary,
+                            shape = RoundedCornerShape(SHAPE_RADIUS),
+                        ).size(40.dp),
+            ) {
+                Icon(
+                    imageVector = MoneyManagerIcons.ArrowDropDown,
+                    contentDescription = "content description",
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            }
+            OutlinedButton(
+                onClick = {
+                    val newScreenType =
+                        when (screenType) {
+                            PrepopulateScreen.CurrencyScreen -> {
+                                PrepopulateScreen.CurrencyScreen
+                            }
+                            PrepopulateScreen.BudgetScreen -> {
+                                onBudgetSave()
+                                PrepopulateScreen.BudgetScreen
+                            }
+                        }
+                    progress =
+                        (newScreenType.id * 1.0f + 1) / PrepopulateScreen.SCREEN_COUNT
+                    onScreenChanged(newScreenType)
+                },
+                modifier =
+                    Modifier
+                        .height(height = 40.dp)
+                        .wrapContentWidth(),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
                 shape = RoundedCornerShape(SHAPE_RADIUS),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary)
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(text = "Next")
                     Icon(
                         imageVector = MoneyManagerIcons.ArrowDropUp,
                         contentDescription = "content description",
-                        tint = MaterialTheme.colorScheme.primary
+                        tint = MaterialTheme.colorScheme.primary,
                     )
                 }
             }
@@ -212,30 +226,40 @@ fun BottomNavigationBar(
 }
 
 @Composable
-fun ProgressIndicator(indicatorProgress: Float, modifier: Modifier) {
+fun ProgressIndicator(
+    indicatorProgress: Float,
+    modifier: Modifier,
+) {
     val progressAnimation by animateFloatAsState(
         targetValue = indicatorProgress,
-        animationSpec = tween(durationMillis = 1500, easing = FastOutSlowInEasing), label = ""
+        animationSpec = tween(durationMillis = 1500, easing = FastOutSlowInEasing),
+        label = "",
     )
     LinearProgressIndicator(
-        modifier = modifier
-            .clip(RoundedCornerShape(20.dp)), // Rounded edges
-        progress = { progressAnimation }
+        modifier =
+            modifier
+                .clip(RoundedCornerShape(20.dp)),
+        // Rounded edges
+        progress = { progressAnimation },
     )
 }
 
-sealed class PrepopulateScreen(val id: Int, @StringRes val title: Int) {
-
+sealed class PrepopulateScreen(
+    val id: Int,
+    @StringRes val title: Int,
+) {
     data object CurrencyScreen : PrepopulateScreen(0, R.string.title_prepopulate_currency)
+
     data object BudgetScreen : PrepopulateScreen(1, R.string.title_prepopulate_budget)
 
     companion object {
         const val SCREEN_COUNT = 2
 
-        fun Int.fromScreenId() = when (this) {
-            0 -> CurrencyScreen
-            1 -> BudgetScreen
-            else -> throw IllegalArgumentException("Wrong screen id: $this")
-        }
+        fun Int.fromScreenId() =
+            when (this) {
+                0 -> CurrencyScreen
+                1 -> BudgetScreen
+                else -> throw IllegalArgumentException("Wrong screen id: $this")
+            }
     }
 }

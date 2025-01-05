@@ -1,6 +1,3 @@
-import java.io.FileInputStream
-import java.util.*
-
 plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")

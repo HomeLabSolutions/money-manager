@@ -6,9 +6,8 @@ import com.d9tilov.android.currency.observer.contract.CurrencyUpdateObserver
 
 class CurrencyUpdateObserverImpl(
     private val currencyInteractor: CurrencyInteractor,
-    private val budgetInteractor: BudgetInteractor
+    private val budgetInteractor: BudgetInteractor,
 ) : CurrencyUpdateObserver {
-
     override suspend fun updateMainCurrency(code: String) {
         currencyInteractor.updateMainCurrency(code)
         budgetInteractor.updateBudgetWithCurrency(code)

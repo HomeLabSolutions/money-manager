@@ -22,6 +22,7 @@ import com.d9tilov.android.regular.transaction.ui.vm.RegularTransactionCreationV
 interface BaseRegularIncomeExpenseNavigator : BaseNavigator
 
 interface RegularExpenseNavigator : BaseRegularIncomeExpenseNavigator
+
 interface RegularIncomeNavigator : BaseRegularIncomeExpenseNavigator
 
 const val REGULAR_TRANSACTION_ID_ARGS = "regular_transaction_id"
@@ -35,7 +36,7 @@ internal sealed class RegularTransactionArgs {
         val transactionType: TransactionType,
     ) {
         constructor(savedStateHandle: SavedStateHandle) :
-                this((checkNotNull(savedStateHandle[NavigationConstants.transactionTypeArg]) as Int).toType())
+            this((checkNotNull(savedStateHandle[NavigationConstants.TRANSACTION_TYPE_ARG]) as Int).toType())
     }
 
     class RegularTransactionCreationArgs(
@@ -43,13 +44,12 @@ internal sealed class RegularTransactionArgs {
         val transactionId: Long,
     ) {
         constructor(savedStateHandle: SavedStateHandle) :
-                this(
-                    (checkNotNull(savedStateHandle[NavigationConstants.transactionTypeArg]) as Int).toType(),
-                    (checkNotNull(savedStateHandle[REGULAR_TRANSACTION_ID_ARGS]) as Long)
-                )
+            this(
+                (checkNotNull(savedStateHandle[NavigationConstants.TRANSACTION_TYPE_ARG]) as Int).toType(),
+                (checkNotNull(savedStateHandle[REGULAR_TRANSACTION_ID_ARGS]) as Long),
+            )
     }
 }
-
 
 fun NavController.navigateToRegularTransactionListScreen(
     navOptions: NavOptions? = null,
@@ -57,7 +57,7 @@ fun NavController.navigateToRegularTransactionListScreen(
 ) {
     this.navigate(
         "$REGULAR_TRANSACTION_LIST_NAVIGATION_ROUTE/${transactionType.value}",
-        navOptions
+        navOptions,
     )
 }
 
@@ -68,14 +68,15 @@ fun NavGraphBuilder.regularTransactionListScreen(
 ) {
     composable(
         route = route,
-        arguments = listOf(
-            navArgument(NavigationConstants.transactionTypeArg) { type = NavType.IntType },
-        )
+        arguments =
+            listOf(
+                navArgument(NavigationConstants.TRANSACTION_TYPE_ARG) { type = NavType.IntType },
+            ),
     ) {
         RegularTransactionListRoute(
             clickBack = clickBack,
             onAddClicked = openCreationTransaction,
-            onItemClicked = { tr -> openCreationTransaction(tr.type, tr.id) }
+            onItemClicked = { tr -> openCreationTransaction(tr.type, tr.id) },
         )
     }
 }
@@ -86,8 +87,8 @@ fun NavController.navigateToRegularTransactionCreationScreen(
     navOptions: NavOptions? = null,
 ) {
     this.navigate(
-        "$REGULAR_TRANSACTION_CREATION_NAVIGATION_ROUTE/${transactionType.value}/${transactionId}",
-        navOptions
+        "$REGULAR_TRANSACTION_CREATION_NAVIGATION_ROUTE/${transactionType.value}/$transactionId",
+        navOptions,
     )
 }
 
@@ -100,16 +101,17 @@ fun NavGraphBuilder.regularTransactionCreationScreen(
 ) {
     composable(
         route = route,
-        arguments = listOf(
-            navArgument(NavigationConstants.transactionTypeArg) { type = NavType.IntType },
-            navArgument(REGULAR_TRANSACTION_ID_ARGS) { type = NavType.LongType }
-        )
+        arguments =
+            listOf(
+                navArgument(NavigationConstants.TRANSACTION_TYPE_ARG) { type = NavType.IntType },
+                navArgument(REGULAR_TRANSACTION_ID_ARGS) { type = NavType.LongType },
+            ),
     ) { entry ->
         val viewModel: RegularTransactionCreationViewModel = hiltViewModel()
-        val categoryId = entry.savedStateHandle.get<Long>(CategoryArgs.categoryIdArgs)
+        val categoryId = entry.savedStateHandle.get<Long>(CategoryArgs.CATEGORY_ID_ARGS)
         categoryId?.let { id ->
             viewModel.updateCategory(id)
-            entry.savedStateHandle.remove<Long>(CategoryArgs.categoryIdArgs)
+            entry.savedStateHandle.remove<Long>(CategoryArgs.CATEGORY_ID_ARGS)
         }
         val currencyCode = entry.savedStateHandle.get<String>(CURRENCY_CODE_ARGS)
         currencyCode?.let { code ->

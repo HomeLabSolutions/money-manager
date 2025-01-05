@@ -9,16 +9,16 @@ data class DomainCurrency(
     val symbol: String,
     val value: BigDecimal,
     val isBase: Boolean = false,
-    val lastUpdateTime: Long
+    val lastUpdateTime: Long,
 ) {
-
     companion object {
-        val EMPTY = DomainCurrency(
-            code = DEFAULT_CURRENCY_CODE,
-            symbol = DEFAULT_CURRENCY_SYMBOL,
-            value = BigDecimal.ZERO,
-            isBase = false,
-            lastUpdateTime = System.currentTimeMillis()
-        )
+        val EMPTY =
+            DomainCurrency(
+                code = DEFAULT_CURRENCY_CODE,
+                symbol = DEFAULT_CURRENCY_SYMBOL,
+                value = BigDecimal.ZERO,
+                isBase = false,
+                lastUpdateTime = System.currentTimeMillis(),
+            )
     }
 }

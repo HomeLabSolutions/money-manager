@@ -15,6 +15,10 @@ fun NavController.navigateToSettingsScreen(navOptions: NavOptions? = null) {
     this.navigate(SETTINGS_NAVIGATION_ROUTE, navOptions)
 }
 
-fun NavGraphBuilder.settingsScreen(route: String, clickBack: () -> Unit, onShowSnackBar: suspend (String, String?) -> Boolean) {
+fun NavGraphBuilder.settingsScreen(
+    route: String,
+    clickBack: () -> Unit,
+    onShowSnackBar: suspend (String, String?) -> Boolean,
+) {
     composable(route = route) { SettingsRoute(clickBack = clickBack, onShowSnackBar = onShowSnackBar) }
 }

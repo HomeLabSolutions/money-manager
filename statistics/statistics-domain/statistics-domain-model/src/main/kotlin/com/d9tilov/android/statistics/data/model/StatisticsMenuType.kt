@@ -5,7 +5,7 @@ enum class StatisticsMenuType {
     CHART,
     CATEGORY_TYPE,
     TRANSACTION_TYPE,
-    STATISTICS
+    STATISTICS,
 }
 
 fun toType(number: Int) = StatisticsMenuType.entries[number]

@@ -15,7 +15,7 @@ fun RegularTransactionDbModel.toDataModel(): RegularTransactionData =
         executionPeriod,
         description,
         pushEnable,
-        autoAdd
+        autoAdd,
     )
 
 fun RegularTransactionData.toDbModel(): RegularTransactionDbModel =
@@ -30,5 +30,5 @@ fun RegularTransactionData.toDbModel(): RegularTransactionDbModel =
         executionPeriod,
         description,
         pushEnable,
-        autoAdd
+        autoAdd,
     )

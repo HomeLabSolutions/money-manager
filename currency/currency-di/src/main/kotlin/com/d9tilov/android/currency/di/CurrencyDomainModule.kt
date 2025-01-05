@@ -14,14 +14,12 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 object CurrencyDomainModule {
-
     @Provides
-    fun provideCurrencyInteractor(currencyRepo: CurrencyRepo): CurrencyInteractor =
-        CurrencyInteractorImpl(currencyRepo)
+    fun provideCurrencyInteractor(currencyRepo: CurrencyRepo): CurrencyInteractor = CurrencyInteractorImpl(currencyRepo)
 
     @Provides
     fun provideCurrencyObserver(
         currencyInteractor: CurrencyInteractor,
-        budgetInteractor: BudgetInteractor
+        budgetInteractor: BudgetInteractor,
     ): CurrencyUpdateObserver = CurrencyUpdateObserverImpl(currencyInteractor, budgetInteractor)
 }

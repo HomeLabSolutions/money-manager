@@ -18,35 +18,36 @@ import kotlinx.coroutines.withContext
 import java.io.FileNotFoundException
 import javax.inject.Inject
 
-class BackupLocalSource @Inject constructor(
-    @Dispatcher(MoneyManagerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
-    private val backupManager: BackupManager,
-    private val preferencesStore: PreferencesStore
-) : BackupSource {
+class BackupLocalSource
+    @Inject
+    constructor(
+        @Dispatcher(MoneyManagerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
+        private val backupManager: BackupManager,
+        private val preferencesStore: PreferencesStore,
+    ) : BackupSource {
+        override fun getBackupData(): Flow<BackupData> =
+            preferencesStore.backupData
+                .map { time -> BackupData(time) }
+                .flowOn(dispatcher)
 
-    override fun getBackupData(): Flow<BackupData> = preferencesStore.backupData
-        .map { time -> BackupData(time) }
-        .flowOn(dispatcher)
+        override suspend fun makeBackup(): ResultOf<BackupData> = withContext(dispatcher) { backupManager.backupDb() }
 
-    override suspend fun makeBackup(): ResultOf<BackupData> =
-        withContext(dispatcher) { backupManager.backupDb() }
+        override suspend fun restoreBackup(): ResultOf<Any> = withContext(dispatcher) { backupManager.restoreDb() }
 
-    override suspend fun restoreBackup(): ResultOf<Any> =
-        withContext(dispatcher) { backupManager.restoreDb() }
-
-    override suspend fun deleteBackup(): ResultOf<Any> = withContext(dispatcher) {
-        try {
-            backupManager.deleteBackup()
-            preferencesStore.updateLastBackupDate(-1L)
-            ResultOf.Success(Any())
-        } catch (ex: NetworkException) {
-            ResultOf.Failure(ex)
-        } catch (ex: WrongUidException) {
-            ResultOf.Failure(ex)
-        } catch (ex: FileNotFoundException) {
-            ResultOf.Failure(ex)
-        } catch (ex: FirebaseException) {
-            ResultOf.Failure(ex)
-        }
+        override suspend fun deleteBackup(): ResultOf<Any> =
+            withContext(dispatcher) {
+                try {
+                    backupManager.deleteBackup()
+                    preferencesStore.updateLastBackupDate(-1L)
+                    ResultOf.Success(Any())
+                } catch (ex: NetworkException) {
+                    ResultOf.Failure(ex)
+                } catch (ex: WrongUidException) {
+                    ResultOf.Failure(ex)
+                } catch (ex: FileNotFoundException) {
+                    ResultOf.Failure(ex)
+                } catch (ex: FirebaseException) {
+                    ResultOf.Failure(ex)
+                }
+            }
     }
-}

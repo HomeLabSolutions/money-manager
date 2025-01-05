@@ -23,9 +23,8 @@ import kotlinx.coroutines.withContext
 class RegularTransactionLocalSource(
     @Dispatcher(MoneyManagerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
     private val preferencesStore: PreferencesStore,
-    private val regularTransactionDao: RegularTransactionDao
+    private val regularTransactionDao: RegularTransactionDao,
 ) : RegularTransactionSource {
-
     override suspend fun insert(regularTransactionData: RegularTransactionData) =
         withContext(dispatcher) {
             val currentUserId = preferencesStore.uid.firstOrNull()
@@ -33,7 +32,7 @@ class RegularTransactionLocalSource(
                 throw WrongUidException()
             } else {
                 regularTransactionDao.insert(
-                    regularTransactionData.copy(clientId = currentUserId).toDbModel()
+                    regularTransactionData.copy(clientId = currentUserId).toDbModel(),
                 )
             }
         }
@@ -42,10 +41,10 @@ class RegularTransactionLocalSource(
         preferencesStore.uid
             .filterNotNull()
             .flatMapMerge { uid ->
-                regularTransactionDao.getAll(uid, type)
+                regularTransactionDao
+                    .getAll(uid, type)
                     .map { it.map { item -> item.toDataModel() } }
-            }
-            .flowOn(dispatcher)
+            }.flowOn(dispatcher)
 
     override suspend fun getAllByCategory(category: Category): List<RegularTransactionData> =
         withContext(dispatcher) {
@@ -53,19 +52,21 @@ class RegularTransactionLocalSource(
             if (currentUserId == null) {
                 throw WrongUidException()
             } else {
-                regularTransactionDao.getByCategoryId(currentUserId, category.id)
+                regularTransactionDao
+                    .getByCategoryId(currentUserId, category.id)
                     .map { item -> item.toDataModel() }
             }
         }
 
-    override suspend fun getById(id: Long): RegularTransactionData = withContext(dispatcher) {
-        val currentUserId = preferencesStore.uid.firstOrNull()
-        if (currentUserId == null) {
-            throw WrongUidException()
-        } else {
-            regularTransactionDao.getById(currentUserId, id).toDataModel()
+    override suspend fun getById(id: Long): RegularTransactionData =
+        withContext(dispatcher) {
+            val currentUserId = preferencesStore.uid.firstOrNull()
+            if (currentUserId == null) {
+                throw WrongUidException()
+            } else {
+                regularTransactionDao.getById(currentUserId, id).toDataModel()
+            }
         }
-    }
 
     override suspend fun update(regularTransactionData: RegularTransactionData) =
         withContext(dispatcher) {

@@ -33,7 +33,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -73,6 +72,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -129,12 +129,13 @@ fun IncomeExpenseRoute(
     onCurrencyClicked: (String) -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
     LaunchedEffect(Unit) {
-        viewModel.errorMessage
+        viewModel.errorMessageFlow
             .collect { message ->
-                Toast.makeText(context, message, Toast.LENGTH_SHORT)
+                Toast
+                    .makeText(context, message, Toast.LENGTH_SHORT)
                     .show()
             }
     }
@@ -146,7 +147,7 @@ fun IncomeExpenseRoute(
         onEditModeChanged = { mode -> viewModel.updateMode(mode) },
         onCurrencyClicked = { onCurrencyClicked(uiState.price.currencyCode) },
         onAllCategoryClicked = onAllCategoryClicked,
-        onDeleteTransactionConfirmClicked = viewModel::deleteTransaction
+        onDeleteTransactionConfirmClicked = viewModel::deleteTransaction,
     )
 }
 
@@ -167,9 +168,10 @@ fun IncomeExpenseScreen(
             if (uiState.mode == EditMode.LIST) {
                 AnimatedFloatingActionButton(
                     listState,
-                    onClick = { onEditModeChanged(EditMode.KEYBOARD) })
+                    onClick = { onEditModeChanged(EditMode.KEYBOARD) },
+                )
             }
-        }
+        },
     ) { paddingValues ->
         HomeTabs(
             listState = listState,
@@ -181,7 +183,7 @@ fun IncomeExpenseScreen(
             onCurrencyClicked = onCurrencyClicked,
             onAllCategoryClicked = onAllCategoryClicked,
             onTransactionClicked = onTransactionClicked,
-            onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked
+            onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked,
         )
     }
 }
@@ -205,7 +207,10 @@ fun LazyListState.isScrollingUp(): Boolean {
 }
 
 @Composable
-fun AnimatedFloatingActionButton(listState: LazyListState, onClick: () -> Unit) {
+fun AnimatedFloatingActionButton(
+    listState: LazyListState,
+    onClick: () -> Unit,
+) {
     AnimatedVisibility(
         visible = listState.isScrollingUp(),
         enter = scaleIn(),
@@ -214,19 +219,23 @@ fun AnimatedFloatingActionButton(listState: LazyListState, onClick: () -> Unit) 
         FloatingActionButton(
             onClick = onClick,
             modifier = Modifier.navigationBarsPadding(),
-            containerColor = MaterialTheme.colorScheme.secondary
+            containerColor = MaterialTheme.colorScheme.secondary,
         ) {
             Icon(
                 imageVector = MoneyManagerIcons.AddCircle,
                 contentDescription = "Add transaction",
-                tint = MaterialTheme.colorScheme.onSecondary
+                tint = MaterialTheme.colorScheme.onSecondary,
             )
         }
     }
 }
 
 @Composable
-fun MainPriceInput(price: MainPrice, modifier: Modifier, onCurrencyClicked: () -> Unit) {
+fun MainPriceInput(
+    price: MainPrice,
+    modifier: Modifier,
+    onCurrencyClicked: () -> Unit,
+) {
     Surface(
         modifier = modifier,
         onClick = onCurrencyClicked,
@@ -253,11 +262,12 @@ fun TransactionListLayout(
         EmptyListPlaceholder(
             modifier = Modifier.fillMaxSize(),
             icon = painterResource(id = MoneyManagerIcons.EmptyPlaceholder),
-            title = when (screenType) {
-                EXPENSE -> stringResource(id = R.string.transaction_empty_placeholder_expense_title)
-                INCOME -> stringResource(id = R.string.transaction_empty_placeholder_income_title)
-            },
-            subtitle = stringResource(id = R.string.transaction_empty_placeholder_subtitle)
+            title =
+                when (screenType) {
+                    EXPENSE -> stringResource(id = R.string.transaction_empty_placeholder_expense_title)
+                    INCOME -> stringResource(id = R.string.transaction_empty_placeholder_income_title)
+                },
+            subtitle = stringResource(id = R.string.transaction_empty_placeholder_subtitle),
         )
         return
     }
@@ -273,26 +283,27 @@ fun TransactionListLayout(
                     stickyHeader(key = tr.date.hashCode()) {
                         Surface(
                             modifier = Modifier.fillParentMaxWidth(),
-                            color = MaterialTheme.colorScheme.primaryContainer
+                            color = MaterialTheme.colorScheme.primaryContainer,
                         ) {
                             Text(
                                 modifier = Modifier.padding(start = 24.dp),
                                 text = formatDate(currentItem.date, TRANSACTION_DATE_FORMAT),
-                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
                             )
                         }
                     }
                 } else {
                     item(key = index) {
                         val item = lazyTransactionItems[index] as Transaction
-                        val dismissState = rememberSwipeToDismissBoxState(
-                            confirmValueChange = {
-                                if (it == SwipeToDismissBoxValue.EndToStart) {
-                                    openRemoveDialog.value = item
-                                }
-                                true
-                            }
-                        )
+                        val dismissState =
+                            rememberSwipeToDismissBoxState(
+                                confirmValueChange = {
+                                    if (it == SwipeToDismissBoxValue.EndToStart) {
+                                        openRemoveDialog.value = item
+                                    }
+                                    true
+                                },
+                            )
                         if (openRemoveDialog.value == null) LaunchedEffect(Unit) { dismissState.reset() }
                         SwipeToDismissBox(
                             state = dismissState,
@@ -302,35 +313,40 @@ fun TransactionListLayout(
                                     when (dismissState.targetValue) {
                                         SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.error
                                         else -> Color.Transparent
-                                    }, label = ""
+                                    },
+                                    label = "",
                                 )
                                 val iconScale by animateFloatAsState(
                                     targetValue = if (dismissState.targetValue == SwipeToDismissBoxValue.Settled) 0.0f else 1.3f,
-                                    label = ""
+                                    label = "",
                                 )
                                 Box(
                                     Modifier
                                         .fillMaxSize()
                                         .background(color = backgroundColor)
-                                        .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium)),
-                                    contentAlignment = Alignment.CenterEnd
+                                        .padding(
+                                            horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                                        ),
+                                    contentAlignment = Alignment.CenterEnd,
                                 ) {
                                     Icon(
                                         modifier = Modifier.scale(iconScale),
                                         imageVector = MoneyManagerIcons.Delete,
                                         contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.onError
+                                        tint = MaterialTheme.colorScheme.onError,
                                     )
                                 }
                             },
                             content = {
                                 TransactionItem(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clickable { onTransactionClicked(item) },
-                                    transaction = item
+                                    modifier =
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .clickable { onTransactionClicked(item) },
+                                    transaction = item,
                                 )
-                            })
+                            },
+                        )
                     }
                 }
             }
@@ -353,122 +369,133 @@ fun TransactionListLayout(
                 openRemoveDialog.value = null
             }
         },
-        onDismiss = { openRemoveDialog.value = null }
+        onDismiss = { openRemoveDialog.value = null },
     )
 }
 
 @Composable
-fun TransactionItem(modifier: Modifier, transaction: Transaction) {
+fun TransactionItem(
+    modifier: Modifier,
+    transaction: Transaction,
+) {
     val context = LocalContext.current
     ConstraintLayout(
-        modifier = modifier
-            .height(72.dp)
-            .padding(horizontal = 32.dp)
+        modifier =
+            modifier
+                .height(72.dp)
+                .padding(horizontal = 32.dp),
     ) {
         val (idIcon, idTitle, idDescription, idRegularIcon, idInStatisticsIcon, idSum, idDivider) = createRefs()
         Icon(
-            modifier = Modifier
-                .constrainAs(idIcon) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                }
-                .size(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.category_item_icon_size)),
+            modifier =
+                Modifier
+                    .constrainAs(idIcon) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                    }.size(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.category_item_icon_size)),
             imageVector = ImageVector.vectorResource(id = transaction.category.icon),
             contentDescription = "Transaction",
-            tint = Color(ContextCompat.getColor(context, transaction.category.color))
+            tint = Color(ContextCompat.getColor(context, transaction.category.color)),
         )
         Text(
-            modifier = Modifier
-                .padding(start = 16.dp)
-                .constrainAs(idTitle) {
-                    top.linkTo(idIcon.top)
-                    bottom.linkTo(idIcon.bottom)
-                    start.linkTo(idIcon.end)
-                },
+            modifier =
+                Modifier
+                    .padding(start = 16.dp)
+                    .constrainAs(idTitle) {
+                        top.linkTo(idIcon.top)
+                        bottom.linkTo(idIcon.bottom)
+                        start.linkTo(idIcon.end)
+                    },
             text = transaction.category.name,
             style = MaterialTheme.typography.displayLarge,
             fontSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.income_expense_name_text_size).value.sp,
             maxLines = 1,
             color = Color(ContextCompat.getColor(context, transaction.category.color)),
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
         if (transaction.description.isNotEmpty()) {
             Text(
-                modifier = Modifier
-                    .padding(start = 16.dp, bottom = 4.dp)
-                    .constrainAs(idDescription) {
-                        top.linkTo(idTitle.bottom)
-                        bottom.linkTo(parent.bottom)
-                        start.linkTo(idTitle.start)
-                    },
+                modifier =
+                    Modifier
+                        .padding(start = 16.dp, bottom = 4.dp)
+                        .constrainAs(idDescription) {
+                            top.linkTo(idTitle.bottom)
+                            bottom.linkTo(parent.bottom)
+                            start.linkTo(idTitle.start)
+                        },
                 text = transaction.description,
                 style = MaterialTheme.typography.bodySmall,
-                fontSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.income_expense_name_description_text_size).value.sp,
-                color = MaterialTheme.colorScheme.tertiary
+                fontSize =
+                    dimensionResource(
+                        id = com.d9tilov.android.designsystem.R.dimen.income_expense_name_description_text_size,
+                    ).value.sp,
+                color = MaterialTheme.colorScheme.tertiary,
             )
         }
         if (transaction.isRegular) {
             Icon(
-                modifier = Modifier
-                    .constrainAs(idRegularIcon) {
-                        top.linkTo(idIcon.top)
-                        end.linkTo(idIcon.start)
-                    }
-                    .size(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.transaction_meta_icon_size)),
+                modifier =
+                    Modifier
+                        .constrainAs(idRegularIcon) {
+                            top.linkTo(idIcon.top)
+                            end.linkTo(idIcon.start)
+                        }.size(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.transaction_meta_icon_size)),
                 imageVector = MoneyManagerIcons.Repeat,
                 contentDescription = "RegularTransaction",
-                tint = MaterialTheme.colorScheme.tertiary
+                tint = MaterialTheme.colorScheme.tertiary,
             )
         }
         if (!transaction.inStatistics) {
             Icon(
-                modifier = Modifier
-                    .padding(top = 4.dp)
-                    .constrainAs(idInStatisticsIcon) {
-                        top.linkTo(idRegularIcon.bottom)
-                        end.linkTo(idIcon.start)
-                    }
-                    .size(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.transaction_meta_icon_size)),
+                modifier =
+                    Modifier
+                        .padding(top = 4.dp)
+                        .constrainAs(idInStatisticsIcon) {
+                            top.linkTo(idRegularIcon.bottom)
+                            end.linkTo(idIcon.start)
+                        }.size(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.transaction_meta_icon_size)),
                 imageVector = ImageVector.vectorResource(MoneyManagerIcons.InStatisticsTransaction),
                 contentDescription = "InStatisticsTransaction",
-                tint = MaterialTheme.colorScheme.error
+                tint = MaterialTheme.colorScheme.error,
             )
         }
         Column(
-            modifier = Modifier
-                .fillMaxHeight()
-                .constrainAs(idSum) {
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                },
+            modifier =
+                Modifier
+                    .fillMaxHeight()
+                    .constrainAs(idSum) {
+                        end.linkTo(parent.end)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    },
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.End
+            horizontalAlignment = Alignment.End,
         ) {
             ComposeCurrencyView(
                 value = transaction.sum.toString(),
                 valueSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sum_small_text_size).value.sp,
                 symbol = transaction.currencyCode.getSymbolByCode(),
-                symbolSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sign_small_text_size).value.sp
+                symbolSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sign_small_text_size).value.sp,
             )
             ComposeCurrencyView(
                 value = transaction.usdSum.toString(),
                 valueSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_extra_small_text_size).value.sp,
                 symbol = DEFAULT_CURRENCY_SYMBOL,
-                symbolSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sign_extra_small_text_size).value.sp
+                symbolSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sign_extra_small_text_size).value.sp,
             )
         }
         HorizontalDivider(
             color = MaterialTheme.colorScheme.primary,
             thickness = 1.dp,
-            modifier = Modifier
-                .alpha(0.2f)
-                .constrainAs(idDivider) {
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                }
+            modifier =
+                Modifier
+                    .alpha(0.2f)
+                    .constrainAs(idDivider) {
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                    },
         )
     }
 }
@@ -488,10 +515,11 @@ fun HomeTabs(
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
 ) {
     var tabIndex by remember { mutableIntStateOf(0) }
-    val pagerState = rememberPagerState(
-        initialPage = 0,
-        initialPageOffsetFraction = 0f
-    ) { screenTypes.size }
+    val pagerState =
+        rememberPagerState(
+            initialPage = 0,
+            initialPageOffsetFraction = 0f,
+        ) { screenTypes.size }
     val coroutineScope = rememberCoroutineScope()
     val indicator = @Composable { tabPositions: List<TabPosition> ->
         HomeTabIndicator(Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]))
@@ -501,7 +529,7 @@ fun HomeTabs(
             selectedTabIndex = pagerState.currentPage,
             indicator = indicator,
             modifier = modifier,
-            containerColor = MaterialTheme.colorScheme.background
+            containerColor = MaterialTheme.colorScheme.background,
         ) {
             screenTypes.forEachIndexed { index, type ->
                 Tab(
@@ -514,24 +542,26 @@ fun HomeTabs(
                     },
                     text = {
                         Text(
-                            text = when (type) {
-                                EXPENSE -> stringResource(R.string.tab_expense)
-                                INCOME -> stringResource(R.string.tab_income)
-                            },
+                            text =
+                                when (type) {
+                                    EXPENSE -> stringResource(R.string.tab_expense)
+                                    INCOME -> stringResource(R.string.tab_income)
+                                },
                         )
                     },
                     selectedContentColor = MaterialTheme.colorScheme.primary,
-                    unselectedContentColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
+                    unselectedContentColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
                 )
             }
         }
         if (uiState.mode == EditMode.KEYBOARD) {
             MainPriceInput(
                 price = uiState.price,
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp),
-                onCurrencyClicked = onCurrencyClicked
+                modifier =
+                    modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 32.dp),
+                onCurrencyClicked = onCurrencyClicked,
             )
             Spacer(modifier = Modifier.weight(1f))
         }
@@ -539,57 +569,69 @@ fun HomeTabs(
             if (uiState.mode == EditMode.KEYBOARD) {
                 Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.Center) {
                     val screenType = tabIndex.toScreenType()
-                    if (screenType == INCOME) uiState.incomeUiState.incomeInfo?.let {
-                        IncomeInfoBlock(
-                            Modifier
-                                .fillMaxWidth()
-                                .height(120.dp)
-                                .padding(start = 32.dp),
-                            it
-                        )
-                    } else uiState.expenseUiState.expenseInfo?.let {
-                        ExpenseInfoBlock(
-                            Modifier
-                                .fillMaxWidth()
-                                .height(120.dp)
-                                .padding(start = 32.dp),
-                            it
-                        )
+                    if (screenType == INCOME) {
+                        uiState.incomeUiState.incomeInfo?.let {
+                            IncomeInfoBlock(
+                                Modifier
+                                    .fillMaxWidth()
+                                    .height(120.dp)
+                                    .padding(start = 32.dp),
+                                it,
+                            )
+                        }
+                    } else {
+                        uiState.expenseUiState.expenseInfo?.let {
+                            ExpenseInfoBlock(
+                                Modifier
+                                    .fillMaxWidth()
+                                    .height(120.dp)
+                                    .padding(start = 32.dp),
+                                it,
+                            )
+                        }
                     }
 
                     CategoryListLayout(
                         categoryList =
-                        if (screenType == INCOME) uiState.incomeUiState.incomeCategoryList
-                        else uiState.expenseUiState.expenseCategoryList,
+                            if (screenType == INCOME) {
+                                uiState.incomeUiState.incomeCategoryList
+                            } else {
+                                uiState.expenseUiState.expenseCategoryList
+                            },
                         modifier = Modifier.fillMaxWidth(),
                         onItemClicked = { category -> onCategoryClicked(category) },
                         onAllCategoryClicked = {
                             onAllCategoryClicked(
                                 screenType,
-                                if (uiState.price.value == ZERO) CategoryDestination.MAIN_SCREEN
-                                else CategoryDestination.MAIN_WITH_SUM_SCREEN
+                                if (uiState.price.value == ZERO) {
+                                    CategoryDestination.MAIN_SCREEN
+                                } else {
+                                    CategoryDestination.MAIN_WITH_SUM_SCREEN
+                                },
                             )
-                        }
+                        },
                     )
                 }
             } else {
                 TransactionListLayout(
                     listState,
                     Modifier.fillMaxSize(),
-                    if (tabIndex.toScreenType() == INCOME) uiState.incomeUiState.incomeTransactions
-                    else uiState.expenseUiState.expenseTransactions,
+                    if (tabIndex.toScreenType() == INCOME) {
+                        uiState.incomeUiState.incomeTransactions
+                    } else {
+                        uiState.expenseUiState.expenseTransactions
+                    },
                     tabIndex.toScreenType(),
                     onTransactionClicked = onTransactionClicked,
-                    onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked
+                    onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked,
                 )
             }
-
         }
         if (uiState.mode == EditMode.KEYBOARD) {
             KeyBoardLayout(
                 modifier = Modifier.fillMaxWidth(),
                 onNumberClicked = onNumberClicked,
-                onKeyboardClicked = onKeyboardClicked
+                onKeyboardClicked = onKeyboardClicked,
             )
         }
     }
@@ -604,7 +646,7 @@ fun HomeTabIndicator(
         modifier
             .padding(horizontal = 24.dp)
             .height(4.dp)
-            .background(color, RoundedCornerShape(topStartPercent = 100, topEndPercent = 100))
+            .background(color, RoundedCornerShape(topStartPercent = 100, topEndPercent = 100)),
     )
 }
 
@@ -621,36 +663,38 @@ fun KeyBoardLayout(
             horizontalArrangement = Arrangement.Center,
             verticalArrangement = Arrangement.spacedBy(16.dp),
             userScrollEnabled = false,
-            contentPadding = PaddingValues(start = 40.dp, end = 40.dp)
+            contentPadding = PaddingValues(start = 40.dp, end = 40.dp),
         ) {
             items(data, key = { it.hashCode() }) { item ->
                 val keyPress = item.toKeyPress() ?: return@items
                 if (keyPress != KeyPress.Del) {
-                    ClickableText(
-                        text = AnnotatedString(item),
-                        style = TextStyle.Default.copy(
-                            color = MaterialTheme.colorScheme.primary,
-                            fontSize = 32.sp,
-                            textAlign = TextAlign.Center
-                        ),
-                        onClick = { onNumberClicked(keyPress) }
+                    Text(
+                        modifier = Modifier.clickable { onNumberClicked(keyPress) },
+                        text = buildAnnotatedString { AnnotatedString(item) },
+                        style =
+                            TextStyle.Default.copy(
+                                color = MaterialTheme.colorScheme.primary,
+                                fontSize = 32.sp,
+                                textAlign = TextAlign.Center,
+                            ),
                     )
                 } else {
                     IconButton(onClick = { onNumberClicked(keyPress) }) {
                         Icon(
                             imageVector = MoneyManagerIcons.BackSpace,
                             contentDescription = "BackSpace",
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = MaterialTheme.colorScheme.primary,
                         )
                     }
                 }
             }
         }
         IconButton(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = 8.dp),
-            onClick = onKeyboardClicked
+            modifier =
+                Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 8.dp),
+            onClick = onKeyboardClicked,
         ) {
             Icon(
                 imageVector = MoneyManagerIcons.HideKeyboard,
@@ -662,7 +706,10 @@ fun KeyBoardLayout(
 }
 
 @Composable
-fun ExpenseInfoBlock(modifier: Modifier, info: ExpenseInfo) {
+fun ExpenseInfoBlock(
+    modifier: Modifier,
+    info: ExpenseInfo,
+) {
     Column(modifier = modifier, verticalArrangement = Arrangement.Center) {
         InfoLabel(info.ableToSpendToday)
         InfoLabel(info.wasSpendToday)
@@ -671,7 +718,10 @@ fun ExpenseInfoBlock(modifier: Modifier, info: ExpenseInfo) {
 }
 
 @Composable
-fun IncomeInfoBlock(modifier: Modifier, info: IncomeInfo) {
+fun IncomeInfoBlock(
+    modifier: Modifier,
+    info: IncomeInfo,
+) {
     Column(modifier = modifier, verticalArrangement = Arrangement.Center) {
         InfoLabel(info.wasEarnedInPeriod)
     }
@@ -684,22 +734,26 @@ fun InfoLabel(price: Price) {
         Text(
             modifier = Modifier.padding(start = 4.dp),
             text = price.value,
-            style = MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.primary)
+            style = MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.primary),
         )
     }
 }
 
 @Composable
-fun InfoLabelTitle(modifier: Modifier = Modifier, text: String) {
+fun InfoLabelTitle(
+    modifier: Modifier = Modifier,
+    text: String,
+) {
     Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(50))
-            .background(MaterialTheme.colorScheme.primary)
+        modifier =
+            modifier
+                .clip(RoundedCornerShape(50))
+                .background(MaterialTheme.colorScheme.primary),
     ) {
         Text(
             modifier = Modifier.padding(6.dp),
             text = text,
-            style = MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.onPrimary)
+            style = MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.onPrimary),
         )
     }
 }
@@ -714,34 +768,39 @@ fun CategoryListLayout(
     val context = LocalContext.current
 
     LazyHorizontalGrid(
-        modifier = modifier
-            .height(200.dp)
-            .padding(16.dp),
+        modifier =
+            modifier
+                .height(200.dp)
+                .padding(16.dp),
         rows = GridCells.Fixed(2),
         horizontalArrangement = Arrangement.Start,
         verticalArrangement = Arrangement.Center,
     ) {
         items(categoryList, { it.id }) { item ->
             Column(
-                modifier = Modifier
-                    .size(dimensionResource(id = R.dimen.category_item_size))
-                    .padding(8.dp)
-                    .clickable {
-                        if (item.id == ALL_ITEMS_ID) onAllCategoryClicked()
-                        else onItemClicked(item)
-                    },
+                modifier =
+                    Modifier
+                        .size(dimensionResource(id = R.dimen.category_item_size))
+                        .padding(8.dp)
+                        .clickable {
+                            if (item.id == ALL_ITEMS_ID) {
+                                onAllCategoryClicked()
+                            } else {
+                                onItemClicked(item)
+                            }
+                        },
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = item.icon),
                     contentDescription = "Backup",
-                    tint = Color(ContextCompat.getColor(context, item.color))
+                    tint = Color(ContextCompat.getColor(context, item.color)),
                 )
                 Text(
                     text = if (item.id == ALL_ITEMS_ID) stringResource(id = R.string.category_all) else item.name,
                     color = Color(ContextCompat.getColor(context, item.color)),
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }
@@ -754,15 +813,16 @@ fun TransactionListItemPreview() {
     MoneyManagerTheme {
         TransactionItem(
             modifier = Modifier.fillMaxWidth(),
-            transaction = Transaction.EMPTY.copy(
-                sum = BigDecimal.TEN,
-                usdSum = BigDecimal(5),
-                currencyCode = "RUB",
-                isRegular = true,
-                inStatistics = true,
-                description = "description",
-                category = mockCategory(2, "Cafe")
-            )
+            transaction =
+                Transaction.EMPTY.copy(
+                    sum = BigDecimal.TEN,
+                    usdSum = BigDecimal(5),
+                    currencyCode = "RUB",
+                    isRegular = true,
+                    inStatistics = true,
+                    description = "description",
+                    category = mockCategory(2, "Cafe"),
+                ),
         )
     }
 }
@@ -771,44 +831,51 @@ fun TransactionListItemPreview() {
 @Preview
 fun PreviewIncomeExpenseScreen() {
     MoneyManagerTheme {
-        IncomeExpenseScreen(uiState = IncomeExpenseUiState.EMPTY.copy(
-            incomeUiState = IncomeUiState(
-                incomeCategoryList = listOf(
-                    mockCategory(1L, "Category1"),
-                    mockCategory(2L, "Category2"),
-                    mockCategory(3L, "Category3"),
-                    mockCategory(4L, "Category4"),
-                    mockCategory(5L, "Category5"),
-                    mockCategory(6L, "Category6"),
-                    mockCategory(7L, "Category7"),
-                    mockCategory(8L, "Category8"),
-                    mockCategory(9L, "Category9"),
-                    mockCategory(10L, "Category10"),
-                    mockCategory(11L, "Category11"),
-                    mockCategory(12L, "Category12"),
-                    mockCategory(13L, "Category13"),
-                    mockCategory(14L, "Category14"),
-                    mockCategory(15L, "Category15"),
+        IncomeExpenseScreen(
+            uiState =
+                IncomeExpenseUiState.EMPTY.copy(
+                    incomeUiState =
+                        IncomeUiState(
+                            incomeCategoryList =
+                                listOf(
+                                    mockCategory(1L, "Category1"),
+                                    mockCategory(2L, "Category2"),
+                                    mockCategory(3L, "Category3"),
+                                    mockCategory(4L, "Category4"),
+                                    mockCategory(5L, "Category5"),
+                                    mockCategory(6L, "Category6"),
+                                    mockCategory(7L, "Category7"),
+                                    mockCategory(8L, "Category8"),
+                                    mockCategory(9L, "Category9"),
+                                    mockCategory(10L, "Category10"),
+                                    mockCategory(11L, "Category11"),
+                                    mockCategory(12L, "Category12"),
+                                    mockCategory(13L, "Category13"),
+                                    mockCategory(14L, "Category14"),
+                                    mockCategory(15L, "Category15"),
+                                ),
+                        ),
+                    expenseUiState =
+                        ExpenseUiState.EMPTY.copy(
+                            expenseInfo =
+                                ExpenseInfo(
+                                    ableToSpendToday =
+                                        Price(
+                                            R.string.expense_info_can_spend_today_title,
+                                            "$42",
+                                        ),
+                                    wasSpendToday = Price(R.string.expense_info_today_title, "$43"),
+                                    wasSpendInPeriod = Price(R.string.expense_info_period_title, "$44"),
+                                ),
+                        ),
                 ),
-            ),
-            expenseUiState = ExpenseUiState.EMPTY.copy(
-                expenseInfo = ExpenseInfo(
-                    ableToSpendToday = Price(
-                        R.string.expense_info_can_spend_today_title,
-                        "$42"
-                    ),
-                    wasSpendToday = Price(R.string.expense_info_today_title, "$43"),
-                    wasSpendInPeriod = Price(R.string.expense_info_period_title, "$44")
-                )
-            )
-        ),
             onNumberClicked = {},
             onCategoryClicked = {},
             onEditModeChanged = {},
             onCurrencyClicked = {},
             onAllCategoryClicked = { _, _ -> },
             onTransactionClicked = {},
-            onDeleteTransactionConfirmClicked = {}
+            onDeleteTransactionConfirmClicked = {},
         )
     }
 }
@@ -818,16 +885,20 @@ fun PreviewIncomeExpenseScreen() {
 fun InfoLabelPreview() {
     MoneyManagerTheme {
         ExpenseInfoBlock(
-            Modifier, ExpenseInfo(
+            Modifier,
+            ExpenseInfo(
                 ableToSpendToday = Price(R.string.expense_info_can_spend_today_title, "$41"),
                 wasSpendToday = Price(R.string.expense_info_today_title, "$42"),
                 wasSpendInPeriod = Price(R.string.expense_info_period_title, "$43"),
-            )
+            ),
         )
     }
 }
 
-private fun mockCategory(id: Long, name: String) = Category.EMPTY_INCOME.copy(
+private fun mockCategory(
+    id: Long,
+    name: String,
+) = Category.EMPTY_INCOME.copy(
     id = id,
     name = name,
     icon = R.drawable.ic_category_beach,

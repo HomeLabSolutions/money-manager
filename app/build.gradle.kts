@@ -47,10 +47,11 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments += mapOf(
-                    "room.incremental" to "true",
-                    "room.schemaLocation" to "$projectDir/schemas"
-                )
+                arguments +=
+                    mapOf(
+                        "room.incremental" to "true",
+                        "room.schemaLocation" to "$projectDir/schemas",
+                    )
             }
         }
     }
@@ -63,7 +64,7 @@ android {
             signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
             manifestPlaceholders["appName"] = "Money Manager"
         }
@@ -100,7 +101,7 @@ android {
 }
 
 dependencies {
-    
+
     implementation(project(":analytics:analytics-di"))
     implementation(project(":backup:backup-data:backup-data-impl"))
     implementation(project(":backup:backup-di"))

@@ -14,17 +14,20 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RegularIncomeViewModel @Inject constructor(private val regularTransactionInteractor: RegularTransactionInteractor) :
-    BaseRegularIncomeExpenseViewModel<RegularIncomeNavigator>() {
+class RegularIncomeViewModel
+    @Inject
+    constructor(
+        private val regularTransactionInteractor: RegularTransactionInteractor,
+    ) : BaseRegularIncomeExpenseViewModel<RegularIncomeNavigator>() {
+        val regularIncomeTransactionList: SharedFlow<List<RegularTransaction>> =
+            regularTransactionInteractor
+                .getAll(TransactionType.INCOME)
+                .distinctUntilChanged()
+                .shareIn(viewModelScope, SharingStarted.Eagerly, 1)
 
-    val regularIncomeTransactionList: SharedFlow<List<RegularTransaction>> =
-        regularTransactionInteractor.getAll(TransactionType.INCOME)
-            .distinctUntilChanged()
-            .shareIn(viewModelScope, SharingStarted.Eagerly, 1)
-
-    override fun onCheckClicked(regularTransaction: RegularTransaction) {
-        viewModelScope.launch {
-            regularTransactionInteractor.update(regularTransaction.copy(pushEnabled = !regularTransaction.pushEnabled))
+        override fun onCheckClicked(regularTransaction: RegularTransaction) {
+            viewModelScope.launch {
+                regularTransactionInteractor.update(regularTransaction.copy(pushEnabled = !regularTransaction.pushEnabled))
+            }
         }
     }
-}

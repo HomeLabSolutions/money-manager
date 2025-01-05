@@ -11,7 +11,8 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 data class CategoryIconListUiState(
-    val groups: List<CategoryGroup> = listOf(
+    val groups: List<CategoryGroup> =
+        listOf(
             CategoryGroup.HOUSING,
             CategoryGroup.TRANSPORT,
             CategoryGroup.FOOD,
@@ -24,7 +25,7 @@ data class CategoryIconListUiState(
             CategoryGroup.PERSONAL,
             CategoryGroup.OTHERS,
             CategoryGroup.UNKNOWN,
-    ),
+        ),
 ) {
     companion object {
         val EMPTY = CategoryIconListUiState()
@@ -32,15 +33,16 @@ data class CategoryIconListUiState(
 }
 
 @HiltViewModel
-class CategoryGroupIconListViewModel @Inject constructor() : ViewModel() {
+class CategoryGroupIconListViewModel
+    @Inject
+    constructor() : ViewModel() {
+        val route = ""
 
-    val route = ""
-
-    val uiState: StateFlow<CategoryIconListUiState> = flowOf(CategoryIconListUiState.EMPTY)
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = CategoryIconListUiState.EMPTY
-        )
-
-}
+        val uiState: StateFlow<CategoryIconListUiState> =
+            flowOf(CategoryIconListUiState.EMPTY)
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(),
+                    initialValue = CategoryIconListUiState.EMPTY,
+                )
+    }

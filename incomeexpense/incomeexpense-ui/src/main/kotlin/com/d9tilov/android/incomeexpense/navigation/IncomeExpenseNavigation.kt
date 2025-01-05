@@ -28,12 +28,12 @@ fun NavGraphBuilder.incomeExpenseScreen(
 ) {
     composable(route = route) { entry ->
         val viewModel: IncomeExpenseViewModel = hiltViewModel()
-        val categoryId = entry.savedStateHandle.get<Long>(CategoryArgs.categoryIdArgs)
+        val categoryId = entry.savedStateHandle.get<Long>(CategoryArgs.CATEGORY_ID_ARGS)
         categoryId?.let { id ->
             viewModel.addTransaction(id)
-            entry.savedStateHandle.remove<Long>(CategoryArgs.categoryIdArgs)
+            entry.savedStateHandle.remove<Long>(CategoryArgs.CATEGORY_ID_ARGS)
         }
-        val currencyCode =  entry.savedStateHandle.get<String>(CURRENCY_CODE_ARGS)
+        val currencyCode = entry.savedStateHandle.get<String>(CURRENCY_CODE_ARGS)
         currencyCode?.let { code ->
             viewModel.updateCurrencyCode(code)
             entry.savedStateHandle.remove<String>(CURRENCY_CODE_ARGS)
@@ -47,7 +47,7 @@ fun NavGraphBuilder.incomeExpenseScreen(
                     ScreenType.INCOME -> onAllCategoryClick(TransactionType.INCOME, destination)
                 }
             },
-            onTransactionClicked = onTransactionClick
+            onTransactionClicked = onTransactionClick,
         )
     }
 }

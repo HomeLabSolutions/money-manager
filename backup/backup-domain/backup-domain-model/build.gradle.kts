@@ -3,7 +3,6 @@ plugins {
 }
 
 dependencies {
-
 }
 
 dependencyAnalysis {

@@ -12,20 +12,23 @@ import timber.log.Timber.DebugTree
 
 @HiltAndroidApp
 class App : Application() {
-
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
-            val threadPolicy = StrictMode.ThreadPolicy.Builder()
-                .detectAll()
-                .penaltyLog()
-                .build()
+            val threadPolicy =
+                StrictMode.ThreadPolicy
+                    .Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build()
             StrictMode.setThreadPolicy(threadPolicy)
-            val vmPolicy = StrictMode.VmPolicy.Builder()
-                .detectAll()
-                .penaltyLog()
-                .build()
+            val vmPolicy =
+                StrictMode.VmPolicy
+                    .Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build()
             StrictMode.setVmPolicy(vmPolicy)
         }
         DynamicColors.applyToActivitiesIfAvailable(this)

@@ -66,7 +66,6 @@ import com.d9tilov.android.regular.transaction.ui.vm.RegularTransactionListState
 import com.d9tilov.android.regular.transaction.ui.vm.RegularTransactionListViewModel
 import com.d9tilov.android.regular_transaction_ui.R
 
-
 @Composable
 fun RegularTransactionListRoute(
     viewModel: RegularTransactionListViewModel = hiltViewModel(),
@@ -80,7 +79,7 @@ fun RegularTransactionListRoute(
         onAddClicked = { onAddClicked(uiState.transactionType, NO_ID) },
         onTransactionClicked = onItemClicked,
         onDeleteTransactionConfirmClicked = viewModel::removeTransaction,
-        onBackClicked = clickBack
+        onBackClicked = clickBack,
     )
 }
 
@@ -91,19 +90,20 @@ fun RegularTransactionListScreen(
     onTransactionClicked: (currency: RegularTransaction) -> Unit = {},
     onDeleteTransactionConfirmClicked: (RegularTransaction) -> Unit,
     onAddClicked: () -> Unit,
-    onBackClicked: () -> Unit
+    onBackClicked: () -> Unit,
 ) {
     val openRemoveDialog = remember { mutableStateOf<RegularTransaction?>(null) }
     Scaffold(
         topBar = {
             MmTopAppBar(
-                titleRes = when (uiState.transactionType) {
-                    TransactionType.EXPENSE -> R.string.profile_item_regular_expenses_title
-                    TransactionType.INCOME -> R.string.profile_item_regular_incomes_title
-                },
+                titleRes =
+                    when (uiState.transactionType) {
+                        TransactionType.EXPENSE -> R.string.profile_item_regular_expenses_title
+                        TransactionType.INCOME -> R.string.profile_item_regular_incomes_title
+                    },
                 onNavigationClick = onBackClicked,
                 actionIcon = MoneyManagerIcons.ActionAdd,
-                onActionClick = onAddClicked
+                onActionClick = onAddClicked,
             )
         },
     ) { padding: PaddingValues ->
@@ -111,10 +111,11 @@ fun RegularTransactionListScreen(
             EmptyListPlaceholder(
                 modifier = Modifier.fillMaxSize(),
                 icon = painterResource(id = MoneyManagerIcons.EmptyRegularPlaceholder),
-                title = when (uiState.transactionType) {
-                    TransactionType.EXPENSE -> stringResource(id = R.string.transaction_empty_placeholder_regular_expense_title)
-                    TransactionType.INCOME -> stringResource(id = R.string.transaction_empty_placeholder_regular_income_title)
-                },
+                title =
+                    when (uiState.transactionType) {
+                        TransactionType.EXPENSE -> stringResource(id = R.string.transaction_empty_placeholder_regular_expense_title)
+                        TransactionType.INCOME -> stringResource(id = R.string.transaction_empty_placeholder_regular_income_title)
+                    },
             )
             return@Scaffold
         }
@@ -123,14 +124,15 @@ fun RegularTransactionListScreen(
             modifier = Modifier.consumeWindowInsets(padding),
         ) {
             items(items = uiState.regularTransactions, key = { item -> item.id }) { item ->
-                val dismissState = rememberSwipeToDismissBoxState(
-                    confirmValueChange = {
-                        if (it == SwipeToDismissBoxValue.EndToStart) {
-                            openRemoveDialog.value = item
-                        }
-                        true
-                    }
-                )
+                val dismissState =
+                    rememberSwipeToDismissBoxState(
+                        confirmValueChange = {
+                            if (it == SwipeToDismissBoxValue.EndToStart) {
+                                openRemoveDialog.value = item
+                            }
+                            true
+                        },
+                    )
                 if (openRemoveDialog.value == null) LaunchedEffect(Unit) { dismissState.reset() }
                 SwipeToDismissBox(
                     state = dismissState,
@@ -140,28 +142,30 @@ fun RegularTransactionListScreen(
                             when (dismissState.targetValue) {
                                 SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.error
                                 else -> Color.Transparent
-                            }, label = ""
+                            },
+                            label = "",
                         )
                         val iconScale by animateFloatAsState(
                             targetValue = if (dismissState.targetValue == SwipeToDismissBoxValue.Settled) 0.0f else 1.3f,
-                            label = ""
+                            label = "",
                         )
                         Box(
                             Modifier
                                 .fillMaxSize()
                                 .background(color = backgroundColor)
                                 .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium)),
-                            contentAlignment = Alignment.CenterEnd
+                            contentAlignment = Alignment.CenterEnd,
                         ) {
                             Icon(
                                 modifier = Modifier.scale(iconScale),
                                 imageVector = Delete,
                                 contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onError
+                                tint = MaterialTheme.colorScheme.onError,
                             )
                         }
                     },
-                    content = { RegularTransactionItem(item, onTransactionClicked) })
+                    content = { RegularTransactionItem(item, onTransactionClicked) },
+                )
             }
         }
     }
@@ -177,7 +181,7 @@ fun RegularTransactionListScreen(
                 openRemoveDialog.value = null
             }
         },
-        onDismiss = { openRemoveDialog.value = null }
+        onDismiss = { openRemoveDialog.value = null },
     )
 }
 
@@ -192,61 +196,67 @@ fun RegularTransactionItem(
             .fillMaxWidth()
             .padding(
                 vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_extra_small),
-                horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)
-            )
-            .clickable { onItemClicked(transaction) }) {
+                horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
+            ).clickable { onItemClicked(transaction) },
+    ) {
         Row(
-            modifier = Modifier
-                .wrapContentHeight(Alignment.CenterVertically)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .wrapContentHeight(Alignment.CenterVertically)
+                    .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Row(
                     modifier = Modifier.padding(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium)),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
-                        modifier = Modifier
-                            .size(dimensionResource(id = R.dimen.regular_category_item_icon_small_size)),
+                        modifier =
+                            Modifier
+                                .size(dimensionResource(id = R.dimen.regular_category_item_icon_small_size)),
                         imageVector = ImageVector.vectorResource(id = transaction.category.icon),
                         contentDescription = "Transaction",
-                        tint = Color(ContextCompat.getColor(context, transaction.category.color))
+                        tint = Color(ContextCompat.getColor(context, transaction.category.color)),
                     )
                     Text(
-                        modifier = Modifier
-                            .padding(start = 16.dp),
+                        modifier =
+                            Modifier
+                                .padding(start = 16.dp),
                         text = transaction.category.name,
                         style = MaterialTheme.typography.displayLarge,
                         fontSize = dimensionResource(id = R.dimen.regular_transaction_category_name_text_size).value.sp,
                         maxLines = 1,
                         color = Color(ContextCompat.getColor(context, transaction.category.color)),
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
                 Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium),
-                            bottom = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)
-                        ),
-                    text = when (transaction.executionPeriod.periodType) {
-                        PeriodType.DAY -> context.getString(R.string.regular_transaction_repeat_period_day)
-                        PeriodType.WEEK -> context.getString(
-                            R.string.regular_transaction_repeat_period_week,
-                            getWeekDayString(context, (transaction.executionPeriod as ExecutionPeriod.EveryWeek).dayOfWeek)
-                        )
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                                bottom = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
+                            ),
+                    text =
+                        when (transaction.executionPeriod.periodType) {
+                            PeriodType.DAY -> context.getString(R.string.regular_transaction_repeat_period_day)
+                            PeriodType.WEEK ->
+                                context.getString(
+                                    R.string.regular_transaction_repeat_period_week,
+                                    getWeekDayString(context, (transaction.executionPeriod as ExecutionPeriod.EveryWeek).dayOfWeek),
+                                )
 
-                        PeriodType.MONTH -> {
-                            val dayOfMonth = (transaction.executionPeriod as ExecutionPeriod.EveryMonth).dayOfMonth
-                            context.getString(
-                                R.string.regular_transaction_repeat_period_month,
-                                dayOfMonth.toString()
-                            )
-                        }
-                    },
-                    maxLines = 1
+                            PeriodType.MONTH -> {
+                                val dayOfMonth = (transaction.executionPeriod as ExecutionPeriod.EveryMonth).dayOfMonth
+                                context.getString(
+                                    R.string.regular_transaction_repeat_period_month,
+                                    dayOfMonth.toString(),
+                                )
+                            }
+                        },
+                    maxLines = 1,
                 )
             }
             CurrencyTextFieldMedium(
@@ -258,7 +268,10 @@ fun RegularTransactionItem(
     }
 }
 
-private fun getWeekDayString(context: Context, day: Int) = when (day) {
+private fun getWeekDayString(
+    context: Context,
+    day: Int,
+) = when (day) {
     WeekDays.MONDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_monday)
     WeekDays.TUESDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_tuesday)
     WeekDays.WEDNESDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_wednesday)
@@ -273,37 +286,42 @@ private fun getWeekDayString(context: Context, day: Int) = when (day) {
 @Composable
 fun DefaultRegularTransactionListPreview() {
     RegularTransactionListScreen(
-        uiState = RegularTransactionListState(
-            transactionType = TransactionType.EXPENSE,
-            regularTransactions = listOf(
-                RegularTransaction.EMPTY.copy(id = 1L, category = mockCategory(1L, "Category1")),
-                RegularTransaction.EMPTY.copy(id = 2L, category = mockCategory(2L, "Category2")),
-                RegularTransaction.EMPTY.copy(id = 3L, category = mockCategory(3L, "Category3")),
-                RegularTransaction.EMPTY.copy(id = 4L, category = mockCategory(4L, "Category4")),
-                RegularTransaction.EMPTY.copy(id = 5L, category = mockCategory(5L, "Category5")),
-                RegularTransaction.EMPTY.copy(id = 6L, category = mockCategory(6L, "Category6")),
-                RegularTransaction.EMPTY.copy(id = 7L, category = mockCategory(7L, "Category7")),
-                RegularTransaction.EMPTY.copy(id = 8L, category = mockCategory(8L, "Category8")),
-                RegularTransaction.EMPTY.copy(id = 9L, category = mockCategory(9L, "Category9")),
-                RegularTransaction.EMPTY.copy(id = 10L, category = mockCategory(10L, "Category10")),
-                RegularTransaction.EMPTY.copy(id = 11L, category = mockCategory(11L, "Category11")),
-                RegularTransaction.EMPTY.copy(id = 12L, category = mockCategory(12L, "Category12")),
-                RegularTransaction.EMPTY.copy(id = 13L, category = mockCategory(13L, "Category13")),
-                RegularTransaction.EMPTY.copy(id = 14L, category = mockCategory(14L, "Category14")),
-                RegularTransaction.EMPTY.copy(id = 15L, category = mockCategory(15L, "Category15")),
-                RegularTransaction.EMPTY.copy(id = 16L, category = mockCategory(16L, "Category16")),
-                RegularTransaction.EMPTY.copy(id = 17L, category = mockCategory(17L, "Category17")),
-                RegularTransaction.EMPTY.copy(id = 18L, category = mockCategory(18L, "Category18")),
-            )
-        ),
+        uiState =
+            RegularTransactionListState(
+                transactionType = TransactionType.EXPENSE,
+                regularTransactions =
+                    listOf(
+                        RegularTransaction.EMPTY.copy(id = 1L, category = mockCategory(1L, "Category1")),
+                        RegularTransaction.EMPTY.copy(id = 2L, category = mockCategory(2L, "Category2")),
+                        RegularTransaction.EMPTY.copy(id = 3L, category = mockCategory(3L, "Category3")),
+                        RegularTransaction.EMPTY.copy(id = 4L, category = mockCategory(4L, "Category4")),
+                        RegularTransaction.EMPTY.copy(id = 5L, category = mockCategory(5L, "Category5")),
+                        RegularTransaction.EMPTY.copy(id = 6L, category = mockCategory(6L, "Category6")),
+                        RegularTransaction.EMPTY.copy(id = 7L, category = mockCategory(7L, "Category7")),
+                        RegularTransaction.EMPTY.copy(id = 8L, category = mockCategory(8L, "Category8")),
+                        RegularTransaction.EMPTY.copy(id = 9L, category = mockCategory(9L, "Category9")),
+                        RegularTransaction.EMPTY.copy(id = 10L, category = mockCategory(10L, "Category10")),
+                        RegularTransaction.EMPTY.copy(id = 11L, category = mockCategory(11L, "Category11")),
+                        RegularTransaction.EMPTY.copy(id = 12L, category = mockCategory(12L, "Category12")),
+                        RegularTransaction.EMPTY.copy(id = 13L, category = mockCategory(13L, "Category13")),
+                        RegularTransaction.EMPTY.copy(id = 14L, category = mockCategory(14L, "Category14")),
+                        RegularTransaction.EMPTY.copy(id = 15L, category = mockCategory(15L, "Category15")),
+                        RegularTransaction.EMPTY.copy(id = 16L, category = mockCategory(16L, "Category16")),
+                        RegularTransaction.EMPTY.copy(id = 17L, category = mockCategory(17L, "Category17")),
+                        RegularTransaction.EMPTY.copy(id = 18L, category = mockCategory(18L, "Category18")),
+                    ),
+            ),
         onAddClicked = {},
         onTransactionClicked = {},
         onBackClicked = {},
-        onDeleteTransactionConfirmClicked = {}
+        onDeleteTransactionConfirmClicked = {},
     )
 }
 
-private fun mockCategory(id: Long, name: String) = Category.EMPTY_EXPENSE.copy(
+private fun mockCategory(
+    id: Long,
+    name: String,
+) = Category.EMPTY_EXPENSE.copy(
     id = id,
     name = name,
     icon = com.d9tilov.android.common.android.R.drawable.ic_category_cafe,

@@ -5,12 +5,9 @@ import com.d9tilov.android.core.constants.CurrencyConstants.DECIMAL_LENGTH
 import java.math.BigDecimal
 
 object CurrencyConverter {
-
     @TypeConverter
     @JvmStatic
-    fun fromBigDecimalToString(value: BigDecimal): String {
-        return (value * 10.toBigDecimal().pow(DECIMAL_LENGTH)).toString()
-    }
+    fun fromBigDecimalToString(value: BigDecimal): String = (value * 10.toBigDecimal().pow(DECIMAL_LENGTH)).toString()
 
     @TypeConverter
     @JvmStatic

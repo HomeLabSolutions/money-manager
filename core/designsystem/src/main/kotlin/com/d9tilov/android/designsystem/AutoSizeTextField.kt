@@ -41,7 +41,7 @@ fun AutoSizeTextField(
     showError: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     fontSize: TextUnit = 72.sp,
-    fontColor: Color = MaterialTheme.colorScheme.primary
+    fontColor: Color = MaterialTheme.colorScheme.primary,
 ) {
     var amount by remember { mutableStateOf(TextFieldValue()) }
     amount = amount.copy(text = inputValue, selection = TextRange(inputValue.length))
@@ -52,7 +52,7 @@ fun AutoSizeTextField(
                 text = inputValue,
                 style = TextStyle(fontSize = shrunkFontSize),
                 density = LocalDensity.current,
-                fontFamilyResolver = createFontFamilyResolver(LocalContext.current)
+                fontFamilyResolver = createFontFamilyResolver(LocalContext.current),
             )
         }
 
@@ -70,21 +70,22 @@ fun AutoSizeTextField(
         val focusRequester = remember { FocusRequester() }
         OutlinedTextField(
             value = amount,
-            modifier = Modifier
-                .fillMaxWidth()
-                .width(IntrinsicSize.Min)
-                .focusRequester(focusRequester)
-                .fillMaxWidth()
-                .padding(
-                    horizontal = dimensionResource(id = R.dimen.padding_extra_small),
-                    vertical = dimensionResource(id = R.dimen.padding_medium)
-                ),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .width(IntrinsicSize.Min)
+                    .focusRequester(focusRequester)
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = dimensionResource(id = R.dimen.padding_extra_small),
+                        vertical = dimensionResource(id = R.dimen.padding_medium),
+                    ),
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
             maxLines = 1,
             textStyle = TextStyle.Default.copy(fontSize = shrunkFontSize, color = fontColor),
             singleLine = true,
             onValueChange = { text -> if (text.text.length <= MainPriceFieldParser.MAX_PRICE_LENGTH) inputValueChanged(text.text) },
-            supportingText = { showError() }
+            supportingText = { showError() },
         )
         LaunchedEffect(Unit) { focusRequester.requestFocus() }
     }

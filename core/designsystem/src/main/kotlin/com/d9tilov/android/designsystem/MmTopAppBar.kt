@@ -24,13 +24,13 @@ fun MmTopAppBar(
     actionIcon: ImageVector? = null,
     colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
     onNavigationClick: () -> Unit = {},
-    onActionClick: () -> Unit = {}
+    onActionClick: () -> Unit = {},
 ) {
     TopAppBar(
         title = {
             Text(
                 text = stringResource(id = titleRes),
-                color = MaterialTheme.colorScheme.tertiary
+                color = MaterialTheme.colorScheme.tertiary,
             )
         },
         navigationIcon = {
@@ -38,7 +38,7 @@ fun MmTopAppBar(
                 Icon(
                     imageVector = navigationIcon,
                     contentDescription = "Navigation Icon",
-                    tint = MaterialTheme.colorScheme.tertiary
+                    tint = MaterialTheme.colorScheme.tertiary,
                 )
             }
         },
@@ -48,13 +48,13 @@ fun MmTopAppBar(
                     Icon(
                         imageVector = actionIcon,
                         contentDescription = "Action Icon",
-                        tint = MaterialTheme.colorScheme.tertiary
+                        tint = MaterialTheme.colorScheme.tertiary,
                     )
                 }
             }
         },
         colors = colors,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -65,6 +65,6 @@ fun TopAppBarPreview() {
     MmTopAppBar(
         titleRes = android.R.string.untitled,
         navigationIcon = MoneyManagerIcons.ArrowBack,
-        actionIcon = MoneyManagerIcons.ActionAdd
+        actionIcon = MoneyManagerIcons.ActionAdd,
     )
 }

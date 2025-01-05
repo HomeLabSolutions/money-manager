@@ -13,17 +13,17 @@ data class BudgetData(
     val currencyCode: String,
     val sum: BigDecimal,
     val saveSum: BigDecimal,
-    val createdDate: LocalDateTime
+    val createdDate: LocalDateTime,
 ) {
-
     companion object {
-        val EMPTY = BudgetData(
-            id = DEFAULT_DATA_ID,
-            clientId = NO_ID.toString(),
-            currencyCode = DEFAULT_CURRENCY_CODE,
-            sum = BigDecimal.ZERO,
-            saveSum = BigDecimal.ZERO,
-            createdDate = currentDateTime()
-        )
+        val EMPTY =
+            BudgetData(
+                id = DEFAULT_DATA_ID,
+                clientId = NO_ID.toString(),
+                currencyCode = DEFAULT_CURRENCY_CODE,
+                sum = BigDecimal.ZERO,
+                saveSum = BigDecimal.ZERO,
+                createdDate = currentDateTime(),
+            )
     }
 }

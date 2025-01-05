@@ -13,16 +13,15 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object RegularTransactionDomainModule {
-
     @Provides
     fun provideRegularTransactionInteractor(
         regularTransactionRepo: RegularTransactionRepo,
         currencyInteractor: CurrencyInteractor,
-        categoryInteractor: CategoryInteractor
+        categoryInteractor: CategoryInteractor,
     ): RegularTransactionInteractor =
         RegularTransactionInteractorImpl(
             currencyInteractor,
             regularTransactionRepo,
-            categoryInteractor
+            categoryInteractor,
         )
 }

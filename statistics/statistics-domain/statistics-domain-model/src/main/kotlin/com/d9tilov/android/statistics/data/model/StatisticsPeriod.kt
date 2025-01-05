@@ -7,8 +7,11 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.minus
 
-sealed class StatisticsPeriod(val name: String, val from: LocalDateTime, val to: LocalDateTime) {
-
+sealed class StatisticsPeriod(
+    val name: String,
+    val from: LocalDateTime,
+    val to: LocalDateTime,
+) {
     companion object {
         private const val STATISTICS_PERIOD_DAY_NAME = "statistics_period_day"
         private const val STATISTICS_PERIOD_WEEK_NAME = "statistics_period_week"
@@ -20,31 +23,33 @@ sealed class StatisticsPeriod(val name: String, val from: LocalDateTime, val to:
     object DAY : StatisticsPeriod(
         STATISTICS_PERIOD_DAY_NAME,
         currentDate().getStartOfDay(),
-        currentDate().getEndOfDay()
+        currentDate().getEndOfDay(),
     )
 
     object WEEK : StatisticsPeriod(
         STATISTICS_PERIOD_WEEK_NAME,
         currentDate().minus(1, DateTimeUnit.WEEK).getStartOfDay(),
-        currentDate().getEndOfDay()
+        currentDate().getEndOfDay(),
     )
 
     object MONTH : StatisticsPeriod(
         STATISTICS_PERIOD_MONTH_NAME,
         currentDate().minus(1, DateTimeUnit.MONTH).getStartOfDay(),
-        currentDate().getEndOfDay()
+        currentDate().getEndOfDay(),
     )
 
     object YEAR : StatisticsPeriod(
         STATISTICS_PERIOD_YEAR_NAME,
         currentDate().minus(1, DateTimeUnit.YEAR).getStartOfDay(),
-        currentDate().getEndOfDay()
+        currentDate().getEndOfDay(),
     )
 
-    data class CUSTOM(val fromDate: LocalDateTime, val toDate: LocalDateTime) :
-        StatisticsPeriod(
+    data class CUSTOM(
+        val fromDate: LocalDateTime,
+        val toDate: LocalDateTime,
+    ) : StatisticsPeriod(
             STATISTICS_PERIOD_CUSTOM_NAME,
             fromDate.getStartOfDay(),
-            toDate.getEndOfDay()
+            toDate.getEndOfDay(),
         )
 }

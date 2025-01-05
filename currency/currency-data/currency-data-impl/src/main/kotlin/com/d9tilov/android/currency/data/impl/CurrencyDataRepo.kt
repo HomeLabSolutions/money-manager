@@ -13,15 +13,13 @@ import kotlinx.coroutines.flow.firstOrNull
 class CurrencyDataRepo(
     private val currencySource: CurrencySource,
     private val currencyApi: CurrencyApi,
-    private val preferencesStore: PreferencesStore
+    private val preferencesStore: PreferencesStore,
 ) : CurrencyRepo {
-
     override fun getCurrencies(): Flow<List<Currency>> = currencySource.getCurrencies()
 
     override fun getMainCurrency(): Flow<CurrencyMetaData> = currencySource.getMainCurrency()
 
-    override suspend fun getCurrencyByCode(code: String): Currency =
-        currencySource.getCurrencyByCode(code)
+    override suspend fun getCurrencyByCode(code: String): Currency = currencySource.getCurrencyByCode(code)
 
     override suspend fun updateCurrencies() {
         val currencies = currencyApi.getCurrencies()
@@ -34,6 +32,5 @@ class CurrencyDataRepo(
         uid?.run { currencySource.updateMainCurrency(code) }
     }
 
-    override suspend fun hasAlreadyUpdatedToday(baseCurrency: String): Boolean =
-        currencySource.hasAlreadyUpdatedToday(baseCurrency)
+    override suspend fun hasAlreadyUpdatedToday(baseCurrency: String): Boolean = currencySource.hasAlreadyUpdatedToday(baseCurrency)
 }
