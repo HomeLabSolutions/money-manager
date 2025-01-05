@@ -38,7 +38,6 @@ kotlin = "2.0.20"
 kotlinDatetime = "0.4.1"
 ksp = "2.0.20-1.0.24"
 material = "1.12.0"
-moduleDetector = "0.3.1"
 moshi = "1.15.1"
 navigation = "2.8.5"
 okhttp = "4.12.0"
@@ -124,4 +123,3 @@ deps-sorting = { id = "com.squareup.sort-dependencies", version.ref = "autonomou
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-module-detector = { id = "com.dropbox.affectedmoduledetector", version.ref = "moduleDetector" }
