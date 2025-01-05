@@ -1,18 +1,17 @@
 package com.android.moneymanager.task
 
-import java.io.ByteArrayOutputStream
 import org.gradle.api.DefaultTask
-import org.gradle.api.Task
 import org.gradle.api.tasks.TaskAction
+import java.io.ByteArrayOutputStream
 import java.io.File
 
 abstract class CheckUnusedDependenciesByImpact : DefaultTask() {
-
-    private val whitelistModuleKeywords = setOf(
-        "buildSrc",
-        ".ci",
-        ".py",
-    )
+    private val whitelistModuleKeywords =
+        setOf(
+            "buildSrc",
+            ".ci",
+            ".py",
+        )
 
     @TaskAction
     fun action() {
@@ -31,7 +30,7 @@ abstract class CheckUnusedDependenciesByImpact : DefaultTask() {
             .mapNotNull { file -> file.split("\n").firstOrNull() }
             .filter { s -> whitelistModuleKeywords.none { keyword -> s.contains(keyword, ignoreCase = true) } }
             .mapNotNull { findBuildFilePath(File(it)) }
-            .map { it.replace("/",":").replace("build.gradle.kts", "").removeSuffix(":") }
+            .map { it.replace("/", ":").replace("build.gradle.kts", "").removeSuffix(":") }
             .distinct()
             .toList()
     }
@@ -47,6 +46,4 @@ abstract class CheckUnusedDependenciesByImpact : DefaultTask() {
         }
         return null
     }
-
 }
-

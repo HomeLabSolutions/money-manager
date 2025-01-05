@@ -25,27 +25,27 @@ data class Transaction(
     val inStatistics: Boolean,
     val latitude: Double,
     val longitude: Double,
-    val photoUri: String?
+    val photoUri: String?,
 ) : BaseTransaction {
-
     companion object {
-        val EMPTY = Transaction(
-            id = DataConstants.DEFAULT_DATA_ID,
-            clientId = NO_ID.toString(),
-            type = TransactionType.EXPENSE,
-            category = Category.EMPTY_EXPENSE,
-            currencyCode = DEFAULT_CURRENCY_CODE,
-            sum = BigDecimal.ZERO,
-            usdSum = BigDecimal.ZERO,
-            date = currentDateTime(),
-            description = "",
-            qrCode = null,
-            isRegular = false,
-            inStatistics = true,
-            latitude = 0.0,
-            longitude = 0.0,
-            photoUri = null
-        )
+        val EMPTY =
+            Transaction(
+                id = DataConstants.DEFAULT_DATA_ID,
+                clientId = NO_ID.toString(),
+                type = TransactionType.EXPENSE,
+                category = Category.EMPTY_EXPENSE,
+                currencyCode = DEFAULT_CURRENCY_CODE,
+                sum = BigDecimal.ZERO,
+                usdSum = BigDecimal.ZERO,
+                date = currentDateTime(),
+                description = "",
+                qrCode = null,
+                isRegular = false,
+                inStatistics = true,
+                latitude = 0.0,
+                longitude = 0.0,
+                photoUri = null,
+            )
     }
 
     override val itemType: Int = ITEM

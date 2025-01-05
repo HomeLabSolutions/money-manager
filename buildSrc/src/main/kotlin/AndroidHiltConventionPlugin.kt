@@ -34,5 +34,4 @@ class AndroidHiltConventionPlugin : Plugin<Project> {
             }
         }
     }
-
 }

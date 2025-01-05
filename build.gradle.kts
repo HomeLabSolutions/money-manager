@@ -1,4 +1,4 @@
-import com.android.moneymanager.DetektOptions.applyDetektOptions
+import com.agoda.gradle.FormattingOptions.applyPrecheckOptions
 import com.dropbox.affectedmoduledetector.AffectedModuleConfiguration
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
@@ -14,13 +14,12 @@ buildscript {
         classpath(libs.google.services)
         classpath(libs.hilt.android.gradle.plugin)
         classpath(libs.firebase.crashlytics.gradle)
-        classpath(libs.detekt.gradle.plugin)
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
-applyDetektOptions()
+applyPrecheckOptions()
 
 allprojects {
     repositories {
@@ -58,19 +57,20 @@ affectedModuleDetector {
     pathsAffectingAllModules = setOf()
     logFilename = "output.log"
     logFolder = "${project.rootDir}/output"
-    compareFrom = "PreviousCommit" //default is PreviousCommit
+    compareFrom = "PreviousCommit" // default is PreviousCommit
     excludedModules = setOf()
     specifiedBranch = "develop"
     ignoredFiles = setOf()
     includeUncommitted = false
     top = "HEAD"
-    customTasks = setOf(
-        AffectedModuleConfiguration.CustomTask(
-            "runDetektByImpact",
-            "projectHealth",
-            "Run projectHealth task for current module"
+    customTasks =
+        setOf(
+            AffectedModuleConfiguration.CustomTask(
+                "runDetektByImpact",
+                "projectHealth",
+                "Run projectHealth task for current module",
+            ),
         )
-    )
 }
 
 subprojects {

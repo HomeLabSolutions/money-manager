@@ -12,10 +12,9 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 object BudgetDomainModule {
-
     @Provides
     fun provideBudgetInteractor(
         budgetRepo: BudgetRepo,
-        currencyInteractor: CurrencyInteractor
+        currencyInteractor: CurrencyInteractor,
     ): BudgetInteractor = BudgetInteractorImpl(budgetRepo, currencyInteractor)
 }

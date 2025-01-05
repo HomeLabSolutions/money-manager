@@ -89,7 +89,7 @@ fun RegularTransactionCreationRoute(
         onCurPeriodItemUpdate = viewModel::updateCurPeriodItem,
         onWeekDayClicked = viewModel::updateWeekDay,
         onDayOfMonthClicked = viewModel::updateDayOfMonth,
-        onDescriptionChanged = viewModel::updateDescription
+        onDescriptionChanged = viewModel::updateDescription,
     )
 }
 
@@ -114,46 +114,54 @@ fun RegularTransactionCreationScreen(
     Scaffold(
         topBar = {
             MmTopAppBar(
-                titleRes = when (uiState.transaction.type) {
-                    TransactionType.EXPENSE -> R.string.regular_transaction_expense_title
-                    TransactionType.INCOME -> R.string.regular_transaction_income_title
-                },
-                onNavigationClick = onBackClicked
+                titleRes =
+                    when (uiState.transaction.type) {
+                        TransactionType.EXPENSE -> R.string.regular_transaction_expense_title
+                        TransactionType.INCOME -> R.string.regular_transaction_income_title
+                    },
+                onNavigationClick = onBackClicked,
             )
-        }) { padding ->
+        },
+    ) { padding ->
         Column(
             Modifier
                 .fillMaxWidth()
-                .padding(top = padding.calculateTopPadding())
+                .padding(top = padding.calculateTopPadding()),
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
-                    .weight(1f)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState())
+                        .weight(1f),
             ) {
                 Text(
-                    modifier = Modifier.padding(
-                        start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                        end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                        top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
-                    ),
+                    modifier =
+                        Modifier.padding(
+                            start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                            end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                            top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
+                        ),
                     text = stringResource(id = R.string.regular_transaction_edit_sum_title),
                     style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.primary,
                 )
                 Row(
-                    modifier = Modifier.padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large)),
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier =
+                        Modifier.padding(
+                            horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                        ),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        modifier = Modifier
-                            .alignByBaseline()
-                            .clickable(onClick = { onCurrencyClicked(uiState.transaction.currencyCode) }),
+                        modifier =
+                            Modifier
+                                .alignByBaseline()
+                                .clickable(onClick = { onCurrencyClicked(uiState.transaction.currencyCode) }),
                         text = uiState.transaction.currencyCode.getSymbolByCode(),
                         style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.primary,
-                        fontSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sign_big_text_size).value.sp
+                        fontSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sign_big_text_size).value.sp,
                     )
                     AutoSizeTextField(
                         modifier = Modifier.alignByBaseline(),
@@ -163,148 +171,180 @@ fun RegularTransactionCreationScreen(
                             saveBtnEnabled = !showError
                             onSumChanged(text)
                         },
-                        showError = { if (showError) ShowError() }
+                        showError = { if (showError) ShowError() },
                     )
                 }
                 Row(
-                    modifier = Modifier
-                        .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large))
-                        .clickable {
-                            onCategoryClicked(
-                                uiState.transaction.type,
-                                CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN
-                            )
-                        },
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier =
+                        Modifier
+                            .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large))
+                            .clickable {
+                                onCategoryClicked(
+                                    uiState.transaction.type,
+                                    CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN,
+                                )
+                            },
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     val tintColor: Color?
                     if (uiState.transaction.category != Category.EMPTY_EXPENSE) {
                         saveBtnEnabled = !showError
                         Icon(
-                            modifier = Modifier.size(dimensionResource(id = com.d9tilov.android.common.android.R.dimen.category_creation_icon_size)),
+                            modifier =
+                                Modifier.size(
+                                    dimensionResource(id = com.d9tilov.android.common.android.R.dimen.category_creation_icon_size),
+                                ),
                             imageVector = ImageVector.vectorResource(id = uiState.transaction.category.icon),
                             contentDescription = "Category",
-                            tint = Color(
-                                ContextCompat.getColor(
-                                    context,
-                                    uiState.transaction.category.color
-                                )
-                            )
+                            tint =
+                                Color(
+                                    ContextCompat.getColor(
+                                        context,
+                                        uiState.transaction.category.color,
+                                    ),
+                                ),
                         )
                         Text(
-                            modifier = Modifier.padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)),
+                            modifier =
+                                Modifier.padding(
+                                    horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
+                                ),
                             text = uiState.transaction.category.name,
-                            color = Color(
+                            color =
+                                Color(
+                                    ContextCompat.getColor(
+                                        context,
+                                        uiState.transaction.category.color,
+                                    ),
+                                ),
+                            style = MaterialTheme.typography.bodyLarge,
+                        )
+                        tintColor =
+                            Color(
                                 ContextCompat.getColor(
                                     context,
-                                    uiState.transaction.category.color
-                                )
-                            ),
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                        tintColor = Color(
-                            ContextCompat.getColor(
-                                context,
-                                uiState.transaction.category.color
+                                    uiState.transaction.category.color,
+                                ),
                             )
-                        )
                     } else {
                         Text(
-                            modifier = Modifier.padding(
-                                start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
-                                end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_extra_small),
-                            ),
+                            modifier =
+                                Modifier.padding(
+                                    start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
+                                    end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_extra_small),
+                                ),
                             text = stringResource(id = R.string.regular_transaction_choose_category),
                             color = MaterialTheme.colorScheme.primary,
-                            style = MaterialTheme.typography.bodyLarge
+                            style = MaterialTheme.typography.bodyLarge,
                         )
                         tintColor = MaterialTheme.colorScheme.primary
                         saveBtnEnabled = false
                     }
                     Icon(
-                        modifier = Modifier.size(dimensionResource(id = com.d9tilov.android.common.android.R.dimen.category_creation_icon_size)),
+                        modifier =
+                            Modifier.size(
+                                dimensionResource(id = com.d9tilov.android.common.android.R.dimen.category_creation_icon_size),
+                            ),
                         imageVector = MoneyManagerIcons.ArrowRight,
                         contentDescription = "Category",
                         tint = tintColor,
                     )
                 }
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(82.dp)
-                        .padding(
-                            horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                            vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)
-                        ),
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(82.dp)
+                            .padding(
+                                horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                                vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
+                            ),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
-                        modifier = Modifier.size(dimensionResource(id = com.d9tilov.android.common.android.R.dimen.category_creation_icon_size)),
+                        modifier =
+                            Modifier.size(
+                                dimensionResource(id = com.d9tilov.android.common.android.R.dimen.category_creation_icon_size),
+                            ),
                         imageVector = MoneyManagerIcons.Repeat,
                         contentDescription = "Repeat",
-                        tint = MaterialTheme.colorScheme.primary
+                        tint = MaterialTheme.colorScheme.primary,
                     )
                     Column(
-                        modifier = Modifier.padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small))
+                        modifier =
+                            Modifier.padding(
+                                horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
+                            ),
                     ) {
                         Row(
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
                                 text = stringResource(id = R.string.regular_transaction_repeat_title),
                                 color = MaterialTheme.colorScheme.primary,
-                                style = MaterialTheme.typography.bodyLarge
+                                style = MaterialTheme.typography.bodyLarge,
                             )
                             DropdownPeriodMenu(
-                                modifier = Modifier.padding(
-                                    horizontal = dimensionResource(
-                                        id = com.d9tilov.android.designsystem.R.dimen.padding_small
-                                    )
-                                ),
+                                modifier =
+                                    Modifier.padding(
+                                        horizontal =
+                                            dimensionResource(
+                                                id = com.d9tilov.android.designsystem.R.dimen.padding_small,
+                                            ),
+                                    ),
                                 selectedItem = uiState.curPeriodItem,
-                                onMenuItemClick = onCurPeriodItemUpdate::invoke
+                                onMenuItemClick = onCurPeriodItemUpdate::invoke,
                             )
                         }
                         when (uiState.curPeriodItem) {
                             PeriodMenuItem.DAY -> {}
-                            PeriodMenuItem.WEEK -> DaysOfWeek(uiState.curDayInWeek) {
-                                onWeekDayClicked(it)
-                            }
+                            PeriodMenuItem.WEEK ->
+                                DaysOfWeek(uiState.curDayInWeek) {
+                                    onWeekDayClicked(it)
+                                }
 
-                            PeriodMenuItem.MONTH -> Text(
-                                text = stringResource(
-                                    id = R.string.regular_transaction_repeat_every_month_on,
-                                    uiState.curDayOfMonth
-                                ),
-                                modifier = Modifier
-                                    .clickable { openDayOfMonthDialog = true }
-                                    .padding(vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)),
-                                color = MaterialTheme.colorScheme.secondary,
-                                style = MaterialTheme.typography.labelMedium
-                            )
+                            PeriodMenuItem.MONTH ->
+                                Text(
+                                    text =
+                                        stringResource(
+                                            id = R.string.regular_transaction_repeat_every_month_on,
+                                            uiState.curDayOfMonth,
+                                        ),
+                                    modifier =
+                                        Modifier
+                                            .clickable { openDayOfMonthDialog = true }
+                                            .padding(
+                                                vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
+                                            ),
+                                    color = MaterialTheme.colorScheme.secondary,
+                                    style = MaterialTheme.typography.labelMedium,
+                                )
                         }
                     }
                 }
                 DottedDivider(
-                    modifier = Modifier.padding(
-                        start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                        end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                        top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large)
-                    )
+                    modifier =
+                        Modifier.padding(
+                            start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                            end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                            top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                        ),
                 )
                 DescriptionTextField(
-                    modifier = Modifier.padding(
-                        horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                        vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)
-                    ),
+                    modifier =
+                        Modifier.padding(
+                            horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                            vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
+                        ),
                     value = uiState.transaction.description,
-                    onValueChange = onDescriptionChanged
+                    onValueChange = onDescriptionChanged,
                 )
             }
             BottomActionButton(
-                modifier = Modifier
-                    .navigationBarsPadding()
-                    .imePadding(),
+                modifier =
+                    Modifier
+                        .navigationBarsPadding()
+                        .imePadding(),
                 onClick = onSaveClicked,
                 enabled = saveBtnEnabled,
             )
@@ -315,7 +355,8 @@ fun RegularTransactionCreationScreen(
                     onDayClicked = {
                         onDayOfMonthClicked(it)
                         openDayOfMonthDialog = false
-                    })
+                    },
+                )
             }
         }
     }
@@ -332,48 +373,57 @@ fun DayInMonthDialog(
         onDismissRequest = { onDismiss() },
         content = {
             Column(
-                modifier = Modifier
-                    .height(342.dp)
-                    .width(260.dp)
-                    .clip(shape = RoundedCornerShape(20.dp))
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier =
+                    Modifier
+                        .height(342.dp)
+                        .width(260.dp)
+                        .clip(shape = RoundedCornerShape(20.dp))
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
                     text = stringResource(id = R.string.regular_transaction_repeat_day_of_month),
                     modifier = Modifier.padding(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)),
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.primary,
                 )
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(5),
                     horizontalArrangement = Arrangement.Start,
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.Center,
                 ) {
                     items(days, { it }) { item ->
                         Box(
-                            modifier = Modifier
-                                .size(36.dp)
-                                .padding(2.dp)
-                                .clip(CircleShape)
-                                .border(
-                                    1.dp,
-                                    MaterialTheme.colorScheme.secondary,
-                                    CircleShape
-                                )
-                                .clickable { onDayClicked(item) }
-                                .background(
-                                    color = if (item == selectedDay) MaterialTheme.colorScheme.secondary
-                                    else MaterialTheme.colorScheme.background,
-                                    shape = CircleShape
-                                ),
-                            contentAlignment = Alignment.Center
+                            modifier =
+                                Modifier
+                                    .size(36.dp)
+                                    .padding(2.dp)
+                                    .clip(CircleShape)
+                                    .border(
+                                        1.dp,
+                                        MaterialTheme.colorScheme.secondary,
+                                        CircleShape,
+                                    ).clickable { onDayClicked(item) }
+                                    .background(
+                                        color =
+                                            if (item == selectedDay) {
+                                                MaterialTheme.colorScheme.secondary
+                                            } else {
+                                                MaterialTheme.colorScheme.background
+                                            },
+                                        shape = CircleShape,
+                                    ),
+                            contentAlignment = Alignment.Center,
                         ) {
                             Text(
                                 text = item.toString(),
                                 fontSize = 12.sp,
-                                color = if (item == selectedDay) MaterialTheme.colorScheme.onSecondary
-                                else MaterialTheme.colorScheme.secondary,
+                                color =
+                                    if (item == selectedDay) {
+                                        MaterialTheme.colorScheme.onSecondary
+                                    } else {
+                                        MaterialTheme.colorScheme.secondary
+                                    },
                             )
                         }
                     }
@@ -393,54 +443,56 @@ fun DropdownPeriodMenu(
     var isExpanded by remember { mutableStateOf(false) }
     var curValue by remember { mutableStateOf(selectedItem) }
     Row(
-        modifier = modifier
-            .clickable { isExpanded = !isExpanded },
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            modifier
+                .clickable { isExpanded = !isExpanded },
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = when (curValue) {
-                PeriodMenuItem.DAY -> stringResource(id = R.string.regular_transaction_repeat_list_day)
-                PeriodMenuItem.WEEK -> stringResource(id = R.string.regular_transaction_repeat_list_week)
-                PeriodMenuItem.MONTH -> stringResource(id = R.string.regular_transaction_repeat_list_month)
-            },
+            text =
+                when (curValue) {
+                    PeriodMenuItem.DAY -> stringResource(id = R.string.regular_transaction_repeat_list_day)
+                    PeriodMenuItem.WEEK -> stringResource(id = R.string.regular_transaction_repeat_list_week)
+                    PeriodMenuItem.MONTH -> stringResource(id = R.string.regular_transaction_repeat_list_month)
+                },
             color = MaterialTheme.colorScheme.primary,
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge,
         )
         Icon(
             imageVector = MoneyManagerIcons.ArrowDropDown,
             contentDescription = "ArrowDropDown",
-            tint = MaterialTheme.colorScheme.primary
+            tint = MaterialTheme.colorScheme.primary,
         )
         DropdownMenu(
             modifier = Modifier.background(color = MaterialTheme.colorScheme.tertiaryContainer),
             expanded = isExpanded,
             onDismissRequest = {
                 isExpanded = false
-            }
+            },
         ) {
             items.forEach { item ->
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = when (item) {
-                                PeriodMenuItem.DAY -> stringResource(id = R.string.regular_transaction_repeat_list_day)
-                                PeriodMenuItem.WEEK -> stringResource(id = R.string.regular_transaction_repeat_list_week)
-                                PeriodMenuItem.MONTH -> stringResource(id = R.string.regular_transaction_repeat_list_month)
-                            },
+                            text =
+                                when (item) {
+                                    PeriodMenuItem.DAY -> stringResource(id = R.string.regular_transaction_repeat_list_day)
+                                    PeriodMenuItem.WEEK -> stringResource(id = R.string.regular_transaction_repeat_list_week)
+                                    PeriodMenuItem.MONTH -> stringResource(id = R.string.regular_transaction_repeat_list_month)
+                                },
                             color = MaterialTheme.colorScheme.onTertiaryContainer,
-                            style = MaterialTheme.typography.bodyLarge
+                            style = MaterialTheme.typography.bodyLarge,
                         )
                     },
                     onClick = {
                         curValue = item
                         onMenuItemClick(item)
                         isExpanded = false
-                    }
+                    },
                 )
             }
         }
     }
-
 }
 
 @Composable
@@ -452,29 +504,38 @@ fun DaysOfWeek(
     LazyHorizontalGrid(
         rows = GridCells.Fixed(1),
         horizontalArrangement = Arrangement.Start,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         items(daysOfWeek, { it.name }) { item ->
             Box(
-                modifier = Modifier
-                    .size(32.dp)
-                    .padding(2.dp)
-                    .aspectRatio(1f)
-                    .clip(CircleShape)
-                    .border(1.dp, MaterialTheme.colorScheme.secondary, CircleShape)
-                    .clickable { onDayClicked(item) }
-                    .background(
-                        color = if (item == selected) MaterialTheme.colorScheme.secondary
-                        else MaterialTheme.colorScheme.background,
-                        shape = CircleShape
-                    ),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .size(32.dp)
+                        .padding(2.dp)
+                        .aspectRatio(1f)
+                        .clip(CircleShape)
+                        .border(1.dp, MaterialTheme.colorScheme.secondary, CircleShape)
+                        .clickable { onDayClicked(item) }
+                        .background(
+                            color =
+                                if (item == selected) {
+                                    MaterialTheme.colorScheme.secondary
+                                } else {
+                                    MaterialTheme.colorScheme.background
+                                },
+                            shape = CircleShape,
+                        ),
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = stringResource(id = item.id),
                     fontSize = 12.sp,
-                    color = if (item == selected) MaterialTheme.colorScheme.onSecondary
-                    else MaterialTheme.colorScheme.secondary,
+                    color =
+                        if (item == selected) {
+                            MaterialTheme.colorScheme.onSecondary
+                        } else {
+                            MaterialTheme.colorScheme.secondary
+                        },
                 )
             }
         }
@@ -486,7 +547,7 @@ fun ShowError() {
     Text(
         text = stringResource(id = R.string.regular_transaction_invalid_amount),
         style = MaterialTheme.typography.bodySmall,
-        color = MaterialTheme.colorScheme.error
+        color = MaterialTheme.colorScheme.error,
     )
 }
 
@@ -503,6 +564,6 @@ fun DefaultRegularTransactionCreationPreview() {
         onCurPeriodItemUpdate = {},
         onWeekDayClicked = {},
         onDayOfMonthClicked = {},
-        onDescriptionChanged = {}
+        onDescriptionChanged = {},
     )
 }

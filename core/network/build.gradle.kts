@@ -1,20 +1,15 @@
-import java.io.FileInputStream
-import java.util.*
-
 plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
 }
 
-val keystorePropertiesFile = rootProject.file("keystore.properties")
-val keystoreProperties = Properties()
-keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+val apiKey: String = project.findProperty("currency_api_key") as String? ?: ""
 
 android {
     namespace = "com.d9tilov.android.network"
 
     defaultConfig {
-        buildConfigField("String", "API_KEY", keystoreProperties["currency_api_key"] as String)
+        buildConfigField("String", "CURRENCY_API_KEY", "\"$apiKey\"")
     }
 }
 

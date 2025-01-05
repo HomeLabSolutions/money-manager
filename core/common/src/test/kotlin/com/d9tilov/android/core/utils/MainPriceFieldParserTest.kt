@@ -6,7 +6,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class MainPriceFieldParserTest {
-
     @Test
     fun `do not remove zero`() {
         val res = MainPriceFieldParser.parse("0", KeyPress.Del)

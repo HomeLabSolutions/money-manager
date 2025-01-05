@@ -16,12 +16,11 @@ import kotlinx.coroutines.launch
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object TrackerDataModule {
-
     @Provides
     @ActivityRetainedScoped
     fun provideFirebaseTracker(
         coroutineScope: CoroutineScope,
-        preferencesStore: PreferencesStore
+        preferencesStore: PreferencesStore,
     ): FirebaseAnalytics {
         val tracker: FirebaseAnalytics = Firebase.analytics
         coroutineScope.launch { tracker.setUserId(preferencesStore.uid.firstOrNull()) }

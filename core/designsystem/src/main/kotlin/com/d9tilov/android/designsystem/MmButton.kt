@@ -46,15 +46,16 @@ fun FilledButton(
     small: Boolean = false,
     colors: ButtonColors = MoneyManagerButtonDefaults.filledButtonColors(),
     contentPadding: PaddingValues = MoneyManagerButtonDefaults.buttonContentPadding(small = small),
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
 ) {
     Button(
         onClick = onClick,
-        modifier = if (small) {
-            modifier.heightIn(min = MoneyManagerButtonDefaults.SmallButtonHeight)
-        } else {
-            modifier
-        },
+        modifier =
+            if (small) {
+                modifier.heightIn(min = MoneyManagerButtonDefaults.SmallButtonHeight)
+            } else {
+                modifier
+            },
         enabled = enabled,
         colors = colors,
         contentPadding = contentPadding,
@@ -62,7 +63,7 @@ fun FilledButton(
             ProvideTextStyle(value = MaterialTheme.typography.labelLarge) {
                 content()
             }
-        }
+        },
     )
 }
 
@@ -75,9 +76,10 @@ fun BottomActionButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier
-            .padding(dimensionResource(R.dimen.padding_medium))
-            .fillMaxWidth(),
+        modifier =
+            modifier
+                .padding(dimensionResource(R.dimen.padding_medium))
+                .fillMaxWidth(),
         enabled = enabled,
         colors = MoneyManagerButtonDefaults.filledButtonColors(),
         contentPadding = MoneyManagerButtonDefaults.buttonContentPadding(small = false),
@@ -85,7 +87,7 @@ fun BottomActionButton(
             ProvideTextStyle(value = MaterialTheme.typography.labelLarge) {
                 Text(text = text)
             }
-        }
+        },
     )
 }
 
@@ -112,7 +114,7 @@ fun FilledButton(
     colors: ButtonColors = MoneyManagerButtonDefaults.filledButtonColors(),
     text: @Composable () -> Unit,
     leadingIcon: @Composable (() -> Unit)? = null,
-    trailingIcon: @Composable (() -> Unit)? = null
+    trailingIcon: @Composable (() -> Unit)? = null,
 ) {
     FilledButton(
         onClick = onClick,
@@ -120,16 +122,17 @@ fun FilledButton(
         enabled = enabled,
         small = small,
         colors = colors,
-        contentPadding = MoneyManagerButtonDefaults.buttonContentPadding(
-            small = small,
-            leadingIcon = leadingIcon != null,
-            trailingIcon = trailingIcon != null
-        )
+        contentPadding =
+            MoneyManagerButtonDefaults.buttonContentPadding(
+                small = small,
+                leadingIcon = leadingIcon != null,
+                trailingIcon = trailingIcon != null,
+            ),
     ) {
         ButtonContent(
             text = text,
             leadingIcon = leadingIcon,
-            trailingIcon = trailingIcon
+            trailingIcon = trailingIcon,
         )
     }
 }
@@ -158,15 +161,16 @@ fun OutlinedButton(
     border: BorderStroke? = MoneyManagerButtonDefaults.outlinedButtonBorder(enabled = enabled),
     colors: ButtonColors = MoneyManagerButtonDefaults.outlinedButtonColors(),
     contentPadding: PaddingValues = MoneyManagerButtonDefaults.buttonContentPadding(small = small),
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
 ) {
     OutlinedButton(
         onClick = onClick,
-        modifier = if (small) {
-            modifier.heightIn(min = MoneyManagerButtonDefaults.SmallButtonHeight)
-        } else {
-            modifier
-        },
+        modifier =
+            if (small) {
+                modifier.heightIn(min = MoneyManagerButtonDefaults.SmallButtonHeight)
+            } else {
+                modifier
+            },
         enabled = enabled,
         border = border,
         colors = colors,
@@ -175,7 +179,7 @@ fun OutlinedButton(
             ProvideTextStyle(value = MaterialTheme.typography.labelSmall) {
                 content()
             }
-        }
+        },
     )
 }
 
@@ -204,7 +208,7 @@ fun OutlinedButton(
     colors: ButtonColors = MoneyManagerButtonDefaults.outlinedButtonColors(),
     text: @Composable () -> Unit,
     leadingIcon: @Composable (() -> Unit)? = null,
-    trailingIcon: @Composable (() -> Unit)? = null
+    trailingIcon: @Composable (() -> Unit)? = null,
 ) {
     OutlinedButton(
         onClick = onClick,
@@ -213,16 +217,17 @@ fun OutlinedButton(
         small = small,
         border = border,
         colors = colors,
-        contentPadding = MoneyManagerButtonDefaults.buttonContentPadding(
-            small = small,
-            leadingIcon = leadingIcon != null,
-            trailingIcon = trailingIcon != null
-        )
+        contentPadding =
+            MoneyManagerButtonDefaults.buttonContentPadding(
+                small = small,
+                leadingIcon = leadingIcon != null,
+                trailingIcon = trailingIcon != null,
+            ),
     ) {
         ButtonContent(
             text = text,
             leadingIcon = leadingIcon,
-            trailingIcon = trailingIcon
+            trailingIcon = trailingIcon,
         )
     }
 }
@@ -249,15 +254,16 @@ fun TextButton(
     small: Boolean = false,
     colors: ButtonColors = MoneyManagerButtonDefaults.textButtonColors(),
     contentPadding: PaddingValues = MoneyManagerButtonDefaults.buttonContentPadding(small = small),
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
 ) {
     TextButton(
         onClick = onClick,
-        modifier = if (small) {
-            modifier.heightIn(min = MoneyManagerButtonDefaults.SmallButtonHeight)
-        } else {
-            modifier
-        },
+        modifier =
+            if (small) {
+                modifier.heightIn(min = MoneyManagerButtonDefaults.SmallButtonHeight)
+            } else {
+                modifier
+            },
         enabled = enabled,
         colors = colors,
         contentPadding = contentPadding,
@@ -265,7 +271,7 @@ fun TextButton(
             ProvideTextStyle(value = MaterialTheme.typography.labelSmall) {
                 content()
             }
-        }
+        },
     )
 }
 
@@ -292,7 +298,7 @@ fun TextButton(
     colors: ButtonColors = MoneyManagerButtonDefaults.textButtonColors(),
     text: @Composable () -> Unit,
     leadingIcon: @Composable (() -> Unit)? = null,
-    trailingIcon: @Composable (() -> Unit)? = null
+    trailingIcon: @Composable (() -> Unit)? = null,
 ) {
     TextButton(
         onClick = onClick,
@@ -300,16 +306,17 @@ fun TextButton(
         enabled = enabled,
         small = small,
         colors = colors,
-        contentPadding = MoneyManagerButtonDefaults.buttonContentPadding(
-            small = small,
-            leadingIcon = leadingIcon != null,
-            trailingIcon = trailingIcon != null
-        )
+        contentPadding =
+            MoneyManagerButtonDefaults.buttonContentPadding(
+                small = small,
+                leadingIcon = leadingIcon != null,
+                trailingIcon = trailingIcon != null,
+            ),
     ) {
         ButtonContent(
             text = text,
             leadingIcon = leadingIcon,
-            trailingIcon = trailingIcon
+            trailingIcon = trailingIcon,
         )
     }
 }
@@ -326,7 +333,7 @@ fun TextButton(
 private fun RowScope.ButtonContent(
     text: @Composable () -> Unit,
     leadingIcon: @Composable (() -> Unit)?,
-    trailingIcon: @Composable (() -> Unit)?
+    trailingIcon: @Composable (() -> Unit)?,
 ) {
     if (leadingIcon != null) {
         Box(Modifier.sizeIn(maxHeight = MoneyManagerButtonDefaults.ButtonIconSize)) {
@@ -336,17 +343,19 @@ private fun RowScope.ButtonContent(
     Box(
         Modifier
             .padding(
-                start = if (leadingIcon != null) {
-                    MoneyManagerButtonDefaults.ButtonContentSpacing
-                } else {
-                    0.dp
-                },
-                end = if (trailingIcon != null) {
-                    MoneyManagerButtonDefaults.ButtonContentSpacing
-                } else {
-                    0.dp
-                }
-            )
+                start =
+                    if (leadingIcon != null) {
+                        MoneyManagerButtonDefaults.ButtonContentSpacing
+                    } else {
+                        0.dp
+                    },
+                end =
+                    if (trailingIcon != null) {
+                        MoneyManagerButtonDefaults.ButtonContentSpacing
+                    } else {
+                        0.dp
+                    },
+            ),
     ) {
         text()
     }
@@ -361,55 +370,59 @@ private fun RowScope.ButtonContent(
  * Money Manager button default values.
  */
 object MoneyManagerButtonDefaults {
+    private const val DISABLE_BUTTON_CONTAINER_ALPHA = 0.12f
+    private const val DISABLE_BUTTON_CONTENT_ALPHA = 0.38f
+    private val ButtonHorizontalPadding = 24.dp
+    private val ButtonHorizontalIconPadding = 16.dp
+    private val ButtonVerticalPadding = 8.dp
+    private val SmallButtonHorizontalPadding = 16.dp
+    private val SmallButtonHorizontalIconPadding = 12.dp
+    private val SmallButtonVerticalPadding = 7.dp
     val SmallButtonHeight = 32.dp
-    const val DisabledButtonContainerAlpha = 0.12f
-    const val DisabledButtonContentAlpha = 0.38f
-    val ButtonHorizontalPadding = 24.dp
-    val ButtonHorizontalIconPadding = 16.dp
-    val ButtonVerticalPadding = 8.dp
-    val SmallButtonHorizontalPadding = 16.dp
-    val SmallButtonHorizontalIconPadding = 12.dp
-    val SmallButtonVerticalPadding = 7.dp
     val ButtonContentSpacing = 8.dp
     val ButtonIconSize = 18.dp
+
     fun buttonContentPadding(
         small: Boolean,
         leadingIcon: Boolean = false,
-        trailingIcon: Boolean = false
-    ): PaddingValues {
-        return PaddingValues(
-            start = when {
-                small && leadingIcon -> SmallButtonHorizontalIconPadding
-                small -> SmallButtonHorizontalPadding
-                leadingIcon -> ButtonHorizontalIconPadding
-                else -> ButtonHorizontalPadding
-            },
+        trailingIcon: Boolean = false,
+    ): PaddingValues =
+        PaddingValues(
+            start =
+                when {
+                    small && leadingIcon -> SmallButtonHorizontalIconPadding
+                    small -> SmallButtonHorizontalPadding
+                    leadingIcon -> ButtonHorizontalIconPadding
+                    else -> ButtonHorizontalPadding
+                },
             top = if (small) SmallButtonVerticalPadding else ButtonVerticalPadding,
-            end = when {
-                small && trailingIcon -> SmallButtonHorizontalIconPadding
-                small -> SmallButtonHorizontalPadding
-                trailingIcon -> ButtonHorizontalIconPadding
-                else -> ButtonHorizontalPadding
-            },
-            bottom = if (small) SmallButtonVerticalPadding else ButtonVerticalPadding
+            end =
+                when {
+                    small && trailingIcon -> SmallButtonHorizontalIconPadding
+                    small -> SmallButtonHorizontalPadding
+                    trailingIcon -> ButtonHorizontalIconPadding
+                    else -> ButtonHorizontalPadding
+                },
+            bottom = if (small) SmallButtonVerticalPadding else ButtonVerticalPadding,
         )
-    }
 
     @Composable
     fun filledButtonColors(
         containerColor: Color = MaterialTheme.colorScheme.primary,
         contentColor: Color = MaterialTheme.colorScheme.onPrimary,
-        disabledContainerColor: Color = MaterialTheme.colorScheme.onBackground.copy(
-            alpha = DisabledButtonContainerAlpha
-        ),
-        disabledContentColor: Color = MaterialTheme.colorScheme.onBackground.copy(
-            alpha = DisabledButtonContentAlpha
-        )
+        disabledContainerColor: Color =
+            MaterialTheme.colorScheme.onBackground.copy(
+                alpha = DISABLE_BUTTON_CONTAINER_ALPHA,
+            ),
+        disabledContentColor: Color =
+            MaterialTheme.colorScheme.onBackground.copy(
+                alpha = DISABLE_BUTTON_CONTENT_ALPHA,
+            ),
     ) = ButtonDefaults.buttonColors(
         containerColor = containerColor,
         contentColor = contentColor,
         disabledContainerColor = disabledContainerColor,
-        disabledContentColor = disabledContentColor
+        disabledContentColor = disabledContentColor,
     )
 
     @Composable
@@ -417,27 +430,30 @@ object MoneyManagerButtonDefaults {
         enabled: Boolean,
         width: Dp = 1.dp,
         color: Color = MaterialTheme.colorScheme.onBackground,
-        disabledColor: Color = MaterialTheme.colorScheme.onBackground.copy(
-            alpha = DisabledButtonContainerAlpha
+        disabledColor: Color =
+            MaterialTheme.colorScheme.onBackground.copy(
+                alpha = DISABLE_BUTTON_CONTAINER_ALPHA,
+            ),
+    ): BorderStroke =
+        BorderStroke(
+            width = width,
+            color = if (enabled) color else disabledColor,
         )
-    ): BorderStroke = BorderStroke(
-        width = width,
-        color = if (enabled) color else disabledColor
-    )
 
     @Composable
     fun outlinedButtonColors(
         containerColor: Color = Color.Transparent,
         contentColor: Color = MaterialTheme.colorScheme.onBackground,
         disabledContainerColor: Color = Color.Transparent,
-        disabledContentColor: Color = MaterialTheme.colorScheme.onBackground.copy(
-            alpha = DisabledButtonContentAlpha
-        )
+        disabledContentColor: Color =
+            MaterialTheme.colorScheme.onBackground.copy(
+                alpha = DISABLE_BUTTON_CONTENT_ALPHA,
+            ),
     ) = ButtonDefaults.outlinedButtonColors(
         containerColor = containerColor,
         contentColor = contentColor,
         disabledContainerColor = disabledContainerColor,
-        disabledContentColor = disabledContentColor
+        disabledContentColor = disabledContentColor,
     )
 
     @Composable
@@ -445,13 +461,14 @@ object MoneyManagerButtonDefaults {
         containerColor: Color = Color.Transparent,
         contentColor: Color = MaterialTheme.colorScheme.onBackground,
         disabledContainerColor: Color = Color.Transparent,
-        disabledContentColor: Color = MaterialTheme.colorScheme.onBackground.copy(
-            alpha = DisabledButtonContentAlpha
-        )
+        disabledContentColor: Color =
+            MaterialTheme.colorScheme.onBackground.copy(
+                alpha = DISABLE_BUTTON_CONTENT_ALPHA,
+            ),
     ) = ButtonDefaults.textButtonColors(
         containerColor = containerColor,
         contentColor = contentColor,
         disabledContainerColor = disabledContainerColor,
-        disabledContentColor = disabledContentColor
+        disabledContentColor = disabledContentColor,
     )
 }

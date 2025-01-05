@@ -1,7 +1,8 @@
 package com.d9tilov.android.core.model
 
-sealed class PeriodType(open val name: String) {
-
+sealed class PeriodType(
+    open val name: String,
+) {
     companion object {
         const val MONTH_NAME = "every_month"
         const val WEEK_NAME = "every_week"

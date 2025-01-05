@@ -6,13 +6,13 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 
 abstract class ModuleChangeDetectorTask : DefaultTask() {
-
     @TaskAction
     fun action() {
         try {
-            val process = ProcessBuilder("git", "diff", "--name-only", "develop")
-                .redirectErrorStream(true)
-                .start()
+            val process =
+                ProcessBuilder("git", "diff", "--name-only", "develop")
+                    .redirectErrorStream(true)
+                    .start()
 
             val output = BufferedReader(InputStreamReader(process.inputStream)).use { it.readText() }
             val exitCode = process.waitFor()
@@ -29,4 +29,3 @@ abstract class ModuleChangeDetectorTask : DefaultTask() {
         }
     }
 }
-

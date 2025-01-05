@@ -21,25 +21,26 @@ import kotlinx.coroutines.withContext
 class BudgetLocalSource(
     @Dispatcher(MoneyManagerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
     private val preferencesStore: PreferencesStore,
-    private val budgetDao: BudgetDao
+    private val budgetDao: BudgetDao,
 ) : BudgetSource {
-
-    override suspend fun createIfNeeded(currencyCode: String) = withContext(dispatcher) {
-        val currentUserId = preferencesStore.uid.firstOrNull()
-        if (currentUserId == null) {
-            throw WrongUidException()
-        } else {
-            val budget = budgetDao.get(currentUserId).firstOrNull()
-            if (budget == null) {
-                budgetDao.insert(
-                    BudgetData.EMPTY.copy(
-                        clientId = currentUserId,
-                        currencyCode = currencyCode
-                    ).toDbModel()
-                )
+    override suspend fun createIfNeeded(currencyCode: String) =
+        withContext(dispatcher) {
+            val currentUserId = preferencesStore.uid.firstOrNull()
+            if (currentUserId == null) {
+                throw WrongUidException()
+            } else {
+                val budget = budgetDao.get(currentUserId).firstOrNull()
+                if (budget == null) {
+                    budgetDao.insert(
+                        BudgetData.EMPTY
+                            .copy(
+                                clientId = currentUserId,
+                                currencyCode = currencyCode,
+                            ).toDbModel(),
+                    )
+                }
             }
         }
-    }
 
     override fun get(): Flow<BudgetData> =
         preferencesStore.uid
@@ -47,21 +48,23 @@ class BudgetLocalSource(
             .flatMapMerge { uid -> budgetDao.get(uid).filterNotNull().map { it.toDataModel() } }
             .flowOn(dispatcher)
 
-    override suspend fun update(budgetData: BudgetData) = withContext(dispatcher) {
-        val currentUserId = preferencesStore.uid.firstOrNull()
-        if (currentUserId == null) {
-            throw WrongUidException()
-        } else {
-            budgetDao.update(budgetData.toDbModel().copy(clientId = currentUserId))
+    override suspend fun update(budgetData: BudgetData) =
+        withContext(dispatcher) {
+            val currentUserId = preferencesStore.uid.firstOrNull()
+            if (currentUserId == null) {
+                throw WrongUidException()
+            } else {
+                budgetDao.update(budgetData.toDbModel().copy(clientId = currentUserId))
+            }
         }
-    }
 
-    override suspend fun delete(budgetData: BudgetData) = withContext(dispatcher) {
-        val currentUserId = preferencesStore.uid.firstOrNull()
-        if (currentUserId == null) {
-            throw WrongUidException()
-        } else {
-            budgetDao.delete(budgetData.toDbModel())
+    override suspend fun delete(budgetData: BudgetData) =
+        withContext(dispatcher) {
+            val currentUserId = preferencesStore.uid.firstOrNull()
+            if (currentUserId == null) {
+                throw WrongUidException()
+            } else {
+                budgetDao.delete(budgetData.toDbModel())
+            }
         }
-    }
 }

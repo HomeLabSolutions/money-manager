@@ -10,6 +10,7 @@ buildscript {
 
 dependencies {
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
+    implementation(libs.detekt)
     implementation(libs.android.gradle.plugin)
     implementation(libs.kotlin.gradle.plugin)
     implementation(libs.ksp.gradle.plugin)

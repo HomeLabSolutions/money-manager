@@ -10,7 +10,7 @@ fun BudgetDbModel.toDataModel(): BudgetData =
         currency,
         sum,
         saveSum,
-        createdDate
+        createdDate,
     )
 
 fun BudgetData.toDbModel(): BudgetDbModel =
@@ -20,5 +20,5 @@ fun BudgetData.toDbModel(): BudgetDbModel =
         currencyCode,
         sum,
         saveSum,
-        createdDate
+        createdDate,
     )

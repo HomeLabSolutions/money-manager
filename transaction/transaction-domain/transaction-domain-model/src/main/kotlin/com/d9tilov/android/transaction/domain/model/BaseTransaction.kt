@@ -3,7 +3,6 @@ package com.d9tilov.android.transaction.domain.model
 import kotlinx.datetime.LocalDateTime
 
 interface BaseTransaction {
-
     val itemType: Int
     val date: LocalDateTime
 

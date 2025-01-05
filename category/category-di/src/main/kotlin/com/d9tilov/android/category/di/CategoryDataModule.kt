@@ -15,7 +15,6 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 interface CategoryDataModule {
-
     @Binds
     @ActivityRetainedScoped
     fun provideDefaultCategoriesManager(defaultCategoriesManager: DefaultCategoriesManagerImpl): DefaultCategoriesManager

@@ -22,26 +22,27 @@ data class RegularTransaction(
     val executionPeriod: ExecutionPeriod,
     val description: String,
     val pushEnabled: Boolean,
-    val autoAdd: Boolean
+    val autoAdd: Boolean,
 ) {
-
     companion object {
-        val EMPTY = RegularTransaction(
-            id = DEFAULT_DATA_ID,
-            clientId = DataConstants.NO_ID.toString(),
-            currencyCode = DEFAULT_CURRENCY_CODE,
-            type = TransactionType.EXPENSE,
-            sum = BigDecimal.ZERO,
-            category = Category.EMPTY_EXPENSE,
-            createdDate = currentDateTime(),
-            executionPeriod = ExecutionPeriod.EveryMonth(
-                currentDate().dayOfMonth,
-                currentDateTime()
-            ),
-            description = "",
-            pushEnabled = true,
-            autoAdd = true
-        )
+        val EMPTY =
+            RegularTransaction(
+                id = DEFAULT_DATA_ID,
+                clientId = DataConstants.NO_ID.toString(),
+                currencyCode = DEFAULT_CURRENCY_CODE,
+                type = TransactionType.EXPENSE,
+                sum = BigDecimal.ZERO,
+                category = Category.EMPTY_EXPENSE,
+                createdDate = currentDateTime(),
+                executionPeriod =
+                    ExecutionPeriod.EveryMonth(
+                        currentDate().dayOfMonth,
+                        currentDateTime(),
+                    ),
+                description = "",
+                pushEnabled = true,
+                autoAdd = true,
+            )
     }
 
     fun isValid(): Boolean = id != DEFAULT_DATA_ID

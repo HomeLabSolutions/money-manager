@@ -17,12 +17,11 @@ import kotlinx.coroutines.CoroutineDispatcher
 @Module
 @InstallIn(SingletonComponent::class)
 object UserDataModule {
-
     @Provides
     fun provideUserSource(
         @Dispatcher(MoneyManagerDispatchers.IO) dispatcher: CoroutineDispatcher,
         appDatabase: AppDatabase,
-        preferencesStore: PreferencesStore
+        preferencesStore: PreferencesStore,
     ): UserSource = UserLocalSource(dispatcher, preferencesStore, appDatabase.userDao())
 
     @Provides

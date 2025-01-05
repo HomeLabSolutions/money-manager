@@ -6,12 +6,17 @@ import com.d9tilov.android.regular.transaction.domain.model.RegularTransaction
 import kotlinx.coroutines.flow.Flow
 
 interface RegularTransactionInteractor {
-
     fun createDefault(): Flow<RegularTransaction>
+
     fun getAll(type: TransactionType): Flow<List<RegularTransaction>>
+
     suspend fun removeAllByCategory(category: Category)
+
     suspend fun getById(id: Long): RegularTransaction
+
     suspend fun insert(regularTransactionData: RegularTransaction)
+
     suspend fun update(regularTransactionData: RegularTransaction)
+
     suspend fun delete(regularTransactionData: RegularTransaction)
 }

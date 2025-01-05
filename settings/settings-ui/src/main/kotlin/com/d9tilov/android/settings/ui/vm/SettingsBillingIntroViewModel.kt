@@ -21,42 +21,48 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsBillingIntroViewModel @Inject constructor(private val billingInteractor: BillingInteractor) :
-    BaseViewModel<SettingsBillingNavigator>() {
+class SettingsBillingIntroViewModel
+    @Inject
+    constructor(
+        private val billingInteractor: BillingInteractor,
+    ) : BaseViewModel<SettingsBillingNavigator>() {
+        private var currentPurchases: List<Purchase> = listOf()
+        private var productDetails: ProductDetails? = null
 
-    private var currentPurchases: List<Purchase> = listOf()
-    private var productDetails: ProductDetails? = null
-
-    private val skuExceptionHandler = CoroutineExceptionHandler { _, _ ->
-        Timber.tag(TAG).d("Unable to get sku")
-    }
-
-    init {
-        viewModelScope.launch {
-            launch {
-                billingInteractor.currentPurchases
-                    .flowOn(Dispatchers.IO)
-                    .collect { currentPurchases = it }
+        private val skuExceptionHandler =
+            CoroutineExceptionHandler { _, _ ->
+                Timber.tag(TAG).d("Unable to get sku")
             }
-            launch {
-                billingInteractor.productDetails
-                    .flowOn(Dispatchers.IO)
-                    .collect { productDetails = it }
+
+        init {
+            viewModelScope.launch {
+                launch {
+                    billingInteractor.currentPurchases
+                        .flowOn(Dispatchers.IO)
+                        .collect { currentPurchases = it }
+                }
+                launch {
+                    billingInteractor.productDetails
+                        .flowOn(Dispatchers.IO)
+                        .collect { productDetails = it }
+                }
             }
         }
-    }
 
-    val skuDetails = billingInteractor.getSkuDetails()
-        .flowOn(Dispatchers.IO + skuExceptionHandler)
-        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
-    val purchaseCompleted = billingInteractor.isNewPurchaseAcknowledged
-        .flowOn(Dispatchers.IO)
-        .stateIn(viewModelScope, SharingStarted.Lazily, false)
+        val skuDetails =
+            billingInteractor
+                .getSkuDetails()
+                .flowOn(Dispatchers.IO + skuExceptionHandler)
+                .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+        val purchaseCompleted =
+            billingInteractor.isNewPurchaseAcknowledged
+                .flowOn(Dispatchers.IO)
+                .stateIn(viewModelScope, SharingStarted.Lazily, false)
 
-    fun buySubscription(
-        tag: String,
-        result: (billingClient: BillingClient, paramBuilder: BillingFlowParams) -> BillingResult
-    ) {
-        billingInteractor.buySku(tag, productDetails, currentPurchases, result)
+        fun buySubscription(
+            tag: String,
+            result: (billingClient: BillingClient, paramBuilder: BillingFlowParams) -> BillingResult,
+        ) {
+            billingInteractor.buySku(tag, productDetails, currentPurchases, result)
+        }
     }
-}

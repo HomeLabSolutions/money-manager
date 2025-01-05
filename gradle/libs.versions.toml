@@ -78,7 +78,7 @@ coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 core = { group = "androidx.core", name = "core", version.ref = "core" }
 dagger = { group = "com.google.dagger", name = "dagger", version.ref = "hiltPlugin" }
 datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
-detekt-gradle-plugin = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detektPlugin" }
+detekt = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detektPlugin" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 firebase-config = { group = "com.google.firebase", name = "firebase-config", version.ref = "firebaseConfig" }

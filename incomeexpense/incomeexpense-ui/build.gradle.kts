@@ -2,8 +2,6 @@ plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
     id("moneymanager.android.library.compose")
-    
-    
 }
 
 android {
@@ -14,9 +12,8 @@ android {
     }
 }
 
-
 dependencies {
-    
+
     implementation(project(":billing:billing-domain:billing-domain-contract"))
     implementation(project(":category:category-domain:category-domain-contract"))
     implementation(project(":category:category-domain:category-domain-model"))

@@ -17,11 +17,12 @@ import kotlinx.coroutines.flow.map
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
     DATA_STORE_NAME,
-    produceMigrations = { context -> listOf(SharedPreferencesMigration(context, STORE_NAME)) }
+    produceMigrations = { context -> listOf(SharedPreferencesMigration(context, STORE_NAME)) },
 )
 
-class PreferencesStore(context: Context) {
-
+class PreferencesStore(
+    context: Context,
+) {
     private val dataStore: DataStore<Preferences> = context.dataStore
 
     val uid: Flow<String?> = dataStore.data.map { data -> data[PREFERENCE_CLIENT_UID_KEY] }

@@ -16,9 +16,9 @@ import java.math.BigDecimal
             entity = UserDbModel::class,
             parentColumns = ["uid"],
             childColumns = ["clientId"],
-            onDelete = ForeignKey.CASCADE
-        )
-    ]
+            onDelete = ForeignKey.CASCADE,
+        ),
+    ],
 )
 data class RegularTransactionDbModel(
     @PrimaryKey(autoGenerate = true)
@@ -33,5 +33,5 @@ data class RegularTransactionDbModel(
     @ColumnInfo(name = "executionPeriod") val executionPeriod: ExecutionPeriod,
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "pushEnable") val pushEnable: Boolean,
-    @ColumnInfo(name = "autoAdd") val autoAdd: Boolean
+    @ColumnInfo(name = "autoAdd") val autoAdd: Boolean,
 )

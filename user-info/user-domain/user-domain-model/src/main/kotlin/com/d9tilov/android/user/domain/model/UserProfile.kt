@@ -9,17 +9,18 @@ data class UserProfile(
     val firstName: String?,
     val lastName: String?,
     val showPrepopulate: Boolean,
-    val fiscalDay: Int
+    val fiscalDay: Int,
 ) {
     companion object {
-        val EMPTY = UserProfile(
-            uid = DataConstants.DEFAULT_DATA_ID.toString(),
-            displayedName = "",
-            photoUrl = null,
-            firstName = "",
-            lastName = "",
-            showPrepopulate = true,
-            fiscalDay = 1
-        )
+        val EMPTY =
+            UserProfile(
+                uid = DataConstants.DEFAULT_DATA_ID.toString(),
+                displayedName = "",
+                photoUrl = null,
+                firstName = "",
+                lastName = "",
+                showPrepopulate = true,
+                fiscalDay = 1,
+            )
     }
 }

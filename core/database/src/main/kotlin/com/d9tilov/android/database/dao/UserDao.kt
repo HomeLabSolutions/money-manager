@@ -1,15 +1,14 @@
 package com.d9tilov.android.database.dao
 
 import androidx.room.Dao
-import androidx.room.Upsert
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import com.d9tilov.android.database.entity.UserDbModel
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
-
     @Query("SELECT * FROM Users WHERE uid = :id")
     fun getById(id: String): Flow<UserDbModel?>
 

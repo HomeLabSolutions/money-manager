@@ -33,25 +33,31 @@ import com.d9tilov.android.database.entity.UserDbModel
         CurrencyDbModel::class,
         MainCurrencyDbModel::class,
         RegularTransactionDbModel::class,
-        GoalDbModel::class
+        GoalDbModel::class,
     ],
     version = VERSION_NUMBER,
-    exportSchema = true
+    exportSchema = true,
 )
 @TypeConverters(
     CurrencyConverter::class,
     DateConverter::class,
-    ModelTypeConverter::class
+    ModelTypeConverter::class,
 )
 abstract class AppDatabase : RoomDatabase() {
-
     abstract fun userDao(): UserDao
+
     abstract fun categoryDao(): CategoryDao
+
     abstract fun transactionDao(): TransactionDao
+
     abstract fun budgetDao(): BudgetDao
+
     abstract fun currencyDao(): CurrencyListDao
+
     abstract fun mainCurrencyDao(): MainCurrencyDao
+
     abstract fun regularTransactionDao(): RegularTransactionDao
+
     abstract fun goalDao(): GoalDao
 
     companion object {

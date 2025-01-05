@@ -42,5 +42,4 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             }
         }
     }
-
 }

@@ -12,5 +12,5 @@ data class CurrencyDbModel(
     val id: String,
     @ColumnInfo(name = "symbol") val symbol: String,
     @ColumnInfo(name = "value") val value: BigDecimal,
-    @ColumnInfo(name = "lastUpdateTime") val lastUpdateTime: Long
+    @ColumnInfo(name = "lastUpdateTime") val lastUpdateTime: Long,
 )

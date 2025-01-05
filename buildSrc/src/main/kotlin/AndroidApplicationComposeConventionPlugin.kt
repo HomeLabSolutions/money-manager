@@ -15,7 +15,6 @@
  */
 
 import com.android.build.api.dsl.ApplicationExtension
-import com.android.moneymanager.extensions.buildLibs
 import com.android.moneymanager.extensions.configureAndroidCompose
 import org.gradle.api.Plugin
 import org.gradle.api.Project

@@ -4,10 +4,12 @@ import javax.inject.Qualifier
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-annotation class Dispatcher(val moneyManagerDispatcher: MoneyManagerDispatchers)
+annotation class Dispatcher(
+    val moneyManagerDispatcher: MoneyManagerDispatchers,
+)
 
 enum class MoneyManagerDispatchers {
     Default,
     IO,
-    Main
+    Main,
 }

@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
 class CategorySharedViewModel : ViewModel() {
-
     private val _categoryIconId = MutableStateFlow(NO_RES_ID)
     val categoryIconId: StateFlow<Int> = _categoryIconId
 

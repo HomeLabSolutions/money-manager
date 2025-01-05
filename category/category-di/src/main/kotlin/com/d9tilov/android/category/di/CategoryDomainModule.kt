@@ -12,9 +12,7 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object CategoryDomainModule {
-
     @Provides
     @ActivityRetainedScoped
-    fun provideCategoryInteractor(categoryRepo: CategoryRepo): CategoryInteractor =
-        CategoryInteractorImpl(categoryRepo)
+    fun provideCategoryInteractor(categoryRepo: CategoryRepo): CategoryInteractor = CategoryInteractorImpl(categoryRepo)
 }

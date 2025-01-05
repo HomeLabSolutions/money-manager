@@ -1,7 +1,6 @@
 plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.library.compose")
-    
 }
 
 android {

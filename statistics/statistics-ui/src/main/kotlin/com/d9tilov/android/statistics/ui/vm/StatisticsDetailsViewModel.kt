@@ -19,33 +19,36 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class StatisticsDetailsViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
-    private val transactionInteractor: TransactionInteractor,
-    private val categoryInteractor: CategoryInteractor
-) : BaseViewModel<StatisticsDetailsNavigator>() {
+class StatisticsDetailsViewModel
+    @Inject
+    constructor(
+        savedStateHandle: SavedStateHandle,
+        private val transactionInteractor: TransactionInteractor,
+        private val categoryInteractor: CategoryInteractor,
+    ) : BaseViewModel<StatisticsDetailsNavigator>() {
+        private val categoryId: Long = checkNotNull(savedStateHandle["category_id"])
+        private val transactionType: TransactionType =
+            checkNotNull(savedStateHandle["transaction_type"])
+        private val startPeriod: Long = checkNotNull(savedStateHandle["start_period"])
+        private val endPeriod: Long = checkNotNull(savedStateHandle["end_period"])
+        private val inStatistics: Boolean = checkNotNull(savedStateHandle["in_statistics"])
+        private val _category = MutableStateFlow(Category.EMPTY_INCOME)
+        private val _transactions = MutableStateFlow<List<Transaction>>(emptyList())
+        val category: StateFlow<Category> = _category
+        val transactions: StateFlow<List<Transaction>> = _transactions
 
-    private val categoryId: Long = checkNotNull(savedStateHandle["category_id"])
-    private val transactionType: TransactionType =
-        checkNotNull(savedStateHandle["transaction_type"])
-    private val startPeriod: Long = checkNotNull(savedStateHandle["start_period"])
-    private val endPeriod: Long = checkNotNull(savedStateHandle["end_period"])
-    private val inStatistics: Boolean = checkNotNull(savedStateHandle["in_statistics"])
-    private val _category = MutableStateFlow(Category.EMPTY_INCOME)
-    private val _transactions = MutableStateFlow<List<Transaction>>(emptyList())
-    val category: StateFlow<Category> = _category
-    val transactions: StateFlow<List<Transaction>> = _transactions
-
-    init {
-        viewModelScope.launch {
-            _category.value = categoryInteractor.getCategoryById(categoryId)
-            _transactions.value = transactionInteractor.getTransactionsByCategory(
-                transactionType,
-                _category.value,
-                startPeriod.toLocalDateTime().getStartOfDay(),
-                endPeriod.toLocalDateTime().getEndOfDay(),
-                inStatistics
-            ).sortedByDescending { item -> item.date }
+        init {
+            viewModelScope.launch {
+                _category.value = categoryInteractor.getCategoryById(categoryId)
+                _transactions.value =
+                    transactionInteractor
+                        .getTransactionsByCategory(
+                            transactionType,
+                            _category.value,
+                            startPeriod.toLocalDateTime().getStartOfDay(),
+                            endPeriod.toLocalDateTime().getEndOfDay(),
+                            inStatistics,
+                        ).sortedByDescending { item -> item.date }
+            }
         }
     }
-}

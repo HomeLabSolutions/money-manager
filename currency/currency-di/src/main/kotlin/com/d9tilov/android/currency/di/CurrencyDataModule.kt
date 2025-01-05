@@ -19,18 +19,18 @@ import retrofit2.Retrofit
 @Module
 @InstallIn(SingletonComponent::class)
 object CurrencyDataModule {
-
     @Provides
     fun provideCurrencySource(
         @Dispatcher(MoneyManagerDispatchers.IO) dispatcher: CoroutineDispatcher,
         appDatabase: AppDatabase,
-        preferencesStore: PreferencesStore
-    ): CurrencySource = CurrencyLocalSource(
-        dispatcher,
-        preferencesStore,
-        appDatabase.currencyDao(),
-        appDatabase.mainCurrencyDao()
-    )
+        preferencesStore: PreferencesStore,
+    ): CurrencySource =
+        CurrencyLocalSource(
+            dispatcher,
+            preferencesStore,
+            appDatabase.currencyDao(),
+            appDatabase.mainCurrencyDao(),
+        )
 
     @Provides
     fun provideCurrencyApi(retrofit: Retrofit): CurrencyApi = retrofit.create(CurrencyApi::class.java)
@@ -39,11 +39,11 @@ object CurrencyDataModule {
     fun provideCurrencyRepo(
         currencySource: CurrencySource,
         currencyApi: CurrencyApi,
-        preferencesStore: PreferencesStore
+        preferencesStore: PreferencesStore,
     ): CurrencyRepo =
         CurrencyDataRepo(
             currencySource,
             currencyApi,
-            preferencesStore
+            preferencesStore,
         )
 }

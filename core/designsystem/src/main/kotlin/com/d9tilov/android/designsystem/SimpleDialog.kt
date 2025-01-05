@@ -13,7 +13,7 @@ fun SimpleDialog(
     confirmButton: String,
     dismissButton: String,
     onDismiss: () -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
 ) {
     if (!show) return
     AlertDialog(
@@ -25,6 +25,6 @@ fun SimpleDialog(
             TextButton(onClick = { onDismiss() }) { Text(text = dismissButton) }
         },
         title = { Text(text = title) },
-        text = { Text(text = subtitle) }
+        text = { Text(text = subtitle) },
     )
 }

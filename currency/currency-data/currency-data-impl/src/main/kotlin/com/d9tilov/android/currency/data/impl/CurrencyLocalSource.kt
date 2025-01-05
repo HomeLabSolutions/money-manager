@@ -26,20 +26,19 @@ class CurrencyLocalSource(
     @Dispatcher(MoneyManagerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
     private val preferencesStore: PreferencesStore,
     private val currencyListDao: CurrencyListDao,
-    private val mainCurrencyDao: MainCurrencyDao
+    private val mainCurrencyDao: MainCurrencyDao,
 ) : CurrencySource {
-
     override fun getMainCurrency(): Flow<CurrencyMetaData> =
         preferencesStore.uid
             .filterNotNull()
             .flatMapMerge { uid ->
                 mainCurrencyDao.get(uid).map { it?.toDataModel() ?: CurrencyMetaData.EMPTY }
-            }
-            .flowOn(dispatcher)
+            }.flowOn(dispatcher)
 
-    override suspend fun saveCurrencies(currencies: List<Currency>) = withContext(dispatcher) {
-        currencyListDao.insert(currencies.map { item -> item.toDbModel() }.toList())
-    }
+    override suspend fun saveCurrencies(currencies: List<Currency>) =
+        withContext(dispatcher) {
+            currencyListDao.insert(currencies.map { item -> item.toDbModel() }.toList())
+        }
 
     override suspend fun getCurrencyByCode(code: String): Currency =
         withContext(dispatcher) { currencyListDao.getByCode(code).toDataModel() }
@@ -49,26 +48,28 @@ class CurrencyLocalSource(
             currencyListDao.getLastUpdateTime(baseCurrency).toLocalDate() == currentDate()
         }
 
-    override suspend fun update(currency: Currency) = withContext(dispatcher) {
-        currencyListDao.update(currency.toDbModel())
-    }
-
-    override suspend fun updateMainCurrency(code: String): Unit = withContext(dispatcher) {
-        val uid = preferencesStore.uid.firstOrNull()
-        uid?.let {
-            mainCurrencyDao.insert(
-                CurrencyMetaData(
-                    it,
-                    code,
-                    code.getSymbolByCode()
-                ).toDbModel()
-            )
+    override suspend fun update(currency: Currency) =
+        withContext(dispatcher) {
+            currencyListDao.update(currency.toDbModel())
         }
-    }
 
-    override fun getCurrencies(): Flow<List<Currency>> {
-        return currencyListDao.getAll()
+    override suspend fun updateMainCurrency(code: String): Unit =
+        withContext(dispatcher) {
+            val uid = preferencesStore.uid.firstOrNull()
+            uid?.let {
+                mainCurrencyDao.insert(
+                    CurrencyMetaData(
+                        it,
+                        code,
+                        code.getSymbolByCode(),
+                    ).toDbModel(),
+                )
+            }
+        }
+
+    override fun getCurrencies(): Flow<List<Currency>> =
+        currencyListDao
+            .getAll()
             .map { it.map { item -> item.toDataModel() } }
             .flowOn(dispatcher)
-    }
 }

@@ -7,7 +7,7 @@ enum class CategoryDestination {
     EDIT_REGULAR_TRANSACTION_SCREEN,
     CATEGORY_CREATION_SCREEN,
     CATEGORY_SCREEN,
-    SUB_CATEGORY_SCREEN
+    SUB_CATEGORY_SCREEN,
 }
 
 fun Int.toDestination() = CategoryDestination.entries.firstOrNull { it.ordinal == this }

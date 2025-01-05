@@ -12,9 +12,9 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DatastoreModule {
-
     @Provides
     @Singleton
-    fun providePreferenceStore(@ApplicationContext context: Context): PreferencesStore =
-        PreferencesStore(context)
+    fun providePreferenceStore(
+        @ApplicationContext context: Context,
+    ): PreferencesStore = PreferencesStore(context)
 }

@@ -12,7 +12,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object BackupDomainModule {
-
     @Provides
     @Singleton
     fun provideBackupInteractor(backupRepo: BackupRepo): BackupInteractor = BackupInteractorImpl(backupRepo)

@@ -1,11 +1,13 @@
 package com.d9tilov.android.core.utils
 
 object MainPriceFieldParser {
-
     const val MAX_PRICE_LENGTH = 11
 
-    fun parse(priceStr: String, btn: KeyPress): String {
-        return if (btn == KeyPress.Del) {
+    fun parse(
+        priceStr: String,
+        btn: KeyPress,
+    ): String =
+        if (btn == KeyPress.Del) {
             if (priceStr.length == 1) {
                 KeyPress.Zero.value
             } else {
@@ -36,12 +38,12 @@ object MainPriceFieldParser {
                 }
             }
         }
-    }
 
     fun isInputValid(str: String): Boolean {
         if (str.isEmpty()) return false
-        if (str.length > MAX_PRICE_LENGTH) return false
-        else {
+        if (str.length > MAX_PRICE_LENGTH) {
+            return false
+        } else {
             if (str[0] == '.') return false
             if (str[0] == '0' && str.length == 1) return false
             if (str.length == 2 && str[0] == '0' && str[1] == '.') return false
@@ -56,7 +58,9 @@ object MainPriceFieldParser {
     }
 }
 
-enum class KeyPress(val value: String) {
+enum class KeyPress(
+    val value: String,
+) {
     One("1"),
     Two("2"),
     Three("3"),
@@ -68,7 +72,7 @@ enum class KeyPress(val value: String) {
     Nine("9"),
     Dot("."),
     Zero("0"),
-    Del("del")
+    Del("del"),
 }
 
 fun String.toKeyPress(): KeyPress? = KeyPress.entries.firstOrNull { it.value == this }

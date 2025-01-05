@@ -63,13 +63,14 @@ fun RowScope.MmNavigationBarItem(
         enabled = enabled,
         label = label,
         alwaysShowLabel = alwaysShowLabel,
-        colors = NavigationBarItemDefaults.colors(
-            selectedIconColor = MmNavigationDefaults.navigationSelectedItemColor(),
-            unselectedIconColor = MmNavigationDefaults.navigationContentColor(),
-            selectedTextColor = MmNavigationDefaults.navigationSelectedItemColor(),
-            unselectedTextColor = MmNavigationDefaults.navigationContentColor(),
-            indicatorColor = MmNavigationDefaults.navigationIndicatorColor(),
-        ),
+        colors =
+            NavigationBarItemDefaults.colors(
+                selectedIconColor = MmNavigationDefaults.navigationSelectedItemColor(),
+                unselectedIconColor = MmNavigationDefaults.navigationContentColor(),
+                selectedTextColor = MmNavigationDefaults.navigationSelectedItemColor(),
+                unselectedTextColor = MmNavigationDefaults.navigationContentColor(),
+                indicatorColor = MmNavigationDefaults.navigationIndicatorColor(),
+            ),
     )
 }
 
@@ -97,16 +98,18 @@ fun MmNavigationBar(
 @Composable
 fun MmNavigationPreview() {
     val items = listOf("For you", "Saved", "Interests")
-    val icons = listOf(
-        MoneyManagerIcons.FormatList,
-        MoneyManagerIcons.Chart,
-        MoneyManagerIcons.Profile,
-    )
-    val selectedIcons = listOf(
-        MoneyManagerIcons.FormatList,
-        MoneyManagerIcons.Chart,
-        MoneyManagerIcons.Profile,
-    )
+    val icons =
+        listOf(
+            MoneyManagerIcons.FormatList,
+            MoneyManagerIcons.Chart,
+            MoneyManagerIcons.Profile,
+        )
+    val selectedIcons =
+        listOf(
+            MoneyManagerIcons.FormatList,
+            MoneyManagerIcons.Chart,
+            MoneyManagerIcons.Profile,
+        )
 
     MoneyManagerTheme {
         MmNavigationBar {

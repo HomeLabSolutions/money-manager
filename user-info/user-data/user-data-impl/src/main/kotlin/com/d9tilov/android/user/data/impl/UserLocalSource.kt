@@ -23,13 +23,13 @@ import kotlinx.coroutines.withContext
 class UserLocalSource(
     @Dispatcher(MoneyManagerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
     private val preferencesStore: PreferencesStore,
-    private val userDao: UserDao
+    private val userDao: UserDao,
 ) : UserSource {
-
     override suspend fun createUserOrRestore(userProfile: UserProfile): UserProfile =
         withContext(dispatcher) {
-            val currentUserId = preferencesStore.uid.firstOrNull()
-                ?: throw WrongUidException()
+            val currentUserId =
+                preferencesStore.uid.firstOrNull()
+                    ?: throw WrongUidException()
             val dbUser = userDao.getById(currentUserId).firstOrNull()
             if (dbUser == null) {
                 userDao.insert(userProfile.toDbModel().copy(uid = currentUserId))
@@ -39,54 +39,61 @@ class UserLocalSource(
             }
         }
 
-    override suspend fun updateFiscalDay(fiscalDay: Int): Unit = withContext(dispatcher) {
-        val currentUserId = preferencesStore.uid.firstOrNull()
-            ?: throw WrongUidException()
-        val user = userDao.getById(currentUserId).firstOrNull()
-        user?.let { userDao.update(it.copy(fiscalDay = fiscalDay)) }
-    }
-
-    override suspend fun showPrepopulate(): Boolean = withContext(dispatcher) {
-        val currentUserId = preferencesStore.uid.firstOrNull()
-        if (currentUserId == null) {
-            throw WrongUidException()
-        } else {
-            userDao.showPrepopulate(currentUserId)
+    override suspend fun updateFiscalDay(fiscalDay: Int): Unit =
+        withContext(dispatcher) {
+            val currentUserId =
+                preferencesStore.uid.firstOrNull()
+                    ?: throw WrongUidException()
+            val user = userDao.getById(currentUserId).firstOrNull()
+            user?.let { userDao.update(it.copy(fiscalDay = fiscalDay)) }
         }
-    }
 
-    override suspend fun prepopulateCompleted(): Unit = withContext(dispatcher) {
-        val currentUserId = preferencesStore.uid.firstOrNull()
-            ?: throw WrongUidException()
-        val user = userDao.getById(currentUserId).firstOrNull()
-        user?.let { userDao.update(it.copy(showPrepopulate = false)) }
-    }
-
-    override suspend fun getFiscalDay(): Int = withContext(dispatcher) {
-        val currentUserId = preferencesStore.uid.firstOrNull()
-        if (currentUserId == null) {
-            1
-        } else {
-            val fiscalDay = userDao.getFiscalDay(currentUserId)
-            if (fiscalDay == 0) 1 else fiscalDay
+    override suspend fun showPrepopulate(): Boolean =
+        withContext(dispatcher) {
+            val currentUserId = preferencesStore.uid.firstOrNull()
+            if (currentUserId == null) {
+                throw WrongUidException()
+            } else {
+                userDao.showPrepopulate(currentUserId)
+            }
         }
-    }
+
+    override suspend fun prepopulateCompleted(): Unit =
+        withContext(dispatcher) {
+            val currentUserId =
+                preferencesStore.uid.firstOrNull()
+                    ?: throw WrongUidException()
+            val user = userDao.getById(currentUserId).firstOrNull()
+            user?.let { userDao.update(it.copy(showPrepopulate = false)) }
+        }
+
+    override suspend fun getFiscalDay(): Int =
+        withContext(dispatcher) {
+            val currentUserId = preferencesStore.uid.firstOrNull()
+            if (currentUserId == null) {
+                1
+            } else {
+                val fiscalDay = userDao.getFiscalDay(currentUserId)
+                if (fiscalDay == 0) 1 else fiscalDay
+            }
+        }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getCurrentUser(): Flow<UserProfile?> = preferencesStore.uid
-        .filterNotNull()
-        .flatMapMerge { uid ->
-            userDao.getById(uid).map { user: UserDbModel? -> user?.toDataModel() }
-        }
-        .flowOn(dispatcher)
+    override fun getCurrentUser(): Flow<UserProfile?> =
+        preferencesStore.uid
+            .filterNotNull()
+            .flatMapMerge { uid ->
+                userDao.getById(uid).map { user: UserDbModel? -> user?.toDataModel() }
+            }.flowOn(dispatcher)
 
-    override suspend fun deleteUser() = withContext(dispatcher) {
-        val currentUserId = preferencesStore.uid.firstOrNull()
-        if (currentUserId == null) {
-            throw WrongUidException()
-        } else {
-            preferencesStore.clearAllData()
-            userDao.deleteUser(currentUserId)
+    override suspend fun deleteUser() =
+        withContext(dispatcher) {
+            val currentUserId = preferencesStore.uid.firstOrNull()
+            if (currentUserId == null) {
+                throw WrongUidException()
+            } else {
+                preferencesStore.clearAllData()
+                userDao.deleteUser(currentUserId)
+            }
         }
-    }
 }
