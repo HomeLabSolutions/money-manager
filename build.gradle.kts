@@ -1,4 +1,4 @@
-import com.agoda.gradle.FormattingOptions.applyPrecheckOptions
+import com.android.moneymanager.FormattingOptions.applyPrecheckOptions
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
