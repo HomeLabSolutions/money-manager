@@ -1,5 +1,4 @@
 import com.agoda.gradle.FormattingOptions.applyPrecheckOptions
-import com.dropbox.affectedmoduledetector.AffectedModuleConfiguration
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
@@ -49,28 +48,6 @@ plugins {
     alias(libs.plugins.serialization) apply false
     alias(libs.plugins.deps.sorting) apply false
     alias(libs.plugins.compose.compiler) apply false
-    alias(libs.plugins.module.detector) apply true
-}
-
-affectedModuleDetector {
-    baseDir = "${project.rootDir}"
-    pathsAffectingAllModules = setOf()
-    logFilename = "output.log"
-    logFolder = "${project.rootDir}/output"
-    compareFrom = "PreviousCommit" // default is PreviousCommit
-    excludedModules = setOf()
-    specifiedBranch = "develop"
-    ignoredFiles = setOf()
-    includeUncommitted = false
-    top = "HEAD"
-    customTasks =
-        setOf(
-            AffectedModuleConfiguration.CustomTask(
-                "runDetektByImpact",
-                "projectHealth",
-                "Run projectHealth task for current module",
-            ),
-        )
 }
 
 subprojects {
