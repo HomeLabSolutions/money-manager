@@ -15,10 +15,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.d9tilov.android.incomeexpense.navigation.INCOME_EXPENSE_NAVIGATION_ROUTE
 import com.d9tilov.android.incomeexpense.navigation.navigateToIncomeExpense
-import com.d9tilov.android.profile.ui.navigation.navigateToProfile
 import com.d9tilov.android.profile.ui.navigation.PROFILE_NAVIGATION_ROUTE
-import com.d9tilov.android.statistics.ui.navigation.navigateToStatistics
+import com.d9tilov.android.profile.ui.navigation.navigateToProfile
 import com.d9tilov.android.statistics.ui.navigation.STATISTICS_NAVIGATION_ROUTE
+import com.d9tilov.android.statistics.ui.navigation.navigateToStatistics
 import com.d9tilov.moneymanager.navigation.TopLevelDestination
 import kotlinx.coroutines.CoroutineScope
 
@@ -27,8 +27,8 @@ fun rememberMmAppState(
     windowSizeClass: WindowSizeClass,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
-): MmAppState {
-    return remember(
+): MmAppState =
+    remember(
         navController,
         coroutineScope,
         windowSizeClass,
@@ -39,7 +39,6 @@ fun rememberMmAppState(
             windowSizeClass,
         )
     }
-}
 
 @Stable
 class MmAppState(
@@ -47,18 +46,21 @@ class MmAppState(
     val coroutineScope: CoroutineScope,
     windowSizeClass: WindowSizeClass,
 ) {
-
     val currentDestination: NavDestination?
-        @Composable get() = navController
-            .currentBackStackEntryAsState().value?.destination
+        @Composable get() =
+            navController
+                .currentBackStackEntryAsState()
+                .value
+                ?.destination
 
     val currentTopLevelDestination: TopLevelDestination?
-        @Composable get() = when (currentDestination?.route) {
-            INCOME_EXPENSE_NAVIGATION_ROUTE -> TopLevelDestination.INCOME_EXPENSE
-            STATISTICS_NAVIGATION_ROUTE -> TopLevelDestination.STATISTICS
-            PROFILE_NAVIGATION_ROUTE -> TopLevelDestination.PROFILE
-            else -> null
-        }
+        @Composable get() =
+            when (currentDestination?.route) {
+                INCOME_EXPENSE_NAVIGATION_ROUTE -> TopLevelDestination.INCOME_EXPENSE
+                STATISTICS_NAVIGATION_ROUTE -> TopLevelDestination.STATISTICS
+                PROFILE_NAVIGATION_ROUTE -> TopLevelDestination.PROFILE
+                else -> null
+            }
 
     val shouldShowBottomBar: Boolean =
         windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
@@ -67,28 +69,27 @@ class MmAppState(
 
     fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestination) {
         trace("Navigation: ${topLevelDestination.name}") {
-            val topLevelNavOptions = navOptions {
-                // Pop up to the start destination of the graph to
-                // avoid building up a large stack of destinations
-                // on the back stack as users select items
-                popUpTo(navController.graph.findStartDestination().id) {
-                    saveState = true
+            val topLevelNavOptions =
+                navOptions {
+                    // Pop up to the start destination of the graph to
+                    // avoid building up a large stack of destinations
+                    // on the back stack as users select items
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    // Avoid multiple copies of the same destination when
+                    // reselecting the same item
+                    launchSingleTop = true
+                    // Restore state when reselecting a previously selected item
+                    restoreState = true
                 }
-                // Avoid multiple copies of the same destination when
-                // reselecting the same item
-                launchSingleTop = true
-                // Restore state when reselecting a previously selected item
-                restoreState = true
-            }
 
             when (topLevelDestination) {
-                TopLevelDestination.INCOME_EXPENSE -> navController.navigateToIncomeExpense(
-                    topLevelNavOptions
-                )
+                TopLevelDestination.INCOME_EXPENSE ->
+                    navController.navigateToIncomeExpense(topLevelNavOptions)
 
-                TopLevelDestination.STATISTICS -> navController.navigateToStatistics(
-                    topLevelNavOptions
-                )
+                TopLevelDestination.STATISTICS ->
+                    navController.navigateToStatistics(topLevelNavOptions)
 
                 TopLevelDestination.PROFILE -> navController.navigateToProfile(topLevelNavOptions)
             }

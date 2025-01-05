@@ -34,7 +34,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -73,7 +72,7 @@ fun SettingsRoute(
         },
         onBackupClick = viewModel::backup,
         onClearBackupClick = viewModel::deleteBackup,
-        onClickBack = clickBack
+        onClickBack = clickBack,
     )
 }
 
@@ -99,34 +98,37 @@ fun SettingsScreen(
         topBar = {
             MmTopAppBar(
                 titleRes = R.string.title_settings,
-                onNavigationClick = onClickBack
+                onNavigationClick = onClickBack,
             )
-        }
+        },
     ) { padding ->
         val openAlertDialog = remember { mutableStateOf(false) }
         Column(modifier = modifier) {
             uiState.subscriptionState?.let { subscriptionState ->
                 SubscriptionLayout(
                     uiState = subscriptionState,
-                    modifier = Modifier
-                        .padding(padding)
-                        .padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium))
-                        .fillMaxWidth(),
-                    onClick = onClickSubscription
+                    modifier =
+                        Modifier
+                            .padding(padding)
+                            .padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium))
+                            .fillMaxWidth(),
+                    onClick = onClickSubscription,
                 )
             }
             StartOfPeriodLayout(
                 day = uiState.startPeriodDay,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
-                onPeriodDateChanged = onPeriodDateChanged
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
+                onPeriodDateChanged = onPeriodDateChanged,
             )
             BackupLayout(
                 backupState = uiState.backupState,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
                 onBackupClick = onBackupClick,
                 onClearBackupClick = { openAlertDialog.value = true },
             )
@@ -141,18 +143,22 @@ fun SettingsScreen(
                     openAlertDialog.value = false
                     onClearBackupClick()
                 },
-                onDismiss = { openAlertDialog.value = false }
+                onDismiss = { openAlertDialog.value = false },
             )
         }
     }
 }
 
 @Composable
-fun StartOfPeriodLayout(day: String, modifier: Modifier, onPeriodDateChanged: (String) -> Unit) {
+fun StartOfPeriodLayout(
+    day: String,
+    modifier: Modifier,
+    onPeriodDateChanged: (String) -> Unit,
+) {
     Row(modifier = modifier.padding(top = 32.dp), verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = stringResource(R.string.settings_start_period_day_title),
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleMedium,
         )
         Box(modifier = Modifier.width(64.dp)) {
             OutlinedTextField(
@@ -162,13 +168,13 @@ fun StartOfPeriodLayout(day: String, modifier: Modifier, onPeriodDateChanged: (S
                 onValueChange = { text: String ->
                     if (isInputDateValid(text)) onPeriodDateChanged(text)
                 },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             )
         }
         Text(
             text = stringResource(R.string.settings_start_period_day_postfix),
             modifier = Modifier.padding(start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small)),
-            style = MaterialTheme.typography.titleSmall
+            style = MaterialTheme.typography.titleSmall,
         )
     }
 }
@@ -184,49 +190,53 @@ fun BackupLayout(
     val angle by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(2000, easing = FastOutLinearInEasing),
-            repeatMode = RepeatMode.Restart
-        ), label = ""
+        animationSpec =
+            infiniteRepeatable(
+                animation = tween(2000, easing = FastOutLinearInEasing),
+                repeatMode = RepeatMode.Restart,
+            ),
+        label = "",
     )
     Row(
-        modifier = modifier
-            .padding(top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            modifier
+                .padding(top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(modifier = Modifier.weight(2f)) {
             Text(
                 text = stringResource(R.string.settings_backup),
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
             )
             Text(
-                text = stringResource(
-                    id = R.string.settings_backup_info,
-                    backupState.lastBackupTimestamp
-                ),
-                style = MaterialTheme.typography.labelSmall
+                text =
+                    stringResource(
+                        id = R.string.settings_backup_info,
+                        backupState.lastBackupTimestamp,
+                    ),
+                style = MaterialTheme.typography.labelSmall,
             )
         }
         IconButton(
             modifier = Modifier.weight(2f),
             enabled = !backupState.backupLoading,
-            onClick = onBackupClick
+            onClick = onBackupClick,
         ) {
             Icon(
                 modifier = Modifier.then(if (backupState.backupLoading) Modifier.rotate(angle) else Modifier),
                 imageVector = MoneyManagerIcons.Backup,
-                contentDescription = "Backup"
+                contentDescription = "Backup",
             )
         }
         if (backupState.showBackupCloseBtn) {
             IconButton(
                 modifier = Modifier.weight(1f),
-                onClick = onClearBackupClick
+                onClick = onClearBackupClick,
             ) {
                 Icon(
                     imageVector = MoneyManagerIcons.Close,
                     contentDescription = "Close",
-                    tint = MaterialTheme.colorScheme.error
+                    tint = MaterialTheme.colorScheme.error,
                 )
             }
         } else {
@@ -255,20 +265,22 @@ fun SubscriptionLayout(
         modifier = modifier.clickable { onClick() },
         elevation = CardDefaults.cardElevation(8.dp),
         shape = RoundedCornerShape(dimensionResource(com.d9tilov.android.designsystem.R.dimen.card_view_corner_radius)),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
-                modifier = Modifier
-                    .padding(start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
+                modifier =
+                    Modifier
+                        .padding(start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
                 imageVector = ImageVector.vectorResource(id = MoneyManagerIcons.Subscription),
-                contentDescription = "Subscription Icon"
+                contentDescription = "Subscription Icon",
             )
             Column(
-                modifier = Modifier.padding(
-                    start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
-                    top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)
-                )
+                modifier =
+                    Modifier.padding(
+                        start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
+                        top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                    ),
             ) {
                 SubscriptionTitle(stringResource(uiState.title))
                 SubscriptionDescription(stringResource(uiState.description))
@@ -282,10 +294,11 @@ fun SubscriptionTitle(title: String) {
     Text(
         modifier = Modifier.padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small)),
         text = title,
-        style = MaterialTheme.typography.headlineMedium.copy(
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
-            fontSize = dimensionResource(R.dimen.settings_subscription_title_text_size).value.sp
-        )
+        style =
+            MaterialTheme.typography.headlineMedium.copy(
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                fontSize = dimensionResource(R.dimen.settings_subscription_title_text_size).value.sp,
+            ),
     )
 }
 
@@ -294,9 +307,10 @@ fun SubscriptionDescription(subtitle: String) {
     Text(
         text = subtitle,
         modifier = Modifier.padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small)),
-        style = MaterialTheme.typography.bodyMedium.copy(
-            color = MaterialTheme.colorScheme.onSecondaryContainer
-        )
+        style =
+            MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+            ),
     )
 }
 
@@ -307,7 +321,7 @@ fun DefaultSettingsPreview() {
         SettingsScreen(
             SettingsUiState(SubscriptionUiState(), startPeriodDay = 30.toString()),
             onPeriodDateChanged = {},
-            onShowSnackBar = { _,_ -> true }
+            onShowSnackBar = { _, _ -> true },
         )
     }
 }

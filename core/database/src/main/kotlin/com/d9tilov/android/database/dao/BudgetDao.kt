@@ -2,15 +2,14 @@ package com.d9tilov.android.database.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Upsert
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import com.d9tilov.android.database.entity.BudgetDbModel
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BudgetDao {
-
     @Upsert
     suspend fun insert(budget: BudgetDbModel)
 

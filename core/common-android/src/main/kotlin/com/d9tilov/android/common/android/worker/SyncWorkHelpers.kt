@@ -27,23 +27,26 @@ import androidx.work.ForegroundInfo
 import androidx.work.NetworkType
 import com.d9tilov.android.common.android.R
 
-private const val SyncNotificationId = 0
-private const val SyncNotificationChannelID = "SyncNotificationChannel"
+private const val SYNC_NOTIFICATION_ID = 0
+private const val SYNC_NOTIFICATION_CHANNEL_ID = "SyncNotificationChannel"
 
 // All sync work needs an internet connections
 val SyncConstraints
-    get() = Constraints.Builder()
-        .setRequiredNetworkType(NetworkType.CONNECTED)
-        .build()
+    get() =
+        Constraints
+            .Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
 
 /**
  * Foreground information for sync on lower API levels when sync workers are being
  * run with a foreground service
  */
-fun Context.syncForegroundInfo() = ForegroundInfo(
-    SyncNotificationId,
-    syncWorkNotification()
-)
+fun Context.syncForegroundInfo() =
+    ForegroundInfo(
+        SYNC_NOTIFICATION_ID,
+        syncWorkNotification(),
+    )
 
 /**
  * Notification displayed on lower API levels when sync workers are being
@@ -51,13 +54,14 @@ fun Context.syncForegroundInfo() = ForegroundInfo(
  */
 private fun Context.syncWorkNotification(): Notification {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        val channel = NotificationChannel(
-            SyncNotificationChannelID,
-            getString(R.string.sync_notification_channel_name),
-            NotificationManager.IMPORTANCE_DEFAULT
-        ).apply {
-            description = getString(R.string.sync_notification_channel_description)
-        }
+        val channel =
+            NotificationChannel(
+                SYNC_NOTIFICATION_CHANNEL_ID,
+                getString(R.string.sync_notification_channel_name),
+                NotificationManager.IMPORTANCE_DEFAULT,
+            ).apply {
+                description = getString(R.string.sync_notification_channel_description)
+            }
         // Register the channel with the system
         val notificationManager: NotificationManager? =
             getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
@@ -65,11 +69,11 @@ private fun Context.syncWorkNotification(): Notification {
         notificationManager?.createNotificationChannel(channel)
     }
 
-    return NotificationCompat.Builder(
-        this,
-        SyncNotificationChannelID
-    )
-        .setSmallIcon(R.drawable.ic_currency_icon)
+    return NotificationCompat
+        .Builder(
+            this,
+            SYNC_NOTIFICATION_CHANNEL_ID,
+        ).setSmallIcon(R.drawable.ic_currency_icon)
         .setContentTitle(getString(R.string.sync_notification_title))
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         .build()

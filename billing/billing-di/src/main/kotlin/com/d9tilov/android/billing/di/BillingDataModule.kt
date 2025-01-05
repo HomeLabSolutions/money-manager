@@ -13,7 +13,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 interface BillingDataModule {
-
     @Binds
     @Singleton
     fun provideBillingLocalSource(billingDataSource: BillingDataSource): BillingSource

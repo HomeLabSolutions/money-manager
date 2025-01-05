@@ -52,7 +52,7 @@ fun CategoryGroupIconListScreen(
     Scaffold(topBar = {
         MmTopAppBar(
             titleRes = R.string.title_category_group_set,
-            onNavigationClick = onBackClicked
+            onNavigationClick = onBackClicked,
         )
     }) { padding ->
         LazyColumn(
@@ -72,22 +72,24 @@ fun CategoryIconListItem(
     clickCallback: (group: Int) -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .height(dimensionResource(id = R.dimen.category_group_item_height))
-            .fillMaxWidth()
-            .clickable { clickCallback(group.value) },
-        verticalArrangement = Arrangement.Center
+        modifier =
+            Modifier
+                .height(dimensionResource(id = R.dimen.category_group_item_height))
+                .fillMaxWidth()
+                .clickable { clickCallback(group.value) },
+        verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large)),
-            text = stringResource(id = categoryGroupItemMap[group] ?: R.string.category_group_free)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large)),
+            text = stringResource(id = categoryGroupItemMap[group] ?: R.string.category_group_free),
         )
         HorizontalDivider(
             color = MaterialTheme.colorScheme.primary,
             thickness = 1.dp,
-            modifier = Modifier.alpha(0.2f)
+            modifier = Modifier.alpha(0.2f),
         )
     }
 }

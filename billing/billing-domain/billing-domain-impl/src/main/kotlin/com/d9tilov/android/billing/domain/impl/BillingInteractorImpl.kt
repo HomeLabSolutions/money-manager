@@ -19,28 +19,29 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import timber.log.Timber
 import java.io.IOException
 
 class BillingInteractorImpl(
-    private val billingRepo: BillingRepo
+    private val billingRepo: BillingRepo,
 ) : BillingInteractor {
-
     private val premiumEmailList = MutableStateFlow(listOf<String>())
 
     init {
         Firebase.remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val config = Firebase.remoteConfig.getValue("premium_list").asString()
-                val moshi: Moshi = Moshi.Builder()
-                    .add(KotlinJsonAdapterFactory())
-                    .build()
+                val moshi: Moshi =
+                    Moshi
+                        .Builder()
+                        .add(KotlinJsonAdapterFactory())
+                        .build()
                 val jsonAdapter: JsonAdapter<PremiumEmails> =
                     moshi.adapter(PremiumEmails::class.java)
                 try {
@@ -57,36 +58,39 @@ class BillingInteractorImpl(
     override val productDetails: Flow<ProductDetails?> = billingRepo.premiumProductDetails
     override val isNewPurchaseAcknowledged: Flow<Boolean> = billingRepo.isNewPurchaseAcknowledged
     override val billingConnectionReady: Flow<Boolean> = billingRepo.billingConnectionReady
+
     override fun getPremiumInfo(): Flow<PremiumInfo> {
         val canPurchaseFlow = flowOf(true)
         val details = billingRepo.premiumProductDetails.map { productDetails -> productDetails != null }
         val minPriceFlow = flowOf(DomainCurrency.EMPTY)
-        getSkuDetails().map { list: List<BillingSkuDetails> ->
-            list.minOfWith({ t1, t2 -> t1.value.compareTo(t2.value) }) { it.price }
-        }.map { item: Currency -> item.toDomain(false) }
+        getSkuDetails()
+            .map { list: List<BillingSkuDetails> ->
+                list.minOfWith({ t1, t2 -> t1.value.compareTo(t2.value) }) { it.price }
+            }.map { item: Currency -> item.toDomain(false) }
         return combine(
             canPurchaseFlow,
             isPremium(),
             billingRepo.hasRenewablePremium,
-            minPriceFlow
+            minPriceFlow,
         ) { canPurchase, isPremium, hasActiveSku, minPrice ->
             PremiumInfo(
                 canPurchase,
                 isPremium,
                 hasActiveSku,
-                minPrice
+                minPrice,
             )
         }
     }
 
     override fun startBillingConnection() = billingRepo.startBillingConnection()
+
     override fun terminateBillingConnection() = billingRepo.terminateBillingConnection()
 
     override fun buySku(
         tag: String,
         productDetails: ProductDetails?,
         currentPurchases: List<Purchase>,
-        result: (billingClient: BillingClient, paramBuilder: BillingFlowParams) -> BillingResult
+        result: (billingClient: BillingClient, paramBuilder: BillingFlowParams) -> BillingResult,
     ) {
         billingRepo.buySku(tag, productDetails, currentPurchases, result)
     }
@@ -97,7 +101,7 @@ class BillingInteractorImpl(
 
         return combine(
             isPremiumEmailExists,
-            currentPurchases.map { it.isNotEmpty() }
+            currentPurchases.map { it.isNotEmpty() },
         ) { isPremiumExists, isPremium -> isPremiumExists || isPremium }
     }
 

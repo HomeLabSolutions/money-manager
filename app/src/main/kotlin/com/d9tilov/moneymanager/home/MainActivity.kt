@@ -35,19 +35,18 @@ import timber.log.Timber
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
     private val viewModel: MainViewModel by viewModels()
 
-    private val providers = arrayListOf(
-        AuthUI.IdpConfig.PhoneBuilder().build(),
-        AuthUI.IdpConfig.GoogleBuilder().build()
-    )
+    private val providers =
+        arrayListOf(
+            AuthUI.IdpConfig.PhoneBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build(),
+        )
     private val startForResult: ActivityResultLauncher<Intent> =
         registerForActivityResult(FirebaseAuthUIActivityResultContract()) { result ->
             Timber.tag(DataConstants.TAG).d("Sign in result: $result")
             viewModel.updateData()
         }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -58,22 +57,29 @@ class MainActivity : ComponentActivity() {
         // Update the uiState
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collectLatest { state ->
+                viewModel.uiStateFlow.collectLatest { state ->
                     uiState = state
                     when (uiState) {
-                        is MainActivityUiState.Success.Auth -> {
+                        MainActivityUiState.Success.Auth -> {
                             viewModel.setToLoadingState()
                             startForResult.launch(
-                                AuthUI.getInstance()
+                                AuthUI
+                                    .getInstance()
                                     .createSignInIntentBuilder()
                                     .setLogo(com.d9tilov.android.designsystem.R.drawable.ic_money_manager_logo)
                                     .setTheme(R.style.Theme_MoneyManager)
                                     .setAvailableProviders(providers)
                                     .setIsSmartLockEnabled(false)
-                                    .build()
+                                    .build(),
                             )
                         }
-                        else -> openScreen(uiState)
+
+                        MainActivityUiState.Success.Prepopulate,
+                        MainActivityUiState.Success.Main,
+                        MainActivityUiState.Loading,
+                        -> {
+                            openScreen(uiState)
+                        }
                     }
                 }
             }
@@ -104,23 +110,25 @@ class MainActivity : ComponentActivity() {
             // than the configuration's dark theme value based on the user preference.
             DisposableEffect(darkTheme) {
                 enableEdgeToEdge(
-                    statusBarStyle = SystemBarStyle.auto(
-                        Color.TRANSPARENT,
-                        Color.TRANSPARENT,
-                    ) { darkTheme },
-                    navigationBarStyle = SystemBarStyle.auto(
-                        lightScrim,
-                        darkScrim,
-                    ) { darkTheme },
+                    statusBarStyle =
+                        SystemBarStyle.auto(
+                            Color.TRANSPARENT,
+                            Color.TRANSPARENT,
+                        ) { darkTheme },
+                    navigationBarStyle =
+                        SystemBarStyle.auto(
+                            lightScrim,
+                            darkScrim,
+                        ) { darkTheme },
                 )
                 onDispose {}
             }
 
             MoneyManagerTheme(darkTheme = darkTheme) {
                 when (state) {
-                    is MainActivityUiState.Success.Main -> MmApp(windowSizeClass = calculateWindowSizeClass(this))
-                    is MainActivityUiState.Success.Prepopulate -> PrepopulateScreen()
-                    else -> {}
+                    MainActivityUiState.Success.Main -> MmApp(windowSizeClass = calculateWindowSizeClass(this))
+                    MainActivityUiState.Success.Prepopulate -> PrepopulateScreen()
+                    MainActivityUiState.Loading, MainActivityUiState.Success.Auth -> {}
                 }
             }
         }
@@ -129,5 +137,6 @@ class MainActivity : ComponentActivity() {
 
 @Suppress("MagicNumber")
 private val lightScrim = Color.argb(0xe6, 0xFF, 0xFF, 0xFF)
+
 @Suppress("MagicNumber")
 private val darkScrim = Color.argb(0x80, 0x1b, 0x1b, 0x1b)

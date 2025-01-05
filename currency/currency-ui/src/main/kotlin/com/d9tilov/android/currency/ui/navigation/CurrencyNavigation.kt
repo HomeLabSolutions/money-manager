@@ -13,21 +13,34 @@ import com.d9tilov.android.currency.ui.CurrencyListRoute
 const val CURRENCY_LIST_NAVIGATION_ROUTE = "currency_list_route"
 
 internal sealed class CurrencyArgs {
-    class CurrencyScreenArgs(val currencyCode: String?) {
+    class CurrencyScreenArgs(
+        val currencyCode: String?,
+    ) {
         constructor(savedStateHandle: SavedStateHandle) :
-                this(savedStateHandle.get(CURRENCY_CODE_ARGS) as? String)
+            this(savedStateHandle.get(CURRENCY_CODE_ARGS) as? String)
     }
 }
 
-fun NavGraphBuilder.currencyScreen(route: String, clickBack: () -> Unit, onChooseCurrency: (String) -> Unit) {
+fun NavGraphBuilder.currencyScreen(
+    route: String,
+    clickBack: () -> Unit,
+    onChooseCurrency: (String) -> Unit,
+) {
     composable(
         route = route,
-        arguments = listOf(navArgument(CURRENCY_CODE_ARGS) {
-            type = NavType.StringType
-            nullable = true
-        })
+        arguments =
+            listOf(
+                navArgument(CURRENCY_CODE_ARGS) {
+                    type = NavType.StringType
+                    nullable = true
+                },
+            ),
     ) { CurrencyListRoute(clickBack = clickBack, onChooseCurrency = onChooseCurrency) }
 }
-fun NavController.navigateToCurrencyListScreen(currencyCode: String? = null, navOptions: NavOptions? = null) {
+
+fun NavController.navigateToCurrencyListScreen(
+    currencyCode: String? = null,
+    navOptions: NavOptions? = null,
+) {
     this.navigate("$CURRENCY_LIST_NAVIGATION_ROUTE?$currencyCode", navOptions)
 }

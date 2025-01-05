@@ -8,12 +8,13 @@ import java.math.BigDecimal
 fun CurrencyResponse.toDataModel(): List<Currency> {
     val currencyRateList = mutableSetOf<Currency>()
     for ((key, value) in rates) {
-        val item = Currency(
-            code = key,
-            symbol = key.getSymbolByCode(),
-            value = value.toBigDecimal(),
-            lastUpdateTime = date
-        )
+        val item =
+            Currency(
+                code = key,
+                symbol = key.getSymbolByCode(),
+                value = value.toBigDecimal(),
+                lastUpdateTime = date,
+            )
         currencyRateList.add(item)
     }
     return currencyRateList.toList()
@@ -22,10 +23,11 @@ fun CurrencyResponse.toDataModel(): List<Currency> {
 fun CurrencyResponse.toDataModelValues(list: List<Currency>): List<Currency> {
     val newList = mutableListOf<Currency>()
     list.forEach { currency ->
-        val newCurrency = currency.copy(
-            value = rates[currency.code]?.toBigDecimal() ?: BigDecimal.ZERO,
-            lastUpdateTime = date * MILLIS
-        )
+        val newCurrency =
+            currency.copy(
+                value = rates[currency.code]?.toBigDecimal() ?: BigDecimal.ZERO,
+                lastUpdateTime = date * MILLIS,
+            )
         newList.add(newCurrency)
     }
     return newList

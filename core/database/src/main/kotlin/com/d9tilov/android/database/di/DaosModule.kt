@@ -10,7 +10,6 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 object DaosModule {
-
     @Provides
     fun providesCategoryDao(database: AppDatabase): CategoryDao = database.categoryDao()
 }

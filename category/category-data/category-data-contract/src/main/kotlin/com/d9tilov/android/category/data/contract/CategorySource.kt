@@ -5,14 +5,20 @@ import com.d9tilov.android.core.model.TransactionType
 import kotlinx.coroutines.flow.Flow
 
 interface CategorySource {
-
     suspend fun createExpenseDefaultCategories()
+
     suspend fun createIncomeDefaultCategories()
+
     suspend fun create(category: Category): Long
+
     suspend fun update(category: Category)
+
     suspend fun getById(id: Long): Category
+
     fun getByParentId(id: Long): Flow<List<Category>>
+
     fun getCategoriesByType(type: TransactionType): Flow<List<Category>>
+
     suspend fun delete(category: Category)
 
     /**

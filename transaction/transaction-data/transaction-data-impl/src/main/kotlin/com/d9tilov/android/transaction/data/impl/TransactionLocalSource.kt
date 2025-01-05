@@ -33,17 +33,17 @@ import kotlinx.datetime.LocalDateTime
 class TransactionLocalSource(
     @Dispatcher(MoneyManagerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
     private val preferencesStore: PreferencesStore,
-    private val transactionDao: TransactionDao
+    private val transactionDao: TransactionDao,
 ) : TransactionSource {
-
-    override suspend fun insert(transaction: TransactionDataModel) = withContext(dispatcher) {
-        val currentUserId = preferencesStore.uid.firstOrNull()
-        if (currentUserId == null) {
-            throw WrongUidException()
-        } else {
-            transactionDao.insert(transaction.copy(clientId = currentUserId).toDbModel())
+    override suspend fun insert(transaction: TransactionDataModel) =
+        withContext(dispatcher) {
+            val currentUserId = preferencesStore.uid.firstOrNull()
+            if (currentUserId == null) {
+                throw WrongUidException()
+            } else {
+                transactionDao.insert(transaction.copy(clientId = currentUserId).toDbModel())
+            }
         }
-    }
 
     override fun getById(id: Long): Flow<TransactionDataModel> =
         preferencesStore.uid
@@ -51,44 +51,43 @@ class TransactionLocalSource(
             .flatMapMerge { uid -> transactionDao.getById(uid, id).map { it.toDataModel() } }
             .flowOn(dispatcher)
 
-    override fun getAllByTypePaging(
-        transactionType: TransactionType
-    ): Flow<PagingData<TransactionDataModel>> = preferencesStore.uid
-        .filterNotNull()
-        .flatMapMerge { uid ->
-            Pager(config = PagingConfig(PAGE_SIZE, enablePlaceholders = false)) {
-                transactionDao.getAllByType(
-                    uid,
-                    Instant.fromEpochMilliseconds(0).toLocal().getEndOfDay(),
-                    currentDateTime().getEndOfDay(),
-                    transactionType.value
-                )
-            }.flow.map { value -> value.map { it.toDataModel() } }
-        }
-        .flowOn(dispatcher)
+    override fun getAllByTypePaging(transactionType: TransactionType): Flow<PagingData<TransactionDataModel>> =
+        preferencesStore.uid
+            .filterNotNull()
+            .flatMapMerge { uid ->
+                Pager(config = PagingConfig(PAGE_SIZE, enablePlaceholders = false)) {
+                    transactionDao.getAllByType(
+                        uid,
+                        Instant.fromEpochMilliseconds(0).toLocal().getEndOfDay(),
+                        currentDateTime().getEndOfDay(),
+                        transactionType.value,
+                    )
+                }.flow.map { value -> value.map { it.toDataModel() } }
+            }.flowOn(dispatcher)
 
     override fun getAllByTypeInPeriod(
         from: LocalDateTime,
         to: LocalDateTime,
         transactionType: TransactionType,
         onlyInStatistics: Boolean,
-        withRegular: Boolean
-    ): Flow<List<TransactionDataModel>> = preferencesStore.uid
-        .filterNotNull()
-        .flatMapMerge { uid ->
-            transactionDao.getAllByTypeInPeriod(
-                uid,
-                from.getStartOfDay(),
-                to.getEndOfDay(),
-                transactionType.value
-            )
-                .map { list ->
-                    list.map { item -> item.toDataModel() }
-                        .filter { if (onlyInStatistics) it.inStatistics else true }
-                        .filter { if (!withRegular) !it.isRegular else true }
-                }
-        }
-        .flowOn(dispatcher)
+        withRegular: Boolean,
+    ): Flow<List<TransactionDataModel>> =
+        preferencesStore.uid
+            .filterNotNull()
+            .flatMapMerge { uid ->
+                transactionDao
+                    .getAllByTypeInPeriod(
+                        uid,
+                        from.getStartOfDay(),
+                        to.getEndOfDay(),
+                        transactionType.value,
+                    ).map { list ->
+                        list
+                            .map { item -> item.toDataModel() }
+                            .filter { if (onlyInStatistics) it.inStatistics else true }
+                            .filter { if (!withRegular) !it.isRegular else true }
+                    }
+            }.flowOn(dispatcher)
 
     override suspend fun getAllByCategory(category: Category): List<TransactionDataModel> =
         withContext(dispatcher) {
@@ -96,7 +95,8 @@ class TransactionLocalSource(
             if (currentUserId == null) {
                 throw WrongUidException()
             } else {
-                transactionDao.getByCategoryId(currentUserId, category.id)
+                transactionDao
+                    .getByCategoryId(currentUserId, category.id)
                     .map { item -> item.toDataModel() }
             }
         }
@@ -105,55 +105,59 @@ class TransactionLocalSource(
         category: Category,
         from: LocalDateTime,
         to: LocalDateTime,
-        onlyInStatistics: Boolean
-    ): Flow<List<TransactionDataModel>> {
-        return preferencesStore.uid
+        onlyInStatistics: Boolean,
+    ): Flow<List<TransactionDataModel>> =
+        preferencesStore.uid
             .filterNotNull()
             .flatMapMerge { uid ->
-                transactionDao.getByCategoryIdInPeriod(uid, category.id, from, to)
+                transactionDao
+                    .getByCategoryIdInPeriod(uid, category.id, from, to)
                     .map { list ->
-                        list.map { item -> item.toDataModel() }
+                        list
+                            .map { item -> item.toDataModel() }
                             .filter { if (onlyInStatistics) it.inStatistics else true }
                     }
+            }.flowOn(dispatcher)
+
+    override suspend fun getCountByCurrencyCode(code: String): Int =
+        withContext(dispatcher) {
+            val currentUserId = preferencesStore.uid.firstOrNull()
+            if (currentUserId == null) {
+                throw WrongUidException()
+            } else {
+                transactionDao.getCountByCurrencyCode(code, currentUserId)
             }
-            .flowOn(dispatcher)
-    }
-
-    override suspend fun getCountByCurrencyCode(code: String): Int = withContext(dispatcher) {
-        val currentUserId = preferencesStore.uid.firstOrNull()
-        if (currentUserId == null) {
-            throw WrongUidException()
-        } else {
-            transactionDao.getCountByCurrencyCode(code, currentUserId)
         }
-    }
 
-    override suspend fun update(transaction: TransactionDataModel) = withContext(dispatcher) {
-        val currentUserId = preferencesStore.uid.firstOrNull()
-        if (currentUserId == null) {
-            throw WrongUidException()
-        } else {
-            transactionDao.update(transaction.toDbModel())
+    override suspend fun update(transaction: TransactionDataModel) =
+        withContext(dispatcher) {
+            val currentUserId = preferencesStore.uid.firstOrNull()
+            if (currentUserId == null) {
+                throw WrongUidException()
+            } else {
+                transactionDao.update(transaction.toDbModel())
+            }
         }
-    }
 
-    override suspend fun remove(transaction: TransactionDataModel) = withContext(dispatcher) {
-        val currentUserId = preferencesStore.uid.firstOrNull()
-        if (currentUserId == null) {
-            throw WrongUidException()
-        } else {
-            transactionDao.delete(currentUserId, transaction.id)
+    override suspend fun remove(transaction: TransactionDataModel) =
+        withContext(dispatcher) {
+            val currentUserId = preferencesStore.uid.firstOrNull()
+            if (currentUserId == null) {
+                throw WrongUidException()
+            } else {
+                transactionDao.delete(currentUserId, transaction.id)
+            }
         }
-    }
 
-    override suspend fun clearAll() = withContext(dispatcher) {
-        val currentUserId = preferencesStore.uid.firstOrNull()
-        if (currentUserId == null) {
-            throw WrongUidException()
-        } else {
-            transactionDao.clearAll(currentUserId)
+    override suspend fun clearAll() =
+        withContext(dispatcher) {
+            val currentUserId = preferencesStore.uid.firstOrNull()
+            if (currentUserId == null) {
+                throw WrongUidException()
+            } else {
+                transactionDao.clearAll(currentUserId)
+            }
         }
-    }
 
     companion object {
         private const val PAGE_SIZE = 10

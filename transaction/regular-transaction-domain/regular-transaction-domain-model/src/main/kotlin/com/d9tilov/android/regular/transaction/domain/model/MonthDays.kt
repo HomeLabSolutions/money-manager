@@ -31,5 +31,5 @@ enum class MonthDays {
     DAY_28,
     DAY_29,
     DAY_30,
-    DAY_31
+    DAY_31,
 }

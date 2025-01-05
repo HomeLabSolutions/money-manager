@@ -17,7 +17,6 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object TransactionDomainModule {
-
     @Provides
     @ActivityRetainedScoped
     fun provideTransactionInteractor(
@@ -26,13 +25,14 @@ object TransactionDomainModule {
         categoryInteractor: CategoryInteractor,
         userInteractor: UserInteractor,
         currencyInteractor: CurrencyInteractor,
-        budgetInteractor: BudgetInteractor
-    ): TransactionInteractor = TransactionInteractorImpl(
-        transactionRepo,
-        regularTransactionInteractor,
-        categoryInteractor,
-        userInteractor,
-        currencyInteractor,
-        budgetInteractor
-    )
+        budgetInteractor: BudgetInteractor,
+    ): TransactionInteractor =
+        TransactionInteractorImpl(
+            transactionRepo,
+            regularTransactionInteractor,
+            categoryInteractor,
+            userInteractor,
+            currencyInteractor,
+            budgetInteractor,
+        )
 }

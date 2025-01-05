@@ -16,7 +16,7 @@ fun RegularTransaction.toData(): RegularTransactionData =
         executionPeriod,
         description,
         pushEnabled,
-        autoAdd
+        autoAdd,
     )
 
 fun RegularTransactionData.toDomain(category: Category): RegularTransaction =
@@ -31,5 +31,5 @@ fun RegularTransactionData.toDomain(category: Category): RegularTransaction =
         executionPeriod,
         description,
         pushEnable,
-        autoAdd
+        autoAdd,
     )

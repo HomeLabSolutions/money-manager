@@ -6,5 +6,5 @@ data class PremiumInfo(
     val canPurchase: Boolean,
     val isPremium: Boolean,
     val hasActiveSku: Boolean,
-    val minBillingPrice: DomainCurrency
+    val minBillingPrice: DomainCurrency,
 )

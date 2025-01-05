@@ -44,7 +44,8 @@ private const val WORKER_CLASS_NAME = "RouterWorkerDelegateClassName"
  * delegate to
  */
 fun KClass<out CoroutineWorker>.delegatedData() =
-    Data.Builder()
+    Data
+        .Builder()
         .putString(WORKER_CLASS_NAME, qualifiedName)
         .build()
 
@@ -59,22 +60,20 @@ fun KClass<out CoroutineWorker>.delegatedData() =
  */
 class DelegatingWorker(
     appContext: Context,
-    workerParams: WorkerParameters
+    workerParams: WorkerParameters,
 ) : CoroutineWorker(appContext, workerParams) {
-
     private val workerClassName =
         workerParams.inputData.getString(WORKER_CLASS_NAME) ?: ""
 
     private val delegateWorker =
-        EntryPointAccessors.fromApplication<HiltWorkerFactoryEntryPoint>(appContext)
+        EntryPointAccessors
+            .fromApplication<HiltWorkerFactoryEntryPoint>(appContext)
             .hiltWorkerFactory()
             .createWorker(appContext, workerClassName, workerParams)
             as? CoroutineWorker
             ?: throw IllegalArgumentException("Unable to find appropriate worker")
 
-    override suspend fun getForegroundInfo(): ForegroundInfo =
-        delegateWorker.getForegroundInfo()
+    override suspend fun getForegroundInfo(): ForegroundInfo = delegateWorker.getForegroundInfo()
 
-    override suspend fun doWork(): Result =
-        delegateWorker.doWork()
+    override suspend fun doWork(): Result = delegateWorker.doWork()
 }

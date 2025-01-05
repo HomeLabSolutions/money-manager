@@ -19,12 +19,18 @@ const val TRANSACTION_NAVIGATION_ROUTE = "transaction_route"
 const val TRANSACTION_ID_ARG = "transaction_id"
 
 internal sealed class TransactionArgs {
-    class TransactionCreationArgs(val transactionId: Long) {
+    class TransactionCreationArgs(
+        val transactionId: Long,
+    ) {
         constructor(savedStateHandle: SavedStateHandle) :
-                this((checkNotNull(savedStateHandle[TRANSACTION_ID_ARG]) as Long))
+            this((checkNotNull(savedStateHandle[TRANSACTION_ID_ARG]) as Long))
     }
 }
-fun NavController.navigateToTransactionScreen(transactionId: Long, navOptions: NavOptions? = null) {
+
+fun NavController.navigateToTransactionScreen(
+    transactionId: Long,
+    navOptions: NavOptions? = null,
+) {
     this.navigate("$TRANSACTION_NAVIGATION_ROUTE/$transactionId", navOptions)
 }
 
@@ -32,17 +38,17 @@ fun NavGraphBuilder.transactionCreationScreen(
     route: String,
     clickBack: () -> Unit,
     onCategoryClick: (TransactionType, CategoryDestination) -> Unit,
-    onCurrencyClick: (String) -> Unit
+    onCurrencyClick: (String) -> Unit,
 ) {
     composable(
         route = route,
-        arguments = listOf(navArgument(TRANSACTION_ID_ARG) { type = NavType.LongType })
+        arguments = listOf(navArgument(TRANSACTION_ID_ARG) { type = NavType.LongType }),
     ) { entry ->
         val viewModel: TransactionCreationViewModel = hiltViewModel()
-        val categoryId = entry.savedStateHandle.get<Long>(CategoryArgs.categoryIdArgs)
+        val categoryId = entry.savedStateHandle.get<Long>(CategoryArgs.CATEGORY_ID_ARGS)
         categoryId?.let { id ->
             viewModel.updateCategory(id)
-            entry.savedStateHandle.remove<Long>(CategoryArgs.categoryIdArgs)
+            entry.savedStateHandle.remove<Long>(CategoryArgs.CATEGORY_ID_ARGS)
         }
         val currencyCode = entry.savedStateHandle.get<String>(CURRENCY_CODE_ARGS)
         currencyCode?.let { code ->
@@ -53,7 +59,7 @@ fun NavGraphBuilder.transactionCreationScreen(
             viewModel = viewModel,
             clickBack = clickBack,
             clickCurrency = onCurrencyClick,
-            clickCategory = onCategoryClick
+            clickCategory = onCategoryClick,
         )
     }
 }
