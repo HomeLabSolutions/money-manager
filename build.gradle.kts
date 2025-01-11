@@ -1,3 +1,4 @@
+import com.android.moneymanager.gradle.DetektOptions.applyDetektOptions
 import com.android.moneymanager.gradle.FormattingOptions.applyPrecheckOptions
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
@@ -19,6 +20,7 @@ buildscript {
 }
 
 applyPrecheckOptions()
+applyDetektOptions()
 
 allprojects {
     repositories {

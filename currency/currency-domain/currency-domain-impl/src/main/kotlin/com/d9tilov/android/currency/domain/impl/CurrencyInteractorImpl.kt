@@ -29,7 +29,8 @@ class CurrencyInteractorImpl(
 
     override fun getMainCurrencyFlow(): Flow<CurrencyMetaData> = currencyRepo.getMainCurrency()
 
-    override suspend fun getMainCurrency(): CurrencyMetaData = currencyRepo.getMainCurrency().firstOrNull() ?: CurrencyMetaData.EMPTY
+    override suspend fun getMainCurrency(): CurrencyMetaData =
+        currencyRepo.getMainCurrency().firstOrNull() ?: CurrencyMetaData.EMPTY
 
     override suspend fun getCurrencyByCode(code: String): Currency = currencyRepo.getCurrencyByCode(code)
 

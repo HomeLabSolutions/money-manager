@@ -97,7 +97,9 @@ abstract class GradleFileValidationTask : DefaultTask() {
                     .anyMatch { it.contains(DEPENDENCY_ANALYSIS_PREFIX) }
             }
         if (!found) {
-            throw IllegalStateException("Please check file $path\nfor unused dependencies with script [python3 unused_deps.py <file-path>]")
+            throw IllegalStateException(
+                "Please check file $path\nfor unused dependencies with script [python3 unused_deps.py <file-path>]",
+            )
         }
     }
 

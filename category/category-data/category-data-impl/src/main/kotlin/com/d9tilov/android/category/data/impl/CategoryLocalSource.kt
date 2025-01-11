@@ -82,7 +82,9 @@ class CategoryLocalSource
                     if (count == 0) {
                         categoryDao.update(category.toDbModel())
                     } else {
-                        throw CategoryException.CategoryExistException("Category with name: ${category.name} has already existed")
+                        throw CategoryException.CategoryExistException(
+                            "Category with name: ${category.name} has already existed",
+                        )
                     }
                 }
             }

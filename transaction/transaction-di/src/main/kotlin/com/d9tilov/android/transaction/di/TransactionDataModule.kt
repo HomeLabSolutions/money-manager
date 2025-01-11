@@ -33,5 +33,6 @@ object TransactionDataModule {
 
     @Provides
     @ActivityRetainedScoped
-    fun provideTransactionRepo(transactionSource: TransactionSource): TransactionRepo = TransactionDataRepo(transactionSource)
+    fun provideTransactionRepo(transactionSource: TransactionSource): TransactionRepo =
+        TransactionDataRepo(transactionSource)
 }

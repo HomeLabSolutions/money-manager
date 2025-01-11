@@ -102,7 +102,11 @@ fun TransactionCreationScreen(
     val context = LocalContext.current
     var showError by remember { mutableStateOf(false) }
     val showDatePickerDialog = remember { mutableStateOf(false) }
-    val datePickerState: DatePickerState = rememberDatePickerState().also { it.selectedDateMillis = uiState.transaction.date.toMillis() }
+    val datePickerState: DatePickerState =
+        rememberDatePickerState().also {
+            it.selectedDateMillis =
+                uiState.transaction.date.toMillis()
+        }
     Scaffold(topBar = {
         MmTopAppBar(
             titleRes = R.string.title_transaction,
@@ -147,7 +151,10 @@ fun TransactionCreationScreen(
                         text = uiState.transaction.currencyCode.getSymbolByCode(),
                         style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.primary,
-                        fontSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sign_big_text_size).value.sp,
+                        fontSize =
+                            dimensionResource(
+                                id = com.d9tilov.android.designsystem.R.dimen.currency_sign_big_text_size,
+                            ).value.sp,
                     )
                     AutoSizeTextField(
                         modifier = Modifier.alignByBaseline(),
@@ -162,7 +169,12 @@ fun TransactionCreationScreen(
                 Row(
                     modifier =
                         Modifier
-                            .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large)),
+                            .padding(
+                                horizontal =
+                                    dimensionResource(
+                                        id = com.d9tilov.android.designsystem.R.dimen.padding_large,
+                                    ),
+                            ),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Row(
@@ -178,7 +190,9 @@ fun TransactionCreationScreen(
                         Icon(
                             modifier =
                                 Modifier.size(
-                                    dimensionResource(id = com.d9tilov.android.common.android.R.dimen.category_creation_icon_size),
+                                    dimensionResource(
+                                        id = com.d9tilov.android.common.android.R.dimen.category_creation_icon_size,
+                                    ),
                                 ),
                             imageVector = ImageVector.vectorResource(id = uiState.transaction.category.icon),
                             contentDescription = "Category",
@@ -193,7 +207,10 @@ fun TransactionCreationScreen(
                         Text(
                             modifier =
                                 Modifier.padding(
-                                    horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
+                                    horizontal =
+                                        dimensionResource(
+                                            id = com.d9tilov.android.designsystem.R.dimen.padding_small,
+                                        ),
                                 ),
                             text = uiState.transaction.category.name,
                             color =
@@ -210,8 +227,12 @@ fun TransactionCreationScreen(
                     Text(
                         modifier =
                             Modifier
-                                .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small))
-                                .clickable { showDatePickerDialog.value = true },
+                                .padding(
+                                    horizontal =
+                                        dimensionResource(
+                                            id = com.d9tilov.android.designsystem.R.dimen.padding_small,
+                                        ),
+                                ).clickable { showDatePickerDialog.value = true },
                         text = formatDate(uiState.transaction.date, TRANSACTION_DATE_FORMAT),
                         color = MaterialTheme.colorScheme.secondary,
                         style = MaterialTheme.typography.bodyMedium,
@@ -220,8 +241,14 @@ fun TransactionCreationScreen(
                 CheckboxWithLabel(
                     modifier =
                         Modifier.padding(
-                            horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium),
-                            vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                            horizontal =
+                                dimensionResource(
+                                    id = com.d9tilov.android.designsystem.R.dimen.padding_medium,
+                                ),
+                            vertical =
+                                dimensionResource(
+                                    id = com.d9tilov.android.designsystem.R.dimen.padding_large,
+                                ),
                         ),
                     value = uiState.transaction.inStatistics,
                     label = stringResource(id = R.string.transaction_edit_in_statistics),

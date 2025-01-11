@@ -120,7 +120,9 @@ fun SettingsScreen(
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
+                        .padding(
+                            horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                        ),
                 onPeriodDateChanged = onPeriodDateChanged,
             )
             BackupLayout(
@@ -163,7 +165,10 @@ fun StartOfPeriodLayout(
         Box(modifier = Modifier.width(64.dp)) {
             OutlinedTextField(
                 value = day,
-                modifier = Modifier.padding(start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small)),
+                modifier =
+                    Modifier.padding(
+                        start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small),
+                    ),
                 maxLines = 1,
                 onValueChange = { text: String ->
                     if (isInputDateValid(text)) onPeriodDateChanged(text)
@@ -173,7 +178,10 @@ fun StartOfPeriodLayout(
         }
         Text(
             text = stringResource(R.string.settings_start_period_day_postfix),
-            modifier = Modifier.padding(start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small)),
+            modifier =
+                Modifier.padding(
+                    start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small),
+                ),
             style = MaterialTheme.typography.titleSmall,
         )
     }

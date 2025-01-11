@@ -76,7 +76,13 @@ class RegularTransactionCreationViewModel
                             transaction = tr.copy(type = transactionType),
                         )
                     } else {
-                        state.copy(transaction = tr.copy(type = transactionType, currencyCode = currencyInteractor.getMainCurrency().code))
+                        state.copy(
+                            transaction =
+                                tr.copy(
+                                    type = transactionType,
+                                    currencyCode = currencyInteractor.getMainCurrency().code,
+                                ),
+                        )
                     }
                 }
             }
@@ -120,7 +126,10 @@ class RegularTransactionCreationViewModel
             viewModelScope.launch {
                 val tr =
                     when (_uiState.value.curPeriodItem) {
-                        PeriodMenuItem.DAY -> _uiState.value.transaction.copy(executionPeriod = ExecutionPeriod.EveryDay())
+                        PeriodMenuItem.DAY ->
+                            _uiState.value.transaction.copy(
+                                executionPeriod = ExecutionPeriod.EveryDay(),
+                            )
                         PeriodMenuItem.WEEK ->
                             _uiState.value.transaction.copy(
                                 executionPeriod =

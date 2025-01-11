@@ -27,7 +27,9 @@ class RegularExpenseViewModel
 
         override fun onCheckClicked(regularTransaction: RegularTransaction) {
             viewModelScope.launch {
-                regularTransactionInteractor.update(regularTransaction.copy(pushEnabled = !regularTransaction.pushEnabled))
+                regularTransactionInteractor.update(
+                    regularTransaction.copy(pushEnabled = !regularTransaction.pushEnabled),
+                )
             }
         }
     }

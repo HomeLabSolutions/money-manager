@@ -36,9 +36,11 @@ class CategoryRepoImpl
             categoryLocalSource.delete(category)
         }
 
-        override suspend fun deleteSubcategory(subCategory: Category): Boolean = categoryLocalSource.deleteSubcategory(subCategory)
+        override suspend fun deleteSubcategory(subCategory: Category): Boolean =
+            categoryLocalSource.deleteSubcategory(subCategory)
 
-        override suspend fun deleteFromGroup(subCategory: Category): Boolean = categoryLocalSource.deleteFromGroup(subCategory)
+        override suspend fun deleteFromGroup(subCategory: Category): Boolean =
+            categoryLocalSource.deleteFromGroup(subCategory)
 
         override fun createAllItemsFolder(categories: List<Category>) =
             Category.EMPTY_EXPENSE.copy(
