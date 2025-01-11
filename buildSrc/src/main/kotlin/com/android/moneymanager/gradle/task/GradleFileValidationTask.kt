@@ -1,4 +1,4 @@
-package com.android.moneymanager.task
+package com.android.moneymanager.gradle.task
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction

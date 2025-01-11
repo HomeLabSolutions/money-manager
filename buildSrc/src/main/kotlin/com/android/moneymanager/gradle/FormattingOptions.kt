@@ -1,5 +1,6 @@
-package com.android.moneymanager
+package com.android.moneymanager.gradle
 
+import com.android.moneymanager.gradle.task.TomlFileValidationTask
 import org.gradle.api.Project
 import org.gradle.api.attributes.Bundling
 import org.gradle.api.tasks.JavaExec
@@ -7,7 +8,6 @@ import org.gradle.kotlin.dsl.creating
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.named
-import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.register
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
@@ -23,6 +23,8 @@ object FormattingOptions {
             }
             // ktlint(project(":custom-ktlint-ruleset")) // in case of custom ruleset
         }
+
+        tasks.register<TomlFileValidationTask>("tomlCheck")
 
         tasks.register<JavaExec>("ktlintCheck") {
             group = LifecycleBasePlugin.VERIFICATION_GROUP
