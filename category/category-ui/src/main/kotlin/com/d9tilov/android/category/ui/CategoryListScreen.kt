@@ -135,7 +135,10 @@ fun CategoryListScreen(
                         .weight(1f)
                         .padding(
                             vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium),
-                            horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                            horizontal =
+                                dimensionResource(
+                                    id = com.d9tilov.android.designsystem.R.dimen.padding_medium,
+                                ),
                         ),
                 columns = GridCells.Fixed(4),
             ) {

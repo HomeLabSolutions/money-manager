@@ -83,7 +83,9 @@ fun CategoryIconListItem(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large)),
+                    .padding(
+                        horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                    ),
             text = stringResource(id = categoryGroupItemMap[group] ?: R.string.category_group_free),
         )
         HorizontalDivider(

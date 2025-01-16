@@ -17,7 +17,8 @@ class TransactionDataRepo(
 
     override fun getTransactionById(id: Long): Flow<TransactionDataModel> = transactionSource.getById(id)
 
-    override fun getTransactionsByType(transactionType: TransactionType) = transactionSource.getAllByTypePaging(transactionType)
+    override fun getTransactionsByType(transactionType: TransactionType) =
+        transactionSource.getAllByTypePaging(transactionType)
 
     override fun getTransactionsByTypeInPeriod(
         from: LocalDateTime,
@@ -34,7 +35,8 @@ class TransactionDataRepo(
             withRegular,
         )
 
-    override suspend fun getAllByCategory(category: Category): List<TransactionDataModel> = transactionSource.getAllByCategory(category)
+    override suspend fun getAllByCategory(category: Category): List<TransactionDataModel> =
+        transactionSource.getAllByCategory(category)
 
     override fun getByCategoryInPeriod(
         category: Category,

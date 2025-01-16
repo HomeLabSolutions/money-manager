@@ -70,7 +70,9 @@ class BackupManagerImpl
                             if (!continuation.isActive) return@addOnSuccessListener
                             val backupDate = currentDateTime().toMillis()
                             runBlocking { preferencesStore.updateLastBackupDate(backupDate) }
-                            continuation.resume(ResultOf.Success(BackupData.EMPTY.copy(lastBackupTimestamp = backupDate)))
+                            continuation.resume(
+                                ResultOf.Success(BackupData.EMPTY.copy(lastBackupTimestamp = backupDate)),
+                            )
                             Timber.tag(TAG).d("Backup was compete successfully")
                         }.addOnFailureListener {
                             if (!continuation.isActive) return@addOnFailureListener

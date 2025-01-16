@@ -127,7 +127,10 @@ fun ProfileScreen(
         ProfileSection(state.settings, onSettingsClicked)
         Spacer(modifier = Modifier.weight(1f))
         OutlinedButton(
-            modifier = Modifier.padding(top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
+            modifier =
+                Modifier.padding(
+                    top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                ),
             onClick = { onLogoutClicked() },
             shape = RoundedCornerShape(50),
             colors = ButtonDefaults.outlinedButtonColors().copy(containerColor = MaterialTheme.colorScheme.error),
@@ -361,8 +364,9 @@ fun ProfileSection(
                 Text(
                     modifier =
                         Modifier
-                            .padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large))
-                            .constrainAs(idData) {
+                            .padding(
+                                horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
+                            ).constrainAs(idData) {
                                 baseline.linkTo(idTitle.baseline)
                                 start.linkTo(idTitle.end)
                             }.background(

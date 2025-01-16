@@ -3,13 +3,14 @@ activity = "1.9.3"
 androidxComposeCompiler = "1.5.12"
 appCompat = "1.7.0"
 autonomousapps = "2.6.0"
-autonomousappsSorting = "0.13"
+autonomousappsSorting = "0.14"
+autonomousappsUnused = "2.7.0"
 billing = "7.1.1"
 coil = "2.6.0"
 compose = "1.7.6"
-composePlugin = "2.0.0"
 composeConstraintLayout = "1.1.0"
 composeMaterial3 = "1.3.1"
+composePlugin = "2.0.0"
 composeRuntime = "2.8.7"
 composeViewModel = "2.8.7"
 core = "1.15.0"
@@ -26,13 +27,14 @@ firebaseUi = "8.0.2"
 googlePlayServices = "4.4.2"
 googlePlayServicesAuth = "20.7.0"
 gradlePlugin = "8.2.2"
+guava = "33.4.0-jre"
 hilt = "2.51"
 hiltCommon = "1.2.0"
 hiltNavigationCompose = "1.2.0"
 hiltPlugin = "2.51"
+java = "17"
 javaPoet = "1.13.0"
 javaxInject = "1"
-javaVersion = "17"
 junit = "4.13.2"
 kotlin = "2.0.20"
 kotlinDatetime = "0.4.1"
@@ -50,7 +52,6 @@ startup = "1.2.0"
 timber = "5.0.1"
 worker = "2.10.0"
 workerHilt = "1.2.0"
-unusedDeps = "2.6.1"
 
 [libraries]
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
@@ -86,11 +87,12 @@ firebase-crashlytics-gradle = { group = "com.google.firebase", name = "firebase-
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 firebase-ui-auth = { group = "com.firebaseui", name = "firebase-ui-auth", version.ref = "firebaseUi" }
 google-services = { group = "com.google.gms", name = "google-services", version.ref = "googlePlayServices" }
+guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt-android-gradle-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hiltPlugin" }
-hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "hiltPlugin" }
 hilt-common = { group = "androidx.hilt", name = "hilt-common", version.ref = "hiltCommon" }
+hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "hiltPlugin" }
 java-poet = { group = "com.squareup", name = "javapoet", version.ref = "javaPoet" }
 javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javaxInject" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -106,8 +108,8 @@ navigation-compose = { group = "androidx.navigation", name = "navigation-compose
 navigation-runtime = { group = "androidx.navigation", name = "navigation-runtime", version.ref = "navigation" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
 paging-common = { group = "androidx.paging", name = "paging-common", version.ref = "paging" }
+paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "googlePlayServicesAuth" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
@@ -116,10 +118,9 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 startup = { group = "androidx.startup", name = "startup-runtime", version.ref = "startup" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
-unused-deps = { group = "com.autonomousapps", name = "dependency-analysis-gradle-plugin", version.ref = "unusedDeps" }
 
 [plugins]
-deps-sorting = { id = "com.squareup.sort-dependencies", version.ref = "autonomousappsSorting" }
-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }
-org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+deps-sorting = { id = "com.squareup.sort-dependencies", version.ref = "autonomousappsSorting" }
+deps-unused = { id = "com.autonomousapps.dependency-analysis", version.ref = "autonomousappsUnused" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }

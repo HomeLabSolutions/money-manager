@@ -1,4 +1,4 @@
-package com.android.moneymanager.task
+package com.android.moneymanager.gradle.task
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
@@ -97,7 +97,9 @@ abstract class GradleFileValidationTask : DefaultTask() {
                     .anyMatch { it.contains(DEPENDENCY_ANALYSIS_PREFIX) }
             }
         if (!found) {
-            throw IllegalStateException("Please check file $path\nfor unused dependencies with script [python3 unused_deps.py <file-path>]")
+            throw IllegalStateException(
+                "Please check file $path\nfor unused dependencies with script [python3 unused_deps.py <file-path>]",
+            )
         }
     }
 

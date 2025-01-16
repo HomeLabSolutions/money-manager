@@ -30,9 +30,11 @@ class CategoryInteractorImpl(
             getAllWithChildrenInSingleList(it)
         }
 
-    override fun getAllCategoriesByType(type: TransactionType): Flow<List<Category>> = categoryRepo.getCategoriesByType(type)
+    override fun getAllCategoriesByType(type: TransactionType): Flow<List<Category>> =
+        categoryRepo.getCategoriesByType(type)
 
-    override fun getChildrenByParent(parentCategory: Category): Flow<List<Category>> = categoryRepo.getChildrenByParent(parentCategory)
+    override fun getChildrenByParent(parentCategory: Category): Flow<List<Category>> =
+        categoryRepo.getChildrenByParent(parentCategory)
 
     override suspend fun deleteCategory(category: Category) {
         categoryRepo.deleteCategory(category)

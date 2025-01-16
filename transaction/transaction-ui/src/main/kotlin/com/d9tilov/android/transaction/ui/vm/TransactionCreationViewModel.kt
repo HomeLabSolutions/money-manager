@@ -52,7 +52,9 @@ class TransactionCreationViewModel
             viewModelScope.launch(transactionExceptionHandler) {
                 launch {
                     transactionInteractor.getTransactionById(transactionId).collect { tr ->
-                        _uiState.update { state: TransactionUiState -> state.copy(amount = tr.sum.toString(), transaction = tr) }
+                        _uiState.update { state: TransactionUiState ->
+                            state.copy(amount = tr.sum.toString(), transaction = tr)
+                        }
                     }
                 }
             }
@@ -95,6 +97,8 @@ class TransactionCreationViewModel
 
         fun save() =
             viewModelScope.launch {
-                transactionInteractor.update(_uiState.value.transaction.copy(sum = _uiState.value.amount.toBigDecimal()))
+                transactionInteractor.update(
+                    _uiState.value.transaction.copy(sum = _uiState.value.amount.toBigDecimal()),
+                )
             }
     }

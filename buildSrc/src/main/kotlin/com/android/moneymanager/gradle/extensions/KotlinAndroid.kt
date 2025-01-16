@@ -1,4 +1,4 @@
-package com.android.moneymanager.extensions
+package com.android.moneymanager.gradle.extensions
 
 /*
  * Copyright 2022 The Android Open Source Project
@@ -36,8 +36,8 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, 
         }
 
         compileOptions {
-            sourceCompatibility(buildLibs.versions.javaVersion.get())
-            targetCompatibility(buildLibs.versions.javaVersion.get())
+            sourceCompatibility(buildLibs.versions.java.get())
+            targetCompatibility(buildLibs.versions.java.get())
         }
     }
 

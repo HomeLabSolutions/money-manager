@@ -56,7 +56,9 @@ class CurrencyViewModel
                         _uiState.update { state ->
                             if (selectedCurrency != null) {
                                 val list =
-                                    newState.currencyList.map { item -> item.copy(isBase = item.code == selectedCurrency) }
+                                    newState.currencyList.map { item ->
+                                        item.copy(isBase = item.code == selectedCurrency)
+                                    }
                                 newState.copy(currencyList = list)
                             } else {
                                 newState

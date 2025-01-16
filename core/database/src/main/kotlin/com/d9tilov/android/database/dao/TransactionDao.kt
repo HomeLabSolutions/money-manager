@@ -11,7 +11,9 @@ import kotlinx.datetime.LocalDateTime
 
 @Dao
 interface TransactionDao {
-    @Query("SELECT * FROM transactions WHERE clientId=:clientId AND type = :type AND date >= :from AND date <= :to ORDER BY date DESC")
+    @Query(
+        "SELECT * FROM transactions WHERE clientId=:clientId AND type = :type AND date >= :from AND date <= :to ORDER BY date DESC",
+    )
     fun getAllByType(
         clientId: String,
         from: LocalDateTime,
@@ -39,7 +41,9 @@ interface TransactionDao {
         categoryId: Long,
     ): List<TransactionDbModel>
 
-    @Query("SELECT * FROM transactions WHERE clientId =:uid AND categoryId =:categoryId AND date >= :from AND date <= :to")
+    @Query(
+        "SELECT * FROM transactions WHERE clientId =:uid AND categoryId =:categoryId AND date >= :from AND date <= :to",
+    )
     fun getByCategoryIdInPeriod(
         uid: String,
         categoryId: Long,

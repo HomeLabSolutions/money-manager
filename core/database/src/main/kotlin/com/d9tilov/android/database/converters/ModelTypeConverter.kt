@@ -40,7 +40,9 @@ object ModelTypeConverter {
     @JvmStatic
     fun fromExecutionPeriod(value: ExecutionPeriod): String =
         when (value.periodType) {
-            PeriodType.DAY -> "${value.periodType.name}:1:${DateConverter.fromOffsetDateTime(value.lastExecutionDateTime)}"
+            PeriodType.DAY -> "${value.periodType.name}:1:${DateConverter.fromOffsetDateTime(
+                value.lastExecutionDateTime,
+            )}"
             PeriodType.WEEK ->
                 value.periodType.name +
                     ":${(value as ExecutionPeriod.EveryWeek).dayOfWeek}" +

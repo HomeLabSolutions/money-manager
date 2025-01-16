@@ -148,10 +148,12 @@ fun CategoryCreationScreen(
                     uiState.saveStatus?.onFailure { ex: Throwable ->
                         val messageId =
                             when (ex) {
-                                is CategoryException.CategoryEmptyNameException -> R.string.category_unit_name_exist_error
+                                is CategoryException.CategoryEmptyNameException ->
+                                    R.string.category_unit_name_exist_error
                                 is CategoryException.CategoryExistException -> R.string.category_name_exist_error
                                 is CategoryException.CategoryNotFoundException -> R.string.category_not_found_error
-                                is CategoryException.CategoryNoParentException -> R.string.category_parent_not_found_error
+                                is CategoryException.CategoryNoParentException ->
+                                    R.string.category_parent_not_found_error
                                 else -> com.d9tilov.android.common.android.R.string.unknown_error
                             }
                         Text(
@@ -171,8 +173,9 @@ fun CategoryCreationScreen(
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large))
-                        .clickable { clickOnCategoryIcon() },
+                        .padding(
+                            horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                        ).clickable { clickOnCategoryIcon() },
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
@@ -196,14 +199,20 @@ fun CategoryCreationScreen(
                         Modifier
                             .fillMaxWidth()
                             .padding(
-                                vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                                vertical =
+                                    dimensionResource(
+                                        id = com.d9tilov.android.designsystem.R.dimen.padding_large,
+                                    ),
                             ),
                     state = state,
                 ) {
                     items(items = colorList, key = { item -> item }) { colorRes ->
                         val isSelected = colorRes == uiState.category.color
                         ColorListSelectorItem(
-                            size = dimensionResource(id = com.d9tilov.android.common.android.R.dimen.item_color_picker_size),
+                            size =
+                                dimensionResource(
+                                    id = com.d9tilov.android.common.android.R.dimen.item_color_picker_size,
+                                ),
                             color = colorRes,
                             selected = isSelected,
                             onClick = {
@@ -253,7 +262,9 @@ fun ColorListSelectorItem(
     Column(
         modifier =
             Modifier
-                .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_extra_small)),
+                .padding(
+                    horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_extra_small),
+                ),
         verticalArrangement = Arrangement.Center,
     ) {
         val scale = if (selected) 1.5f else 1f

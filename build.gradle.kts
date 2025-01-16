@@ -1,4 +1,5 @@
-import com.android.moneymanager.FormattingOptions.applyPrecheckOptions
+import com.android.moneymanager.gradle.DetektOptions.applyDetektOptions
+import com.android.moneymanager.gradle.FormattingOptions.applyPrecheckOptions
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
@@ -19,6 +20,7 @@ buildscript {
 }
 
 applyPrecheckOptions()
+applyDetektOptions()
 
 allprojects {
     repositories {
@@ -46,10 +48,27 @@ tasks.register("clean", Delete::class) {
 
 plugins {
     alias(libs.plugins.serialization) apply false
-    alias(libs.plugins.deps.sorting) apply false
     alias(libs.plugins.compose.compiler) apply false
+    alias(libs.plugins.deps.sorting) apply false
+    alias(libs.plugins.deps.unused) apply true
 }
 
 subprojects {
     apply(plugin = "com.squareup.sort-dependencies")
+}
+
+dependencyAnalysis {
+    val fail = "fail"
+    val ignore = "ignore"
+    issues {
+        all {
+            onUnusedDependencies { severity(fail) }
+            onUsedTransitiveDependencies { severity(ignore) }
+            onIncorrectConfiguration { severity(ignore) }
+            onCompileOnly { severity(ignore) }
+            onRuntimeOnly { severity(ignore) }
+            onUnusedAnnotationProcessors { severity(ignore) }
+            onRedundantPlugins { severity(ignore) }
+        }
+    }
 }

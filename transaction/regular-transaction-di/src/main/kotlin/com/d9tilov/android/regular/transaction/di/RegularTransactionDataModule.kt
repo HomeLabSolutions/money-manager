@@ -22,7 +22,8 @@ object RegularTransactionDataModule {
         @Dispatcher(MoneyManagerDispatchers.IO) dispatcher: CoroutineDispatcher,
         preferencesStore: PreferencesStore,
         appDatabase: AppDatabase,
-    ): RegularTransactionSource = RegularTransactionLocalSource(dispatcher, preferencesStore, appDatabase.regularTransactionDao())
+    ): RegularTransactionSource =
+        RegularTransactionLocalSource(dispatcher, preferencesStore, appDatabase.regularTransactionDao())
 
     @Provides
     fun provideRegularTransactionRepo(regularTransactionSource: RegularTransactionSource): RegularTransactionRepo =

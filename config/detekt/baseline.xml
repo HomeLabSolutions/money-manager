@@ -1,0 +1,184 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <CurrentIssues>
+    <ID>BracesOnWhenStatements:CurrencyTextField.kt$when</ID>
+    <ID>BracesOnWhenStatements:ProfileScreen.kt$when</ID>
+    <ID>BracesOnWhenStatements:RegularTransactionListScreen.kt$when</ID>
+    <ID>BracesOnWhenStatements:SettingsViewModel.kt$SettingsViewModel$when</ID>
+    <ID>BracesOnWhenStatements:Theme.kt$when</ID>
+    <ID>BracesOnWhenStatements:TransactionInteractorImpl.kt$TransactionInteractorImpl$when</ID>
+    <ID>CastToNullableType:build.gradle.kts$as</ID>
+    <ID>ClassOrdering:BillingDataRepo.kt$BillingDataRepo$// Set to true when a returned purchases is an auto-renewing premium subscription. override val hasRenewablePremium: Flow&lt;Boolean&gt; = billingSource.purchases .map { purchaseList -&gt; purchaseList.any { purchase -&gt; purchase.products.contains(PREMIUM_SUB) &amp;&amp; purchase.isAutoRenewing } }.flowOn(dispatcher)</ID>
+    <ID>ClassOrdering:PreferencesStore.kt$PreferencesStore$val backupData: Flow&lt;Long&gt; = dataStore.data.map { data -&gt; data[PREFERENCE_LAST_BACKUP_DATE_KEY] ?: -1L }</ID>
+    <ID>ClassOrdering:RegularTransaction.kt$RegularTransaction$fun isValid(): Boolean</ID>
+    <ID>ClassOrdering:Transaction.kt$Transaction$override val itemType: Int = ITEM</ID>
+    <ID>CognitiveComplexMethod:BackupManagerImpl.kt$BackupManagerImpl$override suspend fun backupDb(): ResultOf&lt;BackupData&gt;</ID>
+    <ID>CognitiveComplexMethod:BackupManagerImpl.kt$BackupManagerImpl$override suspend fun deleteBackup(): ResultOf&lt;Any&gt;</ID>
+    <ID>CognitiveComplexMethod:BackupManagerImpl.kt$BackupManagerImpl$override suspend fun restoreDb(): ResultOf&lt;Any&gt;</ID>
+    <ID>CognitiveComplexMethod:CategoryCreationScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun CategoryCreationScreen( uiState: CategoryCreationUiState, onCategoryUpdated: (Category) -&gt; Unit, clickOnCategoryIcon: () -&gt; Unit, onHideError: () -&gt; Unit, onBackClicked: () -&gt; Unit, onSaveClicked: () -&gt; Unit, )</ID>
+    <ID>CognitiveComplexMethod:CategoryListScreen.kt$@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class) @Composable fun CategoryListScreen( uiState: CategoryUiState, onBackClicked: () -&gt; Unit, onCreateClicked: () -&gt; Unit, onCategoryClicked: (Category) -&gt; Unit, onRemoveClicked: (Category) -&gt; Unit, )</ID>
+    <ID>CognitiveComplexMethod:CurrencyTextField.kt$@Composable private fun CurrencyTextField( amount: String, currencyCode: String, isEditable: Boolean, modifier: Modifier = Modifier, style: TextStyle, inputValueChanged: (String) -&gt; Unit, )</ID>
+    <ID>CognitiveComplexMethod:IncomeExpenseScreen.kt$@OptIn(ExperimentalFoundationApi::class) @Composable fun HomeTabs( listState: LazyListState, uiState: IncomeExpenseUiState, modifier: Modifier = Modifier, onTransactionClicked: (Transaction) -&gt; Unit, onNumberClicked: (KeyPress) -&gt; Unit, onCategoryClicked: (Category) -&gt; Unit, onKeyboardClicked: () -&gt; Unit, onCurrencyClicked: () -&gt; Unit, onDeleteTransactionConfirmClicked: (Transaction) -&gt; Unit, onAllCategoryClicked: (ScreenType, CategoryDestination) -&gt; Unit, )</ID>
+    <ID>CognitiveComplexMethod:IncomeExpenseScreen.kt$@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class) @Composable fun TransactionListLayout( listState: LazyListState, modifier: Modifier, transactions: Flow&lt;PagingData&lt;BaseTransaction&gt;&gt;, screenType: ScreenType, onTransactionClicked: (Transaction) -&gt; Unit, onDeleteTransactionConfirmClicked: (Transaction) -&gt; Unit, )</ID>
+    <ID>CognitiveComplexMethod:MainPriceFieldParser.kt$MainPriceFieldParser$fun isInputValid(str: String): Boolean</ID>
+    <ID>CognitiveComplexMethod:MainPriceFieldParser.kt$MainPriceFieldParser$fun parse( priceStr: String, btn: KeyPress, ): String</ID>
+    <ID>CognitiveComplexMethod:RegularTransactionCreationScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun RegularTransactionCreationScreen( uiState: RegularTransactionCreationUiState, onSumChanged: (String) -&gt; Unit, onCurrencyClicked: (String) -&gt; Unit, onCategoryClicked: (TransactionType, CategoryDestination) -&gt; Unit, onCurPeriodItemUpdate: (PeriodMenuItem) -&gt; Unit, onWeekDayClicked: (DaysInWeek) -&gt; Unit, onDayOfMonthClicked: (Int) -&gt; Unit, onDescriptionChanged: (String) -&gt; Unit, onBackClicked: () -&gt; Unit, onSaveClicked: () -&gt; Unit, )</ID>
+    <ID>CognitiveComplexMethod:RegularTransactionListScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun RegularTransactionListScreen( uiState: RegularTransactionListState, onTransactionClicked: (currency: RegularTransaction) -&gt; Unit = {}, onDeleteTransactionConfirmClicked: (RegularTransaction) -&gt; Unit, onAddClicked: () -&gt; Unit, onBackClicked: () -&gt; Unit, )</ID>
+    <ID>CognitiveComplexMethod:TransactionInteractorImpl.kt$TransactionInteractorImpl$override suspend fun executeRegularIfNeeded(type: TransactionType)</ID>
+    <ID>CollapsibleIfStatements:CategoryCreationScreen.kt$if (currentState.isAtLeast(Lifecycle.State.RESUMED)) { if (uiState.saveStatus?.isSuccess == true) onBackClicked() }</ID>
+    <ID>ComplexInterface:BillingInteractor.kt$BillingInteractor</ID>
+    <ID>ComplexInterface:CategoryInteractor.kt$CategoryInteractor</ID>
+    <ID>ComplexInterface:CategoryRepo.kt$CategoryRepo</ID>
+    <ID>ComplexInterface:CategorySource.kt$CategorySource</ID>
+    <ID>ComplexInterface:TransactionDao.kt$TransactionDao</ID>
+    <ID>ComplexInterface:TransactionInteractor.kt$TransactionInteractor</ID>
+    <ID>ComplexInterface:TransactionRepo.kt$TransactionRepo</ID>
+    <ID>ComplexInterface:TransactionSource.kt$TransactionSource</ID>
+    <ID>CyclomaticComplexMethod:IncomeExpenseScreen.kt$@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class) @Composable fun TransactionListLayout( listState: LazyListState, modifier: Modifier, transactions: Flow&lt;PagingData&lt;BaseTransaction&gt;&gt;, screenType: ScreenType, onTransactionClicked: (Transaction) -&gt; Unit, onDeleteTransactionConfirmClicked: (Transaction) -&gt; Unit, )</ID>
+    <ID>CyclomaticComplexMethod:TransactionInteractorImpl.kt$TransactionInteractorImpl$override suspend fun executeRegularIfNeeded(type: TransactionType)</ID>
+    <ID>DataClassContainsFunctions:RegularTransaction.kt$RegularTransaction$fun isValid(): Boolean</ID>
+    <ID>DataClassShouldBeImmutable:UserDbModel.kt$UserDbModel$@PrimaryKey @ColumnInfo(name = "uid") var uid: String</ID>
+    <ID>DestructuringDeclarationWithTooManyEntries:IncomeExpenseScreen.kt$val (idIcon, idTitle, idDescription, idRegularIcon, idInStatisticsIcon, idSum, idDivider) = createRefs()</ID>
+    <ID>DestructuringDeclarationWithTooManyEntries:ProfileScreen.kt$val (idIcon, idTitle, idData, idSubtitle, idDivider) = createRefs()</ID>
+    <ID>EmptyFunctionBlock:StatisticsScreen.kt${}</ID>
+    <ID>ForbiddenImport:BackupManagerImpl.kt$import kotlinx.coroutines.runBlocking</ID>
+    <ID>LabeledExpression:BackupManagerImpl.kt$BackupManagerImpl$@addOnFailureListener</ID>
+    <ID>LabeledExpression:BackupManagerImpl.kt$BackupManagerImpl$@addOnSuccessListener</ID>
+    <ID>LabeledExpression:BackupManagerImpl.kt$BackupManagerImpl$@suspendCancellableCoroutine</ID>
+    <ID>LabeledExpression:CategoryCreationScreen.kt$@LaunchedEffect</ID>
+    <ID>LabeledExpression:CurrencyListScreen.kt$@LaunchedEffect</ID>
+    <ID>LabeledExpression:IncomeExpenseScreen.kt$@items</ID>
+    <ID>LabeledExpression:RegularTransactionListScreen.kt$@Scaffold</ID>
+    <ID>LargeClass:TransactionInteractorImpl.kt$TransactionInteractorImpl : TransactionInteractor</ID>
+    <ID>MagicNumber:CategoryCreationScreen.kt$1.5f</ID>
+    <ID>MagicNumber:CategoryGroupIconListScreen.kt$0.2f</ID>
+    <ID>MagicNumber:CategoryIconGridScreen.kt$4</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$10L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$11L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$12L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$13L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$14L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$15L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$16L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$17L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$18L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$19L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$20L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$21L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$22L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$23L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$24L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$25L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$26L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$27L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$28L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$29L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$2f</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$30L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$31L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$32L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$33L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$34L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$3L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$4</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$4L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$5</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$5L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$6L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$7L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$8L</ID>
+    <ID>MagicNumber:CategoryListScreen.kt$9L</ID>
+    <ID>MagicNumber:CurrencyListScreen.kt$0.2f</ID>
+    <ID>MagicNumber:CurrencyListScreen.kt$0.85f</ID>
+    <ID>MagicNumber:CurrencyTextField.kt$123</ID>
+    <ID>MagicNumber:IncomeExpenseScreen.kt$0.2f</ID>
+    <ID>MagicNumber:IncomeExpenseScreen.kt$10L</ID>
+    <ID>MagicNumber:IncomeExpenseScreen.kt$11L</ID>
+    <ID>MagicNumber:IncomeExpenseScreen.kt$12L</ID>
+    <ID>MagicNumber:IncomeExpenseScreen.kt$13L</ID>
+    <ID>MagicNumber:IncomeExpenseScreen.kt$14L</ID>
+    <ID>MagicNumber:IncomeExpenseScreen.kt$15L</ID>
+    <ID>MagicNumber:IncomeExpenseScreen.kt$3</ID>
+    <ID>MagicNumber:IncomeExpenseScreen.kt$3L</ID>
+    <ID>MagicNumber:IncomeExpenseScreen.kt$4L</ID>
+    <ID>MagicNumber:IncomeExpenseScreen.kt$5</ID>
+    <ID>MagicNumber:IncomeExpenseScreen.kt$50</ID>
+    <ID>MagicNumber:IncomeExpenseScreen.kt$5L</ID>
+    <ID>MagicNumber:IncomeExpenseScreen.kt$6L</ID>
+    <ID>MagicNumber:IncomeExpenseScreen.kt$7L</ID>
+    <ID>MagicNumber:IncomeExpenseScreen.kt$8L</ID>
+    <ID>MagicNumber:IncomeExpenseScreen.kt$9L</ID>
+    <ID>MagicNumber:ProfileScreen.kt$50</ID>
+    <ID>MagicNumber:RegularTransactionCreationScreen.kt$31</ID>
+    <ID>MagicNumber:RegularTransactionCreationScreen.kt$5</ID>
+    <ID>MagicNumber:RegularTransactionListScreen.kt$10L</ID>
+    <ID>MagicNumber:RegularTransactionListScreen.kt$11L</ID>
+    <ID>MagicNumber:RegularTransactionListScreen.kt$12L</ID>
+    <ID>MagicNumber:RegularTransactionListScreen.kt$13L</ID>
+    <ID>MagicNumber:RegularTransactionListScreen.kt$14L</ID>
+    <ID>MagicNumber:RegularTransactionListScreen.kt$15L</ID>
+    <ID>MagicNumber:RegularTransactionListScreen.kt$16L</ID>
+    <ID>MagicNumber:RegularTransactionListScreen.kt$17L</ID>
+    <ID>MagicNumber:RegularTransactionListScreen.kt$18L</ID>
+    <ID>MagicNumber:RegularTransactionListScreen.kt$3L</ID>
+    <ID>MagicNumber:RegularTransactionListScreen.kt$4L</ID>
+    <ID>MagicNumber:RegularTransactionListScreen.kt$5L</ID>
+    <ID>MagicNumber:RegularTransactionListScreen.kt$6L</ID>
+    <ID>MagicNumber:RegularTransactionListScreen.kt$7L</ID>
+    <ID>MagicNumber:RegularTransactionListScreen.kt$8L</ID>
+    <ID>MagicNumber:RegularTransactionListScreen.kt$9L</ID>
+    <ID>MagicNumber:SettingsScreen.kt$2000</ID>
+    <ID>MagicNumber:SettingsScreen.kt$31</ID>
+    <ID>MagicNumber:TransactionCreationScreen.kt$42</ID>
+    <ID>MatchingDeclarationName:Background.kt$BackgroundTheme</ID>
+    <ID>MatchingDeclarationName:SettingsNavigation.kt$SettingsBillingNavigator : BaseNavigator</ID>
+    <ID>MatchingDeclarationName:SyncInitializer.kt$Sync</ID>
+    <ID>MaxLineLength:BillingDataSource.kt$BillingDataSource$"onProductDetailsResponse: Found null or empty ProductDetails. Check to see if the Products you requested are correctly published in the Google Play Console."</ID>
+    <ID>MaxLineLength:GradleFileValidationTask.kt$GradleFileValidationTask$"Transitive internal dependency $it\nin file $path is not allowed. Please, replace it with implementation"</ID>
+    <ID>MaxLineLength:TransactionDao.kt$TransactionDao$"DELETE FROM transactions WHERE rowId in(SELECT rowId from transactions WHERE clientId=:clientId AND categoryId=:categoryId LIMIT 1)"</ID>
+    <ID>MaxLineLength:TransactionDao.kt$TransactionDao$"SELECT * FROM transactions WHERE clientId=:clientId AND type = :type AND date &gt;= :from AND date &lt;= :to ORDER BY date DESC"</ID>
+    <ID>MaxLineLength:TransactionInteractorImpl.kt$TransactionInteractorImpl$"getTransactionsGroupedByCategory Not found category with id: ${item.categoryId}"</ID>
+    <ID>MaxLineLength:build.gradle.kts$println("Warning: keystore.properties file not found. Release signing configuration will not be applied.")</ID>
+    <ID>MissingPackageDeclaration:AndroidApplicationComposeConventionPlugin.kt$.AndroidApplicationComposeConventionPlugin.kt</ID>
+    <ID>MissingPackageDeclaration:AndroidApplicationConventionPlugin.kt$.AndroidApplicationConventionPlugin.kt</ID>
+    <ID>MissingPackageDeclaration:AndroidHiltConventionPlugin.kt$.AndroidHiltConventionPlugin.kt</ID>
+    <ID>MissingPackageDeclaration:AndroidLibraryComposeConventionPlugin.kt$.AndroidLibraryComposeConventionPlugin.kt</ID>
+    <ID>MissingPackageDeclaration:AndroidLibraryConventionPlugin.kt$.AndroidLibraryConventionPlugin.kt</ID>
+    <ID>MissingPackageDeclaration:KotlinLibraryConventionPlugin.kt$.KotlinLibraryConventionPlugin.kt</ID>
+    <ID>NestedBlockDepth:MainPriceFieldParser.kt$MainPriceFieldParser$fun parse( priceStr: String, btn: KeyPress, ): String</ID>
+    <ID>OptionalUnit:CurrencyLocalSource.kt$CurrencyLocalSource$Unit</ID>
+    <ID>OptionalUnit:UserLocalSource.kt$UserLocalSource$Unit</ID>
+    <ID>ReturnCount:Extensions.kt$fun BigDecimal?.reduceScale(fully: Boolean = false): BigDecimal</ID>
+    <ID>ReturnCount:MainPriceFieldParser.kt$MainPriceFieldParser$fun isInputValid(str: String): Boolean</ID>
+    <ID>ReturnCount:NetworkUtils.kt$fun isNetworkConnected(context: Context): Boolean</ID>
+    <ID>StringLiteralDuplication:CategoryListScreen.kt$"Category15"</ID>
+    <ID>SwallowedException:CurrencyInteractorImpl.kt$CurrencyInteractorImpl$ex: Exception</ID>
+    <ID>TooGenericExceptionCaught:CurrencyInteractorImpl.kt$CurrencyInteractorImpl$ex: Exception</ID>
+    <ID>TooManyFunctions:CategoryRepo.kt$CategoryRepo</ID>
+    <ID>TooManyFunctions:IncomeExpenseScreen.kt$com.d9tilov.android.incomeexpense.ui.IncomeExpenseScreen.kt</ID>
+    <ID>TooManyFunctions:TransactionDao.kt$TransactionDao</ID>
+    <ID>TooManyFunctions:TransactionInteractor.kt$TransactionInteractor</ID>
+    <ID>UnnecessaryParentheses:AndroidCompose.kt$(enableMetricsProvider.orNull == "true")</ID>
+    <ID>UnnecessaryParentheses:AndroidCompose.kt$(enableReportsProvider.orNull == "true")</ID>
+    <ID>UnnecessaryParentheses:ComposeCurrencyView.kt$(R.dimen.padding_extra_small)</ID>
+    <ID>UnnecessaryParentheses:RegularIncomeExpenseNavigator.kt$RegularTransactionArgs.RegularTransactionCreationArgs$(checkNotNull(savedStateHandle[REGULAR_TRANSACTION_ID_ARGS]) as Long)</ID>
+    <ID>UnnecessaryParentheses:TransactionNavigation.kt$TransactionArgs.TransactionCreationArgs$(checkNotNull(savedStateHandle[TRANSACTION_ID_ARG]) as Long)</ID>
+    <ID>UnusedParameter:ProfileScreen.kt$onGoalsClicked: () -&gt; Unit</ID>
+    <ID>UnusedPrivateMember:CheckUnusedDependenciesByImpact.kt$CheckUnusedDependenciesByImpact$private fun getChangedModules(): List&lt;String&gt;</ID>
+    <ID>UnusedPrivateProperty:BillingInteractorImpl.kt$BillingInteractorImpl$val details = billingRepo.premiumProductDetails.map { productDetails -&gt; productDetails != null }</ID>
+    <ID>UseCheckOrError:GradleFileValidationTask.kt$GradleFileValidationTask$throw IllegalStateException( "Please check file $path\nfor unused dependencies with script [python3 unused_deps.py &lt;file-path&gt;]", )</ID>
+    <ID>UseDataClass:CategoryNavigation.kt$CategoryArgs$CategoryCreationArgs</ID>
+    <ID>UseDataClass:CategoryNavigation.kt$CategoryArgs$CategoryIconsArgs</ID>
+    <ID>UseDataClass:CategoryNavigation.kt$CategoryArgs$CategoryListArgs</ID>
+    <ID>UseDataClass:CurrencyNavigation.kt$CurrencyArgs$CurrencyScreenArgs</ID>
+    <ID>UseDataClass:RegularIncomeExpenseNavigator.kt$RegularTransactionArgs$RegularTransactionCreationArgs</ID>
+    <ID>UseDataClass:RegularIncomeExpenseNavigator.kt$RegularTransactionArgs$RegularTransactionListArgs</ID>
+    <ID>UseDataClass:TransactionNavigation.kt$TransactionArgs$TransactionCreationArgs</ID>
+    <ID>UseIfInsteadOfWhen:BillingDataSource.kt$BillingDataSource$when (responseCode) { BillingClient.BillingResponseCode.OK -&gt; { var newMap = emptyMap&lt;String, ProductDetails&gt;() if (productDetailsList.isEmpty()) { Timber .tag(TAG) .d( "onProductDetailsResponse: Found null or empty ProductDetails. Check to see if the Products you requested are correctly published in the Google Play Console.", ) } else { newMap = productDetailsList.associateBy { it.productId } } _productWithProductDetails.value = newMap } else -&gt; { Timber.tag(TAG).i("onProductDetailsResponse: $responseCode $debugMessage") } }</ID>
+    <ID>UseIfInsteadOfWhen:CategoryListScreen.kt$when (i % 2) { 0 -&gt; shake.animateTo(2f, spring(stiffness = 5_000f)) else -&gt; shake.animateTo(-2f, spring(stiffness = 5_000f)) }</ID>
+    <ID>UseIfInsteadOfWhen:CurrencyTextField.kt$when (input.toBigDecimalOrNull()) { null -&gt; text else -&gt; { val number = input.toBigDecimal() if (number.scale() &gt; DECIMAL_SIZE) { input.substring( 0, input.indexOf(DELIMITER) + DECIMAL_SIZE + 1, ) } else { input } } }</ID>
+    <ID>UseIfInsteadOfWhen:IncomeExpenseScreen.kt$when (dismissState.targetValue) { SwipeToDismissBoxValue.EndToStart -&gt; MaterialTheme.colorScheme.error else -&gt; Color.Transparent }</ID>
+    <ID>UseIfInsteadOfWhen:RegularTransactionListScreen.kt$when (dismissState.targetValue) { SwipeToDismissBoxValue.EndToStart -&gt; MaterialTheme.colorScheme.error else -&gt; Color.Transparent }</ID>
+  </CurrentIssues>
+</SmellBaseline>

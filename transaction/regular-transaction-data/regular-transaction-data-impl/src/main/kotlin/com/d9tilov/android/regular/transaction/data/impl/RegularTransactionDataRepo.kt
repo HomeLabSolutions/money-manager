@@ -9,7 +9,8 @@ import com.d9tilov.android.regular.transaction.domain.model.RegularTransactionDa
 class RegularTransactionDataRepo(
     private val regularTransactionSource: RegularTransactionSource,
 ) : RegularTransactionRepo {
-    override suspend fun insert(regularTransactionData: RegularTransactionData) = regularTransactionSource.insert(regularTransactionData)
+    override suspend fun insert(regularTransactionData: RegularTransactionData) =
+        regularTransactionSource.insert(regularTransactionData)
 
     override fun getAll(type: TransactionType) = regularTransactionSource.getAll(type)
 
@@ -18,7 +19,9 @@ class RegularTransactionDataRepo(
 
     override suspend fun getById(id: Long): RegularTransactionData = regularTransactionSource.getById(id)
 
-    override suspend fun update(regularTransactionData: RegularTransactionData) = regularTransactionSource.update(regularTransactionData)
+    override suspend fun update(regularTransactionData: RegularTransactionData) =
+        regularTransactionSource.update(regularTransactionData)
 
-    override suspend fun delete(regularTransactionData: RegularTransactionData) = regularTransactionSource.delete(regularTransactionData)
+    override suspend fun delete(regularTransactionData: RegularTransactionData) =
+        regularTransactionSource.delete(regularTransactionData)
 }

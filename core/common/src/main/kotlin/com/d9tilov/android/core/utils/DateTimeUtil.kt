@@ -38,7 +38,8 @@ fun Long.toBackupDate(): String =
         ).format(Date(this))
     }
 
-fun LocalDateTime.toBudgetCreatedDateStr(): String = SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(Date(this.toMillis()))
+fun LocalDateTime.toBudgetCreatedDateStr(): String =
+    SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(Date(this.toMillis()))
 
 fun currentDateTime(): LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 
@@ -53,7 +54,8 @@ fun Instant.toLocal() = this.toLocalDateTime(TimeZone.currentSystemDefault())
 
 fun LocalDateTime.toMillis(): Long = this.toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
 
-fun Long.toLocalDateTime(): LocalDateTime = Instant.fromEpochMilliseconds(this).toLocalDateTime(TimeZone.currentSystemDefault())
+fun Long.toLocalDateTime(): LocalDateTime =
+    Instant.fromEpochMilliseconds(this).toLocalDateTime(TimeZone.currentSystemDefault())
 
 fun Long.fromUTCToLocalDateTime(): LocalDateTime {
     val timeZone = TimeZone.currentSystemDefault()
@@ -62,15 +64,18 @@ fun Long.fromUTCToLocalDateTime(): LocalDateTime {
     return Instant.fromEpochMilliseconds(newMillis).toLocal()
 }
 
-fun Long.toLocalDate(): LocalDate = Instant.fromEpochMilliseconds(this).toLocalDateTime(TimeZone.currentSystemDefault()).date
+fun Long.toLocalDate(): LocalDate =
+    Instant.fromEpochMilliseconds(this).toLocalDateTime(TimeZone.currentSystemDefault()).date
 
 fun LocalDate.getStartOfDay(): LocalDateTime = atTime(0, 0, 0, 0)
 
 fun LocalDateTime.getStartOfDay(): LocalDateTime = date.atTime(0, 0, 0, 0)
 
-fun LocalDate.getEndOfDay(): LocalDateTime = atTime(HOURS_MINUS_ONE, SECONDS_MINUS_ONE, SECONDS_MINUS_ONE, MILLISECONDS_MINUS_ONE)
+fun LocalDate.getEndOfDay(): LocalDateTime =
+    atTime(HOURS_MINUS_ONE, SECONDS_MINUS_ONE, SECONDS_MINUS_ONE, MILLISECONDS_MINUS_ONE)
 
-fun LocalDateTime.getEndOfDay(): LocalDateTime = date.atTime(HOURS_MINUS_ONE, SECONDS_MINUS_ONE, SECONDS_MINUS_ONE, MILLISECONDS_MINUS_ONE)
+fun LocalDateTime.getEndOfDay(): LocalDateTime =
+    date.atTime(HOURS_MINUS_ONE, SECONDS_MINUS_ONE, SECONDS_MINUS_ONE, MILLISECONDS_MINUS_ONE)
 
 fun LocalDateTime.isSameDay(date: LocalDateTime): Boolean = this.year == date.year && this.dayOfYear == date.dayOfYear
 

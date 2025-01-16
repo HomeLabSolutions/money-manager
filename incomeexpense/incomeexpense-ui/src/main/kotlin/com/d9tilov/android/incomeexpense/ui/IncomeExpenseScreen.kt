@@ -317,7 +317,14 @@ fun TransactionListLayout(
                                     label = "",
                                 )
                                 val iconScale by animateFloatAsState(
-                                    targetValue = if (dismissState.targetValue == SwipeToDismissBoxValue.Settled) 0.0f else 1.3f,
+                                    targetValue =
+                                        if (dismissState.targetValue ==
+                                            SwipeToDismissBoxValue.Settled
+                                        ) {
+                                            0.0f
+                                        } else {
+                                            1.3f
+                                        },
                                     label = "",
                                 )
                                 Box(
@@ -325,7 +332,10 @@ fun TransactionListLayout(
                                         .fillMaxSize()
                                         .background(color = backgroundColor)
                                         .padding(
-                                            horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                                            horizontal =
+                                                dimensionResource(
+                                                    id = com.d9tilov.android.designsystem.R.dimen.padding_medium,
+                                                ),
                                         ),
                                     contentAlignment = Alignment.CenterEnd,
                                 ) {
@@ -409,7 +419,10 @@ fun TransactionItem(
                     },
             text = transaction.category.name,
             style = MaterialTheme.typography.displayLarge,
-            fontSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.income_expense_name_text_size).value.sp,
+            fontSize =
+                dimensionResource(
+                    id = com.d9tilov.android.designsystem.R.dimen.income_expense_name_text_size,
+                ).value.sp,
             maxLines = 1,
             color = Color(ContextCompat.getColor(context, transaction.category.color)),
             overflow = TextOverflow.Ellipsis,
@@ -440,7 +453,9 @@ fun TransactionItem(
                         .constrainAs(idRegularIcon) {
                             top.linkTo(idIcon.top)
                             end.linkTo(idIcon.start)
-                        }.size(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.transaction_meta_icon_size)),
+                        }.size(
+                            dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.transaction_meta_icon_size),
+                        ),
                 imageVector = MoneyManagerIcons.Repeat,
                 contentDescription = "RegularTransaction",
                 tint = MaterialTheme.colorScheme.tertiary,
@@ -454,7 +469,9 @@ fun TransactionItem(
                         .constrainAs(idInStatisticsIcon) {
                             top.linkTo(idRegularIcon.bottom)
                             end.linkTo(idIcon.start)
-                        }.size(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.transaction_meta_icon_size)),
+                        }.size(
+                            dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.transaction_meta_icon_size),
+                        ),
                 imageVector = ImageVector.vectorResource(MoneyManagerIcons.InStatisticsTransaction),
                 contentDescription = "InStatisticsTransaction",
                 tint = MaterialTheme.colorScheme.error,
@@ -474,15 +491,27 @@ fun TransactionItem(
         ) {
             ComposeCurrencyView(
                 value = transaction.sum.toString(),
-                valueSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sum_small_text_size).value.sp,
+                valueSize =
+                    dimensionResource(
+                        id = com.d9tilov.android.designsystem.R.dimen.currency_sum_small_text_size,
+                    ).value.sp,
                 symbol = transaction.currencyCode.getSymbolByCode(),
-                symbolSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sign_small_text_size).value.sp,
+                symbolSize =
+                    dimensionResource(
+                        id = com.d9tilov.android.designsystem.R.dimen.currency_sign_small_text_size,
+                    ).value.sp,
             )
             ComposeCurrencyView(
                 value = transaction.usdSum.toString(),
-                valueSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_extra_small_text_size).value.sp,
+                valueSize =
+                    dimensionResource(
+                        id = com.d9tilov.android.designsystem.R.dimen.currency_extra_small_text_size,
+                    ).value.sp,
                 symbol = DEFAULT_CURRENCY_SYMBOL,
-                symbolSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sign_extra_small_text_size).value.sp,
+                symbolSize =
+                    dimensionResource(
+                        id = com.d9tilov.android.designsystem.R.dimen.currency_sign_extra_small_text_size,
+                    ).value.sp,
             )
         }
         HorizontalDivider(

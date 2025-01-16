@@ -113,8 +113,14 @@ fun RegularTransactionListScreen(
                 icon = painterResource(id = MoneyManagerIcons.EmptyRegularPlaceholder),
                 title =
                     when (uiState.transactionType) {
-                        TransactionType.EXPENSE -> stringResource(id = R.string.transaction_empty_placeholder_regular_expense_title)
-                        TransactionType.INCOME -> stringResource(id = R.string.transaction_empty_placeholder_regular_income_title)
+                        TransactionType.EXPENSE ->
+                            stringResource(
+                                id = R.string.transaction_empty_placeholder_regular_expense_title,
+                            )
+                        TransactionType.INCOME ->
+                            stringResource(
+                                id = R.string.transaction_empty_placeholder_regular_income_title,
+                            )
                     },
             )
             return@Scaffold
@@ -146,14 +152,26 @@ fun RegularTransactionListScreen(
                             label = "",
                         )
                         val iconScale by animateFloatAsState(
-                            targetValue = if (dismissState.targetValue == SwipeToDismissBoxValue.Settled) 0.0f else 1.3f,
+                            targetValue =
+                                if (dismissState.targetValue ==
+                                    SwipeToDismissBoxValue.Settled
+                                ) {
+                                    0.0f
+                                } else {
+                                    1.3f
+                                },
                             label = "",
                         )
                         Box(
                             Modifier
                                 .fillMaxSize()
                                 .background(color = backgroundColor)
-                                .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium)),
+                                .padding(
+                                    horizontal =
+                                        dimensionResource(
+                                            id = com.d9tilov.android.designsystem.R.dimen.padding_medium,
+                                        ),
+                                ),
                             contentAlignment = Alignment.CenterEnd,
                         ) {
                             Icon(
@@ -208,7 +226,10 @@ fun RegularTransactionItem(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Row(
-                    modifier = Modifier.padding(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium)),
+                    modifier =
+                        Modifier.padding(
+                            dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                        ),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
@@ -245,7 +266,10 @@ fun RegularTransactionItem(
                             PeriodType.WEEK ->
                                 context.getString(
                                     R.string.regular_transaction_repeat_period_week,
-                                    getWeekDayString(context, (transaction.executionPeriod as ExecutionPeriod.EveryWeek).dayOfWeek),
+                                    getWeekDayString(
+                                        context,
+                                        (transaction.executionPeriod as ExecutionPeriod.EveryWeek).dayOfWeek,
+                                    ),
                                 )
 
                             PeriodType.MONTH -> {
@@ -260,7 +284,10 @@ fun RegularTransactionItem(
                 )
             }
             CurrencyTextFieldMedium(
-                modifier = Modifier.padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large)),
+                modifier =
+                    Modifier.padding(
+                        horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                    ),
                 value = transaction.sum.toString(),
                 currencyCode = transaction.currencyCode.getSymbolByCode(),
             )
