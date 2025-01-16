@@ -1,4 +1,4 @@
-package com.android.moneymanager
+package com.android.moneymanager.gradle
 
 import org.gradle.api.Project
 import org.gradle.api.attributes.Bundling
@@ -7,7 +7,6 @@ import org.gradle.kotlin.dsl.creating
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.named
-import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.register
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 

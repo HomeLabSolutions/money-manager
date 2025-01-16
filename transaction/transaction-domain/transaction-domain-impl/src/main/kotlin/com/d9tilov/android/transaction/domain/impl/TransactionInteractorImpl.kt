@@ -404,7 +404,11 @@ class TransactionInteractorImpl(
                     var dayOfWeekCount = 0
                     var dateIterator = startDate
                     while (dateIterator != endDate) {
-                        if (dateIterator.dayOfWeek.ordinal == (tr.executionPeriod as ExecutionPeriod.EveryWeek).dayOfWeek) dayOfWeekCount++
+                        if (dateIterator.dayOfWeek.ordinal ==
+                            (tr.executionPeriod as ExecutionPeriod.EveryWeek).dayOfWeek
+                        ) {
+                            dayOfWeekCount++
+                        }
                         dateIterator = dateIterator.plus(1, DateTimeUnit.DAY)
                     }
                     currencyInteractor.toTargetCurrency(

@@ -32,5 +32,6 @@ class CurrencyDataRepo(
         uid?.run { currencySource.updateMainCurrency(code) }
     }
 
-    override suspend fun hasAlreadyUpdatedToday(baseCurrency: String): Boolean = currencySource.hasAlreadyUpdatedToday(baseCurrency)
+    override suspend fun hasAlreadyUpdatedToday(baseCurrency: String): Boolean =
+        currencySource.hasAlreadyUpdatedToday(baseCurrency)
 }

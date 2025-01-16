@@ -1,4 +1,4 @@
-package com.android.moneymanager.extensions
+package com.android.moneymanager.gradle.extensions
 
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Project

@@ -19,25 +19,7 @@ dependencies {
     implementation(project(":transaction:transaction-domain:transaction-domain-contract"))
     implementation(project(":transaction:transaction-domain:transaction-domain-model"))
     implementation(project(":user-info:user-domain:user-domain-contract"))
+
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.paging.common)
-}
-
-dependencyAnalysis {
-    val fail = "fail"
-    val ignore = "ignore"
-    issues {
-        onUnusedDependencies {
-            severity(fail)
-            exclude(
-                "",
-            )
-        }
-        onUsedTransitiveDependencies { severity(ignore) }
-        onIncorrectConfiguration { severity(ignore) }
-        onCompileOnly { severity(ignore) }
-        onRuntimeOnly { severity(ignore) }
-        onUnusedAnnotationProcessors { severity(ignore) }
-        onRedundantPlugins { severity(ignore) }
-    }
 }

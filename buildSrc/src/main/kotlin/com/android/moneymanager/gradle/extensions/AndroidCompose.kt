@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.moneymanager.extensions
+package com.android.moneymanager.gradle.extensions
 
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project

@@ -161,7 +161,10 @@ fun RegularTransactionCreationScreen(
                         text = uiState.transaction.currencyCode.getSymbolByCode(),
                         style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.primary,
-                        fontSize = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.currency_sign_big_text_size).value.sp,
+                        fontSize =
+                            dimensionResource(
+                                id = com.d9tilov.android.designsystem.R.dimen.currency_sign_big_text_size,
+                            ).value.sp,
                     )
                     AutoSizeTextField(
                         modifier = Modifier.alignByBaseline(),
@@ -177,8 +180,12 @@ fun RegularTransactionCreationScreen(
                 Row(
                     modifier =
                         Modifier
-                            .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large))
-                            .clickable {
+                            .padding(
+                                horizontal =
+                                    dimensionResource(
+                                        id = com.d9tilov.android.designsystem.R.dimen.padding_large,
+                                    ),
+                            ).clickable {
                                 onCategoryClicked(
                                     uiState.transaction.type,
                                     CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN,
@@ -192,7 +199,9 @@ fun RegularTransactionCreationScreen(
                         Icon(
                             modifier =
                                 Modifier.size(
-                                    dimensionResource(id = com.d9tilov.android.common.android.R.dimen.category_creation_icon_size),
+                                    dimensionResource(
+                                        id = com.d9tilov.android.common.android.R.dimen.category_creation_icon_size,
+                                    ),
                                 ),
                             imageVector = ImageVector.vectorResource(id = uiState.transaction.category.icon),
                             contentDescription = "Category",
@@ -207,7 +216,10 @@ fun RegularTransactionCreationScreen(
                         Text(
                             modifier =
                                 Modifier.padding(
-                                    horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
+                                    horizontal =
+                                        dimensionResource(
+                                            id = com.d9tilov.android.designsystem.R.dimen.padding_small,
+                                        ),
                                 ),
                             text = uiState.transaction.category.name,
                             color =
@@ -230,8 +242,14 @@ fun RegularTransactionCreationScreen(
                         Text(
                             modifier =
                                 Modifier.padding(
-                                    start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
-                                    end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_extra_small),
+                                    start =
+                                        dimensionResource(
+                                            id = com.d9tilov.android.designsystem.R.dimen.padding_small,
+                                        ),
+                                    end =
+                                        dimensionResource(
+                                            id = com.d9tilov.android.designsystem.R.dimen.padding_extra_small,
+                                        ),
                                 ),
                             text = stringResource(id = R.string.regular_transaction_choose_category),
                             color = MaterialTheme.colorScheme.primary,
@@ -243,7 +261,9 @@ fun RegularTransactionCreationScreen(
                     Icon(
                         modifier =
                             Modifier.size(
-                                dimensionResource(id = com.d9tilov.android.common.android.R.dimen.category_creation_icon_size),
+                                dimensionResource(
+                                    id = com.d9tilov.android.common.android.R.dimen.category_creation_icon_size,
+                                ),
                             ),
                         imageVector = MoneyManagerIcons.ArrowRight,
                         contentDescription = "Category",
@@ -256,15 +276,23 @@ fun RegularTransactionCreationScreen(
                             .fillMaxWidth()
                             .height(82.dp)
                             .padding(
-                                horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                                vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
+                                horizontal =
+                                    dimensionResource(
+                                        id = com.d9tilov.android.designsystem.R.dimen.padding_large,
+                                    ),
+                                vertical =
+                                    dimensionResource(
+                                        id = com.d9tilov.android.designsystem.R.dimen.padding_small,
+                                    ),
                             ),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
                         modifier =
                             Modifier.size(
-                                dimensionResource(id = com.d9tilov.android.common.android.R.dimen.category_creation_icon_size),
+                                dimensionResource(
+                                    id = com.d9tilov.android.common.android.R.dimen.category_creation_icon_size,
+                                ),
                             ),
                         imageVector = MoneyManagerIcons.Repeat,
                         contentDescription = "Repeat",
@@ -273,7 +301,10 @@ fun RegularTransactionCreationScreen(
                     Column(
                         modifier =
                             Modifier.padding(
-                                horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
+                                horizontal =
+                                    dimensionResource(
+                                        id = com.d9tilov.android.designsystem.R.dimen.padding_small,
+                                    ),
                             ),
                     ) {
                         Row(
@@ -314,7 +345,10 @@ fun RegularTransactionCreationScreen(
                                         Modifier
                                             .clickable { openDayOfMonthDialog = true }
                                             .padding(
-                                                vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
+                                                vertical =
+                                                    dimensionResource(
+                                                        id = com.d9tilov.android.designsystem.R.dimen.padding_small,
+                                                    ),
                                             ),
                                     color = MaterialTheme.colorScheme.secondary,
                                     style = MaterialTheme.typography.labelMedium,
@@ -384,7 +418,10 @@ fun DayInMonthDialog(
             ) {
                 Text(
                     text = stringResource(id = R.string.regular_transaction_repeat_day_of_month),
-                    modifier = Modifier.padding(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)),
+                    modifier =
+                        Modifier.padding(
+                            dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
+                        ),
                     color = MaterialTheme.colorScheme.primary,
                 )
                 LazyVerticalGrid(
@@ -476,9 +513,18 @@ fun DropdownPeriodMenu(
                         Text(
                             text =
                                 when (item) {
-                                    PeriodMenuItem.DAY -> stringResource(id = R.string.regular_transaction_repeat_list_day)
-                                    PeriodMenuItem.WEEK -> stringResource(id = R.string.regular_transaction_repeat_list_week)
-                                    PeriodMenuItem.MONTH -> stringResource(id = R.string.regular_transaction_repeat_list_month)
+                                    PeriodMenuItem.DAY ->
+                                        stringResource(
+                                            id = R.string.regular_transaction_repeat_list_day,
+                                        )
+                                    PeriodMenuItem.WEEK ->
+                                        stringResource(
+                                            id = R.string.regular_transaction_repeat_list_week,
+                                        )
+                                    PeriodMenuItem.MONTH ->
+                                        stringResource(
+                                            id = R.string.regular_transaction_repeat_list_month,
+                                        )
                                 },
                             color = MaterialTheme.colorScheme.onTertiaryContainer,
                             style = MaterialTheme.typography.bodyLarge,

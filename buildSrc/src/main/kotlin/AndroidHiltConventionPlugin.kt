@@ -14,9 +14,9 @@
  *   limitations under the License.
  */
 
-import com.android.moneymanager.extensions.buildLibs
-import com.android.moneymanager.extensions.implementation
-import com.android.moneymanager.extensions.ksp
+import com.android.moneymanager.gradle.extensions.buildLibs
+import com.android.moneymanager.gradle.extensions.implementation
+import com.android.moneymanager.gradle.extensions.ksp
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
