@@ -26,7 +26,7 @@ import java.io.File
 /**
  * Configure Compose-specific options
  */
-internal fun Project.configureAndroidCompose(commonExtension: CommonExtension<*, *, *, *, *>) {
+internal fun Project.configureAndroidCompose(commonExtension: CommonExtension<*, *, *, *, *, *>) {
     commonExtension.apply {
         project.plugins.apply(
             buildLibs.plugins.compose.compiler
@@ -38,6 +38,7 @@ internal fun Project.configureAndroidCompose(commonExtension: CommonExtension<*,
         }
 
         dependencies {
+            implementation(platform(buildLibs.androidx.compose.bom))
         }
     }
 

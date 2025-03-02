@@ -35,6 +35,7 @@ class PeriodicBackupWorker
 
         override suspend fun doWork(): Result {
             Timber.tag(TAG).d("Do work...")
+            System.out.println("moggot backup doWork")
             return try {
                 setForeground(context.syncForegroundInfo())
                 backupInteractor.makeBackup()

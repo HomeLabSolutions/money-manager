@@ -33,12 +33,13 @@ class CurrencySyncWorker
 
         override suspend fun doWork(): Result =
             withContext(Dispatchers.IO) {
+                System.out.println("moggot currency doWork")
                 Timber.tag(DataConstants.TAG).d("CurrencySyncWorker doWork")
                 // First sync the repositories in parallel
                 val syncedSuccessfully =
                     awaitAll(async { currencyInteractor.updateCurrencyRates() })
                         .all { it }
-
+                System.out.println("moggot syncedSuccessfully: $syncedSuccessfully")
                 if (syncedSuccessfully) {
                     Result.success()
                 } else {

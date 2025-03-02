@@ -32,7 +32,7 @@ class App : Application() {
             StrictMode.setVmPolicy(vmPolicy)
         }
         DynamicColors.applyToActivitiesIfAvailable(this)
-        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
+        FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled = !BuildConfig.DEBUG
         Sync.initialize(this)
         PeriodicBackupWorker.startPeriodicJob(this)
     }

@@ -5,6 +5,13 @@ plugins {
 
 android {
     namespace = "com.d9tilov.android.currency_data_impl"
+
+    lint {
+        disable.apply {
+            add("CoroutineCreationDuringComposition")
+            add("FlowOperatorInvokedInComposition")
+        }
+    }
 }
 
 dependencies {

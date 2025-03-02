@@ -23,6 +23,7 @@ class CurrencyDataRepo(
 
     override suspend fun updateCurrencies() {
         val currencies = currencyApi.getCurrencies()
+        System.out.println("moggot list: $currencies")
         val remoteCurrencyList = currencies.toDataModel()
         currencySource.saveCurrencies(remoteCurrencyList)
     }
