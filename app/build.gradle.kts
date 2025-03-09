@@ -101,7 +101,6 @@ android {
 }
 
 dependencies {
-
     implementation(project(":analytics:analytics-di"))
     implementation(project(":backup:backup-data:backup-data-impl"))
     implementation(project(":backup:backup-di"))
@@ -148,8 +147,10 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.work.runtime)
     implementation(libs.appcompat)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth)

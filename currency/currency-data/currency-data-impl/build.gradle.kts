@@ -1,6 +1,6 @@
 plugins {
     id("moneymanager.android.library")
-    id("com.google.devtools.ksp")
+    id("moneymanager.android.hilt")
 }
 
 android {
@@ -24,11 +24,12 @@ dependencies {
     implementation(project(":currency:currency-domain:currency-domain-contract"))
     implementation(project(":currency:currency-domain:currency-domain-model"))
     implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.work.ktx)
+    implementation(libs.androidx.hilt.work)
     implementation(libs.dagger)
     implementation(libs.hilt.common)
+    implementation(libs.hilt.android)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.startup)
     implementation(libs.timber)
-
-    ksp(libs.hilt.android.compiler)
 }

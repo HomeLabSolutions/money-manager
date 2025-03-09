@@ -29,7 +29,6 @@ object Sync {
     // Application.onCreate() and should be only done once.
     fun initialize(context: Context) {
         Timber.tag(TAG).d("Initialize currency sync worker")
-        System.out.println("moggot start currency worker")
         WorkManager
             .getInstance(context)
             .enqueueUniqueWork(

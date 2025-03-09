@@ -32,7 +32,8 @@ class App : Application() {
             StrictMode.setVmPolicy(vmPolicy)
         }
         DynamicColors.applyToActivitiesIfAvailable(this)
-        FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled = !BuildConfig.DEBUG
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
+        System.out.println("moggot app")
         Sync.initialize(this)
         PeriodicBackupWorker.startPeriodicJob(this)
     }

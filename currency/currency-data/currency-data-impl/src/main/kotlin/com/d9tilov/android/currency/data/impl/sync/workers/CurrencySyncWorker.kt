@@ -23,39 +23,38 @@ import timber.log.Timber
 
 @HiltWorker
 class CurrencySyncWorker
-    @AssistedInject
-    constructor(
-        @Assisted private val context: Context,
-        @Assisted workerParameters: WorkerParameters,
-        private val currencyInteractor: CurrencyInteractor,
-    ) : CoroutineWorker(context, workerParameters) {
-        override suspend fun getForegroundInfo(): ForegroundInfo = context.syncForegroundInfo()
+@AssistedInject
+constructor(
+    @Assisted private val context: Context,
+    @Assisted workerParameters: WorkerParameters,
+    private val currencyInteractor: CurrencyInteractor,
+) : CoroutineWorker(context, workerParameters) {
+    override suspend fun getForegroundInfo(): ForegroundInfo = context.syncForegroundInfo()
 
-        override suspend fun doWork(): Result =
-            withContext(Dispatchers.IO) {
-                System.out.println("moggot currency doWork")
-                Timber.tag(DataConstants.TAG).d("CurrencySyncWorker doWork")
-                // First sync the repositories in parallel
-                val syncedSuccessfully =
-                    awaitAll(async { currencyInteractor.updateCurrencyRates() })
-                        .all { it }
-                System.out.println("moggot syncedSuccessfully: $syncedSuccessfully")
-                if (syncedSuccessfully) {
-                    Result.success()
-                } else {
-                    Result.retry()
-                }
+    override suspend fun doWork(): Result =
+        withContext(Dispatchers.IO) {
+            Timber.tag(DataConstants.TAG).d("CurrencySyncWorker doWork")
+            // First sync the repositories in parallel
+            val syncedSuccessfully =
+                awaitAll(async { currencyInteractor.updateCurrencyRates() })
+                    .all { it }
+
+            if (syncedSuccessfully) {
+                Result.success()
+            } else {
+                Result.retry()
             }
-
-        companion object {
-            /**
-             * Expedited one time work to sync data on app startup
-             */
-            fun startUpSyncWork() =
-                OneTimeWorkRequestBuilder<DelegatingWorker>()
-                    .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
-                    .setConstraints(SyncConstraints)
-                    .setInputData(CurrencySyncWorker::class.delegatedData())
-                    .build()
         }
+
+    companion object {
+        /**
+         * Expedited one time work to sync data on app startup
+         */
+        fun startUpSyncWork() =
+            OneTimeWorkRequestBuilder<DelegatingWorker>()
+                .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                .setConstraints(SyncConstraints)
+                .setInputData(CurrencySyncWorker::class.delegatedData())
+                .build()
     }
+}

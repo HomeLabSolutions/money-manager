@@ -31,6 +31,7 @@ class AndroidHiltConventionPlugin : Plugin<Project> {
             dependencies {
                 implementation(buildLibs.hilt.core)
                 ksp(buildLibs.hilt.android.compiler)
+                ksp(buildLibs.hilt.ext.compiler)
             }
         }
     }
