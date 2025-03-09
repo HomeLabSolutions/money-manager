@@ -45,12 +45,11 @@ class DelegatingWorker(
     private val workerClassName = workerParams.inputData.getString(WORKER_CLASS_NAME) ?: ""
 
     private val delegateWorker by lazy {
-        val a = EntryPointAccessors
+        EntryPointAccessors
             .fromApplication<HiltWorkerFactoryEntryPoint>(appContext)
             .hiltWorkerFactory()
             .createWorker(appContext, workerClassName, workerParams) as? CoroutineWorker
-        System.out.println("moggot a: $a")
-            a ?: throw IllegalArgumentException("Unable to find appropriate worker")
+            ?: throw IllegalArgumentException("Unable to find appropriate worker")
     }
 
     override suspend fun getForegroundInfo(): ForegroundInfo = delegateWorker.getForegroundInfo()

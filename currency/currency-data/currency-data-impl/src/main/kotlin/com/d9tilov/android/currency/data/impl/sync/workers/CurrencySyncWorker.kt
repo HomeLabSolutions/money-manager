@@ -16,15 +16,11 @@ import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 @HiltWorker
-class CurrencySyncWorker
-@AssistedInject
-constructor(
+class CurrencySyncWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted workerParameters: WorkerParameters,
     private val currencyInteractor: CurrencyInteractor,
@@ -35,11 +31,7 @@ constructor(
         withContext(Dispatchers.IO) {
             Timber.tag(DataConstants.TAG).d("CurrencySyncWorker doWork")
             // First sync the repositories in parallel
-            val syncedSuccessfully =
-                awaitAll(async { currencyInteractor.updateCurrencyRates() })
-                    .all { it }
-
-            if (syncedSuccessfully) {
+            if (currencyInteractor.updateCurrencyRates()) {
                 Result.success()
             } else {
                 Result.retry()

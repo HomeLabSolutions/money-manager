@@ -33,7 +33,6 @@ class App : Application() {
         }
         DynamicColors.applyToActivitiesIfAvailable(this)
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
-        System.out.println("moggot app")
         Sync.initialize(this)
         PeriodicBackupWorker.startPeriodicJob(this)
     }

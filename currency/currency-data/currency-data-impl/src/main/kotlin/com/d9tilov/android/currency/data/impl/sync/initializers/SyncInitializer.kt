@@ -33,7 +33,7 @@ object Sync {
             .getInstance(context)
             .enqueueUniqueWork(
                 SYNC_WORK_NAME,
-                ExistingWorkPolicy.KEEP,
+                ExistingWorkPolicy.REPLACE,
                 CurrencySyncWorker.startUpSyncWork(),
             )
     }

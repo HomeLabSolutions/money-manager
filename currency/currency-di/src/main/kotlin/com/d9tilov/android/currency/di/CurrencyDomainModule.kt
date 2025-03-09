@@ -11,9 +11,9 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal interface CurrencyDomainModule {
+interface CurrencyDomainModule {
     @Binds
-    fun provideCurrencyInteractor(currencyRepo: CurrencyInteractorImpl): CurrencyInteractor
+    fun provideCurrencyInteractor(impl: CurrencyInteractorImpl): CurrencyInteractor
 
     @Binds
     fun provideCurrencyObserver(impl: CurrencyUpdateObserverImpl): CurrencyUpdateObserver
