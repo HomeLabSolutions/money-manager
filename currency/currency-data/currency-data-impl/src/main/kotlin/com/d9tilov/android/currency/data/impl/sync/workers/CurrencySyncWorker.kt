@@ -31,10 +31,15 @@ class CurrencySyncWorker @AssistedInject constructor(
         withContext(Dispatchers.IO) {
             Timber.tag(DataConstants.TAG).d("CurrencySyncWorker doWork")
             // First sync the repositories in parallel
-            if (currencyInteractor.updateCurrencyRates()) {
+            val res =
+                currencyInteractor
+                    .updateCurrencyRates()
+                    .onSuccess { Timber.tag(DataConstants.TAG).d("CurrencySyncWorker doWork success") }
+                    .onFailure { Timber.tag(DataConstants.TAG).d("CurrencySyncWorker doWork failure: $it") }
+            if (res.isSuccess) {
                 Result.success()
             } else {
-                Result.retry()
+                Result.failure()
             }
         }
 

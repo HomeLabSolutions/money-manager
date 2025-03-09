@@ -59,12 +59,12 @@ class CurrencyInteractorImpl @Inject constructor(
         return amount.divideBy(currentAbsoluteAmount)
     }
 
-    override suspend fun updateCurrencyRates(): Boolean =
+    override suspend fun updateCurrencyRates(): Result<Boolean> =
         try {
             currencyRepo.updateCurrencies()
-            true
+            Result.success(true)
         } catch (ex: Exception) {
-            false
+            Result.failure(ex)
         }
 
     override suspend fun updateMainCurrency(code: String) = currencyRepo.updateMainCurrency(code)

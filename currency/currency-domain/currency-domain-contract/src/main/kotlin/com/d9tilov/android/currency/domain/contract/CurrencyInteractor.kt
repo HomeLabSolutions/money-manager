@@ -26,7 +26,7 @@ interface CurrencyInteractor {
         currencyCode: String,
     ): BigDecimal
 
-    suspend fun updateCurrencyRates(): Boolean
+    suspend fun updateCurrencyRates(): Result<Boolean>
 
     suspend fun updateMainCurrency(code: String)
 }
