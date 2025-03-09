@@ -18,5 +18,5 @@ data class RegularTransactionData(
     val executionPeriod: ExecutionPeriod,
     val description: String,
     val pushEnable: Boolean = true,
-    val autoAdd: Boolean = false
+    val autoAdd: Boolean = false,
 )

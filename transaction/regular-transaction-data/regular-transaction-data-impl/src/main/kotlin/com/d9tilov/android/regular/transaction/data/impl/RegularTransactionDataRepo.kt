@@ -6,9 +6,9 @@ import com.d9tilov.android.regular.transaction.data.contract.RegularTransactionS
 import com.d9tilov.android.regular.transaction.domain.contract.RegularTransactionRepo
 import com.d9tilov.android.regular.transaction.domain.model.RegularTransactionData
 
-class RegularTransactionDataRepo(private val regularTransactionSource: RegularTransactionSource) :
-    RegularTransactionRepo {
-
+class RegularTransactionDataRepo(
+    private val regularTransactionSource: RegularTransactionSource,
+) : RegularTransactionRepo {
     override suspend fun insert(regularTransactionData: RegularTransactionData) =
         regularTransactionSource.insert(regularTransactionData)
 

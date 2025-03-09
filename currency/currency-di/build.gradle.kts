@@ -8,7 +8,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":budget:budget-domain:budget-domain-contract"))
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
     implementation(project(":core:network"))
@@ -19,23 +18,4 @@ dependencies {
     implementation(project(":currency:currency-observer:currency-observer-contract"))
     implementation(project(":currency:currency-observer:currency-observer-impl"))
     implementation(libs.retrofit)
-}
-
-dependencyAnalysis {
-    val fail = "fail"
-    val ignore = "ignore"
-    issues {
-        onUnusedDependencies {
-            severity(fail)
-            exclude(
-                "",
-            )
-        }
-        onUsedTransitiveDependencies { severity(ignore) }
-        onIncorrectConfiguration { severity(ignore) }
-        onCompileOnly { severity(ignore) }
-        onRuntimeOnly { severity(ignore) }
-        onUnusedAnnotationProcessors { severity(ignore) }
-        onRedundantPlugins { severity(ignore) }
-    }
 }

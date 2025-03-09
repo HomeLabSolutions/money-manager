@@ -1,4 +1,6 @@
-package com.android.moneymanager.extensions/*
+package com.android.moneymanager.gradle.extensions
+
+/*
  * Copyright 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,9 +27,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 /**
  * Configure base Kotlin with Android options
  */
-internal fun Project.configureKotlinAndroid(
-    commonExtension: CommonExtension<*, *, *, *, *>,
-) {
+internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, *, *, *, *, *>) {
     commonExtension.apply {
         compileSdk = rootProject.extra.get("compileSdkVersion") as Int
 
@@ -36,8 +36,8 @@ internal fun Project.configureKotlinAndroid(
         }
 
         compileOptions {
-            sourceCompatibility(buildLibs.versions.javaVersion.get())
-            targetCompatibility(buildLibs.versions.javaVersion.get())
+            sourceCompatibility(buildLibs.versions.java.get())
+            targetCompatibility(buildLibs.versions.java.get())
         }
     }
 

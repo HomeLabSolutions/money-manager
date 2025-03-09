@@ -14,24 +14,25 @@ fun CheckboxWithLabel(
     modifier: Modifier = Modifier,
     value: Boolean,
     label: String,
-    onCheckChanged: (Boolean) -> Unit
+    onCheckChanged: (Boolean) -> Unit,
 ) {
     Row(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Checkbox(
             checked = value,
-            colors = CheckboxDefaults.colors(
-                checkedColor = MaterialTheme.colorScheme.primary,
-                uncheckedColor = MaterialTheme.colorScheme.primary,
-            ),
-            onCheckedChange = { isChecked -> onCheckChanged(isChecked) }
+            colors =
+                CheckboxDefaults.colors(
+                    checkedColor = MaterialTheme.colorScheme.primary,
+                    uncheckedColor = MaterialTheme.colorScheme.primary,
+                ),
+            onCheckedChange = { isChecked -> onCheckChanged(isChecked) },
         )
         Text(
             text = label,
             style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.primary,
         )
     }
 }

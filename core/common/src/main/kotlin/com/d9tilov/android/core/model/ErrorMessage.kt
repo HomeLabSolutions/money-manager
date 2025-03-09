@@ -16,4 +16,8 @@
 
 package com.d9tilov.android.core.model
 
-data class ErrorMessage(val id: Long, val messageId: Int, val throwable: Throwable)
+data class ErrorMessage(
+    val id: Long,
+    val messageId: Int,
+    val throwable: Throwable,
+)

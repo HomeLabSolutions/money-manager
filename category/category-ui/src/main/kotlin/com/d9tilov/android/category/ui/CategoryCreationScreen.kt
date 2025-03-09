@@ -80,11 +80,14 @@ fun CategoryCreationRoute(
             sharedViewModel.setId(NO_RES_ID)
         },
         clickOnCategoryIcon = {
-            if (viewModel.uiState.value.isPremium) openCategoryGroupIconList()
-            else openCategoryIconGrid()
+            if (viewModel.uiState.value.isPremium) {
+                openCategoryGroupIconList()
+            } else {
+                openCategoryIconGrid()
+            }
         },
         onCategoryUpdated = viewModel::updateCategory,
-        onHideError = viewModel::hideError
+        onHideError = viewModel::hideError,
     )
 }
 
@@ -107,27 +110,32 @@ fun CategoryCreationScreen(
     Scaffold(topBar = {
         MmTopAppBar(
             titleRes =
-            if (uiState.itemState == ItemState.CREATE) R.string.title_category_creation
-            else R.string.title_category_edit,
-            onNavigationClick = onBackClicked
+                if (uiState.itemState == ItemState.CREATE) {
+                    R.string.title_category_creation
+                } else {
+                    R.string.title_category_edit
+                },
+            onNavigationClick = onBackClicked,
         )
     }) { padding ->
         Column(
-            modifier = Modifier
-                .padding(top = padding.calculateTopPadding())
+            modifier =
+                Modifier
+                    .padding(top = padding.calculateTopPadding()),
         ) {
             val maxNameLength =
                 integerResource(id = com.d9tilov.android.designsystem.R.integer.max_category_name_length)
             val focusRequester = remember { FocusRequester() }
             OutlinedTextField(
                 value = uiState.category.name,
-                modifier = Modifier
-                    .focusRequester(focusRequester)
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                        vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large)
-                    ),
+                modifier =
+                    Modifier
+                        .focusRequester(focusRequester)
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                            vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                        ),
                 maxLines = 1,
                 onValueChange = { text ->
                     if (text.length <= maxNameLength) {
@@ -138,20 +146,23 @@ fun CategoryCreationScreen(
                 label = { Text(text = stringResource(id = R.string.category_name_title)) },
                 supportingText = {
                     uiState.saveStatus?.onFailure { ex: Throwable ->
-                        val messageId = when (ex) {
-                            is CategoryException.CategoryEmptyNameException -> R.string.category_unit_name_exist_error
-                            is CategoryException.CategoryExistException -> R.string.category_name_exist_error
-                            is CategoryException.CategoryNotFoundException -> R.string.category_not_found_error
-                            is CategoryException.CategoryNoParentException -> R.string.category_parent_not_found_error
-                            else -> com.d9tilov.android.common.android.R.string.unknown_error
-                        }
+                        val messageId =
+                            when (ex) {
+                                is CategoryException.CategoryEmptyNameException ->
+                                    R.string.category_unit_name_exist_error
+                                is CategoryException.CategoryExistException -> R.string.category_name_exist_error
+                                is CategoryException.CategoryNotFoundException -> R.string.category_not_found_error
+                                is CategoryException.CategoryNoParentException ->
+                                    R.string.category_parent_not_found_error
+                                else -> com.d9tilov.android.common.android.R.string.unknown_error
+                            }
                         Text(
                             text = stringResource(id = messageId),
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.error
+                            color = MaterialTheme.colorScheme.error,
                         )
                     }
-                }
+                },
             )
             if (uiState.itemState == ItemState.CREATE) {
                 LaunchedEffect(Unit) {
@@ -159,22 +170,24 @@ fun CategoryCreationScreen(
                 }
             }
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large))
-                    .clickable { clickOnCategoryIcon() },
-                verticalAlignment = Alignment.CenterVertically
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                        ).clickable { clickOnCategoryIcon() },
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
                     modifier = Modifier.size(dimensionResource(id = R.dimen.category_creation_item_size)),
                     imageVector = ImageVector.vectorResource(id = uiState.category.icon),
                     contentDescription = "Category",
-                    tint = Color(ContextCompat.getColor(context, uiState.category.color))
+                    tint = Color(ContextCompat.getColor(context, uiState.category.color)),
                 )
                 Icon(
                     imageVector = MoneyManagerIcons.ArrowRight,
                     contentDescription = "Arrow",
-                    tint = Color(ContextCompat.getColor(context, uiState.category.color))
+                    tint = Color(ContextCompat.getColor(context, uiState.category.color)),
                 )
             }
             if (colorListShow) {
@@ -182,23 +195,30 @@ fun CategoryCreationScreen(
                 val state = rememberLazyListState()
                 val coroutineScope = rememberCoroutineScope()
                 LazyRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                        ),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                vertical =
+                                    dimensionResource(
+                                        id = com.d9tilov.android.designsystem.R.dimen.padding_large,
+                                    ),
+                            ),
                     state = state,
                 ) {
                     items(items = colorList, key = { item -> item }) { colorRes ->
                         val isSelected = colorRes == uiState.category.color
                         ColorListSelectorItem(
-                            size = dimensionResource(id = com.d9tilov.android.common.android.R.dimen.item_color_picker_size),
+                            size =
+                                dimensionResource(
+                                    id = com.d9tilov.android.common.android.R.dimen.item_color_picker_size,
+                                ),
                             color = colorRes,
                             selected = isSelected,
                             onClick = {
                                 onCategoryUpdated(uiState.category.copy(color = colorRes))
                                 colorListShow = !colorListShow
-                            }
+                            },
                         )
                     }
                 }
@@ -209,21 +229,23 @@ fun CategoryCreationScreen(
                 }
             } else {
                 OutlineCircle(
-                    modifier = Modifier.padding(
-                        horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                        vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                    ),
+                    modifier =
+                        Modifier.padding(
+                            horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                            vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                        ),
                     size = dimensionResource(id = com.d9tilov.android.common.android.R.dimen.item_color_picker_size),
                     color = Color(ContextCompat.getColor(context, uiState.category.color)),
-                    onClick = { colorListShow = !colorListShow }
+                    onClick = { colorListShow = !colorListShow },
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
             BottomActionButton(
-                modifier = Modifier
-                    .navigationBarsPadding()
-                    .imePadding(),
-                onClick = onSaveClicked
+                modifier =
+                    Modifier
+                        .navigationBarsPadding()
+                        .imePadding(),
+                onClick = onSaveClicked,
             )
         }
     }
@@ -238,21 +260,25 @@ fun ColorListSelectorItem(
 ) {
     val context = LocalContext.current
     Column(
-        modifier = Modifier
-            .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_extra_small)),
-        verticalArrangement = Arrangement.Center
+        modifier =
+            Modifier
+                .padding(
+                    horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_extra_small),
+                ),
+        verticalArrangement = Arrangement.Center,
     ) {
         val scale = if (selected) 1.5f else 1f
         OutlineCircle(
-            modifier = Modifier
-                .graphicsLayer {
-                    scaleX = scale
-                    scaleY = scale
-                },
+            modifier =
+                Modifier
+                    .graphicsLayer {
+                        scaleX = scale
+                        scaleY = scale
+                    },
             size = size,
             color = Color(ContextCompat.getColor(context, color)),
             showOutline = selected,
-            onClick = { onClick(color) }
+            onClick = { onClick(color) },
         )
     }
 }
@@ -262,20 +288,22 @@ fun ColorListSelectorItem(
 fun DefaultCategoryCreationPreview() {
     MoneyManagerTheme {
         CategoryCreationScreen(
-            uiState = CategoryCreationUiState(
-                category = Category.EMPTY_INCOME.copy(
-                    id = 1L,
-                    name = "Relax",
-                    icon = com.d9tilov.android.category_data_impl.R.drawable.ic_category_beach,
-                    color = com.d9tilov.android.category_data_impl.R.color.category_red_theme,
+            uiState =
+                CategoryCreationUiState(
+                    category =
+                        Category.EMPTY_INCOME.copy(
+                            id = 1L,
+                            name = "Relax",
+                            icon = com.d9tilov.android.category_data_impl.R.drawable.ic_category_beach,
+                            color = com.d9tilov.android.category_data_impl.R.color.category_red_theme,
+                        ),
+                    isPremium = true,
                 ),
-                isPremium = true
-            ),
             onBackClicked = { },
             onSaveClicked = {},
             onCategoryUpdated = {},
             onHideError = {},
-            clickOnCategoryIcon = {}
+            clickOnCategoryIcon = {},
         )
     }
 }

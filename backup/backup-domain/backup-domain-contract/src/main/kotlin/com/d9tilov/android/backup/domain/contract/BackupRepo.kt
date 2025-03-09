@@ -5,9 +5,11 @@ import com.d9tilov.android.core.model.ResultOf
 import kotlinx.coroutines.flow.Flow
 
 interface BackupRepo {
-
     fun getBackupData(): Flow<BackupData>
+
     suspend fun makeBackup(): ResultOf<BackupData>
+
     suspend fun restoreBackup(): ResultOf<Any>
+
     suspend fun deleteBackup(): ResultOf<Any>
 }

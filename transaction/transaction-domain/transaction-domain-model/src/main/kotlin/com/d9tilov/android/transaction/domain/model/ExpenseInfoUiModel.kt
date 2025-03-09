@@ -7,5 +7,5 @@ data class ExpenseInfoUiModel(
     val isSpendTodayApprox: Boolean,
     val spentTodaySumApprox: BigDecimal,
     val isSpendInPeriodApprox: Boolean,
-    val spentInPeriodSumApprox: BigDecimal
+    val spentInPeriodSumApprox: BigDecimal,
 )

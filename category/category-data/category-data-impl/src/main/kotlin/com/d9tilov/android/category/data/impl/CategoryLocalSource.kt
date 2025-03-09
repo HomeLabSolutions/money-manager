@@ -27,150 +27,172 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class CategoryLocalSource @Inject constructor(
-    @Dispatcher(MoneyManagerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
-    private val preferencesStore: PreferencesStore,
-    private val defaultCategoriesManager: DefaultCategoriesManager,
-    private val categoryDao: CategoryDao
-) : CategorySource {
-
-    override suspend fun createExpenseDefaultCategories() = withContext(dispatcher) {
-        val currentUserId = preferencesStore.uid.firstOrNull() ?: throw WrongUidException()
-        val defaultCategories = defaultCategoriesManager.createDefaultExpenseCategories()
-        defaultCategories.forEach {
-            categoryDao.create(
-                it.toDataModelFromPrePopulate(
-                    currentUserId
-                )
-            )
-        }
-    }
-
-    override suspend fun createIncomeDefaultCategories() = withContext(dispatcher) {
-        val currentUserId = preferencesStore.uid.firstOrNull() ?: throw WrongUidException()
-        val defaultCategories = defaultCategoriesManager.createDefaultIncomeCategories()
-        defaultCategories.forEach { categoryDao.create(it.toDataModelFromPrePopulate(currentUserId)) }
-    }
-
-    override suspend fun create(category: Category): Long = withContext(dispatcher) {
-        if (category.name.isEmpty()) throw CategoryException.CategoryEmptyNameException()
-        val currentUserId = preferencesStore.uid.firstOrNull() ?: throw WrongUidException()
-        val count = categoryDao.getCategoriesCountByName(currentUserId, category.name)
-        if (count == 0) {
-            categoryDao.create(category.copy(clientId = currentUserId).toDbModel())
-        } else {
-            throw CategoryException.CategoryExistException(
-                "Category with name: ${category.name} has already existed"
-            )
-        }
-    }
-
-    override suspend fun update(category: Category) = withContext(dispatcher) {
-        if (category.name.isEmpty()) throw CategoryException.CategoryEmptyNameException()
-        val currentUserId = preferencesStore.uid.firstOrNull() ?: throw WrongUidException()
-        val categoryById =
-            categoryDao.getById(currentUserId, category.id) ?: throw WrongIdException()
-        if (categoryById.name == category.name) {
-            categoryDao.update(category.toDbModel())
-        } else {
-            val count = categoryDao.getCategoriesCountByName(currentUserId, category.name)
-            if (count == 0) categoryDao.update(category.toDbModel())
-            else throw CategoryException.CategoryExistException("Category with name: ${category.name} has already existed")
-        }
-    }
-
-    override suspend fun getById(id: Long): Category = withContext(dispatcher) {
-        val currentUserId = preferencesStore.uid.firstOrNull() ?: throw WrongUidException()
-        val category = categoryDao.getById(currentUserId, id) ?: throw WrongIdException()
-        val parentCategory =
-            categoryDao.getById(currentUserId, category.parentId) ?: createDummyModel()
-        val childrenCategories: List<Category> = getByParentId(id).firstOrNull() ?: emptyList()
-        val newCategory: Category =
-            category.toDataModel(if (parentCategory.id == NO_ID) null else parentCategory)
-        newCategory.copy(children = childrenCategories)
-    }
-
-    private fun createDummyModel() = CategoryDbModel(
-        NO_ID,
-        "",
-        NO_ID,
-        TransactionType.EXPENSE.value,
-        "",
-        0,
-        0,
-        0
-    )
-
-    override fun getByParentId(id: Long): Flow<List<Category>> =
-        preferencesStore.uid
-            .filterNotNull()
-            .flatMapMerge { uid ->
-                categoryDao.getByParentId(uid, id)
-                    .map { it.map { item -> item.toDataParentModel() } }
+class CategoryLocalSource
+    @Inject
+    constructor(
+        @Dispatcher(MoneyManagerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
+        private val preferencesStore: PreferencesStore,
+        private val defaultCategoriesManager: DefaultCategoriesManager,
+        private val categoryDao: CategoryDao,
+    ) : CategorySource {
+        override suspend fun createExpenseDefaultCategories() =
+            withContext(dispatcher) {
+                val currentUserId = preferencesStore.uid.firstOrNull() ?: throw WrongUidException()
+                val defaultCategories = defaultCategoriesManager.createDefaultExpenseCategories()
+                defaultCategories.forEach {
+                    categoryDao.create(
+                        it.toDataModelFromPrePopulate(
+                            currentUserId,
+                        ),
+                    )
+                }
             }
-            .flowOn(dispatcher)
 
-    override fun getCategoriesByType(type: TransactionType): Flow<List<Category>> =
-        preferencesStore.uid
-            .filterNotNull()
-            .flatMapMerge { uid ->
-                categoryDao.getAllByType(uid, type.value).map { groupChildrenWithParent(it) }
+        override suspend fun createIncomeDefaultCategories() =
+            withContext(dispatcher) {
+                val currentUserId = preferencesStore.uid.firstOrNull() ?: throw WrongUidException()
+                val defaultCategories = defaultCategoriesManager.createDefaultIncomeCategories()
+                defaultCategories.forEach { categoryDao.create(it.toDataModelFromPrePopulate(currentUserId)) }
             }
-            .flowOn(dispatcher)
 
-    private fun groupChildrenWithParent(list: List<CategoryDbModel>): List<Category> {
-        val childrenOfOneParent = list.groupBy { it.parentId }
-        val parents = childrenOfOneParent[NO_ID] ?: emptyList()
-        val categories = mutableListOf<Category>()
-        for (parent in parents) {
-            val children = childrenOfOneParent[parent.id]
-            if (children != null) {
-                categories.add(
-                    parent.toDataModel()
-                        .copy(
-                            children = children.map {
-                                it.toDataModel()
-                                    .copy(parent = parent.toDataModel())
-                            }
+        override suspend fun create(category: Category): Long =
+            withContext(dispatcher) {
+                if (category.name.isEmpty()) throw CategoryException.CategoryEmptyNameException()
+                val currentUserId = preferencesStore.uid.firstOrNull() ?: throw WrongUidException()
+                val count = categoryDao.getCategoriesCountByName(currentUserId, category.name)
+                if (count == 0) {
+                    categoryDao.create(category.copy(clientId = currentUserId).toDbModel())
+                } else {
+                    throw CategoryException.CategoryExistException(
+                        "Category with name: ${category.name} has already existed",
+                    )
+                }
+            }
+
+        override suspend fun update(category: Category) =
+            withContext(dispatcher) {
+                if (category.name.isEmpty()) throw CategoryException.CategoryEmptyNameException()
+                val currentUserId = preferencesStore.uid.firstOrNull() ?: throw WrongUidException()
+                val categoryById =
+                    categoryDao.getById(currentUserId, category.id) ?: throw WrongIdException()
+                if (categoryById.name == category.name) {
+                    categoryDao.update(category.toDbModel())
+                } else {
+                    val count = categoryDao.getCategoriesCountByName(currentUserId, category.name)
+                    if (count == 0) {
+                        categoryDao.update(category.toDbModel())
+                    } else {
+                        throw CategoryException.CategoryExistException(
+                            "Category with name: ${category.name} has already existed",
                         )
-                )
-            } else {
-                categories.add(parent.toDataModel())
+                    }
+                }
             }
+
+        override suspend fun getById(id: Long): Category =
+            withContext(dispatcher) {
+                val currentUserId = preferencesStore.uid.firstOrNull() ?: throw WrongUidException()
+                val category = categoryDao.getById(currentUserId, id) ?: throw WrongIdException()
+                val parentCategory =
+                    categoryDao.getById(currentUserId, category.parentId) ?: createDummyModel()
+                val childrenCategories: List<Category> = getByParentId(id).firstOrNull() ?: emptyList()
+                val newCategory: Category =
+                    category.toDataModel(if (parentCategory.id == NO_ID) null else parentCategory)
+                newCategory.copy(children = childrenCategories)
+            }
+
+        private fun createDummyModel() =
+            CategoryDbModel(
+                NO_ID,
+                "",
+                NO_ID,
+                TransactionType.EXPENSE.value,
+                "",
+                0,
+                0,
+                0,
+            )
+
+        override fun getByParentId(id: Long): Flow<List<Category>> =
+            preferencesStore.uid
+                .filterNotNull()
+                .flatMapMerge { uid ->
+                    categoryDao
+                        .getByParentId(uid, id)
+                        .map { it.map { item -> item.toDataParentModel() } }
+                }.flowOn(dispatcher)
+
+        override fun getCategoriesByType(type: TransactionType): Flow<List<Category>> =
+            preferencesStore.uid
+                .filterNotNull()
+                .flatMapMerge { uid ->
+                    categoryDao.getAllByType(uid, type.value).map { groupChildrenWithParent(it) }
+                }.flowOn(dispatcher)
+
+        private fun groupChildrenWithParent(list: List<CategoryDbModel>): List<Category> {
+            val childrenOfOneParent = list.groupBy { it.parentId }
+            val parents = childrenOfOneParent[NO_ID] ?: emptyList()
+            val categories = mutableListOf<Category>()
+            for (parent in parents) {
+                val children = childrenOfOneParent[parent.id]
+                if (children != null) {
+                    categories.add(
+                        parent
+                            .toDataModel()
+                            .copy(
+                                children =
+                                    children.map {
+                                        it
+                                            .toDataModel()
+                                            .copy(parent = parent.toDataModel())
+                                    },
+                            ),
+                    )
+                } else {
+                    categories.add(parent.toDataModel())
+                }
+            }
+            return categories
         }
-        return categories
-    }
 
-    override suspend fun delete(category: Category) = withContext(dispatcher) {
-        val currentUserId = preferencesStore.uid.firstOrNull() ?: throw WrongUidException()
-        categoryDao.delete(currentUserId, category.id)
-        category.children.forEach { categoryDao.delete(currentUserId, it.id) }
-    }
+        override suspend fun delete(category: Category) =
+            withContext(dispatcher) {
+                val currentUserId = preferencesStore.uid.firstOrNull() ?: throw WrongUidException()
+                categoryDao.delete(currentUserId, category.id)
+                category.children.forEach { categoryDao.delete(currentUserId, it.id) }
+            }
 
-    override suspend fun deleteSubcategory(subCategory: Category): Boolean =
-        withContext(dispatcher) {
-            val currentUserId = preferencesStore.uid.firstOrNull() ?: throw WrongUidException()
-            val parent = subCategory.parent
-                ?: throw CategoryException.CategoryNoParentException("Subcategory $subCategory has not parent")
-            categoryDao.delete(currentUserId, subCategory.id)
-            val list = categoryDao.getByParentId(
-                currentUserId,
-                parent.id
-            ).firstOrNull() ?: emptyList()
-            if (list.isEmpty()) categoryDao.delete(currentUserId, parent.id)
-            list.isEmpty()
-        }
+        override suspend fun deleteSubcategory(subCategory: Category): Boolean =
+            withContext(dispatcher) {
+                val currentUserId = preferencesStore.uid.firstOrNull() ?: throw WrongUidException()
+                val parent =
+                    subCategory.parent
+                        ?: throw CategoryException.CategoryNoParentException("Subcategory $subCategory has not parent")
+                categoryDao.delete(currentUserId, subCategory.id)
+                val list =
+                    categoryDao
+                        .getByParentId(
+                            currentUserId,
+                            parent.id,
+                        ).firstOrNull() ?: emptyList()
+                if (list.isEmpty()) categoryDao.delete(currentUserId, parent.id)
+                list.isEmpty()
+            }
 
-    override suspend fun deleteFromGroup(subCategory: Category): Boolean = withContext(dispatcher) {
-        val currentUserId = preferencesStore.uid.firstOrNull() ?: throw WrongUidException()
-        val parent = subCategory.parent
-            ?: throw CategoryException.CategoryNoParentException("Subcategory $subCategory has not parent")
-        categoryDao.update(subCategory.copy(parent = null).toDbModel())
-        val list = categoryDao.getByParentId(
-            currentUserId,
-            parent.id
-        ).firstOrNull() ?: emptyList()
-        if (list.isEmpty()) categoryDao.delete(currentUserId, parent.id)
-        list.isEmpty()
+        override suspend fun deleteFromGroup(subCategory: Category): Boolean =
+            withContext(dispatcher) {
+                val currentUserId = preferencesStore.uid.firstOrNull() ?: throw WrongUidException()
+                val parent =
+                    subCategory.parent
+                        ?: throw CategoryException.CategoryNoParentException("Subcategory $subCategory has not parent")
+                categoryDao.update(subCategory.copy(parent = null).toDbModel())
+                val list =
+                    categoryDao
+                        .getByParentId(
+                            currentUserId,
+                            parent.id,
+                        ).firstOrNull() ?: emptyList()
+                if (list.isEmpty()) categoryDao.delete(currentUserId, parent.id)
+                list.isEmpty()
+            }
     }
-}

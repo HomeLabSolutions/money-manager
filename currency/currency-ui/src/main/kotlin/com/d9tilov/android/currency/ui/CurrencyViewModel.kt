@@ -21,48 +21,55 @@ sealed interface CurrencyUiState {
 
     data class NoCurrencies(
         override val isLoading: Boolean = true,
-        override val errorMessages: List<ErrorMessage> = emptyList()
+        override val errorMessages: List<ErrorMessage> = emptyList(),
     ) : CurrencyUiState
 
     data class HasCurrencies(
         val currencyList: List<DomainCurrency> = emptyList(),
         override val isLoading: Boolean,
-        override val errorMessages: List<ErrorMessage> = emptyList()
+        override val errorMessages: List<ErrorMessage> = emptyList(),
     ) : CurrencyUiState
 }
 
 @HiltViewModel
-class CurrencyViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
-    currencyInteractor: CurrencyInteractor,
-    private val currencyUpdateObserver: CurrencyUpdateObserver
-) : ViewModel() {
+class CurrencyViewModel
+    @Inject
+    constructor(
+        savedStateHandle: SavedStateHandle,
+        currencyInteractor: CurrencyInteractor,
+        private val currencyUpdateObserver: CurrencyUpdateObserver,
+    ) : ViewModel() {
+        private val currencyArgs: CurrencyArgs.CurrencyScreenArgs =
+            CurrencyArgs.CurrencyScreenArgs(savedStateHandle)
+        private val selectedCurrency: String? = currencyArgs.currencyCode
 
-    private val currencyArgs: CurrencyArgs.CurrencyScreenArgs =
-        CurrencyArgs.CurrencyScreenArgs(savedStateHandle)
-    private val selectedCurrency: String? = currencyArgs.currencyCode
+        private val _uiState: MutableStateFlow<CurrencyUiState> =
+            MutableStateFlow(CurrencyUiState.NoCurrencies())
+        val uiState = _uiState
 
-    private val _uiState: MutableStateFlow<CurrencyUiState> =
-        MutableStateFlow(CurrencyUiState.NoCurrencies())
-    val uiState = _uiState
-
-    init {
-        viewModelScope.launch {
-            currencyInteractor.getCurrencies()
-                .map { CurrencyUiState.HasCurrencies(it, false) }
-                .collect { newState: CurrencyUiState.HasCurrencies ->
-                    _uiState.update { state ->
-                        if (selectedCurrency != null) {
-                            val list =
-                                newState.currencyList.map { item -> item.copy(isBase = item.code == selectedCurrency) }
-                            newState.copy(currencyList = list)
-                        } else newState
+        init {
+            viewModelScope.launch {
+                currencyInteractor
+                    .getCurrencies()
+                    .map { CurrencyUiState.HasCurrencies(it, false) }
+                    .collect { newState: CurrencyUiState.HasCurrencies ->
+                        _uiState.update { state ->
+                            if (selectedCurrency != null) {
+                                val list =
+                                    newState.currencyList.map { item ->
+                                        item.copy(isBase = item.code == selectedCurrency)
+                                    }
+                                newState.copy(currencyList = list)
+                            } else {
+                                newState
+                            }
+                        }
                     }
-                }
+            }
         }
-    }
 
-    fun changeCurrency(code: String) = viewModelScope.launch {
-        if (selectedCurrency == null) currencyUpdateObserver.updateMainCurrency(code)
+        fun changeCurrency(code: String) =
+            viewModelScope.launch {
+                if (selectedCurrency == null) currencyUpdateObserver.updateMainCurrency(code)
+            }
     }
-}

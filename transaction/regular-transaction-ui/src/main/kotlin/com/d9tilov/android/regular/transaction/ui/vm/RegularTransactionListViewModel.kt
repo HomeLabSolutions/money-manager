@@ -24,33 +24,36 @@ data class RegularTransactionListState(
 }
 
 @HiltViewModel
-class RegularTransactionListViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
-    private val regularTransactionInteractor: RegularTransactionInteractor,
-) : ViewModel() {
+class RegularTransactionListViewModel
+    @Inject
+    constructor(
+        savedStateHandle: SavedStateHandle,
+        private val regularTransactionInteractor: RegularTransactionInteractor,
+    ) : ViewModel() {
+        private val regularTransactionArgs: RegularTransactionArgs.RegularTransactionListArgs =
+            RegularTransactionArgs.RegularTransactionListArgs(savedStateHandle)
+        private val transactionType = checkNotNull(regularTransactionArgs.transactionType)
 
-    private val regularTransactionArgs: RegularTransactionArgs.RegularTransactionListArgs =
-        RegularTransactionArgs.RegularTransactionListArgs(savedStateHandle)
-    private val transactionType = checkNotNull(regularTransactionArgs.transactionType)
+        private val _uiState = MutableStateFlow(RegularTransactionListState.EMPTY)
+        val uiState = _uiState.asStateFlow()
 
-    private val _uiState = MutableStateFlow(RegularTransactionListState.EMPTY)
-    val uiState = _uiState.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            regularTransactionInteractor.getAll(transactionType)
-                .collect { list ->
-                    _uiState.update { state ->
-                        state.copy(
-                            transactionType = transactionType,
-                            regularTransactions = list
-                        )
+        init {
+            viewModelScope.launch {
+                regularTransactionInteractor
+                    .getAll(transactionType)
+                    .collect { list ->
+                        _uiState.update { state ->
+                            state.copy(
+                                transactionType = transactionType,
+                                regularTransactions = list,
+                            )
+                        }
                     }
-                }
+            }
         }
-    }
 
-    fun removeTransaction(transaction: RegularTransaction) = viewModelScope.launch {
-        regularTransactionInteractor.delete(transaction)
+        fun removeTransaction(transaction: RegularTransaction) =
+            viewModelScope.launch {
+                regularTransactionInteractor.delete(transaction)
+            }
     }
-}

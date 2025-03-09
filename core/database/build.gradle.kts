@@ -10,10 +10,11 @@ android {
     defaultConfig {
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments += mapOf(
-                    "room.incremental" to "true",
-                    "room.schemaLocation" to "$projectDir/schemas"
-                )
+                arguments +=
+                    mapOf(
+                        "room.incremental" to "true",
+                        "room.schemaLocation" to "$projectDir/schemas",
+                    )
             }
         }
     }
@@ -28,23 +29,4 @@ dependencies {
     implementation(libs.room.paging)
 
     ksp(libs.room.compiler)
-}
-
-dependencyAnalysis {
-    val fail = "fail"
-    val ignore = "ignore"
-    issues {
-        onUnusedDependencies {
-            severity(fail)
-            exclude(
-                "",
-            )
-        }
-        onUsedTransitiveDependencies { severity(ignore) }
-        onIncorrectConfiguration { severity(ignore) }
-        onCompileOnly { severity(ignore) }
-        onRuntimeOnly { severity(ignore) }
-        onUnusedAnnotationProcessors { severity(ignore) }
-        onRedundantPlugins { severity(ignore) }
-    }
 }

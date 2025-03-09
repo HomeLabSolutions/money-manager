@@ -7,7 +7,6 @@ import com.d9tilov.android.core.utils.toUTC
 import kotlinx.datetime.LocalDateTime
 
 object DateConverter {
-
     @TypeConverter
     @JvmStatic
     fun toOffsetDateTime(value: Long): LocalDateTime = value.fromUTCToLocalDateTime()

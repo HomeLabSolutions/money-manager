@@ -9,9 +9,11 @@ fun DomainCurrency.toDataModel(): Currency =
             code,
             symbol,
             value,
-            lastUpdateTime
+            lastUpdateTime,
         )
     }
 
 fun Currency.toDomain(isBase: Boolean): DomainCurrency =
-    with(this) { DomainCurrency(code, symbol, value, isBase, lastUpdateTime) }
+    with(this) {
+        DomainCurrency(code, symbol, value, isBase, lastUpdateTime)
+    }

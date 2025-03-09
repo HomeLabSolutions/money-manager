@@ -12,9 +12,9 @@ import androidx.room.PrimaryKey
             entity = UserDbModel::class,
             parentColumns = ["uid"],
             childColumns = ["clientId"],
-            onDelete = ForeignKey.CASCADE
-        )
-    ]
+            onDelete = ForeignKey.CASCADE,
+        ),
+    ],
 )
 data class CategoryDbModel(
     @PrimaryKey(autoGenerate = true)
@@ -26,5 +26,5 @@ data class CategoryDbModel(
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "icon") val iconNameOrdinal: Int,
     @ColumnInfo(name = "color") val colorNameOrdinal: Int,
-    @ColumnInfo(name = "usageCount") val usageCount: Int
+    @ColumnInfo(name = "usageCount") val usageCount: Int,
 )

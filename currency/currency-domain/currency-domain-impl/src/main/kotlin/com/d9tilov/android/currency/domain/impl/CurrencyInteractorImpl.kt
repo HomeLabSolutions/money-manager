@@ -14,29 +14,31 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
 import java.math.BigDecimal
+import javax.inject.Inject
 
-class CurrencyInteractorImpl(private val currencyRepo: CurrencyRepo) : CurrencyInteractor {
-
-    override fun getCurrencies(): Flow<List<DomainCurrency>> {
-        return currencyRepo.getMainCurrency()
+class CurrencyInteractorImpl @Inject constructor(
+    private val currencyRepo: CurrencyRepo,
+) : CurrencyInteractor {
+    override fun getCurrencies(): Flow<List<DomainCurrency>> =
+        currencyRepo
+            .getMainCurrency()
             .flatMapMerge { baseCurrency ->
-                currencyRepo.getCurrencies()
+                currencyRepo
+                    .getCurrencies()
                     .map { list -> list.map { item -> item.toDomain(baseCurrency.code == item.code) } }
             }
-    }
 
     override fun getMainCurrencyFlow(): Flow<CurrencyMetaData> = currencyRepo.getMainCurrency()
 
     override suspend fun getMainCurrency(): CurrencyMetaData =
         currencyRepo.getMainCurrency().firstOrNull() ?: CurrencyMetaData.EMPTY
 
-    override suspend fun getCurrencyByCode(code: String): Currency =
-        currencyRepo.getCurrencyByCode(code)
+    override suspend fun getCurrencyByCode(code: String): Currency = currencyRepo.getCurrencyByCode(code)
 
     override suspend fun toTargetCurrency(
         amount: BigDecimal,
         sourceCurrencyCode: String,
-        targetCurrencyCode: String
+        targetCurrencyCode: String,
     ): BigDecimal {
         if (sourceCurrencyCode == targetCurrencyCode) return amount
         val targetCurrency = getCurrencyByCode(targetCurrencyCode)
@@ -46,7 +48,10 @@ class CurrencyInteractorImpl(private val currencyRepo: CurrencyRepo) : CurrencyI
         return amount.multiply(mainAbsoluteAmount.divideBy(currentAbsoluteAmount)).reduceScale()
     }
 
-    override suspend fun toUsd(amount: BigDecimal, currencyCode: String): BigDecimal {
+    override suspend fun toUsd(
+        amount: BigDecimal,
+        currencyCode: String,
+    ): BigDecimal {
         val mainCurrencyCode = DEFAULT_CURRENCY_CODE
         if (currencyCode == mainCurrencyCode) return amount
         val currentCurrency = getCurrencyByCode(currencyCode)
@@ -54,14 +59,13 @@ class CurrencyInteractorImpl(private val currencyRepo: CurrencyRepo) : CurrencyI
         return amount.divideBy(currentAbsoluteAmount)
     }
 
-    override suspend fun updateCurrencyRates(): Boolean {
-        return try {
+    override suspend fun updateCurrencyRates(): Result<Boolean> =
+        try {
             currencyRepo.updateCurrencies()
-            true
+            Result.success(true)
         } catch (ex: Exception) {
-            false
+            Result.failure(ex)
         }
-    }
 
     override suspend fun updateMainCurrency(code: String) = currencyRepo.updateMainCurrency(code)
 }

@@ -42,7 +42,11 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @Composable
-fun CurrencyListRoute(viewModel: CurrencyViewModel = hiltViewModel(), clickBack: () -> Unit, onChooseCurrency: (currencyCode: String) -> Unit) {
+fun CurrencyListRoute(
+    viewModel: CurrencyViewModel = hiltViewModel(),
+    clickBack: () -> Unit,
+    onChooseCurrency: (currencyCode: String) -> Unit,
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     CurrencyListScreen(
         currencyUiState = uiState,
@@ -52,7 +56,7 @@ fun CurrencyListRoute(viewModel: CurrencyViewModel = hiltViewModel(), clickBack:
             viewModel.changeCurrency(code)
             onChooseCurrency(code)
         },
-        onClickBack = clickBack
+        onClickBack = clickBack,
     )
 }
 
@@ -63,17 +67,17 @@ fun CurrencyListScreen(
     modifier: Modifier = Modifier,
     showToolbar: Boolean,
     onChooseCurrency: (currency: DomainCurrency) -> Unit = {},
-    onClickBack: () -> Unit = {}
+    onClickBack: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
             if (showToolbar) {
                 MmTopAppBar(
                     titleRes = R.string.title_prepopulate_currency,
-                    onNavigationClick = onClickBack
+                    onNavigationClick = onClickBack,
                 )
             }
-        }
+        },
     ) { padding ->
         if (currencyUiState.isLoading) {
             Box(modifier = modifier.fillMaxSize()) {
@@ -89,7 +93,7 @@ fun CurrencyListScreen(
                 LazyColumn(
                     contentPadding = padding,
                     modifier = modifier.consumeWindowInsets(padding),
-                    state = state
+                    state = state,
                 ) {
                     items(items = currencyList, key = { item -> item.code }) { item ->
                         CurrencyItem(item, onChooseCurrency)
@@ -107,53 +111,61 @@ fun CurrencyListScreen(
 }
 
 @Composable
-fun CurrencyItem(currency: DomainCurrency, clickCallback: (currency: DomainCurrency) -> Unit) {
+fun CurrencyItem(
+    currency: DomainCurrency,
+    clickCallback: (currency: DomainCurrency) -> Unit,
+) {
     Column(
         Modifier
             .fillMaxWidth()
-            .clickable { clickCallback(currency) }) {
+            .clickable { clickCallback(currency) },
+    ) {
         Row(
-            modifier = Modifier
-                .wrapContentHeight(Alignment.CenterVertically)
-                .fillMaxWidth()
-                .height(60.dp)
+            modifier =
+                Modifier
+                    .wrapContentHeight(Alignment.CenterVertically)
+                    .fillMaxWidth()
+                    .height(60.dp),
         ) {
             Text(
                 text = CurrencyUtils.getCurrencyIcon(currency.code),
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .padding(horizontal = 16.dp),
-                fontSize = 30.sp
+                modifier =
+                    Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding(horizontal = 16.dp),
+                fontSize = 30.sp,
             )
             Column(
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .fillMaxWidth(0.85f)
+                modifier =
+                    Modifier
+                        .align(Alignment.CenterVertically)
+                        .fillMaxWidth(0.85f),
             ) {
                 Text(
                     text = CurrencyUtils.getCurrencyFullName(currency.code),
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.secondary
+                    color = MaterialTheme.colorScheme.secondary,
                 )
                 Text(
                     text = currency.code,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.tertiary
+                    color = MaterialTheme.colorScheme.tertiary,
                 )
             }
             Icon(
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .alpha(if (currency.isBase) 1f else 0f),
+                modifier =
+                    Modifier
+                        .align(Alignment.CenterVertically)
+                        .alpha(if (currency.isBase) 1f else 0f),
                 imageVector = MoneyManagerIcons.Check,
                 contentDescription = "content description",
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.primary,
             )
         }
         HorizontalDivider(
             color = MaterialTheme.colorScheme.primary,
             thickness = 1.dp,
-            modifier = Modifier.alpha(0.2f)
+            modifier = Modifier.alpha(0.2f),
         )
     }
 }

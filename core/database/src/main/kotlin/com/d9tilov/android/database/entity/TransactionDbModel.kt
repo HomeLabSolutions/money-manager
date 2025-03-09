@@ -14,9 +14,9 @@ import java.math.BigDecimal
             entity = UserDbModel::class,
             parentColumns = ["uid"],
             childColumns = ["clientId"],
-            onDelete = ForeignKey.CASCADE
-        )
-    ]
+            onDelete = ForeignKey.CASCADE,
+        ),
+    ],
 )
 data class TransactionDbModel(
     @PrimaryKey(autoGenerate = true)
@@ -35,6 +35,5 @@ data class TransactionDbModel(
     @ColumnInfo(name = "inStatistics") val inStatistics: Boolean,
     @ColumnInfo(name = "latitude") val latitude: Double,
     @ColumnInfo(name = "longitude") val longitude: Double,
-    @ColumnInfo(name = "photo") val photoUri: String?
-
+    @ColumnInfo(name = "photo") val photoUri: String?,
 )

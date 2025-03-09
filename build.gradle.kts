@@ -1,5 +1,5 @@
-import com.android.moneymanager.DetektOptions.applyDetektOptions
-import com.dropbox.affectedmoduledetector.AffectedModuleConfiguration
+import com.android.moneymanager.gradle.DetektOptions.applyDetektOptions
+import com.android.moneymanager.gradle.FormattingOptions.applyPrecheckOptions
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
@@ -14,12 +14,12 @@ buildscript {
         classpath(libs.google.services)
         classpath(libs.hilt.android.gradle.plugin)
         classpath(libs.firebase.crashlytics.gradle)
-        classpath(libs.detekt.gradle.plugin)
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
+applyPrecheckOptions()
 applyDetektOptions()
 
 allprojects {
@@ -39,7 +39,7 @@ extra["minSdkVersion"] = 23
 extra["targetSdkVersion"] = 35
 extra["versionMajor"] = 1
 extra["versionMinor"] = 0
-extra["versionPatch"] = 26
+extra["versionPatch"] = 27
 extra["versionBuild"] = 1
 
 tasks.register("clean", Delete::class) {
@@ -48,31 +48,27 @@ tasks.register("clean", Delete::class) {
 
 plugins {
     alias(libs.plugins.serialization) apply false
-    alias(libs.plugins.deps.sorting) apply false
     alias(libs.plugins.compose.compiler) apply false
-    alias(libs.plugins.module.detector) apply true
-}
-
-affectedModuleDetector {
-    baseDir = "${project.rootDir}"
-    pathsAffectingAllModules = setOf()
-    logFilename = "output.log"
-    logFolder = "${project.rootDir}/output"
-    compareFrom = "PreviousCommit" //default is PreviousCommit
-    excludedModules = setOf()
-    specifiedBranch = "develop"
-    ignoredFiles = setOf()
-    includeUncommitted = false
-    top = "HEAD"
-    customTasks = setOf(
-        AffectedModuleConfiguration.CustomTask(
-            "runDetektByImpact",
-            "projectHealth",
-            "Run projectHealth task for current module"
-        )
-    )
+    alias(libs.plugins.deps.sorting) apply false
+    alias(libs.plugins.deps.unused) apply true
 }
 
 subprojects {
     apply(plugin = "com.squareup.sort-dependencies")
+}
+
+dependencyAnalysis {
+    val fail = "fail"
+    val ignore = "ignore"
+    issues {
+        all {
+            onUnusedDependencies { severity(fail) }
+            onUsedTransitiveDependencies { severity(ignore) }
+            onIncorrectConfiguration { severity(ignore) }
+            onCompileOnly { severity(ignore) }
+            onRuntimeOnly { severity(ignore) }
+            onUnusedAnnotationProcessors { severity(ignore) }
+            onRedundantPlugins { severity(ignore) }
+        }
+    }
 }

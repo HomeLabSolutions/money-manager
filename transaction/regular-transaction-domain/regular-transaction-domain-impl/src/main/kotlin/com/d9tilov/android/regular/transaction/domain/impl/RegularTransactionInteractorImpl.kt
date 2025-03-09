@@ -16,36 +16,40 @@ import kotlinx.coroutines.flow.map
 class RegularTransactionInteractorImpl(
     private val currencyInteractor: CurrencyInteractor,
     private val regularTransactionRepo: RegularTransactionRepo,
-    private val categoryInteractor: CategoryInteractor
+    private val categoryInteractor: CategoryInteractor,
 ) : RegularTransactionInteractor {
-
     override fun createDefault(): Flow<RegularTransaction> =
-        currencyInteractor.getMainCurrencyFlow()
+        currencyInteractor
+            .getMainCurrencyFlow()
             .map { RegularTransaction.EMPTY.copy(currencyCode = it.code) }
 
     override suspend fun insert(regularTransactionData: RegularTransaction) {
         regularTransactionRepo.insert(regularTransactionData.toData())
     }
 
-    override fun getAll(type: TransactionType): Flow<List<RegularTransaction>> {
-        return categoryInteractor.getGroupedCategoriesByType(type)
+    override fun getAll(type: TransactionType): Flow<List<RegularTransaction>> =
+        categoryInteractor
+            .getGroupedCategoriesByType(type)
             .flatMapLatest { categoryList ->
                 regularTransactionRepo.getAll(type).map { list ->
                     val newList = mutableListOf<RegularTransaction>()
                     for (item in list) {
                         val category =
                             categoryList.find { item.categoryId == it.id }
-                                ?: throw com.d9tilov.android.category.domain.model.exception.CategoryException.CategoryNotFoundException("getAll Not found category with id: ${item.categoryId}")
+                                ?: throw com.d9tilov.android.category.domain.model.exception.CategoryException
+                                    .CategoryNotFoundException(
+                                        "getAll Not found category with id: ${item.categoryId}",
+                                    )
                         val regularTransaction = item.toDomain(category)
                         newList.add(regularTransaction)
                     }
                     newList
                 }
             }
-    }
 
     override suspend fun removeAllByCategory(category: Category) {
-        regularTransactionRepo.getAllByCategory(category)
+        regularTransactionRepo
+            .getAllByCategory(category)
             .map { tr -> delete(tr.toDomain(category)) }
     }
 

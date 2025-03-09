@@ -1,4 +1,6 @@
-package com.d9tilov.android.common.android.utils // ktlint-disable filename
+@file:Suppress("ktlint:standard:filename")
+
+package com.d9tilov.android.common.android.utils
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -13,21 +15,23 @@ fun isNetworkConnected(context: Context): Boolean {
         val networkCapabilities = connectivityManager.activeNetwork ?: return false
         val activeNetwork =
             connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
-        result = when {
-            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-            else -> false
-        }
+        result =
+            when {
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+                else -> false
+            }
     } else {
         @Suppress("DEPRECATION")
         connectivityManager.activeNetworkInfo?.run {
-            result = when (type) {
-                ConnectivityManager.TYPE_WIFI -> true
-                ConnectivityManager.TYPE_MOBILE -> true
-                ConnectivityManager.TYPE_ETHERNET -> true
-                else -> false
-            }
+            result =
+                when (type) {
+                    ConnectivityManager.TYPE_WIFI -> true
+                    ConnectivityManager.TYPE_MOBILE -> true
+                    ConnectivityManager.TYPE_ETHERNET -> true
+                    else -> false
+                }
         }
     }
     return result

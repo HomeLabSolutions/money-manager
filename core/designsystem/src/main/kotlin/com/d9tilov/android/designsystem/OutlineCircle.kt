@@ -26,17 +26,21 @@ fun OutlineCircle(
     onClick: (Color) -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .size(size)
-            .padding(1.dp)
-            .clip(CircleShape)
-            .background(color)
-            .clickable { onClick(color) }
-            .then(
-                if (showOutline) Modifier
-                    .border(2.dp, MaterialTheme.colorScheme.secondary, CircleShape)
-                else Modifier
-            )
+        modifier =
+            modifier
+                .size(size)
+                .padding(1.dp)
+                .clip(CircleShape)
+                .background(color)
+                .clickable { onClick(color) }
+                .then(
+                    if (showOutline) {
+                        Modifier
+                            .border(2.dp, MaterialTheme.colorScheme.secondary, CircleShape)
+                    } else {
+                        Modifier
+                    },
+                ),
     )
 }
 

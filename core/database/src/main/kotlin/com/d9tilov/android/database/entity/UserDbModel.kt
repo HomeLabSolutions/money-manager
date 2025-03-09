@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "users")
 data class UserDbModel(
-
     @PrimaryKey
     @ColumnInfo(name = "uid")
     var uid: String,
@@ -14,5 +13,5 @@ data class UserDbModel(
     @ColumnInfo(name = "lastName") val lastName: String?,
     @ColumnInfo(name = "photoUrl") val photoUrl: String?,
     @ColumnInfo(name = "showPrepopulate") val showPrepopulate: Boolean,
-    @ColumnInfo(name = "fiscalDay") val fiscalDay: Int
+    @ColumnInfo(name = "fiscalDay") val fiscalDay: Int,
 )
