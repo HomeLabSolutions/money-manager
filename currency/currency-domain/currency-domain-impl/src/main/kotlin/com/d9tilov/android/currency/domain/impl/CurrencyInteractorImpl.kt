@@ -14,8 +14,9 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
 import java.math.BigDecimal
+import javax.inject.Inject
 
-class CurrencyInteractorImpl(
+class CurrencyInteractorImpl @Inject constructor(
     private val currencyRepo: CurrencyRepo,
 ) : CurrencyInteractor {
     override fun getCurrencies(): Flow<List<DomainCurrency>> =
@@ -58,12 +59,12 @@ class CurrencyInteractorImpl(
         return amount.divideBy(currentAbsoluteAmount)
     }
 
-    override suspend fun updateCurrencyRates(): Boolean =
+    override suspend fun updateCurrencyRates(): Result<Boolean> =
         try {
             currencyRepo.updateCurrencies()
-            true
+            Result.success(true)
         } catch (ex: Exception) {
-            false
+            Result.failure(ex)
         }
 
     override suspend fun updateMainCurrency(code: String) = currencyRepo.updateMainCurrency(code)

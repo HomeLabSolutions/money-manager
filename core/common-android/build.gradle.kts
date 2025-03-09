@@ -24,5 +24,5 @@ dependencies {
     implementation(libs.navigation.common)
     implementation(libs.navigation.runtime)
 
-    ksp(libs.hilt.android.compiler)
+    ksp(libs.hilt.ext.compiler)
 }
