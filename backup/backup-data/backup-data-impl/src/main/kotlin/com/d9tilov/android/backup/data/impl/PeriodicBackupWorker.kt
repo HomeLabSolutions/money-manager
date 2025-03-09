@@ -76,7 +76,7 @@ class PeriodicBackupWorker
                 val workManager = WorkManager.getInstance(context)
                 workManager.enqueueUniquePeriodicWork(
                     BACKUP_WORK_NAME,
-                    ExistingPeriodicWorkPolicy.KEEP,
+                    ExistingPeriodicWorkPolicy.REPLACE,
                     recurringWork,
                 )
             }

@@ -29,14 +29,13 @@ object Sync {
     // Application.onCreate() and should be only done once.
     fun initialize(context: Context) {
         Timber.tag(TAG).d("Initialize currency sync worker")
-        WorkManager.getInstance(context).apply {
-            // Run sync on app startup and ensure only one sync worker runs at any time
-            enqueueUniqueWork(
+        WorkManager
+            .getInstance(context)
+            .enqueueUniqueWork(
                 SYNC_WORK_NAME,
-                ExistingWorkPolicy.KEEP,
+                ExistingWorkPolicy.REPLACE,
                 CurrencySyncWorker.startUpSyncWork(),
             )
-        }
     }
 }
 

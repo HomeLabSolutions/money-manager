@@ -15,11 +15,13 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import retrofit2.Retrofit
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object CurrencyDataModule {
     @Provides
+    @Singleton
     fun provideCurrencySource(
         @Dispatcher(MoneyManagerDispatchers.IO) dispatcher: CoroutineDispatcher,
         appDatabase: AppDatabase,
@@ -33,9 +35,11 @@ object CurrencyDataModule {
         )
 
     @Provides
+    @Singleton
     fun provideCurrencyApi(retrofit: Retrofit): CurrencyApi = retrofit.create(CurrencyApi::class.java)
 
     @Provides
+    @Singleton
     fun provideCurrencyRepo(
         currencySource: CurrencySource,
         currencyApi: CurrencyApi,
