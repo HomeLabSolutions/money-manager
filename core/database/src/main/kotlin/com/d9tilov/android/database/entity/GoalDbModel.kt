@@ -14,9 +14,9 @@ import java.math.BigDecimal
             entity = UserDbModel::class,
             parentColumns = ["uid"],
             childColumns = ["clientId"],
-            onDelete = ForeignKey.CASCADE
-        )
-    ]
+            onDelete = ForeignKey.CASCADE,
+        ),
+    ],
 )
 data class GoalDbModel(
     @PrimaryKey(autoGenerate = true)
@@ -27,5 +27,5 @@ data class GoalDbModel(
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "targetSum") val targetSum: BigDecimal,
     @ColumnInfo(name = "createdDate") val createdDate: LocalDateTime,
-    @ColumnInfo(name = "description") val description: String
+    @ColumnInfo(name = "description") val description: String,
 )

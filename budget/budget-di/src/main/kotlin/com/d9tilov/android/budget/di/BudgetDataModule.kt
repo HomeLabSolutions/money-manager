@@ -18,18 +18,17 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object BudgetDataModule {
-
     @Provides
     @Singleton
     fun provideBudgetLocalSource(
         @Dispatcher(MoneyManagerDispatchers.IO) dispatcher: CoroutineDispatcher,
         preferencesStore: PreferencesStore,
-        database: AppDatabase
+        database: AppDatabase,
     ): BudgetSource =
         BudgetLocalSource(
             dispatcher,
             preferencesStore,
-            database.budgetDao()
+            database.budgetDao(),
         )
 
     @Provides

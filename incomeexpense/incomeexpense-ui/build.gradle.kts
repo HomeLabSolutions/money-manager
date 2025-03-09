@@ -2,8 +2,6 @@ plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
     id("moneymanager.android.library.compose")
-    
-    
 }
 
 android {
@@ -14,9 +12,8 @@ android {
     }
 }
 
-
 dependencies {
-    
+
     implementation(project(":billing:billing-domain:billing-domain-contract"))
     implementation(project(":category:category-domain:category-domain-contract"))
     implementation(project(":category:category-domain:category-domain-model"))
@@ -38,23 +35,4 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.paging.compose)
     implementation(libs.timber)
-}
-
-dependencyAnalysis {
-    val fail = "fail"
-    val ignore = "ignore"
-    issues {
-        onUnusedDependencies {
-            severity(fail)
-            exclude(
-                "",
-            )
-        }
-        onUsedTransitiveDependencies { severity(ignore) }
-        onIncorrectConfiguration { severity(ignore) }
-        onCompileOnly { severity(ignore) }
-        onRuntimeOnly { severity(ignore) }
-        onUnusedAnnotationProcessors { severity(ignore) }
-        onRedundantPlugins { severity(ignore) }
-    }
 }

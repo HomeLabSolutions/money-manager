@@ -1,48 +1,38 @@
 import java.io.FileInputStream
-import java.util.*
+import java.util.Properties
 
 plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
+    alias(libs.plugins.serialization)
 }
 
-val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystorePropertiesFile: File = rootProject.file("keystore.properties")
 val keystoreProperties = Properties()
-keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+val apiKey =
+    if (keystorePropertiesFile.exists()) {
+        keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+        keystoreProperties["currency_api_key"] as String
+    } else {
+        println("Warning: keystore.properties file not found. Release signing configuration will not be applied.")
+        ""
+    }
 
 android {
     namespace = "com.d9tilov.android.network"
 
     defaultConfig {
-        buildConfigField("String", "API_KEY", keystoreProperties["currency_api_key"] as String)
+        buildConfigField("String", "CURRENCY_API_KEY", "\"$apiKey\"")
     }
 }
 
 dependencies {
     implementation(project(":core:common"))
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.serialization.converter)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.retrofit)
-    implementation(libs.retrofit.moshi)
     implementation(libs.timber)
-}
-
-dependencyAnalysis {
-    val fail = "fail"
-    val ignore = "ignore"
-    issues {
-        onUnusedDependencies {
-            severity(fail)
-            exclude(
-                "",
-            )
-        }
-        onUsedTransitiveDependencies { severity(ignore) }
-        onIncorrectConfiguration { severity(ignore) }
-        onCompileOnly { severity(ignore) }
-        onRuntimeOnly { severity(ignore) }
-        onUnusedAnnotationProcessors { severity(ignore) }
-        onRedundantPlugins { severity(ignore) }
-    }
 }

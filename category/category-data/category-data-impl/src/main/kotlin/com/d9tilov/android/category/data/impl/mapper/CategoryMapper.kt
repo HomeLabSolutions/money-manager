@@ -10,28 +10,29 @@ import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.android.core.model.toType
 import com.d9tilov.android.database.entity.CategoryDbModel
 
-fun CategoryDbModel.toDataModel(parentModel: CategoryDbModel? = null) = with(this) {
-    parentModel?.let {
-        Category.EMPTY_EXPENSE.copy(
+fun CategoryDbModel.toDataModel(parentModel: CategoryDbModel? = null) =
+    with(this) {
+        parentModel?.let {
+            Category.EMPTY_EXPENSE.copy(
+                id = id,
+                clientId = uid,
+                name = name,
+                parent = parentModel.toDataParentModel(),
+                type = type.toType(),
+                icon = categoryMap.getOrElse(iconNameOrdinal) { R.drawable.ic_category_folder },
+                color = colorMap.getOrElse(colorNameOrdinal) { R.color.category_all_color },
+                usageCount = usageCount,
+            )
+        } ?: Category.EMPTY_EXPENSE.copy(
             id = id,
             clientId = uid,
             name = name,
-            parent = parentModel.toDataParentModel(),
             type = type.toType(),
             icon = categoryMap.getOrElse(iconNameOrdinal) { R.drawable.ic_category_folder },
             color = colorMap.getOrElse(colorNameOrdinal) { R.color.category_all_color },
-            usageCount = usageCount
+            usageCount = usageCount,
         )
-    } ?: Category.EMPTY_EXPENSE.copy(
-        id = id,
-        clientId = uid,
-        name = name,
-        type = type.toType(),
-        icon = categoryMap.getOrElse(iconNameOrdinal) { R.drawable.ic_category_folder },
-        color = colorMap.getOrElse(colorNameOrdinal) { R.color.category_all_color },
-        usageCount = usageCount
-    )
-}
+    }
 
 fun CategoryDbModel.toDataParentModel(): Category =
     with(this) {
@@ -42,7 +43,7 @@ fun CategoryDbModel.toDataParentModel(): Category =
             type = type.toType(),
             icon = categoryMap.getOrElse(iconNameOrdinal) { R.drawable.ic_category_folder },
             color = colorMap.getOrElse(colorNameOrdinal) { R.color.category_all_color },
-            usageCount = usageCount
+            usageCount = usageCount,
         )
     }
 
@@ -58,7 +59,7 @@ fun Category.toDbModel() =
             name = name,
             iconNameOrdinal = iconNameOrdinal,
             colorNameOrdinal = colorNameOrdinal,
-            usageCount = usageCount
+            usageCount = usageCount,
         )
     }
 
@@ -74,6 +75,6 @@ fun com.d9tilov.android.category.domain.model.DefaultCategory.toDataModelFromPre
             name = name,
             iconNameOrdinal = iconNameOrdinal,
             colorNameOrdinal = colorNameOrdinal,
-            usageCount = usageCount
+            usageCount = usageCount,
         )
     }

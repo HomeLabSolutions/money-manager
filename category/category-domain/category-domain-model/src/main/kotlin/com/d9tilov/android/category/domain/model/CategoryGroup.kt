@@ -1,6 +1,8 @@
 package com.d9tilov.android.category.domain.model
 
-enum class CategoryGroup(val value: Int) {
+enum class CategoryGroup(
+    val value: Int,
+) {
     UNKNOWN(-1),
     HOUSING(0),
     TRANSPORT(1),
@@ -12,6 +14,7 @@ enum class CategoryGroup(val value: Int) {
     INVESTING(7),
     RECREATION(8),
     PERSONAL(9),
-    OTHERS(10)
+    OTHERS(10),
 }
+
 fun Int.toGroupId(): CategoryGroup = CategoryGroup.entries.firstOrNull { it.value == this } ?: CategoryGroup.UNKNOWN

@@ -11,10 +11,11 @@ buildscript {
 dependencies {
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
     implementation(libs.android.gradle.plugin)
+    implementation(libs.detekt)
+    implementation(libs.java.poet)
+    implementation(libs.guava)
     implementation(libs.kotlin.gradle.plugin)
     implementation(libs.ksp.gradle.plugin)
-    implementation(libs.java.poet)
-    implementation(libs.unused.deps)
 }
 
 gradlePlugin {

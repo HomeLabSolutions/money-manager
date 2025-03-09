@@ -19,19 +19,16 @@ import kotlinx.coroutines.CoroutineDispatcher
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object TransactionDataModule {
-
     @Provides
     @ActivityRetainedScoped
-    fun provideTransactionDao(appDatabase: AppDatabase): TransactionDao {
-        return appDatabase.transactionDao()
-    }
+    fun provideTransactionDao(appDatabase: AppDatabase): TransactionDao = appDatabase.transactionDao()
 
     @Provides
     @ActivityRetainedScoped
     fun provideTransactionLocalSource(
         @Dispatcher(MoneyManagerDispatchers.IO) dispatcher: CoroutineDispatcher,
         preferencesStore: PreferencesStore,
-        appDatabase: AppDatabase
+        appDatabase: AppDatabase,
     ): TransactionSource = TransactionLocalSource(dispatcher, preferencesStore, appDatabase.transactionDao())
 
     @Provides

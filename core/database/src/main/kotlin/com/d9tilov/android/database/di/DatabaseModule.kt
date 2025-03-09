@@ -15,10 +15,13 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
-
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): AppDatabase =
-        Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
-            .setJournalMode(RoomDatabase.JournalMode.TRUNCATE).build()
+    fun provideDatabase(
+        @ApplicationContext context: Context,
+    ): AppDatabase =
+        Room
+            .databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
+            .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
+            .build()
 }

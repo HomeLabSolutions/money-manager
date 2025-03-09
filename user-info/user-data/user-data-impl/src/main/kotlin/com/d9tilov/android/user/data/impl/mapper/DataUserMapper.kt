@@ -11,14 +11,15 @@ fun UserDbModel.toDataModel(): UserProfile =
         firstName = firstName,
         lastName = lastName,
         showPrepopulate = showPrepopulate,
-        fiscalDay = fiscalDay
+        fiscalDay = fiscalDay,
     )
 
-fun UserProfile.toDbModel(): UserDbModel = UserDbModel(
-    uid = uid,
-    firstName = firstName,
-    lastName = lastName,
-    photoUrl = photoUrl,
-    showPrepopulate = showPrepopulate,
-    fiscalDay = fiscalDay
-)
+fun UserProfile.toDbModel(): UserDbModel =
+    UserDbModel(
+        uid = uid,
+        firstName = firstName,
+        lastName = lastName,
+        photoUrl = photoUrl,
+        showPrepopulate = showPrepopulate,
+        fiscalDay = fiscalDay,
+    )

@@ -103,11 +103,13 @@ data class ExpenseInfo(
     val wasSpendInPeriod: Price = Price.EMPTY,
 )
 
-data class IncomeInfo(val wasEarnedInPeriod: Price = Price.EMPTY)
+data class IncomeInfo(
+    val wasEarnedInPeriod: Price = Price.EMPTY,
+)
 
 enum class ScreenType {
     EXPENSE,
-    INCOME;
+    INCOME,
 }
 
 val screenTypes = ScreenType.entries
@@ -116,227 +118,253 @@ fun Int.toScreenType(): ScreenType = ScreenType.entries[this]
 
 enum class EditMode {
     KEYBOARD,
-    LIST
+    LIST,
 }
 
 @HiltViewModel
-class IncomeExpenseViewModel @Inject constructor(
-    billingInteractor: BillingInteractor,
-    private val currencyInteractor: CurrencyInteractor,
-    private val categoryInteractor: CategoryInteractor,
-    private val transactionInteractor: TransactionInteractor,
-) : ViewModel() {
+class IncomeExpenseViewModel
+    @Inject
+    constructor(
+        billingInteractor: BillingInteractor,
+        private val currencyInteractor: CurrencyInteractor,
+        private val categoryInteractor: CategoryInteractor,
+        private val transactionInteractor: TransactionInteractor,
+    ) : ViewModel() {
+        private val uiState = MutableStateFlow(IncomeExpenseUiState.EMPTY)
+        val uiStateFlow = uiState.asStateFlow()
+        private val mainCurrency = MutableStateFlow(CurrencyMetaData.EMPTY)
+        private val errorMessage = MutableSharedFlow<Int>()
+        val errorMessageFlow = errorMessage.asSharedFlow()
 
-    private val _uiState = MutableStateFlow(IncomeExpenseUiState.EMPTY)
-    val uiState = _uiState.asStateFlow()
-    private val _mainCurrency = MutableStateFlow(CurrencyMetaData.EMPTY)
-    private val _errorMessage = MutableSharedFlow<Int>()
-    val errorMessage = _errorMessage.asSharedFlow()
-
-    init {
-        val updateCurrencyExceptionHandler = CoroutineExceptionHandler { _, exception ->
-            Timber.tag(TAG).d("Unable to update currency: $exception")
-        }
-        viewModelScope.launch(updateCurrencyExceptionHandler) {
-            launch {
-                currencyInteractor.getMainCurrencyFlow()
-                    .collect { currencyData ->
-                        _uiState.update { state ->
-                            state.copy(
-                                price = MainPrice(
-                                    BigDecimal.ZERO.toString(),
-                                    currencyData.code
+        init {
+            val updateCurrencyExceptionHandler =
+                CoroutineExceptionHandler { _, exception ->
+                    Timber.tag(TAG).d("Unable to update currency: $exception")
+                }
+            viewModelScope.launch(updateCurrencyExceptionHandler) {
+                launch {
+                    currencyInteractor
+                        .getMainCurrencyFlow()
+                        .collect { currencyData ->
+                            uiState.update { state ->
+                                state.copy(
+                                    price =
+                                        MainPrice(
+                                            BigDecimal.ZERO.toString(),
+                                            currencyData.code,
+                                        ),
                                 )
+                            }
+                            mainCurrency.value = currencyData
+                        }
+                }
+                launch {
+                    getSortedCategories(TransactionType.EXPENSE).collect { list ->
+                        uiState.update { state ->
+                            state.copy(expenseUiState = state.expenseUiState.copy(expenseCategoryList = list))
+                        }
+                    }
+                }
+                launch {
+                    getSortedCategories(TransactionType.INCOME).collect { list ->
+                        uiState.update { state ->
+                            state.copy(incomeUiState = state.incomeUiState.copy(incomeCategoryList = list))
+                        }
+                    }
+                }
+                launch {
+                    uiState.update { state ->
+                        state.copy(
+                            expenseUiState =
+                                state.expenseUiState.copy(
+                                    expenseTransactions =
+                                        mapWithStickyHeaders(
+                                            transactionInteractor.getTransactionsByType(TransactionType.EXPENSE),
+                                        ),
+                                ),
+                        )
+                    }
+                }
+                launch {
+                    uiState.update { state ->
+                        state.copy(
+                            incomeUiState =
+                                state.incomeUiState.copy(
+                                    incomeTransactions =
+                                        mapWithStickyHeaders(
+                                            transactionInteractor.getTransactionsByType(
+                                                TransactionType.INCOME,
+                                            ),
+                                        ),
+                                ),
+                        )
+                    }
+                }
+                launch {
+                    val expenseSpendingExpenseInfoFlow =
+                        combine(
+                            transactionInteractor.ableToSpendToday(),
+                            transactionInteractor.getApproxSumTodayCurrentCurrency(TransactionType.EXPENSE),
+                            transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.EXPENSE),
+                        ) { ableToSpendToday, spentTodayApprox, spentInPeriodApprox ->
+                            val currencyCode = mainCurrency.value.code
+                            ExpenseInfo(
+                                when (ableToSpendToday) {
+                                    is TransactionSpendingTodayModel.NORMAL ->
+                                        Price(
+                                            R.string.expense_info_can_spend_today_title,
+                                            "${currencyCode.getSymbolByCode()}${ableToSpendToday.trSum.reduceScale(
+                                                true,
+                                            )}",
+                                        )
+
+                                    is TransactionSpendingTodayModel.OVERSPENDING ->
+                                        Price(
+                                            R.string.expense_info_can_spend_today_negate_title,
+                                            "${currencyCode.getSymbolByCode()}${ableToSpendToday.trSum.reduceScale(
+                                                true,
+                                            )}",
+                                        )
+                                },
+                                Price(
+                                    R.string.expense_info_today_title,
+                                    "${currencyCode.getSymbolByCode()}${spentTodayApprox.reduceScale(true)}",
+                                ),
+                                Price(
+                                    R.string.expense_info_period_title,
+                                    "${currencyCode.getSymbolByCode()}${spentInPeriodApprox.reduceScale(true)}",
+                                ),
                             )
                         }
-                        _mainCurrency.value = currencyData
-                    }
-            }
-            launch {
-                getSortedCategories(TransactionType.EXPENSE).collect{ list ->
-                    _uiState.update { state ->
-                        state.copy(expenseUiState = state.expenseUiState.copy(expenseCategoryList = list))
-                    }
+                    combine(
+                        billingInteractor.isPremium(),
+                        expenseSpendingExpenseInfoFlow,
+                    ) { isPremium, info -> if (isPremium) info else null }
+                        .collect { info ->
+                            uiState.update { state ->
+                                val expenseUiState = state.expenseUiState
+                                state.copy(expenseUiState = expenseUiState.copy(expenseInfo = info))
+                            }
+                        }
                 }
-            }
-            launch {
-                getSortedCategories(TransactionType.INCOME).collect{ list ->
-                    _uiState.update { state ->
-                        state.copy(incomeUiState = state.incomeUiState.copy(incomeCategoryList = list))
-                    }
-                }
-            }
-            launch {
-                _uiState.update { state ->
-                    state.copy(
-                        expenseUiState = state.expenseUiState.copy(
-                            expenseTransactions = mapWithStickyHeaders(transactionInteractor.getTransactionsByType(TransactionType.EXPENSE))
-                        )
-                    )
-                }
-            }
-            launch {
-                _uiState.update { state ->
-                    state.copy(
-                        incomeUiState = state.incomeUiState.copy(
-                            incomeTransactions = mapWithStickyHeaders(
-                                transactionInteractor.getTransactionsByType(
-                                    TransactionType.INCOME
-                                )
+                launch {
+                    combine(
+                        billingInteractor.isPremium(),
+                        transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.INCOME),
+                    ) { isPremium: Boolean, approxSum: BigDecimal ->
+                        if (isPremium) {
+                            val currencyCode = mainCurrency.value.code
+                            IncomeInfo(
+                                Price(
+                                    R.string.income_info_period_title,
+                                    "${currencyCode.getSymbolByCode()}$approxSum",
+                                ),
                             )
-                        )
-                    )
+                        } else {
+                            null
+                        }
+                    }.collect { info ->
+                        val incomeInfo = uiState.value.incomeUiState
+                        uiState.update { state ->
+                            state.copy(
+                                incomeUiState =
+                                    incomeInfo.copy(
+                                        incomeInfo = info,
+                                    ),
+                            )
+                        }
+                    }
                 }
             }
-            launch {
-                val expenseSpendingExpenseInfoFlow = combine(
-                    transactionInteractor.ableToSpendToday(),
-                    transactionInteractor.getApproxSumTodayCurrentCurrency(TransactionType.EXPENSE),
-                    transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.EXPENSE)
-                ) { ableToSpendToday, spentTodayApprox, spentInPeriodApprox ->
-                    val currencyCode = _mainCurrency.value.code
-                    ExpenseInfo(
-                        when (ableToSpendToday) {
-                            is TransactionSpendingTodayModel.NORMAL ->
-                                Price(
-                                    R.string.expense_info_can_spend_today_title,
-                                    "${currencyCode.getSymbolByCode()}${ableToSpendToday.trSum.reduceScale(true)}"
-                                )
+        }
 
-                            is TransactionSpendingTodayModel.OVERSPENDING ->
-                                Price(
-                                    R.string.expense_info_can_spend_today_negate_title,
-                                    "${currencyCode.getSymbolByCode()}${ableToSpendToday.trSum.reduceScale(true)}"
-                                )
-                        },
-                        Price(
-                            R.string.expense_info_today_title,
-                            "${currencyCode.getSymbolByCode()}${spentTodayApprox.reduceScale(true)}"
+        private fun getSortedCategories(type: TransactionType): Flow<List<Category>> =
+            categoryInteractor
+                .getGroupedCategoriesByType(type)
+                .flowOn(Dispatchers.IO)
+                .map { list -> list.sortedByDescending { it.usageCount } }
+                .flowOn(Dispatchers.Default)
+
+        fun addNumber(btn: KeyPress) {
+            uiState.update { state ->
+                val newPriceStr = MainPriceFieldParser.parse(state.price.value, btn)
+                val newPrice = state.price.copy(value = newPriceStr)
+                state.copy(price = newPrice)
+            }
+        }
+
+        fun addTransaction(categoryId: Long) {
+            if (uiState.value.price.value
+                    .toBigDecimal()
+                    .signum() == 0
+            ) {
+                viewModelScope.launch { errorMessage.emit(R.string.income_expense_empty_sum_error) }
+                return
+            }
+            updateMode(EditMode.LIST)
+            uiState.value.run {
+                viewModelScope.launch {
+                    val category = categoryInteractor.getCategoryById(categoryId)
+                    transactionInteractor.addTransaction(
+                        Transaction.EMPTY.copy(
+                            sum = price.value.toBigDecimal(),
+                            category = category,
+                            currencyCode = price.currencyCode,
+                            date = currentDateTime(),
+                            type = category.type,
                         ),
-                        Price(
-                            R.string.expense_info_period_title,
-                            "${currencyCode.getSymbolByCode()}${spentInPeriodApprox.reduceScale(true)}"
-                        )
                     )
                 }
-                combine(
-                    billingInteractor.isPremium(),
-                    expenseSpendingExpenseInfoFlow
-                ) { isPremium, info -> if (isPremium) info else null }
-                    .collect { info ->
-                        _uiState.update { state ->
-                            val expenseUiState = state.expenseUiState
-                            state.copy(expenseUiState = expenseUiState.copy(expenseInfo = info))
-                        }
-                    }
             }
-            launch {
-                combine(
-                    billingInteractor.isPremium(),
-                    transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.INCOME)
-                ) { isPremium: Boolean, approxSum: BigDecimal ->
-                    if (isPremium) {
-                        val currencyCode = _mainCurrency.value.code
-                        IncomeInfo(
-                            Price(
-                                R.string.income_info_period_title,
-                                "${currencyCode.getSymbolByCode()}$approxSum"
-                            )
+            uiState.update { state ->
+                val price = state.price.copy(value = BigDecimal.ZERO.toString())
+                state.copy(price = price)
+            }
+        }
+
+        fun updateCurrencyCode(code: String) {
+            uiState.update { state ->
+                val price = state.price.copy(currencyCode = code)
+                state.copy(price = price)
+            }
+        }
+
+        fun updateMode(mode: EditMode) {
+            uiState.update { state -> state.copy(mode = mode) }
+        }
+
+        fun deleteTransaction(transaction: Transaction) {
+            val deleteTransactionExceptionHandler =
+                CoroutineExceptionHandler { _, exception ->
+                    Timber.tag(TAG).d("Delete: $exception")
+                }
+            viewModelScope.launch(deleteTransactionExceptionHandler) {
+                transactionInteractor.removeTransaction(transaction)
+            }
+        }
+
+        private fun mapWithStickyHeaders(flow: Flow<PagingData<Transaction>>): Flow<PagingData<BaseTransaction>> =
+            flow.map { pagingData ->
+                pagingData.insertSeparators { before: Transaction?, after: Transaction? ->
+                    if (before == null && after == null) {
+                        null
+                    } else if (before != null && after == null) {
+                        null
+                    } else if (before == null && after != null) {
+                        TransactionHeader(
+                            after.date.getEndOfDay(),
+                            after.currencyCode,
                         )
-                    } else null
-                }.collect { info ->
-                        val incomeInfo = _uiState.value.incomeUiState
-                        _uiState.update { state ->
-                            state.copy(
-                                incomeUiState = incomeInfo.copy(
-                                    incomeInfo = info
-                                )
-                            )
-                        }
+                    } else if (before != null && after != null && before.date.isSameDay(after.date)) {
+                        null
+                    } else if (before != null && after != null && !before.date.isSameDay(after.date)) {
+                        TransactionHeader(
+                            after.date.getEndOfDay(),
+                            after.currencyCode,
+                        )
+                    } else {
+                        null
                     }
+                }
             }
-        }
     }
-
-    private fun getSortedCategories(type: TransactionType): Flow<List<Category>> {
-        return categoryInteractor.getGroupedCategoriesByType(type)
-            .flowOn(Dispatchers.IO)
-            .map { list -> list.sortedByDescending { it.usageCount } }
-            .flowOn(Dispatchers.Default)
-    }
-
-    fun addNumber(btn: KeyPress) {
-        _uiState.update { state ->
-            val newPriceStr = MainPriceFieldParser.parse(state.price.value, btn)
-            val newPrice = state.price.copy(value = newPriceStr)
-            state.copy(price = newPrice)
-        }
-    }
-
-    fun addTransaction(categoryId: Long) {
-        if (_uiState.value.price.value.toBigDecimal().signum() == 0) {
-            viewModelScope.launch { _errorMessage.emit(R.string.income_expense_empty_sum_error) }
-            return
-        }
-        updateMode(EditMode.LIST)
-        _uiState.value.run {
-            viewModelScope.launch {
-                val category = categoryInteractor.getCategoryById(categoryId)
-                transactionInteractor.addTransaction(
-                    Transaction.EMPTY.copy(
-                        sum = price.value.toBigDecimal(),
-                        category = category,
-                        currencyCode = price.currencyCode,
-                        date = currentDateTime(),
-                        type = category.type
-                    )
-                )
-            }
-        }
-        _uiState.update { state ->
-            val price = state.price.copy(value = BigDecimal.ZERO.toString())
-            state.copy(price = price)
-        }
-    }
-
-    fun updateCurrencyCode(code: String) {
-        _uiState.update { state ->
-            val price = state.price.copy(currencyCode = code)
-            state.copy(price = price)
-        }
-    }
-
-    fun updateMode(mode: EditMode) {
-        _uiState.update { state -> state.copy(mode = mode) }
-    }
-
-    fun deleteTransaction(transaction: Transaction) {
-        val deleteTransactionExceptionHandler = CoroutineExceptionHandler { _, exception ->
-            Timber.tag(TAG).d("Delete: $exception")
-        }
-        viewModelScope.launch(deleteTransactionExceptionHandler) {
-            transactionInteractor.removeTransaction(transaction)
-        }
-    }
-
-    private fun mapWithStickyHeaders(flow: Flow<PagingData<Transaction>>): Flow<PagingData<BaseTransaction>> {
-        return flow.map { pagingData ->
-            pagingData.insertSeparators { before: Transaction?, after: Transaction? ->
-                if (before == null && after == null) null
-                else if (before != null && after == null) null
-                else if (before == null && after != null)
-                    TransactionHeader(
-                        after.date.getEndOfDay(),
-                        after.currencyCode
-                    )
-                else if (before != null && after != null && before.date.isSameDay(after.date)) null
-                else if (before != null && after != null && !before.date.isSameDay(after.date))
-                    TransactionHeader(
-                        after.date.getEndOfDay(),
-                        after.currencyCode
-                    )
-                else null
-            }
-        }
-    }
-}

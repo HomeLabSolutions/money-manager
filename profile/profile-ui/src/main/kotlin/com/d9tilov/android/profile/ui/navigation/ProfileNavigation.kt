@@ -37,4 +37,5 @@ fun NavGraphBuilder.profileScreen(
 interface LogoutDialogNavigator : BaseNavigator {
     fun logout()
 }
+
 interface ProfileNavigator : BaseNavigator

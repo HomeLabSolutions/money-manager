@@ -13,18 +13,21 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
 }
 
-val keystorePropertiesFile: File = rootProject.file("keystore.properties")
-val keystoreProperties = Properties()
-keystoreProperties.load(FileInputStream(keystorePropertiesFile))
-
 android {
 
     signingConfigs {
         create("release") {
-            keyAlias = keystoreProperties["keyAlias"] as String
-            keyPassword = keystoreProperties["keyPassword"] as String
-            storeFile = file(keystoreProperties["storeFile"]!!)
-            storePassword = keystoreProperties["storePassword"] as String
+            val keystorePropertiesFile: File = rootProject.file("keystore.properties")
+            val keystoreProperties = Properties()
+            if (keystorePropertiesFile.exists()) {
+                keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+                keyAlias = keystoreProperties["keyAlias"] as String
+                keyPassword = keystoreProperties["keyPassword"] as String
+                storeFile = file(keystoreProperties["storeFile"]!!)
+                storePassword = keystoreProperties["storePassword"] as String
+            } else {
+                println("Warning: keystore.properties file not found. Release signing configuration will not be applied.")
+            }
         }
     }
 
@@ -44,10 +47,11 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments += mapOf(
-                    "room.incremental" to "true",
-                    "room.schemaLocation" to "$projectDir/schemas"
-                )
+                arguments +=
+                    mapOf(
+                        "room.incremental" to "true",
+                        "room.schemaLocation" to "$projectDir/schemas",
+                    )
             }
         }
     }
@@ -56,10 +60,11 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            isDebuggable = false
             signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
             manifestPlaceholders["appName"] = "Money Manager"
         }
@@ -67,7 +72,9 @@ android {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
             isMinifyEnabled = false
+            isDebuggable = true
             manifestPlaceholders["appName"] = "Money Manager debug"
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
@@ -94,7 +101,6 @@ android {
 }
 
 dependencies {
-    
     implementation(project(":analytics:analytics-di"))
     implementation(project(":backup:backup-data:backup-data-impl"))
     implementation(project(":backup:backup-di"))
@@ -141,8 +147,10 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.work.runtime)
     implementation(libs.appcompat)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth)
@@ -154,23 +162,4 @@ dependencies {
     implementation(libs.material)
     implementation(libs.play.services.auth)
     implementation(libs.timber)
-}
-
-dependencyAnalysis {
-    val fail = "fail"
-    val ignore = "ignore"
-    issues {
-        onUnusedDependencies {
-            severity(fail)
-            exclude(
-                "",
-            )
-        }
-        onUsedTransitiveDependencies { severity(ignore) }
-        onIncorrectConfiguration { severity(ignore) }
-        onCompileOnly { severity(ignore) }
-        onRuntimeOnly { severity(ignore) }
-        onUnusedAnnotationProcessors { severity(ignore) }
-        onRedundantPlugins { severity(ignore) }
-    }
 }

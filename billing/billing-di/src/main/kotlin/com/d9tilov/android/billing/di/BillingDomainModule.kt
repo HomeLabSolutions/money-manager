@@ -12,9 +12,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object BillingDomainModule {
-
     @Provides
     @Singleton
-    fun provideBillingInteractor(billingRepo: BillingRepo): BillingInteractor =
-        BillingInteractorImpl(billingRepo)
+    fun provideBillingInteractor(billingRepo: BillingRepo): BillingInteractor = BillingInteractorImpl(billingRepo)
 }

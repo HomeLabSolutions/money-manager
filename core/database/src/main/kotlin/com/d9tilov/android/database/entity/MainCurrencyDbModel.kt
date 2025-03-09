@@ -12,14 +12,14 @@ import androidx.room.PrimaryKey
             entity = UserDbModel::class,
             parentColumns = ["uid"],
             childColumns = ["clientId"],
-            onDelete = ForeignKey.CASCADE
-        )
-    ]
+            onDelete = ForeignKey.CASCADE,
+        ),
+    ],
 )
 data class MainCurrencyDbModel(
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id: Int = 1,
     @ColumnInfo(name = "clientId", index = true) val clientId: String,
-    @ColumnInfo(name = "code") val code: String
+    @ColumnInfo(name = "code") val code: String,
 )

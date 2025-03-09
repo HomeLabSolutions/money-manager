@@ -17,17 +17,15 @@ import kotlinx.coroutines.CoroutineDispatcher
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object RegularTransactionDataModule {
-
     @Provides
     fun provideRegularTransactionSource(
         @Dispatcher(MoneyManagerDispatchers.IO) dispatcher: CoroutineDispatcher,
         preferencesStore: PreferencesStore,
-        appDatabase: AppDatabase
+        appDatabase: AppDatabase,
     ): RegularTransactionSource =
         RegularTransactionLocalSource(dispatcher, preferencesStore, appDatabase.regularTransactionDao())
 
     @Provides
-    fun provideRegularTransactionRepo(
-        regularTransactionSource: RegularTransactionSource
-    ): RegularTransactionRepo = RegularTransactionDataRepo(regularTransactionSource)
+    fun provideRegularTransactionRepo(regularTransactionSource: RegularTransactionSource): RegularTransactionRepo =
+        RegularTransactionDataRepo(regularTransactionSource)
 }

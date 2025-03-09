@@ -5,12 +5,15 @@ import com.d9tilov.android.user.domain.contract.UserRepo
 import com.d9tilov.android.user.domain.model.UserProfile
 import kotlinx.coroutines.flow.Flow
 
-class UserInteractorImpl(private val userRepo: UserRepo) : UserInteractor {
-
+class UserInteractorImpl(
+    private val userRepo: UserRepo,
+) : UserInteractor {
     override fun getCurrentUser(): Flow<UserProfile?> = userRepo.getCurrentUser()
 
     override suspend fun getFiscalDay(): Int = userRepo.getFiscalDay()
+
     override suspend fun showPrepopulate(): Boolean = userRepo.showPrepopulate()
+
     override suspend fun prepopulateCompleted() = userRepo.prepopulateCompleted()
 
     override suspend fun createUser(user: UserProfile): UserProfile = userRepo.create(user)

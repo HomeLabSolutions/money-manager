@@ -15,9 +15,9 @@
  */
 
 import com.android.build.api.dsl.ApplicationExtension
-import com.android.moneymanager.extensions.buildLibs
-import com.android.moneymanager.extensions.configureKotlinAndroid
-import com.android.moneymanager.extensions.implementation
+import com.android.moneymanager.gradle.extensions.buildLibs
+import com.android.moneymanager.gradle.extensions.configureKotlinAndroid
+import com.android.moneymanager.gradle.extensions.implementation
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -42,5 +42,4 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             }
         }
     }
-
 }

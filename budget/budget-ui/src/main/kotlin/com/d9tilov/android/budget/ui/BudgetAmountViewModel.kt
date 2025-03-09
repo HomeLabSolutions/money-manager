@@ -16,43 +16,46 @@ import javax.inject.Inject
 
 data class BudgetUiState(
     val budgetSum: String = "",
-    val currencySymbol: String = DEFAULT_CURRENCY_SYMBOL
+    val currencySymbol: String = DEFAULT_CURRENCY_SYMBOL,
 )
 
 @HiltViewModel
-class BudgetAmountViewModel @Inject constructor(
-    private val budgetInteractor: BudgetInteractor
-) : ViewModel() {
+class BudgetAmountViewModel
+    @Inject
+    constructor(
+        private val budgetInteractor: BudgetInteractor,
+    ) : ViewModel() {
+        private val _uiState = MutableStateFlow(BudgetUiState())
+        val uiState = _uiState.asStateFlow()
 
-    private val _uiState = MutableStateFlow(BudgetUiState())
-    val uiState = _uiState.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            budgetInteractor.get()
-                .collect { budget ->
-                    _uiState.update {
-                        it.copy(
-                            budgetSum = budget.sum.toString(),
-                            currencySymbol = budget.currencyCode.getSymbolByCode()
-                        )
+        init {
+            viewModelScope.launch {
+                budgetInteractor
+                    .get()
+                    .collect { budget ->
+                        _uiState.update {
+                            it.copy(
+                                budgetSum = budget.sum.toString(),
+                                currencySymbol = budget.currencyCode.getSymbolByCode(),
+                            )
+                        }
                     }
+            }
+        }
+
+        fun changeBudgetAmount(amount: String) {
+            _uiState.update { it.copy(budgetSum = amount) }
+        }
+
+        fun saveBudgetAmount() =
+            viewModelScope.launch {
+                val budget = budgetInteractor.get().firstOrNull()
+                budget?.let {
+                    budgetInteractor.update(
+                        budget.copy(
+                            sum = _uiState.value.budgetSum.toBigDecimalOrNull() ?: BigDecimal.ZERO,
+                        ),
+                    )
                 }
-        }
+            }
     }
-
-    fun changeBudgetAmount(amount: String) {
-        _uiState.update { it.copy(budgetSum = amount) }
-    }
-
-    fun saveBudgetAmount() = viewModelScope.launch {
-        val budget = budgetInteractor.get().firstOrNull()
-        budget?.let {
-            budgetInteractor.update(
-                budget.copy(
-                    sum = _uiState.value.budgetSum.toBigDecimalOrNull() ?: BigDecimal.ZERO
-                )
-            )
-        }
-    }
-}

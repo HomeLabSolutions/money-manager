@@ -12,14 +12,13 @@ import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
 
 interface TransactionInteractor {
-
     fun getTransactionsGroupedByCategory(
         type: TransactionType,
         from: LocalDateTime,
         to: LocalDateTime,
         currencyCode: String,
         inStatistics: Boolean,
-        onlySubcategories: Boolean
+        onlySubcategories: Boolean,
     ): Flow<List<TransactionChartModel>>
 
     fun getTransactionsGroupedByDate(
@@ -27,7 +26,7 @@ interface TransactionInteractor {
         from: LocalDateTime,
         to: LocalDateTime,
         currencyCode: String,
-        inStatistics: Boolean
+        inStatistics: Boolean,
     ): Flow<Map<LocalDateTime, TransactionLineChartModel>>
 
     suspend fun getTransactionsByCategory(
@@ -35,20 +34,32 @@ interface TransactionInteractor {
         category: Category,
         from: LocalDateTime,
         to: LocalDateTime,
-        inStatistics: Boolean
+        inStatistics: Boolean,
     ): List<Transaction>
 
     fun getTransactionById(id: Long): Flow<Transaction>
+
     fun getTransactionsByType(type: TransactionType): Flow<PagingData<Transaction>>
+
     fun ableToSpendToday(): Flow<TransactionSpendingTodayModel>
+
     fun ableToSpendInFiscalPeriod(): Flow<BigDecimal>
+
     fun getSumInFiscalPeriod(): Flow<BigDecimal>
+
     fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<BigDecimal>
+
     fun getApproxSumTodayCurrentCurrency(type: TransactionType): Flow<BigDecimal>
+
     suspend fun removeAllByCategory(category: Category)
+
     suspend fun addTransaction(transaction: Transaction)
+
     suspend fun executeRegularIfNeeded(type: TransactionType)
+
     suspend fun update(transaction: Transaction)
+
     suspend fun removeTransaction(transaction: Transaction)
+
     suspend fun clearAll()
 }

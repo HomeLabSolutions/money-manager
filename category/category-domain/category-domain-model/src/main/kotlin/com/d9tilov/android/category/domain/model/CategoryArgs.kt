@@ -1,5 +1,5 @@
 package com.d9tilov.android.category.domain.model
 
 object CategoryArgs {
-    const val categoryIdArgs = "category_id"
+    const val CATEGORY_ID_ARGS = "category_id"
 }

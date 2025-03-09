@@ -27,7 +27,10 @@ import com.d9tilov.android.designsystem.CurrencyTextFieldExtraBig
 import com.d9tilov.android.designsystem.MmTopAppBar
 
 @Composable
-fun BudgetRoute(viewModel: BudgetAmountViewModel = hiltViewModel(), clickBack: () -> Unit) {
+fun BudgetRoute(
+    viewModel: BudgetAmountViewModel = hiltViewModel(),
+    clickBack: () -> Unit,
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     BudgetScreen(
         uiState = uiState,
@@ -36,7 +39,7 @@ fun BudgetRoute(viewModel: BudgetAmountViewModel = hiltViewModel(), clickBack: (
             viewModel.saveBudgetAmount()
             clickBack()
         },
-        onClickBack = clickBack
+        onClickBack = clickBack,
     )
 }
 
@@ -47,26 +50,27 @@ fun BudgetScreen(
     showInPrepopulate: Boolean = false,
     onBudgetInputChanged: (String) -> Unit,
     onSave: () -> Unit = {},
-    onClickBack: () -> Unit = {}
+    onClickBack: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
             if (!showInPrepopulate) {
                 MmTopAppBar(
                     titleRes = R.string.title_prepopulate_budget,
-                    onNavigationClick = onClickBack
+                    onNavigationClick = onClickBack,
                 )
             }
-        }
+        },
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
             Text(
                 text = stringResource(R.string.budget_sum_title),
-                modifier = Modifier.padding(
-                    start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
-                    top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large)
-                ),
-                style = MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.secondary)
+                modifier =
+                    Modifier.padding(
+                        start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
+                        top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
+                    ),
+                style = MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.secondary),
             )
             var text by rememberSaveable { mutableStateOf("") }
             CurrencyTextFieldExtraBig(
@@ -76,17 +80,19 @@ fun BudgetScreen(
                 uiState.budgetSum,
                 uiState.currencySymbol,
                 true,
-                ) { s ->
+            ) { s ->
                 text = s
                 onBudgetInputChanged(s)
             }
             Spacer(modifier = Modifier.weight(1f))
             if (!showInPrepopulate) {
                 BottomActionButton(
-                    modifier = Modifier
-                        .navigationBarsPadding()
-                        .imePadding(),
-                    onClick = onSave)
+                    modifier =
+                        Modifier
+                            .navigationBarsPadding()
+                            .imePadding(),
+                    onClick = onSave,
+                )
             }
         }
     }

@@ -33,120 +33,128 @@ import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-class BackupManagerImpl @Inject constructor(
-    @Dispatcher(MoneyManagerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
-    private val context: Context,
-    private val preferencesStore: PreferencesStore
-) : BackupManager {
+class BackupManagerImpl
+    @Inject
+    constructor(
+        @Dispatcher(MoneyManagerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
+        private val context: Context,
+        private val preferencesStore: PreferencesStore,
+    ) : BackupManager {
+        override suspend fun backupDb(): ResultOf<BackupData> =
+            withContext(dispatcher) {
+                Timber.tag(TAG).d("Backup backupDb before")
+                val uid = preferencesStore.uid.firstOrNull()
+                Timber.tag(TAG).d("Backup backupDb: $uid")
+                suspendCancellableCoroutine { continuation ->
+                    if (!isNetworkConnected(context)) {
+                        continuation.resumeWithException(NetworkException())
+                        return@suspendCancellableCoroutine
+                    }
+                    Timber.tag(TAG).d("Backup start")
+                    if (uid.isNullOrEmpty()) {
+                        Timber.tag(TAG).d("Empty uid")
+                        continuation.resumeWithException(WrongUidException())
+                        return@suspendCancellableCoroutine
+                    }
+                    val file = context.getDatabasePath(DATABASE_NAME)
+                    if (!file.exists()) {
+                        continuation.resumeWithException(FileNotFoundException())
+                        return@suspendCancellableCoroutine
+                    }
+                    val parentPath = "${uid.normalizePath()}/$DATABASE_NAME"
+                    val fileRef = Firebase.storage.reference.child(parentPath)
+                    val uploadTask = fileRef.putFile(Uri.fromFile(file))
+                    Timber.tag(TAG).d("Backup end")
+                    uploadTask
+                        .addOnSuccessListener {
+                            if (!continuation.isActive) return@addOnSuccessListener
+                            val backupDate = currentDateTime().toMillis()
+                            runBlocking { preferencesStore.updateLastBackupDate(backupDate) }
+                            continuation.resume(
+                                ResultOf.Success(BackupData.EMPTY.copy(lastBackupTimestamp = backupDate)),
+                            )
+                            Timber.tag(TAG).d("Backup was compete successfully")
+                        }.addOnFailureListener {
+                            if (!continuation.isActive) return@addOnFailureListener
+                            continuation.resumeWithException(FirebaseException("Make backup", it))
+                            Timber.tag(TAG).d("Backup was compete with error: $it")
+                        }
+                }
+            }
 
-    override suspend fun backupDb(): ResultOf<BackupData> = withContext(dispatcher) {
-        Timber.tag(TAG).d("Backup backupDb before")
-        val uid = preferencesStore.uid.firstOrNull()
-        Timber.tag(TAG).d("Backup backupDb: $uid")
-        suspendCancellableCoroutine { continuation ->
-            if (!isNetworkConnected(context)) {
-                continuation.resumeWithException(NetworkException())
-                return@suspendCancellableCoroutine
-            }
-            Timber.tag(TAG).d("Backup start")
-            if (uid.isNullOrEmpty()) {
-                Timber.tag(TAG).d("Empty uid")
-                continuation.resumeWithException(WrongUidException())
-                return@suspendCancellableCoroutine
-            }
-            val file = context.getDatabasePath(DATABASE_NAME)
-            if (!file.exists()) {
-                continuation.resumeWithException(FileNotFoundException())
-                return@suspendCancellableCoroutine
-            }
-            val parentPath = "${uid.normalizePath()}/$DATABASE_NAME"
-            val fileRef = Firebase.storage.reference.child(parentPath)
-            val uploadTask = fileRef.putFile(Uri.fromFile(file))
-            Timber.tag(TAG).d("Backup end")
-            uploadTask
-                .addOnSuccessListener {
-                    if (!continuation.isActive) return@addOnSuccessListener
-                    val backupDate = currentDateTime().toMillis()
-                    runBlocking { preferencesStore.updateLastBackupDate(backupDate) }
-                    continuation.resume(ResultOf.Success(BackupData.EMPTY.copy(lastBackupTimestamp = backupDate)))
-                    Timber.tag(TAG).d("Backup was compete successfully")
+        override suspend fun restoreDb(): ResultOf<Any> =
+            withContext(dispatcher) {
+                val uid = preferencesStore.uid.firstOrNull()
+                suspendCancellableCoroutine { continuation ->
+                    if (!isNetworkConnected(context)) continuation.resumeWithException(NetworkException())
+                    if (uid.isNullOrEmpty()) continuation.resumeWithException(WrongUidException())
+                    val parentPath = "${uid?.normalizePath()}/$DATABASE_NAME"
+                    val fileRef = Firebase.storage.reference.child(parentPath)
+                    val localFile = File.createTempFile(DATABASE_NAME, "db")
+                    fileRef
+                        .getFile(localFile)
+                        .addOnSuccessListener {
+                            if (!continuation.isActive) return@addOnSuccessListener
+                            val output = context.getDatabasePath(DATABASE_NAME)
+                            val myInputs: InputStream = FileInputStream(localFile.path)
+                            val buffer = ByteArray(BUFFER_SIZE)
+                            var length: Int
+                            val myOutput = FileOutputStream(output.path)
+                            while (myInputs.read(buffer).also { length = it } > 0) {
+                                myOutput.write(buffer, 0, length)
+                            }
+                            myOutput.flush()
+                            myOutput.close()
+                            myInputs.close()
+                            fileRef.metadata.addOnSuccessListener { metadata ->
+                                runBlocking { preferencesStore.updateLastBackupDate(metadata.updatedTimeMillis) }
+                            }
+                            continuation.resume(ResultOf.Success(Any()))
+                            Timber.tag(TAG).d("Restore was compete successfully")
+                        }.addOnFailureListener {
+                            if (!continuation.isActive) return@addOnFailureListener
+                            continuation.resumeWithException(FirebaseException("Restore backup", it))
+                            Timber.tag(TAG).d("Restore was complete with error: $it")
+                        }
                 }
-                .addOnFailureListener {
-                    if (!continuation.isActive) return@addOnFailureListener
-                    continuation.resumeWithException(FirebaseException("Make backup", it))
-                    Timber.tag(TAG).d("Backup was compete with error: $it")
+            }
+
+        override suspend fun deleteBackup(): ResultOf<Any> =
+            withContext(dispatcher) {
+                val uid = preferencesStore.uid.firstOrNull()
+                suspendCancellableCoroutine { continuation ->
+                    if (!isNetworkConnected(context)) {
+                        continuation.resumeWithException(NetworkException())
+                        return@suspendCancellableCoroutine
+                    }
+                    if (uid.isNullOrEmpty()) {
+                        continuation.resumeWithException(WrongUidException())
+                        return@suspendCancellableCoroutine
+                    }
+                    val file = context.getDatabasePath(DATABASE_NAME)
+                    if (!file.exists()) {
+                        continuation.resumeWithException(FileNotFoundException())
+                        return@suspendCancellableCoroutine
+                    }
+                    val parentPath = "${uid.normalizePath()}/$DATABASE_NAME"
+                    val fileRef = Firebase.storage.reference.child(parentPath)
+                    val deleteTask = fileRef.delete()
+                    deleteTask
+                        .addOnSuccessListener {
+                            if (!continuation.isActive) return@addOnSuccessListener
+                            continuation.resume(ResultOf.Success(Any()))
+                            Timber.tag(TAG).d("Deleting Firebase file was compete successfully")
+                        }.addOnFailureListener {
+                            if (!continuation.isActive) return@addOnFailureListener
+                            continuation.resumeWithException(FirebaseException("Delete backup", it))
+                            Timber.tag(TAG).d("Deleting Firebase file was complete with error: $it")
+                        }
                 }
+            }
+
+        companion object {
+            private const val BUFFER_SIZE = 1024
         }
     }
-
-    override suspend fun restoreDb(): ResultOf<Any> = withContext(dispatcher) {
-        val uid = preferencesStore.uid.firstOrNull()
-        suspendCancellableCoroutine { continuation ->
-            if (!isNetworkConnected(context)) continuation.resumeWithException(NetworkException())
-            if (uid.isNullOrEmpty()) continuation.resumeWithException(WrongUidException())
-            val parentPath = "${uid?.normalizePath()}/$DATABASE_NAME"
-            val fileRef = Firebase.storage.reference.child(parentPath)
-            val localFile = File.createTempFile(DATABASE_NAME, "db")
-            fileRef.getFile(localFile).addOnSuccessListener {
-                if (!continuation.isActive) return@addOnSuccessListener
-                val output = context.getDatabasePath(DATABASE_NAME)
-                val myInputs: InputStream = FileInputStream(localFile.path)
-                val buffer = ByteArray(BUFFER_SIZE)
-                var length: Int
-                val myOutput = FileOutputStream(output.path)
-                while (myInputs.read(buffer).also { length = it } > 0) {
-                    myOutput.write(buffer, 0, length)
-                }
-                myOutput.flush()
-                myOutput.close()
-                myInputs.close()
-                fileRef.metadata.addOnSuccessListener { metadata ->
-                    runBlocking { preferencesStore.updateLastBackupDate(metadata.updatedTimeMillis) }
-                }
-                continuation.resume(ResultOf.Success(Any()))
-                Timber.tag(TAG).d("Restore was compete successfully")
-            }.addOnFailureListener {
-                if (!continuation.isActive) return@addOnFailureListener
-                continuation.resumeWithException(FirebaseException("Restore backup", it))
-                Timber.tag(TAG).d("Restore was complete with error: $it")
-            }
-        }
-    }
-
-    override suspend fun deleteBackup(): ResultOf<Any> = withContext(dispatcher) {
-        val uid = preferencesStore.uid.firstOrNull()
-        suspendCancellableCoroutine { continuation ->
-            if (!isNetworkConnected(context)) {
-                continuation.resumeWithException(NetworkException())
-                return@suspendCancellableCoroutine
-            }
-            if (uid.isNullOrEmpty()) {
-                continuation.resumeWithException(WrongUidException())
-                return@suspendCancellableCoroutine
-            }
-            val file = context.getDatabasePath(DATABASE_NAME)
-            if (!file.exists()) {
-                continuation.resumeWithException(FileNotFoundException())
-                return@suspendCancellableCoroutine
-            }
-            val parentPath = "${uid.normalizePath()}/$DATABASE_NAME"
-            val fileRef = Firebase.storage.reference.child(parentPath)
-            val deleteTask = fileRef.delete()
-            deleteTask.addOnSuccessListener {
-                if (!continuation.isActive) return@addOnSuccessListener
-                continuation.resume(ResultOf.Success(Any()))
-                Timber.tag(TAG).d("Deleting Firebase file was compete successfully")
-            }.addOnFailureListener {
-                if (!continuation.isActive) return@addOnFailureListener
-                continuation.resumeWithException(FirebaseException("Delete backup", it))
-                Timber.tag(TAG).d("Deleting Firebase file was complete with error: $it")
-            }
-        }
-    }
-
-    companion object {
-        private const val BUFFER_SIZE = 1024
-    }
-}
 
 fun String.normalizePath() = this.replace("/", "")

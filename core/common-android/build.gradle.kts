@@ -18,29 +18,11 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.work.runtime)
     implementation(libs.core)
+    implementation(libs.hilt.android)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.material)
     implementation(libs.navigation.common)
     implementation(libs.navigation.runtime)
 
-    ksp(libs.hilt.android.compiler)
-}
-
-dependencyAnalysis {
-    val fail = "fail"
-    val ignore = "ignore"
-    issues {
-        onUnusedDependencies {
-            severity(fail)
-            exclude(
-                "",
-            )
-        }
-        onUsedTransitiveDependencies { severity(ignore) }
-        onIncorrectConfiguration { severity(ignore) }
-        onCompileOnly { severity(ignore) }
-        onRuntimeOnly { severity(ignore) }
-        onUnusedAnnotationProcessors { severity(ignore) }
-        onRedundantPlugins { severity(ignore) }
-    }
+    ksp(libs.hilt.ext.compiler)
 }

@@ -11,5 +11,5 @@ data class TransactionChartModel(
     val category: Category,
     val currencyCode: String,
     val sum: BigDecimal,
-    val percent: BigDecimal
+    val percent: BigDecimal,
 )

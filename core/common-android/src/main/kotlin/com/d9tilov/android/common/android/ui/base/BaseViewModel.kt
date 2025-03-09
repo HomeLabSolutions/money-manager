@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
 abstract class BaseViewModel<T : BaseNavigator> : ViewModel() {
-
     var navigator: T? = null
         set(value) {
             field = value
@@ -17,7 +16,9 @@ abstract class BaseViewModel<T : BaseNavigator> : ViewModel() {
     private val msg = MutableSharedFlow<Int>()
     private val loading = MutableStateFlow(false)
 
-    suspend fun setMessage(@StringRes message: Int) {
+    suspend fun setMessage(
+        @StringRes message: Int,
+    ) {
         msg.emit(message)
     }
 
@@ -28,6 +29,7 @@ abstract class BaseViewModel<T : BaseNavigator> : ViewModel() {
     protected open fun onNavigatorAttached() {}
 
     fun getMsg(): SharedFlow<Int> = msg
+
     fun getLoading(): StateFlow<Boolean> = loading
 
     companion object {

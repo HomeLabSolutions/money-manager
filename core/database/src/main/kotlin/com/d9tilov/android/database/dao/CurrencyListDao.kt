@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CurrencyListDao {
-
     @Upsert
     suspend fun insert(list: List<CurrencyDbModel>)
 

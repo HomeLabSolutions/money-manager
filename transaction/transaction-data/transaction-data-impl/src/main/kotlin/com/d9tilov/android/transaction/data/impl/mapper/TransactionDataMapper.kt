@@ -20,7 +20,7 @@ fun TransactionDbModel.toDataModel(): TransactionDataModel =
         inStatistics,
         latitude,
         longitude,
-        photoUri
+        photoUri,
     )
 
 fun TransactionDataModel.toDbModel(): TransactionDbModel =
@@ -39,5 +39,5 @@ fun TransactionDataModel.toDbModel(): TransactionDbModel =
         inStatistics,
         latitude,
         longitude,
-        photoUri
+        photoUri,
     )

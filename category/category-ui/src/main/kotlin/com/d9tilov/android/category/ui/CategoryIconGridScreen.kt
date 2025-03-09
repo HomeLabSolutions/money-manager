@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -43,7 +43,7 @@ fun CategoryIconGridRoute(
         onIconClicked = { id ->
             sharedViewModel.setId(id)
             onIconClick(viewModel.isPremium.value)
-        }
+        },
     )
 }
 
@@ -57,29 +57,32 @@ fun CategoryIconGridScreen(
     Scaffold(topBar = {
         MmTopAppBar(
             titleRes = uiState.title,
-            onNavigationClick = onBackClicked
+            onNavigationClick = onBackClicked,
         )
     }) { padding ->
         Column(
-            modifier = Modifier
-                .padding(top = padding.calculateTopPadding())
+            modifier =
+                Modifier
+                    .padding(top = padding.calculateTopPadding()),
         ) {
             LazyVerticalGrid(
-                modifier = Modifier
-                    .padding(top = 16.dp, start = 8.dp, end = 8.dp),
+                modifier =
+                    Modifier
+                        .padding(top = 16.dp, start = 8.dp, end = 8.dp),
                 columns = GridCells.Fixed(4),
                 horizontalArrangement = Arrangement.Start,
-                verticalArrangement = Arrangement.Top
+                verticalArrangement = Arrangement.Top,
             ) {
                 items(uiState.icons, { it }) { id ->
                     Icon(
-                        modifier = Modifier
-                            .size(dimensionResource(id = R.dimen.category_grid_item_size))
-                            .padding(8.dp)
-                            .clickable { onIconClicked(id) },
+                        modifier =
+                            Modifier
+                                .size(dimensionResource(id = R.dimen.category_grid_item_size))
+                                .padding(8.dp)
+                                .clickable { onIconClicked(id) },
                         imageVector = ImageVector.vectorResource(id = id),
                         contentDescription = "Icon",
-                        tint = MaterialTheme.colorScheme.primary
+                        tint = MaterialTheme.colorScheme.primary,
                     )
                 }
             }
@@ -100,8 +103,11 @@ fun DefaultCategoryIconGridPreview() {
                     com.d9tilov.android.category_data_impl.R.drawable.ic_category_electricity3,
                     com.d9tilov.android.category_data_impl.R.drawable.ic_category_garbage,
                     com.d9tilov.android.category_data_impl.R.drawable.ic_category_home,
-                    com.d9tilov.android.category_data_impl.R.drawable.ic_category_house
-                )
-            ), {}, {})
+                    com.d9tilov.android.category_data_impl.R.drawable.ic_category_house,
+                ),
+            ),
+            {},
+            {},
+        )
     }
 }

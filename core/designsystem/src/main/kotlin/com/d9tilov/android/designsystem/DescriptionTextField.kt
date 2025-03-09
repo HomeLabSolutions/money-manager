@@ -19,19 +19,20 @@ fun DescriptionTextField(
         modifier = modifier,
         value = value,
         onValueChange = onValueChange,
-        colors = TextFieldDefaults.colors().copy(
-            focusedContainerColor = Color.Transparent,
-            unfocusedContainerColor = Color.Transparent,
-            focusedTextColor = MaterialTheme.colorScheme.tertiary,
-            cursorColor = MaterialTheme.colorScheme.tertiary,
-            focusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
-            unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f),
-        ),
+        colors =
+            TextFieldDefaults.colors().copy(
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                focusedTextColor = MaterialTheme.colorScheme.tertiary,
+                cursorColor = MaterialTheme.colorScheme.tertiary,
+                focusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
+                unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f),
+            ),
         placeholder = {
             Text(
                 text = stringResource(id = R.string.description),
-                color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f)
+                color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f),
             )
-        }
+        },
     )
 }

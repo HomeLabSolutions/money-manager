@@ -9,5 +9,5 @@ data class DefaultCategory(
     val name: String,
     val icon: Int,
     val color: Int,
-    val usageCount: Int
+    val usageCount: Int,
 )
