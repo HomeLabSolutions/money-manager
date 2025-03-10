@@ -7,15 +7,16 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,10 +32,12 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -46,7 +49,6 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -58,6 +60,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
@@ -73,6 +76,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -80,11 +84,12 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.d9tilov.android.category.domain.entity.Category
-import com.d9tilov.android.category.domain.entity.Category.Companion.ALL_ITEMS_ID
-import com.d9tilov.android.category.domain.entity.CategoryDestination
+import com.d9tilov.android.category.domain.model.Category
+import com.d9tilov.android.category.domain.model.Category.Companion.ALL_ITEMS_ID
+import com.d9tilov.android.category.domain.model.CategoryDestination
 import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_FORMAT
 import com.d9tilov.android.common.android.utils.formatDate
+import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.core.constants.CurrencyConstants.ZERO
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.KeyPress
@@ -108,9 +113,9 @@ import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.EXPENSE
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.INCOME
 import com.d9tilov.android.incomeexpense.ui.vm.screenTypes
 import com.d9tilov.android.incomeexpense.ui.vm.toScreenType
-import com.d9tilov.android.transaction.ui.TransactionItem
-import com.d9tilov.android.transaction.ui.model.BaseTransaction
-import com.d9tilov.android.transaction.ui.model.TransactionUiModel
+import com.d9tilov.android.incomeexpense_ui.R
+import com.d9tilov.android.transaction.domain.model.BaseTransaction
+import com.d9tilov.android.transaction.domain.model.Transaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -118,7 +123,7 @@ import java.math.BigDecimal
 @Composable
 fun IncomeExpenseRoute(
     viewModel: IncomeExpenseViewModel = hiltViewModel(),
-    onTransactionClicked: (TransactionUiModel) -> Unit,
+    onTransactionClicked: (Transaction) -> Unit,
     onCurrencyClicked: (String) -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
 ) {
@@ -148,11 +153,11 @@ fun IncomeExpenseRoute(
 fun IncomeExpenseScreen(
     uiState: IncomeExpenseUiState,
     onNumberClicked: (KeyPress) -> Unit,
-    onTransactionClicked: (TransactionUiModel) -> Unit,
+    onTransactionClicked: (Transaction) -> Unit,
     onCategoryClicked: (Category) -> Unit,
     onEditModeChanged: (EditMode) -> Unit,
     onCurrencyClicked: () -> Unit,
-    onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
+    onDeleteTransactionConfirmClicked: (Transaction) -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
 ) {
     val listState = rememberLazyListState()
@@ -235,27 +240,19 @@ fun MainPriceInput(
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
         shape = RoundedCornerShape(50),
     ) {
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center,
-        ) {
-            ComposeCurrencyView(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                symbol = price.currencyCode.getSymbolByCode(),
-                value = price.value,
-            )
-        }
+        ComposeCurrencyView(symbol = price.currencyCode.getSymbolByCode(), value = price.value)
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionListLayout(
     listState: LazyListState,
     modifier: Modifier,
     transactions: Flow<PagingData<BaseTransaction>>,
     screenType: ScreenType,
-    onTransactionClicked: (TransactionUiModel) -> Unit,
-    onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
+    onTransactionClicked: (Transaction) -> Unit,
+    onDeleteTransactionConfirmClicked: (Transaction) -> Unit,
 ) {
     val lazyTransactionItems: LazyPagingItems<BaseTransaction> =
         transactions.collectAsLazyPagingItems()
@@ -275,7 +272,7 @@ fun TransactionListLayout(
     if (lazyTransactionItems.loadState.refresh is LoadState.Error) {
         // handle error
     }
-    val openRemoveDialog = remember { mutableStateOf<TransactionUiModel?>(null) }
+    val openRemoveDialog = remember { mutableStateOf<Transaction?>(null) }
     LazyColumn(modifier = modifier, state = listState) {
         for (index in 0 until lazyTransactionItems.itemCount) {
             val currentItem = lazyTransactionItems.peek(index)
@@ -295,7 +292,7 @@ fun TransactionListLayout(
                     }
                 } else {
                     item(key = index) {
-                        val item = lazyTransactionItems[index] as TransactionUiModel
+                        val item = lazyTransactionItems[index] as Transaction
                         val dismissState =
                             rememberSwipeToDismissBoxState(
                                 confirmValueChange = {
@@ -385,17 +382,163 @@ fun TransactionListLayout(
 }
 
 @Composable
-@Suppress("CognitiveComplexMethod")
+fun TransactionItem(
+    modifier: Modifier,
+    transaction: Transaction,
+) {
+    val context = LocalContext.current
+    ConstraintLayout(
+        modifier =
+            modifier
+                .height(72.dp)
+                .padding(horizontal = 32.dp),
+    ) {
+        val (idIcon, idTitle, idDescription, idRegularIcon, idInStatisticsIcon, idSum, idDivider) = createRefs()
+        Icon(
+            modifier =
+                Modifier
+                    .constrainAs(idIcon) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                    }.size(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.category_item_icon_size)),
+            imageVector = ImageVector.vectorResource(id = transaction.category.icon),
+            contentDescription = "Transaction",
+            tint = Color(ContextCompat.getColor(context, transaction.category.color)),
+        )
+        Text(
+            modifier =
+                Modifier
+                    .padding(start = 16.dp)
+                    .constrainAs(idTitle) {
+                        top.linkTo(idIcon.top)
+                        bottom.linkTo(idIcon.bottom)
+                        start.linkTo(idIcon.end)
+                    },
+            text = transaction.category.name,
+            style = MaterialTheme.typography.displayLarge,
+            fontSize =
+                dimensionResource(
+                    id = com.d9tilov.android.designsystem.R.dimen.income_expense_name_text_size,
+                ).value.sp,
+            maxLines = 1,
+            color = Color(ContextCompat.getColor(context, transaction.category.color)),
+            overflow = TextOverflow.Ellipsis,
+        )
+        if (transaction.description.isNotEmpty()) {
+            Text(
+                modifier =
+                    Modifier
+                        .padding(start = 16.dp, bottom = 4.dp)
+                        .constrainAs(idDescription) {
+                            top.linkTo(idTitle.bottom)
+                            bottom.linkTo(parent.bottom)
+                            start.linkTo(idTitle.start)
+                        },
+                text = transaction.description,
+                style = MaterialTheme.typography.bodySmall,
+                fontSize =
+                    dimensionResource(
+                        id = com.d9tilov.android.designsystem.R.dimen.income_expense_name_description_text_size,
+                    ).value.sp,
+                color = MaterialTheme.colorScheme.tertiary,
+            )
+        }
+        if (transaction.isRegular) {
+            Icon(
+                modifier =
+                    Modifier
+                        .constrainAs(idRegularIcon) {
+                            top.linkTo(idIcon.top)
+                            end.linkTo(idIcon.start)
+                        }.size(
+                            dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.transaction_meta_icon_size),
+                        ),
+                imageVector = MoneyManagerIcons.Repeat,
+                contentDescription = "RegularTransaction",
+                tint = MaterialTheme.colorScheme.tertiary,
+            )
+        }
+        if (!transaction.inStatistics) {
+            Icon(
+                modifier =
+                    Modifier
+                        .padding(top = 4.dp)
+                        .constrainAs(idInStatisticsIcon) {
+                            top.linkTo(idRegularIcon.bottom)
+                            end.linkTo(idIcon.start)
+                        }.size(
+                            dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.transaction_meta_icon_size),
+                        ),
+                imageVector = ImageVector.vectorResource(MoneyManagerIcons.InStatisticsTransaction),
+                contentDescription = "InStatisticsTransaction",
+                tint = MaterialTheme.colorScheme.error,
+            )
+        }
+        Column(
+            modifier =
+                Modifier
+                    .fillMaxHeight()
+                    .constrainAs(idSum) {
+                        end.linkTo(parent.end)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    },
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.End,
+        ) {
+            ComposeCurrencyView(
+                value = transaction.sum.toString(),
+                valueSize =
+                    dimensionResource(
+                        id = com.d9tilov.android.designsystem.R.dimen.currency_sum_small_text_size,
+                    ).value.sp,
+                symbol = transaction.currencyCode.getSymbolByCode(),
+                symbolSize =
+                    dimensionResource(
+                        id = com.d9tilov.android.designsystem.R.dimen.currency_sign_small_text_size,
+                    ).value.sp,
+            )
+            ComposeCurrencyView(
+                value = transaction.usdSum.toString(),
+                valueSize =
+                    dimensionResource(
+                        id = com.d9tilov.android.designsystem.R.dimen.currency_extra_small_text_size,
+                    ).value.sp,
+                symbol = DEFAULT_CURRENCY_SYMBOL,
+                symbolSize =
+                    dimensionResource(
+                        id = com.d9tilov.android.designsystem.R.dimen.currency_sign_extra_small_text_size,
+                    ).value.sp,
+            )
+        }
+        HorizontalDivider(
+            color = MaterialTheme.colorScheme.primary,
+            thickness = 1.dp,
+            modifier =
+                Modifier
+                    .alpha(0.2f)
+                    .constrainAs(idDivider) {
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                    },
+        )
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
 fun HomeTabs(
     listState: LazyListState,
     uiState: IncomeExpenseUiState,
-    modifier: Modifier,
-    onTransactionClicked: (TransactionUiModel) -> Unit,
+    modifier: Modifier = Modifier,
+    onTransactionClicked: (Transaction) -> Unit,
     onNumberClicked: (KeyPress) -> Unit,
     onCategoryClicked: (Category) -> Unit,
     onKeyboardClicked: () -> Unit,
     onCurrencyClicked: () -> Unit,
-    onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
+    onDeleteTransactionConfirmClicked: (Transaction) -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
 ) {
     var tabIndex by remember { mutableIntStateOf(0) }
@@ -442,9 +585,9 @@ fun HomeTabs(
             MainPriceInput(
                 price = uiState.price,
                 modifier =
-                    Modifier
+                    modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 32.dp, vertical = 8.dp),
+                        .padding(horizontal = 32.dp),
                 onCurrencyClicked = onCurrencyClicked,
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -551,45 +694,41 @@ fun KeyBoardLayout(
         ) {
             items(data, key = { it.hashCode() }) { item ->
                 val keyPress = item.toKeyPress() ?: return@items
-                Surface(
-                    modifier =
-                        Modifier.clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = ripple(bounded = false, radius = 20.dp),
-                        ) { onNumberClicked(keyPress) },
-                    shape = CircleShape,
-                    color = Color.Transparent,
-                ) {
-                    if (keyPress == KeyPress.Del) {
+                if (keyPress != KeyPress.Del) {
+                    Text(
+                        modifier = Modifier.clickable { onNumberClicked(keyPress) },
+                        text = item,
+                        style =
+                            TextStyle.Default.copy(
+                                color = MaterialTheme.colorScheme.primary,
+                                fontSize = 32.sp,
+                                textAlign = TextAlign.Center,
+                            ),
+                    )
+                } else {
+                    IconButton(onClick = { onNumberClicked(keyPress) }) {
                         Icon(
                             imageVector = MoneyManagerIcons.BackSpace,
                             contentDescription = "BackSpace",
                             tint = MaterialTheme.colorScheme.primary,
                         )
-                    } else {
-                        Text(
-                            text = item,
-                            style =
-                                TextStyle.Default.copy(
-                                    color = MaterialTheme.colorScheme.primary,
-                                    fontSize = 32.sp,
-                                    textAlign = TextAlign.Center,
-                                ),
-                        )
                     }
                 }
             }
         }
-        Icon(
+        IconButton(
             modifier =
                 Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(end = 24.dp)
-                    .clickable { onKeyboardClicked() },
-            imageVector = MoneyManagerIcons.HideKeyboard,
-            tint = MaterialTheme.colorScheme.secondary,
-            contentDescription = "HideKeyboard",
-        )
+                    .padding(end = 8.dp),
+            onClick = onKeyboardClicked,
+        ) {
+            Icon(
+                imageVector = MoneyManagerIcons.HideKeyboard,
+                tint = MaterialTheme.colorScheme.secondary,
+                contentDescription = "HideKeyboard",
+            )
+        }
     }
 }
 
@@ -702,7 +841,7 @@ fun TransactionListItemPreview() {
         TransactionItem(
             modifier = Modifier.fillMaxWidth(),
             transaction =
-                TransactionUiModel.EMPTY.copy(
+                Transaction.EMPTY.copy(
                     sum = BigDecimal.TEN,
                     usdSum = BigDecimal(5),
                     currencyCode = "RUB",
