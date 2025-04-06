@@ -70,9 +70,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -699,7 +697,7 @@ fun KeyBoardLayout(
                 if (keyPress != KeyPress.Del) {
                     Text(
                         modifier = Modifier.clickable { onNumberClicked(keyPress) },
-                        text = buildAnnotatedString { AnnotatedString(item) },
+                        text = item,
                         style =
                             TextStyle.Default.copy(
                                 color = MaterialTheme.colorScheme.primary,
