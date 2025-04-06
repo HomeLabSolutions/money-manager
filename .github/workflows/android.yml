@@ -28,4 +28,3 @@ jobs:
       run: ./gradlew ktlintCheck detektCheck checkSortDependencies projectHealth tomlCheck
     - name: Tests
       run: ./gradlew test
-
