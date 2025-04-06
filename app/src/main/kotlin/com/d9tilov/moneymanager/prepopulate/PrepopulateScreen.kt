@@ -193,7 +193,7 @@ fun BottomNavigationBar(
                     val newScreenType =
                         when (screenType) {
                             PrepopulateScreen.CurrencyScreen -> {
-                                PrepopulateScreen.CurrencyScreen
+                                PrepopulateScreen.BudgetScreen
                             }
                             PrepopulateScreen.BudgetScreen -> {
                                 onBudgetSave()
@@ -213,7 +213,7 @@ fun BottomNavigationBar(
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = "Next")
+                    Text(text = stringResource(com.d9tilov.android.common.android.R.string.next))
                     Icon(
                         imageVector = MoneyManagerIcons.ArrowDropUp,
                         contentDescription = "content description",
