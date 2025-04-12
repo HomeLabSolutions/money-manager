@@ -14,7 +14,6 @@ sealed class StatisticsPeriodModel(
     val from: LocalDateTime,
     val to: LocalDateTime,
 ) {
-
     data object DAY : StatisticsPeriodModel(
         R.string.statistics_period_day,
         currentDate().getStartOfDay(),
@@ -43,8 +42,8 @@ sealed class StatisticsPeriodModel(
         val fromDate: LocalDateTime = currentDate().minus(1, DateTimeUnit.MONTH).getStartOfDay(),
         val toDate: LocalDateTime = currentDate().getEndOfDay(),
     ) : StatisticsPeriodModel(
-        R.string.statistics_period_custom,
-        fromDate.getStartOfDay(),
-        toDate.getEndOfDay(),
-    )
+            R.string.statistics_period_custom,
+            fromDate.getStartOfDay(),
+            toDate.getEndOfDay(),
+        )
 }

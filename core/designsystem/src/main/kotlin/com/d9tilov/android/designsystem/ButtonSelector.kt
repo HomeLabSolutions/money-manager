@@ -23,13 +23,15 @@ fun ButtonSelector(
         androidx.compose.material3.TextButton(
             onClick = onClick,
             enabled = enabled,
-            colors = ButtonDefaults.textButtonColors(
-                containerColor = containerColor,
-                contentColor = contentColorFor(backgroundColor = containerColor),
-                disabledContainerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(
-                    alpha = MmTagDefaults.DISABLED_TOPIC_TAG_CONTAINER_ALPHA,
+            colors =
+                ButtonDefaults.textButtonColors(
+                    containerColor = containerColor,
+                    contentColor = contentColorFor(backgroundColor = containerColor),
+                    disabledContainerColor =
+                        MaterialTheme.colorScheme.onTertiaryContainer.copy(
+                            alpha = MmTagDefaults.DISABLED_TOPIC_TAG_CONTAINER_ALPHA,
+                        ),
                 ),
-            ),
         ) {
             ProvideTextStyle(value = MaterialTheme.typography.labelSmall) {
                 text()

@@ -240,7 +240,16 @@ fun MainPriceInput(
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
         shape = RoundedCornerShape(50),
     ) {
-        ComposeCurrencyView(symbol = price.currencyCode.getSymbolByCode(), value = price.value)
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center,
+        ) {
+            ComposeCurrencyView(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                symbol = price.currencyCode.getSymbolByCode(),
+                value = price.value,
+            )
+        }
     }
 }
 
@@ -489,27 +498,15 @@ fun TransactionItem(
         ) {
             ComposeCurrencyView(
                 value = transaction.sum.toString(),
-                valueSize =
-                    dimensionResource(
-                        id = com.d9tilov.android.designsystem.R.dimen.currency_sum_small_text_size,
-                    ).value.sp,
+                valueStyle = MaterialTheme.typography.headlineSmall,
                 symbol = transaction.currencyCode.getSymbolByCode(),
-                symbolSize =
-                    dimensionResource(
-                        id = com.d9tilov.android.designsystem.R.dimen.currency_sign_small_text_size,
-                    ).value.sp,
+                symbolStyle = MaterialTheme.typography.labelLarge,
             )
             ComposeCurrencyView(
                 value = transaction.usdSum.toString(),
-                valueSize =
-                    dimensionResource(
-                        id = com.d9tilov.android.designsystem.R.dimen.currency_extra_small_text_size,
-                    ).value.sp,
+                valueStyle = MaterialTheme.typography.bodyLarge,
                 symbol = DEFAULT_CURRENCY_SYMBOL,
-                symbolSize =
-                    dimensionResource(
-                        id = com.d9tilov.android.designsystem.R.dimen.currency_sign_extra_small_text_size,
-                    ).value.sp,
+                symbolStyle = MaterialTheme.typography.bodyMedium,
             )
         }
         HorizontalDivider(
@@ -527,8 +524,8 @@ fun TransactionItem(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
+@Suppress("CognitiveComplexMethod")
 fun HomeTabs(
     listState: LazyListState,
     uiState: IncomeExpenseUiState,
@@ -587,7 +584,7 @@ fun HomeTabs(
                 modifier =
                     modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 32.dp),
+                        .padding(horizontal = 32.dp, vertical = 8.dp),
                 onCurrencyClicked = onCurrencyClicked,
             )
             Spacer(modifier = Modifier.weight(1f))

@@ -481,6 +481,27 @@ class TransactionInteractorImpl(
         ) { income, expense -> income.minus(expense) }
     }
 
+    override fun getSumSpentInPeriod(
+        from: LocalDateTime,
+        to: LocalDateTime,
+    ): Flow<BigDecimal> =
+        transactionRepo
+            .getTransactionsByTypeInPeriod(
+                from,
+                to,
+                TransactionType.EXPENSE,
+                onlyInStatistics = true,
+                withRegular = true,
+            ).map { list ->
+                list.sumOf {
+                    currencyInteractor.toTargetCurrency(
+                        it.sum,
+                        it.currencyCode,
+                        currencyInteractor.getMainCurrency().code,
+                    )
+                }
+            }
+
     override fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<BigDecimal> =
         currencyInteractor
             .getMainCurrencyFlow()
