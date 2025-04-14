@@ -484,6 +484,7 @@ class TransactionInteractorImpl(
     override fun getSumSpentInPeriod(
         from: LocalDateTime,
         to: LocalDateTime,
+        currencyCode: String,
     ): Flow<BigDecimal> =
         transactionRepo
             .getTransactionsByTypeInPeriod(
@@ -497,7 +498,7 @@ class TransactionInteractorImpl(
                     currencyInteractor.toTargetCurrency(
                         it.sum,
                         it.currencyCode,
-                        currencyInteractor.getMainCurrency().code,
+                        currencyCode,
                     )
                 }
             }

@@ -50,6 +50,7 @@ interface TransactionInteractor {
     fun getSumSpentInPeriod(
         from: LocalDateTime,
         to: LocalDateTime,
+        currencyCode: String,
     ): Flow<BigDecimal>
 
     fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<BigDecimal>

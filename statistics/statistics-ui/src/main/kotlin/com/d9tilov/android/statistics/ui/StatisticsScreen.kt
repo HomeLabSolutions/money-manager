@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -40,7 +41,6 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.core.constants.CurrencyConstants
 import com.d9tilov.android.core.model.TransactionType
@@ -51,11 +51,7 @@ import com.d9tilov.android.designsystem.ComposeCurrencyView
 import com.d9tilov.android.designsystem.ProgressIndicator
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.android.statistics.data.model.StatisticsMenuType
-import com.d9tilov.android.statistics.ui.model.StatisticsMenuCategoryType
-import com.d9tilov.android.statistics.ui.model.StatisticsMenuChartModel
-import com.d9tilov.android.statistics.ui.model.StatisticsMenuCurrencyType
-import com.d9tilov.android.statistics.ui.model.StatisticsMenuInStatisticsType
-import com.d9tilov.android.statistics.ui.model.StatisticsMenuTransactionType
+import com.d9tilov.android.statistics.ui.model.StatisticsPeriodModel
 import com.d9tilov.android.statistics.ui.vm.DetailsSpentInPeriodState
 import com.d9tilov.android.statistics.ui.vm.DetailsTransactionListState
 import com.d9tilov.android.statistics.ui.vm.PeriodUiState
@@ -69,11 +65,13 @@ import java.math.RoundingMode
 
 @Composable
 fun StatisticsRoute(viewModel: StatisticsViewModel = hiltViewModel()) {
-    val uiState: StatisticsUiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState: StatisticsUiState by viewModel.uiState.collectAsState(StatisticsUiState())
     Scaffold { paddingValues ->
         StatisticsScreen(
             modifier = Modifier.padding(paddingValues),
             state = uiState,
+            onPeriodClick = { viewModel.updatePeriod(it) },
+            onMenuClick = { viewModel.onMenuClick(it) },
         )
     }
 }
@@ -82,12 +80,12 @@ fun StatisticsRoute(viewModel: StatisticsViewModel = hiltViewModel()) {
 fun StatisticsScreen(
     modifier: Modifier,
     state: StatisticsUiState,
-    onPeriodClick: () -> Unit = {},
-    onMenuClick: (type: StatisticsMenuType) -> Unit = {},
+    onPeriodClick: (period: StatisticsPeriodModel) -> Unit,
+    onMenuClick: (type: StatisticsMenuType) -> Unit,
 ) {
     Column(modifier) {
         Column(modifier = Modifier.weight(2f)) {
-            StatisticsPeriodSelector(state = state.periodState, onClick = onPeriodClick)
+            StatisticsPeriodSelector(state = state.periodState, onPeriodClick = onPeriodClick)
             StatisticsMenuSelector(state = state.statisticsMenuState, onClick = onMenuClick)
             StatisticsChart(Modifier.weight(1f))
         }
@@ -99,7 +97,7 @@ fun StatisticsScreen(
 fun StatisticsPeriodSelector(
     modifier: Modifier = Modifier,
     state: PeriodUiState,
-    onClick: () -> Unit,
+    onPeriodClick: (period: StatisticsPeriodModel) -> Unit = {},
 ) {
     Row(
         modifier =
@@ -108,11 +106,11 @@ fun StatisticsPeriodSelector(
                 .padding(vertical = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small)),
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
-        for (item in state.periods) {
+        for (item: StatisticsPeriodModel in state.periods) {
             ButtonSelector(
                 enabled = state.selectedPeriod == item,
                 text = { Text(text = stringResource(item.name)) },
-                onClick = onClick,
+                onClick = { onPeriodClick(item) },
             )
         }
     }
@@ -125,47 +123,21 @@ fun StatisticsMenuSelector(
     onClick: (type: StatisticsMenuType) -> Unit,
 ) {
     Row(
-        modifier =
-            modifier
-                .fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
-        for (itemEntry in state.menuMap) {
-            when (val type = itemEntry.value.menuType) {
-                StatisticsMenuType.CURRENCY ->
-                    Text(
-                        text =
-                            CurrencyUtils.getCurrencyIcon(
-                                (itemEntry.value as StatisticsMenuCurrencyType).currencyCode,
-                            ),
-                        modifier =
-                            Modifier
-                                .size(dimensionResource(R.dimen.statistics_menu_item_icon_size))
-                                .clickable { onClick(type) },
-                        fontSize = 30.sp,
-                    )
-
-                StatisticsMenuType.CHART ->
-                    StatisticMenuIcon(
-                        (itemEntry.value as StatisticsMenuChartModel).iconId,
-                    ) { onClick.invoke(type) }
-
-                StatisticsMenuType.CATEGORY_TYPE ->
-                    StatisticMenuIcon(
-                        (itemEntry.value as StatisticsMenuCategoryType).iconId,
-                    ) { onClick.invoke(type) }
-
-                StatisticsMenuType.TRANSACTION_TYPE ->
-                    StatisticMenuIcon(
-                        (itemEntry.value as StatisticsMenuTransactionType).iconId,
-                    ) { onClick.invoke(type) }
-
-                StatisticsMenuType.STATISTICS ->
-                    StatisticMenuIcon(
-                        (itemEntry.value as StatisticsMenuInStatisticsType).iconId,
-                    ) { onClick.invoke(type) }
-            }
-        }
+        Text(
+            text = CurrencyUtils.getCurrencyIcon(state.currency.currencyCode),
+            modifier =
+                Modifier
+                    .size(dimensionResource(R.dimen.statistics_menu_item_icon_size))
+                    .clickable { onClick(StatisticsMenuType.CURRENCY) },
+            fontSize = 30.sp,
+        )
+        StatisticMenuIcon(state.chartType.iconId) { onClick(StatisticsMenuType.CHART) }
+        StatisticMenuIcon(state.categoryType.iconId) { onClick(StatisticsMenuType.CATEGORY_TYPE) }
+        StatisticMenuIcon(state.transactionType.iconId) { onClick(StatisticsMenuType.TRANSACTION_TYPE) }
+        StatisticMenuIcon(state.inStatistics.iconId) { onClick(StatisticsMenuType.STATISTICS) }
     }
 }
 
@@ -428,6 +400,8 @@ fun DefaultCategoryIconGridPreview() {
                             ),
                     ),
             ),
+            onPeriodClick = {},
+            onMenuClick = {},
         )
     }
 }
