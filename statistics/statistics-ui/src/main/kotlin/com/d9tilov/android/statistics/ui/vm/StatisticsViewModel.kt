@@ -6,7 +6,6 @@ import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.statistics.data.model.StatisticsMenuType
-import com.d9tilov.android.statistics.ui.model.StatisticsMenuCategoryType
 import com.d9tilov.android.statistics.ui.model.StatisticsMenuChartModel
 import com.d9tilov.android.statistics.ui.model.StatisticsMenuCurrencyType
 import com.d9tilov.android.statistics.ui.model.StatisticsMenuInStatisticsType
@@ -51,7 +50,6 @@ data class PeriodUiState(
 data class StatisticsMenuState(
     val currency: StatisticsMenuCurrencyType = StatisticsMenuCurrencyType.Default,
     val chartType: StatisticsMenuChartModel = StatisticsMenuChartModel.PieChart,
-    val categoryType: StatisticsMenuCategoryType = StatisticsMenuCategoryType.Child,
     val transactionType: StatisticsMenuTransactionType = StatisticsMenuTransactionType.Expense,
     val inStatistics: StatisticsMenuInStatisticsType = StatisticsMenuInStatisticsType.InStatisticsType,
 )
@@ -96,16 +94,16 @@ class StatisticsViewModel
                     }
                     updateTrigger
                         .flatMapLatest {
+                            val (periodState: PeriodUiState, statisticsMenuState: StatisticsMenuState) = _uiState.value
                             transactionInteractor
                                 .getTransactionsGroupedByCategory(
-                                    _uiState.value.statisticsMenuState.transactionType
-                                        .toTransactionType(),
-                                    _uiState.value.periodState.selectedPeriod.from,
-                                    _uiState.value.periodState.selectedPeriod.to,
-                                    _uiState.value.statisticsMenuState.currency.currencyCode,
-                                    _uiState.value.statisticsMenuState.inStatistics ==
+                                    statisticsMenuState.transactionType.toTransactionType(),
+                                    periodState.selectedPeriod.from,
+                                    periodState.selectedPeriod.to,
+                                    statisticsMenuState.currency.currencyCode,
+                                    statisticsMenuState.inStatistics ==
                                         StatisticsMenuInStatisticsType.InStatisticsType,
-                                    _uiState.value.statisticsMenuState.categoryType == StatisticsMenuCategoryType.Child,
+                                    false,
                                 ).map { list -> list.sortedByDescending { tr -> tr.sum } }
                         }.flowOn(ioDispatcher)
                         .collect { list: List<TransactionChartModel> ->
@@ -122,11 +120,13 @@ class StatisticsViewModel
                 launch {
                     updateTrigger
                         .flatMapLatest {
+                            val (periodState: PeriodUiState, statisticsMenuState: StatisticsMenuState) = _uiState.value
                             transactionInteractor
-                                .getSumSpentInPeriod(
-                                    _uiState.value.periodState.selectedPeriod.from,
-                                    _uiState.value.periodState.selectedPeriod.to,
-                                    _uiState.value.statisticsMenuState.currency.currencyCode,
+                                .getSumInPeriod(
+                                    periodState.selectedPeriod.from,
+                                    periodState.selectedPeriod.to,
+                                    statisticsMenuState.transactionType.toTransactionType(),
+                                    statisticsMenuState.currency.currencyCode,
                                 )
                         }.collect { sum ->
                             _uiState.update {
@@ -156,9 +156,8 @@ class StatisticsViewModel
                 when (type) {
                     StatisticsMenuType.CURRENCY -> updateCurrency()
                     StatisticsMenuType.CHART -> TODO()
-                    StatisticsMenuType.CATEGORY_TYPE -> TODO()
-                    StatisticsMenuType.TRANSACTION_TYPE -> TODO()
-                    StatisticsMenuType.STATISTICS -> TODO()
+                    StatisticsMenuType.TRANSACTION_TYPE -> updateTransactionType()
+                    StatisticsMenuType.STATISTICS -> updateInStatistics()
                 }
                 updateTrigger.update { it + 1 }
             }
@@ -172,5 +171,29 @@ class StatisticsViewModel
                     is StatisticsMenuCurrencyType.Default -> StatisticsMenuCurrencyType.Current(currency.code)
                 }
             _uiState.update { it.copy(statisticsMenuState = it.statisticsMenuState.copy(currency = newCurrency)) }
+        }
+
+        private fun updateTransactionType() {
+            val currentTransactionType = _uiState.value.statisticsMenuState.transactionType
+            val newTransactionType =
+                when (currentTransactionType) {
+                    StatisticsMenuTransactionType.Expense -> StatisticsMenuTransactionType.Income
+                    StatisticsMenuTransactionType.Income -> StatisticsMenuTransactionType.Expense
+                }
+            _uiState.update {
+                it.copy(statisticsMenuState = it.statisticsMenuState.copy(transactionType = newTransactionType))
+            }
+        }
+
+        private fun updateInStatistics() {
+            val currentInStatistics = _uiState.value.statisticsMenuState.inStatistics
+            val newInStatistics =
+                when (currentInStatistics) {
+                    StatisticsMenuInStatisticsType.InStatisticsType -> StatisticsMenuInStatisticsType.All
+                    StatisticsMenuInStatisticsType.All -> StatisticsMenuInStatisticsType.InStatisticsType
+                }
+            _uiState.update {
+                it.copy(statisticsMenuState = it.statisticsMenuState.copy(inStatistics = newInStatistics))
+            }
         }
     }

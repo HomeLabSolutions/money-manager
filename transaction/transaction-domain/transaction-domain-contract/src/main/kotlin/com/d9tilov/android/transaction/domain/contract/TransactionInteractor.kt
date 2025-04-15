@@ -47,9 +47,10 @@ interface TransactionInteractor {
 
     fun getSumInFiscalPeriod(): Flow<BigDecimal>
 
-    fun getSumSpentInPeriod(
+    fun getSumInPeriod(
         from: LocalDateTime,
         to: LocalDateTime,
+        transactionType: TransactionType,
         currencyCode: String,
     ): Flow<BigDecimal>
 

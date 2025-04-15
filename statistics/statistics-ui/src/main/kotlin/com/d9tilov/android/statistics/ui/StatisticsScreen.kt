@@ -22,8 +22,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -46,11 +46,14 @@ import com.d9tilov.android.core.constants.CurrencyConstants
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
+import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.designsystem.ButtonSelector
 import com.d9tilov.android.designsystem.ComposeCurrencyView
+import com.d9tilov.android.designsystem.DateRangePickerModal
 import com.d9tilov.android.designsystem.ProgressIndicator
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.android.statistics.data.model.StatisticsMenuType
+import com.d9tilov.android.statistics.ui.model.StatisticsMenuTransactionType
 import com.d9tilov.android.statistics.ui.model.StatisticsPeriodModel
 import com.d9tilov.android.statistics.ui.vm.DetailsSpentInPeriodState
 import com.d9tilov.android.statistics.ui.vm.DetailsTransactionListState
@@ -83,13 +86,38 @@ fun StatisticsScreen(
     onPeriodClick: (period: StatisticsPeriodModel) -> Unit,
     onMenuClick: (type: StatisticsMenuType) -> Unit,
 ) {
+    val showDatePicker = remember { mutableStateOf(false) }
     Column(modifier) {
         Column(modifier = Modifier.weight(2f)) {
-            StatisticsPeriodSelector(state = state.periodState, onPeriodClick = onPeriodClick)
+            StatisticsPeriodSelector(state = state.periodState, onPeriodClick = { period: StatisticsPeriodModel ->
+                if (period == StatisticsPeriodModel.CUSTOM()) {
+                    showDatePicker.value = true
+                }
+                onPeriodClick(period)
+            })
             StatisticsMenuSelector(state = state.statisticsMenuState, onClick = onMenuClick)
             StatisticsChart(Modifier.weight(1f))
         }
-        StatisticsList(modifier = Modifier.weight(1f), state = state.detailsTransactionListState, onItemClick = {})
+        StatisticsList(
+            modifier = Modifier.weight(1f),
+            state = state.detailsTransactionListState,
+            transactionType = state.statisticsMenuState.transactionType,
+            onItemClick = {},
+        )
+    }
+
+    if (showDatePicker.value) {
+        DateRangePickerModal(
+            onDateRangeSelected = { pairPeriod ->
+                onPeriodClick(
+                    StatisticsPeriodModel.CUSTOM(
+                        pairPeriod.first.toLocalDateTime(),
+                        pairPeriod.second.toLocalDateTime(),
+                    ),
+                )
+            },
+            onDismiss = { showDatePicker.value = false },
+        )
     }
 }
 
@@ -108,7 +136,7 @@ fun StatisticsPeriodSelector(
     ) {
         for (item: StatisticsPeriodModel in state.periods) {
             ButtonSelector(
-                enabled = state.selectedPeriod == item,
+                enabled = state.selectedPeriod.name == item.name,
                 text = { Text(text = stringResource(item.name)) },
                 onClick = { onPeriodClick(item) },
             )
@@ -135,7 +163,6 @@ fun StatisticsMenuSelector(
             fontSize = 30.sp,
         )
         StatisticMenuIcon(state.chartType.iconId) { onClick(StatisticsMenuType.CHART) }
-        StatisticMenuIcon(state.categoryType.iconId) { onClick(StatisticsMenuType.CATEGORY_TYPE) }
         StatisticMenuIcon(state.transactionType.iconId) { onClick(StatisticsMenuType.TRANSACTION_TYPE) }
         StatisticMenuIcon(state.inStatistics.iconId) { onClick(StatisticsMenuType.STATISTICS) }
     }
@@ -166,6 +193,7 @@ fun StatisticsChart(modifier: Modifier) {
 fun StatisticsList(
     modifier: Modifier = Modifier,
     state: DetailsTransactionListState,
+    transactionType: StatisticsMenuTransactionType,
     onItemClick: (currency: TransactionChartModel) -> Unit,
 ) {
     Column(modifier = modifier) {
@@ -176,7 +204,12 @@ fun StatisticsList(
             verticalAlignment = Alignment.Bottom,
         ) {
             Text(
-                text = stringResource(R.string.statistics_expense_info_period_title),
+                text =
+                    if (transactionType == StatisticsMenuTransactionType.Expense) {
+                        stringResource(R.string.statistics_expense_info_period_title)
+                    } else {
+                        stringResource(R.string.statistics_income_info_period_title)
+                    },
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary,
@@ -217,7 +250,7 @@ fun TransactionItem(
     transaction: TransactionChartModel,
 ) {
     val context = LocalContext.current
-    var progressValue by remember { mutableFloatStateOf(transaction.percent.toFloat()) }
+    val progressValue by remember { mutableFloatStateOf(transaction.percent.toFloat()) }
     ConstraintLayout(
         modifier =
             modifier
