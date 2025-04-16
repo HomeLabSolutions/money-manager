@@ -29,9 +29,8 @@ interface TransactionInteractor {
         inStatistics: Boolean,
     ): Flow<Map<LocalDateTime, TransactionLineChartModel>>
 
-    suspend fun getTransactionsByCategory(
-        type: TransactionType,
-        category: Category,
+    suspend fun getTransactionsByCategoryId(
+        categoryId: Long,
         from: LocalDateTime,
         to: LocalDateTime,
         inStatistics: Boolean,

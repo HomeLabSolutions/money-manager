@@ -48,14 +48,17 @@ import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.reduceScale
 import com.d9tilov.android.core.utils.toLocalDateTime
+import com.d9tilov.android.core.utils.toMillis
 import com.d9tilov.android.designsystem.ButtonSelector
 import com.d9tilov.android.designsystem.ComposeCurrencyView
 import com.d9tilov.android.designsystem.DateRangePickerModal
 import com.d9tilov.android.designsystem.ProgressIndicator
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.android.statistics.data.model.StatisticsMenuType
+import com.d9tilov.android.statistics.ui.model.StatisticsMenuInStatisticsType
 import com.d9tilov.android.statistics.ui.model.StatisticsMenuTransactionType
 import com.d9tilov.android.statistics.ui.model.StatisticsPeriodModel
+import com.d9tilov.android.statistics.ui.model.TransactionDetailsChartModel
 import com.d9tilov.android.statistics.ui.vm.DetailsSpentInPeriodState
 import com.d9tilov.android.statistics.ui.vm.DetailsTransactionListState
 import com.d9tilov.android.statistics.ui.vm.PeriodUiState
@@ -67,7 +70,10 @@ import com.d9tilov.android.transaction.domain.model.TransactionChartModel
 import java.math.BigDecimal
 
 @Composable
-fun StatisticsRoute(viewModel: StatisticsViewModel = hiltViewModel()) {
+fun StatisticsRoute(
+    viewModel: StatisticsViewModel = hiltViewModel(),
+    onTransactionClicked: (TransactionDetailsChartModel) -> Unit,
+) {
     val uiState: StatisticsUiState by viewModel.uiState.collectAsState(StatisticsUiState())
     Scaffold { paddingValues ->
         StatisticsScreen(
@@ -75,6 +81,7 @@ fun StatisticsRoute(viewModel: StatisticsViewModel = hiltViewModel()) {
             state = uiState,
             onPeriodClick = { viewModel.updatePeriod(it) },
             onMenuClick = { viewModel.onMenuClick(it) },
+            onTransactionClicked = onTransactionClicked,
         )
     }
 }
@@ -85,6 +92,7 @@ fun StatisticsScreen(
     state: StatisticsUiState,
     onPeriodClick: (period: StatisticsPeriodModel) -> Unit,
     onMenuClick: (type: StatisticsMenuType) -> Unit,
+    onTransactionClicked: (TransactionDetailsChartModel) -> Unit,
 ) {
     val showDatePicker = remember { mutableStateOf(false) }
     Column(modifier) {
@@ -102,7 +110,18 @@ fun StatisticsScreen(
             modifier = Modifier.weight(1f),
             state = state.detailsTransactionListState,
             transactionType = state.statisticsMenuState.transactionType,
-            onItemClick = {},
+            onItemClick = {
+                onTransactionClicked(
+                    TransactionDetailsChartModel(
+                        it.category.id,
+                        state.periodState.selectedPeriod.from
+                            .toMillis(),
+                        state.periodState.selectedPeriod.to
+                            .toMillis(),
+                        state.statisticsMenuState.inStatistics == StatisticsMenuInStatisticsType.InStatisticsType,
+                    ),
+                )
+            },
         )
     }
 
@@ -315,9 +334,11 @@ fun TransactionItem(
                 symbolStyle = MaterialTheme.typography.labelLarge,
             )
             Text(
-                text = "${transaction.percent.reduceScale()}${stringResource(
-                    com.d9tilov.android.common.android.R.string.percent_sign,
-                )}",
+                text = "${transaction.percent.reduceScale()}${
+                    stringResource(
+                        com.d9tilov.android.common.android.R.string.percent_sign,
+                    )
+                }",
                 color = MaterialTheme.colorScheme.secondary,
                 style = MaterialTheme.typography.titleSmall,
             )
@@ -433,6 +454,7 @@ fun DefaultCategoryIconGridPreview() {
             ),
             onPeriodClick = {},
             onMenuClick = {},
+            onTransactionClicked = {},
         )
     }
 }

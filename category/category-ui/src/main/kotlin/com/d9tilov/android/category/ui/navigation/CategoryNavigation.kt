@@ -31,34 +31,34 @@ const val CATEGORY_ICON_LIST_NAVIGATION_ROUTE = "category_icon_list_route"
 const val CATEGORY_ICON_GRID_NAVIGATION_ROUTE = "category_icon_grid_route"
 
 internal sealed class CategoryArgs {
-    class CategoryListArgs(
+    data class CategoryListArgs(
         val transactionType: TransactionType,
         val destination: CategoryDestination?,
     ) {
         constructor(savedStateHandle: SavedStateHandle) :
             this(
-                (checkNotNull(savedStateHandle[TRANSACTION_TYPE_ARG]) as Int).toType(),
-                (checkNotNull(savedStateHandle[CATEGORY_DESTINATION_ARG]) as Int).toDestination(),
+                checkNotNull(savedStateHandle[TRANSACTION_TYPE_ARG]).toString().toInt().toType(),
+                checkNotNull(savedStateHandle[CATEGORY_DESTINATION_ARG]).toString().toInt().toDestination(),
             )
     }
 
-    class CategoryCreationArgs(
+    data class CategoryCreationArgs(
         val categoryId: Long,
         val transactionType: TransactionType,
     ) {
         constructor(savedStateHandle: SavedStateHandle) :
             this(
-                checkNotNull(savedStateHandle[CATEGORY_ID_ARG]) as Long,
-                (checkNotNull(savedStateHandle[TRANSACTION_TYPE_ARG]) as Int).toType(),
+                checkNotNull(savedStateHandle[CATEGORY_ID_ARG]).toString().toLong(),
+                checkNotNull(savedStateHandle[TRANSACTION_TYPE_ARG]).toString().toInt().toType(),
             )
     }
 
-    class CategoryIconsArgs(
+    data class CategoryIconsArgs(
         val groupId: CategoryGroup,
     ) {
         constructor(savedStateHandle: SavedStateHandle) :
             this(
-                (checkNotNull(savedStateHandle[CATEGORY_GROUP_ARG]) as Int).toGroupId(),
+                checkNotNull(savedStateHandle[CATEGORY_GROUP_ARG]).toString().toInt().toGroupId(),
             )
     }
 }

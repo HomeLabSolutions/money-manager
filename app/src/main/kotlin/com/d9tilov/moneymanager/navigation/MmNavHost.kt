@@ -43,7 +43,14 @@ import com.d9tilov.android.regular.transaction.ui.navigator.regularTransactionLi
 import com.d9tilov.android.settings.ui.navigation.SETTINGS_NAVIGATION_ROUTE
 import com.d9tilov.android.settings.ui.navigation.navigateToSettingsScreen
 import com.d9tilov.android.settings.ui.navigation.settingsScreen
+import com.d9tilov.android.statistics.ui.navigation.STATISTICS_DETAILS_NAVIGATION_ROUTE
 import com.d9tilov.android.statistics.ui.navigation.STATISTICS_NAVIGATION_ROUTE
+import com.d9tilov.android.statistics.ui.navigation.TRANSACTION_DETAILS_CATEGORY_ID_ARGS
+import com.d9tilov.android.statistics.ui.navigation.TRANSACTION_DETAILS_DATE_FROM_ARGS
+import com.d9tilov.android.statistics.ui.navigation.TRANSACTION_DETAILS_DATE_TO_ARGS
+import com.d9tilov.android.statistics.ui.navigation.TRANSACTION_DETAILS_IN_STATISTICS_ARGS
+import com.d9tilov.android.statistics.ui.navigation.navigateToStatisticsDetailsTransactionScreen
+import com.d9tilov.android.statistics.ui.navigation.statisticsDetailsScreen
 import com.d9tilov.android.statistics.ui.navigation.statisticsScreen
 import com.d9tilov.android.transaction.ui.navigation.TRANSACTION_ID_ARG
 import com.d9tilov.android.transaction.ui.navigation.TRANSACTION_NAVIGATION_ROUTE
@@ -134,7 +141,18 @@ fun MmNavHost(
             startDestination = STATISTICS_NAVIGATION_ROUTE,
             route = STATISTICS_ROOT_DESTINATION,
         ) {
-            statisticsScreen(STATISTICS_NAVIGATION_ROUTE)
+            statisticsScreen(
+                STATISTICS_NAVIGATION_ROUTE,
+                onTransactionClick = { navController.navigateToStatisticsDetailsTransactionScreen(it) },
+            )
+            statisticsDetailsScreen(
+                route =
+                    "$STATISTICS_DETAILS_NAVIGATION_ROUTE/" +
+                        "{$TRANSACTION_DETAILS_CATEGORY_ID_ARGS}/" +
+                        "{$TRANSACTION_DETAILS_DATE_FROM_ARGS}/" +
+                        "{$TRANSACTION_DETAILS_DATE_TO_ARGS}/" +
+                        "{$TRANSACTION_DETAILS_IN_STATISTICS_ARGS}",
+            )
         }
         navigation(startDestination = PROFILE_NAVIGATION_ROUTE, route = PROFILE_ROOT_DESTINATION) {
             profileScreen(

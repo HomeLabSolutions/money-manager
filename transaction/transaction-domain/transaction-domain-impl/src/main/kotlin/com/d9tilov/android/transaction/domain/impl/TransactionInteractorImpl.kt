@@ -190,13 +190,13 @@ class TransactionInteractorImpl(
                     }
             }
 
-    override suspend fun getTransactionsByCategory(
-        type: TransactionType,
-        category: Category,
+    override suspend fun getTransactionsByCategoryId(
+        categoryId: Long,
         from: LocalDateTime,
         to: LocalDateTime,
         inStatistics: Boolean,
     ): List<Transaction> {
+        val category = categoryInteractor.getCategoryById(categoryId)
         val categoryList: List<Category> = category.children.ifEmpty { listOf(category) }
         return categoryList.flatMap { item: Category ->
             transactionRepo

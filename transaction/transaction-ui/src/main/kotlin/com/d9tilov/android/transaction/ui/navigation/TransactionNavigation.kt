@@ -23,7 +23,7 @@ internal sealed class TransactionArgs {
         val transactionId: Long,
     ) {
         constructor(savedStateHandle: SavedStateHandle) :
-            this((checkNotNull(savedStateHandle[TRANSACTION_ID_ARG]) as Long))
+            this(checkNotNull(savedStateHandle[TRANSACTION_ID_ARG]).toString().toLong())
     }
 }
 

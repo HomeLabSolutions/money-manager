@@ -36,7 +36,7 @@ internal sealed class RegularTransactionArgs {
         val transactionType: TransactionType,
     ) {
         constructor(savedStateHandle: SavedStateHandle) :
-            this((checkNotNull(savedStateHandle[NavigationConstants.TRANSACTION_TYPE_ARG]) as Int).toType())
+            this(checkNotNull(savedStateHandle[NavigationConstants.TRANSACTION_TYPE_ARG]).toString().toInt().toType())
     }
 
     class RegularTransactionCreationArgs(
@@ -45,8 +45,8 @@ internal sealed class RegularTransactionArgs {
     ) {
         constructor(savedStateHandle: SavedStateHandle) :
             this(
-                (checkNotNull(savedStateHandle[NavigationConstants.TRANSACTION_TYPE_ARG]) as Int).toType(),
-                (checkNotNull(savedStateHandle[REGULAR_TRANSACTION_ID_ARGS]) as Long),
+                checkNotNull(savedStateHandle[NavigationConstants.TRANSACTION_TYPE_ARG]).toString().toInt().toType(),
+                checkNotNull(savedStateHandle[REGULAR_TRANSACTION_ID_ARGS]).toString().toLong(),
             )
     }
 }
