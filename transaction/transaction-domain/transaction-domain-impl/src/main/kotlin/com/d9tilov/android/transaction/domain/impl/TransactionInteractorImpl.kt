@@ -486,13 +486,14 @@ class TransactionInteractorImpl(
         to: LocalDateTime,
         transactionType: TransactionType,
         currencyCode: String,
+        inStatistics: Boolean,
     ): Flow<BigDecimal> =
         transactionRepo
             .getTransactionsByTypeInPeriod(
                 from,
                 to,
                 transactionType,
-                onlyInStatistics = true,
+                onlyInStatistics = inStatistics,
                 withRegular = true,
             ).map { list ->
                 list.sumOf {

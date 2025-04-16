@@ -46,6 +46,7 @@ import com.d9tilov.android.core.constants.CurrencyConstants
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
+import com.d9tilov.android.core.utils.reduceScale
 import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.designsystem.ButtonSelector
 import com.d9tilov.android.designsystem.ComposeCurrencyView
@@ -64,7 +65,6 @@ import com.d9tilov.android.statistics.ui.vm.StatisticsViewModel
 import com.d9tilov.android.statistics_ui.R
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
 import java.math.BigDecimal
-import java.math.RoundingMode
 
 @Composable
 fun StatisticsRoute(viewModel: StatisticsViewModel = hiltViewModel()) {
@@ -309,17 +309,15 @@ fun TransactionItem(
             horizontalAlignment = Alignment.End,
         ) {
             ComposeCurrencyView(
-                value = transaction.sum.toString(),
+                value = transaction.sum.reduceScale().toString(),
                 valueStyle = MaterialTheme.typography.headlineSmall,
                 symbol = transaction.currencyCode.getSymbolByCode(),
                 symbolStyle = MaterialTheme.typography.labelLarge,
             )
             Text(
-                text = "${transaction.percent.setScale(1, RoundingMode.HALF_UP).setScale(2)}${
-                    stringResource(
-                        com.d9tilov.android.common.android.R.string.percent_sign,
-                    )
-                }",
+                text = "${transaction.percent.reduceScale()}${stringResource(
+                    com.d9tilov.android.common.android.R.string.percent_sign,
+                )}",
                 color = MaterialTheme.colorScheme.secondary,
                 style = MaterialTheme.typography.titleSmall,
             )

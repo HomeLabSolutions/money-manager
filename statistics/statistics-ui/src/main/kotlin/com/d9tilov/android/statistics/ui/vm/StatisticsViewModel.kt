@@ -127,6 +127,7 @@ class StatisticsViewModel
                                     periodState.selectedPeriod.to,
                                     statisticsMenuState.transactionType.toTransactionType(),
                                     statisticsMenuState.currency.currencyCode,
+                                    statisticsMenuState.inStatistics == StatisticsMenuInStatisticsType.InStatisticsType,
                                 )
                         }.collect { sum ->
                             _uiState.update {
