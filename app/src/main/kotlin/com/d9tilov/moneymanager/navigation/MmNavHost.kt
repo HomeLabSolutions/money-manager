@@ -33,13 +33,6 @@ import com.d9tilov.android.incomeexpense.navigation.INCOME_EXPENSE_NAVIGATION_RO
 import com.d9tilov.android.incomeexpense.navigation.incomeExpenseScreen
 import com.d9tilov.android.profile.ui.navigation.PROFILE_NAVIGATION_ROUTE
 import com.d9tilov.android.profile.ui.navigation.profileScreen
-import com.d9tilov.android.regular.transaction.ui.navigator.REGULAR_TRANSACTION_CREATION_NAVIGATION_ROUTE
-import com.d9tilov.android.regular.transaction.ui.navigator.REGULAR_TRANSACTION_ID_ARGS
-import com.d9tilov.android.regular.transaction.ui.navigator.REGULAR_TRANSACTION_LIST_NAVIGATION_ROUTE
-import com.d9tilov.android.regular.transaction.ui.navigator.navigateToRegularTransactionCreationScreen
-import com.d9tilov.android.regular.transaction.ui.navigator.navigateToRegularTransactionListScreen
-import com.d9tilov.android.regular.transaction.ui.navigator.regularTransactionCreationScreen
-import com.d9tilov.android.regular.transaction.ui.navigator.regularTransactionListScreen
 import com.d9tilov.android.settings.ui.navigation.SETTINGS_NAVIGATION_ROUTE
 import com.d9tilov.android.settings.ui.navigation.navigateToSettingsScreen
 import com.d9tilov.android.settings.ui.navigation.settingsScreen
@@ -52,6 +45,13 @@ import com.d9tilov.android.statistics.ui.navigation.TRANSACTION_DETAILS_IN_STATI
 import com.d9tilov.android.statistics.ui.navigation.navigateToStatisticsDetailsTransactionScreen
 import com.d9tilov.android.statistics.ui.navigation.statisticsDetailsScreen
 import com.d9tilov.android.statistics.ui.navigation.statisticsScreen
+import com.d9tilov.android.transaction.regular.ui.navigator.REGULAR_TRANSACTION_CREATION_NAVIGATION_ROUTE
+import com.d9tilov.android.transaction.regular.ui.navigator.REGULAR_TRANSACTION_ID_ARGS
+import com.d9tilov.android.transaction.regular.ui.navigator.REGULAR_TRANSACTION_LIST_NAVIGATION_ROUTE
+import com.d9tilov.android.transaction.regular.ui.navigator.navigateToRegularTransactionCreationScreen
+import com.d9tilov.android.transaction.regular.ui.navigator.navigateToRegularTransactionListScreen
+import com.d9tilov.android.transaction.regular.ui.navigator.regularTransactionCreationScreen
+import com.d9tilov.android.transaction.regular.ui.navigator.regularTransactionListScreen
 import com.d9tilov.android.transaction.ui.navigation.TRANSACTION_ID_ARG
 import com.d9tilov.android.transaction.ui.navigation.TRANSACTION_NAVIGATION_ROUTE
 import com.d9tilov.android.transaction.ui.navigation.navigateToTransactionScreen

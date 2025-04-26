@@ -10,8 +10,8 @@ import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_COD
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
-import com.d9tilov.android.regular.transaction.domain.contract.RegularTransactionInteractor
-import com.d9tilov.android.regular.transaction.domain.model.RegularTransaction
+import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactionInteractor
+import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
 import com.d9tilov.android.user.domain.contract.UserInteractor
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent

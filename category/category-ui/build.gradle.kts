@@ -10,7 +10,6 @@ android {
 }
 
 dependencies {
-
     implementation(project(":billing:billing-domain:billing-domain-contract"))
     implementation(project(":category:category-data:category-data-impl"))
     implementation(project(":category:category-domain:category-domain-contract"))
@@ -18,8 +17,8 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
     implementation(project(":core:designsystem"))
-    implementation(project(":transaction:regular-transaction-domain:regular-transaction-domain-contract"))
-    implementation(project(":transaction:transaction-domain:transaction-domain-contract"))
+    implementation(project(":transaction:domain:contract"))
+    implementation(project(":transaction:regular:domain:contract"))
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling.preview)

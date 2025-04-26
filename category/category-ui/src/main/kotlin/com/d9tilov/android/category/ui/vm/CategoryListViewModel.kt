@@ -8,8 +8,8 @@ import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.domain.model.Category.Companion.ALL_ITEMS_ID
 import com.d9tilov.android.category.domain.model.CategoryDestination
 import com.d9tilov.android.category.ui.navigation.CategoryArgs
-import com.d9tilov.android.regular.transaction.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
+import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactionInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
