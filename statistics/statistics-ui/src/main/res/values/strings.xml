@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="statistics_details_title">Transactions</string>
     <string name="statistics_period_day">Day</string>
     <string name="statistics_period_week">Week</string>
     <string name="statistics_period_month">Month</string>

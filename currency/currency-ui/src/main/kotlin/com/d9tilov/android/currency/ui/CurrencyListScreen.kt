@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.core.constants.DataConstants.TAG
+import com.d9tilov.android.core.constants.UiConstants.ALPHA
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.android.currency_ui.R
@@ -165,7 +166,7 @@ fun CurrencyItem(
         HorizontalDivider(
             color = MaterialTheme.colorScheme.primary,
             thickness = 1.dp,
-            modifier = Modifier.alpha(0.2f),
+            modifier = Modifier.alpha(ALPHA),
         )
     }
 }

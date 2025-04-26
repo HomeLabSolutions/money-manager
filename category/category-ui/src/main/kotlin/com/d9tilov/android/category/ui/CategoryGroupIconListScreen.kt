@@ -29,6 +29,7 @@ import com.d9tilov.android.category.ui.model.categoryGroupItemMap
 import com.d9tilov.android.category.ui.vm.CategoryGroupIconListViewModel
 import com.d9tilov.android.category.ui.vm.CategoryIconListUiState
 import com.d9tilov.android.category_ui.R
+import com.d9tilov.android.core.constants.UiConstants.ALPHA
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 
@@ -91,7 +92,7 @@ fun CategoryIconListItem(
         HorizontalDivider(
             color = MaterialTheme.colorScheme.primary,
             thickness = 1.dp,
-            modifier = Modifier.alpha(0.2f),
+            modifier = Modifier.alpha(ALPHA),
         )
     }
 }

@@ -152,6 +152,7 @@ fun MmNavHost(
                         "{$TRANSACTION_DETAILS_DATE_FROM_ARGS}/" +
                         "{$TRANSACTION_DETAILS_DATE_TO_ARGS}/" +
                         "{$TRANSACTION_DETAILS_IN_STATISTICS_ARGS}",
+                onBackClicked = navController::popBackStack,
             )
         }
         navigation(startDestination = PROFILE_NAVIGATION_ROUTE, route = PROFILE_ROOT_DESTINATION) {

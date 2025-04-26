@@ -43,6 +43,7 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.core.constants.CurrencyConstants
+import com.d9tilov.android.core.constants.UiConstants.ALPHA
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
@@ -348,7 +349,7 @@ fun TransactionItem(
             thickness = 1.dp,
             modifier =
                 Modifier
-                    .alpha(0.2f)
+                    .alpha(ALPHA)
                     .constrainAs(idDivider) {
                         end.linkTo(parent.end)
                         bottom.linkTo(parent.bottom)

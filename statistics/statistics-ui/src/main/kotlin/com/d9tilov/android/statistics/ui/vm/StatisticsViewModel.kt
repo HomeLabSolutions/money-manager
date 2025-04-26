@@ -21,7 +21,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -78,7 +77,7 @@ class StatisticsViewModel
         private val updateTrigger = MutableStateFlow(0)
 
         init {
-            viewModelScope.launch {
+            viewModelScope.launch(ioDispatcher) {
                 val currency = currencyInteractor.getMainCurrency()
                 launch {
                     _uiState.update {
@@ -105,8 +104,7 @@ class StatisticsViewModel
                                         StatisticsMenuInStatisticsType.InStatisticsType,
                                     false,
                                 ).map { list -> list.sortedByDescending { tr -> tr.sum } }
-                        }.flowOn(ioDispatcher)
-                        .collect { list: List<TransactionChartModel> ->
+                        }.collect { list: List<TransactionChartModel> ->
                             _uiState.update {
                                 it.copy(
                                     detailsTransactionListState =

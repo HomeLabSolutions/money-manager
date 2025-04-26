@@ -57,6 +57,9 @@ fun NavGraphBuilder.statisticsScreen(
     composable(route = route) { StatisticsRoute(onTransactionClicked = onTransactionClick) }
 }
 
-fun NavGraphBuilder.statisticsDetailsScreen(route: String) {
-    composable(route = route) { StatisticsDetailsRoute() }
+fun NavGraphBuilder.statisticsDetailsScreen(
+    route: String,
+    onBackClicked: () -> Unit,
+) {
+    composable(route = route) { StatisticsDetailsRoute(onBackClicked = onBackClicked) }
 }

@@ -39,8 +39,6 @@
     <ID>CyclomaticComplexMethod:TransactionInteractorImpl.kt$TransactionInteractorImpl$override suspend fun executeRegularIfNeeded(type: TransactionType)</ID>
     <ID>DataClassContainsFunctions:RegularTransaction.kt$RegularTransaction$fun isValid(): Boolean</ID>
     <ID>DataClassShouldBeImmutable:UserDbModel.kt$UserDbModel$@PrimaryKey @ColumnInfo(name = "uid") var uid: String</ID>
-    <ID>DestructuringDeclarationWithTooManyEntries:IncomeExpenseScreen.kt$val (idIcon, idTitle, idDescription, idRegularIcon, idInStatisticsIcon, idSum, idDivider) = createRefs()</ID>
-    <ID>DestructuringDeclarationWithTooManyEntries:ProfileScreen.kt$val (idIcon, idTitle, idData, idSubtitle, idDivider) = createRefs()</ID>
     <ID>EmptyFunctionBlock:StatisticsScreen.kt${}</ID>
     <ID>ForbiddenImport:BackupManagerImpl.kt$import kotlinx.coroutines.runBlocking</ID>
     <ID>LabeledExpression:BackupManagerImpl.kt$BackupManagerImpl$@addOnFailureListener</ID>

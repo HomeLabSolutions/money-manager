@@ -91,6 +91,7 @@ import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_FORMAT
 import com.d9tilov.android.common.android.utils.formatDate
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.core.constants.CurrencyConstants.ZERO
+import com.d9tilov.android.core.constants.UiConstants.ALPHA
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.KeyPress
 import com.d9tilov.android.core.utils.toKeyPress
@@ -514,7 +515,7 @@ fun TransactionItem(
             thickness = 1.dp,
             modifier =
                 Modifier
-                    .alpha(0.2f)
+                    .alpha(ALPHA)
                     .constrainAs(idDivider) {
                         end.linkTo(parent.end)
                         bottom.linkTo(parent.bottom)
