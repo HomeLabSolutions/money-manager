@@ -7,7 +7,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":category:category-data:category-data-contract"))
+    implementation(project(":category:category-data:contract"))
     implementation(project(":category:category-domain:category-domain-model"))
     implementation(project(":category:category-domain:contract"))
     implementation(project(":core:common"))
