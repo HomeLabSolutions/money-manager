@@ -5,12 +5,12 @@ plugins {
 }
 
 android {
-    namespace = "com.d9tilov.android.budget_ui"
+    namespace = "com.d9tilov.android.budget.ui"
 }
 
 dependencies {
-    implementation(project(":budget:budget-domain:budget-domain-contract"))
-    implementation(project(":budget:budget-domain:budget-domain-model"))
+    implementation(project(":budget:domain:contract"))
+    implementation(project(":budget:domain:model"))
     implementation(project(":core:common"))
     implementation(project(":core:designsystem"))
     implementation(libs.androidx.compose.material3)

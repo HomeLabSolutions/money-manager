@@ -21,7 +21,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.d9tilov.android.budget_ui.R
 import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.CurrencyTextFieldExtraBig
 import com.d9tilov.android.designsystem.MmTopAppBar

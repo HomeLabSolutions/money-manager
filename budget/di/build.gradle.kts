@@ -4,14 +4,14 @@ plugins {
 }
 
 android {
-    namespace = "com.d9tilov.android.budget_di"
+    namespace = "com.d9tilov.android.budget.di"
 }
 
 dependencies {
-    implementation(project(":budget:budget-data:budget-data-contract"))
-    implementation(project(":budget:budget-data:budget-data-impl"))
-    implementation(project(":budget:budget-domain:budget-domain-contract"))
-    implementation(project(":budget:budget-domain:budget-domain-impl"))
+    implementation(project(":budget:data:contract"))
+    implementation(project(":budget:data:impl"))
+    implementation(project(":budget:domain:contract"))
+    implementation(project(":budget:domain:impl"))
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
     implementation(project(":core:network"))

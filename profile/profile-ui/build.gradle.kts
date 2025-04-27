@@ -13,8 +13,8 @@ dependencies {
 
     implementation(project(":backup:data:impl"))
     implementation(project(":billing:domain:contract"))
-    implementation(project(":budget:budget-domain:budget-domain-contract"))
-    implementation(project(":budget:budget-domain:budget-domain-model"))
+    implementation(project(":budget:domain:contract"))
+    implementation(project(":budget:domain:model"))
     implementation(project(":category:category-domain:category-domain-model"))
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))

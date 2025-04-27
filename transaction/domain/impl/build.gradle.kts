@@ -7,8 +7,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":budget:budget-domain:budget-domain-contract"))
-    implementation(project(":budget:budget-domain:budget-domain-model"))
+    implementation(project(":budget:domain:contract"))
+    implementation(project(":budget:domain:model"))
     implementation(project(":category:category-domain:category-domain-contract"))
     implementation(project(":category:category-domain:category-domain-model"))
     implementation(project(":core:common"))

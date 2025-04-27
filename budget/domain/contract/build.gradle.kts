@@ -4,7 +4,6 @@ plugins {
 
 dependencies {
 
-    implementation(project(":budget:budget-domain:budget-domain-model"))
-
+    implementation(project(":budget:domain:model"))
     implementation(libs.kotlinx.coroutines.core)
 }
