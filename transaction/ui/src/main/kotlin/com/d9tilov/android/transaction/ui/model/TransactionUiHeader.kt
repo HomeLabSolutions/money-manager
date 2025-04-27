@@ -1,9 +1,9 @@
-package com.d9tilov.android.transaction.domain.model
+package com.d9tilov.android.transaction.ui.model
 
-import com.d9tilov.android.transaction.domain.model.BaseTransaction.Companion.HEADER
+import com.d9tilov.android.transaction.ui.model.BaseTransaction.Companion.HEADER
 import kotlinx.datetime.LocalDateTime
 
-data class TransactionHeader(
+data class TransactionUiHeader(
     override val date: LocalDateTime,
     val currency: String,
 ) : BaseTransaction {

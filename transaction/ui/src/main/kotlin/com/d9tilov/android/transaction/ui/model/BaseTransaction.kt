@@ -1,4 +1,4 @@
-package com.d9tilov.android.transaction.domain.model
+package com.d9tilov.android.transaction.ui.model
 
 import kotlinx.datetime.LocalDateTime
 

@@ -251,7 +251,7 @@ fun StatisticsList(
             state = stateList,
         ) {
             items(items = state.transactions, key = { item -> item.category.id }) { item ->
-                TransactionItem(
+                TransactionStatisticsItem(
                     Modifier
                         .fillMaxWidth()
                         .clickable { onItemClick(item) },
@@ -264,7 +264,7 @@ fun StatisticsList(
 
 @Composable
 @Suppress("MagicNumber")
-fun TransactionItem(
+fun TransactionStatisticsItem(
     modifier: Modifier,
     transaction: TransactionChartModel,
 ) {
@@ -464,7 +464,7 @@ fun DefaultCategoryIconGridPreview() {
 @Suppress("MagicNumber")
 fun TransactionItemPreview() {
     MoneyManagerTheme {
-        TransactionItem(
+        TransactionStatisticsItem(
             modifier =
                 Modifier
                     .fillMaxWidth()

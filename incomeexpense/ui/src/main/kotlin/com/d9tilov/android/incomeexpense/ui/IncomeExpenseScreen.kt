@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -35,7 +34,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -60,7 +58,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
@@ -76,7 +73,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -89,9 +85,7 @@ import com.d9tilov.android.category.domain.entity.Category.Companion.ALL_ITEMS_I
 import com.d9tilov.android.category.domain.entity.CategoryDestination
 import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_FORMAT
 import com.d9tilov.android.common.android.utils.formatDate
-import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.core.constants.CurrencyConstants.ZERO
-import com.d9tilov.android.core.constants.UiConstants.ALPHA
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.KeyPress
 import com.d9tilov.android.core.utils.toKeyPress
@@ -114,8 +108,9 @@ import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.EXPENSE
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.INCOME
 import com.d9tilov.android.incomeexpense.ui.vm.screenTypes
 import com.d9tilov.android.incomeexpense.ui.vm.toScreenType
-import com.d9tilov.android.transaction.domain.model.BaseTransaction
-import com.d9tilov.android.transaction.domain.model.Transaction
+import com.d9tilov.android.transaction.ui.TransactionItem
+import com.d9tilov.android.transaction.ui.model.BaseTransaction
+import com.d9tilov.android.transaction.ui.model.TransactionUiModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -123,7 +118,7 @@ import java.math.BigDecimal
 @Composable
 fun IncomeExpenseRoute(
     viewModel: IncomeExpenseViewModel = hiltViewModel(),
-    onTransactionClicked: (Transaction) -> Unit,
+    onTransactionClicked: (TransactionUiModel) -> Unit,
     onCurrencyClicked: (String) -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
 ) {
@@ -153,11 +148,11 @@ fun IncomeExpenseRoute(
 fun IncomeExpenseScreen(
     uiState: IncomeExpenseUiState,
     onNumberClicked: (KeyPress) -> Unit,
-    onTransactionClicked: (Transaction) -> Unit,
+    onTransactionClicked: (TransactionUiModel) -> Unit,
     onCategoryClicked: (Category) -> Unit,
     onEditModeChanged: (EditMode) -> Unit,
     onCurrencyClicked: () -> Unit,
-    onDeleteTransactionConfirmClicked: (Transaction) -> Unit,
+    onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
 ) {
     val listState = rememberLazyListState()
@@ -260,8 +255,8 @@ fun TransactionListLayout(
     modifier: Modifier,
     transactions: Flow<PagingData<BaseTransaction>>,
     screenType: ScreenType,
-    onTransactionClicked: (Transaction) -> Unit,
-    onDeleteTransactionConfirmClicked: (Transaction) -> Unit,
+    onTransactionClicked: (TransactionUiModel) -> Unit,
+    onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
 ) {
     val lazyTransactionItems: LazyPagingItems<BaseTransaction> =
         transactions.collectAsLazyPagingItems()
@@ -281,7 +276,7 @@ fun TransactionListLayout(
     if (lazyTransactionItems.loadState.refresh is LoadState.Error) {
         // handle error
     }
-    val openRemoveDialog = remember { mutableStateOf<Transaction?>(null) }
+    val openRemoveDialog = remember { mutableStateOf<TransactionUiModel?>(null) }
     LazyColumn(modifier = modifier, state = listState) {
         for (index in 0 until lazyTransactionItems.itemCount) {
             val currentItem = lazyTransactionItems.peek(index)
@@ -301,7 +296,7 @@ fun TransactionListLayout(
                     }
                 } else {
                     item(key = index) {
-                        val item = lazyTransactionItems[index] as Transaction
+                        val item = lazyTransactionItems[index] as TransactionUiModel
                         val dismissState =
                             rememberSwipeToDismissBoxState(
                                 confirmValueChange = {
@@ -391,151 +386,17 @@ fun TransactionListLayout(
 }
 
 @Composable
-fun TransactionItem(
-    modifier: Modifier,
-    transaction: Transaction,
-) {
-    val context = LocalContext.current
-    ConstraintLayout(
-        modifier =
-            modifier
-                .height(72.dp)
-                .padding(horizontal = 32.dp),
-    ) {
-        val (idIcon, idTitle, idDescription, idRegularIcon, idInStatisticsIcon, idSum, idDivider) = createRefs()
-        Icon(
-            modifier =
-                Modifier
-                    .constrainAs(idIcon) {
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                        start.linkTo(parent.start)
-                    }.size(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.category_item_icon_size)),
-            imageVector = ImageVector.vectorResource(id = transaction.category.icon),
-            contentDescription = "Transaction",
-            tint = Color(ContextCompat.getColor(context, transaction.category.color)),
-        )
-        Text(
-            modifier =
-                Modifier
-                    .padding(start = 16.dp)
-                    .constrainAs(idTitle) {
-                        top.linkTo(idIcon.top)
-                        bottom.linkTo(idIcon.bottom)
-                        start.linkTo(idIcon.end)
-                    },
-            text = transaction.category.name,
-            style = MaterialTheme.typography.displayLarge,
-            fontSize =
-                dimensionResource(
-                    id = com.d9tilov.android.designsystem.R.dimen.income_expense_name_text_size,
-                ).value.sp,
-            maxLines = 1,
-            color = Color(ContextCompat.getColor(context, transaction.category.color)),
-            overflow = TextOverflow.Ellipsis,
-        )
-        if (transaction.description.isNotEmpty()) {
-            Text(
-                modifier =
-                    Modifier
-                        .padding(start = 16.dp, bottom = 4.dp)
-                        .constrainAs(idDescription) {
-                            top.linkTo(idTitle.bottom)
-                            bottom.linkTo(parent.bottom)
-                            start.linkTo(idTitle.start)
-                        },
-                text = transaction.description,
-                style = MaterialTheme.typography.bodySmall,
-                fontSize =
-                    dimensionResource(
-                        id = com.d9tilov.android.designsystem.R.dimen.income_expense_name_description_text_size,
-                    ).value.sp,
-                color = MaterialTheme.colorScheme.tertiary,
-            )
-        }
-        if (transaction.isRegular) {
-            Icon(
-                modifier =
-                    Modifier
-                        .constrainAs(idRegularIcon) {
-                            top.linkTo(idIcon.top)
-                            end.linkTo(idIcon.start)
-                        }.size(
-                            dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.transaction_meta_icon_size),
-                        ),
-                imageVector = MoneyManagerIcons.Repeat,
-                contentDescription = "RegularTransaction",
-                tint = MaterialTheme.colorScheme.tertiary,
-            )
-        }
-        if (!transaction.inStatistics) {
-            Icon(
-                modifier =
-                    Modifier
-                        .padding(top = 4.dp)
-                        .constrainAs(idInStatisticsIcon) {
-                            top.linkTo(idRegularIcon.bottom)
-                            end.linkTo(idIcon.start)
-                        }.size(
-                            dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.transaction_meta_icon_size),
-                        ),
-                imageVector = ImageVector.vectorResource(MoneyManagerIcons.InStatisticsTransaction),
-                contentDescription = "InStatisticsTransaction",
-                tint = MaterialTheme.colorScheme.error,
-            )
-        }
-        Column(
-            modifier =
-                Modifier
-                    .fillMaxHeight()
-                    .constrainAs(idSum) {
-                        end.linkTo(parent.end)
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                    },
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.End,
-        ) {
-            ComposeCurrencyView(
-                value = transaction.sum.toString(),
-                valueStyle = MaterialTheme.typography.headlineSmall,
-                symbol = transaction.currencyCode.getSymbolByCode(),
-                symbolStyle = MaterialTheme.typography.labelLarge,
-            )
-            ComposeCurrencyView(
-                value = transaction.usdSum.toString(),
-                valueStyle = MaterialTheme.typography.bodyLarge,
-                symbol = DEFAULT_CURRENCY_SYMBOL,
-                symbolStyle = MaterialTheme.typography.bodyMedium,
-            )
-        }
-        HorizontalDivider(
-            color = MaterialTheme.colorScheme.primary,
-            thickness = 1.dp,
-            modifier =
-                Modifier
-                    .alpha(ALPHA)
-                    .constrainAs(idDivider) {
-                        end.linkTo(parent.end)
-                        bottom.linkTo(parent.bottom)
-                        start.linkTo(parent.start)
-                    },
-        )
-    }
-}
-
-@Composable
 @Suppress("CognitiveComplexMethod")
 fun HomeTabs(
     listState: LazyListState,
     uiState: IncomeExpenseUiState,
     modifier: Modifier = Modifier,
-    onTransactionClicked: (Transaction) -> Unit,
+    onTransactionClicked: (TransactionUiModel) -> Unit,
     onNumberClicked: (KeyPress) -> Unit,
     onCategoryClicked: (Category) -> Unit,
     onKeyboardClicked: () -> Unit,
     onCurrencyClicked: () -> Unit,
-    onDeleteTransactionConfirmClicked: (Transaction) -> Unit,
+    onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
 ) {
     var tabIndex by remember { mutableIntStateOf(0) }
@@ -838,7 +699,7 @@ fun TransactionListItemPreview() {
         TransactionItem(
             modifier = Modifier.fillMaxWidth(),
             transaction =
-                Transaction.EMPTY.copy(
+                TransactionUiModel.EMPTY.copy(
                     sum = BigDecimal.TEN,
                     usdSum = BigDecimal(5),
                     currencyCode = "RUB",

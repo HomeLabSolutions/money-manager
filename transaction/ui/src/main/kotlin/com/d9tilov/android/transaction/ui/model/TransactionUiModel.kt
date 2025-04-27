@@ -1,4 +1,4 @@
-package com.d9tilov.android.transaction.domain.model
+package com.d9tilov.android.transaction.ui.model
 
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
@@ -6,44 +6,60 @@ import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDateTime
+import com.d9tilov.android.transaction.domain.model.Transaction
+import com.d9tilov.android.transaction.ui.model.BaseTransaction.Companion.ITEM
 import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
 
-data class Transaction(
+data class TransactionUiModel(
     val id: Long,
     val clientId: String,
     val type: TransactionType,
     val category: Category,
     val currencyCode: String,
     val sum: BigDecimal,
-    val usdSum: BigDecimal,
-    val date: LocalDateTime,
+    val usdSum: BigDecimal?,
+    override val date: LocalDateTime,
     val description: String,
-    val qrCode: String?,
     val isRegular: Boolean,
     val inStatistics: Boolean,
-    val latitude: Double,
-    val longitude: Double,
-    val photoUri: String?,
-) {
+) : BaseTransaction {
+    override val itemType: Int = ITEM
+
     companion object {
         val EMPTY =
-            Transaction(
+            TransactionUiModel(
                 id = DataConstants.DEFAULT_DATA_ID,
                 clientId = NO_ID.toString(),
                 type = TransactionType.EXPENSE,
-                category = Category.EMPTY_EXPENSE,
+                category =
+                    Category.EMPTY_EXPENSE.copy(
+                        color = android.R.color.holo_blue_light,
+                        name = "Category1",
+                        icon = android.R.drawable.star_on,
+                    ),
                 currencyCode = DEFAULT_CURRENCY_CODE,
                 sum = BigDecimal.ZERO,
                 usdSum = BigDecimal.ZERO,
                 date = currentDateTime(),
                 description = "",
-                qrCode = null,
                 isRegular = false,
                 inStatistics = true,
-                latitude = 0.0,
-                longitude = 0.0,
-                photoUri = null,
             )
     }
 }
+
+fun Transaction.toUiModel() =
+    TransactionUiModel(
+        id = id,
+        clientId = clientId,
+        type = type,
+        category = category,
+        currencyCode = currencyCode,
+        sum = sum,
+        usdSum = if (currencyCode == DEFAULT_CURRENCY_CODE) null else usdSum,
+        date = date,
+        description = description,
+        isRegular = isRegular,
+        inStatistics = inStatistics,
+    )

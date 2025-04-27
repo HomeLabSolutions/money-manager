@@ -6,9 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.insertSeparators
+import androidx.paging.map
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.common.android.di.CoroutinesModule.Companion.DISPATCHER_IO
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.model.TransactionType
@@ -23,11 +25,14 @@ import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.incomeexpense.ui.R
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
-import com.d9tilov.android.transaction.domain.model.BaseTransaction
 import com.d9tilov.android.transaction.domain.model.Transaction
-import com.d9tilov.android.transaction.domain.model.TransactionHeader
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
+import com.d9tilov.android.transaction.ui.model.BaseTransaction
+import com.d9tilov.android.transaction.ui.model.TransactionUiHeader
+import com.d9tilov.android.transaction.ui.model.TransactionUiModel
+import com.d9tilov.android.transaction.ui.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -44,6 +49,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.math.BigDecimal
 import javax.inject.Inject
+import javax.inject.Named
 
 data class IncomeExpenseUiState(
     val mode: EditMode = EditMode.KEYBOARD,
@@ -125,6 +131,7 @@ enum class EditMode {
 class IncomeExpenseViewModel
     @Inject
     constructor(
+        @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
         billingInteractor: BillingInteractor,
         private val currencyInteractor: CurrencyInteractor,
         private val categoryInteractor: CategoryInteractor,
@@ -141,7 +148,7 @@ class IncomeExpenseViewModel
                 CoroutineExceptionHandler { _, exception ->
                     Timber.tag(TAG).d("Unable to update currency: $exception")
                 }
-            viewModelScope.launch(updateCurrencyExceptionHandler) {
+            viewModelScope.launch(updateCurrencyExceptionHandler + ioDispatcher) {
                 launch {
                     currencyInteractor
                         .getMainCurrencyFlow()
@@ -179,7 +186,13 @@ class IncomeExpenseViewModel
                                 state.expenseUiState.copy(
                                     expenseTransactions =
                                         mapWithStickyHeaders(
-                                            transactionInteractor.getTransactionsByType(TransactionType.EXPENSE),
+                                            transactionInteractor
+                                                .getTransactionsByType(TransactionType.EXPENSE)
+                                                .map { tr: PagingData<Transaction> ->
+                                                    tr.map { a: Transaction ->
+                                                        a.toUiModel()
+                                                    }
+                                                },
                                         ),
                                 ),
                         )
@@ -192,9 +205,13 @@ class IncomeExpenseViewModel
                                 state.incomeUiState.copy(
                                     incomeTransactions =
                                         mapWithStickyHeaders(
-                                            transactionInteractor.getTransactionsByType(
-                                                TransactionType.INCOME,
-                                            ),
+                                            transactionInteractor
+                                                .getTransactionsByType(TransactionType.INCOME)
+                                                .map { tr: PagingData<Transaction> ->
+                                                    tr.map { a: Transaction ->
+                                                        a.toUiModel()
+                                                    }
+                                                },
                                         ),
                                 ),
                         )
@@ -205,7 +222,9 @@ class IncomeExpenseViewModel
                         combine(
                             transactionInteractor.ableToSpendToday(),
                             transactionInteractor.getApproxSumTodayCurrentCurrency(TransactionType.EXPENSE),
-                            transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.EXPENSE),
+                            transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(
+                                TransactionType.EXPENSE,
+                            ),
                         ) { ableToSpendToday, spentTodayApprox, spentInPeriodApprox ->
                             val currencyCode = mainCurrency.value.code
                             ExpenseInfo(
@@ -213,26 +232,38 @@ class IncomeExpenseViewModel
                                     is TransactionSpendingTodayModel.NORMAL ->
                                         Price(
                                             R.string.expense_info_can_spend_today_title,
-                                            "${currencyCode.getSymbolByCode()}${ableToSpendToday.trSum.reduceScale(
-                                                true,
-                                            )}",
+                                            "${currencyCode.getSymbolByCode()}${
+                                                ableToSpendToday.trSum.reduceScale(
+                                                    true,
+                                                )
+                                            }",
                                         )
 
                                     is TransactionSpendingTodayModel.OVERSPENDING ->
                                         Price(
                                             R.string.expense_info_can_spend_today_negate_title,
-                                            "${currencyCode.getSymbolByCode()}${ableToSpendToday.trSum.reduceScale(
-                                                true,
-                                            )}",
+                                            "${currencyCode.getSymbolByCode()}${
+                                                ableToSpendToday.trSum.reduceScale(
+                                                    true,
+                                                )
+                                            }",
                                         )
                                 },
                                 Price(
                                     R.string.expense_info_today_title,
-                                    "${currencyCode.getSymbolByCode()}${spentTodayApprox.reduceScale(true)}",
+                                    "${currencyCode.getSymbolByCode()}${
+                                        spentTodayApprox.reduceScale(
+                                            true,
+                                        )
+                                    }",
                                 ),
                                 Price(
                                     R.string.expense_info_period_title,
-                                    "${currencyCode.getSymbolByCode()}${spentInPeriodApprox.reduceScale(true)}",
+                                    "${currencyCode.getSymbolByCode()}${
+                                        spentInPeriodApprox.reduceScale(
+                                            true,
+                                        )
+                                    }",
                                 ),
                             )
                         }
@@ -303,7 +334,7 @@ class IncomeExpenseViewModel
             }
             updateMode(EditMode.LIST)
             uiState.value.run {
-                viewModelScope.launch {
+                viewModelScope.launch(ioDispatcher) {
                     val category = categoryInteractor.getCategoryById(categoryId)
                     transactionInteractor.addTransaction(
                         Transaction.EMPTY.copy(
@@ -333,32 +364,36 @@ class IncomeExpenseViewModel
             uiState.update { state -> state.copy(mode = mode) }
         }
 
-        fun deleteTransaction(transaction: Transaction) {
+        fun deleteTransaction(transaction: TransactionUiModel) {
             val deleteTransactionExceptionHandler =
                 CoroutineExceptionHandler { _, exception ->
                     Timber.tag(TAG).d("Delete: $exception")
                 }
-            viewModelScope.launch(deleteTransactionExceptionHandler) {
-                transactionInteractor.removeTransaction(transaction)
+            viewModelScope.launch(deleteTransactionExceptionHandler + ioDispatcher) {
+                transactionInteractor
+                    .getTransactionById(transaction.id)
+                    .collect { tr -> transactionInteractor.removeTransaction(tr) }
             }
         }
 
-        private fun mapWithStickyHeaders(flow: Flow<PagingData<Transaction>>): Flow<PagingData<BaseTransaction>> =
+        private fun mapWithStickyHeaders(
+            flow: Flow<PagingData<TransactionUiModel>>,
+        ): Flow<PagingData<BaseTransaction>> =
             flow.map { pagingData ->
-                pagingData.insertSeparators { before: Transaction?, after: Transaction? ->
+                pagingData.insertSeparators { before: TransactionUiModel?, after: TransactionUiModel? ->
                     if (before == null && after == null) {
                         null
                     } else if (before != null && after == null) {
                         null
                     } else if (before == null && after != null) {
-                        TransactionHeader(
+                        TransactionUiHeader(
                             after.date.getEndOfDay(),
                             after.currencyCode,
                         )
                     } else if (before != null && after != null && before.date.isSameDay(after.date)) {
                         null
                     } else if (before != null && after != null && !before.date.isSameDay(after.date)) {
-                        TransactionHeader(
+                        TransactionUiHeader(
                             after.date.getEndOfDay(),
                             after.currencyCode,
                         )

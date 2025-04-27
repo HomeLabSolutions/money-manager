@@ -24,6 +24,7 @@ dependencies {
     implementation(project(":statistics:domain:model"))
     implementation(project(":transaction:domain:contract"))
     implementation(project(":transaction:domain:model"))
+    implementation(project(":transaction:ui"))
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.constraintlayout.compose)

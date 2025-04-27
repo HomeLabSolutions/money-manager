@@ -132,7 +132,6 @@ dependencies {
     implementation(project(":statistics:ui"))
     implementation(project(":transaction:di"))
     implementation(project(":transaction:domain:contract"))
-    implementation(project(":transaction:domain:model"))
     implementation(project(":transaction:regular:di"))
     implementation(project(":transaction:regular:ui"))
     implementation(project(":transaction:ui"))

@@ -9,7 +9,8 @@ import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.statistics.ui.navigation.StatisticsDetailsNavigator
 import com.d9tilov.android.statistics.ui.navigation.TransactionDetailsArgs
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
-import com.d9tilov.android.transaction.domain.model.Transaction
+import com.d9tilov.android.transaction.ui.model.TransactionUiModel
+import com.d9tilov.android.transaction.ui.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
@@ -22,7 +23,7 @@ import javax.inject.Named
 
 data class StatisticsDetailsUiState(
     val categoryName: String = "",
-    val transactions: List<Transaction> = emptyList(),
+    val transactions: List<TransactionUiModel> = emptyList(),
 )
 
 @HiltViewModel
@@ -53,7 +54,7 @@ class StatisticsDetailsViewModel
                 _uiState.update {
                     it.copy(
                         categoryName = categoryDeferred.await().name,
-                        transactions = transactionsDeferred.await(),
+                        transactions = transactionsDeferred.await().map { it.toUiModel() },
                     )
                 }
                 System.out.println("moggot args: $transactionDetailsArgs")

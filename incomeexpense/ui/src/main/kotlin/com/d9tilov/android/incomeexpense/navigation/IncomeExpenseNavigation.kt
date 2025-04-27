@@ -12,7 +12,7 @@ import com.d9tilov.android.currency.domain.model.CurrencyArgs.CURRENCY_CODE_ARGS
 import com.d9tilov.android.incomeexpense.ui.IncomeExpenseRoute
 import com.d9tilov.android.incomeexpense.ui.vm.IncomeExpenseViewModel
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType
-import com.d9tilov.android.transaction.domain.model.Transaction
+import com.d9tilov.android.transaction.ui.model.TransactionUiModel
 
 const val INCOME_EXPENSE_NAVIGATION_ROUTE = "income_expense_route"
 
@@ -24,7 +24,7 @@ fun NavGraphBuilder.incomeExpenseScreen(
     route: String,
     onCurrencyClick: (String) -> Unit,
     onAllCategoryClick: (TransactionType, CategoryDestination) -> Unit,
-    onTransactionClick: (Transaction) -> Unit,
+    onTransactionClick: (TransactionUiModel) -> Unit,
 ) {
     composable(route = route) { entry ->
         val viewModel: IncomeExpenseViewModel = hiltViewModel()
