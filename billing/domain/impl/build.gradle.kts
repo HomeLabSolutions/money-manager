@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    namespace = "com.d9tilov.android.billing_domain_impl"
+    namespace = "com.d9tilov.android.billing.domain.impl"
 }
 
 dependencies {
 
-    implementation(project(":billing:billing-domain:billing-domain-contract"))
-    implementation(project(":billing:billing-domain:billing-domain-model"))
+    implementation(project(":billing:domain:contract"))
+    implementation(project(":billing:domain:model"))
     implementation(project(":core:common"))
     implementation(project(":currency:currency-domain:currency-domain-contract"))
     implementation(project(":currency:currency-domain:currency-domain-model"))

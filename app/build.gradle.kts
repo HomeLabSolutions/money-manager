@@ -101,12 +101,12 @@ android {
 }
 
 dependencies {
-    implementation(project(":analytics:analytics-di"))
-    implementation(project(":backup:backup-data:backup-data-impl"))
-    implementation(project(":backup:backup-di"))
-    implementation(project(":backup:backup-domain:backup-domain-contract"))
-    implementation(project(":billing:billing-di"))
-    implementation(project(":billing:billing-domain:billing-domain-contract"))
+    implementation(project(":analytics:di"))
+    implementation(project(":backup:data:impl"))
+    implementation(project(":backup:di"))
+    implementation(project(":backup:domain:contract"))
+    implementation(project(":billing:di"))
+    implementation(project(":billing:domain:contract"))
     implementation(project(":budget:budget-di"))
     implementation(project(":budget:budget-domain:budget-domain-contract"))
     implementation(project(":budget:budget-domain:budget-domain-model"))

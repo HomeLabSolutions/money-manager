@@ -16,10 +16,10 @@ android {
 
 dependencies {
 
-    implementation(project(":backup:backup-domain:backup-domain-contract"))
-    implementation(project(":backup:backup-domain:backup-domain-model"))
-    implementation(project(":billing:billing-domain:billing-domain-contract"))
-    implementation(project(":billing:billing-domain:billing-domain-model"))
+    implementation(project(":backup:domain:contract"))
+    implementation(project(":backup:domain:model"))
+    implementation(project(":billing:domain:contract"))
+    implementation(project(":billing:domain:model"))
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
     implementation(project(":core:designsystem"))

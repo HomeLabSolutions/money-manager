@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.d9tilov.android.billing_data_contract"
+    namespace = "com.d9tilov.android.billing.data.contract"
 }
 
 dependencies {

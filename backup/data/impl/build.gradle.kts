@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.d9tilov.android.backup_data_impl"
+    namespace = "com.d9tilov.android.backup.data.impl"
 
     lint {
         disable.add("FlowOperatorInvokedInComposition")
@@ -12,9 +12,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":backup:backup-data:backup-data-contract"))
-    implementation(project(":backup:backup-domain:backup-domain-contract"))
-    implementation(project(":backup:backup-domain:backup-domain-model"))
+    implementation(project(":backup:data:contract"))
+    implementation(project(":backup:domain:contract"))
+    implementation(project(":backup:domain:model"))
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
     implementation(project(":core:datastore"))

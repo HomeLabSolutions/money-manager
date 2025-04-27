@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.d9tilov.android.analytics_di"
+    namespace = "com.d9tilov.android.analytics.di"
 }
 
 dependencies {
