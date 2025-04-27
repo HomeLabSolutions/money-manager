@@ -114,7 +114,7 @@ dependencies {
     implementation(project(":category:category-di"))
     implementation(project(":category:category-domain:category-domain-contract"))
     implementation(project(":category:category-domain:category-domain-model"))
-    implementation(project(":category:category-ui"))
+    implementation(project(":category:ui"))
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
     implementation(project(":core:datastore"))

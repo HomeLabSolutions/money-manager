@@ -1,7 +1,7 @@
 package com.d9tilov.android.category.ui.model
 
 import com.d9tilov.android.category.domain.model.CategoryGroup
-import com.d9tilov.android.category_ui.R
+import com.d9tilov.android.category.ui.R
 
 val categoryGroupItemMap =
     mapOf(

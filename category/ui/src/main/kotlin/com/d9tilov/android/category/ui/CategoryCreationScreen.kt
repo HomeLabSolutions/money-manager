@@ -51,7 +51,6 @@ import com.d9tilov.android.category.domain.model.exception.CategoryException
 import com.d9tilov.android.category.ui.vm.CategoryCreationUiState
 import com.d9tilov.android.category.ui.vm.CategoryCreationViewModel
 import com.d9tilov.android.category.ui.vm.CategorySharedViewModel
-import com.d9tilov.android.category_ui.R
 import com.d9tilov.android.core.constants.DataConstants.NO_RES_ID
 import com.d9tilov.android.core.model.ItemState
 import com.d9tilov.android.designsystem.BottomActionButton

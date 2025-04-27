@@ -58,7 +58,7 @@ include(":category:category-data:category-data-contract")
 include(":category:category-domain:category-domain-contract")
 include(":category:category-domain:category-domain-model")
 include(":category:category-domain:category-domain-impl")
-include(":category:category-ui")
+include(":category:ui")
 
 include(":billing:data:contract")
 include(":billing:data:impl")

@@ -3,7 +3,6 @@ package com.d9tilov.android.category.ui
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -46,7 +45,6 @@ import com.d9tilov.android.category.domain.model.Category
 import com.d9tilov.android.category.domain.model.CategoryDestination
 import com.d9tilov.android.category.ui.vm.CategoryListViewModel
 import com.d9tilov.android.category.ui.vm.CategoryUiState
-import com.d9tilov.android.category_ui.R
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.designsystem.BottomActionButton
@@ -85,7 +83,7 @@ fun CategoryListRoute(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryListScreen(
     uiState: CategoryUiState,

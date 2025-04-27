@@ -25,7 +25,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.category.ui.vm.CategoryIconGridUiState
 import com.d9tilov.android.category.ui.vm.CategoryIconGridViewModel
 import com.d9tilov.android.category.ui.vm.CategorySharedViewModel
-import com.d9tilov.android.category_ui.R
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 

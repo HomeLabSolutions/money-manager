@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.d9tilov.android.category_ui"
+    namespace = "com.d9tilov.android.category.ui"
 }
 
 dependencies {

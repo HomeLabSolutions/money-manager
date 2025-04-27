@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.model.CategoryGroup
+import com.d9tilov.android.category.ui.R
 import com.d9tilov.android.category.ui.model.categoryGroupItemMap
 import com.d9tilov.android.category.ui.navigation.CategoryArgs
-import com.d9tilov.android.category_ui.R
 import com.d9tilov.android.core.constants.DataConstants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class CategoryIconGridUiState(
-    val title: Int = com.d9tilov.android.category_ui.R.string.category_group_free,
+    val title: Int = R.string.category_group_free,
     val icons: List<Int> = emptyList(),
 ) {
     companion object {
