@@ -8,8 +8,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.d9tilov.android.category.domain.model.CategoryArgs
-import com.d9tilov.android.category.domain.model.CategoryDestination
+import com.d9tilov.android.category.domain.entity.CategoryArgs
+import com.d9tilov.android.category.domain.entity.CategoryDestination
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.model.CurrencyArgs.CURRENCY_CODE_ARGS
 import com.d9tilov.android.transaction.ui.TransactionCreationRoute

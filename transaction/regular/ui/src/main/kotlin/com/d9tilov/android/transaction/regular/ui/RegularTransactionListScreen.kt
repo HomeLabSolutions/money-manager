@@ -48,7 +48,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.d9tilov.android.category.domain.model.Category
+import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.PeriodType

@@ -5,7 +5,8 @@ import com.d9tilov.android.category.data.impl.categoryMap
 import com.d9tilov.android.category.data.impl.color.ColorManager.colorMap
 import com.d9tilov.android.category.data.impl.color.ColorManager.fromColorRes
 import com.d9tilov.android.category.data.impl.fromCategoryRes
-import com.d9tilov.android.category.domain.model.Category
+import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.category.domain.entity.DefaultCategory
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.android.core.model.toType
 import com.d9tilov.android.database.entity.CategoryDbModel
@@ -63,7 +64,7 @@ fun Category.toDbModel() =
         )
     }
 
-fun com.d9tilov.android.category.domain.model.DefaultCategory.toDataModelFromPrePopulate(uid: String) =
+fun DefaultCategory.toDataModelFromPrePopulate(uid: String) =
     with(this) {
         val iconNameOrdinal = fromCategoryRes(icon)
         val colorNameOrdinal = fromColorRes(color)

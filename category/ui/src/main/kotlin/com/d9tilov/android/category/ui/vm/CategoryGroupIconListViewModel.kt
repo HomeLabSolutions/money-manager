@@ -2,7 +2,7 @@ package com.d9tilov.android.category.ui.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.d9tilov.android.category.domain.model.CategoryGroup
+import com.d9tilov.android.category.domain.entity.CategoryGroup
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

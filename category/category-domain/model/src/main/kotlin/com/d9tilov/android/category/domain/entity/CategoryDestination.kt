@@ -1,4 +1,4 @@
-package com.d9tilov.android.category.domain.model
+package com.d9tilov.android.category.domain.entity
 
 enum class CategoryDestination {
     MAIN_SCREEN,

@@ -39,8 +39,8 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.d9tilov.android.category.domain.model.Category
-import com.d9tilov.android.category.domain.model.CategoryDestination
+import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.category.domain.entity.CategoryDestination
 import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_FORMAT
 import com.d9tilov.android.common.android.utils.formatDate
 import com.d9tilov.android.core.model.TransactionType

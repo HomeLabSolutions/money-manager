@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.d9tilov.android.category.domain.model.CategoryGroup
+import com.d9tilov.android.category.domain.entity.CategoryGroup
 import com.d9tilov.android.category.ui.model.categoryGroupItemMap
 import com.d9tilov.android.category.ui.vm.CategoryGroupIconListViewModel
 import com.d9tilov.android.category.ui.vm.CategoryIconListUiState

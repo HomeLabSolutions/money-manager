@@ -46,8 +46,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.category.data.impl.color.ColorManager
-import com.d9tilov.android.category.domain.model.Category
-import com.d9tilov.android.category.domain.model.exception.CategoryException
+import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.category.domain.entity.exception.CategoryException
 import com.d9tilov.android.category.ui.vm.CategoryCreationUiState
 import com.d9tilov.android.category.ui.vm.CategoryCreationViewModel
 import com.d9tilov.android.category.ui.vm.CategorySharedViewModel

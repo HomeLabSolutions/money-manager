@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
-import com.d9tilov.android.category.domain.model.CategoryGroup
+import com.d9tilov.android.category.domain.entity.CategoryGroup
 import com.d9tilov.android.category.ui.R
 import com.d9tilov.android.category.ui.model.categoryGroupItemMap
 import com.d9tilov.android.category.ui.navigation.CategoryArgs

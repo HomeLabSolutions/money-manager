@@ -4,8 +4,8 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
-import com.d9tilov.android.category.domain.model.Category
-import com.d9tilov.android.category.domain.model.exception.CategoryException
+import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.category.domain.entity.exception.CategoryException
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.PeriodType

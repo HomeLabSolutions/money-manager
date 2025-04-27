@@ -4,9 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
-import com.d9tilov.android.category.domain.model.Category
-import com.d9tilov.android.category.domain.model.Category.Companion.ALL_ITEMS_ID
-import com.d9tilov.android.category.domain.model.CategoryDestination
+import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.category.domain.entity.Category.Companion.ALL_ITEMS_ID
+import com.d9tilov.android.category.domain.entity.CategoryDestination
 import com.d9tilov.android.category.ui.navigation.CategoryArgs
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactionInteractor

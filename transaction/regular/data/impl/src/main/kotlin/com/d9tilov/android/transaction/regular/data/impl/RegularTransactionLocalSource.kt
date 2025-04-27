@@ -1,6 +1,6 @@
 package com.d9tilov.android.transaction.regular.data.impl
 
-import com.d9tilov.android.category.domain.model.Category
+import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.database.dao.RegularTransactionDao

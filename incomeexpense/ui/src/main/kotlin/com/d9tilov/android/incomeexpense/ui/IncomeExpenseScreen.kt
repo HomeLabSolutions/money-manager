@@ -84,9 +84,9 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.d9tilov.android.category.domain.model.Category
-import com.d9tilov.android.category.domain.model.Category.Companion.ALL_ITEMS_ID
-import com.d9tilov.android.category.domain.model.CategoryDestination
+import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.category.domain.entity.Category.Companion.ALL_ITEMS_ID
+import com.d9tilov.android.category.domain.entity.CategoryDestination
 import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_FORMAT
 import com.d9tilov.android.common.android.utils.formatDate
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL

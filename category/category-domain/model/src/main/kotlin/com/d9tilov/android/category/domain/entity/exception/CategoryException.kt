@@ -1,4 +1,4 @@
-package com.d9tilov.android.category.domain.model.exception
+package com.d9tilov.android.category.domain.entity.exception
 
 sealed class CategoryException(
     message: String,

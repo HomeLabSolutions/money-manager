@@ -7,11 +7,11 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.d9tilov.android.category.domain.model.Category
-import com.d9tilov.android.category.domain.model.CategoryDestination
-import com.d9tilov.android.category.domain.model.CategoryGroup
-import com.d9tilov.android.category.domain.model.toDestination
-import com.d9tilov.android.category.domain.model.toGroupId
+import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.category.domain.entity.CategoryDestination
+import com.d9tilov.android.category.domain.entity.CategoryGroup
+import com.d9tilov.android.category.domain.entity.toDestination
+import com.d9tilov.android.category.domain.entity.toGroupId
 import com.d9tilov.android.category.ui.CategoryCreationRoute
 import com.d9tilov.android.category.ui.CategoryGroupIconListRoute
 import com.d9tilov.android.category.ui.CategoryIconGridRoute

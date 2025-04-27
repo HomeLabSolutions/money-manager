@@ -8,7 +8,7 @@ import androidx.paging.PagingData
 import androidx.paging.insertSeparators
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
-import com.d9tilov.android.category.domain.model.Category
+import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.model.TransactionType

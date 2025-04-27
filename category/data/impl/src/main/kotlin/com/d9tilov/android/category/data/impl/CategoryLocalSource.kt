@@ -6,8 +6,8 @@ import com.d9tilov.android.category.data.impl.mapper.toDataModel
 import com.d9tilov.android.category.data.impl.mapper.toDataModelFromPrePopulate
 import com.d9tilov.android.category.data.impl.mapper.toDataParentModel
 import com.d9tilov.android.category.data.impl.mapper.toDbModel
-import com.d9tilov.android.category.domain.model.Category
-import com.d9tilov.android.category.domain.model.exception.CategoryException
+import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.category.domain.entity.exception.CategoryException
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.android.core.exceptions.WrongIdException
 import com.d9tilov.android.core.exceptions.WrongUidException

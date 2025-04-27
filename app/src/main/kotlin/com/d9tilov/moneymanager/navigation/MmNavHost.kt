@@ -7,7 +7,7 @@ import androidx.navigation.compose.navigation
 import com.d9tilov.android.budget.ui.navigation.BUDGET_NAVIGATION_ROUTE
 import com.d9tilov.android.budget.ui.navigation.budgetScreen
 import com.d9tilov.android.budget.ui.navigation.navigateToBudgetScreen
-import com.d9tilov.android.category.domain.model.CategoryArgs.CATEGORY_ID_ARGS
+import com.d9tilov.android.category.domain.entity.CategoryArgs.CATEGORY_ID_ARGS
 import com.d9tilov.android.category.ui.navigation.CATEGORY_CREATION_NAVIGATION_ROUTE
 import com.d9tilov.android.category.ui.navigation.CATEGORY_DESTINATION_ARG
 import com.d9tilov.android.category.ui.navigation.CATEGORY_GROUP_ARG

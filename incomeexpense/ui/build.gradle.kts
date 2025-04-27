@@ -14,8 +14,8 @@ android {
 
 dependencies {
     implementation(project(":billing:domain:contract"))
-    implementation(project(":category:category-domain:category-domain-model"))
     implementation(project(":category:category-domain:contract"))
+    implementation(project(":category:category-domain:model"))
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
     implementation(project(":core:designsystem"))

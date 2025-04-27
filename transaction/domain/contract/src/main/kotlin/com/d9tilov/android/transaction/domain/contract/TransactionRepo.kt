@@ -1,7 +1,7 @@
 package com.d9tilov.android.transaction.domain.contract
 
 import androidx.paging.PagingData
-import com.d9tilov.android.category.domain.model.Category
+import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.transaction.domain.model.TransactionDataModel
 import kotlinx.coroutines.flow.Flow

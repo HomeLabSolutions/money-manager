@@ -1,6 +1,6 @@
 package com.d9tilov.android.category.domain.contract
 
-import com.d9tilov.android.category.domain.model.Category
+import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.model.TransactionType
 import kotlinx.coroutines.flow.Flow
 

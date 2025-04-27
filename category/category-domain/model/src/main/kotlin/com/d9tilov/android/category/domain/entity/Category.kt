@@ -1,4 +1,4 @@
-package com.d9tilov.android.category.domain.model
+package com.d9tilov.android.category.domain.entity
 
 import com.d9tilov.android.core.constants.DataConstants.DEFAULT_DATA_ID
 import com.d9tilov.android.core.constants.DataConstants.NO_ID

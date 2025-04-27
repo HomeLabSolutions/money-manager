@@ -1,6 +1,6 @@
 package com.d9tilov.android.transaction.regular.data.impl
 
-import com.d9tilov.android.category.domain.model.Category
+import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.transaction.regular.data.contract.RegularTransactionSource
 import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactionRepo

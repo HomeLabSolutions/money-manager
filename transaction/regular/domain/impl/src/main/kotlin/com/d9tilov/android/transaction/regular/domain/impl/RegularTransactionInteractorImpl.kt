@@ -1,7 +1,8 @@
 package com.d9tilov.android.transaction.regular.domain.impl
 
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
-import com.d9tilov.android.category.domain.model.Category
+import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.category.domain.entity.exception.CategoryException
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactionInteractor
@@ -36,7 +37,7 @@ class RegularTransactionInteractorImpl(
                     for (item in list) {
                         val category =
                             categoryList.find { item.categoryId == it.id }
-                                ?: throw com.d9tilov.android.category.domain.model.exception.CategoryException
+                                ?: throw CategoryException
                                     .CategoryNotFoundException(
                                         "getAll Not found category with id: ${item.categoryId}",
                                     )

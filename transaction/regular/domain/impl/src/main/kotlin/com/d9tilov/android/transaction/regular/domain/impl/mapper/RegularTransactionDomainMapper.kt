@@ -1,6 +1,6 @@
 package com.d9tilov.android.transaction.regular.domain.impl.mapper
 
-import com.d9tilov.android.category.domain.model.Category
+import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
 import com.d9tilov.android.transaction.regular.domain.model.RegularTransactionData
 
