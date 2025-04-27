@@ -7,7 +7,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":category:category-domain:model"))
+    implementation(project(":category:domain:model"))
     implementation(project(":core:common"))
     implementation(project(":transaction:domain:model"))
     implementation(libs.kotlinx.coroutines.core)

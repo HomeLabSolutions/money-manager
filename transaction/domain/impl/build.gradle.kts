@@ -9,8 +9,8 @@ android {
 dependencies {
     implementation(project(":budget:domain:contract"))
     implementation(project(":budget:domain:model"))
-    implementation(project(":category:category-domain:contract"))
-    implementation(project(":category:category-domain:model"))
+    implementation(project(":category:domain:contract"))
+    implementation(project(":category:domain:model"))
     implementation(project(":core:common"))
     implementation(project(":currency:domain:contract"))
     implementation(project(":currency:domain:model"))

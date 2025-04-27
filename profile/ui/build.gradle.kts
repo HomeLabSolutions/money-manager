@@ -15,7 +15,7 @@ dependencies {
     implementation(project(":billing:domain:contract"))
     implementation(project(":budget:domain:contract"))
     implementation(project(":budget:domain:model"))
-    implementation(project(":category:category-domain:model"))
+    implementation(project(":category:domain:model"))
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
     implementation(project(":core:designsystem"))

@@ -8,7 +8,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":category:category-domain:contract"))
+    implementation(project(":category:domain:contract"))
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
     implementation(project(":core:network"))

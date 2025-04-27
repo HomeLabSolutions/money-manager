@@ -8,9 +8,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":category:category-domain:contract"))
-    implementation(project(":category:category-domain:impl"))
     implementation(project(":category:data:contract"))
     implementation(project(":category:data:impl"))
+    implementation(project(":category:domain:contract"))
+    implementation(project(":category:domain:impl"))
     implementation(libs.hilt.android)
 }
