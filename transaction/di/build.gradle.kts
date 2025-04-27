@@ -11,7 +11,7 @@ android {
 
 dependencies {
     implementation(project(":budget:domain:contract"))
-    implementation(project(":category:category-domain:category-domain-contract"))
+    implementation(project(":category:category-domain:contract"))
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
     implementation(project(":core:network"))
