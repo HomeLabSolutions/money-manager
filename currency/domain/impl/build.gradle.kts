@@ -4,8 +4,8 @@ plugins {
 
 dependencies {
     implementation(project(":core:common"))
-    implementation(project(":currency:currency-domain:currency-domain-contract"))
-    implementation(project(":currency:currency-domain:currency-domain-model"))
+    implementation(project(":currency:domain:contract"))
+    implementation(project(":currency:domain:model"))
     implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)
 }

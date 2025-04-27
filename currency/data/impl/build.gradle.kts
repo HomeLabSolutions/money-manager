@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.d9tilov.android.currency_data_impl"
+    namespace = "com.d9tilov.android.currency.data.impl"
 
     lint {
         disable.apply {
@@ -20,9 +20,9 @@ dependencies {
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
     implementation(project(":core:network"))
-    implementation(project(":currency:currency-data:currency-data-contract"))
-    implementation(project(":currency:currency-domain:currency-domain-contract"))
-    implementation(project(":currency:currency-domain:currency-domain-model"))
+    implementation(project(":currency:data:contract"))
+    implementation(project(":currency:domain:contract"))
+    implementation(project(":currency:domain:model"))
     implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.work.runtime)
     implementation(libs.dagger)

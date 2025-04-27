@@ -6,15 +6,15 @@ plugins {
 }
 
 android {
-    namespace = "com.d9tilov.android.currency_ui"
+    namespace = "com.d9tilov.android.currency.ui"
 }
 
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:designsystem"))
-    implementation(project(":currency:currency-domain:currency-domain-contract"))
-    implementation(project(":currency:currency-domain:currency-domain-model"))
-    implementation(project(":currency:currency-observer:currency-observer-contract"))
+    implementation(project(":currency:domain:contract"))
+    implementation(project(":currency:domain:model"))
+    implementation(project(":currency:observer:contract"))
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling.preview)

@@ -15,5 +15,5 @@ dependencies {
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
     implementation(project(":core:network"))
-    implementation(project(":currency:currency-domain:currency-domain-contract"))
+    implementation(project(":currency:domain:contract"))
 }
