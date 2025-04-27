@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.d9tilov.android.category_di"
+    namespace = "com.d9tilov.android.category.di"
 }
 
 dependencies {

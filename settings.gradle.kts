@@ -50,7 +50,7 @@ include(":transaction:regular:domain:impl")
 include(":transaction:regular:di")
 include(":transaction:regular:ui")
 
-include(":category:category-di")
+include(":category:di")
 include(":category:category-data")
 include(":category:category-domain")
 include(":category:category-data:category-data-impl")
