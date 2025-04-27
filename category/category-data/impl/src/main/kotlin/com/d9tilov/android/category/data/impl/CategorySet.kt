@@ -1,7 +1,6 @@
 package com.d9tilov.android.category.data.impl
 
 import androidx.annotation.DrawableRes
-import com.d9tilov.android.category_data_impl.R
 
 @Suppress("MagicNumber")
 val categoryMap =

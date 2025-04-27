@@ -293,8 +293,8 @@ fun DefaultCategoryCreationPreview() {
                         Category.EMPTY_INCOME.copy(
                             id = 1L,
                             name = "Relax",
-                            icon = com.d9tilov.android.category_data_impl.R.drawable.ic_category_beach,
-                            color = com.d9tilov.android.category_data_impl.R.color.category_red_theme,
+                            icon = com.d9tilov.android.category.data.impl.R.drawable.ic_category_beach,
+                            color = com.d9tilov.android.category.data.impl.R.color.category_red_theme,
                         ),
                     isPremium = true,
                 ),

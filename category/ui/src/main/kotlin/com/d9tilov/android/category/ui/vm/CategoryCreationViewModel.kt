@@ -25,7 +25,7 @@ import javax.inject.Inject
 data class CategoryCreationUiState(
     val category: Category =
         Category.EMPTY_EXPENSE.copy(
-            color = com.d9tilov.android.category_data_impl.R.color.category_blue,
+            color = com.d9tilov.android.category.data.impl.R.color.category_blue,
             icon = com.d9tilov.android.common.android.R.drawable.ic_category_cafe,
         ),
     val itemState: ItemState = ItemState.UNKNOWN,
@@ -63,14 +63,14 @@ class CategoryCreationViewModel
                                 when (transactionType) {
                                     TransactionType.EXPENSE ->
                                         Category.EMPTY_EXPENSE.copy(
-                                            color = com.d9tilov.android.category_data_impl.R.color.category_blue,
+                                            color = com.d9tilov.android.category.data.impl.R.color.category_blue,
                                             icon = com.d9tilov.android.common.android.R.drawable.ic_category_cafe,
                                         )
 
                                     TransactionType.INCOME ->
                                         Category.EMPTY_INCOME.copy(
-                                            color = com.d9tilov.android.category_data_impl.R.color.category_blue,
-                                            icon = com.d9tilov.android.category_data_impl.R.drawable.ic_category_salary,
+                                            color = com.d9tilov.android.category.data.impl.R.color.category_blue,
+                                            icon = com.d9tilov.android.category.data.impl.R.drawable.ic_category_salary,
                                         )
                                 },
                             itemState = ItemState.CREATE,

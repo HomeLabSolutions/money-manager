@@ -97,12 +97,12 @@ fun DefaultCategoryIconGridPreview() {
             CategoryIconGridUiState(
                 R.string.category_group_free,
                 listOf(
-                    com.d9tilov.android.category_data_impl.R.drawable.ic_category_electricity,
-                    com.d9tilov.android.category_data_impl.R.drawable.ic_category_electricity2,
-                    com.d9tilov.android.category_data_impl.R.drawable.ic_category_electricity3,
-                    com.d9tilov.android.category_data_impl.R.drawable.ic_category_garbage,
-                    com.d9tilov.android.category_data_impl.R.drawable.ic_category_home,
-                    com.d9tilov.android.category_data_impl.R.drawable.ic_category_house,
+                    com.d9tilov.android.category.data.impl.R.drawable.ic_category_electricity,
+                    com.d9tilov.android.category.data.impl.R.drawable.ic_category_electricity2,
+                    com.d9tilov.android.category.data.impl.R.drawable.ic_category_electricity3,
+                    com.d9tilov.android.category.data.impl.R.drawable.ic_category_garbage,
+                    com.d9tilov.android.category.data.impl.R.drawable.ic_category_home,
+                    com.d9tilov.android.category.data.impl.R.drawable.ic_category_house,
                 ),
             ),
             {},

@@ -10,7 +10,7 @@ android {
 dependencies {
 
     implementation(project(":category:category-data:category-data-contract"))
-    implementation(project(":category:category-data:category-data-impl"))
+    implementation(project(":category:category-data:impl"))
     implementation(project(":category:category-domain:contract"))
     implementation(project(":category:category-domain:impl"))
 

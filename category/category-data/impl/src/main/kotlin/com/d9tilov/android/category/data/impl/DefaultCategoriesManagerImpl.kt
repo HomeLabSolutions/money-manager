@@ -6,7 +6,6 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.d9tilov.android.category.data.contract.DefaultCategoriesManager
 import com.d9tilov.android.category.domain.model.DefaultCategory
-import com.d9tilov.android.category_data_impl.R
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.android.core.model.TransactionType
 import javax.inject.Inject

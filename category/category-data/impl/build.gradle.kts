@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.d9tilov.android.category_data_impl"
+    namespace = "com.d9tilov.android.category.data.impl"
 }
 
 dependencies {

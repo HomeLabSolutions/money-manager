@@ -1,7 +1,7 @@
 package com.d9tilov.android.category.data.impl.color
 
 import androidx.annotation.ColorRes
-import com.d9tilov.android.category_data_impl.R
+import com.d9tilov.android.category.data.impl.R
 
 object ColorManager {
     val colorList =
