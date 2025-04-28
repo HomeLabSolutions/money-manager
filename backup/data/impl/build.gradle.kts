@@ -12,7 +12,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":analytics:domain"))
     implementation(project(":backup:data:contract"))
     implementation(project(":backup:domain:contract"))
     implementation(project(":backup:domain:model"))

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="statistics_details_title">Транзакции</string>
-    <string name="statistics_period_day">Сегодня</string>
+    <string name="statistics_period_day">День</string>
     <string name="statistics_period_week">Неделя</string>
     <string name="statistics_period_month">Месяц</string>
     <string name="statistics_period_year">Год</string>

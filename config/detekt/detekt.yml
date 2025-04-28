@@ -122,7 +122,7 @@ complexity:
       - 'with'
   LabeledExpression:
     active: true
-    ignoredLabels: ['launch', 'withContext']
+    ignoredLabels: []
   LargeClass:
     active: true
     threshold: 600
@@ -532,7 +532,7 @@ style:
     active: true
   DestructuringDeclarationWithTooManyEntries:
     active: true
-    maxDestructuringEntries: 5
+    maxDestructuringEntries: 7
   DoubleNegativeLambda:
     active: true
     negativeFunctions:
@@ -684,12 +684,12 @@ style:
     active: true
   ReturnCount:
     active: true
-    max: 3
+    max: 2
     excludedFunctions:
       - 'equals'
     excludeLabeled: false
     excludeReturnFromLambda: true
-    excludeGuardClauses: true
+    excludeGuardClauses: false
   SafeCast:
     active: true
   SerialVersionUIDInSerializableClass:
