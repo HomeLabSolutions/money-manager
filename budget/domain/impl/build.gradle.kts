@@ -7,7 +7,6 @@ dependencies {
     implementation(project(":budget:domain:model"))
     implementation(project(":currency:domain:contract"))
     implementation(project(":currency:domain:model"))
-    implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.datetime)
 }
