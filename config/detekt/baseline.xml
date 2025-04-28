@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <SmellBaseline>
-  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <ManuallySuppressedIssues/>
   <CurrentIssues>
     <ID>BracesOnWhenStatements:CurrencyTextField.kt$when</ID>
     <ID>BracesOnWhenStatements:ProfileScreen.kt$when</ID>
@@ -8,19 +8,16 @@
     <ID>BracesOnWhenStatements:SettingsViewModel.kt$SettingsViewModel$when</ID>
     <ID>BracesOnWhenStatements:Theme.kt$when</ID>
     <ID>BracesOnWhenStatements:TransactionInteractorImpl.kt$TransactionInteractorImpl$when</ID>
-    <ID>CastToNullableType:build.gradle.kts$as</ID>
     <ID>ClassOrdering:BillingDataRepo.kt$BillingDataRepo$// Set to true when a returned purchases is an auto-renewing premium subscription. override val hasRenewablePremium: Flow&lt;Boolean&gt; = billingSource.purchases .map { purchaseList -&gt; purchaseList.any { purchase -&gt; purchase.products.contains(PREMIUM_SUB) &amp;&amp; purchase.isAutoRenewing } }.flowOn(dispatcher)</ID>
     <ID>ClassOrdering:PreferencesStore.kt$PreferencesStore$val backupData: Flow&lt;Long&gt; = dataStore.data.map { data -&gt; data[PREFERENCE_LAST_BACKUP_DATE_KEY] ?: -1L }</ID>
     <ID>ClassOrdering:RegularTransaction.kt$RegularTransaction$fun isValid(): Boolean</ID>
-    <ID>ClassOrdering:Transaction.kt$Transaction$override val itemType: Int = ITEM</ID>
     <ID>CognitiveComplexMethod:BackupManagerImpl.kt$BackupManagerImpl$override suspend fun backupDb(): ResultOf&lt;BackupData&gt;</ID>
     <ID>CognitiveComplexMethod:BackupManagerImpl.kt$BackupManagerImpl$override suspend fun deleteBackup(): ResultOf&lt;Any&gt;</ID>
     <ID>CognitiveComplexMethod:BackupManagerImpl.kt$BackupManagerImpl$override suspend fun restoreDb(): ResultOf&lt;Any&gt;</ID>
     <ID>CognitiveComplexMethod:CategoryCreationScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun CategoryCreationScreen( uiState: CategoryCreationUiState, onCategoryUpdated: (Category) -&gt; Unit, clickOnCategoryIcon: () -&gt; Unit, onHideError: () -&gt; Unit, onBackClicked: () -&gt; Unit, onSaveClicked: () -&gt; Unit, )</ID>
-    <ID>CognitiveComplexMethod:CategoryListScreen.kt$@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class) @Composable fun CategoryListScreen( uiState: CategoryUiState, onBackClicked: () -&gt; Unit, onCreateClicked: () -&gt; Unit, onCategoryClicked: (Category) -&gt; Unit, onRemoveClicked: (Category) -&gt; Unit, )</ID>
+    <ID>CognitiveComplexMethod:CategoryListScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun CategoryListScreen( uiState: CategoryUiState, onBackClicked: () -&gt; Unit, onCreateClicked: () -&gt; Unit, onCategoryClicked: (Category) -&gt; Unit, onRemoveClicked: (Category) -&gt; Unit, )</ID>
     <ID>CognitiveComplexMethod:CurrencyTextField.kt$@Composable private fun CurrencyTextField( amount: String, currencyCode: String, isEditable: Boolean, modifier: Modifier = Modifier, style: TextStyle, inputValueChanged: (String) -&gt; Unit, )</ID>
-    <ID>CognitiveComplexMethod:IncomeExpenseScreen.kt$@OptIn(ExperimentalFoundationApi::class) @Composable fun HomeTabs( listState: LazyListState, uiState: IncomeExpenseUiState, modifier: Modifier = Modifier, onTransactionClicked: (Transaction) -&gt; Unit, onNumberClicked: (KeyPress) -&gt; Unit, onCategoryClicked: (Category) -&gt; Unit, onKeyboardClicked: () -&gt; Unit, onCurrencyClicked: () -&gt; Unit, onDeleteTransactionConfirmClicked: (Transaction) -&gt; Unit, onAllCategoryClicked: (ScreenType, CategoryDestination) -&gt; Unit, )</ID>
-    <ID>CognitiveComplexMethod:IncomeExpenseScreen.kt$@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class) @Composable fun TransactionListLayout( listState: LazyListState, modifier: Modifier, transactions: Flow&lt;PagingData&lt;BaseTransaction&gt;&gt;, screenType: ScreenType, onTransactionClicked: (Transaction) -&gt; Unit, onDeleteTransactionConfirmClicked: (Transaction) -&gt; Unit, )</ID>
+    <ID>CognitiveComplexMethod:IncomeExpenseScreen.kt$@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class) @Composable fun TransactionListLayout( listState: LazyListState, modifier: Modifier, transactions: Flow&lt;PagingData&lt;BaseTransaction&gt;&gt;, screenType: ScreenType, onTransactionClicked: (TransactionUiModel) -&gt; Unit, onDeleteTransactionConfirmClicked: (TransactionUiModel) -&gt; Unit, )</ID>
     <ID>CognitiveComplexMethod:MainPriceFieldParser.kt$MainPriceFieldParser$fun isInputValid(str: String): Boolean</ID>
     <ID>CognitiveComplexMethod:MainPriceFieldParser.kt$MainPriceFieldParser$fun parse( priceStr: String, btn: KeyPress, ): String</ID>
     <ID>CognitiveComplexMethod:RegularTransactionCreationScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun RegularTransactionCreationScreen( uiState: RegularTransactionCreationUiState, onSumChanged: (String) -&gt; Unit, onCurrencyClicked: (String) -&gt; Unit, onCategoryClicked: (TransactionType, CategoryDestination) -&gt; Unit, onCurPeriodItemUpdate: (PeriodMenuItem) -&gt; Unit, onWeekDayClicked: (DaysInWeek) -&gt; Unit, onDayOfMonthClicked: (Int) -&gt; Unit, onDescriptionChanged: (String) -&gt; Unit, onBackClicked: () -&gt; Unit, onSaveClicked: () -&gt; Unit, )</ID>
@@ -35,13 +32,10 @@
     <ID>ComplexInterface:TransactionInteractor.kt$TransactionInteractor</ID>
     <ID>ComplexInterface:TransactionRepo.kt$TransactionRepo</ID>
     <ID>ComplexInterface:TransactionSource.kt$TransactionSource</ID>
-    <ID>CyclomaticComplexMethod:IncomeExpenseScreen.kt$@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class) @Composable fun TransactionListLayout( listState: LazyListState, modifier: Modifier, transactions: Flow&lt;PagingData&lt;BaseTransaction&gt;&gt;, screenType: ScreenType, onTransactionClicked: (Transaction) -&gt; Unit, onDeleteTransactionConfirmClicked: (Transaction) -&gt; Unit, )</ID>
+    <ID>CyclomaticComplexMethod:IncomeExpenseScreen.kt$@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class) @Composable fun TransactionListLayout( listState: LazyListState, modifier: Modifier, transactions: Flow&lt;PagingData&lt;BaseTransaction&gt;&gt;, screenType: ScreenType, onTransactionClicked: (TransactionUiModel) -&gt; Unit, onDeleteTransactionConfirmClicked: (TransactionUiModel) -&gt; Unit, )</ID>
     <ID>CyclomaticComplexMethod:TransactionInteractorImpl.kt$TransactionInteractorImpl$override suspend fun executeRegularIfNeeded(type: TransactionType)</ID>
     <ID>DataClassContainsFunctions:RegularTransaction.kt$RegularTransaction$fun isValid(): Boolean</ID>
     <ID>DataClassShouldBeImmutable:UserDbModel.kt$UserDbModel$@PrimaryKey @ColumnInfo(name = "uid") var uid: String</ID>
-    <ID>DestructuringDeclarationWithTooManyEntries:IncomeExpenseScreen.kt$val (idIcon, idTitle, idDescription, idRegularIcon, idInStatisticsIcon, idSum, idDivider) = createRefs()</ID>
-    <ID>DestructuringDeclarationWithTooManyEntries:ProfileScreen.kt$val (idIcon, idTitle, idData, idSubtitle, idDivider) = createRefs()</ID>
-    <ID>EmptyFunctionBlock:StatisticsScreen.kt${}</ID>
     <ID>ForbiddenImport:BackupManagerImpl.kt$import kotlinx.coroutines.runBlocking</ID>
     <ID>LabeledExpression:BackupManagerImpl.kt$BackupManagerImpl$@addOnFailureListener</ID>
     <ID>LabeledExpression:BackupManagerImpl.kt$BackupManagerImpl$@addOnSuccessListener</ID>
@@ -52,7 +46,6 @@
     <ID>LabeledExpression:RegularTransactionListScreen.kt$@Scaffold</ID>
     <ID>LargeClass:TransactionInteractorImpl.kt$TransactionInteractorImpl : TransactionInteractor</ID>
     <ID>MagicNumber:CategoryCreationScreen.kt$1.5f</ID>
-    <ID>MagicNumber:CategoryGroupIconListScreen.kt$0.2f</ID>
     <ID>MagicNumber:CategoryIconGridScreen.kt$4</ID>
     <ID>MagicNumber:CategoryListScreen.kt$10L</ID>
     <ID>MagicNumber:CategoryListScreen.kt$11L</ID>
@@ -89,10 +82,8 @@
     <ID>MagicNumber:CategoryListScreen.kt$7L</ID>
     <ID>MagicNumber:CategoryListScreen.kt$8L</ID>
     <ID>MagicNumber:CategoryListScreen.kt$9L</ID>
-    <ID>MagicNumber:CurrencyListScreen.kt$0.2f</ID>
     <ID>MagicNumber:CurrencyListScreen.kt$0.85f</ID>
     <ID>MagicNumber:CurrencyTextField.kt$123</ID>
-    <ID>MagicNumber:IncomeExpenseScreen.kt$0.2f</ID>
     <ID>MagicNumber:IncomeExpenseScreen.kt$10L</ID>
     <ID>MagicNumber:IncomeExpenseScreen.kt$11L</ID>
     <ID>MagicNumber:IncomeExpenseScreen.kt$12L</ID>
@@ -153,7 +144,6 @@
     <ID>ReturnCount:MainPriceFieldParser.kt$MainPriceFieldParser$fun isInputValid(str: String): Boolean</ID>
     <ID>ReturnCount:NetworkUtils.kt$fun isNetworkConnected(context: Context): Boolean</ID>
     <ID>StringLiteralDuplication:CategoryListScreen.kt$"Category15"</ID>
-    <ID>SwallowedException:CurrencyInteractorImpl.kt$CurrencyInteractorImpl$ex: Exception</ID>
     <ID>TooGenericExceptionCaught:CurrencyInteractorImpl.kt$CurrencyInteractorImpl$ex: Exception</ID>
     <ID>TooManyFunctions:CategoryRepo.kt$CategoryRepo</ID>
     <ID>TooManyFunctions:IncomeExpenseScreen.kt$com.d9tilov.android.incomeexpense.ui.IncomeExpenseScreen.kt</ID>
@@ -162,15 +152,9 @@
     <ID>UnnecessaryParentheses:AndroidCompose.kt$(enableMetricsProvider.orNull == "true")</ID>
     <ID>UnnecessaryParentheses:AndroidCompose.kt$(enableReportsProvider.orNull == "true")</ID>
     <ID>UnnecessaryParentheses:ComposeCurrencyView.kt$(R.dimen.padding_extra_small)</ID>
-    <ID>UnnecessaryParentheses:RegularIncomeExpenseNavigator.kt$RegularTransactionArgs.RegularTransactionCreationArgs$(checkNotNull(savedStateHandle[REGULAR_TRANSACTION_ID_ARGS]) as Long)</ID>
-    <ID>UnnecessaryParentheses:TransactionNavigation.kt$TransactionArgs.TransactionCreationArgs$(checkNotNull(savedStateHandle[TRANSACTION_ID_ARG]) as Long)</ID>
     <ID>UnusedParameter:ProfileScreen.kt$onGoalsClicked: () -&gt; Unit</ID>
-    <ID>UnusedPrivateMember:CheckUnusedDependenciesByImpact.kt$CheckUnusedDependenciesByImpact$private fun getChangedModules(): List&lt;String&gt;</ID>
     <ID>UnusedPrivateProperty:BillingInteractorImpl.kt$BillingInteractorImpl$val details = billingRepo.premiumProductDetails.map { productDetails -&gt; productDetails != null }</ID>
     <ID>UseCheckOrError:GradleFileValidationTask.kt$GradleFileValidationTask$throw IllegalStateException( "Please check file $path\nfor unused dependencies with script [python3 unused_deps.py &lt;file-path&gt;]", )</ID>
-    <ID>UseDataClass:CategoryNavigation.kt$CategoryArgs$CategoryCreationArgs</ID>
-    <ID>UseDataClass:CategoryNavigation.kt$CategoryArgs$CategoryIconsArgs</ID>
-    <ID>UseDataClass:CategoryNavigation.kt$CategoryArgs$CategoryListArgs</ID>
     <ID>UseDataClass:CurrencyNavigation.kt$CurrencyArgs$CurrencyScreenArgs</ID>
     <ID>UseDataClass:RegularIncomeExpenseNavigator.kt$RegularTransactionArgs$RegularTransactionCreationArgs</ID>
     <ID>UseDataClass:RegularIncomeExpenseNavigator.kt$RegularTransactionArgs$RegularTransactionListArgs</ID>

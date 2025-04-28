@@ -3,9 +3,6 @@ package com.d9tilov.moneymanager.prepopulate
 import android.app.Activity
 import android.content.Intent
 import androidx.annotation.StringRes
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,7 +21,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -40,7 +36,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -52,6 +47,7 @@ import com.d9tilov.android.budget.ui.BudgetScreen
 import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.android.currency.ui.CurrencyListScreen
 import com.d9tilov.android.designsystem.MoneyManagerIcons
+import com.d9tilov.android.designsystem.ProgressIndicator
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.home.MainActivity
 import com.d9tilov.moneymanager.prepopulate.PrepopulateScreen.Companion.fromScreenId
@@ -223,25 +219,6 @@ fun BottomNavigationBar(
             }
         }
     }
-}
-
-@Composable
-fun ProgressIndicator(
-    indicatorProgress: Float,
-    modifier: Modifier,
-) {
-    val progressAnimation by animateFloatAsState(
-        targetValue = indicatorProgress,
-        animationSpec = tween(durationMillis = 1500, easing = FastOutSlowInEasing),
-        label = "",
-    )
-    LinearProgressIndicator(
-        modifier =
-            modifier
-                .clip(RoundedCornerShape(20.dp)),
-        // Rounded edges
-        progress = { progressAnimation },
-    )
 }
 
 sealed class PrepopulateScreen(

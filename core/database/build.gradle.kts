@@ -21,7 +21,7 @@ android {
 }
 
 dependencies {
-    api(libs.room.ktx)
+    api(libs.room.runtime.android)
 
     implementation(project(":core:common"))
     implementation(libs.hilt.android)

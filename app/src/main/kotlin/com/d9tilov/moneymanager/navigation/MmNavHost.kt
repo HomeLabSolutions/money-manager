@@ -7,7 +7,7 @@ import androidx.navigation.compose.navigation
 import com.d9tilov.android.budget.ui.navigation.BUDGET_NAVIGATION_ROUTE
 import com.d9tilov.android.budget.ui.navigation.budgetScreen
 import com.d9tilov.android.budget.ui.navigation.navigateToBudgetScreen
-import com.d9tilov.android.category.domain.model.CategoryArgs.CATEGORY_ID_ARGS
+import com.d9tilov.android.category.domain.entity.CategoryArgs.CATEGORY_ID_ARGS
 import com.d9tilov.android.category.ui.navigation.CATEGORY_CREATION_NAVIGATION_ROUTE
 import com.d9tilov.android.category.ui.navigation.CATEGORY_DESTINATION_ARG
 import com.d9tilov.android.category.ui.navigation.CATEGORY_GROUP_ARG
@@ -33,18 +33,25 @@ import com.d9tilov.android.incomeexpense.navigation.INCOME_EXPENSE_NAVIGATION_RO
 import com.d9tilov.android.incomeexpense.navigation.incomeExpenseScreen
 import com.d9tilov.android.profile.ui.navigation.PROFILE_NAVIGATION_ROUTE
 import com.d9tilov.android.profile.ui.navigation.profileScreen
-import com.d9tilov.android.regular.transaction.ui.navigator.REGULAR_TRANSACTION_CREATION_NAVIGATION_ROUTE
-import com.d9tilov.android.regular.transaction.ui.navigator.REGULAR_TRANSACTION_ID_ARGS
-import com.d9tilov.android.regular.transaction.ui.navigator.REGULAR_TRANSACTION_LIST_NAVIGATION_ROUTE
-import com.d9tilov.android.regular.transaction.ui.navigator.navigateToRegularTransactionCreationScreen
-import com.d9tilov.android.regular.transaction.ui.navigator.navigateToRegularTransactionListScreen
-import com.d9tilov.android.regular.transaction.ui.navigator.regularTransactionCreationScreen
-import com.d9tilov.android.regular.transaction.ui.navigator.regularTransactionListScreen
 import com.d9tilov.android.settings.ui.navigation.SETTINGS_NAVIGATION_ROUTE
 import com.d9tilov.android.settings.ui.navigation.navigateToSettingsScreen
 import com.d9tilov.android.settings.ui.navigation.settingsScreen
+import com.d9tilov.android.statistics.ui.navigation.STATISTICS_DETAILS_NAVIGATION_ROUTE
 import com.d9tilov.android.statistics.ui.navigation.STATISTICS_NAVIGATION_ROUTE
+import com.d9tilov.android.statistics.ui.navigation.TRANSACTION_DETAILS_CATEGORY_ID_ARGS
+import com.d9tilov.android.statistics.ui.navigation.TRANSACTION_DETAILS_DATE_FROM_ARGS
+import com.d9tilov.android.statistics.ui.navigation.TRANSACTION_DETAILS_DATE_TO_ARGS
+import com.d9tilov.android.statistics.ui.navigation.TRANSACTION_DETAILS_IN_STATISTICS_ARGS
+import com.d9tilov.android.statistics.ui.navigation.navigateToStatisticsDetailsTransactionScreen
+import com.d9tilov.android.statistics.ui.navigation.statisticsDetailsScreen
 import com.d9tilov.android.statistics.ui.navigation.statisticsScreen
+import com.d9tilov.android.transaction.regular.ui.navigator.REGULAR_TRANSACTION_CREATION_NAVIGATION_ROUTE
+import com.d9tilov.android.transaction.regular.ui.navigator.REGULAR_TRANSACTION_ID_ARGS
+import com.d9tilov.android.transaction.regular.ui.navigator.REGULAR_TRANSACTION_LIST_NAVIGATION_ROUTE
+import com.d9tilov.android.transaction.regular.ui.navigator.navigateToRegularTransactionCreationScreen
+import com.d9tilov.android.transaction.regular.ui.navigator.navigateToRegularTransactionListScreen
+import com.d9tilov.android.transaction.regular.ui.navigator.regularTransactionCreationScreen
+import com.d9tilov.android.transaction.regular.ui.navigator.regularTransactionListScreen
 import com.d9tilov.android.transaction.ui.navigation.TRANSACTION_ID_ARG
 import com.d9tilov.android.transaction.ui.navigation.TRANSACTION_NAVIGATION_ROUTE
 import com.d9tilov.android.transaction.ui.navigation.navigateToTransactionScreen
@@ -134,7 +141,19 @@ fun MmNavHost(
             startDestination = STATISTICS_NAVIGATION_ROUTE,
             route = STATISTICS_ROOT_DESTINATION,
         ) {
-            statisticsScreen(STATISTICS_NAVIGATION_ROUTE)
+            statisticsScreen(
+                STATISTICS_NAVIGATION_ROUTE,
+                onTransactionClick = { navController.navigateToStatisticsDetailsTransactionScreen(it) },
+            )
+            statisticsDetailsScreen(
+                route =
+                    "$STATISTICS_DETAILS_NAVIGATION_ROUTE/" +
+                        "{$TRANSACTION_DETAILS_CATEGORY_ID_ARGS}/" +
+                        "{$TRANSACTION_DETAILS_DATE_FROM_ARGS}/" +
+                        "{$TRANSACTION_DETAILS_DATE_TO_ARGS}/" +
+                        "{$TRANSACTION_DETAILS_IN_STATISTICS_ARGS}",
+                onBackClicked = navController::popBackStack,
+            )
         }
         navigation(startDestination = PROFILE_NAVIGATION_ROUTE, route = PROFILE_ROOT_DESTINATION) {
             profileScreen(
