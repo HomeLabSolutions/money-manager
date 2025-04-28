@@ -13,14 +13,13 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
 }
 
-val keystorePropertiesFile: File = rootProject.file("keystore.properties")
-
 android {
 
     signingConfigs {
         create("release") {
+            val keystorePropertiesFile: File = rootProject.file("keystore.properties")
+            val keystoreProperties = Properties()
             if (keystorePropertiesFile.exists()) {
-                val keystoreProperties = Properties()
                 keystoreProperties.load(FileInputStream(keystorePropertiesFile))
                 keyAlias = keystoreProperties["keyAlias"] as String
                 keyPassword = keystoreProperties["keyPassword"] as String
@@ -62,9 +61,7 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             isDebuggable = false
-            if (keystorePropertiesFile.exists()) {
-                signingConfig = signingConfigs.getByName("release")
-            }
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -81,6 +78,19 @@ android {
         }
     }
 
+    configure<com.android.build.gradle.BaseExtension> {
+        packagingOptions {
+            exclude("META-INF/DEPENDENCIES")
+            exclude("META-INF/LICENSE")
+            exclude("META-INF/LICENSE.txt")
+            exclude("META-INF/license.txt")
+            exclude("META-INF/NOTICE")
+            exclude("META-INF/NOTICE.txt")
+            exclude("META-INF/notice.txt")
+            exclude("META-INF/ASL2.0")
+        }
+    }
+
     if (project.hasProperty("devBuild")) {
         splits.abi.isEnable = false
         splits.density.isEnable = false
@@ -92,7 +102,6 @@ android {
 
 dependencies {
     implementation(project(":analytics:di"))
-    implementation(project(":analytics:domain"))
     implementation(project(":backup:data:impl"))
     implementation(project(":backup:di"))
     implementation(project(":backup:domain:contract"))
@@ -150,6 +159,5 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.material)
     implementation(libs.play.services.auth)
-    implementation(libs.play.services.location)
     implementation(libs.timber)
 }

@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
-import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.model.Transaction
@@ -54,7 +53,7 @@ class TransactionCreationViewModel
                 launch {
                     transactionInteractor.getTransactionById(transactionId).collect { tr ->
                         _uiState.update { state: TransactionUiState ->
-                            state.copy(amount = tr.sum.reduceScaleStr(), transaction = tr)
+                            state.copy(amount = tr.sum.toString(), transaction = tr)
                         }
                     }
                 }
