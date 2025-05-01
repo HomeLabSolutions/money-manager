@@ -7,7 +7,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,7 +31,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -166,18 +164,19 @@ fun IncomeExpenseScreen(
             }
         },
     ) { paddingValues ->
-        HomeTabs(
-            listState = listState,
-            uiState = uiState,
-            modifier = Modifier.padding(paddingValues),
-            onNumberClicked = onNumberClicked,
-            onCategoryClicked = onCategoryClicked,
-            onKeyboardClicked = { onEditModeChanged(EditMode.LIST) },
-            onCurrencyClicked = onCurrencyClicked,
-            onAllCategoryClicked = onAllCategoryClicked,
-            onTransactionClicked = onTransactionClicked,
-            onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked,
-        )
+        Column(Modifier.padding(paddingValues)) {
+            HomeTabs(
+                listState = listState,
+                uiState = uiState,
+                onNumberClicked = onNumberClicked,
+                onCategoryClicked = onCategoryClicked,
+                onKeyboardClicked = { onEditModeChanged(EditMode.LIST) },
+                onCurrencyClicked = onCurrencyClicked,
+                onAllCategoryClicked = onAllCategoryClicked,
+                onTransactionClicked = onTransactionClicked,
+                onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked,
+            )
+        }
     }
 }
 
@@ -248,7 +247,6 @@ fun MainPriceInput(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionListLayout(
     listState: LazyListState,
@@ -413,7 +411,6 @@ fun HomeTabs(
         TabRow(
             selectedTabIndex = pagerState.currentPage,
             indicator = indicator,
-            modifier = modifier,
             containerColor = MaterialTheme.colorScheme.background,
         ) {
             screenTypes.forEachIndexed { index, type ->
@@ -448,7 +445,6 @@ fun HomeTabs(
                         .padding(horizontal = 32.dp, vertical = 8.dp),
                 onCurrencyClicked = onCurrencyClicked,
             )
-            Spacer(modifier = Modifier.weight(1f))
         }
         HorizontalPager(state = pagerState) { tabIndex: Int ->
             if (uiState.mode == EditMode.KEYBOARD) {
@@ -750,7 +746,11 @@ fun PreviewIncomeExpenseScreen() {
                                             "$42",
                                         ),
                                     wasSpendToday = Price(R.string.expense_info_today_title, "$43"),
-                                    wasSpendInPeriod = Price(R.string.expense_info_period_title, "$44"),
+                                    wasSpendInPeriod =
+                                        Price(
+                                            R.string.expense_info_period_title,
+                                            "$44",
+                                        ),
                                 ),
                         ),
                 ),
