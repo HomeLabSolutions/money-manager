@@ -1,11 +1,14 @@
 package com.d9tilov.android.statistics.ui
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,8 +25,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -56,10 +61,12 @@ import com.d9tilov.android.designsystem.DateRangePickerModal
 import com.d9tilov.android.designsystem.ProgressIndicator
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.android.statistics.data.model.StatisticsMenuType
+import com.d9tilov.android.statistics.ui.charts.PieChart
 import com.d9tilov.android.statistics.ui.model.StatisticsMenuInStatisticsType
 import com.d9tilov.android.statistics.ui.model.StatisticsMenuTransactionType
 import com.d9tilov.android.statistics.ui.model.StatisticsPeriodModel
 import com.d9tilov.android.statistics.ui.model.TransactionDetailsChartModel
+import com.d9tilov.android.statistics.ui.model.chart.Pie
 import com.d9tilov.android.statistics.ui.vm.DetailsSpentInPeriodState
 import com.d9tilov.android.statistics.ui.vm.DetailsTransactionListState
 import com.d9tilov.android.statistics.ui.vm.PeriodUiState
@@ -68,6 +75,8 @@ import com.d9tilov.android.statistics.ui.vm.StatisticsUiState
 import com.d9tilov.android.statistics.ui.vm.StatisticsViewModel
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
 import java.math.BigDecimal
+
+private const val ANIMATION_DURATION = 300
 
 @Composable
 fun StatisticsRoute(
@@ -104,7 +113,17 @@ fun StatisticsScreen(
                 onPeriodClick(period)
             })
             StatisticsMenuSelector(state = state.statisticsMenuState, onClick = onMenuClick)
-            StatisticsChart(Modifier.weight(1f))
+            var selectedIndex by remember { mutableIntStateOf(-1) }
+            StatisticsChart(
+                Modifier
+                    .fillMaxSize()
+                    .padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
+                periodStr = state.periodState.selectedPeriodStr,
+                pieData =
+                    state.chartState.pieData.mapIndexed { index, pie ->
+                        pie.copy(selected = index == selectedIndex)
+                    },
+            ) { selectedIndex = it }
         }
         StatisticsList(
             modifier = Modifier.weight(1f),
@@ -150,7 +169,10 @@ fun StatisticsPeriodSelector(
         modifier =
             modifier
                 .fillMaxWidth()
-                .padding(vertical = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small)),
+                .padding(
+                    vertical = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small),
+                    horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small),
+                ),
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
         for (item: StatisticsPeriodModel in state.periods) {
@@ -204,8 +226,36 @@ fun StatisticMenuIcon(
 }
 
 @Composable
-fun StatisticsChart(modifier: Modifier) {
-    Spacer(modifier = modifier)
+fun StatisticsChart(
+    modifier: Modifier,
+    periodStr: String,
+    pieData: List<Pie>,
+    onPieSelected: (Int) -> Unit,
+) {
+    val floatSpec =
+        spring<Float>(
+            dampingRatio = .3f,
+            stiffness = Spring.StiffnessLow,
+        )
+    PieChart(
+        modifier = modifier,
+        data = pieData,
+        centerLabel = periodStr,
+        onPieClick = {
+            println("${it.label} Clicked")
+            val pieIndex = pieData.indexOf(it)
+            onPieSelected(pieIndex)
+        },
+        selectedScale = 1.2f,
+        spaceDegreeAnimEnterSpec = floatSpec,
+        colorAnimEnterSpec = tween(ANIMATION_DURATION),
+        scaleAnimEnterSpec = floatSpec,
+        colorAnimExitSpec = tween(ANIMATION_DURATION),
+        scaleAnimExitSpec = tween(ANIMATION_DURATION),
+        spaceDegreeAnimExitSpec = tween(ANIMATION_DURATION),
+        selectedPaddingDegree = 0f,
+        style = Pie.Style.Stroke(48.dp),
+    )
 }
 
 @Composable
