@@ -12,8 +12,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.sp
 import com.d9tilov.android.core.constants.CurrencyConstants
 
 @Composable
@@ -21,17 +19,15 @@ fun ComposeCurrencyView(
     modifier: Modifier = Modifier,
     symbol: String,
     symbolColor: Color = MaterialTheme.colorScheme.primary,
-    symbolSize: TextUnit = 18.sp,
-    symbolStyle: TextStyle = MaterialTheme.typography.headlineLarge,
+    symbolStyle: TextStyle = MaterialTheme.typography.headlineSmall,
     value: String,
     valueColor: Color = MaterialTheme.colorScheme.primary,
-    valueSize: TextUnit = 34.sp,
     valueStyle: TextStyle = MaterialTheme.typography.headlineLarge,
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Bottom,
+        horizontalArrangement = Arrangement.Start,
     ) {
         Text(
             modifier =
@@ -40,7 +36,6 @@ fun ComposeCurrencyView(
                     .padding(end = dimensionResource(id = (R.dimen.padding_extra_small))),
             text = symbol,
             color = symbolColor,
-            fontSize = symbolSize,
             style = symbolStyle,
             maxLines = 1,
         )
@@ -48,7 +43,6 @@ fun ComposeCurrencyView(
             modifier = Modifier.alignByBaseline(),
             text = value,
             color = valueColor,
-            fontSize = valueSize,
             style = valueStyle,
             maxLines = 1,
         )

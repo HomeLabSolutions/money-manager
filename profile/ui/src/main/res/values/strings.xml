@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="logout_dialog_title">Logout</string>
+    <string name="logout_dialog_button">Logout</string>
+    <string name="logout_dialog_subtitle">Do you really want to logout?</string>
+    <string name="settings_subscription_premium_acknowledged_title" translatable="false">Premium</string>
+    <string name="profile_logout">Logout</string>
+    <string name="profile_item_currency_title">Currency: </string>
+    <string name="profile_item_budget_title">Budget: </string>
+    <string name="profile_item_goals_title_empty">Goals</string>
+    <string name="profile_item_settings_title">Settings</string>
+    <string name="profile_item_regular_incomes_title">Regular incomes</string>
+    <string name="profile_item_regular_expenses_title">Regular expenses</string>
+    <string name="bottom_menu_chart">Chart</string>
+    <string name="bottom_menu_profile">Profile</string>
+    <string name="settings_subscription_premium_title" translatable="false">Go Premium</string>
+</resources>

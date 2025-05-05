@@ -38,6 +38,7 @@
     <string name="title_prepopulate_budget">Current budget</string>
     <string name="toolbar_menu_skip">Skip</string>
 
+    <string name="bottom_menu_income_expense">Income/Expense</string>
     <string name="bottom_menu_chart">Chart</string>
     <string name="bottom_menu_profile">Profile</string>
 </resources>

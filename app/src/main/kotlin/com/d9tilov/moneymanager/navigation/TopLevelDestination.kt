@@ -2,7 +2,7 @@ package com.d9tilov.moneymanager.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.d9tilov.android.designsystem.MoneyManagerIcons
-import com.d9tilov.android.profile_ui.R
+import com.d9tilov.moneymanager.R
 
 enum class TopLevelDestination(
     val selectedIcon: ImageVector,

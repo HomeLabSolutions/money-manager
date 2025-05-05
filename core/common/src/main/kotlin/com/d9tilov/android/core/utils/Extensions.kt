@@ -4,6 +4,7 @@ import com.d9tilov.android.core.constants.CurrencyConstants.DECIMAL_LENGTH
 import com.d9tilov.android.core.constants.CurrencyConstants.DECIMAL_SEPARATOR
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_DECIMAL_SEPARATOR
 import java.math.BigDecimal
+import java.math.MathContext
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
@@ -36,7 +37,11 @@ fun BigDecimal?.reduceScale(fully: Boolean = false): BigDecimal {
     }
     if (scale() == 0) return this
     val newNum =
-        this.setScale(if (fully) 0 else DECIMAL_LENGTH, RoundingMode.HALF_UP).stripTrailingZeros()
+        if (fully) {
+            this.setScale(0, RoundingMode.HALF_UP)
+        } else {
+            this.round(MathContext(DECIMAL_LENGTH, RoundingMode.HALF_UP))
+        }
     if (newNum.signum() == 0) return BigDecimal.ZERO
     return newNum
 }

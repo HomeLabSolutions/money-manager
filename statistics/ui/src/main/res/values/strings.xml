@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="statistics_details_title">Transactions</string>
+    <string name="statistics_period_day">Today</string>
+    <string name="statistics_period_week">Week</string>
+    <string name="statistics_period_month">Month</string>
+    <string name="statistics_period_year">Year</string>
+    <string name="statistics_period_custom">Custom…</string>
+    <string name="statistics_today">Today</string>
+    <string name="statistics_no_data">Not enough data on this period for display</string>
+    <string name="statistics_expense_info_period_title">Was spent in period:</string>
+    <string name="statistics_income_info_period_title">Was earned in period:</string>
+    <string name="statistics_menu_in_statistics_title">In statistics</string>
+    <string name="statistics_menu_not_in_statistics_title">All</string>
+    <string name="statistics_menu_currency_title">Currency</string>
+    <string name="statistics_menu_incomes_title">Incomes</string>
+    <string name="statistics_menu_expenses_title">Expenses</string>
+    <string name="statistics_menu_chart_type_title">Chart type</string>
+    <string name="statistics_menu_category_type_parent_title">Categories</string>
+    <string name="statistics_menu_category_type_child_title">Subcategories</string>
+</resources>
