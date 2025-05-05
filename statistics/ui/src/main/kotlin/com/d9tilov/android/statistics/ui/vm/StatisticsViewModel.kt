@@ -11,6 +11,7 @@ import com.d9tilov.android.statistics.ui.model.StatisticsMenuCurrencyType
 import com.d9tilov.android.statistics.ui.model.StatisticsMenuInStatisticsType
 import com.d9tilov.android.statistics.ui.model.StatisticsMenuTransactionType
 import com.d9tilov.android.statistics.ui.model.StatisticsPeriodModel
+import com.d9tilov.android.statistics.ui.model.chart.Pie
 import com.d9tilov.android.statistics.ui.model.toTransactionType
 import com.d9tilov.android.statistics.ui.navigation.StatisticsNavigator
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
@@ -30,12 +31,13 @@ import javax.inject.Named
 data class StatisticsUiState(
     val periodState: PeriodUiState = PeriodUiState(),
     val statisticsMenuState: StatisticsMenuState = StatisticsMenuState(),
+    val chartState: ChartState = ChartState(),
     val detailsTransactionListState: DetailsTransactionListState = DetailsTransactionListState(),
     val isPremium: Boolean = false,
 )
 
 data class PeriodUiState(
-    val selectedPeriod: StatisticsPeriodModel = StatisticsPeriodModel.MONTH,
+    val selectedPeriod: StatisticsPeriodModel = StatisticsPeriodModel.DAY,
     val periods: List<StatisticsPeriodModel> =
         listOf(
             StatisticsPeriodModel.DAY,
@@ -51,6 +53,10 @@ data class StatisticsMenuState(
     val chartType: StatisticsMenuChartModel = StatisticsMenuChartModel.PieChart,
     val transactionType: StatisticsMenuTransactionType = StatisticsMenuTransactionType.Expense,
     val inStatistics: StatisticsMenuInStatisticsType = StatisticsMenuInStatisticsType.InStatisticsType,
+)
+
+data class ChartState(
+    val pieData: List<Pie> = emptyList(),
 )
 
 data class DetailsTransactionListState(
@@ -107,6 +113,18 @@ class StatisticsViewModel
                         }.collect { list: List<TransactionChartModel> ->
                             _uiState.update {
                                 it.copy(
+                                    chartState =
+                                        it.chartState.copy(
+                                            pieData =
+                                                list.map { item ->
+                                                    Pie(
+                                                        label = item.category.name,
+                                                        data = item.sum.toDouble(),
+                                                        color = item.category.color,
+                                                        selectedScale = 1.05f,
+                                                    )
+                                                },
+                                        ),
                                     detailsTransactionListState =
                                         it.detailsTransactionListState.copy(
                                             transactions = list,
