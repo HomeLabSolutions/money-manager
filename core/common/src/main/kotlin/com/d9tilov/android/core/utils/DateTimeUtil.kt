@@ -38,7 +38,7 @@ fun Long.toBackupDate(): String =
         ).format(Date(this))
     }
 
-fun LocalDateTime.toBudgetCreatedDateStr(): String =
+fun LocalDateTime.toStandardStringDate(): String =
     SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(Date(this.toMillis()))
 
 fun currentDateTime(): LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
