@@ -387,7 +387,7 @@ fun TransactionListLayout(
 fun HomeTabs(
     listState: LazyListState,
     uiState: IncomeExpenseUiState,
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     onTransactionClicked: (TransactionUiModel) -> Unit,
     onNumberClicked: (KeyPress) -> Unit,
     onCategoryClicked: (Category) -> Unit,
@@ -440,7 +440,7 @@ fun HomeTabs(
             MainPriceInput(
                 price = uiState.price,
                 modifier =
-                    modifier
+                    Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 32.dp, vertical = 8.dp),
                 onCurrencyClicked = onCurrencyClicked,
