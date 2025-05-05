@@ -47,7 +47,7 @@ import coil.request.ImageRequest
 import com.d9tilov.android.backup.data.impl.PeriodicBackupWorker
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
-import com.d9tilov.android.core.utils.toBudgetCreatedDateStr
+import com.d9tilov.android.core.utils.toStandardStringDate
 import com.d9tilov.android.designsystem.CurrencyTextFieldExtraSmall
 import com.d9tilov.android.designsystem.SimpleDialog
 import com.d9tilov.android.profile.ui.vm.ProfileUiItem
@@ -226,7 +226,7 @@ fun ProfileSection(
                 ProfileItemData(
                     ImageVector.vectorResource(R.drawable.ic_budget_icon),
                     stringResource(R.string.profile_item_budget_title),
-                    profileUiItem.budgetData.createdDate.toBudgetCreatedDateStr(),
+                    profileUiItem.budgetData.createdDate.toStandardStringDate(),
                 )
             is ProfileUiItem.RegularIncomeUiItem ->
                 ProfileItemData(
