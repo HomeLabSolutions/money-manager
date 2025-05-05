@@ -22,6 +22,7 @@ fun ButtonSelector(
         val containerColor = MaterialTheme.colorScheme.tertiaryContainer
         TextButton(
             onClick = onClick,
+            small = true,
             colors =
                 ButtonDefaults.textButtonColors(
                     containerColor =
@@ -47,7 +48,7 @@ fun ButtonSelector(
 fun ButtonSelectorPreview() {
     MoneyManagerTheme {
         ButtonSelector(onClick = {}) {
-            Text("Month".uppercase())
+            Text("Month")
         }
     }
 }

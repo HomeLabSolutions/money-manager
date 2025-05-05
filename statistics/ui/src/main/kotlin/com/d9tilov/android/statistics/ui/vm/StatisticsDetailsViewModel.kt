@@ -57,7 +57,6 @@ class StatisticsDetailsViewModel
                         transactions = transactionsDeferred.await().map { it.toUiModel() },
                     )
                 }
-                System.out.println("moggot args: $transactionDetailsArgs")
             }
         }
     }
