@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.common.android.di.CoroutinesModule.Companion.DISPATCHER_IO
 import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
-import com.d9tilov.android.core.utils.toStandardStringDate
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.statistics.data.model.StatisticsMenuType
 import com.d9tilov.android.statistics.ui.model.StatisticsMenuChartModel
@@ -38,10 +37,7 @@ data class StatisticsUiState(
 )
 
 data class PeriodUiState(
-    val selectedPeriod: StatisticsPeriodModel = StatisticsPeriodModel.MONTH,
-    val selectedPeriodStr: String = "${
-        selectedPeriod.from.toStandardStringDate()
-    } - ${selectedPeriod.to.toStandardStringDate()}",
+    val selectedPeriod: StatisticsPeriodModel = StatisticsPeriodModel.DAY,
     val periods: List<StatisticsPeriodModel> =
         listOf(
             StatisticsPeriodModel.DAY,
@@ -168,16 +164,7 @@ class StatisticsViewModel
         }
 
         fun updatePeriod(period: StatisticsPeriodModel) {
-            _uiState.update {
-                it.copy(
-                    periodState =
-                        it.periodState.copy(
-                            selectedPeriod = period,
-                            selectedPeriodStr =
-                                "${period.from.toStandardStringDate()} - ${period.to.toStandardStringDate()}",
-                        ),
-                )
-            }
+            _uiState.update { it.copy(periodState = it.periodState.copy(selectedPeriod = period)) }
             updateTrigger.update { it + 1 }
         }
 

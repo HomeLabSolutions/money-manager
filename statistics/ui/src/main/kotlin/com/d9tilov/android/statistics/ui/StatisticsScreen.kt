@@ -55,6 +55,7 @@ import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.reduceScale
 import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.core.utils.toMillis
+import com.d9tilov.android.core.utils.toStandardStringDate
 import com.d9tilov.android.designsystem.ButtonSelector
 import com.d9tilov.android.designsystem.ComposeCurrencyView
 import com.d9tilov.android.designsystem.DateRangePickerModal
@@ -118,7 +119,13 @@ fun StatisticsScreen(
                 Modifier
                     .fillMaxSize()
                     .padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
-                periodStr = state.periodState.selectedPeriodStr,
+                periodStr =
+                    if (state.periodState.selectedPeriod == StatisticsPeriodModel.DAY) {
+                        ""
+                    } else {
+                        "${state.periodState.selectedPeriod.from.toStandardStringDate()} " +
+                            "- ${state.periodState.selectedPeriod.to.toStandardStringDate()}"
+                    },
                 pieData =
                     state.chartState.pieData.mapIndexed { index, pie ->
                         pie.copy(selected = index == selectedIndex)

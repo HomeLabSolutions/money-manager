@@ -46,7 +46,7 @@ import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 private const val UNSELECTED_PIE_ALPHA = 0.8f
-private const val MIN_PERCENT_TO_SHOW_LABEL = 5.0f
+private const val MIN_PERCENT_TO_SHOW_LABEL = 0.05f
 private const val LABEL_SIZE = 14f
 private const val CENTER_LABEL_SIZE = 16f
 private const val LABEL_RADIUS_PART = 0.7f
@@ -278,7 +278,7 @@ fun PieChart(
                 color = detail.color.value,
                 style = drawStyle,
             )
-            if (degree >= MIN_PERCENT_TO_SHOW_LABEL) {
+            if (degree >= DEGREES_IN_CIRCLE * MIN_PERCENT_TO_SHOW_LABEL) {
                 val beforeItems = data.filterIndexed { filterIndex, _ -> filterIndex < index }
                 val startFromDegree = beforeItems.sumOf { it.data * DEGREES_IN_CIRCLE / total }
 
