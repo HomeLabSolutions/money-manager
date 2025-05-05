@@ -280,7 +280,7 @@ class IncomeExpenseViewModel
                             IncomeInfo(
                                 Price(
                                     R.string.income_info_period_title,
-                                    "${currencyCode.getSymbolByCode()}$approxSum",
+                                    "${currencyCode.getSymbolByCode()}${approxSum.reduceScaleStr()}",
                                 ),
                             )
                         } else {
