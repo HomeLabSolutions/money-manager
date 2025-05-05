@@ -20,7 +20,7 @@ import com.d9tilov.android.core.utils.MainPriceFieldParser
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.isSameDay
-import com.d9tilov.android.core.utils.reduceScale
+import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.incomeexpense.ui.R
@@ -157,7 +157,7 @@ class IncomeExpenseViewModel
                                 state.copy(
                                     price =
                                         MainPrice(
-                                            BigDecimal.ZERO.toString(),
+                                            BigDecimal.ZERO.reduceScaleStr(),
                                             currencyData.code,
                                         ),
                                 )
@@ -233,9 +233,7 @@ class IncomeExpenseViewModel
                                         Price(
                                             R.string.expense_info_can_spend_today_title,
                                             "${currencyCode.getSymbolByCode()}${
-                                                ableToSpendToday.trSum.reduceScale(
-                                                    true,
-                                                )
+                                                ableToSpendToday.trSum.reduceScaleStr()
                                             }",
                                         )
 
@@ -243,26 +241,20 @@ class IncomeExpenseViewModel
                                         Price(
                                             R.string.expense_info_can_spend_today_negate_title,
                                             "${currencyCode.getSymbolByCode()}${
-                                                ableToSpendToday.trSum.reduceScale(
-                                                    true,
-                                                )
+                                                ableToSpendToday.trSum.reduceScaleStr()
                                             }",
                                         )
                                 },
                                 Price(
                                     R.string.expense_info_today_title,
                                     "${currencyCode.getSymbolByCode()}${
-                                        spentTodayApprox.reduceScale(
-                                            true,
-                                        )
+                                        spentTodayApprox.reduceScaleStr()
                                     }",
                                 ),
                                 Price(
                                     R.string.expense_info_period_title,
                                     "${currencyCode.getSymbolByCode()}${
-                                        spentInPeriodApprox.reduceScale(
-                                            true,
-                                        )
+                                        spentInPeriodApprox.reduceScaleStr()
                                     }",
                                 ),
                             )
@@ -348,7 +340,7 @@ class IncomeExpenseViewModel
                 }
             }
             uiState.update { state ->
-                val price = state.price.copy(value = BigDecimal.ZERO.toString())
+                val price = state.price.copy(value = BigDecimal.ZERO.reduceScaleStr())
                 state.copy(price = price)
             }
         }
