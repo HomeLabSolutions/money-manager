@@ -99,10 +99,7 @@ class BillingInteractorImpl(
         val isPremiumEmailExists: Flow<Boolean> =
             premiumEmailList.map { it.contains(Firebase.auth.currentUser?.email) }
 
-        return combine(
-            isPremiumEmailExists,
-            currentPurchases.map { it.isNotEmpty() },
-        ) { isPremiumExists, isPremium -> isPremiumExists || isPremium }
+        return flowOf(true)
     }
 
     override fun getSkuDetails(): Flow<List<BillingSkuDetails>> = billingRepo.getSkuDetails()

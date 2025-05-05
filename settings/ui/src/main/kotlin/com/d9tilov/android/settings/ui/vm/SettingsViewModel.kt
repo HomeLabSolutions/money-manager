@@ -13,6 +13,7 @@ import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.constants.DataConstants.UNKNOWN_BACKUP_DATE
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.core.model.ResultOf
+import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.core.utils.toBackupDate
 import com.d9tilov.android.network.exception.NetworkException
 import com.d9tilov.android.settings.ui.R
@@ -76,7 +77,7 @@ class SettingsViewModel
                     val price =
                         if (premiumInfo.isPremium) {
                             SubscriptionPriceUiState(
-                                premiumInfo.minBillingPrice.value.toString(),
+                                premiumInfo.minBillingPrice.value.reduceScaleStr(),
                                 premiumInfo.minBillingPrice.code,
                                 premiumInfo.minBillingPrice.symbol,
                             )

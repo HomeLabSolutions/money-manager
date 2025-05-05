@@ -27,6 +27,7 @@ import androidx.core.content.ContextCompat
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.core.constants.UiConstants.ALPHA
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
+import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.designsystem.ComposeCurrencyView
 import com.d9tilov.android.designsystem.MoneyManagerIcons
 import com.d9tilov.android.transaction.ui.model.TransactionUiModel
@@ -138,14 +139,14 @@ fun TransactionItem(
             horizontalAlignment = Alignment.End,
         ) {
             ComposeCurrencyView(
-                value = transaction.sum.toString(),
+                value = transaction.sum.reduceScaleStr(),
                 valueStyle = MaterialTheme.typography.headlineSmall,
                 symbol = transaction.currencyCode.getSymbolByCode(),
                 symbolStyle = MaterialTheme.typography.labelLarge,
             )
             if (transaction.usdSum != null) {
                 ComposeCurrencyView(
-                    value = transaction.usdSum.toString(),
+                    value = transaction.usdSum.reduceScaleStr(),
                     valueStyle = MaterialTheme.typography.bodyLarge,
                     symbol = DEFAULT_CURRENCY_SYMBOL,
                     symbolStyle = MaterialTheme.typography.bodyMedium,
