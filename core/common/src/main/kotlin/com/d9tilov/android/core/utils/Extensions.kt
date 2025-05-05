@@ -1,10 +1,8 @@
 package com.d9tilov.android.core.utils
 
-import com.d9tilov.android.core.constants.CurrencyConstants.DECIMAL_LENGTH
 import com.d9tilov.android.core.constants.CurrencyConstants.DECIMAL_SEPARATOR
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_DECIMAL_SEPARATOR
 import java.math.BigDecimal
-import java.math.MathContext
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
@@ -31,17 +29,9 @@ val String?.toBigDecimal: BigDecimal
         return result
     }
 
-fun BigDecimal?.reduceScale(fully: Boolean = false): BigDecimal {
-    if (this == null || this.signum() == 0) {
-        return BigDecimal.ZERO
-    }
-    if (scale() == 0) return this
-    val newNum =
-        if (fully) {
-            this.setScale(0, RoundingMode.HALF_UP)
-        } else {
-            this.round(MathContext(DECIMAL_LENGTH, RoundingMode.HALF_UP))
-        }
-    if (newNum.signum() == 0) return BigDecimal.ZERO
-    return newNum
-}
+fun BigDecimal?.reduceScale(): BigDecimal =
+    this
+        ?.setScale(2, RoundingMode.HALF_UP)
+        ?.stripTrailingZeros() ?: BigDecimal.ZERO
+
+fun BigDecimal?.reduceScaleStr(): String = this.reduceScale().toPlainString()

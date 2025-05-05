@@ -52,7 +52,7 @@ import com.d9tilov.android.core.constants.UiConstants.ALPHA
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
-import com.d9tilov.android.core.utils.reduceScale
+import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.core.utils.toMillis
 import com.d9tilov.android.core.utils.toStandardStringDate
@@ -385,13 +385,13 @@ fun TransactionStatisticsItem(
             horizontalAlignment = Alignment.End,
         ) {
             ComposeCurrencyView(
-                value = transaction.sum.reduceScale().toString(),
+                value = transaction.sum.reduceScaleStr(),
                 valueStyle = MaterialTheme.typography.headlineSmall,
                 symbol = transaction.currencyCode.getSymbolByCode(),
                 symbolStyle = MaterialTheme.typography.labelLarge,
             )
             Text(
-                text = "${transaction.percent.reduceScale()}${
+                text = "${transaction.percent.reduceScaleStr()}${
                     stringResource(
                         com.d9tilov.android.common.android.R.string.percent_sign,
                     )
