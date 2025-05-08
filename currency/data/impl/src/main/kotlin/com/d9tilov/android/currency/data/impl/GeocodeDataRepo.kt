@@ -1,0 +1,13 @@
+package com.d9tilov.android.currency.data.impl
+
+import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
+import com.d9tilov.android.currency.domain.contract.GeocodeRepo
+import com.d9tilov.android.network.GeocodeApi
+
+class GeocodeDataRepo(
+    val geocodeApi: GeocodeApi,
+) : GeocodeRepo {
+    override suspend fun getCurrencyCodeByCoords(latitude: Double, longitude: Double): String =
+        geocodeApi.getCurrencies(coords = "$latitude+$longitude").results.firstOrNull()?.annotations?.currency?.isoCode
+            ?: DEFAULT_CURRENCY_CODE
+}

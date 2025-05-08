@@ -41,4 +41,7 @@
     <string name="bottom_menu_income_expense">Income/Expense</string>
     <string name="bottom_menu_chart">Chart</string>
     <string name="bottom_menu_profile">Profile</string>
+
+    <string name="permissions_location">Location</string>
+    <string name="permissions_location_explanation">display local currency</string>
 </resources>

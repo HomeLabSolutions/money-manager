@@ -23,6 +23,10 @@ dependencies {
     implementation(libs.material)
     implementation(libs.navigation.common)
     implementation(libs.navigation.runtime)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.accompanist.permissions)
 
     ksp(libs.hilt.ext.compiler)
 }

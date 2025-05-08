@@ -2,6 +2,8 @@ package com.d9tilov.android.network.di
 
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.network.BuildConfig
+import com.d9tilov.android.network.di.qualifier.CurrencyNetworkApi
+import com.d9tilov.android.network.di.qualifier.GeoNetworkApi
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -20,7 +22,8 @@ import java.util.concurrent.TimeUnit
 object NetworkModule {
     private const val READ_TIMEOUT = 15L
     private const val WRITE_TIMEOUT = 15L
-    private const val BASE_URL = "https://v6.exchangerate-api.com/v6/"
+    private const val BASE_CURRENCY_URL = "https://v6.exchangerate-api.com/"
+    private const val BASE_GEOCODE_URL = "https://api.opencagedata.com/"
 
     @Provides
     fun provideOkHttpClient(interceptor: HttpLoggingInterceptor): OkHttpClient =
@@ -42,13 +45,27 @@ object NetworkModule {
                 }
         }
 
+    @CurrencyNetworkApi
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideGeoRetrofit(okHttpClient: OkHttpClient): Retrofit {
         val contentType = "application/json".toMediaType()
         val json = Json { ignoreUnknownKeys = true }
         return Retrofit
             .Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BASE_GEOCODE_URL)
+            .addConverterFactory(json.asConverterFactory(contentType))
+            .client(okHttpClient)
+            .build()
+    }
+
+    @GeoNetworkApi
+    @Provides
+    fun provideCurrencyRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        val contentType = "application/json".toMediaType()
+        val json = Json { ignoreUnknownKeys = true }
+        return Retrofit
+            .Builder()
+            .baseUrl(BASE_CURRENCY_URL)
             .addConverterFactory(json.asConverterFactory(contentType))
             .client(okHttpClient)
             .build()

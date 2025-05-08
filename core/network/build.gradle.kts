@@ -9,20 +9,24 @@ plugins {
 
 val keystorePropertiesFile: File = rootProject.file("keystore.properties")
 val keystoreProperties = Properties()
-val apiKey =
-    if (keystorePropertiesFile.exists()) {
-        keystoreProperties.load(FileInputStream(keystorePropertiesFile))
-        keystoreProperties["currency_api_key"] as String
-    } else {
-        println("Warning: keystore.properties file not found. Release signing configuration will not be applied.")
-        ""
-    }
+var currencyApiKey = ""
+var geocodingApiKey = ""
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+    currencyApiKey = keystoreProperties["currency_api_key"] as String
+    geocodingApiKey = keystoreProperties["geocoding_api_key"] as String
+} else {
+    println("Warning: keystore.properties file not found. Release signing configuration will not be applied.")
+    ""
+}
+
 
 android {
     namespace = "com.d9tilov.android.network"
 
     defaultConfig {
-        buildConfigField("String", "CURRENCY_API_KEY", "\"$apiKey\"")
+        buildConfigField("String", "CURRENCY_API_KEY", "\"$currencyApiKey\"")
+        buildConfigField("String", "GEOCODING_API_KEY", "\"$geocodingApiKey\"")
     }
 }
 

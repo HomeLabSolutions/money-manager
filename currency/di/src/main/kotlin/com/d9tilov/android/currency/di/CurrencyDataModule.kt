@@ -3,10 +3,15 @@ package com.d9tilov.android.currency.di
 import com.d9tilov.android.currency.data.contract.CurrencySource
 import com.d9tilov.android.currency.data.impl.CurrencyDataRepo
 import com.d9tilov.android.currency.data.impl.CurrencyLocalSource
+import com.d9tilov.android.currency.data.impl.GeocodeDataRepo
 import com.d9tilov.android.currency.domain.contract.CurrencyRepo
+import com.d9tilov.android.currency.domain.contract.GeocodeRepo
 import com.d9tilov.android.database.AppDatabase
 import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.network.CurrencyApi
+import com.d9tilov.android.network.GeocodeApi
+import com.d9tilov.android.network.di.qualifier.CurrencyNetworkApi
+import com.d9tilov.android.network.di.qualifier.GeoNetworkApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,18 +36,27 @@ object CurrencyDataModule {
 
     @Provides
     @Singleton
-    fun provideCurrencyApi(retrofit: Retrofit): CurrencyApi = retrofit.create(CurrencyApi::class.java)
+    fun provideCurrencyApi(@CurrencyNetworkApi retrofit: Retrofit): CurrencyApi =
+        retrofit.create(CurrencyApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideGeoApi(@GeoNetworkApi retrofit: Retrofit): GeocodeApi =
+        retrofit.create(GeocodeApi::class.java)
 
     @Provides
     @Singleton
     fun provideCurrencyRepo(
         currencySource: CurrencySource,
         currencyApi: CurrencyApi,
-        preferencesStore: PreferencesStore,
     ): CurrencyRepo =
         CurrencyDataRepo(
             currencySource,
             currencyApi,
-            preferencesStore,
         )
+
+    @Provides
+    @Singleton
+    fun provideGeoRepo(geocodeApi: GeocodeApi): GeocodeRepo =
+        GeocodeDataRepo(geocodeApi)
 }

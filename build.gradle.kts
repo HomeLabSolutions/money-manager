@@ -43,7 +43,7 @@ extra["versionPatch"] = 0
 extra["versionBuild"] = 10
 
 tasks.register("clean", Delete::class) {
-    delete(rootProject.buildDir)
+    delete(rootProject.layout.buildDirectory)
 }
 
 plugins {

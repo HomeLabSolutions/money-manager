@@ -51,7 +51,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
-
         var uiState: MainActivityUiState by mutableStateOf(MainActivityUiState.Loading)
 
         // Update the uiState
@@ -126,7 +125,9 @@ class MainActivity : ComponentActivity() {
 
             MoneyManagerTheme(darkTheme = darkTheme) {
                 when (state) {
-                    MainActivityUiState.Success.Main -> MmApp(windowSizeClass = calculateWindowSizeClass(this))
+                    MainActivityUiState.Success.Main -> MmApp(windowSizeClass = calculateWindowSizeClass(this)) {
+                        viewModel.updateData()
+                    }
                     MainActivityUiState.Success.Prepopulate -> PrepopulateScreen()
                     MainActivityUiState.Loading, MainActivityUiState.Success.Auth -> {}
                 }
