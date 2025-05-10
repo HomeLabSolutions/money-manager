@@ -10,7 +10,6 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
-    implementation(project(":core:network"))
     implementation(project(":user-info:data:contract"))
     implementation(project(":user-info:domain:contract"))
     implementation(project(":user-info:domain:model"))
