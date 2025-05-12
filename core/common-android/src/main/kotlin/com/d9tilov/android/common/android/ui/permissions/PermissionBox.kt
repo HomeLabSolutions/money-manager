@@ -7,7 +7,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,7 +18,6 @@ import com.d9tilov.android.common.android.R
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.google.accompanist.permissions.shouldShowRationale
 
 /**
  * The PermissionBox uses a [Box] to show a simple permission request UI when the provided [permission]
@@ -121,10 +119,6 @@ fun PermissionBox(
                         ) { Text(stringResource(R.string.dismiss)) }
                     },
                 )
-            } else {
-                LaunchedEffect(Unit) {
-                    permissionState.launchMultiplePermissionRequest()
-                }
             }
         }
     }
