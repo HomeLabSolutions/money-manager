@@ -8,6 +8,6 @@ interface GeocodeApi {
     @GET("geocode/v1/json")
     suspend fun getCurrencies(
         @Query("q") coords: String,
-        @Query("api_key") key: String = BuildConfig.GEOCODING_API_KEY,
+        @Query("key") key: String = BuildConfig.GEOCODING_API_KEY,
     ): GeocodingResponse
 }

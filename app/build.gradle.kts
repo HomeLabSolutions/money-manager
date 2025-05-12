@@ -139,7 +139,6 @@ dependencies {
     implementation(project(":user-info:di"))
     implementation(project(":user-info:domain:contract"))
     implementation(project(":user-info:domain:model"))
-    implementation(libs.accompanist.permissions)
     implementation(libs.activity)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material3)

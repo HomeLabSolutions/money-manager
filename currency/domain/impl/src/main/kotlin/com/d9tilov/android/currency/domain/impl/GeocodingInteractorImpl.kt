@@ -8,10 +8,17 @@ import javax.inject.Inject
 
 class GeocodingInteractorImpl @Inject constructor(
     val geocodingRepo: GeocodeRepo,
-    val currencyInteractor: CurrencyInteractor
+    val currencyInteractor: CurrencyInteractor,
 ) : GeocodingInteractor {
-    override suspend fun getCurrencyByCoords(latitude: Double, longitude: Double): Currency {
+    override suspend fun getCurrencyByCoords(
+        latitude: Double,
+        longitude: Double,
+    ): Currency {
         val currencyCode = geocodingRepo.getCurrencyCodeByCoords(latitude, longitude)
         return currencyInteractor.getCurrencyByCode(currencyCode)
     }
+
+    override suspend fun updateLocalCurrency(currencyCode: String) = geocodingRepo.updateLocalCurrency(currencyCode)
+
+    override suspend fun resetLocalCurrency() = geocodingRepo.resetLocalCurrency()
 }

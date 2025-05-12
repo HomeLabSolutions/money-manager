@@ -36,13 +36,15 @@ object CurrencyDataModule {
 
     @Provides
     @Singleton
-    fun provideCurrencyApi(@CurrencyNetworkApi retrofit: Retrofit): CurrencyApi =
-        retrofit.create(CurrencyApi::class.java)
+    fun provideCurrencyApi(
+        @CurrencyNetworkApi retrofit: Retrofit,
+    ): CurrencyApi = retrofit.create(CurrencyApi::class.java)
 
     @Provides
     @Singleton
-    fun provideGeoApi(@GeoNetworkApi retrofit: Retrofit): GeocodeApi =
-        retrofit.create(GeocodeApi::class.java)
+    fun provideGeoApi(
+        @GeoNetworkApi retrofit: Retrofit,
+    ): GeocodeApi = retrofit.create(GeocodeApi::class.java)
 
     @Provides
     @Singleton
@@ -57,6 +59,8 @@ object CurrencyDataModule {
 
     @Provides
     @Singleton
-    fun provideGeoRepo(geocodeApi: GeocodeApi): GeocodeRepo =
-        GeocodeDataRepo(geocodeApi)
+    fun provideGeoRepo(
+        geocodeApi: GeocodeApi,
+        preferencesStore: PreferencesStore,
+    ): GeocodeRepo = GeocodeDataRepo(geocodeApi, preferencesStore)
 }

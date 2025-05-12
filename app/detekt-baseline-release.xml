@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CanBeNonNullable:MainViewModel.kt$MainViewModel$currencyCode: String?</ID>
+    <ID>InjectDispatcher:MmApp.kt$IO</ID>
+    <ID>MultilineLambdaItParameter:MmApp.kt${ val usePreciseLocation = it.contains(Manifest.permission.ACCESS_FINE_LOCATION) LaunchedEffect(Unit) { scope.launch(Dispatchers.IO) { val priority = if (usePreciseLocation) { Priority.PRIORITY_HIGH_ACCURACY } else { Priority.PRIORITY_BALANCED_POWER_ACCURACY } val result = locationClient .getCurrentLocation( priority, CancellationTokenSource().token, ).await() result?.let { res -&gt; onLocationUpdated(res) } } } }</ID>
+  </CurrentIssues>
+</SmellBaseline>

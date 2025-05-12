@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.home
 
+import android.location.Location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.backup.domain.contract.BackupInteractor
@@ -9,6 +10,7 @@ import com.d9tilov.android.common.android.di.CoroutinesModule.Companion.DISPATCH
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.contract.GeocodingInteractor
 import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.network.exception.NetworkException
@@ -30,6 +32,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.FileNotFoundException
@@ -38,129 +41,170 @@ import javax.inject.Named
 
 @HiltViewModel
 class MainViewModel
-@Inject
-constructor(
-    @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
-    private val transactionInteractor: TransactionInteractor,
-    private val billingInteractor: BillingInteractor,
-    private val preferencesStore: PreferencesStore,
-    private val backupInteractor: BackupInteractor,
-    private val userInteractor: UserInteractor,
-    private val categoryInteractor: Lazy<CategoryInteractor>,
-    private val geocodingInteractor: GeocodingInteractor,
-) : ViewModel() {
-    private val auth = FirebaseAuth.getInstance()
+    @Inject
+    constructor(
+        @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
+        private val transactionInteractor: TransactionInteractor,
+        private val billingInteractor: BillingInteractor,
+        private val preferencesStore: PreferencesStore,
+        private val backupInteractor: BackupInteractor,
+        private val userInteractor: UserInteractor,
+        private val categoryInteractor: Lazy<CategoryInteractor>,
+        private val currencyInteractor: CurrencyInteractor,
+        private val geocodingInteractor: GeocodingInteractor,
+    ) : ViewModel() {
+        private val auth = FirebaseAuth.getInstance()
 
-    private val updateCurrencyExceptionHandler =
-        CoroutineExceptionHandler { _, exception ->
-            Timber.tag(TAG).d("Unable to update currency: $exception")
-        }
+        private val updateCurrencyExceptionHandler =
+            CoroutineExceptionHandler { _, exception ->
+                Timber.tag(TAG).d("Unable to update currency: $exception")
+            }
 
-    private val uiState: MutableStateFlow<MainActivityUiState> =
-        MutableStateFlow(MainActivityUiState.Loading)
-    val uiStateFlow: StateFlow<MainActivityUiState> = uiState
+        private val uiState: MutableStateFlow<MainActivityUiState> =
+            MutableStateFlow(MainActivityUiState.Loading)
+        private val localCurrencyState = MutableStateFlow(LocationCurrencyState())
+        val uiStateFlow: StateFlow<MainActivityUiState> = uiState
 
-    init {
-        viewModelScope.launch {
-            preferencesStore.uid
-                .map { uid ->
-                    val firebaseUid = auth.currentUser?.uid
-                    if (firebaseUid == null) {
-                        MainActivityUiState.Success.Auth
-                    } else {
-                        if (firebaseUid != uid) {
-                            if (uid != null) userInteractor.deleteUser()
-                            auth.signOut()
+        init {
+            viewModelScope.launch {
+                preferencesStore.uid
+                    .map { uid ->
+                        val firebaseUid = auth.currentUser?.uid
+                        if (firebaseUid == null) {
                             MainActivityUiState.Success.Auth
                         } else {
-                            var user = userInteractor.getCurrentUser().firstOrNull()
-                            if (user == null) {
-                                try {
-                                    backupInteractor.restoreBackup()
-                                } catch (ex: NetworkException) {
-                                    Timber.tag(TAG).d("Do work with network exception: $ex")
-                                } catch (ex: WrongUidException) {
-                                    Timber.tag(TAG).d("Do work with wrong uid exception: $ex")
-                                } catch (ex: FileNotFoundException) {
-                                    Timber.tag(TAG).d("Do work with file not found error: $ex")
-                                } catch (ex: FirebaseException) {
-                                    Timber.tag(TAG).d("Do work with exception: $ex")
-                                }
-                                user = userInteractor.getCurrentUser().firstOrNull()
-                                if (user == null || user.showPrepopulate) {
-                                    userInteractor.createUser(auth.currentUser.toDataModel())
-                                    categoryInteractor.get().createDefaultCategories()
-                                    MainActivityUiState.Success.Prepopulate
-                                } else {
-                                    MainActivityUiState.Success.Main
-                                }
+                            if (firebaseUid != uid) {
+                                if (uid != null) userInteractor.deleteUser()
+                                auth.signOut()
+                                MainActivityUiState.Success.Auth
                             } else {
-                                if (userInteractor.showPrepopulate()) {
-                                    MainActivityUiState.Success.Prepopulate
+                                var user = userInteractor.getCurrentUser().firstOrNull()
+                                if (user == null) {
+                                    try {
+                                        backupInteractor.restoreBackup()
+                                    } catch (ex: NetworkException) {
+                                        Timber.tag(TAG).d("Do work with network exception: $ex")
+                                    } catch (ex: WrongUidException) {
+                                        Timber.tag(TAG).d("Do work with wrong uid exception: $ex")
+                                    } catch (ex: FileNotFoundException) {
+                                        Timber.tag(TAG).d("Do work with file not found error: $ex")
+                                    } catch (ex: FirebaseException) {
+                                        Timber.tag(TAG).d("Do work with exception: $ex")
+                                    }
+                                    user = userInteractor.getCurrentUser().firstOrNull()
+                                    if (user == null || user.showPrepopulate) {
+                                        userInteractor.createUser(auth.currentUser.toDataModel())
+                                        categoryInteractor.get().createDefaultCategories()
+                                        MainActivityUiState.Success.Prepopulate
+                                    } else {
+                                        MainActivityUiState.Success.Main(localCurrencyState.value)
+                                    }
                                 } else {
-                                    MainActivityUiState.Success.Main
+                                    if (userInteractor.showPrepopulate()) {
+                                        MainActivityUiState.Success.Prepopulate
+                                    } else {
+                                        MainActivityUiState.Success.Main(localCurrencyState.value)
+                                    }
                                 }
                             }
                         }
-                    }
-                }.collectLatest { state -> uiState.value = state }
+                    }.collectLatest { state -> uiState.update { state } }
+            }
         }
-    }
 
-    private val premiumFlow =
-        billingInteractor
-            .isPremium()
-            .flowOn(ioDispatcher)
-            .shareIn(viewModelScope, SharingStarted.WhileSubscribed(), 1)
+        private val premiumFlow =
+            billingInteractor
+                .isPremium()
+                .flowOn(ioDispatcher)
+                .shareIn(viewModelScope, SharingStarted.WhileSubscribed(), 1)
 
-    init {
-        billingInteractor.startBillingConnection()
-        viewModelScope.launch(ioDispatcher + updateCurrencyExceptionHandler) {
-            billingInteractor.billingConnectionReady
-                .combine(premiumFlow) { isReady, isPremium ->
-                    isReady && isPremium
-                }.collect { readyForPremium ->
-                    if (readyForPremium) {
-                        launch { transactionInteractor.executeRegularIfNeeded(TransactionType.INCOME) }
-                        launch { transactionInteractor.executeRegularIfNeeded(TransactionType.EXPENSE) }
+        init {
+            billingInteractor.startBillingConnection()
+            viewModelScope.launch(ioDispatcher + updateCurrencyExceptionHandler) {
+                billingInteractor.billingConnectionReady
+                    .combine(premiumFlow) { isReady, isPremium ->
+                        isReady && isPremium
+                    }.collect { readyForPremium ->
+                        if (readyForPremium) {
+                            launch { transactionInteractor.executeRegularIfNeeded(TransactionType.INCOME) }
+                            launch { transactionInteractor.executeRegularIfNeeded(TransactionType.EXPENSE) }
+                        }
                     }
-                }
+            }
         }
-    }
 
-    fun updateData() {
-        Timber.tag(TAG).d("Update data")
-        viewModelScope.launch(ioDispatcher) {
-            auth.currentUser?.let { firebaseUser ->
-                Timber.tag(TAG).d("Update data. FirebaseUser: $firebaseUser")
-                preferencesStore.updateUid(firebaseUser.uid) // need for dataBase decryption
-                try {
-                    backupInteractor.restoreBackup()
-                } catch (ex: NetworkException) {
-                    Timber.tag(TAG).d("Do work with network exception: $ex")
-                } catch (ex: WrongUidException) {
-                    Timber.tag(TAG).d("Do work with wrong uid exception: $ex")
-                } catch (ex: FileNotFoundException) {
-                    Timber.tag(TAG).d("Do work with file not found error: $ex")
-                } catch (ex: FirebaseException) {
-                    Timber.tag(TAG).d("Do work with exception: $ex")
+        fun updateData() {
+            Timber.tag(TAG).d("Update data")
+            viewModelScope.launch(ioDispatcher) {
+                auth.currentUser?.let { firebaseUser ->
+                    Timber.tag(TAG).d("Update data. FirebaseUser: $firebaseUser")
+                    preferencesStore.updateUid(firebaseUser.uid) // need for dataBase decryption
+                    try {
+                        backupInteractor.restoreBackup()
+                    } catch (ex: NetworkException) {
+                        Timber.tag(TAG).d("Do work with network exception: $ex")
+                    } catch (ex: WrongUidException) {
+                        Timber.tag(TAG).d("Do work with wrong uid exception: $ex")
+                    } catch (ex: FileNotFoundException) {
+                        Timber.tag(TAG).d("Do work with file not found error: $ex")
+                    } catch (ex: FirebaseException) {
+                        Timber.tag(TAG).d("Do work with exception: $ex")
+                    }
                 }
             }
         }
-    }
 
-    override fun onCleared() {
-        billingInteractor.terminateBillingConnection()
-    }
+        override fun onCleared() {
+            billingInteractor.terminateBillingConnection()
+        }
 
-    fun setToLoadingState() {
-        uiState.value = MainActivityUiState.Loading
-    }
+        fun setToLoadingState() {
+            uiState.update { MainActivityUiState.Loading }
+        }
 
-    fun getLocationCurrencyCode(): String {
-        geocodingInteractor.getCurrencyByCoords()
+        fun getLocationCurrencyCode(location: Location) =
+            viewModelScope.launch(ioDispatcher + updateCurrencyExceptionHandler) {
+                if (uiState.value !is MainActivityUiState.Success.Main) return@launch
+                val locationCurrency = geocodingInteractor.getCurrencyByCoords(location.latitude, location.longitude)
+                val newState =
+                    when (locationCurrency.code) {
+                        preferencesStore.getLocalCurrency().firstOrNull() -> {
+                            LocationCurrencyState(false, locationCurrency.code)
+                        }
+
+                        currencyInteractor.getMainCurrency().code -> {
+                            geocodingInteractor.resetLocalCurrency()
+                            LocationCurrencyState(false, currencyInteractor.getMainCurrency().code)
+                        }
+
+                        else -> {
+                            LocationCurrencyState(true, locationCurrency.code)
+                        }
+                    }
+                localCurrencyState.update { newState }
+                uiState.update { MainActivityUiState.Success.Main(newState) }
+            }
+
+        fun updateCurrency(currencyCode: String?) =
+            viewModelScope.launch {
+                if (currencyCode == null) return@launch
+                if (uiState.value !is MainActivityUiState.Success.Main) return@launch
+                launch { currencyInteractor.updateMainCurrency(currencyCode) }
+                launch { geocodingInteractor.resetLocalCurrency() }
+                val newState = LocationCurrencyState(false, currencyCode)
+                localCurrencyState.update { newState }
+                uiState.update { MainActivityUiState.Success.Main(newState) }
+            }
+
+        fun updateLocalCurrency(currencyCode: String?) =
+            viewModelScope.launch {
+                if (currencyCode == null) return@launch
+                geocodingInteractor.updateLocalCurrency(currencyCode)
+                val newState = LocationCurrencyState(false, currencyCode)
+                localCurrencyState.update { newState }
+                uiState.update { MainActivityUiState.Success.Main(newState) }
+            }
     }
-}
 
 sealed interface MainActivityUiState {
     data object Loading : MainActivityUiState
@@ -170,6 +214,13 @@ sealed interface MainActivityUiState {
 
         data object Prepopulate : Success
 
-        data object Main : Success
+        data class Main(
+            val locationCurrencyState: LocationCurrencyState,
+        ) : Success
     }
 }
+
+data class LocationCurrencyState(
+    val showDialog: Boolean = false,
+    val currencyCode: String? = null,
+)

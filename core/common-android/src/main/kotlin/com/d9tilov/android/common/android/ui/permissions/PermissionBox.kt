@@ -62,24 +62,23 @@ fun PermissionBox(
     contentAlignment: Alignment = Alignment.TopStart,
     onGranted: @Composable BoxScope.(List<String>) -> Unit,
 ) {
-    val permissionState = rememberMultiplePermissionsState(permissions = permissions) { map ->
-        System.out.println("moggot map: $map")
-    }
-    System.out.println("moggot shouldShowRationale: ${permissionState.shouldShowRationale}")
+    val permissionState = rememberMultiplePermissionsState(permissions = permissions) { _ -> }
     val allRequiredPermissionsGranted =
         permissionState.revokedPermissions.none { it.permission in requiredPermissions }
     var showRationale by remember(permissionState) {
         mutableStateOf(!allRequiredPermissionsGranted && permissionState.shouldShowRationale)
     }
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .then(modifier),
-        contentAlignment = if (allRequiredPermissionsGranted) {
-            contentAlignment
-        } else {
-            Alignment.Center
-        },
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .then(modifier),
+        contentAlignment =
+            if (allRequiredPermissionsGranted) {
+                contentAlignment
+            } else {
+                Alignment.Center
+            },
     ) {
         if (allRequiredPermissionsGranted) {
             onGranted(
@@ -96,11 +95,12 @@ fun PermissionBox(
                     title = { Text(text = stringResource(R.string.permissions_dialog_title)) },
                     text = {
                         Text(
-                            text = stringResource(
-                                R.string.permissions_dialog_subtitle,
-                                permissionTitle,
-                                permissionExplanation
-                            )
+                            text =
+                                stringResource(
+                                    R.string.permissions_dialog_subtitle,
+                                    permissionTitle,
+                                    permissionExplanation,
+                                ),
                         )
                     },
                     confirmButton = {

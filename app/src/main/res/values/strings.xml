@@ -44,4 +44,6 @@
 
     <string name="permissions_location">Location</string>
     <string name="permissions_location_explanation">display local currency</string>
+    <string name="location_currency_dialog_title">Update currency</string>
+    <string name="location_currency_dialog_subtitle">Do you want to change local currency to %1$s</string>
 </resources>

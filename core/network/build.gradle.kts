@@ -20,7 +20,6 @@ if (keystorePropertiesFile.exists()) {
     ""
 }
 
-
 android {
     namespace = "com.d9tilov.android.network"
 

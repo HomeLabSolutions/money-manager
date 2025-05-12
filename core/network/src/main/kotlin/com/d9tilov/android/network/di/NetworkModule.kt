@@ -47,12 +47,12 @@ object NetworkModule {
 
     @CurrencyNetworkApi
     @Provides
-    fun provideGeoRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideCurrencyRetrofit(okHttpClient: OkHttpClient): Retrofit {
         val contentType = "application/json".toMediaType()
         val json = Json { ignoreUnknownKeys = true }
         return Retrofit
             .Builder()
-            .baseUrl(BASE_GEOCODE_URL)
+            .baseUrl(BASE_CURRENCY_URL)
             .addConverterFactory(json.asConverterFactory(contentType))
             .client(okHttpClient)
             .build()
@@ -60,12 +60,12 @@ object NetworkModule {
 
     @GeoNetworkApi
     @Provides
-    fun provideCurrencyRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideGeoRetrofit(okHttpClient: OkHttpClient): Retrofit {
         val contentType = "application/json".toMediaType()
         val json = Json { ignoreUnknownKeys = true }
         return Retrofit
             .Builder()
-            .baseUrl(BASE_CURRENCY_URL)
+            .baseUrl(BASE_GEOCODE_URL)
             .addConverterFactory(json.asConverterFactory(contentType))
             .client(okHttpClient)
             .build()
