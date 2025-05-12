@@ -160,5 +160,6 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.material)
     implementation(libs.play.services.auth)
+    implementation(libs.play.services.location)
     implementation(libs.timber)
 }
