@@ -10,6 +10,6 @@ android {
 dependencies {
 
     implementation(project(":core:datastore"))
-    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.analytics.ktx)
     implementation(libs.hilt.android)
 }

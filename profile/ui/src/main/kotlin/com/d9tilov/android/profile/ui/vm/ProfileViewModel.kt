@@ -1,6 +1,7 @@
 package com.d9tilov.android.profile.ui.vm
 
 import android.net.Uri
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
@@ -14,7 +15,7 @@ import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactio
 import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
 import com.d9tilov.android.user.domain.contract.UserInteractor
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.analytics.logEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,7 +46,7 @@ sealed class ProfileUiItem {
         val regularExpenses: List<RegularTransaction> = emptyList(),
     ) : ProfileUiItem()
 
-    object Goals : ProfileUiItem()
+    data object Goals : ProfileUiItem()
 
     data class Settings(
         val isPremium: Boolean = false,
@@ -99,7 +100,7 @@ class ProfileViewModel
                 val userInfo = userCurrencyPair.first
                 val currency: CurrencyMetaData = userCurrencyPair.second
                 userInfo?.let { user ->
-                    val photoUri: Uri? = if (user.photoUrl != null) Uri.parse(user.photoUrl) else null
+                    val photoUri: Uri? = if (user.photoUrl != null) user.photoUrl?.toUri() else null
                     ProfileUiState(
                         userProfile = UserUiProfile(photoUri, user.displayedName),
                         currency = ProfileUiItem.CurrencyUiItem(currency.code),
