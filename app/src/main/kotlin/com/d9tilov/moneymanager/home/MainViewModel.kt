@@ -3,16 +3,12 @@ package com.d9tilov.moneymanager.home
 import android.location.Location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.d9tilov.android.analytics.domain.AnalyticsSender
-import com.d9tilov.android.analytics.model.AnalyticsEvent
-import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.backup.domain.contract.BackupInteractor
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
+import com.d9tilov.android.common.android.di.CoroutinesModule.Companion.DISPATCHER_IO
 import com.d9tilov.android.core.constants.DataConstants.TAG
-import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.core.exceptions.WrongUidException
-import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.contract.GeocodingInteractor
@@ -48,7 +44,6 @@ class MainViewModel
     @Inject
     constructor(
         @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
-        private val analyticsSender: AnalyticsSender,
         private val transactionInteractor: TransactionInteractor,
         private val billingInteractor: BillingInteractor,
         private val preferencesStore: PreferencesStore,
@@ -85,46 +80,32 @@ class MainViewModel
                             } else {
                                 var user = userInteractor.getCurrentUser().firstOrNull()
                                 if (user == null) {
-                                    when (val result = backupInteractor.restoreBackup()) {
-                                        is ResultOf.Success -> {
-                                            Timber.tag(TAG).d("Database restored successfully")
-                                        }
-
-                                        is ResultOf.Failure -> {
-                                            when (result.throwable) {
-                                                is NetworkException ->
-                                                    Timber
-                                                        .tag(TAG)
-                                                        .d("Do work with network exception: ${result.throwable}")
-
-                                                is WrongUidException ->
-                                                    Timber
-                                                        .tag(TAG)
-                                                        .d("Do work with wrong uid exception: ${result.throwable}")
-
-                                                is FileNotFoundException ->
-                                                    Timber
-                                                        .tag(TAG)
-                                                        .d("Do work with file not found error: ${result.throwable}")
-
-                                                is FirebaseException ->
-                                                    Timber
-                                                        .tag(TAG)
-                                                        .d("Do work with Firebase exception: ${result.throwable}")
-
-                                                else -> Timber.tag(TAG).d("Do work with exception: ${result.throwable}")
-                                            }
-                                        }
-
-                                        else -> {}
+                                    try {
+                                        backupInteractor.restoreBackup()
+                                    } catch (ex: NetworkException) {
+                                        Timber.tag(TAG).d("Do work with network exception: $ex")
+                                    } catch (ex: WrongUidException) {
+                                        Timber.tag(TAG).d("Do work with wrong uid exception: $ex")
+                                    } catch (ex: FileNotFoundException) {
+                                        Timber.tag(TAG).d("Do work with file not found error: $ex")
+                                    } catch (ex: FirebaseException) {
+                                        Timber.tag(TAG).d("Do work with exception: $ex")
                                     }
                                     user = userInteractor.getCurrentUser().firstOrNull()
                                     if (user == null || user.showPrepopulate) {
                                         userInteractor.createUser(auth.currentUser.toDataModel())
                                         categoryInteractor.get().createDefaultCategories()
+                                        MainActivityUiState.Success.Prepopulate
+                                    } else {
+                                        MainActivityUiState.Success.Main(localCurrencyState.value)
+                                    }
+                                } else {
+                                    if (userInteractor.showPrepopulate()) {
+                                        MainActivityUiState.Success.Prepopulate
+                                    } else {
+                                        MainActivityUiState.Success.Main(localCurrencyState.value)
                                     }
                                 }
-                                MainActivityUiState.Success.Main(localCurrencyState.value)
                             }
                         }
                     }.collectLatest { state -> uiState.update { state } }
@@ -156,12 +137,19 @@ class MainViewModel
             Timber.tag(TAG).d("Update data")
             viewModelScope.launch(ioDispatcher) {
                 auth.currentUser?.let { firebaseUser ->
-                    analyticsSender.sendWithParams(AnalyticsEvent.Client.Auth.Login) {
-                        AnalyticsParams.LoginResultProvider.name to firebaseUser.providerData.firstOrNull()?.providerId
-                    }
                     Timber.tag(TAG).d("Update data. FirebaseUser: $firebaseUser")
                     preferencesStore.updateUid(firebaseUser.uid) // need for dataBase decryption
-                    backupInteractor.restoreBackup()
+                    try {
+                        backupInteractor.restoreBackup()
+                    } catch (ex: NetworkException) {
+                        Timber.tag(TAG).d("Do work with network exception: $ex")
+                    } catch (ex: WrongUidException) {
+                        Timber.tag(TAG).d("Do work with wrong uid exception: $ex")
+                    } catch (ex: FileNotFoundException) {
+                        Timber.tag(TAG).d("Do work with file not found error: $ex")
+                    } catch (ex: FirebaseException) {
+                        Timber.tag(TAG).d("Do work with exception: $ex")
+                    }
                 }
             }
         }
