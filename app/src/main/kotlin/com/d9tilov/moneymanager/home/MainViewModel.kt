@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.home
 
+import android.location.Location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.backup.domain.contract.BackupInteractor
@@ -9,6 +10,8 @@ import com.d9tilov.android.common.android.di.CoroutinesModule.Companion.DISPATCH
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
+import com.d9tilov.android.currency.domain.contract.GeocodingInteractor
 import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.network.exception.NetworkException
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
@@ -29,6 +32,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.FileNotFoundException
@@ -46,6 +50,8 @@ class MainViewModel
         private val backupInteractor: BackupInteractor,
         private val userInteractor: UserInteractor,
         private val categoryInteractor: Lazy<CategoryInteractor>,
+        private val currencyInteractor: CurrencyInteractor,
+        private val geocodingInteractor: GeocodingInteractor,
     ) : ViewModel() {
         private val auth = FirebaseAuth.getInstance()
 
@@ -56,6 +62,7 @@ class MainViewModel
 
         private val uiState: MutableStateFlow<MainActivityUiState> =
             MutableStateFlow(MainActivityUiState.Loading)
+        private val localCurrencyState = MutableStateFlow(LocationCurrencyState())
         val uiStateFlow: StateFlow<MainActivityUiState> = uiState
 
         init {
@@ -90,18 +97,18 @@ class MainViewModel
                                         categoryInteractor.get().createDefaultCategories()
                                         MainActivityUiState.Success.Prepopulate
                                     } else {
-                                        MainActivityUiState.Success.Main
+                                        MainActivityUiState.Success.Main(localCurrencyState.value)
                                     }
                                 } else {
                                     if (userInteractor.showPrepopulate()) {
                                         MainActivityUiState.Success.Prepopulate
                                     } else {
-                                        MainActivityUiState.Success.Main
+                                        MainActivityUiState.Success.Main(localCurrencyState.value)
                                     }
                                 }
                             }
                         }
-                    }.collectLatest { state -> uiState.value = state }
+                    }.collectLatest { state -> uiState.update { state } }
             }
         }
 
@@ -152,8 +159,51 @@ class MainViewModel
         }
 
         fun setToLoadingState() {
-            uiState.value = MainActivityUiState.Loading
+            uiState.update { MainActivityUiState.Loading }
         }
+
+        fun getLocationCurrencyCode(location: Location) =
+            viewModelScope.launch(ioDispatcher + updateCurrencyExceptionHandler) {
+                if (uiState.value !is MainActivityUiState.Success.Main) return@launch
+                val locationCurrency = geocodingInteractor.getCurrencyByCoords(location.latitude, location.longitude)
+                val newState =
+                    when (locationCurrency.code) {
+                        preferencesStore.getLocalCurrency().firstOrNull() -> {
+                            LocationCurrencyState(false, locationCurrency.code)
+                        }
+
+                        currencyInteractor.getMainCurrency().code -> {
+                            geocodingInteractor.resetLocalCurrency()
+                            LocationCurrencyState(false, currencyInteractor.getMainCurrency().code)
+                        }
+
+                        else -> {
+                            LocationCurrencyState(true, locationCurrency.code)
+                        }
+                    }
+                localCurrencyState.update { newState }
+                uiState.update { MainActivityUiState.Success.Main(newState) }
+            }
+
+        fun updateCurrency(currencyCode: String?) =
+            viewModelScope.launch {
+                if (currencyCode == null) return@launch
+                if (uiState.value !is MainActivityUiState.Success.Main) return@launch
+                launch { currencyInteractor.updateMainCurrency(currencyCode) }
+                launch { geocodingInteractor.resetLocalCurrency() }
+                val newState = LocationCurrencyState(false, currencyCode)
+                localCurrencyState.update { newState }
+                uiState.update { MainActivityUiState.Success.Main(newState) }
+            }
+
+        fun updateLocalCurrency(currencyCode: String?) =
+            viewModelScope.launch {
+                if (currencyCode == null) return@launch
+                geocodingInteractor.updateLocalCurrency(currencyCode)
+                val newState = LocationCurrencyState(false, currencyCode)
+                localCurrencyState.update { newState }
+                uiState.update { MainActivityUiState.Success.Main(newState) }
+            }
     }
 
 sealed interface MainActivityUiState {
@@ -164,6 +214,13 @@ sealed interface MainActivityUiState {
 
         data object Prepopulate : Success
 
-        data object Main : Success
+        data class Main(
+            val locationCurrencyState: LocationCurrencyState,
+        ) : Success
     }
 }
+
+data class LocationCurrencyState(
+    val showDialog: Boolean = false,
+    val currencyCode: String? = null,
+)
