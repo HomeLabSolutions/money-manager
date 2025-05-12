@@ -14,12 +14,8 @@ core = "1.16.0"
 coroutinesCore = "1.10.1"
 datastore = "1.1.4"
 detektPlugin = "1.23.8"
-firebaseAnalytics = "22.4.0"
-firebaseAuth = "23.2.0"
-firebaseConfig = "22.1.1"
-firebaseCrashlytics = "19.4.3"
+firebaseBom = "33.13.0"
 firebaseCrashlyticsPlugin = "3.0.3"
-firebaseStorage = "21.0.1"
 firebaseUi = "8.0.2"
 googlePlayServices = "4.4.2"
 googlePlayServicesAuth = "20.7.0"
@@ -34,10 +30,10 @@ java = "17"
 javaPoet = "1.13.0"
 javaxInject = "1"
 junit = "4.13.2"
-kotlin = "2.1.10"
+kotlin = "2.1.20"
 kotlinDatetime = "0.6.2"
 kotlinxSerialization = "1.8.0"
-ksp = "2.1.0-1.0.29"
+ksp = "2.1.20-2.0.1"
 material = "1.12.0"
 moshi = "1.15.2"
 navigation = "2.9.0"
@@ -65,7 +61,6 @@ androidx-compose-material3 = { group = "androidx.compose.material3", name = "mat
 androidx-compose-material3-window-size = { group = "androidx.compose.material3", name = "material3-window-size-class" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-constraintlayout-compose = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "composeConstraintLayout" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashScreen" }
@@ -81,12 +76,13 @@ core = { group = "androidx.core", name = "core", version.ref = "core" }
 dagger = { group = "com.google.dagger", name = "dagger", version.ref = "hiltPlugin" }
 datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 detekt = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detektPlugin" }
-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
-firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
-firebase-config = { group = "com.google.firebase", name = "firebase-config", version.ref = "firebaseConfig" }
-firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
+firebase-analytics-ktx = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-config-ktx = { group = "com.google.firebase", name = "firebase-config-ktx" }
 firebase-crashlytics-gradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsPlugin" }
-firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
+firebase-crashlytics-ktx = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage" }
 firebase-ui-auth = { group = "com.firebaseui", name = "firebase-ui-auth", version.ref = "firebaseUi" }
 google-services = { group = "com.google.gms", name = "google-services", version.ref = "googlePlayServices" }
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
