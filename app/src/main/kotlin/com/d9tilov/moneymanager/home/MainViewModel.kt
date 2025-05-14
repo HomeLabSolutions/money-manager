@@ -3,6 +3,9 @@ package com.d9tilov.moneymanager.home
 import android.location.Location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.d9tilov.android.analytics.domain.AnalyticsSender
+import com.d9tilov.android.analytics.model.AnalyticsEvent
+import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.backup.domain.contract.BackupInteractor
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
@@ -44,6 +47,7 @@ class MainViewModel
     @Inject
     constructor(
         @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
+        private val analyticsSender: AnalyticsSender,
         private val transactionInteractor: TransactionInteractor,
         private val billingInteractor: BillingInteractor,
         private val preferencesStore: PreferencesStore,
@@ -137,6 +141,9 @@ class MainViewModel
             Timber.tag(TAG).d("Update data")
             viewModelScope.launch(ioDispatcher) {
                 auth.currentUser?.let { firebaseUser ->
+                    analyticsSender.sendWithParams(AnalyticsEvent.Client.Auth.Login) {
+                        AnalyticsParams.LoginResultProvider.name to firebaseUser.providerData.firstOrNull()?.providerId
+                    }
                     Timber.tag(TAG).d("Update data. FirebaseUser: $firebaseUser")
                     preferencesStore.updateUid(firebaseUser.uid) // need for dataBase decryption
                     try {
