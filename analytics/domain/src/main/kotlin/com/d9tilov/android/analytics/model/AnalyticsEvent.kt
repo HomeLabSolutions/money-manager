@@ -5,7 +5,19 @@ sealed class AnalyticsEvent(
 ) {
     sealed class Internal(
         name: String,
-    ) : AnalyticsEvent(name)
+    ) : AnalyticsEvent(name) {
+        sealed class Error(
+            name: String,
+        ) : Internal(name) {
+            data object WrongUidException : Error("Wrong uid exception")
+
+            data object NetworkException : Error("Network issue")
+
+            data object FileNotFoundException : Error("File not found exception")
+
+            data object FirebaseException : Error("Firebase exception")
+        }
+    }
 
     sealed class Client(
         name: String,

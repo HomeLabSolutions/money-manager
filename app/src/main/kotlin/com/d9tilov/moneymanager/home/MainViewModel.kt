@@ -12,6 +12,7 @@ import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.common.android.di.CoroutinesModule.Companion.DISPATCHER_IO
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.exceptions.WrongUidException
+import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.contract.GeocodingInteractor
@@ -84,16 +85,37 @@ class MainViewModel
                             } else {
                                 var user = userInteractor.getCurrentUser().firstOrNull()
                                 if (user == null) {
-                                    try {
-                                        backupInteractor.restoreBackup()
-                                    } catch (ex: NetworkException) {
-                                        Timber.tag(TAG).d("Do work with network exception: $ex")
-                                    } catch (ex: WrongUidException) {
-                                        Timber.tag(TAG).d("Do work with wrong uid exception: $ex")
-                                    } catch (ex: FileNotFoundException) {
-                                        Timber.tag(TAG).d("Do work with file not found error: $ex")
-                                    } catch (ex: FirebaseException) {
-                                        Timber.tag(TAG).d("Do work with exception: $ex")
+                                    when (val result = backupInteractor.restoreBackup()) {
+                                        is ResultOf.Success -> {
+                                            Timber.tag(TAG).d("Database restored successfully")
+                                        }
+                                        is ResultOf.Failure -> {
+                                            when (result.throwable) {
+                                                is NetworkException ->
+                                                    Timber
+                                                        .tag(TAG)
+                                                        .d("Do work with network exception: ${result.throwable}")
+
+                                                is WrongUidException ->
+                                                    Timber
+                                                        .tag(TAG)
+                                                        .d("Do work with wrong uid exception: ${result.throwable}")
+
+                                                is FileNotFoundException ->
+                                                    Timber
+                                                        .tag(TAG)
+                                                        .d("Do work with file not found error: ${result.throwable}")
+
+                                                is FirebaseException ->
+                                                    Timber
+                                                        .tag(TAG)
+                                                        .d("Do work with Firebase exception: ${result.throwable}")
+
+                                                else -> Timber.tag(TAG).d("Do work with exception: ${result.throwable}")
+                                            }
+                                        }
+
+                                        else -> {}
                                     }
                                     user = userInteractor.getCurrentUser().firstOrNull()
                                     if (user == null || user.showPrepopulate) {
@@ -146,16 +168,40 @@ class MainViewModel
                     }
                     Timber.tag(TAG).d("Update data. FirebaseUser: $firebaseUser")
                     preferencesStore.updateUid(firebaseUser.uid) // need for dataBase decryption
-                    try {
-                        backupInteractor.restoreBackup()
-                    } catch (ex: NetworkException) {
-                        Timber.tag(TAG).d("Do work with network exception: $ex")
-                    } catch (ex: WrongUidException) {
-                        Timber.tag(TAG).d("Do work with wrong uid exception: $ex")
-                    } catch (ex: FileNotFoundException) {
-                        Timber.tag(TAG).d("Do work with file not found error: $ex")
-                    } catch (ex: FirebaseException) {
-                        Timber.tag(TAG).d("Do work with exception: $ex")
+                    when (val result = backupInteractor.restoreBackup()) {
+                        is ResultOf.Success -> {
+                            Timber.tag(TAG).d("Database restored successfully")
+                        }
+                        is ResultOf.Failure -> {
+                            analyticsSender.sendWithParams(AnalyticsEvent.Internal.Error.NetworkException) {
+                                AnalyticsParams.Exception to result.toString()
+                            }
+                            when (result.throwable) {
+                                is NetworkException ->
+                                    Timber
+                                        .tag(TAG)
+                                        .d("Do work with network exception: ${result.throwable}")
+
+                                is WrongUidException ->
+                                    Timber
+                                        .tag(TAG)
+                                        .d("Do work with wrong uid exception: ${result.throwable}")
+
+                                is FileNotFoundException ->
+                                    Timber
+                                        .tag(TAG)
+                                        .d("Do work with file not found error: ${result.throwable}")
+
+                                is FirebaseException ->
+                                    Timber
+                                        .tag(TAG)
+                                        .d("Do work with Firebase exception: ${result.throwable}")
+
+                                else -> Timber.tag(TAG).d("Do work with exception: ${result.throwable}")
+                            }
+                        }
+
+                        else -> {}
                     }
                 }
             }

@@ -7,6 +7,6 @@ interface AnalyticsSender {
 
     fun sendWithParams(
         event: AnalyticsEvent,
-        paramsBuilder: MutableMap<String, Any>.() -> Unit,
+        paramsBuilder: MutableMap<String, Any?>.() -> Unit,
     )
 }

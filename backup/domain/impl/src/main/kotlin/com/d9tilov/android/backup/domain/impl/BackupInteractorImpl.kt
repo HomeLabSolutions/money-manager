@@ -13,7 +13,7 @@ class BackupInteractorImpl(
 
     override suspend fun makeBackup(): ResultOf<BackupData> = backupRepo.makeBackup()
 
-    override suspend fun restoreBackup(): ResultOf<Any> = backupRepo.restoreBackup()
+    override suspend fun restoreBackup(): ResultOf<Long> = backupRepo.restoreBackup()
 
     override suspend fun deleteBackup() = backupRepo.deleteBackup()
 }

@@ -12,9 +12,9 @@ class FirebaseAnalyticsSender(
 
     override fun sendWithParams(
         event: AnalyticsEvent,
-        paramsBuilder: MutableMap<String, Any>.() -> Unit,
+        paramsBuilder: MutableMap<String, Any?>.() -> Unit,
     ) = firebaseAnalytics.logEvent(event.name) {
-        val params = mutableMapOf<String, Any>().apply(paramsBuilder)
+        val params = mutableMapOf<String, Any?>().apply(paramsBuilder)
         params.forEach { (key, value) ->
             when (value) {
                 is Double -> param(key, value)
