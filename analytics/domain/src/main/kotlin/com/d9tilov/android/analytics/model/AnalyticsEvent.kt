@@ -6,18 +6,6 @@ sealed class AnalyticsEvent(
     sealed class Internal(
         name: String,
     ) : AnalyticsEvent(name) {
-        sealed class Backup(
-            name: String,
-        ) : Internal(name) {
-            data object Restored : Backup("backup_restored")
-
-            data object Saved : Backup("backup_saved")
-
-            data object Delete : Backup("backup_saved")
-
-            data object Error : Backup("backup_error")
-        }
-
         sealed class Error(
             name: String,
         ) : Internal(name) {

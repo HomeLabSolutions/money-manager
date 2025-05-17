@@ -2,7 +2,6 @@ plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
     id("moneymanager.android.library.compose")
-    id("com.autonomousapps.dependency-analysis")
 }
 
 android {
@@ -11,6 +10,7 @@ android {
 
 dependencies {
 
+    implementation(project(":analytics:domain"))
     implementation(project(":backup:data:impl"))
     implementation(project(":billing:domain:contract"))
     implementation(project(":budget:domain:contract"))

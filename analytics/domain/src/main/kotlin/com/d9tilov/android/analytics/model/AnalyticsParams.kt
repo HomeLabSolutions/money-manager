@@ -5,5 +5,5 @@ sealed class AnalyticsParams(
 ) {
     data object LoginResultProvider : AnalyticsParams("Login provider type")
 
-    data object Exception : AnalyticsParams("Error")
+    data object Exception : AnalyticsParams("")
 }

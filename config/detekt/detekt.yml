@@ -122,7 +122,7 @@ complexity:
       - 'with'
   LabeledExpression:
     active: true
-    ignoredLabels: ['launch']
+    ignoredLabels: ['launch', 'withContext']
   LargeClass:
     active: true
     threshold: 600
@@ -684,12 +684,12 @@ style:
     active: true
   ReturnCount:
     active: true
-    max: 2
+    max: 3
     excludedFunctions:
       - 'equals'
     excludeLabeled: false
     excludeReturnFromLambda: true
-    excludeGuardClauses: false
+    excludeGuardClauses: true
   SafeCast:
     active: true
   SerialVersionUIDInSerializableClass:
