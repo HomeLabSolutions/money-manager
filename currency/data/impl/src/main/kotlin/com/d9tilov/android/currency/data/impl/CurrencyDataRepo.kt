@@ -7,8 +7,9 @@ import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.network.CurrencyApi
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class CurrencyDataRepo(
+class CurrencyDataRepo @Inject constructor(
     private val currencySource: CurrencySource,
     private val currencyApi: CurrencyApi,
 ) : CurrencyRepo {

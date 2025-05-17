@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDateTime
@@ -17,15 +18,20 @@ import com.d9tilov.android.transaction.data.contract.TransactionSource
 import com.d9tilov.android.transaction.data.impl.mapper.toDataModel
 import com.d9tilov.android.transaction.data.impl.mapper.toDbModel
 import com.d9tilov.android.transaction.domain.model.TransactionDataModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
+import javax.inject.Inject
+import javax.inject.Named
 
-class TransactionLocalSource(
+class TransactionLocalSource @Inject constructor(
+    @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
     private val preferencesStore: PreferencesStore,
     private val transactionDao: TransactionDao,
 ) : TransactionSource {
@@ -52,7 +58,9 @@ class TransactionLocalSource(
                     currentDateTime().getEndOfDay(),
                     transactionType.value,
                 )
-            }.flow.map { value -> value.map { it.toDataModel() } }
+            }.flow
+                .map { value -> value.map { it.toDataModel() } }
+                .flowOn(ioDispatcher)
         }
 
     override fun getAllByTypeInPeriod(

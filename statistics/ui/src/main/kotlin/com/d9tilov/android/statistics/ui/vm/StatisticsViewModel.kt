@@ -1,9 +1,9 @@
 package com.d9tilov.android.statistics.ui.vm
 
 import androidx.lifecycle.viewModelScope
-import com.d9tilov.android.common.android.di.CoroutinesModule.Companion.DISPATCHER_IO
 import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
+import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.statistics.data.model.StatisticsMenuType

@@ -14,8 +14,9 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class UserLocalSource(
+class UserLocalSource @Inject constructor(
     private val preferencesStore: PreferencesStore,
     private val userDao: UserDao,
 ) : UserSource {

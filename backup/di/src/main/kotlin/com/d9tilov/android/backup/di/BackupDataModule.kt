@@ -15,11 +15,11 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 interface BackupDataModule {
     @Binds
-    fun provideBackupRepo(impl: BackupDataRepo): BackupRepo
+    fun provideBackupRepo(backupDataRepo: BackupDataRepo): BackupRepo
 
     @Binds
-    fun provideBackupLocalSource(impl: BackupLocalSource): BackupSource
+    fun provideBackupLocalSource(backupLocalSource: BackupLocalSource): BackupSource
 
     @Binds
-    fun provideBackupManager(impl: BackupManagerImpl): BackupManager
+    fun provideBackupManager(backupManagerImpl: BackupManagerImpl): BackupManager
 }

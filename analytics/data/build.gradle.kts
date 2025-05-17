@@ -10,5 +10,5 @@ dependencies {
 
     implementation(project(":analytics:domain"))
 
-    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.analytics.ktx)
 }

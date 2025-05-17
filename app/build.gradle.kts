@@ -102,6 +102,7 @@ android {
 
 dependencies {
     implementation(project(":analytics:di"))
+    implementation(project(":analytics:domain"))
     implementation(project(":backup:data:impl"))
     implementation(project(":backup:di"))
     implementation(project(":backup:domain:contract"))
