@@ -12,8 +12,9 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class BudgetLocalSource(
+class BudgetLocalSource @Inject constructor(
     private val preferencesStore: PreferencesStore,
     private val budgetDao: BudgetDao,
 ) : BudgetSource {

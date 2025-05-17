@@ -27,8 +27,9 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
 import java.io.IOException
+import javax.inject.Inject
 
-class BillingInteractorImpl(
+class BillingInteractorImpl @Inject constructor(
     private val billingRepo: BillingRepo,
 ) : BillingInteractor {
     private val premiumEmailList = MutableStateFlow(listOf<String>())

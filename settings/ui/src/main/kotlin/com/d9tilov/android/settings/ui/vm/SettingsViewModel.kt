@@ -127,22 +127,19 @@ class SettingsViewModel
         fun backup() {
             viewModelScope.launch {
                 _uiState.update { state -> state.copy(backupState = state.backupState.copy(backupLoading = true)) }
-                try {
-                    message = null
-                    backupInteractor.makeBackup()
-                    message = R.string.settings_backup_succeeded
-                } catch (ex: NetworkException) {
-                    Timber.tag(TAG).d("Do work with network exception: $ex")
-                    message = R.string.settings_backup_network_error
-                } catch (ex: WrongUidException) {
-                    Timber.tag(TAG).d("Do work with wrong uid exception: $ex")
-                    message = R.string.settings_backup_user_error
-                } catch (ex: FileNotFoundException) {
-                    Timber.tag(TAG).d("Do work with file not found error: $ex")
-                    message = R.string.settings_backup_file_not_found_error
-                } catch (ex: FirebaseException) {
-                    Timber.tag(TAG).d("Do work with exception: $ex")
-                    message = R.string.settings_backup_error
+                when (val result = backupInteractor.makeBackup()) {
+                    is ResultOf.Success -> message = R.string.settings_backup_succeeded
+                    is ResultOf.Failure -> {
+                        message =
+                            when (result.throwable) {
+                                is NetworkException -> R.string.settings_backup_network_error
+                                is WrongUidException -> R.string.settings_backup_user_error
+                                is FileNotFoundException -> R.string.settings_backup_file_not_found_error
+                                is FirebaseException -> R.string.settings_backup_error
+                                else -> R.string.settings_backup_user_error
+                            }
+                    }
+                    else -> {}
                 }
                 Timber.tag(TAG).d("Backup completed1: ${_uiState.value}")
                 _uiState.update { state -> state.copy(backupState = state.backupState.copy(backupLoading = false)) }
@@ -155,14 +152,16 @@ class SettingsViewModel
                 when (val result = backupInteractor.deleteBackup()) {
                     is ResultOf.Success -> message = R.string.settings_backup_deleted
                     is ResultOf.Failure -> {
-                        when (result.throwable) {
-                            is NetworkException -> message = R.string.settings_backup_network_error
-                            is WrongUidException -> message = R.string.settings_backup_user_error
-                            is FileNotFoundException -> message = R.string.settings_backup_file_not_found_error
-                            is FirebaseException -> message = R.string.settings_backup_error
-                            else -> message = R.string.settings_backup_user_error
-                        }
+                        message =
+                            when (result.throwable) {
+                                is NetworkException -> R.string.settings_backup_network_error
+                                is WrongUidException -> R.string.settings_backup_user_error
+                                is FileNotFoundException -> R.string.settings_backup_file_not_found_error
+                                is FirebaseException -> R.string.settings_backup_error
+                                else -> R.string.settings_backup_user_error
+                            }
                     }
+
                     else -> {}
                 }
             }

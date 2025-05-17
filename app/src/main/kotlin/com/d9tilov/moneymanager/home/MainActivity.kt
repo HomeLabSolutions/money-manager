@@ -28,6 +28,7 @@ import com.d9tilov.moneymanager.prepopulate.PrepopulateScreen
 import com.d9tilov.moneymanager.ui.MmApp
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
+import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -44,7 +45,9 @@ class MainActivity : ComponentActivity() {
             AuthUI.IdpConfig.GoogleBuilder().build(),
         )
     private val startForResult: ActivityResultLauncher<Intent> =
-        registerForActivityResult(FirebaseAuthUIActivityResultContract()) { result ->
+        registerForActivityResult(
+            FirebaseAuthUIActivityResultContract(),
+        ) { result: FirebaseAuthUIAuthenticationResult ->
             Timber.tag(DataConstants.TAG).d("Sign in result: $result")
             viewModel.updateData()
         }

@@ -1,6 +1,8 @@
 rootProject.name = "MoneyManager"
 
 include(":analytics:di")
+include(":analytics:data")
+include(":analytics:domain")
 
 include(":app")
 

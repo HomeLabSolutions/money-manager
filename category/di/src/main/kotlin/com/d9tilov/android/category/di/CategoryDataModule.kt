@@ -10,22 +10,16 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
-import dagger.hilt.android.scopes.ActivityRetainedScoped
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 interface CategoryDataModule {
     @Binds
-    @ActivityRetainedScoped
-    fun provideDefaultCategoriesManager(
-        defaultCategoriesManager: DefaultCategoriesManagerImpl,
-    ): DefaultCategoriesManager
+    fun provideDefaultCategoriesManager(impl: DefaultCategoriesManagerImpl): DefaultCategoriesManager
 
     @Binds
-    @ActivityRetainedScoped
-    fun provideCategoryLocalSource(categoryLocalSource: CategoryLocalSource): CategorySource
+    fun provideCategoryLocalSource(impl: CategoryLocalSource): CategorySource
 
     @Binds
-    @ActivityRetainedScoped
-    fun provideCategoryRepo(categoryRepoImpl: CategoryRepoImpl): CategoryRepo
+    fun provideCategoryRepo(impl: CategoryRepoImpl): CategoryRepo
 }
