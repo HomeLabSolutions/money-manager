@@ -6,12 +6,10 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 interface BackupDomainModule {
     @Binds
-    @Singleton
-    fun provideBackupInteractor(backupRepo: BackupInteractorImpl): BackupInteractor
+    fun provideBackupInteractor(impl: BackupInteractorImpl): BackupInteractor
 }

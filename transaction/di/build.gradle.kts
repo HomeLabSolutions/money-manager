@@ -11,7 +11,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:database"))
     implementation(project(":transaction:data:contract"))
     implementation(project(":transaction:data:impl"))
     implementation(project(":transaction:domain:contract"))
