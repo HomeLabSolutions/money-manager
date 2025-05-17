@@ -4,6 +4,8 @@ import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.d9tilov.android.analytics.domain.AnalyticsSender
+import com.d9tilov.android.analytics.model.AnalyticsEvent
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.budget.domain.model.BudgetData
@@ -14,8 +16,6 @@ import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
 import com.d9tilov.android.user.domain.contract.UserInteractor
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.logEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -73,7 +73,7 @@ data class ProfileUiState(
 class ProfileViewModel
     @Inject
     constructor(
-        private val firebaseAnalytics: FirebaseAnalytics,
+        private val analyticsSender: AnalyticsSender,
         private val userInfoInteractor: UserInteractor,
         currencyInteractor: CurrencyInteractor,
         budgetInteractor: BudgetInteractor,
@@ -128,9 +128,7 @@ class ProfileViewModel
         fun logout(navigateCallback: () -> Unit) {
             viewModelScope.launch(Dispatchers.IO) {
                 userInfoInteractor.deleteUser()
-                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN) {
-                    param(FirebaseAnalytics.Param.ITEM_CATEGORY, "logout")
-                }
+                analyticsSender.send(AnalyticsEvent.Client.Auth.Logout)
                 withContext(Dispatchers.Main) { navigateCallback() }
             }
         }
