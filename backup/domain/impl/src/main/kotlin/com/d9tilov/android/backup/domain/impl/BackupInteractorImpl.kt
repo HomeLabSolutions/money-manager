@@ -5,8 +5,9 @@ import com.d9tilov.android.backup.domain.contract.BackupRepo
 import com.d9tilov.android.backup.domain.model.BackupData
 import com.d9tilov.android.core.model.ResultOf
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class BackupInteractorImpl(
+class BackupInteractorImpl @Inject constructor(
     private val backupRepo: BackupRepo,
 ) : BackupInteractor {
     override fun getBackupData(): Flow<BackupData> = backupRepo.getBackupData()

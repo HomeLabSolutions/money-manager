@@ -9,8 +9,8 @@ import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.backup.domain.contract.BackupInteractor
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
-import com.d9tilov.android.common.android.di.CoroutinesModule.Companion.DISPATCHER_IO
 import com.d9tilov.android.core.constants.DataConstants.TAG
+import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.android.core.model.TransactionType

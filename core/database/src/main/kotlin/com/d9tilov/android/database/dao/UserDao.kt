@@ -13,7 +13,7 @@ interface UserDao {
     fun getById(id: String): Flow<UserDbModel?>
 
     @Query("SELECT fiscalDay FROM Users WHERE uid = :id")
-    fun getFiscalDay(id: String): Int
+    suspend fun getFiscalDay(id: String): Int
 
     @Query("SELECT showPrepopulate FROM Users WHERE uid = :id")
     suspend fun showPrepopulate(id: String): Boolean

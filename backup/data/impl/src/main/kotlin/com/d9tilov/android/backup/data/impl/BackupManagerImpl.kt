@@ -4,10 +4,10 @@ import android.content.Context
 import android.net.Uri
 import com.d9tilov.android.backup.data.contract.BackupManager
 import com.d9tilov.android.backup.domain.model.BackupData
-import com.d9tilov.android.common.android.di.CoroutinesModule.Companion.DISPATCHER_IO
 import com.d9tilov.android.common.android.utils.isNetworkConnected
 import com.d9tilov.android.core.constants.DataConstants.DATABASE_NAME
 import com.d9tilov.android.core.constants.DataConstants.TAG
+import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.android.core.utils.currentDateTime
