@@ -89,6 +89,7 @@ class MainViewModel
                                         is ResultOf.Success -> {
                                             Timber.tag(TAG).d("Database restored successfully")
                                         }
+
                                         is ResultOf.Failure -> {
                                             when (result.throwable) {
                                                 is NetworkException ->
@@ -121,17 +122,9 @@ class MainViewModel
                                     if (user == null || user.showPrepopulate) {
                                         userInteractor.createUser(auth.currentUser.toDataModel())
                                         categoryInteractor.get().createDefaultCategories()
-                                        MainActivityUiState.Success.Prepopulate
-                                    } else {
-                                        MainActivityUiState.Success.Main(localCurrencyState.value)
-                                    }
-                                } else {
-                                    if (userInteractor.showPrepopulate()) {
-                                        MainActivityUiState.Success.Prepopulate
-                                    } else {
-                                        MainActivityUiState.Success.Main(localCurrencyState.value)
                                     }
                                 }
+                                MainActivityUiState.Success.Main(localCurrencyState.value)
                             }
                         }
                     }.collectLatest { state -> uiState.update { state } }
@@ -172,6 +165,7 @@ class MainViewModel
                         is ResultOf.Success -> {
                             Timber.tag(TAG).d("Database restored successfully")
                         }
+
                         is ResultOf.Failure -> {
                             analyticsSender.sendWithParams(AnalyticsEvent.Internal.Error.NetworkException) {
                                 AnalyticsParams.Exception to result.toString()
