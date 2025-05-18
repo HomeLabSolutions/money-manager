@@ -72,7 +72,6 @@ class MainActivity : ComponentActivity() {
                                     .setLogo(com.d9tilov.android.designsystem.R.drawable.ic_money_manager_logo)
                                     .setTheme(R.style.Theme_MoneyManager)
                                     .setAvailableProviders(providers)
-                                    .setIsSmartLockEnabled(false)
                                     .build(),
                             )
                         }
