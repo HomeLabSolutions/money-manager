@@ -2,12 +2,18 @@ package com.d9tilov.android.backup.data.impl
 
 import android.content.Context
 import android.net.Uri
+import com.d9tilov.android.analytics.domain.AnalyticsSender
+import com.d9tilov.android.analytics.model.AnalyticsEvent
+import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.backup.data.contract.BackupManager
 import com.d9tilov.android.backup.domain.model.BackupData
 import com.d9tilov.android.common.android.utils.isNetworkConnected
 import com.d9tilov.android.core.constants.DataConstants.DATABASE_NAME
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
+import com.d9tilov.android.core.constants.ExceptionMessageConstants.FILE_NOT_FOUND
+import com.d9tilov.android.core.constants.ExceptionMessageConstants.NETWORK_EXCEPTION
+import com.d9tilov.android.core.constants.ExceptionMessageConstants.UID_IS_NULL_OR_EMPTY
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.android.core.utils.currentDateTime
@@ -32,16 +38,38 @@ import javax.inject.Named
 class BackupManagerImpl
     @Inject constructor(
         @Named(DISPATCHER_IO) private val coroutineDispatcher: CoroutineDispatcher,
+        private val analyticsSender: AnalyticsSender,
         private val context: Context,
         private val preferencesStore: PreferencesStore,
     ) : BackupManager {
         override suspend fun backupDb(): ResultOf<BackupData> {
-            Timber.tag(TAG).d("Backup backupDb before")
+            Timber.tag(TAG).d("$BACKUP backupDb before")
             val uid = preferencesStore.uid.firstOrNull()
-            if (uid.isNullOrEmpty()) return ResultOf.Failure(WrongUidException())
-            if (!isNetworkConnected(context)) return ResultOf.Failure(NetworkException())
+            if (uid.isNullOrEmpty()) {
+                val message = "$BACKUP $UID_IS_NULL_OR_EMPTY: $uid"
+                Timber.tag(TAG).e(message)
+                analyticsSender.sendWithParams(AnalyticsEvent.Internal.Backup.Error) {
+                    AnalyticsParams.Exception to message
+                }
+                return ResultOf.Failure(WrongUidException())
+            }
+            if (!isNetworkConnected(context)) {
+                val message = "$BACKUP $NETWORK_EXCEPTION"
+                Timber.tag(TAG).e(message)
+                analyticsSender.sendWithParams(AnalyticsEvent.Internal.Backup.Error) {
+                    AnalyticsParams.Exception to message
+                }
+                return ResultOf.Failure(NetworkException())
+            }
             val file = context.getDatabasePath(DATABASE_NAME)
-            if (!file.exists()) return ResultOf.Failure(FileNotFoundException())
+            if (!file.exists()) {
+                val message = "$BACKUP $FILE_NOT_FOUND: $DATABASE_NAME"
+                Timber.tag(TAG).e(message)
+                analyticsSender.sendWithParams(AnalyticsEvent.Internal.Backup.Error) {
+                    AnalyticsParams.Exception to message
+                }
+                return ResultOf.Failure(FileNotFoundException())
+            }
             val parentPath = createParentPath(uid)
             return try {
                 val fileRef: UploadTask.TaskSnapshot =
@@ -50,6 +78,7 @@ class BackupManagerImpl
                         .putFile(Uri.fromFile(file))
                         .await()
                 Timber.tag(TAG).d("Backup was compete successfully")
+                analyticsSender.send(AnalyticsEvent.Internal.Backup.Saved)
                 ResultOf.Success(
                     BackupData.EMPTY.copy(
                         lastBackupTimestamp = fileRef.metadata?.updatedTimeMillis ?: currentDateTime().toMillis(),
@@ -57,6 +86,9 @@ class BackupManagerImpl
                 )
             } catch (ex: Exception) {
                 Timber.tag(TAG).e("Backup failed: $ex")
+                analyticsSender.sendWithParams(AnalyticsEvent.Internal.Backup.Error) {
+                    AnalyticsParams.Exception to ex.toString()
+                }
                 ResultOf.Failure(ex)
             }
         }
@@ -64,8 +96,22 @@ class BackupManagerImpl
         override suspend fun restoreDb(): ResultOf<Long> =
             withContext(coroutineDispatcher) {
                 val uid = preferencesStore.uid.firstOrNull()
-                if (uid.isNullOrEmpty()) return@withContext ResultOf.Failure(WrongUidException())
-                if (!isNetworkConnected(context)) return@withContext ResultOf.Failure(NetworkException())
+                if (uid.isNullOrEmpty()) {
+                    val message = "$RESTORE $UID_IS_NULL_OR_EMPTY: $uid"
+                    Timber.tag(TAG).e(message)
+                    analyticsSender.sendWithParams(AnalyticsEvent.Internal.Backup.Error) {
+                        AnalyticsParams.Exception to message
+                    }
+                    return@withContext ResultOf.Failure(WrongUidException())
+                }
+                if (!isNetworkConnected(context)) {
+                    val message = "$RESTORE $NETWORK_EXCEPTION"
+                    Timber.tag(TAG).e(message)
+                    analyticsSender.sendWithParams(AnalyticsEvent.Internal.Backup.Error) {
+                        AnalyticsParams.Exception to message
+                    }
+                    return@withContext ResultOf.Failure(NetworkException())
+                }
                 val parentPath = createParentPath(uid)
                 val fileRef = Firebase.storage.reference.child(parentPath)
                 var localFile: File? = null
@@ -85,9 +131,13 @@ class BackupManagerImpl
                     }
                     val metadata = fileRef.metadata.await()
                     Timber.tag(TAG).d("Database was restored successfully")
+                    analyticsSender.send(AnalyticsEvent.Internal.Backup.Restored)
                     ResultOf.Success(metadata.updatedTimeMillis)
                 } catch (ex: Exception) {
                     Timber.tag(TAG).e("Restore backup failed: $ex")
+                    analyticsSender.sendWithParams(AnalyticsEvent.Internal.Backup.Error) {
+                        AnalyticsParams.Exception to ex.message
+                    }
                     ResultOf.Failure(ex)
                 } finally {
                     Timber.tag(TAG).i("Temp file was removed")
@@ -97,8 +147,22 @@ class BackupManagerImpl
 
         override suspend fun deleteBackup(): ResultOf<Unit> {
             val uid = preferencesStore.uid.firstOrNull()
-            if (uid.isNullOrEmpty()) return ResultOf.Failure(WrongUidException())
-            if (!isNetworkConnected(context)) return ResultOf.Failure(NetworkException())
+            if (uid.isNullOrEmpty()) {
+                val message = "$DELETE $UID_IS_NULL_OR_EMPTY: $uid"
+                Timber.tag(TAG).e(message)
+                analyticsSender.sendWithParams(AnalyticsEvent.Internal.Backup.Error) {
+                    AnalyticsParams.Exception to message
+                }
+                return ResultOf.Failure(WrongUidException())
+            }
+            if (!isNetworkConnected(context)) {
+                val message = "$DELETE $NETWORK_EXCEPTION"
+                Timber.tag(TAG).e(message)
+                analyticsSender.sendWithParams(AnalyticsEvent.Internal.Backup.Error) {
+                    AnalyticsParams.Exception to message
+                }
+                return ResultOf.Failure(NetworkException())
+            }
             val parentPath = createParentPath(uid)
             return try {
                 Firebase.storage.reference
@@ -106,17 +170,24 @@ class BackupManagerImpl
                     .delete()
                     .await()
                 Timber.tag(TAG).d("Backup deleted successfully")
+                analyticsSender.send(AnalyticsEvent.Internal.Backup.Delete)
                 ResultOf.Success(Unit)
             } catch (ex: Exception) {
                 Timber.tag(TAG).e(ex, "Failed to delete backup")
+                analyticsSender.sendWithParams(AnalyticsEvent.Internal.Backup.Error) {
+                    AnalyticsParams.Exception to ex.message
+                }
                 ResultOf.Failure(ex)
             }
         }
 
         private fun createParentPath(uid: String) = "${uid.normalizePath()}/$DATABASE_NAME"
 
-        companion object {
-            private const val BUFFER_SIZE = 1024
+        private companion object {
+            const val BUFFER_SIZE = 1024
+            const val BACKUP = "[Backup]"
+            const val RESTORE = "[Restore]"
+            const val DELETE = "[Delete]"
         }
     }
 
