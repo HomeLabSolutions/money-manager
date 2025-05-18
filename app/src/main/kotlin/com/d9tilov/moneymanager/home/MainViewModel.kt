@@ -161,42 +161,7 @@ class MainViewModel
                     }
                     Timber.tag(TAG).d("Update data. FirebaseUser: $firebaseUser")
                     preferencesStore.updateUid(firebaseUser.uid) // need for dataBase decryption
-                    when (val result = backupInteractor.restoreBackup()) {
-                        is ResultOf.Success -> {
-                            Timber.tag(TAG).d("Database restored successfully")
-                        }
-
-                        is ResultOf.Failure -> {
-                            analyticsSender.sendWithParams(AnalyticsEvent.Internal.Error.NetworkException) {
-                                AnalyticsParams.Exception to result.toString()
-                            }
-                            when (result.throwable) {
-                                is NetworkException ->
-                                    Timber
-                                        .tag(TAG)
-                                        .d("Do work with network exception: ${result.throwable}")
-
-                                is WrongUidException ->
-                                    Timber
-                                        .tag(TAG)
-                                        .d("Do work with wrong uid exception: ${result.throwable}")
-
-                                is FileNotFoundException ->
-                                    Timber
-                                        .tag(TAG)
-                                        .d("Do work with file not found error: ${result.throwable}")
-
-                                is FirebaseException ->
-                                    Timber
-                                        .tag(TAG)
-                                        .d("Do work with Firebase exception: ${result.throwable}")
-
-                                else -> Timber.tag(TAG).d("Do work with exception: ${result.throwable}")
-                            }
-                        }
-
-                        else -> {}
-                    }
+                    backupInteractor.restoreBackup()
                 }
             }
         }
