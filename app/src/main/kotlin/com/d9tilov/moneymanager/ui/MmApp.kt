@@ -135,7 +135,7 @@ fun MmApp(
                 )
             PermissionBox(
                 permissions = permissions,
-                requiredPermissions = listOf(permissions.first()),
+                requiredPermissions = listOf(Manifest.permission.ACCESS_COARSE_LOCATION),
                 permissionTitle = stringResource(R.string.permissions_location),
                 permissionExplanation = stringResource(R.string.permissions_location_explanation),
             ) {
