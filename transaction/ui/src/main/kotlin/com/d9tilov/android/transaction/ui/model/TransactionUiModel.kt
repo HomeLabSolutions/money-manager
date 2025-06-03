@@ -21,6 +21,7 @@ data class TransactionUiModel(
     val usdSum: BigDecimal?,
     override val date: LocalDateTime,
     val description: String,
+    val showTime: Boolean,
     val isRegular: Boolean,
     val inStatistics: Boolean,
 ) : BaseTransaction {
@@ -43,13 +44,14 @@ data class TransactionUiModel(
                 usdSum = BigDecimal.ZERO,
                 date = currentDateTime(),
                 description = "",
+                showTime = true,
                 isRegular = false,
                 inStatistics = true,
             )
     }
 }
 
-fun Transaction.toUiModel() =
+fun Transaction.toUiModel(showTime: Boolean = false) =
     TransactionUiModel(
         id = id,
         clientId = clientId,
@@ -60,6 +62,7 @@ fun Transaction.toUiModel() =
         usdSum = if (currencyCode == DEFAULT_CURRENCY_CODE) null else usdSum,
         date = date,
         description = description,
+        showTime = showTime,
         isRegular = isRegular,
         inStatistics = inStatistics,
     )
