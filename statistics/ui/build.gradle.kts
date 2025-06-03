@@ -32,4 +32,5 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.material)
     implementation(libs.navigation.compose)
+    debugImplementation(libs.androidx.compose.ui.tooling)
 }
