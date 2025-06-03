@@ -28,4 +28,5 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.firebase.analytics.ktx)
     implementation(libs.navigation.compose)
+    debugImplementation(libs.androidx.compose.ui.tooling)
 }
