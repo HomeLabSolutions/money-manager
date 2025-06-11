@@ -173,7 +173,7 @@ class StatisticsViewModel
             viewModelScope.launch {
                 when (type) {
                     StatisticsMenuType.CURRENCY -> updateCurrency()
-                    StatisticsMenuType.CHART -> TODO()
+                    StatisticsMenuType.CHART -> {}
                     StatisticsMenuType.TRANSACTION_TYPE -> updateTransactionType()
                     StatisticsMenuType.STATISTICS -> updateInStatistics()
                 }
