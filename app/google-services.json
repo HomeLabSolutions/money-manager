@@ -75,6 +75,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "490802194845-4lk48bjhtcjneab26s262b68977pt4kd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.d9tilov.moneymanager.debug",
+            "certificate_hash": "f8b42facdca78e683cf4904870c788a3e4369c98"
+          }
+        },
+        {
           "client_id": "490802194845-fabkk8uvr7p50djmu7skdibsoqdh8r7e.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
