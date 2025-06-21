@@ -13,13 +13,14 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
 }
 
+val keystorePropertiesFile: File = rootProject.file("keystore.properties")
+
 android {
 
     signingConfigs {
         create("release") {
-            val keystorePropertiesFile: File = rootProject.file("keystore.properties")
-            val keystoreProperties = Properties()
             if (keystorePropertiesFile.exists()) {
+                val keystoreProperties = Properties()
                 keystoreProperties.load(FileInputStream(keystorePropertiesFile))
                 keyAlias = keystoreProperties["keyAlias"] as String
                 keyPassword = keystoreProperties["keyPassword"] as String
@@ -61,7 +62,9 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             isDebuggable = false
-            signingConfig = signingConfigs.getByName("release")
+            if (keystorePropertiesFile.exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
