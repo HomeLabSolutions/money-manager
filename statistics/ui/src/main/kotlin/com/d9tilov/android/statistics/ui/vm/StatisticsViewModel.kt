@@ -4,6 +4,8 @@ import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
+import com.d9tilov.android.core.utils.getEndOfDay
+import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.statistics.data.model.StatisticsMenuType
@@ -26,6 +28,9 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -38,13 +43,15 @@ data class StatisticsUiState(
 )
 
 data class PeriodUiState(
-    val selectedPeriod: StatisticsPeriodModel = StatisticsPeriodModel.DAY,
+    val selectedPeriod: StatisticsPeriodModel = StatisticsPeriodModel.DAY(),
+    val showNextArrow: Boolean = false,
+    val showPrevArrow: Boolean = false,
     val periods: List<StatisticsPeriodModel> =
         listOf(
-            StatisticsPeriodModel.DAY,
-            StatisticsPeriodModel.WEEK,
-            StatisticsPeriodModel.MONTH,
-            StatisticsPeriodModel.YEAR,
+            StatisticsPeriodModel.DAY(),
+            StatisticsPeriodModel.WEEK(),
+            StatisticsPeriodModel.MONTH(),
+            StatisticsPeriodModel.YEAR(),
             StatisticsPeriodModel.CUSTOM(),
         ),
 )
@@ -73,8 +80,7 @@ data class DetailsSpentInPeriodState(
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class StatisticsViewModel
-    @Inject
-    constructor(
+    @Inject constructor(
         @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
         private val transactionInteractor: TransactionInteractor,
         private val currencyInteractor: CurrencyInteractor,
@@ -107,8 +113,7 @@ class StatisticsViewModel
                                     periodState.selectedPeriod.from,
                                     periodState.selectedPeriod.to,
                                     statisticsMenuState.currency.currencyCode,
-                                    statisticsMenuState.inStatistics ==
-                                        StatisticsMenuInStatisticsType.InStatisticsType,
+                                    statisticsMenuState.inStatistics == StatisticsMenuInStatisticsType.InStatisticsType,
                                     false,
                                 ).map { list -> list.sortedByDescending { tr -> tr.sum } }
                         }.collect { list: List<TransactionChartModel> ->
@@ -138,14 +143,13 @@ class StatisticsViewModel
                     updateTrigger
                         .flatMapLatest {
                             val (periodState: PeriodUiState, statisticsMenuState: StatisticsMenuState) = _uiState.value
-                            transactionInteractor
-                                .getSumInPeriod(
-                                    periodState.selectedPeriod.from,
-                                    periodState.selectedPeriod.to,
-                                    statisticsMenuState.transactionType.toTransactionType(),
-                                    statisticsMenuState.currency.currencyCode,
-                                    statisticsMenuState.inStatistics == StatisticsMenuInStatisticsType.InStatisticsType,
-                                )
+                            transactionInteractor.getSumInPeriod(
+                                periodState.selectedPeriod.from,
+                                periodState.selectedPeriod.to,
+                                statisticsMenuState.transactionType.toTransactionType(),
+                                statisticsMenuState.currency.currencyCode,
+                                statisticsMenuState.inStatistics == StatisticsMenuInStatisticsType.InStatisticsType,
+                            )
                         }.collect { sum ->
                             _uiState.update {
                                 it.copy(
@@ -165,7 +169,16 @@ class StatisticsViewModel
         }
 
         fun updatePeriod(period: StatisticsPeriodModel) {
-            _uiState.update { it.copy(periodState = it.periodState.copy(selectedPeriod = period)) }
+            _uiState.update {
+                it.copy(
+                    periodState =
+                        it.periodState.copy(
+                            selectedPeriod = period,
+                            showNextArrow = period !is StatisticsPeriodModel.CUSTOM,
+                            showPrevArrow = period !is StatisticsPeriodModel.CUSTOM,
+                        ),
+                )
+            }
             updateTrigger.update { it + 1 }
         }
 
@@ -179,6 +192,45 @@ class StatisticsViewModel
                 }
                 updateTrigger.update { it + 1 }
             }
+
+        fun onPeriodArrowClicked(isForward: Boolean) {
+            val period = _uiState.value.periodState.selectedPeriod
+            when (period) {
+                is StatisticsPeriodModel.DAY ->
+                    _uiState.update {
+                        it.copy(
+                            periodState =
+                                it.periodState.copy(
+                                    selectedPeriod =
+                                        if (isForward) {
+                                            StatisticsPeriodModel.DAY(
+                                                period.from.date
+                                                    .plus(1, DateTimeUnit.DAY)
+                                                    .getStartOfDay(),
+                                                period.to.date
+                                                    .plus(1, DateTimeUnit.DAY)
+                                                    .getEndOfDay(),
+                                            )
+                                        } else {
+                                            StatisticsPeriodModel.DAY(
+                                                period.from.date
+                                                    .minus(1, DateTimeUnit.DAY)
+                                                    .getStartOfDay(),
+                                                period.to.date
+                                                    .minus(1, DateTimeUnit.DAY)
+                                                    .getEndOfDay(),
+                                            )
+                                        },
+                                ),
+                        )
+                    }
+
+                is StatisticsPeriodModel.MONTH -> TODO()
+                is StatisticsPeriodModel.WEEK -> TODO()
+                is StatisticsPeriodModel.YEAR -> TODO()
+                is StatisticsPeriodModel.CUSTOM -> {}
+            }
+        }
 
         private suspend fun updateCurrency() {
             val currency = currencyInteractor.getMainCurrency()

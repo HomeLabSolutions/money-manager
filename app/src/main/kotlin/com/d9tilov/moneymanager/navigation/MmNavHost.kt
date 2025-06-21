@@ -143,7 +143,13 @@ fun MmNavHost(
         ) {
             statisticsScreen(
                 STATISTICS_NAVIGATION_ROUTE,
-                onTransactionClick = { navController.navigateToStatisticsDetailsTransactionScreen(it) },
+                onTransactionClick = { tr, from, to ->
+                    navController.navigateToStatisticsDetailsTransactionScreen(
+                        tr,
+                        from,
+                        to,
+                    )
+                },
             )
             statisticsDetailsScreen(
                 route =

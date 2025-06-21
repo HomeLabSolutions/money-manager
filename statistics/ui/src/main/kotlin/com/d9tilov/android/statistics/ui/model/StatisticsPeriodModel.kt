@@ -14,29 +14,41 @@ sealed class StatisticsPeriodModel(
     val from: LocalDateTime,
     val to: LocalDateTime,
 ) {
-    data object DAY : StatisticsPeriodModel(
-        R.string.statistics_period_day,
-        currentDate().getStartOfDay(),
-        currentDate().getEndOfDay(),
-    )
+    data class DAY(
+        val fromDate: LocalDateTime = currentDate().getStartOfDay(),
+        val toDate: LocalDateTime = currentDate().getEndOfDay(),
+    ) : StatisticsPeriodModel(
+            R.string.statistics_period_day,
+            fromDate,
+            toDate,
+        )
 
-    data object WEEK : StatisticsPeriodModel(
-        R.string.statistics_period_week,
-        currentDate().minus(1, DateTimeUnit.WEEK).getStartOfDay(),
-        currentDate().getEndOfDay(),
-    )
+    data class WEEK(
+        val fromDate: LocalDateTime = currentDate().minus(1, DateTimeUnit.WEEK).getStartOfDay(),
+        val toDate: LocalDateTime = currentDate().getEndOfDay(),
+    ) : StatisticsPeriodModel(
+            R.string.statistics_period_week,
+            fromDate,
+            toDate,
+        )
 
-    data object MONTH : StatisticsPeriodModel(
-        R.string.statistics_period_month,
-        currentDate().minus(1, DateTimeUnit.MONTH).getStartOfDay(),
-        currentDate().getEndOfDay(),
-    )
+    data class MONTH(
+        val fromDate: LocalDateTime = currentDate().minus(1, DateTimeUnit.MONTH).getStartOfDay(),
+        val toDate: LocalDateTime = currentDate().getEndOfDay(),
+    ) : StatisticsPeriodModel(
+            R.string.statistics_period_month,
+            fromDate,
+            toDate,
+        )
 
-    data object YEAR : StatisticsPeriodModel(
-        R.string.statistics_period_year,
-        currentDate().minus(1, DateTimeUnit.YEAR).getStartOfDay(),
-        currentDate().getEndOfDay(),
-    )
+    data class YEAR(
+        val fromDate: LocalDateTime = currentDate().minus(1, DateTimeUnit.YEAR).getStartOfDay(),
+        val toDate: LocalDateTime = currentDate().getEndOfDay(),
+    ) : StatisticsPeriodModel(
+            R.string.statistics_period_year,
+            fromDate,
+            toDate,
+        )
 
     data class CUSTOM(
         val fromDate: LocalDateTime = currentDate().minus(1, DateTimeUnit.MONTH).getStartOfDay(),

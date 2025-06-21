@@ -25,7 +25,16 @@ data class Pie(
         data object Fill : Style()
 
         data class Stroke(
-            val width: Dp = 42.dp,
+            val width: Dp = 36.dp,
         ) : Style()
+    }
+
+    companion object {
+        val EMPTY =
+            Pie(
+                label = "Category1",
+                data = 0.4,
+                color = com.google.android.material.R.color.design_default_color_error,
+            )
     }
 }
