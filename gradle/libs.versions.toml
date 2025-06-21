@@ -45,7 +45,7 @@ serialization = "2.1.10"
 splashScreen = "1.0.1"
 startup = "1.2.0"
 timber = "5.0.1"
-worker = "2.10.1"
+worker = "2.10.2"
 workerHilt = "1.2.0"
 
 [libraries]
