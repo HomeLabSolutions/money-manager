@@ -164,7 +164,6 @@ class StatisticsViewModel
             }
         }
 
-
         fun updatePeriod(period: StatisticsPeriodModel) {
             _uiState.update { it.copy(periodState = it.periodState.copy(selectedPeriod = period)) }
             updateTrigger.update { it + 1 }
