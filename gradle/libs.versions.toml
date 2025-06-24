@@ -29,7 +29,7 @@ java = "17"
 javaPoet = "1.13.0"
 javaxInject = "1"
 junit = "4.13.2"
-kotlin = "2.1.21"
+kotlin = "2.2.0"
 kotlinDatetime = "0.6.2"
 kotlinxSerialization = "1.8.1"
 ksp = "2.1.21-2.0.2"
@@ -41,7 +41,7 @@ paging = "3.3.6"
 retrofit = "3.0.0"
 retrofitConverter = "1.0.0"
 room = "2.7.2"
-serialization = "2.1.21"
+serialization = "2.2.0"
 splashScreen = "1.0.1"
 startup = "1.2.0"
 timber = "5.0.1"
@@ -96,6 +96,7 @@ java-poet = { group = "com.squareup", name = "javapoet", version.ref = "javaPoet
 javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javaxInject" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-metadata-jvm = { group = "org.jetbrains.kotlin", name = "kotlin-metadata-jvm", version.ref = "kotlin" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutinesCore" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinDatetime" }
 kotlinx-serialization-converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitConverter" }
