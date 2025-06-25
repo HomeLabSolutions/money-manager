@@ -25,10 +25,11 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Named
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 class TransactionLocalSource @Inject constructor(
     @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
@@ -49,6 +50,7 @@ class TransactionLocalSource @Inject constructor(
             .filterNotNull()
             .flatMapMerge { uid -> transactionDao.getById(uid, id).map { it.toDataModel() } }
 
+    @OptIn(ExperimentalTime::class)
     override fun getAllByTypePaging(transactionType: TransactionType): Flow<PagingData<TransactionDataModel>> =
         preferencesStore.uid.filterNotNull().flatMapMerge { uid ->
             Pager(config = PagingConfig(PAGE_SIZE, enablePlaceholders = false)) {
