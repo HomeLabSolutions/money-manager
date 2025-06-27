@@ -2,6 +2,7 @@ package com.d9tilov.android.designsystem
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.automirrored.rounded.ArrowRight
 import androidx.compose.material.icons.automirrored.rounded.Backspace
 import androidx.compose.material.icons.automirrored.rounded.List
@@ -24,6 +25,7 @@ object MoneyManagerIcons {
     val Chart = Icons.Rounded.BarChart
     val Profile = Icons.Rounded.Settings
     val ArrowBack = Icons.AutoMirrored.Rounded.ArrowBack
+    val ArrowForward = Icons.AutoMirrored.Rounded.ArrowForward
     val ArrowDropDown = Icons.Default.ArrowDropDown
     val ArrowDropUp = Icons.Default.ArrowDropUp
     val Check = Icons.Default.Check
@@ -39,6 +41,7 @@ object MoneyManagerIcons {
     val InStatisticsTransaction = R.drawable.ic_not_in_statistics
     val EmptyPlaceholder = R.drawable.ic_categories_empty
     val EmptyRegularPlaceholder = R.drawable.ic_wallet_empty
+    val EmptyStatisticsPlaceholder = R.drawable.ic_statistics_empty_placeholder
     val Cross = Icons.Rounded.RemoveCircle
     val Delete = Icons.Outlined.Delete
 }
