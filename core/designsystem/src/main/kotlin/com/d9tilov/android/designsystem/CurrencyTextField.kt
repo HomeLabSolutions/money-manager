@@ -28,6 +28,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.d9tilov.android.core.utils.reduceScaleStr
 import java.math.BigDecimal
 
 private const val TEXT_SCALE_REDUCTION_INTERVAL = 0.9f
@@ -229,7 +230,7 @@ private fun CurrencyTextField(
                     },
                     placeholder = {
                         Text(
-                            text = BigDecimal.ZERO.toString(),
+                            text = BigDecimal.ZERO.reduceScaleStr(),
                             style = style.copy(color = MaterialTheme.colorScheme.primaryContainer),
                         )
                     },
@@ -282,7 +283,7 @@ private fun CurrencyTextField(
 @Composable
 fun DefaultPreviewCurrencyTextField() {
     CurrencyTextFieldSmall(
-        amount = BigDecimal(123).toString(),
+        amount = BigDecimal(123).reduceScaleStr(),
         currencyCode = "$",
         isEditable = false,
     )

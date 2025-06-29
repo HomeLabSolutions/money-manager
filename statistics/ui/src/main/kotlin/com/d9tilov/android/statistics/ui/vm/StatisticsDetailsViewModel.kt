@@ -3,8 +3,8 @@ package com.d9tilov.android.statistics.ui.vm
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
-import com.d9tilov.android.common.android.di.CoroutinesModule.Companion.DISPATCHER_IO
 import com.d9tilov.android.common.android.ui.base.BaseViewModel
+import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.statistics.ui.navigation.StatisticsDetailsNavigator
 import com.d9tilov.android.statistics.ui.navigation.TransactionDetailsArgs
@@ -54,7 +54,7 @@ class StatisticsDetailsViewModel
                 _uiState.update {
                     it.copy(
                         categoryName = categoryDeferred.await().name,
-                        transactions = transactionsDeferred.await().map { it.toUiModel() },
+                        transactions = transactionsDeferred.await().map { it.toUiModel(showTime = true) },
                     )
                 }
             }

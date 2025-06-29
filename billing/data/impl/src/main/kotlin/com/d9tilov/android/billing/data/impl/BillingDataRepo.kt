@@ -11,20 +11,15 @@ import com.d9tilov.android.billing.domain.model.BillingSkuDetails
 import com.d9tilov.android.billing.domain.model.exceptions.BillingFailure
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.currency.domain.model.Currency
-import com.d9tilov.android.network.dispatchers.Dispatcher
-import com.d9tilov.android.network.dispatchers.MoneyManagerDispatchers
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class BillingDataRepo
     @Inject
     constructor(
-        @Dispatcher(MoneyManagerDispatchers.IO) private val dispatcher: CoroutineDispatcher,
         private val billingSource: BillingSource,
     ) : BillingRepo {
         override val currentPurchases: Flow<List<Purchase>> = billingSource.purchases
@@ -36,10 +31,18 @@ class BillingDataRepo
                 .filter {
                     it.containsKey(PREMIUM_SUB)
                 }.map { it[PREMIUM_SUB] }
-                .flowOn(dispatcher)
 
         // Set to true when a purchase is acknowledged.
         override val isNewPurchaseAcknowledged: Flow<Boolean> = billingSource.isNewPurchaseAcknowledged
+
+        // Set to true when a returned purchases is an auto-renewing premium subscription.
+        override val hasRenewablePremium: Flow<Boolean> =
+            billingSource.purchases
+                .map { purchaseList ->
+                    purchaseList.any { purchase ->
+                        purchase.products.contains(PREMIUM_SUB) && purchase.isAutoRenewing
+                    }
+                }
 
         override fun startBillingConnection() = billingSource.startBillingConnection()
 
@@ -81,7 +84,7 @@ class BillingDataRepo
                             currency,
                         )
                     } ?: throw BillingFailure.SubscriptionNotFoundException(product)
-                }.flowOn(dispatcher)
+                }
 
         override fun buySku(
             tag: String,
@@ -91,15 +94,6 @@ class BillingDataRepo
         ) {
             billingSource.buySku(tag, productDetails, currentPurchases, result)
         }
-
-        // Set to true when a returned purchases is an auto-renewing premium subscription.
-        override val hasRenewablePremium: Flow<Boolean> =
-            billingSource.purchases
-                .map { purchaseList ->
-                    purchaseList.any { purchase ->
-                        purchase.products.contains(PREMIUM_SUB) && purchase.isAutoRenewing
-                    }
-                }.flowOn(dispatcher)
 
         companion object {
             // List of subscription product offerings

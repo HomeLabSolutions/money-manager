@@ -54,8 +54,9 @@ import kotlinx.datetime.plus
 import java.math.BigDecimal
 import java.util.Calendar
 import java.util.GregorianCalendar
+import javax.inject.Inject
 
-class TransactionInteractorImpl(
+class TransactionInteractorImpl @Inject constructor(
     private val transactionRepo: TransactionRepo,
     private val regularTransactionInteractor: RegularTransactionInteractor,
     private val categoryInteractor: CategoryInteractor,

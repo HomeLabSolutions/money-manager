@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface CurrencyApi {
-    @GET("{api_key}/latest/{base}")
+    @GET("v6/{api_key}/latest/{base}")
     suspend fun getCurrencies(
         @Path("base") baseCurrency: String = DEFAULT_CURRENCY_CODE,
         @Path("api_key") key: String = BuildConfig.CURRENCY_API_KEY,

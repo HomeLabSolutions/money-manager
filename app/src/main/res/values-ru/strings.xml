@@ -42,4 +42,9 @@
     <string name="bottom_menu_income_expense">Расход/Доход</string>
     <string name="bottom_menu_chart">Статистика</string>
     <string name="bottom_menu_profile">Профиль</string>
+
+    <string name="permissions_location">Геолокации</string>
+    <string name="permissions_location_explanation">отображения валюты вашего региона</string>
+    <string name="location_currency_dialog_title">Обновить валюту</string>
+    <string name="location_currency_dialog_subtitle">Вы хотите обновить валюту на %1$s</string>
 </resources>

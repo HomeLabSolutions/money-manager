@@ -34,7 +34,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
@@ -44,7 +43,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.currentStateAsState
 import com.d9tilov.android.category.data.impl.color.ColorManager
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.exception.CategoryException
@@ -102,10 +103,8 @@ fun CategoryCreationScreen(
 ) {
     val context = LocalContext.current
     var colorListShow by remember { mutableStateOf(false) }
-    val currentState = LocalLifecycleOwner.current.lifecycle.currentState
-    if (currentState.isAtLeast(Lifecycle.State.RESUMED)) {
-        if (uiState.saveStatus?.isSuccess == true) onBackClicked()
-    }
+    val currentState = LocalLifecycleOwner.current.lifecycle.currentStateAsState()
+    if (currentState.value.isAtLeast(Lifecycle.State.RESUMED) && uiState.saveStatus?.isSuccess == true) onBackClicked()
     Scaffold(topBar = {
         MmTopAppBar(
             titleRes =

@@ -10,20 +10,16 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 interface BackupDataModule {
     @Binds
-    @Singleton
-    fun provideBackupRepo(backupDataRepo: BackupDataRepo): BackupRepo
+    fun provideBackupRepo(impl: BackupDataRepo): BackupRepo
 
     @Binds
-    @Singleton
-    fun provideBackupLocalSource(backupLocalSource: BackupLocalSource): BackupSource
+    fun provideBackupLocalSource(impl: BackupLocalSource): BackupSource
 
     @Binds
-    @Singleton
-    fun provideBackupManager(backupManagerImpl: BackupManagerImpl): BackupManager
+    fun provideBackupManager(impl: BackupManagerImpl): BackupManager
 }

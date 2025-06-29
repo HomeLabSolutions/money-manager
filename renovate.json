@@ -1,8 +1,11 @@
 {
-  "extends": [
-    "config:gradle"
+  "extends": ["config:recommended", ":dependencyDashboard"],
+  "packageRules": [
+    {
+      "matchManagers": ["gradle"],
+      "schedule": ["* 0-4 * * *"]
+    }
   ],
-  "interval": "hourly",
   "labels": [
     "android",
     "dependencies"

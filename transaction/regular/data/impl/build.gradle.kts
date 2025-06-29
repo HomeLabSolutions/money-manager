@@ -11,9 +11,9 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
-    implementation(project(":core:network"))
     implementation(project(":transaction:regular:data:contract"))
     implementation(project(":transaction:regular:domain:contract"))
     implementation(project(":transaction:regular:domain:model"))
+    implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)
 }
