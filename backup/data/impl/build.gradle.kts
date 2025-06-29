@@ -12,6 +12,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":analytics:domain"))
     implementation(project(":backup:data:contract"))
     implementation(project(":backup:domain:contract"))
     implementation(project(":backup:domain:model"))
@@ -23,7 +24,7 @@ dependencies {
     implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.work.runtime)
     implementation(libs.dagger)
-    implementation(libs.firebase.config)
+    implementation(libs.firebase.config.ktx)
     implementation(libs.firebase.storage)
     implementation(libs.hilt.common)
     implementation(libs.kotlinx.coroutines.core)

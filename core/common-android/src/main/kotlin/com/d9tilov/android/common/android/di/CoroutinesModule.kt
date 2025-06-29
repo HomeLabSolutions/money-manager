@@ -1,5 +1,7 @@
 package com.d9tilov.android.common.android.di
 
+import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_DEFAULT
+import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,9 +23,4 @@ class CoroutinesModule {
     @Singleton
     @Named(DISPATCHER_DEFAULT)
     fun provideDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
-
-    companion object {
-        const val DISPATCHER_IO = "dispatcher_io"
-        const val DISPATCHER_DEFAULT = "dispatcher_default"
-    }
 }

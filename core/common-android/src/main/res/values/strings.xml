@@ -5,12 +5,16 @@
     <string name="exit">Exit</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="dismiss">Dismiss</string>
     <string name="retry">Retry</string>
     <string name="next">Next</string>
+    <string name="str_continue">Continue</string>
     <string name="save">Save</string>
     <string name="buy">Buy</string>
     <string name="add">Add</string>
     <string name="create">Create</string>
+    <string name="permissions_dialog_title">Permissions are required</string>
+    <string name="permissions_dialog_subtitle">The app needs %1$s permission to %2$s.</string>
 
     <string name="sub_category_delete_subtitle">All operations with this category will also be deleted.</string>
     <string name="unknown_error">Unknown error</string>

@@ -4,8 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.budget.ui.BudgetUiState
-import com.d9tilov.android.common.android.di.CoroutinesModule.Companion.DISPATCHER_IO
+import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
+import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.observer.contract.CurrencyUpdateObserver
 import com.d9tilov.android.currency.ui.CurrencyUiState
@@ -50,7 +51,7 @@ class PrepopulateViewModel
                 ) { currencyList, budget ->
                     PrepopulateUiState(
                         CurrencyUiState.HasCurrencies(currencyList, false),
-                        BudgetUiState(budget.sum.toString(), budget.currencyCode.getSymbolByCode()),
+                        BudgetUiState(budget.sum.reduceScaleStr(), budget.currencyCode.getSymbolByCode()),
                     )
                 }.collect { state -> _uiState.update { state } }
             }

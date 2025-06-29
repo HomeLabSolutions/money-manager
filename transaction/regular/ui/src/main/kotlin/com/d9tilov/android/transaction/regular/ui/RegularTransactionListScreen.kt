@@ -54,6 +54,7 @@ import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.PeriodType
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
+import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.designsystem.CurrencyTextFieldMedium
 import com.d9tilov.android.designsystem.EmptyListPlaceholder
 import com.d9tilov.android.designsystem.MmTopAppBar
@@ -287,7 +288,7 @@ fun RegularTransactionItem(
                     Modifier.padding(
                         horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
                     ),
-                value = transaction.sum.toString(),
+                value = transaction.sum.reduceScaleStr(),
                 currencyCode = transaction.currencyCode.getSymbolByCode(),
             )
         }

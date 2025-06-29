@@ -9,7 +9,7 @@ interface BackupSource {
 
     suspend fun makeBackup(): ResultOf<BackupData>
 
-    suspend fun restoreBackup(): ResultOf<Any>
+    suspend fun restoreBackup(): ResultOf<Long>
 
     suspend fun deleteBackup(): ResultOf<Any>
 }

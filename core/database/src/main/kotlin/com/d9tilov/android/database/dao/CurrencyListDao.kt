@@ -19,8 +19,8 @@ interface CurrencyListDao {
     fun getAll(): Flow<List<CurrencyDbModel>>
 
     @Query("SELECT * FROM currency WHERE id=:code")
-    fun getByCode(code: String): CurrencyDbModel
+    suspend fun getByCode(code: String): CurrencyDbModel
 
     @Query("SELECT lastUpdateTime FROM currency WHERE id=:code")
-    fun getLastUpdateTime(code: String): Long
+    suspend fun getLastUpdateTime(code: String): Long
 }

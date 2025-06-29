@@ -3,6 +3,7 @@ package com.d9tilov.android.datastore
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.SharedPreferencesMigration
+import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
@@ -11,6 +12,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.d9tilov.android.core.constants.DataConstants.DATA_STORE_NAME
 import com.d9tilov.android.core.constants.DataConstants.PREFERENCE_CLIENT_UID
 import com.d9tilov.android.core.constants.DataConstants.PREFERENCE_LAST_BACKUP_DATE
+import com.d9tilov.android.core.constants.DataConstants.PREFERENCE_LOCAL_CURRENCY
 import com.d9tilov.android.core.constants.DataConstants.STORE_NAME
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -38,6 +40,16 @@ class PreferencesStore(
         dataStore.edit { preferences -> preferences[PREFERENCE_LAST_BACKUP_DATE_KEY] = date }
     }
 
+    suspend fun updateLocalCurrency(currencyCode: String) {
+        dataStore.edit { preferences -> preferences[PREFERENCE_LOCAL_CURRENCY_KEY] = currencyCode }
+    }
+
+    suspend fun resetLocalCurrency() {
+        dataStore.edit { preferences: MutablePreferences -> preferences.remove(PREFERENCE_LOCAL_CURRENCY_KEY) }
+    }
+
+    fun getLocalCurrency(): Flow<String?> = dataStore.data.map { data -> data[PREFERENCE_LOCAL_CURRENCY_KEY] }
+
     suspend fun clearAllData() {
         dataStore.edit { it.clear() }
     }
@@ -46,5 +58,6 @@ class PreferencesStore(
         private val PREFERENCE_LAST_BACKUP_DATE_KEY =
             longPreferencesKey(PREFERENCE_LAST_BACKUP_DATE)
         private val PREFERENCE_CLIENT_UID_KEY = stringPreferencesKey(PREFERENCE_CLIENT_UID)
+        private val PREFERENCE_LOCAL_CURRENCY_KEY = stringPreferencesKey(PREFERENCE_LOCAL_CURRENCY)
     }
 }

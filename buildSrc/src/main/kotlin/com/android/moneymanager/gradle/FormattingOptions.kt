@@ -15,7 +15,7 @@ object FormattingOptions {
         val ktlint by configurations.creating
 
         dependencies {
-            ktlint("com.pinterest.ktlint:ktlint-cli:1.5.0") {
+            ktlint("com.pinterest.ktlint:ktlint-cli:1.6.0") {
                 attributes {
                     attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
                 }

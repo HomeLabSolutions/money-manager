@@ -5,8 +5,9 @@ import com.d9tilov.android.budget.domain.contract.BudgetRepo
 import com.d9tilov.android.budget.domain.model.BudgetData
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import kotlinx.coroutines.flow.firstOrNull
+import javax.inject.Inject
 
-class BudgetInteractorImpl(
+class BudgetInteractorImpl @Inject constructor(
     private val budgetRepo: BudgetRepo,
     private val currencyInteractor: CurrencyInteractor,
 ) : BudgetInteractor {

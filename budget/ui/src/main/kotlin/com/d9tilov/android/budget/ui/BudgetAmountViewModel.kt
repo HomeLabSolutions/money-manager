@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
+import com.d9tilov.android.core.utils.reduceScaleStr
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,7 +36,7 @@ class BudgetAmountViewModel
                     .collect { budget ->
                         _uiState.update {
                             it.copy(
-                                budgetSum = budget.sum.toString(),
+                                budgetSum = budget.sum.reduceScaleStr(),
                                 currencySymbol = budget.currencyCode.getSymbolByCode(),
                             )
                         }

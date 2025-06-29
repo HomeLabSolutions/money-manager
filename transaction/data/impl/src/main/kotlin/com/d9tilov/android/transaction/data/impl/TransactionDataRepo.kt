@@ -7,8 +7,9 @@ import com.d9tilov.android.transaction.domain.contract.TransactionRepo
 import com.d9tilov.android.transaction.domain.model.TransactionDataModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
+import javax.inject.Inject
 
-class TransactionDataRepo(
+class TransactionDataRepo @Inject constructor(
     private val transactionSource: TransactionSource,
 ) : TransactionRepo {
     override suspend fun addTransaction(transaction: TransactionDataModel) {

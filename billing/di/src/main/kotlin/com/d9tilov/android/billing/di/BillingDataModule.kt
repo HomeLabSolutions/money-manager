@@ -8,16 +8,13 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 interface BillingDataModule {
     @Binds
-    @Singleton
-    fun provideBillingLocalSource(billingDataSource: BillingDataSource): BillingSource
+    fun provideBillingLocalSource(impl: BillingDataSource): BillingSource
 
     @Binds
-    @Singleton
-    fun provideBillingRepo(billingDataRepo: BillingDataRepo): BillingRepo
+    fun provideBillingRepo(impl: BillingDataRepo): BillingRepo
 }

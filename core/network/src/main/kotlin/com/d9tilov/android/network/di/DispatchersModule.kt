@@ -16,27 +16,29 @@
 
 package com.d9tilov.android.network.di
 
-import com.d9tilov.android.network.dispatchers.Dispatcher
-import com.d9tilov.android.network.dispatchers.MoneyManagerDispatchers
+import com.d9tilov.android.network.dispatchers.DEFAULT
+import com.d9tilov.android.network.dispatchers.IO
+import com.d9tilov.android.network.dispatchers.MAIN
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import javax.inject.Named
 
 @Module
 @InstallIn(SingletonComponent::class)
 object DispatchersModule {
     @Provides
-    @Dispatcher(MoneyManagerDispatchers.IO)
+    @Named(IO)
     fun providesIODispatcher(): CoroutineDispatcher = Dispatchers.IO
 
     @Provides
-    @Dispatcher(MoneyManagerDispatchers.Default)
+    @Named(DEFAULT)
     fun providesDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
 
     @Provides
-    @Dispatcher(MoneyManagerDispatchers.Main)
+    @Named(MAIN)
     fun providesMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
 }

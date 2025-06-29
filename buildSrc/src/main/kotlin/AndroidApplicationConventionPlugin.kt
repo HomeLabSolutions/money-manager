@@ -16,6 +16,7 @@
 
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.moneymanager.gradle.extensions.buildLibs
+import com.android.moneymanager.gradle.extensions.configureAndroidFirebase
 import com.android.moneymanager.gradle.extensions.configureKotlinAndroid
 import com.android.moneymanager.gradle.extensions.implementation
 import org.gradle.api.Plugin
@@ -23,6 +24,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.extra
+import org.gradle.kotlin.dsl.getByType
 
 class AndroidApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -37,6 +39,8 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = rootProject.extra.get("targetSdkVersion") as Int
             }
+            val extension = extensions.getByType<ApplicationExtension>()
+            configureAndroidFirebase(extension)
             dependencies {
                 implementation(buildLibs.timber)
             }

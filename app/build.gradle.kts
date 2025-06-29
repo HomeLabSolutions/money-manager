@@ -13,13 +13,14 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
 }
 
+val keystorePropertiesFile: File = rootProject.file("keystore.properties")
+
 android {
 
     signingConfigs {
         create("release") {
-            val keystorePropertiesFile: File = rootProject.file("keystore.properties")
-            val keystoreProperties = Properties()
             if (keystorePropertiesFile.exists()) {
+                val keystoreProperties = Properties()
                 keystoreProperties.load(FileInputStream(keystorePropertiesFile))
                 keyAlias = keystoreProperties["keyAlias"] as String
                 keyPassword = keystoreProperties["keyPassword"] as String
@@ -61,7 +62,9 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             isDebuggable = false
-            signingConfig = signingConfigs.getByName("release")
+            if (keystorePropertiesFile.exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -102,6 +105,7 @@ android {
 
 dependencies {
     implementation(project(":analytics:di"))
+    implementation(project(":analytics:domain"))
     implementation(project(":backup:data:impl"))
     implementation(project(":backup:di"))
     implementation(project(":backup:domain:contract"))
@@ -151,14 +155,15 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.work.runtime)
     implementation(libs.appcompat)
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.config)
-    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebase.config.ktx)
+    implementation(libs.firebase.crashlytics.ktx)
     implementation(libs.firebase.storage)
     implementation(libs.firebase.ui.auth)
     implementation(libs.hilt.android)
     implementation(libs.material)
     implementation(libs.play.services.auth)
+    implementation(libs.play.services.location)
     implementation(libs.timber)
 }

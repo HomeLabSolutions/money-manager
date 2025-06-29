@@ -16,7 +16,7 @@ class BackupDataRepo
 
         override suspend fun makeBackup(): ResultOf<BackupData> = backupSource.makeBackup()
 
-        override suspend fun restoreBackup(): ResultOf<Any> = backupSource.restoreBackup()
+        override suspend fun restoreBackup(): ResultOf<Long> = backupSource.restoreBackup()
 
         override suspend fun deleteBackup() = backupSource.deleteBackup()
     }

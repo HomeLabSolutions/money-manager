@@ -7,6 +7,7 @@ import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
@@ -72,7 +73,7 @@ class RegularTransactionCreationViewModel
                     if (transactionId != NO_ID) {
                         tr = regularTransactionInteractor.getById(transactionId)
                         state.copy(
-                            amount = tr.sum.toString(),
+                            amount = tr.sum.reduceScaleStr(),
                             transaction = tr.copy(type = transactionType),
                         )
                     } else {

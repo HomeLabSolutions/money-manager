@@ -161,8 +161,7 @@ class BillingDataSource
             billingResult: BillingResult,
             purchases: List<Purchase>?,
         ) {
-            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && !purchases.isNullOrEmpty()
-            ) {
+            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && !purchases.isNullOrEmpty()) {
                 // Post new purchase List to _purchases
                 _purchases.value = purchases
 

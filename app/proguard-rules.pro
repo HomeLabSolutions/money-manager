@@ -233,3 +233,8 @@
 -dontwarn com.google.android.gms.auth.api.credentials.CredentialsOptions
 -dontwarn com.google.android.gms.auth.api.credentials.HintRequest$Builder
 -dontwarn com.google.android.gms.auth.api.credentials.HintRequest
+
+-keep class androidx.datastore.*.** {*;}
+-keepclassmembers class * extends com.google.protobuf.GeneratedMessageLite {
+    <fields>;
+}

@@ -14,13 +14,10 @@ import com.d9tilov.android.common.android.worker.SyncConstraints
 import com.d9tilov.android.common.android.worker.delegatedData
 import com.d9tilov.android.common.android.worker.syncForegroundInfo
 import com.d9tilov.android.core.constants.DataConstants.TAG
-import com.d9tilov.android.core.exceptions.WrongUidException
-import com.d9tilov.android.network.exception.NetworkException
-import com.google.firebase.FirebaseException
+import com.d9tilov.android.core.model.ResultOf
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import timber.log.Timber
-import java.io.FileNotFoundException
 import java.util.concurrent.TimeUnit
 
 @HiltWorker
@@ -35,23 +32,10 @@ class PeriodicBackupWorker
 
         override suspend fun doWork(): Result {
             Timber.tag(TAG).d("Do work...")
-            return try {
-                setForeground(context.syncForegroundInfo())
-                backupInteractor.makeBackup()
-                Timber.tag(TAG).d("Do work with success")
-                Result.success()
-            } catch (ex: NetworkException) {
-                Timber.tag(TAG).d("Do work with network exception: $ex")
-                Result.failure()
-            } catch (ex: WrongUidException) {
-                Timber.tag(TAG).d("Do work with wrong uid exception: $ex")
-                Result.failure()
-            } catch (ex: FileNotFoundException) {
-                Timber.tag(TAG).d("Do work with file not found error: $ex")
-                Result.failure()
-            } catch (ex: FirebaseException) {
-                Timber.tag(TAG).d("Do work with exception: $ex")
-                Result.failure()
+            setForeground(context.syncForegroundInfo())
+            return when (backupInteractor.makeBackup()) {
+                is ResultOf.Failure -> Result.failure()
+                is ResultOf.Loading, is ResultOf.Success -> Result.success()
             }
         }
 
@@ -76,7 +60,7 @@ class PeriodicBackupWorker
                 val workManager = WorkManager.getInstance(context)
                 workManager.enqueueUniquePeriodicWork(
                     BACKUP_WORK_NAME,
-                    ExistingPeriodicWorkPolicy.REPLACE,
+                    ExistingPeriodicWorkPolicy.UPDATE,
                     recurringWork,
                 )
             }

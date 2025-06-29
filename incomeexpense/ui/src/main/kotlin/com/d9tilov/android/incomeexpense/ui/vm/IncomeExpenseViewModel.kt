@@ -10,9 +10,9 @@ import androidx.paging.map
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
-import com.d9tilov.android.common.android.di.CoroutinesModule.Companion.DISPATCHER_IO
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.DataConstants.TAG
+import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.KeyPress
@@ -20,7 +20,7 @@ import com.d9tilov.android.core.utils.MainPriceFieldParser
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.isSameDay
-import com.d9tilov.android.core.utils.reduceScale
+import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.incomeexpense.ui.R
@@ -144,11 +144,7 @@ class IncomeExpenseViewModel
         val errorMessageFlow = errorMessage.asSharedFlow()
 
         init {
-            val updateCurrencyExceptionHandler =
-                CoroutineExceptionHandler { _, exception ->
-                    Timber.tag(TAG).d("Unable to update currency: $exception")
-                }
-            viewModelScope.launch(updateCurrencyExceptionHandler + ioDispatcher) {
+            viewModelScope.launch(ioDispatcher) {
                 launch {
                     currencyInteractor
                         .getMainCurrencyFlow()
@@ -157,7 +153,7 @@ class IncomeExpenseViewModel
                                 state.copy(
                                     price =
                                         MainPrice(
-                                            BigDecimal.ZERO.toString(),
+                                            BigDecimal.ZERO.reduceScaleStr(),
                                             currencyData.code,
                                         ),
                                 )
@@ -233,9 +229,7 @@ class IncomeExpenseViewModel
                                         Price(
                                             R.string.expense_info_can_spend_today_title,
                                             "${currencyCode.getSymbolByCode()}${
-                                                ableToSpendToday.trSum.reduceScale(
-                                                    true,
-                                                )
+                                                ableToSpendToday.trSum.reduceScaleStr()
                                             }",
                                         )
 
@@ -243,26 +237,20 @@ class IncomeExpenseViewModel
                                         Price(
                                             R.string.expense_info_can_spend_today_negate_title,
                                             "${currencyCode.getSymbolByCode()}${
-                                                ableToSpendToday.trSum.reduceScale(
-                                                    true,
-                                                )
+                                                ableToSpendToday.trSum.reduceScaleStr()
                                             }",
                                         )
                                 },
                                 Price(
                                     R.string.expense_info_today_title,
                                     "${currencyCode.getSymbolByCode()}${
-                                        spentTodayApprox.reduceScale(
-                                            true,
-                                        )
+                                        spentTodayApprox.reduceScaleStr()
                                     }",
                                 ),
                                 Price(
                                     R.string.expense_info_period_title,
                                     "${currencyCode.getSymbolByCode()}${
-                                        spentInPeriodApprox.reduceScale(
-                                            true,
-                                        )
+                                        spentInPeriodApprox.reduceScaleStr()
                                     }",
                                 ),
                             )
@@ -288,7 +276,7 @@ class IncomeExpenseViewModel
                             IncomeInfo(
                                 Price(
                                     R.string.income_info_period_title,
-                                    "${currencyCode.getSymbolByCode()}$approxSum",
+                                    "${currencyCode.getSymbolByCode()}${approxSum.reduceScaleStr()}",
                                 ),
                             )
                         } else {
@@ -348,7 +336,7 @@ class IncomeExpenseViewModel
                 }
             }
             uiState.update { state ->
-                val price = state.price.copy(value = BigDecimal.ZERO.toString())
+                val price = state.price.copy(value = BigDecimal.ZERO.reduceScaleStr())
                 state.copy(price = price)
             }
         }

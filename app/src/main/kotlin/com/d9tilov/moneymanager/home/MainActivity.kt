@@ -1,5 +1,6 @@
 package com.d9tilov.moneymanager.home
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -27,6 +28,7 @@ import com.d9tilov.moneymanager.prepopulate.PrepopulateScreen
 import com.d9tilov.moneymanager.ui.MmApp
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
+import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -43,15 +45,17 @@ class MainActivity : ComponentActivity() {
             AuthUI.IdpConfig.GoogleBuilder().build(),
         )
     private val startForResult: ActivityResultLauncher<Intent> =
-        registerForActivityResult(FirebaseAuthUIActivityResultContract()) { result ->
+        registerForActivityResult(
+            FirebaseAuthUIActivityResultContract(),
+        ) { result: FirebaseAuthUIAuthenticationResult ->
             Timber.tag(DataConstants.TAG).d("Sign in result: $result")
             viewModel.updateData()
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-
         var uiState: MainActivityUiState by mutableStateOf(MainActivityUiState.Loading)
 
         // Update the uiState
@@ -60,7 +64,7 @@ class MainActivity : ComponentActivity() {
                 viewModel.uiStateFlow.collectLatest { state ->
                     uiState = state
                     when (uiState) {
-                        MainActivityUiState.Success.Auth -> {
+                        is MainActivityUiState.Success.Auth -> {
                             viewModel.setToLoadingState()
                             startForResult.launch(
                                 AuthUI
@@ -69,14 +73,13 @@ class MainActivity : ComponentActivity() {
                                     .setLogo(com.d9tilov.android.designsystem.R.drawable.ic_money_manager_logo)
                                     .setTheme(R.style.Theme_MoneyManager)
                                     .setAvailableProviders(providers)
-                                    .setIsSmartLockEnabled(false)
                                     .build(),
                             )
                         }
 
-                        MainActivityUiState.Success.Prepopulate,
-                        MainActivityUiState.Success.Main,
-                        MainActivityUiState.Loading,
+                        is MainActivityUiState.Success.Prepopulate,
+                        is MainActivityUiState.Success.Main,
+                        is MainActivityUiState.Loading,
                         -> {
                             openScreen(uiState)
                         }
@@ -97,6 +100,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
     }
 
+    @SuppressLint("MissingPermission")
     private fun openScreen(state: MainActivityUiState) {
         // Turn off the decor fitting system windows, which allows us to handle insets,
         // including IME animations, and go edge-to-edge
@@ -126,9 +130,17 @@ class MainActivity : ComponentActivity() {
 
             MoneyManagerTheme(darkTheme = darkTheme) {
                 when (state) {
-                    MainActivityUiState.Success.Main -> MmApp(windowSizeClass = calculateWindowSizeClass(this))
-                    MainActivityUiState.Success.Prepopulate -> PrepopulateScreen()
-                    MainActivityUiState.Loading, MainActivityUiState.Success.Auth -> {}
+                    is MainActivityUiState.Success.Main ->
+                        MmApp(
+                            windowSizeClass = calculateWindowSizeClass(this),
+                            locationCurrencyState = state.locationCurrencyState,
+                            onLocationUpdated = { viewModel.getLocationCurrencyCode(it) },
+                            onConfirmClicked = { viewModel.updateCurrency(it) },
+                            onDismissClicked = { viewModel.updateLocalCurrency(it) },
+                        )
+
+                    is MainActivityUiState.Success.Prepopulate -> PrepopulateScreen()
+                    is MainActivityUiState.Loading, MainActivityUiState.Success.Auth -> {}
                 }
             }
         }
