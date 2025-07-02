@@ -12,6 +12,7 @@ dependencies {
     implementation(project(":billing:domain:model"))
     implementation(project(":core:common"))
     implementation(project(":currency:domain:model"))
+    implementation(libs.billing)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.timber)
 }
