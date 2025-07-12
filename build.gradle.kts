@@ -34,13 +34,13 @@ repositories {
     mavenCentral()
 }
 
-extra["compileSdkVersion"] = 35
+extra["compileSdkVersion"] = 36
 extra["minSdkVersion"] = 23
-extra["targetSdkVersion"] = 35
+extra["targetSdkVersion"] = 36
 extra["versionMajor"] = 1
 extra["versionMinor"] = 1
 extra["versionPatch"] = 1
-extra["versionBuild"] = 13
+extra["versionBuild"] = 15
 
 tasks.register("clean", Delete::class) {
     delete(rootProject.layout.buildDirectory)
