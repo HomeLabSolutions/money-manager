@@ -47,10 +47,11 @@ tasks.register("clean", Delete::class) {
 }
 
 plugins {
-    alias(libs.plugins.serialization) apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.deps.sorting) apply false
     alias(libs.plugins.deps.unused) apply true
+    alias(libs.plugins.hilt) apply false
+    alias(libs.plugins.serialization) apply false
 }
 
 subprojects {
