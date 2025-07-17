@@ -21,16 +21,15 @@ googlePlayServicesAuth = "21.3.0"
 googlePlayServicesLocation = "21.3.0"
 gradlePlugin = "8.11.1"
 guava = "33.4.8-jre"
-hilt = "2.56.2"
+hilt = "2.57"
 hiltCommon = "1.2.0"
 hiltNavigationCompose = "1.2.0"
-hiltPlugin = "2.56.2"
 java = "17"
 javaPoet = "1.13.0"
 javaxInject = "1"
 junit = "4.13.2"
 kotlin = "2.2.0"
-kotlinDatetime = "0.7.0"
+kotlinDatetime = "0.7.1"
 kotlinxSerialization = "1.9.0"
 ksp = "2.2.0-2.0.2"
 material = "1.12.0"
@@ -73,7 +72,7 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 billing = { group = "com.android.billingclient", name = "billing", version.ref = "billing" }
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 core = { group = "androidx.core", name = "core", version.ref = "core" }
-dagger = { group = "com.google.dagger", name = "dagger", version.ref = "hiltPlugin" }
+dagger = { group = "com.google.dagger", name = "dagger", version.ref = "hilt" }
 datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 detekt = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detektPlugin" }
 firebase-analytics-ktx = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
@@ -88,9 +87,9 @@ google-services = { group = "com.google.gms", name = "google-services", version.
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
-hilt-android-gradle-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hiltPlugin" }
+hilt-android-gradle-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt" }
 hilt-common = { group = "androidx.hilt", name = "hilt-common", version.ref = "hiltCommon" }
-hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "hiltPlugin" }
+hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "hilt" }
 hilt-ext-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltCommon" }
 java-poet = { group = "com.squareup", name = "javapoet", version.ref = "javaPoet" }
 javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javaxInject" }
@@ -125,4 +124,5 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 deps-sorting = { id = "com.squareup.sort-dependencies", version.ref = "autonomousappsSorting" }
 deps-unused = { id = "com.autonomousapps.dependency-analysis", version.ref = "autonomousappsUnused" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }
