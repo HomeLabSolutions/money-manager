@@ -10,7 +10,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.minus
 
 sealed class StatisticsPeriodModel(
-    @StringRes val name: Int,
+    @field:StringRes val name: Int,
     val from: LocalDateTime,
     val to: LocalDateTime,
 ) {
