@@ -12,5 +12,5 @@ dependencies {
     implementation(project(":analytics:data"))
     implementation(project(":analytics:domain"))
     implementation(project(":core:datastore"))
-    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.analytics)
 }
