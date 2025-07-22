@@ -26,7 +26,7 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.analytics)
     implementation(libs.navigation.compose)
     debugImplementation(libs.androidx.compose.ui.tooling)
 }

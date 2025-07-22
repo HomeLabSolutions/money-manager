@@ -95,7 +95,7 @@ data class MainPrice(
 }
 
 data class Price(
-    @StringRes val label: Int = R.string.expense_info_can_spend_today_title,
+    @field:StringRes val label: Int = R.string.expense_info_can_spend_today_title,
     val value: String = "${BigDecimal.ZERO}$DEFAULT_CURRENCY_CODE",
 ) {
     companion object {
