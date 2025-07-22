@@ -42,9 +42,9 @@ data class BackupState(
 )
 
 data class SubscriptionUiState(
-    @StringRes val title: Int = R.string.settings_subscription_premium_title,
-    @StringRes val description: Int = R.string.settings_subscription_premium_description,
-    @DrawableRes val icon: Int = com.d9tilov.android.designsystem.R.drawable.ic_money_manager_logo,
+    @field:StringRes val title: Int = R.string.settings_subscription_premium_title,
+    @field:StringRes val description: Int = R.string.settings_subscription_premium_description,
+    @field:DrawableRes val icon: Int = com.d9tilov.android.designsystem.R.drawable.ic_money_manager_logo,
     val minPrice: SubscriptionPriceUiState? = null,
 )
 

@@ -36,7 +36,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.appcompat)
     implementation(libs.coil)
-    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.analytics)
     implementation(libs.firebase.ui.auth)
     implementation(libs.play.services.auth)
 }
