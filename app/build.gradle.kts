@@ -81,19 +81,6 @@ android {
         }
     }
 
-    configure<com.android.build.gradle.BaseExtension> {
-        packagingOptions {
-            exclude("META-INF/DEPENDENCIES")
-            exclude("META-INF/LICENSE")
-            exclude("META-INF/LICENSE.txt")
-            exclude("META-INF/license.txt")
-            exclude("META-INF/NOTICE")
-            exclude("META-INF/NOTICE.txt")
-            exclude("META-INF/notice.txt")
-            exclude("META-INF/ASL2.0")
-        }
-    }
-
     if (project.hasProperty("devBuild")) {
         splits.abi.isEnable = false
         splits.density.isEnable = false
@@ -155,10 +142,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.work.runtime)
     implementation(libs.appcompat)
-    implementation(libs.firebase.analytics.ktx)
-    implementation(libs.firebase.auth.ktx)
-    implementation(libs.firebase.config.ktx)
-    implementation(libs.firebase.crashlytics.ktx)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.config)
+    implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.storage)
     implementation(libs.firebase.ui.auth)
     implementation(libs.hilt.android)

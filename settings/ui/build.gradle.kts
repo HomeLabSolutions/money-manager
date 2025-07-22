@@ -34,6 +34,6 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.firebase.config.ktx)
+    implementation(libs.firebase.config)
     implementation(libs.timber)
 }
