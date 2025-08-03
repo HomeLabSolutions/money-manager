@@ -3,9 +3,9 @@ package com.d9tilov.android.analytics.di
 import com.d9tilov.android.analytics.data.FirebaseAnalyticsSender
 import com.d9tilov.android.analytics.domain.AnalyticsSender
 import com.d9tilov.android.datastore.PreferencesStore
+import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.analytics.analytics
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
