@@ -12,7 +12,6 @@
 
     <application
         android:name="com.d9tilov.moneymanager.App"
-        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="${appName}"
         android:restoreAnyVersion="true"
