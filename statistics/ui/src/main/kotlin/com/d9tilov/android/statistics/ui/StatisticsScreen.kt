@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -36,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -54,11 +56,12 @@ import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.core.utils.toLocalDateTime
-import com.d9tilov.android.core.utils.toMillis
 import com.d9tilov.android.core.utils.toStandardStringDate
 import com.d9tilov.android.designsystem.ButtonSelector
 import com.d9tilov.android.designsystem.ComposeCurrencyView
 import com.d9tilov.android.designsystem.DateRangePickerModal
+import com.d9tilov.android.designsystem.EmptyListPlaceholder
+import com.d9tilov.android.designsystem.MoneyManagerIcons
 import com.d9tilov.android.designsystem.ProgressIndicator
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.android.statistics.data.model.StatisticsMenuType
@@ -68,6 +71,7 @@ import com.d9tilov.android.statistics.ui.model.StatisticsMenuTransactionType
 import com.d9tilov.android.statistics.ui.model.StatisticsPeriodModel
 import com.d9tilov.android.statistics.ui.model.TransactionDetailsChartModel
 import com.d9tilov.android.statistics.ui.model.chart.Pie
+import com.d9tilov.android.statistics.ui.vm.ChartState
 import com.d9tilov.android.statistics.ui.vm.DetailsSpentInPeriodState
 import com.d9tilov.android.statistics.ui.vm.DetailsTransactionListState
 import com.d9tilov.android.statistics.ui.vm.PeriodUiState
@@ -75,6 +79,7 @@ import com.d9tilov.android.statistics.ui.vm.StatisticsMenuState
 import com.d9tilov.android.statistics.ui.vm.StatisticsUiState
 import com.d9tilov.android.statistics.ui.vm.StatisticsViewModel
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
+import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
 
 private const val ANIMATION_DURATION = 300
@@ -82,7 +87,7 @@ private const val ANIMATION_DURATION = 300
 @Composable
 fun StatisticsRoute(
     viewModel: StatisticsViewModel = hiltViewModel(),
-    onTransactionClicked: (TransactionDetailsChartModel) -> Unit,
+    onTransactionClicked: (TransactionDetailsChartModel, LocalDateTime, LocalDateTime) -> Unit,
 ) {
     val uiState: StatisticsUiState by viewModel.uiState.collectAsState(StatisticsUiState())
     Scaffold { paddingValues ->
@@ -91,7 +96,15 @@ fun StatisticsRoute(
             state = uiState,
             onPeriodClick = { viewModel.updatePeriod(it) },
             onMenuClick = { viewModel.onMenuClick(it) },
-            onTransactionClicked = onTransactionClicked,
+            onTransactionClicked = {
+                onTransactionClicked(
+                    it,
+                    uiState.periodState.selectedPeriod.from,
+                    uiState.periodState.selectedPeriod.to,
+                )
+            },
+            onPrevClicked = { viewModel.onPeriodArrowClicked(false) },
+            onNextClicked = { viewModel.onPeriodArrowClicked(true) },
         )
     }
 }
@@ -103,25 +116,31 @@ fun StatisticsScreen(
     onPeriodClick: (period: StatisticsPeriodModel) -> Unit,
     onMenuClick: (type: StatisticsMenuType) -> Unit,
     onTransactionClicked: (TransactionDetailsChartModel) -> Unit,
+    onPrevClicked: () -> Unit,
+    onNextClicked: () -> Unit,
 ) {
     val showDatePicker = remember { mutableStateOf(false) }
     Column(modifier) {
-        Column(modifier = Modifier.weight(2f)) {
-            StatisticsPeriodSelector(state = state.periodState, onPeriodClick = { period: StatisticsPeriodModel ->
+        StatisticsPeriodSelector(
+            state = state.periodState,
+            onPeriodClick = { period: StatisticsPeriodModel ->
                 if (period == StatisticsPeriodModel.CUSTOM()) {
                     showDatePicker.value = true
                 }
                 onPeriodClick(period)
-            })
-            StatisticsMenuSelector(state = state.statisticsMenuState, onClick = onMenuClick)
+            },
+        )
+        StatisticsMenuSelector(state = state.statisticsMenuState, onClick = onMenuClick)
+
+        Column(modifier = Modifier.weight(2f)) {
             var selectedIndex by remember { mutableIntStateOf(-1) }
             StatisticsChart(
-                Modifier
-                    .fillMaxSize()
-                    .padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
+                Modifier.fillMaxSize(),
+                periodUiState = state.periodState,
                 periodStr =
-                    if (state.periodState.selectedPeriod == StatisticsPeriodModel.DAY) {
-                        ""
+                    if (state.periodState.selectedPeriod is StatisticsPeriodModel.DAY) {
+                        state.periodState.selectedPeriod.from
+                            .toStandardStringDate()
                     } else {
                         "${state.periodState.selectedPeriod.from.toStandardStringDate()} " +
                             "- ${state.periodState.selectedPeriod.to.toStandardStringDate()}"
@@ -130,7 +149,10 @@ fun StatisticsScreen(
                     state.chartState.pieData.mapIndexed { index, pie ->
                         pie.copy(selected = index == selectedIndex)
                     },
-            ) { selectedIndex = it }
+                { selectedIndex = it },
+                onPrevClicked,
+                onNextClicked,
+            )
         }
         StatisticsList(
             modifier = Modifier.weight(1f),
@@ -140,10 +162,6 @@ fun StatisticsScreen(
                 onTransactionClicked(
                     TransactionDetailsChartModel(
                         it.category.id,
-                        state.periodState.selectedPeriod.from
-                            .toMillis(),
-                        state.periodState.selectedPeriod.to
-                            .toMillis(),
                         state.statisticsMenuState.inStatistics == StatisticsMenuInStatisticsType.InStatisticsType,
                     ),
                 )
@@ -235,34 +253,86 @@ fun StatisticMenuIcon(
 @Composable
 fun StatisticsChart(
     modifier: Modifier,
+    periodUiState: PeriodUiState,
     periodStr: String,
     pieData: List<Pie>,
     onPieSelected: (Int) -> Unit,
+    onPrevClicked: () -> Unit,
+    onNextClicked: () -> Unit,
 ) {
     val floatSpec =
         spring<Float>(
             dampingRatio = .3f,
             stiffness = Spring.StiffnessLow,
         )
-    PieChart(
+    Row(
         modifier = modifier,
-        data = pieData,
-        centerLabel = periodStr,
-        onPieClick = {
-            println("${it.label} Clicked")
-            val pieIndex = pieData.indexOf(it)
-            onPieSelected(pieIndex)
-        },
-        selectedScale = 1.2f,
-        spaceDegreeAnimEnterSpec = floatSpec,
-        colorAnimEnterSpec = tween(ANIMATION_DURATION),
-        scaleAnimEnterSpec = floatSpec,
-        colorAnimExitSpec = tween(ANIMATION_DURATION),
-        scaleAnimExitSpec = tween(ANIMATION_DURATION),
-        spaceDegreeAnimExitSpec = tween(ANIMATION_DURATION),
-        selectedPaddingDegree = 0f,
-        style = Pie.Style.Stroke(48.dp),
-    )
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (periodUiState.showPrevArrow) {
+            IconButton(
+                onClick = onPrevClicked,
+            ) {
+                Icon(
+                    imageVector = MoneyManagerIcons.ArrowBack,
+                    contentDescription = "Back",
+                    tint = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.size(dimensionResource(R.dimen.statistics_item_icon_size)),
+                )
+            }
+        }
+
+        val modifier =
+            Modifier
+                .weight(1f)
+                .fillMaxSize()
+                .padding(
+                    if (periodUiState.selectedPeriod is StatisticsPeriodModel.CUSTOM) {
+                        dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large)
+                    } else {
+                        0.dp
+                    },
+                )
+        if (pieData.isEmpty()) {
+            EmptyListPlaceholder(
+                modifier = modifier,
+                icon = painterResource(id = MoneyManagerIcons.EmptyStatisticsPlaceholder),
+                title = stringResource(id = R.string.statistics_no_data),
+            )
+        } else {
+            PieChart(
+                modifier = modifier,
+                data = pieData,
+                centerLabel = periodStr,
+                onPieClick = {
+                    println("${it.label} Clicked")
+                    val pieIndex = pieData.indexOf(it)
+                    onPieSelected(pieIndex)
+                },
+                selectedScale = 1.2f,
+                spaceDegreeAnimEnterSpec = floatSpec,
+                colorAnimEnterSpec = tween(ANIMATION_DURATION),
+                scaleAnimEnterSpec = floatSpec,
+                colorAnimExitSpec = tween(ANIMATION_DURATION),
+                scaleAnimExitSpec = tween(ANIMATION_DURATION),
+                spaceDegreeAnimExitSpec = tween(ANIMATION_DURATION),
+                selectedPaddingDegree = 0f,
+                style = Pie.Style.Stroke(48.dp),
+            )
+        }
+        if (periodUiState.showNextArrow) {
+            IconButton(
+                onClick = onNextClicked,
+            ) {
+                Icon(
+                    imageVector = MoneyManagerIcons.ArrowForward,
+                    contentDescription = "Forward",
+                    tint = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.size(dimensionResource(R.dimen.statistics_item_icon_size)),
+                )
+            }
+        }
+    }
 }
 
 @Composable
@@ -423,6 +493,10 @@ fun DefaultCategoryIconGridPreview() {
         StatisticsScreen(
             Modifier,
             StatisticsUiState(
+                chartState =
+                    ChartState(
+                        pieData = listOf(Pie.EMPTY),
+                    ),
                 detailsTransactionListState =
                     DetailsTransactionListState(
                         amount = DetailsSpentInPeriodState(),
@@ -512,6 +586,8 @@ fun DefaultCategoryIconGridPreview() {
             onPeriodClick = {},
             onMenuClick = {},
             onTransactionClicked = {},
+            onPrevClicked = {},
+            onNextClicked = {},
         )
     }
 }
