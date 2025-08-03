@@ -8,35 +8,48 @@ import com.d9tilov.android.statistics.ui.R
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 
 sealed class StatisticsPeriodModel(
     @field:StringRes val name: Int,
     val from: LocalDateTime,
     val to: LocalDateTime,
 ) {
-    data object DAY : StatisticsPeriodModel(
-        R.string.statistics_period_day,
-        currentDate().getStartOfDay(),
-        currentDate().getEndOfDay(),
-    )
+    data class DAY(
+        val fromDate: LocalDateTime = currentDate().getStartOfDay(),
+        val toDate: LocalDateTime = currentDate().getEndOfDay(),
+    ) : StatisticsPeriodModel(
+            R.string.statistics_period_day,
+            fromDate,
+            toDate,
+        )
 
-    data object WEEK : StatisticsPeriodModel(
-        R.string.statistics_period_week,
-        currentDate().minus(1, DateTimeUnit.WEEK).getStartOfDay(),
-        currentDate().getEndOfDay(),
-    )
+    data class WEEK(
+        val fromDate: LocalDateTime = currentDate().minus(1, DateTimeUnit.WEEK).getStartOfDay(),
+        val toDate: LocalDateTime = currentDate().getEndOfDay(),
+    ) : StatisticsPeriodModel(
+            R.string.statistics_period_week,
+            fromDate,
+            toDate,
+        )
 
-    data object MONTH : StatisticsPeriodModel(
-        R.string.statistics_period_month,
-        currentDate().minus(1, DateTimeUnit.MONTH).getStartOfDay(),
-        currentDate().getEndOfDay(),
-    )
+    data class MONTH(
+        val fromDate: LocalDateTime = currentDate().minus(1, DateTimeUnit.MONTH).getStartOfDay(),
+        val toDate: LocalDateTime = currentDate().getEndOfDay(),
+    ) : StatisticsPeriodModel(
+            R.string.statistics_period_month,
+            fromDate,
+            toDate,
+        )
 
-    data object YEAR : StatisticsPeriodModel(
-        R.string.statistics_period_year,
-        currentDate().minus(1, DateTimeUnit.YEAR).getStartOfDay(),
-        currentDate().getEndOfDay(),
-    )
+    data class YEAR(
+        val fromDate: LocalDateTime = currentDate().minus(1, DateTimeUnit.YEAR).getStartOfDay(),
+        val toDate: LocalDateTime = currentDate().getEndOfDay(),
+    ) : StatisticsPeriodModel(
+            R.string.statistics_period_year,
+            fromDate,
+            toDate,
+        )
 
     data class CUSTOM(
         val fromDate: LocalDateTime = currentDate().minus(1, DateTimeUnit.MONTH).getStartOfDay(),
@@ -47,3 +60,91 @@ sealed class StatisticsPeriodModel(
             toDate.getEndOfDay(),
         )
 }
+
+infix fun StatisticsPeriodModel.plus(count: Int): StatisticsPeriodModel =
+    when (this) {
+        is StatisticsPeriodModel.CUSTOM -> this
+        is StatisticsPeriodModel.DAY ->
+            StatisticsPeriodModel.DAY(
+                from.date
+                    .plus(count, DateTimeUnit.DAY)
+                    .getStartOfDay(),
+                to.date
+                    .plus(count, DateTimeUnit.DAY)
+                    .getEndOfDay(),
+            )
+
+        is StatisticsPeriodModel.WEEK ->
+            StatisticsPeriodModel.WEEK(
+                from.date
+                    .plus(count, DateTimeUnit.WEEK)
+                    .getStartOfDay(),
+                to.date
+                    .plus(count, DateTimeUnit.WEEK)
+                    .getEndOfDay(),
+            )
+
+        is StatisticsPeriodModel.MONTH ->
+            StatisticsPeriodModel.MONTH(
+                from.date
+                    .plus(count, DateTimeUnit.MONTH)
+                    .getStartOfDay(),
+                to.date
+                    .plus(count, DateTimeUnit.MONTH)
+                    .getEndOfDay(),
+            )
+
+        is StatisticsPeriodModel.YEAR ->
+            StatisticsPeriodModel.YEAR(
+                from.date
+                    .plus(count, DateTimeUnit.YEAR)
+                    .getStartOfDay(),
+                to.date
+                    .plus(count, DateTimeUnit.YEAR)
+                    .getEndOfDay(),
+            )
+    }
+
+infix fun StatisticsPeriodModel.minus(count: Int): StatisticsPeriodModel =
+    when (this) {
+        is StatisticsPeriodModel.CUSTOM -> this
+        is StatisticsPeriodModel.DAY ->
+            StatisticsPeriodModel.DAY(
+                from.date
+                    .minus(count, DateTimeUnit.DAY)
+                    .getStartOfDay(),
+                to.date
+                    .minus(count, DateTimeUnit.DAY)
+                    .getEndOfDay(),
+            )
+
+        is StatisticsPeriodModel.WEEK ->
+            StatisticsPeriodModel.WEEK(
+                from.date
+                    .minus(count, DateTimeUnit.WEEK)
+                    .getStartOfDay(),
+                to.date
+                    .minus(count, DateTimeUnit.WEEK)
+                    .getEndOfDay(),
+            )
+
+        is StatisticsPeriodModel.MONTH ->
+            StatisticsPeriodModel.MONTH(
+                from.date
+                    .minus(count, DateTimeUnit.MONTH)
+                    .getStartOfDay(),
+                to.date
+                    .minus(count, DateTimeUnit.MONTH)
+                    .getEndOfDay(),
+            )
+
+        is StatisticsPeriodModel.YEAR ->
+            StatisticsPeriodModel.YEAR(
+                from.date
+                    .minus(count, DateTimeUnit.YEAR)
+                    .getStartOfDay(),
+                to.date
+                    .minus(count, DateTimeUnit.YEAR)
+                    .getEndOfDay(),
+            )
+    }
