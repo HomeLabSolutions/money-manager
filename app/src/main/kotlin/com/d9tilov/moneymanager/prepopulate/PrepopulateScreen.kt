@@ -223,7 +223,7 @@ fun BottomNavigationBar(
 
 sealed class PrepopulateScreen(
     val id: Int,
-    @StringRes val title: Int,
+    @field:StringRes val title: Int,
 ) {
     data object CurrencyScreen : PrepopulateScreen(0, R.string.title_prepopulate_currency)
 

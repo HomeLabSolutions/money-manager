@@ -6,11 +6,13 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.PendingPurchasesParams
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.ProductDetailsResponseListener
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
+import com.android.billingclient.api.QueryProductDetailsResult
 import com.android.billingclient.api.QueryPurchasesParams
 import com.d9tilov.android.billing.data.contract.BillingSource
 import kotlinx.coroutines.flow.Flow
@@ -49,8 +51,13 @@ class BillingDataSource
             BillingClient
                 .newBuilder(context)
                 .setListener(this)
-                .enablePendingPurchases()
-                .build()
+                .enablePendingPurchases(
+                    PendingPurchasesParams
+                        .newBuilder()
+                        .enableOneTimeProducts()
+                        .enableOneTimeProducts()
+                        .build(),
+                ).build()
 
         // Establish a connection to Google Play.
         override fun startBillingConnection() {
@@ -120,38 +127,6 @@ class BillingDataSource
                 params.setProductList(productList).let { productDetailsParams ->
                     Timber.tag(TAG).i("queryProductDetailsAsync")
                     billingClient.queryProductDetailsAsync(productDetailsParams.build(), this)
-                }
-            }
-        }
-
-        // [ProductDetailsResponseListener] implementation
-        // Listen to response back from [queryProductDetails] and emits the results
-        // to [_productWithProductDetails].
-        override fun onProductDetailsResponse(
-            billingResult: BillingResult,
-            productDetailsList: MutableList<ProductDetails>,
-        ) {
-            val responseCode = billingResult.responseCode
-            val debugMessage = billingResult.debugMessage
-            when (responseCode) {
-                BillingClient.BillingResponseCode.OK -> {
-                    var newMap = emptyMap<String, ProductDetails>()
-                    if (productDetailsList.isEmpty()) {
-                        Timber
-                            .tag(TAG)
-                            .d(
-                                "onProductDetailsResponse: Found null or empty ProductDetails. Check to see if the Products you requested are correctly published in the Google Play Console.",
-                            )
-                    } else {
-                        newMap =
-                            productDetailsList.associateBy {
-                                it.productId
-                            }
-                    }
-                    _productWithProductDetails.value = newMap
-                }
-                else -> {
-                    Timber.tag(TAG).i("onProductDetailsResponse: $responseCode $debugMessage")
                 }
             }
         }
@@ -300,6 +275,32 @@ class BillingDataSource
             }
 
             return eligibleOffers
+        }
+
+        override fun onProductDetailsResponse(
+            billingResult: BillingResult,
+            detailsResult: QueryProductDetailsResult,
+        ) {
+            val responseCode = billingResult.responseCode
+            val debugMessage = billingResult.debugMessage
+            if (responseCode == BillingClient.BillingResponseCode.OK) {
+                var newMap = emptyMap<String, ProductDetails>()
+                if (detailsResult.productDetailsList.isEmpty()) {
+                    Timber
+                        .tag(TAG)
+                        .d(
+                            "onProductDetailsResponse: Found null or empty ProductDetails. Check to see if the Products you requested are correctly published in the Google Play Console.",
+                        )
+                } else {
+                    newMap =
+                        detailsResult.productDetailsList.associateBy {
+                            it.productId
+                        }
+                }
+                _productWithProductDetails.value = newMap
+            } else {
+                Timber.tag(TAG).i("onProductDetailsResponse: $responseCode $debugMessage")
+            }
         }
 
         companion object {
