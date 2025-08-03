@@ -9,6 +9,7 @@ import com.d9tilov.android.common.android.ui.base.BaseNavigator
 import com.d9tilov.android.statistics.ui.StatisticsDetailsRoute
 import com.d9tilov.android.statistics.ui.StatisticsRoute
 import com.d9tilov.android.statistics.ui.model.TransactionDetailsChartModel
+import kotlinx.datetime.LocalDateTime
 
 const val STATISTICS_NAVIGATION_ROUTE = "statistics_route"
 const val STATISTICS_DETAILS_NAVIGATION_ROUTE = "statistics_details_route"
@@ -42,17 +43,19 @@ internal data class TransactionDetailsArgs(
 
 fun NavController.navigateToStatisticsDetailsTransactionScreen(
     model: TransactionDetailsChartModel,
+    from: LocalDateTime,
+    to: LocalDateTime,
     navOptions: NavOptions? = null,
 ) {
     this.navigate(
-        "$STATISTICS_DETAILS_NAVIGATION_ROUTE/${model.categoryId}/${model.from}/${model.to}/${model.inStatistics}",
+        "$STATISTICS_DETAILS_NAVIGATION_ROUTE/${model.categoryId}/$from/$to/${model.inStatistics}",
         navOptions,
     )
 }
 
 fun NavGraphBuilder.statisticsScreen(
     route: String,
-    onTransactionClick: (TransactionDetailsChartModel) -> Unit,
+    onTransactionClick: (TransactionDetailsChartModel, LocalDateTime, LocalDateTime) -> Unit,
 ) {
     composable(route = route) { StatisticsRoute(onTransactionClicked = onTransactionClick) }
 }
