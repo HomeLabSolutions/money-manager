@@ -4,18 +4,8 @@
     <string name="delete">Удалить</string>
     <string name="create">Создать</string>
     <string name="category_name_title">Название</string>
-    <string name="category_name_hint">Введите название</string>
-    <string name="title_category_set">Доступные иконки</string>
-    <string name="category_edit_title">Редактирование группы категорий</string>
-    <string name="category_unit_name_group_hint">Название группы</string>
     <string name="category_delete_title">Удаление категории</string>
     <string name="category_delete_subtitle">Категория $1%s будет удалена</string>
-    <string name="category_delete_sub_title">Так же будут удалены все операции с этой статьёй</string>
-    <string name="category_delete_group_sub_title">Так же будут удалены все подкатегории и операции со статьей</string>
-    <string name="category_unit_to_group_title">Объединение в группу</string>
-    <string name="category_add_to_group_title">Добавление в группу</string>
-    <string name="category_unit_to_group_subtitle">Добавить категорию \"%1$s\"\ в группу \"%2$s\"\?</string>
-    <string name="category_unit_new_name_subtitle">Введите название новой группы категорий</string>
     <string name="category_unit_name_exist_error">Название группы с таким именем уже существует</string>
     <string name="category_name_exist_error">Название категории с таким именем уже существует</string>
     <string name="category_not_found_error">Категория не найдена</string>
@@ -30,19 +20,10 @@
     <string name="category_group_sport">Спорт</string>
     <string name="category_group_investing">Инвестирование</string>
     <string name="category_group_recreation">Отдых</string>
-    <string name="category_group_clothes">Одежда</string>
     <string name="category_group_personal">Личное</string>
     <string name="category_group_others">Другое</string>
 
-    <string name="category_empty_placeholder_title">Список категорий пуст</string>
-    <string name="category_empty_placeholder_subtitle">Добавьте хотя бы одну категорию</string>
-
-    <string name="sub_category_delete_title">Удаление подкатегории</string>
-    <string name="sub_category_delete">Удалить</string>
-    <string name="sub_category_delete_from_group">Удалить из группы</string>
-
     <string name="title_category">Категории</string>
-    <string name="title_sub_category">Категория: %1$s</string>
     <string name="title_category_edit">Категория</string>
     <string name="title_category_group_set">Категории</string>
     <string name="title_category_creation">Создание категории</string>

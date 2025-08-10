@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="toolbar_menu_skip">Skip</string>
-    <string name="title_prepopulate_regular_incomes">Regular incomes</string>
-    <string name="title_prepopulate_regular_expenses">Regular expenses</string>
     <string name="transaction_empty_placeholder_expense_title">Add expense</string>
     <string name="transaction_empty_placeholder_subtitle">Enter the amount and tap on a category</string>
     <string name="transaction_empty_placeholder_regular_expense_title">Add regular expense</string>
     <string name="transaction_empty_placeholder_regular_income_title">Add regular income</string>
 
-    <string name="day_of_month_title">Choose a day of the month</string>
-
-    <string name="regular_transaction_notify">Notify</string>
-    <string name="regular_transaction_auto_add">Auto add</string>
     <string name="regular_transaction_choose_category">Choose category</string>
     <string name="regular_transaction_repeat_title">Repeat every</string>
-    <string name="regular_transaction_repeat_next_date_title">Starts</string>
     <string name="regular_transaction_repeat_monday_short">Mo</string>
     <string name="regular_transaction_repeat_monday">Monday</string>
     <string name="regular_transaction_repeat_tuesday_short">Tu</string>
@@ -32,8 +25,6 @@
     <string name="regular_transaction_repeat_period_day">every day</string>
     <string name="regular_transaction_repeat_period_week">repeat on: %1$s</string>
     <string name="regular_transaction_repeat_period_month">every month on %1$sth</string>
-    <string name="regular_transaction_repeat_period_month_2">every month on %1$sth</string>
-    <string name="regular_transaction_repeat_period_year">every year\n%1$s</string>
     <string name="regular_transaction_income_title">Regular income</string>
     <string name="regular_transaction_expense_title">Regular expense</string>
     <string name="regular_transaction_edit_sum_title">Amount</string>
@@ -48,9 +39,4 @@
 
     <string name="profile_item_regular_incomes_title">Regular incomes</string>
     <string name="profile_item_regular_expenses_title">Regular expenses</string>
-    <string-array name="regular_transaction_repeat_list">
-        <item>Day</item>
-        <item>Week</item>
-        <item>Month</item>
-    </string-array>
 </resources>

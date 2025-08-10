@@ -39,6 +39,18 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, 
             sourceCompatibility(buildLibs.versions.java.get())
             targetCompatibility(buildLibs.versions.java.get())
         }
+
+        lint {
+            warningsAsErrors = true
+            abortOnError = true
+            ignoreWarnings = false
+            checkDependencies = true
+            disable +=
+                listOf(
+                    "VectorPath",
+                    "UnusedAttribute",
+                )
+        }
     }
 
     configureKotlin()

@@ -1,17 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="billing_purchase_quarterly">Квартальная</string>
-    <string name="billing_purchase_annual">Годовая</string>
-    <string name="billing_purchase_quarterly_price">%1$s%2$s %3$s/3 месяца</string>
-    <string name="billing_purchase_annual_price">%1$s%2$s %3$s/год</string>
-    <string name="billing_intro_1">Контроль расходов</string>
-    <string name="billing_intro_2">Регулярные транзакции</string>
-    <string name="billing_intro_3">Цели</string>
-    <string name="billing_intro_4">Дополнительные иконки</string>
-    <string name="billing_intro_5">Дополнительная статистика</string>
-    <string name="billing_intro_6">Автоматический backup</string>
-    <string name="billing_title">Подписки</string>
-
     <string name="title_settings">Настройки</string>
     <string name="settings_start_period_day_postfix">день месяца</string>
     <string name="settings_start_period_day_title">Начало периода:</string>

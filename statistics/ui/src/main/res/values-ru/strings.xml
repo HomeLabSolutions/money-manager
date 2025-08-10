@@ -6,16 +6,7 @@
     <string name="statistics_period_month">Месяц</string>
     <string name="statistics_period_year">Год</string>
     <string name="statistics_period_custom">Другой…</string>
-    <string name="statistics_today">Сегодня</string>
     <string name="statistics_no_data">Недостаточно данных для отображения</string>
     <string name="statistics_expense_info_period_title">Было потрачено за период: </string>
     <string name="statistics_income_info_period_title">Было заработано за период: </string>
-    <string name="statistics_menu_in_statistics_title">В статистике</string>
-    <string name="statistics_menu_not_in_statistics_title">Все</string>
-    <string name="statistics_menu_currency_title">Валюта</string>
-    <string name="statistics_menu_incomes_title">Доходы</string>
-    <string name="statistics_menu_expenses_title">Расходы</string>
-    <string name="statistics_menu_chart_type_title">График</string>
-    <string name="statistics_menu_category_type_parent_title">Категории</string>
-    <string name="statistics_menu_category_type_child_title">Подкатегории</string>
 </resources>
