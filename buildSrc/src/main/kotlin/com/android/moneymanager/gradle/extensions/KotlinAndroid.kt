@@ -41,11 +41,15 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, 
         }
 
         lint {
-            warningsAsErrors = false
+            warningsAsErrors = true
             abortOnError = true
             ignoreWarnings = false
             checkDependencies = true
-            error.add("UnusedResources")
+            disable +=
+                listOf(
+                    "VectorPath",
+                    "UnusedAttribute",
+                )
         }
     }
 

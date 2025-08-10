@@ -29,7 +29,6 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.appcompat)
     implementation(libs.hilt.android)
     implementation(libs.material)
     implementation(libs.navigation.compose)
