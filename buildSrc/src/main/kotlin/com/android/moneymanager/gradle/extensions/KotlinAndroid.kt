@@ -45,6 +45,7 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, 
             abortOnError = true
             ignoreWarnings = false
             checkDependencies = true
+            error.add("UnusedResources")
         }
     }
 
