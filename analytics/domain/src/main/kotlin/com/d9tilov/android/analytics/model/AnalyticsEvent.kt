@@ -8,26 +8,12 @@ sealed class AnalyticsEvent(
     ) : AnalyticsEvent(name) {
         sealed class Screen(
             name: String,
-        ) : Internal("screen_$name") {
+        ) : Internal(name) {
             data object Main : Screen("main")
-
-            sealed class Category(
-                name: String,
-            ) : Screen("category_$name") {
-                data object List : Category("list")
-
-                data object Details : Category("details")
-
-                data object IconGrid : Category("icon_grid")
-
-                data object GroupIconList : Category("group_icon_list")
-
-                data object Color : Category("color")
-            }
 
             sealed class Statistics(
                 name: String,
-            ) : Screen("statistics_$name") {
+            ) : Screen("statistics.$name") {
                 data object Parent : Statistics("parent")
 
                 data object Details : Statistics("details")
@@ -35,7 +21,7 @@ sealed class AnalyticsEvent(
 
             sealed class Profile(
                 name: String,
-            ) : Screen("profile_$name") {
+            ) : Screen("profile.$name") {
                 data object Parent : Profile("parent")
 
                 data object CurrencyList : Profile("currency_list")
@@ -52,26 +38,26 @@ sealed class AnalyticsEvent(
 
         sealed class Backup(
             name: String,
-        ) : Internal("backup_$name") {
-            data object Restored : Backup("restored")
+        ) : Internal(name) {
+            data object Restored : Backup("backup_restored")
 
-            data object Saved : Backup("saved")
+            data object Saved : Backup("backup_saved")
 
-            data object Delete : Backup("deleted")
+            data object Delete : Backup("backup_deleted")
 
-            data object Error : Backup("error")
+            data object Error : Backup("backup_error")
         }
 
         sealed class Error(
             name: String,
         ) : Internal(name) {
-            data object WrongUidException : Error("wrong_uid_exception")
+            data object WrongUidException : Error("Wrong uid exception")
 
-            data object NetworkException : Error("network_issue")
+            data object NetworkException : Error("Network issue")
 
-            data object FileNotFoundException : Error("file_not_found_exception")
+            data object FileNotFoundException : Error("File not found exception")
 
-            data object FirebaseException : Error("firebase_exception")
+            data object FirebaseException : Error("Firebase exception")
         }
     }
 
@@ -80,7 +66,7 @@ sealed class AnalyticsEvent(
     ) : AnalyticsEvent(name) {
         sealed class Auth(
             name: String,
-        ) : Client("auth_$name") {
+        ) : Client(name) {
             data object Login : Auth("login")
 
             data object Logout : Auth("logout")
