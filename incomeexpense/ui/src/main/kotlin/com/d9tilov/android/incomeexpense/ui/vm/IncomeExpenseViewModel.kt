@@ -357,14 +357,14 @@ class IncomeExpenseViewModel
             uiState.update { state -> state.copy(mode = mode) }
             analyticsSender.send(
                 AnalyticsEvent.Internal.Screen.Main,
-                mapOf(AnalyticsParams.MainScreenEditMode to mode.name),
+                mapOf(AnalyticsParams.MainScreen.EditMode to mode.name),
             )
         }
 
         fun onTabClicked(screenType: ScreenType) {
             analyticsSender.send(
                 AnalyticsEvent.Internal.Screen.Main,
-                mapOf(AnalyticsParams.MainScreenType to screenType.name),
+                mapOf(AnalyticsParams.MainScreen.ScreenType to screenType.name),
             )
         }
 
