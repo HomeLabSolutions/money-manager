@@ -40,7 +40,6 @@ paging = "3.3.6"
 retrofit = "3.0.0"
 retrofitConverter = "1.0.0"
 room = "2.7.2"
-serialization = "2.2.10"
 splashScreen = "1.0.1"
 startup = "1.2.0"
 timber = "5.0.1"
@@ -124,4 +123,4 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 deps-sorting = { id = "com.squareup.sort-dependencies", version.ref = "autonomousappsSorting" }
 deps-unused = { id = "com.autonomousapps.dependency-analysis", version.ref = "autonomousappsUnused" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

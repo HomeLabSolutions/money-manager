@@ -14,12 +14,8 @@ class FirebaseAnalyticsSender(
     override fun send(
         event: AnalyticsEvent,
         params: Map<AnalyticsParams, String?>,
-    ) {
+    ) = firebaseAnalytics.logEvent(event.name) {
         Timber.tag(LOG_TAG).i("Event: ${event.name}, params: $params")
-        firebaseAnalytics.logEvent(event.name) {
-            params.forEach { (key, value) ->
-                value?.let { param(key.name, it) }
-            }
-        }
+        params.forEach { (key, value) -> value?.let { param(key.name, value) } }
     }
 }
