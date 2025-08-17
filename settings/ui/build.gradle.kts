@@ -9,13 +9,12 @@ android {
     namespace = "com.d9tilov.android.settings.ui"
 
     defaultConfig {
-
         vectorDrawables.useSupportLibrary = true
     }
 }
 
 dependencies {
-
+    implementation(project(":analytics:domain"))
     implementation(project(":backup:domain:contract"))
     implementation(project(":backup:domain:model"))
     implementation(project(":billing:domain:contract"))

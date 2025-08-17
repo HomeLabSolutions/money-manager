@@ -1,27 +1,21 @@
 package com.d9tilov.android.analytics.data
 
+import com.d9tilov.android.analytics.constants.LOG_TAG
 import com.d9tilov.android.analytics.domain.AnalyticsSender
 import com.d9tilov.android.analytics.model.AnalyticsEvent
+import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.logEvent
+import timber.log.Timber
 
 class FirebaseAnalyticsSender(
     private val firebaseAnalytics: FirebaseAnalytics,
 ) : AnalyticsSender {
-    override fun send(event: AnalyticsEvent) = firebaseAnalytics.logEvent(event.name, null)
-
-    override fun sendWithParams(
+    override fun send(
         event: AnalyticsEvent,
-        paramsBuilder: MutableMap<String, Any?>.() -> Unit,
+        params: Map<AnalyticsParams, String?>,
     ) = firebaseAnalytics.logEvent(event.name) {
-        val params = mutableMapOf<String, Any?>().apply(paramsBuilder)
-        params.forEach { (key, value) ->
-            when (value) {
-                is Double -> param(key, value)
-                is Long -> param(key, value)
-                is String -> param(key, value)
-                is Int -> param(key, value.toLong())
-            }
-        }
+        Timber.tag(LOG_TAG).i("Event: ${event.name}, params: $params")
+        params.forEach { (key, value) -> value?.let { param(key.name, value) } }
     }
 }

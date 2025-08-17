@@ -141,6 +141,7 @@ fun IncomeExpenseRoute(
         onCurrencyClicked = { onCurrencyClicked(uiState.price.currencyCode) },
         onAllCategoryClicked = onAllCategoryClicked,
         onDeleteTransactionConfirmClicked = viewModel::deleteTransaction,
+        onScreenTypeClicked = viewModel::onTabClicked,
     )
 }
 
@@ -154,6 +155,7 @@ fun IncomeExpenseScreen(
     onCurrencyClicked: () -> Unit,
     onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
+    onScreenTypeClicked: (ScreenType) -> Unit,
 ) {
     val listState = rememberLazyListState()
     Scaffold(
@@ -177,6 +179,7 @@ fun IncomeExpenseScreen(
             onAllCategoryClicked = onAllCategoryClicked,
             onTransactionClicked = onTransactionClicked,
             onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked,
+            onScreenTypeClicked = onScreenTypeClicked,
         )
     }
 }
@@ -397,6 +400,7 @@ fun HomeTabs(
     onCurrencyClicked: () -> Unit,
     onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
+    onScreenTypeClicked: (ScreenType) -> Unit,
 ) {
     var tabIndex by remember { mutableIntStateOf(0) }
     val pagerState =
@@ -420,6 +424,8 @@ fun HomeTabs(
                     selected = tabIndex == index,
                     onClick = {
                         tabIndex = index
+                        val screenType = tabIndex.toScreenType()
+                        onScreenTypeClicked(screenType)
                         coroutineScope.launch {
                             pagerState.animateScrollToPage(tabIndex)
                         }
@@ -764,6 +770,7 @@ fun PreviewIncomeExpenseScreen() {
             onAllCategoryClicked = { _, _ -> },
             onTransactionClicked = {},
             onDeleteTransactionConfirmClicked = {},
+            onScreenTypeClicked = {},
         )
     }
 }

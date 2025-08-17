@@ -3,6 +3,8 @@ package com.d9tilov.android.transaction.regular.ui.vm
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.d9tilov.android.analytics.domain.AnalyticsSender
+import com.d9tilov.android.analytics.model.AnalyticsEvent
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
@@ -28,6 +30,7 @@ class RegularTransactionListViewModel
     @Inject
     constructor(
         savedStateHandle: SavedStateHandle,
+        private val analyticsSender: AnalyticsSender,
         private val regularTransactionInteractor: RegularTransactionInteractor,
     ) : ViewModel() {
         private val regularTransactionArgs: RegularTransactionArgs.RegularTransactionListArgs =
@@ -38,6 +41,12 @@ class RegularTransactionListViewModel
         val uiState = _uiState.asStateFlow()
 
         init {
+            analyticsSender.send(
+                when (transactionType) {
+                    TransactionType.EXPENSE -> AnalyticsEvent.Internal.Screen.Profile.RegularExpenses
+                    TransactionType.INCOME -> AnalyticsEvent.Internal.Screen.Profile.RegularIncomes
+                },
+            )
             viewModelScope.launch {
                 regularTransactionInteractor
                     .getAll(transactionType)

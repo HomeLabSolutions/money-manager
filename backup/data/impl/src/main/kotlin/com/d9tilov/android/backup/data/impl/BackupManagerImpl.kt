@@ -48,26 +48,29 @@ class BackupManagerImpl
             if (uid.isNullOrEmpty()) {
                 val message = "$BACKUP $UID_IS_NULL_OR_EMPTY: $uid"
                 Timber.tag(TAG).e(message)
-                analyticsSender.sendWithParams(AnalyticsEvent.Internal.Backup.Error) {
-                    AnalyticsParams.Exception to message
-                }
+                analyticsSender.send(
+                    AnalyticsEvent.Internal.Backup.Error,
+                    mapOf(AnalyticsParams.Exception to message),
+                )
                 return ResultOf.Failure(WrongUidException())
             }
             if (!isNetworkConnected(context)) {
                 val message = "$BACKUP $NETWORK_EXCEPTION"
                 Timber.tag(TAG).e(message)
-                analyticsSender.sendWithParams(AnalyticsEvent.Internal.Backup.Error) {
-                    AnalyticsParams.Exception to message
-                }
+                analyticsSender.send(
+                    AnalyticsEvent.Internal.Backup.Error,
+                    mapOf(AnalyticsParams.Exception to message),
+                )
                 return ResultOf.Failure(NetworkException())
             }
             val file = context.getDatabasePath(DATABASE_NAME)
             if (!file.exists()) {
                 val message = "$BACKUP $FILE_NOT_FOUND: $DATABASE_NAME"
                 Timber.tag(TAG).e(message)
-                analyticsSender.sendWithParams(AnalyticsEvent.Internal.Backup.Error) {
-                    AnalyticsParams.Exception to message
-                }
+                analyticsSender.send(
+                    AnalyticsEvent.Internal.Backup.Error,
+                    mapOf(AnalyticsParams.Exception to message),
+                )
                 return ResultOf.Failure(FileNotFoundException())
             }
             val parentPath = createParentPath(uid)
@@ -86,9 +89,10 @@ class BackupManagerImpl
                 )
             } catch (ex: Exception) {
                 Timber.tag(TAG).e("Backup failed: $ex")
-                analyticsSender.sendWithParams(AnalyticsEvent.Internal.Backup.Error) {
-                    AnalyticsParams.Exception to ex.toString()
-                }
+                analyticsSender.send(
+                    AnalyticsEvent.Internal.Backup.Error,
+                    mapOf(AnalyticsParams.Exception to ex.toString()),
+                )
                 ResultOf.Failure(ex)
             }
         }
@@ -99,17 +103,19 @@ class BackupManagerImpl
                 if (uid.isNullOrEmpty()) {
                     val message = "$RESTORE $UID_IS_NULL_OR_EMPTY: $uid"
                     Timber.tag(TAG).e(message)
-                    analyticsSender.sendWithParams(AnalyticsEvent.Internal.Backup.Error) {
-                        AnalyticsParams.Exception to message
-                    }
+                    analyticsSender.send(
+                        AnalyticsEvent.Internal.Backup.Error,
+                        mapOf(AnalyticsParams.Exception to message),
+                    )
                     return@withContext ResultOf.Failure(WrongUidException())
                 }
                 if (!isNetworkConnected(context)) {
                     val message = "$RESTORE $NETWORK_EXCEPTION"
                     Timber.tag(TAG).e(message)
-                    analyticsSender.sendWithParams(AnalyticsEvent.Internal.Backup.Error) {
-                        AnalyticsParams.Exception to message
-                    }
+                    analyticsSender.send(
+                        AnalyticsEvent.Internal.Backup.Error,
+                        mapOf(AnalyticsParams.Exception to message),
+                    )
                     return@withContext ResultOf.Failure(NetworkException())
                 }
                 val parentPath = createParentPath(uid)
@@ -135,9 +141,10 @@ class BackupManagerImpl
                     ResultOf.Success(metadata.updatedTimeMillis)
                 } catch (ex: Exception) {
                     Timber.tag(TAG).e("Restore backup failed: $ex")
-                    analyticsSender.sendWithParams(AnalyticsEvent.Internal.Backup.Error) {
-                        AnalyticsParams.Exception to ex.message
-                    }
+                    analyticsSender.send(
+                        AnalyticsEvent.Internal.Backup.Error,
+                        mapOf(AnalyticsParams.Exception to ex.message),
+                    )
                     ResultOf.Failure(ex)
                 } finally {
                     Timber.tag(TAG).i("Temp file was removed")
@@ -150,17 +157,19 @@ class BackupManagerImpl
             if (uid.isNullOrEmpty()) {
                 val message = "$DELETE $UID_IS_NULL_OR_EMPTY: $uid"
                 Timber.tag(TAG).e(message)
-                analyticsSender.sendWithParams(AnalyticsEvent.Internal.Backup.Error) {
-                    AnalyticsParams.Exception to message
-                }
+                analyticsSender.send(
+                    AnalyticsEvent.Internal.Backup.Error,
+                    mapOf(AnalyticsParams.Exception to message),
+                )
                 return ResultOf.Failure(WrongUidException())
             }
             if (!isNetworkConnected(context)) {
                 val message = "$DELETE $NETWORK_EXCEPTION"
                 Timber.tag(TAG).e(message)
-                analyticsSender.sendWithParams(AnalyticsEvent.Internal.Backup.Error) {
-                    AnalyticsParams.Exception to message
-                }
+                analyticsSender.send(
+                    AnalyticsEvent.Internal.Backup.Error,
+                    mapOf(AnalyticsParams.Exception to message),
+                )
                 return ResultOf.Failure(NetworkException())
             }
             val parentPath = createParentPath(uid)
@@ -174,9 +183,10 @@ class BackupManagerImpl
                 ResultOf.Success(Unit)
             } catch (ex: Exception) {
                 Timber.tag(TAG).e(ex, "Failed to delete backup")
-                analyticsSender.sendWithParams(AnalyticsEvent.Internal.Backup.Error) {
-                    AnalyticsParams.Exception to ex.message
-                }
+                analyticsSender.send(
+                    AnalyticsEvent.Internal.Backup.Error,
+                    mapOf(AnalyticsParams.Exception to ex.message),
+                )
                 ResultOf.Failure(ex)
             }
         }
