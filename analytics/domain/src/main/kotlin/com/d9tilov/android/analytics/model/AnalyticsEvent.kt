@@ -8,8 +8,22 @@ sealed class AnalyticsEvent(
     ) : AnalyticsEvent(name) {
         sealed class Screen(
             name: String,
-        ) : Internal(name) {
+        ) : Internal("screen.$name") {
             data object Main : Screen("main")
+
+            sealed class Category(
+                name: String,
+            ) : Screen("category.$name") {
+                data object List : Category("list")
+
+                data object Details : Category("details")
+
+                data object IconGrid : Category("icon.grid")
+
+                data object GroupIconList : Category("group.icon.list")
+
+                data object Color : Category("color")
+            }
 
             sealed class Statistics(
                 name: String,
@@ -38,14 +52,14 @@ sealed class AnalyticsEvent(
 
         sealed class Backup(
             name: String,
-        ) : Internal(name) {
-            data object Restored : Backup("backup_restored")
+        ) : Internal("backup.$name") {
+            data object Restored : Backup("restored")
 
-            data object Saved : Backup("backup_saved")
+            data object Saved : Backup("saved")
 
-            data object Delete : Backup("backup_deleted")
+            data object Delete : Backup("deleted")
 
-            data object Error : Backup("backup_error")
+            data object Error : Backup("error")
         }
 
         sealed class Error(
@@ -66,7 +80,7 @@ sealed class AnalyticsEvent(
     ) : AnalyticsEvent(name) {
         sealed class Auth(
             name: String,
-        ) : Client(name) {
+        ) : Client("auth.$name") {
             data object Login : Auth("login")
 
             data object Logout : Auth("logout")
