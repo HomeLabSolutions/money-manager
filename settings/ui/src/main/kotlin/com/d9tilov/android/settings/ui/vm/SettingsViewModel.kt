@@ -7,6 +7,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.d9tilov.android.analytics.domain.AnalyticsSender
+import com.d9tilov.android.analytics.model.AnalyticsEvent
 import com.d9tilov.android.backup.domain.contract.BackupInteractor
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.core.constants.DataConstants.TAG
@@ -60,6 +62,7 @@ class SettingsViewModel
     constructor(
         private val backupInteractor: BackupInteractor,
         private val userInteractor: UserInteractor,
+        private val analyticsSender: AnalyticsSender,
         billingInteractor: BillingInteractor,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(SettingsUiState())
@@ -67,6 +70,7 @@ class SettingsViewModel
         var message: Int? by mutableStateOf(null)
 
         init {
+            analyticsSender.send(AnalyticsEvent.Internal.Screen.Profile.Settings)
             viewModelScope.launch {
                 combine(
                     userInteractor.getCurrentUser(),
