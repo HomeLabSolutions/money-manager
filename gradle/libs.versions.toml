@@ -4,7 +4,7 @@ activity = "1.10.1"
 androidxComposeBom="2025.08.00"
 appCompat = "1.7.1"
 autonomousappsSorting = "0.14"
-autonomousappsUnused = "2.19.0"
+autonomousappsUnused = "3.0.0"
 billing = "8.0.0"
 coil = "2.7.0"
 compose = "2.9.2"
@@ -20,7 +20,6 @@ googlePlayServices = "4.4.3"
 googlePlayServicesAuth = "21.4.0"
 googlePlayServicesLocation = "21.3.0"
 gradlePlugin = "8.12.1"
-guava = "33.4.8-jre"
 hilt = "2.57"
 hiltCommon = "1.2.0"
 hiltNavigationCompose = "1.2.0"
@@ -82,7 +81,6 @@ firebase-crashlytics-gradle = { group = "com.google.firebase", name = "firebase-
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage" }
 firebase-ui-auth = { group = "com.firebaseui", name = "firebase-ui-auth", version.ref = "firebaseUi" }
 google-services = { group = "com.google.gms", name = "google-services", version.ref = "googlePlayServices" }
-guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt-android-gradle-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt" }
