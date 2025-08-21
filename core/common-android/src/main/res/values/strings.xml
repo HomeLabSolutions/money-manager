@@ -10,6 +10,6 @@
     <string name="create">Create</string>
     <string name="permissions_dialog_title">Permissions are required</string>
     <string name="permissions_dialog_subtitle">The app needs %1$s permission to %2$s.</string>
-
+    <string name="version">Version: %1$s</string>
     <string name="unknown_error">Unknown error</string>
 </resources>
