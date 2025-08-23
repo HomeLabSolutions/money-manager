@@ -5,16 +5,16 @@ sealed class AnalyticsParams(
 ) {
     sealed class MainScreen(
         name: String,
-    ) : AnalyticsParams("main.$name") {
-        data object EditMode : AnalyticsParams("edit.mode")
+    ) : AnalyticsParams("main_$name") {
+        data object EditMode : AnalyticsParams("edit_mode")
 
-        data object ScreenType : AnalyticsParams("screen.type")
+        data object ScreenType : AnalyticsParams("screen_type")
     }
 
     sealed class CategoryScreen(
         name: String,
-    ) : AnalyticsParams("category.$name") {
-        data object ScreenType : AnalyticsParams("screen.type")
+    ) : AnalyticsParams("category_$name") {
+        data object ScreenType : AnalyticsParams("screen_type")
     }
 
     data object LoginResultProvider : AnalyticsParams("login_provider_type")
