@@ -3,6 +3,9 @@ package com.d9tilov.android.category.ui.vm
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.d9tilov.android.analytics.domain.AnalyticsSender
+import com.d9tilov.android.analytics.model.AnalyticsEvent
+import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
@@ -43,6 +46,7 @@ class CategoryCreationViewModel
     @Inject
     constructor(
         savedStateHandle: SavedStateHandle,
+        private val analyticsSender: AnalyticsSender,
         private val categoryInteractor: CategoryInteractor,
         private val billingInteractor: BillingInteractor,
     ) : ViewModel() {
@@ -55,6 +59,10 @@ class CategoryCreationViewModel
         private val categoryExceptionHandler = CoroutineExceptionHandler { _, _ -> }
 
         init {
+            analyticsSender.send(
+                AnalyticsEvent.Internal.Screen.Category.Details,
+                mapOf(AnalyticsParams.CategoryScreen.ScreenType to if (categoryId == NO_ID) "create" else "edit"),
+            )
             viewModelScope.launch(categoryExceptionHandler) {
                 launch {
                     _uiState.update { state: CategoryCreationUiState ->
@@ -120,5 +128,9 @@ class CategoryCreationViewModel
 
         fun hideError() {
             _uiState.update { state -> state.copy(saveStatus = null) }
+        }
+
+        fun onColorClicked() {
+            analyticsSender.send(AnalyticsEvent.Internal.Screen.Category.Color)
         }
     }

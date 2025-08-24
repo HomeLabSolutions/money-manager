@@ -10,6 +10,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":analytics:domain"))
     implementation(project(":billing:domain:contract"))
     implementation(project(":category:data:impl"))
     implementation(project(":category:domain:contract"))

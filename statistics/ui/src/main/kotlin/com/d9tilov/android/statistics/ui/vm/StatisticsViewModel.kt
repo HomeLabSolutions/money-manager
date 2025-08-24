@@ -1,6 +1,8 @@
 package com.d9tilov.android.statistics.ui.vm
 
 import androidx.lifecycle.viewModelScope
+import com.d9tilov.android.analytics.domain.AnalyticsSender
+import com.d9tilov.android.analytics.model.AnalyticsEvent
 import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
@@ -78,6 +80,7 @@ data class DetailsSpentInPeriodState(
 @HiltViewModel
 class StatisticsViewModel
     @Inject constructor(
+        analyticsSender: AnalyticsSender,
         @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
         private val transactionInteractor: TransactionInteractor,
         private val currencyInteractor: CurrencyInteractor,
@@ -87,6 +90,7 @@ class StatisticsViewModel
         private val updateTrigger = MutableStateFlow(0)
 
         init {
+            analyticsSender.send(AnalyticsEvent.Internal.Screen.Statistics.Parent)
             viewModelScope.launch(ioDispatcher) {
                 val currency = currencyInteractor.getMainCurrency()
                 launch {

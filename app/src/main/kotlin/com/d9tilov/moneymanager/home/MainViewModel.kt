@@ -156,9 +156,12 @@ class MainViewModel
             Timber.tag(TAG).d("Update data")
             viewModelScope.launch(ioDispatcher) {
                 auth.currentUser?.let { firebaseUser ->
-                    analyticsSender.sendWithParams(AnalyticsEvent.Client.Auth.Login) {
-                        AnalyticsParams.LoginResultProvider.name to firebaseUser.providerData.firstOrNull()?.providerId
-                    }
+                    analyticsSender.send(
+                        AnalyticsEvent.Client.Auth.Login,
+                        mapOf(
+                            AnalyticsParams.LoginResultProvider to firebaseUser.providerData.firstOrNull()?.providerId,
+                        ),
+                    )
                     Timber.tag(TAG).d("Update data. FirebaseUser: $firebaseUser")
                     preferencesStore.updateUid(firebaseUser.uid) // need for dataBase decryption
                     backupInteractor.restoreBackup()
