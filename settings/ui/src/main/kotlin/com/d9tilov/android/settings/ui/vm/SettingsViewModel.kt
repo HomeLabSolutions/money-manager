@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.analytics.domain.AnalyticsSender
 import com.d9tilov.android.analytics.model.AnalyticsEvent
+import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.backup.domain.contract.BackupInteractor
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.core.constants.DataConstants.TAG
@@ -62,7 +63,7 @@ class SettingsViewModel
     constructor(
         private val backupInteractor: BackupInteractor,
         private val userInteractor: UserInteractor,
-        private val analyticsSender: AnalyticsSender,
+        analyticsSender: AnalyticsSender,
         billingInteractor: BillingInteractor,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(SettingsUiState())
@@ -70,7 +71,10 @@ class SettingsViewModel
         var message: Int? by mutableStateOf(null)
 
         init {
-            analyticsSender.send(AnalyticsEvent.Internal.Screen.Profile.Settings)
+            analyticsSender.send(
+                AnalyticsEvent.Internal.Screen,
+                mapOf(AnalyticsParams.Screen.Name to "settings"),
+            )
             viewModelScope.launch {
                 combine(
                     userInteractor.getCurrentUser(),
@@ -143,6 +147,7 @@ class SettingsViewModel
                                 else -> R.string.settings_backup_user_error
                             }
                     }
+
                     else -> {}
                 }
                 Timber.tag(TAG).d("Backup completed1: ${_uiState.value}")

@@ -60,8 +60,11 @@ class CategoryCreationViewModel
 
         init {
             analyticsSender.send(
-                AnalyticsEvent.Internal.Screen.Category.Details,
-                mapOf(AnalyticsParams.CategoryScreen.ScreenType to if (categoryId == NO_ID) "create" else "edit"),
+                AnalyticsEvent.Internal.Screen,
+                mapOf(
+                    AnalyticsParams.Screen.Name to "category",
+                    AnalyticsParams.Screen.Mode to if (categoryId == NO_ID) "create" else "edit",
+                ),
             )
             viewModelScope.launch(categoryExceptionHandler) {
                 launch {
@@ -131,6 +134,9 @@ class CategoryCreationViewModel
         }
 
         fun onColorClicked() {
-            analyticsSender.send(AnalyticsEvent.Internal.Screen.Category.Color)
+            analyticsSender.send(
+                AnalyticsEvent.Internal.Screen,
+                mapOf(AnalyticsParams.Screen.Click to "category_color"),
+            )
         }
     }

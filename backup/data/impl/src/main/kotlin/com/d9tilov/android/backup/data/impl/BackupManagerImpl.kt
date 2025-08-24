@@ -49,7 +49,7 @@ class BackupManagerImpl
                 val message = "$BACKUP $UID_IS_NULL_OR_EMPTY: $uid"
                 Timber.tag(TAG).e(message)
                 analyticsSender.send(
-                    AnalyticsEvent.Internal.Backup.Error,
+                    AnalyticsEvent.Internal.Backup,
                     mapOf(AnalyticsParams.Exception to message),
                 )
                 return ResultOf.Failure(WrongUidException())
@@ -58,7 +58,7 @@ class BackupManagerImpl
                 val message = "$BACKUP $NETWORK_EXCEPTION"
                 Timber.tag(TAG).e(message)
                 analyticsSender.send(
-                    AnalyticsEvent.Internal.Backup.Error,
+                    AnalyticsEvent.Internal.Backup,
                     mapOf(AnalyticsParams.Exception to message),
                 )
                 return ResultOf.Failure(NetworkException())
@@ -68,7 +68,7 @@ class BackupManagerImpl
                 val message = "$BACKUP $FILE_NOT_FOUND: $DATABASE_NAME"
                 Timber.tag(TAG).e(message)
                 analyticsSender.send(
-                    AnalyticsEvent.Internal.Backup.Error,
+                    AnalyticsEvent.Internal.Backup,
                     mapOf(AnalyticsParams.Exception to message),
                 )
                 return ResultOf.Failure(FileNotFoundException())
@@ -81,7 +81,10 @@ class BackupManagerImpl
                         .putFile(Uri.fromFile(file))
                         .await()
                 Timber.tag(TAG).d("Backup was compete successfully")
-                analyticsSender.send(AnalyticsEvent.Internal.Backup.Saved)
+                analyticsSender.send(
+                    AnalyticsEvent.Internal.Backup,
+                    mapOf(AnalyticsParams.Method to "saved"),
+                )
                 ResultOf.Success(
                     BackupData.EMPTY.copy(
                         lastBackupTimestamp = fileRef.metadata?.updatedTimeMillis ?: currentDateTime().toMillis(),
@@ -90,7 +93,7 @@ class BackupManagerImpl
             } catch (ex: Exception) {
                 Timber.tag(TAG).e("Backup failed: $ex")
                 analyticsSender.send(
-                    AnalyticsEvent.Internal.Backup.Error,
+                    AnalyticsEvent.Internal.Backup,
                     mapOf(AnalyticsParams.Exception to ex.toString()),
                 )
                 ResultOf.Failure(ex)
@@ -104,7 +107,7 @@ class BackupManagerImpl
                     val message = "$RESTORE $UID_IS_NULL_OR_EMPTY: $uid"
                     Timber.tag(TAG).e(message)
                     analyticsSender.send(
-                        AnalyticsEvent.Internal.Backup.Error,
+                        AnalyticsEvent.Internal.Backup,
                         mapOf(AnalyticsParams.Exception to message),
                     )
                     return@withContext ResultOf.Failure(WrongUidException())
@@ -113,7 +116,7 @@ class BackupManagerImpl
                     val message = "$RESTORE $NETWORK_EXCEPTION"
                     Timber.tag(TAG).e(message)
                     analyticsSender.send(
-                        AnalyticsEvent.Internal.Backup.Error,
+                        AnalyticsEvent.Internal.Backup,
                         mapOf(AnalyticsParams.Exception to message),
                     )
                     return@withContext ResultOf.Failure(NetworkException())
@@ -137,12 +140,15 @@ class BackupManagerImpl
                     }
                     val metadata = fileRef.metadata.await()
                     Timber.tag(TAG).d("Database was restored successfully")
-                    analyticsSender.send(AnalyticsEvent.Internal.Backup.Restored)
+                    analyticsSender.send(
+                        AnalyticsEvent.Internal.Backup,
+                        mapOf(AnalyticsParams.Method to "restored"),
+                    )
                     ResultOf.Success(metadata.updatedTimeMillis)
                 } catch (ex: Exception) {
                     Timber.tag(TAG).e("Restore backup failed: $ex")
                     analyticsSender.send(
-                        AnalyticsEvent.Internal.Backup.Error,
+                        AnalyticsEvent.Internal.Backup,
                         mapOf(AnalyticsParams.Exception to ex.message),
                     )
                     ResultOf.Failure(ex)
@@ -158,7 +164,7 @@ class BackupManagerImpl
                 val message = "$DELETE $UID_IS_NULL_OR_EMPTY: $uid"
                 Timber.tag(TAG).e(message)
                 analyticsSender.send(
-                    AnalyticsEvent.Internal.Backup.Error,
+                    AnalyticsEvent.Internal.Backup,
                     mapOf(AnalyticsParams.Exception to message),
                 )
                 return ResultOf.Failure(WrongUidException())
@@ -167,7 +173,7 @@ class BackupManagerImpl
                 val message = "$DELETE $NETWORK_EXCEPTION"
                 Timber.tag(TAG).e(message)
                 analyticsSender.send(
-                    AnalyticsEvent.Internal.Backup.Error,
+                    AnalyticsEvent.Internal.Backup,
                     mapOf(AnalyticsParams.Exception to message),
                 )
                 return ResultOf.Failure(NetworkException())
@@ -179,12 +185,15 @@ class BackupManagerImpl
                     .delete()
                     .await()
                 Timber.tag(TAG).d("Backup deleted successfully")
-                analyticsSender.send(AnalyticsEvent.Internal.Backup.Delete)
+                analyticsSender.send(
+                    AnalyticsEvent.Internal.Backup,
+                    mapOf(AnalyticsParams.Method to "deleted"),
+                )
                 ResultOf.Success(Unit)
             } catch (ex: Exception) {
                 Timber.tag(TAG).e(ex, "Failed to delete backup")
                 analyticsSender.send(
-                    AnalyticsEvent.Internal.Backup.Error,
+                    AnalyticsEvent.Internal.Backup,
                     mapOf(AnalyticsParams.Exception to ex.message),
                 )
                 ResultOf.Failure(ex)

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.analytics.domain.AnalyticsSender
 import com.d9tilov.android.analytics.model.AnalyticsEvent
+import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.budget.domain.model.BudgetData
@@ -118,7 +119,10 @@ class ProfileViewModel
                 )
 
         init {
-            analyticsSender.send(AnalyticsEvent.Internal.Screen.Profile.Parent)
+            analyticsSender.send(
+                AnalyticsEvent.Internal.Screen,
+                mapOf(AnalyticsParams.Screen.Name to "profile"),
+            )
         }
 
         fun showDialog() {
@@ -132,7 +136,10 @@ class ProfileViewModel
         fun logout(navigateCallback: () -> Unit) {
             viewModelScope.launch(Dispatchers.IO) {
                 userInfoInteractor.deleteUser()
-                analyticsSender.send(AnalyticsEvent.Client.Auth.Logout)
+                analyticsSender.send(
+                    AnalyticsEvent.Client.Auth,
+                    mapOf(AnalyticsParams.Auth.Action to "logout"),
+                )
                 withContext(Dispatchers.Main) { navigateCallback() }
             }
         }

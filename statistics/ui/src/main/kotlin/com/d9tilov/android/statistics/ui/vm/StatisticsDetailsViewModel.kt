@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.analytics.domain.AnalyticsSender
 import com.d9tilov.android.analytics.model.AnalyticsEvent
+import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
@@ -42,7 +43,10 @@ class StatisticsDetailsViewModel
         val uiState = _uiState.asStateFlow()
 
         init {
-            analyticsSender.send(AnalyticsEvent.Internal.Screen.Statistics.Details)
+            analyticsSender.send(
+                AnalyticsEvent.Internal.Screen,
+                mapOf(AnalyticsParams.Screen.Name to "statistics_details"),
+            )
             viewModelScope.launch(ioDispatcher) {
                 val transactionsDeferred =
                     async {
