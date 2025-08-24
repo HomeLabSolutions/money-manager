@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.analytics.domain.AnalyticsSender
 import com.d9tilov.android.analytics.model.AnalyticsEvent
+import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.core.model.ErrorMessage
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.DomainCurrency
@@ -51,7 +52,13 @@ class CurrencyViewModel
         val uiState = _uiState
 
         init {
-            analyticsSender.send(AnalyticsEvent.Internal.Screen.Profile.CurrencyList)
+            analyticsSender.send(
+                AnalyticsEvent.Internal.Screen,
+                mapOf(
+                    AnalyticsParams.Screen.Name to "currency_list",
+                    AnalyticsParams.Currency to selectedCurrency,
+                ),
+            )
             viewModelScope.launch {
                 currencyInteractor
                     .getCurrencies()

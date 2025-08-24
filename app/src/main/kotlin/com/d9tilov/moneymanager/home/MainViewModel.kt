@@ -157,10 +157,8 @@ class MainViewModel
             viewModelScope.launch(ioDispatcher) {
                 auth.currentUser?.let { firebaseUser ->
                     analyticsSender.send(
-                        AnalyticsEvent.Client.Auth.Login,
-                        mapOf(
-                            AnalyticsParams.LoginResultProvider to firebaseUser.providerData.firstOrNull()?.providerId,
-                        ),
+                        AnalyticsEvent.Client.Auth,
+                        mapOf(AnalyticsParams.Auth.Provider to firebaseUser.providerData.firstOrNull()?.providerId),
                     )
                     Timber.tag(TAG).d("Update data. FirebaseUser: $firebaseUser")
                     preferencesStore.updateUid(firebaseUser.uid) // need for dataBase decryption

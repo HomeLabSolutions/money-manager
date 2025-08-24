@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.analytics.domain.AnalyticsSender
 import com.d9tilov.android.analytics.model.AnalyticsEvent
+import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
@@ -42,10 +43,14 @@ class RegularTransactionListViewModel
 
         init {
             analyticsSender.send(
-                when (transactionType) {
-                    TransactionType.EXPENSE -> AnalyticsEvent.Internal.Screen.Profile.RegularExpenses
-                    TransactionType.INCOME -> AnalyticsEvent.Internal.Screen.Profile.RegularIncomes
-                },
+                AnalyticsEvent.Internal.Screen,
+                mapOf(
+                    AnalyticsParams.Screen.Name to
+                        when (transactionType) {
+                            TransactionType.EXPENSE -> "regular_expenses"
+                            TransactionType.INCOME -> "regular_incomes"
+                        },
+                ),
             )
             viewModelScope.launch {
                 regularTransactionInteractor

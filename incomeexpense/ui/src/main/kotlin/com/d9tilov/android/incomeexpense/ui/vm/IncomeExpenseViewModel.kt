@@ -148,7 +148,10 @@ class IncomeExpenseViewModel
         val errorMessageFlow = errorMessage.asSharedFlow()
 
         init {
-            analyticsSender.send(AnalyticsEvent.Internal.Screen.Main)
+            analyticsSender.send(
+                AnalyticsEvent.Internal.Screen,
+                mapOf(AnalyticsParams.Screen.Name to "main"),
+            )
             viewModelScope.launch(ioDispatcher) {
                 launch {
                     currencyInteractor
@@ -356,15 +359,21 @@ class IncomeExpenseViewModel
         fun updateMode(mode: EditMode) {
             uiState.update { state -> state.copy(mode = mode) }
             analyticsSender.send(
-                AnalyticsEvent.Internal.Screen.Main,
-                mapOf(AnalyticsParams.MainScreen.EditMode to mode.name),
+                AnalyticsEvent.Internal.Screen,
+                mapOf(
+                    AnalyticsParams.Screen.Name to "main",
+                    AnalyticsParams.Screen.Mode to mode.name,
+                ),
             )
         }
 
         fun onTabClicked(screenType: ScreenType) {
             analyticsSender.send(
-                AnalyticsEvent.Internal.Screen.Main,
-                mapOf(AnalyticsParams.MainScreen.ScreenType to screenType.name),
+                AnalyticsEvent.Internal.Screen,
+                mapOf(
+                    AnalyticsParams.Screen.Name to "main",
+                    AnalyticsParams.Screen.Type to screenType.name,
+                ),
             )
         }
 

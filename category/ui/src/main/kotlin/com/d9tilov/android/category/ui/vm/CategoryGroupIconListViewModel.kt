@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.analytics.domain.AnalyticsSender
 import com.d9tilov.android.analytics.model.AnalyticsEvent
+import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.category.domain.entity.CategoryGroup
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -49,6 +50,9 @@ class CategoryGroupIconListViewModel
                 )
 
         init {
-            analyticsSender.send(AnalyticsEvent.Internal.Screen.Category.GroupIconList)
+            analyticsSender.send(
+                AnalyticsEvent.Internal.Screen,
+                mapOf(AnalyticsParams.Screen.Name to "group_icon_list"),
+            )
         }
     }

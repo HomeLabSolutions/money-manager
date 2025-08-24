@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.analytics.domain.AnalyticsSender
 import com.d9tilov.android.analytics.model.AnalyticsEvent
+import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.Category.Companion.ALL_ITEMS_ID
@@ -56,7 +57,10 @@ class CategoryListViewModel
         val uiState: StateFlow<CategoryUiState> = _uiState
 
         init {
-            analyticsSender.send(AnalyticsEvent.Internal.Screen.Category.List)
+            analyticsSender.send(
+                AnalyticsEvent.Internal.Screen,
+                mapOf(AnalyticsParams.Screen.Name to "category_list"),
+            )
         }
 
         fun remove(category: Category) {

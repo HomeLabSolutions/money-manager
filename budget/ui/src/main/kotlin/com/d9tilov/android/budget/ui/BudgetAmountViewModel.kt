@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.analytics.domain.AnalyticsSender
 import com.d9tilov.android.analytics.model.AnalyticsEvent
+import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
@@ -33,7 +34,10 @@ class BudgetAmountViewModel
         val uiState = _uiState.asStateFlow()
 
         init {
-            analyticsSender.send(AnalyticsEvent.Internal.Screen.Profile.Budget)
+            analyticsSender.send(
+                AnalyticsEvent.Internal.Screen,
+                mapOf(AnalyticsParams.Screen.Name to "budget"),
+            )
             viewModelScope.launch {
                 budgetInteractor
                     .get()

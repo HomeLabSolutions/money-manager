@@ -3,6 +3,7 @@ package com.d9tilov.android.statistics.ui.vm
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.analytics.domain.AnalyticsSender
 import com.d9tilov.android.analytics.model.AnalyticsEvent
+import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
@@ -90,7 +91,10 @@ class StatisticsViewModel
         private val updateTrigger = MutableStateFlow(0)
 
         init {
-            analyticsSender.send(AnalyticsEvent.Internal.Screen.Statistics.Parent)
+            analyticsSender.send(
+                AnalyticsEvent.Internal.Screen,
+                mapOf(AnalyticsParams.Screen.Name to "statistics"),
+            )
             viewModelScope.launch(ioDispatcher) {
                 val currency = currencyInteractor.getMainCurrency()
                 launch {
