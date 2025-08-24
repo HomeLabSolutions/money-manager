@@ -10,6 +10,6 @@
     <string name="create">Создать</string>
     <string name="permissions_dialog_title">Требуются разрешения</string>
     <string name="permissions_dialog_subtitle">Приложению требуется разрешение %1$s для %2$s.</string>
-
+    <string name="version">Версия: %1$s</string>
     <string name="unknown_error">Неизвестная ошибка</string>
 </resources>

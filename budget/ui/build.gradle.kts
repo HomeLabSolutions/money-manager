@@ -9,6 +9,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":analytics:domain"))
     implementation(project(":budget:domain:contract"))
     implementation(project(":budget:domain:model"))
     implementation(project(":core:common"))

@@ -88,11 +88,13 @@ fun CategoryCreationRoute(
         },
         onCategoryUpdated = viewModel::updateCategory,
         onHideError = viewModel::hideError,
+        onColorClicked = viewModel::onColorClicked,
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+@Suppress("CognitiveComplexMethod")
 fun CategoryCreationScreen(
     uiState: CategoryCreationUiState,
     onCategoryUpdated: (Category) -> Unit,
@@ -100,6 +102,7 @@ fun CategoryCreationScreen(
     onHideError: () -> Unit,
     onBackClicked: () -> Unit,
     onSaveClicked: () -> Unit,
+    onColorClicked: () -> Unit,
 ) {
     val context = LocalContext.current
     var colorListShow by remember { mutableStateOf(false) }
@@ -148,10 +151,12 @@ fun CategoryCreationScreen(
                             when (ex) {
                                 is CategoryException.CategoryEmptyNameException ->
                                     R.string.category_unit_name_exist_error
+
                                 is CategoryException.CategoryExistException -> R.string.category_name_exist_error
                                 is CategoryException.CategoryNotFoundException -> R.string.category_not_found_error
                                 is CategoryException.CategoryNoParentException ->
                                     R.string.category_parent_not_found_error
+
                                 else -> com.d9tilov.android.common.android.R.string.unknown_error
                             }
                         Text(
@@ -234,7 +239,10 @@ fun CategoryCreationScreen(
                         ),
                     size = dimensionResource(id = com.d9tilov.android.common.android.R.dimen.item_color_picker_size),
                     color = Color(ContextCompat.getColor(context, uiState.category.color)),
-                    onClick = { colorListShow = !colorListShow },
+                    onClick = {
+                        colorListShow = !colorListShow
+                        onColorClicked()
+                    },
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
@@ -302,6 +310,7 @@ fun DefaultCategoryCreationPreview() {
             onCategoryUpdated = {},
             onHideError = {},
             clickOnCategoryIcon = {},
+            onColorClicked = {},
         )
     }
 }

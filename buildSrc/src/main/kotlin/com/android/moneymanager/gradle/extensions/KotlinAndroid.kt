@@ -49,6 +49,7 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, 
                 listOf(
                     "VectorPath",
                     "UnusedAttribute",
+                    "NewerVersionAvailable",
                 )
         }
     }

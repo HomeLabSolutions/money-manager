@@ -3,6 +3,8 @@ package com.d9tilov.android.category.ui.vm
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.d9tilov.android.analytics.domain.AnalyticsSender
+import com.d9tilov.android.analytics.model.AnalyticsEvent
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.entity.CategoryGroup
 import com.d9tilov.android.category.ui.R
@@ -34,8 +36,9 @@ data class CategoryIconGridUiState(
 class CategoryIconGridViewModel
     @Inject
     constructor(
-        private val billingInteractor: BillingInteractor,
+        analyticsSender: AnalyticsSender,
         savedStateHandle: SavedStateHandle,
+        private val billingInteractor: BillingInteractor,
     ) : ViewModel() {
         private val groupedPaidIcons =
             mapOf(
@@ -242,6 +245,7 @@ class CategoryIconGridViewModel
             )
 
         init {
+            analyticsSender.send(AnalyticsEvent.Internal.Screen.Category.IconGrid)
             viewModelScope.launch {
                 billingInteractor
                     .isPremium()

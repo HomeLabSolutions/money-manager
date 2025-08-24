@@ -3,6 +3,8 @@ package com.d9tilov.android.currency.ui
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.d9tilov.android.analytics.domain.AnalyticsSender
+import com.d9tilov.android.analytics.model.AnalyticsEvent
 import com.d9tilov.android.core.model.ErrorMessage
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.DomainCurrency
@@ -37,6 +39,7 @@ class CurrencyViewModel
     constructor(
         savedStateHandle: SavedStateHandle,
         currencyInteractor: CurrencyInteractor,
+        analyticsSender: AnalyticsSender,
         private val currencyUpdateObserver: CurrencyUpdateObserver,
     ) : ViewModel() {
         private val currencyArgs: CurrencyArgs.CurrencyScreenArgs =
@@ -48,6 +51,7 @@ class CurrencyViewModel
         val uiState = _uiState
 
         init {
+            analyticsSender.send(AnalyticsEvent.Internal.Screen.Profile.CurrencyList)
             viewModelScope.launch {
                 currencyInteractor
                     .getCurrencies()

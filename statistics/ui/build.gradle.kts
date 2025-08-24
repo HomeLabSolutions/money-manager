@@ -14,6 +14,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":analytics:domain"))
     implementation(project(":category:domain:contract"))
     implementation(project(":category:domain:model"))
     implementation(project(":core:common"))

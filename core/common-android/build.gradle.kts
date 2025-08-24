@@ -25,6 +25,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.navigation.common)
     implementation(libs.navigation.runtime)
+    implementation(libs.timber)
 
     ksp(libs.hilt.ext.compiler)
 }

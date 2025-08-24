@@ -18,10 +18,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoneyManager.Splash">
 
-        <meta-data
-            android:name="firebase_crashlytics_collection_enabled"
-            android:value="false" />
-
         <activity
             android:name="com.d9tilov.moneymanager.home.MainActivity"
             android:exported="true"

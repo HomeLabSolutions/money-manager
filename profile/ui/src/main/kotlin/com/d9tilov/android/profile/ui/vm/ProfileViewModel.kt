@@ -117,6 +117,10 @@ class ProfileViewModel
                     initialValue = ProfileUiState(),
                 )
 
+        init {
+            analyticsSender.send(AnalyticsEvent.Internal.Screen.Profile.Parent)
+        }
+
         fun showDialog() {
             _showDialog.value = true
         }

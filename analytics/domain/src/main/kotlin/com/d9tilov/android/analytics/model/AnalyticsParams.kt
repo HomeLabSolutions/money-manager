@@ -3,7 +3,21 @@ package com.d9tilov.android.analytics.model
 sealed class AnalyticsParams(
     val name: String,
 ) {
-    data object LoginResultProvider : AnalyticsParams("Login provider type")
+    sealed class MainScreen(
+        name: String,
+    ) : AnalyticsParams("main_$name") {
+        data object EditMode : AnalyticsParams("edit_mode")
 
-    data object Exception : AnalyticsParams("Error")
+        data object ScreenType : AnalyticsParams("screen_type")
+    }
+
+    sealed class CategoryScreen(
+        name: String,
+    ) : AnalyticsParams("category_$name") {
+        data object ScreenType : AnalyticsParams("screen_type")
+    }
+
+    data object LoginResultProvider : AnalyticsParams("login_provider_type")
+
+    data object Exception : AnalyticsParams("error")
 }

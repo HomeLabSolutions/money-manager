@@ -3,6 +3,8 @@ package com.d9tilov.android.category.ui.vm
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.d9tilov.android.analytics.domain.AnalyticsSender
+import com.d9tilov.android.analytics.model.AnalyticsEvent
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.Category.Companion.ALL_ITEMS_ID
@@ -33,6 +35,7 @@ data class CategoryUiState(
 class CategoryListViewModel
     @Inject
     constructor(
+        analyticsSender: AnalyticsSender,
         savedStateHandle: SavedStateHandle,
         private val categoryInteractor: CategoryInteractor,
         private val transactionInteractor: TransactionInteractor,
@@ -51,6 +54,10 @@ class CategoryListViewModel
                     initialValue = CategoryUiState.EMPTY,
                 )
         val uiState: StateFlow<CategoryUiState> = _uiState
+
+        init {
+            analyticsSender.send(AnalyticsEvent.Internal.Screen.Category.List)
+        }
 
         fun remove(category: Category) {
             val categoryExceptionHandler = CoroutineExceptionHandler { _, _ -> }

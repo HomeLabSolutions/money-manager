@@ -7,6 +7,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.insertSeparators
 import androidx.paging.map
+import com.d9tilov.android.analytics.domain.AnalyticsSender
+import com.d9tilov.android.analytics.model.AnalyticsEvent
+import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
@@ -131,8 +134,9 @@ enum class EditMode {
 class IncomeExpenseViewModel
     @Inject
     constructor(
-        @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
         billingInteractor: BillingInteractor,
+        private val analyticsSender: AnalyticsSender,
+        @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
         private val currencyInteractor: CurrencyInteractor,
         private val categoryInteractor: CategoryInteractor,
         private val transactionInteractor: TransactionInteractor,
@@ -144,6 +148,7 @@ class IncomeExpenseViewModel
         val errorMessageFlow = errorMessage.asSharedFlow()
 
         init {
+            analyticsSender.send(AnalyticsEvent.Internal.Screen.Main)
             viewModelScope.launch(ioDispatcher) {
                 launch {
                     currencyInteractor
@@ -350,6 +355,17 @@ class IncomeExpenseViewModel
 
         fun updateMode(mode: EditMode) {
             uiState.update { state -> state.copy(mode = mode) }
+            analyticsSender.send(
+                AnalyticsEvent.Internal.Screen.Main,
+                mapOf(AnalyticsParams.MainScreen.EditMode to mode.name),
+            )
+        }
+
+        fun onTabClicked(screenType: ScreenType) {
+            analyticsSender.send(
+                AnalyticsEvent.Internal.Screen.Main,
+                mapOf(AnalyticsParams.MainScreen.ScreenType to screenType.name),
+            )
         }
 
         fun deleteTransaction(transaction: TransactionUiModel) {

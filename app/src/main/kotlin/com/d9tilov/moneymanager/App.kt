@@ -5,6 +5,8 @@ import android.os.StrictMode
 import com.d9tilov.android.backup.data.impl.PeriodicBackupWorker
 import com.d9tilov.android.currency.data.impl.sync.initializers.Sync
 import com.google.android.material.color.DynamicColors
+import com.google.firebase.FirebaseApp
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
@@ -32,7 +34,9 @@ class App : Application() {
             StrictMode.setVmPolicy(vmPolicy)
         }
         DynamicColors.applyToActivitiesIfAvailable(this)
-        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
+        FirebaseApp.initializeApp(this)
+        FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(!BuildConfig.DEBUG)
+        FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled = !BuildConfig.DEBUG
         Sync.initialize(this)
         PeriodicBackupWorker.startPeriodicJob(this)
     }

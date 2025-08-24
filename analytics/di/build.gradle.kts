@@ -13,4 +13,5 @@ dependencies {
     implementation(project(":analytics:domain"))
     implementation(project(":core:datastore"))
     implementation(libs.firebase.analytics)
+    implementation(libs.hilt.android)
 }

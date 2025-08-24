@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.d9tilov.android.common.android.ui.base.BaseNavigator
+import com.d9tilov.android.core.utils.toMillis
 import com.d9tilov.android.statistics.ui.StatisticsDetailsRoute
 import com.d9tilov.android.statistics.ui.StatisticsRoute
 import com.d9tilov.android.statistics.ui.model.TransactionDetailsChartModel
@@ -48,7 +49,11 @@ fun NavController.navigateToStatisticsDetailsTransactionScreen(
     navOptions: NavOptions? = null,
 ) {
     this.navigate(
-        "$STATISTICS_DETAILS_NAVIGATION_ROUTE/${model.categoryId}/$from/$to/${model.inStatistics}",
+        "$STATISTICS_DETAILS_NAVIGATION_ROUTE/" +
+            "${model.categoryId}/" +
+            "${from.toMillis()}/" +
+            "${to.toMillis()}/" +
+            "${model.inStatistics}",
         navOptions,
     )
 }

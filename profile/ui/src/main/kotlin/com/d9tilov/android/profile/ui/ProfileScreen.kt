@@ -45,6 +45,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.d9tilov.android.backup.data.impl.PeriodicBackupWorker
+import com.d9tilov.android.common.android.utils.getAppVersion
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.reduceScaleStr
@@ -127,9 +128,7 @@ fun ProfileScreen(
         Spacer(modifier = Modifier.weight(1f))
         OutlinedButton(
             modifier =
-                Modifier.padding(
-                    top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
-                ),
+                Modifier.padding(vertical = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
             onClick = { onLogoutClicked() },
             shape = RoundedCornerShape(50),
             colors = ButtonDefaults.outlinedButtonColors().copy(containerColor = MaterialTheme.colorScheme.error),
@@ -140,9 +139,13 @@ fun ProfileScreen(
             )
         }
         Text(
-            text = "",
-            modifier = Modifier.padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
-            style = MaterialTheme.typography.bodySmall,
+            text =
+                stringResource(
+                    com.d9tilov.android.common.android.R.string.version,
+                    getAppVersion(LocalContext.current),
+                ),
+            modifier = Modifier.padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small)),
+            style = MaterialTheme.typography.labelSmall.copy(color = MaterialTheme.colorScheme.tertiary),
         )
         SimpleDialog(
             show = showDialog,
@@ -223,12 +226,14 @@ fun ProfileSection(
                     stringResource(R.string.profile_item_currency_title),
                     null,
                 )
+
             is ProfileUiItem.BudgetUiItem ->
                 ProfileItemData(
                     ImageVector.vectorResource(R.drawable.ic_budget_icon),
                     stringResource(R.string.profile_item_budget_title),
                     profileUiItem.budgetData.createdDate.toStandardStringDate(),
                 )
+
             is ProfileUiItem.RegularIncomeUiItem ->
                 ProfileItemData(
                     ImageVector.vectorResource(R.drawable.ic_regular_income),
@@ -236,18 +241,21 @@ fun ProfileSection(
                     profileUiItem.regularIncomes.joinToString { it.category.name },
                     null,
                 )
+
             is ProfileUiItem.RegularExpenseUiItem ->
                 ProfileItemData(
                     ImageVector.vectorResource(R.drawable.ic_regular_expense),
                     stringResource(R.string.profile_item_regular_expenses_title),
                     profileUiItem.regularExpenses.joinToString { it.category.name },
                 )
+
             is ProfileUiItem.Goals ->
                 ProfileItemData(
                     ImageVector.vectorResource(R.drawable.ic_goal),
                     stringResource(R.string.profile_item_goals_title_empty),
                     null,
                 )
+
             is ProfileUiItem.Settings ->
                 ProfileItemData(
                     ImageVector.vectorResource(R.drawable.ic_settings),
@@ -323,6 +331,7 @@ fun ProfileSection(
                     style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.primary),
                 )
             }
+
             is ProfileUiItem.BudgetUiItem ->
                 CurrencyTextFieldExtraSmall(
                     amount = profileUiItem.budgetData.sum.reduceScaleStr(),
@@ -344,6 +353,7 @@ fun ProfileSection(
                                 color = MaterialTheme.colorScheme.tertiary,
                             ),
                 )
+
             is ProfileUiItem.Settings -> {
                 val isPremium = profileUiItem.isPremium
                 val (backgroundColor, text, textColor) =
@@ -380,6 +390,7 @@ fun ProfileSection(
                     text = text,
                 )
             }
+
             else -> {}
         }
 

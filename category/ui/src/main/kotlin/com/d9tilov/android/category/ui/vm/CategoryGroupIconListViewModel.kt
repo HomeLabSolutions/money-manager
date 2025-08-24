@@ -2,6 +2,8 @@ package com.d9tilov.android.category.ui.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.d9tilov.android.analytics.domain.AnalyticsSender
+import com.d9tilov.android.analytics.model.AnalyticsEvent
 import com.d9tilov.android.category.domain.entity.CategoryGroup
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -35,9 +37,9 @@ data class CategoryIconListUiState(
 @HiltViewModel
 class CategoryGroupIconListViewModel
     @Inject
-    constructor() : ViewModel() {
-        val route = ""
-
+    constructor(
+        analyticsSender: AnalyticsSender,
+    ) : ViewModel() {
         val uiState: StateFlow<CategoryIconListUiState> =
             flowOf(CategoryIconListUiState.EMPTY)
                 .stateIn(
@@ -45,4 +47,8 @@ class CategoryGroupIconListViewModel
                     started = SharingStarted.WhileSubscribed(),
                     initialValue = CategoryIconListUiState.EMPTY,
                 )
+
+        init {
+            analyticsSender.send(AnalyticsEvent.Internal.Screen.Category.GroupIconList)
+        }
     }
