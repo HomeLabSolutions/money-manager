@@ -50,6 +50,7 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, 
                     "VectorPath",
                     "UnusedAttribute",
                     "NewerVersionAvailable",
+                    "GradleDependency",
                 )
         }
     }
