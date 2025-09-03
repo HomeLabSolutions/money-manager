@@ -24,6 +24,7 @@ hilt = "2.57.1"
 hiltCommon = "1.2.0"
 hiltNavigationCompose = "1.2.0"
 java = "17"
+javaDesugaring = "2.0.1"
 javaPoet = "1.13.0"
 javaxInject = "1"
 junit = "4.13.2"
@@ -87,6 +88,7 @@ hilt-android-gradle-plugin = { group = "com.google.dagger", name = "hilt-android
 hilt-common = { group = "androidx.hilt", name = "hilt-common", version.ref = "hiltCommon" }
 hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "hilt" }
 hilt-ext-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltCommon" }
+java-desugaring = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "javaDesugaring" }
 java-poet = { group = "com.squareup", name = "javapoet", version.ref = "javaPoet" }
 javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javaxInject" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
