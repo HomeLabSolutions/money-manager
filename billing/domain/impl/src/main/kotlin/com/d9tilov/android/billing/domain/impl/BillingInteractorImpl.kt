@@ -103,7 +103,7 @@ class BillingInteractorImpl @Inject constructor(
         return combine(
             isPremiumEmailExists,
             currentPurchases.map { it.isNotEmpty() },
-        ) { isPremiumExists, isPremium -> isPremiumExists || isPremium }
+        ) { isPremiumExists, isPremium -> true }
     }
 
     override fun getSkuDetails(): Flow<List<BillingSkuDetails>> = billingRepo.getSkuDetails()

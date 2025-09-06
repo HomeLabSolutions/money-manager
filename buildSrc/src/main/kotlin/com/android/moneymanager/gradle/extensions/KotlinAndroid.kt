@@ -36,6 +36,7 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, 
         }
 
         compileOptions {
+            isCoreLibraryDesugaringEnabled = true
             sourceCompatibility(buildLibs.versions.java.get())
             targetCompatibility(buildLibs.versions.java.get())
         }
@@ -50,6 +51,8 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, 
                     "VectorPath",
                     "UnusedAttribute",
                     "NewerVersionAvailable",
+                    "GradleDependency",
+                    "AndroidGradlePluginVersion",
                 )
         }
     }
@@ -57,6 +60,7 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, 
     configureKotlin()
 
     dependencies {
+        add("coreLibraryDesugaring", buildLibs.java.desugaring.get())
     }
 }
 

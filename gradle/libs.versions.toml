@@ -1,29 +1,30 @@
 [versions]
 accompanist = "0.37.3"
 activity = "1.10.1"
-androidxComposeBom="2025.08.00"
+androidxComposeBom="2025.08.01"
 appCompat = "1.7.1"
-autonomousappsSorting = "0.14"
-autonomousappsUnused = "3.0.0"
+autonomousappsSorting = "0.15"
+autonomousappsUnused = "3.0.1"
 billing = "8.0.0"
 coil = "2.7.0"
-compose = "2.9.2"
+compose = "2.9.3"
 composeConstraintLayout = "1.1.1"
 core = "1.17.0"
 coroutinesCore = "1.10.2"
 datastore = "1.1.7"
 detektPlugin = "1.23.8"
-firebaseBom = "34.1.0"
+firebaseBom = "34.2.0"
 firebaseCrashlyticsPlugin = "3.0.6"
 firebaseUi = "9.0.0"
 googlePlayServices = "4.4.3"
 googlePlayServicesAuth = "21.4.0"
 googlePlayServicesLocation = "21.3.0"
-gradlePlugin = "8.12.1"
+gradlePlugin = "8.13.0"
 hilt = "2.57.1"
 hiltCommon = "1.2.0"
 hiltNavigationCompose = "1.2.0"
 java = "17"
+javaDesugaring = "2.1.5"
 javaPoet = "1.13.0"
 javaxInject = "1"
 junit = "4.13.2"
@@ -31,7 +32,7 @@ kotlin = "2.2.10"
 kotlinDatetime = "0.7.1"
 kotlinxSerialization = "1.9.0"
 ksp = "2.2.10-2.0.2"
-material = "1.12.0"
+material = "1.13.0"
 moshi = "1.15.2"
 navigation = "2.9.3"
 okhttp = "5.1.0"
@@ -87,6 +88,7 @@ hilt-android-gradle-plugin = { group = "com.google.dagger", name = "hilt-android
 hilt-common = { group = "androidx.hilt", name = "hilt-common", version.ref = "hiltCommon" }
 hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "hilt" }
 hilt-ext-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltCommon" }
+java-desugaring = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "javaDesugaring" }
 java-poet = { group = "com.squareup", name = "javapoet", version.ref = "javaPoet" }
 javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javaxInject" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
