@@ -43,7 +43,7 @@ room = "2.7.2"
 splashScreen = "1.0.1"
 startup = "1.2.0"
 timber = "5.0.1"
-worker = "2.10.3"
+worker = "2.10.4"
 workerHilt = "1.2.0"
 
 [libraries]
