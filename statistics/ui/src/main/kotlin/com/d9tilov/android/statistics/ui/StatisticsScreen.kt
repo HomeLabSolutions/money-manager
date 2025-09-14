@@ -47,7 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.constants.CurrencyConstants
 import com.d9tilov.android.core.constants.UiConstants.ALPHA

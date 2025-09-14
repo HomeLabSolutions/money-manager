@@ -9,7 +9,6 @@ android {
 }
 
 dependencies {
-
     implementation(project(":analytics:domain"))
     implementation(project(":backup:data:impl"))
     implementation(project(":billing:domain:contract"))
@@ -30,12 +29,12 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.constraintlayout.compose)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.appcompat)
     implementation(libs.coil)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.ui.auth)
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.lifecycle.viewmodel.compose)
+    implementation(libs.navigation.compose)
     implementation(libs.play.services.auth)
 }
