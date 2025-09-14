@@ -1,15 +1,14 @@
 package com.d9tilov.android.statistics.ui.vm
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.analytics.domain.AnalyticsSender
 import com.d9tilov.android.analytics.model.AnalyticsEvent
 import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
-import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.core.utils.toLocalDateTime
-import com.d9tilov.android.statistics.ui.navigation.StatisticsDetailsNavigator
 import com.d9tilov.android.statistics.ui.navigation.TransactionDetailsArgs
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.ui.model.TransactionUiModel
@@ -37,7 +36,7 @@ class StatisticsDetailsViewModel
         transactionInteractor: TransactionInteractor,
         categoryInteractor: CategoryInteractor,
         @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
-    ) : BaseViewModel<StatisticsDetailsNavigator>() {
+    ) : ViewModel() {
         private val transactionDetailsArgs: TransactionDetailsArgs = TransactionDetailsArgs(savedStateHandle)
         private val _uiState = MutableStateFlow(StatisticsDetailsUiState())
         val uiState = _uiState.asStateFlow()
