@@ -1,10 +1,10 @@
 package com.d9tilov.android.statistics.ui.vm
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.analytics.domain.AnalyticsSender
 import com.d9tilov.android.analytics.model.AnalyticsEvent
 import com.d9tilov.android.analytics.model.AnalyticsParams
-import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.core.utils.reduceScaleStr
@@ -19,7 +19,6 @@ import com.d9tilov.android.statistics.ui.model.chart.Pie
 import com.d9tilov.android.statistics.ui.model.minus
 import com.d9tilov.android.statistics.ui.model.plus
 import com.d9tilov.android.statistics.ui.model.toTransactionType
-import com.d9tilov.android.statistics.ui.navigation.StatisticsNavigator
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -85,7 +84,7 @@ class StatisticsViewModel
         @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
         private val transactionInteractor: TransactionInteractor,
         private val currencyInteractor: CurrencyInteractor,
-    ) : BaseViewModel<StatisticsNavigator>() {
+    ) : ViewModel() {
         private val _uiState = MutableStateFlow(StatisticsUiState())
         val uiState = _uiState.asStateFlow()
         private val updateTrigger = MutableStateFlow(0)

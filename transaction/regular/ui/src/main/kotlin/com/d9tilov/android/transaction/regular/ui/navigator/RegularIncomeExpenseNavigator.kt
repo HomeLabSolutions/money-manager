@@ -1,6 +1,6 @@
 package com.d9tilov.android.transaction.regular.ui.navigator
 
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -10,7 +10,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.d9tilov.android.category.domain.entity.CategoryArgs
 import com.d9tilov.android.category.domain.entity.CategoryDestination
-import com.d9tilov.android.common.android.ui.base.BaseNavigator
 import com.d9tilov.android.core.constants.NavigationConstants
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.model.toType
@@ -19,17 +18,9 @@ import com.d9tilov.android.transaction.regular.ui.RegularTransactionCreationRout
 import com.d9tilov.android.transaction.regular.ui.RegularTransactionListRoute
 import com.d9tilov.android.transaction.regular.ui.vm.RegularTransactionCreationViewModel
 
-interface BaseRegularIncomeExpenseNavigator : BaseNavigator
-
-interface RegularExpenseNavigator : BaseRegularIncomeExpenseNavigator
-
-interface RegularIncomeNavigator : BaseRegularIncomeExpenseNavigator
-
 const val REGULAR_TRANSACTION_ID_ARGS = "regular_transaction_id"
 const val REGULAR_TRANSACTION_LIST_NAVIGATION_ROUTE = "regular_transaction_list_route"
 const val REGULAR_TRANSACTION_CREATION_NAVIGATION_ROUTE = "regular_transaction_creation_route"
-
-interface DayOfMonthDialogNavigator : BaseNavigator
 
 internal sealed class RegularTransactionArgs {
     class RegularTransactionListArgs(

@@ -1,5 +1,6 @@
 package com.d9tilov.android.settings.ui.vm
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingFlowParams
@@ -7,9 +8,7 @@ import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
-import com.d9tilov.android.common.android.ui.base.BaseViewModel
 import com.d9tilov.android.core.constants.DataConstants.TAG
-import com.d9tilov.android.settings.ui.navigation.SettingsBillingNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +24,7 @@ class SettingsBillingIntroViewModel
     @Inject
     constructor(
         private val billingInteractor: BillingInteractor,
-    ) : BaseViewModel<SettingsBillingNavigator>() {
+    ) : ViewModel() {
         private var currentPurchases: List<Purchase> = listOf()
         private var productDetails: ProductDetails? = null
 

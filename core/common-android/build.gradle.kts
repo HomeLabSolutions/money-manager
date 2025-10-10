@@ -18,7 +18,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.hilt.work)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose.android)
     implementation(libs.androidx.work.runtime)
     implementation(libs.core)
     implementation(libs.hilt.android)
