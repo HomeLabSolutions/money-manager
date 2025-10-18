@@ -15,14 +15,13 @@ object DetektOptions {
     fun Project.applyDetektOptions() {
         plugins.apply("io.gitlab.arturbosch.detekt")
 
-        val configFolder = file("${layout.projectDirectory}/config/detekt/")
-
         tasks.register<TomlFileValidationTask>("tomlCheck")
 
         tasks.register<Detekt>("detektCheck") {
             configureCommon()
-            config.setFrom(configFolder.resolve(CONFIG_FILE))
-            baseline.set(configFolder.resolve(BASELINE_FILE))
+            val configFolder = project.layout.projectDirectory.dir("config/detekt")
+            config.setFrom(configFolder.file(CONFIG_FILE))
+            baseline.set(configFolder.file(BASELINE_FILE))
         }
 
         tasks.register<Detekt>("detektCheckStrict") {
@@ -31,10 +30,11 @@ object DetektOptions {
         }
 
         tasks.register<DetektCreateBaselineTask>("detektCreateBaseline") {
-            config.setFrom(configFolder.resolve(CONFIG_FILE))
-            baseline.set(configFolder.resolve(BASELINE_FILE))
+            val configFolder = project.layout.projectDirectory.dir("config/detekt")
+            config.setFrom(configFolder.file(CONFIG_FILE))
+            baseline.set(configFolder.file(BASELINE_FILE))
 
-            configureSources(layout)
+            configureSources(project.layout)
 
             parallel.set(true)
         }
@@ -57,9 +57,8 @@ object DetektOptions {
     }
 
     private fun Detekt.configureCommon() {
-        val outputFolder = project.file("${project.layout.buildDirectory.get()}/reports/detekt/")
-
-        basePath = project.layout.projectDirectory.asFile.absolutePath // required for CI reporting
+        // Use providers to avoid configuration cache issues
+        basePath = project.projectDir.absolutePath // required for CI reporting
 
         configureSources(project.layout)
 
@@ -68,7 +67,9 @@ object DetektOptions {
         reports {
             html {
                 required.set(true)
-                outputLocation.set(outputFolder.resolve("detekt-report.html"))
+                outputLocation.set(
+                    project.layout.buildDirectory.dir("reports/detekt").map { it.file("detekt-report.html") }
+                )
             }
 
             // disable unwanted report formats
