@@ -61,7 +61,7 @@ class StatisticsDetailsViewModel
                 _uiState.update {
                     it.copy(
                         categoryName = categoryDeferred.await().name,
-                        transactions = transactionsDeferred.await().map { it.toUiModel(showTime = true) },
+                        transactions = transactionsDeferred.await().map { it.toUiModel(isStatisticsScreen = true) },
                     )
                 }
             }

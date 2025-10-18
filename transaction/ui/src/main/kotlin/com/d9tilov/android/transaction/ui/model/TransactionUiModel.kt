@@ -51,7 +51,7 @@ data class TransactionUiModel(
     }
 }
 
-fun Transaction.toUiModel(showTime: Boolean = false) =
+fun Transaction.toUiModel(isStatisticsScreen: Boolean = false) =
     TransactionUiModel(
         id = id,
         clientId = clientId,
@@ -61,8 +61,8 @@ fun Transaction.toUiModel(showTime: Boolean = false) =
         sum = sum,
         usdSum = if (currencyCode == DEFAULT_CURRENCY_CODE) null else usdSum,
         date = date,
-        description = description,
-        showTime = showTime,
+        description = if (!isStatisticsScreen) description else "",
+        showTime = isStatisticsScreen,
         isRegular = isRegular,
         inStatistics = inStatistics,
     )
