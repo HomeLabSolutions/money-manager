@@ -86,8 +86,6 @@ android {
         splits.density.isEnable = false
         aaptOptions.cruncherEnabled = false
     }
-
-    tasks.getByPath("detekt").onlyIf { gradle.startParameter.taskNames.contains("detekt") }
 }
 
 dependencies {
