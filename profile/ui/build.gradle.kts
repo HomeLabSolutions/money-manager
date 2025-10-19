@@ -6,6 +6,10 @@ plugins {
 
 android {
     namespace = "com.d9tilov.android.profile.ui"
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
