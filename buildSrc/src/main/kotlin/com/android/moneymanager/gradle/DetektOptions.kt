@@ -68,7 +68,9 @@ object DetektOptions {
             html {
                 required.set(true)
                 outputLocation.set(
-                    project.layout.buildDirectory.dir("reports/detekt").map { it.file("detekt-report.html") }
+                    project.layout.buildDirectory
+                        .dir("reports/detekt")
+                        .map { it.file("detekt-report.html") },
                 )
             }
 
