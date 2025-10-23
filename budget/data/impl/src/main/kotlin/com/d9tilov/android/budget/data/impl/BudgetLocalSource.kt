@@ -18,28 +18,33 @@ class BudgetLocalSource @Inject constructor(
     private val preferencesStore: PreferencesStore,
     private val budgetDao: BudgetDao,
 ) : BudgetSource {
-    override suspend fun createIfNeeded(currencyCode: String) {
+    override suspend fun createIfNeeded(currencyCode: String): BudgetData {
         val currentUserId = preferencesStore.uid.firstOrNull()
-        if (currentUserId == null) {
-            throw WrongUidException()
-        } else {
-            val budget = budgetDao.get(currentUserId).firstOrNull()
-            if (budget == null) {
-                budgetDao.insert(
-                    BudgetData.EMPTY
-                        .copy(
-                            clientId = currentUserId,
-                            currencyCode = currencyCode,
-                        ).toDbModel(),
-                )
+        val dbModel =
+            if (currentUserId == null) {
+                throw WrongUidException()
+            } else {
+                val budget = budgetDao.get(currentUserId).firstOrNull()
+                if (budget == null) {
+                    val toBeInserted =
+                        BudgetData.EMPTY
+                            .copy(
+                                clientId = currentUserId,
+                                currencyCode = currencyCode,
+                            ).toDbModel()
+                    budgetDao.insert(toBeInserted)
+                    toBeInserted
+                } else {
+                    budget
+                }
             }
-        }
+        return dbModel.toDataModel()
     }
 
-    override fun get(): Flow<BudgetData> =
+    override fun get(): Flow<BudgetData?> =
         preferencesStore.uid
             .filterNotNull()
-            .flatMapMerge { uid -> budgetDao.get(uid).filterNotNull().map { it.toDataModel() } }
+            .flatMapMerge { uid -> budgetDao.get(uid).map { it?.toDataModel() } }
 
     override suspend fun update(budgetData: BudgetData) {
         val currentUserId = preferencesStore.uid.firstOrNull()

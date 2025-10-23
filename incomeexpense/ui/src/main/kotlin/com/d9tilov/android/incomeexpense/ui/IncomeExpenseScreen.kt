@@ -36,13 +36,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabPosition
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
@@ -299,15 +298,13 @@ fun TransactionListLayout(
                 } else {
                     item(key = index) {
                         val item = lazyTransactionItems[index] as TransactionUiModel
-                        val dismissState =
-                            rememberSwipeToDismissBoxState(
-                                confirmValueChange = {
-                                    if (it == SwipeToDismissBoxValue.EndToStart) {
-                                        openRemoveDialog.value = item
-                                    }
-                                    true
-                                },
-                            )
+                        val dismissState = rememberSwipeToDismissBoxState()
+                        LaunchedEffect(dismissState.currentValue) {
+                            if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
+                                openRemoveDialog.value = item
+                                dismissState.snapTo(SwipeToDismissBoxValue.Settled)
+                            }
+                        }
                         if (openRemoveDialog.value == null) LaunchedEffect(Unit) { dismissState.reset() }
                         SwipeToDismissBox(
                             state = dismissState,
@@ -409,15 +406,16 @@ fun HomeTabs(
             initialPageOffsetFraction = 0f,
         ) { screenTypes.size }
     val coroutineScope = rememberCoroutineScope()
-    val indicator = @Composable { tabPositions: List<TabPosition> ->
-        HomeTabIndicator(Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]))
-    }
     Column {
-        TabRow(
+        PrimaryTabRow(
             selectedTabIndex = pagerState.currentPage,
-            indicator = indicator,
             modifier = modifier,
             containerColor = MaterialTheme.colorScheme.background,
+            indicator = {
+                HomeTabIndicator(
+                    Modifier.tabIndicatorOffset(pagerState.currentPage),
+                )
+            },
         ) {
             screenTypes.forEachIndexed { index, type ->
                 Tab(

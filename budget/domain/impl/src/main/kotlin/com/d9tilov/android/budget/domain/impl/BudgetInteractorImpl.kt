@@ -5,17 +5,16 @@ import com.d9tilov.android.budget.domain.contract.BudgetRepo
 import com.d9tilov.android.budget.domain.model.BudgetData
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class BudgetInteractorImpl @Inject constructor(
     private val budgetRepo: BudgetRepo,
     private val currencyInteractor: CurrencyInteractor,
 ) : BudgetInteractor {
-    override fun get() = budgetRepo.get()
+    override fun get() = budgetRepo.get().map { budget -> budget ?: create() }
 
-    override suspend fun create() {
-        budgetRepo.create(currencyInteractor.getMainCurrency().code)
-    }
+    override suspend fun create() = budgetRepo.create(currencyInteractor.getMainCurrency().code)
 
     override suspend fun update(budgetData: BudgetData) = budgetRepo.update(budgetData)
 
