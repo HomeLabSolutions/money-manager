@@ -130,15 +130,13 @@ fun RegularTransactionListScreen(
             modifier = Modifier.consumeWindowInsets(padding),
         ) {
             items(items = uiState.regularTransactions, key = { item -> item.id }) { item ->
-                val dismissState =
-                    rememberSwipeToDismissBoxState(
-                        confirmValueChange = {
-                            if (it == SwipeToDismissBoxValue.EndToStart) {
-                                openRemoveDialog.value = item
-                            }
-                            true
-                        },
-                    )
+                val dismissState = rememberSwipeToDismissBoxState()
+                LaunchedEffect(dismissState.currentValue) {
+                    if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
+                        openRemoveDialog.value = item
+                        dismissState.snapTo(SwipeToDismissBoxValue.Settled)
+                    }
+                }
                 if (openRemoveDialog.value == null) LaunchedEffect(Unit) { dismissState.reset() }
                 SwipeToDismissBox(
                     state = dismissState,

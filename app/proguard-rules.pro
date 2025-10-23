@@ -109,9 +109,6 @@
 -dontwarn org.apache.**
 -dontwarn org.w3c.dom.**
 
--keep class net.sqlcipher.** { *; }
--keep class net.sqlcipher.database.* { *; }
-
 -keep public class io.ktor.client.** {
     public <methods>;
     private <methods>;

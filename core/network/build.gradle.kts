@@ -23,6 +23,10 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace = "com.d9tilov.android.network"
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         buildConfigField("String", "CURRENCY_API_KEY", "\"$currencyApiKey\"")
         buildConfigField("String", "GEOCODING_API_KEY", "\"$geocodingApiKey\"")

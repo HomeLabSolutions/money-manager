@@ -67,8 +67,8 @@ class MainActivity : ComponentActivity() {
                                 AuthUI
                                     .getInstance()
                                     .createSignInIntentBuilder()
-                                    .setLogo(com.d9tilov.android.designsystem.R.drawable.ic_money_manager_logo)
-                                    .setTheme(R.style.Theme_MoneyManager)
+                                    .setLogo(R.mipmap.ic_launcher_foreground)
+                                    .setTheme(R.style.Login_Theme_MoneyManager)
                                     .setAvailableProviders(providers)
                                     .build(),
                             )

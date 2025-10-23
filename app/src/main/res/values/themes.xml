@@ -19,6 +19,19 @@
          values-night folder. -->
     <style name="NightAdjusted.Theme.MoneyManager" parent="android:Theme.Material.Light.NoActionBar" />
 
+    <style name="Login.Theme.MoneyManager" parent="FirebaseUI">
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlActivated">@android:color/white</item>
+        <item name="colorControlHighlight">@android:color/white</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:textColorHint">@android:color/white</item>
+        <item name="android:windowBackground">@color/ic_launcher_background</item>
+    </style>
+
     <!-- The final theme we use -->
     <style name="Theme.MoneyManager" parent="NightAdjusted.Theme.MoneyManager" />
 
@@ -29,7 +42,7 @@
 
     <style name="Theme.MoneyManager.Splash" parent="NightAdjusted.Theme.Splash">
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
-        <item name="windowSplashScreenBackground">@color/splash_screen_background</item>
+        <item name="windowSplashScreenBackground">@color/ic_launcher_background</item>
         <item name="postSplashScreenTheme">@style/Theme.MoneyManager</item>
     </style>
 
