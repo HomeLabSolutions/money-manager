@@ -141,7 +141,6 @@
     <ID>UnnecessaryParentheses:AndroidCompose.kt$(enableMetricsProvider.orNull == "true")</ID>
     <ID>UnnecessaryParentheses:AndroidCompose.kt$(enableReportsProvider.orNull == "true")</ID>
     <ID>UnnecessaryParentheses:ComposeCurrencyView.kt$(R.dimen.padding_extra_small)</ID>
-    <ID>UnusedParameter:ProfileScreen.kt$onGoalsClicked: () -&gt; Unit</ID>
     <ID>UnusedPrivateProperty:BillingInteractorImpl.kt$BillingInteractorImpl$val details = billingRepo.premiumProductDetails.map { productDetails -&gt; productDetails != null }</ID>
     <ID>UseCheckOrError:GradleFileValidationTask.kt$GradleFileValidationTask$throw IllegalStateException( "Please check file $path\nfor unused dependencies with script [python3 unused_deps.py &lt;file-path&gt;]", )</ID>
     <ID>UseDataClass:CurrencyNavigation.kt$CurrencyArgs$CurrencyScreenArgs</ID>

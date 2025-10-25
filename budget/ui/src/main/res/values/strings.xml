@@ -2,5 +2,6 @@
 <resources>
     <string name="title_prepopulate_budget">Current budget</string>
     <string name="budget_sum_title">Amount</string>
+    <string name="budget_amount_to_save_title">Amount to save</string>
     <string name="save">Save</string>
 </resources>
