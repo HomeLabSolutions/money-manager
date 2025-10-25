@@ -12,9 +12,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -22,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.designsystem.BottomActionButton
+import com.d9tilov.android.designsystem.CurrencyTextFieldBig
 import com.d9tilov.android.designsystem.CurrencyTextFieldExtraBig
 import com.d9tilov.android.designsystem.MmTopAppBar
 
@@ -34,6 +32,7 @@ fun BudgetRoute(
     BudgetScreen(
         uiState = uiState,
         onBudgetInputChanged = viewModel::changeBudgetAmount,
+        onAmountToSaveInputChanged = viewModel::changeAmountToSave,
         onSave = {
             viewModel.saveBudgetAmount()
             clickBack()
@@ -48,6 +47,7 @@ fun BudgetScreen(
     uiState: BudgetUiState,
     showInPrepopulate: Boolean = false,
     onBudgetInputChanged: (String) -> Unit,
+    onAmountToSaveInputChanged: (String) -> Unit,
     onSave: () -> Unit = {},
     onClickBack: () -> Unit = {},
 ) {
@@ -69,9 +69,8 @@ fun BudgetScreen(
                         start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
                         top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
                     ),
-                style = MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.secondary),
+                style = MaterialTheme.typography.headlineLarge.copy(color = MaterialTheme.colorScheme.secondary),
             )
-            var text by rememberSaveable { mutableStateOf("") }
             CurrencyTextFieldExtraBig(
                 Modifier
                     .fillMaxWidth()
@@ -80,8 +79,26 @@ fun BudgetScreen(
                 uiState.currencySymbol,
                 true,
             ) { s ->
-                text = s
                 onBudgetInputChanged(s)
+            }
+            Text(
+                text = stringResource(R.string.budget_amount_to_save_title),
+                modifier =
+                    Modifier.padding(
+                        start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
+                        top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
+                    ),
+                style = MaterialTheme.typography.headlineSmall.copy(color = MaterialTheme.colorScheme.secondary),
+            )
+            CurrencyTextFieldBig(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
+                uiState.amountToSave,
+                uiState.currencySymbol,
+                true,
+            ) { s ->
+                onAmountToSaveInputChanged(s)
             }
             Spacer(modifier = Modifier.weight(1f))
             if (!showInPrepopulate) {
@@ -100,5 +117,5 @@ fun BudgetScreen(
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreviewBudget() {
-    BudgetScreen(uiState = BudgetUiState(), onBudgetInputChanged = {})
+    BudgetScreen(uiState = BudgetUiState(), onBudgetInputChanged = {}, onAmountToSaveInputChanged = {})
 }

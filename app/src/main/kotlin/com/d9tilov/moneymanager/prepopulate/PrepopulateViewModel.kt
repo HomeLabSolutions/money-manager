@@ -66,6 +66,10 @@ class PrepopulateViewModel
             _uiState.update { it.copy(budgetUiState = it.budgetUiState.copy(budgetSum = amount)) }
         }
 
+        fun changeAmountToSave(amount: String) {
+            _uiState.update { it.copy(budgetUiState = it.budgetUiState.copy(amountToSave = amount)) }
+        }
+
         fun saveBudgetAmountAndComplete() =
             viewModelScope.launch(ioDispatcher) {
                 launch {

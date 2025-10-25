@@ -18,7 +18,6 @@ fun NavGraphBuilder.profileScreen(
     navigateToBudgetScreen: () -> Unit,
     navigateToRegularIncomeScreen: () -> Unit,
     navigateToRegularExpenseScreen: () -> Unit,
-    navigateToGoalsScreen: () -> Unit,
     navigateToSettingsScreen: () -> Unit,
 ) {
     composable(route = route) {
@@ -27,7 +26,6 @@ fun NavGraphBuilder.profileScreen(
             navigateToBudgetScreen = navigateToBudgetScreen,
             navigateToRegularIncomeScreen = navigateToRegularIncomeScreen,
             navigateToRegularExpenseScreen = navigateToRegularExpenseScreen,
-            navigateToGoalsScreen = navigateToGoalsScreen,
             navigateToSettingsScreen = navigateToSettingsScreen,
         )
     }

@@ -60,9 +60,10 @@ fun PrepopulateScreen(prepopulateViewModel: PrepopulateViewModel = hiltViewModel
     val uiState: PrepopulateUiState by prepopulateViewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     PrepopulateScreen(
-        uiState,
-        { currency -> prepopulateViewModel.changeCurrency(currency.code) },
-        { budget -> prepopulateViewModel.changeBudgetAmount(budget) },
+        uiState = uiState,
+        clickCallback = { currency -> prepopulateViewModel.changeCurrency(currency.code) },
+        onBudgetInputChanged = { budget -> prepopulateViewModel.changeBudgetAmount(budget) },
+        onAmountToSaveChanged = { budget -> prepopulateViewModel.changeAmountToSave(budget) },
         {
             prepopulateViewModel.saveBudgetAmountAndComplete()
             val intent = Intent(context, MainActivity::class.java)
@@ -78,6 +79,7 @@ fun PrepopulateScreen(
     uiState: PrepopulateUiState,
     clickCallback: (currency: DomainCurrency) -> Unit,
     onBudgetInputChanged: (String) -> Unit,
+    onAmountToSaveChanged: (String) -> Unit,
     onBudgetSaveAndComplete: () -> Unit,
 ) {
     var screenTypeId by rememberSaveable { mutableIntStateOf(0) }
@@ -125,6 +127,7 @@ fun PrepopulateScreen(
                         uiState = uiState.budgetUiState,
                         showInPrepopulate = true,
                         onBudgetInputChanged = onBudgetInputChanged,
+                        onAmountToSaveInputChanged = onAmountToSaveChanged,
                     )
             }
         }

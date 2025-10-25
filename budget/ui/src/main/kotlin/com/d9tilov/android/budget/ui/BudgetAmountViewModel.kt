@@ -20,6 +20,7 @@ import javax.inject.Inject
 
 data class BudgetUiState(
     val budgetSum: String = "",
+    val amountToSave: String = "",
     val currencySymbol: String = DEFAULT_CURRENCY_SYMBOL,
 )
 
@@ -45,6 +46,7 @@ class BudgetAmountViewModel
                         _uiState.update {
                             it.copy(
                                 budgetSum = budget.sum.reduceScaleStr(),
+                                amountToSave = budget.saveSum.reduceScaleStr(),
                                 currencySymbol = budget.currencyCode.getSymbolByCode(),
                             )
                         }
@@ -56,6 +58,10 @@ class BudgetAmountViewModel
             _uiState.update { it.copy(budgetSum = amount) }
         }
 
+        fun changeAmountToSave(amount: String) {
+            _uiState.update { it.copy(amountToSave = amount) }
+        }
+
         fun saveBudgetAmount() =
             viewModelScope.launch {
                 val budget = budgetInteractor.get().firstOrNull()
@@ -63,6 +69,7 @@ class BudgetAmountViewModel
                     budgetInteractor.update(
                         budget.copy(
                             sum = _uiState.value.budgetSum.toBigDecimalOrNull() ?: BigDecimal.ZERO,
+                            saveSum = _uiState.value.amountToSave.toBigDecimalOrNull() ?: BigDecimal.ZERO,
                         ),
                     )
                 }

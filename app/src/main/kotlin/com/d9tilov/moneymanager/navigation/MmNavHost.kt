@@ -176,7 +176,6 @@ fun MmNavHost(
                         transactionType = TransactionType.EXPENSE,
                     )
                 },
-                navigateToGoalsScreen = { /* no-op */ },
                 navigateToSettingsScreen = navController::navigateToSettingsScreen,
             )
             budgetScreen(BUDGET_NAVIGATION_ROUTE) { navController.popBackStack() }

@@ -2,5 +2,6 @@
 <resources>
     <string name="title_prepopulate_budget">Текущий бюджет</string>
     <string name="budget_sum_title">Сумма</string>
+    <string name="budget_amount_to_save_title">Сумма накопления</string>
     <string name="save">Сохранить</string>
 </resources>

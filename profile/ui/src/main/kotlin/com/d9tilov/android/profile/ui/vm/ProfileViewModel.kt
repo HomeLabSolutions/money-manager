@@ -47,8 +47,6 @@ sealed class ProfileUiItem {
         val regularExpenses: List<RegularTransaction> = emptyList(),
     ) : ProfileUiItem()
 
-    data object Goals : ProfileUiItem()
-
     data class Settings(
         val isPremium: Boolean = false,
     ) : ProfileUiItem()
@@ -65,7 +63,6 @@ data class ProfileUiState(
     val budgetData: ProfileUiItem = ProfileUiItem.BudgetUiItem(),
     val regularIncomes: ProfileUiItem = ProfileUiItem.RegularIncomeUiItem(),
     val regularExpenses: ProfileUiItem = ProfileUiItem.RegularExpenseUiItem(),
-    val goals: ProfileUiItem = ProfileUiItem.Goals,
     val settings: ProfileUiItem = ProfileUiItem.Settings(),
     val showLogoutDialog: Boolean = false,
 )

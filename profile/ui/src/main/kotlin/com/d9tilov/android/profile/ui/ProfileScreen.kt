@@ -65,7 +65,6 @@ fun ProfileRoute(
     navigateToBudgetScreen: () -> Unit,
     navigateToRegularIncomeScreen: () -> Unit,
     navigateToRegularExpenseScreen: () -> Unit,
-    navigateToGoalsScreen: () -> Unit,
     navigateToSettingsScreen: () -> Unit,
 ) {
     val uiState: ProfileUiState by viewModel.profileState.collectAsStateWithLifecycle()
@@ -80,7 +79,6 @@ fun ProfileRoute(
             onBudgetClicked = navigateToBudgetScreen,
             onRegularIncomeClicked = navigateToRegularIncomeScreen,
             onRegularExpenseClicked = navigateToRegularExpenseScreen,
-            onGoalsClicked = navigateToGoalsScreen,
             onSettingsClicked = navigateToSettingsScreen,
             onLogoutClicked = { viewModel.showDialog() },
             onLogoutConfirmClicked = {
@@ -111,7 +109,6 @@ fun ProfileScreen(
     onBudgetClicked: () -> Unit,
     onRegularIncomeClicked: () -> Unit,
     onRegularExpenseClicked: () -> Unit,
-    onGoalsClicked: () -> Unit,
     onSettingsClicked: () -> Unit,
     onLogoutClicked: () -> Unit,
     onLogoutConfirmClicked: () -> Unit,
@@ -123,7 +120,6 @@ fun ProfileScreen(
         ProfileSection(state.budgetData, onBudgetClicked)
         ProfileSection(state.regularIncomes, onRegularIncomeClicked)
         ProfileSection(state.regularExpenses, onRegularExpenseClicked)
-//        ProfileSection(state.goals, onGoalsClicked)
         ProfileSection(state.settings, onSettingsClicked)
         Spacer(modifier = Modifier.weight(1f))
         OutlinedButton(
@@ -247,13 +243,6 @@ fun ProfileSection(
                     ImageVector.vectorResource(R.drawable.ic_regular_expense),
                     stringResource(R.string.profile_item_regular_expenses_title),
                     profileUiItem.regularExpenses.joinToString { it.category.name },
-                )
-
-            is ProfileUiItem.Goals ->
-                ProfileItemData(
-                    ImageVector.vectorResource(R.drawable.ic_goal),
-                    stringResource(R.string.profile_item_goals_title_empty),
-                    null,
                 )
 
             is ProfileUiItem.Settings ->
@@ -431,7 +420,6 @@ fun DefaultPreviewProfile() {
         modifier = Modifier,
         ProfileUiState(userProfile = UserUiProfile()),
         false,
-        {},
         {},
         {},
         {},
