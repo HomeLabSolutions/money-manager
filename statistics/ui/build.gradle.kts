@@ -35,4 +35,8 @@ dependencies {
     implementation(libs.navigation.compose)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk.core)
 }

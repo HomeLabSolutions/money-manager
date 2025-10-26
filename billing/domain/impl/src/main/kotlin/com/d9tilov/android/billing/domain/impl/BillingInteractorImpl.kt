@@ -12,7 +12,6 @@ import com.d9tilov.android.billing.domain.model.PremiumEmails
 import com.d9tilov.android.billing.domain.model.PremiumInfo
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.currency.domain.contract.mapper.toDomain
-import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -63,11 +62,15 @@ class BillingInteractorImpl @Inject constructor(
     override fun getPremiumInfo(): Flow<PremiumInfo> {
         val canPurchaseFlow = flowOf(true)
         val details = billingRepo.premiumProductDetails.map { productDetails -> productDetails != null }
-        val minPriceFlow = flowOf(DomainCurrency.EMPTY)
-        getSkuDetails()
-            .map { list: List<BillingSkuDetails> ->
-                list.minOfWith({ t1, t2 -> t1.value.compareTo(t2.value) }) { it.price }
-            }.map { item: Currency -> item.toDomain(false) }
+        val minPriceFlow =
+            getSkuDetails()
+                .map { list: List<BillingSkuDetails> ->
+                    if (list.isEmpty()) {
+                        DomainCurrency.EMPTY
+                    } else {
+                        list.minOfWith({ t1, t2 -> t1.value.compareTo(t2.value) }) { it.price }.toDomain(false)
+                    }
+                }
         return combine(
             canPurchaseFlow,
             isPremium(),
