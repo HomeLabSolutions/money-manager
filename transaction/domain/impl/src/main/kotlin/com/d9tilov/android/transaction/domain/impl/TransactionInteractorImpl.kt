@@ -31,6 +31,7 @@ import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
 import com.d9tilov.android.transaction.domain.model.TransactionDataModel
 import com.d9tilov.android.transaction.domain.model.TransactionLineChartModel
+import com.d9tilov.android.transaction.domain.model.TransactionMinMaxDateModel
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
 import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
@@ -552,6 +553,9 @@ class TransactionInteractorImpl @Inject constructor(
                     }
                 }.reduceScale()
         }
+
+    override suspend fun getTransactionMinMaxDate(): TransactionMinMaxDateModel =
+        transactionRepo.getTransactionMinMaxDate()
 
     override suspend fun executeRegularIfNeeded(type: TransactionType) {
         regularTransactionInteractor
