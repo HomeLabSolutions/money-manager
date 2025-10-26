@@ -738,7 +738,7 @@ class TransactionInteractorImpl @Inject constructor(
     override suspend fun removeAllByCategory(category: Category) {
         transactionRepo
             .getAllByCategory(category)
-            .map { tr -> removeTransaction(tr.toDomainModel(category)) }
+            .forEach { tr -> removeTransaction(tr.toDomainModel(category)) }
     }
 
     override suspend fun clearAll() {
