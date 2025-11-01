@@ -7,12 +7,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -83,6 +85,7 @@ import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
 
 private const val ANIMATION_DURATION = 300
+private const val PIE_CHART_WEIGHT = 3f
 
 @Composable
 fun StatisticsRoute(
@@ -132,10 +135,14 @@ fun StatisticsScreen(
         )
         StatisticsMenuSelector(state = state.statisticsMenuState, onClick = onMenuClick)
 
-        Column(modifier = Modifier.weight(2f)) {
+        Column(modifier = Modifier.weight(PIE_CHART_WEIGHT)) {
+            Spacer(modifier = Modifier.weight(1f))
+
             var selectedIndex by remember { mutableIntStateOf(-1) }
             StatisticsChart(
-                Modifier.fillMaxSize(),
+                Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
                 periodUiState = state.periodState,
                 periodStr =
                     if (state.periodState.selectedPeriod is StatisticsPeriodModel.DAY) {
@@ -153,9 +160,12 @@ fun StatisticsScreen(
                 onPrevClicked,
                 onNextClicked,
             )
+
+            Spacer(modifier = Modifier.weight(1f))
         }
+
         StatisticsList(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(2f),
             state = state.detailsTransactionListState,
             transactionType = state.statisticsMenuState.transactionType,
             onItemClick = {
@@ -269,39 +279,33 @@ fun StatisticsChart(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        if (periodUiState.showPrevArrow) {
-            IconButton(
-                onClick = onPrevClicked,
-            ) {
-                Icon(
-                    imageVector = MoneyManagerIcons.ArrowBack,
-                    contentDescription = "Back",
-                    tint = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.size(dimensionResource(R.dimen.statistics_item_icon_size)),
-                )
-            }
+        IconButton(
+            onClick = onPrevClicked,
+            enabled = periodUiState.showPrevArrow,
+            modifier = Modifier.alpha(if (periodUiState.showPrevArrow) 1f else 0f),
+        ) {
+            Icon(
+                imageVector = MoneyManagerIcons.ArrowBack,
+                contentDescription = "Back",
+                tint = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier.size(dimensionResource(R.dimen.statistics_item_icon_size)),
+            )
         }
 
-        val modifier =
+        val chartModifier =
             Modifier
                 .weight(1f)
                 .fillMaxSize()
-                .padding(
-                    if (periodUiState.selectedPeriod is StatisticsPeriodModel.CUSTOM) {
-                        dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large)
-                    } else {
-                        0.dp
-                    },
-                )
+                .padding(top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large))
         if (pieData.isEmpty()) {
             EmptyListPlaceholder(
-                modifier = modifier,
+                modifier = chartModifier,
                 icon = painterResource(id = MoneyManagerIcons.EmptyStatisticsPlaceholder),
                 title = stringResource(id = R.string.statistics_no_data),
             )
         } else {
             PieChart(
-                modifier = modifier,
+                modifier = chartModifier,
                 data = pieData,
                 centerLabel = periodStr,
                 onPieClick = {
@@ -320,17 +324,17 @@ fun StatisticsChart(
                 style = Pie.Style.Stroke(48.dp),
             )
         }
-        if (periodUiState.showNextArrow) {
-            IconButton(
-                onClick = onNextClicked,
-            ) {
-                Icon(
-                    imageVector = MoneyManagerIcons.ArrowForward,
-                    contentDescription = "Forward",
-                    tint = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.size(dimensionResource(R.dimen.statistics_item_icon_size)),
-                )
-            }
+        IconButton(
+            onClick = onNextClicked,
+            enabled = periodUiState.showNextArrow,
+            modifier = Modifier.alpha(if (periodUiState.showNextArrow) 1f else 0f),
+        ) {
+            Icon(
+                imageVector = MoneyManagerIcons.ArrowForward,
+                contentDescription = "Forward",
+                tint = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier.size(dimensionResource(R.dimen.statistics_item_icon_size)),
+            )
         }
     }
 }

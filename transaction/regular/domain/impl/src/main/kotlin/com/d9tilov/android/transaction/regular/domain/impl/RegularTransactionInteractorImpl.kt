@@ -51,7 +51,7 @@ class RegularTransactionInteractorImpl(
     override suspend fun removeAllByCategory(category: Category) {
         regularTransactionRepo
             .getAllByCategory(category)
-            .map { tr -> delete(tr.toDomain(category)) }
+            .forEach { tr -> delete(tr.toDomain(category)) }
     }
 
     override suspend fun getById(id: Long): RegularTransaction {

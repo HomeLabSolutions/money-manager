@@ -11,4 +11,8 @@ dependencies {
     implementation(project(":transaction:regular:domain:contract"))
     implementation(project(":transaction:regular:domain:model"))
     implementation(libs.kotlinx.coroutines.core)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk.core)
 }

@@ -23,4 +23,8 @@ dependencies {
     implementation(libs.hilt.lifecycle.viewmodel.compose)
     implementation(libs.navigation.compose)
     implementation(libs.timber)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk.core)
 }

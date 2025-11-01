@@ -4,7 +4,7 @@ activity = "1.11.0"
 androidxComposeBom="2025.10.01"
 appCompat = "1.7.1"
 autonomousappsSorting = "0.15"
-autonomousappsUnused = "3.3.0"
+autonomousappsUnused = "3.4.1"
 billing = "8.0.0"
 coil = "2.7.0"
 compose = "2.9.4"
@@ -13,7 +13,7 @@ core = "1.17.0"
 coroutinesCore = "1.10.2"
 datastore = "1.1.7"
 detektPlugin = "1.23.8"
-firebaseBom = "34.4.0"
+firebaseBom = "34.5.0"
 firebaseCrashlyticsPlugin = "3.0.6"
 firebaseUi = "9.1.1"
 googlePlayServices = "4.4.4"
@@ -32,9 +32,10 @@ kotlinDatetime = "0.7.1"
 kotlinxSerialization = "1.9.0"
 ksp = "2.3.0"
 material = "1.13.0"
+mockk = "1.14.6"
 moshi = "1.15.2"
 navigation = "2.9.5"
-okhttp = "5.2.1"
+okhttp = "5.3.0"
 paging = "3.3.6"
 retrofit = "3.0.0"
 retrofitConverter = "1.0.0"
@@ -93,11 +94,13 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-metadata-jvm = { group = "org.jetbrains.kotlin", name = "kotlin-metadata-jvm", version.ref = "kotlin" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutinesCore" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesCore" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinDatetime" }
 kotlinx-serialization-converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitConverter" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+mockk-core = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "moshi" }
 moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
 navigation-common = { group = "androidx.navigation", name = "navigation-common", version.ref = "navigation" }

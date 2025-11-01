@@ -6,6 +6,7 @@ import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
 import com.d9tilov.android.transaction.domain.model.TransactionLineChartModel
+import com.d9tilov.android.transaction.domain.model.TransactionMinMaxDateModel
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
@@ -57,6 +58,8 @@ interface TransactionInteractor {
     fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<BigDecimal>
 
     fun getApproxSumTodayCurrentCurrency(type: TransactionType): Flow<BigDecimal>
+
+    suspend fun getTransactionMinMaxDate(): TransactionMinMaxDateModel
 
     suspend fun removeAllByCategory(category: Category)
 

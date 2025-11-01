@@ -22,4 +22,8 @@ dependencies {
     implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.paging.common)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk.core)
 }
