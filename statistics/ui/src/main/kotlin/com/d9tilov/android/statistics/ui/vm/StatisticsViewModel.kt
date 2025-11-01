@@ -29,6 +29,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
@@ -103,38 +104,39 @@ class StatisticsViewModel
             )
             viewModelScope.launch(ioDispatcher) {
                 val currency = currencyInteractor.getMainCurrency()
-                launch {
-                    _uiState.update {
-                        it.copy(
-                            periodState =
-                                it.periodState.copy(
-                                    minMaxTransactionDate =
-                                        TransactionMinMaxDateModel(
-                                            minDate = transactionInteractor.getTransactionMinMaxDate().minDate,
-                                            maxDate = currentDateTime().getEndOfDay(),
-                                        ),
-                                ),
-                        )
-                    }
-                    _uiState.update {
-                        it.copy(
-                            statisticsMenuState =
-                                it.statisticsMenuState.copy(
-                                    currency =
-                                        StatisticsMenuCurrencyType.Current(
-                                            currency.code,
-                                        ),
-                                ),
-                            periodState =
-                                it.periodState.copy(
-                                    showNextArrow = showNextArrow(it.periodState.selectedPeriod),
-                                    showPrevArrow = showPrevArrow(it.periodState.selectedPeriod),
-                                ),
-                        )
-                    }
-                    updateTrigger
-                        .flatMapLatest {
-                            val (periodState: PeriodUiState, statisticsMenuState: StatisticsMenuState) = _uiState.value
+                _uiState.update {
+                    it.copy(
+                        periodState =
+                            it.periodState.copy(
+                                minMaxTransactionDate =
+                                    TransactionMinMaxDateModel(
+                                        minDate = transactionInteractor.getTransactionMinMaxDate().minDate,
+                                        maxDate = currentDateTime().getEndOfDay(),
+                                    ),
+                            ),
+                    )
+                }
+                _uiState.update {
+                    it.copy(
+                        statisticsMenuState =
+                            it.statisticsMenuState.copy(
+                                currency =
+                                    StatisticsMenuCurrencyType.Current(
+                                        currency.code,
+                                    ),
+                            ),
+                        periodState =
+                            it.periodState.copy(
+                                showNextArrow = showNextArrow(it.periodState.selectedPeriod),
+                                showPrevArrow = showPrevArrow(it.periodState.selectedPeriod),
+                            ),
+                    )
+                }
+                updateTrigger
+                    .flatMapLatest {
+                        val (periodState: PeriodUiState, statisticsMenuState: StatisticsMenuState) = _uiState.value
+
+                        val transactionsFlow =
                             transactionInteractor
                                 .getTransactionsGroupedByCategory(
                                     statisticsMenuState.transactionType.toTransactionType(),
@@ -144,33 +146,8 @@ class StatisticsViewModel
                                     statisticsMenuState.inStatistics == StatisticsMenuInStatisticsType.InStatisticsType,
                                     false,
                                 ).map { list -> list.sortedByDescending { tr -> tr.sum } }
-                        }.collect { list: List<TransactionChartModel> ->
-                            _uiState.update {
-                                it.copy(
-                                    chartState =
-                                        it.chartState.copy(
-                                            pieData =
-                                                list.map { item ->
-                                                    Pie(
-                                                        label = item.category.name,
-                                                        data = item.sum.toDouble(),
-                                                        color = item.category.color,
-                                                        selectedScale = 1.05f,
-                                                    )
-                                                },
-                                        ),
-                                    detailsTransactionListState =
-                                        it.detailsTransactionListState.copy(
-                                            transactions = list,
-                                        ),
-                                )
-                            }
-                        }
-                }
-                launch {
-                    updateTrigger
-                        .flatMapLatest {
-                            val (periodState: PeriodUiState, statisticsMenuState: StatisticsMenuState) = _uiState.value
+
+                        val sumFlow =
                             transactionInteractor.getSumInPeriod(
                                 periodState.selectedPeriod.from,
                                 periodState.selectedPeriod.to,
@@ -178,21 +155,37 @@ class StatisticsViewModel
                                 statisticsMenuState.currency.currencyCode,
                                 statisticsMenuState.inStatistics == StatisticsMenuInStatisticsType.InStatisticsType,
                             )
-                        }.collect { sum ->
-                            _uiState.update {
-                                it.copy(
-                                    detailsTransactionListState =
-                                        it.detailsTransactionListState.copy(
-                                            amount =
-                                                DetailsSpentInPeriodState(
-                                                    sum.reduceScaleStr(),
-                                                    currency.symbol,
-                                                ),
-                                        ),
-                                )
-                            }
+
+                        combine(transactionsFlow, sumFlow) { transactions, sum ->
+                            transactions to sum
                         }
-                }
+                    }.collect { (transactions, sum) ->
+                        _uiState.update {
+                            it.copy(
+                                chartState =
+                                    it.chartState.copy(
+                                        pieData =
+                                            transactions.map { item ->
+                                                Pie(
+                                                    label = item.category.name,
+                                                    data = item.sum.toDouble(),
+                                                    color = item.category.color,
+                                                    selectedScale = 1.05f,
+                                                )
+                                            },
+                                    ),
+                                detailsTransactionListState =
+                                    it.detailsTransactionListState.copy(
+                                        transactions = transactions,
+                                        amount =
+                                            it.detailsTransactionListState.amount.copy(
+                                                sum.reduceScaleStr(),
+                                                currency.symbol,
+                                            ),
+                                    ),
+                            )
+                        }
+                    }
             }
         }
 
