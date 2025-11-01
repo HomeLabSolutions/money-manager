@@ -18,6 +18,7 @@ import com.d9tilov.android.transaction.data.contract.TransactionSource
 import com.d9tilov.android.transaction.data.impl.mapper.toDataModel
 import com.d9tilov.android.transaction.data.impl.mapper.toDbModel
 import com.d9tilov.android.transaction.domain.model.TransactionDataModel
+import com.d9tilov.android.transaction.domain.model.TransactionMinMaxDateModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
@@ -108,12 +109,12 @@ class TransactionLocalSource @Inject constructor(
             }
         }
 
-    override suspend fun getCountByCurrencyCode(code: String): Int {
+    override suspend fun getMinMaxDate(): TransactionMinMaxDateModel {
         val currentUserId = preferencesStore.uid.firstOrNull()
         return if (currentUserId == null) {
             throw WrongUidException()
         } else {
-            transactionDao.getCountByCurrencyCode(code, currentUserId)
+            transactionDao.getMinMaxDate().toDataModel()
         }
     }
 

@@ -6,6 +6,7 @@ import androidx.room.Query
 import androidx.room.Update
 import androidx.room.Upsert
 import com.d9tilov.android.database.entity.TransactionDbModel
+import com.d9tilov.android.database.entity.TransactionMinMaxDateDbModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
 
@@ -67,6 +68,9 @@ interface TransactionDao {
         uid: String,
         code: String,
     ): Int
+
+    @Query("SELECT MIN(date) as minDate, MAX(date) as maxDate FROM transactions")
+    suspend fun getMinMaxDate(): TransactionMinMaxDateDbModel
 
     @Update
     suspend fun update(transaction: TransactionDbModel)
