@@ -17,7 +17,6 @@ import com.d9tilov.android.core.constants.DataConstants.UNKNOWN_BACKUP_DATE
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.core.model.ResultOf
-import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.core.utils.toBackupDate
 import com.d9tilov.android.network.exception.NetworkException
 import com.d9tilov.android.settings.ui.R
@@ -86,45 +85,9 @@ class SettingsViewModel
                     billingInteractor.getPremiumInfo(),
                 ) { user, backupData, premiumInfo ->
                     Timber.tag(TAG).d("PremiumInfo: $premiumInfo, BackupData: $backupData")
-                    val price =
-                        if (premiumInfo.isPremium) {
-                            SubscriptionPriceUiState(
-                                premiumInfo.minBillingPrice.value.reduceScaleStr(),
-                                premiumInfo.minBillingPrice.code,
-                                premiumInfo.minBillingPrice.symbol,
-                            )
-                        } else {
-                            null
-                        }
-                    val subscriptionState =
-                        if (premiumInfo.canPurchase) {
-                            SubscriptionUiState(
-                                title =
-                                    if (premiumInfo.isPremium) {
-                                        R.string.settings_subscription_premium_acknowledged_title
-                                    } else {
-                                        R.string.settings_subscription_premium_title
-                                    },
-                                description =
-                                    when (premiumInfo.isPremium) {
-                                        true ->
-                                            if (premiumInfo.hasActiveSku) {
-                                                R.string.settings_subscription_premium_acknowledged_subtitle_renewing
-                                            } else {
-                                                R.string.settings_subscription_premium_acknowledged_subtitle_cancel
-                                            }
-
-                                        false -> R.string.settings_subscription_premium_description
-                                    },
-                                minPrice = price,
-                            )
-                        } else {
-                            null
-                        }
                     val fiscalDay = user?.fiscalDay ?: 1
                     val curValue = _uiState.value
                     curValue.copy(
-                        subscriptionState = subscriptionState,
                         startPeriodDay = fiscalDay.toString(),
                         backupState =
                             curValue.backupState.copy(

@@ -51,10 +51,10 @@ class BillingDataRepo
             billingSource.productWithProductDetails
                 .map { details: Map<String, ProductDetails> ->
                     val list = details.toList()
-                    if (list.isEmpty()) {
+                    val item = list.firstOrNull()
+                    if (item == null) {
                         emptyList()
                     } else {
-                        val item = list.firstOrNull() ?: return@map emptyList()
                         val pair = Pair(item.first, item.second.subscriptionOfferDetails)
                         val product: String = pair.first
                         pair.second?.map { details: ProductDetails.SubscriptionOfferDetails ->
