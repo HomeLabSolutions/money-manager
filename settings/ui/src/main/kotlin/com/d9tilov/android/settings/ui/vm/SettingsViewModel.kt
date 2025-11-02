@@ -14,6 +14,7 @@ import com.d9tilov.android.backup.domain.contract.BackupInteractor
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.constants.DataConstants.UNKNOWN_BACKUP_DATE
+import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.android.core.utils.reduceScaleStr
@@ -23,6 +24,7 @@ import com.d9tilov.android.settings.ui.R
 import com.d9tilov.android.user.domain.contract.UserInteractor
 import com.google.firebase.FirebaseException
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -31,6 +33,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.FileNotFoundException
 import javax.inject.Inject
+import javax.inject.Named
 
 data class SettingsUiState(
     val subscriptionState: SubscriptionUiState? = null,
@@ -61,6 +64,7 @@ data class SubscriptionPriceUiState(
 class SettingsViewModel
     @Inject
     constructor(
+        @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
         private val backupInteractor: BackupInteractor,
         private val userInteractor: UserInteractor,
         analyticsSender: AnalyticsSender,
@@ -75,13 +79,13 @@ class SettingsViewModel
                 AnalyticsEvent.Internal.Screen,
                 mapOf(AnalyticsParams.Screen.Name to "settings"),
             )
-            viewModelScope.launch {
+            viewModelScope.launch(ioDispatcher) {
                 combine(
                     userInteractor.getCurrentUser(),
                     backupInteractor.getBackupData(),
                     billingInteractor.getPremiumInfo(),
                 ) { user, backupData, premiumInfo ->
-                    Timber.tag(TAG).d("PremiumInfo: $premiumInfo")
+                    Timber.tag(TAG).d("PremiumInfo: $premiumInfo, BackupData: $backupData")
                     val price =
                         if (premiumInfo.isPremium) {
                             SubscriptionPriceUiState(

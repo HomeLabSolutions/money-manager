@@ -13,7 +13,6 @@ import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.currency.domain.model.Currency
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -50,40 +49,38 @@ class BillingDataRepo
 
         override fun getSkuDetails(): Flow<List<BillingSkuDetails>> =
             billingSource.productWithProductDetails
-                .map { details: Map<String, ProductDetails> -> details.toList() }
-                .filter { it.isNotEmpty() }
-                .map { list: List<Pair<String, ProductDetails>> -> list.firstOrNull() }
-                .filterNotNull()
-                .map { item ->
-                    Pair<String, List<ProductDetails.SubscriptionOfferDetails>?>(
-                        item.first,
-                        item.second.subscriptionOfferDetails,
-                    )
-                }.map { pair: Pair<String, List<ProductDetails.SubscriptionOfferDetails>?> ->
-                    val product: String = pair.first
-                    pair.second?.map { details: ProductDetails.SubscriptionOfferDetails ->
-                        val offerTags = details.offerTags
-                        if (offerTags.isEmpty()) throw BillingFailure.TagNotFoundException(product)
-                        val tag = checkNotNull(offerTags.firstOrNull())
-                        val offerToken = details.offerToken
-                        val pricingList = details.pricingPhases.pricingPhaseList
-                        if (pricingList.isEmpty()) throw BillingFailure.PriceNotFoundException(product)
-                        val price = checkNotNull(pricingList.firstOrNull())
-                        val formattedPrice =
-                            price.priceAmountMicros.toBigDecimal().divide(AMOUNT_DIVIDER.toBigDecimal())
-                        val currencyCode = price.priceCurrencyCode
-                        val currency =
-                            Currency.EMPTY.copy(
-                                code = currencyCode,
-                                value = formattedPrice,
-                                symbol = currencyCode.getSymbolByCode(),
+                .map { details: Map<String, ProductDetails> ->
+                    val list = details.toList()
+                    if (list.isEmpty()) {
+                        emptyList()
+                    } else {
+                        val item = list.firstOrNull() ?: return@map emptyList()
+                        val pair = Pair(item.first, item.second.subscriptionOfferDetails)
+                        val product: String = pair.first
+                        pair.second?.map { details: ProductDetails.SubscriptionOfferDetails ->
+                            val offerTags = details.offerTags
+                            if (offerTags.isEmpty()) throw BillingFailure.TagNotFoundException(product)
+                            val tag = checkNotNull(offerTags.firstOrNull())
+                            val offerToken = details.offerToken
+                            val pricingList = details.pricingPhases.pricingPhaseList
+                            if (pricingList.isEmpty()) throw BillingFailure.PriceNotFoundException(product)
+                            val price = checkNotNull(pricingList.firstOrNull())
+                            val formattedPrice =
+                                price.priceAmountMicros.toBigDecimal().divide(AMOUNT_DIVIDER.toBigDecimal())
+                            val currencyCode = price.priceCurrencyCode
+                            val currency =
+                                Currency.EMPTY.copy(
+                                    code = currencyCode,
+                                    value = formattedPrice,
+                                    symbol = currencyCode.getSymbolByCode(),
+                                )
+                            BillingSkuDetails(
+                                tag,
+                                offerToken,
+                                currency,
                             )
-                        BillingSkuDetails(
-                            tag,
-                            offerToken,
-                            currency,
-                        )
-                    } ?: throw BillingFailure.SubscriptionNotFoundException(product)
+                        } ?: emptyList()
+                    }
                 }
 
         override fun buySku(
