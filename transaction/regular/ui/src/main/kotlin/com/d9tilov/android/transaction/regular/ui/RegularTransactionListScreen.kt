@@ -199,9 +199,8 @@ fun RegularTransactionListScreen(
         dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
         confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
         onConfirm = {
-            openRemoveDialog.value?.let { (transaction, state) ->
+            openRemoveDialog.value?.let { (transaction, _) ->
                 onDeleteTransactionConfirmClicked(transaction)
-                coroutineScope.launch { state.reset() }
             }
             openRemoveDialog.value = null
         },

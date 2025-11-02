@@ -298,7 +298,7 @@ fun TransactionListLayout(
                         }
                     }
                 } else {
-                    item(key = index) {
+                    item(key = (currentItem as TransactionUiModel).id) {
                         val item = lazyTransactionItems[index] as TransactionUiModel
                         val dismissState = rememberSwipeToDismissBoxState(SwipeToDismissBoxValue.Settled)
                         LaunchedEffect(dismissState.currentValue) {
@@ -376,9 +376,8 @@ fun TransactionListLayout(
         dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
         confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
         onConfirm = {
-            openRemoveDialog.value?.let { (transaction, state) ->
+            openRemoveDialog.value?.let { (transaction, _) ->
                 onDeleteTransactionConfirmClicked(transaction)
-                coroutineScope.launch { state.reset() }
             }
             openRemoveDialog.value = null
         },
