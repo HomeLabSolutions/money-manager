@@ -18,6 +18,7 @@ import androidx.compose.material.icons.rounded.KeyboardHide
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.RemoveCircle
 import androidx.compose.material.icons.rounded.Repeat
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
 
 object MoneyManagerIcons {
@@ -44,4 +45,5 @@ object MoneyManagerIcons {
     val EmptyStatisticsPlaceholder = R.drawable.ic_statistics_empty_placeholder
     val Cross = Icons.Rounded.RemoveCircle
     val Delete = Icons.Outlined.Delete
+    val Search = Icons.Rounded.Search
 }

@@ -72,6 +72,7 @@ class CurrencyViewModelTest {
             val savedStateHandle = SavedStateHandle()
             val viewModel =
                 CurrencyViewModel(
+                    testDispatcher,
                     savedStateHandle,
                     currencyInteractor,
                     analyticsSender,
@@ -93,6 +94,7 @@ class CurrencyViewModelTest {
             val savedStateHandle = SavedStateHandle(mapOf("currency_code_args" to "EUR"))
             val viewModel =
                 CurrencyViewModel(
+                    testDispatcher,
                     savedStateHandle,
                     currencyInteractor,
                     analyticsSender,
@@ -119,6 +121,7 @@ class CurrencyViewModelTest {
 
             val viewModel =
                 CurrencyViewModel(
+                    testDispatcher,
                     savedStateHandle,
                     currencyInteractor,
                     analyticsSender,
@@ -139,6 +142,7 @@ class CurrencyViewModelTest {
 
             val viewModel =
                 CurrencyViewModel(
+                    testDispatcher,
                     savedStateHandle,
                     currencyInteractor,
                     analyticsSender,
@@ -160,6 +164,7 @@ class CurrencyViewModelTest {
             val savedStateHandle = SavedStateHandle()
             val viewModel =
                 CurrencyViewModel(
+                    testDispatcher,
                     savedStateHandle,
                     currencyInteractor,
                     analyticsSender,
@@ -178,6 +183,7 @@ class CurrencyViewModelTest {
             val savedStateHandle = SavedStateHandle()
             val viewModel =
                 CurrencyViewModel(
+                    testDispatcher,
                     savedStateHandle,
                     currencyInteractor,
                     analyticsSender,

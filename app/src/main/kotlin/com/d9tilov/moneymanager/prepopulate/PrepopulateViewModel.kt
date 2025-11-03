@@ -50,7 +50,11 @@ class PrepopulateViewModel
                     budgetInteractor.get(),
                 ) { currencyList, budget ->
                     PrepopulateUiState(
-                        CurrencyUiState.HasCurrencies(currencyList, false),
+                        CurrencyUiState.HasCurrencies(
+                            currencyList = currencyList,
+                            filteredCurrencyList = currencyList,
+                            isLoading = false,
+                        ),
                         BudgetUiState(budget.sum.reduceScaleStr(), budget.currencyCode.getSymbolByCode()),
                     )
                 }.collect { state -> _uiState.update { state } }
