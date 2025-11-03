@@ -46,7 +46,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -160,10 +159,6 @@ fun RegularTransactionCreationScreen(
                         text = uiState.transaction.currencyCode.getSymbolByCode(),
                         style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.primary,
-                        fontSize =
-                            dimensionResource(
-                                id = com.d9tilov.android.designsystem.R.dimen.currency_sign_big_text_size,
-                            ).value.sp,
                     )
                     AutoSizeTextField(
                         modifier = Modifier.alignByBaseline(),
@@ -453,7 +448,7 @@ fun DayInMonthDialog(
                         ) {
                             Text(
                                 text = item.toString(),
-                                fontSize = 12.sp,
+                                style = MaterialTheme.typography.labelMedium,
                                 color =
                                     if (item == selectedDay) {
                                         MaterialTheme.colorScheme.onSecondary
@@ -574,7 +569,7 @@ fun DaysOfWeek(
             ) {
                 Text(
                     text = stringResource(id = item.id),
-                    fontSize = 12.sp,
+                    style = MaterialTheme.typography.labelMedium,
                     color =
                         if (item == selected) {
                             MaterialTheme.colorScheme.onSecondary
