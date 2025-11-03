@@ -155,6 +155,10 @@ private fun CurrencyTopBar(
                     actionIcon = MoneyManagerIcons.Search,
                     onNavigationClick = onClickBack,
                     onActionClick = { onSearchActiveChange(true) },
+                    colors =
+                        TopAppBarDefaults.topAppBarColors(
+                            containerColor = Color.Transparent,
+                        ),
                 )
             }
         }

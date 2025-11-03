@@ -24,6 +24,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -86,23 +87,29 @@ fun PrepopulateScreen(
     Scaffold(
         modifier = Modifier.navigationBarsPadding(),
         topBar = {
-            TopAppBar(
-                title = { Text(text = stringResource(screenTypeId.fromScreenId().title)) },
-                colors =
-                    TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.background,
-                        titleContentColor = MaterialTheme.colorScheme.onBackground,
-                    ),
-                actions = {
-                    Text(
-                        text = buildAnnotatedString { AnnotatedString(stringResource(R.string.toolbar_menu_skip)) },
-                        modifier =
-                            Modifier
-                                .padding(8.dp)
-                                .clickable { onBudgetSaveAndComplete() },
-                    )
-                },
-            )
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                shadowElevation = 3.dp,
+                color = MaterialTheme.colorScheme.surface,
+            ) {
+                TopAppBar(
+                    title = { Text(text = stringResource(screenTypeId.fromScreenId().title)) },
+                    colors =
+                        TopAppBarDefaults.topAppBarColors(
+                            containerColor = MaterialTheme.colorScheme.background,
+                            titleContentColor = MaterialTheme.colorScheme.onBackground,
+                        ),
+                    actions = {
+                        Text(
+                            text = buildAnnotatedString { AnnotatedString(stringResource(R.string.toolbar_menu_skip)) },
+                            modifier =
+                                Modifier
+                                    .padding(8.dp)
+                                    .clickable { onBudgetSaveAndComplete() },
+                        )
+                    },
+                )
+            }
         },
         bottomBar = {
             BottomNavigationBar(
