@@ -1,10 +1,12 @@
 package com.d9tilov.android.designsystem
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
@@ -14,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -22,40 +25,45 @@ fun MmTopAppBar(
     modifier: Modifier = Modifier,
     navigationIcon: ImageVector = MoneyManagerIcons.ArrowBack,
     actionIcon: ImageVector? = null,
-    colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
+    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
     onNavigationClick: () -> Unit = {},
     onActionClick: () -> Unit = {},
 ) {
-    TopAppBar(
-        title = {
-            Text(
-                text = stringResource(id = titleRes),
-                color = MaterialTheme.colorScheme.tertiary,
-            )
-        },
-        navigationIcon = {
-            IconButton(onClick = onNavigationClick) {
-                Icon(
-                    imageVector = navigationIcon,
-                    contentDescription = "Navigation Icon",
-                    tint = MaterialTheme.colorScheme.tertiary,
+    Surface(
+        modifier = modifier.fillMaxWidth(),
+        shadowElevation = 3.dp,
+        color = MaterialTheme.colorScheme.surface,
+    ) {
+        TopAppBar(
+            title = {
+                Text(
+                    text = stringResource(id = titleRes),
+                    color = MaterialTheme.colorScheme.tertiary,
                 )
-            }
-        },
-        actions = {
-            actionIcon?.let {
-                IconButton(onClick = onActionClick) {
+            },
+            navigationIcon = {
+                IconButton(onClick = onNavigationClick) {
                     Icon(
-                        imageVector = actionIcon,
-                        contentDescription = "Action Icon",
+                        imageVector = navigationIcon,
+                        contentDescription = "Navigation Icon",
                         tint = MaterialTheme.colorScheme.tertiary,
                     )
                 }
-            }
-        },
-        colors = colors,
-        modifier = modifier,
-    )
+            },
+            actions = {
+                actionIcon?.let {
+                    IconButton(onClick = onActionClick) {
+                        Icon(
+                            imageVector = actionIcon,
+                            contentDescription = "Action Icon",
+                            tint = MaterialTheme.colorScheme.tertiary,
+                        )
+                    }
+                }
+            },
+            colors = colors,
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
