@@ -8,13 +8,10 @@
     <string name="settings_backup_error">Backup error</string>
     <string name="settings_subscription_premium_acknowledged_title" translatable="false">Premium</string>
     <string name="settings_subscription_premium_title" translatable="false">Go Premium</string>
-    <string name="settings_subscription_premium_acknowledged_subtitle_renewing">Subscription will be renewing automatically</string>
-    <string name="settings_subscription_premium_acknowledged_subtitle_cancel">Subscription is cancelled</string>
     <string name="settings_backup_succeeded">Backup succeeded</string>
     <string name="settings_backup_network_error">Network error</string>
     <string name="settings_backup_user_error">Unknown user error</string>
     <string name="settings_backup_file_not_found_error">File not found</string>
-
     <string name="settings_backup">Make backup</string>
     <string name="settings_backup_info">Last backup: %1$s</string>
     <string name="settings_backup_delete_title">Delete backup?</string>

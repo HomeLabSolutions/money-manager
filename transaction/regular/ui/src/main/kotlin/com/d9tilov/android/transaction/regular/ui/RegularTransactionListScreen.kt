@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
@@ -31,6 +32,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -65,6 +67,7 @@ import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
 import com.d9tilov.android.transaction.regular.domain.model.WeekDays
 import com.d9tilov.android.transaction.regular.ui.vm.RegularTransactionListState
 import com.d9tilov.android.transaction.regular.ui.vm.RegularTransactionListViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun RegularTransactionListRoute(
@@ -92,7 +95,8 @@ fun RegularTransactionListScreen(
     onAddClicked: () -> Unit,
     onBackClicked: () -> Unit,
 ) {
-    val openRemoveDialog = remember { mutableStateOf<RegularTransaction?>(null) }
+    val openRemoveDialog = remember { mutableStateOf<Pair<RegularTransaction, SwipeToDismissBoxState>?>(null) }
+    val coroutineScope = rememberCoroutineScope()
     Scaffold(
         topBar = {
             MmTopAppBar(
@@ -130,14 +134,17 @@ fun RegularTransactionListScreen(
             modifier = Modifier.consumeWindowInsets(padding),
         ) {
             items(items = uiState.regularTransactions, key = { item -> item.id }) { item ->
-                val dismissState = rememberSwipeToDismissBoxState()
+                val dismissState =
+                    rememberSwipeToDismissBoxState(
+                        initialValue = SwipeToDismissBoxValue.Settled,
+                    )
+
                 LaunchedEffect(dismissState.currentValue) {
                     if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
-                        openRemoveDialog.value = item
-                        dismissState.snapTo(SwipeToDismissBoxValue.Settled)
+                        openRemoveDialog.value = item to dismissState
                     }
                 }
-                if (openRemoveDialog.value == null) LaunchedEffect(Unit) { dismissState.reset() }
+
                 SwipeToDismissBox(
                     state = dismissState,
                     enableDismissFromStartToEnd = false,
@@ -192,12 +199,17 @@ fun RegularTransactionListScreen(
         dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
         confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
         onConfirm = {
-            openRemoveDialog.value?.let { transactionToDelete ->
-                onDeleteTransactionConfirmClicked(transactionToDelete)
-                openRemoveDialog.value = null
+            openRemoveDialog.value?.let { (transaction, _) ->
+                onDeleteTransactionConfirmClicked(transaction)
             }
+            openRemoveDialog.value = null
         },
-        onDismiss = { openRemoveDialog.value = null },
+        onDismiss = {
+            openRemoveDialog.value?.let { (_, state) ->
+                coroutineScope.launch { state.reset() }
+            }
+            openRemoveDialog.value = null
+        },
     )
 }
 
