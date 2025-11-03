@@ -80,8 +80,8 @@ fun CurrencyListScreen(
         },
     ) { padding ->
         if (currencyUiState.isLoading) {
-            Box(modifier = modifier.fillMaxSize()) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            Box(modifier = modifier.fillMaxSize().padding(padding)) {
+                CircularProgressIndicator(modifier = modifier.align(Alignment.Center))
             }
         }
         when (currencyUiState) {

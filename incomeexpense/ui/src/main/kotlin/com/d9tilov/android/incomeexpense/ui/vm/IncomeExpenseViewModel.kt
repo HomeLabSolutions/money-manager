@@ -44,6 +44,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -383,9 +384,8 @@ class IncomeExpenseViewModel
                     Timber.tag(TAG).d("Delete: $exception")
                 }
             viewModelScope.launch(deleteTransactionExceptionHandler + ioDispatcher) {
-                transactionInteractor
-                    .getTransactionById(transaction.id)
-                    .collect { tr -> transactionInteractor.removeTransaction(tr) }
+                val tr = transactionInteractor.getTransactionById(transaction.id).first()
+                transactionInteractor.removeTransaction(tr)
             }
         }
 

@@ -40,6 +40,7 @@ import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
@@ -277,7 +278,8 @@ fun TransactionListLayout(
     if (lazyTransactionItems.loadState.refresh is LoadState.Error) {
         // handle error
     }
-    val openRemoveDialog = remember { mutableStateOf<TransactionUiModel?>(null) }
+    val openRemoveDialog = remember { mutableStateOf<Pair<TransactionUiModel, SwipeToDismissBoxState>?>(null) }
+    val coroutineScope = rememberCoroutineScope()
     LazyColumn(modifier = modifier, state = listState) {
         for (index in 0 until lazyTransactionItems.itemCount) {
             val currentItem = lazyTransactionItems.peek(index)
@@ -296,16 +298,15 @@ fun TransactionListLayout(
                         }
                     }
                 } else {
-                    item(key = index) {
+                    item(key = (currentItem as TransactionUiModel).id) {
                         val item = lazyTransactionItems[index] as TransactionUiModel
-                        val dismissState = rememberSwipeToDismissBoxState()
+                        val dismissState = rememberSwipeToDismissBoxState(SwipeToDismissBoxValue.Settled)
                         LaunchedEffect(dismissState.currentValue) {
                             if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
-                                openRemoveDialog.value = item
-                                dismissState.snapTo(SwipeToDismissBoxValue.Settled)
+                                openRemoveDialog.value = item to dismissState
                             }
                         }
-                        if (openRemoveDialog.value == null) LaunchedEffect(Unit) { dismissState.reset() }
+
                         SwipeToDismissBox(
                             state = dismissState,
                             enableDismissFromStartToEnd = false,
@@ -375,12 +376,17 @@ fun TransactionListLayout(
         dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
         confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
         onConfirm = {
-            openRemoveDialog.value?.let { transactionToDelete ->
-                onDeleteTransactionConfirmClicked(transactionToDelete)
-                openRemoveDialog.value = null
+            openRemoveDialog.value?.let { (transaction, _) ->
+                onDeleteTransactionConfirmClicked(transaction)
             }
+            openRemoveDialog.value = null
         },
-        onDismiss = { openRemoveDialog.value = null },
+        onDismiss = {
+            openRemoveDialog.value?.let { (_, state) ->
+                coroutineScope.launch { state.reset() }
+            }
+            openRemoveDialog.value = null
+        },
     )
 }
 
