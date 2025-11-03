@@ -1,7 +1,16 @@
 package com.d9tilov.android.category.ui
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +20,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -193,57 +202,81 @@ fun CategoryCreationScreen(
                     tint = Color(ContextCompat.getColor(context, uiState.category.color)),
                 )
             }
-            if (colorListShow) {
-                val colorList = ColorManager.colorList
-                val state = rememberLazyListState()
-                val coroutineScope = rememberCoroutineScope()
-                LazyRow(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                vertical =
-                                    dimensionResource(
-                                        id = com.d9tilov.android.designsystem.R.dimen.padding_large,
-                                    ),
-                            ),
-                    state = state,
-                ) {
-                    items(items = colorList, key = { item -> item }) { colorRes ->
-                        val isSelected = colorRes == uiState.category.color
-                        ColorListSelectorItem(
-                            size =
+            AnimatedContent(
+                targetState = colorListShow,
+                transitionSpec = {
+                    val fadeInDuration = 300
+                    val fadeOutDuration = 200
+                    fadeIn(animationSpec = tween(fadeInDuration))
+                        .togetherWith(fadeOut(animationSpec = tween(fadeOutDuration)))
+                },
+                label = "color_picker_animation",
+            ) { showList ->
+                if (showList) {
+                    val colorList = ColorManager.colorList
+                    val state = rememberLazyListState()
+                    val coroutineScope = rememberCoroutineScope()
+                    val selectedIndex = colorList.indexOfFirst { it == uiState.category.color }
+                    LazyRow(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    vertical =
+                                        dimensionResource(
+                                            id = com.d9tilov.android.designsystem.R.dimen.padding_large,
+                                        ),
+                                ),
+                        state = state,
+                    ) {
+                        itemsIndexed(items = colorList, key = { _, item -> item }) { index, colorRes ->
+                            val isSelected = colorRes == uiState.category.color
+                            val distance = kotlin.math.abs(index - selectedIndex)
+                            val pickerSize =
                                 dimensionResource(
                                     id = com.d9tilov.android.common.android.R.dimen.item_color_picker_size,
-                                ),
-                            color = colorRes,
-                            selected = isSelected,
-                            onClick = {
-                                onCategoryUpdated(uiState.category.copy(color = colorRes))
-                                colorListShow = !colorListShow
-                            },
-                        )
+                                )
+                            AnimatedColorListItem(
+                                size = pickerSize,
+                                color = colorRes,
+                                selected = isSelected,
+                                visible = showList,
+                                animationDelay = distance * 30,
+                                onClick = { color ->
+                                    onCategoryUpdated(uiState.category.copy(color = color))
+                                    colorListShow = !colorListShow
+                                },
+                            )
+                        }
                     }
+                    LaunchedEffect(showList) {
+                        if (showList && selectedIndex > 0) {
+                            coroutineScope.launch { state.scrollToItem(selectedIndex - 1) }
+                        }
+                    }
+                } else {
+                    val paddingLarge =
+                        dimensionResource(
+                            id = com.d9tilov.android.designsystem.R.dimen.padding_large,
+                        )
+                    val pickerSize =
+                        dimensionResource(
+                            id = com.d9tilov.android.common.android.R.dimen.item_color_picker_size,
+                        )
+                    OutlineCircle(
+                        modifier =
+                            Modifier.padding(
+                                horizontal = paddingLarge,
+                                vertical = paddingLarge,
+                            ),
+                        size = pickerSize,
+                        color = Color(ContextCompat.getColor(context, uiState.category.color)),
+                        onClick = {
+                            colorListShow = !colorListShow
+                            onColorClicked()
+                        },
+                    )
                 }
-                LaunchedEffect(true) {
-                    val checkedIndex = colorList.indexOfFirst { it == uiState.category.color }
-                    if (checkedIndex <= 0) return@LaunchedEffect
-                    coroutineScope.launch { state.scrollToItem(checkedIndex - 1) }
-                }
-            } else {
-                OutlineCircle(
-                    modifier =
-                        Modifier.padding(
-                            horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                            vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                        ),
-                    size = dimensionResource(id = com.d9tilov.android.common.android.R.dimen.item_color_picker_size),
-                    color = Color(ContextCompat.getColor(context, uiState.category.color)),
-                    onClick = {
-                        colorListShow = !colorListShow
-                        onColorClicked()
-                    },
-                )
             }
             Spacer(modifier = Modifier.weight(1f))
             BottomActionButton(
@@ -254,6 +287,60 @@ fun CategoryCreationScreen(
                 onClick = onSaveClicked,
             )
         }
+    }
+}
+
+@Composable
+private fun AnimatedColorListItem(
+    size: Dp,
+    color: Int,
+    selected: Boolean,
+    visible: Boolean,
+    animationDelay: Int,
+    onClick: (Int) -> Unit,
+) {
+    var itemVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(visible) {
+        if (visible) {
+            kotlinx.coroutines.delay(animationDelay.toLong())
+            itemVisible = true
+        } else {
+            itemVisible = false
+        }
+    }
+
+    val scale by animateFloatAsState(
+        targetValue = if (itemVisible) 1f else 0f,
+        animationSpec =
+            spring(
+                dampingRatio = Spring.DampingRatioMediumBouncy,
+                stiffness = Spring.StiffnessLow,
+            ),
+        label = "color_item_scale",
+    )
+
+    val alpha by animateFloatAsState(
+        targetValue = if (itemVisible) 1f else 0f,
+        animationSpec = tween(durationMillis = 200),
+        label = "color_item_alpha",
+    )
+
+    Box(
+        modifier =
+            Modifier
+                .graphicsLayer {
+                    scaleX = scale
+                    scaleY = scale
+                    this.alpha = alpha
+                },
+    ) {
+        ColorListSelectorItem(
+            size = size,
+            color = color,
+            selected = selected,
+            onClick = onClick,
+        )
     }
 }
 
