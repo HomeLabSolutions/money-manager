@@ -46,7 +46,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -255,8 +254,7 @@ fun RegularTransactionItem(
                             Modifier
                                 .padding(start = 16.dp),
                         text = transaction.category.name,
-                        style = MaterialTheme.typography.displayLarge,
-                        fontSize = dimensionResource(id = R.dimen.regular_transaction_category_name_text_size).value.sp,
+                        style = MaterialTheme.typography.titleLarge,
                         maxLines = 1,
                         color = Color(ContextCompat.getColor(context, transaction.category.color)),
                         overflow = TextOverflow.Ellipsis,

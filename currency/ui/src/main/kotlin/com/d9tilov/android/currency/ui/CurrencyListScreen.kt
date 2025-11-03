@@ -53,7 +53,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.core.constants.DataConstants.TAG
@@ -314,7 +313,7 @@ fun CurrencyItem(
                     Modifier
                         .align(Alignment.CenterVertically)
                         .padding(horizontal = 16.dp),
-                fontSize = 30.sp,
+                style = MaterialTheme.typography.headlineMedium,
             )
             Column(
                 modifier =

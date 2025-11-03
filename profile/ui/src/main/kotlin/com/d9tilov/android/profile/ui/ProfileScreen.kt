@@ -38,7 +38,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -333,12 +332,8 @@ fun ProfileSection(
                                 start.linkTo(idTitle.end)
                             },
                     style =
-                        MaterialTheme.typography.titleMedium
+                        MaterialTheme.typography.titleSmall
                             .copy(
-                                fontSize =
-                                    dimensionResource(
-                                        com.d9tilov.android.designsystem.R.dimen.currency_extra_small_text_size,
-                                    ).value.sp,
                                 color = MaterialTheme.colorScheme.tertiary,
                             ),
                 )
@@ -372,8 +367,7 @@ fun ProfileSection(
                                 shape = RoundedCornerShape(50),
                             ).padding(all = 8.dp),
                     style =
-                        MaterialTheme.typography.labelMedium.copy(
-                            fontSize = dimensionResource(R.dimen.billing_premium_label_text_size).value.sp,
+                        MaterialTheme.typography.labelSmall.copy(
                             color = textColor,
                         ),
                     text = text,
