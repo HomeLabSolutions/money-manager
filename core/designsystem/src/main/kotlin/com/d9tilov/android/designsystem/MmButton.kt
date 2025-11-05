@@ -327,7 +327,7 @@ fun TextButton(
  *
  * @param text The button text label content.
  * @param leadingIcon The button leading icon content. Pass `null` here for no leading icon.
- * @param trailingIcon The button trailing icon content. Pass `null` here for no trailing icon.
+ * @param trailingIcon The button trailing icon content. Pass `null` here for no leading icon.
  */
 @Composable
 private fun RowScope.ButtonContent(

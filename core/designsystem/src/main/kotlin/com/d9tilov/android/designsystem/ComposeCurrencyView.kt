@@ -1,5 +1,11 @@
 package com.d9tilov.android.designsystem
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -12,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.d9tilov.android.core.constants.CurrencyConstants
 
 @Composable
@@ -32,20 +39,28 @@ fun ComposeCurrencyView(
         Text(
             modifier =
                 Modifier
-                    .alignByBaseline()
-                    .padding(end = dimensionResource(id = (R.dimen.padding_extra_small))),
+                    .padding(bottom = 2.dp, end = dimensionResource(id = (R.dimen.padding_extra_small))),
             text = symbol,
             color = symbolColor,
             style = symbolStyle,
             maxLines = 1,
         )
-        Text(
-            modifier = Modifier.alignByBaseline(),
-            text = value,
-            color = valueColor,
-            style = valueStyle,
-            maxLines = 1,
-        )
+
+        AnimatedContent(
+            targetState = value,
+            transitionSpec = {
+                fadeIn(animationSpec = spring(stiffness = Spring.StiffnessHigh))
+                    .togetherWith(fadeOut(animationSpec = spring(stiffness = Spring.StiffnessHigh)))
+            },
+            label = "currency_value_animation",
+        ) { animatedValue ->
+            Text(
+                text = animatedValue,
+                color = valueColor,
+                style = valueStyle,
+                maxLines = 1,
+            )
+        }
     }
 }
 
