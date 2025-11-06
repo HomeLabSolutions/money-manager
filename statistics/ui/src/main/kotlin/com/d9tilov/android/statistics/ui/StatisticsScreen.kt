@@ -46,7 +46,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -236,7 +235,7 @@ fun StatisticsMenuSelector(
                 Modifier
                     .size(dimensionResource(R.dimen.statistics_menu_item_icon_size))
                     .clickable { onClick(StatisticsMenuType.CURRENCY) },
-            fontSize = 30.sp,
+            style = MaterialTheme.typography.headlineMedium,
         )
         StatisticMenuIcon(state.chartType.iconId) { onClick(StatisticsMenuType.CHART) }
         StatisticMenuIcon(state.transactionType.iconId) { onClick(StatisticsMenuType.TRANSACTION_TYPE) }

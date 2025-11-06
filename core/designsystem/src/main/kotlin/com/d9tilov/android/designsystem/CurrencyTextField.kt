@@ -20,14 +20,12 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.ParagraphIntrinsics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.createFontFamilyResolver
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.d9tilov.android.core.utils.reduceScaleStr
 import java.math.BigDecimal
 
@@ -61,9 +59,8 @@ fun CurrencyTextFieldSmall(
     currencyCode: String,
     isEditable: Boolean = false,
     style: TextStyle =
-        MaterialTheme.typography.bodyLarge
+        MaterialTheme.typography.titleMedium
             .copy(
-                fontSize = dimensionResource(R.dimen.currency_sum_small_text_size).value.sp,
                 color = MaterialTheme.colorScheme.primary,
             ),
     inputValueChanged: (String) -> Unit = {},
@@ -85,9 +82,8 @@ fun CurrencyTextFieldMedium(
     currencyCode: String,
     isEditable: Boolean = false,
     style: TextStyle =
-        MaterialTheme.typography.bodyLarge
+        MaterialTheme.typography.titleLarge
             .copy(
-                fontSize = dimensionResource(R.dimen.currency_sum_medium_text_size).value.sp,
                 color = MaterialTheme.colorScheme.primary,
             ),
     inputValueChanged: (String) -> Unit = {},
@@ -109,9 +105,8 @@ fun CurrencyTextFieldBig(
     currencyCode: String,
     isEditable: Boolean = false,
     style: TextStyle =
-        MaterialTheme.typography.bodyLarge
+        MaterialTheme.typography.headlineMedium
             .copy(
-                fontSize = dimensionResource(R.dimen.currency_sum_big_text_size).value.sp,
                 color = MaterialTheme.colorScheme.primary,
             ),
     inputValueChanged: (String) -> Unit = {},
@@ -133,9 +128,8 @@ fun CurrencyTextFieldExtraBig(
     currencyCode: String,
     isEditable: Boolean = false,
     style: TextStyle =
-        MaterialTheme.typography.bodyLarge
+        MaterialTheme.typography.headlineLarge
             .copy(
-                fontSize = dimensionResource(R.dimen.currency_sum_extra_big_text_size).value.sp,
                 color = MaterialTheme.colorScheme.primary,
             ),
     inputValueChanged: (String) -> Unit = {},
