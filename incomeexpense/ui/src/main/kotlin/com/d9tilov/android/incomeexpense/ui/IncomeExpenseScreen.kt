@@ -3,7 +3,9 @@ package com.d9tilov.android.incomeexpense.ui
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.BorderStroke
@@ -43,7 +45,6 @@ import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.material3.ripple
@@ -61,6 +62,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
@@ -109,9 +111,12 @@ import com.d9tilov.android.incomeexpense.ui.vm.toScreenType
 import com.d9tilov.android.transaction.ui.TransactionItem
 import com.d9tilov.android.transaction.ui.model.BaseTransaction
 import com.d9tilov.android.transaction.ui.model.TransactionUiModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
+
+private const val KEYBOARD_BUTTON_ANIMATION_DELAY_MS = 150L
 
 @Composable
 fun IncomeExpenseRoute(
@@ -233,8 +238,9 @@ fun MainPriceInput(
     Surface(
         modifier = modifier,
         onClick = onCurrencyClicked,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-        shape = RoundedCornerShape(50),
+        border = BorderStroke(2.dp, MaterialTheme.colorScheme.primary),
+        shape = RoundedCornerShape(24.dp),
+        tonalElevation = 1.dp,
     ) {
         Box(
             modifier = Modifier.fillMaxWidth(),
@@ -559,32 +565,11 @@ fun KeyBoardLayout(
         ) {
             items(data, key = { it.hashCode() }) { item ->
                 val keyPress = item.toKeyPress() ?: return@items
-                Surface(
-                    modifier =
-                        Modifier.clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = ripple(bounded = false, radius = 20.dp),
-                        ) { onNumberClicked(keyPress) },
-                    shape = CircleShape,
-                    color = Color.Transparent,
-                ) {
-                    if (keyPress == KeyPress.Del) {
-                        Icon(
-                            imageVector = MoneyManagerIcons.BackSpace,
-                            contentDescription = "BackSpace",
-                            tint = MaterialTheme.colorScheme.primary,
-                        )
-                    } else {
-                        Text(
-                            text = item,
-                            style =
-                                MaterialTheme.typography.headlineMedium.copy(
-                                    color = MaterialTheme.colorScheme.primary,
-                                    textAlign = TextAlign.Center,
-                                ),
-                        )
-                    }
-                }
+                AnimatedKeyboardButton(
+                    keyPress = keyPress,
+                    item = item,
+                    onNumberClicked = onNumberClicked,
+                )
             }
         }
         Icon(
@@ -597,6 +582,65 @@ fun KeyBoardLayout(
             tint = MaterialTheme.colorScheme.secondary,
             contentDescription = "HideKeyboard",
         )
+    }
+}
+
+@Composable
+fun AnimatedKeyboardButton(
+    keyPress: KeyPress,
+    item: String,
+    onNumberClicked: (KeyPress) -> Unit,
+) {
+    var isPressed by remember { mutableStateOf(false) }
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 1.2f else 1f,
+        animationSpec =
+            spring(
+                dampingRatio = Spring.DampingRatioMediumBouncy,
+                stiffness = Spring.StiffnessLow,
+            ),
+        label = "keyboard_button_scale",
+    )
+
+    Surface(
+        modifier =
+            Modifier
+                .graphicsLayer {
+                    scaleX = scale
+                    scaleY = scale
+                }.clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = ripple(bounded = false, radius = 20.dp),
+                ) {
+                    isPressed = true
+                    onNumberClicked(keyPress)
+                },
+        shape = CircleShape,
+        color = Color.Transparent,
+    ) {
+        if (keyPress == KeyPress.Del) {
+            Icon(
+                imageVector = MoneyManagerIcons.BackSpace,
+                contentDescription = "BackSpace",
+                tint = MaterialTheme.colorScheme.primary,
+            )
+        } else {
+            Text(
+                text = item,
+                style =
+                    MaterialTheme.typography.headlineMedium.copy(
+                        color = MaterialTheme.colorScheme.primary,
+                        textAlign = TextAlign.Center,
+                    ),
+            )
+        }
+    }
+
+    LaunchedEffect(isPressed) {
+        if (isPressed) {
+            delay(KEYBOARD_BUTTON_ANIMATION_DELAY_MS)
+            isPressed = false
+        }
     }
 }
 
@@ -642,7 +686,7 @@ fun InfoLabelTitle(
     Box(
         modifier =
             modifier
-                .clip(RoundedCornerShape(50))
+                .clip(RoundedCornerShape(12.dp))
                 .background(MaterialTheme.colorScheme.primary),
     ) {
         Text(
