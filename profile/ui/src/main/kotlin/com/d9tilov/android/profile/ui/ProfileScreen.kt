@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -163,8 +162,8 @@ fun ProfileCard(userProfile: UserUiProfile) {
                     .padding(top = 32.dp, bottom = 4.dp, start = 16.dp, end = 16.dp)
                     .fillMaxWidth()
                     .wrapContentHeight(align = Alignment.Top),
-            elevation = CardDefaults.cardElevation(8.dp),
-            shape = CutCornerShape(topEnd = 24.dp),
+            elevation = CardDefaults.cardElevation(2.dp),
+            shape = RoundedCornerShape(20.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {

@@ -266,7 +266,7 @@ fun SubscriptionLayout(
 ) {
     Card(
         modifier = modifier.clickable { onClick() },
-        elevation = CardDefaults.cardElevation(8.dp),
+        elevation = CardDefaults.cardElevation(2.dp),
         shape = RoundedCornerShape(dimensionResource(com.d9tilov.android.designsystem.R.dimen.card_view_corner_radius)),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
     ) {
