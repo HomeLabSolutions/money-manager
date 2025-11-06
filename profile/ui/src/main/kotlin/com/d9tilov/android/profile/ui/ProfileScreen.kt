@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -38,7 +37,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -164,8 +162,8 @@ fun ProfileCard(userProfile: UserUiProfile) {
                     .padding(top = 32.dp, bottom = 4.dp, start = 16.dp, end = 16.dp)
                     .fillMaxWidth()
                     .wrapContentHeight(align = Alignment.Top),
-            elevation = CardDefaults.cardElevation(8.dp),
-            shape = CutCornerShape(topEnd = 24.dp),
+            elevation = CardDefaults.cardElevation(2.dp),
+            shape = RoundedCornerShape(20.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -333,12 +331,8 @@ fun ProfileSection(
                                 start.linkTo(idTitle.end)
                             },
                     style =
-                        MaterialTheme.typography.titleMedium
+                        MaterialTheme.typography.titleSmall
                             .copy(
-                                fontSize =
-                                    dimensionResource(
-                                        com.d9tilov.android.designsystem.R.dimen.currency_extra_small_text_size,
-                                    ).value.sp,
                                 color = MaterialTheme.colorScheme.tertiary,
                             ),
                 )
@@ -372,8 +366,7 @@ fun ProfileSection(
                                 shape = RoundedCornerShape(50),
                             ).padding(all = 8.dp),
                     style =
-                        MaterialTheme.typography.labelMedium.copy(
-                            fontSize = dimensionResource(R.dimen.billing_premium_label_text_size).value.sp,
+                        MaterialTheme.typography.labelSmall.copy(
                             color = textColor,
                         ),
                     text = text,

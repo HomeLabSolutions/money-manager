@@ -39,7 +39,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.designsystem.BottomActionButton
@@ -267,7 +266,7 @@ fun SubscriptionLayout(
 ) {
     Card(
         modifier = modifier.clickable { onClick() },
-        elevation = CardDefaults.cardElevation(8.dp),
+        elevation = CardDefaults.cardElevation(2.dp),
         shape = RoundedCornerShape(dimensionResource(com.d9tilov.android.designsystem.R.dimen.card_view_corner_radius)),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
     ) {
@@ -301,7 +300,6 @@ fun SubscriptionTitle(title: String) {
         style =
             MaterialTheme.typography.headlineMedium.copy(
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
-                fontSize = dimensionResource(R.dimen.settings_subscription_title_text_size).value.sp,
             ),
     )
 }

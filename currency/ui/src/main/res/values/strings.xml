@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="title_prepopulate_currency">Choose currency</string>
+    <string name="search_currency_hint">Search currency…</string>
+    <string name="close_search_description">Close search</string>
 </resources>

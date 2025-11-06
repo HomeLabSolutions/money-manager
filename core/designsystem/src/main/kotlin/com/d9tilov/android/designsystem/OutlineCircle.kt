@@ -29,14 +29,14 @@ fun OutlineCircle(
         modifier =
             modifier
                 .size(size)
-                .padding(1.dp)
+                .padding(2.dp)
                 .clip(CircleShape)
                 .background(color)
                 .clickable { onClick(color) }
                 .then(
                     if (showOutline) {
                         Modifier
-                            .border(2.dp, MaterialTheme.colorScheme.secondary, CircleShape)
+                            .border(3.dp, MaterialTheme.colorScheme.primary, CircleShape)
                     } else {
                         Modifier
                     },

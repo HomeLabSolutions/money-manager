@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="title_prepopulate_currency">Выберите валюту</string>
+    <string name="search_currency_hint">Поиск валюты…</string>
+    <string name="close_search_description">Закрыть поиск</string>
 </resources>
