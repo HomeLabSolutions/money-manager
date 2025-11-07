@@ -1,7 +1,7 @@
 [versions]
 accompanist = "0.37.3"
 activity = "1.11.0"
-androidxComposeBom="2025.10.01"
+androidxComposeBom="2025.11.00"
 appCompat = "1.7.1"
 autonomousappsSorting = "0.15"
 autonomousappsUnused = "3.4.1"
