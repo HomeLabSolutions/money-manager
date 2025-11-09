@@ -119,11 +119,8 @@ class TransactionInteractorImpl @Inject constructor(
                                 if (currencyCode == DEFAULT_CURRENCY_CODE) {
                                     item.usdSum
                                 } else {
-                                    currencyInteractor.toTargetCurrency(
-                                        item.sum,
-                                        item.currencyCode,
-                                        currencyInteractor.getMainCurrency().code,
-                                    )
+                                    val trCurrency = currencyInteractor.getCurrencyByCode(currencyCode)
+                                    trCurrency.value.multiply(item.usdSum)
                                 },
                             )
                         }
@@ -262,7 +259,7 @@ class TransactionInteractorImpl @Inject constructor(
             flow { emit(userInteractor.getFiscalDay()) }.map { fiscalDay ->
                 currentDateTime().countDaysRemainingNextFiscalDate(fiscalDay).toBigDecimal()
             }
-        val numeratorFlow = getNumerator()
+        val numeratorFlow: Flow<BigDecimal> = getNumerator()
         val expensesPerCurrentDayFlow = getExpensesPerCurrentDay()
 
         return combine(
@@ -498,13 +495,15 @@ class TransactionInteractorImpl @Inject constructor(
                 onlyInStatistics = inStatistics,
                 withRegular = true,
             ).map { list ->
-                list.sumOf {
-                    currencyInteractor.toTargetCurrency(
-                        it.sum,
-                        it.currencyCode,
-                        currencyCode,
-                    )
-                }
+                list
+                    .sumOf { tr ->
+                        if (tr.currencyCode == currencyCode) {
+                            tr.sum
+                        } else {
+                            val trCurrency = currencyInteractor.getCurrencyByCode(currencyCode)
+                            trCurrency.value.multiply(tr.usdSum)
+                        }
+                    }
             }
 
     override fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<BigDecimal> =
