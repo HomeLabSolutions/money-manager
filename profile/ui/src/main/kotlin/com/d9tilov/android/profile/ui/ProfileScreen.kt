@@ -393,8 +393,6 @@ fun ProfileSection(
                 Modifier
                     .padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium))
                     .constrainAs(idDivider) { bottom.linkTo(parent.bottom) },
-            thickness = 1.dp,
-            color = MaterialTheme.colorScheme.primaryContainer,
         )
     }
 }
