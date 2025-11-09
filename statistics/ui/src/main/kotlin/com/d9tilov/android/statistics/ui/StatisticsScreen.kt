@@ -54,7 +54,6 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.constants.CurrencyConstants
-import com.d9tilov.android.core.constants.UiConstants.ALPHA
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
@@ -451,7 +450,7 @@ fun TransactionStatisticsItem(
         modifier =
             modifier
                 .height(72.dp)
-                .padding(horizontal = 32.dp),
+                .padding(horizontal = 16.dp),
     ) {
         val (idIcon, idTitle, idSum, progress, idDivider) = createRefs()
         Icon(
@@ -521,11 +520,8 @@ fun TransactionStatisticsItem(
             )
         }
         HorizontalDivider(
-            color = MaterialTheme.colorScheme.primary,
-            thickness = 1.dp,
             modifier =
                 Modifier
-                    .alpha(ALPHA)
                     .constrainAs(idDivider) {
                         end.linkTo(parent.end)
                         bottom.linkTo(parent.bottom)
