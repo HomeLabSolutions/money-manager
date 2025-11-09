@@ -4,6 +4,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,7 +38,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -82,6 +85,7 @@ import com.d9tilov.android.statistics.ui.vm.StatisticsViewModel
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
 import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
+import kotlin.math.abs
 
 private const val ANIMATION_DURATION = 300
 private const val PIE_CHART_WEIGHT = 3f
@@ -134,34 +138,13 @@ fun StatisticsScreen(
         )
         StatisticsMenuSelector(state = state.statisticsMenuState, onClick = onMenuClick)
 
-        Column(modifier = Modifier.weight(PIE_CHART_WEIGHT)) {
-            Spacer(modifier = Modifier.weight(1f))
-
-            var selectedIndex by remember { mutableIntStateOf(-1) }
-            StatisticsChart(
-                Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                periodUiState = state.periodState,
-                periodStr =
-                    if (state.periodState.selectedPeriod is StatisticsPeriodModel.DAY) {
-                        state.periodState.selectedPeriod.from
-                            .toStandardStringDate()
-                    } else {
-                        "${state.periodState.selectedPeriod.from.toStandardStringDate()} " +
-                            "- ${state.periodState.selectedPeriod.to.toStandardStringDate()}"
-                    },
-                pieData =
-                    state.chartState.pieData.mapIndexed { index, pie ->
-                        pie.copy(selected = index == selectedIndex)
-                    },
-                { selectedIndex = it },
-                onPrevClicked,
-                onNextClicked,
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-        }
+        StatisticsChartWithSwipe(
+            modifier = Modifier.weight(PIE_CHART_WEIGHT),
+            periodState = state.periodState,
+            pieData = state.chartState.pieData,
+            onPrevClicked = onPrevClicked,
+            onNextClicked = onNextClicked,
+        )
 
         StatisticsList(
             modifier = Modifier.weight(2f),
@@ -192,6 +175,70 @@ fun StatisticsScreen(
         )
     }
 }
+
+@Composable
+private fun StatisticsChartWithSwipe(
+    modifier: Modifier = Modifier,
+    periodState: PeriodUiState,
+    pieData: List<Pie>,
+    onPrevClicked: () -> Unit,
+    onNextClicked: () -> Unit,
+) {
+    val density = LocalDensity.current
+    val showPrevArrow = periodState.showPrevArrow
+    val showNextArrow = periodState.showNextArrow
+    val swipeThreshold = with(density) { 36.dp.toPx() }
+    Column(
+        modifier =
+            modifier
+                .pointerInput(showPrevArrow, showNextArrow, swipeThreshold) {
+                    var totalDrag = 0f
+
+                    detectHorizontalDragGestures(
+                        onDragEnd = {
+                            if (abs(totalDrag) >= swipeThreshold) {
+                                if (totalDrag > 0 && showPrevArrow) {
+                                    onPrevClicked()
+                                } else if (totalDrag < 0 && showNextArrow) {
+                                    onNextClicked()
+                                }
+                            }
+                            totalDrag = 0f
+                        },
+                        onHorizontalDrag = { _, dragAmount ->
+                            totalDrag += dragAmount
+                        },
+                    )
+                },
+    ) {
+        Spacer(modifier = Modifier.weight(1f))
+
+        var selectedIndex by remember { mutableIntStateOf(-1) }
+        StatisticsChart(
+            Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            periodUiState = periodState,
+            periodStr = getPeriodString(periodState.selectedPeriod),
+            pieData =
+                pieData.mapIndexed { index, pie ->
+                    pie.copy(selected = index == selectedIndex)
+                },
+            { selectedIndex = it },
+            onPrevClicked,
+            onNextClicked,
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+    }
+}
+
+private fun getPeriodString(period: StatisticsPeriodModel): String =
+    if (period is StatisticsPeriodModel.DAY) {
+        period.from.toStandardStringDate()
+    } else {
+        "${period.from.toStandardStringDate()} - ${period.to.toStandardStringDate()}"
+    }
 
 @Composable
 fun StatisticsPeriodSelector(
