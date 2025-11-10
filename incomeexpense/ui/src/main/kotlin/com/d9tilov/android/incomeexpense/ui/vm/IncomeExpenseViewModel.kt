@@ -13,6 +13,7 @@ import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.common.android.location.LocationProvider
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
@@ -141,6 +142,7 @@ class IncomeExpenseViewModel
         private val currencyInteractor: CurrencyInteractor,
         private val categoryInteractor: CategoryInteractor,
         private val transactionInteractor: TransactionInteractor,
+        private val locationProvider: LocationProvider,
     ) : ViewModel() {
         private val uiState = MutableStateFlow(IncomeExpenseUiState.EMPTY)
         val uiStateFlow = uiState.asStateFlow()
@@ -333,6 +335,7 @@ class IncomeExpenseViewModel
             uiState.value.run {
                 viewModelScope.launch(ioDispatcher) {
                     val category = categoryInteractor.getCategoryById(categoryId)
+                    val location = locationProvider.getCurrentLocation()
                     transactionInteractor.addTransaction(
                         Transaction.EMPTY.copy(
                             sum = price.value.toBigDecimal(),
@@ -340,6 +343,8 @@ class IncomeExpenseViewModel
                             currencyCode = price.currencyCode,
                             date = currentDateTime(),
                             type = category.type,
+                            latitude = location.latitude,
+                            longitude = location.longitude,
                         ),
                     )
                 }

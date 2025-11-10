@@ -23,8 +23,10 @@ dependencies {
     implementation(libs.core)
     implementation(libs.hilt.android)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.play.services)
     implementation(libs.navigation.common)
     implementation(libs.navigation.runtime)
+    implementation(libs.play.services.location)
     implementation(libs.timber)
 
     ksp(libs.hilt.ext.compiler)
