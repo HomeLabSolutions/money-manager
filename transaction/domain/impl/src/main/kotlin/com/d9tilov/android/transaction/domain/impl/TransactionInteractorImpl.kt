@@ -107,7 +107,7 @@ class TransactionInteractorImpl @Inject constructor(
                 transactionRepo
                     .getTransactionsByTypeInPeriod(from, to, type, inStatistics)
                     .map {
-                        it.map { item ->
+                        it.map { item: TransactionDataModel ->
                             val category =
                                 categoryList.find { listItem -> item.categoryId == listItem.id }
                                     ?: throw CategoryException.CategoryNotFoundException(
@@ -116,12 +116,7 @@ class TransactionInteractorImpl @Inject constructor(
                             item.toChartModel(
                                 category,
                                 currencyCode,
-                                if (currencyCode == DEFAULT_CURRENCY_CODE) {
-                                    item.usdSum
-                                } else {
-                                    val trCurrency = currencyInteractor.getCurrencyByCode(currencyCode)
-                                    trCurrency.value.multiply(item.usdSum)
-                                },
+                                getItemSumBaseOnCurrency(currencyCode, item),
                             )
                         }
                     }.map { list ->
@@ -154,6 +149,21 @@ class TransactionInteractorImpl @Inject constructor(
                             }
                     }
             }
+
+    private suspend fun getItemSumBaseOnCurrency(
+        currencyCode: String,
+        item: TransactionDataModel,
+    ): BigDecimal =
+        if (currencyCode == DEFAULT_CURRENCY_CODE) {
+            item.usdSum
+        } else {
+            if (currencyCode == item.currencyCode) {
+                item.sum
+            } else {
+                val trCurrency = currencyInteractor.getCurrencyByCode(currencyCode)
+                trCurrency.value.multiply(item.usdSum)
+            }
+        }
 
     override fun getTransactionsGroupedByDate(
         type: TransactionType,

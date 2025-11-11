@@ -35,9 +35,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
@@ -380,11 +382,16 @@ fun ProfileSection(
             Text(
                 text = it,
                 modifier =
-                    Modifier.constrainAs(idSubtitle) {
-                        start.linkTo(idTitle.start)
-                        top.linkTo(idTitle.bottom)
-                        bottom.linkTo(idDivider.top)
-                    },
+                    Modifier
+                        .constrainAs(idSubtitle) {
+                            start.linkTo(idTitle.start)
+                            end.linkTo(parent.end)
+                            top.linkTo(idTitle.bottom)
+                            bottom.linkTo(idDivider.top)
+                            width = Dimension.fillToConstraints
+                        }.padding(end = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.tertiary),
             )
         }
@@ -404,12 +411,198 @@ data class ProfileItemData(
     val data: String? = null,
 )
 
+private const val PREVIEW_USER_ID = "user123"
+private const val PREVIEW_CURRENCY = "EUR"
+private const val PREVIEW_DATE_JAN_01 = "2024-01-01T00:00:00"
+private const val PREVIEW_DATE_JAN_05 = "2024-01-05T00:00:00"
+private const val PREVIEW_DATE_JAN_10 = "2024-01-10T00:00:00"
+private const val PREVIEW_DATE_JAN_15 = "2024-01-15T00:00:00"
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreviewProfile() {
     ProfileScreen(
         modifier = Modifier,
-        ProfileUiState(userProfile = UserUiProfile()),
+        ProfileUiState(
+            userProfile =
+                UserUiProfile(
+                    name = "John Doe",
+                    photo = null,
+                ),
+            currency = ProfileUiItem.CurrencyUiItem(currencyCode = PREVIEW_CURRENCY),
+            budgetData =
+                ProfileUiItem.BudgetUiItem(
+                    budgetData =
+                        com.d9tilov.android.budget.domain.model.BudgetData(
+                            id = 1L,
+                            clientId = PREVIEW_USER_ID,
+                            currencyCode = PREVIEW_CURRENCY,
+                            sum = java.math.BigDecimal("5000.00"),
+                            saveSum = java.math.BigDecimal("1200.00"),
+                            createdDate = kotlinx.datetime.LocalDateTime.parse("2024-01-15T10:30:00"),
+                        ),
+                ),
+            regularIncomes =
+                ProfileUiItem.RegularIncomeUiItem(
+                    regularIncomes =
+                        listOf(
+                            com.d9tilov.android.transaction.regular.domain.model.RegularTransaction(
+                                id = 1L,
+                                clientId = PREVIEW_USER_ID,
+                                currencyCode = PREVIEW_CURRENCY,
+                                type = com.d9tilov.android.core.model.TransactionType.INCOME,
+                                sum = java.math.BigDecimal("3500.00"),
+                                category =
+                                    com.d9tilov.android.category.domain.entity.Category.EMPTY_INCOME.copy(
+                                        id = 1L,
+                                        name = "Salary",
+                                    ),
+                                createdDate = kotlinx.datetime.LocalDateTime.parse(PREVIEW_DATE_JAN_01),
+                                executionPeriod =
+                                    com.d9tilov.android.core.model.ExecutionPeriod.EveryMonth(
+                                        dayOfMonth = 1,
+                                        lastExecDate = kotlinx.datetime.LocalDateTime.parse(PREVIEW_DATE_JAN_01),
+                                    ),
+                                description = "Monthly salary",
+                                pushEnabled = true,
+                                autoAdd = true,
+                            ),
+                            com.d9tilov.android.transaction.regular.domain.model.RegularTransaction(
+                                id = 2L,
+                                clientId = PREVIEW_USER_ID,
+                                currencyCode = PREVIEW_CURRENCY,
+                                type = com.d9tilov.android.core.model.TransactionType.INCOME,
+                                sum = java.math.BigDecimal("500.00"),
+                                category =
+                                    com.d9tilov.android.category.domain.entity.Category.EMPTY_INCOME.copy(
+                                        id = 2L,
+                                        name = "Freelance",
+                                    ),
+                                createdDate = kotlinx.datetime.LocalDateTime.parse(PREVIEW_DATE_JAN_01),
+                                executionPeriod =
+                                    com.d9tilov.android.core.model.ExecutionPeriod.EveryMonth(
+                                        dayOfMonth = 15,
+                                        lastExecDate = kotlinx.datetime.LocalDateTime.parse(PREVIEW_DATE_JAN_15),
+                                    ),
+                                description = "Side project",
+                                pushEnabled = true,
+                                autoAdd = false,
+                            ),
+                        ),
+                ),
+            regularExpenses =
+                ProfileUiItem.RegularExpenseUiItem(
+                    regularExpenses =
+                        listOf(
+                            com.d9tilov.android.transaction.regular.domain.model.RegularTransaction(
+                                id = 3L,
+                                clientId = PREVIEW_USER_ID,
+                                currencyCode = PREVIEW_CURRENCY,
+                                type = com.d9tilov.android.core.model.TransactionType.EXPENSE,
+                                sum = java.math.BigDecimal("1200.00"),
+                                category =
+                                    com.d9tilov.android.category.domain.entity.Category.EMPTY_EXPENSE.copy(
+                                        id = 3L,
+                                        name = "Rent",
+                                    ),
+                                createdDate = kotlinx.datetime.LocalDateTime.parse(PREVIEW_DATE_JAN_01),
+                                executionPeriod =
+                                    com.d9tilov.android.core.model.ExecutionPeriod.EveryMonth(
+                                        dayOfMonth = 5,
+                                        lastExecDate = kotlinx.datetime.LocalDateTime.parse(PREVIEW_DATE_JAN_05),
+                                    ),
+                                description = "Apartment rent",
+                                pushEnabled = true,
+                                autoAdd = true,
+                            ),
+                            com.d9tilov.android.transaction.regular.domain.model.RegularTransaction(
+                                id = 4L,
+                                clientId = PREVIEW_USER_ID,
+                                currencyCode = PREVIEW_CURRENCY,
+                                type = com.d9tilov.android.core.model.TransactionType.EXPENSE,
+                                sum = java.math.BigDecimal("50.00"),
+                                category =
+                                    com.d9tilov.android.category.domain.entity.Category.EMPTY_EXPENSE.copy(
+                                        id = 4L,
+                                        name = "Internet",
+                                    ),
+                                createdDate = kotlinx.datetime.LocalDateTime.parse(PREVIEW_DATE_JAN_01),
+                                executionPeriod =
+                                    com.d9tilov.android.core.model.ExecutionPeriod.EveryMonth(
+                                        dayOfMonth = 10,
+                                        lastExecDate = kotlinx.datetime.LocalDateTime.parse(PREVIEW_DATE_JAN_10),
+                                    ),
+                                description = "Home internet",
+                                pushEnabled = true,
+                                autoAdd = true,
+                            ),
+                            com.d9tilov.android.transaction.regular.domain.model.RegularTransaction(
+                                id = 5L,
+                                clientId = PREVIEW_USER_ID,
+                                currencyCode = PREVIEW_CURRENCY,
+                                type = com.d9tilov.android.core.model.TransactionType.EXPENSE,
+                                sum = java.math.BigDecimal("80.00"),
+                                category =
+                                    com.d9tilov.android.category.domain.entity.Category.EMPTY_EXPENSE.copy(
+                                        id = 5L,
+                                        name = "Gym",
+                                    ),
+                                createdDate = kotlinx.datetime.LocalDateTime.parse(PREVIEW_DATE_JAN_01),
+                                executionPeriod =
+                                    com.d9tilov.android.core.model.ExecutionPeriod.EveryMonth(
+                                        dayOfMonth = 1,
+                                        lastExecDate = kotlinx.datetime.LocalDateTime.parse(PREVIEW_DATE_JAN_01),
+                                    ),
+                                description = "Monthly membership",
+                                pushEnabled = true,
+                                autoAdd = true,
+                            ),
+                            com.d9tilov.android.transaction.regular.domain.model.RegularTransaction(
+                                id = 6L,
+                                clientId = PREVIEW_USER_ID,
+                                currencyCode = PREVIEW_CURRENCY,
+                                type = com.d9tilov.android.core.model.TransactionType.EXPENSE,
+                                sum = java.math.BigDecimal("120.00"),
+                                category =
+                                    com.d9tilov.android.category.domain.entity.Category.EMPTY_EXPENSE.copy(
+                                        id = 6L,
+                                        name = "Phone",
+                                    ),
+                                createdDate = kotlinx.datetime.LocalDateTime.parse(PREVIEW_DATE_JAN_01),
+                                executionPeriod =
+                                    com.d9tilov.android.core.model.ExecutionPeriod.EveryMonth(
+                                        dayOfMonth = 15,
+                                        lastExecDate = kotlinx.datetime.LocalDateTime.parse(PREVIEW_DATE_JAN_15),
+                                    ),
+                                description = "Mobile plan",
+                                pushEnabled = true,
+                                autoAdd = true,
+                            ),
+                            com.d9tilov.android.transaction.regular.domain.model.RegularTransaction(
+                                id = 7L,
+                                clientId = PREVIEW_USER_ID,
+                                currencyCode = PREVIEW_CURRENCY,
+                                type = com.d9tilov.android.core.model.TransactionType.EXPENSE,
+                                sum = java.math.BigDecimal("250.00"),
+                                category =
+                                    com.d9tilov.android.category.domain.entity.Category.EMPTY_EXPENSE.copy(
+                                        id = 7L,
+                                        name = "Groceries12345678901234567",
+                                    ),
+                                createdDate = kotlinx.datetime.LocalDateTime.parse(PREVIEW_DATE_JAN_01),
+                                executionPeriod =
+                                    com.d9tilov.android.core.model.ExecutionPeriod.EveryWeek(
+                                        dayOfWeek = 1,
+                                        lastExecDate = kotlinx.datetime.LocalDateTime.parse(PREVIEW_DATE_JAN_01),
+                                    ),
+                                description = "Weekly shopping",
+                                pushEnabled = true,
+                                autoAdd = false,
+                            ),
+                        ),
+                ),
+            settings = ProfileUiItem.Settings(isPremium = true),
+        ),
         false,
         {},
         {},
