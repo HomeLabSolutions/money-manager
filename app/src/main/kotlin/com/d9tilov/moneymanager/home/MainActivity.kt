@@ -130,7 +130,7 @@ class MainActivity : ComponentActivity() {
                         MmApp(
                             windowSizeClass = calculateWindowSizeClass(this),
                             locationCurrencyState = state.locationCurrencyState,
-                            onLocationUpdated = { viewModel.getLocationCurrencyCode(it) },
+                            onLocationRequest = { viewModel.onLocationRequest(it) },
                             onConfirmClicked = { viewModel.updateCurrency(it) },
                             onDismissClicked = { viewModel.updateLocalCurrency(it) },
                         )

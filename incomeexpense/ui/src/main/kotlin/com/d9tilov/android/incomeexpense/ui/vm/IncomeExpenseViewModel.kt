@@ -39,6 +39,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -334,8 +335,10 @@ class IncomeExpenseViewModel
             updateMode(EditMode.LIST)
             uiState.value.run {
                 viewModelScope.launch(ioDispatcher) {
-                    val category = categoryInteractor.getCategoryById(categoryId)
-                    val location = locationProvider.getCurrentLocation()
+                    val categoryDeff = async { categoryInteractor.getCategoryById(categoryId) }
+                    val locationDeff = async { locationProvider.getCurrentLocation() }
+                    val category = categoryDeff.await()
+                    val location = locationDeff.await()
                     transactionInteractor.addTransaction(
                         Transaction.EMPTY.copy(
                             sum = price.value.toBigDecimal(),
