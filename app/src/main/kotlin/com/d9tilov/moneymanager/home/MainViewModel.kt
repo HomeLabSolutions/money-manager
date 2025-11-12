@@ -178,9 +178,10 @@ class MainViewModel
         }
 
         fun onLocationRequest(permissions: List<String>) =
-            viewModelScope.launch(ioDispatcher) {
-                val result = locationProvider.getCurrentLocation(permissions)
-                updateLocationCurrencyCode(result)
+            viewModelScope.launch {
+                locationProvider
+                    .getCurrentLocation(permissions)
+                    .collect { updateLocationCurrencyCode(it) }
             }
 
         private fun updateLocationCurrencyCode(location: LocationData) =

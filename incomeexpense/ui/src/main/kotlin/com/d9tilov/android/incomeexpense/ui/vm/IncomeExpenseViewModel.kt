@@ -336,7 +336,7 @@ class IncomeExpenseViewModel
             uiState.value.run {
                 viewModelScope.launch(ioDispatcher) {
                     val categoryDeff = async { categoryInteractor.getCategoryById(categoryId) }
-                    val locationDeff = async { locationProvider.getCurrentLocation() }
+                    val locationDeff = async { locationProvider.getCurrentLocation().first() }
                     val category = categoryDeff.await()
                     val location = locationDeff.await()
                     transactionInteractor.addTransaction(
