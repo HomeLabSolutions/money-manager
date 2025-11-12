@@ -1,6 +1,5 @@
 package com.d9tilov.moneymanager.home
 
-import android.location.Location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.analytics.domain.AnalyticsSender
@@ -9,6 +8,8 @@ import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.backup.domain.contract.BackupInteractor
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
+import com.d9tilov.android.common.android.location.LocationData
+import com.d9tilov.android.common.android.location.LocationProvider
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.core.exceptions.WrongUidException
@@ -57,6 +58,7 @@ class MainViewModel
         private val categoryInteractor: Lazy<CategoryInteractor>,
         private val currencyInteractor: CurrencyInteractor,
         private val geocodingInteractor: GeocodingInteractor,
+        private val locationProvider: LocationProvider,
     ) : ViewModel() {
         private val auth = FirebaseAuth.getInstance()
 
@@ -175,7 +177,13 @@ class MainViewModel
             uiState.update { MainActivityUiState.Loading }
         }
 
-        fun getLocationCurrencyCode(location: Location) =
+        fun onLocationRequest(permissions: List<String>) =
+            viewModelScope.launch(ioDispatcher) {
+                val result = locationProvider.getCurrentLocation(permissions)
+                updateLocationCurrencyCode(result)
+            }
+
+        private fun updateLocationCurrencyCode(location: LocationData) =
             viewModelScope.launch(ioDispatcher + updateCurrencyExceptionHandler) {
                 if (uiState.value !is MainActivityUiState.Success.Main) return@launch
                 val locationCurrency = geocodingInteractor.getCurrencyByCoords(location.latitude, location.longitude)
