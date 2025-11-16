@@ -8,11 +8,11 @@ import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.backup.domain.contract.BackupInteractor
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
-import com.d9tilov.android.common.android.location.LocationData
 import com.d9tilov.android.common.android.location.LocationProvider
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.core.exceptions.WrongUidException
+import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
@@ -187,7 +187,7 @@ class MainViewModel
         private fun updateLocationCurrencyCode(location: LocationData) =
             viewModelScope.launch(ioDispatcher + updateCurrencyExceptionHandler) {
                 if (uiState.value !is MainActivityUiState.Success.Main) return@launch
-                val locationCurrency = geocodingInteractor.getCurrencyByCoords(location.latitude, location.longitude)
+                val locationCurrency = geocodingInteractor.getCurrencyByCoords(location)
                 val newState =
                     when (locationCurrency.code) {
                         preferencesStore.getLocalCurrency().firstOrNull() -> {

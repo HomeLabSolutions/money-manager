@@ -39,8 +39,8 @@ extra["minSdkVersion"] = 23
 extra["targetSdkVersion"] = 36
 extra["versionMajor"] = 1
 extra["versionMinor"] = 2
-extra["versionPatch"] = 5
-extra["versionBuild"] = 1
+extra["versionPatch"] = 6
+extra["versionBuild"] = 2
 
 tasks.register("clean", Delete::class) {
     delete(rootProject.layout.buildDirectory)
@@ -52,6 +52,7 @@ plugins {
     alias(libs.plugins.deps.unused) apply true
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.serialization) apply false
+    alias(libs.plugins.secrets.gradle.plugin) apply false
 }
 
 subprojects {

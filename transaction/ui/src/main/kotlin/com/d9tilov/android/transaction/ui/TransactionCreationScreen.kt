@@ -5,11 +5,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -22,12 +24,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -35,6 +39,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -42,6 +47,7 @@ import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.CategoryDestination
 import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_FORMAT
 import com.d9tilov.android.common.android.utils.formatDate
+import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.MainPriceFieldParser.isInputValid
@@ -57,8 +63,16 @@ import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.vm.TransactionCreationViewModel
 import com.d9tilov.android.transaction.ui.vm.TransactionUiState
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.rememberMarkerState
 import java.math.BigDecimal
 import java.util.Locale
+
+private const val MAP_ZOOM_LEVEL = 15f
 
 @Composable
 fun TransactionCreationRoute(
@@ -158,6 +172,7 @@ fun TransactionCreationScreen(
                             onSumChanged(text)
                         },
                         showError = { if (showError) ShowError() },
+                        autoFocus = false,
                     )
                 }
                 Row(
@@ -265,6 +280,38 @@ fun TransactionCreationScreen(
                     value = uiState.transaction.description,
                     onValueChange = onDescriptionChanged,
                 )
+
+                val hasLocation = uiState.transaction.locationData != LocationData.EMPTY
+                if (hasLocation) {
+                    val location =
+                        LatLng(uiState.transaction.locationData.latitude, uiState.transaction.locationData.longitude)
+                    val cameraPositionState = rememberCameraPositionState()
+                    val markerState = rememberMarkerState(position = location)
+
+                    LaunchedEffect(location) {
+                        cameraPositionState.position = CameraPosition.fromLatLngZoom(location, MAP_ZOOM_LEVEL)
+                    }
+
+                    GoogleMap(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .height(250.dp)
+                                .padding(
+                                    horizontal =
+                                        dimensionResource(
+                                            id = com.d9tilov.android.designsystem.R.dimen.padding_large,
+                                        ),
+                                    vertical =
+                                        dimensionResource(
+                                            id = com.d9tilov.android.designsystem.R.dimen.padding_small,
+                                        ),
+                                ).clip(RoundedCornerShape(16.dp)),
+                        cameraPositionState = cameraPositionState,
+                    ) {
+                        Marker(state = markerState)
+                    }
+                }
             }
             BottomActionButton(
                 modifier =

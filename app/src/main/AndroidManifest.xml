@@ -18,6 +18,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoneyManager.Splash">
 
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${maps_api_key}" />
+
         <activity
             android:name="com.d9tilov.moneymanager.home.MainActivity"
             android:exported="true"

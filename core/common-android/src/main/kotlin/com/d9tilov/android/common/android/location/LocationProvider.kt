@@ -6,6 +6,7 @@ import android.content.Context
 import android.location.Location
 import androidx.annotation.RequiresPermission
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
+import com.d9tilov.android.core.model.LocationData
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
@@ -17,15 +18,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.tasks.await
 import javax.inject.Named
-
-data class LocationData(
-    val latitude: Double,
-    val longitude: Double,
-) {
-    companion object {
-        val EMPTY = LocationData(0.0, 0.0)
-    }
-}
 
 interface LocationProvider {
     suspend fun getCurrentLocation(

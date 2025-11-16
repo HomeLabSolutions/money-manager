@@ -11,6 +11,12 @@ plugins {
     id("kotlin-android")
     id("kotlin-parcelize")
     id("io.gitlab.arturbosch.detekt")
+    alias(libs.plugins.secrets.gradle.plugin)
+}
+
+secrets {
+    propertiesFileName = "keystore.properties"
+    defaultPropertiesFileName = "local.defaults.properties"
 }
 
 val keystorePropertiesFile: File = rootProject.file("keystore.properties")

@@ -346,8 +346,7 @@ class IncomeExpenseViewModel
                             currencyCode = price.currencyCode,
                             date = currentDateTime(),
                             type = category.type,
-                            latitude = location.latitude,
-                            longitude = location.longitude,
+                            locationData = location,
                         ),
                     )
                 }
