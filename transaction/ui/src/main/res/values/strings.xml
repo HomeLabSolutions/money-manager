@@ -7,4 +7,5 @@
     <string name="title_transaction">Transaction</string>
     <string name="transaction_edit_sum_title">Amount</string>
     <string name="transaction_invalid_amount">Please, enter the correct amount</string>
+    <string name="transaction_location_title">Location</string>
 </resources>

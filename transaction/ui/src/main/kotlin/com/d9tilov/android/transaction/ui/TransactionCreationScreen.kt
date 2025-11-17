@@ -1,5 +1,6 @@
 package com.d9tilov.android.transaction.ui
 
+import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,6 +42,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.category.domain.entity.Category
@@ -281,36 +283,11 @@ fun TransactionCreationScreen(
                     onValueChange = onDescriptionChanged,
                 )
 
-                val hasLocation = uiState.transaction.locationData != LocationData.EMPTY
-                if (hasLocation) {
-                    val location =
-                        LatLng(uiState.transaction.locationData.latitude, uiState.transaction.locationData.longitude)
-                    val cameraPositionState = rememberCameraPositionState()
-                    val markerState = rememberMarkerState(position = location)
-
-                    LaunchedEffect(location) {
-                        cameraPositionState.position = CameraPosition.fromLatLngZoom(location, MAP_ZOOM_LEVEL)
-                    }
-
-                    GoogleMap(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .height(250.dp)
-                                .padding(
-                                    horizontal =
-                                        dimensionResource(
-                                            id = com.d9tilov.android.designsystem.R.dimen.padding_large,
-                                        ),
-                                    vertical =
-                                        dimensionResource(
-                                            id = com.d9tilov.android.designsystem.R.dimen.padding_small,
-                                        ),
-                                ).clip(RoundedCornerShape(16.dp)),
-                        cameraPositionState = cameraPositionState,
-                    ) {
-                        Marker(state = markerState)
-                    }
+                if (uiState.transaction.locationData != LocationData.EMPTY) {
+                    TransactionLocationMap(
+                        locationData = uiState.transaction.locationData,
+                        categoryName = uiState.transaction.category.name,
+                    )
                 }
             }
             BottomActionButton(
@@ -364,6 +341,60 @@ fun ShowError() {
     )
 }
 
+@Composable
+fun TransactionLocationMap(
+    locationData: LocationData,
+    categoryName: String,
+) {
+    val context = LocalContext.current
+    val location = LatLng(locationData.latitude, locationData.longitude)
+    val cameraPositionState = rememberCameraPositionState()
+    val markerState = rememberMarkerState(position = location)
+
+    LaunchedEffect(location) {
+        cameraPositionState.position = CameraPosition.fromLatLngZoom(location, MAP_ZOOM_LEVEL)
+    }
+
+    Text(
+        modifier =
+            Modifier.padding(
+                start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+            ),
+        text = stringResource(id = R.string.transaction_location_title),
+        style = MaterialTheme.typography.labelLarge,
+        color = MaterialTheme.colorScheme.primary,
+    )
+
+    GoogleMap(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(250.dp)
+                .padding(
+                    horizontal =
+                        dimensionResource(
+                            id = com.d9tilov.android.designsystem.R.dimen.padding_large,
+                        ),
+                    vertical =
+                        dimensionResource(
+                            id = com.d9tilov.android.designsystem.R.dimen.padding_small,
+                        ),
+                ).clip(RoundedCornerShape(16.dp)),
+        cameraPositionState = cameraPositionState,
+        onMapClick = {
+            val latitude = locationData.latitude
+            val longitude = locationData.longitude
+            val gmmIntentUri = "geo:$latitude,$longitude?q=$latitude,$longitude($categoryName)".toUri()
+            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+            context.startActivity(mapIntent)
+        },
+    ) {
+        Marker(state = markerState)
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultTransactionCreationPreview() {
@@ -371,14 +402,24 @@ fun DefaultTransactionCreationPreview() {
         TransactionCreationScreen(
             uiState =
                 TransactionUiState.EMPTY.copy(
+                    amount = "1500.50",
                     transaction =
                         Transaction.EMPTY.copy(
-                            sum = BigDecimal(42),
+                            sum = BigDecimal("1500.50"),
+                            description = "Покупка продуктов в магазине",
+                            inStatistics = true,
+                            currencyCode = "USD",
+                            date = currentDateTime(),
                             category =
                                 Category.EMPTY_EXPENSE.copy(
-                                    name = "My category",
+                                    name = "Продукты",
                                     icon = com.d9tilov.android.designsystem.R.drawable.ic_category_food,
                                     color = android.R.color.holo_red_dark,
+                                ),
+                            locationData =
+                                LocationData(
+                                    latitude = 55.7558,
+                                    longitude = 37.6173,
                                 ),
                         ),
                 ),
