@@ -7,4 +7,5 @@
     <string name="title_transaction">Транзакция</string>
     <string name="transaction_edit_sum_title">Сумма</string>
     <string name="transaction_invalid_amount">Пожалуйста, введите корректную сумму</string>
+    <string name="transaction_location_title">Геопозиция</string>
 </resources>

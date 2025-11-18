@@ -107,7 +107,7 @@ class TransactionInteractorImpl @Inject constructor(
                 transactionRepo
                     .getTransactionsByTypeInPeriod(from, to, type, inStatistics)
                     .map {
-                        it.map { item ->
+                        it.map { item: TransactionDataModel ->
                             val category =
                                 categoryList.find { listItem -> item.categoryId == listItem.id }
                                     ?: throw CategoryException.CategoryNotFoundException(
@@ -116,15 +116,7 @@ class TransactionInteractorImpl @Inject constructor(
                             item.toChartModel(
                                 category,
                                 currencyCode,
-                                if (currencyCode == DEFAULT_CURRENCY_CODE) {
-                                    item.usdSum
-                                } else {
-                                    currencyInteractor.toTargetCurrency(
-                                        item.sum,
-                                        item.currencyCode,
-                                        currencyInteractor.getMainCurrency().code,
-                                    )
-                                },
+                                getItemSumBaseOnCurrency(currencyCode, item),
                             )
                         }
                     }.map { list ->
@@ -157,6 +149,21 @@ class TransactionInteractorImpl @Inject constructor(
                             }
                     }
             }
+
+    private suspend fun getItemSumBaseOnCurrency(
+        currencyCode: String,
+        item: TransactionDataModel,
+    ): BigDecimal =
+        if (currencyCode == DEFAULT_CURRENCY_CODE) {
+            item.usdSum
+        } else {
+            if (currencyCode == item.currencyCode) {
+                item.sum
+            } else {
+                val trCurrency = currencyInteractor.getCurrencyByCode(currencyCode)
+                trCurrency.value.multiply(item.usdSum)
+            }
+        }
 
     override fun getTransactionsGroupedByDate(
         type: TransactionType,
@@ -233,8 +240,7 @@ class TransactionInteractorImpl @Inject constructor(
                     qrCode = transactionDataModel.qrCode,
                     inStatistics = transactionDataModel.inStatistics,
                     isRegular = transactionDataModel.isRegular,
-                    latitude = transactionDataModel.latitude,
-                    longitude = transactionDataModel.longitude,
+                    locationData = transactionDataModel.location,
                     photoUri = transactionDataModel.photoUri,
                 )
             }
@@ -262,7 +268,7 @@ class TransactionInteractorImpl @Inject constructor(
             flow { emit(userInteractor.getFiscalDay()) }.map { fiscalDay ->
                 currentDateTime().countDaysRemainingNextFiscalDate(fiscalDay).toBigDecimal()
             }
-        val numeratorFlow = getNumerator()
+        val numeratorFlow: Flow<BigDecimal> = getNumerator()
         val expensesPerCurrentDayFlow = getExpensesPerCurrentDay()
 
         return combine(
@@ -498,13 +504,15 @@ class TransactionInteractorImpl @Inject constructor(
                 onlyInStatistics = inStatistics,
                 withRegular = true,
             ).map { list ->
-                list.sumOf {
-                    currencyInteractor.toTargetCurrency(
-                        it.sum,
-                        it.currencyCode,
-                        currencyCode,
-                    )
-                }
+                list
+                    .sumOf { tr ->
+                        if (tr.currencyCode == currencyCode) {
+                            tr.sum
+                        } else {
+                            val trCurrency = currencyInteractor.getCurrencyByCode(currencyCode)
+                            trCurrency.value.multiply(tr.usdSum)
+                        }
+                    }
             }
 
     override fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<BigDecimal> =

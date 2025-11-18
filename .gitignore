@@ -10,3 +10,4 @@
 .cxx
 .kotlin
 keystore.properties
+local.defaults.properties

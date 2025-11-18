@@ -4,6 +4,7 @@ import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.budget.domain.model.BudgetData
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.Currency
@@ -134,8 +135,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    latitude = 0.0,
-                    longitude = 0.0,
+                    location = LocationData(0.0, 0.0),
                     photoUri = "",
                 )
 
@@ -166,8 +166,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    latitude = 0.0,
-                    longitude = 0.0,
+                    location = LocationData(0.0, 0.0),
                     photoUri = "",
                 )
 
@@ -219,8 +218,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    latitude = 0.0,
-                    longitude = 0.0,
+                    location = LocationData(0.0, 0.0),
                     photoUri = "",
                 )
 
@@ -308,8 +306,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    latitude = 0.0,
-                    longitude = 0.0,
+                    location = LocationData(0.0, 0.0),
                     photoUri = "",
                 )
 
@@ -327,8 +324,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    latitude = 0.0,
-                    longitude = 0.0,
+                    location = LocationData(0.0, 0.0),
                     photoUri = "",
                 )
 
@@ -393,8 +389,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    latitude = 0.0,
-                    longitude = 0.0,
+                    location = LocationData(0.0, 0.0),
                     photoUri = "",
                 )
 
@@ -429,8 +424,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    latitude = 0.0,
-                    longitude = 0.0,
+                    location = LocationData(0.0, 0.0),
                     photoUri = "",
                 )
 
@@ -475,8 +469,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    latitude = 0.0,
-                    longitude = 0.0,
+                    location = LocationData(0.0, 0.0),
                     photoUri = "",
                 )
 
@@ -508,8 +501,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    latitude = 0.0,
-                    longitude = 0.0,
+                    location = LocationData(0.0, 0.0),
                     photoUri = "",
                 )
 
@@ -542,8 +534,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    latitude = 0.0,
-                    longitude = 0.0,
+                    location = LocationData(0.0, 0.0),
                     photoUri = "",
                 )
 
