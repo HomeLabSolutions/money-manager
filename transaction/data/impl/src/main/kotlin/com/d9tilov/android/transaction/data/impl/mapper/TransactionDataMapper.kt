@@ -1,5 +1,6 @@
 package com.d9tilov.android.transaction.data.impl.mapper
 
+import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.core.model.toType
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.database.entity.TransactionDbModel
@@ -21,8 +22,7 @@ fun TransactionDbModel.toDataModel(): TransactionDataModel =
         qrCode,
         isRegular,
         inStatistics,
-        latitude,
-        longitude,
+        LocationData(latitude, longitude),
         photoUri,
     )
 
@@ -40,8 +40,8 @@ fun TransactionDataModel.toDbModel(): TransactionDbModel =
         qrCode,
         isRegular,
         inStatistics,
-        latitude,
-        longitude,
+        location.latitude,
+        location.longitude,
         photoUri,
     )
 

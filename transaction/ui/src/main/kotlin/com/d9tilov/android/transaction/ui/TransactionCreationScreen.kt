@@ -1,15 +1,18 @@
 package com.d9tilov.android.transaction.ui
 
+import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -22,12 +25,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -35,13 +40,16 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.CategoryDestination
 import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_FORMAT
 import com.d9tilov.android.common.android.utils.formatDate
+import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.MainPriceFieldParser.isInputValid
@@ -57,8 +65,16 @@ import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.vm.TransactionCreationViewModel
 import com.d9tilov.android.transaction.ui.vm.TransactionUiState
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.rememberMarkerState
 import java.math.BigDecimal
 import java.util.Locale
+
+private const val MAP_ZOOM_LEVEL = 15f
 
 @Composable
 fun TransactionCreationRoute(
@@ -158,6 +174,7 @@ fun TransactionCreationScreen(
                             onSumChanged(text)
                         },
                         showError = { if (showError) ShowError() },
+                        autoFocus = false,
                     )
                 }
                 Row(
@@ -265,6 +282,13 @@ fun TransactionCreationScreen(
                     value = uiState.transaction.description,
                     onValueChange = onDescriptionChanged,
                 )
+
+                if (uiState.transaction.locationData != LocationData.EMPTY) {
+                    TransactionLocationMap(
+                        locationData = uiState.transaction.locationData,
+                        categoryName = uiState.transaction.category.name,
+                    )
+                }
             }
             BottomActionButton(
                 modifier =
@@ -317,6 +341,60 @@ fun ShowError() {
     )
 }
 
+@Composable
+fun TransactionLocationMap(
+    locationData: LocationData,
+    categoryName: String,
+) {
+    val context = LocalContext.current
+    val location = LatLng(locationData.latitude, locationData.longitude)
+    val cameraPositionState = rememberCameraPositionState()
+    val markerState = rememberMarkerState(position = location)
+
+    LaunchedEffect(location) {
+        cameraPositionState.position = CameraPosition.fromLatLngZoom(location, MAP_ZOOM_LEVEL)
+    }
+
+    Text(
+        modifier =
+            Modifier.padding(
+                start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+            ),
+        text = stringResource(id = R.string.transaction_location_title),
+        style = MaterialTheme.typography.labelLarge,
+        color = MaterialTheme.colorScheme.primary,
+    )
+
+    GoogleMap(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(250.dp)
+                .padding(
+                    horizontal =
+                        dimensionResource(
+                            id = com.d9tilov.android.designsystem.R.dimen.padding_large,
+                        ),
+                    vertical =
+                        dimensionResource(
+                            id = com.d9tilov.android.designsystem.R.dimen.padding_small,
+                        ),
+                ).clip(RoundedCornerShape(16.dp)),
+        cameraPositionState = cameraPositionState,
+        onMapClick = {
+            val latitude = locationData.latitude
+            val longitude = locationData.longitude
+            val gmmIntentUri = "geo:$latitude,$longitude?q=$latitude,$longitude($categoryName)".toUri()
+            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+            context.startActivity(mapIntent)
+        },
+    ) {
+        Marker(state = markerState)
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultTransactionCreationPreview() {
@@ -324,14 +402,24 @@ fun DefaultTransactionCreationPreview() {
         TransactionCreationScreen(
             uiState =
                 TransactionUiState.EMPTY.copy(
+                    amount = "1500.50",
                     transaction =
                         Transaction.EMPTY.copy(
-                            sum = BigDecimal(42),
+                            sum = BigDecimal("1500.50"),
+                            description = "Покупка продуктов в магазине",
+                            inStatistics = true,
+                            currencyCode = "USD",
+                            date = currentDateTime(),
                             category =
                                 Category.EMPTY_EXPENSE.copy(
-                                    name = "My category",
+                                    name = "Продукты",
                                     icon = com.d9tilov.android.designsystem.R.drawable.ic_category_food,
                                     color = android.R.color.holo_red_dark,
+                                ),
+                            locationData =
+                                LocationData(
+                                    latitude = 55.7558,
+                                    longitude = 37.6173,
                                 ),
                         ),
                 ),
