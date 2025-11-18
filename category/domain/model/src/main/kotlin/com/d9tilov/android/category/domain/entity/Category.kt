@@ -44,5 +44,3 @@ data class Category(
             )
     }
 }
-
-fun Category.isEmpty() = this == Category.EMPTY_EXPENSE || this == Category.EMPTY_INCOME

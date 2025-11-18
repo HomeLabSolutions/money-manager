@@ -33,7 +33,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
@@ -145,6 +144,7 @@ fun CategoryListScreen(
                         Column(
                             modifier =
                                 Modifier
+                                    .size(dimensionResource(id = R.dimen.category_item_size))
                                     .padding(8.dp)
                                     .offset {
                                         IntOffset(
@@ -166,16 +166,12 @@ fun CategoryListScreen(
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             Icon(
-                                modifier =
-                                    Modifier
-                                        .size(dimensionResource(id = R.dimen.category_creation_item_size)),
                                 imageVector = ImageVector.vectorResource(id = item.icon),
                                 contentDescription = "Backup",
                                 tint = Color(ContextCompat.getColor(context, item.color)),
                             )
                             Text(
                                 text = item.name,
-                                textAlign = TextAlign.Center,
                                 color = Color(ContextCompat.getColor(context, item.color)),
                                 overflow = TextOverflow.Ellipsis,
                             )
@@ -276,6 +272,6 @@ private fun mockCategory(
 ) = Category.EMPTY_INCOME.copy(
     id = id,
     name = name,
-    icon = com.d9tilov.android.category.data.impl.R.drawable.ic_category_food,
+    icon = android.R.drawable.btn_star,
     color = android.R.color.holo_blue_light,
 )

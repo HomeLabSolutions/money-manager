@@ -413,7 +413,7 @@ fun DefaultTransactionCreationPreview() {
                             category =
                                 Category.EMPTY_EXPENSE.copy(
                                     name = "Продукты",
-                                    icon = com.d9tilov.android.designsystem.R.drawable.ic_category_food,
+                                    icon = android.R.drawable.btn_star,
                                     color = android.R.color.holo_red_dark,
                                 ),
                             locationData =
