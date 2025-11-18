@@ -190,7 +190,7 @@ fun TransactionItemPreview() {
                     category =
                         Category.EMPTY_EXPENSE.copy(
                             name = "Category1",
-                            icon = com.d9tilov.android.designsystem.R.drawable.ic_category_food,
+                            icon = android.R.drawable.btn_star,
                             color = android.R.color.black,
                         ),
                     sum = BigDecimal(1),

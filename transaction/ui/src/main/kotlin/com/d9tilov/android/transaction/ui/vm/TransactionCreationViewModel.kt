@@ -25,7 +25,7 @@ data class TransactionUiState(
             category =
                 Category.EMPTY_EXPENSE.copy(
                     color = android.R.color.transparent,
-                    icon = com.d9tilov.android.designsystem.R.drawable.ic_category_food,
+                    icon = android.R.drawable.btn_star,
                 ),
         ),
 ) {

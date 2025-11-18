@@ -11,7 +11,6 @@ import com.d9tilov.android.category.domain.entity.CategoryGroup
 import com.d9tilov.android.category.ui.R
 import com.d9tilov.android.category.ui.model.categoryGroupItemMap
 import com.d9tilov.android.category.ui.navigation.CategoryArgs
-import com.d9tilov.android.core.constants.DataConstants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -67,7 +66,7 @@ class CategoryIconGridViewModel
                 CategoryGroup.FOOD to
                     listOf(
                         com.d9tilov.android.category.data.impl.R.drawable.ic_category_backery,
-                        com.d9tilov.android.designsystem.R.drawable.ic_category_food,
+                        com.d9tilov.android.category.data.impl.R.drawable.ic_category_food,
                         com.d9tilov.android.category.data.impl.R.drawable.ic_category_beer,
                         com.d9tilov.android.category.data.impl.R.drawable.ic_category_barista,
                         com.d9tilov.android.common.android.R.drawable.ic_category_cafe,
@@ -199,7 +198,7 @@ class CategoryIconGridViewModel
                     ),
                 CategoryGroup.UNKNOWN to
                     listOf(
-                        com.d9tilov.android.designsystem.R.drawable.ic_category_food,
+                        com.d9tilov.android.category.data.impl.R.drawable.ic_category_food,
                         com.d9tilov.android.category.data.impl.R.drawable.ic_category_grocery,
                         com.d9tilov.android.category.data.impl.R.drawable.ic_category_car,
                         com.d9tilov.android.category.data.impl.R.drawable.ic_category_fuel,
@@ -226,11 +225,8 @@ class CategoryIconGridViewModel
         private val categoryArgs: CategoryArgs.CategoryIconsArgs =
             CategoryArgs.CategoryIconsArgs(savedStateHandle)
         private val iconGroup = checkNotNull(categoryArgs.groupId)
-        val route = ""
 
-        private val _categoryIconId = MutableStateFlow(DataConstants.NO_RES_ID)
         private val _isPremium = MutableStateFlow(false)
-        val categoryIconId: StateFlow<Int> = _categoryIconId
         val isPremium: StateFlow<Boolean> = _isPremium
 
         val uiState: StateFlow<CategoryIconGridUiState> =
