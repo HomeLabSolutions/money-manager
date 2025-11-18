@@ -1,6 +1,7 @@
 package com.d9tilov.android.transaction.data.impl
 
 import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.transaction.data.contract.TransactionSource
 import com.d9tilov.android.transaction.domain.contract.TransactionRepo
@@ -48,8 +49,7 @@ class TransactionDataRepoTest {
             qrCode = "",
             inStatistics = true,
             isRegular = false,
-            latitude = 0.0,
-            longitude = 0.0,
+            location = LocationData(0.0, 0.0),
             photoUri = "",
         )
 
