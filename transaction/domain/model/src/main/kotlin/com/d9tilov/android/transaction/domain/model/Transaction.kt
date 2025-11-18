@@ -4,6 +4,7 @@ import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
+import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDateTime
 import kotlinx.datetime.LocalDateTime
@@ -22,8 +23,7 @@ data class Transaction(
     val qrCode: String?,
     val isRegular: Boolean,
     val inStatistics: Boolean,
-    val latitude: Double,
-    val longitude: Double,
+    val locationData: LocationData,
     val photoUri: String?,
 ) {
     companion object {
@@ -41,8 +41,7 @@ data class Transaction(
                 qrCode = null,
                 isRegular = false,
                 inStatistics = true,
-                latitude = 0.0,
-                longitude = 0.0,
+                locationData = LocationData.EMPTY,
                 photoUri = null,
             )
     }

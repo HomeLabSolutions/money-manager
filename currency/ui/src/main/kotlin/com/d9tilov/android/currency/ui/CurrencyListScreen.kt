@@ -56,7 +56,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.core.constants.DataConstants.TAG
-import com.d9tilov.android.core.constants.UiConstants.ALPHA
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.android.designsystem.MmTopAppBar
@@ -342,11 +341,7 @@ fun CurrencyItem(
                 tint = MaterialTheme.colorScheme.primary,
             )
         }
-        HorizontalDivider(
-            color = MaterialTheme.colorScheme.primary,
-            thickness = 1.dp,
-            modifier = Modifier.alpha(ALPHA),
-        )
+        HorizontalDivider()
     }
 }
 

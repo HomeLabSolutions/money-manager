@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,15 +43,17 @@ fun AutoSizeTextField(
     modifier: Modifier = Modifier,
     fontSize: TextUnit = 72.sp,
     fontColor: Color = MaterialTheme.colorScheme.primary,
+    autoFocus: Boolean = true,
 ) {
     var amount by remember { mutableStateOf(TextFieldValue()) }
     amount = amount.copy(text = inputValue, selection = TextRange(inputValue.length))
     BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
         var shrunkFontSize = fontSize
-        val calculateIntrinsics = @Composable {
+        val calculateIntrinsics = @ReadOnlyComposable @Composable {
             ParagraphIntrinsics(
                 text = inputValue,
                 style = TextStyle(fontSize = shrunkFontSize),
+                annotations = emptyList(),
                 density = LocalDensity.current,
                 fontFamilyResolver = createFontFamilyResolver(LocalContext.current),
             )
@@ -91,8 +94,10 @@ fun AutoSizeTextField(
                     inputValueChanged(text.text)
                 }
             },
-            supportingText = { showError() },
+            supportingText = showError,
         )
-        LaunchedEffect(Unit) { focusRequester.requestFocus() }
+        if (autoFocus) {
+            LaunchedEffect(Unit) { focusRequester.requestFocus() }
+        }
     }
 }

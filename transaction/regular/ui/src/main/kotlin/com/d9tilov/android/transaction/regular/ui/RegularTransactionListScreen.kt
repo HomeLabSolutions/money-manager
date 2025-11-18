@@ -56,7 +56,7 @@ import com.d9tilov.android.core.model.PeriodType
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.reduceScaleStr
-import com.d9tilov.android.designsystem.CurrencyTextFieldMedium
+import com.d9tilov.android.designsystem.CurrencyTextFieldBig
 import com.d9tilov.android.designsystem.EmptyListPlaceholder
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
@@ -291,7 +291,7 @@ fun RegularTransactionItem(
                     maxLines = 1,
                 )
             }
-            CurrencyTextFieldMedium(
+            CurrencyTextFieldBig(
                 modifier =
                     Modifier.padding(
                         horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),

@@ -1,7 +1,6 @@
 package com.d9tilov.moneymanager.ui
 
 import android.Manifest
-import android.location.Location
 import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,11 +22,8 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -45,12 +41,6 @@ import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.home.LocationCurrencyState
 import com.d9tilov.moneymanager.navigation.MmNavHost
 import com.d9tilov.moneymanager.navigation.TopLevelDestination
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
-import com.google.android.gms.tasks.CancellationTokenSource
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
 @Composable
 @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
@@ -58,16 +48,10 @@ fun MmApp(
     windowSizeClass: WindowSizeClass,
     appState: MmAppState = rememberMmAppState(windowSizeClass = windowSizeClass),
     locationCurrencyState: LocationCurrencyState,
-    onLocationUpdated: suspend (location: Location) -> Unit,
+    onLocationRequest: (permissions: List<String>) -> Unit,
     onDismissClicked: (currencyCode: String?) -> Unit,
     onConfirmClicked: (currencyCode: String?) -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
-    val context = LocalContext.current
-    val locationClient =
-        remember {
-            LocationServices.getFusedLocationProviderClient(context)
-        }
     MmBackground {
         val snackBarHostState = remember { SnackbarHostState() }
         Scaffold(
@@ -128,36 +112,12 @@ fun MmApp(
                 onConfirm = { onConfirmClicked(locationCurrencyState.currencyCode) },
                 onDismiss = { onDismissClicked(locationCurrencyState.currencyCode) },
             )
-            val permissions =
-                listOf(
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                )
             PermissionBox(
-                permissions = permissions,
+                permissions = listOf(Manifest.permission.ACCESS_COARSE_LOCATION),
                 requiredPermissions = listOf(Manifest.permission.ACCESS_COARSE_LOCATION),
                 permissionTitle = stringResource(R.string.permissions_location),
                 permissionExplanation = stringResource(R.string.permissions_location_explanation),
-            ) {
-                val usePreciseLocation = it.contains(Manifest.permission.ACCESS_FINE_LOCATION)
-                LaunchedEffect(Unit) {
-                    scope.launch(Dispatchers.IO) {
-                        val priority =
-                            if (usePreciseLocation) {
-                                Priority.PRIORITY_HIGH_ACCURACY
-                            } else {
-                                Priority.PRIORITY_BALANCED_POWER_ACCURACY
-                            }
-                        val result =
-                            locationClient
-                                .getCurrentLocation(
-                                    priority,
-                                    CancellationTokenSource().token,
-                                ).await()
-                        result?.let { res -> onLocationUpdated(res) }
-                    }
-                }
-            }
+            ) { permissions: List<String> -> onLocationRequest(permissions) }
         }
     }
 }

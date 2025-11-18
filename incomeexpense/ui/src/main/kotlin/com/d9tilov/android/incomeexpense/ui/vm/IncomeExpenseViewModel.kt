@@ -13,6 +13,7 @@ import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.common.android.location.LocationProvider
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
@@ -38,6 +39,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -141,6 +143,7 @@ class IncomeExpenseViewModel
         private val currencyInteractor: CurrencyInteractor,
         private val categoryInteractor: CategoryInteractor,
         private val transactionInteractor: TransactionInteractor,
+        private val locationProvider: LocationProvider,
     ) : ViewModel() {
         private val uiState = MutableStateFlow(IncomeExpenseUiState.EMPTY)
         val uiStateFlow = uiState.asStateFlow()
@@ -332,7 +335,10 @@ class IncomeExpenseViewModel
             updateMode(EditMode.LIST)
             uiState.value.run {
                 viewModelScope.launch(ioDispatcher) {
-                    val category = categoryInteractor.getCategoryById(categoryId)
+                    val categoryDeff = async { categoryInteractor.getCategoryById(categoryId) }
+                    val locationDeff = async { locationProvider.getCurrentLocation().first() }
+                    val category = categoryDeff.await()
+                    val location = locationDeff.await()
                     transactionInteractor.addTransaction(
                         Transaction.EMPTY.copy(
                             sum = price.value.toBigDecimal(),
@@ -340,6 +346,7 @@ class IncomeExpenseViewModel
                             currencyCode = price.currencyCode,
                             date = currentDateTime(),
                             type = category.type,
+                            locationData = location,
                         ),
                     )
                 }
