@@ -9,6 +9,7 @@ import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.model.Transaction
+import com.d9tilov.android.transaction.ui.R
 import com.d9tilov.android.transaction.ui.navigation.TransactionArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -25,7 +26,7 @@ data class TransactionUiState(
             category =
                 Category.EMPTY_EXPENSE.copy(
                     color = android.R.color.transparent,
-                    icon = android.R.drawable.btn_star,
+                    icon = R.drawable.dummy_icon,
                 ),
         ),
 ) {
@@ -36,8 +37,7 @@ data class TransactionUiState(
 
 @HiltViewModel
 class TransactionCreationViewModel
-    @Inject
-    constructor(
+    @Inject constructor(
         savedStateHandle: SavedStateHandle,
         private val transactionInteractor: TransactionInteractor,
         private val categoryInteractor: CategoryInteractor,
