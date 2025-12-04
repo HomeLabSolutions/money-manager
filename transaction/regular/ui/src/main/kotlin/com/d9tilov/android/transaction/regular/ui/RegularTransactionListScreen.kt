@@ -1,6 +1,5 @@
 package com.d9tilov.android.transaction.regular.ui
 
-import android.content.Context
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -270,19 +269,18 @@ fun RegularTransactionItem(
                             ),
                     text =
                         when (transaction.executionPeriod.periodType) {
-                            PeriodType.DAY -> context.getString(R.string.regular_transaction_repeat_period_day)
+                            PeriodType.DAY -> stringResource(R.string.regular_transaction_repeat_period_day)
                             PeriodType.WEEK ->
-                                context.getString(
+                                stringResource(
                                     R.string.regular_transaction_repeat_period_week,
                                     getWeekDayString(
-                                        context,
                                         (transaction.executionPeriod as ExecutionPeriod.EveryWeek).dayOfWeek,
                                     ),
                                 )
 
                             PeriodType.MONTH -> {
                                 val dayOfMonth = (transaction.executionPeriod as ExecutionPeriod.EveryMonth).dayOfMonth
-                                context.getString(
+                                stringResource(
                                     R.string.regular_transaction_repeat_period_month,
                                     dayOfMonth.toString(),
                                 )
@@ -303,19 +301,18 @@ fun RegularTransactionItem(
     }
 }
 
-private fun getWeekDayString(
-    context: Context,
-    day: Int,
-) = when (day) {
-    WeekDays.MONDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_monday)
-    WeekDays.TUESDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_tuesday)
-    WeekDays.WEDNESDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_wednesday)
-    WeekDays.THURSDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_thursday)
-    WeekDays.FRIDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_friday)
-    WeekDays.SATURDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_saturday)
-    WeekDays.SUNDAY.ordinal -> context.getString(R.string.regular_transaction_repeat_sunday)
-    else -> throw IllegalArgumentException("Unknown day of week: $day")
-}
+@Composable
+private fun getWeekDayString(day: Int) =
+    when (day) {
+        WeekDays.MONDAY.ordinal -> stringResource(R.string.regular_transaction_repeat_monday)
+        WeekDays.TUESDAY.ordinal -> stringResource(R.string.regular_transaction_repeat_tuesday)
+        WeekDays.WEDNESDAY.ordinal -> stringResource(R.string.regular_transaction_repeat_wednesday)
+        WeekDays.THURSDAY.ordinal -> stringResource(R.string.regular_transaction_repeat_thursday)
+        WeekDays.FRIDAY.ordinal -> stringResource(R.string.regular_transaction_repeat_friday)
+        WeekDays.SATURDAY.ordinal -> stringResource(R.string.regular_transaction_repeat_saturday)
+        WeekDays.SUNDAY.ordinal -> stringResource(R.string.regular_transaction_repeat_sunday)
+        else -> throw IllegalArgumentException("Unknown day of week: $day")
+    }
 
 @Preview
 @Composable
