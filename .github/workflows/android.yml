@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - name: set up JDK 17
       uses: actions/setup-java@v5
       with:
@@ -25,6 +25,6 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew assembleDebug
     - name: Checks
-      run: ./gradlew projectHealth ktlintCheck detektCheck checkSortDependencies tomlCheck lint
+      run: ./gradlew projectHealth ktlintCheck detektCheck check tomlCheck lint
     - name: Tests
       run: ./gradlew test
