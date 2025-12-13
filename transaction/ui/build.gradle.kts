@@ -7,6 +7,9 @@ plugins {
 
 android {
     namespace = "com.d9tilov.android.transaction.ui"
+    defaultConfig {
+        vectorDrawables.useSupportLibrary = true
+    }
 }
 
 dependencies {
