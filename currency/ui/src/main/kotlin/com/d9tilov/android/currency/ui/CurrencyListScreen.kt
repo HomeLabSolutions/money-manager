@@ -183,6 +183,7 @@ private fun CurrencyContent(
     }
     when (currencyUiState) {
         is CurrencyUiState.NoCurrencies -> {}
+
         is CurrencyUiState.HasCurrencies -> {
             val filteredList = currencyUiState.filteredCurrencyList
             val currencyList = currencyUiState.currencyList

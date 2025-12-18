@@ -216,41 +216,46 @@ fun ProfileSection(
 ) {
     val (icon, title, subtitle) =
         when (profileUiItem) {
-            is ProfileUiItem.CurrencyUiItem ->
+            is ProfileUiItem.CurrencyUiItem -> {
                 ProfileItemData(
                     ImageVector.vectorResource(R.drawable.ic_currency_icon),
                     stringResource(R.string.profile_item_currency_title),
                     null,
                 )
+            }
 
-            is ProfileUiItem.BudgetUiItem ->
+            is ProfileUiItem.BudgetUiItem -> {
                 ProfileItemData(
                     ImageVector.vectorResource(R.drawable.ic_budget_icon),
                     stringResource(R.string.profile_item_budget_title),
                     profileUiItem.budgetData.createdDate.toStandardStringDate(),
                 )
+            }
 
-            is ProfileUiItem.RegularIncomeUiItem ->
+            is ProfileUiItem.RegularIncomeUiItem -> {
                 ProfileItemData(
                     ImageVector.vectorResource(R.drawable.ic_regular_income),
                     stringResource(R.string.profile_item_regular_incomes_title),
                     profileUiItem.regularIncomes.joinToString { it.category.name },
                     null,
                 )
+            }
 
-            is ProfileUiItem.RegularExpenseUiItem ->
+            is ProfileUiItem.RegularExpenseUiItem -> {
                 ProfileItemData(
                     ImageVector.vectorResource(R.drawable.ic_regular_expense),
                     stringResource(R.string.profile_item_regular_expenses_title),
                     profileUiItem.regularExpenses.joinToString { it.category.name },
                 )
+            }
 
-            is ProfileUiItem.Settings ->
+            is ProfileUiItem.Settings -> {
                 ProfileItemData(
                     ImageVector.vectorResource(R.drawable.ic_settings),
                     stringResource(R.string.profile_item_settings_title),
                     null,
                 )
+            }
         }
     ConstraintLayout(
         modifier =
@@ -321,7 +326,7 @@ fun ProfileSection(
                 )
             }
 
-            is ProfileUiItem.BudgetUiItem ->
+            is ProfileUiItem.BudgetUiItem -> {
                 CurrencyTextFieldExtraSmall(
                     amount = profileUiItem.budgetData.sum.reduceScaleStr(),
                     currencyCode = profileUiItem.budgetData.currencyCode.getSymbolByCode(),
@@ -338,6 +343,7 @@ fun ProfileSection(
                                 color = MaterialTheme.colorScheme.tertiary,
                             ),
                 )
+            }
 
             is ProfileUiItem.Settings -> {
                 val isPremium = profileUiItem.isPremium

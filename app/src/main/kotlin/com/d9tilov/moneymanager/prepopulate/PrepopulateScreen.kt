@@ -121,21 +121,23 @@ fun PrepopulateScreen(
     ) { padding: PaddingValues ->
         Column(modifier = Modifier.padding(padding)) {
             when (screenTypeId.fromScreenId()) {
-                PrepopulateScreen.CurrencyScreen ->
+                PrepopulateScreen.CurrencyScreen -> {
                     CurrencyListScreen(
                         uiState.currencyUiState,
                         Modifier.weight(1f),
                         false,
                         clickCallback,
                     )
+                }
 
-                PrepopulateScreen.BudgetScreen ->
+                PrepopulateScreen.BudgetScreen -> {
                     BudgetScreen(
                         uiState = uiState.budgetUiState,
                         showInPrepopulate = true,
                         onBudgetInputChanged = onBudgetInputChanged,
                         onAmountToSaveInputChanged = onAmountToSaveChanged,
                     )
+                }
             }
         }
     }
@@ -201,6 +203,7 @@ fun BottomNavigationBar(
                             PrepopulateScreen.CurrencyScreen -> {
                                 PrepopulateScreen.BudgetScreen
                             }
+
                             PrepopulateScreen.BudgetScreen -> {
                                 onBudgetSave()
                                 PrepopulateScreen.BudgetScreen

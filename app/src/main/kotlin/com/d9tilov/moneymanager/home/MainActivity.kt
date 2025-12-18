@@ -126,7 +126,7 @@ class MainActivity : ComponentActivity() {
 
             MoneyManagerTheme(darkTheme = darkTheme) {
                 when (state) {
-                    is MainActivityUiState.Success.Main ->
+                    is MainActivityUiState.Success.Main -> {
                         MmApp(
                             windowSizeClass = calculateWindowSizeClass(this),
                             locationCurrencyState = state.locationCurrencyState,
@@ -134,8 +134,12 @@ class MainActivity : ComponentActivity() {
                             onConfirmClicked = { viewModel.updateCurrency(it) },
                             onDismissClicked = { viewModel.updateLocalCurrency(it) },
                         )
+                    }
 
-                    is MainActivityUiState.Success.Prepopulate -> PrepopulateScreen()
+                    is MainActivityUiState.Success.Prepopulate -> {
+                        PrepopulateScreen()
+                    }
+
                     is MainActivityUiState.Loading, MainActivityUiState.Success.Auth -> {}
                 }
             }

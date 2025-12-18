@@ -201,21 +201,23 @@ private fun CurrencyTextField(
                     onValueChange = { input ->
                         text =
                             when {
-                                input.isEmpty() -> input
-                                input[0] == '0' -> input.substring(1)
+                                input.isEmpty() -> {
+                                    input
+                                }
+
+                                input[0] == '0' -> {
+                                    input.substring(1)
+                                }
+
                                 else -> {
-                                    when (input.toBigDecimalOrNull()) {
-                                        null -> text
-                                        else -> {
-                                            val number = input.toBigDecimal()
-                                            if (number.scale() > DECIMAL_SIZE) {
-                                                input.substring(
-                                                    0,
-                                                    input.indexOf(DELIMITER) + DECIMAL_SIZE + 1,
-                                                )
-                                            } else {
-                                                input
-                                            }
+                                    if (input.toBigDecimalOrNull() == null) {
+                                        text
+                                    } else {
+                                        val number = input.toBigDecimal()
+                                        if (number.scale() > DECIMAL_SIZE) {
+                                            input.take(input.indexOf(DELIMITER) + DECIMAL_SIZE + 1)
+                                        } else {
+                                            input
                                         }
                                     }
                                 }

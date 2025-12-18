@@ -115,14 +115,17 @@ fun RegularTransactionListScreen(
                 icon = painterResource(id = MoneyManagerIcons.EmptyRegularPlaceholder),
                 title =
                     when (uiState.transactionType) {
-                        TransactionType.EXPENSE ->
+                        TransactionType.EXPENSE -> {
                             stringResource(
                                 id = R.string.transaction_empty_placeholder_regular_expense_title,
                             )
-                        TransactionType.INCOME ->
+                        }
+
+                        TransactionType.INCOME -> {
                             stringResource(
                                 id = R.string.transaction_empty_placeholder_regular_income_title,
                             )
+                        }
                     },
             )
             return@Scaffold
@@ -269,14 +272,18 @@ fun RegularTransactionItem(
                             ),
                     text =
                         when (transaction.executionPeriod.periodType) {
-                            PeriodType.DAY -> stringResource(R.string.regular_transaction_repeat_period_day)
-                            PeriodType.WEEK ->
+                            PeriodType.DAY -> {
+                                stringResource(R.string.regular_transaction_repeat_period_day)
+                            }
+
+                            PeriodType.WEEK -> {
                                 stringResource(
                                     R.string.regular_transaction_repeat_period_week,
                                     getWeekDayString(
                                         (transaction.executionPeriod as ExecutionPeriod.EveryWeek).dayOfWeek,
                                     ),
                                 )
+                            }
 
                             PeriodType.MONTH -> {
                                 val dayOfMonth = (transaction.executionPeriod as ExecutionPeriod.EveryMonth).dayOfMonth

@@ -206,10 +206,19 @@ class StatisticsViewModel
         fun onMenuClick(type: StatisticsMenuType) =
             viewModelScope.launch {
                 when (type) {
-                    StatisticsMenuType.CURRENCY -> updateCurrency()
+                    StatisticsMenuType.CURRENCY -> {
+                        updateCurrency()
+                    }
+
                     StatisticsMenuType.CHART -> {}
-                    StatisticsMenuType.TRANSACTION_TYPE -> updateTransactionType()
-                    StatisticsMenuType.STATISTICS -> updateInStatistics()
+
+                    StatisticsMenuType.TRANSACTION_TYPE -> {
+                        updateTransactionType()
+                    }
+
+                    StatisticsMenuType.STATISTICS -> {
+                        updateInStatistics()
+                    }
                 }
                 updateTrigger.update { it + 1 }
             }

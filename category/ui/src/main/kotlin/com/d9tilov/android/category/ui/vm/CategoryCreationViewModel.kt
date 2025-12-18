@@ -72,17 +72,19 @@ class CategoryCreationViewModel
                         state.copy(
                             category =
                                 when (transactionType) {
-                                    TransactionType.EXPENSE ->
+                                    TransactionType.EXPENSE -> {
                                         Category.EMPTY_EXPENSE.copy(
                                             color = com.d9tilov.android.category.data.impl.R.color.category_blue,
                                             icon = com.d9tilov.android.common.android.R.drawable.ic_category_cafe,
                                         )
+                                    }
 
-                                    TransactionType.INCOME ->
+                                    TransactionType.INCOME -> {
                                         Category.EMPTY_INCOME.copy(
                                             color = com.d9tilov.android.category.data.impl.R.color.category_blue,
                                             icon = com.d9tilov.android.category.data.impl.R.drawable.ic_category_salary,
                                         )
+                                    }
                                 },
                             itemState = ItemState.CREATE,
                             type = transactionType,
