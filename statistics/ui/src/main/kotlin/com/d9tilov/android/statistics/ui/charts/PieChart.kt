@@ -69,22 +69,23 @@ private fun DrawScope.drawSeparatorLine(
     colorBackground: Color,
 ) {
     val separatorAngleRad = Math.toRadians(angleInDegrees)
-    
-    val (separatorStart, separatorEnd) = if (drawStyle is Stroke) {
-        val strokeWidth = drawStyle.width
-        val innerRadius = currentRadius - strokeWidth / 2
-        val outerRadius = currentRadius + strokeWidth / 2
-        val startX = center.x + innerRadius * kotlin.math.cos(separatorAngleRad).toFloat()
-        val startY = center.y + innerRadius * kotlin.math.sin(separatorAngleRad).toFloat()
-        val endX = center.x + outerRadius * kotlin.math.cos(separatorAngleRad).toFloat()
-        val endY = center.y + outerRadius * kotlin.math.sin(separatorAngleRad).toFloat()
-        Offset(startX, startY) to Offset(endX, endY)
-    } else {
-        val endX = center.x + currentRadius * kotlin.math.cos(separatorAngleRad).toFloat()
-        val endY = center.y + currentRadius * kotlin.math.sin(separatorAngleRad).toFloat()
-        center to Offset(endX, endY)
-    }
-    
+
+    val (separatorStart, separatorEnd) =
+        if (drawStyle is Stroke) {
+            val strokeWidth = drawStyle.width
+            val innerRadius = currentRadius - strokeWidth / 2
+            val outerRadius = currentRadius + strokeWidth / 2
+            val startX = center.x + innerRadius * kotlin.math.cos(separatorAngleRad).toFloat()
+            val startY = center.y + innerRadius * kotlin.math.sin(separatorAngleRad).toFloat()
+            val endX = center.x + outerRadius * kotlin.math.cos(separatorAngleRad).toFloat()
+            val endY = center.y + outerRadius * kotlin.math.sin(separatorAngleRad).toFloat()
+            Offset(startX, startY) to Offset(endX, endY)
+        } else {
+            val endX = center.x + currentRadius * kotlin.math.cos(separatorAngleRad).toFloat()
+            val endY = center.y + currentRadius * kotlin.math.sin(separatorAngleRad).toFloat()
+            center to Offset(endX, endY)
+        }
+
     drawLine(
         color = colorBackground,
         start = separatorStart,
@@ -337,15 +338,14 @@ fun PieChart(
                     color = detail.color.value,
                     style = drawStyle,
                 )
-                
+
                 if (index > 0 && degree < DEGREES_IN_CIRCLE) {
                     val beforeItems = data.filterIndexed { filterIndex, item -> filterIndex < index }
                     val separatorAngle = beforeItems.sumOf { it.data * DEGREES_IN_CIRCLE / total }
                     val currentRadius = radius * detail.scale.value
                     drawSeparatorLine(separatorAngle, currentRadius, drawStyle, center, colorBackground)
                 }
-                
-                
+
                 if (degree >= DEGREES_IN_CIRCLE * MIN_PERCENT_TO_SHOW_LABEL) {
                     val beforeItems = data.filterIndexed { filterIndex, _ -> filterIndex < index }
                     val startFromDegree = beforeItems.sumOf { it.data * DEGREES_IN_CIRCLE / total }
@@ -384,17 +384,17 @@ fun PieChart(
                     }
                 }
             }
-            
+
             if (details.size > 1) {
                 val firstDetail = details.first()
                 val lastDetail = details.last()
                 val firstDegree = firstDetail.pie.data * DEGREES_IN_CIRCLE / total
-                
+
                 if (firstDegree < DEGREES_IN_CIRCLE) {
                     val firstRadius = radius * firstDetail.scale.value
                     val lastRadius = radius * lastDetail.scale.value
                     val avgRadius = (firstRadius + lastRadius) / 2f
-                    
+
                     val lastPieStyle = lastDetail.pie.style ?: style
                     val lastDrawStyle: DrawStyle =
                         if (lastPieStyle is Pie.Style.Stroke) {
@@ -402,7 +402,7 @@ fun PieChart(
                         } else {
                             Fill
                         }
-                    
+
                     drawSeparatorLine(0.0, avgRadius, lastDrawStyle, center, colorBackground)
                 }
             }

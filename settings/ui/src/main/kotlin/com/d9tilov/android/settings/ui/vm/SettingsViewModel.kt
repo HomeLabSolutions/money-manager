@@ -103,7 +103,10 @@ class SettingsViewModel
             viewModelScope.launch {
                 _uiState.update { state -> state.copy(backupState = state.backupState.copy(backupLoading = true)) }
                 when (val result = backupInteractor.makeBackup()) {
-                    is ResultOf.Success -> message = R.string.settings_backup_succeeded
+                    is ResultOf.Success -> {
+                        message = R.string.settings_backup_succeeded
+                    }
+
                     is ResultOf.Failure -> {
                         message =
                             when (result.throwable) {
@@ -126,7 +129,10 @@ class SettingsViewModel
         fun deleteBackup() {
             viewModelScope.launch {
                 when (val result = backupInteractor.deleteBackup()) {
-                    is ResultOf.Success -> message = R.string.settings_backup_deleted
+                    is ResultOf.Success -> {
+                        message = R.string.settings_backup_deleted
+                    }
+
                     is ResultOf.Failure -> {
                         message =
                             when (result.throwable) {

@@ -94,27 +94,33 @@ class MainViewModel
 
                                         is ResultOf.Failure -> {
                                             when (result.throwable) {
-                                                is NetworkException ->
+                                                is NetworkException -> {
                                                     Timber
                                                         .tag(TAG)
                                                         .d("Do work with network exception: ${result.throwable}")
+                                                }
 
-                                                is WrongUidException ->
+                                                is WrongUidException -> {
                                                     Timber
                                                         .tag(TAG)
                                                         .d("Do work with wrong uid exception: ${result.throwable}")
+                                                }
 
-                                                is FileNotFoundException ->
+                                                is FileNotFoundException -> {
                                                     Timber
                                                         .tag(TAG)
                                                         .d("Do work with file not found error: ${result.throwable}")
+                                                }
 
-                                                is FirebaseException ->
+                                                is FirebaseException -> {
                                                     Timber
                                                         .tag(TAG)
                                                         .d("Do work with Firebase exception: ${result.throwable}")
+                                                }
 
-                                                else -> Timber.tag(TAG).d("Do work with exception: ${result.throwable}")
+                                                else -> {
+                                                    Timber.tag(TAG).d("Do work with exception: ${result.throwable}")
+                                                }
                                             }
                                         }
 

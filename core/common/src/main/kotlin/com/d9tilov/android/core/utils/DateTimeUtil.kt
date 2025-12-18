@@ -106,12 +106,19 @@ fun LocalDateTime.getEndDateOfFiscalPeriod(fiscalDay: Int): LocalDateTime {
     val c = currentDate()
     val fiscalDate: LocalDate =
         when {
-            day == fiscalDay -> c.plus(1, DateTimeUnit.MONTH).minus(1, DateTimeUnit.DAY)
-            day > fiscalDay ->
+            day == fiscalDay -> {
+                c.plus(1, DateTimeUnit.MONTH).minus(1, DateTimeUnit.DAY)
+            }
+
+            day > fiscalDay -> {
                 LocalDate(c.year, c.month, fiscalDay)
                     .plus(1, DateTimeUnit.MONTH)
                     .minus(1, DateTimeUnit.DAY)
-            else -> LocalDate(c.year, c.month, fiscalDay).minus(1, DateTimeUnit.DAY)
+            }
+
+            else -> {
+                LocalDate(c.year, c.month, fiscalDay).minus(1, DateTimeUnit.DAY)
+            }
         }
     return fiscalDate.getEndOfDay()
 }

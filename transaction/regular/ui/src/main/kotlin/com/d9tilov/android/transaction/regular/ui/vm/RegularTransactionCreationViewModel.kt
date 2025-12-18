@@ -127,25 +127,29 @@ class RegularTransactionCreationViewModel
             viewModelScope.launch {
                 val tr =
                     when (_uiState.value.curPeriodItem) {
-                        PeriodMenuItem.DAY ->
+                        PeriodMenuItem.DAY -> {
                             _uiState.value.transaction.copy(
                                 executionPeriod = ExecutionPeriod.EveryDay(),
                             )
-                        PeriodMenuItem.WEEK ->
+                        }
+
+                        PeriodMenuItem.WEEK -> {
                             _uiState.value.transaction.copy(
                                 executionPeriod =
                                     ExecutionPeriod.EveryWeek(
                                         _uiState.value.curDayInWeek.ordinal,
                                     ),
                             )
+                        }
 
-                        PeriodMenuItem.MONTH ->
+                        PeriodMenuItem.MONTH -> {
                             _uiState.value.transaction.copy(
                                 executionPeriod =
                                     ExecutionPeriod.EveryMonth(
                                         _uiState.value.curDayOfMonth,
                                     ),
                             )
+                        }
                     }
                 regularTransactionInteractor.insert(tr.copy(sum = _uiState.value.amount.toBigDecimal()))
             }
