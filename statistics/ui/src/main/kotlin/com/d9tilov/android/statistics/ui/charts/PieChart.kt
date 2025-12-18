@@ -31,6 +31,7 @@ import androidx.compose.ui.geometry.isUnspecified
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathMeasure
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.DrawStyle
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -59,6 +60,38 @@ private const val LABEL_RADIUS_PART = 0.7f
 private const val ANIMATION_DURATION = 500
 private const val ID_RANGE = 999999
 private const val INNER_RADIUS = 0.6f
+
+private fun DrawScope.drawSeparatorLine(
+    angleInDegrees: Double,
+    currentRadius: Float,
+    drawStyle: DrawStyle,
+    center: Offset,
+    colorBackground: Color,
+) {
+    val separatorAngleRad = Math.toRadians(angleInDegrees)
+    
+    val (separatorStart, separatorEnd) = if (drawStyle is Stroke) {
+        val strokeWidth = drawStyle.width
+        val innerRadius = currentRadius - strokeWidth / 2
+        val outerRadius = currentRadius + strokeWidth / 2
+        val startX = center.x + innerRadius * kotlin.math.cos(separatorAngleRad).toFloat()
+        val startY = center.y + innerRadius * kotlin.math.sin(separatorAngleRad).toFloat()
+        val endX = center.x + outerRadius * kotlin.math.cos(separatorAngleRad).toFloat()
+        val endY = center.y + outerRadius * kotlin.math.sin(separatorAngleRad).toFloat()
+        Offset(startX, startY) to Offset(endX, endY)
+    } else {
+        val endX = center.x + currentRadius * kotlin.math.cos(separatorAngleRad).toFloat()
+        val endY = center.y + currentRadius * kotlin.math.sin(separatorAngleRad).toFloat()
+        center to Offset(endX, endY)
+    }
+    
+    drawLine(
+        color = colorBackground,
+        start = separatorStart,
+        end = separatorEnd,
+        strokeWidth = 2.dp.toPx(),
+    )
+}
 
 @Composable
 fun PieChart(
@@ -164,6 +197,7 @@ fun PieChart(
     }
     val colorPrimary = MaterialTheme.colorScheme.primary
     val colorSecondary = MaterialTheme.colorScheme.secondary
+    val colorBackground = MaterialTheme.colorScheme.background
 
     Column(
         modifier = modifier,
@@ -303,6 +337,15 @@ fun PieChart(
                     color = detail.color.value,
                     style = drawStyle,
                 )
+                
+                if (index > 0 && degree < DEGREES_IN_CIRCLE) {
+                    val beforeItems = data.filterIndexed { filterIndex, item -> filterIndex < index }
+                    val separatorAngle = beforeItems.sumOf { it.data * DEGREES_IN_CIRCLE / total }
+                    val currentRadius = radius * detail.scale.value
+                    drawSeparatorLine(separatorAngle, currentRadius, drawStyle, center, colorBackground)
+                }
+                
+                
                 if (degree >= DEGREES_IN_CIRCLE * MIN_PERCENT_TO_SHOW_LABEL) {
                     val beforeItems = data.filterIndexed { filterIndex, _ -> filterIndex < index }
                     val startFromDegree = beforeItems.sumOf { it.data * DEGREES_IN_CIRCLE / total }
@@ -339,6 +382,28 @@ fun PieChart(
                             textPaint,
                         )
                     }
+                }
+            }
+            
+            if (details.size > 1) {
+                val firstDetail = details.first()
+                val lastDetail = details.last()
+                val firstDegree = firstDetail.pie.data * DEGREES_IN_CIRCLE / total
+                
+                if (firstDegree < DEGREES_IN_CIRCLE) {
+                    val firstRadius = radius * firstDetail.scale.value
+                    val lastRadius = radius * lastDetail.scale.value
+                    val avgRadius = (firstRadius + lastRadius) / 2f
+                    
+                    val lastPieStyle = lastDetail.pie.style ?: style
+                    val lastDrawStyle: DrawStyle =
+                        if (lastPieStyle is Pie.Style.Stroke) {
+                            Stroke(width = ((lastDetail.pie.style ?: style) as Pie.Style.Stroke).width.toPx())
+                        } else {
+                            Fill
+                        }
+                    
+                    drawSeparatorLine(0.0, avgRadius, lastDrawStyle, center, colorBackground)
                 }
             }
         }
