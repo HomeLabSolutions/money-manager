@@ -137,27 +137,39 @@ fun StatisticsScreen(
         )
         StatisticsMenuSelector(state = state.statisticsMenuState, onClick = onMenuClick)
 
-        StatisticsChartWithSwipe(
-            modifier = Modifier.weight(PIE_CHART_WEIGHT),
-            periodState = state.periodState,
-            pieData = state.chartState.pieData,
-            onPrevClicked = onPrevClicked,
-            onNextClicked = onNextClicked,
-        )
+        if (state.chartState.pieData.isEmpty()) {
+            EmptyListPlaceholder(
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large)),
+                icon = painterResource(id = MoneyManagerIcons.EmptyStatisticsPlaceholder),
+                title = stringResource(id = R.string.statistics_no_data),
+            )
+        } else {
+            StatisticsChartWithSwipe(
+                modifier = Modifier.weight(PIE_CHART_WEIGHT),
+                periodState = state.periodState,
+                pieData = state.chartState.pieData,
+                onPrevClicked = onPrevClicked,
+                onNextClicked = onNextClicked,
+            )
 
-        StatisticsList(
-            modifier = Modifier.weight(2f),
-            state = state.detailsTransactionListState,
-            transactionType = state.statisticsMenuState.transactionType,
-            onItemClick = {
-                onTransactionClicked(
-                    TransactionDetailsChartModel(
-                        it.category.id,
-                        state.statisticsMenuState.inStatistics == StatisticsMenuInStatisticsType.InStatisticsType,
-                    ),
-                )
-            },
-        )
+            StatisticsList(
+                modifier = Modifier.weight(2f),
+                state = state.detailsTransactionListState,
+                transactionType = state.statisticsMenuState.transactionType,
+                onItemClick = {
+                    onTransactionClicked(
+                        TransactionDetailsChartModel(
+                            it.category.id,
+                            state.statisticsMenuState.inStatistics == StatisticsMenuInStatisticsType.InStatisticsType,
+                        ),
+                    )
+                },
+            )
+        }
     }
 
     if (showDatePicker.value) {
@@ -336,38 +348,29 @@ fun StatisticsChart(
             )
         }
 
-        val chartModifier =
-            Modifier
-                .weight(1f)
-                .fillMaxSize()
-                .padding(top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large))
-        if (pieData.isEmpty()) {
-            EmptyListPlaceholder(
-                modifier = chartModifier,
-                icon = painterResource(id = MoneyManagerIcons.EmptyStatisticsPlaceholder),
-                title = stringResource(id = R.string.statistics_no_data),
-            )
-        } else {
-            PieChart(
-                modifier = chartModifier,
-                data = pieData,
-                centerLabel = periodStr,
-                onPieClick = {
-                    println("${it.label} Clicked")
-                    val pieIndex = pieData.indexOf(it)
-                    onPieSelected(pieIndex)
-                },
-                selectedScale = 1.2f,
-                spaceDegreeAnimEnterSpec = floatSpec,
-                colorAnimEnterSpec = tween(ANIMATION_DURATION),
-                scaleAnimEnterSpec = floatSpec,
-                colorAnimExitSpec = tween(ANIMATION_DURATION),
-                scaleAnimExitSpec = tween(ANIMATION_DURATION),
-                spaceDegreeAnimExitSpec = tween(ANIMATION_DURATION),
-                selectedPaddingDegree = 0f,
-                style = Pie.Style.Stroke(48.dp),
-            )
-        }
+        PieChart(
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .fillMaxSize()
+                    .padding(top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large)),
+            data = pieData,
+            centerLabel = periodStr,
+            onPieClick = {
+                println("${it.label} Clicked")
+                val pieIndex = pieData.indexOf(it)
+                onPieSelected(pieIndex)
+            },
+            selectedScale = 1.2f,
+            spaceDegreeAnimEnterSpec = floatSpec,
+            colorAnimEnterSpec = tween(ANIMATION_DURATION),
+            scaleAnimEnterSpec = floatSpec,
+            colorAnimExitSpec = tween(ANIMATION_DURATION),
+            scaleAnimExitSpec = tween(ANIMATION_DURATION),
+            spaceDegreeAnimExitSpec = tween(ANIMATION_DURATION),
+            selectedPaddingDegree = 0f,
+            style = Pie.Style.Stroke(48.dp),
+        )
         IconButton(
             onClick = onNextClicked,
             enabled = periodUiState.showNextArrow,
