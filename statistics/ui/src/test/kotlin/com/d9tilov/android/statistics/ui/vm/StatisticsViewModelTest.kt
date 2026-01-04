@@ -302,4 +302,117 @@ class StatisticsViewModelTest {
             assertEquals("100", detailsState.amount.value)
             assertEquals("$", detailsState.amount.currencySymbol)
         }
+
+    @Test
+    fun `currencySymbol should update when currency is toggled to Default`() =
+        runTest {
+            val eurCurrency =
+                CurrencyMetaData(
+                    clientId = "test-client-id",
+                    code = "EUR",
+                    symbol = "€",
+                )
+            coEvery { currencyInteractor.getMainCurrency() } returns eurCurrency
+
+            val viewModel =
+                StatisticsViewModel(
+                    analyticsSender,
+                    testDispatcher,
+                    transactionInteractor,
+                    currencyInteractor,
+                )
+            advanceUntilIdle()
+
+            assertEquals("€", viewModel.uiState.value.detailsTransactionListState.amount.currencySymbol)
+            assertTrue(viewModel.uiState.value.statisticsMenuState.currency is StatisticsMenuCurrencyType.Current)
+
+            viewModel.onMenuClick(StatisticsMenuType.CURRENCY)
+            advanceUntilIdle()
+
+            assertEquals("$", viewModel.uiState.value.detailsTransactionListState.amount.currencySymbol)
+            assertTrue(viewModel.uiState.value.statisticsMenuState.currency is StatisticsMenuCurrencyType.Default)
+        }
+
+    @Test
+    fun `currencySymbol should update when currency is toggled back to Current`() =
+        runTest {
+            val eurCurrency =
+                CurrencyMetaData(
+                    clientId = "test-client-id",
+                    code = "EUR",
+                    symbol = "€",
+                )
+            coEvery { currencyInteractor.getMainCurrency() } returns eurCurrency
+
+            val viewModel =
+                StatisticsViewModel(
+                    analyticsSender,
+                    testDispatcher,
+                    transactionInteractor,
+                    currencyInteractor,
+                )
+            advanceUntilIdle()
+
+            viewModel.onMenuClick(StatisticsMenuType.CURRENCY)
+            advanceUntilIdle()
+            assertEquals("$", viewModel.uiState.value.detailsTransactionListState.amount.currencySymbol)
+
+            viewModel.onMenuClick(StatisticsMenuType.CURRENCY)
+            advanceUntilIdle()
+
+            assertEquals("€", viewModel.uiState.value.detailsTransactionListState.amount.currencySymbol)
+            assertTrue(viewModel.uiState.value.statisticsMenuState.currency is StatisticsMenuCurrencyType.Current)
+        }
+
+    @Test
+    fun `currencySymbol should be set correctly on init with non-USD currency`() =
+        runTest {
+            val rubCurrency =
+                CurrencyMetaData(
+                    clientId = "test-client-id",
+                    code = "RUB",
+                    symbol = "₽",
+                )
+            coEvery { currencyInteractor.getMainCurrency() } returns rubCurrency
+
+            val viewModel =
+                StatisticsViewModel(
+                    analyticsSender,
+                    testDispatcher,
+                    transactionInteractor,
+                    currencyInteractor,
+                )
+            advanceUntilIdle()
+
+            val detailsState = viewModel.uiState.value.detailsTransactionListState
+            assertEquals("₽", detailsState.amount.currencySymbol)
+        }
+
+    @Test
+    fun `currencySymbol should update together with value when data is loaded`() =
+        runTest {
+            val eurCurrency =
+                CurrencyMetaData(
+                    clientId = "test-client-id",
+                    code = "EUR",
+                    symbol = "€",
+                )
+            coEvery { currencyInteractor.getMainCurrency() } returns eurCurrency
+            coEvery {
+                transactionInteractor.getSumInPeriod(any(), any(), any(), any(), any())
+            } returns flowOf(BigDecimal("250.50"))
+
+            val viewModel =
+                StatisticsViewModel(
+                    analyticsSender,
+                    testDispatcher,
+                    transactionInteractor,
+                    currencyInteractor,
+                )
+            advanceUntilIdle()
+
+            val detailsState = viewModel.uiState.value.detailsTransactionListState
+            assertEquals("250.5", detailsState.amount.value)
+            assertEquals("€", detailsState.amount.currencySymbol)
+        }
 }
