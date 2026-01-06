@@ -41,7 +41,7 @@ fun EmptyListPlaceholder(
         Text(
             modifier = Modifier.padding(top = 16.dp),
             text = title,
-            style = MaterialTheme.typography.titleLarge,
+            style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center,
         )
