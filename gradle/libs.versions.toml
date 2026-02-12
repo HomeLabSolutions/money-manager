@@ -1,6 +1,6 @@
 [versions]
 accompanist = "0.37.3"
-activity = "1.12.3"
+activity = "1.12.4"
 androidxComposeBom="2026.01.01"
 appCompat = "1.7.1"
 autonomousappsSorting = "0.16"
