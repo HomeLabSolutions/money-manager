@@ -16,7 +16,8 @@
 
 package com.android.moneymanager.gradle.extensions
 
-import com.android.build.api.dsl.CommonExtension
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
@@ -24,10 +25,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.File
 
 /**
- * Configure Compose-specific options
+ * Configure Compose-specific options for Application
  */
-internal fun Project.configureAndroidCompose(commonExtension: CommonExtension<*, *, *, *, *, *>) {
-    commonExtension.apply {
+internal fun Project.configureAndroidCompose(extension: ApplicationExtension) {
+    extension.apply {
         project.plugins.apply(
             buildLibs.plugins.compose.compiler
                 .get()
@@ -42,6 +43,32 @@ internal fun Project.configureAndroidCompose(commonExtension: CommonExtension<*,
         }
     }
 
+    configureComposeMetrics()
+}
+
+/**
+ * Configure Compose-specific options for Library
+ */
+internal fun Project.configureAndroidCompose(extension: LibraryExtension) {
+    extension.apply {
+        project.plugins.apply(
+            buildLibs.plugins.compose.compiler
+                .get()
+                .pluginId,
+        )
+        buildFeatures {
+            compose = true
+        }
+
+        dependencies {
+            implementation(platform(buildLibs.androidx.compose.bom))
+        }
+    }
+
+    configureComposeMetrics()
+}
+
+private fun Project.configureComposeMetrics() {
     tasks.withType<KotlinCompile>().configureEach {
         compilerOptions {
             for (param in buildComposeMetricsParameters()) {

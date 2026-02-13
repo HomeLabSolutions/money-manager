@@ -16,15 +16,27 @@
 
 package com.android.moneymanager.gradle.extensions
 
-import com.android.build.api.dsl.CommonExtension
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 
 /**
- * Configure Firebase-specific options
+ * Configure Firebase-specific options for Application
  */
-internal fun Project.configureAndroidFirebase(commonExtension: CommonExtension<*, *, *, *, *, *>) {
-    commonExtension.apply {
+internal fun Project.configureAndroidFirebase(extension: ApplicationExtension) {
+    extension.apply {
+        dependencies {
+            implementation(platform(buildLibs.firebase.bom))
+        }
+    }
+}
+
+/**
+ * Configure Firebase-specific options for Library
+ */
+internal fun Project.configureAndroidFirebase(extension: LibraryExtension) {
+    extension.apply {
         dependencies {
             implementation(platform(buildLibs.firebase.bom))
         }
