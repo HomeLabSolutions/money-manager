@@ -88,10 +88,10 @@ fun AutoSizeTextField(
             textStyle = TextStyle.Default.copy(fontSize = shrunkFontSize, color = fontColor),
             singleLine = true,
             onValueChange = { text ->
-                if (text.text.length <=
-                    MainPriceFieldParser.MAX_PRICE_LENGTH
-                ) {
-                    inputValueChanged(text.text)
+                val newText = text.text
+                val hasMultipleDots = newText.count { it == '.' } > 1
+                if (newText.length <= MainPriceFieldParser.MAX_PRICE_LENGTH && !hasMultipleDots) {
+                    inputValueChanged(newText)
                 }
             },
             supportingText = showError,
