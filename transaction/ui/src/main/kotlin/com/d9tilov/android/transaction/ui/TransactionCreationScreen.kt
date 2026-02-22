@@ -47,7 +47,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.CategoryDestination
-import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_FORMAT
+import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_TIME_FORMAT
 import com.d9tilov.android.common.android.utils.formatDate
 import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.core.model.TransactionType
@@ -244,7 +244,7 @@ fun TransactionCreationScreen(
                                             id = com.d9tilov.android.designsystem.R.dimen.padding_small,
                                         ),
                                 ).clickable { showDatePickerDialog.value = true },
-                        text = formatDate(uiState.transaction.date, TRANSACTION_DATE_FORMAT),
+                        text = formatDate(uiState.transaction.date, TRANSACTION_DATE_TIME_FORMAT),
                         color = MaterialTheme.colorScheme.secondary,
                         style = MaterialTheme.typography.bodyMedium,
                     )
