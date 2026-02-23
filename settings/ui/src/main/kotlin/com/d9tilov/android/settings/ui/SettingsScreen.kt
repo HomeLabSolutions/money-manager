@@ -32,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -226,7 +227,10 @@ fun BackupLayout(
             onClick = onBackupClick,
         ) {
             Icon(
-                modifier = Modifier.then(if (backupState.backupLoading) Modifier.rotate(angle) else Modifier),
+                modifier =
+                    Modifier.then(
+                        if (backupState.backupLoading) Modifier.graphicsLayer { rotationZ = angle } else Modifier,
+                    ),
                 imageVector = MoneyManagerIcons.Backup,
                 contentDescription = "Backup",
             )
