@@ -31,7 +31,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
@@ -257,7 +256,7 @@ private fun isInputDateValid(input: String): Boolean {
     return try {
         val num = input.toInt()
         num in 1..31
-    } catch (ex: NumberFormatException) {
+    } catch (_: NumberFormatException) {
         false
     }
 }
