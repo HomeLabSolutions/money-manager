@@ -35,6 +35,12 @@ android {
                 println("Warning: keystore.properties file not found. Release signing configuration will not be applied.")
             }
         }
+        getByName("debug") {
+            storeFile = file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
     }
 
     namespace = "com.d9tilov.moneymanager"

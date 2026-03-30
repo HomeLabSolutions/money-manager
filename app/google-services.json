@@ -46,6 +46,14 @@
           }
         },
         {
+          "client_id": "490802194845-vnvnp42ifs5qsupau3lan2lk2j48iunh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.d9tilov.moneymanager",
+            "certificate_hash": "20c81838f1d6b70836193ce2381689556fb1e701"
+          }
+        },
+        {
           "client_id": "490802194845-0an8pvfbej02j20omopjhdqdjbsrojv7.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -74,6 +82,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "490802194845-37la6v4si65h7b237pqt2fqrsu2pldsl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.d9tilov.moneymanager.debug",
+            "certificate_hash": "20c81838f1d6b70836193ce2381689556fb1e701"
+          }
+        },
         {
           "client_id": "490802194845-4lk48bjhtcjneab26s262b68977pt4kd.apps.googleusercontent.com",
           "client_type": 1,
