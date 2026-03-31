@@ -2,5 +2,3 @@
 *.log
 private_key.pepk
 money_manager_keystore.jks
-# Real Firebase config — injected via CI or local override; only placeholder is committed
-/google-services.json
