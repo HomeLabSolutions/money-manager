@@ -9,7 +9,6 @@ billing = "8.3.0"
 coil = "2.7.0"
 compose = "2.10.0"
 composeConstraintLayout = "1.1.1"
-core = "1.18.0"
 coroutinesCore = "1.10.2"
 datastore = "1.2.1"
 detektPlugin = "1.23.8"
@@ -71,7 +70,6 @@ androidx-work-runtime = { group = "androidx.work", name = "work-runtime", versio
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appCompat" }
 billing = { group = "com.android.billingclient", name = "billing", version.ref = "billing" }
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
-core = { group = "androidx.core", name = "core", version.ref = "core" }
 dagger = { group = "com.google.dagger", name = "dagger", version.ref = "hilt" }
 datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 detekt = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detektPlugin" }
