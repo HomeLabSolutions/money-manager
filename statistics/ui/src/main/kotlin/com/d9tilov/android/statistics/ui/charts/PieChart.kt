@@ -252,7 +252,14 @@ fun PieChart(
                 }
             val total = details.sumOf { it.pie.data }
             details.forEachIndexed { index, detail ->
-                val degree = detail.pie.data * DEGREES_IN_CIRCLE / total
+                val beforeItems = data.filterIndexed { filterIndex, _ -> filterIndex < index }
+                val startFromDegree = beforeItems.sumOf { it.data * DEGREES_IN_CIRCLE / total }
+                val degree =
+                    if (index == details.size - 1) {
+                        DEGREES_IN_CIRCLE - startFromDegree
+                    } else {
+                        detail.pie.data * DEGREES_IN_CIRCLE / total
+                    }
 
                 val pieStyle = detail.pie.style ?: style
                 val drawStyle: DrawStyle =
@@ -261,95 +268,80 @@ fun PieChart(
                     } else {
                         Fill
                     }
-                val piecePath =
-                    if (degree >= DEGREES_IN_CIRCLE) {
-                        pieces.add(
-                            PiePiece(
-                                id = detail.id,
-                                radius = radius * detail.scale.value,
-                                startFromDegree = 0f,
-                                endToDegree = DEGREES_IN_CIRCLE,
-                            ),
+                if (degree >= DEGREES_IN_CIRCLE) {
+                    pieces.add(
+                        PiePiece(
+                            id = detail.id,
+                            radius = radius * detail.scale.value,
+                            startFromDegree = 0f,
+                            endToDegree = DEGREES_IN_CIRCLE,
+                        ),
+                    )
+                    drawCircle(
+                        color = detail.color.value,
+                        radius = radius * detail.scale.value,
+                        center = center,
+                        style = drawStyle,
+                    )
+                } else {
+                    val arcRect =
+                        Rect(
+                            center = center,
+                            radius = radius * detail.scale.value,
                         )
 
+                    val arcStart = startFromDegree.toFloat() + detail.space.value
+                    val arcSweep = degree.toFloat() - (detail.space.value * 2 + spaceDegree)
+
+                    val piecePath =
                         Path().apply {
-                            addOval(
-                                oval =
-                                    Rect(
-                                        center = center,
-                                        radius = radius * detail.scale.value,
-                                    ),
-                            )
-                        }
-                    } else {
-                        val beforeItems = data.filterIndexed { filterIndex, item -> filterIndex < index }
-                        val startFromDegree = beforeItems.sumOf { it.data * DEGREES_IN_CIRCLE / total }
-
-                        val arcRect =
-                            Rect(
-                                center = center,
-                                radius = radius * detail.scale.value,
-                            )
-
-                        val arcStart = startFromDegree.toFloat() + detail.space.value
-                        val arcSweep = degree.toFloat() - (detail.space.value * 2 + spaceDegree)
-
-                        val piecePath =
-                            Path().apply {
-                                arcTo(arcRect, arcStart, arcSweep, true)
-                            }
-
-                        if (pieStyle is Pie.Style.Fill) {
-                            pathMeasure.setPath(piecePath, false)
-                            piecePath.reset()
-                            val start = pathMeasure.getPosition(0f)
-                            if (!start.isUnspecified) {
-                                piecePath.moveTo(start.x, start.y)
-                            }
-                            piecePath.lineTo(
-                                size.width / 2,
-                                size.height / 2,
-                            )
-                            piecePath.arcTo(arcRect, arcStart, arcSweep, true)
-                            piecePath.lineTo(
-                                size.width / 2,
-                                size.height / 2,
-                            )
+                            arcTo(arcRect, arcStart, arcSweep, true)
                         }
 
-                        pieces.add(
-                            PiePiece(
-                                id = detail.id,
-                                radius = radius * detail.scale.value,
-                                startFromDegree = arcStart,
-                                endToDegree =
-                                    if (arcStart + arcSweep >= DEGREES_IN_CIRCLE) {
-                                        DEGREES_IN_CIRCLE
-                                    } else {
-                                        arcStart + arcSweep
-                                    },
-                            ),
+                    if (pieStyle is Pie.Style.Fill) {
+                        pathMeasure.setPath(piecePath, false)
+                        piecePath.reset()
+                        val start = pathMeasure.getPosition(0f)
+                        if (!start.isUnspecified) {
+                            piecePath.moveTo(start.x, start.y)
+                        }
+                        piecePath.lineTo(
+                            size.width / 2,
+                            size.height / 2,
                         )
-                        piecePath
+                        piecePath.arcTo(arcRect, arcStart, arcSweep, true)
+                        piecePath.lineTo(
+                            size.width / 2,
+                            size.height / 2,
+                        )
                     }
 
-                drawPath(
-                    path = piecePath,
-                    color = detail.color.value,
-                    style = drawStyle,
-                )
+                    pieces.add(
+                        PiePiece(
+                            id = detail.id,
+                            radius = radius * detail.scale.value,
+                            startFromDegree = arcStart,
+                            endToDegree =
+                                if (arcStart + arcSweep >= DEGREES_IN_CIRCLE) {
+                                    DEGREES_IN_CIRCLE
+                                } else {
+                                    arcStart + arcSweep
+                                },
+                        ),
+                    )
+                    drawPath(
+                        path = piecePath,
+                        color = detail.color.value,
+                        style = drawStyle,
+                    )
+                }
 
                 if (index > 0 && degree < DEGREES_IN_CIRCLE) {
-                    val beforeItems = data.filterIndexed { filterIndex, item -> filterIndex < index }
-                    val separatorAngle = beforeItems.sumOf { it.data * DEGREES_IN_CIRCLE / total }
                     val currentRadius = radius * detail.scale.value
-                    drawSeparatorLine(separatorAngle, currentRadius, drawStyle, center, colorBackground)
+                    drawSeparatorLine(startFromDegree, currentRadius, drawStyle, center, colorBackground)
                 }
 
                 if (degree >= DEGREES_IN_CIRCLE * MIN_PERCENT_TO_SHOW_LABEL) {
-                    val beforeItems = data.filterIndexed { filterIndex, _ -> filterIndex < index }
-                    val startFromDegree = beforeItems.sumOf { it.data * DEGREES_IN_CIRCLE / total }
-
                     val middleAngle = startFromDegree + degree / 2
 
                     val labelRadius =
