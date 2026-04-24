@@ -323,12 +323,14 @@ fun RegularTransactionCreationScreen(
                         }
                         when (uiState.curPeriodItem) {
                             PeriodMenuItem.DAY -> {}
-                            PeriodMenuItem.WEEK ->
+
+                            PeriodMenuItem.WEEK -> {
                                 DaysOfWeek(uiState.curDayInWeek) {
                                     onWeekDayClicked(it)
                                 }
+                            }
 
-                            PeriodMenuItem.MONTH ->
+                            PeriodMenuItem.MONTH -> {
                                 Text(
                                     text =
                                         stringResource(
@@ -347,6 +349,7 @@ fun RegularTransactionCreationScreen(
                                     color = MaterialTheme.colorScheme.secondary,
                                     style = MaterialTheme.typography.labelMedium,
                                 )
+                            }
                         }
                     }
                 }
@@ -507,18 +510,23 @@ fun DropdownPeriodMenu(
                         Text(
                             text =
                                 when (item) {
-                                    PeriodMenuItem.DAY ->
+                                    PeriodMenuItem.DAY -> {
                                         stringResource(
                                             id = R.string.regular_transaction_repeat_list_day,
                                         )
-                                    PeriodMenuItem.WEEK ->
+                                    }
+
+                                    PeriodMenuItem.WEEK -> {
                                         stringResource(
                                             id = R.string.regular_transaction_repeat_list_week,
                                         )
-                                    PeriodMenuItem.MONTH ->
+                                    }
+
+                                    PeriodMenuItem.MONTH -> {
                                         stringResource(
                                             id = R.string.regular_transaction_repeat_list_month,
                                         )
+                                    }
                                 },
                             color = MaterialTheme.colorScheme.onTertiaryContainer,
                             style = MaterialTheme.typography.bodyLarge,

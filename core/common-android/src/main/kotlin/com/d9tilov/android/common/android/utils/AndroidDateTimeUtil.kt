@@ -14,6 +14,7 @@ import java.util.Locale
 import kotlin.math.abs
 
 const val TRANSACTION_DATE_FORMAT = "dd MMMM yyyy"
+const val TRANSACTION_DATE_TIME_FORMAT = "dd MMMM yyyy, HH:mm"
 
 fun formatDate(
     date: LocalDateTime,

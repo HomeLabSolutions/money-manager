@@ -401,12 +401,13 @@ class TransactionInteractorImpl @Inject constructor(
         val endDate = curDate.getEndDateOfFiscalPeriod(fiscalDay).date
         return transactions.sumOf { tr ->
             when (tr.executionPeriod.periodType) {
-                PeriodType.MONTH ->
+                PeriodType.MONTH -> {
                     currencyInteractor.toTargetCurrency(
                         tr.sum,
                         tr.currencyCode,
                         currencyInteractor.getMainCurrency().code,
                     )
+                }
 
                 PeriodType.WEEK -> {
                     var dayOfWeekCount = 0

@@ -1,5 +1,6 @@
 package com.android.moneymanager.gradle
 
+import com.android.moneymanager.gradle.extensions.buildLibs
 import org.gradle.api.Project
 import org.gradle.api.attributes.Bundling
 import org.gradle.api.tasks.JavaExec
@@ -15,7 +16,7 @@ object FormattingOptions {
         val ktlint by configurations.creating
 
         dependencies {
-            ktlint("com.pinterest.ktlint:ktlint-cli:1.6.0") {
+            ktlint(buildLibs.ktlint.cli) {
                 attributes {
                     attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
                 }

@@ -36,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -47,7 +48,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.CategoryDestination
-import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_FORMAT
+import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_TIME_FORMAT
 import com.d9tilov.android.common.android.utils.formatDate
 import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.core.model.TransactionType
@@ -70,9 +71,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.rememberCameraPositionState
-import com.google.maps.android.compose.rememberMarkerState
+import com.google.maps.android.compose.rememberUpdatedMarkerState
 import java.math.BigDecimal
-import java.util.Locale
 
 private const val MAP_ZOOM_LEVEL = 15f
 
@@ -244,7 +244,7 @@ fun TransactionCreationScreen(
                                             id = com.d9tilov.android.designsystem.R.dimen.padding_small,
                                         ),
                                 ).clickable { showDatePickerDialog.value = true },
-                        text = formatDate(uiState.transaction.date, TRANSACTION_DATE_FORMAT),
+                        text = formatDate(uiState.transaction.date, TRANSACTION_DATE_TIME_FORMAT),
                         color = MaterialTheme.colorScheme.secondary,
                         style = MaterialTheme.typography.bodyMedium,
                     )
@@ -310,7 +310,7 @@ fun TransactionCreationScreen(
                         ) {
                             Text(
                                 stringResource(id = com.d9tilov.android.common.android.R.string.ok)
-                                    .uppercase(Locale.getDefault()),
+                                    .uppercase(LocalLocale.current.platformLocale),
                             )
                         }
                     },
@@ -320,7 +320,7 @@ fun TransactionCreationScreen(
                         ) {
                             Text(
                                 stringResource(id = com.d9tilov.android.common.android.R.string.cancel)
-                                    .uppercase(Locale.getDefault()),
+                                    .uppercase(LocalLocale.current.platformLocale),
                             )
                         }
                     },
@@ -349,7 +349,7 @@ fun TransactionLocationMap(
     val context = LocalContext.current
     val location = LatLng(locationData.latitude, locationData.longitude)
     val cameraPositionState = rememberCameraPositionState()
-    val markerState = rememberMarkerState(position = location)
+    val markerState = rememberUpdatedMarkerState(position = location)
 
     LaunchedEffect(location) {
         cameraPositionState.position = CameraPosition.fromLatLngZoom(location, MAP_ZOOM_LEVEL)

@@ -20,7 +20,6 @@ dependencies {
     implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.lifecycle.viewmodel.compose.android)
     implementation(libs.androidx.work.runtime)
-    implementation(libs.core)
     implementation(libs.hilt.android)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.play.services)

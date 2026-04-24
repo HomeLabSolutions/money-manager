@@ -27,8 +27,14 @@ abstract class TomlFileValidationTask : DefaultTask() {
                 val lastAnchorIndex = content.indexOf(lastAnchor)
                 val contentBetween = content.subList(firstAnchorIndex + 1, lastAnchorIndex - 1)
                 when (firstAnchor) {
-                    ANCHOR_VERSIONS -> checkVersions(fileName, contentBetween)
-                    ANCHOR_LIBRARIES, ANCHOR_PLUGINS -> checkContent(fileName, contentBetween)
+                    ANCHOR_VERSIONS -> {
+                        checkVersions(fileName, contentBetween)
+                    }
+
+                    ANCHOR_LIBRARIES, ANCHOR_PLUGINS -> {
+                        checkContent(fileName, contentBetween)
+                    }
+
                     ANCHOR_BUNDLES -> {}
                 }
             }
@@ -36,8 +42,14 @@ abstract class TomlFileValidationTask : DefaultTask() {
             val firstAnchorIndex = content.indexOf(firstAnchor)
             val contentBetween = content.subList(firstAnchorIndex + 1, content.size)
             when (firstAnchor) {
-                ANCHOR_VERSIONS -> checkVersions(fileName, contentBetween)
-                ANCHOR_LIBRARIES, ANCHOR_PLUGINS -> checkContent(fileName, contentBetween)
+                ANCHOR_VERSIONS -> {
+                    checkVersions(fileName, contentBetween)
+                }
+
+                ANCHOR_LIBRARIES, ANCHOR_PLUGINS -> {
+                    checkContent(fileName, contentBetween)
+                }
+
                 ANCHOR_BUNDLES -> {}
             }
         }

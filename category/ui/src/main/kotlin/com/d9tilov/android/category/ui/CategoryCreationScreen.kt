@@ -158,15 +158,25 @@ fun CategoryCreationScreen(
                     uiState.saveStatus?.onFailure { ex: Throwable ->
                         val messageId =
                             when (ex) {
-                                is CategoryException.CategoryEmptyNameException ->
+                                is CategoryException.CategoryEmptyNameException -> {
                                     R.string.category_unit_name_exist_error
+                                }
 
-                                is CategoryException.CategoryExistException -> R.string.category_name_exist_error
-                                is CategoryException.CategoryNotFoundException -> R.string.category_not_found_error
-                                is CategoryException.CategoryNoParentException ->
+                                is CategoryException.CategoryExistException -> {
+                                    R.string.category_name_exist_error
+                                }
+
+                                is CategoryException.CategoryNotFoundException -> {
+                                    R.string.category_not_found_error
+                                }
+
+                                is CategoryException.CategoryNoParentException -> {
                                     R.string.category_parent_not_found_error
+                                }
 
-                                else -> com.d9tilov.android.common.android.R.string.unknown_error
+                                else -> {
+                                    com.d9tilov.android.common.android.R.string.unknown_error
+                                }
                             }
                         Text(
                             text = stringResource(id = messageId),

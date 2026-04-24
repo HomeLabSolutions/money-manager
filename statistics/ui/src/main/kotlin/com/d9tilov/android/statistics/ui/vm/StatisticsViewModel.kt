@@ -7,6 +7,7 @@ import com.d9tilov.android.analytics.model.AnalyticsEvent
 import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
+import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.reduceScaleStr
@@ -103,7 +104,6 @@ class StatisticsViewModel
                 mapOf(AnalyticsParams.Screen.Name to "statistics"),
             )
             viewModelScope.launch(ioDispatcher) {
-                val currency = currencyInteractor.getMainCurrency()
                 _uiState.update {
                     it.copy(
                         periodState =
@@ -117,6 +117,7 @@ class StatisticsViewModel
                     )
                 }
                 _uiState.update {
+                    val currency = currencyInteractor.getMainCurrency()
                     it.copy(
                         statisticsMenuState =
                             it.statisticsMenuState.copy(
@@ -129,6 +130,13 @@ class StatisticsViewModel
                             it.periodState.copy(
                                 showNextArrow = showNextArrow(it.periodState.selectedPeriod),
                                 showPrevArrow = showPrevArrow(it.periodState.selectedPeriod),
+                            ),
+                        detailsTransactionListState =
+                            it.detailsTransactionListState.copy(
+                                amount =
+                                    it.detailsTransactionListState.amount.copy(
+                                        currencySymbol = currency.symbol,
+                                    ),
                             ),
                     )
                 }
@@ -161,6 +169,9 @@ class StatisticsViewModel
                         }
                     }.collect { (transactions, sum) ->
                         _uiState.update {
+                            val currencySymbol =
+                                it.statisticsMenuState.currency.currencyCode
+                                    .getSymbolByCode()
                             it.copy(
                                 chartState =
                                     it.chartState.copy(
@@ -179,8 +190,8 @@ class StatisticsViewModel
                                         transactions = transactions,
                                         amount =
                                             it.detailsTransactionListState.amount.copy(
-                                                sum.reduceScaleStr(),
-                                                currency.symbol,
+                                                value = sum.reduceScaleStr(),
+                                                currencySymbol = currencySymbol,
                                             ),
                                     ),
                             )
@@ -206,10 +217,19 @@ class StatisticsViewModel
         fun onMenuClick(type: StatisticsMenuType) =
             viewModelScope.launch {
                 when (type) {
-                    StatisticsMenuType.CURRENCY -> updateCurrency()
+                    StatisticsMenuType.CURRENCY -> {
+                        updateCurrency()
+                    }
+
                     StatisticsMenuType.CHART -> {}
-                    StatisticsMenuType.TRANSACTION_TYPE -> updateTransactionType()
-                    StatisticsMenuType.STATISTICS -> updateInStatistics()
+
+                    StatisticsMenuType.TRANSACTION_TYPE -> {
+                        updateTransactionType()
+                    }
+
+                    StatisticsMenuType.STATISTICS -> {
+                        updateInStatistics()
+                    }
                 }
                 updateTrigger.update { it + 1 }
             }
@@ -264,7 +284,7 @@ class StatisticsViewModel
         private suspend fun updateCurrency() {
             val currency = currencyInteractor.getMainCurrency()
             val curCurrency = _uiState.value.statisticsMenuState.currency
-            val newCurrency: StatisticsMenuCurrencyType =
+            val newCurrency =
                 when (curCurrency) {
                     is StatisticsMenuCurrencyType.Current -> StatisticsMenuCurrencyType.Default
                     is StatisticsMenuCurrencyType.Default -> StatisticsMenuCurrencyType.Current(currency.code)

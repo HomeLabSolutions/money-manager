@@ -1,5 +1,8 @@
 {
   "extends": ["config:recommended"],
+  "prConcurrentLimit": 3,
+  "prHourlyLimit": 1,
+  "branchConcurrentLimit": 3,
   "packageRules": [
     {
       "matchManagers": ["gradle"],

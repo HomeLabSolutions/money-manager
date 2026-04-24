@@ -8,7 +8,6 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
-    id("kotlin-android")
     id("kotlin-parcelize")
     id("io.gitlab.arturbosch.detekt")
     alias(libs.plugins.secrets.gradle.plugin)
@@ -35,6 +34,12 @@ android {
             } else {
                 println("Warning: keystore.properties file not found. Release signing configuration will not be applied.")
             }
+        }
+        getByName("debug") {
+            storeFile = file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
         }
     }
 
@@ -93,8 +98,6 @@ android {
 
     if (project.hasProperty("devBuild")) {
         splits.abi.isEnable = false
-        splits.density.isEnable = false
-        aaptOptions.cruncherEnabled = false
     }
 }
 

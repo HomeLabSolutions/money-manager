@@ -237,21 +237,23 @@ class IncomeExpenseViewModel
                             val currencyCode = mainCurrency.value.code
                             ExpenseInfo(
                                 when (ableToSpendToday) {
-                                    is TransactionSpendingTodayModel.NORMAL ->
+                                    is TransactionSpendingTodayModel.NORMAL -> {
                                         Price(
                                             R.string.expense_info_can_spend_today_title,
                                             "${currencyCode.getSymbolByCode()}${
                                                 ableToSpendToday.trSum.reduceScaleStr()
                                             }",
                                         )
+                                    }
 
-                                    is TransactionSpendingTodayModel.OVERSPENDING ->
+                                    is TransactionSpendingTodayModel.OVERSPENDING -> {
                                         Price(
                                             R.string.expense_info_can_spend_today_negate_title,
                                             "${currencyCode.getSymbolByCode()}${
                                                 ableToSpendToday.trSum.reduceScaleStr()
                                             }",
                                         )
+                                    }
                                 },
                                 Price(
                                     R.string.expense_info_today_title,
