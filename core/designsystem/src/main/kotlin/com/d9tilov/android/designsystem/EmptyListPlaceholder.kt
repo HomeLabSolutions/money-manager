@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,7 +15,10 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+
+private val DEFAULT_ICON_SIZE = 120.dp
 
 @Composable
 fun EmptyListPlaceholder(
@@ -22,6 +26,7 @@ fun EmptyListPlaceholder(
     icon: Painter,
     title: String,
     subtitle: String? = null,
+    iconSize: Dp = DEFAULT_ICON_SIZE,
 ) {
     Column(
         modifier = modifier,
@@ -29,13 +34,14 @@ fun EmptyListPlaceholder(
         verticalArrangement = Arrangement.Center,
     ) {
         Image(
+            modifier = Modifier.size(iconSize),
             painter = icon,
             contentDescription = "No transactions",
         )
         Text(
             modifier = Modifier.padding(top = 16.dp),
             text = title,
-            style = MaterialTheme.typography.titleLarge,
+            style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center,
         )

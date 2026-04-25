@@ -40,17 +40,23 @@ object ModelTypeConverter {
     @JvmStatic
     fun fromExecutionPeriod(value: ExecutionPeriod): String =
         when (value.periodType) {
-            PeriodType.DAY -> "${value.periodType.name}:1:${DateConverter.fromOffsetDateTime(
-                value.lastExecutionDateTime,
-            )}"
-            PeriodType.WEEK ->
+            PeriodType.DAY -> {
+                "${value.periodType.name}:1:${DateConverter.fromOffsetDateTime(
+                    value.lastExecutionDateTime,
+                )}"
+            }
+
+            PeriodType.WEEK -> {
                 value.periodType.name +
                     ":${(value as ExecutionPeriod.EveryWeek).dayOfWeek}" +
                     ":${DateConverter.fromOffsetDateTime(value.lastExecutionDateTime)}"
-            PeriodType.MONTH ->
+            }
+
+            PeriodType.MONTH -> {
                 value.periodType.name +
                     ":${(value as ExecutionPeriod.EveryMonth).dayOfMonth}" +
                     ":${DateConverter.fromOffsetDateTime(value.lastExecutionDateTime)}"
+            }
         }
 
     @TypeConverter
@@ -58,18 +64,27 @@ object ModelTypeConverter {
     fun toExecutionPeriod(value: String): ExecutionPeriod {
         val ar = value.split(":")
         return when (ar[0]) {
-            DAY_NAME -> ExecutionPeriod.EveryDay(DateConverter.toOffsetDateTime(ar[2].toLong()))
-            WEEK_NAME ->
+            DAY_NAME -> {
+                ExecutionPeriod.EveryDay(DateConverter.toOffsetDateTime(ar[2].toLong()))
+            }
+
+            WEEK_NAME -> {
                 ExecutionPeriod.EveryWeek(
                     ar[1].toInt(),
                     DateConverter.toOffsetDateTime(ar[2].toLong()),
                 )
-            MONTH_NAME ->
+            }
+
+            MONTH_NAME -> {
                 ExecutionPeriod.EveryMonth(
                     ar[1].toInt(),
                     DateConverter.toOffsetDateTime(ar[2].toLong()),
                 )
-            else -> throw IllegalArgumentException("Wrong period name: ${ar[0]}")
+            }
+
+            else -> {
+                throw IllegalArgumentException("Wrong period name: ${ar[0]}")
+            }
         }
     }
 }

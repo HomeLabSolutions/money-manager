@@ -63,8 +63,11 @@ sealed class StatisticsPeriodModel(
 
 infix fun StatisticsPeriodModel.plus(count: Int): StatisticsPeriodModel =
     when (this) {
-        is StatisticsPeriodModel.CUSTOM -> this
-        is StatisticsPeriodModel.DAY ->
+        is StatisticsPeriodModel.CUSTOM -> {
+            this
+        }
+
+        is StatisticsPeriodModel.DAY -> {
             StatisticsPeriodModel.DAY(
                 from.date
                     .plus(count, DateTimeUnit.DAY)
@@ -73,8 +76,9 @@ infix fun StatisticsPeriodModel.plus(count: Int): StatisticsPeriodModel =
                     .plus(count, DateTimeUnit.DAY)
                     .getEndOfDay(),
             )
+        }
 
-        is StatisticsPeriodModel.WEEK ->
+        is StatisticsPeriodModel.WEEK -> {
             StatisticsPeriodModel.WEEK(
                 from.date
                     .plus(count, DateTimeUnit.WEEK)
@@ -83,8 +87,9 @@ infix fun StatisticsPeriodModel.plus(count: Int): StatisticsPeriodModel =
                     .plus(count, DateTimeUnit.WEEK)
                     .getEndOfDay(),
             )
+        }
 
-        is StatisticsPeriodModel.MONTH ->
+        is StatisticsPeriodModel.MONTH -> {
             StatisticsPeriodModel.MONTH(
                 from.date
                     .plus(count, DateTimeUnit.MONTH)
@@ -93,8 +98,9 @@ infix fun StatisticsPeriodModel.plus(count: Int): StatisticsPeriodModel =
                     .plus(count, DateTimeUnit.MONTH)
                     .getEndOfDay(),
             )
+        }
 
-        is StatisticsPeriodModel.YEAR ->
+        is StatisticsPeriodModel.YEAR -> {
             StatisticsPeriodModel.YEAR(
                 from.date
                     .plus(count, DateTimeUnit.YEAR)
@@ -103,12 +109,16 @@ infix fun StatisticsPeriodModel.plus(count: Int): StatisticsPeriodModel =
                     .plus(count, DateTimeUnit.YEAR)
                     .getEndOfDay(),
             )
+        }
     }
 
 infix fun StatisticsPeriodModel.minus(count: Int): StatisticsPeriodModel =
     when (this) {
-        is StatisticsPeriodModel.CUSTOM -> this
-        is StatisticsPeriodModel.DAY ->
+        is StatisticsPeriodModel.CUSTOM -> {
+            this
+        }
+
+        is StatisticsPeriodModel.DAY -> {
             StatisticsPeriodModel.DAY(
                 from.date
                     .minus(count, DateTimeUnit.DAY)
@@ -117,8 +127,9 @@ infix fun StatisticsPeriodModel.minus(count: Int): StatisticsPeriodModel =
                     .minus(count, DateTimeUnit.DAY)
                     .getEndOfDay(),
             )
+        }
 
-        is StatisticsPeriodModel.WEEK ->
+        is StatisticsPeriodModel.WEEK -> {
             StatisticsPeriodModel.WEEK(
                 from.date
                     .minus(count, DateTimeUnit.WEEK)
@@ -127,8 +138,9 @@ infix fun StatisticsPeriodModel.minus(count: Int): StatisticsPeriodModel =
                     .minus(count, DateTimeUnit.WEEK)
                     .getEndOfDay(),
             )
+        }
 
-        is StatisticsPeriodModel.MONTH ->
+        is StatisticsPeriodModel.MONTH -> {
             StatisticsPeriodModel.MONTH(
                 from.date
                     .minus(count, DateTimeUnit.MONTH)
@@ -137,8 +149,9 @@ infix fun StatisticsPeriodModel.minus(count: Int): StatisticsPeriodModel =
                     .minus(count, DateTimeUnit.MONTH)
                     .getEndOfDay(),
             )
+        }
 
-        is StatisticsPeriodModel.YEAR ->
+        is StatisticsPeriodModel.YEAR -> {
             StatisticsPeriodModel.YEAR(
                 from.date
                     .minus(count, DateTimeUnit.YEAR)
@@ -147,4 +160,5 @@ infix fun StatisticsPeriodModel.minus(count: Int): StatisticsPeriodModel =
                     .minus(count, DateTimeUnit.YEAR)
                     .getEndOfDay(),
             )
+        }
     }

@@ -138,26 +138,28 @@ fun StatisticsScreen(
         StatisticsMenuSelector(state = state.statisticsMenuState, onClick = onMenuClick)
 
         StatisticsChartWithSwipe(
-            modifier = Modifier.weight(PIE_CHART_WEIGHT),
+            modifier = Modifier.weight(if (state.chartState.pieData.isEmpty()) 1f else PIE_CHART_WEIGHT),
             periodState = state.periodState,
             pieData = state.chartState.pieData,
             onPrevClicked = onPrevClicked,
             onNextClicked = onNextClicked,
         )
 
-        StatisticsList(
-            modifier = Modifier.weight(2f),
-            state = state.detailsTransactionListState,
-            transactionType = state.statisticsMenuState.transactionType,
-            onItemClick = {
-                onTransactionClicked(
-                    TransactionDetailsChartModel(
-                        it.category.id,
-                        state.statisticsMenuState.inStatistics == StatisticsMenuInStatisticsType.InStatisticsType,
-                    ),
-                )
-            },
-        )
+        if (state.chartState.pieData.isNotEmpty()) {
+            StatisticsList(
+                modifier = Modifier.weight(2f),
+                state = state.detailsTransactionListState,
+                transactionType = state.statisticsMenuState.transactionType,
+                onItemClick = {
+                    onTransactionClicked(
+                        TransactionDetailsChartModel(
+                            it.category.id,
+                            state.statisticsMenuState.inStatistics == StatisticsMenuInStatisticsType.InStatisticsType,
+                        ),
+                    )
+                },
+            )
+        }
     }
 
     if (showDatePicker.value) {
@@ -283,7 +285,6 @@ fun StatisticsMenuSelector(
                     .clickable { onClick(StatisticsMenuType.CURRENCY) },
             style = MaterialTheme.typography.headlineMedium,
         )
-        StatisticMenuIcon(state.chartType.iconId) { onClick(StatisticsMenuType.CHART) }
         StatisticMenuIcon(state.transactionType.iconId) { onClick(StatisticsMenuType.TRANSACTION_TYPE) }
         StatisticMenuIcon(state.inStatistics.iconId) { onClick(StatisticsMenuType.STATISTICS) }
     }
@@ -343,11 +344,23 @@ fun StatisticsChart(
                 .fillMaxSize()
                 .padding(top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large))
         if (pieData.isEmpty()) {
-            EmptyListPlaceholder(
+            Column(
                 modifier = chartModifier,
-                icon = painterResource(id = MoneyManagerIcons.EmptyStatisticsPlaceholder),
-                title = stringResource(id = R.string.statistics_no_data),
-            )
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Text(
+                    text = periodStr,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.secondary,
+                    textAlign = TextAlign.Center,
+                )
+                EmptyListPlaceholder(
+                    modifier = Modifier.weight(1f),
+                    icon = painterResource(id = MoneyManagerIcons.EmptyStatisticsPlaceholder),
+                    title = stringResource(id = R.string.statistics_no_data),
+                )
+            }
         } else {
             PieChart(
                 modifier = chartModifier,
@@ -554,7 +567,7 @@ fun DefaultCategoryIconGridPreview() {
                                         Category.EMPTY_EXPENSE.copy(
                                             id = 1,
                                             name = "Category1",
-                                            icon = android.R.drawable.btn_star,
+                                            icon = MoneyManagerIcons.InStatisticsTransaction,
                                             color = android.R.color.holo_red_dark,
                                         ),
                                     currencyCode = CurrencyConstants.DEFAULT_CURRENCY_CODE,
@@ -567,7 +580,7 @@ fun DefaultCategoryIconGridPreview() {
                                         Category.EMPTY_EXPENSE.copy(
                                             id = 2,
                                             name = "Category2",
-                                            icon = android.R.drawable.btn_star,
+                                            icon = MoneyManagerIcons.InStatisticsTransaction,
                                             color = android.R.color.holo_blue_dark,
                                         ),
                                     currencyCode = CurrencyConstants.DEFAULT_CURRENCY_CODE,
@@ -580,7 +593,7 @@ fun DefaultCategoryIconGridPreview() {
                                         Category.EMPTY_EXPENSE.copy(
                                             id = 3,
                                             name = "Category3",
-                                            icon = android.R.drawable.btn_star,
+                                            icon = MoneyManagerIcons.InStatisticsTransaction,
                                             color = android.R.color.holo_orange_dark,
                                         ),
                                     currencyCode = CurrencyConstants.DEFAULT_CURRENCY_CODE,
@@ -593,7 +606,7 @@ fun DefaultCategoryIconGridPreview() {
                                         Category.EMPTY_EXPENSE.copy(
                                             id = 4,
                                             name = "Category4",
-                                            icon = android.R.drawable.btn_star,
+                                            icon = MoneyManagerIcons.InStatisticsTransaction,
                                             color = android.R.color.holo_orange_dark,
                                         ),
                                     currencyCode = CurrencyConstants.DEFAULT_CURRENCY_CODE,
@@ -606,7 +619,7 @@ fun DefaultCategoryIconGridPreview() {
                                         Category.EMPTY_EXPENSE.copy(
                                             id = 5,
                                             name = "Category5",
-                                            icon = android.R.drawable.btn_star,
+                                            icon = MoneyManagerIcons.InStatisticsTransaction,
                                             color = android.R.color.holo_orange_dark,
                                         ),
                                     currencyCode = CurrencyConstants.DEFAULT_CURRENCY_CODE,
@@ -619,7 +632,7 @@ fun DefaultCategoryIconGridPreview() {
                                         Category.EMPTY_EXPENSE.copy(
                                             id = 6,
                                             name = "Category6",
-                                            icon = android.R.drawable.btn_star,
+                                            icon = MoneyManagerIcons.InStatisticsTransaction,
                                             color = android.R.color.holo_orange_dark,
                                         ),
                                     currencyCode = CurrencyConstants.DEFAULT_CURRENCY_CODE,
@@ -653,7 +666,7 @@ fun TransactionItemPreview() {
                 category =
                     Category.EMPTY_EXPENSE.copy(
                         name = "Category1",
-                        icon = android.R.drawable.btn_star,
+                        icon = MoneyManagerIcons.InStatisticsTransaction,
                         color = android.R.color.black,
                     ),
                 currencyCode = CurrencyConstants.DEFAULT_CURRENCY_CODE,

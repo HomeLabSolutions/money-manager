@@ -71,13 +71,17 @@ class MmAppState(
                 }
 
             when (topLevelDestination) {
-                TopLevelDestination.INCOME_EXPENSE ->
+                TopLevelDestination.INCOME_EXPENSE -> {
                     navController.navigateToIncomeExpense(topLevelNavOptions)
+                }
 
-                TopLevelDestination.STATISTICS ->
+                TopLevelDestination.STATISTICS -> {
                     navController.navigateToStatistics(topLevelNavOptions)
+                }
 
-                TopLevelDestination.PROFILE -> navController.navigateToProfile(topLevelNavOptions)
+                TopLevelDestination.PROFILE -> {
+                    navController.navigateToProfile(topLevelNavOptions)
+                }
             }
         }
     }
