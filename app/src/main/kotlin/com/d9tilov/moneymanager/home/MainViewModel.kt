@@ -17,6 +17,7 @@ import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.contract.GeocodingInteractor
+import com.d9tilov.android.currency.observer.contract.CurrencyUpdateObserver
 import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.network.exception.NetworkException
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
@@ -56,6 +57,7 @@ class MainViewModel
         private val backupInteractor: BackupInteractor,
         private val userInteractor: UserInteractor,
         private val categoryInteractor: Lazy<CategoryInteractor>,
+        private val currencyUpdateObserver: CurrencyUpdateObserver,
         private val currencyInteractor: CurrencyInteractor,
         private val geocodingInteractor: GeocodingInteractor,
         private val locationProvider: LocationProvider,
@@ -217,7 +219,7 @@ class MainViewModel
             viewModelScope.launch {
                 if (currencyCode == null) return@launch
                 if (uiState.value !is MainActivityUiState.Success.Main) return@launch
-                launch { currencyInteractor.updateMainCurrency(currencyCode) }
+                launch { currencyUpdateObserver.updateMainCurrency(currencyCode) }
                 launch { geocodingInteractor.resetLocalCurrency() }
                 val newState = LocationCurrencyState(false, currencyCode)
                 localCurrencyState.update { newState }
