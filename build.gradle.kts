@@ -43,7 +43,6 @@ extra["versionPatch"] = 19
 extra["versionBuild"] = 1
 
 tasks.register("clean", Delete::class) {
-    description = "clean"
     delete(rootProject.layout.buildDirectory)
 }
 
