@@ -33,7 +33,7 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
 class TransactionLocalSource @Inject constructor(
-    @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
+    @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
     private val preferencesStore: PreferencesStore,
     private val transactionDao: TransactionDao,
 ) : TransactionSource {

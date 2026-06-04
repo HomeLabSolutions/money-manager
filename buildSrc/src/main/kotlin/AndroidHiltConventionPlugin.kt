@@ -32,6 +32,7 @@ class AndroidHiltConventionPlugin : Plugin<Project> {
                 implementation(buildLibs.hilt.core)
                 ksp(buildLibs.hilt.android.compiler)
                 ksp(buildLibs.hilt.ext.compiler)
+                ksp(buildLibs.kotlin.metadata.jvm)
             }
         }
     }

@@ -33,7 +33,7 @@ data class PrepopulateUiState(
 class PrepopulateViewModel
     @Inject
     constructor(
-        @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
+        @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
         private val currencyInteractor: CurrencyInteractor,
         private val currencyUpdateObserver: CurrencyUpdateObserver,
         private val budgetInteractor: BudgetInteractor,

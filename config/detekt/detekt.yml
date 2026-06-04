@@ -718,7 +718,7 @@ style:
   UnnecessaryAbstractClass:
     active: true
   UnnecessaryAnnotationUseSiteTarget:
-    active: true
+    active: false
   UnnecessaryApply:
     active: true
   UnnecessaryBackticks:

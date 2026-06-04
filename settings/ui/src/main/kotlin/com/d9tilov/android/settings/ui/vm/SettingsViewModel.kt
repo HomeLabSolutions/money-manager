@@ -63,7 +63,7 @@ data class SubscriptionPriceUiState(
 class SettingsViewModel
     @Inject
     constructor(
-        @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
+        @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
         private val backupInteractor: BackupInteractor,
         private val userInteractor: UserInteractor,
         analyticsSender: AnalyticsSender,

@@ -49,7 +49,7 @@ import javax.inject.Named
 class MainViewModel
     @Inject
     constructor(
-        @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
+        @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
         private val analyticsSender: AnalyticsSender,
         private val transactionInteractor: TransactionInteractor,
         private val billingInteractor: BillingInteractor,
@@ -199,16 +199,19 @@ class MainViewModel
                 val newState =
                     when (locationCurrency.code) {
                         preferencesStore.getLocalCurrency().firstOrNull() -> {
-                            LocationCurrencyState(false, locationCurrency.code)
+                            LocationCurrencyState(showDialog = false, currencyCode = locationCurrency.code)
                         }
 
                         currencyInteractor.getMainCurrency().code -> {
                             geocodingInteractor.resetLocalCurrency()
-                            LocationCurrencyState(false, currencyInteractor.getMainCurrency().code)
+                            LocationCurrencyState(
+                                showDialog = false,
+                                currencyCode = currencyInteractor.getMainCurrency().code,
+                            )
                         }
 
                         else -> {
-                            LocationCurrencyState(true, locationCurrency.code)
+                            LocationCurrencyState(showDialog = true, currencyCode = locationCurrency.code)
                         }
                     }
                 localCurrencyState.update { newState }
@@ -221,7 +224,7 @@ class MainViewModel
                 if (uiState.value !is MainActivityUiState.Success.Main) return@launch
                 launch { currencyUpdateObserver.updateMainCurrency(currencyCode) }
                 launch { geocodingInteractor.resetLocalCurrency() }
-                val newState = LocationCurrencyState(false, currencyCode)
+                val newState = LocationCurrencyState(showDialog = false, currencyCode = currencyCode)
                 localCurrencyState.update { newState }
                 uiState.update { MainActivityUiState.Success.Main(newState) }
             }
@@ -230,7 +233,7 @@ class MainViewModel
             viewModelScope.launch {
                 if (currencyCode == null) return@launch
                 geocodingInteractor.updateLocalCurrency(currencyCode)
-                val newState = LocationCurrencyState(false, currencyCode)
+                val newState = LocationCurrencyState(showDialog = false, currencyCode = currencyCode)
                 localCurrencyState.update { newState }
                 uiState.update { MainActivityUiState.Success.Main(newState) }
             }

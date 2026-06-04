@@ -37,7 +37,7 @@ import javax.inject.Named
 
 class BackupManagerImpl
     @Inject constructor(
-        @Named(DISPATCHER_IO) private val coroutineDispatcher: CoroutineDispatcher,
+        @param:Named(DISPATCHER_IO) private val coroutineDispatcher: CoroutineDispatcher,
         private val analyticsSender: AnalyticsSender,
         private val context: Context,
         private val preferencesStore: PreferencesStore,
