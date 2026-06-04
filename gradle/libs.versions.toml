@@ -12,7 +12,8 @@ composeConstraintLayout = "1.1.1"
 coroutinesCore = "1.11.0"
 datastore = "1.2.1"
 detektPlugin = "1.23.8"
-firebaseBom = "34.14.0"
+facebookLogin = "17.0.0"
+firebaseBom = "34.13.0"
 firebaseCrashlyticsPlugin = "3.0.7"
 firebaseUi = "9.1.1"
 googlePlayServices = "4.4.4"
@@ -73,6 +74,7 @@ coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 dagger = { group = "com.google.dagger", name = "dagger", version.ref = "hilt" }
 datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 detekt = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detektPlugin" }
+facebook-login = { group = "com.facebook.android", name = "facebook-login", version.ref = "facebookLogin" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
