@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.core.content.ContextCompat
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
@@ -37,7 +38,7 @@ import com.d9tilov.android.transaction.ui.model.TransactionUiModel
 import java.math.BigDecimal
 
 @Composable
-@Suppress("DestructuringDeclarationWithTooManyEntries")
+@Suppress("DestructuringDeclarationWithTooManyEntries", "CognitiveComplexMethod")
 fun TransactionItem(
     modifier: Modifier,
     transaction: TransactionUiModel,
@@ -90,6 +91,8 @@ fun TransactionItem(
                             top.linkTo(idTitle.bottom)
                             bottom.linkTo(parent.bottom)
                             start.linkTo(idTitle.start)
+                            end.linkTo(idSum.start, margin = 16.dp)
+                            width = Dimension.fillToConstraints
                         },
                 text = transaction.description,
                 style = MaterialTheme.typography.bodySmall,
@@ -98,6 +101,8 @@ fun TransactionItem(
                         id = com.d9tilov.android.designsystem.R.dimen.income_expense_name_description_text_size,
                     ).value.sp,
                 color = MaterialTheme.colorScheme.tertiary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
         }
         if (transaction.isRegular) {
@@ -137,7 +142,9 @@ fun TransactionItem(
                     Modifier
                         .padding(start = 16.dp)
                         .constrainAs(idTime) {
-                            top.linkTo(idTitle.bottom)
+                            top.linkTo(
+                                if (transaction.description.isNotEmpty()) idDescription.bottom else idTitle.bottom,
+                            )
                             bottom.linkTo(parent.bottom)
                             start.linkTo(idTitle.start)
                         },
@@ -190,7 +197,7 @@ fun TransactionItemPreview() {
                     category =
                         Category.EMPTY_EXPENSE.copy(
                             name = "Category1",
-                            icon = android.R.drawable.btn_star,
+                            icon = MoneyManagerIcons.InStatisticsTransaction,
                             color = android.R.color.black,
                         ),
                     sum = BigDecimal(1),
