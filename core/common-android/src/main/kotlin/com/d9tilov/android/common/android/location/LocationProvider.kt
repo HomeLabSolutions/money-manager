@@ -27,7 +27,7 @@ interface LocationProvider {
 
 internal class LocationProviderImpl(
     val context: Context,
-    @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
+    @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
 ) : LocationProvider {
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 

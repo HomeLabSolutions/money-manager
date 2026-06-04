@@ -35,7 +35,7 @@ class StatisticsDetailsViewModel
         savedStateHandle: SavedStateHandle,
         transactionInteractor: TransactionInteractor,
         categoryInteractor: CategoryInteractor,
-        @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
+        @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
     ) : ViewModel() {
         private val transactionDetailsArgs: TransactionDetailsArgs = TransactionDetailsArgs(savedStateHandle)
         private val _uiState = MutableStateFlow(StatisticsDetailsUiState())

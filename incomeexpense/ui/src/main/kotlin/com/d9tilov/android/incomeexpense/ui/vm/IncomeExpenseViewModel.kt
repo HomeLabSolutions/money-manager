@@ -139,7 +139,7 @@ class IncomeExpenseViewModel
     constructor(
         billingInteractor: BillingInteractor,
         private val analyticsSender: AnalyticsSender,
-        @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
+        @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
         private val currencyInteractor: CurrencyInteractor,
         private val categoryInteractor: CategoryInteractor,
         private val transactionInteractor: TransactionInteractor,

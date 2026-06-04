@@ -45,7 +45,7 @@ sealed interface CurrencyUiState {
 class CurrencyViewModel
     @Inject
     constructor(
-        @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
+        @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
         savedStateHandle: SavedStateHandle,
         currencyInteractor: CurrencyInteractor,
         analyticsSender: AnalyticsSender,

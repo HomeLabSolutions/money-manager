@@ -90,7 +90,7 @@ data class DetailsSpentInPeriodState(
 class StatisticsViewModel
     @Inject constructor(
         analyticsSender: AnalyticsSender,
-        @Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
+        @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
         private val transactionInteractor: TransactionInteractor,
         private val currencyInteractor: CurrencyInteractor,
     ) : ViewModel() {
