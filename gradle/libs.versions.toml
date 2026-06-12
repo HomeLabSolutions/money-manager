@@ -107,7 +107,7 @@ maps-compose = { group = "com.google.maps.android", name = "maps-compose", versi
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 mockk-core = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "moshi" }
-moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
+moshi-kotlin-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
 navigation-common = { group = "androidx.navigation", name = "navigation-common", version.ref = "navigation" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 navigation-runtime = { group = "androidx.navigation", name = "navigation-runtime", version.ref = "navigation" }

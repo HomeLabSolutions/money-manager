@@ -1,4 +1,5 @@
 plugins {
+    id("com.google.devtools.ksp")
     id("moneymanager.android.library")
 }
 
@@ -21,7 +22,6 @@ dependencies {
     implementation(libs.firebase.ui.auth)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.moshi)
-    implementation(libs.moshi.kotlin)
     implementation(libs.play.services.auth)
     implementation(libs.timber)
 }
