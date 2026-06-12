@@ -39,10 +39,11 @@ extra["minSdkVersion"] = 23
 extra["targetSdkVersion"] = 36
 extra["versionMajor"] = 1
 extra["versionMinor"] = 2
-extra["versionPatch"] = 19
+extra["versionPatch"] = 22
 extra["versionBuild"] = 1
 
 tasks.register("clean", Delete::class) {
+    description = "clean"
     delete(rootProject.layout.buildDirectory)
 }
 
@@ -53,10 +54,6 @@ plugins {
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.serialization) apply false
     alias(libs.plugins.secrets.gradle.plugin) apply false
-}
-
-subprojects {
-    apply(plugin = "com.squareup.sort-dependencies")
 }
 
 dependencyAnalysis {

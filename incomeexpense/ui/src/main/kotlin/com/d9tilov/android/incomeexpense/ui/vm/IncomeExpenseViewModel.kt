@@ -162,13 +162,7 @@ class IncomeExpenseViewModel
                         .getMainCurrencyFlow()
                         .collect { currencyData ->
                             uiState.update { state ->
-                                state.copy(
-                                    price =
-                                        MainPrice(
-                                            BigDecimal.ZERO.reduceScaleStr(),
-                                            currencyData.code,
-                                        ),
-                                )
+                                state.copy(price = state.price.copy(currencyCode = currencyData.code))
                             }
                             mainCurrency.value = currencyData
                         }

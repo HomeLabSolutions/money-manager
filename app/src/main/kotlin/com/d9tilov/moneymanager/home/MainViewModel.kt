@@ -62,8 +62,7 @@ class MainViewModel
         private val geocodingInteractor: GeocodingInteractor,
         private val locationProvider: LocationProvider,
     ) : ViewModel() {
-        private val auth = FirebaseAuth.getInstance()
-
+        private val auth by lazy { FirebaseAuth.getInstance() }
         private val updateCurrencyExceptionHandler =
             CoroutineExceptionHandler { _, exception ->
                 Timber.tag(TAG).d("Unable to update currency: $exception")

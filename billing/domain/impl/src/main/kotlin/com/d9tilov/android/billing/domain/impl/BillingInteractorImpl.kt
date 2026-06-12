@@ -16,9 +16,7 @@ import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.remoteconfig.remoteConfig
-import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -37,13 +35,11 @@ class BillingInteractorImpl @Inject constructor(
         Firebase.remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val config = Firebase.remoteConfig.getValue("premium_list").asString()
-                val moshi: Moshi =
+                val jsonAdapter =
                     Moshi
                         .Builder()
-                        .add(KotlinJsonAdapterFactory())
                         .build()
-                val jsonAdapter: JsonAdapter<PremiumEmails> =
-                    moshi.adapter(PremiumEmails::class.java)
+                        .adapter(PremiumEmails::class.java)
                 try {
                     val premiumConfig = jsonAdapter.fromJson(config)
                     premiumEmailList.value = premiumConfig?.emails ?: emptyList()

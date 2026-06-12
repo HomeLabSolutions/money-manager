@@ -1,9 +1,10 @@
+import com.android.moneymanager.gradle.extensions.ksp
+
 plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.library.compose")
     id("moneymanager.android.hilt")
     id("kotlin-parcelize")
-    id("com.google.devtools.ksp")
 }
 
 android {
