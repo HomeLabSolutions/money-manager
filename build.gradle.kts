@@ -34,7 +34,7 @@ repositories {
     mavenCentral()
 }
 
-extra["compileSdkVersion"] = 36
+extra["compileSdkVersion"] = 37
 extra["minSdkVersion"] = 23
 extra["targetSdkVersion"] = 36
 extra["versionMajor"] = 1
