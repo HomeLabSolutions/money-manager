@@ -33,14 +33,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.d9tilov.android.backup.data.impl.PeriodicBackupWorker
+import com.d9tilov.android.common.android.ui.logout.logout
 import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
@@ -58,6 +62,7 @@ fun SettingsRoute(
     onShowSnackBar: suspend (String, String?) -> Boolean,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
     SettingsScreen(
         uiState = uiState,
         onPeriodDateChanged = viewModel::changeFiscalDay,
@@ -69,6 +74,12 @@ fun SettingsRoute(
         },
         onBackupClick = viewModel::backup,
         onClearBackupClick = viewModel::deleteBackup,
+        onAccountDeleteClick = {
+            viewModel.deleteAccount {
+                PeriodicBackupWorker.stopPeriodicJob(context)
+                context.logout()
+            }
+        },
         onClickBack = clickBack,
     )
 }
@@ -84,6 +95,7 @@ fun SettingsScreen(
     onClickSubscription: () -> Unit = {},
     onBackupClick: () -> Unit = {},
     onClearBackupClick: () -> Unit = {},
+    onAccountDeleteClick: () -> Unit = {},
     onClickBack: () -> Unit = {},
 ) {
     messageId?.let { id ->
@@ -98,7 +110,7 @@ fun SettingsScreen(
             )
         },
     ) { padding ->
-        val openAlertDialog = remember { mutableStateOf(false) }
+        val openDialog = remember { mutableStateOf(DialogType.NONE) }
         Column(modifier = modifier.padding(padding)) {
             uiState.subscriptionState?.let { subscriptionState ->
                 SubscriptionLayout(
@@ -127,21 +139,59 @@ fun SettingsScreen(
                         .fillMaxWidth()
                         .padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
                 onBackupClick = onBackupClick,
-                onClearBackupClick = { openAlertDialog.value = true },
+                onClearBackupClick = { openDialog.value = DialogType.DELETE_BACKUP },
             )
             Spacer(modifier = Modifier.weight(1f))
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    modifier = Modifier.clickable { openDialog.value = DialogType.DELETE_ACCOUNT },
+                    text = stringResource(R.string.settings_account_delete),
+                    textDecoration = TextDecoration.Underline,
+                    style =
+                        MaterialTheme.typography.labelLarge.copy(
+                            color = MaterialTheme.colorScheme.tertiary,
+                        ),
+                )
+            }
             BottomActionButton(onClick = onSave)
-            SimpleDialog(
-                show = openAlertDialog.value,
-                title = stringResource(R.string.settings_backup_delete_title),
-                dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
-                confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
-                onConfirm = {
-                    openAlertDialog.value = false
-                    onClearBackupClick()
-                },
-                onDismiss = { openAlertDialog.value = false },
-            )
+            when (openDialog.value) {
+                DialogType.DELETE_BACKUP -> {
+                    SimpleDialog(
+                        show = true,
+                        title = stringResource(R.string.settings_backup_delete_dialog_title),
+                        dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
+                        confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
+                        onConfirm = {
+                            openDialog.value = DialogType.NONE
+                            onClearBackupClick()
+                        },
+                        onDismiss = { openDialog.value = DialogType.NONE },
+                    )
+                }
+
+                DialogType.DELETE_ACCOUNT -> {
+                    SimpleDialog(
+                        show = true,
+                        title = stringResource(R.string.settings_account_delete_dialog_title),
+                        subtitle = stringResource(R.string.settings_account_delete_dialog_subtitle),
+                        dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
+                        confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
+                        onConfirm = {
+                            openDialog.value = DialogType.NONE
+                            onAccountDeleteClick()
+                        },
+                        onDismiss = { openDialog.value = DialogType.NONE },
+                    )
+                }
+
+                DialogType.NONE -> { /* no-op */ }
+            }
         }
     }
 }
@@ -317,6 +367,12 @@ fun SubscriptionDescription(subtitle: String) {
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
             ),
     )
+}
+
+enum class DialogType {
+    NONE,
+    DELETE_BACKUP,
+    DELETE_ACCOUNT,
 }
 
 @Preview(showBackground = true)

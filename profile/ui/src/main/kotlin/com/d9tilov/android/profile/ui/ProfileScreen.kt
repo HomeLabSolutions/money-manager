@@ -1,7 +1,5 @@
 package com.d9tilov.android.profile.ui
 
-import android.app.Activity
-import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -45,6 +43,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.d9tilov.android.backup.data.impl.PeriodicBackupWorker
+import com.d9tilov.android.common.android.ui.logout.logout
 import com.d9tilov.android.common.android.utils.getAppVersion
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
@@ -56,7 +55,6 @@ import com.d9tilov.android.profile.ui.vm.ProfileUiItem
 import com.d9tilov.android.profile.ui.vm.ProfileUiState
 import com.d9tilov.android.profile.ui.vm.ProfileViewModel
 import com.d9tilov.android.profile.ui.vm.UserUiProfile
-import dagger.hilt.android.internal.managers.FragmentComponentManager
 
 @Composable
 fun ProfileRoute(
@@ -84,15 +82,7 @@ fun ProfileRoute(
             onLogoutConfirmClicked = {
                 viewModel.logout {
                     PeriodicBackupWorker.stopPeriodicJob(context)
-                    val intent =
-                        context.packageManager.getLaunchIntentForPackage(
-                            if (BuildConfig.DEBUG) "com.d9tilov.moneymanager.debug" else "com.d9tilov.moneymanager",
-                        )
-                    if (intent != null) {
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                        context.startActivity(intent)
-                        (FragmentComponentManager.findActivity(context) as Activity).finish()
-                    }
+                    context.logout()
                 }
             },
             onLogoutDismissClicked = { viewModel.dismissDialog() },

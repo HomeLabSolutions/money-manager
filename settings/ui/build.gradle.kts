@@ -15,12 +15,14 @@ android {
 
 dependencies {
     implementation(project(":analytics:domain"))
+    implementation(project(":backup:data:impl"))
     implementation(project(":backup:domain:contract"))
     implementation(project(":backup:domain:model"))
     implementation(project(":billing:domain:contract"))
     implementation(project(":billing:domain:model"))
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
+    implementation(project(":core:datastore"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:network"))
     implementation(project(":user-info:domain:contract"))
@@ -30,6 +32,7 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.firebase.config)
+    implementation(libs.firebase.ui.auth)
     implementation(libs.hilt.android)
     implementation(libs.hilt.lifecycle.viewmodel.compose)
     implementation(libs.navigation.compose)

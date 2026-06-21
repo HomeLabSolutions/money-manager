@@ -11,6 +11,11 @@
     <string name="settings_backup_file_not_found_error">Файл не найден</string>
     <string name="settings_backup">Сделать backup</string>
     <string name="settings_backup_info">Последняя копия: %1$s</string>
-    <string name="settings_backup_delete_title">Удалить резервную копию?</string>
+    <string name="settings_backup_delete_dialog_title">Удалить резервную копию?</string>
     <string name="settings_backup_deleted">Резервная копия удалена</string>
+    <string name="settings_account_delete">Удалить аккаунт</string>
+    <string name="settings_account_delete_dialog_title">Удалить аккаунт?</string>
+    <string name="settings_account_delete_dialog_subtitle">
+        Это действие навсегда удалит ваш аккаунт и все связанные данные.\nПосле подтверждения восстановление будет невозможно.\nУбедитесь, что вы действительно хотите продолжить.
+    </string>
 </resources>
