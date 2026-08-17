@@ -13,5 +13,7 @@
     "android",
     "dependencies"
   ],
-  "baseBranches": ["develop"]
+  "baseBranchPatterns": [
+    "develop"
+  ]
 }
