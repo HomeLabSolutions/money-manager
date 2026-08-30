@@ -160,8 +160,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.navigation.compose)
     implementation(libs.okhttp)
-    implementation(libs.okhttp.logging.interceptor)
-    implementation(libs.play.services.auth)
     implementation(libs.play.services.location)
     implementation(libs.retrofit)
     implementation(libs.timber)

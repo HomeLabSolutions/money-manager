@@ -35,12 +35,12 @@ repositories {
 }
 
 extra["compileSdkVersion"] = 37
-extra["minSdkVersion"] = 23
+extra["minSdkVersion"] = 24
 extra["targetSdkVersion"] = 36
 extra["versionMajor"] = 1
 extra["versionMinor"] = 2
-extra["versionPatch"] = 22
-extra["versionBuild"] = 2
+extra["versionPatch"] = 23
+extra["versionBuild"] = 4
 
 tasks.register("clean", Delete::class) {
     description = "clean"

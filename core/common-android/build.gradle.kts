@@ -9,6 +9,9 @@ plugins {
 
 android {
     namespace = "com.d9tilov.android.common.android"
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {

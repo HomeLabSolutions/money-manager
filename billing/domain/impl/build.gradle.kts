@@ -22,6 +22,5 @@ dependencies {
     implementation(libs.firebase.ui.auth)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.moshi)
-    implementation(libs.play.services.auth)
     implementation(libs.timber)
 }

@@ -18,17 +18,22 @@ import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.android.core.utils.toBackupDate
+import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.network.exception.NetworkException
 import com.d9tilov.android.settings.ui.R
 import com.d9tilov.android.user.domain.contract.UserInteractor
+import com.google.firebase.Firebase
 import com.google.firebase.FirebaseException
+import com.google.firebase.auth.auth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.FileNotFoundException
 import javax.inject.Inject
@@ -66,6 +71,8 @@ class SettingsViewModel
         @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
         private val backupInteractor: BackupInteractor,
         private val userInteractor: UserInteractor,
+        private val userInfoInteractor: UserInteractor,
+        private val preferencesStore: PreferencesStore,
         analyticsSender: AnalyticsSender,
         billingInteractor: BillingInteractor,
     ) : ViewModel() {
@@ -146,6 +153,16 @@ class SettingsViewModel
 
                     else -> {}
                 }
+            }
+        }
+
+        fun deleteAccount(navigateCallback: () -> Unit) {
+            viewModelScope.launch(Dispatchers.IO) {
+                backupInteractor.deleteBackup()
+                Firebase.auth.currentUser?.delete()
+                userInfoInteractor.deleteUser()
+                preferencesStore.clearAllData()
+                withContext(Dispatchers.Main) { navigateCallback() }
             }
         }
 

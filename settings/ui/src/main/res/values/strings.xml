@@ -14,6 +14,11 @@
     <string name="settings_backup_file_not_found_error">File not found</string>
     <string name="settings_backup">Make backup</string>
     <string name="settings_backup_info">Last backup: %1$s</string>
-    <string name="settings_backup_delete_title">Delete backup?</string>
+    <string name="settings_backup_delete_dialog_title">Delete backup?</string>
     <string name="settings_backup_deleted">Backup file was deleted</string>
+    <string name="settings_account_delete">Delete account</string>
+    <string name="settings_account_delete_dialog_title">Delete account?</string>
+    <string name="settings_account_delete_dialog_subtitle">
+        This action will permanently delete your account and all associated data.\nThis cannot be undone after confirmation.\nPlease make sure you want to continue.
+    </string>
 </resources>
