@@ -16,7 +16,6 @@ firebaseBom = "34.18.0"
 firebaseCrashlyticsPlugin = "3.0.8"
 firebaseUi = "9.1.1"
 googlePlayServices = "4.5.0"
-googlePlayServicesAuth = "22.0.0"
 googlePlayServicesLocation = "21.4.0"
 googlePlayServicesMaps = "20.0.0"
 gradlePlugin = "9.3.2"
@@ -115,7 +114,6 @@ okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhtt
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 paging-common = { group = "androidx.paging", name = "paging-common", version.ref = "paging" }
 paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
-play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "googlePlayServicesAuth" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "googlePlayServicesLocation" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "googlePlayServicesMaps" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }

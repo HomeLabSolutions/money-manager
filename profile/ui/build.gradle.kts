@@ -40,5 +40,4 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.hilt.lifecycle.viewmodel.compose)
     implementation(libs.navigation.compose)
-    implementation(libs.play.services.auth)
 }
