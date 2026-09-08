@@ -20,10 +20,12 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    - name: Inject google-services.json
+    - name: Inject production google-services.json
       env:
         GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-      run: echo "$GOOGLE_SERVICES_JSON" | base64 --decode > app/google-services.json
+      run: |
+        mkdir -p app/src/release
+        echo "$GOOGLE_SERVICES_JSON" | base64 --decode > app/src/release/google-services.json
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
