@@ -36,7 +36,7 @@ data class RegularTransaction(
                 createdDate = currentDateTime(),
                 executionPeriod =
                     ExecutionPeriod.EveryMonth(
-                        currentDate().dayOfMonth,
+                        currentDate().day,
                         currentDateTime(),
                     ),
                 description = "",
