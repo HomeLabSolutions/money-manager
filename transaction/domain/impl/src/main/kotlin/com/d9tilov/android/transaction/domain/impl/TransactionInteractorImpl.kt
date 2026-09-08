@@ -654,15 +654,15 @@ class TransactionInteractorImpl @Inject constructor(
                                     GregorianCalendar(
                                         dayIterator.year,
                                         dayIterator.monthNumber - 1,
-                                        dayIterator.dayOfMonth,
+                                        dayIterator.day,
                                     )
                                 val countDaysOfMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH)
                                 if (executeDay > countDaysOfMonth) {
-                                    if (dayIterator.dayOfMonth == countDaysOfMonth) {
+                                    if (dayIterator.day == countDaysOfMonth) {
                                         listOfSkippedDates.add(dayIterator)
                                     }
                                 } else {
-                                    if (dayIterator.dayOfMonth == executeDay) {
+                                    if (dayIterator.day == executeDay) {
                                         listOfSkippedDates.add(dayIterator)
                                     }
                                 }
