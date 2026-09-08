@@ -8,7 +8,6 @@ import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.exception.CategoryException
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.model.ExecutionPeriod
-import com.d9tilov.android.core.model.PeriodType
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.model.isIncome
 import com.d9tilov.android.core.utils.countDaysRemainingNextFiscalDate
@@ -19,7 +18,6 @@ import com.d9tilov.android.core.utils.getEndDateOfFiscalPeriod
 import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.getStartDateOfFiscalPeriod
 import com.d9tilov.android.core.utils.getStartOfDay
-import com.d9tilov.android.core.utils.isSameDay
 import com.d9tilov.android.core.utils.reduceScale
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
@@ -50,11 +48,8 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.atTime
 import kotlinx.datetime.minus
-import kotlinx.datetime.periodUntil
 import kotlinx.datetime.plus
 import java.math.BigDecimal
-import java.util.Calendar
-import java.util.GregorianCalendar
 import javax.inject.Inject
 
 class TransactionInteractorImpl @Inject constructor(
@@ -400,42 +395,18 @@ class TransactionInteractorImpl @Inject constructor(
         val startDate = getStartDateOfFiscalPeriod(fiscalDay).date
         val endDate = curDate.getEndDateOfFiscalPeriod(fiscalDay).date
         return transactions.sumOf { tr ->
-            when (tr.executionPeriod.periodType) {
-                PeriodType.MONTH -> {
-                    currencyInteractor.toTargetCurrency(
-                        tr.sum,
-                        tr.currencyCode,
-                        currencyInteractor.getMainCurrency().code,
-                    )
-                }
-
-                PeriodType.WEEK -> {
-                    var dayOfWeekCount = 0
-                    var dateIterator = startDate
-                    while (dateIterator != endDate) {
-                        if (dateIterator.dayOfWeek.ordinal ==
-                            (tr.executionPeriod as ExecutionPeriod.EveryWeek).dayOfWeek
-                        ) {
-                            dayOfWeekCount++
-                        }
-                        dateIterator = dateIterator.plus(1, DateTimeUnit.DAY)
-                    }
-                    currencyInteractor.toTargetCurrency(
-                        tr.sum.multiply(BigDecimal(dayOfWeekCount)),
-                        tr.currencyCode,
-                        currencyInteractor.getMainCurrency().code,
-                    )
-                }
-
-                PeriodType.DAY -> {
-                    val countDays = startDate.periodUntil(endDate).days
-                    currencyInteractor.toTargetCurrency(
-                        tr.sum.multiply(BigDecimal(countDays)),
-                        tr.currencyCode,
-                        currencyInteractor.getMainCurrency().code,
-                    )
-                }
-            }
+            val occurrenceCount =
+                occurrencesBetween(
+                    executionPeriod = tr.executionPeriod,
+                    activeFrom = tr.createdDate.date,
+                    from = startDate,
+                    to = endDate,
+                ).size
+            currencyInteractor.toTargetCurrency(
+                tr.sum.multiply(BigDecimal(occurrenceCount)),
+                tr.currencyCode,
+                currencyInteractor.getMainCurrency().code,
+            )
         }
     }
 
@@ -572,131 +543,49 @@ class TransactionInteractorImpl @Inject constructor(
             .map { transactions ->
                 for (tr in transactions) {
                     val curDay = currentDate()
-                    when (tr.executionPeriod.periodType) {
-                        PeriodType.DAY -> {
-                            var dayIterator = tr.executionPeriod.lastExecutionDateTime.date
-                            val listOfSkippedDates = mutableListOf<LocalDate>()
-                            while (dayIterator <= curDay && !curDay.isSameDay(dayIterator)) {
-                                dayIterator = dayIterator.plus(1, DateTimeUnit.DAY)
-                                listOfSkippedDates.add(dayIterator)
-                            }
-                            listOfSkippedDates.forEachIndexed { index, day ->
-                                val transaction =
-                                    Transaction.EMPTY.copy(
-                                        type = tr.type,
-                                        sum = tr.sum,
-                                        category = tr.category,
-                                        currencyCode = tr.currencyCode,
-                                        date = day.getStartOfDay(),
-                                        description = tr.description,
-                                        isRegular = true,
-                                        inStatistics = true,
-                                    )
-                                addTransaction(transaction)
-                                if (index == listOfSkippedDates.size - 1) {
-                                    regularTransactionInteractor.update(
-                                        tr.copy(
-                                            executionPeriod =
-                                                ExecutionPeriod.EveryDay(
-                                                    day.getStartOfDay(),
-                                                ),
-                                        ),
-                                    )
-                                }
-                            }
-                        }
-
-                        PeriodType.WEEK -> {
-                            var dayIterator = tr.executionPeriod.lastExecutionDateTime.date
-                            val executeDay = (tr.executionPeriod as ExecutionPeriod.EveryWeek).dayOfWeek
-                            val listOfSkippedDates = mutableListOf<LocalDate>()
-                            while (dayIterator <= curDay && !curDay.isSameDay(dayIterator)) {
-                                dayIterator = dayIterator.plus(1, DateTimeUnit.DAY)
-                                if (dayIterator.dayOfWeek.ordinal == executeDay) {
-                                    listOfSkippedDates.add(dayIterator)
-                                }
-                            }
-                            listOfSkippedDates.forEachIndexed { index, day ->
-                                val transaction =
-                                    Transaction.EMPTY.copy(
-                                        type = tr.type,
-                                        sum = tr.sum,
-                                        category = tr.category,
-                                        currencyCode = tr.currencyCode,
-                                        date = day.getStartOfDay(),
-                                        description = tr.description,
-                                        isRegular = true,
-                                        inStatistics = true,
-                                    )
-                                addTransaction(transaction)
-                                if (index == listOfSkippedDates.size - 1) {
-                                    regularTransactionInteractor.update(
-                                        tr.copy(
-                                            executionPeriod =
-                                                ExecutionPeriod.EveryWeek(
-                                                    (tr.executionPeriod as ExecutionPeriod.EveryWeek).dayOfWeek,
-                                                    day.getStartOfDay(),
-                                                ),
-                                        ),
-                                    )
-                                }
-                            }
-                        }
-
-                        PeriodType.MONTH -> {
-                            var dayIterator = tr.executionPeriod.lastExecutionDateTime.date
-                            val executeDay =
-                                (tr.executionPeriod as ExecutionPeriod.EveryMonth).dayOfMonth
-                            val listOfSkippedDates = mutableListOf<LocalDate>()
-                            while (dayIterator <= curDay && !curDay.isSameDay(dayIterator)) {
-                                dayIterator = dayIterator.plus(1, DateTimeUnit.DAY)
-                                val c =
-                                    GregorianCalendar(
-                                        dayIterator.year,
-                                        dayIterator.monthNumber - 1,
-                                        dayIterator.day,
-                                    )
-                                val countDaysOfMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH)
-                                if (executeDay > countDaysOfMonth) {
-                                    if (dayIterator.day == countDaysOfMonth) {
-                                        listOfSkippedDates.add(dayIterator)
-                                    }
-                                } else {
-                                    if (dayIterator.day == executeDay) {
-                                        listOfSkippedDates.add(dayIterator)
-                                    }
-                                }
-                            }
-                            listOfSkippedDates.forEachIndexed { index, day ->
-                                val transaction =
-                                    Transaction.EMPTY.copy(
-                                        type = tr.type,
-                                        sum = tr.sum,
-                                        category = tr.category,
-                                        currencyCode = tr.currencyCode,
-                                        date = day.getStartOfDay(),
-                                        description = tr.description,
-                                        isRegular = true,
-                                        inStatistics = true,
-                                    )
-                                addTransaction(transaction)
-                                if (index == listOfSkippedDates.size - 1) {
-                                    regularTransactionInteractor.update(
-                                        tr.copy(
-                                            executionPeriod =
-                                                ExecutionPeriod.EveryMonth(
-                                                    (tr.executionPeriod as ExecutionPeriod.EveryMonth).dayOfMonth,
-                                                    day.getStartOfDay(),
-                                                ),
-                                        ),
-                                    )
-                                }
-                            }
-                        }
+                    val skippedDates =
+                        occurrencesBetween(
+                            executionPeriod = tr.executionPeriod,
+                            activeFrom = tr.createdDate.date,
+                            from =
+                                tr.executionPeriod.lastExecutionDateTime.date.plus(
+                                    1,
+                                    DateTimeUnit.DAY,
+                                ),
+                            to = curDay,
+                        )
+                    for (day in skippedDates) {
+                        addTransaction(
+                            Transaction.EMPTY.copy(
+                                type = tr.type,
+                                sum = tr.sum,
+                                category = tr.category,
+                                currencyCode = tr.currencyCode,
+                                date = day.getStartOfDay(),
+                                description = tr.description,
+                                isRegular = true,
+                                inStatistics = true,
+                            ),
+                        )
+                    }
+                    skippedDates.lastOrNull()?.let { lastExecutionDate ->
+                        regularTransactionInteractor.update(
+                            tr.copy(
+                                executionPeriod =
+                                    tr.executionPeriod.withLastExecutionDate(lastExecutionDate),
+                            ),
+                        )
                     }
                 }
             }.firstOrNull()
     }
+
+    private fun ExecutionPeriod.withLastExecutionDate(date: LocalDate): ExecutionPeriod =
+        when (this) {
+            is ExecutionPeriod.EveryDay -> ExecutionPeriod.EveryDay(date.getStartOfDay())
+            is ExecutionPeriod.EveryWeek -> ExecutionPeriod.EveryWeek(dayOfWeek, date.getStartOfDay())
+            is ExecutionPeriod.EveryMonth -> ExecutionPeriod.EveryMonth(dayOfMonth, date.getStartOfDay())
+        }
 
     override suspend fun update(transaction: Transaction) {
         coroutineScope {
