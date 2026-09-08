@@ -51,9 +51,11 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.CategoryDestination
+import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.MainPriceFieldParser
+import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.designsystem.AutoSizeTextField
 import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.DescriptionTextField
@@ -64,6 +66,7 @@ import com.d9tilov.android.transaction.regular.ui.vm.DaysInWeek
 import com.d9tilov.android.transaction.regular.ui.vm.PeriodMenuItem
 import com.d9tilov.android.transaction.regular.ui.vm.RegularTransactionCreationUiState
 import com.d9tilov.android.transaction.regular.ui.vm.RegularTransactionCreationViewModel
+import com.d9tilov.android.transaction.regular.ui.vm.toPeriodMenuItem
 
 @Composable
 fun RegularTransactionCreationRoute(
@@ -106,6 +109,8 @@ fun RegularTransactionCreationScreen(
     onSaveClicked: () -> Unit,
 ) {
     val context = LocalContext.current
+    val executionPeriod = uiState.transaction.executionPeriod
+    val periodMenuItem = executionPeriod.toPeriodMenuItem()
     var showError by remember { mutableStateOf(false) }
     var saveBtnEnabled by remember { mutableStateOf(showError) }
     var openDayOfMonthDialog by remember { mutableStateOf(false) }
@@ -317,25 +322,30 @@ fun RegularTransactionCreationScreen(
                                                 id = com.d9tilov.android.designsystem.R.dimen.padding_small,
                                             ),
                                     ),
-                                selectedItem = uiState.curPeriodItem,
+                                selectedItem = periodMenuItem,
                                 onMenuItemClick = onCurPeriodItemUpdate::invoke,
                             )
                         }
-                        when (uiState.curPeriodItem) {
-                            PeriodMenuItem.DAY -> {}
+                        when (executionPeriod) {
+                            is ExecutionPeriod.EveryDay -> {}
 
-                            PeriodMenuItem.WEEK -> {
-                                DaysOfWeek(uiState.curDayInWeek) {
+                            is ExecutionPeriod.EveryWeek -> {
+                                DaysOfWeek(
+                                    selected =
+                                        DaysInWeek.entries.getOrElse(executionPeriod.dayOfWeek) {
+                                            DaysInWeek.MONDAY
+                                        },
+                                ) {
                                     onWeekDayClicked(it)
                                 }
                             }
 
-                            PeriodMenuItem.MONTH -> {
+                            is ExecutionPeriod.EveryMonth -> {
                                 Text(
                                     text =
                                         stringResource(
                                             id = R.string.regular_transaction_repeat_every_month_on,
-                                            uiState.curDayOfMonth,
+                                            executionPeriod.dayOfMonth,
                                         ),
                                     modifier =
                                         Modifier
@@ -381,7 +391,7 @@ fun RegularTransactionCreationScreen(
             )
             if (openDayOfMonthDialog) {
                 DayInMonthDialog(
-                    uiState.curDayOfMonth,
+                    (executionPeriod as? ExecutionPeriod.EveryMonth)?.dayOfMonth ?: currentDate().day,
                     onDismiss = { openDayOfMonthDialog = false },
                     onDayClicked = {
                         onDayOfMonthClicked(it)
@@ -603,7 +613,13 @@ fun ShowError() {
 @Composable
 fun DefaultRegularTransactionCreationPreview() {
     RegularTransactionCreationScreen(
-        uiState = RegularTransactionCreationUiState.EMPTY.copy(curPeriodItem = PeriodMenuItem.WEEK),
+        uiState =
+            RegularTransactionCreationUiState.EMPTY.copy(
+                transaction =
+                    RegularTransactionCreationUiState.EMPTY.transaction.copy(
+                        executionPeriod = ExecutionPeriod.EveryWeek(DaysInWeek.MONDAY.ordinal),
+                    ),
+            ),
         onBackClicked = {},
         onSumChanged = {},
         onSaveClicked = {},
