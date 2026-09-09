@@ -6,7 +6,6 @@ import com.d9tilov.android.analytics.domain.AnalyticsSender
 import com.d9tilov.android.analytics.model.AnalyticsEvent
 import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.backup.domain.contract.BackupInteractor
-import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.common.android.location.LocationProvider
 import com.d9tilov.android.core.constants.DataConstants.TAG
@@ -14,13 +13,11 @@ import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.core.model.ResultOf
-import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.contract.GeocodingInteractor
 import com.d9tilov.android.currency.observer.contract.CurrencyUpdateObserver
 import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.network.exception.NetworkException
-import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.user.data.impl.mapper.toDataModel
 import com.d9tilov.android.user.domain.contract.UserInteractor
 import com.google.firebase.FirebaseException
@@ -30,14 +27,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -51,8 +44,7 @@ class MainViewModel
     constructor(
         @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
         private val analyticsSender: AnalyticsSender,
-        private val transactionInteractor: TransactionInteractor,
-        private val billingInteractor: BillingInteractor,
+//        private val billingInteractor: BillingInteractor,
         private val preferencesStore: PreferencesStore,
         private val backupInteractor: BackupInteractor,
         private val userInteractor: UserInteractor,
@@ -140,27 +132,6 @@ class MainViewModel
             }
         }
 
-        private val premiumFlow =
-            billingInteractor
-                .isPremium()
-                .flowOn(ioDispatcher)
-                .shareIn(viewModelScope, SharingStarted.WhileSubscribed(), 1)
-
-        init {
-            billingInteractor.startBillingConnection()
-            viewModelScope.launch(ioDispatcher + updateCurrencyExceptionHandler) {
-                billingInteractor.billingConnectionReady
-                    .combine(premiumFlow) { isReady, isPremium ->
-                        isReady && isPremium
-                    }.collect { readyForPremium ->
-                        if (readyForPremium) {
-                            launch { transactionInteractor.executeRegularIfNeeded(TransactionType.INCOME) }
-                            launch { transactionInteractor.executeRegularIfNeeded(TransactionType.EXPENSE) }
-                        }
-                    }
-            }
-        }
-
         fun updateData() {
             Timber.tag(TAG).d("Update data")
             viewModelScope.launch(ioDispatcher) {
@@ -174,10 +145,6 @@ class MainViewModel
                     backupInteractor.restoreBackup()
                 }
             }
-        }
-
-        override fun onCleared() {
-            billingInteractor.terminateBillingConnection()
         }
 
         fun setToLoadingState() {

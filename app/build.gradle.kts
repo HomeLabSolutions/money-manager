@@ -107,8 +107,6 @@ dependencies {
     implementation(project(":backup:data:impl"))
     implementation(project(":backup:di"))
     implementation(project(":backup:domain:contract"))
-    implementation(project(":billing:di"))
-    implementation(project(":billing:domain:contract"))
     implementation(project(":budget:di"))
     implementation(project(":budget:domain:contract"))
     implementation(project(":budget:domain:model"))
