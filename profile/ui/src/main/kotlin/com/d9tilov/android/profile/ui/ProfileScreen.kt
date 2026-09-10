@@ -55,7 +55,7 @@ import com.d9tilov.android.profile.ui.vm.ProfileUiItem
 import com.d9tilov.android.profile.ui.vm.ProfileUiState
 import com.d9tilov.android.profile.ui.vm.ProfileViewModel
 import com.d9tilov.android.profile.ui.vm.UserUiProfile
-import com.d9tilov.android.transaction.regular.ui.worker.RegularTransactionSyncWorker
+import com.d9tilov.android.transaction.regular.data.impl.worker.RegularTransactionSyncWorker
 
 @Composable
 fun ProfileRoute(

@@ -7,10 +7,10 @@ import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactio
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.components.SingletonComponent
 
 @Module
-@InstallIn(ActivityRetainedComponent::class)
+@InstallIn(SingletonComponent::class)
 interface RegularTransactionDataModule {
     @Binds
     fun provideRegularTransactionSource(impl: RegularTransactionLocalSource): RegularTransactionSource

@@ -54,7 +54,7 @@ import com.d9tilov.android.settings.ui.vm.BackupState
 import com.d9tilov.android.settings.ui.vm.SettingsUiState
 import com.d9tilov.android.settings.ui.vm.SettingsViewModel
 import com.d9tilov.android.settings.ui.vm.SubscriptionUiState
-import com.d9tilov.android.transaction.regular.ui.worker.RegularTransactionSyncWorker
+import com.d9tilov.android.transaction.regular.data.impl.worker.RegularTransactionSyncWorker
 
 @Composable
 fun SettingsRoute(

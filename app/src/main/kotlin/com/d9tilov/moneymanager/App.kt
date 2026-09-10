@@ -4,7 +4,7 @@ import android.app.Application
 import android.os.StrictMode
 import com.d9tilov.android.backup.data.impl.PeriodicBackupWorker
 import com.d9tilov.android.currency.data.impl.sync.initializers.Sync
-import com.d9tilov.android.transaction.regular.ui.worker.RegularTransactionSyncWorker
+import com.d9tilov.android.transaction.regular.data.impl.worker.RegularTransactionSyncWorker
 import com.google.android.material.color.DynamicColors
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
