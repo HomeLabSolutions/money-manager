@@ -69,8 +69,8 @@ interface TransactionDao {
         code: String,
     ): Int
 
-    @Query("SELECT MIN(date) as minDate, MAX(date) as maxDate FROM transactions")
-    suspend fun getMinMaxDate(): TransactionMinMaxDateDbModel
+    @Query("SELECT MIN(date) as minDate, MAX(date) as maxDate FROM transactions WHERE clientId=:uid")
+    suspend fun getMinMaxDate(uid: String): TransactionMinMaxDateDbModel
 
     @Update
     suspend fun update(transaction: TransactionDbModel)

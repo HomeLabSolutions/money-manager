@@ -114,7 +114,7 @@ class TransactionLocalSource @Inject constructor(
         return if (currentUserId == null) {
             throw WrongUidException()
         } else {
-            transactionDao.getMinMaxDate().toDataModel()
+            transactionDao.getMinMaxDate(currentUserId).toDataModel()
         }
     }
 
