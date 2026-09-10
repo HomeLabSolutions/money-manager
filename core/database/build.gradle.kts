@@ -29,4 +29,6 @@ dependencies {
     implementation(libs.room.paging)
 
     ksp(libs.room.compiler)
+
+    testImplementation(libs.junit)
 }
