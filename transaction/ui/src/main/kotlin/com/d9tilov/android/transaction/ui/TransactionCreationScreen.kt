@@ -1,6 +1,7 @@
 package com.d9tilov.android.transaction.ui
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,6 +30,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,6 +74,8 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberUpdatedMarkerState
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 private const val MAP_ZOOM_LEVEL = 15f
@@ -84,13 +88,28 @@ fun TransactionCreationRoute(
     clickCategory: (TransactionType, CategoryDestination) -> Unit,
 ) {
     val state: TransactionUiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     TransactionCreationScreen(
         uiState = state,
         onBackClicked = clickBack,
         onSumChanged = viewModel::updateAmount,
         onSaveClicked = {
-            viewModel.save()
-            clickBack()
+            coroutineScope.launch {
+                try {
+                    viewModel.save()
+                    clickBack()
+                } catch (exception: CancellationException) {
+                    throw exception
+                } catch (_: Exception) {
+                    Toast
+                        .makeText(
+                            context,
+                            com.d9tilov.android.common.android.R.string.unknown_error,
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                }
+            }
         },
         onInStatisticsChanged = viewModel::updateInStatistics,
         onDescriptionChanged = viewModel::updateDescription,
