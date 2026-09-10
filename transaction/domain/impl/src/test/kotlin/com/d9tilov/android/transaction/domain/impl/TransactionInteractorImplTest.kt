@@ -6,6 +6,7 @@ import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
@@ -14,6 +15,7 @@ import com.d9tilov.android.transaction.domain.contract.TransactionRepo
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.domain.model.TransactionDataModel
 import com.d9tilov.android.transaction.domain.model.TransactionMinMaxDateModel
+import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
 import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.user.domain.contract.UserInteractor
 import io.mockk.coEvery
@@ -23,8 +25,11 @@ import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.plus
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import java.math.BigDecimal
@@ -549,4 +554,73 @@ class TransactionInteractorImplTest {
 
             assertEquals(0, result.compareTo(BigDecimal(100)))
         }
+
+    @Test
+    fun `ableToSpendToday returns overspending when today's expenses exceed daily allowance`() =
+        runTest {
+            val today = currentDate()
+            val fiscalDayInTenDays = today.plus(10, DateTimeUnit.DAY).day
+            val income = transactionDataModel(id = 1L, type = TransactionType.INCOME, sum = BigDecimal(100))
+            val todayExpense = transactionDataModel(id = 2L, type = TransactionType.EXPENSE, sum = BigDecimal(20))
+
+            coEvery { userInteractor.getFiscalDay() } returns fiscalDayInTenDays
+            every { regularTransactionInteractor.getAll(any()) } returns flowOf(emptyList())
+            coEvery { budgetInteractor.get() } returns flowOf(testBudget.copy(saveSum = BigDecimal.ZERO))
+            every {
+                transactionRepo.getTransactionsByTypeInPeriod(
+                    any(),
+                    any(),
+                    TransactionType.INCOME,
+                    onlyInStatistics = true,
+                    withRegular = false,
+                )
+            } returns flowOf(listOf(income))
+            every {
+                transactionRepo.getTransactionsByTypeInPeriod(
+                    any(),
+                    any(),
+                    TransactionType.EXPENSE,
+                    onlyInStatistics = true,
+                    withRegular = false,
+                )
+            } answers {
+                val from = firstArg<LocalDateTime>()
+                flowOf(if (from.date == today) listOf(todayExpense) else emptyList())
+            }
+            coEvery {
+                currencyInteractor.toTargetCurrency(BigDecimal(100), "USD", "USD")
+            } returns BigDecimal(100)
+            coEvery {
+                currencyInteractor.toTargetCurrency(BigDecimal(20), "USD", "USD")
+            } returns BigDecimal(20)
+
+            val result = interactor.ableToSpendToday().first()
+
+            assertTrue(result is TransactionSpendingTodayModel.OVERSPENDING)
+            assertEquals(
+                0,
+                (result as TransactionSpendingTodayModel.OVERSPENDING).trSum.compareTo(BigDecimal(-10)),
+            )
+        }
+
+    private fun transactionDataModel(
+        id: Long,
+        type: TransactionType,
+        sum: BigDecimal,
+    ) = TransactionDataModel(
+        id = id,
+        clientId = "test-client-id-$id",
+        type = type,
+        categoryId = testCategory.id,
+        currencyCode = "USD",
+        sum = sum,
+        usdSum = sum,
+        date = LocalDateTime(2024, 1, 1, 0, 0),
+        description = "Test",
+        qrCode = "",
+        inStatistics = true,
+        isRegular = false,
+        location = LocationData(0.0, 0.0),
+        photoUri = "",
+    )
 }
