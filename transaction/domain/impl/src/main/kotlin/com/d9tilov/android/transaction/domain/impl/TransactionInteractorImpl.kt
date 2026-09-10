@@ -271,12 +271,15 @@ class TransactionInteractorImpl @Inject constructor(
             countDaysSinceFiscalDateFlow,
             expensesPerCurrentDayFlow,
         ) { numerator, countDaysSinceFiscalDate, expensesPerCurrentDay ->
-            if (numerator.minus(expensesPerCurrentDay).signum() < 0) {
-                TransactionSpendingTodayModel.OVERSPENDING(numerator.minus(expensesPerCurrentDay).reduceScale())
+            val dailyAvailable =
+                numerator
+                    .divideBy(countDaysSinceFiscalDate)
+                    .minus(expensesPerCurrentDay)
+                    .reduceScale()
+            if (dailyAvailable.signum() < 0) {
+                TransactionSpendingTodayModel.OVERSPENDING(dailyAvailable)
             } else {
-                TransactionSpendingTodayModel.NORMAL(
-                    numerator.divideBy(countDaysSinceFiscalDate).minus(expensesPerCurrentDay).reduceScale(),
-                )
+                TransactionSpendingTodayModel.NORMAL(dailyAvailable)
             }
         }
     }
