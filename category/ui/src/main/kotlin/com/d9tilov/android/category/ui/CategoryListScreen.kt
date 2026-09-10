@@ -73,12 +73,6 @@ fun CategoryListRoute(
                 CategoryDestination.EDIT_TRANSACTION_SCREEN,
                 CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN,
                 -> onCategoryClickAndBack(category)
-
-                CategoryDestination.CATEGORY_CREATION_SCREEN -> TODO()
-
-                CategoryDestination.CATEGORY_SCREEN -> TODO()
-
-                CategoryDestination.SUB_CATEGORY_SCREEN -> TODO()
             }
         },
         onCreateClicked = { openCategory(NO_ID, viewModel.transactionType) },
