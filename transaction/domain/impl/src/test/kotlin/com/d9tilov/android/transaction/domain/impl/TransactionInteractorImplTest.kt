@@ -363,6 +363,57 @@ class TransactionInteractorImplTest {
         }
 
     @Test
+    fun `getTransactionsGroupedByDate should convert transactions to selected currency`() =
+        runTest {
+            val transaction =
+                TransactionDataModel(
+                    id = 1L,
+                    clientId = "test-client-id",
+                    type = TransactionType.EXPENSE,
+                    categoryId = 1L,
+                    currencyCode = "GBP",
+                    sum = BigDecimal(100),
+                    usdSum = BigDecimal(125),
+                    date = LocalDateTime(2024, 1, 1, 10, 0),
+                    description = "Test",
+                    qrCode = "",
+                    inStatistics = true,
+                    isRegular = false,
+                    location = LocationData(0.0, 0.0),
+                    photoUri = "",
+                )
+            val from = LocalDateTime(2024, 1, 1, 0, 0)
+            val to = LocalDateTime(2024, 1, 31, 23, 59)
+
+            coEvery {
+                transactionRepo.getTransactionsByTypeInPeriod(from, to, TransactionType.EXPENSE, true)
+            } returns flowOf(listOf(transaction))
+            coEvery {
+                currencyInteractor.toTargetCurrency(BigDecimal(100), "GBP", "EUR")
+            } returns BigDecimal(115)
+            coEvery {
+                currencyInteractor.toTargetCurrency(BigDecimal(100), "GBP", "USD")
+            } returns BigDecimal(125)
+
+            val result =
+                interactor
+                    .getTransactionsGroupedByDate(
+                        type = TransactionType.EXPENSE,
+                        from = from,
+                        to = to,
+                        currencyCode = "EUR",
+                        inStatistics = true,
+                    ).first()
+
+            val chartItem = result.getValue(LocalDateTime(2024, 1, 1, 0, 0))
+            assertEquals("EUR", chartItem.currencyCode)
+            assertEquals(0, chartItem.sum.compareTo(BigDecimal(115)))
+            coVerify(exactly = 1) {
+                currencyInteractor.toTargetCurrency(BigDecimal(100), "GBP", "EUR")
+            }
+        }
+
+    @Test
     fun `getTransactionsByCategoryId should return transactions for category with children`() =
         runTest {
             val childCategory =

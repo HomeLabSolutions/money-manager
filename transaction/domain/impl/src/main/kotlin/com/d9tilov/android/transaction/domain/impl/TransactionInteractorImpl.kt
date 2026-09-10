@@ -186,7 +186,7 @@ class TransactionInteractorImpl @Inject constructor(
                                         currencyInteractor.toTargetCurrency(
                                             model.sum,
                                             model.currencyCode,
-                                            currencyInteractor.getMainCurrency().code,
+                                            currencyCode,
                                         )
                                     }
                                 },
