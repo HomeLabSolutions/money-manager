@@ -22,7 +22,9 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.DateTimeUnit
@@ -209,7 +211,7 @@ class TransactionInteractorImplTest {
     @Test
     fun `update should update transaction and adjust budget`() =
         runTest {
-            val oldTransaction =
+            var persistedTransaction =
                 TransactionDataModel(
                     id = 1L,
                     clientId = "test-client-id",
@@ -226,6 +228,7 @@ class TransactionInteractorImplTest {
                     location = LocationData(0.0, 0.0),
                     photoUri = "",
                 )
+            var persistedBudget = testBudget
 
             val updatedTransaction =
                 Transaction.EMPTY.copy(
@@ -236,14 +239,29 @@ class TransactionInteractorImplTest {
                     currencyCode = "USD",
                 )
 
-            coEvery { transactionRepo.getTransactionById(1L) } returns flowOf(oldTransaction)
-            coEvery { transactionRepo.update(any()) } returns Unit
+            coEvery { transactionRepo.getTransactionById(1L) } returns
+                flow {
+                    delay(1)
+                    emit(persistedTransaction)
+                }
+            coEvery { transactionRepo.update(any()) } answers {
+                persistedTransaction = firstArg()
+            }
             coEvery { currencyInteractor.toUsd(any(), any()) } returns BigDecimal(150)
+            coEvery {
+                currencyInteractor.toTargetCurrency(any(), any(), any())
+            } answers {
+                firstArg()
+            }
+            coEvery { budgetInteractor.update(any()) } answers {
+                persistedBudget = firstArg()
+            }
 
             interactor.update(updatedTransaction)
 
             coVerify { transactionRepo.update(any()) }
             coVerify { budgetInteractor.update(any()) }
+            assertEquals(0, persistedBudget.sum.compareTo(BigDecimal(950)))
         }
 
     @Test

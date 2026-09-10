@@ -591,32 +591,27 @@ class TransactionInteractorImpl @Inject constructor(
         }
 
     override suspend fun update(transaction: Transaction) {
-        coroutineScope {
-            launch {
-                val usdSumValue =
-                    currencyInteractor.toUsd(transaction.sum, transaction.currencyCode)
-                transactionRepo.update(transaction.toDataModel().copy(usdSum = usdSumValue))
-            }
-            launch {
-                val oldTransaction =
-                    checkNotNull(transactionRepo.getTransactionById(transaction.id).firstOrNull())
-                val budget = checkNotNull(budgetInteractor.get().firstOrNull())
-                var budgetSum = budget.sum
-                budgetSum +=
-                    currencyInteractor.toTargetCurrency(
-                        if (oldTransaction.type.isIncome()) oldTransaction.sum.negate() else oldTransaction.sum,
-                        oldTransaction.currencyCode,
-                        currencyInteractor.getMainCurrency().code,
-                    )
-                budgetSum +=
-                    currencyInteractor.toTargetCurrency(
-                        if (transaction.type.isIncome()) transaction.sum else transaction.sum.negate(),
-                        transaction.currencyCode,
-                        currencyInteractor.getMainCurrency().code,
-                    )
-                budgetInteractor.update(budget.copy(sum = budgetSum))
-            }
-        }
+        val oldTransaction =
+            checkNotNull(transactionRepo.getTransactionById(transaction.id).firstOrNull())
+        val usdSumValue = currencyInteractor.toUsd(transaction.sum, transaction.currencyCode)
+        val budget = checkNotNull(budgetInteractor.get().firstOrNull())
+        val mainCurrencyCode = currencyInteractor.getMainCurrency().code
+        var budgetSum = budget.sum
+        budgetSum +=
+            currencyInteractor.toTargetCurrency(
+                if (oldTransaction.type.isIncome()) oldTransaction.sum.negate() else oldTransaction.sum,
+                oldTransaction.currencyCode,
+                mainCurrencyCode,
+            )
+        budgetSum +=
+            currencyInteractor.toTargetCurrency(
+                if (transaction.type.isIncome()) transaction.sum else transaction.sum.negate(),
+                transaction.currencyCode,
+                mainCurrencyCode,
+            )
+
+        transactionRepo.update(transaction.toDataModel().copy(usdSum = usdSumValue))
+        budgetInteractor.update(budget.copy(sum = budgetSum))
     }
 
     override suspend fun removeTransaction(transaction: Transaction) {
