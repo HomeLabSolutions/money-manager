@@ -19,7 +19,6 @@ dependencies {
     implementation(project(":transaction:regular:domain:model"))
     implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.work.runtime)
-    implementation(libs.hilt.android)
     implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.timber)
