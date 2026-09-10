@@ -42,7 +42,7 @@ class RegularTransactionSyncWorker
             private const val PERIOD_WORK_IN_HOURS = 24L
 
             fun startPeriodicJob(context: Context) {
-                Timber.tag(DataConstants.TAG).d("Start backup periodic job")
+                Timber.tag(DataConstants.TAG).d("Start regular transaction periodic job")
                 val recurringWork =
                     PeriodicWorkRequest
                         .Builder(
@@ -57,7 +57,7 @@ class RegularTransactionSyncWorker
                 val workManager = WorkManager.getInstance(context)
                 workManager.enqueueUniquePeriodicWork(
                     REGULAR_TRANSACTION_SYNC_WORK_NAME,
-                    ExistingPeriodicWorkPolicy.UPDATE,
+                    ExistingPeriodicWorkPolicy.KEEP,
                     recurringWork,
                 )
             }

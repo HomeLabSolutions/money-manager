@@ -44,7 +44,6 @@ class MainViewModel
     constructor(
         @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
         private val analyticsSender: AnalyticsSender,
-//        private val billingInteractor: BillingInteractor,
         private val preferencesStore: PreferencesStore,
         private val backupInteractor: BackupInteractor,
         private val userInteractor: UserInteractor,
