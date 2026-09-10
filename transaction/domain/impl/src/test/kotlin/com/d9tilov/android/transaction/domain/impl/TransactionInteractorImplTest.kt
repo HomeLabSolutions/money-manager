@@ -20,7 +20,11 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.LocalDateTime
@@ -44,6 +48,7 @@ class TransactionInteractorImplTest {
             userInteractor = userInteractor,
             currencyInteractor = currencyInteractor,
             budgetInteractor = budgetInteractor,
+            transactionMutationMutex = TransactionMutationMutex(),
         )
     }
 
@@ -116,6 +121,42 @@ class TransactionInteractorImplTest {
             coVerify { transactionRepo.addTransaction(any()) }
             coVerify { categoryInteractor.update(match { it.usageCount == 1 }) }
             coVerify { budgetInteractor.update(any()) }
+        }
+
+    @Test
+    fun `concurrent transactions should not lose budget updates`() =
+        runTest {
+            var currentBudget = testBudget
+            coEvery { budgetInteractor.get() } answers {
+                flow {
+                    val budgetSnapshot = currentBudget
+                    delay(1)
+                    emit(budgetSnapshot)
+                }
+            }
+            coEvery { budgetInteractor.update(any()) } answers {
+                currentBudget = firstArg()
+            }
+            coEvery {
+                currencyInteractor.toTargetCurrency(any(), any(), any())
+            } answers {
+                firstArg()
+            }
+
+            val transaction =
+                Transaction.EMPTY.copy(
+                    type = TransactionType.EXPENSE,
+                    category = testCategory,
+                    sum = BigDecimal.TEN,
+                    currencyCode = "USD",
+                )
+
+            listOf(
+                async { interactor.addTransaction(transaction) },
+                async { interactor.addTransaction(transaction) },
+            ).awaitAll()
+
+            assertEquals(0, currentBudget.sum.compareTo(BigDecimal(980)))
         }
 
     @Test

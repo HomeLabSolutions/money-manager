@@ -34,7 +34,6 @@ import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayMode
 import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
 import com.d9tilov.android.user.domain.contract.UserInteractor
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
@@ -42,7 +41,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
@@ -59,30 +57,27 @@ class TransactionInteractorImpl @Inject constructor(
     private val userInteractor: UserInteractor,
     private val currencyInteractor: CurrencyInteractor,
     private val budgetInteractor: BudgetInteractor,
+    private val transactionMutationMutex: TransactionMutationMutex,
 ) : TransactionInteractor {
     override suspend fun addTransaction(transaction: Transaction) {
         val currencyCode = transaction.currencyCode
         val usdSumValue = currencyInteractor.toUsd(transaction.sum, currencyCode)
         val newTransaction =
             transaction.copy(currencyCode = currencyCode, usdSum = usdSumValue).toDataModel()
-        coroutineScope {
-            launch { transactionRepo.addTransaction(newTransaction) }
-            launch {
-                val category = categoryInteractor.getCategoryById(transaction.category.id)
-                val count = category.usageCount + 1
-                categoryInteractor.update(category.copy(usageCount = count))
-            }
-            launch {
-                val budget = checkNotNull(budgetInteractor.get().firstOrNull())
-                var budgetSum = budget.sum
-                budgetSum +=
-                    currencyInteractor.toTargetCurrency(
-                        if (transaction.type.isIncome()) transaction.sum else transaction.sum.negate(),
-                        currencyCode,
-                        currencyInteractor.getMainCurrency().code,
-                    )
-                budgetInteractor.update(budget.copy(sum = budgetSum))
-            }
+        transactionMutationMutex.withLock {
+            transactionRepo.addTransaction(newTransaction)
+            val category = categoryInteractor.getCategoryById(transaction.category.id)
+            val count = category.usageCount + 1
+            categoryInteractor.update(category.copy(usageCount = count))
+            val budget = checkNotNull(budgetInteractor.get().firstOrNull())
+            var budgetSum = budget.sum
+            budgetSum +=
+                currencyInteractor.toTargetCurrency(
+                    if (transaction.type.isIncome()) transaction.sum else transaction.sum.negate(),
+                    currencyCode,
+                    currencyInteractor.getMainCurrency().code,
+                )
+            budgetInteractor.update(budget.copy(sum = budgetSum))
         }
     }
 
@@ -588,48 +583,42 @@ class TransactionInteractorImpl @Inject constructor(
         }
 
     override suspend fun update(transaction: Transaction) {
-        coroutineScope {
-            launch {
-                val usdSumValue =
-                    currencyInteractor.toUsd(transaction.sum, transaction.currencyCode)
-                transactionRepo.update(transaction.toDataModel().copy(usdSum = usdSumValue))
-            }
-            launch {
-                val oldTransaction =
-                    checkNotNull(transactionRepo.getTransactionById(transaction.id).firstOrNull())
-                val budget = checkNotNull(budgetInteractor.get().firstOrNull())
-                var budgetSum = budget.sum
-                budgetSum +=
-                    currencyInteractor.toTargetCurrency(
-                        if (oldTransaction.type.isIncome()) oldTransaction.sum.negate() else oldTransaction.sum,
-                        oldTransaction.currencyCode,
-                        currencyInteractor.getMainCurrency().code,
-                    )
-                budgetSum +=
-                    currencyInteractor.toTargetCurrency(
-                        if (transaction.type.isIncome()) transaction.sum else transaction.sum.negate(),
-                        transaction.currencyCode,
-                        currencyInteractor.getMainCurrency().code,
-                    )
-                budgetInteractor.update(budget.copy(sum = budgetSum))
-            }
+        transactionMutationMutex.withLock {
+            val oldTransaction =
+                checkNotNull(transactionRepo.getTransactionById(transaction.id).firstOrNull())
+            val usdSumValue =
+                currencyInteractor.toUsd(transaction.sum, transaction.currencyCode)
+            transactionRepo.update(transaction.toDataModel().copy(usdSum = usdSumValue))
+            val budget = checkNotNull(budgetInteractor.get().firstOrNull())
+            var budgetSum = budget.sum
+            budgetSum +=
+                currencyInteractor.toTargetCurrency(
+                    if (oldTransaction.type.isIncome()) oldTransaction.sum.negate() else oldTransaction.sum,
+                    oldTransaction.currencyCode,
+                    currencyInteractor.getMainCurrency().code,
+                )
+            budgetSum +=
+                currencyInteractor.toTargetCurrency(
+                    if (transaction.type.isIncome()) transaction.sum else transaction.sum.negate(),
+                    transaction.currencyCode,
+                    currencyInteractor.getMainCurrency().code,
+                )
+            budgetInteractor.update(budget.copy(sum = budgetSum))
         }
     }
 
     override suspend fun removeTransaction(transaction: Transaction) {
-        coroutineScope {
-            launch { transactionRepo.removeTransaction(transaction.toDataModel()) }
-            launch {
-                val budget = checkNotNull(budgetInteractor.get().firstOrNull())
-                var budgetSum = budget.sum
-                budgetSum +=
-                    currencyInteractor.toTargetCurrency(
-                        if (transaction.type.isIncome()) transaction.sum.negate() else transaction.sum,
-                        transaction.currencyCode,
-                        currencyInteractor.getMainCurrency().code,
-                    )
-                budgetInteractor.update(budget.copy(sum = budgetSum))
-            }
+        transactionMutationMutex.withLock {
+            transactionRepo.removeTransaction(transaction.toDataModel())
+            val budget = checkNotNull(budgetInteractor.get().firstOrNull())
+            var budgetSum = budget.sum
+            budgetSum +=
+                currencyInteractor.toTargetCurrency(
+                    if (transaction.type.isIncome()) transaction.sum.negate() else transaction.sum,
+                    transaction.currencyCode,
+                    currencyInteractor.getMainCurrency().code,
+                )
+            budgetInteractor.update(budget.copy(sum = budgetSum))
         }
     }
 
