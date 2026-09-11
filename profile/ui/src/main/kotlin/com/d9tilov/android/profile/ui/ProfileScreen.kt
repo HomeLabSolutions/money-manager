@@ -55,6 +55,7 @@ import com.d9tilov.android.profile.ui.vm.ProfileUiItem
 import com.d9tilov.android.profile.ui.vm.ProfileUiState
 import com.d9tilov.android.profile.ui.vm.ProfileViewModel
 import com.d9tilov.android.profile.ui.vm.UserUiProfile
+import com.d9tilov.android.transaction.regular.data.impl.worker.RegularTransactionSyncWorker
 
 @Composable
 fun ProfileRoute(
@@ -82,6 +83,7 @@ fun ProfileRoute(
             onLogoutConfirmClicked = {
                 viewModel.logout {
                     PeriodicBackupWorker.stopPeriodicJob(context)
+                    RegularTransactionSyncWorker.stopPeriodicJob(context)
                     context.logout()
                 }
             },

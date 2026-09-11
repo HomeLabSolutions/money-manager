@@ -13,7 +13,6 @@ dependencies {
     implementation(project(":transaction:data:impl"))
     implementation(project(":transaction:domain:contract"))
     implementation(project(":transaction:domain:impl"))
-    implementation(libs.hilt.android)
 
     ksp(libs.hilt.ext.compiler)
 }

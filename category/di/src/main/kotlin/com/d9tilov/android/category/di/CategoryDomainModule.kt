@@ -5,10 +5,10 @@ import com.d9tilov.android.category.domain.impl.CategoryInteractorImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.components.SingletonComponent
 
 @Module
-@InstallIn(ActivityRetainedComponent::class)
+@InstallIn(SingletonComponent::class)
 interface CategoryDomainModule {
     @Binds
     fun provideCategoryInteractor(impl: CategoryInteractorImpl): CategoryInteractor
