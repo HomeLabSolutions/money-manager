@@ -299,13 +299,12 @@ class TransactionInteractorImpl @Inject constructor(
                 onlyInStatistics = true,
                 withRegular = false,
             ).map { list ->
-                list.sumOf {
-                    currencyInteractor.toTargetCurrency(
-                        it.sum,
-                        it.currencyCode,
-                        currencyInteractor.getMainCurrency().code,
-                    )
-                }
+                sumAtCurrentRates(
+                    items = list,
+                    targetCurrencyCode = currencyInteractor.getMainCurrency().code,
+                    amount = TransactionDataModel::sum,
+                    currencyCode = TransactionDataModel::currencyCode,
+                )
             }
 
     private fun getNumerator(): Flow<BigDecimal> {
@@ -336,13 +335,12 @@ class TransactionInteractorImpl @Inject constructor(
                             onlyInStatistics = true,
                             withRegular = false,
                         ).map { list ->
-                            list.sumOf {
-                                currencyInteractor.toTargetCurrency(
-                                    it.sum,
-                                    it.currencyCode,
-                                    currencyInteractor.getMainCurrency().code,
-                                )
-                            }
+                            sumAtCurrentRates(
+                                items = list,
+                                targetCurrencyCode = currencyInteractor.getMainCurrency().code,
+                                amount = TransactionDataModel::sum,
+                                currencyCode = TransactionDataModel::currencyCode,
+                            )
                         }
                 }
         val expenseFlow =
@@ -363,13 +361,12 @@ class TransactionInteractorImpl @Inject constructor(
                             onlyInStatistics = true,
                             withRegular = false,
                         ).map { list ->
-                            list.sumOf {
-                                currencyInteractor.toTargetCurrency(
-                                    it.sum,
-                                    it.currencyCode,
-                                    currencyInteractor.getMainCurrency().code,
-                                )
-                            }
+                            sumAtCurrentRates(
+                                items = list,
+                                targetCurrencyCode = currencyInteractor.getMainCurrency().code,
+                                amount = TransactionDataModel::sum,
+                                currencyCode = TransactionDataModel::currencyCode,
+                            )
                         }
                 }
 
@@ -397,20 +394,21 @@ class TransactionInteractorImpl @Inject constructor(
         val curDate = currentDateTime().getEndOfDay()
         val startDate = getStartDateOfFiscalPeriod(fiscalDay).date
         val endDate = curDate.getEndDateOfFiscalPeriod(fiscalDay).date
-        return transactions.sumOf { tr ->
-            val occurrenceCount =
-                occurrencesBetween(
-                    executionPeriod = tr.executionPeriod,
-                    activeFrom = tr.createdDate.date,
-                    from = startDate,
-                    to = endDate,
-                ).size
-            currencyInteractor.toTargetCurrency(
-                tr.sum.multiply(BigDecimal(occurrenceCount)),
-                tr.currencyCode,
-                currencyInteractor.getMainCurrency().code,
-            )
-        }
+        return sumAtCurrentRates(
+            items = transactions,
+            targetCurrencyCode = currencyInteractor.getMainCurrency().code,
+            amount = { transaction ->
+                val occurrenceCount =
+                    occurrencesBetween(
+                        executionPeriod = transaction.executionPeriod,
+                        activeFrom = transaction.createdDate.date,
+                        from = startDate,
+                        to = endDate,
+                    ).size
+                transaction.sum.multiply(BigDecimal(occurrenceCount))
+            },
+            currencyCode = RegularTransaction::currencyCode,
+        )
     }
 
     override fun getSumInFiscalPeriod(): Flow<BigDecimal> {
@@ -427,13 +425,12 @@ class TransactionInteractorImpl @Inject constructor(
                             onlyInStatistics = true,
                             withRegular = true,
                         ).map { list ->
-                            list.sumOf {
-                                currencyInteractor.toTargetCurrency(
-                                    it.sum,
-                                    it.currencyCode,
-                                    currencyInteractor.getMainCurrency().code,
-                                )
-                            }
+                            sumAtCurrentRates(
+                                items = list,
+                                targetCurrencyCode = currencyInteractor.getMainCurrency().code,
+                                amount = TransactionDataModel::sum,
+                                currencyCode = TransactionDataModel::currencyCode,
+                            )
                         }
                 }
         val expenseFlow =
@@ -449,13 +446,12 @@ class TransactionInteractorImpl @Inject constructor(
                             onlyInStatistics = true,
                             withRegular = true,
                         ).map { list ->
-                            list.sumOf {
-                                currencyInteractor.toTargetCurrency(
-                                    it.sum,
-                                    it.currencyCode,
-                                    currencyInteractor.getMainCurrency().code,
-                                )
-                            }
+                            sumAtCurrentRates(
+                                items = list,
+                                targetCurrencyCode = currencyInteractor.getMainCurrency().code,
+                                amount = TransactionDataModel::sum,
+                                currencyCode = TransactionDataModel::currencyCode,
+                            )
                         }
                 }
         return combine(
@@ -478,17 +474,7 @@ class TransactionInteractorImpl @Inject constructor(
                 transactionType,
                 onlyInStatistics = inStatistics,
                 withRegular = true,
-            ).map { list ->
-                list
-                    .sumOf { tr ->
-                        if (tr.currencyCode == currencyCode) {
-                            tr.sum
-                        } else {
-                            val trCurrency = currencyInteractor.getCurrencyByCode(currencyCode)
-                            trCurrency.value.multiply(tr.usdSum)
-                        }
-                    }
-            }
+            ).map { list -> list.sumStoredValuesInCurrency(currencyCode) }
 
     override fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<BigDecimal> =
         currencyInteractor
@@ -502,18 +488,7 @@ class TransactionInteractorImpl @Inject constructor(
                         startDate,
                         endDate,
                         type,
-                    ).map { list ->
-                        list
-                            .sumOf { tr ->
-                                val currencyCode = currency.code
-                                if (tr.currencyCode == currencyCode) {
-                                    tr.sum
-                                } else {
-                                    val trCurrency = currencyInteractor.getCurrencyByCode(currencyCode)
-                                    trCurrency.value.multiply(tr.usdSum)
-                                }
-                            }.reduceScale()
-                    }
+                    ).map { list -> list.sumStoredValuesInCurrency(currency.code).reduceScale() }
             }
 
     override fun getApproxSumTodayCurrentCurrency(type: TransactionType): Flow<BigDecimal> =
@@ -525,17 +500,50 @@ class TransactionInteractorImpl @Inject constructor(
             ),
             currencyInteractor.getMainCurrencyFlow(),
         ) { list, currency ->
-            list
-                .sumOf { tr ->
-                    val currencyCode = currency.code
-                    if (tr.currencyCode == currencyCode) {
-                        tr.sum
-                    } else {
-                        val trCurrency = currencyInteractor.getCurrencyByCode(currencyCode)
-                        trCurrency.value.multiply(tr.usdSum)
-                    }
-                }.reduceScale()
+            list.sumStoredValuesInCurrency(currency.code).reduceScale()
         }
+
+    private suspend fun List<TransactionDataModel>.sumStoredValuesInCurrency(targetCurrencyCode: String): BigDecimal {
+        val targetCurrencyRate =
+            if (any { transaction -> transaction.currencyCode != targetCurrencyCode }) {
+                currencyInteractor.getCurrencyByCode(targetCurrencyCode).value
+            } else {
+                null
+            }
+        return sumOf { transaction ->
+            if (transaction.currencyCode == targetCurrencyCode) {
+                transaction.sum
+            } else {
+                checkNotNull(targetCurrencyRate).multiply(transaction.usdSum)
+            }
+        }
+    }
+
+    private suspend fun <T> sumAtCurrentRates(
+        items: List<T>,
+        targetCurrencyCode: String,
+        amount: (T) -> BigDecimal,
+        currencyCode: (T) -> String,
+    ): BigDecimal {
+        val sourceCurrencyCodes = items.map(currencyCode).filterNot { code -> code == targetCurrencyCode }.toSet()
+        if (sourceCurrencyCodes.isEmpty()) return items.sumOf(amount)
+
+        val ratesByCode =
+            (sourceCurrencyCodes + targetCurrencyCode).associateWith { code ->
+                currencyInteractor.getCurrencyByCode(code).value
+            }
+        val targetCurrencyRate = checkNotNull(ratesByCode[targetCurrencyCode])
+        return items.sumOf { item ->
+            val sourceCurrencyCode = currencyCode(item)
+            if (sourceCurrencyCode == targetCurrencyCode) {
+                amount(item)
+            } else {
+                amount(item)
+                    .multiply(targetCurrencyRate.divideBy(checkNotNull(ratesByCode[sourceCurrencyCode])))
+                    .reduceScale()
+            }
+        }
+    }
 
     override suspend fun getTransactionMinMaxDate(): TransactionMinMaxDateModel =
         transactionRepo.getTransactionMinMaxDate()
