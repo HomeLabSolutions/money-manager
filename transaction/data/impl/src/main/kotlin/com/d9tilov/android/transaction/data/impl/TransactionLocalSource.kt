@@ -80,12 +80,9 @@ class TransactionLocalSource @Inject constructor(
                     from.getStartOfDay(),
                     to.getEndOfDay(),
                     transactionType.value,
-                ).map { list ->
-                    list
-                        .map { item -> item.toDataModel() }
-                        .filter { if (onlyInStatistics) it.inStatistics else true }
-                        .filter { if (!withRegular) !it.isRegular else true }
-                }
+                    onlyInStatistics,
+                    withRegular,
+                ).map { list -> list.map { item -> item.toDataModel() } }
         }
 
     override suspend fun getAllByCategory(category: Category): List<TransactionDataModel> {
@@ -104,8 +101,8 @@ class TransactionLocalSource @Inject constructor(
         onlyInStatistics: Boolean,
     ): Flow<List<TransactionDataModel>> =
         preferencesStore.uid.filterNotNull().flatMapMerge { uid ->
-            transactionDao.getByCategoryIdInPeriod(uid, category.id, from, to).map { list ->
-                list.map { item -> item.toDataModel() }.filter { if (onlyInStatistics) it.inStatistics else true }
+            transactionDao.getByCategoryIdInPeriod(uid, category.id, from, to, onlyInStatistics).map { list ->
+                list.map { item -> item.toDataModel() }
             }
         }
 

@@ -22,12 +22,24 @@ interface TransactionDao {
         type: Int,
     ): PagingSource<Int, TransactionDbModel>
 
-    @Query("SELECT * FROM transactions WHERE clientId=:clientId AND type = :type AND date >= :from AND date <= :to")
+    @Query(
+        """
+        SELECT * FROM transactions
+        WHERE clientId = :clientId
+            AND type = :type
+            AND date >= :from
+            AND date <= :to
+            AND (:onlyInStatistics = 0 OR inStatistics = 1)
+            AND (:withRegular = 1 OR isRegular = 0)
+        """,
+    )
     fun getAllByTypeInPeriod(
         clientId: String,
         from: LocalDateTime,
         to: LocalDateTime,
         type: Int,
+        onlyInStatistics: Boolean,
+        withRegular: Boolean,
     ): Flow<List<TransactionDbModel>>
 
     @Query("SELECT * FROM transactions WHERE clientId =:uid AND id = :id")
@@ -43,13 +55,21 @@ interface TransactionDao {
     ): List<TransactionDbModel>
 
     @Query(
-        "SELECT * FROM transactions WHERE clientId =:uid AND categoryId =:categoryId AND date >= :from AND date <= :to",
+        """
+        SELECT * FROM transactions
+        WHERE clientId = :uid
+            AND categoryId = :categoryId
+            AND date >= :from
+            AND date <= :to
+            AND (:onlyInStatistics = 0 OR inStatistics = 1)
+        """,
     )
     fun getByCategoryIdInPeriod(
         uid: String,
         categoryId: Long,
         from: LocalDateTime,
         to: LocalDateTime,
+        onlyInStatistics: Boolean,
     ): Flow<List<TransactionDbModel>>
 
     @Upsert
