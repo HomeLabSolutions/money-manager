@@ -2,6 +2,7 @@ plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
     id("moneymanager.android.library.compose")
+    id("kotlin-parcelize")
 }
 
 android {
