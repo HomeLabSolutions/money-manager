@@ -15,7 +15,6 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import kotlin.time.Clock
@@ -28,6 +27,7 @@ private const val MILLISECONDS_IN_SECOND = 1000L
 private const val MILLISECONDS_MINUS_ONE = 999
 private const val SECONDS_MINUS_ONE = 59
 private const val HOURS_MINUS_ONE = 23
+private const val MAX_FISCAL_DAY = 31
 
 fun Long.toBackupDate(): String =
     if (this == UNKNOWN_BACKUP_DATE) {
@@ -89,45 +89,59 @@ fun LocalDateTime.isSameDay(date: LocalDateTime): Boolean = this.year == date.ye
 
 fun LocalDate.isSameDay(date: LocalDate): Boolean = this.year == date.year && this.dayOfYear == date.dayOfYear
 
-fun getStartDateOfFiscalPeriod(fiscalDay: Int): LocalDateTime {
-    val c = Calendar.getInstance()
-    val dayOfMonth = c.get(Calendar.DAY_OF_MONTH)
-    val curDate = currentDate()
-    val fiscalDate: LocalDate =
-        when {
-            dayOfMonth == fiscalDay -> curDate
-            dayOfMonth > fiscalDay -> LocalDate(curDate.year, curDate.month, fiscalDay)
-            else -> LocalDate(curDate.year, curDate.month, fiscalDay).minus(1, DateTimeUnit.MONTH)
+fun getStartDateOfFiscalPeriod(fiscalDay: Int): LocalDateTime = getStartDateOfFiscalPeriod(fiscalDay, currentDate())
+
+internal fun getStartDateOfFiscalPeriod(
+    fiscalDay: Int,
+    currentDate: LocalDate,
+): LocalDateTime {
+    val currentMonthFiscalDate = currentDate.fiscalDate(fiscalDay)
+    val startDate =
+        if (currentDate >= currentMonthFiscalDate) {
+            currentMonthFiscalDate
+        } else {
+            currentDate.fiscalDate(fiscalDay, monthOffset = -1)
         }
-    return fiscalDate.getStartOfDay()
+    return startDate.getStartOfDay()
 }
 
 fun LocalDateTime.getEndDateOfFiscalPeriod(fiscalDay: Int): LocalDateTime {
-    val c = currentDate()
-    val fiscalDate: LocalDate =
-        when {
-            day == fiscalDay -> {
-                c.plus(1, DateTimeUnit.MONTH).minus(1, DateTimeUnit.DAY)
-            }
-
-            day > fiscalDay -> {
-                LocalDate(c.year, c.month, fiscalDay)
-                    .plus(1, DateTimeUnit.MONTH)
-                    .minus(1, DateTimeUnit.DAY)
-            }
-
-            else -> {
-                LocalDate(c.year, c.month, fiscalDay).minus(1, DateTimeUnit.DAY)
-            }
+    val currentMonthFiscalDate = date.fiscalDate(fiscalDay)
+    val nextFiscalDate =
+        if (date < currentMonthFiscalDate) {
+            currentMonthFiscalDate
+        } else {
+            date.fiscalDate(fiscalDay, monthOffset = 1)
         }
-    return fiscalDate.getEndOfDay()
+    return nextFiscalDate.minus(1, DateTimeUnit.DAY).getEndOfDay()
 }
 
 fun LocalDateTime.countDaysRemainingNextFiscalDate(fiscalDay: Int): Int {
-    val fiscalDate = LocalDate(this.year, this.month, fiscalDay)
-    return if (this.date < fiscalDate) {
-        this.date.daysUntil(fiscalDate)
+    val currentMonthFiscalDate = date.fiscalDate(fiscalDay)
+    val nextFiscalDate =
+        if (date < currentMonthFiscalDate) {
+            currentMonthFiscalDate
+        } else {
+            date.fiscalDate(fiscalDay, monthOffset = 1)
+        }
+    return date.daysUntil(nextFiscalDate)
+}
+
+private fun LocalDate.fiscalDate(
+    fiscalDay: Int,
+    monthOffset: Int = 0,
+): LocalDate {
+    require(fiscalDay in 1..MAX_FISCAL_DAY) { "Fiscal day must be between 1 and $MAX_FISCAL_DAY" }
+    val firstDayOfTargetMonth =
+        LocalDate(year, month, 1).plus(monthOffset, DateTimeUnit.MONTH)
+    val lastDayOfTargetMonth =
+        firstDayOfTargetMonth
+            .plus(1, DateTimeUnit.MONTH)
+            .minus(1, DateTimeUnit.DAY)
+            .day
+    return if (fiscalDay <= lastDayOfTargetMonth) {
+        LocalDate(firstDayOfTargetMonth.year, firstDayOfTargetMonth.month, fiscalDay)
     } else {
-        this.date.daysUntil(fiscalDate.plus(1, DateTimeUnit.MONTH))
+        LocalDate(firstDayOfTargetMonth.year, firstDayOfTargetMonth.month, lastDayOfTargetMonth)
     }
 }
