@@ -5,6 +5,7 @@ import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
 import androidx.paging.map
 import com.d9tilov.android.analytics.domain.AnalyticsSender
@@ -195,7 +196,7 @@ class IncomeExpenseViewModel
                                                         a.toUiModel()
                                                     }
                                                 },
-                                        ),
+                                        ).cachedIn(viewModelScope),
                                 ),
                         )
                     }
@@ -214,7 +215,7 @@ class IncomeExpenseViewModel
                                                         a.toUiModel()
                                                     }
                                                 },
-                                        ),
+                                        ).cachedIn(viewModelScope),
                                 ),
                         )
                     }
