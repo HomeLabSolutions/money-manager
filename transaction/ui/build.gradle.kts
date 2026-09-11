@@ -34,4 +34,8 @@ dependencies {
     implementation(libs.play.services.maps)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk.core)
 }

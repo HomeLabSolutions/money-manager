@@ -190,10 +190,9 @@ class RegularTransactionCreationViewModel
             _uiState.update { state -> state.copy(transaction = tr) }
         }
 
-        fun saveOrUpdate() =
-            viewModelScope.launch {
-                val state = _uiState.value
-                val tr = state.transaction.copy(sum = state.amount.toBigDecimal())
-                regularTransactionInteractor.insert(tr)
-            }
+        suspend fun saveOrUpdate() {
+            val state = _uiState.value
+            val tr = state.transaction.copy(sum = state.amount.toBigDecimal())
+            regularTransactionInteractor.insert(tr)
+        }
     }

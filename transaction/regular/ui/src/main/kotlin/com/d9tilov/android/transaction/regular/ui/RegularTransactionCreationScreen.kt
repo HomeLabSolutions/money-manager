@@ -1,5 +1,6 @@
 package com.d9tilov.android.transaction.regular.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -34,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,6 +69,8 @@ import com.d9tilov.android.transaction.regular.ui.vm.PeriodMenuItem
 import com.d9tilov.android.transaction.regular.ui.vm.RegularTransactionCreationUiState
 import com.d9tilov.android.transaction.regular.ui.vm.RegularTransactionCreationViewModel
 import com.d9tilov.android.transaction.regular.ui.vm.toPeriodMenuItem
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
 
 @Composable
 fun RegularTransactionCreationRoute(
@@ -77,13 +81,28 @@ fun RegularTransactionCreationRoute(
     clickBack: () -> Unit,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     RegularTransactionCreationScreen(
         uiState = state,
         onCurrencyClicked = onCurrencyClicked,
         onBackClicked = clickBack,
         onSaveClicked = {
-            viewModel.saveOrUpdate()
-            onSaveClicked()
+            coroutineScope.launch {
+                try {
+                    viewModel.saveOrUpdate()
+                    onSaveClicked()
+                } catch (exception: CancellationException) {
+                    throw exception
+                } catch (_: Exception) {
+                    Toast
+                        .makeText(
+                            context,
+                            com.d9tilov.android.common.android.R.string.unknown_error,
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                }
+            }
         },
         onSumChanged = viewModel::updateAmount,
         onCategoryClicked = clickCategory,

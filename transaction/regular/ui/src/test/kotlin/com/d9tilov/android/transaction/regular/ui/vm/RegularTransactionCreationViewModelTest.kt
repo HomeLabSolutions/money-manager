@@ -15,16 +15,20 @@ import com.d9tilov.android.transaction.regular.ui.navigator.REGULAR_TRANSACTION_
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import kotlinx.datetime.LocalDateTime
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Test
 import java.math.BigDecimal
@@ -117,6 +121,42 @@ class RegularTransactionCreationViewModelTest {
                 ExecutionPeriod.EveryDay(currentDate().getStartOfDay()),
                 viewModel.uiState.value.transaction.executionPeriod,
             )
+        }
+
+    @Test
+    fun `save becomes successful only after insert completes`() =
+        runTest(testDispatcher) {
+            val allowInsert = CompletableDeferred<Unit>()
+            coEvery { regularTransactionInteractor.getById(TRANSACTION_ID) } returns
+                transaction(ExecutionPeriod.EveryDay(LocalDateTime(2026, 8, 14, 0, 0)))
+            coEvery { regularTransactionInteractor.insert(any()) } coAnswers { allowInsert.await() }
+            val viewModel = createViewModel()
+            runCurrent()
+
+            val saveJob =
+                launch {
+                    viewModel.saveOrUpdate()
+                }
+            runCurrent()
+
+            assertFalse(saveJob.isCompleted)
+
+            allowInsert.complete(Unit)
+            saveJob.join()
+        }
+
+    @Test
+    fun `save exposes an error when insert fails`() =
+        runTest(testDispatcher) {
+            coEvery { regularTransactionInteractor.getById(TRANSACTION_ID) } returns
+                transaction(ExecutionPeriod.EveryDay(LocalDateTime(2026, 8, 14, 0, 0)))
+            coEvery { regularTransactionInteractor.insert(any()) } throws IllegalStateException("DB failure")
+            val viewModel = createViewModel()
+            runCurrent()
+
+            val result = runCatching { viewModel.saveOrUpdate() }
+
+            assertEquals("DB failure", result.exceptionOrNull()?.message)
         }
 
     private fun createViewModel() =

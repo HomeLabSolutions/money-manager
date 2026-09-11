@@ -96,10 +96,10 @@ class TransactionCreationViewModel
                 }
             }
 
-        fun save() =
-            viewModelScope.launch {
-                transactionInteractor.update(
-                    _uiState.value.transaction.copy(sum = _uiState.value.amount.toBigDecimal()),
-                )
-            }
+        suspend fun save() {
+            val state = _uiState.value
+            transactionInteractor.update(
+                state.transaction.copy(sum = state.amount.toBigDecimal()),
+            )
+        }
     }
