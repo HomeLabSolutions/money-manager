@@ -97,6 +97,7 @@ class TransactionInteractorImpl @Inject constructor(
         categoryInteractor
             .getGroupedCategoriesByType(type)
             .flatMapLatest { categoryList ->
+                val categoriesById = categoryList.associateBy { category -> category.id }
                 val parentChildrenMap: Map<Category, List<Category>> =
                     categoryList.groupBy { category -> category.parent ?: category }
                 transactionRepo
@@ -104,7 +105,7 @@ class TransactionInteractorImpl @Inject constructor(
                     .map {
                         it.map { item: TransactionDataModel ->
                             val category =
-                                categoryList.find { listItem -> item.categoryId == listItem.id }
+                                categoriesById[item.categoryId]
                                     ?: throw CategoryException.CategoryNotFoundException(
                                         "getTransactionsGroupedByCategory Not found category with id: ${item.categoryId}",
                                     )
@@ -202,13 +203,14 @@ class TransactionInteractorImpl @Inject constructor(
     ): List<Transaction> {
         val category = categoryInteractor.getCategoryById(categoryId)
         val categoryList: List<Category> = category.children.ifEmpty { listOf(category) }
+        val categoriesById = categoryList.associateBy { item -> item.id }
         return categoryList.flatMap { item: Category ->
             transactionRepo
                 .getByCategoryInPeriod(item, from, to, inStatistics)
                 .firstOrNull()
                 ?.map { tr: TransactionDataModel ->
                     val foundCategory =
-                        categoryList.find { listItem -> tr.categoryId == listItem.id }
+                        categoriesById[tr.categoryId]
                             ?: throw CategoryException.CategoryNotFoundException(
                                 "getTransactionsByCategory Not found category with id: ${tr.categoryId}",
                             )
@@ -244,12 +246,13 @@ class TransactionInteractorImpl @Inject constructor(
         categoryInteractor
             .getGroupedCategoriesByType(type)
             .flatMapLatest { categoryList ->
+                val categoriesById = categoryList.associateBy { category -> category.id }
                 transactionRepo
                     .getTransactionsByType(transactionType = type)
                     .map {
                         it.map { item ->
                             val category =
-                                categoryList.find { listItem -> item.categoryId == listItem.id }
+                                categoriesById[item.categoryId]
                                     ?: throw CategoryException.CategoryNotFoundException(
                                         "getTransactionsByType Not found category with id: ${item.categoryId}",
                                     )
