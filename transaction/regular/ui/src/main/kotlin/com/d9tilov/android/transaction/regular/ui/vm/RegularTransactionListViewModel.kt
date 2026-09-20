@@ -59,7 +59,7 @@ class RegularTransactionListViewModel
                         _uiState.update { state ->
                             state.copy(
                                 transactionType = transactionType,
-                                regularTransactions = list,
+                                regularTransactions = list.sortedBy { it.executionPeriod.lastExecutionDateTime },
                             )
                         }
                     }
