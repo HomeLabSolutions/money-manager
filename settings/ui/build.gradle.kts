@@ -25,6 +25,7 @@ dependencies {
     implementation(project(":core:datastore"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:network"))
+    implementation(project(":transaction:regular:data:impl"))
     implementation(project(":user-info:domain:contract"))
     implementation(project(":user-info:domain:model"))
     implementation(libs.androidx.compose.foundation)
@@ -35,6 +36,6 @@ dependencies {
     implementation(libs.firebase.ui.auth)
     implementation(libs.hilt.android)
     implementation(libs.hilt.lifecycle.viewmodel.compose)
-    implementation(libs.navigation.compose)
+    implementation(libs.navigation.runtime)
     implementation(libs.timber)
 }

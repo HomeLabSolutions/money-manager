@@ -1,5 +1,11 @@
 package com.d9tilov.android.transaction.regular.ui
 
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -23,6 +29,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -34,6 +41,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,9 +59,11 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.CategoryDestination
+import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.MainPriceFieldParser
+import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.designsystem.AutoSizeTextField
 import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.DescriptionTextField
@@ -64,6 +74,9 @@ import com.d9tilov.android.transaction.regular.ui.vm.DaysInWeek
 import com.d9tilov.android.transaction.regular.ui.vm.PeriodMenuItem
 import com.d9tilov.android.transaction.regular.ui.vm.RegularTransactionCreationUiState
 import com.d9tilov.android.transaction.regular.ui.vm.RegularTransactionCreationViewModel
+import com.d9tilov.android.transaction.regular.ui.vm.toPeriodMenuItem
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
 
 @Composable
 fun RegularTransactionCreationRoute(
@@ -74,13 +87,29 @@ fun RegularTransactionCreationRoute(
     clickBack: () -> Unit,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     RegularTransactionCreationScreen(
         uiState = state,
         onCurrencyClicked = onCurrencyClicked,
         onBackClicked = clickBack,
         onSaveClicked = {
-            viewModel.saveOrUpdate()
-            onSaveClicked()
+            coroutineScope.launch {
+                try {
+                    viewModel.saveOrUpdate()
+                    if (state.transaction.pushEnabled) requestNotificationPermissionIfNeeded(context)
+                    onSaveClicked()
+                } catch (exception: CancellationException) {
+                    throw exception
+                } catch (_: Exception) {
+                    Toast
+                        .makeText(
+                            context,
+                            com.d9tilov.android.common.android.R.string.unknown_error,
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                }
+            }
         },
         onSumChanged = viewModel::updateAmount,
         onCategoryClicked = clickCategory,
@@ -88,7 +117,19 @@ fun RegularTransactionCreationRoute(
         onWeekDayClicked = viewModel::updateWeekDay,
         onDayOfMonthClicked = viewModel::updateDayOfMonth,
         onDescriptionChanged = viewModel::updateDescription,
+        onPushEnabledChanged = { enabled ->
+            viewModel.updatePushEnabled(enabled)
+            if (enabled) requestNotificationPermissionIfNeeded(context)
+        },
     )
+}
+
+private fun requestNotificationPermissionIfNeeded(context: Context) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+        context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+    ) {
+        (context as? Activity)?.requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1)
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -102,12 +143,15 @@ fun RegularTransactionCreationScreen(
     onWeekDayClicked: (DaysInWeek) -> Unit,
     onDayOfMonthClicked: (Int) -> Unit,
     onDescriptionChanged: (String) -> Unit,
+    onPushEnabledChanged: (Boolean) -> Unit,
     onBackClicked: () -> Unit,
     onSaveClicked: () -> Unit,
 ) {
     val context = LocalContext.current
+    val executionPeriod = uiState.transaction.executionPeriod
+    val periodMenuItem = executionPeriod.toPeriodMenuItem()
     var showError by remember { mutableStateOf(false) }
-    var saveBtnEnabled by remember { mutableStateOf(showError) }
+    val saveBtnEnabled = !showError && uiState.transaction.category != Category.EMPTY_EXPENSE
     var openDayOfMonthDialog by remember { mutableStateOf(false) }
     Scaffold(
         topBar = {
@@ -165,194 +209,49 @@ fun RegularTransactionCreationScreen(
                         inputValue = uiState.amount,
                         inputValueChanged = { text ->
                             showError = !MainPriceFieldParser.isInputValid(text)
-                            saveBtnEnabled = !showError
                             onSumChanged(text)
                         },
                         showError = { if (showError) ShowError() },
                     )
                 }
-                Row(
-                    modifier =
-                        Modifier
-                            .padding(
-                                horizontal =
-                                    dimensionResource(
-                                        id = com.d9tilov.android.designsystem.R.dimen.padding_large,
-                                    ),
-                            ).clickable {
-                                onCategoryClicked(
-                                    uiState.transaction.type,
-                                    CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN,
-                                )
-                            },
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    val tintColor: Color?
-                    if (uiState.transaction.category != Category.EMPTY_EXPENSE) {
-                        saveBtnEnabled = !showError
-                        Icon(
-                            modifier =
-                                Modifier.size(
-                                    dimensionResource(
-                                        id = com.d9tilov.android.common.android.R.dimen.category_creation_icon_size,
-                                    ),
-                                ),
-                            imageVector = ImageVector.vectorResource(id = uiState.transaction.category.icon),
-                            contentDescription = "Category",
-                            tint =
-                                Color(
-                                    ContextCompat.getColor(
-                                        context,
-                                        uiState.transaction.category.color,
-                                    ),
-                                ),
-                        )
-                        Text(
-                            modifier =
-                                Modifier.padding(
-                                    horizontal =
-                                        dimensionResource(
-                                            id = com.d9tilov.android.designsystem.R.dimen.padding_small,
-                                        ),
-                                ),
-                            text = uiState.transaction.category.name,
-                            color =
-                                Color(
-                                    ContextCompat.getColor(
-                                        context,
-                                        uiState.transaction.category.color,
-                                    ),
-                                ),
-                            style = MaterialTheme.typography.bodyLarge,
-                        )
-                        tintColor =
-                            Color(
-                                ContextCompat.getColor(
-                                    context,
-                                    uiState.transaction.category.color,
-                                ),
-                            )
-                    } else {
-                        Text(
-                            modifier =
-                                Modifier.padding(
-                                    start =
-                                        dimensionResource(
-                                            id = com.d9tilov.android.designsystem.R.dimen.padding_small,
-                                        ),
-                                    end =
-                                        dimensionResource(
-                                            id = com.d9tilov.android.designsystem.R.dimen.padding_extra_small,
-                                        ),
-                                ),
-                            text = stringResource(id = R.string.regular_transaction_choose_category),
-                            color = MaterialTheme.colorScheme.primary,
-                            style = MaterialTheme.typography.bodyLarge,
-                        )
-                        tintColor = MaterialTheme.colorScheme.primary
-                        saveBtnEnabled = false
-                    }
-                    Icon(
-                        modifier =
-                            Modifier.size(
-                                dimensionResource(
-                                    id = com.d9tilov.android.common.android.R.dimen.category_creation_icon_size,
-                                ),
-                            ),
-                        imageVector = MoneyManagerIcons.ArrowRight,
-                        contentDescription = "Category",
-                        tint = tintColor,
-                    )
-                }
+                RegularCategorySelector(
+                    category = uiState.transaction.category,
+                    type = uiState.transaction.type,
+                    onCategoryClicked = onCategoryClicked,
+                )
                 Row(
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .height(82.dp)
+                            .clickable { onPushEnabledChanged(!uiState.transaction.pushEnabled) }
                             .padding(
                                 horizontal =
                                     dimensionResource(
-                                        id = com.d9tilov.android.designsystem.R.dimen.padding_large,
+                                        id = com.d9tilov.android.designsystem.R.dimen.padding_medium,
                                     ),
                                 vertical =
                                     dimensionResource(
-                                        id = com.d9tilov.android.designsystem.R.dimen.padding_small,
+                                        id = com.d9tilov.android.designsystem.R.dimen.padding_large,
                                     ),
                             ),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Icon(
-                        modifier =
-                            Modifier.size(
-                                dimensionResource(
-                                    id = com.d9tilov.android.common.android.R.dimen.category_creation_icon_size,
-                                ),
-                            ),
-                        imageVector = MoneyManagerIcons.Repeat,
-                        contentDescription = "Repeat",
-                        tint = MaterialTheme.colorScheme.primary,
+                    Checkbox(
+                        checked = uiState.transaction.pushEnabled,
+                        onCheckedChange = onPushEnabledChanged,
                     )
-                    Column(
-                        modifier =
-                            Modifier.padding(
-                                horizontal =
-                                    dimensionResource(
-                                        id = com.d9tilov.android.designsystem.R.dimen.padding_small,
-                                    ),
-                            ),
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.regular_transaction_repeat_title),
-                                color = MaterialTheme.colorScheme.primary,
-                                style = MaterialTheme.typography.bodyLarge,
-                            )
-                            DropdownPeriodMenu(
-                                modifier =
-                                    Modifier.padding(
-                                        horizontal =
-                                            dimensionResource(
-                                                id = com.d9tilov.android.designsystem.R.dimen.padding_small,
-                                            ),
-                                    ),
-                                selectedItem = uiState.curPeriodItem,
-                                onMenuItemClick = onCurPeriodItemUpdate::invoke,
-                            )
-                        }
-                        when (uiState.curPeriodItem) {
-                            PeriodMenuItem.DAY -> {}
-
-                            PeriodMenuItem.WEEK -> {
-                                DaysOfWeek(uiState.curDayInWeek) {
-                                    onWeekDayClicked(it)
-                                }
-                            }
-
-                            PeriodMenuItem.MONTH -> {
-                                Text(
-                                    text =
-                                        stringResource(
-                                            id = R.string.regular_transaction_repeat_every_month_on,
-                                            uiState.curDayOfMonth,
-                                        ),
-                                    modifier =
-                                        Modifier
-                                            .clickable { openDayOfMonthDialog = true }
-                                            .padding(
-                                                vertical =
-                                                    dimensionResource(
-                                                        id = com.d9tilov.android.designsystem.R.dimen.padding_small,
-                                                    ),
-                                            ),
-                                    color = MaterialTheme.colorScheme.secondary,
-                                    style = MaterialTheme.typography.labelMedium,
-                                )
-                            }
-                        }
-                    }
+                    Text(
+                        text = stringResource(R.string.regular_transaction_notify_on_add),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
                 }
+                RegularRepeatSelector(
+                    executionPeriod = executionPeriod,
+                    periodMenuItem = periodMenuItem,
+                    onCurPeriodItemUpdate = onCurPeriodItemUpdate,
+                    onWeekDayClicked = onWeekDayClicked,
+                    onOpenDayOfMonthDialog = { openDayOfMonthDialog = true },
+                )
                 DottedDivider(
                     modifier =
                         Modifier.padding(
@@ -381,13 +280,163 @@ fun RegularTransactionCreationScreen(
             )
             if (openDayOfMonthDialog) {
                 DayInMonthDialog(
-                    uiState.curDayOfMonth,
+                    (executionPeriod as? ExecutionPeriod.EveryMonth)?.dayOfMonth ?: currentDate().day,
                     onDismiss = { openDayOfMonthDialog = false },
                     onDayClicked = {
                         onDayOfMonthClicked(it)
                         openDayOfMonthDialog = false
                     },
                 )
+            }
+        }
+    }
+}
+
+@Composable
+private fun RegularCategorySelector(
+    category: Category,
+    type: TransactionType,
+    onCategoryClicked: (TransactionType, CategoryDestination) -> Unit,
+) {
+    val context = LocalContext.current
+    val selected = category != Category.EMPTY_EXPENSE
+    val tint =
+        if (selected) {
+            Color(ContextCompat.getColor(context, category.color))
+        } else {
+            MaterialTheme.colorScheme.primary
+        }
+    Row(
+        modifier =
+            Modifier
+                .padding(horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large))
+                .clickable { onCategoryClicked(type, CategoryDestination.EDIT_REGULAR_TRANSACTION_SCREEN) },
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (selected) {
+            Icon(
+                modifier =
+                    Modifier.size(
+                        dimensionResource(id = com.d9tilov.android.common.android.R.dimen.category_creation_icon_size),
+                    ),
+                imageVector = ImageVector.vectorResource(id = category.icon),
+                contentDescription = "Category",
+                tint = tint,
+            )
+            Text(
+                modifier =
+                    Modifier.padding(
+                        horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
+                    ),
+                text = category.name,
+                color = tint,
+                style = MaterialTheme.typography.bodyLarge,
+            )
+        } else {
+            Text(
+                modifier =
+                    Modifier.padding(
+                        end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_extra_small),
+                    ),
+                text = stringResource(id = R.string.regular_transaction_choose_category),
+                color = tint,
+                style = MaterialTheme.typography.bodyLarge,
+            )
+        }
+        Icon(
+            modifier =
+                Modifier.size(
+                    dimensionResource(id = com.d9tilov.android.common.android.R.dimen.category_creation_icon_size),
+                ),
+            imageVector = MoneyManagerIcons.ArrowRight,
+            contentDescription = "Category",
+            tint = tint,
+        )
+    }
+}
+
+@Composable
+private fun RegularRepeatSelector(
+    executionPeriod: ExecutionPeriod,
+    periodMenuItem: PeriodMenuItem,
+    onCurPeriodItemUpdate: (PeriodMenuItem) -> Unit,
+    onWeekDayClicked: (DaysInWeek) -> Unit,
+    onOpenDayOfMonthDialog: () -> Unit,
+) {
+    Row(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(82.dp)
+                .padding(
+                    horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                    vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
+                ),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            modifier =
+                Modifier.size(
+                    dimensionResource(id = com.d9tilov.android.common.android.R.dimen.category_creation_icon_size),
+                ),
+            imageVector = MoneyManagerIcons.Repeat,
+            contentDescription = "Repeat",
+            tint = MaterialTheme.colorScheme.primary,
+        )
+        Column(
+            modifier =
+                Modifier.padding(
+                    horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
+                ),
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = stringResource(id = R.string.regular_transaction_repeat_title),
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+                DropdownPeriodMenu(
+                    modifier =
+                        Modifier.padding(
+                            horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
+                        ),
+                    selectedItem = periodMenuItem,
+                    onMenuItemClick = onCurPeriodItemUpdate,
+                )
+            }
+            when (executionPeriod) {
+                is ExecutionPeriod.EveryDay -> {}
+
+                is ExecutionPeriod.EveryWeek -> {
+                    DaysOfWeek(
+                        selected =
+                            DaysInWeek.entries.getOrElse(executionPeriod.dayOfWeek) {
+                                DaysInWeek.MONDAY
+                            },
+                        onDayClicked = onWeekDayClicked,
+                    )
+                }
+
+                is ExecutionPeriod.EveryMonth -> {
+                    Text(
+                        text =
+                            stringResource(
+                                id = R.string.regular_transaction_repeat_every_month_on,
+                                executionPeriod.dayOfMonth,
+                            ),
+                        modifier =
+                            Modifier
+                                .clickable(onClick = onOpenDayOfMonthDialog)
+                                .padding(
+                                    vertical =
+                                        dimensionResource(
+                                            id = com.d9tilov.android.designsystem.R.dimen.padding_small,
+                                        ),
+                                ),
+                        color = MaterialTheme.colorScheme.secondary,
+                        style = MaterialTheme.typography.labelMedium,
+                    )
+                }
             }
         }
     }
@@ -603,7 +652,13 @@ fun ShowError() {
 @Composable
 fun DefaultRegularTransactionCreationPreview() {
     RegularTransactionCreationScreen(
-        uiState = RegularTransactionCreationUiState.EMPTY.copy(curPeriodItem = PeriodMenuItem.WEEK),
+        uiState =
+            RegularTransactionCreationUiState.EMPTY.copy(
+                transaction =
+                    RegularTransactionCreationUiState.EMPTY.transaction.copy(
+                        executionPeriod = ExecutionPeriod.EveryWeek(DaysInWeek.MONDAY.ordinal),
+                    ),
+            ),
         onBackClicked = {},
         onSumChanged = {},
         onSaveClicked = {},
@@ -613,5 +668,6 @@ fun DefaultRegularTransactionCreationPreview() {
         onWeekDayClicked = {},
         onDayOfMonthClicked = {},
         onDescriptionChanged = {},
+        onPushEnabledChanged = {},
     )
 }

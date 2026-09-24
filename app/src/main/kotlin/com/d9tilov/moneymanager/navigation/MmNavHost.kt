@@ -1,7 +1,10 @@
 package com.d9tilov.moneymanager.navigation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.scaleOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.navigation
 import com.d9tilov.android.budget.ui.navigation.BUDGET_NAVIGATION_ROUTE
@@ -69,6 +72,15 @@ fun MmNavHost(
         navController = navController,
         startDestination = INCOME_EXPENSE_ROOT_DESTINATION,
         modifier = modifier,
+        popExitTransition = {
+            scaleOut(
+                targetScale = 0.9f,
+                transformOrigin = TransformOrigin(pivotFractionX = 0.5f, pivotFractionY = 0.5f),
+            )
+        },
+        popEnterTransition = {
+            EnterTransition.None
+        },
     ) {
         navigation(
             startDestination = categoryNavigationRoute(),

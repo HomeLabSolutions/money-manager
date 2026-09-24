@@ -4,8 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
 import com.d9tilov.android.core.utils.toMillis
+import com.d9tilov.android.designsystem.component.roundedBackComposable
 import com.d9tilov.android.statistics.ui.StatisticsDetailsRoute
 import com.d9tilov.android.statistics.ui.StatisticsRoute
 import com.d9tilov.android.statistics.ui.model.TransactionDetailsChartModel
@@ -57,12 +57,12 @@ fun NavGraphBuilder.statisticsScreen(
     route: String,
     onTransactionClick: (TransactionDetailsChartModel, LocalDateTime, LocalDateTime) -> Unit,
 ) {
-    composable(route = route) { StatisticsRoute(onTransactionClicked = onTransactionClick) }
+    roundedBackComposable(route = route) { StatisticsRoute(onTransactionClicked = onTransactionClick) }
 }
 
 fun NavGraphBuilder.statisticsDetailsScreen(
     route: String,
     onBackClicked: () -> Unit,
 ) {
-    composable(route = route) { StatisticsDetailsRoute(onBackClicked = onBackClicked) }
+    roundedBackComposable(route = route) { StatisticsDetailsRoute(onBackClicked = onBackClicked) }
 }

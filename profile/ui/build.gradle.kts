@@ -24,6 +24,7 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":currency:domain:contract"))
     implementation(project(":currency:domain:model"))
+    implementation(project(":transaction:regular:data:impl"))
     implementation(project(":transaction:regular:domain:contract"))
     implementation(project(":transaction:regular:domain:model"))
     implementation(project(":user-info:domain:contract"))
@@ -39,5 +40,5 @@ dependencies {
     implementation(libs.firebase.ui.auth)
     implementation(libs.hilt.android)
     implementation(libs.hilt.lifecycle.viewmodel.compose)
-    implementation(libs.navigation.compose)
+    implementation(libs.navigation.runtime)
 }

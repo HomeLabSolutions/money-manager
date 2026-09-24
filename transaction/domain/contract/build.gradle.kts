@@ -10,6 +10,7 @@ dependencies {
     implementation(project(":category:domain:model"))
     implementation(project(":core:common"))
     implementation(project(":transaction:domain:model"))
+    implementation(project(":transaction:regular:domain:model"))
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.paging.common)
 }

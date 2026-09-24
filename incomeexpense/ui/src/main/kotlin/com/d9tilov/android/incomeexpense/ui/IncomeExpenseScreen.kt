@@ -1,5 +1,6 @@
 package com.d9tilov.android.incomeexpense.ui
 
+import android.os.Parcelable
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
@@ -32,6 +33,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -56,6 +58,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -114,9 +117,17 @@ import com.d9tilov.android.transaction.ui.model.TransactionUiModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
 private const val KEYBOARD_BUTTON_ANIMATION_DELAY_MS = 150L
+
+@Parcelize
+private data class ScrollAnchor(
+    val itemKey: String,
+    val scrollOffset: Int,
+    val snapshotHash: Int,
+) : Parcelable
 
 @Composable
 fun IncomeExpenseRoute(
@@ -160,19 +171,32 @@ fun IncomeExpenseScreen(
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
     onScreenTypeClicked: (ScreenType) -> Unit,
 ) {
-    val listState = rememberLazyListState()
+    val expenseListState = rememberLazyListState()
+    val incomeListState = rememberLazyListState()
+    val pagerState =
+        rememberPagerState(
+            initialPage = 0,
+            initialPageOffsetFraction = 0f,
+        ) { screenTypes.size }
+    val currentListState =
+        when (pagerState.currentPage.toScreenType()) {
+            EXPENSE -> expenseListState
+            INCOME -> incomeListState
+        }
     Scaffold(
         floatingActionButton = {
             if (uiState.mode == EditMode.LIST) {
                 AnimatedFloatingActionButton(
-                    listState,
+                    currentListState,
                     onClick = { onEditModeChanged(EditMode.KEYBOARD) },
                 )
             }
         },
     ) { paddingValues ->
         HomeTabs(
-            listState = listState,
+            expenseListState = expenseListState,
+            incomeListState = incomeListState,
+            pagerState = pagerState,
             uiState = uiState,
             modifier = Modifier.padding(paddingValues),
             onNumberClicked = onNumberClicked,
@@ -266,6 +290,51 @@ fun TransactionListLayout(
 ) {
     val lazyTransactionItems: LazyPagingItems<BaseTransaction> =
         transactions.collectAsLazyPagingItems()
+    var scrollAnchor by rememberSaveable { mutableStateOf<ScrollAnchor?>(null) }
+    val coroutineScope = rememberCoroutineScope()
+    val snapshot = lazyTransactionItems.itemSnapshotList
+    LaunchedEffect(snapshot) {
+        val anchor = scrollAnchor ?: return@LaunchedEffect
+        if (snapshot.items.hashCode() == anchor.snapshotHash) return@LaunchedEffect
+        val latestSnapshot = lazyTransactionItems.itemSnapshotList
+        val anchorIndex = latestSnapshot.items.indexOfFirst { it.listKey() == anchor.itemKey }
+        if (anchorIndex >= 0) {
+            listState.scrollToItem(anchorIndex, anchor.scrollOffset)
+            scrollAnchor = null
+        } else if (lazyTransactionItems.loadState.append is LoadState.NotLoading) {
+            val appendState = lazyTransactionItems.loadState.append as LoadState.NotLoading
+            if (appendState.endOfPaginationReached) {
+                scrollAnchor = null
+            } else if (lazyTransactionItems.itemCount > 0) {
+                lazyTransactionItems[lazyTransactionItems.itemCount - 1]
+            }
+        }
+    }
+
+    fun captureScrollAnchor(
+        preferredId: Long? = null,
+        excludedId: Long? = null,
+    ) {
+        val transactionsByKey =
+            snapshot.items
+                .filterIsInstance<TransactionUiModel>()
+                .associateBy { it.listKey() }
+        val visibleTransactions =
+            listState.layoutInfo.visibleItemsInfo.mapNotNull { itemInfo ->
+                val transaction = transactionsByKey[itemInfo.key]
+                if (transaction?.id == excludedId) null else transaction?.let { it to itemInfo }
+            }
+        val (transaction, itemInfo) =
+            visibleTransactions.firstOrNull { (transaction, _) -> transaction.id == preferredId }
+                ?: visibleTransactions.firstOrNull()
+                ?: return
+        scrollAnchor =
+            ScrollAnchor(
+                itemKey = transaction.listKey(),
+                scrollOffset = -itemInfo.offset,
+                snapshotHash = snapshot.items.hashCode(),
+            )
+    }
     if (lazyTransactionItems.loadState.refresh is LoadState.NotLoading && lazyTransactionItems.itemCount == 0) {
         EmptyListPlaceholder(
             modifier = Modifier.fillMaxSize(),
@@ -283,13 +352,12 @@ fun TransactionListLayout(
         // handle error
     }
     val openRemoveDialog = remember { mutableStateOf<Pair<TransactionUiModel, SwipeToDismissBoxState>?>(null) }
-    val coroutineScope = rememberCoroutineScope()
     LazyColumn(modifier = modifier, state = listState) {
         for (index in 0 until lazyTransactionItems.itemCount) {
             val currentItem = lazyTransactionItems.peek(index)
             currentItem?.let { tr ->
                 if (tr.itemType == BaseTransaction.HEADER) {
-                    stickyHeader(key = tr.date.hashCode()) {
+                    stickyHeader(key = tr.listKey()) {
                         Surface(
                             modifier = Modifier.fillParentMaxWidth(),
                             color = MaterialTheme.colorScheme.primaryContainer,
@@ -302,7 +370,7 @@ fun TransactionListLayout(
                         }
                     }
                 } else {
-                    item(key = (currentItem as TransactionUiModel).id) {
+                    item(key = currentItem.listKey()) {
                         val item = lazyTransactionItems[index] as TransactionUiModel
                         val dismissState = rememberSwipeToDismissBoxState(SwipeToDismissBoxValue.Settled)
                         LaunchedEffect(dismissState.currentValue) {
@@ -358,7 +426,10 @@ fun TransactionListLayout(
                                     modifier =
                                         Modifier
                                             .fillMaxWidth()
-                                            .clickable { onTransactionClicked(item) },
+                                            .clickable {
+                                                captureScrollAnchor(preferredId = item.id)
+                                                onTransactionClicked(item)
+                                            },
                                     transaction = item,
                                 )
                             },
@@ -381,6 +452,7 @@ fun TransactionListLayout(
         confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
         onConfirm = {
             openRemoveDialog.value?.let { (transaction, _) ->
+                captureScrollAnchor(excludedId = transaction.id)
                 onDeleteTransactionConfirmClicked(transaction)
             }
             openRemoveDialog.value = null
@@ -394,10 +466,19 @@ fun TransactionListLayout(
     )
 }
 
+private fun BaseTransaction.listKey(): String =
+    if (itemType == BaseTransaction.HEADER) {
+        "header:$date"
+    } else {
+        "transaction:${(this as TransactionUiModel).id}"
+    }
+
 @Composable
 @Suppress("CognitiveComplexMethod")
 fun HomeTabs(
-    listState: LazyListState,
+    expenseListState: LazyListState,
+    incomeListState: LazyListState,
+    pagerState: PagerState,
     uiState: IncomeExpenseUiState,
     modifier: Modifier,
     onTransactionClicked: (TransactionUiModel) -> Unit,
@@ -409,12 +490,6 @@ fun HomeTabs(
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
     onScreenTypeClicked: (ScreenType) -> Unit,
 ) {
-    var tabIndex by remember { mutableIntStateOf(0) }
-    val pagerState =
-        rememberPagerState(
-            initialPage = 0,
-            initialPageOffsetFraction = 0f,
-        ) { screenTypes.size }
     val coroutineScope = rememberCoroutineScope()
     Column {
         PrimaryTabRow(
@@ -429,13 +504,12 @@ fun HomeTabs(
         ) {
             screenTypes.forEachIndexed { index, type ->
                 Tab(
-                    selected = tabIndex == index,
+                    selected = pagerState.currentPage == index,
                     onClick = {
-                        tabIndex = index
-                        val screenType = tabIndex.toScreenType()
+                        val screenType = index.toScreenType()
                         onScreenTypeClicked(screenType)
                         coroutineScope.launch {
-                            pagerState.animateScrollToPage(tabIndex)
+                            pagerState.animateScrollToPage(index)
                         }
                     },
                     text = {
@@ -512,7 +586,11 @@ fun HomeTabs(
                 }
             } else {
                 TransactionListLayout(
-                    listState,
+                    if (tabIndex.toScreenType() == INCOME) {
+                        incomeListState
+                    } else {
+                        expenseListState
+                    },
                     Modifier.fillMaxSize(),
                     if (tabIndex.toScreenType() == INCOME) {
                         uiState.incomeUiState.incomeTransactions

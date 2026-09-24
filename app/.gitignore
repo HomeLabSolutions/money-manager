@@ -2,4 +2,5 @@
 *.log
 private_key.pepk
 money_manager_keystore.jks
-google-services.json
+/google-services.json
+/src/release/google-services.json

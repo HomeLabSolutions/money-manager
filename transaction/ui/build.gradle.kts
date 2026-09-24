@@ -30,8 +30,12 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.hilt.lifecycle.viewmodel.compose)
     implementation(libs.maps.compose)
-    implementation(libs.navigation.compose)
+    implementation(libs.navigation.runtime)
     implementation(libs.play.services.maps)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk.core)
 }

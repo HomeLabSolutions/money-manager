@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="regular_transaction_notification_channel">Регулярные транзакции</string>
+    <string name="regular_transaction_notification_title">Регулярная транзакция</string>
+</resources>

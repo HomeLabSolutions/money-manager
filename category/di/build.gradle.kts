@@ -12,5 +12,4 @@ dependencies {
     implementation(project(":category:data:impl"))
     implementation(project(":category:domain:contract"))
     implementation(project(":category:domain:impl"))
-    implementation(libs.hilt.android)
 }
