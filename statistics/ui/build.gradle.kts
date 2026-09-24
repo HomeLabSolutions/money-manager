@@ -32,7 +32,7 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.hilt.lifecycle.viewmodel.compose)
     implementation(libs.material)
-    implementation(libs.navigation.compose)
+    implementation(libs.navigation.runtime)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
 

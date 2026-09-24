@@ -5,7 +5,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
-import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.CategoryDestination
@@ -21,6 +20,7 @@ import com.d9tilov.android.common.android.utils.sharedViewModel
 import com.d9tilov.android.core.constants.NavigationConstants.TRANSACTION_TYPE_ARG
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.model.toType
+import com.d9tilov.android.designsystem.component.roundedBackComposable
 
 const val CATEGORY_ID_ARG = "category_id"
 const val CATEGORY_GROUP_ARG = "category_group"
@@ -77,7 +77,7 @@ fun NavGraphBuilder.categoryListScreen(
     openCategory: (Long, TransactionType) -> Unit,
     onCategoryClickAndBack: (Category) -> Unit,
 ) {
-    composable(
+    roundedBackComposable(
         route = route,
         arguments =
             listOf(
@@ -109,7 +109,7 @@ fun NavGraphBuilder.categoryCreationScreen(
     openCategoryGroupIconList: () -> Unit,
     openCategoryIconGrid: () -> Unit,
 ) {
-    composable(
+    roundedBackComposable(
         route = route,
         arguments =
             listOf(
@@ -136,7 +136,7 @@ fun NavGraphBuilder.categoryIconListScreen(
     clickBack: () -> Unit,
     onItemClick: (Int) -> Unit,
 ) {
-    composable(route = route) {
+    roundedBackComposable(route = route) {
         CategoryGroupIconListRoute(
             onItemClick = onItemClick,
             clickBack = clickBack,
@@ -157,7 +157,7 @@ fun NavGraphBuilder.categoryIconGridScreen(
     clickBack: () -> Unit,
     onIconClick: (Boolean) -> Unit,
 ) {
-    composable(
+    roundedBackComposable(
         route = route,
         arguments = listOf(navArgument(CATEGORY_GROUP_ARG) { type = NavType.IntType }),
     ) { entry ->
