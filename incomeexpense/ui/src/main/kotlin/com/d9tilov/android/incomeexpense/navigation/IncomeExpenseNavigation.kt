@@ -4,11 +4,11 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
 import com.d9tilov.android.category.domain.entity.CategoryArgs
 import com.d9tilov.android.category.domain.entity.CategoryDestination
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.model.CurrencyArgs.CURRENCY_CODE_ARGS
+import com.d9tilov.android.designsystem.component.roundedBackComposable
 import com.d9tilov.android.incomeexpense.ui.IncomeExpenseRoute
 import com.d9tilov.android.incomeexpense.ui.vm.IncomeExpenseViewModel
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType
@@ -26,7 +26,7 @@ fun NavGraphBuilder.incomeExpenseScreen(
     onAllCategoryClick: (TransactionType, CategoryDestination) -> Unit,
     onTransactionClick: (TransactionUiModel) -> Unit,
 ) {
-    composable(route = route) { entry ->
+    roundedBackComposable(route = route) { entry ->
         val viewModel: IncomeExpenseViewModel = hiltViewModel()
         val categoryId = entry.savedStateHandle.get<Long>(CategoryArgs.CATEGORY_ID_ARGS)
         categoryId?.let { id ->

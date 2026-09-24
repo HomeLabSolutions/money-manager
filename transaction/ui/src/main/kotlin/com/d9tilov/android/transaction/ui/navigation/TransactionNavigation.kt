@@ -6,12 +6,12 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
-import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.d9tilov.android.category.domain.entity.CategoryArgs
 import com.d9tilov.android.category.domain.entity.CategoryDestination
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.model.CurrencyArgs.CURRENCY_CODE_ARGS
+import com.d9tilov.android.designsystem.component.roundedBackComposable
 import com.d9tilov.android.transaction.ui.TransactionCreationRoute
 import com.d9tilov.android.transaction.ui.vm.TransactionCreationViewModel
 
@@ -40,7 +40,7 @@ fun NavGraphBuilder.transactionCreationScreen(
     onCategoryClick: (TransactionType, CategoryDestination) -> Unit,
     onCurrencyClick: (String) -> Unit,
 ) {
-    composable(
+    roundedBackComposable(
         route = route,
         arguments = listOf(navArgument(TRANSACTION_ID_ARG) { type = NavType.LongType }),
     ) { entry ->

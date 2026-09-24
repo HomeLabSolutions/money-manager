@@ -5,10 +5,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
-import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.d9tilov.android.currency.domain.model.CurrencyArgs.CURRENCY_CODE_ARGS
 import com.d9tilov.android.currency.ui.CurrencyListRoute
+import com.d9tilov.android.designsystem.component.roundedBackComposable
 
 const val CURRENCY_LIST_NAVIGATION_ROUTE = "currency_list_route"
 
@@ -26,7 +26,7 @@ fun NavGraphBuilder.currencyScreen(
     clickBack: () -> Unit,
     onChooseCurrency: (String) -> Unit,
 ) {
-    composable(
+    roundedBackComposable(
         route = route,
         arguments =
             listOf(
