@@ -551,7 +551,8 @@ class TransactionInteractorImpl @Inject constructor(
     override suspend fun getTransactionMinMaxDate(): TransactionMinMaxDateModel =
         transactionRepo.getTransactionMinMaxDate()
 
-    override suspend fun executeRegularIfNeeded(type: TransactionType) {
+    override suspend fun executeRegularIfNeeded(type: TransactionType): List<RegularTransaction> {
+        val addedTransactions = mutableListOf<RegularTransaction>()
         regularTransactionInteractor
             .getAll(type)
             .map { transactions ->
@@ -581,6 +582,7 @@ class TransactionInteractorImpl @Inject constructor(
                                 inStatistics = true,
                             ),
                         )
+                        addedTransactions.add(tr)
                     }
                     skippedDates.lastOrNull()?.let { lastExecutionDate ->
                         regularTransactionInteractor.update(
@@ -592,6 +594,7 @@ class TransactionInteractorImpl @Inject constructor(
                     }
                 }
             }.firstOrNull()
+        return addedTransactions
     }
 
     private fun ExecutionPeriod.withLastExecutionDate(date: LocalDate): ExecutionPeriod =

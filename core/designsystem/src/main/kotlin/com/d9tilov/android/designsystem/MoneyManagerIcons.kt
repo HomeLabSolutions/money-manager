@@ -15,6 +15,7 @@ import androidx.compose.material.icons.rounded.AddTask
 import androidx.compose.material.icons.rounded.BarChart
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.KeyboardHide
+import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.RemoveCircle
 import androidx.compose.material.icons.rounded.Repeat
@@ -39,6 +40,7 @@ object MoneyManagerIcons {
     val BackSpace = Icons.AutoMirrored.Rounded.Backspace
     val HideKeyboard = Icons.Rounded.KeyboardHide
     val Repeat = Icons.Rounded.Repeat
+    val Notifications = Icons.Rounded.Notifications
     val InStatisticsTransaction = R.drawable.ic_not_in_statistics
     val EmptyPlaceholder = R.drawable.ic_categories_empty
     val EmptyRegularPlaceholder = R.drawable.ic_wallet_empty

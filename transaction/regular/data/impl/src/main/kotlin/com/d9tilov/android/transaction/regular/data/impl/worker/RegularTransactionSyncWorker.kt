@@ -15,6 +15,7 @@ import com.d9tilov.android.common.android.worker.syncForegroundInfo
 import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
+import com.d9tilov.android.transaction.regular.data.impl.notification.TransactionNotificationManager
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import timber.log.Timber
@@ -27,12 +28,15 @@ class RegularTransactionSyncWorker
         @Assisted private val context: Context,
         @Assisted workerParameters: WorkerParameters,
         private val transactionInteractor: TransactionInteractor,
+        private val transactionNotificationManager: TransactionNotificationManager,
     ) : CoroutineWorker(context, workerParameters) {
         override suspend fun getForegroundInfo(): ForegroundInfo = context.syncForegroundInfo()
 
         override suspend fun doWork(): Result {
-            transactionInteractor.executeRegularIfNeeded(TransactionType.INCOME)
-            transactionInteractor.executeRegularIfNeeded(TransactionType.EXPENSE)
+            val added =
+                transactionInteractor.executeRegularIfNeeded(TransactionType.INCOME) +
+                    transactionInteractor.executeRegularIfNeeded(TransactionType.EXPENSE)
+            transactionNotificationManager.notifyAboutRegularTransactions(added)
             return Result.success()
         }
 

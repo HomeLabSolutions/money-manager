@@ -8,6 +8,7 @@ import com.d9tilov.android.transaction.domain.model.TransactionChartModel
 import com.d9tilov.android.transaction.domain.model.TransactionLineChartModel
 import com.d9tilov.android.transaction.domain.model.TransactionMinMaxDateModel
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
+import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
@@ -65,7 +66,7 @@ interface TransactionInteractor {
 
     suspend fun addTransaction(transaction: Transaction)
 
-    suspend fun executeRegularIfNeeded(type: TransactionType)
+    suspend fun executeRegularIfNeeded(type: TransactionType): List<RegularTransaction>
 
     suspend fun update(transaction: Transaction)
 
