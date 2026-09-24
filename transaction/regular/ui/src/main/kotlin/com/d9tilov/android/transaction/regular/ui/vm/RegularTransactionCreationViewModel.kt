@@ -190,6 +190,12 @@ class RegularTransactionCreationViewModel
             _uiState.update { state -> state.copy(transaction = tr) }
         }
 
+        fun updatePushEnabled(enabled: Boolean) {
+            _uiState.update { state ->
+                state.copy(transaction = state.transaction.copy(pushEnabled = enabled))
+            }
+        }
+
         suspend fun saveOrUpdate() {
             val state = _uiState.value
             val tr = state.transaction.copy(sum = state.amount.toBigDecimal())

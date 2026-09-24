@@ -203,6 +203,7 @@ fun TransactionItemPreview() {
                     sum = BigDecimal(1),
                     type = TransactionType.EXPENSE,
                     showTime = true,
+                    isRegular = true,
                 ),
         )
     }

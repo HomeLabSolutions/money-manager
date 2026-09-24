@@ -4,9 +4,11 @@ import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.budget.domain.model.BudgetData
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDate
+import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
@@ -17,6 +19,7 @@ import com.d9tilov.android.transaction.domain.model.TransactionDataModel
 import com.d9tilov.android.transaction.domain.model.TransactionMinMaxDateModel
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
 import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactionInteractor
+import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
 import com.d9tilov.android.user.domain.contract.UserInteractor
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -102,6 +105,26 @@ class TransactionInteractorImplTest {
         coEvery { categoryInteractor.getCategoryById(any()) } returns testCategory
         coEvery { budgetInteractor.get() } returns flowOf(testBudget)
     }
+
+    @Test
+    fun `regular execution returns all added transactions`() =
+        runTest {
+            val yesterday = currentDate().plus(-1, DateTimeUnit.DAY)
+            val template =
+                RegularTransaction.EMPTY.copy(
+                    id = 1L,
+                    category = testCategory,
+                    createdDate = yesterday.getStartOfDay(),
+                    executionPeriod = ExecutionPeriod.EveryDay(yesterday.getStartOfDay()),
+                )
+            coEvery { regularTransactionInteractor.getAll(TransactionType.EXPENSE) } returns
+                flowOf(listOf(template, template.copy(id = 2L, pushEnabled = false)))
+
+            val addedTransactions = interactor.executeRegularIfNeeded(TransactionType.EXPENSE)
+
+            assertEquals(listOf(template, template.copy(id = 2L, pushEnabled = false)), addedTransactions)
+            coVerify(exactly = 2) { transactionRepo.addTransaction(any()) }
+        }
 
     @Test
     fun `addTransaction should add transaction and update category usage count`() =
