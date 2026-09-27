@@ -3,8 +3,16 @@ package com.d9tilov.moneymanager.navigation
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.scaleOut
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.res.stringResource
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.navigation
 import com.d9tilov.android.budget.ui.navigation.BUDGET_NAVIGATION_ROUTE
@@ -34,6 +42,10 @@ import com.d9tilov.android.currency.ui.navigation.currencyScreen
 import com.d9tilov.android.currency.ui.navigation.navigateToCurrencyListScreen
 import com.d9tilov.android.incomeexpense.navigation.INCOME_EXPENSE_NAVIGATION_ROUTE
 import com.d9tilov.android.incomeexpense.navigation.incomeExpenseScreen
+import com.d9tilov.android.insights.presentation.InsightsConsentDialog
+import com.d9tilov.android.insights.presentation.InsightsConsentViewModel
+import com.d9tilov.android.insights.presentation.navigation.insightsScreen
+import com.d9tilov.android.insights.presentation.navigation.navigateToInsights
 import com.d9tilov.android.profile.ui.navigation.PROFILE_NAVIGATION_ROUTE
 import com.d9tilov.android.profile.ui.navigation.profileScreen
 import com.d9tilov.android.settings.ui.navigation.SETTINGS_NAVIGATION_ROUTE
@@ -60,6 +72,9 @@ import com.d9tilov.android.transaction.ui.navigation.TRANSACTION_NAVIGATION_ROUT
 import com.d9tilov.android.transaction.ui.navigation.navigateToTransactionScreen
 import com.d9tilov.android.transaction.ui.navigation.transactionCreationScreen
 import com.d9tilov.moneymanager.ui.MmAppState
+import kotlinx.coroutines.launch
+import java.io.IOException
+import com.d9tilov.android.insights.presentation.R as InsightsR
 
 @Composable
 fun MmNavHost(
@@ -68,6 +83,12 @@ fun MmNavHost(
     modifier: Modifier = Modifier,
 ) {
     val navController = appState.navController
+    val consentViewModel: InsightsConsentViewModel = hiltViewModel()
+    val scope = rememberCoroutineScope()
+    val consentSaveFailed = stringResource(InsightsR.string.insights_consent_save_failed)
+    var showConsentDialog by rememberSaveable { mutableStateOf(false) }
+    var isSavingConsent by remember { mutableStateOf(false) }
+
     NavHost(
         navController = navController,
         startDestination = INCOME_EXPENSE_ROOT_DESTINATION,
@@ -141,7 +162,17 @@ fun MmNavHost(
                 onCurrencyClick = navController::navigateToCurrencyListScreen,
                 onAllCategoryClick = navController::navigateToCategoryListScreen,
                 onTransactionClick = { navController.navigateToTransactionScreen(transactionId = it.id) },
+                onInsightsClick = {
+                    scope.launch {
+                        if (consentViewModel.isConsentGranted()) {
+                            navController.navigateToInsights()
+                        } else {
+                            showConsentDialog = true
+                        }
+                    }
+                },
             )
+            insightsScreen(onBackClick = navController::popBackStack)
             transactionCreationScreen(
                 route = "$TRANSACTION_NAVIGATION_ROUTE/{$TRANSACTION_ID_ARG}",
                 clickBack = navController::popBackStack,
@@ -215,6 +246,28 @@ fun MmNavHost(
             )
         }
     }
+
+    InsightsConsentDialog(
+        visible = showConsentDialog,
+        isSaving = isSavingConsent,
+        onConfirm = {
+            scope.launch {
+                isSavingConsent = true
+                try {
+                    consentViewModel.grantConsent()
+                    showConsentDialog = false
+                    navController.navigateToInsights()
+                } catch (_: IOException) {
+                    onShowSnackBar(consentSaveFailed, null)
+                } catch (_: IllegalArgumentException) {
+                    onShowSnackBar(consentSaveFailed, null)
+                } finally {
+                    isSavingConsent = false
+                }
+            }
+        },
+        onDismiss = { showConsentDialog = false },
+    )
 }
 
 private fun categoryNavigationRoute() =

@@ -1,0 +1,20 @@
+plugins {
+    id("moneymanager.android.library")
+    id("moneymanager.android.hilt")
+    id("moneymanager.android.library.compose")
+}
+
+android {
+    namespace = "com.d9tilov.android.insights.presentation"
+}
+
+dependencies {
+    implementation(project(":insights:domain"))
+    implementation(project(":core:designsystem"))
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.hilt.android)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.navigation.runtime)
+}

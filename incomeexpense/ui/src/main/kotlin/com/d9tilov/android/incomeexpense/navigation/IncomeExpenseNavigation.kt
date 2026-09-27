@@ -25,6 +25,7 @@ fun NavGraphBuilder.incomeExpenseScreen(
     onCurrencyClick: (String) -> Unit,
     onAllCategoryClick: (TransactionType, CategoryDestination) -> Unit,
     onTransactionClick: (TransactionUiModel) -> Unit,
+    onInsightsClick: () -> Unit,
 ) {
     roundedBackComposable(route = route) { entry ->
         val viewModel: IncomeExpenseViewModel = hiltViewModel()
@@ -48,6 +49,7 @@ fun NavGraphBuilder.incomeExpenseScreen(
                 }
             },
             onTransactionClicked = onTransactionClick,
+            onInsightsClicked = onInsightsClick,
         )
     }
 }

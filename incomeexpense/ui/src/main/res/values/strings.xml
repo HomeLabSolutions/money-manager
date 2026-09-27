@@ -10,6 +10,7 @@
 
     <string name="tab_income">Income</string>
     <string name="tab_expense">Expense</string>
+    <string name="insights_button">Insights</string>
 
     <string name="category_all">All items</string>
     <string name="expense_info_can_spend_today_title">you can spend today:</string>
