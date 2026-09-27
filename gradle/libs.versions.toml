@@ -79,6 +79,7 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-config = { group = "com.google.firebase", name = "firebase-config" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 firebase-crashlytics-gradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsPlugin" }
+firebase-functions = { group = "com.google.firebase", name = "firebase-functions" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage" }
 firebase-ui-auth = { group = "com.firebaseui", name = "firebase-ui-auth", version.ref = "firebaseUi" }
 google-services = { group = "com.google.gms", name = "google-services", version.ref = "googlePlayServices" }

@@ -35,3 +35,13 @@ jobs:
       run: ./gradlew projectHealth ktlintCheck detektCheck check tomlCheck lint
     - name: Tests
       run: ./gradlew test
+    - name: Set up Node.js
+      uses: actions/setup-node@v7
+      with:
+        node-version: '22'
+        cache: npm
+        cache-dependency-path: functions/package-lock.json
+    - name: Install function dependencies
+      run: npm ci --prefix functions
+    - name: Test Firebase Function
+      run: npm test --prefix functions

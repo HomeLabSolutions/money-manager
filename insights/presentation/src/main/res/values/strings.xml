@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="insights_consent_title">Financial insights</string>
-    <string name="insights_consent_message">To create insights, the app will send your income and expense summaries for the past 12 months, grouped by date, category, and currency, to a third-party AI service for analysis. Individual transactions and notes will not be sent.</string>
+    <string name="insights_consent_message">To create insights, the app will send your daily income and expense totals for the past 12 months, grouped by category and currency, to a third-party AI service for analysis. Notes are not sent.</string>
     <string name="insights_consent_confirm">Agree and continue</string>
     <string name="insights_consent_dismiss">Not now</string>
     <string name="insights_consent_save_failed">Could not save your choice. Please try again.</string>
     <string name="insights_screen_title">Financial insights</string>
-    <string name="insights_unavailable_title">No insight yet</string>
     <string name="insights_unavailable_message">Insights are unavailable right now. Please try again later.</string>
+    <string name="insights_insufficient_data">Not enough data for an insight yet. Add transactions over at least two weeks and try again.</string>
     <string name="insights_another">Show another</string>
+    <string name="insights_retry">Try again</string>
 </resources>

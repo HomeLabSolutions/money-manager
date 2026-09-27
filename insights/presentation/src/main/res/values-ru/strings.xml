@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="insights_consent_title">Финансовые инсайты</string>
-    <string name="insights_consent_message">Для создания инсайтов приложение будет отправлять стороннему сервису ИИ сводные суммы ваших доходов и расходов за последние 12 месяцев с разбивкой по датам, категориям и валютам. Отдельные транзакции и заметки не отправляются.</string>
+    <string name="insights_consent_message">Для создания инсайтов приложение будет отправлять стороннему сервису ИИ дневные суммы ваших доходов и расходов за последние 12 месяцев с разбивкой по категориям и валютам. Заметки не отправляются.</string>
     <string name="insights_consent_confirm">Согласен, продолжить</string>
     <string name="insights_consent_dismiss">Не сейчас</string>
     <string name="insights_consent_save_failed">Не удалось сохранить выбор. Попробуйте ещё раз.</string>
     <string name="insights_screen_title">Финансовые инсайты</string>
-    <string name="insights_unavailable_title">Инсайта пока нет</string>
     <string name="insights_unavailable_message">Инсайты сейчас недоступны. Попробуйте позже.</string>
+    <string name="insights_insufficient_data">Пока недостаточно данных для инсайта. Добавьте транзакции за период не менее двух недель и попробуйте снова.</string>
     <string name="insights_another">Показать другой</string>
+    <string name="insights_retry">Повторить</string>
 </resources>

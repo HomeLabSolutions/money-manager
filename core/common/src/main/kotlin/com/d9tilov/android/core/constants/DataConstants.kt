@@ -10,7 +10,6 @@ object DataConstants {
     const val PREFERENCE_LOCAL_CURRENCY = BASE_NAMESPACE + "local.currency"
     const val PREFERENCE_LAST_BACKUP_DATE = BASE_NAMESPACE + "last.backup.date"
     const val PREFERENCE_INSIGHTS_CONSENT_UID = BASE_NAMESPACE + "insights.consent.uid"
-    const val PREFERENCE_INSIGHTS_CONSENT_VERSION = BASE_NAMESPACE + "insights.consent.version"
     const val DEFAULT_DATA_ID = 0L
     const val NO_ID = -1L
     const val UNKNOWN_BACKUP_DATE = -1L

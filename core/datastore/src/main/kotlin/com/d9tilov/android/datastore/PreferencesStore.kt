@@ -6,14 +6,12 @@ import androidx.datastore.preferences.SharedPreferencesMigration
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.d9tilov.android.core.constants.DataConstants.DATA_STORE_NAME
 import com.d9tilov.android.core.constants.DataConstants.PREFERENCE_CLIENT_UID
 import com.d9tilov.android.core.constants.DataConstants.PREFERENCE_INSIGHTS_CONSENT_UID
-import com.d9tilov.android.core.constants.DataConstants.PREFERENCE_INSIGHTS_CONSENT_VERSION
 import com.d9tilov.android.core.constants.DataConstants.PREFERENCE_LAST_BACKUP_DATE
 import com.d9tilov.android.core.constants.DataConstants.PREFERENCE_LOCAL_CURRENCY
 import com.d9tilov.android.core.constants.DataConstants.STORE_NAME
@@ -36,22 +34,19 @@ class PreferencesStore(
         dataStore.data.map { data ->
             val currentUid = data[PREFERENCE_CLIENT_UID_KEY]
             currentUid != null &&
-                data[PREFERENCE_INSIGHTS_CONSENT_UID_KEY] == currentUid &&
-                data[PREFERENCE_INSIGHTS_CONSENT_VERSION_KEY] == INSIGHTS_CONSENT_VERSION
+                data[PREFERENCE_INSIGHTS_CONSENT_UID_KEY] == currentUid
         }
 
     suspend fun grantInsightsConsent() {
         dataStore.edit { preferences ->
             val currentUid = requireNotNull(preferences[PREFERENCE_CLIENT_UID_KEY])
             preferences[PREFERENCE_INSIGHTS_CONSENT_UID_KEY] = currentUid
-            preferences[PREFERENCE_INSIGHTS_CONSENT_VERSION_KEY] = INSIGHTS_CONSENT_VERSION
         }
     }
 
     suspend fun revokeInsightsConsent() {
         dataStore.edit { preferences ->
             preferences.remove(PREFERENCE_INSIGHTS_CONSENT_UID_KEY)
-            preferences.remove(PREFERENCE_INSIGHTS_CONSENT_VERSION_KEY)
         }
     }
 
@@ -81,9 +76,7 @@ class PreferencesStore(
     }
 
     companion object {
-        private const val INSIGHTS_CONSENT_VERSION = 1
         private val PREFERENCE_INSIGHTS_CONSENT_UID_KEY = stringPreferencesKey(PREFERENCE_INSIGHTS_CONSENT_UID)
-        private val PREFERENCE_INSIGHTS_CONSENT_VERSION_KEY = intPreferencesKey(PREFERENCE_INSIGHTS_CONSENT_VERSION)
         private val PREFERENCE_LAST_BACKUP_DATE_KEY =
             longPreferencesKey(PREFERENCE_LAST_BACKUP_DATE)
         private val PREFERENCE_CLIENT_UID_KEY = stringPreferencesKey(PREFERENCE_CLIENT_UID)

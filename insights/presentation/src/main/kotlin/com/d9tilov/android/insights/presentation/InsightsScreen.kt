@@ -10,12 +10,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -23,12 +26,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.d9tilov.android.designsystem.MmTopAppBar
+
+@Composable
+fun InsightsRoute(
+    viewModel: InsightsViewModel = hiltViewModel(),
+    onBackClick: () -> Unit,
+) {
+    val state by viewModel.state.collectAsState()
+    InsightsScreen(
+        onBackClick = onBackClick,
+        state = state,
+        onAnotherClick = viewModel::generate,
+    )
+}
 
 @Composable
 fun InsightsScreen(
     onBackClick: () -> Unit,
-    insight: InsightUiModel? = null,
+    state: InsightsUiState,
     onAnotherClick: () -> Unit = {},
 ) {
     val colors = MaterialTheme.colorScheme
@@ -62,44 +79,61 @@ fun InsightsScreen(
                     .padding(horizontal = 24.dp, vertical = 16.dp),
         ) {
             Spacer(Modifier.weight(1f))
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(28.dp),
-                color = colors.surface.copy(alpha = 0.92f),
-                tonalElevation = 4.dp,
-            ) {
-                Column(
-                    modifier = Modifier.padding(28.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                ) {
-                    Text(
-                        text = insight?.title ?: stringResource(R.string.insights_unavailable_title),
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = colors.onSurface,
-                    )
-                    Text(
-                        text = insight?.text ?: stringResource(R.string.insights_unavailable_message),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = colors.onSurfaceVariant,
-                    )
-                    if (insight != null) {
-                        Text(
-                            text = insight.period,
-                            style = MaterialTheme.typography.labelMedium,
-                            color = colors.primary,
-                        )
-                    }
-                }
-            }
+            InsightCard(state)
             Spacer(Modifier.weight(1f))
             Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 Button(
                     onClick = onAnotherClick,
-                    enabled = insight != null,
+                    enabled = state !is InsightsUiState.Loading,
                 ) {
                     Text(
-                        text = stringResource(R.string.insights_another),
+                        text =
+                            stringResource(
+                                if (state is InsightsUiState.Error) {
+                                    R.string.insights_retry
+                                } else {
+                                    R.string.insights_another
+                                },
+                            ),
                         textAlign = TextAlign.Center,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun InsightCard(state: InsightsUiState) {
+    val colors = MaterialTheme.colorScheme
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(28.dp),
+        color = colors.surface.copy(alpha = 0.92f),
+        tonalElevation = 4.dp,
+    ) {
+        Column(
+            modifier = Modifier.padding(28.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            when (state) {
+                InsightsUiState.Loading -> {
+                    CircularProgressIndicator()
+                }
+
+                is InsightsUiState.Data -> {
+                    Text(
+                        text = state.insight.ifEmpty { stringResource(R.string.insights_unavailable_message) },
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = colors.onSurface,
+                    )
+                }
+
+                is InsightsUiState.Error -> {
+                    Text(
+                        text = stringResource(state.messageRes),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = colors.onSurface,
                     )
                 }
             }
