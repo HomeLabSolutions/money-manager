@@ -17,6 +17,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -33,12 +34,14 @@ import com.d9tilov.android.designsystem.MmTopAppBar
 fun InsightsRoute(
     viewModel: InsightsViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
+    onShowSnackBar: suspend (String, String?) -> Boolean,
 ) {
     val state by viewModel.state.collectAsState()
     InsightsScreen(
         onBackClick = onBackClick,
         state = state,
         onAnotherClick = viewModel::generate,
+        onShowSnackBar = onShowSnackBar,
     )
 }
 
@@ -47,7 +50,16 @@ fun InsightsScreen(
     onBackClick: () -> Unit,
     state: InsightsUiState,
     onAnotherClick: () -> Unit = {},
+    onShowSnackBar: suspend (String, String?) -> Boolean,
 ) {
+    if (state is InsightsUiState.Error) {
+        val message = stringResource(state.messageRes)
+        val retry = stringResource(R.string.insights_retry)
+        LaunchedEffect(state) {
+            if (onShowSnackBar(message, retry)) onAnotherClick()
+        }
+    }
+
     val colors = MaterialTheme.colorScheme
     val gradient =
         Brush.linearGradient(
@@ -81,22 +93,11 @@ fun InsightsScreen(
             Spacer(Modifier.weight(1f))
             InsightCard(state)
             Spacer(Modifier.weight(1f))
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                Button(
-                    onClick = onAnotherClick,
-                    enabled = state !is InsightsUiState.Loading,
-                ) {
-                    Text(
-                        text =
-                            stringResource(
-                                if (state is InsightsUiState.Error) {
-                                    R.string.insights_retry
-                                } else {
-                                    R.string.insights_another
-                                },
-                            ),
-                        textAlign = TextAlign.Center,
-                    )
+            if (state is InsightsUiState.Data) {
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    Button(onClick = onAnotherClick) {
+                        Text(text = stringResource(R.string.insights_another), textAlign = TextAlign.Center)
+                    }
                 }
             }
         }

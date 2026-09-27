@@ -172,7 +172,7 @@ fun MmNavHost(
                     }
                 },
             )
-            insightsScreen(onBackClick = navController::popBackStack)
+            insightsScreen(onBackClick = navController::popBackStack, onShowSnackBar = onShowSnackBar)
             transactionCreationScreen(
                 route = "$TRANSACTION_NAVIGATION_ROUTE/{$TRANSACTION_ID_ARG}",
                 clickBack = navController::popBackStack,

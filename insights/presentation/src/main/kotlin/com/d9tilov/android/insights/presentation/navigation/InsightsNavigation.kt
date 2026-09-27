@@ -11,8 +11,11 @@ fun NavController.navigateToInsights() {
     navigate(INSIGHTS_NAVIGATION_ROUTE)
 }
 
-fun NavGraphBuilder.insightsScreen(onBackClick: () -> Unit) {
+fun NavGraphBuilder.insightsScreen(
+    onBackClick: () -> Unit,
+    onShowSnackBar: suspend (String, String?) -> Boolean,
+) {
     roundedBackComposable(route = INSIGHTS_NAVIGATION_ROUTE) {
-        InsightsRoute(onBackClick = onBackClick)
+        InsightsRoute(onBackClick = onBackClick, onShowSnackBar = onShowSnackBar)
     }
 }
