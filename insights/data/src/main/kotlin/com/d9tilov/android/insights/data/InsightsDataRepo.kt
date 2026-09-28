@@ -7,6 +7,7 @@ import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.insights.domain.InsightsRepository
+import com.d9tilov.android.insights.domain.InsightLanguageRepository
 import com.d9tilov.android.insights.domain.InsufficientInsightsDataException
 import com.d9tilov.android.insights.domain.NoNewInsightException
 import com.d9tilov.android.transaction.data.contract.TransactionSource
@@ -22,6 +23,7 @@ import javax.inject.Singleton
 class InsightsDataRepo @Inject constructor(
     private val preferencesStore: PreferencesStore,
     private val localSource: InsightLocalSource,
+    private val insightLanguageRepository: InsightLanguageRepository,
     private val transactionSource: TransactionSource,
     private val categorySource: CategorySource,
     private val remoteSource: InsightsRemoteSource,
@@ -77,10 +79,11 @@ class InsightsDataRepo @Inject constructor(
         val traces = aggregateTransactions(rows).toPayload()
         val previous = localSource.previous(clientId)
 
+        val selectedLanguage = insightLanguageRepository.language.first()
         val insight = remoteSource.generate(
             periodStart = from.date.toString(),
             periodEnd = to.date.toString(),
-            languageTag = languageTag,
+            languageTag = selectedLanguage.ifBlank { languageTag },
             traces = traces,
             previousInsights = previous,
         )

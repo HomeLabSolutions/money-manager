@@ -66,6 +66,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun insightDao(): InsightDao
 
     companion object {
-        const val VERSION_NUMBER = 2
+        const val VERSION_NUMBER = 3
     }
 }

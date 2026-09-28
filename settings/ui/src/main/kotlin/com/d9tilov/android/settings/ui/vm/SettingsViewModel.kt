@@ -19,6 +19,7 @@ import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.android.core.utils.toBackupDate
 import com.d9tilov.android.datastore.PreferencesStore
+import com.d9tilov.android.insights.domain.InsightLanguageRepository
 import com.d9tilov.android.network.exception.NetworkException
 import com.d9tilov.android.settings.ui.R
 import com.d9tilov.android.user.domain.contract.UserInteractor
@@ -42,6 +43,8 @@ import javax.inject.Named
 data class SettingsUiState(
     val subscriptionState: SubscriptionUiState? = null,
     val startPeriodDay: String = "1",
+    val insightLanguage: String = "",
+    val insightLanguageEdited: Boolean = false,
     val backupState: BackupState = BackupState(),
 )
 
@@ -72,6 +75,7 @@ class SettingsViewModel
         private val backupInteractor: BackupInteractor,
         private val userInteractor: UserInteractor,
         private val userInfoInteractor: UserInteractor,
+        private val insightLanguageRepository: InsightLanguageRepository,
         private val preferencesStore: PreferencesStore,
         analyticsSender: AnalyticsSender,
         billingInteractor: BillingInteractor,
@@ -90,12 +94,14 @@ class SettingsViewModel
                     userInteractor.getCurrentUser(),
                     backupInteractor.getBackupData(),
                     billingInteractor.getPremiumInfo(),
-                ) { user, backupData, premiumInfo ->
+                    insightLanguageRepository.language,
+                ) { user, backupData, premiumInfo, insightLanguage ->
                     Timber.tag(TAG).d("PremiumInfo: $premiumInfo, BackupData: $backupData")
                     val fiscalDay = user?.fiscalDay ?: 1
                     val curValue = _uiState.value
                     curValue.copy(
                         startPeriodDay = fiscalDay.toString(),
+                        insightLanguage = if (curValue.insightLanguageEdited) curValue.insightLanguage else insightLanguage,
                         backupState =
                             curValue.backupState.copy(
                                 lastBackupTimestamp = backupData.lastBackupTimestamp.toBackupDate(),
@@ -170,9 +176,16 @@ class SettingsViewModel
             _uiState.update { it.copy(startPeriodDay = day) }
         }
 
-        fun save() {
-            viewModelScope.launch {
-                userInteractor.updateFiscalDay(_uiState.value.startPeriodDay.toInt())
+        fun changeInsightLanguage(language: String) {
+            _uiState.update { it.copy(insightLanguage = language, insightLanguageEdited = true) }
+        }
+
+        fun save(onSaved: () -> Unit) {
+            val settings = _uiState.value
+            viewModelScope.launch(ioDispatcher) {
+                userInteractor.updateFiscalDay(settings.startPeriodDay.toInt())
+                insightLanguageRepository.setLanguage(settings.insightLanguage)
+                withContext(Dispatchers.Main) { onSaved() }
             }
         }
     }
