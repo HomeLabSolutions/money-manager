@@ -33,11 +33,12 @@ export const generateInsight = onCall(
     try {
       const openai = new OpenAI({apiKey: openAiKey.value()});
       const response = await openai.responses.create({
-        model: 'gpt-4o-mini',
+        model: 'gpt-6-sol',
         instructions: prompt,
         input: JSON.stringify(data),
+        reasoning: {effort: 'low'},
         store: false,
-        max_output_tokens: 400,
+        max_output_tokens: 2000,
       });
       const insight = response.output_text?.trim();
       if (!insight) {
