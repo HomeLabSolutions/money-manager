@@ -2,6 +2,7 @@ import {initializeApp} from 'firebase-admin/app';
 import {getRemoteConfig} from 'firebase-admin/remote-config';
 import {defineSecret} from 'firebase-functions/params';
 import {HttpsError, onCall} from 'firebase-functions/v2/https';
+import {logger} from 'firebase-functions';
 import OpenAI from 'openai';
 import {validateInsightRequest} from './insightRequest.js';
 
@@ -52,7 +53,14 @@ export const generateInsight = onCall(
         throw new Error('Empty model response');
       }
       return insight;
-    } catch {
+    } catch (error) {
+      logger.error('Insight generation failed', {
+        name: error?.name,
+        status: error?.status,
+        code: error?.code,
+        type: error?.type,
+        requestId: error?.request_id,
+      });
       throw new HttpsError('internal', 'Could not generate an insight');
     }
   },
