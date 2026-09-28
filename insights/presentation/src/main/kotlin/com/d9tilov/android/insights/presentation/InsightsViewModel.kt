@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.insights.domain.InsightsRepository
 import com.d9tilov.android.insights.domain.InsufficientInsightsDataException
+import com.d9tilov.android.insights.domain.NoNewInsightException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
@@ -52,6 +53,8 @@ class InsightsViewModel @Inject constructor(
                 throw error
             } catch (_: InsufficientInsightsDataException) {
                 _state.update { InsightsUiState.Error(R.string.insights_insufficient_data) }
+            } catch (_: NoNewInsightException) {
+                _state.update { InsightsUiState.Error(R.string.insights_no_new_insight) }
             } catch (_: Exception) {
                 _state.update { InsightsUiState.Error(R.string.insights_unavailable_message) }
             }

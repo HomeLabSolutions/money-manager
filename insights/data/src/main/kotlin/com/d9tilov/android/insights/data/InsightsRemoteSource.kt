@@ -6,5 +6,6 @@ interface InsightsRemoteSource {
         periodEnd: String,
         languageTag: String,
         traces: Map<String, List<Map<String, Any>>>,
+        previousInsights: List<String>,
     ): String
 }

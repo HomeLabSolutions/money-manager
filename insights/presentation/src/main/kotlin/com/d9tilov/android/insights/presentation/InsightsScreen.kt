@@ -40,7 +40,7 @@ fun InsightsRoute(
     InsightsScreen(
         onBackClick = onBackClick,
         state = state,
-        onAnotherClick = viewModel::generate,
+        onRetryClick = viewModel::generate,
         onShowSnackBar = onShowSnackBar,
     )
 }
@@ -49,14 +49,14 @@ fun InsightsRoute(
 fun InsightsScreen(
     onBackClick: () -> Unit,
     state: InsightsUiState,
-    onAnotherClick: () -> Unit = {},
+    onRetryClick: () -> Unit = {},
     onShowSnackBar: suspend (String, String?) -> Boolean,
 ) {
     if (state is InsightsUiState.Error) {
         val message = stringResource(state.messageRes)
         val retry = stringResource(R.string.insights_retry)
         LaunchedEffect(state) {
-            if (onShowSnackBar(message, retry)) onAnotherClick()
+            if (onShowSnackBar(message, retry)) onRetryClick()
         }
     }
 
@@ -95,7 +95,7 @@ fun InsightsScreen(
             Spacer(Modifier.weight(1f))
             if (state is InsightsUiState.Data) {
                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    Button(onClick = onAnotherClick) {
+                    Button(onClick = onRetryClick) {
                         Text(text = stringResource(R.string.insights_another), textAlign = TextAlign.Center)
                     }
                 }

@@ -1,8 +1,8 @@
-export const defaultPrompt = `You analyze personal finance summaries covering approximately three months.
+export const defaultPrompt = `You analyze personal finance summaries covering the last 90 calendar days.
 
 Your task is to return exactly ONE concise and useful insight based strictly on the supplied data.
 
-The input is JSON containing the available period, requested language, and category traces. Each trace contains daily income or expense totals by date and currency. These are daily totals, not individual transaction records.
+The input is JSON containing the available period, requested language, category traces, and previously shown insights. Each trace contains daily income or expense totals by date and currency. These are daily totals, not individual transaction records. Previously shown insights are context, not financial data for calculations.
 
 Rules:
 
@@ -36,6 +36,7 @@ Rules:
    d. significant pattern visible across the full period
 16. If the latest period is incomplete, do not directly compare it with a complete period unless you normalize the comparison appropriately or explicitly use equal-length date ranges.
 17. If there is not enough data to support a meaningful insight, say so instead of inventing one.
+18. Do not repeat a previously shown insight, even with different wording. Choose a different underlying fact, comparison, or category. If no distinct meaningful insight remains, say so.
 
 Output requirements:
 

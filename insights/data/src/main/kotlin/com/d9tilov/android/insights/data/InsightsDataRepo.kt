@@ -5,21 +5,36 @@ import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getStartOfDay
+import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.insights.domain.InsightsRepository
 import com.d9tilov.android.insights.domain.InsufficientInsightsDataException
+import com.d9tilov.android.insights.domain.NoNewInsightException
 import com.d9tilov.android.transaction.data.contract.TransactionSource
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.minus
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class InsightsDataRepo @Inject constructor(
+    private val preferencesStore: PreferencesStore,
+    private val localSource: InsightLocalSource,
     private val transactionSource: TransactionSource,
     private val categorySource: CategorySource,
     private val remoteSource: InsightsRemoteSource,
 ) : InsightsRepository {
-    override suspend fun generate(languageTag: String): String {
-        val from = currentDate().minus(3, DateTimeUnit.MONTH).getStartOfDay()
+    private val generationMutex = Mutex()
+
+    override suspend fun generate(languageTag: String): String = generationMutex.withLock {
+        val clientId = requireNotNull(preferencesStore.uid.first())
+        generateNew(clientId, languageTag)
+    }
+
+    private suspend fun generateNew(clientId: String, languageTag: String): String {
+        val from = currentDate().minus(INSIGHT_WINDOW_DAYS - 1, DateTimeUnit.DAY).getStartOfDay()
         val to = currentDateTime()
         val income =
             transactionSource
@@ -60,12 +75,20 @@ class InsightsDataRepo @Inject constructor(
                 )
             }
         val traces = aggregateTransactions(rows).toPayload()
+        val previous = localSource.previous(clientId)
 
-        return remoteSource.generate(
+        val insight = remoteSource.generate(
             periodStart = from.date.toString(),
             periodEnd = to.date.toString(),
             languageTag = languageTag,
             traces = traces,
+            previousInsights = previous,
         )
+        check(insight.length <= MAX_INSIGHT_TEXT_LENGTH)
+        if (matchesPreviousInsight(insight, previous)) {
+            throw NoNewInsightException()
+        }
+        localSource.save(clientId, insight)
+        return insight
     }
 }

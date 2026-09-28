@@ -11,6 +11,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(project(":core:common"))
     implementation(project(":core:datastore"))
+    implementation(project(":core:database"))
     implementation(project(":category:data:contract"))
     implementation(project(":category:domain:model"))
     implementation(project(":insights:domain"))

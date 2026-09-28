@@ -5,6 +5,7 @@ import com.d9tilov.android.database.dao.BudgetDao
 import com.d9tilov.android.database.dao.CategoryDao
 import com.d9tilov.android.database.dao.CurrencyListDao
 import com.d9tilov.android.database.dao.GoalDao
+import com.d9tilov.android.database.dao.InsightDao
 import com.d9tilov.android.database.dao.MainCurrencyDao
 import com.d9tilov.android.database.dao.RegularTransactionDao
 import com.d9tilov.android.database.dao.TransactionDao
@@ -40,4 +41,7 @@ object DaosModule {
 
     @Provides
     fun providesGoalDao(database: AppDatabase): GoalDao = database.goalDao()
+
+    @Provides
+    fun providesInsightDao(database: AppDatabase): InsightDao = database.insightDao()
 }

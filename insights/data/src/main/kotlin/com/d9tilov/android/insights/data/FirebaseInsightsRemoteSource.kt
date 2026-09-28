@@ -10,6 +10,7 @@ class FirebaseInsightsRemoteSource @Inject constructor() : InsightsRemoteSource 
         periodEnd: String,
         languageTag: String,
         traces: Map<String, List<Map<String, Any>>>,
+        previousInsights: List<String>,
     ): String {
         val text =
             FirebaseFunctions
@@ -21,6 +22,7 @@ class FirebaseInsightsRemoteSource @Inject constructor() : InsightsRemoteSource 
                         "periodEnd" to periodEnd,
                         "language" to languageTag,
                         "traces" to traces,
+                        "previousInsights" to previousInsights,
                     ),
                 ).await()
                 .data as? String ?: error("Invalid insight response")

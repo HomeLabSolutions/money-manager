@@ -32,3 +32,7 @@ dependencies {
 
     testImplementation(libs.junit)
 }
+
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
