@@ -19,7 +19,7 @@ class InsightsDataRepo @Inject constructor(
     private val remoteSource: InsightsRemoteSource,
 ) : InsightsRepository {
     override suspend fun generate(languageTag: String): String {
-        val from = currentDate().minus(1, DateTimeUnit.YEAR).getStartOfDay()
+        val from = currentDate().minus(3, DateTimeUnit.MONTH).getStartOfDay()
         val to = currentDateTime()
         val income =
             transactionSource

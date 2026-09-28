@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="insights_consent_title">Financial insights</string>
-    <string name="insights_consent_message">To create insights, the app will send your daily income and expense totals for the past 12 months, grouped by category and currency, to a third-party AI service for analysis. Notes are not sent.</string>
+    <string name="insights_consent_message">To create insights, the app will send your daily income and expense totals for the past 3 months, grouped by category and currency, to a third-party AI service for analysis. Notes are not sent.</string>
     <string name="insights_consent_confirm">Agree and continue</string>
     <string name="insights_consent_dismiss">Not now</string>
     <string name="insights_consent_save_failed">Could not save your choice. Please try again.</string>
