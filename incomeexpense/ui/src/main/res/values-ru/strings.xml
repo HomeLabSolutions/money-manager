@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="insights_button">Инсайты</string>
     <string name="transaction_empty_placeholder_income_title">Добавьте доход</string>
     <string name="transaction_empty_placeholder_expense_title">Добавьте расход</string>
     <string name="transaction_empty_placeholder_subtitle">Введите сумму и выберите категорию</string>

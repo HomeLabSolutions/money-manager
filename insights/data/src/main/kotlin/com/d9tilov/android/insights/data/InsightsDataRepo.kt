@@ -6,12 +6,17 @@ import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.datastore.PreferencesStore
-import com.d9tilov.android.insights.domain.InsightsRepository
+import com.d9tilov.android.insights.domain.Insight
 import com.d9tilov.android.insights.domain.InsightLanguageRepository
+import com.d9tilov.android.insights.domain.InsightsRepository
 import com.d9tilov.android.insights.domain.InsufficientInsightsDataException
 import com.d9tilov.android.insights.domain.NoNewInsightException
 import com.d9tilov.android.transaction.data.contract.TransactionSource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.datetime.DateTimeUnit
@@ -30,12 +35,23 @@ class InsightsDataRepo @Inject constructor(
 ) : InsightsRepository {
     private val generationMutex = Mutex()
 
-    override suspend fun generate(languageTag: String): String = generationMutex.withLock {
-        val clientId = requireNotNull(preferencesStore.uid.first())
-        generateNew(clientId, languageTag)
-    }
+    override fun history(): Flow<List<Insight>> =
+        preferencesStore.uid.filterNotNull().flatMapLatest { clientId ->
+            localSource.history(clientId).map { rows ->
+                rows.map { Insight(id = it.id, createdAtMillis = it.createdAtMillis, text = it.text) }
+            }
+        }
 
-    private suspend fun generateNew(clientId: String, languageTag: String): String {
+    override suspend fun generate(languageTag: String): String =
+        generationMutex.withLock {
+            val clientId = requireNotNull(preferencesStore.uid.first())
+            generateNew(clientId, languageTag)
+        }
+
+    private suspend fun generateNew(
+        clientId: String,
+        languageTag: String,
+    ): String {
         val from = currentDate().minus(INSIGHT_WINDOW_DAYS - 1, DateTimeUnit.DAY).getStartOfDay()
         val to = currentDateTime()
         val income =
@@ -80,13 +96,14 @@ class InsightsDataRepo @Inject constructor(
         val previous = localSource.previous(clientId)
 
         val selectedLanguage = insightLanguageRepository.language.first()
-        val insight = remoteSource.generate(
-            periodStart = from.date.toString(),
-            periodEnd = to.date.toString(),
-            languageTag = selectedLanguage.ifBlank { languageTag },
-            traces = traces,
-            previousInsights = previous,
-        )
+        val insight =
+            remoteSource.generate(
+                periodStart = from.date.toString(),
+                periodEnd = to.date.toString(),
+                languageTag = selectedLanguage.ifBlank { languageTag },
+                traces = traces,
+                previousInsights = previous,
+            )
         check(insight.length <= MAX_INSIGHT_TEXT_LENGTH)
         if (matchesPreviousInsight(insight, previous)) {
             throw NoNewInsightException()

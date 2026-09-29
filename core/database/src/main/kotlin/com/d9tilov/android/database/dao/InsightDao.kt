@@ -5,11 +5,18 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import com.d9tilov.android.database.entity.InsightDbModel
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface InsightDao {
+    @Query("SELECT * FROM insights WHERE clientId = :clientId ORDER BY createdAtMillis ASC, id ASC")
+    fun observeHistory(clientId: String): Flow<List<InsightDbModel>>
+
     @Query("SELECT text FROM insights WHERE clientId = :clientId ORDER BY createdAtMillis DESC, id DESC LIMIT :limit")
-    suspend fun getPrevious(clientId: String, limit: Int): List<String>
+    suspend fun getPrevious(
+        clientId: String,
+        limit: Int,
+    ): List<String>
 
     @Insert
     suspend fun insert(insight: InsightDbModel)
@@ -18,10 +25,16 @@ interface InsightDao {
         "DELETE FROM insights WHERE clientId = :clientId AND id NOT IN " +
             "(SELECT id FROM insights WHERE clientId = :clientId ORDER BY createdAtMillis DESC, id DESC LIMIT :limit)",
     )
-    suspend fun keepLatest(clientId: String, limit: Int)
+    suspend fun keepLatest(
+        clientId: String,
+        limit: Int,
+    )
 
     @Transaction
-    suspend fun insertAndKeepLatest(insight: InsightDbModel, limit: Int) {
+    suspend fun insertAndKeepLatest(
+        insight: InsightDbModel,
+        limit: Int,
+    ) {
         insert(insight)
         keepLatest(insight.clientId, limit)
     }

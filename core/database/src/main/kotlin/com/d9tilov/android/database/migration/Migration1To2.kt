@@ -16,6 +16,11 @@ val MIGRATION_1_2 =
                 )
                 """.trimIndent(),
             )
-            db.execSQL("CREATE INDEX IF NOT EXISTS `index_insights_clientId_createdAtMillis` ON `insights` (`clientId`, `createdAtMillis`)")
+            db.execSQL(
+                """
+                CREATE INDEX IF NOT EXISTS `index_insights_clientId_createdAtMillis`
+                ON `insights` (`clientId`, `createdAtMillis`)
+                """.trimIndent(),
+            )
         }
     }

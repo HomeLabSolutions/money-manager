@@ -101,7 +101,8 @@ class SettingsViewModel
                     val curValue = _uiState.value
                     curValue.copy(
                         startPeriodDay = fiscalDay.toString(),
-                        insightLanguage = if (curValue.insightLanguageEdited) curValue.insightLanguage else insightLanguage,
+                        insightLanguage =
+                            if (curValue.insightLanguageEdited) curValue.insightLanguage else insightLanguage,
                         backupState =
                             curValue.backupState.copy(
                                 lastBackupTimestamp = backupData.lastBackupTimestamp.toBackupDate(),

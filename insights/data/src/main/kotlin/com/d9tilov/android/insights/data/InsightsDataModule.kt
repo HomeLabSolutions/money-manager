@@ -1,7 +1,7 @@
 package com.d9tilov.android.insights.data
 
-import com.d9tilov.android.insights.domain.InsightsConsentRepository
 import com.d9tilov.android.insights.domain.InsightLanguageRepository
+import com.d9tilov.android.insights.domain.InsightsConsentRepository
 import com.d9tilov.android.insights.domain.InsightsRepository
 import dagger.Binds
 import dagger.Module

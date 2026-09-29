@@ -135,7 +135,6 @@ fun IncomeExpenseRoute(
     onTransactionClicked: (TransactionUiModel) -> Unit,
     onCurrencyClicked: (String) -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
-    onInsightsClicked: () -> Unit,
 ) {
     val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -157,7 +156,6 @@ fun IncomeExpenseRoute(
         onAllCategoryClicked = onAllCategoryClicked,
         onDeleteTransactionConfirmClicked = viewModel::deleteTransaction,
         onScreenTypeClicked = viewModel::onTabClicked,
-        onInsightsClicked = onInsightsClicked,
     )
 }
 
@@ -172,7 +170,6 @@ fun IncomeExpenseScreen(
     onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
     onScreenTypeClicked: (ScreenType) -> Unit,
-    onInsightsClicked: () -> Unit,
 ) {
     val expenseListState = rememberLazyListState()
     val incomeListState = rememberLazyListState()
@@ -192,7 +189,6 @@ fun IncomeExpenseScreen(
                 AnimatedFloatingActionButton(
                     currentListState,
                     onClick = { onEditModeChanged(EditMode.KEYBOARD) },
-                    onInsightsClick = onInsightsClicked,
                 )
             }
         },
@@ -237,38 +233,22 @@ fun LazyListState.isScrollingUp(): Boolean {
 fun AnimatedFloatingActionButton(
     listState: LazyListState,
     onClick: () -> Unit,
-    onInsightsClick: () -> Unit,
 ) {
     AnimatedVisibility(
         visible = listState.isScrollingUp(),
         enter = scaleIn(),
         exit = scaleOut(),
     ) {
-        Column(
+        FloatingActionButton(
+            onClick = onClick,
             modifier = Modifier.navigationBarsPadding(),
-            horizontalAlignment = Alignment.End,
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            containerColor = MaterialTheme.colorScheme.secondary,
         ) {
-            FloatingActionButton(
-                onClick = onInsightsClick,
-                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-            ) {
-                Icon(
-                    imageVector = MoneyManagerIcons.Insights,
-                    contentDescription = stringResource(R.string.insights_button),
-                )
-            }
-            FloatingActionButton(
-                onClick = onClick,
-                containerColor = MaterialTheme.colorScheme.secondary,
-            ) {
-                Icon(
-                    imageVector = MoneyManagerIcons.AddCircle,
-                    contentDescription = "Add transaction",
-                    tint = MaterialTheme.colorScheme.onSecondary,
-                )
-            }
+            Icon(
+                imageVector = MoneyManagerIcons.AddCircle,
+                contentDescription = "Add transaction",
+                tint = MaterialTheme.colorScheme.onSecondary,
+            )
         }
     }
 }
@@ -914,7 +894,6 @@ fun PreviewIncomeExpenseScreen() {
             onTransactionClicked = {},
             onDeleteTransactionConfirmClicked = {},
             onScreenTypeClicked = {},
-            onInsightsClicked = {},
         )
     }
 }

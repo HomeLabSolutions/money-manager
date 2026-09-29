@@ -142,7 +142,9 @@ fun SettingsScreen(
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
+                        .padding(
+                            horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                        ),
             )
             BackupLayout(
                 backupState = uiState.backupState,
@@ -234,7 +236,14 @@ private fun InsightLanguageLayout(
         )
         Box {
             OutlinedButton(onClick = { expanded.value = true }) {
-                Text(stringResource(options.firstOrNull { it.first == language }?.second ?: R.string.settings_insight_language_system))
+                Text(
+                    stringResource(
+                        options
+                            .firstOrNull {
+                                it.first == language
+                            }?.second ?: R.string.settings_insight_language_system,
+                    ),
+                )
             }
             DropdownMenu(expanded = expanded.value, onDismissRequest = { expanded.value = false }) {
                 options.forEach { (tag, label) ->

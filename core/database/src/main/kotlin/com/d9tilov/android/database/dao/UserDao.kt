@@ -19,7 +19,10 @@ interface UserDao {
     fun getInsightLanguage(id: String): Flow<String?>
 
     @Query("UPDATE users SET insightLanguage = :language WHERE uid = :id")
-    suspend fun updateInsightLanguage(id: String, language: String)
+    suspend fun updateInsightLanguage(
+        id: String,
+        language: String,
+    )
 
     @Query("SELECT showPrepopulate FROM Users WHERE uid = :id")
     suspend fun showPrepopulate(id: String): Boolean

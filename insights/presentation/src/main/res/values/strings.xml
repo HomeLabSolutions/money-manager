@@ -9,6 +9,7 @@
     <string name="insights_unavailable_message">Insights are unavailable right now. Please try again later.</string>
     <string name="insights_insufficient_data">Not enough data for an insight yet. Add transactions over at least two weeks and try again.</string>
     <string name="insights_no_new_insight">The new insight repeated a previous one. Please try again.</string>
-    <string name="insights_another">Show another</string>
+    <string name="insights_generate">Generate insight</string>
+    <string name="insights_empty_history">Your insights will appear here.</string>
     <string name="insights_retry">Try again</string>
 </resources>
