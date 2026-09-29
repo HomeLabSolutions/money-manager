@@ -18,6 +18,16 @@ interface InsightDao {
         limit: Int,
     ): List<String>
 
+    @Query(
+        "SELECT EXISTS(SELECT 1 FROM insights WHERE clientId = :clientId " +
+            "AND createdAtMillis >= :from AND createdAtMillis < :to)",
+    )
+    suspend fun hasInsightInPeriod(
+        clientId: String,
+        from: Long,
+        to: Long,
+    ): Boolean
+
     @Insert
     suspend fun insert(insight: InsightDbModel)
 

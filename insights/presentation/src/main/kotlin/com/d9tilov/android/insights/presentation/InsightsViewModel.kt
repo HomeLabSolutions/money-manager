@@ -3,6 +3,7 @@ package com.d9tilov.android.insights.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
+import com.d9tilov.android.insights.domain.DailyInsightLimitException
 import com.d9tilov.android.insights.domain.Insight
 import com.d9tilov.android.insights.domain.InsightsRepository
 import com.d9tilov.android.insights.domain.InsufficientInsightsDataException
@@ -75,6 +76,8 @@ class InsightsViewModel @Inject constructor(
                 throw error
             } catch (_: InsufficientInsightsDataException) {
                 setError(R.string.insights_insufficient_data)
+            } catch (_: DailyInsightLimitException) {
+                setError(R.string.insights_daily_limit)
             } catch (_: NoNewInsightException) {
                 setError(R.string.insights_no_new_insight)
             } catch (_: Exception) {

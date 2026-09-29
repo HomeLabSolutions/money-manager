@@ -13,6 +13,7 @@ import com.d9tilov.android.common.android.worker.SyncConstraints
 import com.d9tilov.android.common.android.worker.delegatedData
 import com.d9tilov.android.common.android.worker.syncForegroundInfo
 import com.d9tilov.android.datastore.PreferencesStore
+import com.d9tilov.android.insights.domain.DailyInsightLimitException
 import com.d9tilov.android.insights.domain.InsightsConsentRepository
 import com.d9tilov.android.insights.domain.InsightsRepository
 import com.d9tilov.android.insights.domain.InsufficientInsightsDataException
@@ -53,6 +54,15 @@ class WeeklyInsightWorker @AssistedInject constructor(
             throw error
         } catch (_: InsufficientInsightsDataException) {
             Result.success()
+        } catch (_: DailyInsightLimitException) {
+            if (FirebaseAuth.getInstance().currentUser?.uid == uid && consentRepository.isGranted.first()) {
+                insightsRepository
+                    .history()
+                    .first()
+                    .lastOrNull()
+                    ?.let { notification.show(it.text) }
+            }
+            Result.success()
         } catch (_: NoNewInsightException) {
             Result.success()
         } catch (error: Exception) {
@@ -62,7 +72,8 @@ class WeeklyInsightWorker @AssistedInject constructor(
     }
 
     companion object {
-        private const val WORK_NAME = "weekly_insight"
+        private const val WORK_NAME = "weekly_insight_after_consent"
+        private const val LEGACY_WORK_NAME = "weekly_insight"
         private const val INTERVAL_DAYS = 7L
 
         fun startPeriodicJob(context: Context) {
@@ -72,11 +83,19 @@ class WeeklyInsightWorker @AssistedInject constructor(
                     .setConstraints(SyncConstraints)
                     .setInputData(WeeklyInsightWorker::class.delegatedData())
                     .build()
-            WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+            val workManager = WorkManager.getInstance(context)
+            workManager.cancelUniqueWork(LEGACY_WORK_NAME)
+            workManager.enqueueUniquePeriodicWork(
                 WORK_NAME,
                 ExistingPeriodicWorkPolicy.KEEP,
                 request,
             )
+        }
+
+        fun stopPeriodicJob(context: Context) {
+            val workManager = WorkManager.getInstance(context)
+            workManager.cancelUniqueWork(LEGACY_WORK_NAME)
+            workManager.cancelUniqueWork(WORK_NAME)
         }
     }
 }

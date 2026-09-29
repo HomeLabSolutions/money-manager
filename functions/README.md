@@ -2,7 +2,7 @@
 
 `generateInsight` is a Firebase callable function in `us-central1`. The Android app sends daily income and expense totals from the latest 90 calendar days in date-sorted category traces, separately by currency and transaction type. It also sends up to 90 previously shown insight texts to discourage repeated facts. A daily total can equal the amount of one transaction. The function does not receive transaction descriptions, notes, photos, locations, or a user ID in the model input.
 
-The function requires Firebase Authentication. It uses the OpenAI Responses API and returns one insight as plain text. The Android app stores up to 90 recent results in its local Room database and passes them to the next request to discourage repeats. Each request can generate a new insight; the function does not store insight history.
+The function requires Firebase Authentication. It uses the OpenAI Responses API and returns one insight as plain text. The Android app stores up to 90 recent results in its local Room database and passes them to the next request to discourage repeats. The Android app allows at most one saved insight per UTC day for each local user. The function itself does not enforce a daily quota or store insight history.
 
 ## Firebase setup
 

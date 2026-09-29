@@ -9,6 +9,9 @@ import javax.inject.Inject
 internal const val INSIGHT_WINDOW_DAYS = 90
 private const val MAX_STORED_INSIGHTS = INSIGHT_WINDOW_DAYS
 internal const val MAX_INSIGHT_TEXT_LENGTH = 1000
+private const val MILLIS_PER_DAY = 24L * 60L * 60L * 1000L
+
+internal fun utcDayStartMillis(timeMillis: Long): Long = Math.floorDiv(timeMillis, MILLIS_PER_DAY) * MILLIS_PER_DAY
 
 internal fun matchesPreviousInsight(
     insight: String,
@@ -25,6 +28,11 @@ class InsightLocalSource @Inject constructor(
     fun history(clientId: String): Flow<List<InsightDbModel>> = dao.observeHistory(clientId)
 
     suspend fun previous(clientId: String): List<String> = dao.getPrevious(clientId, MAX_STORED_INSIGHTS)
+
+    suspend fun hasInsightToday(clientId: String): Boolean {
+        val start = utcDayStartMillis(System.currentTimeMillis())
+        return dao.hasInsightInPeriod(clientId, start, start + MILLIS_PER_DAY)
+    }
 
     suspend fun save(
         clientId: String,

@@ -6,6 +6,7 @@ import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.datastore.PreferencesStore
+import com.d9tilov.android.insights.domain.DailyInsightLimitException
 import com.d9tilov.android.insights.domain.Insight
 import com.d9tilov.android.insights.domain.InsightLanguageRepository
 import com.d9tilov.android.insights.domain.InsightsRepository
@@ -45,6 +46,7 @@ class InsightsDataRepo @Inject constructor(
     override suspend fun generate(languageTag: String): String =
         generationMutex.withLock {
             val clientId = requireNotNull(preferencesStore.uid.first())
+            if (localSource.hasInsightToday(clientId)) throw DailyInsightLimitException()
             generateNew(clientId, languageTag)
         }
 

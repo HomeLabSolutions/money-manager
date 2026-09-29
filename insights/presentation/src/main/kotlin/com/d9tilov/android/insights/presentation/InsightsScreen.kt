@@ -180,9 +180,10 @@ private fun InsightErrorSnackBar(
 ) {
     if (state is InsightsUiState.Error) {
         val message = stringResource(state.messageRes)
-        val retry = stringResource(R.string.insights_retry)
+        val retry =
+            if (state.messageRes == R.string.insights_daily_limit) null else stringResource(R.string.insights_retry)
         LaunchedEffect(state.messageRes) {
-            if (onShowSnackBar(message, retry)) onGenerateClick()
+            if (onShowSnackBar(message, retry) && retry != null) onGenerateClick()
         }
     }
 }
