@@ -9,6 +9,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.activity.compose)
     implementation(project(":core:common"))
     implementation(project(":insights:domain"))
     implementation(project(":core:designsystem"))

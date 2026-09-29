@@ -1,5 +1,12 @@
 package com.d9tilov.android.insights.presentation
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -54,12 +62,17 @@ fun InsightsRoute(
 ) {
     val state by viewModel.state.collectAsState()
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val notificationPermissionLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { }
     val consentSaveFailed = stringResource(R.string.insights_consent_save_failed)
     var showConsentDialog by remember { mutableStateOf(false) }
     var isSavingConsent by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        showConsentDialog = !consentViewModel.isConsentGranted()
+        val granted = consentViewModel.isConsentGranted()
+        showConsentDialog = !granted
+        if (granted) requestNotificationPermission(context, notificationPermissionLauncher)
     }
 
     val generate: () -> Unit = {
@@ -87,6 +100,7 @@ fun InsightsRoute(
                 try {
                     consentViewModel.grantConsent()
                     showConsentDialog = false
+                    requestNotificationPermission(context, notificationPermissionLauncher)
                     viewModel.generate()
                 } catch (_: IOException) {
                     onShowSnackBar(consentSaveFailed, null)
@@ -99,6 +113,17 @@ fun InsightsRoute(
         },
         onDismiss = { showConsentDialog = false },
     )
+}
+
+private fun requestNotificationPermission(
+    context: Context,
+    launcher: ManagedActivityResultLauncher<String, Boolean>,
+) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+        context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+    ) {
+        launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+    }
 }
 
 @Composable

@@ -22,6 +22,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -47,11 +48,19 @@ import com.d9tilov.moneymanager.navigation.TopLevelDestination
 fun MmApp(
     windowSizeClass: WindowSizeClass,
     appState: MmAppState = rememberMmAppState(windowSizeClass = windowSizeClass),
+    openInsights: Boolean = false,
+    onInsightsOpened: () -> Unit = {},
     locationCurrencyState: LocationCurrencyState,
     onLocationRequest: (permissions: List<String>) -> Unit,
     onDismissClicked: (currencyCode: String?) -> Unit,
     onConfirmClicked: (currencyCode: String?) -> Unit,
 ) {
+    LaunchedEffect(openInsights) {
+        if (openInsights) {
+            appState.navigateToTopLevelDestination(TopLevelDestination.INSIGHTS)
+            onInsightsOpened()
+        }
+    }
     MmBackground {
         val snackBarHostState = remember { SnackbarHostState() }
         Scaffold(

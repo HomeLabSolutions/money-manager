@@ -24,6 +24,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.moneymanager.R
+import com.d9tilov.moneymanager.insights.WeeklyInsightNotification
 import com.d9tilov.moneymanager.prepopulate.PrepopulateScreen
 import com.d9tilov.moneymanager.ui.MmApp
 import com.firebase.ui.auth.AuthUI
@@ -38,6 +39,7 @@ import timber.log.Timber
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
+    private var openInsights by mutableStateOf(false)
 
     private val providers =
         arrayListOf(
@@ -56,6 +58,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+        openInsights = intent?.action == WeeklyInsightNotification.ACTION_OPEN_INSIGHTS
         var uiState: MainActivityUiState by mutableStateOf(MainActivityUiState.Loading)
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -63,6 +66,7 @@ class MainActivity : ComponentActivity() {
                     uiState = state
                     when (uiState) {
                         is MainActivityUiState.Success.Auth -> {
+                            WeeklyInsightNotification(this@MainActivity).cancel()
                             viewModel.setToLoadingState()
                             startForResult.launch(
                                 AuthUI
@@ -95,6 +99,12 @@ class MainActivity : ComponentActivity() {
                 is MainActivityUiState.Success -> false
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        if (intent.action == WeeklyInsightNotification.ACTION_OPEN_INSIGHTS) openInsights = true
     }
 
     @SuppressLint("MissingPermission")
@@ -130,6 +140,8 @@ class MainActivity : ComponentActivity() {
                     is MainActivityUiState.Success.Main -> {
                         MmApp(
                             windowSizeClass = calculateWindowSizeClass(this),
+                            openInsights = openInsights,
+                            onInsightsOpened = { openInsights = false },
                             locationCurrencyState = state.locationCurrencyState,
                             onLocationRequest = { viewModel.onLocationRequest(it) },
                             onConfirmClicked = { viewModel.updateCurrency(it) },
