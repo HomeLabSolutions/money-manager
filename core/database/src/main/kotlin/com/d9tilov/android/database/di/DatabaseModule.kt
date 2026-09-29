@@ -5,8 +5,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.d9tilov.android.core.constants.DataConstants.DATABASE_NAME
 import com.d9tilov.android.database.AppDatabase
-import com.d9tilov.android.database.migration.MIGRATION_1_2
-import com.d9tilov.android.database.migration.MIGRATION_2_3
+import com.d9tilov.android.database.migration.MIGRATION_1_3
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,6 +24,6 @@ object DatabaseModule {
         Room
             .databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
             .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+            .addMigrations(MIGRATION_1_3)
             .build()
 }
