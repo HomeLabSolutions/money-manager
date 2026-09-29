@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -27,6 +28,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -129,12 +131,17 @@ fun InsightsScreen(
             modifier = Modifier.fillMaxSize().padding(paddingValues).padding(horizontal = 16.dp),
         ) {
             InsightHistoryContent(state = state, modifier = Modifier.weight(1f).fillMaxWidth())
-            Button(
-                onClick = onGenerateClick,
-                enabled = state != InsightsUiState.Loading && !isGenerating,
-                modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 16.dp),
+            Box(
+                modifier = Modifier.fillMaxWidth().height(64.dp).padding(bottom = 16.dp),
+                contentAlignment = Alignment.Center,
             ) {
-                Text(stringResource(R.string.insights_generate))
+                if (state == InsightsUiState.Loading || isGenerating) {
+                    CircularProgressIndicator()
+                } else {
+                    Button(onClick = onGenerateClick) {
+                        Text(stringResource(R.string.insights_generate))
+                    }
+                }
             }
         }
     }
@@ -166,17 +173,19 @@ private fun InsightHistoryContent(
             is InsightsUiState.Error -> state.insights
             InsightsUiState.Loading -> emptyList()
         }
-    val isGenerating = state is InsightsUiState.Data && state.isGenerating
     val listState = rememberLazyListState()
     LaunchedEffect(insights.lastOrNull()?.id) {
-        if (insights.isNotEmpty()) listState.animateScrollToItem(insights.lastIndex)
+        if (insights.isNotEmpty()) {
+            withFrameNanos { }
+            listState.animateScrollToItem(insights.lastIndex)
+        }
     }
     when {
         state == InsightsUiState.Loading -> {
-            Box(modifier, contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+            Box(modifier)
         }
 
-        insights.isEmpty() && !isGenerating -> {
+        insights.isEmpty() -> {
             Box(modifier, contentAlignment = Alignment.Center) {
                 Text(
                     text = stringResource(R.string.insights_empty_history),
@@ -194,16 +203,6 @@ private fun InsightHistoryContent(
                 contentPadding = PaddingValues(vertical = 16.dp),
             ) {
                 items(insights, key = Insight::id) { insight -> InsightBubble(insight) }
-                if (isGenerating) {
-                    item {
-                        Surface(
-                            shape = RoundedCornerShape(20.dp),
-                            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.92f),
-                        ) {
-                            CircularProgressIndicator(modifier = Modifier.padding(20.dp))
-                        }
-                    }
-                }
             }
         }
     }
