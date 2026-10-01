@@ -19,6 +19,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.kotlinx.datetime)
     implementation(project(":category:domain:model"))
     implementation(project(":core:common"))
     implementation(project(":transaction:domain:model"))

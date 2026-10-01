@@ -8,6 +8,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.billing)
 
     implementation(project(":billing:domain:contract"))
     implementation(project(":billing:domain:model"))

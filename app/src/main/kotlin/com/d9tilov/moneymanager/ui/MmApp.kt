@@ -1,6 +1,9 @@
 package com.d9tilov.moneymanager.ui
 
 import android.Manifest
+import android.content.Intent
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,13 +25,14 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.core.util.Consumer
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.d9tilov.android.common.android.ui.permissions.PermissionBox
@@ -48,18 +52,19 @@ import com.d9tilov.moneymanager.navigation.TopLevelDestination
 fun MmApp(
     windowSizeClass: WindowSizeClass,
     appState: MmAppState = rememberMmAppState(windowSizeClass = windowSizeClass),
-    openInsights: Boolean = false,
-    onInsightsOpened: () -> Unit = {},
     locationCurrencyState: LocationCurrencyState,
     onLocationRequest: (permissions: List<String>) -> Unit,
     onDismissClicked: (currencyCode: String?) -> Unit,
     onConfirmClicked: (currencyCode: String?) -> Unit,
 ) {
-    LaunchedEffect(openInsights) {
-        if (openInsights) {
-            appState.navigateToTopLevelDestination(TopLevelDestination.INSIGHTS)
-            onInsightsOpened()
-        }
+    val activity = LocalActivity.current as? ComponentActivity
+    DisposableEffect(activity, appState.navController) {
+        val listener =
+            Consumer<Intent> { intent ->
+                appState.navController.handleDeepLink(intent)
+            }
+        activity?.addOnNewIntentListener(listener)
+        onDispose { activity?.removeOnNewIntentListener(listener) }
     }
     MmBackground {
         val snackBarHostState = remember { SnackbarHostState() }

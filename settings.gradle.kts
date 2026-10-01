@@ -59,6 +59,8 @@ include(":insights:data")
 include(":insights:domain")
 include(":insights:presentation")
 
+include(":notification")
+
 include(":profile:ui")
 
 include(":settings:ui")

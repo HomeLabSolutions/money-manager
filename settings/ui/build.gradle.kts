@@ -14,6 +14,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.billing)
     implementation(project(":analytics:domain"))
     implementation(project(":backup:data:impl"))
     implementation(project(":backup:domain:contract"))

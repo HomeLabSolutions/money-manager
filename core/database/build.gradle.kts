@@ -21,7 +21,8 @@ android {
 }
 
 dependencies {
-    api(libs.room.runtime.android)
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.room.runtime.android)
 
     implementation(project(":core:common"))
     implementation(libs.hilt.android)

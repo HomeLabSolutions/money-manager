@@ -13,6 +13,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.kotlinx.datetime)
     implementation(project(":analytics:domain"))
     implementation(project(":backup:data:impl"))
     implementation(project(":billing:domain:contract"))
