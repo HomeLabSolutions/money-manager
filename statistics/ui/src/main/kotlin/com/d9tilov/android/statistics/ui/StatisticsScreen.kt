@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,9 +37,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
@@ -48,6 +55,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -85,9 +93,11 @@ import com.d9tilov.android.transaction.domain.model.TransactionChartModel
 import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
 import kotlin.math.abs
+import kotlin.math.roundToInt
 
 private const val ANIMATION_DURATION = 300
-private const val PIE_CHART_WEIGHT = 3f
+private const val CHART_HEIGHT_FRACTION = 0.6f
+private val COLLAPSED_LIST_TOP_PADDING = 32.dp
 
 @Composable
 fun StatisticsRoute(
@@ -137,25 +147,40 @@ fun StatisticsScreen(
         )
         StatisticsMenuSelector(state = state.statisticsMenuState, onClick = onMenuClick)
 
-        StatisticsChartWithSwipe(
-            modifier = Modifier.weight(if (state.chartState.pieData.isEmpty()) 1f else PIE_CHART_WEIGHT),
-            periodState = state.periodState,
-            pieData = state.chartState.pieData,
-            onPrevClicked = onPrevClicked,
-            onNextClicked = onNextClicked,
-        )
-
-        if (state.chartState.pieData.isNotEmpty()) {
-            StatisticsList(
-                modifier = Modifier.weight(2f),
-                state = state.detailsTransactionListState,
-                transactionType = state.statisticsMenuState.transactionType,
-                onItemClick = {
-                    onTransactionClicked(
-                        TransactionDetailsChartModel(
-                            it.category.id,
-                            state.statisticsMenuState.inStatistics == StatisticsMenuInStatisticsType.InStatisticsType,
-                        ),
+        if (state.chartState.pieData.isEmpty()) {
+            StatisticsChartWithSwipe(
+                modifier = Modifier.weight(1f),
+                periodState = state.periodState,
+                pieData = state.chartState.pieData,
+                onPrevClicked = onPrevClicked,
+                onNextClicked = onNextClicked,
+            )
+        } else {
+            CollapsingStatisticsContent(
+                modifier = Modifier.weight(1f),
+                chart = {
+                    StatisticsChartWithSwipe(
+                        modifier = Modifier.fillMaxSize(),
+                        periodState = state.periodState,
+                        pieData = state.chartState.pieData,
+                        onPrevClicked = onPrevClicked,
+                        onNextClicked = onNextClicked,
+                    )
+                },
+                list = {
+                    StatisticsList(
+                        modifier = it,
+                        state = state.detailsTransactionListState,
+                        transactionType = state.statisticsMenuState.transactionType,
+                        onItemClick = { transaction ->
+                            onTransactionClicked(
+                                TransactionDetailsChartModel(
+                                    transaction.category.id,
+                                    state.statisticsMenuState.inStatistics ==
+                                        StatisticsMenuInStatisticsType.InStatisticsType,
+                                ),
+                            )
+                        },
                     )
                 },
             )
@@ -174,6 +199,73 @@ fun StatisticsScreen(
             },
             onDismiss = { showDatePicker.value = false },
         )
+    }
+}
+
+@Composable
+private fun CollapsingStatisticsContent(
+    modifier: Modifier,
+    chart: @Composable () -> Unit,
+    list: @Composable (Modifier) -> Unit,
+) {
+    BoxWithConstraints(modifier.fillMaxSize()) {
+        val chartHeightPx = constraints.maxHeight * CHART_HEIGHT_FRACTION
+        var chartOffset by remember(chartHeightPx) { mutableFloatStateOf(0f) }
+        val scrollConnection =
+            remember(chartHeightPx) {
+                object : NestedScrollConnection {
+                    fun consumeScroll(delta: Float): Offset {
+                        val previousOffset = chartOffset
+                        chartOffset = (chartOffset + delta).coerceIn(-chartHeightPx, 0f)
+                        return Offset(0f, chartOffset - previousOffset)
+                    }
+
+                    override fun onPreScroll(
+                        available: Offset,
+                        source: NestedScrollSource,
+                    ): Offset = if (available.y < 0f) consumeScroll(available.y) else Offset.Zero
+
+                    override fun onPostScroll(
+                        consumed: Offset,
+                        available: Offset,
+                        source: NestedScrollSource,
+                    ): Offset = if (available.y > 0f) consumeScroll(available.y) else Offset.Zero
+                }
+            }
+        Column(Modifier.fillMaxSize().nestedScroll(scrollConnection)) {
+            CollapsingStatisticsChart(chartHeightPx, { chartOffset }, chart)
+            val collapseFraction = (-chartOffset / chartHeightPx).coerceIn(0f, 1f)
+            list(Modifier.weight(1f).padding(top = COLLAPSED_LIST_TOP_PADDING * collapseFraction))
+        }
+    }
+}
+
+@Composable
+private fun CollapsingStatisticsChart(
+    expandedHeightPx: Float,
+    offset: () -> Float,
+    chart: @Composable () -> Unit,
+) {
+    // Measure at the expanded height so the chart scales as a whole while the list grows.
+    Layout(
+        modifier = Modifier.fillMaxWidth().clipToBounds(),
+        content = chart,
+    ) { measurables, constraints ->
+        val expandedHeight = expandedHeightPx.roundToInt()
+        val visibleHeight = (expandedHeightPx + offset()).roundToInt().coerceAtLeast(0)
+        val placeable =
+            measurables.single().measure(
+                Constraints.fixed(constraints.maxWidth, expandedHeight),
+            )
+        layout(constraints.maxWidth, visibleHeight) {
+            placeable.placeWithLayer(0, 0) {
+                val fraction = if (expandedHeightPx > 0f) visibleHeight / expandedHeightPx else 0f
+                scaleX = fraction
+                scaleY = fraction
+                alpha = fraction
+                translationY = offset() / 2f
+            }
+        }
     }
 }
 
