@@ -246,7 +246,6 @@ private fun CollapsingStatisticsChart(
     offset: () -> Float,
     chart: @Composable () -> Unit,
 ) {
-    // Measure at the expanded height so the chart scales as a whole while the list grows.
     Layout(
         modifier = Modifier.fillMaxWidth().clipToBounds(),
         content = chart,
