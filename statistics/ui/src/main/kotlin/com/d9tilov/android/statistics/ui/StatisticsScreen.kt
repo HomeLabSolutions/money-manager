@@ -97,7 +97,6 @@ import kotlin.math.roundToInt
 
 private const val ANIMATION_DURATION = 300
 private const val CHART_HEIGHT_FRACTION = 0.6f
-private val COLLAPSED_LIST_TOP_PADDING = 32.dp
 
 @Composable
 fun StatisticsRoute(
@@ -235,7 +234,8 @@ private fun CollapsingStatisticsContent(
         Column(Modifier.fillMaxSize().nestedScroll(scrollConnection)) {
             CollapsingStatisticsChart(chartHeightPx, { chartOffset }, chart)
             val collapseFraction = (-chartOffset / chartHeightPx).coerceIn(0f, 1f)
-            list(Modifier.weight(1f).padding(top = COLLAPSED_LIST_TOP_PADDING * collapseFraction))
+            val listTopPadding = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large)
+            list(Modifier.weight(1f).padding(top = listTopPadding * collapseFraction))
         }
     }
 }
