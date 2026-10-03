@@ -1,5 +1,6 @@
 package com.d9tilov.android.insights.data
 
+import com.d9tilov.android.insights.data.InsightsDataRepo.Companion.hasTwoWeeksOfHistory
 import kotlinx.datetime.LocalDate
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

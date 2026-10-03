@@ -18,6 +18,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.daysUntil
 import kotlinx.datetime.minus
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -103,5 +105,15 @@ class InsightsDataRepo @Inject constructor(
         check(insight.length <= MAX_INSIGHT_TEXT_LENGTH)
         localSource.save(clientId, insight)
         return insight
+    }
+
+    internal companion object {
+        private const val MIN_INSIGHT_HISTORY_DAYS = 14
+
+        internal fun hasTwoWeeksOfHistory(dates: List<LocalDate>): Boolean {
+            val first = dates.minOrNull() ?: return false
+            val last = dates.maxOrNull() ?: return false
+            return first.daysUntil(last) >= MIN_INSIGHT_HISTORY_DAYS
+        }
     }
 }
