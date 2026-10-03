@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 3,
-    "identityHash": "932dd29ccdebdc54fba8a3b52ca25982",
+    "version": 2,
+    "identityHash": "23f1697cee689b21061f3811b81e6053",
     "entities": [
       {
         "tableName": "users",
@@ -608,7 +608,7 @@
       },
       {
         "tableName": "insights",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `clientId` TEXT NOT NULL, `createdAtMillis` INTEGER NOT NULL, `text` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `clientId` TEXT NOT NULL, `text` TEXT NOT NULL, `createdDate` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -623,15 +623,15 @@
             "notNull": true
           },
           {
-            "fieldPath": "createdAtMillis",
-            "columnName": "createdAtMillis",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
             "fieldPath": "text",
             "columnName": "text",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdDate",
+            "columnName": "createdDate",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -643,21 +643,21 @@
         },
         "indices": [
           {
-            "name": "index_insights_clientId_createdAtMillis",
+            "name": "index_insights_clientId_createdDate",
             "unique": false,
             "columnNames": [
               "clientId",
-              "createdAtMillis"
+              "createdDate"
             ],
             "orders": [],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_insights_clientId_createdAtMillis` ON `${TABLE_NAME}` (`clientId`, `createdAtMillis`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_insights_clientId_createdDate` ON `${TABLE_NAME}` (`clientId`, `createdDate`)"
           }
         ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '932dd29ccdebdc54fba8a3b52ca25982')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '23f1697cee689b21061f3811b81e6053')"
     ]
   }
 }

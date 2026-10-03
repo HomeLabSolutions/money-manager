@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface InsightDao {
     @Query(
         "SELECT * FROM insights WHERE clientId = :clientId " +
-            "AND createdAtMillis >= :from AND createdAtMillis < :to ORDER BY createdAtMillis ASC",
+            "AND createdDate >= :from AND createdDate < :to ORDER BY createdDate ASC",
     )
     fun get(
         clientId: String,
@@ -24,7 +24,7 @@ interface InsightDao {
 
     @Query(
         "DELETE FROM insights WHERE clientId = :clientId AND id NOT IN " +
-            "(SELECT id FROM insights WHERE clientId = :clientId ORDER BY createdAtMillis DESC, id DESC LIMIT :limit)",
+            "(SELECT id FROM insights WHERE clientId = :clientId ORDER BY createdDate DESC, id DESC LIMIT :limit)",
     )
     suspend fun keepLatest(
         clientId: String,

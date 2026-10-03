@@ -5,6 +5,7 @@ import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getStartOfDay
+import com.d9tilov.android.core.utils.toMillis
 import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.insights.domain.DailyInsightLimitException
 import com.d9tilov.android.insights.domain.Insight
@@ -36,7 +37,7 @@ class InsightsDataRepo @Inject constructor(
     override fun history(): Flow<List<Insight>> =
         preferencesStore.uid.filterNotNull().flatMapLatest { clientId ->
             localSource.history(clientId).map { rows ->
-                rows.map { Insight(id = it.id, createdAtMillis = it.createdAtMillis, text = it.text) }
+                rows.map { Insight(id = it.id, createdAtMillis = it.createdDate.toMillis(), text = it.text) }
             }
         }
 

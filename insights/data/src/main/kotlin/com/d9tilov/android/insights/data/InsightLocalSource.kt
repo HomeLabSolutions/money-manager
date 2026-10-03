@@ -1,6 +1,7 @@
 package com.d9tilov.android.insights.data
 
 import com.d9tilov.android.core.utils.currentDate
+import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.core.utils.toMillis
 import com.d9tilov.android.database.dao.InsightDao
@@ -32,7 +33,7 @@ class InsightLocalSource @Inject constructor(
         text: String,
     ) {
         dao.upsertAndKeepLatest(
-            InsightDbModel(clientId = clientId, createdAtMillis = System.currentTimeMillis(), text = text),
+            InsightDbModel(clientId = clientId, text = text, createdDate = currentDateTime()),
             MAX_STORED_INSIGHTS,
         )
     }
