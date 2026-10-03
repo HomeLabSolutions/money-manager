@@ -7,7 +7,6 @@ import com.d9tilov.android.insights.domain.DailyInsightLimitException
 import com.d9tilov.android.insights.domain.Insight
 import com.d9tilov.android.insights.domain.InsightsRepository
 import com.d9tilov.android.insights.domain.InsufficientInsightsDataException
-import com.d9tilov.android.insights.domain.NoNewInsightException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
@@ -78,8 +77,6 @@ class InsightsViewModel @Inject constructor(
                 setError(R.string.insights_insufficient_data)
             } catch (_: DailyInsightLimitException) {
                 setError(R.string.insights_daily_limit)
-            } catch (_: NoNewInsightException) {
-                setError(R.string.insights_no_new_insight)
             } catch (_: Exception) {
                 setError(R.string.insights_unavailable_message)
             }

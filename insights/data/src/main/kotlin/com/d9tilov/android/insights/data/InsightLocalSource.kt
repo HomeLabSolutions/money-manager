@@ -8,21 +8,11 @@ import com.d9tilov.android.database.entity.InsightDbModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.plus
-import java.util.Locale
 import javax.inject.Inject
 
 internal const val INSIGHT_WINDOW_DAYS = 90
 private const val MAX_STORED_INSIGHTS = INSIGHT_WINDOW_DAYS
 internal const val MAX_INSIGHT_TEXT_LENGTH = 1000
-
-internal fun matchesPreviousInsight(
-    insight: String,
-    previous: List<String>,
-): Boolean {
-    fun normalize(text: String): String = text.trim().replace(Regex("\\s+"), " ").lowercase(Locale.ROOT)
-    val normalized = normalize(insight)
-    return previous.any { normalize(it) == normalized }
-}
 
 class InsightLocalSource @Inject constructor(
     private val dao: InsightDao,

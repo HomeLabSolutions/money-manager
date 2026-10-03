@@ -11,7 +11,6 @@ import com.d9tilov.android.insights.domain.Insight
 import com.d9tilov.android.insights.domain.InsightLanguageRepository
 import com.d9tilov.android.insights.domain.InsightsRepository
 import com.d9tilov.android.insights.domain.InsufficientInsightsDataException
-import com.d9tilov.android.insights.domain.NoNewInsightException
 import com.d9tilov.android.transaction.data.contract.TransactionSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
@@ -102,9 +101,6 @@ class InsightsDataRepo @Inject constructor(
                 previousInsights = previous,
             )
         check(insight.length <= MAX_INSIGHT_TEXT_LENGTH)
-        if (matchesPreviousInsight(insight, previous)) {
-            throw NoNewInsightException()
-        }
         localSource.save(clientId, insight)
         return insight
     }

@@ -17,7 +17,6 @@ import com.d9tilov.android.insights.domain.DailyInsightLimitException
 import com.d9tilov.android.insights.domain.InsightsConsentRepository
 import com.d9tilov.android.insights.domain.InsightsRepository
 import com.d9tilov.android.insights.domain.InsufficientInsightsDataException
-import com.d9tilov.android.insights.domain.NoNewInsightException
 import com.d9tilov.android.insights.domain.WeeklyInsightNotification
 import com.d9tilov.android.insights.presentation.notification.WeeklyInsightNotificationSender
 import com.google.firebase.auth.FirebaseAuth
@@ -55,8 +54,6 @@ class WeeklyInsightWorker @AssistedInject constructor(
         } catch (_: InsufficientInsightsDataException) {
             Result.failure()
         } catch (_: DailyInsightLimitException) {
-            Result.failure()
-        } catch (_: NoNewInsightException) {
             Result.failure()
         } catch (error: Exception) {
             Timber.w(error, "Unable to generate weekly insight")
