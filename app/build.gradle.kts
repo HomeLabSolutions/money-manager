@@ -129,7 +129,6 @@ dependencies {
     implementation(project(":currency:ui"))
     implementation(project(":incomeexpense:ui"))
     implementation(project(":insights:data"))
-    implementation(project(":insights:domain"))
     implementation(project(":insights:presentation"))
     implementation(project(":notification"))
     implementation(project(":profile:ui"))

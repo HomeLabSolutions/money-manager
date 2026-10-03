@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.insights
+package com.d9tilov.android.insights.presentation.worker
 
 import android.content.Context
 import androidx.hilt.work.HiltWorker
@@ -18,6 +18,8 @@ import com.d9tilov.android.insights.domain.InsightsConsentRepository
 import com.d9tilov.android.insights.domain.InsightsRepository
 import com.d9tilov.android.insights.domain.InsufficientInsightsDataException
 import com.d9tilov.android.insights.domain.NoNewInsightException
+import com.d9tilov.android.insights.domain.WeeklyInsightNotification
+import com.d9tilov.android.insights.presentation.notification.WeeklyInsightNotificationSender
 import com.google.firebase.auth.FirebaseAuth
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -87,7 +89,7 @@ class WeeklyInsightWorker @AssistedInject constructor(
             workManager.cancelUniqueWork(LEGACY_WORK_NAME)
             workManager.enqueueUniquePeriodicWork(
                 WORK_NAME,
-                ExistingPeriodicWorkPolicy.KEEP,
+                ExistingPeriodicWorkPolicy.UPDATE,
                 request,
             )
         }

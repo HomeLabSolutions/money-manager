@@ -1,4 +1,4 @@
-package com.d9tilov.moneymanager.insights
+package com.d9tilov.android.insights.presentation.notification
 
 import android.app.PendingIntent
 import android.content.Context
@@ -6,11 +6,11 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.net.toUri
+import com.d9tilov.android.insights.domain.WeeklyInsightNotification
+import com.d9tilov.android.insights.presentation.R
 import com.d9tilov.android.insights.presentation.navigation.INSIGHTS_DEEP_LINK_URI
 import com.d9tilov.android.notification.MoneyManagerNotificationManager
 import com.d9tilov.android.notification.NotificationSender
-import com.d9tilov.moneymanager.R
-import com.d9tilov.moneymanager.home.MainActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -21,7 +21,7 @@ class WeeklyInsightNotificationSender @Inject constructor(
     override fun send(data: WeeklyInsightNotification) {
         notificationManager.createChannel(CHANNEL_ID, context.getString(R.string.weekly_insight_channel))
         val intent =
-            Intent(context, MainActivity::class.java).apply {
+            checkNotNull(context.packageManager.getLaunchIntentForPackage(context.packageName)).apply {
                 action = Intent.ACTION_VIEW
                 this.data = INSIGHTS_DEEP_LINK_URI.toUri()
             }
