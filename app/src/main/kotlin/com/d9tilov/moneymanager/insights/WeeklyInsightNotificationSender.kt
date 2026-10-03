@@ -13,7 +13,7 @@ import com.d9tilov.moneymanager.home.MainActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class WeeklyInsightNotification @Inject constructor(
+class WeeklyInsightNotificationSender @Inject constructor(
     @ApplicationContext private val context: Context,
     private val notificationManager: MoneyManagerNotificationManager,
 ) {

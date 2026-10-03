@@ -34,7 +34,7 @@ class WeeklyInsightWorker @AssistedInject constructor(
     private val preferencesStore: PreferencesStore,
     private val consentRepository: InsightsConsentRepository,
     private val insightsRepository: InsightsRepository,
-    private val notification: WeeklyInsightNotification,
+    private val notification: WeeklyInsightNotificationSender,
 ) : CoroutineWorker(context, workerParameters) {
     override suspend fun getForegroundInfo(): ForegroundInfo = context.syncForegroundInfo()
 

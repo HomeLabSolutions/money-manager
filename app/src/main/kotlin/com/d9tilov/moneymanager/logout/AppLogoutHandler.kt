@@ -11,7 +11,7 @@ import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.transaction.regular.data.impl.worker.RegularTransactionSyncWorker
 import com.d9tilov.android.user.domain.contract.UserInteractor
-import com.d9tilov.moneymanager.insights.WeeklyInsightNotification
+import com.d9tilov.moneymanager.insights.WeeklyInsightNotificationSender
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -20,7 +20,7 @@ import javax.inject.Named
 
 class AppLogoutHandler @Inject constructor(
     private val application: Application,
-    private val notification: WeeklyInsightNotification,
+    private val notification: WeeklyInsightNotificationSender,
     private val userInfoInteractor: UserInteractor,
     private val preferencesStore: PreferencesStore,
     private val analyticsSender: AnalyticsSender,

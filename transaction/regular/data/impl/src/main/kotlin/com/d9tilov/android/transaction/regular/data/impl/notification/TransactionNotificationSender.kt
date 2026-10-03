@@ -16,7 +16,7 @@ import com.d9tilov.android.transaction.regular.impl.R
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class TransactionNotificationManager
+class TransactionNotificationSender
     @Inject
     constructor(
         @ApplicationContext private val context: Context,
