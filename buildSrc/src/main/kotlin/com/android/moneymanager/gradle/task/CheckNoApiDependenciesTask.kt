@@ -33,10 +33,11 @@ abstract class CheckNoApiDependenciesTask : DefaultTask() {
 
     @TaskAction
     fun checkDependencies() {
-        val violations = forbiddenDependencies.get().distinct().sorted()
+        val violations = forbiddenDependencies.get().distinct()
         if (violations.isNotEmpty()) {
+            val sortedViolations = violations.sorted()
             throw GradleException(
-                "API dependencies are forbidden. Use implementation instead:\n${violations.joinToString("\n")}",
+                "API dependencies are forbidden. Use implementation instead:\n${sortedViolations.joinToString("\n")}",
             )
         }
     }
