@@ -11,6 +11,7 @@ import com.d9tilov.android.database.dao.BudgetDao
 import com.d9tilov.android.database.dao.CategoryDao
 import com.d9tilov.android.database.dao.CurrencyListDao
 import com.d9tilov.android.database.dao.GoalDao
+import com.d9tilov.android.database.dao.InsightDao
 import com.d9tilov.android.database.dao.MainCurrencyDao
 import com.d9tilov.android.database.dao.RegularTransactionDao
 import com.d9tilov.android.database.dao.TransactionDao
@@ -19,6 +20,7 @@ import com.d9tilov.android.database.entity.BudgetDbModel
 import com.d9tilov.android.database.entity.CategoryDbModel
 import com.d9tilov.android.database.entity.CurrencyDbModel
 import com.d9tilov.android.database.entity.GoalDbModel
+import com.d9tilov.android.database.entity.InsightDbModel
 import com.d9tilov.android.database.entity.MainCurrencyDbModel
 import com.d9tilov.android.database.entity.RegularTransactionDbModel
 import com.d9tilov.android.database.entity.TransactionDbModel
@@ -34,6 +36,7 @@ import com.d9tilov.android.database.entity.UserDbModel
         MainCurrencyDbModel::class,
         RegularTransactionDbModel::class,
         GoalDbModel::class,
+        InsightDbModel::class,
     ],
     version = VERSION_NUMBER,
     exportSchema = true,
@@ -60,7 +63,9 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun goalDao(): GoalDao
 
+    abstract fun insightDao(): InsightDao
+
     companion object {
-        const val VERSION_NUMBER = 1
+        const val VERSION_NUMBER = 2
     }
 }

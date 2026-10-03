@@ -18,9 +18,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -33,7 +36,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -43,8 +45,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.d9tilov.android.backup.data.impl.PeriodicBackupWorker
-import com.d9tilov.android.common.android.ui.logout.logout
 import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
@@ -54,7 +54,6 @@ import com.d9tilov.android.settings.ui.vm.BackupState
 import com.d9tilov.android.settings.ui.vm.SettingsUiState
 import com.d9tilov.android.settings.ui.vm.SettingsViewModel
 import com.d9tilov.android.settings.ui.vm.SubscriptionUiState
-import com.d9tilov.android.transaction.regular.data.impl.worker.RegularTransactionSyncWorker
 
 @Composable
 fun SettingsRoute(
@@ -63,25 +62,16 @@ fun SettingsRoute(
     onShowSnackBar: suspend (String, String?) -> Boolean,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
     SettingsScreen(
         uiState = uiState,
         onPeriodDateChanged = viewModel::changeFiscalDay,
+        onInsightLanguageChanged = viewModel::changeInsightLanguage,
         messageId = viewModel.message,
         onShowSnackBar = onShowSnackBar,
-        onSave = {
-            viewModel.save()
-            clickBack()
-        },
+        onSave = { viewModel.save(clickBack) },
         onBackupClick = viewModel::backup,
         onClearBackupClick = viewModel::deleteBackup,
-        onAccountDeleteClick = {
-            viewModel.deleteAccount {
-                PeriodicBackupWorker.stopPeriodicJob(context)
-                RegularTransactionSyncWorker.stopPeriodicJob(context)
-                context.logout()
-            }
-        },
+        onAccountDeleteClick = viewModel::deleteAccount,
         onClickBack = clickBack,
     )
 }
@@ -91,6 +81,7 @@ fun SettingsScreen(
     uiState: SettingsUiState,
     modifier: Modifier = Modifier,
     onPeriodDateChanged: (String) -> Unit,
+    onInsightLanguageChanged: (String) -> Unit = {},
     messageId: Int? = null,
     onShowSnackBar: suspend (String, String?) -> Boolean,
     onSave: () -> Unit = {},
@@ -133,6 +124,16 @@ fun SettingsScreen(
                             horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
                         ),
                 onPeriodDateChanged = onPeriodDateChanged,
+            )
+            InsightLanguageLayout(
+                language = uiState.insightLanguage,
+                onLanguageChanged = onInsightLanguageChanged,
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                        ),
             )
             BackupLayout(
                 backupState = uiState.backupState,
@@ -193,6 +194,56 @@ fun SettingsScreen(
                 }
 
                 DialogType.NONE -> { /* no-op */ }
+            }
+        }
+    }
+}
+
+@Composable
+private fun InsightLanguageLayout(
+    language: String,
+    onLanguageChanged: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val expanded = remember { mutableStateOf(false) }
+    val options =
+        listOf(
+            "" to R.string.settings_insight_language_system,
+            "en" to R.string.settings_insight_language_english,
+            "ru" to R.string.settings_insight_language_russian,
+            "es" to R.string.settings_insight_language_spanish,
+            "pt" to R.string.settings_insight_language_portuguese,
+            "ar" to R.string.settings_insight_language_arabic,
+            "hi" to R.string.settings_insight_language_hindi,
+            "zh-CN" to R.string.settings_insight_language_chinese,
+        )
+    Row(modifier = modifier.padding(top = 16.dp), verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            text = stringResource(R.string.settings_insight_language),
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.weight(1f),
+        )
+        Box {
+            OutlinedButton(onClick = { expanded.value = true }) {
+                Text(
+                    stringResource(
+                        options
+                            .firstOrNull {
+                                it.first == language
+                            }?.second ?: R.string.settings_insight_language_system,
+                    ),
+                )
+            }
+            DropdownMenu(expanded = expanded.value, onDismissRequest = { expanded.value = false }) {
+                options.forEach { (tag, label) ->
+                    DropdownMenuItem(
+                        text = { Text(stringResource(label)) },
+                        onClick = {
+                            onLanguageChanged(tag)
+                            expanded.value = false
+                        },
+                    )
+                }
             }
         }
     }

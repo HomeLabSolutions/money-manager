@@ -8,16 +8,19 @@ android {
 }
 
 dependencies {
+    implementation(libs.kotlinx.datetime)
     implementation(project(":category:domain:model"))
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
+    implementation(project(":notification"))
     implementation(project(":transaction:domain:contract"))
     implementation(project(":transaction:regular:data:contract"))
     implementation(project(":transaction:regular:domain:contract"))
     implementation(project(":transaction:regular:domain:model"))
     implementation(libs.androidx.hilt.work)
+    implementation(libs.androidx.core)
     implementation(libs.androidx.work.runtime)
     implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)

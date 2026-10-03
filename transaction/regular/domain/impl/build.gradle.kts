@@ -3,6 +3,7 @@ plugins {
 }
 
 dependencies {
+    implementation(libs.kotlinx.datetime)
     implementation(project(":category:domain:contract"))
     implementation(project(":category:domain:model"))
     implementation(project(":core:common"))

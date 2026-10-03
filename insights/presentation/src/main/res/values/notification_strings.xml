@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="weekly_insight_channel">Weekly insights</string>
+    <string name="weekly_insight_title">Your weekly insight</string>
+</resources>

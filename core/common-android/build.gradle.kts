@@ -15,7 +15,8 @@ android {
 }
 
 dependencies {
-    api(libs.appcompat)
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.appcompat)
 
     implementation(project(":core:common"))
     implementation(libs.accompanist.permissions)

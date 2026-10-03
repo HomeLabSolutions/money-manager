@@ -11,6 +11,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.d9tilov.android.core.constants.DataConstants.DATA_STORE_NAME
 import com.d9tilov.android.core.constants.DataConstants.PREFERENCE_CLIENT_UID
+import com.d9tilov.android.core.constants.DataConstants.PREFERENCE_INSIGHTS_CONSENT_UID
 import com.d9tilov.android.core.constants.DataConstants.PREFERENCE_LAST_BACKUP_DATE
 import com.d9tilov.android.core.constants.DataConstants.PREFERENCE_LOCAL_CURRENCY
 import com.d9tilov.android.core.constants.DataConstants.STORE_NAME
@@ -28,6 +29,26 @@ class PreferencesStore(
     private val dataStore: DataStore<Preferences> = context.dataStore
 
     val uid: Flow<String?> = dataStore.data.map { data -> data[PREFERENCE_CLIENT_UID_KEY] }
+
+    val insightsConsentGranted: Flow<Boolean> =
+        dataStore.data.map { data ->
+            val currentUid = data[PREFERENCE_CLIENT_UID_KEY]
+            currentUid != null &&
+                data[PREFERENCE_INSIGHTS_CONSENT_UID_KEY] == currentUid
+        }
+
+    suspend fun grantInsightsConsent() {
+        dataStore.edit { preferences ->
+            val currentUid = requireNotNull(preferences[PREFERENCE_CLIENT_UID_KEY])
+            preferences[PREFERENCE_INSIGHTS_CONSENT_UID_KEY] = currentUid
+        }
+    }
+
+    suspend fun revokeInsightsConsent() {
+        dataStore.edit { preferences ->
+            preferences.remove(PREFERENCE_INSIGHTS_CONSENT_UID_KEY)
+        }
+    }
 
     suspend fun updateUid(uid: String) {
         dataStore.edit { preferences -> preferences[PREFERENCE_CLIENT_UID_KEY] = uid }
@@ -55,6 +76,7 @@ class PreferencesStore(
     }
 
     companion object {
+        private val PREFERENCE_INSIGHTS_CONSENT_UID_KEY = stringPreferencesKey(PREFERENCE_INSIGHTS_CONSENT_UID)
         private val PREFERENCE_LAST_BACKUP_DATE_KEY =
             longPreferencesKey(PREFERENCE_LAST_BACKUP_DATE)
         private val PREFERENCE_CLIENT_UID_KEY = stringPreferencesKey(PREFERENCE_CLIENT_UID)

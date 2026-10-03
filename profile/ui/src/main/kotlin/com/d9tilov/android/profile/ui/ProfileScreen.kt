@@ -42,8 +42,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.d9tilov.android.backup.data.impl.PeriodicBackupWorker
-import com.d9tilov.android.common.android.ui.logout.logout
 import com.d9tilov.android.common.android.utils.getAppVersion
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
@@ -55,7 +53,6 @@ import com.d9tilov.android.profile.ui.vm.ProfileUiItem
 import com.d9tilov.android.profile.ui.vm.ProfileUiState
 import com.d9tilov.android.profile.ui.vm.ProfileViewModel
 import com.d9tilov.android.profile.ui.vm.UserUiProfile
-import com.d9tilov.android.transaction.regular.data.impl.worker.RegularTransactionSyncWorker
 
 @Composable
 fun ProfileRoute(
@@ -68,7 +65,6 @@ fun ProfileRoute(
 ) {
     val uiState: ProfileUiState by viewModel.profileState.collectAsStateWithLifecycle()
     val showDialog by viewModel.showDialog.collectAsStateWithLifecycle()
-    val context = LocalContext.current
     Scaffold { paddingValues ->
         ProfileScreen(
             modifier = Modifier.padding(paddingValues),
@@ -80,13 +76,7 @@ fun ProfileRoute(
             onRegularExpenseClicked = navigateToRegularExpenseScreen,
             onSettingsClicked = navigateToSettingsScreen,
             onLogoutClicked = { viewModel.showDialog() },
-            onLogoutConfirmClicked = {
-                viewModel.logout {
-                    PeriodicBackupWorker.stopPeriodicJob(context)
-                    RegularTransactionSyncWorker.stopPeriodicJob(context)
-                    context.logout()
-                }
-            },
+            onLogoutConfirmClicked = viewModel::logout,
             onLogoutDismissClicked = { viewModel.dismissDialog() },
         )
     }

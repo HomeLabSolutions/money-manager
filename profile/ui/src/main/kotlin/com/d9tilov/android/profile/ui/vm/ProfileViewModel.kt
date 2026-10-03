@@ -10,6 +10,7 @@ import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.budget.domain.model.BudgetData
+import com.d9tilov.android.common.android.ui.logout.LogoutHandler
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
@@ -27,7 +28,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 sealed class ProfileUiItem {
@@ -73,6 +73,7 @@ class ProfileViewModel
     constructor(
         private val analyticsSender: AnalyticsSender,
         private val userInfoInteractor: UserInteractor,
+        private val logoutHandler: LogoutHandler,
         currencyInteractor: CurrencyInteractor,
         budgetInteractor: BudgetInteractor,
         regularTransactionInteractor: RegularTransactionInteractor,
@@ -130,14 +131,8 @@ class ProfileViewModel
             _showDialog.value = false
         }
 
-        fun logout(navigateCallback: () -> Unit) {
-            viewModelScope.launch(Dispatchers.IO) {
-                userInfoInteractor.deleteUser()
-                analyticsSender.send(
-                    AnalyticsEvent.Client.Auth,
-                    mapOf(AnalyticsParams.Auth.Action to "logout"),
-                )
-                withContext(Dispatchers.Main) { navigateCallback() }
+        fun logout() =
+            viewModelScope.launch {
+                logoutHandler.onLogout()
             }
-        }
     }

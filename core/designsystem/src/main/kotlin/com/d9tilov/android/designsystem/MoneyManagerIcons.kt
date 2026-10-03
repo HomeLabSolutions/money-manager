@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.material.icons.rounded.AddTask
+import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.rounded.BarChart
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.KeyboardHide
@@ -25,6 +26,7 @@ import androidx.compose.material.icons.rounded.Settings
 object MoneyManagerIcons {
     val FormatList = Icons.AutoMirrored.Rounded.List
     val Chart = Icons.Rounded.BarChart
+    val Insights = Icons.Rounded.AutoAwesome
     val Profile = Icons.Rounded.Settings
     val ArrowBack = Icons.AutoMirrored.Rounded.ArrowBack
     val ArrowForward = Icons.AutoMirrored.Rounded.ArrowForward

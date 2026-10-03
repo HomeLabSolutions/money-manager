@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 
@@ -20,9 +21,10 @@ import androidx.navigation.compose.composable
 fun NavGraphBuilder.roundedBackComposable(
     route: String,
     arguments: List<NamedNavArgument> = emptyList(),
+    deepLinks: List<NavDeepLink> = emptyList(),
     content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit,
 ) {
-    composable(route = route, arguments = arguments) { entry ->
+    composable(route = route, arguments = arguments, deepLinks = deepLinks) { entry ->
         val destinationScope = this
         val cornerRadius by transition.animateDp(label = "back corner radius") { state ->
             if (state == EnterExitState.PostExit) BACK_CORNER_RADIUS else 0.dp

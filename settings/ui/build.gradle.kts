@@ -14,18 +14,17 @@ android {
 }
 
 dependencies {
+    implementation(libs.billing)
     implementation(project(":analytics:domain"))
-    implementation(project(":backup:data:impl"))
     implementation(project(":backup:domain:contract"))
     implementation(project(":backup:domain:model"))
     implementation(project(":billing:domain:contract"))
     implementation(project(":billing:domain:model"))
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
-    implementation(project(":core:datastore"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:network"))
-    implementation(project(":transaction:regular:data:impl"))
+    implementation(project(":insights:domain"))
     implementation(project(":user-info:domain:contract"))
     implementation(project(":user-info:domain:model"))
     implementation(libs.androidx.compose.foundation)
@@ -36,6 +35,7 @@ dependencies {
     implementation(libs.firebase.ui.auth)
     implementation(libs.hilt.android)
     implementation(libs.hilt.lifecycle.viewmodel.compose)
+    implementation(libs.kotlinx.coroutines.play.services)
     implementation(libs.navigation.runtime)
     implementation(libs.timber)
 }

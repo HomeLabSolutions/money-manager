@@ -14,6 +14,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.kotlinx.datetime)
     implementation(project(":analytics:domain"))
     implementation(project(":billing:domain:contract"))
     implementation(project(":category:domain:contract"))
