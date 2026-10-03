@@ -17,8 +17,8 @@ import javax.inject.Inject
 class WeeklyInsightNotificationSender @Inject constructor(
     @ApplicationContext private val context: Context,
     private val notificationManager: MoneyManagerNotificationManager,
-) : NotificationSender<String> {
-    override fun send(data: String) {
+) : NotificationSender<WeeklyInsightNotification> {
+    override fun send(data: WeeklyInsightNotification) {
         notificationManager.createChannel(CHANNEL_ID, context.getString(R.string.weekly_insight_channel))
         val intent =
             Intent(context, MainActivity::class.java).apply {
@@ -39,8 +39,8 @@ class WeeklyInsightNotificationSender @Inject constructor(
             notificationManager
                 .createBuilder(CHANNEL_ID)
                 .setContentTitle(context.getString(R.string.weekly_insight_title))
-                .setContentText(data)
-                .setStyle(NotificationCompat.BigTextStyle().bigText(data))
+                .setContentText(data.text)
+                .setStyle(NotificationCompat.BigTextStyle().bigText(data.text))
                 .setContentIntent(pendingIntent)
         notificationManager.notify(NOTIFICATION_ID, message)
     }
