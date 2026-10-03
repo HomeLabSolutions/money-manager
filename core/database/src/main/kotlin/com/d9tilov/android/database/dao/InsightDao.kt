@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface InsightDao {
-    @Query("SELECT * FROM insights WHERE clientId = :clientId ORDER BY createdAtMillis ASC, id ASC")
+    @Query("SELECT * FROM insights WHERE clientId = :clientId ORDER BY createdAtMillis ASC")
     fun observeHistory(clientId: String): Flow<List<InsightDbModel>>
 
     @Query("SELECT text FROM insights WHERE clientId = :clientId ORDER BY createdAtMillis DESC, id DESC LIMIT :limit")
