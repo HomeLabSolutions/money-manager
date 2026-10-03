@@ -48,22 +48,13 @@ class WeeklyInsightWorker @AssistedInject constructor(
         }
         return try {
             val insight = insightsRepository.generate(Locale.getDefault().toLanguageTag())
-            if (FirebaseAuth.getInstance().currentUser?.uid == uid && consentRepository.isGranted.first()) {
-                notification.send(WeeklyInsightNotification(text = insight))
-            }
+            notification.send(WeeklyInsightNotification(text = insight))
             Result.success()
         } catch (error: CancellationException) {
             throw error
         } catch (_: InsufficientInsightsDataException) {
             Result.success()
         } catch (_: DailyInsightLimitException) {
-            if (FirebaseAuth.getInstance().currentUser?.uid == uid && consentRepository.isGranted.first()) {
-                insightsRepository
-                    .history()
-                    .first()
-                    .lastOrNull()
-                    ?.let { notification.send(WeeklyInsightNotification(text = it.text)) }
-            }
             Result.success()
         } catch (_: NoNewInsightException) {
             Result.success()
