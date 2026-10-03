@@ -36,7 +36,7 @@ class InsightLocalSource @Inject constructor(
         clientId: String,
         text: String,
     ) {
-        dao.insertAndKeepLatest(
+        dao.upsertAndKeepLatest(
             InsightDbModel(clientId = clientId, createdAtMillis = System.currentTimeMillis(), text = text),
             MAX_STORED_INSIGHTS,
         )

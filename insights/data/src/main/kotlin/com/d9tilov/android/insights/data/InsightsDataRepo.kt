@@ -18,8 +18,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.minus
 import javax.inject.Inject
@@ -34,8 +32,6 @@ class InsightsDataRepo @Inject constructor(
     private val categorySource: CategorySource,
     private val remoteSource: InsightsRemoteSource,
 ) : InsightsRepository {
-    private val generationMutex = Mutex()
-
     override fun history(): Flow<List<Insight>> =
         preferencesStore.uid.filterNotNull().flatMapLatest { clientId ->
             localSource.history(clientId).map { rows ->
@@ -43,12 +39,11 @@ class InsightsDataRepo @Inject constructor(
             }
         }
 
-    override suspend fun generate(languageTag: String): String =
-        generationMutex.withLock {
-            val clientId = requireNotNull(preferencesStore.uid.first())
-            if (localSource.hasInsightToday(clientId)) throw DailyInsightLimitException()
-            generateNew(clientId, languageTag)
-        }
+    override suspend fun generate(languageTag: String): String {
+        val clientId = requireNotNull(preferencesStore.uid.first())
+        if (localSource.hasInsightToday(clientId)) throw DailyInsightLimitException()
+        return generateNew(clientId, languageTag)
+    }
 
     private suspend fun generateNew(
         clientId: String,

@@ -1,9 +1,9 @@
 package com.d9tilov.android.database.dao
 
 import androidx.room.Dao
-import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Upsert
 import com.d9tilov.android.database.entity.InsightDbModel
 import kotlinx.coroutines.flow.Flow
 
@@ -22,8 +22,8 @@ interface InsightDao {
         to: Long,
     ): Boolean
 
-    @Insert
-    suspend fun insert(insight: InsightDbModel)
+    @Upsert
+    suspend fun upsert(insight: InsightDbModel)
 
     @Query(
         "DELETE FROM insights WHERE clientId = :clientId AND id NOT IN " +
@@ -35,11 +35,11 @@ interface InsightDao {
     )
 
     @Transaction
-    suspend fun insertAndKeepLatest(
+    suspend fun upsertAndKeepLatest(
         insight: InsightDbModel,
         limit: Int,
     ) {
-        insert(insight)
+        upsert(insight)
         keepLatest(insight.clientId, limit)
     }
 }
