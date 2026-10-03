@@ -97,11 +97,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        setIntent(intent)
-    }
-
     @SuppressLint("MissingPermission")
     private fun openScreen(state: MainActivityUiState) {
         // Turn off the decor fitting system windows, which allows us to handle insets,
