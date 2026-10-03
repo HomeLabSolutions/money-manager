@@ -12,6 +12,7 @@ import com.d9tilov.android.analytics.model.AnalyticsEvent
 import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.backup.domain.contract.BackupInteractor
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
+import com.d9tilov.android.common.android.ui.logout.LogoutHandler
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.constants.DataConstants.UNKNOWN_BACKUP_DATE
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
@@ -77,6 +78,7 @@ class SettingsViewModel
         private val userInfoInteractor: UserInteractor,
         private val insightLanguageRepository: InsightLanguageRepository,
         private val preferencesStore: PreferencesStore,
+        private val logoutHandler: LogoutHandler,
         analyticsSender: AnalyticsSender,
         billingInteractor: BillingInteractor,
     ) : ViewModel() {
@@ -163,13 +165,13 @@ class SettingsViewModel
             }
         }
 
-        fun deleteAccount(navigateCallback: () -> Unit) {
+        fun deleteAccount() {
             viewModelScope.launch(Dispatchers.IO) {
                 backupInteractor.deleteBackup()
                 Firebase.auth.currentUser?.delete()
                 userInfoInteractor.deleteUser()
                 preferencesStore.clearAllData()
-                withContext(Dispatchers.Main) { navigateCallback() }
+                withContext(Dispatchers.Main) { logoutHandler.onLogout() }
             }
         }
 

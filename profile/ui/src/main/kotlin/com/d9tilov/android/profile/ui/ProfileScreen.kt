@@ -42,7 +42,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.d9tilov.android.common.android.ui.logout.logout
 import com.d9tilov.android.common.android.utils.getAppVersion
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
@@ -66,7 +65,6 @@ fun ProfileRoute(
 ) {
     val uiState: ProfileUiState by viewModel.profileState.collectAsStateWithLifecycle()
     val showDialog by viewModel.showDialog.collectAsStateWithLifecycle()
-    val context = LocalContext.current
     Scaffold { paddingValues ->
         ProfileScreen(
             modifier = Modifier.padding(paddingValues),
@@ -78,11 +76,7 @@ fun ProfileRoute(
             onRegularExpenseClicked = navigateToRegularExpenseScreen,
             onSettingsClicked = navigateToSettingsScreen,
             onLogoutClicked = { viewModel.showDialog() },
-            onLogoutConfirmClicked = {
-                viewModel.logout {
-                    context.logout()
-                }
-            },
+            onLogoutConfirmClicked = viewModel::logout,
             onLogoutDismissClicked = { viewModel.dismissDialog() },
         )
     }

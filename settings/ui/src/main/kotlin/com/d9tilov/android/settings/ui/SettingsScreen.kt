@@ -36,7 +36,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -46,7 +45,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.d9tilov.android.common.android.ui.logout.logout
 import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
@@ -64,7 +62,6 @@ fun SettingsRoute(
     onShowSnackBar: suspend (String, String?) -> Boolean,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
     SettingsScreen(
         uiState = uiState,
         onPeriodDateChanged = viewModel::changeFiscalDay,
@@ -74,11 +71,7 @@ fun SettingsRoute(
         onSave = { viewModel.save(clickBack) },
         onBackupClick = viewModel::backup,
         onClearBackupClick = viewModel::deleteBackup,
-        onAccountDeleteClick = {
-            viewModel.deleteAccount {
-                context.logout()
-            }
-        },
+        onAccountDeleteClick = viewModel::deleteAccount,
         onClickBack = clickBack,
     )
 }
