@@ -19,20 +19,18 @@ fun ButtonSelector(
     text: @Composable () -> Unit,
 ) {
     Box(modifier = modifier) {
-        val containerColor = MaterialTheme.colorScheme.tertiaryContainer
+        val containerColor =
+            if (enabled) {
+                MaterialTheme.colorScheme.tertiaryContainer
+            } else {
+                MaterialTheme.colorScheme.onTertiaryContainer
+            }
         TextButton(
             onClick = onClick,
             small = true,
             colors =
                 ButtonDefaults.textButtonColors(
-                    containerColor =
-                        if (enabled) {
-                            containerColor
-                        } else {
-                            MaterialTheme.colorScheme.onTertiaryContainer.copy(
-                                alpha = MmTagDefaults.DISABLED_TOPIC_TAG_CONTAINER_ALPHA,
-                            )
-                        },
+                    containerColor = containerColor,
                     contentColor = contentColorFor(backgroundColor = containerColor),
                 ),
         ) {
@@ -51,9 +49,4 @@ fun ButtonSelectorPreview() {
             Text("Month")
         }
     }
-}
-
-object MmTagDefaults {
-    // Button disabled container alpha value not exposed by ButtonDefaults
-    const val DISABLED_TOPIC_TAG_CONTAINER_ALPHA = 0.12f
 }

@@ -526,6 +526,9 @@ fun StatisticsList(
             )
         }
 
+        Spacer(
+            modifier = Modifier.height(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
+        )
         LazyColumn(
             modifier = Modifier.weight(1f),
             state = stateList,
