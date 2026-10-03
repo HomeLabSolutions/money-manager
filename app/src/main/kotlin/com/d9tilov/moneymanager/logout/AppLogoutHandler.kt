@@ -9,6 +9,7 @@ import com.d9tilov.android.backup.data.impl.PeriodicBackupWorker
 import com.d9tilov.android.common.android.ui.logout.LogoutHandler
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.datastore.PreferencesStore
+import com.d9tilov.android.insights.presentation.worker.WeeklyInsightWorker
 import com.d9tilov.android.notification.MoneyManagerNotificationManager
 import com.d9tilov.android.transaction.regular.data.impl.worker.RegularTransactionSyncWorker
 import com.d9tilov.android.user.domain.contract.UserInteractor
@@ -36,6 +37,7 @@ class AppLogoutHandler @Inject constructor(
             )
             PeriodicBackupWorker.stopPeriodicJob(application)
             RegularTransactionSyncWorker.stopPeriodicJob(application)
+            WeeklyInsightWorker.stopPeriodicJob(application)
             notificationManager.cancelAll()
         }
         withContext(Dispatchers.Main) {
