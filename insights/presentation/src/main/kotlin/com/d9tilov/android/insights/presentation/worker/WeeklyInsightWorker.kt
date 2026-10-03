@@ -53,14 +53,14 @@ class WeeklyInsightWorker @AssistedInject constructor(
         } catch (error: CancellationException) {
             throw error
         } catch (_: InsufficientInsightsDataException) {
-            Result.success()
+            Result.failure()
         } catch (_: DailyInsightLimitException) {
-            Result.success()
+            Result.failure()
         } catch (_: NoNewInsightException) {
-            Result.success()
+            Result.failure()
         } catch (error: Exception) {
             Timber.w(error, "Unable to generate weekly insight")
-            Result.retry()
+            Result.failure()
         }
     }
 
