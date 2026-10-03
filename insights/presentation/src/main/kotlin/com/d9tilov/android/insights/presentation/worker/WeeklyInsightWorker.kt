@@ -5,7 +5,7 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ForegroundInfo
-import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.d9tilov.android.common.android.worker.DelegatingWorker
@@ -75,29 +75,30 @@ class WeeklyInsightWorker @AssistedInject constructor(
 
     companion object {
         private const val WORK_NAME = "weekly_insight_after_consent"
-        private const val LEGACY_WORK_NAME = "weekly_insight"
         private const val INTERVAL_DAYS = 7L
 
         fun startPeriodicJob(context: Context) {
-            val request =
-                PeriodicWorkRequestBuilder<DelegatingWorker>(INTERVAL_DAYS, TimeUnit.DAYS)
+            val recurringWork =
+                PeriodicWorkRequest
+                    .Builder(
+                        DelegatingWorker::class.java,
+                        INTERVAL_DAYS,
+                        TimeUnit.DAYS,
+                    ).addTag(WORK_NAME)
                     .setInitialDelay(INTERVAL_DAYS, TimeUnit.DAYS)
                     .setConstraints(SyncConstraints)
                     .setInputData(WeeklyInsightWorker::class.delegatedData())
                     .build()
             val workManager = WorkManager.getInstance(context)
-            workManager.cancelUniqueWork(LEGACY_WORK_NAME)
             workManager.enqueueUniquePeriodicWork(
                 WORK_NAME,
                 ExistingPeriodicWorkPolicy.UPDATE,
-                request,
+                recurringWork,
             )
         }
 
         fun stopPeriodicJob(context: Context) {
-            val workManager = WorkManager.getInstance(context)
-            workManager.cancelUniqueWork(LEGACY_WORK_NAME)
-            workManager.cancelUniqueWork(WORK_NAME)
+            WorkManager.getInstance(context).cancelAllWorkByTag(WORK_NAME)
         }
     }
 }
