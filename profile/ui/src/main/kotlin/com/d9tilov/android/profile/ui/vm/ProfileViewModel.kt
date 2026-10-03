@@ -28,7 +28,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 sealed class ProfileUiItem {
@@ -133,13 +132,8 @@ class ProfileViewModel
         }
 
         fun logout() {
-            viewModelScope.launch(Dispatchers.IO) {
-                userInfoInteractor.deleteUser()
-                analyticsSender.send(
-                    AnalyticsEvent.Client.Auth,
-                    mapOf(AnalyticsParams.Auth.Action to "logout"),
-                )
-                withContext(Dispatchers.Main) { logoutHandler.onLogout() }
+            viewModelScope.launch {
+                logoutHandler.onLogout()
             }
         }
     }

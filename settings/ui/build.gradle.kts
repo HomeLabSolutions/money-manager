@@ -22,7 +22,6 @@ dependencies {
     implementation(project(":billing:domain:model"))
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
-    implementation(project(":core:datastore"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:network"))
     implementation(project(":insights:domain"))

@@ -19,7 +19,6 @@ import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.android.core.utils.toBackupDate
-import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.insights.domain.InsightLanguageRepository
 import com.d9tilov.android.network.exception.NetworkException
 import com.d9tilov.android.settings.ui.R
@@ -75,9 +74,7 @@ class SettingsViewModel
         @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
         private val backupInteractor: BackupInteractor,
         private val userInteractor: UserInteractor,
-        private val userInfoInteractor: UserInteractor,
         private val insightLanguageRepository: InsightLanguageRepository,
-        private val preferencesStore: PreferencesStore,
         private val logoutHandler: LogoutHandler,
         analyticsSender: AnalyticsSender,
         billingInteractor: BillingInteractor,
@@ -166,12 +163,10 @@ class SettingsViewModel
         }
 
         fun deleteAccount() {
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch(ioDispatcher) {
                 backupInteractor.deleteBackup()
                 Firebase.auth.currentUser?.delete()
-                userInfoInteractor.deleteUser()
-                preferencesStore.clearAllData()
-                withContext(Dispatchers.Main) { logoutHandler.onLogout() }
+                logoutHandler.onLogout()
             }
         }
 
