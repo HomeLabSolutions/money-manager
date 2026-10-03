@@ -42,7 +42,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.d9tilov.android.backup.data.impl.PeriodicBackupWorker
 import com.d9tilov.android.common.android.ui.logout.logout
 import com.d9tilov.android.common.android.utils.getAppVersion
 import com.d9tilov.android.core.utils.CurrencyUtils
@@ -55,7 +54,6 @@ import com.d9tilov.android.profile.ui.vm.ProfileUiItem
 import com.d9tilov.android.profile.ui.vm.ProfileUiState
 import com.d9tilov.android.profile.ui.vm.ProfileViewModel
 import com.d9tilov.android.profile.ui.vm.UserUiProfile
-import com.d9tilov.android.transaction.regular.data.impl.worker.RegularTransactionSyncWorker
 
 @Composable
 fun ProfileRoute(
@@ -82,8 +80,6 @@ fun ProfileRoute(
             onLogoutClicked = { viewModel.showDialog() },
             onLogoutConfirmClicked = {
                 viewModel.logout {
-                    PeriodicBackupWorker.stopPeriodicJob(context)
-                    RegularTransactionSyncWorker.stopPeriodicJob(context)
                     context.logout()
                 }
             },

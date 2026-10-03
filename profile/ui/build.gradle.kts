@@ -15,7 +15,6 @@ android {
 dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(project(":analytics:domain"))
-    implementation(project(":backup:data:impl"))
     implementation(project(":billing:domain:contract"))
     implementation(project(":budget:domain:contract"))
     implementation(project(":budget:domain:model"))
@@ -25,7 +24,6 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":currency:domain:contract"))
     implementation(project(":currency:domain:model"))
-    implementation(project(":transaction:regular:data:impl"))
     implementation(project(":transaction:regular:domain:contract"))
     implementation(project(":transaction:regular:domain:model"))
     implementation(project(":user-info:domain:contract"))

@@ -2,7 +2,9 @@ package com.d9tilov.moneymanager.di
 
 import android.app.Application
 import android.content.Context
+import com.d9tilov.android.backup.data.impl.PeriodicBackupWorker
 import com.d9tilov.android.common.android.ui.logout.LogoutHandler
+import com.d9tilov.android.transaction.regular.data.impl.worker.RegularTransactionSyncWorker
 import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.insights.WeeklyInsightNotification
 import dagger.Module
@@ -25,8 +27,15 @@ object AppModule {
     fun provideApplication(application: Application): App = application as App
 
     @Provides
-    fun provideLogoutHandler(notification: WeeklyInsightNotification): LogoutHandler =
-        LogoutHandler { notification.cancel() }
+    fun provideLogoutHandler(
+        application: Application,
+        notification: WeeklyInsightNotification,
+    ): LogoutHandler =
+        LogoutHandler {
+            PeriodicBackupWorker.stopPeriodicJob(application)
+            RegularTransactionSyncWorker.stopPeriodicJob(application)
+            notification.cancel()
+        }
 
     @Provides
     @Singleton

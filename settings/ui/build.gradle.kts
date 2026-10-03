@@ -16,7 +16,6 @@ android {
 dependencies {
     implementation(libs.billing)
     implementation(project(":analytics:domain"))
-    implementation(project(":backup:data:impl"))
     implementation(project(":backup:domain:contract"))
     implementation(project(":backup:domain:model"))
     implementation(project(":billing:domain:contract"))
@@ -27,7 +26,6 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:network"))
     implementation(project(":insights:domain"))
-    implementation(project(":transaction:regular:data:impl"))
     implementation(project(":user-info:domain:contract"))
     implementation(project(":user-info:domain:model"))
     implementation(libs.androidx.compose.foundation)

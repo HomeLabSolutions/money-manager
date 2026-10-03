@@ -46,7 +46,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.d9tilov.android.backup.data.impl.PeriodicBackupWorker
 import com.d9tilov.android.common.android.ui.logout.logout
 import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.MmTopAppBar
@@ -57,7 +56,6 @@ import com.d9tilov.android.settings.ui.vm.BackupState
 import com.d9tilov.android.settings.ui.vm.SettingsUiState
 import com.d9tilov.android.settings.ui.vm.SettingsViewModel
 import com.d9tilov.android.settings.ui.vm.SubscriptionUiState
-import com.d9tilov.android.transaction.regular.data.impl.worker.RegularTransactionSyncWorker
 
 @Composable
 fun SettingsRoute(
@@ -78,8 +76,6 @@ fun SettingsRoute(
         onClearBackupClick = viewModel::deleteBackup,
         onAccountDeleteClick = {
             viewModel.deleteAccount {
-                PeriodicBackupWorker.stopPeriodicJob(context)
-                RegularTransactionSyncWorker.stopPeriodicJob(context)
                 context.logout()
             }
         },
