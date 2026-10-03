@@ -36,7 +36,7 @@ class RegularTransactionSyncWorker
             val added =
                 transactionInteractor.executeRegularIfNeeded(TransactionType.INCOME) +
                     transactionInteractor.executeRegularIfNeeded(TransactionType.EXPENSE)
-            transactionNotificationSender.notifyAboutRegularTransactions(added)
+            transactionNotificationSender.send(added)
             return Result.success()
         }
 

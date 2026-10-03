@@ -8,6 +8,7 @@ import androidx.core.app.TaskStackBuilder
 import androidx.core.net.toUri
 import com.d9tilov.android.insights.presentation.navigation.INSIGHTS_DEEP_LINK_URI
 import com.d9tilov.android.notification.MoneyManagerNotificationManager
+import com.d9tilov.android.notification.NotificationSender
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.home.MainActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -16,13 +17,13 @@ import javax.inject.Inject
 class WeeklyInsightNotificationSender @Inject constructor(
     @ApplicationContext private val context: Context,
     private val notificationManager: MoneyManagerNotificationManager,
-) {
-    fun show(insight: String) {
+) : NotificationSender<String> {
+    override fun send(data: String) {
         notificationManager.createChannel(CHANNEL_ID, context.getString(R.string.weekly_insight_channel))
         val intent =
             Intent(context, MainActivity::class.java).apply {
                 action = Intent.ACTION_VIEW
-                data = INSIGHTS_DEEP_LINK_URI.toUri()
+                this.data = INSIGHTS_DEEP_LINK_URI.toUri()
             }
         val pendingIntent =
             checkNotNull(
@@ -38,14 +39,10 @@ class WeeklyInsightNotificationSender @Inject constructor(
             notificationManager
                 .createBuilder(CHANNEL_ID)
                 .setContentTitle(context.getString(R.string.weekly_insight_title))
-                .setContentText(insight)
-                .setStyle(NotificationCompat.BigTextStyle().bigText(insight))
+                .setContentText(data)
+                .setStyle(NotificationCompat.BigTextStyle().bigText(data))
                 .setContentIntent(pendingIntent)
         notificationManager.notify(NOTIFICATION_ID, message)
-    }
-
-    fun cancel() {
-        notificationManager.cancel(NOTIFICATION_ID)
     }
 
     private companion object {

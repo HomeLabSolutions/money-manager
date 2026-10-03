@@ -47,7 +47,7 @@ class WeeklyInsightWorker @AssistedInject constructor(
         return try {
             val insight = insightsRepository.generate(Locale.getDefault().toLanguageTag())
             if (FirebaseAuth.getInstance().currentUser?.uid == uid && consentRepository.isGranted.first()) {
-                notification.show(insight)
+                notification.send(insight)
             }
             Result.success()
         } catch (error: CancellationException) {
@@ -60,7 +60,7 @@ class WeeklyInsightWorker @AssistedInject constructor(
                     .history()
                     .first()
                     .lastOrNull()
-                    ?.let { notification.show(it.text) }
+                    ?.let { notification.send(it.text) }
             }
             Result.success()
         } catch (_: NoNewInsightException) {

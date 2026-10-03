@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.notification.MoneyManagerNotificationManager
+import com.d9tilov.android.notification.NotificationSender
 import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
 import com.d9tilov.android.transaction.regular.impl.R
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -21,9 +22,9 @@ class TransactionNotificationSender
     constructor(
         @ApplicationContext private val context: Context,
         private val notificationManager: MoneyManagerNotificationManager,
-    ) {
-        fun notifyAboutRegularTransactions(transactions: List<RegularTransaction>) {
-            val notifiableTransactions = transactions.filter { it.pushEnabled }
+    ) : NotificationSender<List<RegularTransaction>> {
+        override fun send(data: List<RegularTransaction>) {
+            val notifiableTransactions = data.filter { it.pushEnabled }
             if (notifiableTransactions.isEmpty()) return
 
             notificationManager.createChannel(

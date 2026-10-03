@@ -44,7 +44,7 @@ class MoneyManagerNotificationManager @Inject constructor(
         NotificationManagerCompat.from(context).notify(id, builder.build())
     }
 
-    fun cancel(id: Int) {
-        NotificationManagerCompat.from(context).cancel(id)
+    fun cancelAll() {
+        NotificationManagerCompat.from(context).cancelAll()
     }
 }
