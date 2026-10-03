@@ -6,6 +6,7 @@ import com.d9tilov.android.core.utils.toMillis
 import com.d9tilov.android.database.dao.InsightDao
 import com.d9tilov.android.database.entity.InsightDbModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.plus
 import javax.inject.Inject
@@ -17,13 +18,13 @@ internal const val MAX_INSIGHT_TEXT_LENGTH = 1000
 class InsightLocalSource @Inject constructor(
     private val dao: InsightDao,
 ) {
-    fun history(clientId: String): Flow<List<InsightDbModel>> = dao.observeHistory(clientId)
+    fun history(clientId: String): Flow<List<InsightDbModel>> = dao.get(clientId, Long.MIN_VALUE, Long.MAX_VALUE)
 
     suspend fun hasInsightToday(clientId: String): Boolean {
         val today = currentDate()
         val start = today.getStartOfDay().toMillis()
         val end = today.plus(1, DateTimeUnit.DAY).getStartOfDay().toMillis()
-        return dao.hasInsightInPeriod(clientId, start, end)
+        return dao.get(clientId, start, end).first().isNotEmpty()
     }
 
     suspend fun save(

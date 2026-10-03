@@ -9,18 +9,15 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface InsightDao {
-    @Query("SELECT * FROM insights WHERE clientId = :clientId ORDER BY createdAtMillis ASC")
-    fun observeHistory(clientId: String): Flow<List<InsightDbModel>>
-
     @Query(
-        "SELECT EXISTS(SELECT 1 FROM insights WHERE clientId = :clientId " +
-            "AND createdAtMillis >= :from AND createdAtMillis < :to)",
+        "SELECT * FROM insights WHERE clientId = :clientId " +
+            "AND createdAtMillis >= :from AND createdAtMillis < :to ORDER BY createdAtMillis ASC",
     )
-    suspend fun hasInsightInPeriod(
+    fun get(
         clientId: String,
         from: Long,
         to: Long,
-    ): Boolean
+    ): Flow<List<InsightDbModel>>
 
     @Upsert
     suspend fun upsert(insight: InsightDbModel)
