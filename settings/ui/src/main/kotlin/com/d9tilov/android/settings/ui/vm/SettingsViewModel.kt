@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.FileNotFoundException
@@ -162,13 +163,14 @@ class SettingsViewModel
             }
         }
 
-        fun deleteAccount() {
+        fun deleteAccount() =
             viewModelScope.launch(ioDispatcher) {
                 backupInteractor.deleteBackup()
-                Firebase.auth.currentUser?.delete()
+                Firebase.auth.currentUser
+                    ?.delete()
+                    ?.await()
                 logoutHandler.onLogout()
             }
-        }
 
         fun changeFiscalDay(day: String) {
             _uiState.update { it.copy(startPeriodDay = day) }

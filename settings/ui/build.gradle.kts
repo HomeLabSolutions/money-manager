@@ -35,6 +35,7 @@ dependencies {
     implementation(libs.firebase.ui.auth)
     implementation(libs.hilt.android)
     implementation(libs.hilt.lifecycle.viewmodel.compose)
+    implementation(libs.kotlinx.coroutines.play.services)
     implementation(libs.navigation.runtime)
     implementation(libs.timber)
 }

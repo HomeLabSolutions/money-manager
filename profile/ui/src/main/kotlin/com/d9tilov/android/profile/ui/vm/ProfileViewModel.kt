@@ -131,9 +131,8 @@ class ProfileViewModel
             _showDialog.value = false
         }
 
-        fun logout() {
+        fun logout() =
             viewModelScope.launch {
                 logoutHandler.onLogout()
             }
-        }
     }
