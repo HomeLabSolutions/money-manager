@@ -27,8 +27,6 @@ class InsightLocalSource @Inject constructor(
 ) {
     fun history(clientId: String): Flow<List<InsightDbModel>> = dao.observeHistory(clientId)
 
-    suspend fun previous(clientId: String): List<String> = dao.getPrevious(clientId, MAX_STORED_INSIGHTS)
-
     suspend fun hasInsightToday(clientId: String): Boolean {
         val start = utcDayStartMillis(System.currentTimeMillis())
         return dao.hasInsightInPeriod(clientId, start, start + MILLIS_PER_DAY)

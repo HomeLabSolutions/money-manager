@@ -95,7 +95,7 @@ class InsightsDataRepo @Inject constructor(
                 )
             }
         val traces = aggregateTransactions(rows).toPayload()
-        val previous = localSource.previous(clientId)
+        val previous = localSource.history(clientId).first().map { it.text }
 
         val selectedLanguage = insightLanguageRepository.language.first()
         val insight =

@@ -12,12 +12,6 @@ interface InsightDao {
     @Query("SELECT * FROM insights WHERE clientId = :clientId ORDER BY createdAtMillis ASC")
     fun observeHistory(clientId: String): Flow<List<InsightDbModel>>
 
-    @Query("SELECT text FROM insights WHERE clientId = :clientId ORDER BY createdAtMillis DESC, id DESC LIMIT :limit")
-    suspend fun getPrevious(
-        clientId: String,
-        limit: Int,
-    ): List<String>
-
     @Query(
         "SELECT EXISTS(SELECT 1 FROM insights WHERE clientId = :clientId " +
             "AND createdAtMillis >= :from AND createdAtMillis < :to)",
