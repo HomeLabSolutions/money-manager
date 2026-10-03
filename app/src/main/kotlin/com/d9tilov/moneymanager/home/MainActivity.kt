@@ -23,7 +23,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
-import com.d9tilov.moneymanager.InsightsConsentEntryPoint
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.prepopulate.PrepopulateScreen
 import com.d9tilov.moneymanager.ui.MmApp
@@ -31,7 +30,6 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -65,10 +63,6 @@ class MainActivity : ComponentActivity() {
                     uiState = state
                     when (uiState) {
                         is MainActivityUiState.Success.Auth -> {
-                            EntryPointAccessors
-                                .fromApplication<InsightsConsentEntryPoint>(applicationContext)
-                                .weeklyInsightNotification()
-                                .cancel()
                             viewModel.setToLoadingState()
                             startForResult.launch(
                                 AuthUI
