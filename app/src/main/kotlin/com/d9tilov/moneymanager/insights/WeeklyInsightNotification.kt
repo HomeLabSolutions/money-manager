@@ -17,15 +17,8 @@ class WeeklyInsightNotification @Inject constructor(
     @ApplicationContext private val context: Context,
     private val notificationManager: MoneyManagerNotificationManager,
 ) {
-    fun cancel() {
-        notificationManager.cancel(NOTIFICATION_ID)
-    }
-
-    fun createNotificationChannel() {
-        notificationManager.createChannel(CHANNEL_ID, context.getString(R.string.weekly_insight_channel))
-    }
-
     fun show(insight: String) {
+        notificationManager.createChannel(CHANNEL_ID, context.getString(R.string.weekly_insight_channel))
         val intent =
             Intent(context, MainActivity::class.java).apply {
                 action = Intent.ACTION_VIEW
@@ -51,8 +44,12 @@ class WeeklyInsightNotification @Inject constructor(
         notificationManager.notify(NOTIFICATION_ID, message)
     }
 
-    companion object {
-        private const val CHANNEL_ID = "weekly_insights"
-        private const val NOTIFICATION_ID = 501
+    fun cancel() {
+        notificationManager.cancel(NOTIFICATION_ID)
+    }
+
+    private companion object {
+        const val CHANNEL_ID = "weekly_insights"
+        const val NOTIFICATION_ID = 501
     }
 }

@@ -6,7 +6,6 @@ import com.d9tilov.android.backup.data.impl.PeriodicBackupWorker
 import com.d9tilov.android.currency.data.impl.sync.initializers.Sync
 import com.d9tilov.android.insights.domain.InsightsConsentRepository
 import com.d9tilov.android.transaction.regular.data.impl.worker.RegularTransactionSyncWorker
-import com.d9tilov.moneymanager.insights.WeeklyInsightNotification
 import com.d9tilov.moneymanager.insights.WeeklyInsightWorker
 import com.google.android.material.color.DynamicColors
 import com.google.firebase.FirebaseApp
@@ -48,10 +47,6 @@ class App : Application() {
         }
         DynamicColors.applyToActivitiesIfAvailable(this)
         FirebaseApp.initializeApp(this)
-        EntryPointAccessors
-            .fromApplication<InsightsConsentEntryPoint>(this)
-            .weeklyInsightNotification()
-            .createNotificationChannel()
         FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(!BuildConfig.DEBUG)
         FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled = !BuildConfig.DEBUG
         Sync.initialize(this)
@@ -75,6 +70,4 @@ class App : Application() {
 @InstallIn(SingletonComponent::class)
 interface InsightsConsentEntryPoint {
     fun insightsConsentRepository(): InsightsConsentRepository
-
-    fun weeklyInsightNotification(): WeeklyInsightNotification
 }
