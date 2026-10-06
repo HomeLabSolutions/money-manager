@@ -109,6 +109,9 @@ internal fun Project.configureKotlinAndroid(extension: LibraryExtension) {
  * Configure base Kotlin options
  */
 private fun Project.configureKotlin() {
+    dependencies {
+        implementation(buildLibs.kotlin.stdlib)
+    }
     // Use withType to workaround https://youtrack.jetbrains.com/issue/KT-55947
     tasks.withType<KotlinCompile>().configureEach {
         compilerOptions {

@@ -3,6 +3,8 @@
     <string name="title_settings">Настройки</string>
     <string name="settings_start_period_day_postfix">день месяца</string>
     <string name="settings_start_period_day_title">Начало периода:</string>
+    <string name="settings_insight_language">Язык инсайтов</string>
+    <string name="settings_insight_language_system">Как в системе</string>
     <string name="settings_subscription_premium_description">контроль расходов\nрасширенные иконки\nрегулярные транзакции\nи многое другое…\n</string>
     <string name="settings_backup_error">Ошибка резервного копирования</string>
     <string name="settings_backup_succeeded">Резервное копирование выполнено успешно</string>

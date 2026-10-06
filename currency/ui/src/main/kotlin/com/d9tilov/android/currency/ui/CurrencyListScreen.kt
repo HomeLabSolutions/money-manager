@@ -47,6 +47,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
@@ -132,7 +133,7 @@ private fun CurrencyTopBar(
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        shadowElevation = 3.dp,
+        shadowElevation = dimensionResource(com.d9tilov.android.designsystem.R.dimen.surface_elevation),
         color = MaterialTheme.colorScheme.surface,
     ) {
         AnimatedContent(

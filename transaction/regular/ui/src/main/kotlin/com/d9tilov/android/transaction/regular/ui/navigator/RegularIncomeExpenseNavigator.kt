@@ -6,6 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
+import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.d9tilov.android.category.domain.entity.CategoryArgs
 import com.d9tilov.android.category.domain.entity.CategoryDestination
@@ -13,7 +14,6 @@ import com.d9tilov.android.core.constants.NavigationConstants
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.model.toType
 import com.d9tilov.android.currency.domain.model.CurrencyArgs.CURRENCY_CODE_ARGS
-import com.d9tilov.android.designsystem.component.roundedBackComposable
 import com.d9tilov.android.transaction.regular.ui.RegularTransactionCreationRoute
 import com.d9tilov.android.transaction.regular.ui.RegularTransactionListRoute
 import com.d9tilov.android.transaction.regular.ui.vm.RegularTransactionCreationViewModel
@@ -57,7 +57,7 @@ fun NavGraphBuilder.regularTransactionListScreen(
     clickBack: () -> Unit,
     openCreationTransaction: (TransactionType, Long) -> Unit,
 ) {
-    roundedBackComposable(
+    composable(
         route = route,
         arguments =
             listOf(
@@ -90,7 +90,7 @@ fun NavGraphBuilder.regularTransactionCreationScreen(
     onSaveClick: () -> Unit,
     clickBack: () -> Unit,
 ) {
-    roundedBackComposable(
+    composable(
         route = route,
         arguments =
             listOf(

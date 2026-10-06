@@ -1,10 +1,8 @@
 package com.d9tilov.moneymanager.navigation
 
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.scaleOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.TransformOrigin
+import androidx.navigation.compose.DefaultNavTransitions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.navigation
 import com.d9tilov.android.budget.ui.navigation.BUDGET_NAVIGATION_ROUTE
@@ -34,6 +32,8 @@ import com.d9tilov.android.currency.ui.navigation.currencyScreen
 import com.d9tilov.android.currency.ui.navigation.navigateToCurrencyListScreen
 import com.d9tilov.android.incomeexpense.navigation.INCOME_EXPENSE_NAVIGATION_ROUTE
 import com.d9tilov.android.incomeexpense.navigation.incomeExpenseScreen
+import com.d9tilov.android.insights.presentation.navigation.INSIGHTS_NAVIGATION_ROUTE
+import com.d9tilov.android.insights.presentation.navigation.insightsScreen
 import com.d9tilov.android.profile.ui.navigation.PROFILE_NAVIGATION_ROUTE
 import com.d9tilov.android.profile.ui.navigation.profileScreen
 import com.d9tilov.android.settings.ui.navigation.SETTINGS_NAVIGATION_ROUTE
@@ -68,19 +68,13 @@ fun MmNavHost(
     modifier: Modifier = Modifier,
 ) {
     val navController = appState.navController
+
     NavHost(
         navController = navController,
         startDestination = INCOME_EXPENSE_ROOT_DESTINATION,
         modifier = modifier,
-        popExitTransition = {
-            scaleOut(
-                targetScale = 0.9f,
-                transformOrigin = TransformOrigin(pivotFractionX = 0.5f, pivotFractionY = 0.5f),
-            )
-        },
-        popEnterTransition = {
-            EnterTransition.None
-        },
+        predictivePopEnterTransition = { DefaultNavTransitions.enterTransition.invoke(this) },
+        predictivePopExitTransition = { DefaultNavTransitions.exitTransition.invoke(this) },
     ) {
         navigation(
             startDestination = categoryNavigationRoute(),
@@ -148,6 +142,9 @@ fun MmNavHost(
                 onCategoryClick = navController::navigateToCategoryListScreen,
                 onCurrencyClick = navController::navigateToCurrencyListScreen,
             )
+        }
+        navigation(startDestination = INSIGHTS_NAVIGATION_ROUTE, route = INSIGHTS_ROOT_DESTINATION) {
+            insightsScreen(onBackClick = navController::popBackStack, onShowSnackBar = onShowSnackBar)
         }
         navigation(
             startDestination = STATISTICS_NAVIGATION_ROUTE,
@@ -224,5 +221,6 @@ private fun categoryNavigationRoute() =
 
 private const val INCOME_EXPENSE_ROOT_DESTINATION = "income_expense_root_destination"
 private const val STATISTICS_ROOT_DESTINATION = "statistics_root_destination"
+private const val INSIGHTS_ROOT_DESTINATION = "insights_root_destination"
 private const val PROFILE_ROOT_DESTINATION = "profile_root_destination"
 private const val CATEGORY_ROOT_ROUTE = "category_root_route"

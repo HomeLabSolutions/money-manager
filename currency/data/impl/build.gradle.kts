@@ -15,6 +15,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.kotlinx.datetime)
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
     implementation(project(":core:database"))

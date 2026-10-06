@@ -12,6 +12,7 @@ fun UserDbModel.toDataModel(): UserProfile =
         lastName = lastName,
         showPrepopulate = showPrepopulate,
         fiscalDay = fiscalDay,
+        insightLanguage = insightLanguage,
     )
 
 fun UserProfile.toDbModel(): UserDbModel =
@@ -22,4 +23,5 @@ fun UserProfile.toDbModel(): UserDbModel =
         photoUrl = photoUrl,
         showPrepopulate = showPrepopulate,
         fiscalDay = fiscalDay,
+        insightLanguage = insightLanguage,
     )
