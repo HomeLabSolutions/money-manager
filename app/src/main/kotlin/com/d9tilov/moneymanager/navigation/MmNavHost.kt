@@ -144,7 +144,7 @@ fun MmNavHost(
             )
         }
         navigation(startDestination = INSIGHTS_NAVIGATION_ROUTE, route = INSIGHTS_ROOT_DESTINATION) {
-            insightsScreen(onBackClick = navController::popBackStack, onShowSnackBar = onShowSnackBar)
+            insightsScreen(onShowSnackBar = onShowSnackBar)
         }
         navigation(
             startDestination = STATISTICS_NAVIGATION_ROUTE,

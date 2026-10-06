@@ -20,7 +20,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -40,7 +39,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.d9tilov.android.common.android.ui.permissions.rememberNotificationPermissionRequester
-import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.android.insights.domain.Insight
 import kotlinx.coroutines.launch
@@ -53,7 +51,6 @@ private const val INSIGHT_BUBBLE_SURFACE_ALPHA = 0.94f
 @Composable
 fun InsightsRoute(
     viewModel: InsightsViewModel = hiltViewModel(),
-    onBackClick: () -> Unit,
     onShowSnackBar: suspend (String, String?) -> Boolean,
 ) {
     val state by viewModel.state.collectAsState()
@@ -69,7 +66,6 @@ fun InsightsRoute(
 
     InsightsScreen(
         state = state,
-        onBackClick = onBackClick,
         onGenerateClick = {
             if (viewModel.isConsentGranted()) {
                 viewModel.generate()
@@ -96,7 +92,6 @@ fun InsightsRoute(
 @Composable
 fun InsightsScreen(
     state: InsightsUiState,
-    onBackClick: () -> Unit,
     onGenerateClick: suspend () -> Unit,
     onShowSnackBar: suspend (String, String?) -> Boolean,
     onErrorDismissed: () -> Unit = {},
@@ -119,14 +114,6 @@ fun InsightsScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize().background(gradient),
         containerColor = Color.Transparent,
-        topBar = {
-            MmTopAppBar(
-                titleRes = R.string.insights_screen_title,
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
-                surfaceColor = Color.Transparent,
-                onNavigationClick = onBackClick,
-            )
-        },
     ) { paddingValues ->
         Column(
             modifier =
@@ -277,7 +264,6 @@ fun InsightsScreenPreview(
     MoneyManagerTheme(dynamicColor = false) {
         InsightsScreen(
             state = InsightsUiState(insights = insights, isHistoryLoading = false),
-            onBackClick = {},
             onGenerateClick = {},
             onShowSnackBar = { _, _ -> false },
         )
@@ -293,7 +279,6 @@ fun InsightsScreenLoadingPreview(
     MoneyManagerTheme(dynamicColor = false) {
         InsightsScreen(
             state = InsightsUiState(insights = insights, isInsightLoading = true, isHistoryLoading = false),
-            onBackClick = {},
             onGenerateClick = {},
             onShowSnackBar = { _, _ -> false },
         )
@@ -306,7 +291,6 @@ fun InsightsScreenHistoryLoadingPreview() {
     MoneyManagerTheme(dynamicColor = false) {
         InsightsScreen(
             state = InsightsUiState(),
-            onBackClick = {},
             onGenerateClick = {},
             onShowSnackBar = { _, _ -> false },
         )
