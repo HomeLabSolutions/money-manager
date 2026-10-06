@@ -811,12 +811,14 @@ fun CategoryListLayout(
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = item.icon),
+                    modifier = Modifier.size(dimensionResource(id = R.dimen.category_icon_size)),
                     contentDescription = "Backup",
                     tint = Color(ContextCompat.getColor(context, item.color)),
                 )
                 Text(
                     text = if (item.id == ALL_ITEMS_ID) stringResource(id = R.string.category_all) else item.name,
                     color = Color(ContextCompat.getColor(context, item.color)),
+                    style = MaterialTheme.typography.bodySmall,
                     overflow = TextOverflow.Ellipsis,
                 )
             }
