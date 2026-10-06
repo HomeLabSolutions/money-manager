@@ -14,6 +14,8 @@
  *   limitations under the License.
  */
 
+import com.android.moneymanager.gradle.extensions.buildLibs
+import com.android.moneymanager.gradle.extensions.implementation
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
@@ -26,6 +28,7 @@ class KotlinLibraryConventionPlugin : Plugin<Project> {
                 apply("com.autonomousapps.dependency-analysis")
             }
             dependencies {
+                implementation(buildLibs.kotlin.stdlib)
             }
         }
     }

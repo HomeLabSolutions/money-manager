@@ -2,7 +2,9 @@ package com.d9tilov.moneymanager.di
 
 import android.app.Application
 import android.content.Context
+import com.d9tilov.android.common.android.ui.logout.LogoutHandler
 import com.d9tilov.moneymanager.App
+import com.d9tilov.moneymanager.logout.AppLogoutHandler
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,6 +23,9 @@ object AppModule {
     @Provides
     @Singleton
     fun provideApplication(application: Application): App = application as App
+
+    @Provides
+    fun provideLogoutHandler(handler: AppLogoutHandler): LogoutHandler = handler
 
     @Provides
     @Singleton

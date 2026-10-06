@@ -14,4 +14,5 @@ data class UserDbModel(
     @ColumnInfo(name = "photoUrl") val photoUrl: String?,
     @ColumnInfo(name = "showPrepopulate") val showPrepopulate: Boolean,
     @ColumnInfo(name = "fiscalDay") val fiscalDay: Int,
+    @ColumnInfo(name = "insightLanguage") val insightLanguage: String,
 )

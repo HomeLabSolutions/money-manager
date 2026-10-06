@@ -12,16 +12,18 @@ import com.d9tilov.android.analytics.model.AnalyticsEvent
 import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.backup.domain.contract.BackupInteractor
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
+import com.d9tilov.android.common.android.ui.logout.LogoutHandler
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.constants.DataConstants.UNKNOWN_BACKUP_DATE
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.android.core.utils.toBackupDate
-import com.d9tilov.android.datastore.PreferencesStore
+import com.d9tilov.android.insights.domain.InsightLanguageRepository
 import com.d9tilov.android.network.exception.NetworkException
 import com.d9tilov.android.settings.ui.R
 import com.d9tilov.android.user.domain.contract.UserInteractor
+import com.d9tilov.android.user.domain.model.InsightLanguage
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.auth
@@ -31,8 +33,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.FileNotFoundException
@@ -42,8 +46,23 @@ import javax.inject.Named
 data class SettingsUiState(
     val subscriptionState: SubscriptionUiState? = null,
     val startPeriodDay: String = "1",
+    val insightLanguage: InsightLanguage = InsightLanguage.SYSTEM,
     val backupState: BackupState = BackupState(),
+    val insightLanguageLabels: Map<InsightLanguage, Int> =
+        InsightLanguage.supportedLanguages.associateWith { it.labelRes() },
 )
+
+private fun InsightLanguage.labelRes(): Int =
+    when (this) {
+        InsightLanguage.SYSTEM -> R.string.settings_insight_language_system
+        InsightLanguage.ENGLISH -> R.string.settings_insight_language_english
+        InsightLanguage.RUSSIAN -> R.string.settings_insight_language_russian
+        InsightLanguage.SPANISH -> R.string.settings_insight_language_spanish
+        InsightLanguage.PORTUGUESE -> R.string.settings_insight_language_portuguese
+        InsightLanguage.ARABIC -> R.string.settings_insight_language_arabic
+        InsightLanguage.HINDI -> R.string.settings_insight_language_hindi
+        InsightLanguage.CHINESE -> R.string.settings_insight_language_chinese
+    }
 
 data class BackupState(
     val lastBackupTimestamp: String = "",
@@ -71,8 +90,8 @@ class SettingsViewModel
         @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
         private val backupInteractor: BackupInteractor,
         private val userInteractor: UserInteractor,
-        private val userInfoInteractor: UserInteractor,
-        private val preferencesStore: PreferencesStore,
+        private val insightLanguageRepository: InsightLanguageRepository,
+        private val logoutHandler: LogoutHandler,
         analyticsSender: AnalyticsSender,
         billingInteractor: BillingInteractor,
     ) : ViewModel() {
@@ -86,23 +105,27 @@ class SettingsViewModel
                 mapOf(AnalyticsParams.Screen.Name to "settings"),
             )
             viewModelScope.launch(ioDispatcher) {
+                val insightLanguage = insightLanguageRepository.language.first()
+                _uiState.update { it.copy(insightLanguage = insightLanguage) }
                 combine(
                     userInteractor.getCurrentUser(),
                     backupInteractor.getBackupData(),
                     billingInteractor.getPremiumInfo(),
                 ) { user, backupData, premiumInfo ->
                     Timber.tag(TAG).d("PremiumInfo: $premiumInfo, BackupData: $backupData")
-                    val fiscalDay = user?.fiscalDay ?: 1
-                    val curValue = _uiState.value
-                    curValue.copy(
-                        startPeriodDay = fiscalDay.toString(),
-                        backupState =
-                            curValue.backupState.copy(
-                                lastBackupTimestamp = backupData.lastBackupTimestamp.toBackupDate(),
-                                showBackupCloseBtn = backupData.lastBackupTimestamp != UNKNOWN_BACKUP_DATE,
-                            ),
-                    )
-                }.collect { state -> _uiState.update { state } }
+                    user to backupData
+                }.collect { (user, backupData) ->
+                    _uiState.update { state ->
+                        state.copy(
+                            startPeriodDay = (user?.fiscalDay ?: 1).toString(),
+                            backupState =
+                                state.backupState.copy(
+                                    lastBackupTimestamp = backupData.lastBackupTimestamp.toBackupDate(),
+                                    showBackupCloseBtn = backupData.lastBackupTimestamp != UNKNOWN_BACKUP_DATE,
+                                ),
+                        )
+                    }
+                }
             }
         }
 
@@ -156,23 +179,29 @@ class SettingsViewModel
             }
         }
 
-        fun deleteAccount(navigateCallback: () -> Unit) {
-            viewModelScope.launch(Dispatchers.IO) {
+        fun deleteAccount() =
+            viewModelScope.launch(ioDispatcher) {
                 backupInteractor.deleteBackup()
-                Firebase.auth.currentUser?.delete()
-                userInfoInteractor.deleteUser()
-                preferencesStore.clearAllData()
-                withContext(Dispatchers.Main) { navigateCallback() }
+                Firebase.auth.currentUser
+                    ?.delete()
+                    ?.await()
+                logoutHandler.onLogout()
             }
-        }
 
         fun changeFiscalDay(day: String) {
             _uiState.update { it.copy(startPeriodDay = day) }
         }
 
-        fun save() {
-            viewModelScope.launch {
-                userInteractor.updateFiscalDay(_uiState.value.startPeriodDay.toInt())
+        fun changeInsightLanguage(language: InsightLanguage) {
+            _uiState.update { it.copy(insightLanguage = language) }
+        }
+
+        fun save(onSaved: () -> Unit) {
+            val settings = _uiState.value
+            viewModelScope.launch(ioDispatcher) {
+                userInteractor.updateFiscalDay(settings.startPeriodDay.toInt())
+                insightLanguageRepository.setLanguage(settings.insightLanguage)
+                withContext(Dispatchers.Main) { onSaved() }
             }
         }
     }

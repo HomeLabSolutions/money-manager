@@ -7,6 +7,18 @@ import org.junit.Test
 
 class DateTimeUtilTest {
     @Test
+    fun `both end of day overloads include the last millisecond`() {
+        val date = LocalDate(2026, 10, 4)
+        val nextDayStart = LocalDateTime(2026, 10, 5, 0, 0).toMillis()
+        val ends = listOf(date.getEndOfDay(), LocalDateTime(2026, 10, 4, 12, 30).getEndOfDay())
+
+        ends.forEach { end ->
+            assertEquals(date, end.date)
+            assertEquals(nextDayStart - 1, end.toMillis())
+        }
+    }
+
+    @Test
     fun `fiscal period starts on the last available day of the month`() {
         val cases =
             listOf(

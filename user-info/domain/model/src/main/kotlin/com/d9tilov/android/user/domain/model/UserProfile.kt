@@ -10,6 +10,7 @@ data class UserProfile(
     val lastName: String?,
     val showPrepopulate: Boolean,
     val fiscalDay: Int,
+    val insightLanguage: String,
 ) {
     companion object {
         val EMPTY =
@@ -21,6 +22,7 @@ data class UserProfile(
                 lastName = "",
                 showPrepopulate = true,
                 fiscalDay = 1,
+                insightLanguage = InsightLanguage.SYSTEM.tag,
             )
     }
 }

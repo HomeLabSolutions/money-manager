@@ -1,10 +1,5 @@
 package com.d9tilov.android.transaction.regular.ui
 
-import android.Manifest
-import android.app.Activity
-import android.content.Context
-import android.content.pm.PackageManager
-import android.os.Build
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -59,6 +54,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.CategoryDestination
+import com.d9tilov.android.common.android.ui.permissions.rememberNotificationPermissionRequester
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
@@ -89,6 +85,7 @@ fun RegularTransactionCreationRoute(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    val requestNotificationPermission = rememberNotificationPermissionRequester()
     RegularTransactionCreationScreen(
         uiState = state,
         onCurrencyClicked = onCurrencyClicked,
@@ -97,7 +94,7 @@ fun RegularTransactionCreationRoute(
             coroutineScope.launch {
                 try {
                     viewModel.saveOrUpdate()
-                    if (state.transaction.pushEnabled) requestNotificationPermissionIfNeeded(context)
+                    if (state.transaction.pushEnabled) requestNotificationPermission()
                     onSaveClicked()
                 } catch (exception: CancellationException) {
                     throw exception
@@ -119,17 +116,9 @@ fun RegularTransactionCreationRoute(
         onDescriptionChanged = viewModel::updateDescription,
         onPushEnabledChanged = { enabled ->
             viewModel.updatePushEnabled(enabled)
-            if (enabled) requestNotificationPermissionIfNeeded(context)
+            if (enabled) requestNotificationPermission()
         },
     )
-}
-
-private fun requestNotificationPermissionIfNeeded(context: Context) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-        context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
-    ) {
-        (context as? Activity)?.requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1)
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- These counts use fixed domain constants, so plural selection is not needed. -->
+    <string name="insights_consent_message" tools:ignore="PluralsCandidate">To create insights, the app will send your daily income and expense totals for the past %1$d days, grouped by category and currency, to a third-party service. After you agree, the app will also create an insight each week in the background and show it in a notification. Up to %1$d generated insights will be stored on this device and may be sent to the service to avoid repeats. Notes are not sent.</string>
+    <string name="insights_consent_confirm">Agree and continue</string>
+    <string name="insights_consent_dismiss">Not now</string>
+    <string name="insights_screen_title">Financial insights</string>
+    <string name="insights_unavailable_message">Insights are unavailable right now. Please try again later.</string>
+    <string name="insights_insufficient_data" tools:ignore="PluralsCandidate">Not enough data for an insight yet. Add transactions over at least %1$d days and try again.</string>
+    <string name="insights_daily_limit">You can generate one insight per day. Please come back tomorrow.</string>
+    <string name="insights_generate">Generate insight</string>
+    <string name="insights_empty_history">Your insights will appear here.</string>
+    <string name="insights_retry">Retry</string>
+    <string name="weekly_insight_channel">Weekly insights</string>
+    <string name="weekly_insight_title">Your weekly insight</string>
+</resources>

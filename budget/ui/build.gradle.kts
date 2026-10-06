@@ -9,6 +9,7 @@ android {
 }
 
 dependencies {
+    testImplementation(libs.kotlinx.datetime)
     implementation(project(":analytics:domain"))
     implementation(project(":budget:domain:contract"))
     implementation(project(":budget:domain:model"))
@@ -19,6 +20,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.hilt.android)
     implementation(libs.hilt.lifecycle.viewmodel.compose)
+    implementation(libs.navigation.compose)
     implementation(libs.navigation.runtime)
 
     testImplementation(libs.junit)

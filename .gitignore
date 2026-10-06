@@ -11,3 +11,6 @@
 .kotlin
 keystore.properties
 local.defaults.properties
+/functions/node_modules/
+/functions/.secret.local
+/functions/.env*

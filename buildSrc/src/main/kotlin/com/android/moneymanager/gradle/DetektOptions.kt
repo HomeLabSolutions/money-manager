@@ -1,5 +1,6 @@
 package com.android.moneymanager.gradle
 
+import com.android.moneymanager.gradle.task.CheckNoApiDependenciesTask
 import com.android.moneymanager.gradle.task.TomlFileValidationTask
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
@@ -16,6 +17,7 @@ object DetektOptions {
         plugins.apply("io.gitlab.arturbosch.detekt")
 
         tasks.register<TomlFileValidationTask>("tomlCheck")
+        tasks.register<CheckNoApiDependenciesTask>("noApiCheck")
 
         tasks.register<Detekt>("detektCheck") {
             configureCommon()

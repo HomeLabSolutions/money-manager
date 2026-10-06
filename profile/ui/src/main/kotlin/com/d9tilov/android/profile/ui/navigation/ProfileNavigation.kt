@@ -3,7 +3,7 @@ package com.d9tilov.android.profile.ui.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import com.d9tilov.android.designsystem.component.roundedBackComposable
+import androidx.navigation.compose.composable
 import com.d9tilov.android.profile.ui.ProfileRoute
 
 const val PROFILE_NAVIGATION_ROUTE = "profile_route"
@@ -20,7 +20,7 @@ fun NavGraphBuilder.profileScreen(
     navigateToRegularExpenseScreen: () -> Unit,
     navigateToSettingsScreen: () -> Unit,
 ) {
-    roundedBackComposable(route = route) {
+    composable(route = route) {
         ProfileRoute(
             navigateToCurrencyListScreen = navigateToCurrencyListScreen,
             navigateToBudgetScreen = navigateToBudgetScreen,

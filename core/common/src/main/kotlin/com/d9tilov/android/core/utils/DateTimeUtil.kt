@@ -24,7 +24,7 @@ import kotlin.time.Instant
 const val DATE_FORMAT = "dd.MM.yyyy"
 const val BACKUP_DATE = "dd.MM.yyyy HH:mm"
 private const val MILLISECONDS_IN_SECOND = 1000L
-private const val MILLISECONDS_MINUS_ONE = 999
+private const val NANOSECONDS_MINUS_ONE = 999_999_999
 private const val SECONDS_MINUS_ONE = 59
 private const val HOURS_MINUS_ONE = 23
 private const val MAX_FISCAL_DAY = 31
@@ -80,10 +80,10 @@ fun LocalDate.getStartOfDay(): LocalDateTime = atTime(0, 0, 0, 0)
 fun LocalDateTime.getStartOfDay(): LocalDateTime = date.atTime(0, 0, 0, 0)
 
 fun LocalDate.getEndOfDay(): LocalDateTime =
-    atTime(HOURS_MINUS_ONE, SECONDS_MINUS_ONE, SECONDS_MINUS_ONE, MILLISECONDS_MINUS_ONE)
+    atTime(HOURS_MINUS_ONE, SECONDS_MINUS_ONE, SECONDS_MINUS_ONE, NANOSECONDS_MINUS_ONE)
 
 fun LocalDateTime.getEndOfDay(): LocalDateTime =
-    date.atTime(HOURS_MINUS_ONE, SECONDS_MINUS_ONE, SECONDS_MINUS_ONE, MILLISECONDS_MINUS_ONE)
+    date.atTime(HOURS_MINUS_ONE, SECONDS_MINUS_ONE, SECONDS_MINUS_ONE, NANOSECONDS_MINUS_ONE)
 
 fun LocalDateTime.isSameDay(date: LocalDateTime): Boolean = this.year == date.year && this.dayOfYear == date.dayOfYear
 

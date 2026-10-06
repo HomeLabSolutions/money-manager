@@ -7,6 +7,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.annotation)
     implementation(project(":category:data:contract"))
     implementation(project(":category:domain:contract"))
     implementation(project(":category:domain:model"))
