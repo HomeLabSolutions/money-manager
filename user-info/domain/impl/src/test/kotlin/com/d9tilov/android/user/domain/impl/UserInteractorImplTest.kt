@@ -29,6 +29,7 @@ class UserInteractorImplTest {
             photoUrl = "https://example.com/photo.jpg",
             showPrepopulate = false,
             fiscalDay = 1,
+            insightLanguage = UserProfile.EMPTY.insightLanguage,
         )
 
     @Test

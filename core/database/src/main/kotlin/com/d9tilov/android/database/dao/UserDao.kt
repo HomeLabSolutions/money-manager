@@ -15,6 +15,15 @@ interface UserDao {
     @Query("SELECT fiscalDay FROM Users WHERE uid = :id")
     suspend fun getFiscalDay(id: String): Int
 
+    @Query("SELECT insightLanguage FROM users WHERE uid = :id")
+    fun getInsightLanguage(id: String): Flow<String>
+
+    @Query("UPDATE users SET insightLanguage = :language WHERE uid = :id")
+    suspend fun updateInsightLanguage(
+        id: String,
+        language: String,
+    )
+
     @Query("SELECT showPrepopulate FROM Users WHERE uid = :id")
     suspend fun showPrepopulate(id: String): Boolean
 

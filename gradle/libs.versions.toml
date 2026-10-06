@@ -2,6 +2,8 @@
 accompanist = "0.37.3"
 activity = "1.13.0"
 androidxComposeBom="2026.04.01"
+androidxCore = "1.19.0"
+annotation = "1.8.2"
 appCompat = "1.8.0"
 autonomousappsSorting = "0.21.0"
 autonomousappsUnused = "3.19.2"
@@ -53,6 +55,7 @@ accompanist-permissions = { group = "com.google.accompanist", name = "accompanis
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "gradlePlugin" }
+androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
 androidx-compose-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core" }
@@ -63,6 +66,7 @@ androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-constraintlayout-compose = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "composeConstraintLayout" }
+androidx-core = { group = "androidx.core", name = "core", version.ref = "androidxCore" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashScreen" }
 androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "workerHilt" }
 androidx-lifecycle-viewmodel-compose-android = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose-android", version.ref = "compose" }
@@ -79,6 +83,7 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-config = { group = "com.google.firebase", name = "firebase-config" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 firebase-crashlytics-gradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsPlugin" }
+firebase-functions = { group = "com.google.firebase", name = "firebase-functions" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage" }
 firebase-ui-auth = { group = "com.firebaseui", name = "firebase-ui-auth", version.ref = "firebaseUi" }
 google-services = { group = "com.google.gms", name = "google-services", version.ref = "googlePlayServices" }
@@ -95,6 +100,7 @@ javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "j
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-metadata-jvm = { group = "org.jetbrains.kotlin", name = "kotlin-metadata-jvm", version.ref = "kotlin" }
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutinesCore" }
 kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutinesCore" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesCore" }

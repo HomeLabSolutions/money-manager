@@ -4,6 +4,15 @@
     <string name="title_settings">Settings</string>
     <string name="settings_start_period_day_postfix">day of month</string>
     <string name="settings_start_period_day_title">Start of period:</string>
+    <string name="settings_insight_language">Insight language</string>
+    <string name="settings_insight_language_system">System default</string>
+    <string name="settings_insight_language_english" translatable="false">English</string>
+    <string name="settings_insight_language_russian" translatable="false">Русский</string>
+    <string name="settings_insight_language_spanish" translatable="false">Español</string>
+    <string name="settings_insight_language_portuguese" translatable="false">Português</string>
+    <string name="settings_insight_language_arabic" translatable="false">العربية</string>
+    <string name="settings_insight_language_hindi" translatable="false">हिन्दी</string>
+    <string name="settings_insight_language_chinese" translatable="false">简体中文</string>
     <string name="settings_subscription_premium_description">cost control\nextra icons\nregular transactions\nand much more…\n</string>
     <string name="settings_backup_error">Backup error</string>
     <string name="settings_subscription_premium_acknowledged_title" translatable="false">Premium</string>

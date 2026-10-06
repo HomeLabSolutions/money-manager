@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="insights_action_height">64dp</dimen>
+    <dimen name="insight_bubble_spacing">12dp</dimen>
+    <dimen name="insight_bubble_corner_radius">22dp</dimen>
+    <dimen name="insight_bubble_small_corner_radius">6dp</dimen>
+</resources>

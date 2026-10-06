@@ -22,6 +22,12 @@ enum class TopLevelDestination(
         iconTextId = R.string.bottom_menu_chart,
         titleTextId = R.string.bottom_menu_chart,
     ),
+    INSIGHTS(
+        selectedIcon = MoneyManagerIcons.Insights,
+        unselectedIcon = MoneyManagerIcons.Insights,
+        iconTextId = R.string.bottom_menu_insights,
+        titleTextId = R.string.bottom_menu_insights,
+    ),
     PROFILE(
         selectedIcon = MoneyManagerIcons.Profile,
         unselectedIcon = MoneyManagerIcons.Profile,

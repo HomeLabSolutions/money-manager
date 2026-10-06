@@ -88,7 +88,7 @@ fun MmApp(
                             snackBarHostState.showSnackbar(
                                 message = message,
                                 actionLabel = action,
-                                duration = SnackbarDuration.Short,
+                                duration = if (action != null) SnackbarDuration.Indefinite else SnackbarDuration.Short,
                             ) == SnackbarResult.ActionPerformed
                         },
                     )

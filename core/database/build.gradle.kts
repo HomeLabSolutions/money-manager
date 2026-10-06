@@ -21,7 +21,8 @@ android {
 }
 
 dependencies {
-    api(libs.room.runtime.android)
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.room.runtime.android)
 
     implementation(project(":core:common"))
     implementation(libs.hilt.android)
@@ -31,4 +32,8 @@ dependencies {
     ksp(libs.room.compiler)
 
     testImplementation(libs.junit)
+}
+
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
 }

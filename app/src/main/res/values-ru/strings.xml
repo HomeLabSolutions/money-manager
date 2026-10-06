@@ -6,6 +6,7 @@
 
     <string name="bottom_menu_income_expense">Расход/Доход</string>
     <string name="bottom_menu_chart">Статистика</string>
+    <string name="bottom_menu_insights">Инсайты</string>
     <string name="bottom_menu_profile">Профиль</string>
 
     <string name="permissions_location">Геолокации</string>

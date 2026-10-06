@@ -13,10 +13,12 @@ import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.Dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,13 +28,15 @@ fun MmTopAppBar(
     navigationIcon: ImageVector = MoneyManagerIcons.ArrowBack,
     actionIcon: ImageVector? = null,
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
+    surfaceColor: Color = MaterialTheme.colorScheme.surface,
+    shadowElevation: Dp = dimensionResource(R.dimen.surface_elevation),
     onNavigationClick: () -> Unit = {},
     onActionClick: () -> Unit = {},
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        shadowElevation = 3.dp,
-        color = MaterialTheme.colorScheme.surface,
+        shadowElevation = shadowElevation,
+        color = surfaceColor,
     ) {
         TopAppBar(
             title = {

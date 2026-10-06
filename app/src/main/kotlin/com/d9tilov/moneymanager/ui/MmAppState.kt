@@ -14,6 +14,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.d9tilov.android.incomeexpense.navigation.navigateToIncomeExpense
+import com.d9tilov.android.insights.presentation.navigation.navigateToInsights
 import com.d9tilov.android.profile.ui.navigation.navigateToProfile
 import com.d9tilov.android.statistics.ui.navigation.navigateToStatistics
 import com.d9tilov.moneymanager.navigation.TopLevelDestination
@@ -77,6 +78,10 @@ class MmAppState(
 
                 TopLevelDestination.STATISTICS -> {
                     navController.navigateToStatistics(topLevelNavOptions)
+                }
+
+                TopLevelDestination.INSIGHTS -> {
+                    navController.navigateToInsights(topLevelNavOptions)
                 }
 
                 TopLevelDestination.PROFILE -> {
