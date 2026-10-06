@@ -14,14 +14,11 @@ fun NavController.navigateToInsights(navOptions: NavOptions? = null) {
     navigate(INSIGHTS_NAVIGATION_ROUTE, navOptions)
 }
 
-fun NavGraphBuilder.insightsScreen(
-    onBackClick: () -> Unit,
-    onShowSnackBar: suspend (String, String?) -> Boolean,
-) {
+fun NavGraphBuilder.insightsScreen(onShowSnackBar: suspend (String, String?) -> Boolean) {
     composable(
         route = INSIGHTS_NAVIGATION_ROUTE,
         deepLinks = listOf(navDeepLink { uriPattern = INSIGHTS_DEEP_LINK_URI }),
     ) {
-        InsightsRoute(onBackClick = onBackClick, onShowSnackBar = onShowSnackBar)
+        InsightsRoute(onShowSnackBar = onShowSnackBar)
     }
 }

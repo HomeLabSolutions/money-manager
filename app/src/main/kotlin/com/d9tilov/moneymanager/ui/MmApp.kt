@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.d9tilov.android.common.android.ui.permissions.PermissionBox
@@ -149,7 +150,7 @@ private fun MmBottomBar(
                         contentDescription = null,
                     )
                 },
-                label = { Text(stringResource(destination.iconTextId)) },
+                label = { Text(stringResource(destination.iconTextId), textAlign = TextAlign.Center) },
                 modifier = Modifier,
             )
         }
