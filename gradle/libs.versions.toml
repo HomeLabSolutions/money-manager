@@ -2,7 +2,7 @@
 accompanist = "0.37.3"
 activity = "1.13.0"
 androidxComposeBom="2026.04.01"
-androidxCore = "1.19.0"
+androidxCore = "1.19.1"
 annotation = "1.11.0"
 appCompat = "1.8.0"
 autonomousappsSorting = "0.21.0"
