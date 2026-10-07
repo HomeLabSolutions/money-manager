@@ -31,11 +31,30 @@ internal object DatabaseBackupSchema {
         table: String,
     ): TableSchema =
         TableSchema(
-            // Room permits defaults introduced by migrations when an entity specifies no default.
-            columns = rows(query, "PRAGMA table_info(${table.sqlIdentifier()})", setOf("cid", "dflt_value")),
+            columns = columns(query, table),
             foreignKeys = foreignKeys(query, table),
             indices = indices(query, table),
         )
+
+    private fun columns(
+        query: (String) -> Cursor,
+        table: String,
+    ): Set<ColumnSchema> =
+        query("PRAGMA table_info(${table.sqlIdentifier()})").use { cursor ->
+            buildSet {
+                while (cursor.moveToNext()) {
+                    // Allow defaults introduced by migrations when entities specify no default.
+                    add(
+                        ColumnSchema(
+                            name = cursor.string("name"),
+                            type = cursor.string("type"),
+                            notNull = cursor.int("notnull") != 0,
+                            primaryKeyPosition = cursor.int("pk"),
+                        ),
+                    )
+                }
+            }
+        }
 
     private fun foreignKeys(
         query: (String) -> Cursor,
@@ -76,37 +95,51 @@ internal object DatabaseBackupSchema {
                     val name = cursor.getString(cursor.getColumnIndexOrThrow("name"))
                     add(
                         IndexSchema(
-                            properties = cursor.values(setOf("seq", "name")),
-                            columns = rows(query, "PRAGMA index_xinfo(${name.sqlIdentifier()})", setOf("cid")),
+                            unique = cursor.int("unique") != 0,
+                            origin = cursor.string("origin"),
+                            partial = cursor.int("partial") != 0,
+                            columns = indexColumns(query, name),
                         ),
                     )
                 }
             }
         }
 
-    private fun rows(
+    private fun indexColumns(
         query: (String) -> Cursor,
-        sql: String,
-        excluded: Set<String>,
-    ): Set<List<String?>> =
-        query(sql).use { cursor ->
+        index: String,
+    ): Set<IndexColumnSchema> =
+        query("PRAGMA index_xinfo(${index.sqlIdentifier()})").use { cursor ->
             buildSet {
-                while (cursor.moveToNext()) add(cursor.values(excluded))
+                while (cursor.moveToNext()) {
+                    add(
+                        IndexColumnSchema(
+                            position = cursor.int("seqno"),
+                            name = cursor.getString(cursor.getColumnIndexOrThrow("name")),
+                            descending = cursor.int("desc") != 0,
+                            collation = cursor.getString(cursor.getColumnIndexOrThrow("coll")),
+                            isKey = cursor.int("key") != 0,
+                        ),
+                    )
+                }
             }
-        }
-
-    private fun Cursor.values(excluded: Set<String>): List<String?> =
-        columnNames.filterNot { it in excluded }.map { name ->
-            val index = getColumnIndexOrThrow(name)
-            if (isNull(index)) null else getString(index)
         }
 
     private fun Cursor.string(name: String): String = getString(getColumnIndexOrThrow(name))
 
+    private fun Cursor.int(name: String): Int = getInt(getColumnIndexOrThrow(name))
+
     private data class TableSchema(
-        val columns: Set<List<String?>>,
+        val columns: Set<ColumnSchema>,
         val foreignKeys: Set<ForeignKeySchema>,
         val indices: Set<IndexSchema>,
+    )
+
+    private data class ColumnSchema(
+        val name: String,
+        val type: String,
+        val notNull: Boolean,
+        val primaryKeyPosition: Int,
     )
 
     private data class ForeignKeySchema(
@@ -124,8 +157,18 @@ internal object DatabaseBackupSchema {
     )
 
     private data class IndexSchema(
-        val properties: List<String?>,
-        val columns: Set<List<String?>>,
+        val unique: Boolean,
+        val origin: String,
+        val partial: Boolean,
+        val columns: Set<IndexColumnSchema>,
+    )
+
+    private data class IndexColumnSchema(
+        val position: Int,
+        val name: String?,
+        val descending: Boolean,
+        val collation: String?,
+        val isKey: Boolean,
     )
 }
 
