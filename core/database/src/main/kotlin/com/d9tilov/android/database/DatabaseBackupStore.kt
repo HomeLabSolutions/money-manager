@@ -19,7 +19,7 @@ class DatabaseBackupStore @Inject constructor(
             database.runInTransaction {
                 val destination = database.openHelper.writableDatabase
                 val tables = backupTables()
-                DatabaseBackupSchema.validate(source, destination, tables)
+                DatabaseBackupSchemaValidator.validate(source, destination, tables)
                 destination.execSQL("PRAGMA defer_foreign_keys = ON")
                 tables.forEach { table -> destination.execSQL("DELETE FROM ${table.sqlIdentifier()}") }
                 tables.forEach { table ->

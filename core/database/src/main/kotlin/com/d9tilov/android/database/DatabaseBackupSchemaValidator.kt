@@ -4,7 +4,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 
-internal object DatabaseBackupSchema {
+internal object DatabaseBackupSchemaValidator {
     fun validate(
         source: SQLiteDatabase,
         destination: SupportSQLiteDatabase,
