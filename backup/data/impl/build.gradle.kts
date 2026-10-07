@@ -20,6 +20,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
     implementation(project(":core:datastore"))
+    implementation(project(":core:database"))
     implementation(project(":core:network"))
 
     implementation(libs.androidx.hilt.work)
