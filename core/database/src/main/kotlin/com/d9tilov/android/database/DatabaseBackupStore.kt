@@ -25,13 +25,15 @@ class DatabaseBackupStore @Inject constructor(
             val source = backup.openHelper.writableDatabase
             database.runInTransaction {
                 val destination = database.openHelper.writableDatabase
-                TABLES.asReversed().forEach { table -> destination.execSQL("DELETE FROM `$table`") }
-                TABLES.forEach { table ->
-                    source.query("SELECT * FROM `$table`").use { cursor ->
+                val tables = backupTables()
+                destination.execSQL("PRAGMA defer_foreign_keys = ON")
+                tables.forEach { table -> destination.execSQL("DELETE FROM ${table.sqlIdentifier()}") }
+                tables.forEach { table ->
+                    source.query("SELECT * FROM ${table.sqlIdentifier()}").use { cursor ->
                         while (cursor.moveToNext()) {
                             val values = android.content.ContentValues()
                             DatabaseUtils.cursorRowToContentValues(cursor, values)
-                            destination.insert(table, SQLiteDatabase.CONFLICT_ABORT, values)
+                            destination.insert(table.sqlIdentifier(), SQLiteDatabase.CONFLICT_ABORT, values)
                         }
                     }
                 }
@@ -67,18 +69,24 @@ class DatabaseBackupStore @Inject constructor(
         }
     }
 
-    private companion object {
-        val TABLES =
-            listOf(
-                "users",
-                "currency",
-                "categories",
-                "transactions",
-                "budget",
-                "main_currency",
-                "regularTransaction",
-                "goal",
-                "insights",
-            )
+    private fun backupTables(): List<String> =
+        database.openHelper.writableDatabase
+            .query(
+                """
+                SELECT name FROM sqlite_master
+                WHERE type = 'table'
+                  AND name NOT GLOB 'sqlite_*'
+                  AND name NOT IN ('android_metadata', 'room_master_table')
+                ORDER BY name
+                """.trimIndent(),
+            ).use { cursor ->
+                buildList {
+                    while (cursor.moveToNext()) add(cursor.getString(0))
+                }
+            }
+
+    private fun String.sqlIdentifier(): String {
+        val quote = '"'
+        return "$quote${replace(quote.toString(), "$quote$quote")}$quote"
     }
 }
