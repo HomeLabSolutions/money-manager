@@ -40,14 +40,30 @@ internal object DatabaseBackupSchema {
     private fun foreignKeys(
         query: (String) -> Cursor,
         table: String,
-    ): Set<Set<List<String?>>> =
+    ): Set<ForeignKeySchema> =
         query("PRAGMA foreign_key_list(${table.sqlIdentifier()})").use { cursor ->
-            val groups = mutableMapOf<Int, MutableSet<List<String?>>>()
+            val keys = mutableMapOf<Int, ForeignKeySchema>()
             while (cursor.moveToNext()) {
                 val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
-                groups.getOrPut(id) { mutableSetOf() }.add(cursor.values(setOf("id")))
+                val key =
+                    keys.getOrPut(id) {
+                        ForeignKeySchema(
+                            referencedTable = cursor.string("table"),
+                            onDelete = cursor.string("on_delete"),
+                            onUpdate = cursor.string("on_update"),
+                            match = cursor.string("match"),
+                            columns = emptySet(),
+                        )
+                    }
+                val column =
+                    ForeignKeyColumn(
+                        position = cursor.getInt(cursor.getColumnIndexOrThrow("seq")),
+                        sourceColumn = cursor.string("from"),
+                        referencedColumn = cursor.getString(cursor.getColumnIndexOrThrow("to")),
+                    )
+                keys[id] = key.copy(columns = key.columns + column)
             }
-            groups.values.toSet()
+            keys.values.toSet()
         }
 
     private fun indices(
@@ -85,10 +101,26 @@ internal object DatabaseBackupSchema {
             if (isNull(index)) null else getString(index)
         }
 
+    private fun Cursor.string(name: String): String = getString(getColumnIndexOrThrow(name))
+
     private data class TableSchema(
         val columns: Set<List<String?>>,
-        val foreignKeys: Set<Set<List<String?>>>,
+        val foreignKeys: Set<ForeignKeySchema>,
         val indices: Set<IndexSchema>,
+    )
+
+    private data class ForeignKeySchema(
+        val referencedTable: String,
+        val onDelete: String,
+        val onUpdate: String,
+        val match: String,
+        val columns: Set<ForeignKeyColumn>,
+    )
+
+    private data class ForeignKeyColumn(
+        val position: Int,
+        val sourceColumn: String,
+        val referencedColumn: String?,
     )
 
     private data class IndexSchema(
