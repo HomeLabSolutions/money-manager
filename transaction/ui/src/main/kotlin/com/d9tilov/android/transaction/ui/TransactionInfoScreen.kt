@@ -66,8 +66,9 @@ import com.d9tilov.android.designsystem.DottedDivider
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.android.transaction.domain.model.Transaction
-import com.d9tilov.android.transaction.ui.vm.TransactionCreationViewModel
-import com.d9tilov.android.transaction.ui.vm.TransactionUiState
+import com.d9tilov.android.transaction.ui.model.TransactionInfoMode
+import com.d9tilov.android.transaction.ui.vm.TransactionInfoUiState
+import com.d9tilov.android.transaction.ui.vm.TransactionInfoViewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -81,16 +82,16 @@ import java.math.BigDecimal
 private const val MAP_ZOOM_LEVEL = 15f
 
 @Composable
-fun TransactionCreationRoute(
-    viewModel: TransactionCreationViewModel = hiltViewModel(),
+fun TransactionInfoRoute(
+    viewModel: TransactionInfoViewModel = hiltViewModel(),
     clickBack: () -> Unit,
     clickCurrency: (String) -> Unit,
     clickCategory: (TransactionType, CategoryDestination) -> Unit,
 ) {
-    val state: TransactionUiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val state: TransactionInfoUiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    TransactionCreationScreen(
+    TransactionInfoScreen(
         uiState = state,
         onBackClicked = clickBack,
         onSumChanged = viewModel::updateAmount,
@@ -121,8 +122,8 @@ fun TransactionCreationRoute(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TransactionCreationScreen(
-    uiState: TransactionUiState,
+fun TransactionInfoScreen(
+    uiState: TransactionInfoUiState,
     onSumChanged: (String) -> Unit,
     onInStatisticsChanged: (Boolean) -> Unit,
     onDescriptionChanged: (String) -> Unit,
@@ -132,6 +133,7 @@ fun TransactionCreationScreen(
     onDateClicked: (Long) -> Unit,
     onSaveClicked: () -> Unit,
 ) {
+    val mode = uiState.mode
     val context = LocalContext.current
     var showError by remember { mutableStateOf(false) }
     val showDatePickerDialog = remember { mutableStateOf(false) }
@@ -169,33 +171,15 @@ fun TransactionCreationScreen(
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary,
                 )
-                Row(
-                    modifier =
-                        Modifier.padding(
-                            horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                        ),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        modifier =
-                            Modifier
-                                .alignByBaseline()
-                                .clickable(onClick = { onCurrencyClicked(uiState.transaction.currencyCode) }),
-                        text = uiState.transaction.currencyCode.getSymbolByCode(),
-                        style = MaterialTheme.typography.displaySmall,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                    AutoSizeTextField(
-                        modifier = Modifier.alignByBaseline(),
-                        inputValue = uiState.amount,
-                        inputValueChanged = { text ->
-                            showError = !isInputValid(text)
-                            onSumChanged(text)
-                        },
-                        showError = { if (showError) ShowError() },
-                        autoFocus = false,
-                    )
-                }
+                TransactionAmountField(
+                    uiState = uiState,
+                    showError = showError,
+                    onCurrencyClicked = onCurrencyClicked,
+                    onSumChanged = { text ->
+                        showError = !isInputValid(text)
+                        onSumChanged(text)
+                    },
+                )
                 Row(
                     modifier =
                         Modifier
@@ -209,7 +193,7 @@ fun TransactionCreationScreen(
                 ) {
                     Row(
                         modifier =
-                            Modifier.clickable {
+                            Modifier.clickable(enabled = mode == TransactionInfoMode.EDIT) {
                                 onCategoryClicked(
                                     uiState.transaction.type,
                                     CategoryDestination.EDIT_TRANSACTION_SCREEN,
@@ -262,7 +246,9 @@ fun TransactionCreationScreen(
                                         dimensionResource(
                                             id = com.d9tilov.android.designsystem.R.dimen.padding_small,
                                         ),
-                                ).clickable { showDatePickerDialog.value = true },
+                                ).clickable(enabled = mode == TransactionInfoMode.EDIT) {
+                                    showDatePickerDialog.value = true
+                                },
                         text = formatDate(uiState.transaction.date, TRANSACTION_DATE_TIME_FORMAT),
                         color = MaterialTheme.colorScheme.secondary,
                         style = MaterialTheme.typography.bodyMedium,
@@ -283,6 +269,7 @@ fun TransactionCreationScreen(
                     value = uiState.transaction.inStatistics,
                     label = stringResource(id = R.string.transaction_edit_in_statistics),
                     onCheckChanged = { onInStatisticsChanged(it) },
+                    enabled = mode == TransactionInfoMode.EDIT,
                 )
                 DottedDivider(
                     modifier =
@@ -300,6 +287,7 @@ fun TransactionCreationScreen(
                         ),
                     value = uiState.transaction.description,
                     onValueChange = onDescriptionChanged,
+                    readOnly = mode == TransactionInfoMode.VIEW,
                 )
 
                 if (uiState.transaction.locationData != LocationData.EMPTY) {
@@ -309,45 +297,99 @@ fun TransactionCreationScreen(
                     )
                 }
             }
-            BottomActionButton(
-                modifier =
-                    Modifier
-                        .navigationBarsPadding()
-                        .imePadding(),
-                onClick = onSaveClicked,
-                enabled = !showError,
-            )
+            if (mode == TransactionInfoMode.EDIT) {
+                BottomActionButton(
+                    modifier =
+                        Modifier
+                            .navigationBarsPadding()
+                            .imePadding(),
+                    onClick = onSaveClicked,
+                    enabled = !showError,
+                )
+            }
             if (showDatePickerDialog.value) {
-                DatePickerDialog(
-                    onDismissRequest = { showDatePickerDialog.value = false },
-                    confirmButton = {
-                        TextButton(
-                            onClick = {
-                                onDateClicked(datePickerState.selectedDateMillis ?: currentDateTime().toMillis())
-                                showDatePickerDialog.value = false
-                            },
-                        ) {
-                            Text(
-                                stringResource(id = com.d9tilov.android.common.android.R.string.ok)
-                                    .uppercase(LocalLocale.current.platformLocale),
-                            )
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(
-                            onClick = { showDatePickerDialog.value = false },
-                        ) {
-                            Text(
-                                stringResource(id = com.d9tilov.android.common.android.R.string.cancel)
-                                    .uppercase(LocalLocale.current.platformLocale),
-                            )
-                        }
-                    },
-                ) {
-                    DatePicker(state = datePickerState)
-                }
+                TransactionDatePickerDialog(
+                    datePickerState = datePickerState,
+                    onDismiss = { showDatePickerDialog.value = false },
+                    onDateClicked = onDateClicked,
+                )
             }
         }
+    }
+}
+
+@Composable
+private fun TransactionAmountField(
+    uiState: TransactionInfoUiState,
+    showError: Boolean,
+    onCurrencyClicked: (String) -> Unit,
+    onSumChanged: (String) -> Unit,
+) {
+    val mode = uiState.mode
+    Row(
+        modifier =
+            Modifier.padding(
+                horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            modifier =
+                Modifier
+                    .alignByBaseline()
+                    .clickable(
+                        enabled = mode == TransactionInfoMode.EDIT,
+                        onClick = { onCurrencyClicked(uiState.transaction.currencyCode) },
+                    ),
+            text = uiState.transaction.currencyCode.getSymbolByCode(),
+            style = MaterialTheme.typography.displaySmall,
+            color = MaterialTheme.colorScheme.primary,
+        )
+        AutoSizeTextField(
+            modifier = Modifier.alignByBaseline(),
+            inputValue = uiState.amount,
+            inputValueChanged = onSumChanged,
+            showError = { if (showError) ShowError() },
+            autoFocus = false,
+            readOnly = mode == TransactionInfoMode.VIEW,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TransactionDatePickerDialog(
+    datePickerState: DatePickerState,
+    onDismiss: () -> Unit,
+    onDateClicked: (Long) -> Unit,
+) {
+    DatePickerDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onDateClicked(datePickerState.selectedDateMillis ?: currentDateTime().toMillis())
+                    onDismiss()
+                },
+            ) {
+                Text(
+                    stringResource(id = com.d9tilov.android.common.android.R.string.ok)
+                        .uppercase(LocalLocale.current.platformLocale),
+                )
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismiss,
+            ) {
+                Text(
+                    stringResource(id = com.d9tilov.android.common.android.R.string.cancel)
+                        .uppercase(LocalLocale.current.platformLocale),
+                )
+            }
+        },
+    ) {
+        DatePicker(state = datePickerState)
     }
 }
 
@@ -416,11 +458,12 @@ fun TransactionLocationMap(
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultTransactionCreationPreview() {
+fun DefaultTransactionInfoPreview(mode: TransactionInfoMode = TransactionInfoMode.EDIT) {
     MoneyManagerTheme {
-        TransactionCreationScreen(
+        TransactionInfoScreen(
             uiState =
-                TransactionUiState.EMPTY.copy(
+                TransactionInfoUiState.EMPTY.copy(
+                    mode = mode,
                     amount = "1500.50",
                     transaction =
                         Transaction.EMPTY.copy(
@@ -452,4 +495,10 @@ fun DefaultTransactionCreationPreview() {
             onDateClicked = {},
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ViewTransactionInfoPreview() {
+    DefaultTransactionInfoPreview(mode = TransactionInfoMode.VIEW)
 }

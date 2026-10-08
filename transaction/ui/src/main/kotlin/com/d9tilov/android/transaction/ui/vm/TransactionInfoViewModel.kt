@@ -10,6 +10,7 @@ import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.R
+import com.d9tilov.android.transaction.ui.model.TransactionInfoMode
 import com.d9tilov.android.transaction.ui.navigation.TransactionArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -19,7 +20,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class TransactionUiState(
+data class TransactionInfoUiState(
+    val mode: TransactionInfoMode = TransactionInfoMode.VIEW,
     val amount: String = "0",
     val transaction: Transaction =
         Transaction.EMPTY.copy(
@@ -31,30 +33,30 @@ data class TransactionUiState(
         ),
 ) {
     companion object {
-        val EMPTY = TransactionUiState()
+        val EMPTY = TransactionInfoUiState()
     }
 }
 
 @HiltViewModel
-class TransactionCreationViewModel
+class TransactionInfoViewModel
     @Inject constructor(
         savedStateHandle: SavedStateHandle,
         private val transactionInteractor: TransactionInteractor,
         private val categoryInteractor: CategoryInteractor,
     ) : ViewModel() {
-        private val _uiState = MutableStateFlow(TransactionUiState.EMPTY)
+        private val transactionArgs: TransactionArgs.TransactionInfoArgs =
+            TransactionArgs.TransactionInfoArgs(savedStateHandle)
+        private val _uiState = MutableStateFlow(TransactionInfoUiState.EMPTY)
         val uiState = _uiState.asStateFlow()
-        private val categoryArgs: TransactionArgs.TransactionCreationArgs =
-            TransactionArgs.TransactionCreationArgs(savedStateHandle)
-        private val transactionId: Long = categoryArgs.transactionId
+        private val transactionId: Long = transactionArgs.transactionId
 
         init {
             val transactionExceptionHandler = CoroutineExceptionHandler { _, _ -> }
             viewModelScope.launch(transactionExceptionHandler) {
                 launch {
                     transactionInteractor.getTransactionById(transactionId).collect { tr ->
-                        _uiState.update { state: TransactionUiState ->
-                            state.copy(amount = tr.sum.reduceScaleStr(), transaction = tr)
+                        _uiState.update { state: TransactionInfoUiState ->
+                            state.copy(mode = transactionArgs.mode, amount = tr.sum.reduceScaleStr(), transaction = tr)
                         }
                     }
                 }
@@ -98,6 +100,7 @@ class TransactionCreationViewModel
 
         suspend fun save() {
             val state = _uiState.value
+            if (state.mode == TransactionInfoMode.VIEW) return
             transactionInteractor.update(
                 state.transaction.copy(sum = state.amount.toBigDecimal()),
             )
