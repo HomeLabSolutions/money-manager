@@ -270,6 +270,6 @@ private fun mockCategory(
 ) = Category.EMPTY_INCOME.copy(
     id = id,
     name = name,
-    icon = android.R.drawable.btn_star,
+    icon = com.d9tilov.android.common.android.R.drawable.ic_category_cafe,
     color = android.R.color.holo_blue_light,
 )
