@@ -1,5 +1,6 @@
 package com.d9tilov.android.statistics.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,9 +29,14 @@ import com.d9tilov.android.common.android.R as CommonAndroidR
 fun StatisticsDetailsRoute(
     viewModel: StatisticsDetailsViewModel = hiltViewModel(),
     onBackClicked: () -> Unit,
+    onTransactionClicked: (Long) -> Unit,
 ) {
     val uiState: StatisticsDetailsUiState by viewModel.uiState.collectAsState(StatisticsDetailsUiState())
-    StatisticsDetailsScreen(state = uiState, onBackClicked = onBackClicked)
+    StatisticsDetailsScreen(
+        state = uiState,
+        onBackClicked = onBackClicked,
+        onTransactionClicked = onTransactionClicked,
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,6 +45,7 @@ fun StatisticsDetailsScreen(
     modifier: Modifier = Modifier,
     state: StatisticsDetailsUiState,
     onBackClicked: () -> Unit,
+    onTransactionClicked: (Long) -> Unit,
 ) {
     Scaffold(topBar = {
         MmTopAppBar(
@@ -52,7 +59,10 @@ fun StatisticsDetailsScreen(
             state = rememberLazyListState(),
         ) {
             items(items = state.transactions, key = { item -> item.id }) { item ->
-                TransactionItem(Modifier.fillMaxWidth(), item)
+                TransactionItem(
+                    Modifier.fillMaxWidth().clickable { onTransactionClicked(item.id) },
+                    item,
+                )
             }
         }
     }
@@ -82,6 +92,7 @@ fun StatisticsDetailsScreenPreview() {
                         },
                 ),
             onBackClicked = {},
+            onTransactionClicked = {},
         )
     }
 }

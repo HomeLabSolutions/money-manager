@@ -23,14 +23,14 @@ const val REGULAR_TRANSACTION_LIST_NAVIGATION_ROUTE = "regular_transaction_list_
 const val REGULAR_TRANSACTION_CREATION_NAVIGATION_ROUTE = "regular_transaction_creation_route"
 
 internal sealed class RegularTransactionArgs {
-    class RegularTransactionListArgs(
+    data class RegularTransactionListArgs(
         val transactionType: TransactionType,
     ) {
         constructor(savedStateHandle: SavedStateHandle) :
             this(checkNotNull(savedStateHandle[NavigationConstants.TRANSACTION_TYPE_ARG]).toString().toInt().toType())
     }
 
-    class RegularTransactionCreationArgs(
+    data class RegularTransactionCreationArgs(
         val transactionType: TransactionType,
         val transactionId: Long,
     ) {

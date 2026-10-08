@@ -55,10 +55,12 @@ import com.d9tilov.android.transaction.regular.ui.navigator.navigateToRegularTra
 import com.d9tilov.android.transaction.regular.ui.navigator.navigateToRegularTransactionListScreen
 import com.d9tilov.android.transaction.regular.ui.navigator.regularTransactionCreationScreen
 import com.d9tilov.android.transaction.regular.ui.navigator.regularTransactionListScreen
+import com.d9tilov.android.transaction.ui.model.TransactionInfoMode
 import com.d9tilov.android.transaction.ui.navigation.TRANSACTION_ID_ARG
+import com.d9tilov.android.transaction.ui.navigation.TRANSACTION_MODE_ARG
 import com.d9tilov.android.transaction.ui.navigation.TRANSACTION_NAVIGATION_ROUTE
 import com.d9tilov.android.transaction.ui.navigation.navigateToTransactionScreen
-import com.d9tilov.android.transaction.ui.navigation.transactionCreationScreen
+import com.d9tilov.android.transaction.ui.navigation.transactionInfoScreen
 import com.d9tilov.moneymanager.ui.MmAppState
 
 @Composable
@@ -76,6 +78,12 @@ fun MmNavHost(
         predictivePopEnterTransition = { DefaultNavTransitions.enterTransition.invoke(this) },
         predictivePopExitTransition = { DefaultNavTransitions.exitTransition.invoke(this) },
     ) {
+        transactionInfoScreen(
+            route = "$TRANSACTION_NAVIGATION_ROUTE/{$TRANSACTION_ID_ARG}/{$TRANSACTION_MODE_ARG}",
+            clickBack = navController::popBackStack,
+            onCategoryClick = navController::navigateToCategoryListScreen,
+            onCurrencyClick = navController::navigateToCurrencyListScreen,
+        )
         navigation(
             startDestination = categoryNavigationRoute(),
             route = CATEGORY_ROOT_ROUTE,
@@ -134,13 +142,9 @@ fun MmNavHost(
                 route = INCOME_EXPENSE_NAVIGATION_ROUTE,
                 onCurrencyClick = navController::navigateToCurrencyListScreen,
                 onAllCategoryClick = navController::navigateToCategoryListScreen,
-                onTransactionClick = { navController.navigateToTransactionScreen(transactionId = it.id) },
-            )
-            transactionCreationScreen(
-                route = "$TRANSACTION_NAVIGATION_ROUTE/{$TRANSACTION_ID_ARG}",
-                clickBack = navController::popBackStack,
-                onCategoryClick = navController::navigateToCategoryListScreen,
-                onCurrencyClick = navController::navigateToCurrencyListScreen,
+                onTransactionClick = {
+                    navController.navigateToTransactionScreen(transactionId = it.id, mode = TransactionInfoMode.EDIT)
+                },
             )
         }
         navigation(startDestination = INSIGHTS_NAVIGATION_ROUTE, route = INSIGHTS_ROOT_DESTINATION) {
@@ -168,6 +172,9 @@ fun MmNavHost(
                         "{$TRANSACTION_DETAILS_DATE_TO_ARGS}/" +
                         "{$TRANSACTION_DETAILS_IN_STATISTICS_ARGS}",
                 onBackClicked = navController::popBackStack,
+                onTransactionClicked = {
+                    navController.navigateToTransactionScreen(transactionId = it, mode = TransactionInfoMode.VIEW)
+                },
             )
         }
         navigation(startDestination = PROFILE_NAVIGATION_ROUTE, route = PROFILE_ROOT_DESTINATION) {

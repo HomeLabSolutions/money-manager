@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -44,6 +45,7 @@ fun AutoSizeTextField(
     fontSize: TextUnit = 72.sp,
     fontColor: Color = MaterialTheme.colorScheme.primary,
     autoFocus: Boolean = true,
+    readOnly: Boolean = false,
 ) {
     var amount by remember { mutableStateOf(TextFieldValue()) }
     amount = amount.copy(text = inputValue, selection = TextRange(inputValue.length))
@@ -72,11 +74,13 @@ fun AutoSizeTextField(
         }
         val focusRequester = remember { FocusRequester() }
         OutlinedTextField(
+            readOnly = readOnly,
             value = amount,
             modifier =
                 Modifier
                     .fillMaxWidth()
                     .width(IntrinsicSize.Min)
+                    .focusProperties { canFocus = !readOnly }
                     .focusRequester(focusRequester)
                     .fillMaxWidth()
                     .padding(
@@ -96,7 +100,7 @@ fun AutoSizeTextField(
             },
             supportingText = showError,
         )
-        if (autoFocus) {
+        if (autoFocus && !readOnly) {
             LaunchedEffect(Unit) { focusRequester.requestFocus() }
         }
     }

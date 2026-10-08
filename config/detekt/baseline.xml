@@ -143,10 +143,6 @@
     <ID>UnnecessaryParentheses:ComposeCurrencyView.kt$(R.dimen.padding_extra_small)</ID>
     <ID>UnusedPrivateProperty:BillingInteractorImpl.kt$BillingInteractorImpl$val details = billingRepo.premiumProductDetails.map { productDetails -&gt; productDetails != null }</ID>
     <ID>UseCheckOrError:GradleFileValidationTask.kt$GradleFileValidationTask$throw IllegalStateException( "Please check file $path\nfor unused dependencies with script [python3 unused_deps.py &lt;file-path&gt;]", )</ID>
-    <ID>UseDataClass:CurrencyNavigation.kt$CurrencyArgs$CurrencyScreenArgs</ID>
-    <ID>UseDataClass:RegularIncomeExpenseNavigator.kt$RegularTransactionArgs$RegularTransactionCreationArgs</ID>
-    <ID>UseDataClass:RegularIncomeExpenseNavigator.kt$RegularTransactionArgs$RegularTransactionListArgs</ID>
-    <ID>UseDataClass:TransactionNavigation.kt$TransactionArgs$TransactionCreationArgs</ID>
     <ID>UseIfInsteadOfWhen:BillingDataSource.kt$BillingDataSource$when (responseCode) { BillingClient.BillingResponseCode.OK -&gt; { var newMap = emptyMap&lt;String, ProductDetails&gt;() if (productDetailsList.isEmpty()) { Timber .tag(TAG) .d( "onProductDetailsResponse: Found null or empty ProductDetails. Check to see if the Products you requested are correctly published in the Google Play Console.", ) } else { newMap = productDetailsList.associateBy { it.productId } } _productWithProductDetails.value = newMap } else -&gt; { Timber.tag(TAG).i("onProductDetailsResponse: $responseCode $debugMessage") } }</ID>
     <ID>UseIfInsteadOfWhen:CategoryListScreen.kt$when (i % 2) { 0 -&gt; shake.animateTo(2f, spring(stiffness = 5_000f)) else -&gt; shake.animateTo(-2f, spring(stiffness = 5_000f)) }</ID>
     <ID>UseIfInsteadOfWhen:CurrencyTextField.kt$when (input.toBigDecimalOrNull()) { null -&gt; text else -&gt; { val number = input.toBigDecimal() if (number.scale() &gt; DECIMAL_SIZE) { input.substring( 0, input.indexOf(DELIMITER) + DECIMAL_SIZE + 1, ) } else { input } } }</ID>
