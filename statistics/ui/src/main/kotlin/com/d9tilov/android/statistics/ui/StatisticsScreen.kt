@@ -350,7 +350,7 @@ fun StatisticsPeriodSelector(
     ) {
         for (item: StatisticsPeriodModel in state.periods) {
             ButtonSelector(
-                enabled = state.selectedPeriod.name == item.name,
+                selected = state.selectedPeriod.name == item.name,
                 text = { Text(text = stringResource(item.name)) },
                 onClick = { onPeriodClick(item) },
             )

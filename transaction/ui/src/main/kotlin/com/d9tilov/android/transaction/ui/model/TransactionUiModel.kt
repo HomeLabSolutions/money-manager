@@ -37,7 +37,7 @@ data class TransactionUiModel(
                     Category.EMPTY_EXPENSE.copy(
                         color = android.R.color.holo_blue_light,
                         name = "Category1",
-                        icon = android.R.drawable.star_on,
+                        icon = com.d9tilov.android.common.android.R.drawable.ic_category_cafe,
                     ),
                 currencyCode = DEFAULT_CURRENCY_CODE,
                 sum = BigDecimal.ZERO,
