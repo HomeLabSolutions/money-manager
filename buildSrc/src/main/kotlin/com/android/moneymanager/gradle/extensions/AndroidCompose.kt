@@ -81,7 +81,7 @@ private fun Project.configureComposeMetrics() {
 private fun Project.buildComposeMetricsParameters(): List<String> {
     val metricParameters = mutableListOf<String>()
     val enableMetricsProvider = project.providers.gradleProperty("enableComposeCompilerMetrics")
-    val enableMetrics = (enableMetricsProvider.orNull == "true")
+    val enableMetrics = enableMetricsProvider.orNull == "true"
     if (enableMetrics) {
         val metricsFolder = File(project.buildDir, "compose-metrics")
         metricParameters.add("-P")
@@ -91,7 +91,7 @@ private fun Project.buildComposeMetricsParameters(): List<String> {
     }
 
     val enableReportsProvider = project.providers.gradleProperty("enableComposeCompilerReports")
-    val enableReports = (enableReportsProvider.orNull == "true")
+    val enableReports = enableReportsProvider.orNull == "true"
     if (enableReports) {
         val reportsFolder = File(project.buildDir, "compose-reports")
         metricParameters.add("-P")

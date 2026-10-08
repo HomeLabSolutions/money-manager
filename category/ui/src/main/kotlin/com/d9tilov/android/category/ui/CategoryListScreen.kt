@@ -54,6 +54,12 @@ import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
+private const val CATEGORY_GRID_COLUMN_COUNT = 4
+private const val CATEGORY_SHAKE_OFFSET_PX = 2f
+private const val CATEGORY_SHAKE_JITTER_BOUND_PX = 5
+private const val PREVIEW_CATEGORY_COUNT = 34
+private const val PREVIEW_CATEGORY_NAME_LIMIT = 15
+
 @Composable
 fun CategoryListRoute(
     viewModel: CategoryListViewModel = hiltViewModel(),
@@ -102,9 +108,10 @@ fun CategoryListScreen(
     LaunchedEffect(isRemoveState) {
         var i = 0
         while (isRemoveState) {
-            when (i % 2) {
-                0 -> shake.animateTo(2f, spring(stiffness = 5_000f))
-                else -> shake.animateTo(-2f, spring(stiffness = 5_000f))
+            if (i % 2 == 0) {
+                shake.animateTo(CATEGORY_SHAKE_OFFSET_PX, spring(stiffness = 5_000f))
+            } else {
+                shake.animateTo(-CATEGORY_SHAKE_OFFSET_PX, spring(stiffness = 5_000f))
             }
             ++i
             if (i == 2) i = 0
@@ -135,7 +142,7 @@ fun CategoryListScreen(
                                     id = com.d9tilov.android.designsystem.R.dimen.padding_medium,
                                 ),
                         ),
-                columns = GridCells.Fixed(4),
+                columns = GridCells.Fixed(CATEGORY_GRID_COLUMN_COUNT),
             ) {
                 items(uiState.categories, { it.id }) { item ->
                     Box {
@@ -146,8 +153,12 @@ fun CategoryListScreen(
                                     .padding(8.dp)
                                     .offset {
                                         IntOffset(
-                                            x = shake.value.roundToInt() + Random.nextInt(5),
-                                            y = shake.value.roundToInt() + Random.nextInt(5),
+                                            x =
+                                                shake.value.roundToInt() +
+                                                    Random.nextInt(CATEGORY_SHAKE_JITTER_BOUND_PX),
+                                            y =
+                                                shake.value.roundToInt() +
+                                                    Random.nextInt(CATEGORY_SHAKE_JITTER_BOUND_PX),
                                         )
                                     }.combinedClickable(
                                         onClick = {
@@ -219,42 +230,10 @@ fun DefaultCategoryListPreview() {
     MoneyManagerTheme {
         CategoryListScreen(
             CategoryUiState(
-                listOf(
-                    mockCategory(1L, "Category1"),
-                    mockCategory(2L, "Category2"),
-                    mockCategory(3L, "Category3"),
-                    mockCategory(4L, "Category4"),
-                    mockCategory(5L, "Category5"),
-                    mockCategory(6L, "Category6"),
-                    mockCategory(7L, "Category7"),
-                    mockCategory(8L, "Category8"),
-                    mockCategory(9L, "Category9"),
-                    mockCategory(10L, "Category10"),
-                    mockCategory(11L, "Category11"),
-                    mockCategory(12L, "Category12"),
-                    mockCategory(13L, "Category13"),
-                    mockCategory(14L, "Category14"),
-                    mockCategory(15L, "Category15"),
-                    mockCategory(16L, "Category15"),
-                    mockCategory(17L, "Category15"),
-                    mockCategory(18L, "Category15"),
-                    mockCategory(19L, "Category15"),
-                    mockCategory(20L, "Category15"),
-                    mockCategory(21L, "Category15"),
-                    mockCategory(22L, "Category15"),
-                    mockCategory(23L, "Category15"),
-                    mockCategory(24L, "Category15"),
-                    mockCategory(25L, "Category15"),
-                    mockCategory(26L, "Category15"),
-                    mockCategory(27L, "Category15"),
-                    mockCategory(28L, "Category15"),
-                    mockCategory(29L, "Category15"),
-                    mockCategory(30L, "Category15"),
-                    mockCategory(31L, "Category15"),
-                    mockCategory(32L, "Category15"),
-                    mockCategory(33L, "Category15"),
-                    mockCategory(34L, "Category15"),
-                ),
+                List(PREVIEW_CATEGORY_COUNT) { index ->
+                    val id = index + 1
+                    mockCategory(id.toLong(), "Category${minOf(id, PREVIEW_CATEGORY_NAME_LIMIT)}")
+                },
             ),
             {},
             {},

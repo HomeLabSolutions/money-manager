@@ -108,7 +108,7 @@ fun ProfileScreen(
             modifier =
                 Modifier.padding(vertical = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
             onClick = { onLogoutClicked() },
-            shape = RoundedCornerShape(50),
+            shape = CircleShape,
             colors = ButtonDefaults.outlinedButtonColors().copy(containerColor = MaterialTheme.colorScheme.error),
         ) {
             Text(
@@ -353,7 +353,7 @@ fun ProfileSection(
                                 start.linkTo(idTitle.end)
                             }.background(
                                 color = backgroundColor,
-                                shape = RoundedCornerShape(50),
+                                shape = CircleShape,
                             ).padding(all = 8.dp),
                     style =
                         MaterialTheme.typography.labelSmall.copy(

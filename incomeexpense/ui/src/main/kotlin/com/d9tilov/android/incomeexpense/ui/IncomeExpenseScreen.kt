@@ -122,6 +122,10 @@ import java.math.BigDecimal
 
 private const val KEYBOARD_BUTTON_ANIMATION_DELAY_MS = 150L
 
+private const val KEYBOARD_COLUMN_COUNT = 3
+private const val PREVIEW_USD_AMOUNT = 5
+private const val PREVIEW_CATEGORY_COUNT = 15
+
 @Parcelize
 private data class ScrollAnchor(
     val itemKey: String,
@@ -384,9 +388,10 @@ fun TransactionListLayout(
                             enableDismissFromStartToEnd = false,
                             backgroundContent = {
                                 val backgroundColor by animateColorAsState(
-                                    when (dismissState.targetValue) {
-                                        SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.error
-                                        else -> Color.Transparent
+                                    if (dismissState.targetValue == SwipeToDismissBoxValue.EndToStart) {
+                                        MaterialTheme.colorScheme.error
+                                    } else {
+                                        Color.Transparent
                                     },
                                     label = "",
                                 )
@@ -635,7 +640,7 @@ fun KeyBoardLayout(
     val data: List<String> = KeyPress.entries.map { it.value }
     Box(modifier = modifier.padding(bottom = 8.dp)) {
         LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
+            columns = GridCells.Fixed(KEYBOARD_COLUMN_COUNT),
             horizontalArrangement = Arrangement.Center,
             verticalArrangement = Arrangement.spacedBy(16.dp),
             userScrollEnabled = false,
@@ -835,7 +840,7 @@ fun TransactionListItemPreview() {
             transaction =
                 TransactionUiModel.EMPTY.copy(
                     sum = BigDecimal.TEN,
-                    usdSum = BigDecimal(5),
+                    usdSum = BigDecimal(PREVIEW_USD_AMOUNT),
                     currencyCode = "RUB",
                     isRegular = true,
                     inStatistics = true,
@@ -856,23 +861,10 @@ fun PreviewIncomeExpenseScreen() {
                     incomeUiState =
                         IncomeUiState(
                             incomeCategoryList =
-                                listOf(
-                                    mockCategory(1L, "Category1"),
-                                    mockCategory(2L, "Category2"),
-                                    mockCategory(3L, "Category3"),
-                                    mockCategory(4L, "Category4"),
-                                    mockCategory(5L, "Category5"),
-                                    mockCategory(6L, "Category6"),
-                                    mockCategory(7L, "Category7"),
-                                    mockCategory(8L, "Category8"),
-                                    mockCategory(9L, "Category9"),
-                                    mockCategory(10L, "Category10"),
-                                    mockCategory(11L, "Category11"),
-                                    mockCategory(12L, "Category12"),
-                                    mockCategory(13L, "Category13"),
-                                    mockCategory(14L, "Category14"),
-                                    mockCategory(15L, "Category15"),
-                                ),
+                                List(PREVIEW_CATEGORY_COUNT) { index ->
+                                    val id = (index + 1).toLong()
+                                    mockCategory(id, "Category$id")
+                                },
                         ),
                     expenseUiState =
                         ExpenseUiState.EMPTY.copy(

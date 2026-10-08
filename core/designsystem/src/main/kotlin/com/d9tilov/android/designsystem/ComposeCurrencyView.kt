@@ -39,7 +39,7 @@ fun ComposeCurrencyView(
         Text(
             modifier =
                 Modifier
-                    .padding(bottom = 2.dp, end = dimensionResource(id = (R.dimen.padding_extra_small))),
+                    .padding(bottom = 2.dp, end = dimensionResource(id = R.dimen.padding_extra_small)),
             text = symbol,
             color = symbolColor,
             style = symbolStyle,

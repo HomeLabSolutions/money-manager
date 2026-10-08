@@ -47,6 +47,8 @@ import com.d9tilov.android.transaction.regular.ui.vm.RegularTransactionListState
 import com.d9tilov.android.transaction.regular.ui.vm.RegularTransactionListViewModel
 import kotlinx.coroutines.launch
 
+private const val PREVIEW_TRANSACTION_COUNT = 18
+
 @Composable
 fun RegularTransactionListRoute(
     viewModel: RegularTransactionListViewModel = hiltViewModel(),
@@ -131,9 +133,10 @@ fun RegularTransactionListScreen(
                     enableDismissFromStartToEnd = false,
                     backgroundContent = {
                         val backgroundColor by animateColorAsState(
-                            when (dismissState.targetValue) {
-                                SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.error
-                                else -> Color.Transparent
+                            if (dismissState.targetValue == SwipeToDismissBoxValue.EndToStart) {
+                                MaterialTheme.colorScheme.error
+                            } else {
+                                Color.Transparent
                             },
                             label = "",
                         )
@@ -207,26 +210,10 @@ fun DefaultRegularTransactionListPreview() {
             RegularTransactionListState(
                 transactionType = TransactionType.EXPENSE,
                 regularTransactions =
-                    listOf(
-                        RegularTransaction.EMPTY.copy(id = 1L, category = mockCategory(1L, "Category1")),
-                        RegularTransaction.EMPTY.copy(id = 2L, category = mockCategory(2L, "Category2")),
-                        RegularTransaction.EMPTY.copy(id = 3L, category = mockCategory(3L, "Category3")),
-                        RegularTransaction.EMPTY.copy(id = 4L, category = mockCategory(4L, "Category4")),
-                        RegularTransaction.EMPTY.copy(id = 5L, category = mockCategory(5L, "Category5")),
-                        RegularTransaction.EMPTY.copy(id = 6L, category = mockCategory(6L, "Category6")),
-                        RegularTransaction.EMPTY.copy(id = 7L, category = mockCategory(7L, "Category7")),
-                        RegularTransaction.EMPTY.copy(id = 8L, category = mockCategory(8L, "Category8")),
-                        RegularTransaction.EMPTY.copy(id = 9L, category = mockCategory(9L, "Category9")),
-                        RegularTransaction.EMPTY.copy(id = 10L, category = mockCategory(10L, "Category10")),
-                        RegularTransaction.EMPTY.copy(id = 11L, category = mockCategory(11L, "Category11")),
-                        RegularTransaction.EMPTY.copy(id = 12L, category = mockCategory(12L, "Category12")),
-                        RegularTransaction.EMPTY.copy(id = 13L, category = mockCategory(13L, "Category13")),
-                        RegularTransaction.EMPTY.copy(id = 14L, category = mockCategory(14L, "Category14")),
-                        RegularTransaction.EMPTY.copy(id = 15L, category = mockCategory(15L, "Category15")),
-                        RegularTransaction.EMPTY.copy(id = 16L, category = mockCategory(16L, "Category16")),
-                        RegularTransaction.EMPTY.copy(id = 17L, category = mockCategory(17L, "Category17")),
-                        RegularTransaction.EMPTY.copy(id = 18L, category = mockCategory(18L, "Category18")),
-                    ),
+                    List(PREVIEW_TRANSACTION_COUNT) { index ->
+                        val id = (index + 1).toLong()
+                        RegularTransaction.EMPTY.copy(id = id, category = mockCategory(id, "Category$id"))
+                    },
             ),
         onAddClicked = {},
         onTransactionClicked = {},

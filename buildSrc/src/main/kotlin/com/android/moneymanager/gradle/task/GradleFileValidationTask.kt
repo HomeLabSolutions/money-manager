@@ -80,8 +80,9 @@ abstract class GradleFileValidationTask : DefaultTask() {
                 .map { it.trim() }
                 .filter { trimmedLine -> TRANSITIVE_DEPENDENCY_LIST.any { trimmedLine.startsWith(it) } }
                 .forEach {
-                    throw IllegalStateException(
-                        "Transitive internal dependency $it\nin file $path is not allowed. Please, replace it with implementation",
+                    error(
+                        "Transitive internal dependency $it\nin file $path is not allowed. " +
+                            "Please, replace it with implementation",
                     )
                 }
         }
@@ -96,10 +97,8 @@ abstract class GradleFileValidationTask : DefaultTask() {
                     .map { it.trim() }
                     .anyMatch { it.contains(DEPENDENCY_ANALYSIS_PREFIX) }
             }
-        if (!found) {
-            throw IllegalStateException(
-                "Please check file $path\nfor unused dependencies with script [python3 unused_deps.py <file-path>]",
-            )
+        check(found) {
+            "Please check file $path\nfor unused dependencies with script [python3 unused_deps.py <file-path>]"
         }
     }
 

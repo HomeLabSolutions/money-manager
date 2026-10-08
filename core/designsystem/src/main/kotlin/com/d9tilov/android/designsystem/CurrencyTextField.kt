@@ -33,6 +33,8 @@ private const val TEXT_SCALE_REDUCTION_INTERVAL = 0.9f
 private const val DECIMAL_SIZE = 2
 private const val DELIMITER = "."
 
+private const val PREVIEW_AMOUNT = 123
+
 @Composable
 fun CurrencyTextFieldExtraSmall(
     modifier: Modifier = Modifier,
@@ -279,7 +281,7 @@ private fun CurrencyTextField(
 @Composable
 fun DefaultPreviewCurrencyTextField() {
     CurrencyTextFieldSmall(
-        amount = BigDecimal(123).reduceScaleStr(),
+        amount = BigDecimal(PREVIEW_AMOUNT).reduceScaleStr(),
         currencyCode = "$",
         isEditable = false,
     )
