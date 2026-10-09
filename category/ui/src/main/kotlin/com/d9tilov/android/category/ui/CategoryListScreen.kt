@@ -2,6 +2,7 @@ package com.d9tilov.android.category.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -95,9 +96,9 @@ fun CategoryListScreen(
     onCategoryClicked: (Category) -> Unit,
     onRemoveClicked: (Category) -> Unit,
 ) {
-    val context = LocalContext.current
-    val shake = remember { Animatable(0f) }
     var isRemoveState by remember { mutableStateOf(false) }
+    val shake = rememberCategoryShake(isRemoveState)
+    var categoryToRemove by remember { mutableStateOf<Category?>(null) }
     BackHandler {
         if (isRemoveState) {
             isRemoveState = false
@@ -105,26 +106,12 @@ fun CategoryListScreen(
             onBackClicked()
         }
     }
-    LaunchedEffect(isRemoveState) {
-        var i = 0
-        while (isRemoveState) {
-            if (i % 2 == 0) {
-                shake.animateTo(CATEGORY_SHAKE_OFFSET_PX, spring(stiffness = 5_000f))
-            } else {
-                shake.animateTo(-CATEGORY_SHAKE_OFFSET_PX, spring(stiffness = 5_000f))
-            }
-            ++i
-            if (i == 2) i = 0
-        }
-        shake.animateTo(0f)
-    }
     Scaffold(topBar = {
         MmTopAppBar(
             titleRes = R.string.title_category,
             onNavigationClick = onBackClicked,
         )
     }) { padding ->
-        val openAlertDialog = remember { mutableStateOf<Category?>(null) }
         Column(
             modifier =
                 Modifier
@@ -145,75 +132,20 @@ fun CategoryListScreen(
                 columns = GridCells.Fixed(CATEGORY_GRID_COLUMN_COUNT),
             ) {
                 items(uiState.categories, { it.id }) { item ->
-                    Box {
-                        Column(
-                            modifier =
-                                Modifier
-                                    .size(dimensionResource(id = R.dimen.category_item_size))
-                                    .padding(8.dp)
-                                    .offset {
-                                        IntOffset(
-                                            x =
-                                                shake.value.roundToInt() +
-                                                    Random.nextInt(CATEGORY_SHAKE_JITTER_BOUND_PX),
-                                            y =
-                                                shake.value.roundToInt() +
-                                                    Random.nextInt(CATEGORY_SHAKE_JITTER_BOUND_PX),
-                                        )
-                                    }.combinedClickable(
-                                        onClick = {
-                                            if (isRemoveState) {
-                                                openAlertDialog.value = item
-                                            } else {
-                                                onCategoryClicked(item)
-                                            }
-                                            isRemoveState = false
-                                        },
-                                        onLongClick = { isRemoveState = true },
-                                    ),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                        ) {
-                            Icon(
-                                imageVector = ImageVector.vectorResource(id = item.icon),
-                                contentDescription = "Backup",
-                                tint = Color(ContextCompat.getColor(context, item.color)),
-                            )
-                            Text(
-                                text = item.name,
-                                color = Color(ContextCompat.getColor(context, item.color)),
-                                overflow = TextOverflow.Ellipsis,
-                            )
-                        }
-                        if (isRemoveState) {
-                            Icon(
-                                modifier =
-                                    Modifier
-                                        .size(32.dp),
-                                imageVector = MoneyManagerIcons.Cross,
-                                tint = MaterialTheme.colorScheme.error,
-                                contentDescription = "",
-                            )
-                        }
-                    }
-                    openAlertDialog.value?.let { categoryToRemove ->
-                        SimpleDialog(
-                            show = openAlertDialog.value != null,
-                            title = stringResource(R.string.category_delete_title),
-                            subtitle =
-                                stringResource(
-                                    R.string.category_delete_subtitle,
-                                    categoryToRemove.name,
-                                ),
-                            dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
-                            confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
-                            onConfirm = {
-                                onRemoveClicked(categoryToRemove)
-                                openAlertDialog.value = null
-                            },
-                            onDismiss = { openAlertDialog.value = null },
-                        )
-                    }
+                    CategoryGridItem(
+                        category = item,
+                        isRemoveState = isRemoveState,
+                        shake = shake,
+                        onClick = {
+                            if (isRemoveState) {
+                                categoryToRemove = item
+                            } else {
+                                onCategoryClicked(item)
+                            }
+                            isRemoveState = false
+                        },
+                        onLongClick = { isRemoveState = true },
+                    )
                 }
             }
             BottomActionButton(
@@ -221,6 +153,107 @@ fun CategoryListScreen(
                 text = stringResource(id = R.string.create),
             )
         }
+        CategoryRemovalDialog(
+            category = categoryToRemove,
+            onRemoveClicked = onRemoveClicked,
+            onDismiss = { categoryToRemove = null },
+        )
+    }
+}
+
+@Composable
+private fun rememberCategoryShake(isRemoveState: Boolean): Animatable<Float, AnimationVector1D> {
+    val shake = remember { Animatable(0f) }
+    LaunchedEffect(isRemoveState) {
+        var i = 0
+        while (isRemoveState) {
+            if (i % 2 == 0) {
+                shake.animateTo(CATEGORY_SHAKE_OFFSET_PX, spring(stiffness = 5_000f))
+            } else {
+                shake.animateTo(-CATEGORY_SHAKE_OFFSET_PX, spring(stiffness = 5_000f))
+            }
+            ++i
+            if (i == 2) i = 0
+        }
+        shake.animateTo(0f)
+    }
+    return shake
+}
+
+@Composable
+private fun CategoryGridItem(
+    category: Category,
+    isRemoveState: Boolean,
+    shake: Animatable<Float, AnimationVector1D>,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
+) {
+    val context = LocalContext.current
+    Box {
+        Column(
+            modifier =
+                Modifier
+                    .size(dimensionResource(id = R.dimen.category_item_size))
+                    .padding(8.dp)
+                    .offset {
+                        IntOffset(
+                            x =
+                                shake.value.roundToInt() +
+                                    Random.nextInt(CATEGORY_SHAKE_JITTER_BOUND_PX),
+                            y =
+                                shake.value.roundToInt() +
+                                    Random.nextInt(CATEGORY_SHAKE_JITTER_BOUND_PX),
+                        )
+                    }.combinedClickable(
+                        onClick = onClick,
+                        onLongClick = onLongClick,
+                    ),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = category.icon),
+                contentDescription = "Backup",
+                tint = Color(ContextCompat.getColor(context, category.color)),
+            )
+            Text(
+                text = category.name,
+                color = Color(ContextCompat.getColor(context, category.color)),
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+        if (isRemoveState) {
+            Icon(
+                modifier =
+                    Modifier
+                        .size(32.dp),
+                imageVector = MoneyManagerIcons.Cross,
+                tint = MaterialTheme.colorScheme.error,
+                contentDescription = "",
+            )
+        }
+    }
+}
+
+@Composable
+private fun CategoryRemovalDialog(
+    category: Category?,
+    onRemoveClicked: (Category) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    category?.let { categoryToRemove ->
+        SimpleDialog(
+            show = true,
+            title = stringResource(R.string.category_delete_title),
+            subtitle = stringResource(R.string.category_delete_subtitle, categoryToRemove.name),
+            dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
+            confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
+            onConfirm = {
+                onRemoveClicked(categoryToRemove)
+                onDismiss()
+            },
+            onDismiss = onDismiss,
+        )
     }
 }
 

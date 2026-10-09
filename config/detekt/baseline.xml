@@ -2,11 +2,6 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>CognitiveComplexMethod:CategoryListScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun CategoryListScreen( uiState: CategoryUiState, onBackClicked: () -&gt; Unit, onCreateClicked: () -&gt; Unit, onCategoryClicked: (Category) -&gt; Unit, onRemoveClicked: (Category) -&gt; Unit, )</ID>
-    <ID>CognitiveComplexMethod:IncomeExpenseScreen.kt$@Composable fun TransactionListLayout( listState: LazyListState, modifier: Modifier, transactions: Flow&lt;PagingData&lt;BaseTransaction&gt;&gt;, screenType: ScreenType, onTransactionClicked: (TransactionUiModel) -&gt; Unit, onDeleteTransactionConfirmClicked: (TransactionUiModel) -&gt; Unit, )</ID>
-    <ID>CognitiveComplexMethod:MainPriceFieldParser.kt$MainPriceFieldParser$fun isInputValid(str: String): Boolean</ID>
-    <ID>CognitiveComplexMethod:MainPriceFieldParser.kt$MainPriceFieldParser$fun parse( priceStr: String, btn: KeyPress, ): String</ID>
-    <ID>CognitiveComplexMethod:PieChart.kt$@Composable fun PieChart( modifier: Modifier = Modifier, data: List&lt;Pie&gt;, centerLabel: String = "", spaceDegree: Float = 0f, onPieClick: (Pie) -&gt; Unit = {}, selectedScale: Float = 1.1f, selectedPaddingDegree: Float = 5f, colorAnimEnterSpec: AnimationSpec&lt;Color&gt; = tween(ANIMATION_DURATION), scaleAnimEnterSpec: AnimationSpec&lt;Float&gt; = tween(ANIMATION_DURATION), spaceDegreeAnimEnterSpec: AnimationSpec&lt;Float&gt; = tween(ANIMATION_DURATION), colorAnimExitSpec: AnimationSpec&lt;Color&gt; = colorAnimEnterSpec, scaleAnimExitSpec: AnimationSpec&lt;Float&gt; = scaleAnimEnterSpec, spaceDegreeAnimExitSpec: AnimationSpec&lt;Float&gt; = spaceDegreeAnimEnterSpec, style: Pie.Style = Pie.Style.Fill, )</ID>
     <ID>ComplexInterface:BillingInteractor.kt$BillingInteractor</ID>
     <ID>ComplexInterface:CategoryInteractor.kt$CategoryInteractor</ID>
     <ID>ComplexInterface:CategoryRepo.kt$CategoryRepo</ID>
@@ -15,10 +10,6 @@
     <ID>ComplexInterface:TransactionInteractor.kt$TransactionInteractor</ID>
     <ID>ComplexInterface:TransactionRepo.kt$TransactionRepo</ID>
     <ID>ComplexInterface:TransactionSource.kt$TransactionSource</ID>
-    <ID>CyclomaticComplexMethod:IncomeExpenseScreen.kt$@Composable fun TransactionListLayout( listState: LazyListState, modifier: Modifier, transactions: Flow&lt;PagingData&lt;BaseTransaction&gt;&gt;, screenType: ScreenType, onTransactionClicked: (TransactionUiModel) -&gt; Unit, onDeleteTransactionConfirmClicked: (TransactionUiModel) -&gt; Unit, )</ID>
-    <ID>CyclomaticComplexMethod:PieChart.kt$@Composable fun PieChart( modifier: Modifier = Modifier, data: List&lt;Pie&gt;, centerLabel: String = "", spaceDegree: Float = 0f, onPieClick: (Pie) -&gt; Unit = {}, selectedScale: Float = 1.1f, selectedPaddingDegree: Float = 5f, colorAnimEnterSpec: AnimationSpec&lt;Color&gt; = tween(ANIMATION_DURATION), scaleAnimEnterSpec: AnimationSpec&lt;Float&gt; = tween(ANIMATION_DURATION), spaceDegreeAnimEnterSpec: AnimationSpec&lt;Float&gt; = tween(ANIMATION_DURATION), colorAnimExitSpec: AnimationSpec&lt;Color&gt; = colorAnimEnterSpec, scaleAnimExitSpec: AnimationSpec&lt;Float&gt; = scaleAnimEnterSpec, spaceDegreeAnimExitSpec: AnimationSpec&lt;Float&gt; = spaceDegreeAnimEnterSpec, style: Pie.Style = Pie.Style.Fill, )</ID>
-    <ID>NestedBlockDepth:MainPriceFieldParser.kt$MainPriceFieldParser$fun parse( priceStr: String, btn: KeyPress, ): String</ID>
-    <ID>ReturnCount:MainPriceFieldParser.kt$MainPriceFieldParser$fun isInputValid(str: String): Boolean</ID>
     <ID>TooGenericExceptionCaught:BackupManagerImpl.kt$BackupManagerImpl$ex: Exception</ID>
     <ID>TooGenericExceptionCaught:CurrencyInteractorImpl.kt$CurrencyInteractorImpl$ex: Exception</ID>
     <ID>TooManyFunctions:CategoryRepo.kt$CategoryRepo</ID>
