@@ -145,4 +145,48 @@ class MainPriceFieldParserTest {
 
         assertFalse(res)
     }
+
+    @Test
+    fun `do not append to an amount already beyond maximum length`() {
+        assertEquals("123456789012", MainPriceFieldParser.parse("123456789012", KeyPress.Three))
+    }
+
+    @Test
+    fun `deleting an empty amount restores zero`() {
+        assertEquals("0", MainPriceFieldParser.parse("", KeyPress.Del))
+    }
+
+    @Test
+    fun `do not append when fractional precision already exceeds two digits`() {
+        assertEquals("12.345", MainPriceFieldParser.parse("12.345", KeyPress.Six))
+    }
+
+    @Test
+    fun `deletion remains available above the length limit`() {
+        assertEquals("12345678901", MainPriceFieldParser.parse("123456789012", KeyPress.Del))
+    }
+
+    @Test
+    fun `dot cannot be appended at the length limit`() {
+        assertEquals("12345678901", MainPriceFieldParser.parse("12345678901", KeyPress.Dot))
+    }
+
+    @Test
+    fun `fractional amount can reach the length limit`() {
+        assertEquals("12345678.12", MainPriceFieldParser.parse("12345678.1", KeyPress.Two))
+    }
+
+    @Test
+    fun `validation preserves accepted decimal forms`() {
+        listOf("12345678901", "0.0", "0.12", "123.", "1.234").forEach { amount ->
+            assertTrue(amount, MainPriceFieldParser.isInputValid(amount))
+        }
+    }
+
+    @Test
+    fun `validation rejects malformed prefixes and whitespace`() {
+        listOf("00", "00.1", ".5", " 1", "1 ", "0..1").forEach { amount ->
+            assertFalse(amount, MainPriceFieldParser.isInputValid(amount))
+        }
+    }
 }

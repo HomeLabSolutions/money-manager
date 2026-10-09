@@ -70,6 +70,8 @@ import com.d9tilov.android.designsystem.OutlineCircle
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import kotlinx.coroutines.launch
 
+private const val SELECTED_CATEGORY_SCALE = 1.5f
+
 @Composable
 fun CategoryCreationRoute(
     sharedViewModel: CategorySharedViewModel,
@@ -370,7 +372,7 @@ fun ColorListSelectorItem(
                 ),
         verticalArrangement = Arrangement.Center,
     ) {
-        val scale = if (selected) 1.5f else 1f
+        val scale = if (selected) SELECTED_CATEGORY_SCALE else 1f
         OutlineCircle(
             modifier =
                 Modifier

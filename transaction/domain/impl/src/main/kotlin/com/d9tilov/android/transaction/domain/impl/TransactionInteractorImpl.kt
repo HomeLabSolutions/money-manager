@@ -107,7 +107,8 @@ class TransactionInteractorImpl @Inject constructor(
                             val category =
                                 categoriesById[item.categoryId]
                                     ?: throw CategoryException.CategoryNotFoundException(
-                                        "getTransactionsGroupedByCategory Not found category with id: ${item.categoryId}",
+                                        "getTransactionsGroupedByCategory Not found category with id: " +
+                                            item.categoryId,
                                     )
                             item.toChartModel(
                                 category,

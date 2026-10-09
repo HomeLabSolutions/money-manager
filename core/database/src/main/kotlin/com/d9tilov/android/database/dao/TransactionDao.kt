@@ -13,7 +13,11 @@ import kotlinx.datetime.LocalDateTime
 @Dao
 interface TransactionDao {
     @Query(
-        "SELECT * FROM transactions WHERE clientId=:clientId AND type = :type AND date >= :from AND date <= :to ORDER BY date DESC",
+        """
+        SELECT * FROM transactions
+        WHERE clientId=:clientId AND type = :type AND date >= :from AND date <= :to
+        ORDER BY date DESC
+        """,
     )
     fun getAllByType(
         clientId: String,
@@ -102,7 +106,11 @@ interface TransactionDao {
     )
 
     @Query(
-        "DELETE FROM transactions WHERE rowId in(SELECT rowId from transactions WHERE clientId=:clientId AND categoryId=:categoryId LIMIT 1)",
+        """
+        DELETE FROM transactions WHERE rowId in(
+            SELECT rowId FROM transactions WHERE clientId=:clientId AND categoryId=:categoryId LIMIT 1
+        )
+        """,
     )
     suspend fun deleteByCategoryId(
         clientId: String,

@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 data class UserDbModel(
     @PrimaryKey
     @ColumnInfo(name = "uid")
-    var uid: String,
+    val uid: String,
     @ColumnInfo(name = "firstName") val firstName: String?,
     @ColumnInfo(name = "lastName") val lastName: String?,
     @ColumnInfo(name = "photoUrl") val photoUrl: String?,

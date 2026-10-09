@@ -2,60 +2,34 @@ package com.d9tilov.android.core.utils
 
 object MainPriceFieldParser {
     const val MAX_PRICE_LENGTH = 11
+    private const val MAX_FRACTION_DIGITS = 2
 
     fun parse(
         priceStr: String,
         btn: KeyPress,
     ): String =
-        if (btn == KeyPress.Del) {
-            if (priceStr.length == 1) {
-                KeyPress.Zero.value
-            } else {
-                priceStr.dropLast(1)
-            }
-        } else {
-            if (priceStr.length == MAX_PRICE_LENGTH) {
-                priceStr
-            } else {
-                if (btn == KeyPress.Dot) {
-                    if (priceStr.contains(KeyPress.Dot.value)) {
-                        priceStr
-                    } else {
-                        priceStr + btn.value
-                    }
-                } else {
-                    if (priceStr.length == 1 && priceStr == KeyPress.Zero.value) {
-                        btn.value
-                    } else if (priceStr.contains(KeyPress.Dot.value)) {
-                        if (priceStr.substringAfterLast(KeyPress.Dot.value).length == 2) {
-                            priceStr
-                        } else {
-                            priceStr + btn.value
-                        }
-                    } else {
-                        priceStr + btn.value
-                    }
-                }
-            }
+        when {
+            btn == KeyPress.Del -> priceStr.dropLast(1).ifEmpty { KeyPress.Zero.value }
+            priceStr.length >= MAX_PRICE_LENGTH -> priceStr
+            btn == KeyPress.Dot -> if (priceStr.contains(KeyPress.Dot.value)) priceStr else priceStr + btn.value
+            priceStr == KeyPress.Zero.value -> btn.value
+            hasMaxFractionDigits(priceStr) -> priceStr
+            else -> priceStr + btn.value
         }
 
-    fun isInputValid(str: String): Boolean {
-        if (str.isEmpty()) return false
-        if (str.length > MAX_PRICE_LENGTH) {
-            return false
-        } else {
-            if (str[0] == '.') return false
-            if (str[0] == '0' && str.length == 1) return false
-            if (str.length == 2 && str[0] == '0' && str[1] == '.') return false
-            if (str.length > 1 && str[0] == '0' && str[1] != '.') return false
+    fun isInputValid(str: String): Boolean =
+        str.length in 1..MAX_PRICE_LENGTH && hasValidPrefix(str) && str.toBigDecimalOrNull() != null
+
+    private fun hasMaxFractionDigits(str: String): Boolean =
+        str.contains(KeyPress.Dot.value) && str.substringAfterLast(KeyPress.Dot.value).length >= MAX_FRACTION_DIGITS
+
+    private fun hasValidPrefix(str: String): Boolean =
+        when {
+            str.startsWith(KeyPress.Dot.value) -> false
+            str == KeyPress.Zero.value || str == KeyPress.Zero.value + KeyPress.Dot.value -> false
+            str.startsWith(KeyPress.Zero.value) -> str.startsWith(KeyPress.Zero.value + KeyPress.Dot.value)
+            else -> true
         }
-        return try {
-            str.toBigDecimal()
-            true
-        } catch (ex: NumberFormatException) {
-            false
-        }
-    }
 }
 
 enum class KeyPress(

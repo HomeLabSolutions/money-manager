@@ -32,7 +32,9 @@ android {
                 storeFile = file(keystoreProperties["storeFile"]!!)
                 storePassword = keystoreProperties["storePassword"] as String
             } else {
-                println("Warning: keystore.properties file not found. Release signing configuration will not be applied.")
+                println(
+                    "Warning: keystore.properties file not found. Release signing configuration will not be applied.",
+                )
             }
         }
         getByName("debug") {

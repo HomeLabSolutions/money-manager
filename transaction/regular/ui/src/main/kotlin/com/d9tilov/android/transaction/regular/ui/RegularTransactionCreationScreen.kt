@@ -74,6 +74,9 @@ import com.d9tilov.android.transaction.regular.ui.vm.toPeriodMenuItem
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
+private const val MAX_DAY_OF_MONTH = 31
+private const val DAY_GRID_COLUMN_COUNT = 5
+
 @Composable
 fun RegularTransactionCreationRoute(
     viewModel: RegularTransactionCreationViewModel,
@@ -437,7 +440,7 @@ fun DayInMonthDialog(
     onDismiss: () -> Unit,
     onDayClicked: (Int) -> Unit,
 ) {
-    val days = (1..31).toList()
+    val days = (1..MAX_DAY_OF_MONTH).toList()
     Dialog(
         onDismissRequest = { onDismiss() },
         content = {
@@ -460,7 +463,7 @@ fun DayInMonthDialog(
                     color = MaterialTheme.colorScheme.primary,
                 )
                 LazyVerticalGrid(
-                    columns = GridCells.Fixed(5),
+                    columns = GridCells.Fixed(DAY_GRID_COLUMN_COUNT),
                     horizontalArrangement = Arrangement.Start,
                     verticalArrangement = Arrangement.Center,
                 ) {

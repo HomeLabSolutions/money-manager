@@ -36,4 +36,6 @@ dependencies {
     implementation(libs.navigation.runtime)
     implementation(libs.paging.compose)
     implementation(libs.timber)
+
+    testImplementation(libs.junit)
 }

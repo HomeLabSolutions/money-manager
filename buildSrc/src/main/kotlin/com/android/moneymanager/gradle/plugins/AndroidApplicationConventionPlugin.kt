@@ -14,6 +14,8 @@
  *   limitations under the License.
  */
 
+package com.android.moneymanager.gradle.plugins
+
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.moneymanager.gradle.extensions.buildLibs
 import com.android.moneymanager.gradle.extensions.configureAndroidFirebase
