@@ -9,29 +9,12 @@ object MainPriceFieldParser {
         btn: KeyPress,
     ): String =
         when {
-            btn == KeyPress.Del -> {
-                priceStr.dropLast(1).ifEmpty { KeyPress.Zero.value }
-            }
-
-            priceStr.length >= MAX_PRICE_LENGTH -> {
-                priceStr
-            }
-
-            btn == KeyPress.Dot -> {
-                if (priceStr.contains(KeyPress.Dot.value)) priceStr else priceStr + btn.value
-            }
-
-            priceStr == KeyPress.Zero.value -> {
-                btn.value
-            }
-
-            hasMaxFractionDigits(priceStr) -> {
-                priceStr
-            }
-
-            else -> {
-                priceStr + btn.value
-            }
+            btn == KeyPress.Del -> priceStr.dropLast(1).ifEmpty { KeyPress.Zero.value }
+            priceStr.length >= MAX_PRICE_LENGTH -> priceStr
+            btn == KeyPress.Dot -> if (priceStr.contains(KeyPress.Dot.value)) priceStr else priceStr + btn.value
+            priceStr == KeyPress.Zero.value -> btn.value
+            hasMaxFractionDigits(priceStr) -> priceStr
+            else -> priceStr + btn.value
         }
 
     fun isInputValid(str: String): Boolean =
