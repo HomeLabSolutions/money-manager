@@ -40,7 +40,6 @@ import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.designsystem.EmptyListPlaceholder
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
-import com.d9tilov.android.designsystem.MoneyManagerIcons.Delete
 import com.d9tilov.android.designsystem.SimpleDialog
 import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
 import com.d9tilov.android.transaction.regular.ui.vm.RegularTransactionListState
@@ -110,74 +109,18 @@ fun RegularTransactionListScreen(
                         }
                     },
             )
-            return@Scaffold
-        }
-        LazyColumn(
-            contentPadding = padding,
-            modifier = Modifier.consumeWindowInsets(padding),
-        ) {
-            items(items = uiState.regularTransactions, key = { item -> item.id }) { item ->
-                val dismissState =
-                    rememberSwipeToDismissBoxState(
-                        initialValue = SwipeToDismissBoxValue.Settled,
+        } else {
+            LazyColumn(
+                contentPadding = padding,
+                modifier = Modifier.consumeWindowInsets(padding),
+            ) {
+                items(items = uiState.regularTransactions, key = { item -> item.id }) { item ->
+                    DismissibleRegularTransactionItem(
+                        item = item,
+                        onTransactionClicked = onTransactionClicked,
+                        onRemoveRequested = { transaction, state -> openRemoveDialog.value = transaction to state },
                     )
-
-                LaunchedEffect(dismissState.currentValue) {
-                    if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
-                        openRemoveDialog.value = item to dismissState
-                    }
                 }
-
-                SwipeToDismissBox(
-                    state = dismissState,
-                    enableDismissFromStartToEnd = false,
-                    backgroundContent = {
-                        val backgroundColor by animateColorAsState(
-                            if (dismissState.targetValue == SwipeToDismissBoxValue.EndToStart) {
-                                MaterialTheme.colorScheme.error
-                            } else {
-                                Color.Transparent
-                            },
-                            label = "",
-                        )
-                        val iconScale by animateFloatAsState(
-                            targetValue =
-                                if (dismissState.targetValue ==
-                                    SwipeToDismissBoxValue.Settled
-                                ) {
-                                    0.0f
-                                } else {
-                                    1.3f
-                                },
-                            label = "",
-                        )
-                        Box(
-                            Modifier
-                                .fillMaxSize()
-                                .background(color = backgroundColor)
-                                .padding(
-                                    horizontal =
-                                        dimensionResource(
-                                            id = com.d9tilov.android.designsystem.R.dimen.padding_medium,
-                                        ),
-                                ),
-                            contentAlignment = Alignment.CenterEnd,
-                        ) {
-                            Icon(
-                                modifier = Modifier.scale(iconScale),
-                                imageVector = Delete,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onError,
-                            )
-                        }
-                    },
-                    content = {
-                        RegularTransactionItem(
-                            transaction = item,
-                            onClick = { onTransactionClicked(item) },
-                        )
-                    },
-                )
             }
         }
     }
@@ -200,6 +143,82 @@ fun RegularTransactionListScreen(
             openRemoveDialog.value = null
         },
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DismissibleRegularTransactionItem(
+    item: RegularTransaction,
+    onTransactionClicked: (RegularTransaction) -> Unit,
+    onRemoveRequested: (RegularTransaction, SwipeToDismissBoxState) -> Unit,
+) {
+    val dismissState =
+        rememberSwipeToDismissBoxState(
+            initialValue = SwipeToDismissBoxValue.Settled,
+        )
+
+    LaunchedEffect(dismissState.currentValue) {
+        if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
+            onRemoveRequested(item, dismissState)
+        }
+    }
+
+    SwipeToDismissBox(
+        state = dismissState,
+        enableDismissFromStartToEnd = false,
+        backgroundContent = {
+            RegularTransactionDismissBackground(dismissState)
+        },
+        content = {
+            RegularTransactionItem(
+                transaction = item,
+                onClick = { onTransactionClicked(item) },
+            )
+        },
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun RegularTransactionDismissBackground(dismissState: SwipeToDismissBoxState) {
+    val backgroundColor by animateColorAsState(
+        if (dismissState.targetValue == SwipeToDismissBoxValue.EndToStart) {
+            MaterialTheme.colorScheme.error
+        } else {
+            Color.Transparent
+        },
+        label = "",
+    )
+    val iconScale by animateFloatAsState(
+        targetValue =
+            if (dismissState.targetValue ==
+                SwipeToDismissBoxValue.Settled
+            ) {
+                0.0f
+            } else {
+                1.3f
+            },
+        label = "",
+    )
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(color = backgroundColor)
+            .padding(
+                horizontal =
+                    dimensionResource(
+                        id = com.d9tilov.android.designsystem.R.dimen.padding_medium,
+                    ),
+            ),
+        contentAlignment = Alignment.CenterEnd,
+    ) {
+        Icon(
+            modifier = Modifier.scale(iconScale),
+            imageVector = MoneyManagerIcons.Delete,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onError,
+        )
+    }
 }
 
 @Preview

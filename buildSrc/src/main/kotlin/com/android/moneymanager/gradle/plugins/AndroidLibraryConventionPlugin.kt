@@ -14,22 +14,29 @@
  *   limitations under the License.
  */
 
-import com.android.moneymanager.gradle.extensions.buildLibs
-import com.android.moneymanager.gradle.extensions.implementation
+package com.android.moneymanager.gradle.plugins
+
+import com.android.build.api.dsl.LibraryExtension
+import com.android.moneymanager.gradle.extensions.configureAndroidFirebase
+import com.android.moneymanager.gradle.extensions.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.getByType
 
-class KotlinLibraryConventionPlugin : Plugin<Project> {
+class AndroidLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("kotlin")
+                apply("com.android.library")
                 apply("com.autonomousapps.dependency-analysis")
             }
-            dependencies {
-                implementation(buildLibs.kotlin.stdlib)
+
+            extensions.configure<LibraryExtension> {
+                configureKotlinAndroid(this)
             }
+            val extension = extensions.getByType<LibraryExtension>()
+            configureAndroidFirebase(extension)
         }
     }
 }

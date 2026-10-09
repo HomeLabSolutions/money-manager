@@ -4,20 +4,14 @@ import android.os.Parcelable
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,13 +23,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -49,7 +41,6 @@ import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -62,19 +53,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -89,23 +76,13 @@ import com.d9tilov.android.category.domain.entity.CategoryDestination
 import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_FORMAT
 import com.d9tilov.android.common.android.utils.formatDate
 import com.d9tilov.android.core.constants.CurrencyConstants.ZERO
-import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.KeyPress
-import com.d9tilov.android.core.utils.toKeyPress
-import com.d9tilov.android.designsystem.ComposeCurrencyView
 import com.d9tilov.android.designsystem.EmptyListPlaceholder
 import com.d9tilov.android.designsystem.MoneyManagerIcons
 import com.d9tilov.android.designsystem.SimpleDialog
-import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.android.incomeexpense.ui.vm.EditMode
-import com.d9tilov.android.incomeexpense.ui.vm.ExpenseInfo
-import com.d9tilov.android.incomeexpense.ui.vm.ExpenseUiState
 import com.d9tilov.android.incomeexpense.ui.vm.IncomeExpenseUiState
 import com.d9tilov.android.incomeexpense.ui.vm.IncomeExpenseViewModel
-import com.d9tilov.android.incomeexpense.ui.vm.IncomeInfo
-import com.d9tilov.android.incomeexpense.ui.vm.IncomeUiState
-import com.d9tilov.android.incomeexpense.ui.vm.MainPrice
-import com.d9tilov.android.incomeexpense.ui.vm.Price
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.EXPENSE
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.INCOME
@@ -114,17 +91,9 @@ import com.d9tilov.android.incomeexpense.ui.vm.toScreenType
 import com.d9tilov.android.transaction.ui.TransactionItem
 import com.d9tilov.android.transaction.ui.model.BaseTransaction
 import com.d9tilov.android.transaction.ui.model.TransactionUiModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import java.math.BigDecimal
-
-private const val KEYBOARD_BUTTON_ANIMATION_DELAY_MS = 150L
-
-private const val KEYBOARD_COLUMN_COUNT = 3
-private const val PREVIEW_USD_AMOUNT = 5
-private const val PREVIEW_CATEGORY_COUNT = 15
 
 @Parcelize
 private data class ScrollAnchor(
@@ -252,32 +221,6 @@ fun AnimatedFloatingActionButton(
                 imageVector = MoneyManagerIcons.AddCircle,
                 contentDescription = "Add transaction",
                 tint = MaterialTheme.colorScheme.onSecondary,
-            )
-        }
-    }
-}
-
-@Composable
-fun MainPriceInput(
-    price: MainPrice,
-    modifier: Modifier,
-    onCurrencyClicked: () -> Unit,
-) {
-    Surface(
-        modifier = modifier,
-        onClick = onCurrencyClicked,
-        border = BorderStroke(2.dp, MaterialTheme.colorScheme.primary),
-        shape = RoundedCornerShape(24.dp),
-        tonalElevation = 1.dp,
-    ) {
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center,
-        ) {
-            ComposeCurrencyView(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                symbol = price.currencyCode.getSymbolByCode(),
-                value = price.value,
             )
         }
     }
@@ -632,155 +575,6 @@ fun HomeTabIndicator(
 }
 
 @Composable
-fun KeyBoardLayout(
-    modifier: Modifier,
-    onKeyboardClicked: () -> Unit,
-    onNumberClicked: (KeyPress) -> Unit,
-) {
-    val data: List<String> = KeyPress.entries.map { it.value }
-    Box(modifier = modifier.padding(bottom = 8.dp)) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(KEYBOARD_COLUMN_COUNT),
-            horizontalArrangement = Arrangement.Center,
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            userScrollEnabled = false,
-            contentPadding = PaddingValues(start = 40.dp, end = 40.dp),
-        ) {
-            items(data, key = { it.hashCode() }) { item ->
-                val keyPress = item.toKeyPress() ?: return@items
-                AnimatedKeyboardButton(
-                    keyPress = keyPress,
-                    item = item,
-                    onNumberClicked = onNumberClicked,
-                )
-            }
-        }
-        Icon(
-            modifier =
-                Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 24.dp)
-                    .clickable { onKeyboardClicked() },
-            imageVector = MoneyManagerIcons.HideKeyboard,
-            tint = MaterialTheme.colorScheme.secondary,
-            contentDescription = "HideKeyboard",
-        )
-    }
-}
-
-@Composable
-fun AnimatedKeyboardButton(
-    keyPress: KeyPress,
-    item: String,
-    onNumberClicked: (KeyPress) -> Unit,
-) {
-    var isPressed by remember { mutableStateOf(false) }
-    val scale by animateFloatAsState(
-        targetValue = if (isPressed) 1.2f else 1f,
-        animationSpec =
-            spring(
-                dampingRatio = Spring.DampingRatioMediumBouncy,
-                stiffness = Spring.StiffnessLow,
-            ),
-        label = "keyboard_button_scale",
-    )
-
-    Surface(
-        modifier =
-            Modifier
-                .graphicsLayer {
-                    scaleX = scale
-                    scaleY = scale
-                }.clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = ripple(bounded = false, radius = 20.dp),
-                ) {
-                    isPressed = true
-                    onNumberClicked(keyPress)
-                },
-        shape = CircleShape,
-        color = Color.Transparent,
-    ) {
-        if (keyPress == KeyPress.Del) {
-            Icon(
-                imageVector = MoneyManagerIcons.BackSpace,
-                contentDescription = "BackSpace",
-                tint = MaterialTheme.colorScheme.primary,
-            )
-        } else {
-            Text(
-                text = item,
-                style =
-                    MaterialTheme.typography.headlineMedium.copy(
-                        color = MaterialTheme.colorScheme.primary,
-                        textAlign = TextAlign.Center,
-                    ),
-            )
-        }
-    }
-
-    LaunchedEffect(isPressed) {
-        if (isPressed) {
-            delay(KEYBOARD_BUTTON_ANIMATION_DELAY_MS)
-            isPressed = false
-        }
-    }
-}
-
-@Composable
-fun ExpenseInfoBlock(
-    modifier: Modifier,
-    info: ExpenseInfo,
-) {
-    Column(modifier = modifier, verticalArrangement = Arrangement.Center) {
-        InfoLabel(info.ableToSpendToday)
-        InfoLabel(info.wasSpendToday)
-        InfoLabel(info.wasSpendInPeriod)
-    }
-}
-
-@Composable
-fun IncomeInfoBlock(
-    modifier: Modifier,
-    info: IncomeInfo,
-) {
-    Column(modifier = modifier, verticalArrangement = Arrangement.Center) {
-        InfoLabel(info.wasEarnedInPeriod)
-    }
-}
-
-@Composable
-fun InfoLabel(price: Price) {
-    Row(Modifier.padding(bottom = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-        InfoLabelTitle(text = stringResource(id = price.label))
-        Text(
-            modifier = Modifier.padding(start = 4.dp),
-            text = price.value,
-            style = MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.primary),
-        )
-    }
-}
-
-@Composable
-fun InfoLabelTitle(
-    modifier: Modifier = Modifier,
-    text: String,
-) {
-    Box(
-        modifier =
-            modifier
-                .clip(RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.primary),
-    ) {
-        Text(
-            modifier = Modifier.padding(6.dp),
-            text = text,
-            style = MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.onPrimary),
-        )
-    }
-}
-
-@Composable
 fun CategoryListLayout(
     categoryList: List<Category>,
     modifier: Modifier,
@@ -830,89 +624,3 @@ fun CategoryListLayout(
         }
     }
 }
-
-@Composable
-@Preview
-fun TransactionListItemPreview() {
-    MoneyManagerTheme {
-        TransactionItem(
-            modifier = Modifier.fillMaxWidth(),
-            transaction =
-                TransactionUiModel.EMPTY.copy(
-                    sum = BigDecimal.TEN,
-                    usdSum = BigDecimal(PREVIEW_USD_AMOUNT),
-                    currencyCode = "RUB",
-                    isRegular = true,
-                    inStatistics = true,
-                    description = "description",
-                    category = mockCategory(2, "Cafe"),
-                ),
-        )
-    }
-}
-
-@Composable
-@Preview
-fun PreviewIncomeExpenseScreen() {
-    MoneyManagerTheme {
-        IncomeExpenseScreen(
-            uiState =
-                IncomeExpenseUiState.EMPTY.copy(
-                    incomeUiState =
-                        IncomeUiState(
-                            incomeCategoryList =
-                                List(PREVIEW_CATEGORY_COUNT) { index ->
-                                    val id = (index + 1).toLong()
-                                    mockCategory(id, "Category$id")
-                                },
-                        ),
-                    expenseUiState =
-                        ExpenseUiState.EMPTY.copy(
-                            expenseInfo =
-                                ExpenseInfo(
-                                    ableToSpendToday =
-                                        Price(
-                                            R.string.expense_info_can_spend_today_title,
-                                            "$42",
-                                        ),
-                                    wasSpendToday = Price(R.string.expense_info_today_title, "$43"),
-                                    wasSpendInPeriod = Price(R.string.expense_info_period_title, "$44"),
-                                ),
-                        ),
-                ),
-            onNumberClicked = {},
-            onCategoryClicked = {},
-            onEditModeChanged = {},
-            onCurrencyClicked = {},
-            onAllCategoryClicked = { _, _ -> },
-            onTransactionClicked = {},
-            onDeleteTransactionConfirmClicked = {},
-            onScreenTypeClicked = {},
-        )
-    }
-}
-
-@Composable
-@Preview
-fun InfoLabelPreview() {
-    MoneyManagerTheme {
-        ExpenseInfoBlock(
-            Modifier,
-            ExpenseInfo(
-                ableToSpendToday = Price(R.string.expense_info_can_spend_today_title, "$41"),
-                wasSpendToday = Price(R.string.expense_info_today_title, "$42"),
-                wasSpendInPeriod = Price(R.string.expense_info_period_title, "$43"),
-            ),
-        )
-    }
-}
-
-private fun mockCategory(
-    id: Long,
-    name: String,
-) = Category.EMPTY_INCOME.copy(
-    id = id,
-    name = name,
-    icon = R.drawable.ic_category_beach,
-    color = android.R.color.holo_blue_light,
-)
