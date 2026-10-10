@@ -2,8 +2,9 @@ package com.d9tilov.android.insights.presentation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.window.DialogProperties
 import com.d9tilov.android.designsystem.SimpleDialog
-import com.d9tilov.android.insights.domain.InsightsConstants.INSIGHT_WINDOW_DAYS
+import com.d9tilov.android.insights.domain.model.InsightsConstants.INSIGHT_WINDOW_DAYS
 
 @Composable
 fun InsightsConsentDialog(
@@ -19,5 +20,6 @@ fun InsightsConsentDialog(
         dismissButton = stringResource(R.string.insights_consent_dismiss),
         onConfirm = onConfirm,
         onDismiss = onDismiss,
+        properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
     )
 }

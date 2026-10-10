@@ -4,6 +4,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.window.DialogProperties
 
 @Composable
 fun SimpleDialog(
@@ -14,9 +15,11 @@ fun SimpleDialog(
     dismissButton: String,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
+    properties: DialogProperties = DialogProperties(),
 ) {
     if (!show) return
     AlertDialog(
+        properties = properties,
         onDismissRequest = { onDismiss() },
         confirmButton = {
             TextButton(onClick = { onConfirm() }) { Text(text = confirmButton) }

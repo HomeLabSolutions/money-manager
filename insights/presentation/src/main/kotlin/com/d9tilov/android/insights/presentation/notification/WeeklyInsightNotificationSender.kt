@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.TaskStackBuilder
 import androidx.core.net.toUri
-import com.d9tilov.android.insights.domain.WeeklyInsightNotification
+import com.d9tilov.android.insights.domain.model.WeeklyInsightNotification
 import com.d9tilov.android.insights.presentation.R
 import com.d9tilov.android.insights.presentation.navigation.INSIGHTS_DEEP_LINK_URI
 import com.d9tilov.android.notification.AndroidNotificationData

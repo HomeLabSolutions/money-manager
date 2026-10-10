@@ -130,7 +130,7 @@ dependencies {
     implementation(project(":currency:observer:contract"))
     implementation(project(":currency:ui"))
     implementation(project(":incomeexpense:ui"))
-    implementation(project(":insights:data"))
+    implementation(project(":insights:di"))
     implementation(project(":insights:presentation"))
     implementation(project(":notification"))
     implementation(project(":notification:domain"))

@@ -19,7 +19,7 @@ import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.android.core.utils.toBackupDate
-import com.d9tilov.android.insights.domain.InsightLanguageRepository
+import com.d9tilov.android.insights.domain.contract.InsightsInteractor
 import com.d9tilov.android.network.exception.NetworkException
 import com.d9tilov.android.settings.ui.R
 import com.d9tilov.android.user.domain.contract.UserInteractor
@@ -90,7 +90,7 @@ class SettingsViewModel
         @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
         private val backupInteractor: BackupInteractor,
         private val userInteractor: UserInteractor,
-        private val insightLanguageRepository: InsightLanguageRepository,
+        private val insightsInteractor: InsightsInteractor,
         private val logoutHandler: LogoutHandler,
         analyticsSender: AnalyticsSender,
         billingInteractor: BillingInteractor,
@@ -105,7 +105,7 @@ class SettingsViewModel
                 mapOf(AnalyticsParams.Screen.Name to "settings"),
             )
             viewModelScope.launch(ioDispatcher) {
-                val insightLanguage = insightLanguageRepository.language.first()
+                val insightLanguage = insightsInteractor.language.first()
                 _uiState.update { it.copy(insightLanguage = insightLanguage) }
                 combine(
                     userInteractor.getCurrentUser(),
@@ -200,7 +200,7 @@ class SettingsViewModel
             val settings = _uiState.value
             viewModelScope.launch(ioDispatcher) {
                 userInteractor.updateFiscalDay(settings.startPeriodDay.toInt())
-                insightLanguageRepository.setLanguage(settings.insightLanguage)
+                insightsInteractor.setLanguage(settings.insightLanguage)
                 withContext(Dispatchers.Main) { onSaved() }
             }
         }

@@ -5,7 +5,7 @@
     <string name="insights_consent_dismiss">Не сейчас</string>
     <string name="insights_screen_title">Финансовые инсайты</string>
     <string name="insights_unavailable_message">Инсайты сейчас недоступны. Попробуйте позже.</string>
-    <string name="insights_insufficient_data">Пока недостаточно данных для инсайта. Добавьте транзакции за период не менее %1$d дней и попробуйте снова.</string>
+    <string name="insights_insufficient_data">Пока недостаточно данных для инсайта. Нужно не менее %1$d транзакций.</string>
     <string name="insights_daily_limit">Можно создавать один инсайт в сутки. Попробуйте завтра.</string>
     <string name="insights_generate">Создать инсайт</string>
     <string name="insights_empty_history">Здесь появятся ваши инсайты.</string>

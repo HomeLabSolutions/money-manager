@@ -6,7 +6,7 @@
     <string name="insights_consent_dismiss">Not now</string>
     <string name="insights_screen_title">Financial insights</string>
     <string name="insights_unavailable_message">Insights are unavailable right now. Please try again later.</string>
-    <string name="insights_insufficient_data" tools:ignore="PluralsCandidate">Not enough data for an insight yet. Add transactions over at least %1$d days and try again.</string>
+    <string name="insights_insufficient_data" tools:ignore="PluralsCandidate">Not enough data for an insight yet. At least %1$d transactions are required.</string>
     <string name="insights_daily_limit">You can generate one insight per day. Please come back tomorrow.</string>
     <string name="insights_generate">Generate insight</string>
     <string name="insights_empty_history">Your insights will appear here.</string>

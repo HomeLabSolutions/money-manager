@@ -33,6 +33,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -134,7 +135,11 @@ fun StatisticsScreen(
     onNextClicked: () -> Unit,
 ) {
     val showDatePicker = remember { mutableStateOf(false) }
-    Column(modifier) {
+    Column(
+        modifier
+            .fillMaxSize()
+            .statisticsPeriodSwipe(state.periodState, onPrevClicked, onNextClicked),
+    ) {
         StatisticsPeriodSelector(
             state = state.periodState,
             onPeriodClick = { period: StatisticsPeriodModel ->
@@ -147,7 +152,7 @@ fun StatisticsScreen(
         StatisticsMenuSelector(state = state.statisticsMenuState, onClick = onMenuClick)
 
         if (state.chartState.pieData.isEmpty()) {
-            StatisticsChartWithSwipe(
+            StatisticsChartContent(
                 modifier = Modifier.weight(1f),
                 periodState = state.periodState,
                 pieData = state.chartState.pieData,
@@ -158,7 +163,7 @@ fun StatisticsScreen(
             CollapsingStatisticsContent(
                 modifier = Modifier.weight(1f),
                 chart = {
-                    StatisticsChartWithSwipe(
+                    StatisticsChartContent(
                         modifier = Modifier.fillMaxSize(),
                         periodState = state.periodState,
                         pieData = state.chartState.pieData,
@@ -269,40 +274,46 @@ private fun CollapsingStatisticsChart(
 }
 
 @Composable
-private fun StatisticsChartWithSwipe(
+private fun Modifier.statisticsPeriodSwipe(
+    periodState: PeriodUiState,
+    onPrevClicked: () -> Unit,
+    onNextClicked: () -> Unit,
+): Modifier {
+    val density = LocalDensity.current
+    val showPrevArrow = periodState.showPrevArrow
+    val showNextArrow = periodState.showNextArrow
+    val onPrev by rememberUpdatedState(onPrevClicked)
+    val onNext by rememberUpdatedState(onNextClicked)
+    val swipeThreshold = with(density) { 36.dp.toPx() }
+    return pointerInput(showPrevArrow, showNextArrow, swipeThreshold) {
+        var totalDrag = 0f
+        detectHorizontalDragGestures(
+            onDragStart = { totalDrag = 0f },
+            onDragCancel = { totalDrag = 0f },
+            onDragEnd = {
+                if (abs(totalDrag) >= swipeThreshold) {
+                    if (totalDrag > 0 && showPrevArrow) {
+                        onPrev()
+                    } else if (totalDrag < 0 && showNextArrow) {
+                        onNext()
+                    }
+                }
+                totalDrag = 0f
+            },
+            onHorizontalDrag = { _, dragAmount -> totalDrag += dragAmount },
+        )
+    }
+}
+
+@Composable
+private fun StatisticsChartContent(
     modifier: Modifier = Modifier,
     periodState: PeriodUiState,
     pieData: List<Pie>,
     onPrevClicked: () -> Unit,
     onNextClicked: () -> Unit,
 ) {
-    val density = LocalDensity.current
-    val showPrevArrow = periodState.showPrevArrow
-    val showNextArrow = periodState.showNextArrow
-    val swipeThreshold = with(density) { 36.dp.toPx() }
-    Column(
-        modifier =
-            modifier
-                .pointerInput(showPrevArrow, showNextArrow, swipeThreshold) {
-                    var totalDrag = 0f
-
-                    detectHorizontalDragGestures(
-                        onDragEnd = {
-                            if (abs(totalDrag) >= swipeThreshold) {
-                                if (totalDrag > 0 && showPrevArrow) {
-                                    onPrevClicked()
-                                } else if (totalDrag < 0 && showNextArrow) {
-                                    onNextClicked()
-                                }
-                            }
-                            totalDrag = 0f
-                        },
-                        onHorizontalDrag = { _, dragAmount ->
-                            totalDrag += dragAmount
-                        },
-                    )
-                },
-    ) {
+    Column(modifier = modifier) {
         Spacer(modifier = Modifier.weight(1f))
 
         var selectedIndex by remember { mutableIntStateOf(-1) }

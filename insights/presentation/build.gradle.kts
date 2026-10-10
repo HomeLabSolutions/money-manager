@@ -12,7 +12,9 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
-    implementation(project(":insights:domain"))
+    implementation(project(":insights:domain:contract"))
+    implementation(project(":insights:domain:model"))
+    implementation(libs.kotlinx.datetime)
     implementation(project(":core:designsystem"))
     implementation(project(":notification"))
     implementation(project(":notification:domain"))
@@ -31,6 +33,8 @@ dependencies {
     implementation(libs.navigation.runtime)
     implementation(libs.timber)
 
+    testImplementation(project(":user-info:domain:model"))
     testImplementation(libs.junit)
+    testImplementation(libs.mockk.core)
     testImplementation(libs.kotlinx.coroutines.test)
 }
