@@ -1,21 +1,5 @@
 plugins {
-    id("moneymanager.android.library")
-}
-
-android {
-    namespace = "com.d9tilov.android.transaction.data.contract"
-
-    defaultConfig {
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments +=
-                    mapOf(
-                        "room.incremental" to "true",
-                        "room.schemaLocation" to "$projectDir/schemas",
-                    )
-            }
-        }
-    }
+    id("moneymanager.android.library.kotlin")
 }
 
 dependencies {

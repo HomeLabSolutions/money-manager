@@ -1,9 +1,5 @@
 plugins {
-    id("moneymanager.android.library")
-}
-
-android {
-    namespace = "com.d9tilov.android.transaction.domain.impl"
+    id("moneymanager.android.library.kotlin")
 }
 
 dependencies {

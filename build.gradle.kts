@@ -62,6 +62,13 @@ tasks.named("check") {
 }
 
 dependencyAnalysis {
+    structure {
+        bundle("paging-common") {
+            primary(libs.paging.common)
+            includeDependency("androidx.paging:paging-common-desktop")
+        }
+    }
+
     val fail = "fail"
     val ignore = "ignore"
     issues {
