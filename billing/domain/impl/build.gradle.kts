@@ -8,13 +8,12 @@ android {
 }
 
 dependencies {
-    implementation(libs.billing)
-
     implementation(project(":billing:domain:contract"))
     implementation(project(":billing:domain:model"))
     implementation(project(":core:common"))
     implementation(project(":currency:domain:contract"))
     implementation(project(":currency:domain:model"))
+    implementation(libs.billing)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.config)

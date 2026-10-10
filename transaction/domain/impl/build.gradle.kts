@@ -1,13 +1,8 @@
 plugins {
-    id("moneymanager.android.library")
-}
-
-android {
-    namespace = "com.d9tilov.android.transaction.domain.impl"
+    id("moneymanager.android.library.kotlin")
 }
 
 dependencies {
-    implementation(libs.kotlinx.datetime)
     implementation(project(":budget:domain:contract"))
     implementation(project(":budget:domain:model"))
     implementation(project(":category:domain:contract"))
@@ -22,6 +17,7 @@ dependencies {
     implementation(project(":user-info:domain:contract"))
     implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.datetime)
     implementation(libs.paging.common)
 
     testImplementation(libs.junit)

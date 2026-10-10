@@ -21,17 +21,16 @@ android {
 }
 
 dependencies {
-    implementation(libs.kotlinx.datetime)
-    implementation(libs.room.runtime.android)
-
     implementation(project(":core:common"))
     implementation(libs.hilt.android)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.datetime)
     implementation(libs.room.paging)
-
-    ksp(libs.room.compiler)
+    implementation(libs.room.runtime.android)
 
     testImplementation(libs.junit)
+
+    ksp(libs.room.compiler)
 }
 
 ksp {

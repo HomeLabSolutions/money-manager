@@ -1,3 +1,4 @@
+import com.android.moneymanager.gradle.DependencySortingOptions.applyDependencySortingOptions
 import com.android.moneymanager.gradle.DetektOptions.applyDetektOptions
 import com.android.moneymanager.gradle.FormattingOptions.applyPrecheckOptions
 
@@ -11,16 +12,15 @@ buildscript {
         maven("https://plugins.gradle.org/m2/")
     }
     dependencies {
+        classpath(libs.firebase.crashlytics.gradle)
         classpath(libs.google.services)
         classpath(libs.hilt.android.gradle.plugin)
-        classpath(libs.firebase.crashlytics.gradle)
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
     }
 }
 
 applyPrecheckOptions()
 applyDetektOptions()
+applyDependencySortingOptions()
 
 allprojects {
     repositories {
@@ -39,17 +39,18 @@ extra["minSdkVersion"] = 24
 extra["targetSdkVersion"] = 36
 extra["versionMajor"] = 1
 extra["versionMinor"] = 3
-extra["versionPatch"] = 6
+extra["versionPatch"] = 7
 extra["versionBuild"] = 1
 
-tasks.register("clean", Delete::class) {
+tasks.named("clean", Delete::class) {
     description = "clean"
     delete(rootProject.layout.buildDirectory)
 }
 
 plugins {
+    base
     alias(libs.plugins.compose.compiler) apply false
-    alias(libs.plugins.deps.sorting) apply false
+    alias(libs.plugins.deps.sorting)
     alias(libs.plugins.deps.unused) apply true
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.serialization) apply false
@@ -57,6 +58,13 @@ plugins {
 }
 
 dependencyAnalysis {
+    structure {
+        bundle("paging-common") {
+            primary(libs.paging.common)
+            includeDependency("androidx.paging:paging-common-desktop")
+        }
+    }
+
     val fail = "fail"
     val ignore = "ignore"
     issues {

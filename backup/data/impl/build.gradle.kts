@@ -12,17 +12,15 @@ android {
 }
 
 dependencies {
-    implementation(libs.kotlinx.datetime)
     implementation(project(":analytics:domain"))
     implementation(project(":backup:data:contract"))
     implementation(project(":backup:domain:contract"))
     implementation(project(":backup:domain:model"))
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
-    implementation(project(":core:datastore"))
     implementation(project(":core:database"))
+    implementation(project(":core:datastore"))
     implementation(project(":core:network"))
-
     implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.work.runtime)
     implementation(libs.dagger)
@@ -30,5 +28,6 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.hilt.common)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.datetime)
     implementation(libs.timber)
 }

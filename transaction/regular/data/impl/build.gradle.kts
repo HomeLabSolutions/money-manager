@@ -8,7 +8,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.kotlinx.datetime)
     implementation(project(":category:domain:model"))
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
@@ -24,5 +23,6 @@ dependencies {
     implementation(libs.androidx.work.runtime)
     implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.datetime)
     implementation(libs.timber)
 }

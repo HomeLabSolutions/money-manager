@@ -13,7 +13,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.kotlinx.datetime)
     implementation(project(":category:domain:contract"))
     implementation(project(":category:domain:model"))
     implementation(project(":core:common"))
@@ -30,6 +29,7 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.hilt.android)
     implementation(libs.hilt.lifecycle.viewmodel.compose)
+    implementation(libs.kotlinx.datetime)
     implementation(libs.maps.compose)
     implementation(libs.navigation.compose)
     implementation(libs.navigation.runtime)

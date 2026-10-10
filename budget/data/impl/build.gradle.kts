@@ -7,7 +7,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.kotlinx.datetime)
     implementation(project(":budget:data:contract"))
     implementation(project(":budget:domain:contract"))
     implementation(project(":budget:domain:model"))
@@ -16,4 +15,5 @@ dependencies {
     implementation(project(":core:datastore"))
     implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.datetime)
 }

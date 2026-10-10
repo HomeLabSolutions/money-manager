@@ -15,20 +15,19 @@ android {
 }
 
 dependencies {
-    implementation(libs.activity.compose)
-    implementation(libs.kotlinx.datetime)
-    implementation(libs.appcompat)
-
     implementation(project(":core:common"))
     implementation(libs.accompanist.permissions)
+    implementation(libs.activity.compose)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.lifecycle.viewmodel.compose.android)
     implementation(libs.androidx.work.runtime)
+    implementation(libs.appcompat)
     implementation(libs.hilt.android)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.play.services)
+    implementation(libs.kotlinx.datetime)
     implementation(libs.navigation.common)
     implementation(libs.navigation.runtime)
     implementation(libs.play.services.location)

@@ -3,7 +3,6 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.kotlinx.datetime)
     implementation(project(":category:domain:contract"))
     implementation(project(":category:domain:model"))
     implementation(project(":core:common"))
@@ -12,6 +11,7 @@ dependencies {
     implementation(project(":transaction:regular:domain:contract"))
     implementation(project(":transaction:regular:domain:model"))
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.datetime)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
