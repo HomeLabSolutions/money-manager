@@ -1,23 +1,13 @@
 package com.d9tilov.android.incomeexpense.ui
 
-import android.os.Parcelable
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,109 +15,59 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.SwipeToDismissBox
-import androidx.compose.material3.SwipeToDismissBoxState
-import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberSwipeToDismissBoxState
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.paging.LoadState
-import androidx.paging.PagingData
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.Category.Companion.ALL_ITEMS_ID
 import com.d9tilov.android.category.domain.entity.CategoryDestination
-import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_FORMAT
-import com.d9tilov.android.common.android.utils.formatDate
 import com.d9tilov.android.core.constants.CurrencyConstants.ZERO
-import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.KeyPress
-import com.d9tilov.android.core.utils.toKeyPress
-import com.d9tilov.android.designsystem.ComposeCurrencyView
-import com.d9tilov.android.designsystem.EmptyListPlaceholder
 import com.d9tilov.android.designsystem.MoneyManagerIcons
-import com.d9tilov.android.designsystem.SimpleDialog
-import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.android.incomeexpense.ui.vm.EditMode
-import com.d9tilov.android.incomeexpense.ui.vm.ExpenseInfo
-import com.d9tilov.android.incomeexpense.ui.vm.ExpenseUiState
 import com.d9tilov.android.incomeexpense.ui.vm.IncomeExpenseUiState
 import com.d9tilov.android.incomeexpense.ui.vm.IncomeExpenseViewModel
-import com.d9tilov.android.incomeexpense.ui.vm.IncomeInfo
-import com.d9tilov.android.incomeexpense.ui.vm.IncomeUiState
-import com.d9tilov.android.incomeexpense.ui.vm.MainPrice
-import com.d9tilov.android.incomeexpense.ui.vm.Price
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.EXPENSE
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.INCOME
 import com.d9tilov.android.incomeexpense.ui.vm.screenTypes
 import com.d9tilov.android.incomeexpense.ui.vm.toScreenType
-import com.d9tilov.android.transaction.ui.TransactionItem
-import com.d9tilov.android.transaction.ui.model.BaseTransaction
 import com.d9tilov.android.transaction.ui.model.TransactionUiModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
-import java.math.BigDecimal
-
-private const val KEYBOARD_BUTTON_ANIMATION_DELAY_MS = 150L
-
-@Parcelize
-private data class ScrollAnchor(
-    val itemKey: String,
-    val scrollOffset: Int,
-    val snapshotHash: Int,
-) : Parcelable
 
 @Composable
 fun IncomeExpenseRoute(
@@ -252,226 +192,6 @@ fun AnimatedFloatingActionButton(
         }
     }
 }
-
-@Composable
-fun MainPriceInput(
-    price: MainPrice,
-    modifier: Modifier,
-    onCurrencyClicked: () -> Unit,
-) {
-    Surface(
-        modifier = modifier,
-        onClick = onCurrencyClicked,
-        border = BorderStroke(2.dp, MaterialTheme.colorScheme.primary),
-        shape = RoundedCornerShape(24.dp),
-        tonalElevation = 1.dp,
-    ) {
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center,
-        ) {
-            ComposeCurrencyView(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                symbol = price.currencyCode.getSymbolByCode(),
-                value = price.value,
-            )
-        }
-    }
-}
-
-@Composable
-fun TransactionListLayout(
-    listState: LazyListState,
-    modifier: Modifier,
-    transactions: Flow<PagingData<BaseTransaction>>,
-    screenType: ScreenType,
-    onTransactionClicked: (TransactionUiModel) -> Unit,
-    onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
-) {
-    val lazyTransactionItems: LazyPagingItems<BaseTransaction> =
-        transactions.collectAsLazyPagingItems()
-    var scrollAnchor by rememberSaveable { mutableStateOf<ScrollAnchor?>(null) }
-    val coroutineScope = rememberCoroutineScope()
-    val snapshot = lazyTransactionItems.itemSnapshotList
-    LaunchedEffect(snapshot) {
-        val anchor = scrollAnchor ?: return@LaunchedEffect
-        if (snapshot.items.hashCode() == anchor.snapshotHash) return@LaunchedEffect
-        val latestSnapshot = lazyTransactionItems.itemSnapshotList
-        val anchorIndex = latestSnapshot.items.indexOfFirst { it.listKey() == anchor.itemKey }
-        if (anchorIndex >= 0) {
-            listState.scrollToItem(anchorIndex, anchor.scrollOffset)
-            scrollAnchor = null
-        } else if (lazyTransactionItems.loadState.append is LoadState.NotLoading) {
-            val appendState = lazyTransactionItems.loadState.append as LoadState.NotLoading
-            if (appendState.endOfPaginationReached) {
-                scrollAnchor = null
-            } else if (lazyTransactionItems.itemCount > 0) {
-                lazyTransactionItems[lazyTransactionItems.itemCount - 1]
-            }
-        }
-    }
-
-    fun captureScrollAnchor(
-        preferredId: Long? = null,
-        excludedId: Long? = null,
-    ) {
-        val transactionsByKey =
-            snapshot.items
-                .filterIsInstance<TransactionUiModel>()
-                .associateBy { it.listKey() }
-        val visibleTransactions =
-            listState.layoutInfo.visibleItemsInfo.mapNotNull { itemInfo ->
-                val transaction = transactionsByKey[itemInfo.key]
-                if (transaction?.id == excludedId) null else transaction?.let { it to itemInfo }
-            }
-        val (transaction, itemInfo) =
-            visibleTransactions.firstOrNull { (transaction, _) -> transaction.id == preferredId }
-                ?: visibleTransactions.firstOrNull()
-                ?: return
-        scrollAnchor =
-            ScrollAnchor(
-                itemKey = transaction.listKey(),
-                scrollOffset = -itemInfo.offset,
-                snapshotHash = snapshot.items.hashCode(),
-            )
-    }
-    if (lazyTransactionItems.loadState.refresh is LoadState.NotLoading && lazyTransactionItems.itemCount == 0) {
-        EmptyListPlaceholder(
-            modifier = Modifier.fillMaxSize(),
-            icon = painterResource(id = MoneyManagerIcons.EmptyPlaceholder),
-            title =
-                when (screenType) {
-                    EXPENSE -> stringResource(id = R.string.transaction_empty_placeholder_expense_title)
-                    INCOME -> stringResource(id = R.string.transaction_empty_placeholder_income_title)
-                },
-            subtitle = stringResource(id = R.string.transaction_empty_placeholder_subtitle),
-        )
-        return
-    }
-    if (lazyTransactionItems.loadState.refresh is LoadState.Error) {
-        // handle error
-    }
-    val openRemoveDialog = remember { mutableStateOf<Pair<TransactionUiModel, SwipeToDismissBoxState>?>(null) }
-    LazyColumn(modifier = modifier, state = listState) {
-        for (index in 0 until lazyTransactionItems.itemCount) {
-            val currentItem = lazyTransactionItems.peek(index)
-            currentItem?.let { tr ->
-                if (tr.itemType == BaseTransaction.HEADER) {
-                    stickyHeader(key = tr.listKey()) {
-                        Surface(
-                            modifier = Modifier.fillParentMaxWidth(),
-                            color = MaterialTheme.colorScheme.primaryContainer,
-                        ) {
-                            Text(
-                                modifier = Modifier.padding(start = 24.dp),
-                                text = formatDate(currentItem.date, TRANSACTION_DATE_FORMAT),
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            )
-                        }
-                    }
-                } else {
-                    item(key = currentItem.listKey()) {
-                        val item = lazyTransactionItems[index] as TransactionUiModel
-                        val dismissState = rememberSwipeToDismissBoxState(SwipeToDismissBoxValue.Settled)
-                        LaunchedEffect(dismissState.currentValue) {
-                            if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
-                                openRemoveDialog.value = item to dismissState
-                            }
-                        }
-
-                        SwipeToDismissBox(
-                            state = dismissState,
-                            enableDismissFromStartToEnd = false,
-                            backgroundContent = {
-                                val backgroundColor by animateColorAsState(
-                                    when (dismissState.targetValue) {
-                                        SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.error
-                                        else -> Color.Transparent
-                                    },
-                                    label = "",
-                                )
-                                val iconScale by animateFloatAsState(
-                                    targetValue =
-                                        if (dismissState.targetValue ==
-                                            SwipeToDismissBoxValue.Settled
-                                        ) {
-                                            0.0f
-                                        } else {
-                                            1.3f
-                                        },
-                                    label = "",
-                                )
-                                Box(
-                                    Modifier
-                                        .fillMaxSize()
-                                        .background(color = backgroundColor)
-                                        .padding(
-                                            horizontal =
-                                                dimensionResource(
-                                                    id = com.d9tilov.android.designsystem.R.dimen.padding_medium,
-                                                ),
-                                        ),
-                                    contentAlignment = Alignment.CenterEnd,
-                                ) {
-                                    Icon(
-                                        modifier = Modifier.scale(iconScale),
-                                        imageVector = MoneyManagerIcons.Delete,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.onError,
-                                    )
-                                }
-                            },
-                            content = {
-                                TransactionItem(
-                                    modifier =
-                                        Modifier
-                                            .fillMaxWidth()
-                                            .clickable {
-                                                captureScrollAnchor(preferredId = item.id)
-                                                onTransactionClicked(item)
-                                            },
-                                    transaction = item,
-                                )
-                            },
-                        )
-                    }
-                }
-            }
-        }
-        item {
-            if (lazyTransactionItems.loadState.append is LoadState.Loading) {
-                // handle loading
-            }
-        }
-    }
-    SimpleDialog(
-        show = openRemoveDialog.value != null,
-        title = stringResource(R.string.transaction_delete_dialog_title),
-        subtitle = stringResource(R.string.transaction_delete_dialog_subtitle),
-        dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
-        confirmButton = stringResource(com.d9tilov.android.common.android.R.string.delete),
-        onConfirm = {
-            openRemoveDialog.value?.let { (transaction, _) ->
-                captureScrollAnchor(excludedId = transaction.id)
-                onDeleteTransactionConfirmClicked(transaction)
-            }
-            openRemoveDialog.value = null
-        },
-        onDismiss = {
-            openRemoveDialog.value?.let { (_, state) ->
-                coroutineScope.launch { state.reset() }
-            }
-            openRemoveDialog.value = null
-        },
-    )
-}
-
-private fun BaseTransaction.listKey(): String =
-    if (itemType == BaseTransaction.HEADER) {
-        "header:$date"
-    } else {
-        "transaction:${(this as TransactionUiModel).id}"
-    }
 
 @Composable
 @Suppress("CognitiveComplexMethod")
@@ -627,155 +347,6 @@ fun HomeTabIndicator(
 }
 
 @Composable
-fun KeyBoardLayout(
-    modifier: Modifier,
-    onKeyboardClicked: () -> Unit,
-    onNumberClicked: (KeyPress) -> Unit,
-) {
-    val data: List<String> = KeyPress.entries.map { it.value }
-    Box(modifier = modifier.padding(bottom = 8.dp)) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            horizontalArrangement = Arrangement.Center,
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            userScrollEnabled = false,
-            contentPadding = PaddingValues(start = 40.dp, end = 40.dp),
-        ) {
-            items(data, key = { it.hashCode() }) { item ->
-                val keyPress = item.toKeyPress() ?: return@items
-                AnimatedKeyboardButton(
-                    keyPress = keyPress,
-                    item = item,
-                    onNumberClicked = onNumberClicked,
-                )
-            }
-        }
-        Icon(
-            modifier =
-                Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 24.dp)
-                    .clickable { onKeyboardClicked() },
-            imageVector = MoneyManagerIcons.HideKeyboard,
-            tint = MaterialTheme.colorScheme.secondary,
-            contentDescription = "HideKeyboard",
-        )
-    }
-}
-
-@Composable
-fun AnimatedKeyboardButton(
-    keyPress: KeyPress,
-    item: String,
-    onNumberClicked: (KeyPress) -> Unit,
-) {
-    var isPressed by remember { mutableStateOf(false) }
-    val scale by animateFloatAsState(
-        targetValue = if (isPressed) 1.2f else 1f,
-        animationSpec =
-            spring(
-                dampingRatio = Spring.DampingRatioMediumBouncy,
-                stiffness = Spring.StiffnessLow,
-            ),
-        label = "keyboard_button_scale",
-    )
-
-    Surface(
-        modifier =
-            Modifier
-                .graphicsLayer {
-                    scaleX = scale
-                    scaleY = scale
-                }.clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = ripple(bounded = false, radius = 20.dp),
-                ) {
-                    isPressed = true
-                    onNumberClicked(keyPress)
-                },
-        shape = CircleShape,
-        color = Color.Transparent,
-    ) {
-        if (keyPress == KeyPress.Del) {
-            Icon(
-                imageVector = MoneyManagerIcons.BackSpace,
-                contentDescription = "BackSpace",
-                tint = MaterialTheme.colorScheme.primary,
-            )
-        } else {
-            Text(
-                text = item,
-                style =
-                    MaterialTheme.typography.headlineMedium.copy(
-                        color = MaterialTheme.colorScheme.primary,
-                        textAlign = TextAlign.Center,
-                    ),
-            )
-        }
-    }
-
-    LaunchedEffect(isPressed) {
-        if (isPressed) {
-            delay(KEYBOARD_BUTTON_ANIMATION_DELAY_MS)
-            isPressed = false
-        }
-    }
-}
-
-@Composable
-fun ExpenseInfoBlock(
-    modifier: Modifier,
-    info: ExpenseInfo,
-) {
-    Column(modifier = modifier, verticalArrangement = Arrangement.Center) {
-        InfoLabel(info.ableToSpendToday)
-        InfoLabel(info.wasSpendToday)
-        InfoLabel(info.wasSpendInPeriod)
-    }
-}
-
-@Composable
-fun IncomeInfoBlock(
-    modifier: Modifier,
-    info: IncomeInfo,
-) {
-    Column(modifier = modifier, verticalArrangement = Arrangement.Center) {
-        InfoLabel(info.wasEarnedInPeriod)
-    }
-}
-
-@Composable
-fun InfoLabel(price: Price) {
-    Row(Modifier.padding(bottom = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-        InfoLabelTitle(text = stringResource(id = price.label))
-        Text(
-            modifier = Modifier.padding(start = 4.dp),
-            text = price.value,
-            style = MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.primary),
-        )
-    }
-}
-
-@Composable
-fun InfoLabelTitle(
-    modifier: Modifier = Modifier,
-    text: String,
-) {
-    Box(
-        modifier =
-            modifier
-                .clip(RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.primary),
-    ) {
-        Text(
-            modifier = Modifier.padding(6.dp),
-            text = text,
-            style = MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.onPrimary),
-        )
-    }
-}
-
-@Composable
 fun CategoryListLayout(
     categoryList: List<Category>,
     modifier: Modifier,
@@ -811,114 +382,17 @@ fun CategoryListLayout(
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = item.icon),
+                    modifier = Modifier.size(dimensionResource(id = R.dimen.category_icon_size)),
                     contentDescription = "Backup",
                     tint = Color(ContextCompat.getColor(context, item.color)),
                 )
                 Text(
                     text = if (item.id == ALL_ITEMS_ID) stringResource(id = R.string.category_all) else item.name,
                     color = Color(ContextCompat.getColor(context, item.color)),
+                    style = MaterialTheme.typography.bodySmall,
                     overflow = TextOverflow.Ellipsis,
                 )
             }
         }
     }
 }
-
-@Composable
-@Preview
-fun TransactionListItemPreview() {
-    MoneyManagerTheme {
-        TransactionItem(
-            modifier = Modifier.fillMaxWidth(),
-            transaction =
-                TransactionUiModel.EMPTY.copy(
-                    sum = BigDecimal.TEN,
-                    usdSum = BigDecimal(5),
-                    currencyCode = "RUB",
-                    isRegular = true,
-                    inStatistics = true,
-                    description = "description",
-                    category = mockCategory(2, "Cafe"),
-                ),
-        )
-    }
-}
-
-@Composable
-@Preview
-fun PreviewIncomeExpenseScreen() {
-    MoneyManagerTheme {
-        IncomeExpenseScreen(
-            uiState =
-                IncomeExpenseUiState.EMPTY.copy(
-                    incomeUiState =
-                        IncomeUiState(
-                            incomeCategoryList =
-                                listOf(
-                                    mockCategory(1L, "Category1"),
-                                    mockCategory(2L, "Category2"),
-                                    mockCategory(3L, "Category3"),
-                                    mockCategory(4L, "Category4"),
-                                    mockCategory(5L, "Category5"),
-                                    mockCategory(6L, "Category6"),
-                                    mockCategory(7L, "Category7"),
-                                    mockCategory(8L, "Category8"),
-                                    mockCategory(9L, "Category9"),
-                                    mockCategory(10L, "Category10"),
-                                    mockCategory(11L, "Category11"),
-                                    mockCategory(12L, "Category12"),
-                                    mockCategory(13L, "Category13"),
-                                    mockCategory(14L, "Category14"),
-                                    mockCategory(15L, "Category15"),
-                                ),
-                        ),
-                    expenseUiState =
-                        ExpenseUiState.EMPTY.copy(
-                            expenseInfo =
-                                ExpenseInfo(
-                                    ableToSpendToday =
-                                        Price(
-                                            R.string.expense_info_can_spend_today_title,
-                                            "$42",
-                                        ),
-                                    wasSpendToday = Price(R.string.expense_info_today_title, "$43"),
-                                    wasSpendInPeriod = Price(R.string.expense_info_period_title, "$44"),
-                                ),
-                        ),
-                ),
-            onNumberClicked = {},
-            onCategoryClicked = {},
-            onEditModeChanged = {},
-            onCurrencyClicked = {},
-            onAllCategoryClicked = { _, _ -> },
-            onTransactionClicked = {},
-            onDeleteTransactionConfirmClicked = {},
-            onScreenTypeClicked = {},
-        )
-    }
-}
-
-@Composable
-@Preview
-fun InfoLabelPreview() {
-    MoneyManagerTheme {
-        ExpenseInfoBlock(
-            Modifier,
-            ExpenseInfo(
-                ableToSpendToday = Price(R.string.expense_info_can_spend_today_title, "$41"),
-                wasSpendToday = Price(R.string.expense_info_today_title, "$42"),
-                wasSpendInPeriod = Price(R.string.expense_info_period_title, "$43"),
-            ),
-        )
-    }
-}
-
-private fun mockCategory(
-    id: Long,
-    name: String,
-) = Category.EMPTY_INCOME.copy(
-    id = id,
-    name = name,
-    icon = R.drawable.ic_category_beach,
-    color = android.R.color.holo_blue_light,
-)

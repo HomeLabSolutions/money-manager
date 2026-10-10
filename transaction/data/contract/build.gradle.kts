@@ -1,28 +1,12 @@
 plugins {
-    id("moneymanager.android.library")
-}
-
-android {
-    namespace = "com.d9tilov.android.transaction.data.contract"
-
-    defaultConfig {
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments +=
-                    mapOf(
-                        "room.incremental" to "true",
-                        "room.schemaLocation" to "$projectDir/schemas",
-                    )
-            }
-        }
-    }
+    id("moneymanager.android.library.kotlin")
 }
 
 dependencies {
-    implementation(libs.kotlinx.datetime)
     implementation(project(":category:domain:model"))
     implementation(project(":core:common"))
     implementation(project(":transaction:domain:model"))
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.datetime)
     implementation(libs.paging.common)
 }

@@ -288,9 +288,7 @@ class BillingDataSource
                 if (detailsResult.productDetailsList.isEmpty()) {
                     Timber
                         .tag(TAG)
-                        .d(
-                            "onProductDetailsResponse: Found null or empty ProductDetails. Check to see if the Products you requested are correctly published in the Google Play Console.",
-                        )
+                        .d(EMPTY_PRODUCT_DETAILS_MESSAGE)
                 } else {
                     newMap =
                         detailsResult.productDetailsList.associateBy {
@@ -303,12 +301,15 @@ class BillingDataSource
             }
         }
 
-        companion object {
-            private const val TAG = "BillingClient"
+        private companion object {
+            const val TAG = "BillingClient"
+            const val EMPTY_PRODUCT_DETAILS_MESSAGE =
+                "onProductDetailsResponse: Found null or empty ProductDetails. " +
+                    "Check to see if the Products you requested are correctly published in the Google Play Console."
 
             // List of subscription product offerings
-            private const val PREMIUM_SUB = "common_subs"
+            const val PREMIUM_SUB = "common_subs"
 
-            private val LIST_OF_PRODUCTS = listOf(PREMIUM_SUB)
+            val LIST_OF_PRODUCTS = listOf(PREMIUM_SUB)
         }
     }

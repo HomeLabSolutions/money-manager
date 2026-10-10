@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -20,7 +20,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -35,14 +34,16 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.d9tilov.android.common.android.ui.permissions.rememberNotificationPermissionRequester
-import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
-import com.d9tilov.android.insights.domain.Insight
+import com.d9tilov.android.insights.domain.model.Insight
+import com.d9tilov.android.insights.domain.model.InsightGenerationStatus
+import com.d9tilov.android.insights.domain.model.InsightsConstants.MIN_INSIGHT_TRANSACTION_COUNT
 import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.util.Date
@@ -53,7 +54,6 @@ private const val INSIGHT_BUBBLE_SURFACE_ALPHA = 0.94f
 @Composable
 fun InsightsRoute(
     viewModel: InsightsViewModel = hiltViewModel(),
-    onBackClick: () -> Unit,
     onShowSnackBar: suspend (String, String?) -> Boolean,
 ) {
     val state by viewModel.state.collectAsState()
@@ -69,7 +69,6 @@ fun InsightsRoute(
 
     InsightsScreen(
         state = state,
-        onBackClick = onBackClick,
         onGenerateClick = {
             if (viewModel.isConsentGranted()) {
                 viewModel.generate()
@@ -96,12 +95,10 @@ fun InsightsRoute(
 @Composable
 fun InsightsScreen(
     state: InsightsUiState,
-    onBackClick: () -> Unit,
     onGenerateClick: suspend () -> Unit,
     onShowSnackBar: suspend (String, String?) -> Boolean,
     onErrorDismissed: () -> Unit = {},
 ) {
-    val scope = rememberCoroutineScope()
     val errorState = state.errorState
     if (errorState != null) {
         InsightErrorSnackBar(
@@ -119,14 +116,6 @@ fun InsightsScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize().background(gradient),
         containerColor = Color.Transparent,
-        topBar = {
-            MmTopAppBar(
-                titleRes = R.string.insights_screen_title,
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
-                surfaceColor = Color.Transparent,
-                onNavigationClick = onBackClick,
-            )
-        },
     ) { paddingValues ->
         Column(
             modifier =
@@ -137,24 +126,59 @@ fun InsightsScreen(
         ) {
             val contentModifier = Modifier.weight(1f).fillMaxWidth()
             InsightHistoryContent(state, contentModifier)
-            Box(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .height(dimensionResource(R.dimen.insights_action_height))
-                        .padding(bottom = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
-                contentAlignment = Alignment.Center,
-            ) {
-                if (state.isInsightLoading) {
-                    CircularProgressIndicator()
-                } else {
-                    Button(onClick = { scope.launch { onGenerateClick() } }) {
-                        Text(stringResource(R.string.insights_generate))
-                    }
+            InsightGenerationAction(state.generationStatus, onGenerateClick)
+        }
+    }
+}
+
+@Composable
+private fun InsightGenerationAction(
+    status: InsightGenerationStatus,
+    onGenerateClick: suspend () -> Unit,
+) {
+    val scope = rememberCoroutineScope()
+    Box(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .heightIn(min = dimensionResource(R.dimen.insights_action_height))
+                .padding(bottom = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
+        contentAlignment = Alignment.Center,
+    ) {
+        when (status) {
+            InsightGenerationStatus.AVAILABLE -> {
+                Button(onClick = { scope.launch { onGenerateClick() } }) {
+                    Text(stringResource(R.string.insights_generate))
                 }
+            }
+
+            InsightGenerationStatus.INSUFFICIENT_DATA -> {
+                InsightGenerationNotice(
+                    stringResource(R.string.insights_insufficient_data, MIN_INSIGHT_TRANSACTION_COUNT),
+                )
+            }
+
+            InsightGenerationStatus.DAILY_LIMIT_REACHED -> {
+                InsightGenerationNotice(stringResource(R.string.insights_daily_limit))
+            }
+
+            InsightGenerationStatus.UNDEFINED -> {}
+
+            InsightGenerationStatus.LOADING -> {
+                CircularProgressIndicator()
             }
         }
     }
+}
+
+@Composable
+private fun InsightGenerationNotice(message: String) {
+    Text(
+        text = message,
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        textAlign = TextAlign.Center,
+    )
 }
 
 @Composable
@@ -276,8 +300,12 @@ fun InsightsScreenPreview(
 ) {
     MoneyManagerTheme(dynamicColor = false) {
         InsightsScreen(
-            state = InsightsUiState(insights = insights, isHistoryLoading = false),
-            onBackClick = {},
+            state =
+                InsightsUiState(
+                    insights = insights,
+                    isHistoryLoading = false,
+                    generationStatus = InsightGenerationStatus.AVAILABLE,
+                ),
             onGenerateClick = {},
             onShowSnackBar = { _, _ -> false },
         )
@@ -292,8 +320,12 @@ fun InsightsScreenLoadingPreview(
 ) {
     MoneyManagerTheme(dynamicColor = false) {
         InsightsScreen(
-            state = InsightsUiState(insights = insights, isInsightLoading = true, isHistoryLoading = false),
-            onBackClick = {},
+            state =
+                InsightsUiState(
+                    insights = insights,
+                    isHistoryLoading = false,
+                    generationStatus = InsightGenerationStatus.LOADING,
+                ),
             onGenerateClick = {},
             onShowSnackBar = { _, _ -> false },
         )
@@ -306,7 +338,50 @@ fun InsightsScreenHistoryLoadingPreview() {
     MoneyManagerTheme(dynamicColor = false) {
         InsightsScreen(
             state = InsightsUiState(),
-            onBackClick = {},
+            onGenerateClick = {},
+            onShowSnackBar = { _, _ -> false },
+        )
+    }
+}
+
+class InsightGenerationBlockedPreviewProvider : PreviewParameterProvider<InsightGenerationStatus> {
+    override val values =
+        sequenceOf(InsightGenerationStatus.INSUFFICIENT_DATA, InsightGenerationStatus.DAILY_LIMIT_REACHED)
+}
+
+@Preview(name = "Generation unavailable light", showBackground = true)
+@Preview(name = "Generation unavailable dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun InsightsScreenGenerationBlockedPreview(
+    @PreviewParameter(InsightGenerationBlockedPreviewProvider::class) status: InsightGenerationStatus,
+) {
+    MoneyManagerTheme(dynamicColor = false) {
+        InsightsScreen(
+            state = InsightsUiState(isHistoryLoading = false, generationStatus = status),
+            onGenerateClick = {},
+            onShowSnackBar = { _, _ -> false },
+        )
+    }
+}
+
+@Preview(name = "History and generation unavailable light", showBackground = true)
+@Preview(
+    name = "History and generation unavailable dark",
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+)
+@Composable
+fun InsightsScreenHistoryGenerationBlockedPreview(
+    @PreviewParameter(InsightGenerationBlockedPreviewProvider::class) status: InsightGenerationStatus,
+) {
+    MoneyManagerTheme(dynamicColor = false) {
+        InsightsScreen(
+            state =
+                InsightsUiState(
+                    insights = InsightsHistoryPreviewProvider().values.first(),
+                    isHistoryLoading = false,
+                    generationStatus = status,
+                ),
             onGenerateClick = {},
             onShowSnackBar = { _, _ -> false },
         )

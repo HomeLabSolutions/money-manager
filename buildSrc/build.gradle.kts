@@ -27,27 +27,27 @@ gradlePlugin {
     plugins {
         register("androidApplication") {
             id = "moneymanager.android.application"
-            implementationClass = "AndroidApplicationConventionPlugin"
+            implementationClass = "com.android.moneymanager.gradle.plugins.AndroidApplicationConventionPlugin"
         }
         register("androidLibrary") {
             id = "moneymanager.android.library"
-            implementationClass = "AndroidLibraryConventionPlugin"
+            implementationClass = "com.android.moneymanager.gradle.plugins.AndroidLibraryConventionPlugin"
         }
         register("androidHilt") {
             id = "moneymanager.android.hilt"
-            implementationClass = "AndroidHiltConventionPlugin"
+            implementationClass = "com.android.moneymanager.gradle.plugins.AndroidHiltConventionPlugin"
         }
         register("androidApplicationCompose") {
             id = "moneymanager.android.application.compose"
-            implementationClass = "AndroidApplicationComposeConventionPlugin"
+            implementationClass = "com.android.moneymanager.gradle.plugins.AndroidApplicationComposeConventionPlugin"
         }
         register("androidLibraryCompose") {
             id = "moneymanager.android.library.compose"
-            implementationClass = "AndroidLibraryComposeConventionPlugin"
+            implementationClass = "com.android.moneymanager.gradle.plugins.AndroidLibraryComposeConventionPlugin"
         }
         register("kotlinLibrary") {
             id = "moneymanager.android.library.kotlin"
-            implementationClass = "KotlinLibraryConventionPlugin"
+            implementationClass = "com.android.moneymanager.gradle.plugins.KotlinLibraryConventionPlugin"
         }
     }
 }

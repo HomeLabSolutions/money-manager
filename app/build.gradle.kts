@@ -32,7 +32,9 @@ android {
                 storeFile = file(keystoreProperties["storeFile"]!!)
                 storePassword = keystoreProperties["storePassword"] as String
             } else {
-                println("Warning: keystore.properties file not found. Release signing configuration will not be applied.")
+                println(
+                    "Warning: keystore.properties file not found. Release signing configuration will not be applied.",
+                )
             }
         }
         getByName("debug") {
@@ -128,7 +130,7 @@ dependencies {
     implementation(project(":currency:observer:contract"))
     implementation(project(":currency:ui"))
     implementation(project(":incomeexpense:ui"))
-    implementation(project(":insights:data"))
+    implementation(project(":insights:di"))
     implementation(project(":insights:presentation"))
     implementation(project(":notification"))
     implementation(project(":notification:domain"))

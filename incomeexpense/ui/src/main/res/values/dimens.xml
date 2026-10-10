@@ -2,5 +2,6 @@
 <resources>
 
     //keyboard
-    <dimen name="category_item_size">80dp</dimen>
+    <dimen name="category_item_size">72dp</dimen>
+    <dimen name="category_icon_size">40dp</dimen>
 </resources>

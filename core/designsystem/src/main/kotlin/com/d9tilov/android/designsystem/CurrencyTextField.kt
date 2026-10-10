@@ -33,6 +33,8 @@ private const val TEXT_SCALE_REDUCTION_INTERVAL = 0.9f
 private const val DECIMAL_SIZE = 2
 private const val DELIMITER = "."
 
+private const val PREVIEW_AMOUNT = 123
+
 @Composable
 fun CurrencyTextFieldExtraSmall(
     modifier: Modifier = Modifier,
@@ -199,29 +201,7 @@ private fun CurrencyTextField(
                             .alignByBaseline(),
                     value = amount,
                     onValueChange = { input ->
-                        text =
-                            when {
-                                input.isEmpty() -> {
-                                    input
-                                }
-
-                                input[0] == '0' -> {
-                                    input.substring(1)
-                                }
-
-                                else -> {
-                                    if (input.toBigDecimalOrNull() == null) {
-                                        text
-                                    } else {
-                                        val number = input.toBigDecimal()
-                                        if (number.scale() > DECIMAL_SIZE) {
-                                            input.take(input.indexOf(DELIMITER) + DECIMAL_SIZE + 1)
-                                        } else {
-                                            input
-                                        }
-                                    }
-                                }
-                            }
+                        text = parseCurrencyInput(input, text)
                         inputValueChanged(text)
                     },
                     placeholder = {
@@ -275,11 +255,33 @@ private fun CurrencyTextField(
     }
 }
 
+private fun parseCurrencyInput(
+    input: String,
+    previousValue: String,
+): String =
+    when {
+        input.isEmpty() -> input
+        input[0] == '0' -> input.substring(1)
+        else -> parseCurrencyNumber(input, previousValue)
+    }
+
+private fun parseCurrencyNumber(
+    input: String,
+    previousValue: String,
+): String {
+    val number = input.toBigDecimalOrNull()
+    return when {
+        number == null -> previousValue
+        number.scale() > DECIMAL_SIZE -> input.take(input.indexOf(DELIMITER) + DECIMAL_SIZE + 1)
+        else -> input
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreviewCurrencyTextField() {
     CurrencyTextFieldSmall(
-        amount = BigDecimal(123).reduceScaleStr(),
+        amount = BigDecimal(PREVIEW_AMOUNT).reduceScaleStr(),
         currencyCode = "$",
         isEditable = false,
     )

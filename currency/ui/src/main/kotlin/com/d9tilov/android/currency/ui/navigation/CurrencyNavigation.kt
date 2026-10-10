@@ -13,7 +13,7 @@ import com.d9tilov.android.currency.ui.CurrencyListRoute
 const val CURRENCY_LIST_NAVIGATION_ROUTE = "currency_list_route"
 
 internal sealed class CurrencyArgs {
-    class CurrencyScreenArgs(
+    data class CurrencyScreenArgs(
         val currencyCode: String?,
     ) {
         constructor(savedStateHandle: SavedStateHandle) :

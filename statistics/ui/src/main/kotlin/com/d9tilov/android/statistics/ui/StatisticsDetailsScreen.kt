@@ -1,5 +1,6 @@
 package com.d9tilov.android.statistics.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,14 +23,20 @@ import com.d9tilov.android.statistics.ui.vm.StatisticsDetailsViewModel
 import com.d9tilov.android.transaction.ui.TransactionItem
 import com.d9tilov.android.transaction.ui.model.TransactionUiModel
 import java.math.BigDecimal
+import com.d9tilov.android.common.android.R as CommonAndroidR
 
 @Composable
 fun StatisticsDetailsRoute(
     viewModel: StatisticsDetailsViewModel = hiltViewModel(),
     onBackClicked: () -> Unit,
+    onTransactionClicked: (Long) -> Unit,
 ) {
     val uiState: StatisticsDetailsUiState by viewModel.uiState.collectAsState(StatisticsDetailsUiState())
-    StatisticsDetailsScreen(state = uiState, onBackClicked = onBackClicked)
+    StatisticsDetailsScreen(
+        state = uiState,
+        onBackClicked = onBackClicked,
+        onTransactionClicked = onTransactionClicked,
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,6 +45,7 @@ fun StatisticsDetailsScreen(
     modifier: Modifier = Modifier,
     state: StatisticsDetailsUiState,
     onBackClicked: () -> Unit,
+    onTransactionClicked: (Long) -> Unit,
 ) {
     Scaffold(topBar = {
         MmTopAppBar(
@@ -51,7 +59,10 @@ fun StatisticsDetailsScreen(
             state = rememberLazyListState(),
         ) {
             items(items = state.transactions, key = { item -> item.id }) { item ->
-                TransactionItem(Modifier.fillMaxWidth(), item)
+                TransactionItem(
+                    Modifier.fillMaxWidth().clickable { onTransactionClicked(item.id) },
+                    item,
+                )
             }
         }
     }
@@ -59,7 +70,6 @@ fun StatisticsDetailsScreen(
 
 @Preview(showBackground = true)
 @Composable
-@Suppress("MagicNumber")
 fun StatisticsDetailsScreenPreview() {
     MoneyManagerTheme {
         StatisticsDetailsScreen(
@@ -67,43 +77,22 @@ fun StatisticsDetailsScreenPreview() {
                 StatisticsDetailsUiState(
                     categoryName = "MyCategory",
                     transactions =
-                        listOf(
+                        listOf("Category1", "Category2", "Category3").mapIndexed { index, name ->
                             TransactionUiModel.EMPTY.copy(
-                                id = 1,
+                                id = (index + 1).toLong(),
                                 category =
                                     Category.EMPTY_EXPENSE.copy(
-                                        name = "Category1",
-                                        icon = android.R.drawable.btn_star,
+                                        name = name,
+                                        icon = CommonAndroidR.drawable.ic_category_cafe,
                                         color = android.R.color.black,
                                     ),
-                                sum = BigDecimal(1),
+                                sum = BigDecimal.valueOf((index + 1).toLong()),
                                 type = TransactionType.EXPENSE,
-                            ),
-                            TransactionUiModel.EMPTY.copy(
-                                id = 2,
-                                category =
-                                    Category.EMPTY_EXPENSE.copy(
-                                        name = "Category2",
-                                        icon = android.R.drawable.btn_star,
-                                        color = android.R.color.black,
-                                    ),
-                                sum = BigDecimal(2),
-                                type = TransactionType.EXPENSE,
-                            ),
-                            TransactionUiModel.EMPTY.copy(
-                                id = 3,
-                                category =
-                                    Category.EMPTY_EXPENSE.copy(
-                                        name = "Category3",
-                                        icon = android.R.drawable.btn_star,
-                                        color = android.R.color.black,
-                                    ),
-                                sum = BigDecimal(3),
-                                type = TransactionType.EXPENSE,
-                            ),
-                        ),
+                            )
+                        },
                 ),
             onBackClicked = {},
+            onTransactionClicked = {},
         )
     }
 }

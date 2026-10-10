@@ -28,6 +28,8 @@ import com.d9tilov.android.category.ui.vm.CategorySharedViewModel
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 
+private const val ICON_GRID_COLUMN_COUNT = 4
+
 @Composable
 fun CategoryIconGridRoute(
     sharedViewModel: CategorySharedViewModel,
@@ -68,7 +70,7 @@ fun CategoryIconGridScreen(
                 modifier =
                     Modifier
                         .padding(top = 16.dp, start = 8.dp, end = 8.dp),
-                columns = GridCells.Fixed(4),
+                columns = GridCells.Fixed(ICON_GRID_COLUMN_COUNT),
                 horizontalArrangement = Arrangement.Start,
                 verticalArrangement = Arrangement.Top,
             ) {

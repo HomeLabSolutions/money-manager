@@ -1,17 +1,21 @@
 package com.d9tilov.android.insights.presentation
 
-import com.d9tilov.android.insights.domain.GeneratedInsight
-import com.d9tilov.android.insights.domain.Insight
-import com.d9tilov.android.insights.domain.InsightsConsentRepository
-import com.d9tilov.android.insights.domain.InsightsRepository
-import com.d9tilov.android.insights.domain.exception.DailyInsightLimitException
-import com.d9tilov.android.insights.domain.exception.InsightServiceException
-import com.d9tilov.android.insights.domain.exception.InsufficientInsightsDataException
+import com.d9tilov.android.core.utils.currentDateTime
+import com.d9tilov.android.core.utils.toMillis
+import com.d9tilov.android.insights.domain.contract.InsightsInteractor
+import com.d9tilov.android.insights.domain.model.GeneratedInsight
+import com.d9tilov.android.insights.domain.model.Insight
+import com.d9tilov.android.insights.domain.model.InsightGenerationStatus
+import com.d9tilov.android.insights.domain.model.exception.DailyInsightLimitException
+import com.d9tilov.android.insights.domain.model.exception.InsightServiceException
+import com.d9tilov.android.insights.domain.model.exception.InsufficientInsightsDataException
+import com.d9tilov.android.user.domain.model.InsightLanguage
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -29,22 +33,33 @@ class InsightsViewModelTest {
     private val dispatcher = UnconfinedTestDispatcher()
     private val history = MutableStateFlow(listOf(Insight(1L, 0L, "Saved insight")))
     private var historyFlow: Flow<List<Insight>> = history
-    private var historyCalls = 0
+    private var historySubscriptions = 0
+    private val enoughTransactions = MutableStateFlow(true)
+    private var enoughTransactionsFlow: Flow<Boolean> = enoughTransactions
+    private var generateCalls = 0
     private var generate: suspend () -> GeneratedInsight = { GeneratedInsight("New insight") }
-    private val repository =
-        object : InsightsRepository {
-            override fun history(): Flow<List<Insight>> {
-                historyCalls++
-                return historyFlow
+    private val insightsInteractor =
+        object : InsightsInteractor {
+            override val language = flowOf(InsightLanguage.SYSTEM)
+
+            override suspend fun setLanguage(language: InsightLanguage) = Unit
+
+            override fun hasEnoughTransactionsForInsight(): Flow<Boolean> = enoughTransactionsFlow
+
+            override suspend fun isConsentGranted(): Boolean = true
+
+            override suspend fun grantConsent() = Unit
+
+            override fun history(): Flow<List<Insight>> =
+                flow {
+                    historySubscriptions++
+                    emitAll(historyFlow)
+                }
+
+            override suspend fun generate(): GeneratedInsight {
+                generateCalls++
+                return generate.invoke()
             }
-
-            override suspend fun generate(): GeneratedInsight = generate.invoke()
-        }
-    private val consent =
-        object : InsightsConsentRepository {
-            override val isGranted = flowOf(true)
-
-            override suspend fun grant() = Unit
         }
 
     @Before
@@ -58,98 +73,96 @@ class InsightsViewModelTest {
     }
 
     @Test
-    fun `generation failures preserve history and only transient failures allow retry`() =
+    fun `history and generation wait for transaction check`() =
         runTest(dispatcher) {
-            val viewModel = InsightsViewModel(dispatcher, repository, consent)
-            val cases =
-                listOf(
-                    InsufficientInsightsDataException() to
-                        InsightsErrorState(R.string.insights_insufficient_data, messageArg = 14),
-                    DailyInsightLimitException() to InsightsErrorState(R.string.insights_daily_limit),
-                    InsightServiceException(IOException("Technical details")) to
-                        InsightsErrorState(R.string.insights_unavailable_message, canRetry = true),
-                    IllegalStateException("Technical details") to
-                        InsightsErrorState(R.string.insights_unavailable_message),
-                )
+            val enough = CompletableDeferred<Boolean>()
+            enoughTransactionsFlow = flow { emit(enough.await()) }
+            val viewModel = InsightsViewModel(dispatcher, insightsInteractor)
+            assertEquals(InsightGenerationStatus.UNDEFINED, viewModel.state.value.generationStatus)
+            assertEquals(true, viewModel.state.value.isHistoryLoading)
+            assertEquals(emptyList<Insight>(), viewModel.state.value.insights)
+            viewModel.generate()
+            assertEquals(0, generateCalls)
 
-            cases.forEach { (exception, expectedError) ->
+            enough.complete(true)
+            assertEquals(false, viewModel.state.value.isHistoryLoading)
+            assertEquals(history.value, viewModel.state.value.insights)
+            assertEquals(InsightGenerationStatus.AVAILABLE, viewModel.state.value.generationStatus)
+            assertEquals(1, historySubscriptions)
+        }
+
+    @Test
+    fun `status follows transaction availability and prioritizes daily limit`() =
+        runTest(dispatcher) {
+            enoughTransactions.value = false
+            val viewModel = InsightsViewModel(dispatcher, insightsInteractor)
+            assertEquals(InsightGenerationStatus.INSUFFICIENT_DATA, viewModel.state.value.generationStatus)
+            viewModel.generate()
+            assertEquals(0, generateCalls)
+
+            enoughTransactions.value = true
+            assertEquals(InsightGenerationStatus.AVAILABLE, viewModel.state.value.generationStatus)
+
+            history.value = history.value + Insight(2L, currentDateTime().toMillis(), "Today's insight")
+            assertEquals(InsightGenerationStatus.DAILY_LIMIT_REACHED, viewModel.state.value.generationStatus)
+            enoughTransactions.value = false
+            assertEquals(InsightGenerationStatus.DAILY_LIMIT_REACHED, viewModel.state.value.generationStatus)
+            history.value = history.value.take(1)
+            assertEquals(InsightGenerationStatus.INSUFFICIENT_DATA, viewModel.state.value.generationStatus)
+            assertEquals(1, historySubscriptions)
+        }
+
+    @Test
+    fun `history and transaction updates preserve loading and prevent duplicate generation`() =
+        runTest(dispatcher) {
+            val result = CompletableDeferred<GeneratedInsight>()
+            generate = { result.await() }
+            val viewModel = InsightsViewModel(dispatcher, insightsInteractor)
+            viewModel.generate()
+            enoughTransactions.value = false
+            enoughTransactions.value = true
+            assertEquals(InsightGenerationStatus.LOADING, viewModel.state.value.generationStatus)
+            viewModel.generate()
+            assertEquals(1, generateCalls)
+            history.value = history.value + Insight(2L, currentDateTime().toMillis(), "Background insight")
+            assertEquals(history.value, viewModel.state.value.insights)
+            assertEquals(InsightGenerationStatus.LOADING, viewModel.state.value.generationStatus)
+            viewModel.generate()
+            assertEquals(1, generateCalls)
+
+            result.complete(GeneratedInsight("Generated insight"))
+            assertEquals(InsightGenerationStatus.DAILY_LIMIT_REACHED, viewModel.state.value.generationStatus)
+            assertEquals(1, historySubscriptions)
+        }
+
+    @Test
+    fun `generation failures preserve history and only service failures allow retry`() =
+        runTest(dispatcher) {
+            val viewModel = InsightsViewModel(dispatcher, insightsInteractor)
+            listOf(
+                InsightServiceException(IOException("Technical details")) to
+                    InsightsErrorState(R.string.insights_unavailable_message, canRetry = true),
+                IllegalStateException("Technical details") to InsightsErrorState(R.string.insights_unavailable_message),
+                InsufficientInsightsDataException() to InsightsErrorState(R.string.insights_unavailable_message),
+                DailyInsightLimitException() to InsightsErrorState(R.string.insights_unavailable_message),
+            ).forEach { (exception, expectedError) ->
                 generate = { throw exception }
                 viewModel.generate()
-
-                assertEquals(
-                    InsightsUiState(insights = history.value, isHistoryLoading = false, errorState = expectedError),
-                    viewModel.state.value,
-                )
-
+                assertEquals(InsightGenerationStatus.AVAILABLE, viewModel.state.value.generationStatus)
+                assertEquals(expectedError, viewModel.state.value.errorState)
+                assertEquals(history.value, viewModel.state.value.insights)
                 viewModel.dismissSnackbarError()
-                assertEquals(InsightsUiState(insights = history.value, isHistoryLoading = false), viewModel.state.value)
+                assertEquals(null, viewModel.state.value.errorState)
             }
         }
 
     @Test
-    fun `history updates preserve the generation loader`() =
+    fun `success blocks generation before saved history is observed`() =
         runTest(dispatcher) {
-            val result = CompletableDeferred<GeneratedInsight>()
-            generate = { result.await() }
-            val viewModel = InsightsViewModel(dispatcher, repository, consent)
+            val viewModel = InsightsViewModel(dispatcher, insightsInteractor)
             viewModel.generate()
-
-            assertEquals(
-                InsightsUiState(insights = history.value, isInsightLoading = true, isHistoryLoading = false),
-                viewModel.state.value,
-            )
-
-            history.value = history.value + Insight(2L, 1L, "Background insight")
-
-            assertEquals(
-                InsightsUiState(insights = history.value, isInsightLoading = true, isHistoryLoading = false),
-                viewModel.state.value,
-            )
-
-            result.complete(GeneratedInsight("Generated insight"))
-            assertEquals(InsightsUiState(insights = history.value, isHistoryLoading = false), viewModel.state.value)
-            assertEquals(1, historyCalls)
-        }
-
-    @Test
-    fun `initial history loading is independent of generation`() =
-        runTest(dispatcher) {
-            val initialHistory = CompletableDeferred<List<Insight>>()
-            val generatedInsight = CompletableDeferred<GeneratedInsight>()
-            historyFlow = flow { emit(initialHistory.await()) }
-            generate = { generatedInsight.await() }
-            val viewModel = InsightsViewModel(dispatcher, repository, consent)
-
-            assertEquals(InsightsUiState(), viewModel.state.value)
-
+            assertEquals(InsightGenerationStatus.DAILY_LIMIT_REACHED, viewModel.state.value.generationStatus)
             viewModel.generate()
-            assertEquals(InsightsUiState(isInsightLoading = true), viewModel.state.value)
-
-            initialHistory.complete(history.value)
-            assertEquals(
-                InsightsUiState(insights = history.value, isInsightLoading = true, isHistoryLoading = false),
-                viewModel.state.value,
-            )
-
-            generatedInsight.complete(GeneratedInsight("Generated insight"))
-            assertEquals(InsightsUiState(insights = history.value, isHistoryLoading = false), viewModel.state.value)
-        }
-
-    @Test
-    fun `history loading failure shows a generic error with empty data`() =
-        runTest(dispatcher) {
-            historyFlow = flow { throw IOException("Technical details") }
-            val viewModel = InsightsViewModel(dispatcher, repository, consent)
-
-            assertEquals(
-                InsightsUiState(
-                    isHistoryLoading = false,
-                    errorState = InsightsErrorState(R.string.insights_unavailable_message),
-                ),
-                viewModel.state.value,
-            )
-
-            viewModel.dismissSnackbarError()
-            assertEquals(InsightsUiState(isHistoryLoading = false), viewModel.state.value)
+            assertEquals(1, generateCalls)
         }
 }

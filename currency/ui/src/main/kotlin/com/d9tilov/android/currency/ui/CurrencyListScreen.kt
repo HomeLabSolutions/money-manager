@@ -64,6 +64,8 @@ import com.d9tilov.android.designsystem.MoneyManagerIcons
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+private const val CURRENCY_LABEL_WIDTH_FRACTION = 0.85f
+
 @Composable
 fun CurrencyListRoute(
     viewModel: CurrencyViewModel = hiltViewModel(),
@@ -320,7 +322,7 @@ fun CurrencyItem(
                 modifier =
                     Modifier
                         .align(Alignment.CenterVertically)
-                        .fillMaxWidth(0.85f),
+                        .fillMaxWidth(CURRENCY_LABEL_WIDTH_FRACTION),
             ) {
                 Text(
                     text = CurrencyUtils.getCurrencyFullName(currency.code),

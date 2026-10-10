@@ -44,6 +44,4 @@ data class RegularTransaction(
                 autoAdd = true,
             )
     }
-
-    fun isValid(): Boolean = id != DEFAULT_DATA_ID
 }

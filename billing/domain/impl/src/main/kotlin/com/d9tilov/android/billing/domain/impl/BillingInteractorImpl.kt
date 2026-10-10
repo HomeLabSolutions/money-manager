@@ -57,7 +57,6 @@ class BillingInteractorImpl @Inject constructor(
 
     override fun getPremiumInfo(): Flow<PremiumInfo> {
         val canPurchaseFlow = flowOf(true)
-        val details = billingRepo.premiumProductDetails.map { productDetails -> productDetails != null }
         val minPriceFlow =
             getSkuDetails()
                 .map { list: List<BillingSkuDetails> ->

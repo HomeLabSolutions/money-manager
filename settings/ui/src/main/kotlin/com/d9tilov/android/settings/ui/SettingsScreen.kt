@@ -57,6 +57,9 @@ import com.d9tilov.android.settings.ui.vm.SettingsViewModel
 import com.d9tilov.android.settings.ui.vm.SubscriptionUiState
 import com.d9tilov.android.user.domain.model.InsightLanguage
 
+private const val BACKUP_SPINNER_DURATION_MILLIS = 2000
+private const val MAX_FISCAL_DAY = 31
+
 @Composable
 fun SettingsRoute(
     viewModel: SettingsViewModel = hiltViewModel(),
@@ -292,7 +295,7 @@ fun BackupLayout(
         targetValue = 360f,
         animationSpec =
             infiniteRepeatable(
-                animation = tween(2000, easing = FastOutLinearInEasing),
+                animation = tween(BACKUP_SPINNER_DURATION_MILLIS, easing = FastOutLinearInEasing),
                 repeatMode = RepeatMode.Restart,
             ),
         label = "",
@@ -352,7 +355,7 @@ private fun isInputDateValid(input: String): Boolean {
     if (input.isEmpty()) return false
     return try {
         val num = input.toInt()
-        num in 1..31
+        num in 1..MAX_FISCAL_DAY
     } catch (_: NumberFormatException) {
         false
     }

@@ -55,8 +55,12 @@ include(":currency:ui")
 
 include(":incomeexpense:ui")
 
-include(":insights:data")
-include(":insights:domain")
+include(":insights:data:contract")
+include(":insights:data:impl")
+include(":insights:di")
+include(":insights:domain:contract")
+include(":insights:domain:impl")
+include(":insights:domain:model")
 include(":insights:presentation")
 
 include(":notification")

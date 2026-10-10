@@ -15,12 +15,14 @@ fun CheckboxWithLabel(
     value: Boolean,
     label: String,
     onCheckChanged: (Boolean) -> Unit,
+    enabled: Boolean = true,
 ) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Checkbox(
+            enabled = enabled,
             checked = value,
             colors =
                 CheckboxDefaults.colors(

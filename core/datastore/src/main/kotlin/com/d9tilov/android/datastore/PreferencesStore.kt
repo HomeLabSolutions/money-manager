@@ -37,6 +37,9 @@ class PreferencesStore(
             data[PREFERENCE_INSIGHTS_CONSENT_UID_KEY] == currentUid
         }
 
+    val backupData: Flow<Long> =
+        dataStore.data.map { data -> data[PREFERENCE_LAST_BACKUP_DATE_KEY] ?: -1L }
+
     suspend fun grantInsightsConsent() {
         dataStore.edit { preferences ->
             val currentUid = requireNotNull(preferences[PREFERENCE_CLIENT_UID_KEY])
@@ -47,9 +50,6 @@ class PreferencesStore(
     suspend fun updateUid(uid: String) {
         dataStore.edit { preferences -> preferences[PREFERENCE_CLIENT_UID_KEY] = uid }
     }
-
-    val backupData: Flow<Long> =
-        dataStore.data.map { data -> data[PREFERENCE_LAST_BACKUP_DATE_KEY] ?: -1L }
 
     suspend fun updateLastBackupDate(date: Long) {
         dataStore.edit { preferences -> preferences[PREFERENCE_LAST_BACKUP_DATE_KEY] = date }

@@ -1,0 +1,504 @@
+package com.d9tilov.android.transaction.ui
+
+import android.content.Intent
+import android.widget.Toast
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DatePickerState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLocale
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.category.domain.entity.CategoryDestination
+import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_TIME_FORMAT
+import com.d9tilov.android.common.android.utils.formatDate
+import com.d9tilov.android.core.model.LocationData
+import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
+import com.d9tilov.android.core.utils.MainPriceFieldParser.isInputValid
+import com.d9tilov.android.core.utils.currentDateTime
+import com.d9tilov.android.core.utils.toMillis
+import com.d9tilov.android.designsystem.AutoSizeTextField
+import com.d9tilov.android.designsystem.BottomActionButton
+import com.d9tilov.android.designsystem.CheckboxWithLabel
+import com.d9tilov.android.designsystem.DescriptionTextField
+import com.d9tilov.android.designsystem.DottedDivider
+import com.d9tilov.android.designsystem.MmTopAppBar
+import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
+import com.d9tilov.android.transaction.domain.model.Transaction
+import com.d9tilov.android.transaction.ui.model.TransactionInfoMode
+import com.d9tilov.android.transaction.ui.vm.TransactionInfoUiState
+import com.d9tilov.android.transaction.ui.vm.TransactionInfoViewModel
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.rememberUpdatedMarkerState
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
+import java.math.BigDecimal
+
+private const val MAP_ZOOM_LEVEL = 15f
+
+@Composable
+fun TransactionInfoRoute(
+    viewModel: TransactionInfoViewModel = hiltViewModel(),
+    clickBack: () -> Unit,
+    clickCurrency: (String) -> Unit,
+    clickCategory: (TransactionType, CategoryDestination) -> Unit,
+) {
+    val state: TransactionInfoUiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    TransactionInfoScreen(
+        uiState = state,
+        onBackClicked = clickBack,
+        onSumChanged = viewModel::updateAmount,
+        onSaveClicked = {
+            coroutineScope.launch {
+                try {
+                    viewModel.save()
+                    clickBack()
+                } catch (exception: CancellationException) {
+                    throw exception
+                } catch (_: Exception) {
+                    Toast
+                        .makeText(
+                            context,
+                            com.d9tilov.android.common.android.R.string.unknown_error,
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                }
+            }
+        },
+        onInStatisticsChanged = viewModel::updateInStatistics,
+        onDescriptionChanged = viewModel::updateDescription,
+        onCurrencyClicked = clickCurrency,
+        onCategoryClicked = clickCategory,
+        onDateClicked = viewModel::updateDate,
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TransactionInfoScreen(
+    uiState: TransactionInfoUiState,
+    onSumChanged: (String) -> Unit,
+    onInStatisticsChanged: (Boolean) -> Unit,
+    onDescriptionChanged: (String) -> Unit,
+    onBackClicked: () -> Unit,
+    onCurrencyClicked: (String) -> Unit,
+    onCategoryClicked: (TransactionType, CategoryDestination) -> Unit,
+    onDateClicked: (Long) -> Unit,
+    onSaveClicked: () -> Unit,
+) {
+    val mode = uiState.mode
+    val context = LocalContext.current
+    var showError by remember { mutableStateOf(false) }
+    val showDatePickerDialog = remember { mutableStateOf(false) }
+    val datePickerState: DatePickerState =
+        rememberDatePickerState().also {
+            it.selectedDateMillis =
+                uiState.transaction.date.toMillis()
+        }
+    Scaffold(topBar = {
+        MmTopAppBar(
+            titleRes = R.string.title_transaction,
+            onNavigationClick = onBackClicked,
+        )
+    }) { padding ->
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .padding(top = padding.calculateTopPadding()),
+        ) {
+            Column(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState())
+                        .weight(1f),
+            ) {
+                Text(
+                    modifier =
+                        Modifier.padding(
+                            start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                            end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                            top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
+                        ),
+                    text = stringResource(id = R.string.transaction_edit_sum_title),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+                TransactionAmountField(
+                    uiState = uiState,
+                    showError = showError,
+                    onCurrencyClicked = onCurrencyClicked,
+                    onSumChanged = { text ->
+                        showError = !isInputValid(text)
+                        onSumChanged(text)
+                    },
+                )
+                Row(
+                    modifier =
+                        Modifier
+                            .padding(
+                                horizontal =
+                                    dimensionResource(
+                                        id = com.d9tilov.android.designsystem.R.dimen.padding_large,
+                                    ),
+                            ),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Row(
+                        modifier =
+                            Modifier.clickable(enabled = mode == TransactionInfoMode.EDIT) {
+                                onCategoryClicked(
+                                    uiState.transaction.type,
+                                    CategoryDestination.EDIT_TRANSACTION_SCREEN,
+                                )
+                            },
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            modifier =
+                                Modifier.size(
+                                    dimensionResource(
+                                        id = com.d9tilov.android.common.android.R.dimen.category_creation_icon_size,
+                                    ),
+                                ),
+                            imageVector = ImageVector.vectorResource(id = uiState.transaction.category.icon),
+                            contentDescription = "Category",
+                            tint =
+                                Color(
+                                    ContextCompat.getColor(
+                                        context,
+                                        uiState.transaction.category.color,
+                                    ),
+                                ),
+                        )
+                        Text(
+                            modifier =
+                                Modifier.padding(
+                                    horizontal =
+                                        dimensionResource(
+                                            id = com.d9tilov.android.designsystem.R.dimen.padding_small,
+                                        ),
+                                ),
+                            text = uiState.transaction.category.name,
+                            color =
+                                Color(
+                                    ContextCompat.getColor(
+                                        context,
+                                        uiState.transaction.category.color,
+                                    ),
+                                ),
+                            style = MaterialTheme.typography.bodyLarge,
+                        )
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(
+                        modifier =
+                            Modifier
+                                .padding(
+                                    horizontal =
+                                        dimensionResource(
+                                            id = com.d9tilov.android.designsystem.R.dimen.padding_small,
+                                        ),
+                                ).clickable(enabled = mode == TransactionInfoMode.EDIT) {
+                                    showDatePickerDialog.value = true
+                                },
+                        text = formatDate(uiState.transaction.date, TRANSACTION_DATE_TIME_FORMAT),
+                        color = MaterialTheme.colorScheme.secondary,
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                }
+                CheckboxWithLabel(
+                    modifier =
+                        Modifier.padding(
+                            horizontal =
+                                dimensionResource(
+                                    id = com.d9tilov.android.designsystem.R.dimen.padding_medium,
+                                ),
+                            vertical =
+                                dimensionResource(
+                                    id = com.d9tilov.android.designsystem.R.dimen.padding_large,
+                                ),
+                        ),
+                    value = uiState.transaction.inStatistics,
+                    label = stringResource(id = R.string.transaction_edit_in_statistics),
+                    onCheckChanged = { onInStatisticsChanged(it) },
+                    enabled = mode == TransactionInfoMode.EDIT,
+                )
+                DottedDivider(
+                    modifier =
+                        Modifier.padding(
+                            start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                            end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                            top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                        ),
+                )
+                DescriptionTextField(
+                    modifier =
+                        Modifier.padding(
+                            horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                            vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
+                        ),
+                    value = uiState.transaction.description,
+                    onValueChange = onDescriptionChanged,
+                    readOnly = mode == TransactionInfoMode.VIEW,
+                )
+
+                if (uiState.transaction.locationData != LocationData.EMPTY) {
+                    TransactionLocationMap(
+                        locationData = uiState.transaction.locationData,
+                        categoryName = uiState.transaction.category.name,
+                    )
+                }
+            }
+            if (mode == TransactionInfoMode.EDIT) {
+                BottomActionButton(
+                    modifier =
+                        Modifier
+                            .navigationBarsPadding()
+                            .imePadding(),
+                    onClick = onSaveClicked,
+                    enabled = !showError,
+                )
+            }
+            if (showDatePickerDialog.value) {
+                TransactionDatePickerDialog(
+                    datePickerState = datePickerState,
+                    onDismiss = { showDatePickerDialog.value = false },
+                    onDateClicked = onDateClicked,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun TransactionAmountField(
+    uiState: TransactionInfoUiState,
+    showError: Boolean,
+    onCurrencyClicked: (String) -> Unit,
+    onSumChanged: (String) -> Unit,
+) {
+    val mode = uiState.mode
+    Row(
+        modifier =
+            Modifier.padding(
+                horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            modifier =
+                Modifier
+                    .alignByBaseline()
+                    .clickable(
+                        enabled = mode == TransactionInfoMode.EDIT,
+                        onClick = { onCurrencyClicked(uiState.transaction.currencyCode) },
+                    ),
+            text = uiState.transaction.currencyCode.getSymbolByCode(),
+            style = MaterialTheme.typography.displaySmall,
+            color = MaterialTheme.colorScheme.primary,
+        )
+        AutoSizeTextField(
+            modifier = Modifier.alignByBaseline(),
+            inputValue = uiState.amount,
+            inputValueChanged = onSumChanged,
+            showError = { if (showError) ShowError() },
+            autoFocus = false,
+            readOnly = mode == TransactionInfoMode.VIEW,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TransactionDatePickerDialog(
+    datePickerState: DatePickerState,
+    onDismiss: () -> Unit,
+    onDateClicked: (Long) -> Unit,
+) {
+    DatePickerDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onDateClicked(datePickerState.selectedDateMillis ?: currentDateTime().toMillis())
+                    onDismiss()
+                },
+            ) {
+                Text(
+                    stringResource(id = com.d9tilov.android.common.android.R.string.ok)
+                        .uppercase(LocalLocale.current.platformLocale),
+                )
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismiss,
+            ) {
+                Text(
+                    stringResource(id = com.d9tilov.android.common.android.R.string.cancel)
+                        .uppercase(LocalLocale.current.platformLocale),
+                )
+            }
+        },
+    ) {
+        DatePicker(state = datePickerState)
+    }
+}
+
+@Composable
+fun ShowError() {
+    Text(
+        text = stringResource(id = R.string.transaction_invalid_amount),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.error,
+    )
+}
+
+@Composable
+fun TransactionLocationMap(
+    locationData: LocationData,
+    categoryName: String,
+) {
+    val context = LocalContext.current
+    val location = LatLng(locationData.latitude, locationData.longitude)
+    val cameraPositionState = rememberCameraPositionState()
+    val markerState = rememberUpdatedMarkerState(position = location)
+
+    LaunchedEffect(location) {
+        cameraPositionState.position = CameraPosition.fromLatLngZoom(location, MAP_ZOOM_LEVEL)
+    }
+
+    Text(
+        modifier =
+            Modifier.padding(
+                start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+            ),
+        text = stringResource(id = R.string.transaction_location_title),
+        style = MaterialTheme.typography.labelLarge,
+        color = MaterialTheme.colorScheme.primary,
+    )
+
+    GoogleMap(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(250.dp)
+                .padding(
+                    horizontal =
+                        dimensionResource(
+                            id = com.d9tilov.android.designsystem.R.dimen.padding_large,
+                        ),
+                    vertical =
+                        dimensionResource(
+                            id = com.d9tilov.android.designsystem.R.dimen.padding_small,
+                        ),
+                ).clip(RoundedCornerShape(16.dp)),
+        cameraPositionState = cameraPositionState,
+        onMapClick = {
+            val latitude = locationData.latitude
+            val longitude = locationData.longitude
+            val gmmIntentUri = "geo:$latitude,$longitude?q=$latitude,$longitude($categoryName)".toUri()
+            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+            context.startActivity(mapIntent)
+        },
+    ) {
+        Marker(state = markerState)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DefaultTransactionInfoPreview(mode: TransactionInfoMode = TransactionInfoMode.EDIT) {
+    MoneyManagerTheme {
+        TransactionInfoScreen(
+            uiState =
+                TransactionInfoUiState.EMPTY.copy(
+                    mode = mode,
+                    amount = "1500.50",
+                    transaction =
+                        Transaction.EMPTY.copy(
+                            sum = BigDecimal("1500.50"),
+                            description = "Покупка продуктов в магазине",
+                            inStatistics = true,
+                            currencyCode = "USD",
+                            date = currentDateTime(),
+                            category =
+                                Category.EMPTY_EXPENSE.copy(
+                                    name = "Продукты",
+                                    icon = com.d9tilov.android.common.android.R.drawable.ic_category_cafe,
+                                    color = android.R.color.holo_red_dark,
+                                ),
+                            locationData =
+                                LocationData(
+                                    latitude = 55.7558,
+                                    longitude = 37.6173,
+                                ),
+                        ),
+                ),
+            onBackClicked = {},
+            onSumChanged = {},
+            onSaveClicked = {},
+            onInStatisticsChanged = {},
+            onDescriptionChanged = {},
+            onCurrencyClicked = {},
+            onCategoryClicked = { _, _ -> },
+            onDateClicked = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ViewTransactionInfoPreview() {
+    DefaultTransactionInfoPreview(mode = TransactionInfoMode.VIEW)
+}
