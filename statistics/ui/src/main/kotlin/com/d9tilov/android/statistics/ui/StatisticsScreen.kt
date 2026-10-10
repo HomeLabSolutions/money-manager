@@ -33,7 +33,6 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -282,20 +281,16 @@ private fun Modifier.statisticsPeriodSwipe(
     val density = LocalDensity.current
     val showPrevArrow = periodState.showPrevArrow
     val showNextArrow = periodState.showNextArrow
-    val onPrev by rememberUpdatedState(onPrevClicked)
-    val onNext by rememberUpdatedState(onNextClicked)
     val swipeThreshold = with(density) { 36.dp.toPx() }
-    return pointerInput(showPrevArrow, showNextArrow, swipeThreshold) {
+    return pointerInput(showPrevArrow, showNextArrow, swipeThreshold, onPrevClicked, onNextClicked) {
         var totalDrag = 0f
         detectHorizontalDragGestures(
-            onDragStart = { totalDrag = 0f },
-            onDragCancel = { totalDrag = 0f },
             onDragEnd = {
                 if (abs(totalDrag) >= swipeThreshold) {
                     if (totalDrag > 0 && showPrevArrow) {
-                        onPrev()
+                        onPrevClicked()
                     } else if (totalDrag < 0 && showNextArrow) {
-                        onNext()
+                        onNextClicked()
                     }
                 }
                 totalDrag = 0f

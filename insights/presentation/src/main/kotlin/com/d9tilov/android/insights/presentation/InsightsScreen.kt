@@ -162,7 +162,9 @@ private fun InsightGenerationAction(
                 InsightGenerationNotice(stringResource(R.string.insights_daily_limit))
             }
 
-            InsightGenerationStatus.UNDEFINED, InsightGenerationStatus.LOADING -> {
+            InsightGenerationStatus.UNDEFINED -> {}
+
+            InsightGenerationStatus.LOADING -> {
                 CircularProgressIndicator()
             }
         }
@@ -356,6 +358,30 @@ fun InsightsScreenGenerationBlockedPreview(
     MoneyManagerTheme(dynamicColor = false) {
         InsightsScreen(
             state = InsightsUiState(isHistoryLoading = false, generationStatus = status),
+            onGenerateClick = {},
+            onShowSnackBar = { _, _ -> false },
+        )
+    }
+}
+
+@Preview(name = "History and generation unavailable light", showBackground = true)
+@Preview(
+    name = "History and generation unavailable dark",
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+)
+@Composable
+fun InsightsScreenHistoryGenerationBlockedPreview(
+    @PreviewParameter(InsightGenerationBlockedPreviewProvider::class) status: InsightGenerationStatus,
+) {
+    MoneyManagerTheme(dynamicColor = false) {
+        InsightsScreen(
+            state =
+                InsightsUiState(
+                    insights = InsightsHistoryPreviewProvider().values.first(),
+                    isHistoryLoading = false,
+                    generationStatus = status,
+                ),
             onGenerateClick = {},
             onShowSnackBar = { _, _ -> false },
         )

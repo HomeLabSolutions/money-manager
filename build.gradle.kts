@@ -1,3 +1,4 @@
+import com.android.moneymanager.gradle.DependencySortingOptions.applyDependencySortingOptions
 import com.android.moneymanager.gradle.DetektOptions.applyDetektOptions
 import com.android.moneymanager.gradle.FormattingOptions.applyPrecheckOptions
 
@@ -19,10 +20,9 @@ buildscript {
 
 applyPrecheckOptions()
 applyDetektOptions()
+applyDependencySortingOptions()
 
 allprojects {
-    apply(plugin = "com.squareup.sort-dependencies")
-
     repositories {
         google()
         mavenCentral()
@@ -55,10 +55,6 @@ plugins {
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.serialization) apply false
     alias(libs.plugins.secrets.gradle.plugin) apply false
-}
-
-tasks.named("check") {
-    dependsOn(subprojects.map { it.tasks.matching { task -> task.name == "checkSortDependencies" } })
 }
 
 dependencyAnalysis {
