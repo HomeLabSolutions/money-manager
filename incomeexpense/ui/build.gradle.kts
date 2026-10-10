@@ -14,7 +14,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.kotlinx.datetime)
     implementation(project(":analytics:domain"))
     implementation(project(":billing:domain:contract"))
     implementation(project(":category:domain:contract"))
@@ -32,6 +31,7 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.hilt.android)
     implementation(libs.hilt.lifecycle.viewmodel.compose)
+    implementation(libs.kotlinx.datetime)
     implementation(libs.navigation.compose)
     implementation(libs.navigation.runtime)
     implementation(libs.paging.compose)

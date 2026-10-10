@@ -15,7 +15,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.kotlinx.datetime)
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
     implementation(project(":core:database"))
@@ -29,6 +28,7 @@ dependencies {
     implementation(libs.dagger)
     implementation(libs.hilt.common)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.datetime)
     implementation(libs.startup)
     implementation(libs.timber)
 }

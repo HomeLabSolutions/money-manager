@@ -11,11 +11,9 @@ buildscript {
         maven("https://plugins.gradle.org/m2/")
     }
     dependencies {
+        classpath(libs.firebase.crashlytics.gradle)
         classpath(libs.google.services)
         classpath(libs.hilt.android.gradle.plugin)
-        classpath(libs.firebase.crashlytics.gradle)
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
     }
 }
 
@@ -23,6 +21,8 @@ applyPrecheckOptions()
 applyDetektOptions()
 
 allprojects {
+    apply(plugin = "com.squareup.sort-dependencies")
+
     repositories {
         google()
         mavenCentral()
@@ -42,18 +42,23 @@ extra["versionMinor"] = 3
 extra["versionPatch"] = 7
 extra["versionBuild"] = 1
 
-tasks.register("clean", Delete::class) {
+tasks.named("clean", Delete::class) {
     description = "clean"
     delete(rootProject.layout.buildDirectory)
 }
 
 plugins {
+    base
     alias(libs.plugins.compose.compiler) apply false
-    alias(libs.plugins.deps.sorting) apply false
+    alias(libs.plugins.deps.sorting)
     alias(libs.plugins.deps.unused) apply true
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.serialization) apply false
     alias(libs.plugins.secrets.gradle.plugin) apply false
+}
+
+tasks.named("check") {
+    dependsOn(subprojects.map { it.tasks.matching { task -> task.name == "checkSortDependencies" } })
 }
 
 dependencyAnalysis {

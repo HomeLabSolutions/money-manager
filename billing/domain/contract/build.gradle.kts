@@ -7,8 +7,7 @@ android {
 }
 
 dependencies {
-    implementation(libs.billing)
     implementation(project(":billing:domain:model"))
-
+    implementation(libs.billing)
     implementation(libs.kotlinx.coroutines.core)
 }

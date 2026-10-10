@@ -14,7 +14,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.kotlinx.datetime)
     implementation(project(":analytics:domain"))
     implementation(project(":category:domain:contract"))
     implementation(project(":category:domain:model"))
@@ -32,6 +31,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.hilt.android)
     implementation(libs.hilt.lifecycle.viewmodel.compose)
+    implementation(libs.kotlinx.datetime)
     implementation(libs.material)
     implementation(libs.navigation.compose)
     implementation(libs.navigation.runtime)
