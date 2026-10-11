@@ -13,19 +13,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
 import kotlin.math.roundToInt
 
 @Composable
 fun DottedDivider(modifier: Modifier = Modifier) {
     Box(
         modifier
-            .height(1.dp)
+            .height(dimensionResource(R.dimen.divider_thickness))
             .fillMaxWidth()
-            .background(Color.Gray, shape = DottedShape(step = 10.dp)),
+            .background(
+                Color.Gray,
+                shape =
+                    DottedShape(
+                        step = dimensionResource(R.dimen.dotted_divider_step),
+                    ),
+            ),
     )
 }
 

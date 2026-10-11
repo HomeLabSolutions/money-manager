@@ -4,7 +4,6 @@ import androidx.annotation.ColorRes
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 
 data class Pie(
     val label: String? = null,
@@ -25,7 +24,7 @@ data class Pie(
         data object Fill : Style()
 
         data class Stroke(
-            val width: Dp = 36.dp,
+            val width: Dp,
         ) : Style()
     }
 

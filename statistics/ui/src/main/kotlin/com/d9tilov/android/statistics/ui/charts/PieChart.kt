@@ -41,9 +41,9 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.d9tilov.android.core.constants.UiConstants.DEGREES_IN_CIRCLE
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
@@ -57,7 +57,6 @@ import kotlin.random.Random
 
 private const val UNSELECTED_PIE_ALPHA = 0.8f
 private const val MIN_PERCENT_TO_SHOW_LABEL = 0.05f
-private const val LABEL_SIZE = 14f
 private const val LABEL_RADIUS_PART = 0.7f
 private const val ANIMATION_DURATION = 500
 private const val ID_RANGE = 999999
@@ -69,6 +68,7 @@ private fun DrawScope.drawSeparatorLine(
     drawStyle: DrawStyle,
     center: Offset,
     colorBackground: Color,
+    separatorWidth: Float,
 ) {
     val separatorAngleRad = Math.toRadians(angleInDegrees)
 
@@ -92,7 +92,7 @@ private fun DrawScope.drawSeparatorLine(
         color = colorBackground,
         start = separatorStart,
         end = separatorEnd,
-        strokeWidth = 2.dp.toPx(),
+        strokeWidth = separatorWidth,
     )
 }
 
@@ -156,6 +156,14 @@ fun PieChart(
     val colorPrimary = MaterialTheme.colorScheme.primary
     val colorSecondary = MaterialTheme.colorScheme.secondary
     val colorBackground = MaterialTheme.colorScheme.background
+    val labelTextSize =
+        with(androidx.compose.ui.platform.LocalDensity.current) {
+            dimensionResource(com.d9tilov.android.designsystem.R.dimen.pie_label_text_size).toPx()
+        }
+    val separatorWidth =
+        with(androidx.compose.ui.platform.LocalDensity.current) {
+            dimensionResource(com.d9tilov.android.designsystem.R.dimen.pie_separator_width).toPx()
+        }
 
     Column(
         modifier = modifier,
@@ -168,7 +176,9 @@ fun PieChart(
                 color = colorSecondary,
                 textAlign = TextAlign.Center,
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(
+                modifier = Modifier.height(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small)),
+            )
         }
 
         Canvas(
@@ -211,6 +221,8 @@ fun PieChart(
                 spaceDegree = spaceDegree,
                 colorPrimary = colorPrimary,
                 colorBackground = colorBackground,
+                separatorWidth = separatorWidth,
+                labelTextSize = labelTextSize,
             )
         }
     }
@@ -288,6 +300,8 @@ private fun DrawScope.drawPieChart(
     spaceDegree: Float,
     colorPrimary: Color,
     colorBackground: Color,
+    separatorWidth: Float,
+    labelTextSize: Float,
 ) {
     val radius: Float =
         when (style) {
@@ -321,7 +335,7 @@ private fun DrawScope.drawPieChart(
 
         if (index > 0 && degree < DEGREES_IN_CIRCLE) {
             val currentRadius = radius * detail.scale.value
-            drawSeparatorLine(startFromDegree, currentRadius, drawStyle, center, colorBackground)
+            drawSeparatorLine(startFromDegree, currentRadius, drawStyle, center, colorBackground, separatorWidth)
         }
 
         if (degree >= DEGREES_IN_CIRCLE * MIN_PERCENT_TO_SHOW_LABEL) {
@@ -333,11 +347,12 @@ private fun DrawScope.drawPieChart(
                 drawStyle = drawStyle,
                 pieceCount = details.size,
                 colorPrimary = colorPrimary,
+                labelTextSize = labelTextSize,
             )
         }
     }
 
-    drawClosingSeparator(details, radius, total, style, colorBackground)
+    drawClosingSeparator(details, radius, total, style, colorBackground, separatorWidth)
 }
 
 private fun DrawScope.pieDrawStyle(pieStyle: Pie.Style): DrawStyle =
@@ -435,6 +450,7 @@ private fun DrawScope.drawPieLabel(
     drawStyle: DrawStyle,
     pieceCount: Int,
     colorPrimary: Color,
+    labelTextSize: Float,
 ) {
     val middleAngle = startFromDegree + degree / 2
 
@@ -457,7 +473,7 @@ private fun DrawScope.drawPieLabel(
         val textPaint =
             android.graphics.Paint().apply {
                 color = colorPrimary.toArgb()
-                textSize = LABEL_SIZE * density
+                textSize = labelTextSize
                 textAlign = android.graphics.Paint.Align.CENTER
             }
         textPaint.setShadowLayer(2f, 1f, 1f, Color.Black.toArgb())
@@ -476,6 +492,7 @@ private fun DrawScope.drawClosingSeparator(
     total: Double,
     style: Pie.Style,
     colorBackground: Color,
+    separatorWidth: Float,
 ) {
     if (details.size > 1) {
         val firstDetail = details.first()
@@ -490,7 +507,7 @@ private fun DrawScope.drawClosingSeparator(
             val lastPieStyle = lastDetail.pie.style ?: style
             val lastDrawStyle = pieDrawStyle(lastPieStyle)
 
-            drawSeparatorLine(0.0, avgRadius, lastDrawStyle, center, colorBackground)
+            drawSeparatorLine(0.0, avgRadius, lastDrawStyle, center, colorBackground, separatorWidth)
         }
     }
 }
@@ -520,7 +537,10 @@ fun PieChartPreview() {
                 modifier = Modifier.fillMaxSize(),
                 centerLabel = "23.04.2024 - 23.05.2024",
                 data = data,
-                style = Pie.Style.Stroke(42.dp),
+                style =
+                    Pie.Style.Stroke(
+                        dimensionResource(com.d9tilov.android.designsystem.R.dimen.pie_preview_stroke_width),
+                    ),
             )
         }
     }

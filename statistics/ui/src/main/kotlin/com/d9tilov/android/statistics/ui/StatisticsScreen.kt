@@ -56,7 +56,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -248,7 +247,7 @@ private fun CollapsingStatisticsContent(
         Column(Modifier.fillMaxSize().nestedScroll(scrollConnection)) {
             CollapsingStatisticsChart(chartHeightPx, { chartOffset }, chart)
             val collapseFraction = (-chartOffset / chartHeightPx).coerceIn(0f, 1f)
-            val listTopPadding = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large)
+            val listTopPadding = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small)
             list(Modifier.weight(1f).padding(top = listTopPadding * collapseFraction))
         }
     }
@@ -291,7 +290,10 @@ private fun Modifier.statisticsPeriodSwipe(
     val density = LocalDensity.current
     val showPrevArrow = periodState.showPrevArrow
     val showNextArrow = periodState.showNextArrow
-    val swipeThreshold = with(density) { 36.dp.toPx() }
+    val swipeThreshold =
+        with(
+            density,
+        ) { dimensionResource(com.d9tilov.android.designsystem.R.dimen.statistics_period_swipe_threshold).toPx() }
     return pointerInput(showPrevArrow, showNextArrow, swipeThreshold, onPrevClicked, onNextClicked) {
         var totalDrag = 0f
         detectHorizontalDragGestures(
@@ -471,7 +473,10 @@ fun StatisticsChart(
                 scaleAnimExitSpec = tween(ANIMATION_DURATION),
                 spaceDegreeAnimExitSpec = tween(ANIMATION_DURATION),
                 selectedPaddingDegree = 0f,
-                style = Pie.Style.Stroke(48.dp),
+                style =
+                    Pie.Style.Stroke(
+                        dimensionResource(com.d9tilov.android.designsystem.R.dimen.statistics_pie_stroke_width),
+                    ),
             )
         }
         IconButton(
@@ -515,7 +520,7 @@ fun StatisticsList(
                 color = MaterialTheme.colorScheme.primary,
                 modifier =
                     Modifier
-                        .padding(end = 8.dp)
+                        .padding(end = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small))
                         .alignByBaseline(),
             )
             ComposeCurrencyView(
@@ -557,8 +562,8 @@ fun TransactionStatisticsItem(
     ConstraintLayout(
         modifier =
             modifier
-                .height(72.dp)
-                .padding(horizontal = 16.dp),
+                .height(dimensionResource(com.d9tilov.android.designsystem.R.dimen.transaction_list_item_height))
+                .padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
     ) {
         val (idIcon, idTitle, idSum, progress, idDivider) = createRefs()
         Icon(
@@ -587,7 +592,7 @@ fun TransactionStatisticsItem(
         Text(
             modifier =
                 Modifier
-                    .padding(start = 16.dp)
+                    .padding(start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium))
                     .constrainAs(idTitle) {
                         top.linkTo(idIcon.top)
                         bottom.linkTo(idIcon.bottom)

@@ -94,6 +94,27 @@ fun InfoLabelPreview() {
     }
 }
 
+@Composable
+@Preview(name = "Categories on a narrow screen", widthDp = 240)
+@Preview(name = "Categories with large text", widthDp = 320, fontScale = 2f)
+fun HomeCategoriesPreview() {
+    MoneyManagerTheme {
+        CategoryListLayout(
+            categoryList =
+                listOf(
+                    "Cafe",
+                    "Public transport",
+                    "Groceries",
+                    "Entertainment",
+                    "Household expenses",
+                ).mapIndexed { index, name -> mockCategory((index + 1).toLong(), name) },
+            modifier = Modifier.fillMaxWidth(),
+            onItemClicked = {},
+            onAllCategoryClicked = {},
+        )
+    }
+}
+
 private fun mockCategory(
     id: Long,
     name: String,

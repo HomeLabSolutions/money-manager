@@ -7,7 +7,9 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,15 +17,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -47,8 +51,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -211,10 +215,10 @@ fun HomeTabs(
     onScreenTypeClicked: (ScreenType) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    Column {
+    Column(modifier = modifier.fillMaxSize()) {
         PrimaryTabRow(
             selectedTabIndex = pagerState.currentPage,
-            modifier = modifier,
+            modifier = Modifier.fillMaxWidth(),
             containerColor = MaterialTheme.colorScheme.background,
             indicator = {
                 HomeTabIndicator(
@@ -252,34 +256,39 @@ fun HomeTabs(
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 32.dp, vertical = 8.dp),
+                        .padding(
+                            horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
+                            vertical = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small),
+                        ),
                 onCurrencyClicked = onCurrencyClicked,
             )
-            Spacer(modifier = Modifier.weight(1f))
         }
-        HorizontalPager(state = pagerState) { tabIndex: Int ->
+        HorizontalPager(state = pagerState, modifier = Modifier.weight(1f)) { tabIndex: Int ->
             if (uiState.mode == EditMode.KEYBOARD) {
-                Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.Center) {
+                Column(Modifier.fillMaxSize()) {
                     val screenType = tabIndex.toScreenType()
-                    if (screenType == INCOME) {
-                        uiState.incomeUiState.incomeInfo?.let {
-                            IncomeInfoBlock(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .height(120.dp)
-                                    .padding(start = 32.dp),
-                                it,
-                            )
-                        }
-                    } else {
-                        uiState.expenseUiState.expenseInfo?.let {
-                            ExpenseInfoBlock(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .height(120.dp)
-                                    .padding(start = 32.dp),
-                                it,
-                            )
+                    Box(
+                        modifier = Modifier.weight(1f).fillMaxWidth(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        val infoModifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .verticalScroll(rememberScrollState())
+                                .padding(
+                                    horizontal =
+                                        dimensionResource(
+                                            com.d9tilov.android.designsystem.R.dimen.padding_large,
+                                        ),
+                                )
+                        if (screenType == INCOME) {
+                            uiState.incomeUiState.incomeInfo?.let { info ->
+                                IncomeInfoBlock(infoModifier, info)
+                            }
+                        } else {
+                            uiState.expenseUiState.expenseInfo?.let { info ->
+                                ExpenseInfoBlock(infoModifier, info)
+                            }
                         }
                     }
 
@@ -340,11 +349,13 @@ fun HomeTabIndicator(
 ) {
     Spacer(
         modifier
-            .padding(horizontal = 24.dp)
-            .height(4.dp)
+            .padding(horizontal = dimensionResource(R.dimen.home_tab_indicator_horizontal_padding))
+            .height(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_extra_small))
             .background(color, RoundedCornerShape(topStartPercent = 100, topEndPercent = 100)),
     )
 }
+
+private const val CATEGORY_ROW_COUNT = 2
 
 @Composable
 fun CategoryListLayout(
@@ -353,46 +364,69 @@ fun CategoryListLayout(
     onItemClicked: (Category) -> Unit,
     onAllCategoryClicked: () -> Unit,
 ) {
-    val context = LocalContext.current
-
-    LazyHorizontalGrid(
-        modifier =
-            modifier
-                .height(200.dp)
-                .padding(16.dp),
-        rows = GridCells.Fixed(2),
-        horizontalArrangement = Arrangement.Start,
-        verticalArrangement = Arrangement.Center,
+    val spacing = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_extra_small)
+    LazyRow(
+        modifier = modifier,
+        contentPadding =
+            PaddingValues(
+                start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                end = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                bottom = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
+            ),
+        horizontalArrangement = Arrangement.spacedBy(spacing),
     ) {
-        items(categoryList, { it.id }) { item ->
+        items(categoryList.chunked(CATEGORY_ROW_COUNT), key = { it.first().id }) { categories ->
             Column(
-                modifier =
-                    Modifier
-                        .size(dimensionResource(id = R.dimen.category_item_size))
-                        .padding(8.dp)
-                        .clickable {
-                            if (item.id == ALL_ITEMS_ID) {
+                verticalArrangement =
+                    Arrangement.spacedBy(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small)),
+            ) {
+                categories.forEach { category ->
+                    HomeCategoryItem(
+                        category = category,
+                        onClick = {
+                            if (category.id == ALL_ITEMS_ID) {
                                 onAllCategoryClicked()
                             } else {
-                                onItemClicked(item)
+                                onItemClicked(category)
                             }
                         },
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = item.icon),
-                    modifier = Modifier.size(dimensionResource(id = R.dimen.category_icon_size)),
-                    contentDescription = "Backup",
-                    tint = Color(ContextCompat.getColor(context, item.color)),
-                )
-                Text(
-                    text = if (item.id == ALL_ITEMS_ID) stringResource(id = R.string.category_all) else item.name,
-                    color = Color(ContextCompat.getColor(context, item.color)),
-                    style = MaterialTheme.typography.bodySmall,
-                    overflow = TextOverflow.Ellipsis,
-                )
+                    )
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun HomeCategoryItem(
+    category: Category,
+    onClick: () -> Unit,
+) {
+    val context = LocalContext.current
+    val color = Color(ContextCompat.getColor(context, category.color))
+    Column(
+        modifier =
+            Modifier
+                .width(dimensionResource(R.dimen.category_item_width))
+                .clickable(onClick = onClick)
+                .padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_extra_small)),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(id = category.icon),
+            modifier = Modifier.size(dimensionResource(R.dimen.category_icon_size)),
+            contentDescription = null,
+            tint = color,
+        )
+        Text(
+            text = if (category.id == ALL_ITEMS_ID) stringResource(R.string.category_all) else category.name,
+            color = color,
+            style = MaterialTheme.typography.bodySmall,
+            textAlign = TextAlign.Center,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }

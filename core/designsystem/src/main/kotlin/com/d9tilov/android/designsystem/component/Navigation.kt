@@ -25,8 +25,9 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
 import com.d9tilov.android.designsystem.MoneyManagerIcons
+import com.d9tilov.android.designsystem.R
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 
 /**
@@ -89,7 +90,7 @@ fun MmNavigationBar(
     NavigationBar(
         modifier = modifier,
         contentColor = MmNavigationDefaults.navigationContentColor(),
-        tonalElevation = 0.dp,
+        tonalElevation = dimensionResource(R.dimen.dimension_zero),
         content = content,
     )
 }

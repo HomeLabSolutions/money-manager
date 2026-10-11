@@ -35,7 +35,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
@@ -245,7 +244,10 @@ private fun TransactionDateHeader(
         color = MaterialTheme.colorScheme.primaryContainer,
     ) {
         Text(
-            modifier = Modifier.padding(start = 24.dp),
+            modifier =
+                Modifier.padding(
+                    start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_expanded),
+                ),
             text = formatDate(transaction.date, TRANSACTION_DATE_FORMAT),
             color = MaterialTheme.colorScheme.onPrimaryContainer,
         )

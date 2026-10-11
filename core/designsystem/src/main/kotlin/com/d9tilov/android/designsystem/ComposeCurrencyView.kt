@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.d9tilov.android.core.constants.CurrencyConstants
 
 @Composable
@@ -39,7 +38,10 @@ fun ComposeCurrencyView(
         Text(
             modifier =
                 Modifier
-                    .padding(bottom = 2.dp, end = dimensionResource(id = R.dimen.padding_extra_small)),
+                    .padding(
+                        bottom = dimensionResource(R.dimen.padding_tiny),
+                        end = dimensionResource(id = R.dimen.padding_extra_small),
+                    ),
             text = symbol,
             color = symbolColor,
             style = symbolStyle,

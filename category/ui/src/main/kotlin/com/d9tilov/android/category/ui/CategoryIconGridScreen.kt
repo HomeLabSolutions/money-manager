@@ -19,7 +19,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.category.ui.vm.CategoryIconGridUiState
@@ -69,7 +68,11 @@ fun CategoryIconGridScreen(
             LazyVerticalGrid(
                 modifier =
                     Modifier
-                        .padding(top = 16.dp, start = 8.dp, end = 8.dp),
+                        .padding(
+                            top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                            start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small),
+                            end = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small),
+                        ),
                 columns = GridCells.Fixed(ICON_GRID_COLUMN_COUNT),
                 horizontalArrangement = Arrangement.Start,
                 verticalArrangement = Arrangement.Top,
@@ -79,7 +82,7 @@ fun CategoryIconGridScreen(
                         modifier =
                             Modifier
                                 .size(dimensionResource(id = R.dimen.category_grid_item_size))
-                                .padding(8.dp)
+                                .padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small))
                                 .clickable { onIconClicked(id) },
                         imageVector = ImageVector.vectorResource(id = id),
                         contentDescription = "Icon",
