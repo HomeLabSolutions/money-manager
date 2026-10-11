@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    //keyboard
-    <dimen name="category_item_size">72dp</dimen>
+    <dimen name="category_item_width">72dp</dimen>
     <dimen name="category_icon_size">40dp</dimen>
+    <dimen name="home_tab_indicator_horizontal_padding">24dp</dimen>
 </resources>

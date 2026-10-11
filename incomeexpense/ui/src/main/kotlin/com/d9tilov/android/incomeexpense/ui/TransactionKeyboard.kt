@@ -8,12 +8,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -31,8 +29,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.KeyPress
 import com.d9tilov.android.designsystem.ComposeCurrencyView
@@ -52,16 +50,27 @@ fun MainPriceInput(
     Surface(
         modifier = modifier,
         onClick = onCurrencyClicked,
-        border = BorderStroke(2.dp, MaterialTheme.colorScheme.primary),
-        shape = RoundedCornerShape(24.dp),
-        tonalElevation = 1.dp,
+        border =
+            BorderStroke(
+                dimensionResource(com.d9tilov.android.designsystem.R.dimen.border_width_medium),
+                MaterialTheme.colorScheme.primary,
+            ),
+        shape =
+            RoundedCornerShape(
+                dimensionResource(com.d9tilov.android.designsystem.R.dimen.keyboard_key_corner_radius),
+            ),
+        tonalElevation = dimensionResource(com.d9tilov.android.designsystem.R.dimen.keyboard_tonal_elevation),
     ) {
         Box(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center,
         ) {
             ComposeCurrencyView(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                modifier =
+                    Modifier.padding(
+                        horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                        vertical = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small),
+                    ),
                 symbol = price.currencyCode.getSymbolByCode(),
                 value = price.value,
             )
@@ -75,27 +84,37 @@ fun KeyBoardLayout(
     onKeyboardClicked: () -> Unit,
     onNumberClicked: (KeyPress) -> Unit,
 ) {
-    Box(modifier = modifier.padding(bottom = 8.dp)) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(KEYBOARD_COLUMN_COUNT),
-            horizontalArrangement = Arrangement.Center,
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            userScrollEnabled = false,
-            contentPadding = PaddingValues(start = 40.dp, end = 40.dp),
+    Box(
+        modifier = modifier.padding(bottom = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small)),
+    ) {
+        Column(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_extra_large),
+                    ),
+            verticalArrangement =
+                Arrangement.spacedBy(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
         ) {
-            items(KeyPress.entries, key = { it.value.hashCode() }) { keyPress ->
-                AnimatedKeyboardButton(
-                    keyPress = keyPress,
-                    item = keyPress.value,
-                    onNumberClicked = onNumberClicked,
-                )
+            KeyPress.entries.chunked(KEYBOARD_COLUMN_COUNT).forEach { keys ->
+                Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    keys.forEach { keyPress ->
+                        AnimatedKeyboardButton(
+                            keyPress = keyPress,
+                            item = keyPress.value,
+                            onNumberClicked = onNumberClicked,
+                            modifier = Modifier.weight(1f),
+                        )
+                    }
+                }
             }
         }
         Icon(
             modifier =
                 Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(end = 24.dp)
+                    .padding(end = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_expanded))
                     .clickable { onKeyboardClicked() },
             imageVector = MoneyManagerIcons.HideKeyboard,
             tint = MaterialTheme.colorScheme.secondary,
@@ -109,6 +128,7 @@ fun AnimatedKeyboardButton(
     keyPress: KeyPress,
     item: String,
     onNumberClicked: (KeyPress) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var isPressed by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(
@@ -123,13 +143,20 @@ fun AnimatedKeyboardButton(
 
     Surface(
         modifier =
-            Modifier
+            modifier
                 .graphicsLayer {
                     scaleX = scale
                     scaleY = scale
                 }.clickable(
                     interactionSource = remember { MutableInteractionSource() },
-                    indication = ripple(bounded = false, radius = 20.dp),
+                    indication =
+                        ripple(
+                            bounded = false,
+                            radius =
+                                dimensionResource(
+                                    com.d9tilov.android.designsystem.R.dimen.keyboard_key_ripple_radius,
+                                ),
+                        ),
                 ) {
                     isPressed = true
                     onNumberClicked(keyPress)

@@ -12,9 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 
 @Composable
@@ -29,14 +29,18 @@ fun OutlineCircle(
         modifier =
             modifier
                 .size(size)
-                .padding(2.dp)
+                .padding(dimensionResource(R.dimen.padding_tiny))
                 .clip(CircleShape)
                 .background(color)
                 .clickable { onClick(color) }
                 .then(
                     if (showOutline) {
                         Modifier
-                            .border(3.dp, MaterialTheme.colorScheme.primary, CircleShape)
+                            .border(
+                                dimensionResource(R.dimen.color_outline_width),
+                                MaterialTheme.colorScheme.primary,
+                                CircleShape,
+                            )
                     } else {
                         Modifier
                     },
@@ -47,5 +51,13 @@ fun OutlineCircle(
 @Preview(showBackground = true)
 @Composable
 fun DefaultCategoryCreationPreview() {
-    MoneyManagerTheme { OutlineCircle(Modifier, Color.Red, 100.dp, true) {} }
+    MoneyManagerTheme {
+        OutlineCircle(
+            Modifier,
+            Color.Red,
+            dimensionResource(R.dimen.color_outline_preview_size),
+            true,
+        ) {
+        }
+    }
 }

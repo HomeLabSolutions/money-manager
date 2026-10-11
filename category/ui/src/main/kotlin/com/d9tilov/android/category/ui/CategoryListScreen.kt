@@ -37,7 +37,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -194,7 +193,7 @@ private fun CategoryGridItem(
             modifier =
                 Modifier
                     .size(dimensionResource(id = R.dimen.category_item_size))
-                    .padding(8.dp)
+                    .padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small))
                     .offset {
                         IntOffset(
                             x =
@@ -226,7 +225,7 @@ private fun CategoryGridItem(
             Icon(
                 modifier =
                     Modifier
-                        .size(32.dp),
+                        .size(dimensionResource(com.d9tilov.android.designsystem.R.dimen.category_removal_icon_size)),
                 imageVector = MoneyManagerIcons.Cross,
                 tint = MaterialTheme.colorScheme.error,
                 contentDescription = "",

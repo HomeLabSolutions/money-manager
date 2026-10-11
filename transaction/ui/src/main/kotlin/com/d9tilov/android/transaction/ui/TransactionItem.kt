@@ -20,7 +20,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -43,12 +42,13 @@ fun TransactionItem(
     modifier: Modifier,
     transaction: TransactionUiModel,
 ) {
+    val descriptionMargin = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)
     val context = LocalContext.current
     ConstraintLayout(
         modifier =
             modifier
-                .height(72.dp)
-                .padding(horizontal = 32.dp),
+                .height(dimensionResource(com.d9tilov.android.designsystem.R.dimen.transaction_list_item_height))
+                .padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large)),
     ) {
         val (idIcon, idTitle, idDescription, idRegularIcon, idInStatisticsIcon, idSum, idDivider, idTime) = createRefs()
         Icon(
@@ -66,7 +66,7 @@ fun TransactionItem(
         Text(
             modifier =
                 Modifier
-                    .padding(start = 16.dp)
+                    .padding(start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium))
                     .constrainAs(idTitle) {
                         top.linkTo(idIcon.top)
                         bottom.linkTo(idIcon.bottom)
@@ -86,12 +86,14 @@ fun TransactionItem(
             Text(
                 modifier =
                     Modifier
-                        .padding(start = 16.dp, bottom = 4.dp)
-                        .constrainAs(idDescription) {
+                        .padding(
+                            start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                            bottom = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_extra_small),
+                        ).constrainAs(idDescription) {
                             top.linkTo(idTitle.bottom)
                             bottom.linkTo(parent.bottom)
                             start.linkTo(idTitle.start)
-                            end.linkTo(idSum.start, margin = 16.dp)
+                            end.linkTo(idSum.start, margin = descriptionMargin)
                             width = Dimension.fillToConstraints
                         },
                 text = transaction.description,
@@ -124,7 +126,7 @@ fun TransactionItem(
             Icon(
                 modifier =
                     Modifier
-                        .padding(top = 4.dp)
+                        .padding(top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_extra_small))
                         .constrainAs(idInStatisticsIcon) {
                             top.linkTo(idRegularIcon.bottom)
                             end.linkTo(idIcon.start)
@@ -140,7 +142,7 @@ fun TransactionItem(
             Text(
                 modifier =
                     Modifier
-                        .padding(start = 16.dp)
+                        .padding(start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium))
                         .constrainAs(idTime) {
                             top.linkTo(
                                 if (transaction.description.isNotEmpty()) idDescription.bottom else idTitle.bottom,

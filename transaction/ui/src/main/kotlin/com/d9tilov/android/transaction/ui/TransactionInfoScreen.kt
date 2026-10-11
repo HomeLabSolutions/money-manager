@@ -43,7 +43,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -432,7 +431,7 @@ fun TransactionLocationMap(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .height(250.dp)
+                .height(dimensionResource(com.d9tilov.android.designsystem.R.dimen.transaction_calendar_height))
                 .padding(
                     horizontal =
                         dimensionResource(
@@ -442,7 +441,11 @@ fun TransactionLocationMap(
                         dimensionResource(
                             id = com.d9tilov.android.designsystem.R.dimen.padding_small,
                         ),
-                ).clip(RoundedCornerShape(16.dp)),
+                ).clip(
+                    RoundedCornerShape(
+                        dimensionResource(com.d9tilov.android.designsystem.R.dimen.card_view_corner_radius),
+                    ),
+                ),
         cameraPositionState = cameraPositionState,
         onMapClick = {
             val latitude = locationData.latitude

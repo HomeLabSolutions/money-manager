@@ -10,9 +10,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.toMillis
 
@@ -54,8 +54,11 @@ fun DateRangePickerModal(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .height(500.dp)
-                    .padding(vertical = 16.dp, horizontal = 4.dp),
+                    .height(dimensionResource(R.dimen.date_range_picker_height))
+                    .padding(
+                        vertical = dimensionResource(R.dimen.padding_medium),
+                        horizontal = dimensionResource(R.dimen.padding_extra_small),
+                    ),
         )
     }
 }
