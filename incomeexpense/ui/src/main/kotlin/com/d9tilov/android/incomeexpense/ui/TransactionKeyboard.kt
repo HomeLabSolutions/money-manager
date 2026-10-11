@@ -43,10 +43,10 @@ import kotlinx.coroutines.delay
 
 private const val KEYBOARD_BUTTON_ANIMATION_DELAY_MS = 150L
 private const val KEYBOARD_COLUMN_COUNT = 3
-private const val AMOUNT_SURFACE_HIGHLIGHT = 0.12f
-private const val AMOUNT_SURFACE_SHADE = 0.16f
-private const val AMOUNT_BORDER_HIGHLIGHT = 0.36f
-private const val AMOUNT_BORDER_SHADE = 0.32f
+private const val AMOUNT_SURFACE_HIGHLIGHT = 0.04f
+private const val AMOUNT_SURFACE_SHADE = 0.06f
+private const val AMOUNT_BORDER_HIGHLIGHT = 0.14f
+private const val AMOUNT_BORDER_SHADE = 0.12f
 
 @Composable
 fun MainPriceInput(
@@ -65,9 +65,9 @@ fun MainPriceInput(
                 Brush.verticalGradient(
                     colors =
                         listOf(
-                            lerp(borderColor, Color.Black, AMOUNT_BORDER_SHADE),
-                            borderColor,
                             lerp(borderColor, Color.White, AMOUNT_BORDER_HIGHLIGHT),
+                            borderColor,
+                            lerp(borderColor, Color.Black, AMOUNT_BORDER_SHADE),
                         ),
                 ),
             ),
@@ -85,9 +85,9 @@ fun MainPriceInput(
                         Brush.verticalGradient(
                             colors =
                                 listOf(
-                                    lerp(surfaceColor, Color.Black, AMOUNT_SURFACE_SHADE),
-                                    surfaceColor,
                                     lerp(surfaceColor, Color.White, AMOUNT_SURFACE_HIGHLIGHT),
+                                    surfaceColor,
+                                    lerp(surfaceColor, Color.Black, AMOUNT_SURFACE_SHADE),
                                 ),
                         ),
                     ),
