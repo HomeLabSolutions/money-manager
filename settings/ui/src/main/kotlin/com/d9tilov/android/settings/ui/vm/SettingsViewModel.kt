@@ -52,7 +52,8 @@ data class SettingsUiState(
         InsightLanguage.supportedLanguages.associateWith { it.labelRes() },
 )
 
-private fun InsightLanguage.labelRes(): Int =
+@StringRes
+internal fun InsightLanguage.labelRes(): Int =
     when (this) {
         InsightLanguage.SYSTEM -> R.string.settings_insight_language_system
         InsightLanguage.ENGLISH -> R.string.settings_insight_language_english

@@ -47,7 +47,7 @@ fun CategoryGroupIconListScreen(
 ) {
     Scaffold(topBar = {
         MmTopAppBar(
-            titleRes = R.string.title_category_group_set,
+            titleRes = R.string.title_category,
             onNavigationClick = onBackClicked,
         )
     }) { padding ->

@@ -16,7 +16,7 @@ fun ButtonSelector(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     selected: Boolean = true,
-    text: @Composable () -> Unit,
+    content: @Composable () -> Unit,
 ) {
     Box(modifier = modifier) {
         val colorScheme = MaterialTheme.colorScheme
@@ -30,7 +30,7 @@ fun ButtonSelector(
                 ),
         ) {
             ProvideTextStyle(value = MaterialTheme.typography.labelSmall) {
-                text()
+                content()
             }
         }
     }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="logout_dialog_title">Выход</string>
-    <string name="logout_dialog_button">Выйти</string>
     <string name="logout_dialog_subtitle">Вы действительно хотите выйти?</string>
 
     <string name="profile_item_currency_title">Валюта: </string>

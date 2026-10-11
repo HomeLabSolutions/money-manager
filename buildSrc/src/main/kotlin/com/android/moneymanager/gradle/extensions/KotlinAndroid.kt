@@ -47,10 +47,12 @@ internal fun Project.configureKotlinAndroid(extension: ApplicationExtension) {
             abortOnError = true
             ignoreWarnings = false
             checkDependencies = true
+            checkAllWarnings = true
+            checkTestSources = true
+            enable += listOf("StopShip", "TypographyQuotes", "UnusedAttribute")
             disable +=
                 listOf(
                     "VectorPath",
-                    "UnusedAttribute",
                     "NewerVersionAvailable",
                     "GradleDependency",
                     "AndroidGradlePluginVersion",
@@ -87,10 +89,12 @@ internal fun Project.configureKotlinAndroid(extension: LibraryExtension) {
             abortOnError = true
             ignoreWarnings = false
             checkDependencies = true
+            checkAllWarnings = true
+            checkTestSources = true
+            enable += listOf("StopShip", "TypographyQuotes", "UnusedAttribute")
             disable +=
                 listOf(
                     "VectorPath",
-                    "UnusedAttribute",
                     "NewerVersionAvailable",
                     "GradleDependency",
                     "AndroidGradlePluginVersion",

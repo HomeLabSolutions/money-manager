@@ -129,7 +129,7 @@ fun ProfileScreen(
             title = stringResource(R.string.logout_dialog_title),
             subtitle = stringResource(R.string.logout_dialog_subtitle),
             dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
-            confirmButton = stringResource(R.string.logout_dialog_button),
+            confirmButton = stringResource(R.string.profile_logout),
             onConfirm = { onLogoutConfirmClicked() },
             onDismiss = { onLogoutDismissClicked() },
         )

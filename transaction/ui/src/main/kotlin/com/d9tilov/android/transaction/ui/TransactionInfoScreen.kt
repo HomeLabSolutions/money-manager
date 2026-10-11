@@ -348,7 +348,7 @@ private fun TransactionAmountField(
             modifier = Modifier.alignByBaseline(),
             inputValue = uiState.amount,
             inputValueChanged = onSumChanged,
-            showError = { if (showError) ShowError() },
+            content = { if (showError) ShowError() },
             autoFocus = false,
             readOnly = mode == TransactionInfoMode.VIEW,
         )

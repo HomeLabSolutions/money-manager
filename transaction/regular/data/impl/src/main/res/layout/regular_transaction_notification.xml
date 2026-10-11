@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
+        android:textIsSelectable="false"
         android:textAppearance="@android:style/TextAppearance.Material.Notification.Title" />
 
     <FrameLayout
@@ -34,6 +35,7 @@
             android:layout_marginStart="28dp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:textIsSelectable="false"
             android:textAppearance="@android:style/TextAppearance.Material.Notification" />
     </FrameLayout>
 </LinearLayout>
