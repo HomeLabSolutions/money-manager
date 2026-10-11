@@ -257,11 +257,11 @@ private fun CollapsingStatisticsContent(
 private fun CollapsingStatisticsChart(
     expandedHeightPx: Float,
     offset: () -> Float,
-    chart: @Composable () -> Unit,
+    content: @Composable () -> Unit,
 ) {
     Layout(
         modifier = Modifier.fillMaxWidth().clipToBounds(),
-        content = chart,
+        content = content,
     ) { measurables, constraints ->
         val expandedHeight = expandedHeightPx.roundToInt()
         val visibleHeight = (expandedHeightPx + offset()).roundToInt().coerceAtLeast(0)
@@ -368,7 +368,7 @@ fun StatisticsPeriodSelector(
         for (item: StatisticsPeriodModel in state.periods) {
             ButtonSelector(
                 selected = state.selectedPeriod.name == item.name,
-                text = { Text(text = stringResource(item.name)) },
+                content = { Text(text = stringResource(item.name)) },
                 onClick = { onPeriodClick(item) },
             )
         }

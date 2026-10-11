@@ -25,6 +25,5 @@
 
     <string name="title_category">Категории</string>
     <string name="title_category_edit">Категория</string>
-    <string name="title_category_group_set">Категории</string>
     <string name="title_category_creation">Создание категории</string>
 </resources>

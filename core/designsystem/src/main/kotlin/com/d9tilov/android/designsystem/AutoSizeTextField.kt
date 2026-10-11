@@ -38,12 +38,12 @@ private const val TEXT_SCALE_REDUCTION_INTERVAL = 0.8f
 fun AutoSizeTextField(
     inputValue: String,
     inputValueChanged: (String) -> Unit,
-    showError: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     fontSize: TextUnit = textDimensionResource(R.dimen.amount_input_text_size),
     fontColor: Color = MaterialTheme.colorScheme.primary,
     autoFocus: Boolean = true,
     readOnly: Boolean = false,
+    content: @Composable () -> Unit,
 ) {
     var amount by remember { mutableStateOf(TextFieldValue()) }
     amount = amount.copy(text = inputValue, selection = TextRange(inputValue.length))
@@ -99,7 +99,7 @@ fun AutoSizeTextField(
                     inputValueChanged(newText)
                 }
             },
-            supportingText = showError,
+            supportingText = content,
         )
         if (autoFocus && !readOnly) {
             LaunchedEffect(Unit) { focusRequester.requestFocus() }

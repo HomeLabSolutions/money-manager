@@ -202,7 +202,7 @@ fun RegularTransactionCreationScreen(
                             showError = !MainPriceFieldParser.isInputValid(text)
                             onSumChanged(text)
                         },
-                        showError = { if (showError) ShowError() },
+                        content = { if (showError) ShowError() },
                     )
                 }
                 RegularCategorySelector(

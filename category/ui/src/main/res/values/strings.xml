@@ -9,7 +9,7 @@
     <string name="category_unit_name_exist_error">Name of this group already exists</string>
     <string name="category_name_exist_error">Name of the category already exists</string>
     <string name="category_not_found_error">Category not found</string>
-    <string name="category_parent_not_found_error">Category\'s parent not found</string>
+    <string name="category_parent_not_found_error">Category’s parent not found</string>
     <string name="category_group_free">Icons</string>
     <string name="category_group_housing">Housing</string>
     <string name="category_group_transportation">Transportation</string>
@@ -25,6 +25,5 @@
 
     <string name="title_category">Categories</string>
     <string name="title_category_edit">Category</string>
-    <string name="title_category_group_set">Categories</string>
     <string name="title_category_creation">Category creation</string>
 </resources>
