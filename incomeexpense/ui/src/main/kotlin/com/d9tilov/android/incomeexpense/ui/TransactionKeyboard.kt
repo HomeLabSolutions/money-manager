@@ -65,9 +65,9 @@ fun MainPriceInput(
                 Brush.verticalGradient(
                     colors =
                         listOf(
-                            lerp(borderColor, Color.White, AMOUNT_BORDER_HIGHLIGHT),
-                            borderColor,
                             lerp(borderColor, Color.Black, AMOUNT_BORDER_SHADE),
+                            borderColor,
+                            lerp(borderColor, Color.White, AMOUNT_BORDER_HIGHLIGHT),
                         ),
                 ),
             ),
@@ -85,9 +85,9 @@ fun MainPriceInput(
                         Brush.verticalGradient(
                             colors =
                                 listOf(
-                                    lerp(surfaceColor, Color.White, AMOUNT_SURFACE_HIGHLIGHT),
-                                    surfaceColor,
                                     lerp(surfaceColor, Color.Black, AMOUNT_SURFACE_SHADE),
+                                    surfaceColor,
+                                    lerp(surfaceColor, Color.White, AMOUNT_SURFACE_HIGHLIGHT),
                                 ),
                         ),
                     ),
