@@ -4,6 +4,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -27,8 +28,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
@@ -40,6 +43,10 @@ import kotlinx.coroutines.delay
 
 private const val KEYBOARD_BUTTON_ANIMATION_DELAY_MS = 150L
 private const val KEYBOARD_COLUMN_COUNT = 3
+private const val AMOUNT_SURFACE_HIGHLIGHT = 0.12f
+private const val AMOUNT_SURFACE_SHADE = 0.16f
+private const val AMOUNT_BORDER_HIGHLIGHT = 0.36f
+private const val AMOUNT_BORDER_SHADE = 0.32f
 
 @Composable
 fun MainPriceInput(
@@ -47,13 +54,22 @@ fun MainPriceInput(
     modifier: Modifier,
     onCurrencyClicked: () -> Unit,
 ) {
+    val surfaceColor = MaterialTheme.colorScheme.surfaceContainer
+    val borderColor = MaterialTheme.colorScheme.primary
     Surface(
         modifier = modifier,
         onClick = onCurrencyClicked,
         border =
             BorderStroke(
                 dimensionResource(com.d9tilov.android.designsystem.R.dimen.border_width_medium),
-                MaterialTheme.colorScheme.primary,
+                Brush.verticalGradient(
+                    colors =
+                        listOf(
+                            lerp(borderColor, Color.White, AMOUNT_BORDER_HIGHLIGHT),
+                            borderColor,
+                            lerp(borderColor, Color.Black, AMOUNT_BORDER_SHADE),
+                        ),
+                ),
             ),
         shape =
             RoundedCornerShape(
@@ -62,7 +78,19 @@ fun MainPriceInput(
         tonalElevation = dimensionResource(com.d9tilov.android.designsystem.R.dimen.keyboard_tonal_elevation),
     ) {
         Box(
-            modifier = Modifier.fillMaxWidth(),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(
+                        Brush.verticalGradient(
+                            colors =
+                                listOf(
+                                    lerp(surfaceColor, Color.White, AMOUNT_SURFACE_HIGHLIGHT),
+                                    surfaceColor,
+                                    lerp(surfaceColor, Color.Black, AMOUNT_SURFACE_SHADE),
+                                ),
+                        ),
+                    ),
             contentAlignment = Alignment.Center,
         ) {
             ComposeCurrencyView(
