@@ -149,6 +149,16 @@ fun StatisticsScreen(
             },
         )
         StatisticsMenuSelector(state = state.statisticsMenuState, onClick = onMenuClick)
+        Text(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large)),
+            text = getPeriodString(state.periodState.selectedPeriod),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.secondary,
+            textAlign = TextAlign.Center,
+        )
 
         if (state.chartState.pieData.isEmpty()) {
             StatisticsChartContent(
@@ -317,7 +327,6 @@ private fun StatisticsChartContent(
                 .fillMaxWidth()
                 .wrapContentHeight(),
             periodUiState = periodState,
-            periodStr = getPeriodString(periodState.selectedPeriod),
             pieData =
                 pieData.mapIndexed { index, pie ->
                     pie.copy(selected = index == selectedIndex)
@@ -407,7 +416,6 @@ fun StatisticMenuIcon(
 fun StatisticsChart(
     modifier: Modifier,
     periodUiState: PeriodUiState,
-    periodStr: String,
     pieData: List<Pie>,
     onPieSelected: (Int) -> Unit,
     onPrevClicked: () -> Unit,
@@ -441,28 +449,15 @@ fun StatisticsChart(
                 .fillMaxSize()
                 .padding(top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large))
         if (pieData.isEmpty()) {
-            Column(
+            EmptyListPlaceholder(
                 modifier = chartModifier,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-            ) {
-                Text(
-                    text = periodStr,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.secondary,
-                    textAlign = TextAlign.Center,
-                )
-                EmptyListPlaceholder(
-                    modifier = Modifier.weight(1f),
-                    icon = painterResource(id = MoneyManagerIcons.EmptyStatisticsPlaceholder),
-                    title = stringResource(id = R.string.statistics_no_data),
-                )
-            }
+                icon = painterResource(id = MoneyManagerIcons.EmptyStatisticsPlaceholder),
+                title = stringResource(id = R.string.statistics_no_data),
+            )
         } else {
             PieChart(
                 modifier = chartModifier,
                 data = pieData,
-                centerLabel = periodStr,
                 onPieClick = {
                     println("${it.label} Clicked")
                     val pieIndex = pieData.indexOf(it)
