@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -61,42 +62,65 @@ fun TransactionListLayout(
     screenType: ScreenType,
     onTransactionClicked: (TransactionUiModel) -> Unit,
     onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
+    searchQuery: String = "",
+    onSearchQueryChanged: (String) -> Unit = {},
+    onSearchClosed: () -> Unit = {},
+) {
+    TransactionSearchLayout(
+        query = searchQuery,
+        onQueryChanged = { query ->
+            if (query != searchQuery && query.isNotBlank()) listState.requestScrollToItem(0)
+            onSearchQueryChanged(query)
+        },
+        onSearchClosed = onSearchClosed,
+        modifier = modifier,
+    ) {
+        TransactionListContent(
+            listState = listState,
+            modifier = Modifier.weight(1f),
+            transactions = transactions,
+            screenType = screenType,
+            searchQuery = searchQuery,
+            onTransactionClicked = onTransactionClicked,
+            onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked,
+        )
+    }
+}
+
+@Composable
+private fun TransactionListContent(
+    listState: LazyListState,
+    modifier: Modifier,
+    transactions: Flow<PagingData<BaseTransaction>>,
+    screenType: ScreenType,
+    searchQuery: String,
+    onTransactionClicked: (TransactionUiModel) -> Unit,
+    onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
 ) {
     val lazyTransactionItems: LazyPagingItems<BaseTransaction> =
         transactions.collectAsLazyPagingItems()
-    val captureScrollAnchor = rememberTransactionScrollAnchor(lazyTransactionItems, listState)
+    val captureScrollAnchor = rememberTransactionScrollAnchor(lazyTransactionItems, listState, searchQuery)
     val coroutineScope = rememberCoroutineScope()
-    if (lazyTransactionItems.loadState.refresh is LoadState.NotLoading && lazyTransactionItems.itemCount == 0) {
-        EmptyListPlaceholder(
-            modifier = Modifier.fillMaxSize(),
-            icon = painterResource(id = MoneyManagerIcons.EmptyPlaceholder),
-            title =
-                when (screenType) {
-                    EXPENSE -> stringResource(id = R.string.transaction_empty_placeholder_expense_title)
-                    INCOME -> stringResource(id = R.string.transaction_empty_placeholder_income_title)
-                },
-            subtitle = stringResource(id = R.string.transaction_empty_placeholder_subtitle),
-        )
-        return
-    }
-    if (lazyTransactionItems.loadState.refresh is LoadState.Error) {
-        // handle error
-    }
     val openRemoveDialog = remember { mutableStateOf<Pair<TransactionUiModel, SwipeToDismissBoxState>?>(null) }
-    LazyColumn(modifier = modifier, state = listState) {
-        transactionItems(
-            lazyTransactionItems = lazyTransactionItems,
-            onTransactionClicked = { transaction ->
-                captureScrollAnchor(transaction.id, null)
-                onTransactionClicked(transaction)
-            },
-            onRemoveRequested = { transaction, state -> openRemoveDialog.value = transaction to state },
-        )
-        item {
-            if (lazyTransactionItems.loadState.append is LoadState.Loading) {
-                // handle loading
+    Box(modifier = modifier) {
+        LazyColumn(modifier = Modifier.fillMaxSize(), state = listState) {
+            transactionItems(
+                lazyTransactionItems = lazyTransactionItems,
+                onTransactionClicked = { transaction ->
+                    captureScrollAnchor(transaction.id, null)
+                    onTransactionClicked(transaction)
+                },
+                onRemoveRequested = { transaction, state -> openRemoveDialog.value = transaction to state },
+            )
+            item {
+                if (lazyTransactionItems.loadState.append is LoadState.Loading) {
+                    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
+                }
             }
         }
+        TransactionListPlaceholder(lazyTransactionItems, screenType, searchQuery)
     }
     SimpleDialog(
         show = openRemoveDialog.value != null,
@@ -120,6 +144,40 @@ fun TransactionListLayout(
     )
 }
 
+@Composable
+private fun TransactionListPlaceholder(
+    items: LazyPagingItems<BaseTransaction>,
+    screenType: ScreenType,
+    searchQuery: String,
+) {
+    val appendState = items.loadState.append
+    if (items.itemCount != 0 || items.loadState.refresh !is LoadState.NotLoading) return
+    if (appendState !is LoadState.NotLoading || !appendState.endOfPaginationReached) return
+    val isSearching = searchQuery.isNotBlank()
+    val title =
+        if (isSearching) {
+            R.string.transaction_search_empty_title
+        } else {
+            when (screenType) {
+                EXPENSE -> R.string.transaction_empty_placeholder_expense_title
+                INCOME -> R.string.transaction_empty_placeholder_income_title
+            }
+        }
+    EmptyListPlaceholder(
+        modifier = Modifier.fillMaxSize(),
+        icon = painterResource(MoneyManagerIcons.EmptyPlaceholder),
+        title = stringResource(title),
+        subtitle =
+            stringResource(
+                if (isSearching) {
+                    R.string.transaction_search_empty_subtitle
+                } else {
+                    R.string.transaction_empty_placeholder_subtitle
+                },
+            ),
+    )
+}
+
 private fun BaseTransaction.listKey(): String =
     if (itemType == BaseTransaction.HEADER) {
         "header:$date"
@@ -131,8 +189,9 @@ private fun BaseTransaction.listKey(): String =
 private fun rememberTransactionScrollAnchor(
     lazyTransactionItems: LazyPagingItems<BaseTransaction>,
     listState: LazyListState,
+    searchQuery: String,
 ): (Long?, Long?) -> Unit {
-    var scrollAnchor by rememberSaveable { mutableStateOf<ScrollAnchor?>(null) }
+    var scrollAnchor by rememberSaveable(searchQuery) { mutableStateOf<ScrollAnchor?>(null) }
     val snapshot = lazyTransactionItems.itemSnapshotList
     LaunchedEffect(snapshot) {
         scrollAnchor?.let { anchor ->

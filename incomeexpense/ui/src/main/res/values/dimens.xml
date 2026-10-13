@@ -3,4 +3,6 @@
     <dimen name="category_item_width">72dp</dimen>
     <dimen name="category_icon_size">40dp</dimen>
     <dimen name="home_tab_indicator_horizontal_padding">24dp</dimen>
+    <dimen name="transaction_search_pull_threshold">48dp</dimen>
+    <dimen name="transaction_search_field_height">32dp</dimen>
 </resources>

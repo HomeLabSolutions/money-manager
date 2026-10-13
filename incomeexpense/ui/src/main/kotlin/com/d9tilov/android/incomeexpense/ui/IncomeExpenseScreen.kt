@@ -100,6 +100,8 @@ fun IncomeExpenseRoute(
         onAllCategoryClicked = onAllCategoryClicked,
         onDeleteTransactionConfirmClicked = viewModel::deleteTransaction,
         onScreenTypeClicked = viewModel::onTabClicked,
+        onSearchQueryChanged = viewModel::updateSearchQuery,
+        onSearchClosed = viewModel::onSearchClosed,
     )
 }
 
@@ -114,6 +116,8 @@ fun IncomeExpenseScreen(
     onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
     onScreenTypeClicked: (ScreenType) -> Unit,
+    onSearchQueryChanged: (ScreenType, String) -> Unit = { _, _ -> },
+    onSearchClosed: (ScreenType) -> Unit = {},
 ) {
     val expenseListState = rememberLazyListState()
     val incomeListState = rememberLazyListState()
@@ -151,6 +155,8 @@ fun IncomeExpenseScreen(
             onTransactionClicked = onTransactionClicked,
             onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked,
             onScreenTypeClicked = onScreenTypeClicked,
+            onSearchQueryChanged = onSearchQueryChanged,
+            onSearchClosed = onSearchClosed,
         )
     }
 }
@@ -213,6 +219,8 @@ fun HomeTabs(
     onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
     onScreenTypeClicked: (ScreenType) -> Unit,
+    onSearchQueryChanged: (ScreenType, String) -> Unit = { _, _ -> },
+    onSearchClosed: (ScreenType) -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
     Column(modifier = modifier.fillMaxSize()) {
@@ -329,6 +337,14 @@ fun HomeTabs(
                     tabIndex.toScreenType(),
                     onTransactionClicked = onTransactionClicked,
                     onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked,
+                    searchQuery =
+                        if (tabIndex.toScreenType() == INCOME) {
+                            uiState.incomeUiState.searchQuery
+                        } else {
+                            uiState.expenseUiState.searchQuery
+                        },
+                    onSearchQueryChanged = { query -> onSearchQueryChanged(tabIndex.toScreenType(), query) },
+                    onSearchClosed = { onSearchClosed(tabIndex.toScreenType()) },
                 )
             }
         }
