@@ -60,7 +60,7 @@ class TransactionLocalSourceTest {
         }
 
     @Test
-    fun `search pager passes the current user and normalized query to the search DAO method`() =
+    fun `search pager passes the current user and decimal query to the search DAO method`() =
         runTest {
             every { preferencesStore.uid } returns flowOf(CURRENT_USER_ID)
             every {
@@ -70,7 +70,7 @@ class TransactionLocalSourceTest {
                     to = any(),
                     type = TransactionType.EXPENSE.value,
                     textPattern = "*1 234,50*",
-                    amountQuery = "1234.5",
+                    amountQuery = "1234.50",
                 )
             } returns mockk(relaxed = true)
             val pagingSource =
@@ -89,7 +89,7 @@ class TransactionLocalSourceTest {
                     to = any(),
                     type = TransactionType.EXPENSE.value,
                     textPattern = "*1 234,50*",
-                    amountQuery = "1234.5",
+                    amountQuery = "1234.50",
                 )
             }
         }

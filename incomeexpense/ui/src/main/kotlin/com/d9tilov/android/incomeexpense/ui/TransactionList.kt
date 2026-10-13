@@ -48,6 +48,7 @@ import com.d9tilov.android.designsystem.SimpleDialog
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.EXPENSE
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.INCOME
+import com.d9tilov.android.incomeexpense.ui.vm.TransactionSearchState
 import com.d9tilov.android.transaction.ui.TransactionItem
 import com.d9tilov.android.transaction.ui.model.BaseTransaction
 import com.d9tilov.android.transaction.ui.model.TransactionUiModel
@@ -62,16 +63,18 @@ fun TransactionListLayout(
     screenType: ScreenType,
     onTransactionClicked: (TransactionUiModel) -> Unit,
     onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
-    searchQuery: String = "",
+    searchState: TransactionSearchState = TransactionSearchState(),
     onSearchQueryChanged: (String) -> Unit = {},
+    onSearchOpened: () -> Unit = {},
     onSearchClosed: () -> Unit = {},
 ) {
     TransactionSearchLayout(
-        query = searchQuery,
+        searchState = searchState,
         onQueryChanged = { query ->
-            if (query != searchQuery && query.isNotBlank()) listState.requestScrollToItem(0)
+            if (query != searchState.searchQuery && query.isNotBlank()) listState.requestScrollToItem(0)
             onSearchQueryChanged(query)
         },
+        onSearchOpened = onSearchOpened,
         onSearchClosed = onSearchClosed,
         modifier = modifier,
     ) {
@@ -80,7 +83,7 @@ fun TransactionListLayout(
             modifier = Modifier.weight(1f),
             transactions = transactions,
             screenType = screenType,
-            searchQuery = searchQuery,
+            searchQuery = searchState.searchQuery,
             onTransactionClicked = onTransactionClicked,
             onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked,
         )

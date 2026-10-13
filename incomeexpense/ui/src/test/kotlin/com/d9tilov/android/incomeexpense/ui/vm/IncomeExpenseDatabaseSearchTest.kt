@@ -87,6 +87,13 @@ class IncomeExpenseDatabaseSearchTest {
             }
             runCurrent()
 
+            viewModel.onSearchOpened(ScreenType.EXPENSE)
+            runCurrent()
+            assertEquals(
+                TransactionSearchState(status = SearchStatus.OPEN),
+                viewModel.uiStateFlow.value.expenseUiState.searchState,
+            )
+            assertEquals(listOf(""), queries)
             viewModel.updateSearchQuery(ScreenType.EXPENSE, " old ")
             runCurrent()
             viewModel.updateSearchQuery(ScreenType.EXPENSE, "new")
@@ -101,6 +108,7 @@ class IncomeExpenseDatabaseSearchTest {
             viewModel.onSearchClosed(ScreenType.EXPENSE)
             runCurrent()
             assertEquals(listOf("", "old", "new", ""), queries)
+            assertEquals(TransactionSearchState(), viewModel.uiStateFlow.value.expenseUiState.searchState)
             viewModel.updateSearchQuery(ScreenType.EXPENSE, " \t\u00a0 ")
             runCurrent()
             assertEquals(listOf("", "old", "new", ""), queries)
@@ -131,8 +139,10 @@ class IncomeExpenseDatabaseSearchTest {
             runCurrent()
             requests.clear()
 
+            viewModel.onSearchOpened(ScreenType.EXPENSE)
             viewModel.updateSearchQuery(ScreenType.EXPENSE, "groceries")
             runCurrent()
+            viewModel.onSearchOpened(ScreenType.INCOME)
             viewModel.updateSearchQuery(ScreenType.INCOME, "salary")
             runCurrent()
             viewModel.onSearchClosed(ScreenType.EXPENSE)
@@ -146,7 +156,11 @@ class IncomeExpenseDatabaseSearchTest {
                 ),
                 requests,
             )
-            assertEquals("salary", viewModel.uiStateFlow.value.incomeUiState.searchQuery)
+            assertEquals(TransactionSearchState(), viewModel.uiStateFlow.value.expenseUiState.searchState)
+            assertEquals(
+                TransactionSearchState(searchQuery = "salary", status = SearchStatus.OPEN),
+                viewModel.uiStateFlow.value.incomeUiState.searchState,
+            )
         }
 
     private fun createViewModel(): IncomeExpenseViewModel =

@@ -77,7 +77,7 @@ data class ExpenseUiState(
     val expenseCategoryList: List<Category> = emptyList(),
     val expenseTransactions: Flow<PagingData<BaseTransaction>> = flowOf(),
     val expenseInfo: ExpenseInfo? = null,
-    val searchQuery: String = "",
+    val searchState: TransactionSearchState = TransactionSearchState(),
 ) {
     companion object {
         val EMPTY = ExpenseUiState()
@@ -89,7 +89,7 @@ data class IncomeUiState(
     val incomeCategoryList: List<Category> = emptyList(),
     val incomeTransactions: Flow<PagingData<BaseTransaction>> = flowOf(),
     val incomeInfo: IncomeInfo? = null,
-    val searchQuery: String = "",
+    val searchState: TransactionSearchState = TransactionSearchState(),
 ) {
     companion object {
         val EMPTY = IncomeUiState()
@@ -305,10 +305,12 @@ class IncomeExpenseViewModel
             val queries =
                 uiState
                     .map { state ->
-                        when (type) {
-                            TransactionType.EXPENSE -> state.expenseUiState.searchQuery
-                            TransactionType.INCOME -> state.incomeUiState.searchQuery
-                        }.trim()
+                        val searchState =
+                            when (type) {
+                                TransactionType.EXPENSE -> state.expenseUiState.searchState
+                                TransactionType.INCOME -> state.incomeUiState.searchState
+                            }
+                        if (searchState.status == SearchStatus.OPEN) searchState.searchQuery.trim() else ""
                     }.distinctUntilChanged()
             val transactions =
                 queries
@@ -326,16 +328,42 @@ class IncomeExpenseViewModel
             screenType: ScreenType,
             query: String,
         ) {
-            uiState.update { state ->
-                when (screenType) {
-                    ScreenType.EXPENSE -> state.copy(expenseUiState = state.expenseUiState.copy(searchQuery = query))
-                    ScreenType.INCOME -> state.copy(incomeUiState = state.incomeUiState.copy(searchQuery = query))
-                }
-            }
+            updateSearchState(screenType) { state -> state.copy(searchQuery = query) }
+        }
+
+        fun onSearchOpened(screenType: ScreenType) {
+            updateSearchState(screenType) { state -> state.copy(status = SearchStatus.OPEN) }
         }
 
         fun onSearchClosed(screenType: ScreenType) {
-            updateSearchQuery(screenType, "")
+            updateSearchState(screenType) { TransactionSearchState() }
+        }
+
+        private fun updateSearchState(
+            screenType: ScreenType,
+            transform: (TransactionSearchState) -> TransactionSearchState,
+        ) {
+            uiState.update { state ->
+                when (screenType) {
+                    ScreenType.EXPENSE -> {
+                        state.copy(
+                            expenseUiState =
+                                state.expenseUiState.copy(
+                                    searchState = transform(state.expenseUiState.searchState),
+                                ),
+                        )
+                    }
+
+                    ScreenType.INCOME -> {
+                        state.copy(
+                            incomeUiState =
+                                state.incomeUiState.copy(
+                                    searchState = transform(state.incomeUiState.searchState),
+                                ),
+                        )
+                    }
+                }
+            }
         }
 
         fun addNumber(btn: KeyPress) {

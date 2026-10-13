@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDateTime
+import java.math.BigDecimal
 import javax.inject.Inject
 import javax.inject.Named
 import kotlin.time.ExperimentalTime
@@ -71,7 +72,7 @@ class TransactionLocalSource @Inject constructor(
                 to = to,
                 type = transactionType.value,
                 textPattern = searchQuery.textPattern,
-                amountQuery = searchQuery.amountQuery,
+                amountQuery = searchQuery.amountQuery?.toPlainString(),
             )
         }
     }
@@ -84,13 +85,11 @@ class TransactionLocalSource @Inject constructor(
         )
     }
 
-    private fun toAmountSearchQuery(query: String): String? =
+    private fun toAmountSearchQuery(query: String): BigDecimal? =
         query
             .replace(',', '.')
             .filterNot { it.isWhitespace() }
             .toBigDecimalOrNull()
-            ?.stripTrailingZeros()
-            ?.toPlainString()
 
     // SQLite LIKE only ignores ASCII case. Character classes also match Cyrillic letters.
     private fun toTextSearchPattern(query: String): String =
