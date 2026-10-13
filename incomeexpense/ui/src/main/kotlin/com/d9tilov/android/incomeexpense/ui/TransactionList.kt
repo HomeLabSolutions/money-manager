@@ -320,8 +320,8 @@ private fun DismissibleTransactionItem(
     onRemoveRequested: (TransactionUiModel, SwipeToDismissBoxState) -> Unit,
 ) {
     val dismissState = rememberSwipeToDismissBoxState(SwipeToDismissBoxValue.Settled)
-    LaunchedEffect(dismissState.currentValue) {
-        if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
+    LaunchedEffect(dismissState.settledValue) {
+        if (dismissState.settledValue == SwipeToDismissBoxValue.EndToStart) {
             onRemoveRequested(item, dismissState)
         }
     }
@@ -337,6 +337,7 @@ private fun DismissibleTransactionItem(
                 modifier =
                     Modifier
                         .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.background)
                         .clickable {
                             onTransactionClicked(item)
                         },
@@ -349,7 +350,7 @@ private fun DismissibleTransactionItem(
 @Composable
 private fun TransactionDismissBackground(dismissState: SwipeToDismissBoxState) {
     val backgroundColor by animateColorAsState(
-        if (dismissState.targetValue == SwipeToDismissBoxValue.EndToStart) {
+        if (dismissState.dismissDirection == SwipeToDismissBoxValue.EndToStart) {
             MaterialTheme.colorScheme.error
         } else {
             Color.Transparent
@@ -358,7 +359,7 @@ private fun TransactionDismissBackground(dismissState: SwipeToDismissBoxState) {
     )
     val iconScale by animateFloatAsState(
         targetValue =
-            if (dismissState.targetValue ==
+            if (dismissState.dismissDirection ==
                 SwipeToDismissBoxValue.Settled
             ) {
                 0.0f
