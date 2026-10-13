@@ -244,12 +244,23 @@ class TransactionInteractorImpl @Inject constructor(
             }
 
     override fun getTransactionsByType(type: TransactionType): Flow<PagingData<Transaction>> =
+        transactionsWithCategories(type, transactionRepo.getTransactionsByType(type))
+
+    override fun searchTransactionsByType(
+        type: TransactionType,
+        query: String,
+    ): Flow<PagingData<Transaction>> =
+        transactionsWithCategories(type, transactionRepo.searchTransactionsByType(type, query))
+
+    private fun transactionsWithCategories(
+        type: TransactionType,
+        transactions: Flow<PagingData<TransactionDataModel>>,
+    ): Flow<PagingData<Transaction>> =
         categoryInteractor
             .getGroupedCategoriesByType(type)
             .flatMapLatest { categoryList ->
                 val categoriesById = categoryList.associateBy { category -> category.id }
-                transactionRepo
-                    .getTransactionsByType(transactionType = type)
+                transactions
                     .map {
                         it.map { item ->
                             val category =

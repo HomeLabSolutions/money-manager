@@ -42,6 +42,11 @@ interface TransactionInteractor {
 
     fun getTransactionsByType(type: TransactionType): Flow<PagingData<Transaction>>
 
+    fun searchTransactionsByType(
+        type: TransactionType,
+        query: String,
+    ): Flow<PagingData<Transaction>>
+
     fun ableToSpendToday(): Flow<TransactionSpendingTodayModel>
 
     fun ableToSpendInFiscalPeriod(): Flow<BigDecimal>

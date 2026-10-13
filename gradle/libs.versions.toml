@@ -45,6 +45,7 @@ retrofitConverter = "1.0.0"
 room = "2.8.5"
 secretesGradle = "2.0.1"
 splashScreen = "1.2.0"
+sqliteJdbc = "3.53.4.0"
 startup = "1.2.0"
 timber = "5.0.1"
 worker = "2.12.0"
@@ -128,6 +129,7 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "room" }
+sqlite-jdbc = { group = "org.xerial", name = "sqlite-jdbc", version.ref = "sqliteJdbc" }
 startup = { group = "androidx.startup", name = "startup-runtime", version.ref = "startup" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
