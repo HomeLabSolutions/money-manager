@@ -29,7 +29,6 @@ import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.incomeexpense.ui.R
-import com.d9tilov.android.incomeexpense.ui.searchTransactions
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
@@ -48,7 +47,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -301,21 +302,24 @@ class IncomeExpenseViewModel
                 .flowOn(Dispatchers.Default)
 
         private fun searchableTransactions(type: TransactionType): Flow<PagingData<BaseTransaction>> {
-            val transactions =
-                transactionInteractor
-                    .getTransactionsByType(type)
-                    .map { data -> data.map { transaction -> transaction.toUiModel() } }
-                    .cachedIn(viewModelScope)
             val queries =
                 uiState
                     .map { state ->
                         when (type) {
                             TransactionType.EXPENSE -> state.expenseUiState.searchQuery
                             TransactionType.INCOME -> state.incomeUiState.searchQuery
+                        }.trim()
+                    }.distinctUntilChanged()
+            val transactions =
+                queries
+                    .flatMapLatest { query ->
+                        if (query.isEmpty()) {
+                            transactionInteractor.getTransactionsByType(type)
+                        } else {
+                            transactionInteractor.searchTransactionsByType(type, query)
                         }
-                    }
-            val filteredTransactions = transactions.searchTransactions(queries)
-            return mapWithStickyHeaders(filteredTransactions).cachedIn(viewModelScope)
+                    }.map { data -> data.map { transaction -> transaction.toUiModel() } }
+            return mapWithStickyHeaders(transactions).cachedIn(viewModelScope)
         }
 
         fun updateSearchQuery(

@@ -12,18 +12,22 @@ import kotlinx.datetime.LocalDateTime
 
 @Dao
 interface TransactionDao {
-    @Query(
-        """
-        SELECT * FROM transactions
-        WHERE clientId=:clientId AND type = :type AND date >= :from AND date <= :to
-        ORDER BY date DESC
-        """,
-    )
+    @Query(TRANSACTION_LIST_QUERY)
     fun getAllByType(
         clientId: String,
         from: LocalDateTime,
         to: LocalDateTime,
         type: Int,
+    ): PagingSource<Int, TransactionDbModel>
+
+    @Query(TRANSACTION_SEARCH_QUERY)
+    fun searchByTypeQuery(
+        clientId: String,
+        from: LocalDateTime,
+        to: LocalDateTime,
+        type: Int,
+        textPattern: String,
+        amountQuery: String?,
     ): PagingSource<Int, TransactionDbModel>
 
     @Query(
@@ -120,3 +124,23 @@ interface TransactionDao {
     @Query("DELETE FROM transactions WHERE clientId=:clientId")
     suspend fun clearAll(clientId: String)
 }
+
+internal const val TRANSACTION_LIST_QUERY = """
+    SELECT * FROM transactions
+    WHERE clientId = :clientId AND type = :type AND date >= :from AND date <= :to
+    ORDER BY date DESC, id DESC
+"""
+
+internal const val TRANSACTION_SEARCH_QUERY = """
+    SELECT t.* FROM transactions AS t
+    WHERE t.clientId = :clientId AND t.type = :type AND t.date >= :from AND t.date <= :to
+        AND (
+            t.description GLOB :textPattern
+            OR EXISTS (
+                SELECT 1 FROM categories AS c
+                WHERE c.id = t.categoryId AND c.clientId = t.clientId AND c.name GLOB :textPattern
+            )
+            OR (:amountQuery IS NOT NULL AND instr(printf('%.2f', CAST(t.sum AS REAL) / 100.0), :amountQuery) > 0)
+        )
+    ORDER BY t.date DESC, t.id DESC
+"""

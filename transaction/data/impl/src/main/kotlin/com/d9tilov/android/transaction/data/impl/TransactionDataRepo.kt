@@ -20,6 +20,11 @@ class TransactionDataRepo @Inject constructor(
     override fun getTransactionsByType(transactionType: TransactionType) =
         transactionSource.getAllByTypePaging(transactionType)
 
+    override fun searchTransactionsByType(
+        transactionType: TransactionType,
+        query: String,
+    ) = transactionSource.searchByTypePaging(transactionType, query)
+
     override fun getTransactionsByTypeInPeriod(
         from: LocalDateTime,
         to: LocalDateTime,

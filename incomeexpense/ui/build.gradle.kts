@@ -40,5 +40,4 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk.core)
-    testImplementation(libs.paging.testing)
 }

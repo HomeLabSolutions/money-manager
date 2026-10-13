@@ -44,6 +44,7 @@ class IncomeExpenseTransactionFeedbackTest {
         every { billing.isPremium() } returns emptyFlow()
         every { categories.getGroupedCategoriesByType(any()) } returns emptyFlow()
         every { transactions.getTransactionsByType(any()) } returns emptyFlow()
+        every { transactions.searchTransactionsByType(any(), any()) } returns emptyFlow()
         every { transactions.ableToSpendToday() } returns emptyFlow()
         every { transactions.getApproxSumTodayCurrentCurrency(any()) } returns emptyFlow()
         every { transactions.getApproxSumInFiscalPeriodCurrentCurrency(any()) } returns emptyFlow()
