@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +25,8 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
@@ -81,6 +84,7 @@ private fun TransactionSearchField(
     onClose: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
     val interactionSource = remember { MutableInteractionSource() }
     val verticalPadding = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small)
     val horizontalPadding = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)
@@ -91,7 +95,8 @@ private fun TransactionSearchField(
             Modifier
                 .fillMaxWidth()
                 .padding(horizontal = horizontalPadding, vertical = verticalPadding)
-                .height(dimensionResource(R.dimen.transaction_search_field_height)),
+                .height(dimensionResource(R.dimen.transaction_search_field_height))
+                .focusRequester(focusRequester),
         singleLine = true,
         textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onSurface),
         cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
@@ -124,6 +129,9 @@ private fun TransactionSearchField(
             )
         },
     )
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
 }
 
 internal class SearchPullConnection(
