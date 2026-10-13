@@ -1,5 +1,7 @@
 package com.d9tilov.android.incomeexpense.navigation
 
+import android.view.HapticFeedbackConstants
+import androidx.compose.ui.platform.LocalView
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -27,10 +29,13 @@ fun NavGraphBuilder.incomeExpenseScreen(
     onTransactionClick: (TransactionUiModel) -> Unit,
 ) {
     composable(route = route) { entry ->
+        val view = LocalView.current
         val viewModel: IncomeExpenseViewModel = hiltViewModel()
         val categoryId = entry.savedStateHandle.get<Long>(CategoryArgs.CATEGORY_ID_ARGS)
         categoryId?.let { id ->
-            viewModel.addTransaction(id)
+            viewModel.addTransaction(id) {
+                view.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
+            }
             entry.savedStateHandle.remove<Long>(CategoryArgs.CATEGORY_ID_ARGS)
         }
         val currencyCode = entry.savedStateHandle.get<String>(CURRENCY_CODE_ARGS)

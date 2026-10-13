@@ -1,5 +1,6 @@
 package com.d9tilov.android.incomeexpense.ui
 
+import android.view.HapticFeedbackConstants
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
@@ -48,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -82,6 +84,7 @@ fun IncomeExpenseRoute(
 ) {
     val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val view = LocalView.current
     LaunchedEffect(Unit) {
         viewModel.errorMessageFlow
             .collect { message ->
@@ -94,12 +97,18 @@ fun IncomeExpenseRoute(
         uiState = uiState,
         onTransactionClicked = onTransactionClicked,
         onNumberClicked = { viewModel.addNumber(it) },
-        onCategoryClicked = { category -> viewModel.addTransaction(category.id) },
+        onCategoryClicked = { category ->
+            viewModel.addTransaction(category.id) {
+                view.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
+            }
+        },
         onEditModeChanged = { mode -> viewModel.updateMode(mode) },
         onCurrencyClicked = { onCurrencyClicked(uiState.price.currencyCode) },
         onAllCategoryClicked = onAllCategoryClicked,
         onDeleteTransactionConfirmClicked = viewModel::deleteTransaction,
         onScreenTypeClicked = viewModel::onTabClicked,
+        onSearchQueryChanged = viewModel::updateSearchQuery,
+        onSearchClosed = viewModel::onSearchClosed,
     )
 }
 
@@ -114,6 +123,8 @@ fun IncomeExpenseScreen(
     onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
     onScreenTypeClicked: (ScreenType) -> Unit,
+    onSearchQueryChanged: (ScreenType, String) -> Unit = { _, _ -> },
+    onSearchClosed: (ScreenType) -> Unit = {},
 ) {
     val expenseListState = rememberLazyListState()
     val incomeListState = rememberLazyListState()
@@ -151,6 +162,8 @@ fun IncomeExpenseScreen(
             onTransactionClicked = onTransactionClicked,
             onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked,
             onScreenTypeClicked = onScreenTypeClicked,
+            onSearchQueryChanged = onSearchQueryChanged,
+            onSearchClosed = onSearchClosed,
         )
     }
 }
@@ -198,7 +211,6 @@ fun AnimatedFloatingActionButton(
 }
 
 @Composable
-@Suppress("CognitiveComplexMethod")
 fun HomeTabs(
     expenseListState: LazyListState,
     incomeListState: LazyListState,
@@ -213,43 +225,11 @@ fun HomeTabs(
     onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
     onScreenTypeClicked: (ScreenType) -> Unit,
+    onSearchQueryChanged: (ScreenType, String) -> Unit = { _, _ -> },
+    onSearchClosed: (ScreenType) -> Unit = {},
 ) {
-    val coroutineScope = rememberCoroutineScope()
     Column(modifier = modifier.fillMaxSize()) {
-        PrimaryTabRow(
-            selectedTabIndex = pagerState.currentPage,
-            modifier = Modifier.fillMaxWidth(),
-            containerColor = MaterialTheme.colorScheme.background,
-            indicator = {
-                HomeTabIndicator(
-                    Modifier.tabIndicatorOffset(pagerState.currentPage),
-                )
-            },
-        ) {
-            screenTypes.forEachIndexed { index, type ->
-                Tab(
-                    selected = pagerState.currentPage == index,
-                    onClick = {
-                        val screenType = index.toScreenType()
-                        onScreenTypeClicked(screenType)
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(index)
-                        }
-                    },
-                    text = {
-                        Text(
-                            text =
-                                when (type) {
-                                    EXPENSE -> stringResource(R.string.tab_expense)
-                                    INCOME -> stringResource(R.string.tab_income)
-                                },
-                        )
-                    },
-                    selectedContentColor = MaterialTheme.colorScheme.primary,
-                    unselectedContentColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-                )
-            }
-        }
+        HomeTabRow(pagerState, onScreenTypeClicked)
         if (uiState.mode == EditMode.KEYBOARD) {
             MainPriceInput(
                 price = uiState.price,
@@ -265,70 +245,17 @@ fun HomeTabs(
         }
         HorizontalPager(state = pagerState, modifier = Modifier.weight(1f)) { tabIndex: Int ->
             if (uiState.mode == EditMode.KEYBOARD) {
-                Column(Modifier.fillMaxSize()) {
-                    val screenType = tabIndex.toScreenType()
-                    Box(
-                        modifier = Modifier.weight(1f).fillMaxWidth(),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        val infoModifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .verticalScroll(rememberScrollState())
-                                .padding(
-                                    horizontal =
-                                        dimensionResource(
-                                            com.d9tilov.android.designsystem.R.dimen.padding_large,
-                                        ),
-                                )
-                        if (screenType == INCOME) {
-                            uiState.incomeUiState.incomeInfo?.let { info ->
-                                IncomeInfoBlock(infoModifier, info)
-                            }
-                        } else {
-                            uiState.expenseUiState.expenseInfo?.let { info ->
-                                ExpenseInfoBlock(infoModifier, info)
-                            }
-                        }
-                    }
-
-                    CategoryListLayout(
-                        categoryList =
-                            if (screenType == INCOME) {
-                                uiState.incomeUiState.incomeCategoryList
-                            } else {
-                                uiState.expenseUiState.expenseCategoryList
-                            },
-                        modifier = Modifier.fillMaxWidth(),
-                        onItemClicked = { category -> onCategoryClicked(category) },
-                        onAllCategoryClicked = {
-                            onAllCategoryClicked(
-                                screenType,
-                                if (uiState.price.value == ZERO) {
-                                    CategoryDestination.MAIN_SCREEN
-                                } else {
-                                    CategoryDestination.MAIN_WITH_SUM_SCREEN
-                                },
-                            )
-                        },
-                    )
-                }
+                HomeKeyboardPage(uiState, tabIndex.toScreenType(), onCategoryClicked, onAllCategoryClicked)
             } else {
-                TransactionListLayout(
-                    if (tabIndex.toScreenType() == INCOME) {
-                        incomeListState
-                    } else {
-                        expenseListState
-                    },
-                    Modifier.fillMaxSize(),
-                    if (tabIndex.toScreenType() == INCOME) {
-                        uiState.incomeUiState.incomeTransactions
-                    } else {
-                        uiState.expenseUiState.expenseTransactions
-                    },
-                    tabIndex.toScreenType(),
+                val screenType = tabIndex.toScreenType()
+                HomeTransactionPage(
+                    uiState = uiState,
+                    screenType = screenType,
+                    listState = if (screenType == INCOME) incomeListState else expenseListState,
                     onTransactionClicked = onTransactionClicked,
                     onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked,
+                    onSearchQueryChanged = { query -> onSearchQueryChanged(screenType, query) },
+                    onSearchClosed = { onSearchClosed(screenType) },
                 )
             }
         }
@@ -339,6 +266,125 @@ fun HomeTabs(
                 onKeyboardClicked = onKeyboardClicked,
             )
         }
+    }
+}
+
+@Composable
+private fun HomeTransactionPage(
+    uiState: IncomeExpenseUiState,
+    screenType: ScreenType,
+    listState: LazyListState,
+    onTransactionClicked: (TransactionUiModel) -> Unit,
+    onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
+    onSearchQueryChanged: (String) -> Unit,
+    onSearchClosed: () -> Unit,
+) {
+    val transactions =
+        when (screenType) {
+            INCOME -> uiState.incomeUiState.incomeTransactions
+            EXPENSE -> uiState.expenseUiState.expenseTransactions
+        }
+    val query =
+        when (screenType) {
+            INCOME -> uiState.incomeUiState.searchQuery
+            EXPENSE -> uiState.expenseUiState.searchQuery
+        }
+    TransactionListLayout(
+        listState = listState,
+        modifier = Modifier.fillMaxSize(),
+        transactions = transactions,
+        screenType = screenType,
+        onTransactionClicked = onTransactionClicked,
+        onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked,
+        searchQuery = query,
+        onSearchQueryChanged = onSearchQueryChanged,
+        onSearchClosed = onSearchClosed,
+    )
+}
+
+@Composable
+private fun HomeTabRow(
+    pagerState: PagerState,
+    onScreenTypeClicked: (ScreenType) -> Unit,
+) {
+    val coroutineScope = rememberCoroutineScope()
+    PrimaryTabRow(
+        selectedTabIndex = pagerState.currentPage,
+        modifier = Modifier.fillMaxWidth(),
+        containerColor = MaterialTheme.colorScheme.background,
+        indicator = {
+            HomeTabIndicator(
+                Modifier.tabIndicatorOffset(pagerState.currentPage),
+            )
+        },
+    ) {
+        screenTypes.forEachIndexed { index, type ->
+            Tab(
+                selected = pagerState.currentPage == index,
+                onClick = {
+                    val screenType = index.toScreenType()
+                    onScreenTypeClicked(screenType)
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(index)
+                    }
+                },
+                text = {
+                    Text(
+                        text =
+                            when (type) {
+                                EXPENSE -> stringResource(R.string.tab_expense)
+                                INCOME -> stringResource(R.string.tab_income)
+                            },
+                    )
+                },
+                selectedContentColor = MaterialTheme.colorScheme.primary,
+                unselectedContentColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+            )
+        }
+    }
+}
+
+@Composable
+private fun HomeKeyboardPage(
+    uiState: IncomeExpenseUiState,
+    screenType: ScreenType,
+    onCategoryClicked: (Category) -> Unit,
+    onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
+) {
+    Column(Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier.weight(1f).fillMaxWidth(),
+            contentAlignment = Alignment.Center,
+        ) {
+            val infoModifier =
+                Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large))
+            when (screenType) {
+                INCOME -> uiState.incomeUiState.incomeInfo?.let { info -> IncomeInfoBlock(infoModifier, info) }
+                EXPENSE -> uiState.expenseUiState.expenseInfo?.let { info -> ExpenseInfoBlock(infoModifier, info) }
+            }
+        }
+        CategoryListLayout(
+            categoryList =
+                when (screenType) {
+                    INCOME -> uiState.incomeUiState.incomeCategoryList
+                    EXPENSE -> uiState.expenseUiState.expenseCategoryList
+                },
+            modifier = Modifier.fillMaxWidth(),
+            onItemClicked = onCategoryClicked,
+            onAllCategoryClicked = {
+                onAllCategoryClicked(
+                    screenType,
+                    if (uiState.price.value == ZERO) {
+                        CategoryDestination.MAIN_SCREEN
+                    } else {
+                        CategoryDestination.MAIN_WITH_SUM_SCREEN
+                    },
+                )
+            },
+        )
     }
 }
 

@@ -29,6 +29,7 @@ import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.incomeexpense.ui.R
+import com.d9tilov.android.incomeexpense.ui.searchTransactions
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
@@ -53,6 +54,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.math.BigDecimal
 import javax.inject.Inject
@@ -74,6 +76,7 @@ data class ExpenseUiState(
     val expenseCategoryList: List<Category> = emptyList(),
     val expenseTransactions: Flow<PagingData<BaseTransaction>> = flowOf(),
     val expenseInfo: ExpenseInfo? = null,
+    val searchQuery: String = "",
 ) {
     companion object {
         val EMPTY = ExpenseUiState()
@@ -85,6 +88,7 @@ data class IncomeUiState(
     val incomeCategoryList: List<Category> = emptyList(),
     val incomeTransactions: Flow<PagingData<BaseTransaction>> = flowOf(),
     val incomeInfo: IncomeInfo? = null,
+    val searchQuery: String = "",
 ) {
     companion object {
         val EMPTY = IncomeUiState()
@@ -188,15 +192,7 @@ class IncomeExpenseViewModel
                             expenseUiState =
                                 state.expenseUiState.copy(
                                     expenseTransactions =
-                                        mapWithStickyHeaders(
-                                            transactionInteractor
-                                                .getTransactionsByType(TransactionType.EXPENSE)
-                                                .map { tr: PagingData<Transaction> ->
-                                                    tr.map { a: Transaction ->
-                                                        a.toUiModel()
-                                                    }
-                                                },
-                                        ).cachedIn(viewModelScope),
+                                        searchableTransactions(TransactionType.EXPENSE),
                                 ),
                         )
                     }
@@ -207,15 +203,7 @@ class IncomeExpenseViewModel
                             incomeUiState =
                                 state.incomeUiState.copy(
                                     incomeTransactions =
-                                        mapWithStickyHeaders(
-                                            transactionInteractor
-                                                .getTransactionsByType(TransactionType.INCOME)
-                                                .map { tr: PagingData<Transaction> ->
-                                                    tr.map { a: Transaction ->
-                                                        a.toUiModel()
-                                                    }
-                                                },
-                                        ).cachedIn(viewModelScope),
+                                        searchableTransactions(TransactionType.INCOME),
                                 ),
                         )
                     }
@@ -292,11 +280,10 @@ class IncomeExpenseViewModel
                             null
                         }
                     }.collect { info ->
-                        val incomeInfo = uiState.value.incomeUiState
                         uiState.update { state ->
                             state.copy(
                                 incomeUiState =
-                                    incomeInfo.copy(
+                                    state.incomeUiState.copy(
                                         incomeInfo = info,
                                     ),
                             )
@@ -313,6 +300,40 @@ class IncomeExpenseViewModel
                 .map { list -> list.sortedByDescending { it.usageCount } }
                 .flowOn(Dispatchers.Default)
 
+        private fun searchableTransactions(type: TransactionType): Flow<PagingData<BaseTransaction>> {
+            val transactions =
+                transactionInteractor
+                    .getTransactionsByType(type)
+                    .map { data -> data.map { transaction -> transaction.toUiModel() } }
+                    .cachedIn(viewModelScope)
+            val queries =
+                uiState
+                    .map { state ->
+                        when (type) {
+                            TransactionType.EXPENSE -> state.expenseUiState.searchQuery
+                            TransactionType.INCOME -> state.incomeUiState.searchQuery
+                        }
+                    }
+            val filteredTransactions = transactions.searchTransactions(queries)
+            return mapWithStickyHeaders(filteredTransactions).cachedIn(viewModelScope)
+        }
+
+        fun updateSearchQuery(
+            screenType: ScreenType,
+            query: String,
+        ) {
+            uiState.update { state ->
+                when (screenType) {
+                    ScreenType.EXPENSE -> state.copy(expenseUiState = state.expenseUiState.copy(searchQuery = query))
+                    ScreenType.INCOME -> state.copy(incomeUiState = state.incomeUiState.copy(searchQuery = query))
+                }
+            }
+        }
+
+        fun onSearchClosed(screenType: ScreenType) {
+            updateSearchQuery(screenType, "")
+        }
+
         fun addNumber(btn: KeyPress) {
             uiState.update { state ->
                 val newPriceStr = MainPriceFieldParser.parse(state.price.value, btn)
@@ -321,7 +342,10 @@ class IncomeExpenseViewModel
             }
         }
 
-        fun addTransaction(categoryId: Long) {
+        fun addTransaction(
+            categoryId: Long,
+            onAdded: () -> Unit,
+        ) {
             if (uiState.value.price.value
                     .toBigDecimal()
                     .signum() == 0
@@ -346,6 +370,7 @@ class IncomeExpenseViewModel
                             locationData = location,
                         ),
                     )
+                    withContext(Dispatchers.Main) { onAdded() }
                 }
             }
             uiState.update { state ->
