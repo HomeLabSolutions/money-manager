@@ -4,9 +4,12 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -24,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -40,7 +44,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Velocity
 import com.d9tilov.android.designsystem.MoneyManagerIcons
+import kotlinx.coroutines.flow.dropWhile
+import kotlinx.coroutines.flow.first
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun TransactionSearchLayout(
     query: String,
@@ -56,6 +63,15 @@ internal fun TransactionSearchLayout(
         focusManager.clearFocus()
         onSearchClosed()
         searchVisible = false
+    }
+    val keyboardVisible by rememberUpdatedState(WindowInsets.isImeVisible)
+    LaunchedEffect(searchVisible) {
+        if (searchVisible) {
+            snapshotFlow { keyboardVisible }
+                .dropWhile { visible -> !visible }
+                .first { visible -> !visible }
+            closeSearch()
+        }
     }
     val connection =
         remember(threshold) {
