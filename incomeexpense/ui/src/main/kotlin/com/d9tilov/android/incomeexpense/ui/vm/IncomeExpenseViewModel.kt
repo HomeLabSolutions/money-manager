@@ -54,6 +54,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.math.BigDecimal
 import javax.inject.Inject
@@ -341,7 +342,10 @@ class IncomeExpenseViewModel
             }
         }
 
-        fun addTransaction(categoryId: Long) {
+        fun addTransaction(
+            categoryId: Long,
+            onAdded: () -> Unit,
+        ) {
             if (uiState.value.price.value
                     .toBigDecimal()
                     .signum() == 0
@@ -366,6 +370,7 @@ class IncomeExpenseViewModel
                             locationData = location,
                         ),
                     )
+                    withContext(Dispatchers.Main) { onAdded() }
                 }
             }
             uiState.update { state ->

@@ -1,5 +1,6 @@
 package com.d9tilov.android.incomeexpense.ui
 
+import android.view.HapticFeedbackConstants
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
@@ -48,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -82,6 +84,7 @@ fun IncomeExpenseRoute(
 ) {
     val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val view = LocalView.current
     LaunchedEffect(Unit) {
         viewModel.errorMessageFlow
             .collect { message ->
@@ -94,7 +97,11 @@ fun IncomeExpenseRoute(
         uiState = uiState,
         onTransactionClicked = onTransactionClicked,
         onNumberClicked = { viewModel.addNumber(it) },
-        onCategoryClicked = { category -> viewModel.addTransaction(category.id) },
+        onCategoryClicked = { category ->
+            viewModel.addTransaction(category.id) {
+                view.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
+            }
+        },
         onEditModeChanged = { mode -> viewModel.updateMode(mode) },
         onCurrencyClicked = { onCurrencyClicked(uiState.price.currencyCode) },
         onAllCategoryClicked = onAllCategoryClicked,
