@@ -7,10 +7,18 @@ import OpenAI from 'openai';
 import {defaultPrompt} from './defaultPrompt.js';
 import {validateInsightRequest} from './insightRequest.js';
 import {validateInsightResponse} from './insightResponse.js';
+import {createNearbyPlacesHandler} from './nearbyPlaces.js';
 
 initializeApp();
 
 const openAiKey = defineSecret('OPENAI_API_KEY');
+const geoapifyKey = defineSecret('GEOAPIFY_API_KEY');
+
+export const getNearbyPlaces = onCall(
+  {region: 'us-central1', timeoutSeconds: 15, maxInstances: 2, secrets: [geoapifyKey]},
+  createNearbyPlacesHandler(() => geoapifyKey.value()),
+);
+
 async function loadPrompt() {
   try {
     const template = await getRemoteConfig().getServerTemplate({

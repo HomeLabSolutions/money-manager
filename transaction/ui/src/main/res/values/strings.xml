@@ -8,4 +8,20 @@
     <string name="transaction_edit_sum_title">Amount</string>
     <string name="transaction_invalid_amount">Please, enter the correct amount</string>
     <string name="transaction_location_title">Location</string>
+    <string name="transaction_place_title">Place</string>
+    <string name="transaction_place_question">Did you spend here?</string>
+    <string name="transaction_place_yes">Yes</string>
+    <string name="transaction_place_skip">Skip</string>
+    <string name="transaction_place_edit">Edit</string>
+    <string name="transaction_place_name">Place name</string>
+    <string name="transaction_place_custom_hint">Choose a nearby place or type your own name.</string>
+    <string name="transaction_place_loading">Finding places within 100 m…</string>
+    <string name="transaction_place_empty">No places found within 100 m. You can enter a name.</string>
+    <string name="transaction_place_unavailable">Could not load nearby places. You can enter a name.</string>
+    <string name="transaction_place_no_location">No saved location. You can enter a name.</string>
+    <string name="transaction_place_skipped">No place selected</string>
+    <string name="transaction_place_retry">Retry</string>
+    <string name="transaction_place_distance">%1$d m away</string>
+    <string name="transaction_place_geoapify" translatable="false">Powered by Geoapify</string>
+    <string name="transaction_place_osm" translatable="false">© OpenStreetMap contributors</string>
 </resources>

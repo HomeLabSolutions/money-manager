@@ -23,4 +23,5 @@ data class TransactionDataModel(
     val inStatistics: Boolean,
     val location: LocationData,
     val photoUri: String? = null,
+    val placeName: String? = null,
 )
