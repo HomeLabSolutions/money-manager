@@ -49,7 +49,9 @@ class DatabaseBackupStore @Inject constructor(
         backup: SQLiteDatabase,
         uid: String,
     ) {
-        check(backup.version == AppDatabase.VERSION_NUMBER) { "Backup database version is not supported" }
+        check(
+            backup.version in MIN_BACKUP_VERSION..AppDatabase.VERSION_NUMBER,
+        ) { "Backup database version is not supported" }
         check(backup.isDatabaseIntegrityOk) { "Backup database is corrupted" }
         backup.rawQuery("PRAGMA foreign_key_check", null).use { cursor ->
             check(!cursor.moveToFirst()) { "Backup database contains broken references" }
@@ -74,4 +76,8 @@ class DatabaseBackupStore @Inject constructor(
                     while (cursor.moveToNext()) add(cursor.getString(0))
                 }
             }
+
+    private companion object {
+        const val MIN_BACKUP_VERSION = 2
+    }
 }

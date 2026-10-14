@@ -5,6 +5,9 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 
 internal object DatabaseBackupSchemaValidator {
+    private const val LEGACY_VERSION = 2
+    private const val LEGACY_IDENTITY_HASH = "80cb2cef309ed61a8273eb7ac3ff8798"
+
     fun validate(
         source: SQLiteDatabase,
         destination: SupportSQLiteDatabase,
@@ -12,9 +15,20 @@ internal object DatabaseBackupSchemaValidator {
     ) {
         val sourceQuery: (String) -> Cursor = { source.rawQuery(it, null) }
         val destinationQuery: (String) -> Cursor = { destination.query(it) }
-        check(identityHash(sourceQuery) == identityHash(destinationQuery)) { "Backup Room schema does not match" }
+        val legacyBackup = source.version == LEGACY_VERSION
+        val expectedHash = if (legacyBackup) LEGACY_IDENTITY_HASH else identityHash(destinationQuery)
+        check(identityHash(sourceQuery) == expectedHash) { "Backup Room schema does not match" }
         tables.forEach { table ->
-            check(tableSchema(sourceQuery, table) == tableSchema(destinationQuery, table)) {
+            val destinationSchema = tableSchema(destinationQuery, table)
+            val expectedSchema =
+                if (legacyBackup && table == "transactions") {
+                    destinationSchema.copy(
+                        columns = destinationSchema.columns.filterNot { it.name == "placeName" }.toSet(),
+                    )
+                } else {
+                    destinationSchema
+                }
+            check(tableSchema(sourceQuery, table) == expectedSchema) {
                 "Backup table schema does not match: $table"
             }
         }

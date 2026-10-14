@@ -14,3 +14,11 @@ The function requires Firebase Authentication. It uses the OpenAI Responses API 
 The API key is available only to this function. Do not place it in Remote Config, Android resources, or the repository. Before a production release, configure Firebase App Check and a usage limit for the OpenAI project to control abuse and spending. Update the Play Data safety form and privacy policy to reflect the data transfer.
 
 Run `npm ci && npm test` in this directory to check the request contract locally. An end-to-end test needs a configured Firebase project and OpenAI key.
+
+## Nearby expense places
+
+`getNearbyPlaces` is a separate authenticated callable function in `us-central1`. It receives the saved expense coordinates and a language code, and searches named catering and retail places within 100 meters using Geoapify. It returns up to 20 places ordered by distance. Coordinates are sent to Geoapify only when editing an expense; the app does not request a new location for this feature. Users can skip the suggestion, select another result, or enter their own name. The name is stored locally when the transaction is saved. A blank name records a skipped suggestion; a null name means no decision has been made.
+
+Set the key with `npx --yes firebase-tools functions:secrets:set GEOAPIFY_API_KEY --project money-manager-679a2`. The key is stored in Cloud Secret Manager, like `OPENAI_API_KEY`, and is bound only to `getNearbyPlaces`. It is not exposed through Remote Config or bundled in Android. Deploy with `npx --yes firebase-tools deploy --only functions:getNearbyPlaces --project money-manager-679a2` after adding the secret.
+
+The Geoapify free quota covers Geoapify API usage; Firebase hosting and function execution retain their own billing terms. Geoapify and OpenStreetMap attribution is shown alongside service results in Android. Update the privacy disclosure to include transfer of saved transaction coordinates to Firebase and Geoapify when this feature is released.

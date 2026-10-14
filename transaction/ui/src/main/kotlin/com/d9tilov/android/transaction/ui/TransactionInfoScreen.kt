@@ -67,6 +67,7 @@ import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.model.TransactionInfoMode
 import com.d9tilov.android.transaction.ui.vm.TransactionInfoUiState
 import com.d9tilov.android.transaction.ui.vm.TransactionInfoViewModel
+import com.d9tilov.android.transaction.ui.vm.TransactionPlaceAction
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -115,6 +116,14 @@ fun TransactionInfoRoute(
         onCurrencyClicked = clickCurrency,
         onCategoryClicked = clickCategory,
         onDateClicked = viewModel::updateDate,
+        placeActions =
+            TransactionPlaceActions(
+                onConfirm = { viewModel.onPlaceAction(TransactionPlaceAction.ACCEPT) },
+                onSkip = { viewModel.onPlaceAction(TransactionPlaceAction.SKIP) },
+                onEdit = { viewModel.onPlaceAction(TransactionPlaceAction.EDIT) },
+                onNameChanged = viewModel::updatePlaceName,
+                onRetry = { viewModel.onPlaceAction(TransactionPlaceAction.EDIT) },
+            ),
     )
 }
 
@@ -130,6 +139,7 @@ fun TransactionInfoScreen(
     onCategoryClicked: (TransactionType, CategoryDestination) -> Unit,
     onDateClicked: (Long) -> Unit,
     onSaveClicked: () -> Unit,
+    placeActions: TransactionPlaceActions = TransactionPlaceActions(),
 ) {
     val mode = uiState.mode
     val context = LocalContext.current
@@ -282,6 +292,15 @@ fun TransactionInfoScreen(
                     readOnly = mode == TransactionInfoMode.VIEW,
                 )
 
+                TransactionPlaceSection(
+                    uiState = uiState,
+                    actions = placeActions,
+                    modifier =
+                        Modifier.padding(
+                            horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
+                            vertical = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small),
+                        ),
+                )
                 if (uiState.transaction.locationData != LocationData.EMPTY) {
                     TransactionLocationMap(
                         locationData = uiState.transaction.locationData,

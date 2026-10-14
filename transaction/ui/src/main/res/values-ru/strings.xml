@@ -8,4 +8,18 @@
     <string name="transaction_edit_sum_title">Сумма</string>
     <string name="transaction_invalid_amount">Пожалуйста, введите корректную сумму</string>
     <string name="transaction_location_title">Геопозиция</string>
+    <string name="transaction_place_title">Место</string>
+    <string name="transaction_place_question">Вы потратили здесь?</string>
+    <string name="transaction_place_yes">Да</string>
+    <string name="transaction_place_skip">Пропустить</string>
+    <string name="transaction_place_edit">Изменить</string>
+    <string name="transaction_place_name">Название места</string>
+    <string name="transaction_place_custom_hint">Выберите ближайшее место или введите своё название.</string>
+    <string name="transaction_place_loading">Ищем места в радиусе 100 м…</string>
+    <string name="transaction_place_empty">В радиусе 100 м ничего не найдено. Можно ввести название.</string>
+    <string name="transaction_place_unavailable">Не удалось загрузить места. Можно ввести название.</string>
+    <string name="transaction_place_no_location">Геопозиция не сохранена. Можно ввести название.</string>
+    <string name="transaction_place_skipped">Место не выбрано</string>
+    <string name="transaction_place_retry">Повторить</string>
+    <string name="transaction_place_distance">На расстоянии %1$d м</string>
 </resources>
