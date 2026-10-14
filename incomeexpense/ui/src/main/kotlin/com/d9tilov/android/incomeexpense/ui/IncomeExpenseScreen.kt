@@ -235,7 +235,12 @@ fun HomeTabs(
     onSearchOpened: (ScreenType) -> Unit = {},
     onSearchClosed: (ScreenType) -> Unit = {},
 ) {
-    HomeTransactionSearchBackHandler(pagerState, uiState, onSearchClosed)
+    val focusManager = LocalFocusManager.current
+    val closeSearch: (ScreenType) -> Unit = { screenType ->
+        focusManager.clearFocus()
+        onSearchClosed(screenType)
+    }
+    HomeTransactionSearchBackHandler(pagerState, uiState, closeSearch)
     Column(modifier = modifier.fillMaxSize()) {
         HomeTabRow(pagerState, onScreenTypeClicked)
         if (uiState.mode == EditMode.KEYBOARD) {
@@ -264,7 +269,7 @@ fun HomeTabs(
                     onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked,
                     onSearchQueryChanged = { query -> onSearchQueryChanged(screenType, query) },
                     onSearchOpened = { onSearchOpened(screenType) },
-                    onSearchClosed = { onSearchClosed(screenType) },
+                    onSearchClosed = { closeSearch(screenType) },
                 )
             }
         }
@@ -290,9 +295,7 @@ private fun HomeTransactionSearchBackHandler(
             EXPENSE -> uiState.expenseUiState.searchState
             INCOME -> uiState.incomeUiState.searchState
         }
-    val focusManager = LocalFocusManager.current
     BackHandler(enabled = uiState.mode == EditMode.LIST && searchState.status == SearchStatus.OPEN) {
-        focusManager.clearFocus()
         onSearchClosed(screenType)
     }
 }

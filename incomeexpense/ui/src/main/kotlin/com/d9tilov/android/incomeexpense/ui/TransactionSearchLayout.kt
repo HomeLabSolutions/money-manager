@@ -51,12 +51,7 @@ internal fun TransactionSearchLayout(
 ) {
     val searchVisible by rememberUpdatedState(searchState.status == SearchStatus.OPEN)
     val revealSearch by rememberUpdatedState(onSearchOpened)
-    val focusManager = LocalFocusManager.current
     val threshold = with(LocalDensity.current) { dimensionResource(R.dimen.transaction_search_pull_threshold).toPx() }
-    val closeSearch by rememberUpdatedState {
-        focusManager.clearFocus()
-        onSearchClosed()
-    }
     val connection =
         remember(threshold) {
             SearchPullConnection(
@@ -70,7 +65,7 @@ internal fun TransactionSearchLayout(
             TransactionSearchField(
                 query = searchState.searchQuery,
                 onQueryChanged = onQueryChanged,
-                onClose = closeSearch,
+                onClose = onSearchClosed,
             )
         }
         content()
