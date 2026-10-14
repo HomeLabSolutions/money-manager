@@ -31,7 +31,7 @@ fun StatisticsDetailsRoute(
     onBackClicked: () -> Unit,
     onTransactionClicked: (Long) -> Unit,
 ) {
-    val uiState: StatisticsDetailsUiState by viewModel.uiState.collectAsState(StatisticsDetailsUiState())
+    val uiState: StatisticsDetailsUiState by viewModel.uiState.collectAsState()
     StatisticsDetailsScreen(
         state = uiState,
         onBackClicked = onBackClicked,

@@ -33,6 +33,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -102,7 +103,7 @@ fun StatisticsRoute(
     viewModel: StatisticsViewModel = hiltViewModel(),
     onTransactionClicked: (TransactionDetailsChartModel, LocalDateTime, LocalDateTime) -> Unit,
 ) {
-    val uiState: StatisticsUiState by viewModel.uiState.collectAsState(StatisticsUiState())
+    val uiState: StatisticsUiState by viewModel.uiState.collectAsState()
     Scaffold { paddingValues ->
         StatisticsScreen(
             modifier = Modifier.padding(paddingValues),
@@ -222,7 +223,7 @@ private fun CollapsingStatisticsContent(
 ) {
     BoxWithConstraints(modifier.fillMaxSize()) {
         val chartHeightPx = constraints.maxHeight * CHART_HEIGHT_FRACTION
-        var chartOffset by remember(chartHeightPx) { mutableFloatStateOf(0f) }
+        var chartOffset by rememberSaveable(chartHeightPx) { mutableFloatStateOf(0f) }
         val scrollConnection =
             remember(chartHeightPx) {
                 object : NestedScrollConnection {

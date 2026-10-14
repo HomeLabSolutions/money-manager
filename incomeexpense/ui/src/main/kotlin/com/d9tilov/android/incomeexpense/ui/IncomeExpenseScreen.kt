@@ -2,6 +2,7 @@ package com.d9tilov.android.incomeexpense.ui
 
 import android.view.HapticFeedbackConstants
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
@@ -49,6 +50,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -70,6 +72,7 @@ import com.d9tilov.android.incomeexpense.ui.vm.IncomeExpenseViewModel
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.EXPENSE
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.INCOME
+import com.d9tilov.android.incomeexpense.ui.vm.SearchStatus
 import com.d9tilov.android.incomeexpense.ui.vm.screenTypes
 import com.d9tilov.android.incomeexpense.ui.vm.toScreenType
 import com.d9tilov.android.transaction.ui.model.TransactionUiModel
@@ -108,6 +111,7 @@ fun IncomeExpenseRoute(
         onDeleteTransactionConfirmClicked = viewModel::deleteTransaction,
         onScreenTypeClicked = viewModel::onTabClicked,
         onSearchQueryChanged = viewModel::updateSearchQuery,
+        onSearchOpened = viewModel::onSearchOpened,
         onSearchClosed = viewModel::onSearchClosed,
     )
 }
@@ -124,6 +128,7 @@ fun IncomeExpenseScreen(
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
     onScreenTypeClicked: (ScreenType) -> Unit,
     onSearchQueryChanged: (ScreenType, String) -> Unit = { _, _ -> },
+    onSearchOpened: (ScreenType) -> Unit = {},
     onSearchClosed: (ScreenType) -> Unit = {},
 ) {
     val expenseListState = rememberLazyListState()
@@ -163,6 +168,7 @@ fun IncomeExpenseScreen(
             onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked,
             onScreenTypeClicked = onScreenTypeClicked,
             onSearchQueryChanged = onSearchQueryChanged,
+            onSearchOpened = onSearchOpened,
             onSearchClosed = onSearchClosed,
         )
     }
@@ -226,8 +232,15 @@ fun HomeTabs(
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
     onScreenTypeClicked: (ScreenType) -> Unit,
     onSearchQueryChanged: (ScreenType, String) -> Unit = { _, _ -> },
+    onSearchOpened: (ScreenType) -> Unit = {},
     onSearchClosed: (ScreenType) -> Unit = {},
 ) {
+    val focusManager = LocalFocusManager.current
+    val closeSearch: (ScreenType) -> Unit = { screenType ->
+        focusManager.clearFocus()
+        onSearchClosed(screenType)
+    }
+    HomeTransactionSearchBackHandler(pagerState, uiState, closeSearch)
     Column(modifier = modifier.fillMaxSize()) {
         HomeTabRow(pagerState, onScreenTypeClicked)
         if (uiState.mode == EditMode.KEYBOARD) {
@@ -255,7 +268,8 @@ fun HomeTabs(
                     onTransactionClicked = onTransactionClicked,
                     onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked,
                     onSearchQueryChanged = { query -> onSearchQueryChanged(screenType, query) },
-                    onSearchClosed = { onSearchClosed(screenType) },
+                    onSearchOpened = { onSearchOpened(screenType) },
+                    onSearchClosed = { closeSearch(screenType) },
                 )
             }
         }
@@ -270,6 +284,23 @@ fun HomeTabs(
 }
 
 @Composable
+private fun HomeTransactionSearchBackHandler(
+    pagerState: PagerState,
+    uiState: IncomeExpenseUiState,
+    onSearchClosed: (ScreenType) -> Unit,
+) {
+    val screenType = pagerState.currentPage.toScreenType()
+    val searchState =
+        when (screenType) {
+            EXPENSE -> uiState.expenseUiState.searchState
+            INCOME -> uiState.incomeUiState.searchState
+        }
+    BackHandler(enabled = uiState.mode == EditMode.LIST && searchState.status == SearchStatus.OPEN) {
+        onSearchClosed(screenType)
+    }
+}
+
+@Composable
 private fun HomeTransactionPage(
     uiState: IncomeExpenseUiState,
     screenType: ScreenType,
@@ -277,6 +308,7 @@ private fun HomeTransactionPage(
     onTransactionClicked: (TransactionUiModel) -> Unit,
     onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
     onSearchQueryChanged: (String) -> Unit,
+    onSearchOpened: () -> Unit,
     onSearchClosed: () -> Unit,
 ) {
     val transactions =
@@ -284,10 +316,10 @@ private fun HomeTransactionPage(
             INCOME -> uiState.incomeUiState.incomeTransactions
             EXPENSE -> uiState.expenseUiState.expenseTransactions
         }
-    val query =
+    val searchState =
         when (screenType) {
-            INCOME -> uiState.incomeUiState.searchQuery
-            EXPENSE -> uiState.expenseUiState.searchQuery
+            INCOME -> uiState.incomeUiState.searchState
+            EXPENSE -> uiState.expenseUiState.searchState
         }
     TransactionListLayout(
         listState = listState,
@@ -296,8 +328,9 @@ private fun HomeTransactionPage(
         screenType = screenType,
         onTransactionClicked = onTransactionClicked,
         onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked,
-        searchQuery = query,
+        searchState = searchState,
         onSearchQueryChanged = onSearchQueryChanged,
+        onSearchOpened = onSearchOpened,
         onSearchClosed = onSearchClosed,
     )
 }

@@ -92,7 +92,7 @@ class TransactionSearchQueryTest {
         assertEquals((1..10).toList(), search("1234"))
         database.createStatement().use { it.execute("UPDATE categories SET name = 'Other'") }
         assertEquals(listOf(49, 50), search("1234"))
-        assertEquals(listOf(50), search("001234.500"))
+        assertTrue(search("001234.500").isEmpty())
         assertEquals((1..10).toList(), search("10"))
     }
 
@@ -153,7 +153,7 @@ class TransactionSearchQueryTest {
                     5
                 } else {
                     statement.setString(5, searchQuery.textPattern)
-                    statement.setString(6, searchQuery.amountQuery)
+                    statement.setString(6, searchQuery.amountQuery?.toPlainString())
                     7
                 }
             statement.setInt(pageParameterIndex, 10)
@@ -172,8 +172,6 @@ class TransactionSearchQueryTest {
                 .replace(',', '.')
                 .filterNot { it.isWhitespace() }
                 .toBigDecimalOrNull()
-                ?.stripTrailingZeros()
-                ?.toPlainString()
         return TransactionSearchQuery(
             amountQuery = amountQuery,
             textPattern = query.trim().map(::globCharacter).joinToString(separator = "", prefix = "*", postfix = "*"),
