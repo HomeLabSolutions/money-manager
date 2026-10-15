@@ -232,7 +232,16 @@ fun DefaultRegularTransactionListPreview() {
                 regularTransactions =
                     List(PREVIEW_TRANSACTION_COUNT) { index ->
                         val id = (index + 1).toLong()
-                        RegularTransaction.EMPTY.copy(id = id, category = mockCategory(id, "Category$id"))
+                        RegularTransaction.EMPTY.copy(
+                            id = id,
+                            category = mockCategory(id, "Category$id"),
+                            description =
+                                if (index % 2 == 0) {
+                                    "Monthly subscription payment with a long description"
+                                } else {
+                                    ""
+                                },
+                        )
                     },
             ),
         onAddClicked = {},

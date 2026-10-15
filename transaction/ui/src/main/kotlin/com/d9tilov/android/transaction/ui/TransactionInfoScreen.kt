@@ -61,7 +61,6 @@ import com.d9tilov.android.designsystem.AutoSizeTextField
 import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.CheckboxWithLabel
 import com.d9tilov.android.designsystem.DescriptionTextField
-import com.d9tilov.android.designsystem.DottedDivider
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.android.transaction.domain.model.Transaction
@@ -256,27 +255,21 @@ fun TransactionInfoScreen(
                 CheckboxWithLabel(
                     modifier =
                         Modifier.padding(
-                            horizontal =
+                            start =
                                 dimensionResource(
                                     id = com.d9tilov.android.designsystem.R.dimen.padding_medium,
                                 ),
-                            vertical =
+                            end =
                                 dimensionResource(
-                                    id = com.d9tilov.android.designsystem.R.dimen.padding_large,
+                                    id = com.d9tilov.android.designsystem.R.dimen.padding_medium,
                                 ),
+                            top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                            bottom = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
                         ),
                     value = uiState.transaction.inStatistics,
                     label = stringResource(id = R.string.transaction_edit_in_statistics),
                     onCheckChanged = { onInStatisticsChanged(it) },
                     enabled = mode == TransactionInfoMode.EDIT,
-                )
-                DottedDivider(
-                    modifier =
-                        Modifier.padding(
-                            start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                            end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                            top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                        ),
                 )
                 DescriptionTextField(
                     modifier =
@@ -418,9 +411,9 @@ fun TransactionLocationMap(
     Text(
         modifier =
             Modifier.padding(
+                top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium),
                 start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
                 end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
             ),
         text = stringResource(id = R.string.transaction_location_title),
         style = MaterialTheme.typography.labelLarge,

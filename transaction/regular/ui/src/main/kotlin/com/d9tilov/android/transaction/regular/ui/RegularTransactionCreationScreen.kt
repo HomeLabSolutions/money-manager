@@ -62,7 +62,6 @@ import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.designsystem.AutoSizeTextField
 import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.DescriptionTextField
-import com.d9tilov.android.designsystem.DottedDivider
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
 import com.d9tilov.android.transaction.regular.ui.vm.DaysInWeek
@@ -203,6 +202,7 @@ fun RegularTransactionCreationScreen(
                             onSumChanged(text)
                         },
                         content = { if (showError) ShowError() },
+                        autoFocus = false,
                     )
                 }
                 RegularCategorySelector(
@@ -216,14 +216,16 @@ fun RegularTransactionCreationScreen(
                             .fillMaxWidth()
                             .clickable { onPushEnabledChanged(!uiState.transaction.pushEnabled) }
                             .padding(
-                                horizontal =
+                                start =
                                     dimensionResource(
                                         id = com.d9tilov.android.designsystem.R.dimen.padding_medium,
                                     ),
-                                vertical =
+                                end =
                                     dimensionResource(
-                                        id = com.d9tilov.android.designsystem.R.dimen.padding_large,
+                                        id = com.d9tilov.android.designsystem.R.dimen.padding_medium,
                                     ),
+                                top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                                bottom = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
                             ),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -242,14 +244,6 @@ fun RegularTransactionCreationScreen(
                     onCurPeriodItemUpdate = onCurPeriodItemUpdate,
                     onWeekDayClicked = onWeekDayClicked,
                     onOpenDayOfMonthDialog = { openDayOfMonthDialog = true },
-                )
-                DottedDivider(
-                    modifier =
-                        Modifier.padding(
-                            start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                            end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                            top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                        ),
                 )
                 DescriptionTextField(
                     modifier =
