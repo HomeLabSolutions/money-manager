@@ -3,7 +3,7 @@ package com.d9tilov.android.transaction.regular.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
@@ -58,9 +58,10 @@ fun RegularTransactionItem(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .height(dimensionResource(id = R.dimen.regular_transaction_item_height))
+                    .heightIn(min = dimensionResource(id = R.dimen.regular_transaction_item_height))
                     .padding(
                         horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+                        vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
                     ),
         ) {
             val (categoryIcon, notificationIcon, details, amount) = createRefs()
@@ -124,10 +125,30 @@ fun RegularTransactionItem(
                     color = Color(ContextCompat.getColor(context, transaction.category.color)),
                     overflow = TextOverflow.Ellipsis,
                 )
+                if (transaction.description.isNotBlank()) {
+                    Text(
+                        modifier =
+                            Modifier.padding(
+                                top =
+                                    dimensionResource(
+                                        id = com.d9tilov.android.designsystem.R.dimen.padding_extra_small,
+                                    ),
+                            ),
+                        text = transaction.description,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.secondary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
                 Text(
+                    modifier =
+                        Modifier.padding(
+                            top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_extra_small),
+                        ),
                     text = transaction.repeatPeriodText(),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.tertiary,
+                    color = MaterialTheme.colorScheme.primary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -181,18 +202,27 @@ private fun weekDayText(day: Int): String =
 @Composable
 fun RegularTransactionItemPreview() {
     MoneyManagerTheme {
-        RegularTransactionItem(
-            onClick = {},
-            transaction =
-                RegularTransaction.EMPTY.copy(
-                    id = 1L,
-                    category =
-                        Category.EMPTY_EXPENSE.copy(
-                            name = "Cafe",
-                            icon = com.d9tilov.android.common.android.R.drawable.ic_category_cafe,
-                            color = android.R.color.holo_blue_light,
+        Column {
+            listOf(
+                "",
+                "Morning coffee",
+                "Morning coffee and breakfast at the cafe near the office",
+            ).forEach { description ->
+                RegularTransactionItem(
+                    onClick = {},
+                    transaction =
+                        RegularTransaction.EMPTY.copy(
+                            id = 1L,
+                            category =
+                                Category.EMPTY_EXPENSE.copy(
+                                    name = "Cafe",
+                                    icon = com.d9tilov.android.common.android.R.drawable.ic_category_cafe,
+                                    color = android.R.color.holo_blue_light,
+                                ),
+                            description = description,
                         ),
-                ),
-        )
+                )
+            }
+        }
     }
 }
