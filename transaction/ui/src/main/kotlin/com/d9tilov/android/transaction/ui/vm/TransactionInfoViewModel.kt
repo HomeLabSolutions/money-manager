@@ -71,50 +71,24 @@ class TransactionInfoViewModel
                             transaction = transaction,
                         )
                     }
-                    if (transaction.placeName == null) loadNearbyPlaces()
+                    loadNearbyPlaces()
                 }
             }
         }
 
         fun updateAmount(amount: String) = _uiState.update { state -> state.copy(amount = amount) }
 
-        fun onPlaceAction(action: TransactionPlaceAction) {
-            when (action) {
-                TransactionPlaceAction.ACCEPT -> confirmSuggestedPlace()
-                TransactionPlaceAction.SKIP -> skipPlace()
-                TransactionPlaceAction.EDIT -> editPlace()
-            }
-        }
-
-        private fun confirmSuggestedPlace() {
-            val suggestedPlace =
-                _uiState.value.placeState.places
-                    .firstOrNull() ?: return
-            updatePlaceName(suggestedPlace.name)
-        }
-
-        private fun skipPlace() {
+        fun updatePlaceName(name: String) {
             if (!canEditPlace()) return
             _uiState.update { state ->
                 state.copy(
-                    transaction = state.transaction.copy(placeName = ""),
-                    placeState = state.placeState.copy(isEditing = false),
+                    transaction = state.transaction.copy(placeName = name),
+                    placeState = state.placeState.copy(nameEdited = true),
                 )
             }
         }
 
-        private fun editPlace() {
-            if (!canEditPlace()) return
-            _uiState.update { state -> state.copy(placeState = state.placeState.copy(isEditing = true)) }
-            loadNearbyPlaces()
-        }
-
-        fun updatePlaceName(name: String) {
-            if (!canEditPlace()) return
-            _uiState.update { state -> state.copy(transaction = state.transaction.copy(placeName = name)) }
-        }
-
-        private fun loadNearbyPlaces() {
+        fun loadNearbyPlaces() {
             if (!canEditPlace()) return
             val state = _uiState.value
             if (state.placeState.status in
@@ -132,7 +106,14 @@ class TransactionInfoViewModel
                 try {
                     val places = nearbyPlacesRepo.getNearbyPlaces(location)
                     _uiState.update {
+                        val name =
+                            if (!it.placeState.nameEdited && it.transaction.placeName.isNullOrBlank()) {
+                                places.firstOrNull()?.name
+                            } else {
+                                it.transaction.placeName
+                            }
                         it.copy(
+                            transaction = it.transaction.copy(placeName = name),
                             placeState = it.placeState.copy(places = places, status = NearbyPlacesStatus.READY),
                         )
                     }

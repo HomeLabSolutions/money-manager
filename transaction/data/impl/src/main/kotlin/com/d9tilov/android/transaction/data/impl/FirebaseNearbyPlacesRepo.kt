@@ -45,5 +45,5 @@ internal fun parseNearbyPlaces(data: Any?): List<NearbyPlace> {
         .take(MAX_NEARBY_PLACES)
 }
 
-private const val MAX_DISTANCE_METERS = 100.0
+private const val MAX_DISTANCE_METERS = 150.0
 private const val MAX_NEARBY_PLACES = 20

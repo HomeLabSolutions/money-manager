@@ -18,7 +18,7 @@ test('fixes radius and limit server-side and uses longitude first for proximity 
   const url = nearbyPlacesUrl(location, 'test-key');
   assert.equal(url.origin, 'https://api.geoapify.com');
   assert.equal(url.pathname, '/v2/places');
-  assert.equal(url.searchParams.get('filter'), 'circle:-0.1,51.5,100');
+  assert.equal(url.searchParams.get('filter'), 'circle:-0.1,51.5,150');
   assert.equal(url.searchParams.get('bias'), 'proximity:-0.1,51.5');
   assert.equal(url.searchParams.get('limit'), '20');
   assert.equal(url.searchParams.get('categories'), 'catering,commercial');
@@ -26,12 +26,12 @@ test('fixes radius and limit server-side and uses longitude first for proximity 
   assert.equal(url.searchParams.get('apiKey'), 'test-key');
 });
 
-test('returns named places in distance order within 100 meters and removes duplicates', () => {
-  const response = parseNearbyPlacesResponse({features: [feature('far', 'Shop', 90),
-    feature('near', ' Cafe ', 10.5), feature('near', 'Cafe', 20), feature('outside', 'Shop', 101),
+test('returns named places in distance order within 150 meters and removes duplicates', () => {
+  const response = parseNearbyPlacesResponse({features: [feature('far', 'Shop', 150),
+    feature('near', ' Cafe ', 10.5), feature('near', 'Cafe', 20), feature('outside', 'Shop', 151),
     feature('empty', ' ', 5), feature('', 'Cafe', 0), feature('invalid', 'Cafe', NaN)]}, location);
   assert.deepEqual(response.places.map((place) => [place.id, place.name, place.distanceMeters]),
-    [['near', 'Cafe', 10.5], ['far', 'Shop', 90]]);
+    [['near', 'Cafe', 10.5], ['far', 'Shop', 150]]);
 });
 
 test('calculates distance when upstream omits it and caps the result at 20', () => {

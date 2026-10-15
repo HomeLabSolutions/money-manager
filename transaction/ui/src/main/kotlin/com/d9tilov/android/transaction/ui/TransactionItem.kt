@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,7 +38,6 @@ import com.d9tilov.android.transaction.ui.model.TransactionUiModel
 import java.math.BigDecimal
 
 @Composable
-@Suppress("DestructuringDeclarationWithTooManyEntries", "CognitiveComplexMethod")
 fun TransactionItem(
     modifier: Modifier,
     transaction: TransactionUiModel,
@@ -50,7 +50,8 @@ fun TransactionItem(
                 .height(dimensionResource(com.d9tilov.android.designsystem.R.dimen.transaction_list_item_height))
                 .padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large)),
     ) {
-        val (idIcon, idTitle, idDescription, idRegularIcon, idInStatisticsIcon, idSum, idDivider, idTime) = createRefs()
+        val (idIcon, idTitle, idDescription, idMetadata, idSum) = createRefs()
+        val idTime = createRef()
         Icon(
             modifier =
                 Modifier
@@ -107,37 +108,14 @@ fun TransactionItem(
                 overflow = TextOverflow.Ellipsis,
             )
         }
-        if (transaction.isRegular) {
-            Icon(
-                modifier =
-                    Modifier
-                        .constrainAs(idRegularIcon) {
-                            top.linkTo(idIcon.top)
-                            end.linkTo(idIcon.start)
-                        }.size(
-                            dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.transaction_meta_icon_size),
-                        ),
-                imageVector = MoneyManagerIcons.Repeat,
-                contentDescription = "RegularTransaction",
-                tint = MaterialTheme.colorScheme.tertiary,
-            )
-        }
-        if (!transaction.inStatistics) {
-            Icon(
-                modifier =
-                    Modifier
-                        .padding(top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_extra_small))
-                        .constrainAs(idInStatisticsIcon) {
-                            top.linkTo(idRegularIcon.bottom)
-                            end.linkTo(idIcon.start)
-                        }.size(
-                            dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.transaction_meta_icon_size),
-                        ),
-                imageVector = ImageVector.vectorResource(MoneyManagerIcons.InStatisticsTransaction),
-                contentDescription = "InStatisticsTransaction",
-                tint = MaterialTheme.colorScheme.error,
-            )
-        }
+        TransactionMetadataIcons(
+            transaction = transaction,
+            modifier =
+                Modifier.constrainAs(idMetadata) {
+                    top.linkTo(idIcon.top)
+                    end.linkTo(idIcon.start)
+                },
+        )
         if (transaction.showTime) {
             Text(
                 modifier =
@@ -184,6 +162,49 @@ fun TransactionItem(
             }
         }
         HorizontalDivider()
+    }
+}
+
+@Composable
+private fun TransactionMetadataIcons(
+    transaction: TransactionUiModel,
+    modifier: Modifier = Modifier,
+) {
+    val iconModifier =
+        Modifier.size(
+            dimensionResource(com.d9tilov.android.designsystem.R.dimen.transaction_meta_icon_size),
+        )
+    Column(
+        modifier = modifier,
+        verticalArrangement =
+            Arrangement.spacedBy(
+                dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_extra_small),
+            ),
+    ) {
+        if (transaction.isRegular) {
+            Icon(
+                modifier = iconModifier,
+                imageVector = MoneyManagerIcons.Repeat,
+                contentDescription = "RegularTransaction",
+                tint = MaterialTheme.colorScheme.tertiary,
+            )
+        }
+        if (!transaction.inStatistics) {
+            Icon(
+                modifier = iconModifier,
+                imageVector = ImageVector.vectorResource(MoneyManagerIcons.InStatisticsTransaction),
+                contentDescription = "InStatisticsTransaction",
+                tint = MaterialTheme.colorScheme.error,
+            )
+        }
+        if (transaction.hasPlace) {
+            Icon(
+                modifier = iconModifier,
+                imageVector = MoneyManagerIcons.Location,
+                contentDescription = stringResource(R.string.transaction_place_saved),
+                tint = MaterialTheme.colorScheme.tertiary,
+            )
+        }
     }
 }
 

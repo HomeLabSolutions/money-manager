@@ -26,7 +26,6 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Test
 
@@ -52,14 +51,14 @@ class TransactionPlaceViewModelTest {
     }
 
     @Test
-    fun `editing expense uses its saved coordinates and only confirmation sets the name`() =
+    fun `opening expense selects nearest place but writes only when saved`() =
         runTest(dispatcher) {
             val viewModel = createViewModel()
             runCurrent()
             coVerify(exactly = 1) { places.getNearbyPlaces(expense.locationData) }
             assertEquals(nearby, viewModel.uiState.value.placeState.places)
-            assertEquals(null, viewModel.uiState.value.transaction.placeName)
-            viewModel.onPlaceAction(TransactionPlaceAction.ACCEPT)
+            assertEquals("Cafe", viewModel.uiState.value.transaction.placeName)
+            coVerify(exactly = 0) { transactions.update(any()) }
             viewModel.updatePlaceName("Cafe branch")
             viewModel.save()
             coVerify {
@@ -79,10 +78,8 @@ class TransactionPlaceViewModelTest {
                 flowOf(expense.copy(type = TransactionType.INCOME))
             val viewModel = createViewModel()
             runCurrent()
-            viewModel.onPlaceAction(TransactionPlaceAction.EDIT)
+            viewModel.loadNearbyPlaces()
             viewModel.updatePlaceName("Shop")
-            viewModel.onPlaceAction(TransactionPlaceAction.SKIP)
-            viewModel.onPlaceAction(TransactionPlaceAction.ACCEPT)
             coVerify(exactly = 0) { places.getNearbyPlaces(any()) }
             assertEquals(null, viewModel.uiState.value.transaction.placeName)
         }
@@ -94,9 +91,8 @@ class TransactionPlaceViewModelTest {
                 flowOf(expense.copy(placeName = "Saved cafe"))
             val viewModel = createViewModel(TransactionInfoMode.VIEW)
             runCurrent()
-            viewModel.onPlaceAction(TransactionPlaceAction.EDIT)
+            viewModel.loadNearbyPlaces()
             viewModel.updatePlaceName("Changed")
-            viewModel.onPlaceAction(TransactionPlaceAction.SKIP)
             coVerify(exactly = 0) { places.getNearbyPlaces(any()) }
             assertEquals("Saved cafe", viewModel.uiState.value.transaction.placeName)
         }
@@ -109,7 +105,7 @@ class TransactionPlaceViewModelTest {
             val viewModel = createViewModel()
             runCurrent()
             assertEquals(NearbyPlacesStatus.NO_LOCATION, viewModel.uiState.value.placeState.status)
-            viewModel.onPlaceAction(TransactionPlaceAction.EDIT)
+            viewModel.loadNearbyPlaces()
             viewModel.updatePlaceName("  My shop  ")
             viewModel.save()
             coVerify { transactions.update(match { it.placeName == "My shop" }) }
@@ -117,31 +113,49 @@ class TransactionPlaceViewModelTest {
         }
 
     @Test
-    fun `skip remains skipped when a pending lookup completes`() =
+    fun `empty results leave place unselected`() =
+        runTest(dispatcher) {
+            coEvery { places.getNearbyPlaces(any()) } returns emptyList()
+            val viewModel = createViewModel()
+            runCurrent()
+            assertEquals(null, viewModel.uiState.value.transaction.placeName)
+            assertEquals(emptyList<NearbyPlace>(), viewModel.uiState.value.placeState.places)
+            coVerify(exactly = 0) { transactions.update(any()) }
+        }
+
+    @Test
+    fun `saved name is preserved when nearest results change`() =
+        runTest(dispatcher) {
+            every { transactions.getTransactionById(TRANSACTION_ID) } returns
+                flowOf(expense.copy(placeName = "Saved shop"))
+            val viewModel = createViewModel()
+            runCurrent()
+            assertEquals("Saved shop", viewModel.uiState.value.transaction.placeName)
+            assertEquals(nearby, viewModel.uiState.value.placeState.places)
+        }
+
+    @Test
+    fun `clearing name during lookup prevents automatic reselection`() =
         runTest(dispatcher) {
             val response = CompletableDeferred<List<NearbyPlace>>()
             coEvery { places.getNearbyPlaces(any()) } coAnswers { response.await() }
             val viewModel = createViewModel()
             runCurrent()
-            viewModel.onPlaceAction(TransactionPlaceAction.SKIP)
+            viewModel.updatePlaceName("")
             response.complete(nearby)
             runCurrent()
             assertEquals("", viewModel.uiState.value.transaction.placeName)
-            assertFalse(viewModel.uiState.value.placeState.isEditing)
-            viewModel.save()
-            coVerify { transactions.update(match { it.placeName == "" }) }
         }
 
     @Test
-    fun `saved skip is not suggested again until edit is requested`() =
+    fun `choosing another result is saved instead of automatic nearest`() =
         runTest(dispatcher) {
-            every { transactions.getTransactionById(TRANSACTION_ID) } returns flowOf(expense.copy(placeName = ""))
             val viewModel = createViewModel()
             runCurrent()
-            coVerify(exactly = 0) { places.getNearbyPlaces(any()) }
-            viewModel.onPlaceAction(TransactionPlaceAction.EDIT)
-            runCurrent()
-            coVerify(exactly = 1) { places.getNearbyPlaces(expense.locationData) }
+            viewModel.updatePlaceName(nearby.last().name)
+            coVerify(exactly = 0) { transactions.update(any()) }
+            viewModel.save()
+            coVerify { transactions.update(match { it.placeName == "Shop" }) }
         }
 
     @Test
@@ -151,7 +165,7 @@ class TransactionPlaceViewModelTest {
             coEvery { places.getNearbyPlaces(any()) } coAnswers { response.await() }
             val viewModel = createViewModel()
             runCurrent()
-            viewModel.onPlaceAction(TransactionPlaceAction.EDIT)
+            viewModel.loadNearbyPlaces()
             viewModel.updatePlaceName("My place")
             viewModel.save()
             coVerify { transactions.update(match { it.placeName == "My place" }) }
@@ -167,11 +181,11 @@ class TransactionPlaceViewModelTest {
             val viewModel = createViewModel()
             runCurrent()
             assertEquals(NearbyPlacesStatus.UNAVAILABLE, viewModel.uiState.value.placeState.status)
-            viewModel.onPlaceAction(TransactionPlaceAction.EDIT)
+            viewModel.loadNearbyPlaces()
             viewModel.updatePlaceName("Custom")
             runCurrent()
             coEvery { places.getNearbyPlaces(any()) } returns nearby
-            viewModel.onPlaceAction(TransactionPlaceAction.EDIT)
+            viewModel.loadNearbyPlaces()
             runCurrent()
             assertEquals(NearbyPlacesStatus.READY, viewModel.uiState.value.placeState.status)
             assertEquals("Custom", viewModel.uiState.value.transaction.placeName)
