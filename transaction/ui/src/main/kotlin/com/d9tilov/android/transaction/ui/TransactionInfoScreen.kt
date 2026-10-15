@@ -303,6 +303,13 @@ fun TransactionInfoScreen(
                         categoryName = uiState.transaction.category.name,
                     )
                 }
+                TransactionPlaceAttribution(
+                    uiState = uiState,
+                    modifier =
+                        Modifier.padding(
+                            horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
+                        ),
+                )
             }
             if (mode == TransactionInfoMode.EDIT) {
                 BottomActionButton(
