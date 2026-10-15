@@ -16,7 +16,7 @@ class NearbyPlacesResponseTest {
             mapOf(
                 "places" to
                     listOf(
-                        mapOf("id" to "shop", "name" to "Shop", "distanceMeters" to 80),
+                        mapOf("id" to "shop", "name" to "Shop", "distanceMeters" to 150),
                         mapOf("id" to "cafe", "name" to "Cafe", "distanceMeters" to 10.5),
                         mapOf("id" to "cafe", "name" to "Cafe", "distanceMeters" to 10.5),
                     ),
@@ -26,7 +26,7 @@ class NearbyPlacesResponseTest {
 
     @Test(expected = IllegalStateException::class)
     fun `invalid distances are rejected rather than presented as nearest`() {
-        parseNearbyPlaces(mapOf("places" to listOf(mapOf("id" to "shop", "name" to "Shop", "distanceMeters" to 101))))
+        parseNearbyPlaces(mapOf("places" to listOf(mapOf("id" to "shop", "name" to "Shop", "distanceMeters" to 151))))
     }
 
     @Test

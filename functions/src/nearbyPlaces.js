@@ -1,6 +1,6 @@
 import {HttpsError} from 'firebase-functions/v2/https';
 
-const RADIUS_METERS = 100;
+const RADIUS_METERS = 150;
 const RESULT_LIMIT = 20;
 const EARTH_RADIUS_METERS = 6_371_000;
 

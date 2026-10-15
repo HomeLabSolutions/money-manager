@@ -5,7 +5,7 @@ import com.d9tilov.android.transaction.domain.model.NearbyPlace
 data class TransactionPlaceState(
     val places: List<NearbyPlace> = emptyList(),
     val status: NearbyPlacesStatus = NearbyPlacesStatus.IDLE,
-    val isEditing: Boolean = false,
+    val nameEdited: Boolean = false,
 )
 
 enum class NearbyPlacesStatus {
@@ -14,10 +14,4 @@ enum class NearbyPlacesStatus {
     READY,
     UNAVAILABLE,
     NO_LOCATION,
-}
-
-enum class TransactionPlaceAction {
-    ACCEPT,
-    SKIP,
-    EDIT,
 }

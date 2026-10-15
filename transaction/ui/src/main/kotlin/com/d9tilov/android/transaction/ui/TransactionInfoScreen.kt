@@ -67,7 +67,6 @@ import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.model.TransactionInfoMode
 import com.d9tilov.android.transaction.ui.vm.TransactionInfoUiState
 import com.d9tilov.android.transaction.ui.vm.TransactionInfoViewModel
-import com.d9tilov.android.transaction.ui.vm.TransactionPlaceAction
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -118,11 +117,8 @@ fun TransactionInfoRoute(
         onDateClicked = viewModel::updateDate,
         placeActions =
             TransactionPlaceActions(
-                onConfirm = { viewModel.onPlaceAction(TransactionPlaceAction.ACCEPT) },
-                onSkip = { viewModel.onPlaceAction(TransactionPlaceAction.SKIP) },
-                onEdit = { viewModel.onPlaceAction(TransactionPlaceAction.EDIT) },
+                onEdit = viewModel::loadNearbyPlaces,
                 onNameChanged = viewModel::updatePlaceName,
-                onRetry = { viewModel.onPlaceAction(TransactionPlaceAction.EDIT) },
             ),
     )
 }
