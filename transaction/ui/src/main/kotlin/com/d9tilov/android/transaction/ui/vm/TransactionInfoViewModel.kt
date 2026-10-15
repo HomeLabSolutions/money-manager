@@ -71,7 +71,6 @@ class TransactionInfoViewModel
                             transaction = transaction,
                         )
                     }
-                    loadNearbyPlaces()
                 }
             }
         }
@@ -83,7 +82,7 @@ class TransactionInfoViewModel
             _uiState.update { state ->
                 state.copy(
                     transaction = state.transaction.copy(placeName = name),
-                    placeState = state.placeState.copy(nameEdited = true),
+                    placeState = state.placeState.copy(menuExpanded = false),
                 )
             }
         }
@@ -91,30 +90,37 @@ class TransactionInfoViewModel
         fun loadNearbyPlaces() {
             if (!canEditPlace()) return
             val state = _uiState.value
-            if (state.placeState.status in
-                listOf(NearbyPlacesStatus.LOADING, NearbyPlacesStatus.READY, NearbyPlacesStatus.NO_LOCATION)
-            ) {
-                return
-            }
+            if (state.placeState.status == NearbyPlacesStatus.LOADING) return
             val location = state.transaction.locationData
             if (!hasUsableCoordinates(location)) {
-                _uiState.update { it.copy(placeState = it.placeState.copy(status = NearbyPlacesStatus.NO_LOCATION)) }
+                _uiState.update {
+                    it.copy(
+                        placeState = it.placeState.copy(status = NearbyPlacesStatus.NO_LOCATION, menuExpanded = true),
+                    )
+                }
                 return
             }
-            _uiState.update { it.copy(placeState = it.placeState.copy(status = NearbyPlacesStatus.LOADING)) }
+            _uiState.update {
+                it.copy(
+                    placeState =
+                        it.placeState.copy(
+                            status = NearbyPlacesStatus.LOADING,
+                            places = emptyList(),
+                            menuExpanded = false,
+                        ),
+                )
+            }
             viewModelScope.launch {
                 try {
                     val places = nearbyPlacesRepo.getNearbyPlaces(location)
                     _uiState.update {
-                        val name =
-                            if (!it.placeState.nameEdited && it.transaction.placeName.isNullOrBlank()) {
-                                places.firstOrNull()?.name
-                            } else {
-                                it.transaction.placeName
-                            }
                         it.copy(
-                            transaction = it.transaction.copy(placeName = name),
-                            placeState = it.placeState.copy(places = places, status = NearbyPlacesStatus.READY),
+                            placeState =
+                                it.placeState.copy(
+                                    places = places,
+                                    status = NearbyPlacesStatus.READY,
+                                    menuExpanded = true,
+                                ),
                         )
                     }
                 } catch (error: CancellationException) {
@@ -122,11 +128,19 @@ class TransactionInfoViewModel
                 } catch (_: Exception) {
                     _uiState.update {
                         it.copy(
-                            placeState = it.placeState.copy(status = NearbyPlacesStatus.UNAVAILABLE),
+                            placeState =
+                                it.placeState.copy(
+                                    status = NearbyPlacesStatus.UNAVAILABLE,
+                                    menuExpanded = true,
+                                ),
                         )
                     }
                 }
             }
+        }
+
+        fun dismissPlaceMenu() {
+            _uiState.update { state -> state.copy(placeState = state.placeState.copy(menuExpanded = false)) }
         }
 
         private fun canEditPlace(): Boolean =

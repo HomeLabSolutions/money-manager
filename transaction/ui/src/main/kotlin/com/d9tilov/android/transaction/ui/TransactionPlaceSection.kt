@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -30,6 +32,7 @@ import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.designsystem.MoneyManagerIcons
 import com.d9tilov.android.transaction.domain.model.NearbyPlace
 import com.d9tilov.android.transaction.ui.model.TransactionInfoMode
+import com.d9tilov.android.transaction.ui.vm.NearbyPlacesStatus
 import com.d9tilov.android.transaction.ui.vm.TransactionInfoUiState
 
 @Composable
@@ -40,7 +43,7 @@ internal fun TransactionPlaceSection(
 ) {
     if (uiState.transaction.type != TransactionType.EXPENSE) return
     val name = uiState.transaction.placeName
-    if (uiState.placeState.places.isEmpty() && name.isNullOrBlank()) return
+    if (uiState.mode == TransactionInfoMode.VIEW && name.isNullOrBlank()) return
     Column(
         modifier = modifier,
         verticalArrangement =
@@ -62,7 +65,6 @@ private fun TransactionPlaceNameRow(
     uiState: TransactionInfoUiState,
     actions: TransactionPlaceActions,
 ) {
-    var expanded by rememberSaveable { mutableStateOf(false) }
     var customNameVisible by rememberSaveable { mutableStateOf(false) }
     val places = uiState.placeState.places
     Box {
@@ -71,7 +73,7 @@ private fun TransactionPlaceNameRow(
                 text =
                     uiState.transaction.placeName.orEmpty().ifBlank {
                         stringResource(
-                            R.string.transaction_place_title,
+                            R.string.transaction_place_not_selected,
                         )
                     },
                 modifier = Modifier.weight(1f),
@@ -79,25 +81,21 @@ private fun TransactionPlaceNameRow(
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
             )
-            IconButton(onClick = {
-                actions.onEdit()
-                expanded = !expanded
-            }) {
-                Icon(
-                    imageVector = MoneyManagerIcons.Edit,
-                    contentDescription = stringResource(R.string.transaction_place_edit),
-                )
-            }
+            PlaceEditButton(
+                loading = uiState.placeState.status == NearbyPlacesStatus.LOADING,
+                onClick = actions.onEdit,
+            )
         }
         DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
+            expanded = uiState.placeState.menuExpanded,
+            onDismissRequest = actions.onDismiss,
             modifier = Modifier.heightIn(max = dimensionResource(R.dimen.transaction_places_menu_max_height)),
         ) {
+            PlaceMenuStatus(uiState)
             DropdownMenuItem(
                 text = { Text(stringResource(R.string.transaction_place_custom_name)) },
                 onClick = {
-                    expanded = false
+                    actions.onDismiss()
                     customNameVisible = true
                 },
             )
@@ -106,7 +104,6 @@ private fun TransactionPlaceNameRow(
                     text = { PlaceDetails(place) },
                     onClick = {
                         actions.onNameChanged(place.name)
-                        expanded = false
                     },
                 )
             }
@@ -118,6 +115,51 @@ private fun TransactionPlaceNameRow(
             onNameChanged = actions.onNameChanged,
             onDismiss = { customNameVisible = false },
         )
+    }
+}
+
+@Composable
+private fun PlaceEditButton(
+    loading: Boolean,
+    onClick: () -> Unit,
+) {
+    IconButton(onClick = onClick, enabled = !loading) {
+        if (loading) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(dimensionResource(R.dimen.transaction_place_loader_size)),
+                strokeWidth = dimensionResource(R.dimen.transaction_place_loader_stroke_width),
+            )
+        } else {
+            Icon(
+                imageVector = MoneyManagerIcons.Edit,
+                contentDescription = stringResource(R.string.transaction_place_edit),
+            )
+        }
+    }
+}
+
+@Composable
+private fun PlaceMenuStatus(uiState: TransactionInfoUiState) {
+    val message =
+        when (uiState.placeState.status) {
+            NearbyPlacesStatus.UNAVAILABLE -> {
+                R.string.transaction_place_unavailable
+            }
+
+            NearbyPlacesStatus.NO_LOCATION -> {
+                R.string.transaction_place_no_location
+            }
+
+            NearbyPlacesStatus.READY -> {
+                if (uiState.placeState.places.isEmpty()) R.string.transaction_place_empty else null
+            }
+
+            else -> {
+                null
+            }
+        }
+    if (message != null) {
+        DropdownMenuItem(text = { Text(stringResource(message)) }, onClick = {}, enabled = false)
     }
 }
 
