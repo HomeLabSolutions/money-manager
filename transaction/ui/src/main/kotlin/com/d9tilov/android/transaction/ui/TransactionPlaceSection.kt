@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -112,7 +113,6 @@ private fun PlaceSelectionDialog(
 ) {
     AlertDialog(
         onDismissRequest = actions.onDismiss,
-        title = { Text(stringResource(R.string.transaction_place_title)) },
         text = {
             val itemColors = ListItemDefaults.colors(containerColor = Color.Transparent)
             LazyColumn(
@@ -127,6 +127,7 @@ private fun PlaceSelectionDialog(
                     )
                 }
                 items(uiState.placeState.places, key = { it.id }) { place ->
+                    HorizontalDivider()
                     ListItem(
                         headlineContent = { PlaceDetails(place) },
                         modifier = Modifier.clickable { actions.onNameChanged(place.name) },
@@ -221,10 +222,6 @@ private fun CustomPlaceNameDialog(
 private fun PlaceDetails(place: NearbyPlace) {
     Column {
         Text(place.name, style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
-        Text(
-            stringResource(R.string.transaction_place_distance, place.distanceMeters),
-            style = MaterialTheme.typography.bodySmall,
-        )
         if (place.address.isNotBlank()) {
             Text(
                 place.address,
@@ -233,6 +230,10 @@ private fun PlaceDetails(place: NearbyPlace) {
                 overflow = TextOverflow.Ellipsis,
             )
         }
+        Text(
+            stringResource(R.string.transaction_place_distance, place.distanceMeters),
+            style = MaterialTheme.typography.bodySmall,
+        )
     }
 }
 
