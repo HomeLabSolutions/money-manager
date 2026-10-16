@@ -88,7 +88,7 @@ class TransactionPlaceViewModelTest {
         }
 
     @Test
-    fun `each pencil tap after dismissal requests a fresh list`() =
+    fun `pencil reopens cached list after dismissal or selecting a name`() =
         runTest(dispatcher) {
             val viewModel = createViewModel()
             runCurrent()
@@ -96,10 +96,38 @@ class TransactionPlaceViewModelTest {
             runCurrent()
             viewModel.dismissPlaceMenu()
             assertFalse(viewModel.uiState.value.placeState.menuExpanded)
-            coEvery { places.getNearbyPlaces(any()) } returns nearby.reversed()
+            viewModel.loadNearbyPlaces()
+            assertEquals(NearbyPlacesStatus.READY, viewModel.uiState.value.placeState.status)
+            assertTrue(viewModel.uiState.value.placeState.menuExpanded)
+            assertEquals(nearby, viewModel.uiState.value.placeState.places)
+            viewModel.updatePlaceName("My custom place")
             viewModel.loadNearbyPlaces()
             runCurrent()
-            assertEquals(nearby.reversed(), viewModel.uiState.value.placeState.places)
+            assertEquals("My custom place", viewModel.uiState.value.transaction.placeName)
+            assertTrue(viewModel.uiState.value.placeState.menuExpanded)
+            assertEquals(nearby, viewModel.uiState.value.placeState.places)
+            coVerify(exactly = 1) { places.getNearbyPlaces(expense.locationData) }
+        }
+
+    @Test
+    fun `a new view model starts without cached places`() =
+        runTest(dispatcher) {
+            val firstEditor = createViewModel()
+            runCurrent()
+            firstEditor.loadNearbyPlaces()
+            runCurrent()
+            val secondEditor = createViewModel()
+            runCurrent()
+            assertEquals(NearbyPlacesStatus.IDLE, secondEditor.uiState.value.placeState.status)
+            assertTrue(
+                secondEditor.uiState.value.placeState.places
+                    .isEmpty(),
+            )
+            coVerify(exactly = 1) { places.getNearbyPlaces(expense.locationData) }
+            coEvery { places.getNearbyPlaces(any()) } returns nearby.reversed()
+            secondEditor.loadNearbyPlaces()
+            runCurrent()
+            assertEquals(nearby.reversed(), secondEditor.uiState.value.placeState.places)
             coVerify(exactly = 2) { places.getNearbyPlaces(expense.locationData) }
         }
 
@@ -186,7 +214,7 @@ class TransactionPlaceViewModelTest {
         }
 
     @Test
-    fun `empty list does not select a name`() =
+    fun `empty list is cached without selecting a name`() =
         runTest(dispatcher) {
             coEvery { places.getNearbyPlaces(any()) } returns emptyList()
             val viewModel = createViewModel()
@@ -196,6 +224,12 @@ class TransactionPlaceViewModelTest {
             assertEquals(null, viewModel.uiState.value.transaction.placeName)
             assertTrue(viewModel.uiState.value.placeState.menuExpanded)
             assertEquals(NearbyPlacesStatus.READY, viewModel.uiState.value.placeState.status)
+            viewModel.dismissPlaceMenu()
+            viewModel.loadNearbyPlaces()
+            assertTrue(viewModel.uiState.value.placeState.menuExpanded)
+            assertEquals(NearbyPlacesStatus.READY, viewModel.uiState.value.placeState.status)
+            runCurrent()
+            coVerify(exactly = 1) { places.getNearbyPlaces(expense.locationData) }
         }
 
     @Test

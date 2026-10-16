@@ -149,7 +149,7 @@ class TransactionInteractorImplTest {
         }
 
     @Test
-    fun `getTransactionById should return transaction with category`() =
+    fun `getTransactionById should return transaction with category and saved place`() =
         runTest {
             val transactionDataModel =
                 TransactionDataModel(
@@ -167,6 +167,7 @@ class TransactionInteractorImplTest {
                     isRegular = false,
                     location = LocationData(0.0, 0.0),
                     photoUri = "",
+                    placeName = "Saved cafe",
                 )
 
             coEvery { transactionRepo.getTransactionById(1L) } returns flowOf(transactionDataModel)
@@ -175,6 +176,7 @@ class TransactionInteractorImplTest {
 
             assertEquals(1L, transaction.id)
             assertEquals(testCategory, transaction.category)
+            assertEquals("Saved cafe", transaction.placeName)
             assertEquals(BigDecimal(100), transaction.sum)
             assertEquals(TransactionType.EXPENSE, transaction.type)
         }
