@@ -91,6 +91,10 @@ class TransactionInfoViewModel
             if (!canEditPlace()) return
             val state = _uiState.value
             if (state.placeState.status == NearbyPlacesStatus.LOADING) return
+            if (state.placeState.status == NearbyPlacesStatus.READY) {
+                _uiState.update { it.copy(placeState = it.placeState.copy(menuExpanded = true)) }
+                return
+            }
             val location = state.transaction.locationData
             if (!hasUsableCoordinates(location)) {
                 _uiState.update {
