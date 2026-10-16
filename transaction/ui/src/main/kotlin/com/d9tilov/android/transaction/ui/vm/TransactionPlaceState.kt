@@ -5,7 +5,7 @@ import com.d9tilov.android.transaction.domain.model.NearbyPlace
 data class TransactionPlaceState(
     val places: List<NearbyPlace> = emptyList(),
     val status: NearbyPlacesStatus = NearbyPlacesStatus.IDLE,
-    val menuExpanded: Boolean = false,
+    val dialogVisible: Boolean = false,
 )
 
 enum class NearbyPlacesStatus {

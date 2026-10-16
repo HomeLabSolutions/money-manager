@@ -61,7 +61,7 @@ class TransactionPlaceViewModelTest {
                 runCurrent()
                 assertEquals(name, viewModel.uiState.value.transaction.placeName)
                 assertEquals(NearbyPlacesStatus.IDLE, viewModel.uiState.value.placeState.status)
-                assertFalse(viewModel.uiState.value.placeState.menuExpanded)
+                assertFalse(viewModel.uiState.value.placeState.dialogVisible)
             }
             coVerify(exactly = 0) { places.getNearbyPlaces(any()) }
         }
@@ -77,13 +77,13 @@ class TransactionPlaceViewModelTest {
             viewModel.loadNearbyPlaces()
             runCurrent()
             assertEquals(NearbyPlacesStatus.LOADING, viewModel.uiState.value.placeState.status)
-            assertFalse(viewModel.uiState.value.placeState.menuExpanded)
+            assertFalse(viewModel.uiState.value.placeState.dialogVisible)
             coVerify(exactly = 1) { places.getNearbyPlaces(expense.locationData) }
             response.complete(nearby)
             runCurrent()
             assertEquals(nearby, viewModel.uiState.value.placeState.places)
             assertEquals(null, viewModel.uiState.value.transaction.placeName)
-            assertTrue(viewModel.uiState.value.placeState.menuExpanded)
+            assertTrue(viewModel.uiState.value.placeState.dialogVisible)
             coVerify(exactly = 0) { transactions.update(any()) }
         }
 
@@ -94,17 +94,17 @@ class TransactionPlaceViewModelTest {
             runCurrent()
             viewModel.loadNearbyPlaces()
             runCurrent()
-            viewModel.dismissPlaceMenu()
-            assertFalse(viewModel.uiState.value.placeState.menuExpanded)
+            viewModel.dismissPlaceDialog()
+            assertFalse(viewModel.uiState.value.placeState.dialogVisible)
             viewModel.loadNearbyPlaces()
             assertEquals(NearbyPlacesStatus.READY, viewModel.uiState.value.placeState.status)
-            assertTrue(viewModel.uiState.value.placeState.menuExpanded)
+            assertTrue(viewModel.uiState.value.placeState.dialogVisible)
             assertEquals(nearby, viewModel.uiState.value.placeState.places)
             viewModel.updatePlaceName("My custom place")
             viewModel.loadNearbyPlaces()
             runCurrent()
             assertEquals("My custom place", viewModel.uiState.value.transaction.placeName)
-            assertTrue(viewModel.uiState.value.placeState.menuExpanded)
+            assertTrue(viewModel.uiState.value.placeState.dialogVisible)
             assertEquals(nearby, viewModel.uiState.value.placeState.places)
             coVerify(exactly = 1) { places.getNearbyPlaces(expense.locationData) }
         }
@@ -145,14 +145,14 @@ class TransactionPlaceViewModelTest {
         }
 
     @Test
-    fun `selected name closes menu and persists only with save`() =
+    fun `selected name closes dialog and persists only with save`() =
         runTest(dispatcher) {
             val viewModel = createViewModel()
             runCurrent()
             viewModel.loadNearbyPlaces()
             runCurrent()
             viewModel.updatePlaceName("Shop")
-            assertFalse(viewModel.uiState.value.placeState.menuExpanded)
+            assertFalse(viewModel.uiState.value.placeState.dialogVisible)
             coVerify(exactly = 0) { transactions.update(any()) }
             viewModel.save()
             coVerify {
@@ -188,7 +188,7 @@ class TransactionPlaceViewModelTest {
             assertEquals(NearbyPlacesStatus.IDLE, viewModel.uiState.value.placeState.status)
             viewModel.loadNearbyPlaces()
             assertEquals(NearbyPlacesStatus.NO_LOCATION, viewModel.uiState.value.placeState.status)
-            assertTrue(viewModel.uiState.value.placeState.menuExpanded)
+            assertTrue(viewModel.uiState.value.placeState.dialogVisible)
             viewModel.updatePlaceName("  My shop  ")
             viewModel.save()
             coVerify { transactions.update(match { it.placeName == "My shop" }) }
@@ -208,7 +208,7 @@ class TransactionPlaceViewModelTest {
                 viewModel.loadNearbyPlaces()
                 viewModel.updatePlaceName("Changed")
                 assertEquals(null, viewModel.uiState.value.transaction.placeName)
-                assertFalse(viewModel.uiState.value.placeState.menuExpanded)
+                assertFalse(viewModel.uiState.value.placeState.dialogVisible)
             }
             coVerify(exactly = 0) { places.getNearbyPlaces(any()) }
         }
@@ -222,11 +222,11 @@ class TransactionPlaceViewModelTest {
             viewModel.loadNearbyPlaces()
             runCurrent()
             assertEquals(null, viewModel.uiState.value.transaction.placeName)
-            assertTrue(viewModel.uiState.value.placeState.menuExpanded)
+            assertTrue(viewModel.uiState.value.placeState.dialogVisible)
             assertEquals(NearbyPlacesStatus.READY, viewModel.uiState.value.placeState.status)
-            viewModel.dismissPlaceMenu()
+            viewModel.dismissPlaceDialog()
             viewModel.loadNearbyPlaces()
-            assertTrue(viewModel.uiState.value.placeState.menuExpanded)
+            assertTrue(viewModel.uiState.value.placeState.dialogVisible)
             assertEquals(NearbyPlacesStatus.READY, viewModel.uiState.value.placeState.status)
             runCurrent()
             coVerify(exactly = 1) { places.getNearbyPlaces(expense.locationData) }
@@ -241,7 +241,7 @@ class TransactionPlaceViewModelTest {
             viewModel.loadNearbyPlaces()
             runCurrent()
             assertEquals(NearbyPlacesStatus.UNAVAILABLE, viewModel.uiState.value.placeState.status)
-            assertTrue(viewModel.uiState.value.placeState.menuExpanded)
+            assertTrue(viewModel.uiState.value.placeState.dialogVisible)
             viewModel.updatePlaceName("Custom")
             coEvery { places.getNearbyPlaces(any()) } returns nearby
             viewModel.loadNearbyPlaces()
