@@ -118,7 +118,7 @@ fun TransactionInfoRoute(
         placeActions =
             TransactionPlaceActions(
                 onEdit = viewModel::loadNearbyPlaces,
-                onDismiss = viewModel::dismissPlaceMenu,
+                onDismiss = viewModel::dismissPlaceDialog,
                 onNameChanged = viewModel::updatePlaceName,
             ),
     )
