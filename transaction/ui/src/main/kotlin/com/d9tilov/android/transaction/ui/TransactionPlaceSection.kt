@@ -136,11 +136,7 @@ private fun PlaceSelectionDialog(
                 }
             }
         },
-        confirmButton = {
-            TextButton(onClick = actions.onDismiss) {
-                Text(stringResource(com.d9tilov.android.common.android.R.string.cancel))
-            }
-        },
+        confirmButton = {},
     )
 }
 
