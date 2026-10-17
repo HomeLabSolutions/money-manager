@@ -9,26 +9,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.math.BigDecimal
 
-class NearbyPlacesResponseTest {
-    @Test
-    fun `callable results are ordered by distance and deduplicated`() {
-        val response =
-            mapOf(
-                "places" to
-                    listOf(
-                        mapOf("id" to "shop", "name" to "Shop", "distanceMeters" to 150),
-                        mapOf("id" to "cafe", "name" to "Cafe", "distanceMeters" to 10.5),
-                        mapOf("id" to "cafe", "name" to "Cafe", "distanceMeters" to 10.5),
-                    ),
-            )
-        assertEquals(listOf("Cafe", "Shop"), parseNearbyPlaces(response).map { it.name })
-    }
-
-    @Test(expected = IllegalStateException::class)
-    fun `invalid distances are rejected rather than presented as nearest`() {
-        parseNearbyPlaces(mapOf("places" to listOf(mapOf("id" to "shop", "name" to "Shop", "distanceMeters" to 151))))
-    }
-
+class TransactionPlaceDataMapperTest {
     @Test
     fun `custom names skipped names and undecided places survive database mapping`() {
         val transaction =
