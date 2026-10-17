@@ -28,7 +28,7 @@ class GeoapifyPlacesResponseTest {
                 }
                 """.trimIndent(),
             )
-        val properties = checkNotNull(response.features.single()?.properties)
+        val properties = checkNotNull(response.features.single().properties)
         assertEquals("cafe", properties.id)
         assertEquals("Cafe", properties.name)
         assertEquals("High Street", properties.address)
@@ -39,16 +39,18 @@ class GeoapifyPlacesResponseTest {
 
     @Test
     fun `missing optional properties can be filtered by the mapper`() {
-        val response = json.decodeFromString<GeoapifyPlacesResponse>("""{"features": [null, {}, {"properties": {}}]}""")
-        assertNull(response.features.first())
-        assertNull(response.features[1]?.properties)
-        assertNull(response.features[2]?.properties?.id)
+        val response = json.decodeFromString<GeoapifyPlacesResponse>("""{"features": [{}, {"properties": {}}]}""")
+        assertNull(response.features[0].properties)
+        assertNull(response.features[1].properties?.id)
     }
 
     @Test
     fun `malformed service responses fail instead of appearing as an empty successful list`() {
-        assertThrows(SerializationException::class.java) {
-            json.decodeFromString<GeoapifyPlacesResponse>("""{"error": "Invalid key"}""")
-        }
+        listOf("""{"error": "Invalid key"}""", """{"features": null}""", """{"features": [null]}""")
+            .forEach { response ->
+                assertThrows(SerializationException::class.java) {
+                    json.decodeFromString<GeoapifyPlacesResponse>(response)
+                }
+            }
     }
 }

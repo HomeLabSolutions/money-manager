@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GeoapifyPlacesResponse(
-    @SerialName("features") val features: List<GeoapifyPlaceFeature?>,
+    @SerialName("features") val features: List<GeoapifyPlaceFeature>,
 )
 
 @Serializable
