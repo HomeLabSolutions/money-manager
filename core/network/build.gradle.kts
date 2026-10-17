@@ -16,7 +16,7 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
     currencyApiKey = keystoreProperties["currency_api_key"] as String
     geocodingApiKey = keystoreProperties["geocoding_api_key"] as String
-    geoapifyApiKey = keystoreProperties.getProperty("geoapify_api_key", "")
+    geoapifyApiKey = keystoreProperties["geoapify_api_key"] as String
 } else {
     println("Warning: keystore.properties file not found. Release signing configuration will not be applied.")
     ""
@@ -30,13 +30,10 @@ android {
     }
 
     defaultConfig {
-        listOf(
-            "CURRENCY_API_KEY" to currencyApiKey,
-            "GEOCODING_API_KEY" to geocodingApiKey,
-            "GEOAPIFY_API_KEY" to geoapifyApiKey,
-        ).forEach { (name, value) ->
-            buildConfigField("String", name, "\"$value\"")
-        }
+        val stringType = "String"
+        buildConfigField(stringType, "CURRENCY_API_KEY", "\"$currencyApiKey\"")
+        buildConfigField(stringType, "GEOCODING_API_KEY", "\"$geocodingApiKey\"")
+        buildConfigField(stringType, "GEOAPIFY_API_KEY", "\"$geoapifyApiKey\"")
     }
 }
 

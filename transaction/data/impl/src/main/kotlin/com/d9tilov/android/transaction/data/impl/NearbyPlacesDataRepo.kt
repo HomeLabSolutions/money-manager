@@ -8,22 +8,19 @@ import com.d9tilov.android.transaction.domain.model.NearbyPlace
 import java.util.Locale
 import javax.inject.Inject
 
-class GeoapifyNearbyPlacesRepo @Inject constructor(
-    private val api: GeoapifyApi,
+class NearbyPlacesDataRepo @Inject constructor(
+    private val geoapifyApi: GeoapifyApi,
 ) : NearbyPlacesRepo {
     override suspend fun getNearbyPlaces(location: LocationData): List<NearbyPlace> {
         require(location.hasValidPlaceCoordinates())
         val language = Locale.getDefault().language.takeIf { it.matches(LANGUAGE_PATTERN) } ?: "en"
-        val parameters =
-            mapOf(
-                "categories" to "catering,commercial",
-                "conditions" to "named",
-                "filter" to "circle:${location.longitude},${location.latitude},$NEARBY_PLACES_RADIUS_METERS",
-                "bias" to "proximity:${location.longitude},${location.latitude}",
-                "limit" to NEARBY_PLACES_LIMIT.toString(),
-                "lang" to language,
-            )
-        return api.getPlaces(parameters).toNearbyPlaces(location)
+        return geoapifyApi
+            .getPlaces(
+                filter = "circle:${location.longitude},${location.latitude},$NEARBY_PLACES_RADIUS_METERS",
+                bias = "proximity:${location.longitude},${location.latitude}",
+                language = language,
+                limit = NEARBY_PLACES_LIMIT,
+            ).toNearbyPlaces(location)
     }
 
     private companion object {

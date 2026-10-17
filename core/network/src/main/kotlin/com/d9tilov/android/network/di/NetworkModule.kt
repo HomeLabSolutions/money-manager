@@ -26,7 +26,6 @@ object NetworkModule {
     private const val BASE_CURRENCY_URL = "https://v6.exchangerate-api.com/"
     private const val BASE_GEOCODE_URL = "https://api.opencagedata.com/"
     private const val BASE_GEOAPIFY_URL = "https://api.geoapify.com/"
-    private const val PLACES_TIMEOUT = 10L
     private const val JSON_CONTENT_TYPE = "application/json"
 
     @Provides
@@ -41,6 +40,7 @@ object NetworkModule {
     @Provides
     fun provideLoggingInterceptor(): HttpLoggingInterceptor =
         HttpLoggingInterceptor { message -> Timber.tag(TAG).d("HTTP REQUEST: $message") }.apply {
+            redactQueryParams("apiKey")
             level =
                 if (BuildConfig.DEBUG) {
                     HttpLoggingInterceptor.Level.BODY
@@ -77,19 +77,14 @@ object NetworkModule {
 
     @GeoapifyNetworkApi
     @Provides
-    fun provideGeoapifyRetrofit(): Retrofit {
+    fun provideGeoapifyRetrofit(okHttpClient: OkHttpClient): Retrofit {
         val contentType = JSON_CONTENT_TYPE.toMediaType()
         val json = Json { ignoreUnknownKeys = true }
-        val client =
-            OkHttpClient
-                .Builder()
-                .callTimeout(PLACES_TIMEOUT, TimeUnit.SECONDS)
-                .build()
         return Retrofit
             .Builder()
             .baseUrl(BASE_GEOAPIFY_URL)
             .addConverterFactory(json.asConverterFactory(contentType))
-            .client(client)
+            .client(okHttpClient)
             .build()
     }
 }

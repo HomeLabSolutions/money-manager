@@ -11,7 +11,6 @@ import {validateInsightResponse} from './insightResponse.js';
 initializeApp();
 
 const openAiKey = defineSecret('OPENAI_API_KEY');
-
 async function loadPrompt() {
   try {
     const template = await getRemoteConfig().getServerTemplate({

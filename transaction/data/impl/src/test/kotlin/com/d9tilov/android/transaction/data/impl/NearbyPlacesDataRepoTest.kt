@@ -13,11 +13,11 @@ import org.junit.Test
 import java.io.IOException
 import java.util.Locale
 
-class GeoapifyNearbyPlacesRepoTest {
+class NearbyPlacesDataRepoTest {
     private val locale = Locale.getDefault()
     private val location = LocationData(51.5, -0.1)
     private val api = RecordingGeoapifyApi()
-    private val repo = GeoapifyNearbyPlacesRepo(api)
+    private val repo = NearbyPlacesDataRepo(api)
 
     @After
     fun tearDown() {
@@ -80,10 +80,24 @@ class GeoapifyNearbyPlacesRepoTest {
         var error: Exception? = null
 
         override suspend fun getPlaces(
-            parameters: Map<String, String>,
+            filter: String,
+            bias: String,
+            language: String,
+            limit: Int,
+            categories: String,
+            conditions: String,
             key: String,
         ): GeoapifyPlacesResponse {
-            requests.add(parameters)
+            requests.add(
+                mapOf(
+                    "categories" to categories,
+                    "conditions" to conditions,
+                    "filter" to filter,
+                    "bias" to bias,
+                    "limit" to limit.toString(),
+                    "lang" to language,
+                ),
+            )
             error?.let { throw it }
             return GeoapifyPlacesResponse(emptyList())
         }
