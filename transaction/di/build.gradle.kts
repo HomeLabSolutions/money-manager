@@ -9,10 +9,12 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:network"))
     implementation(project(":transaction:data:contract"))
     implementation(project(":transaction:data:impl"))
     implementation(project(":transaction:domain:contract"))
     implementation(project(":transaction:domain:impl"))
+    implementation(libs.retrofit)
 
     ksp(libs.hilt.ext.compiler)
 }

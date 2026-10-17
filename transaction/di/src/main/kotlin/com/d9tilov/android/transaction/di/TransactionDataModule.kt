@@ -1,7 +1,7 @@
 package com.d9tilov.android.transaction.di
 
 import com.d9tilov.android.transaction.data.contract.TransactionSource
-import com.d9tilov.android.transaction.data.impl.FirebaseNearbyPlacesRepo
+import com.d9tilov.android.transaction.data.impl.GeoapifyNearbyPlacesRepo
 import com.d9tilov.android.transaction.data.impl.TransactionDataRepo
 import com.d9tilov.android.transaction.data.impl.TransactionLocalSource
 import com.d9tilov.android.transaction.domain.contract.NearbyPlacesRepo
@@ -21,5 +21,5 @@ interface TransactionDataModule {
     fun provideTransactionRepo(impl: TransactionDataRepo): TransactionRepo
 
     @Binds
-    fun provideNearbyPlacesRepo(impl: FirebaseNearbyPlacesRepo): NearbyPlacesRepo
+    fun provideNearbyPlacesRepo(impl: GeoapifyNearbyPlacesRepo): NearbyPlacesRepo
 }
