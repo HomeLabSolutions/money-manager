@@ -241,6 +241,7 @@ class TransactionInteractorImpl @Inject constructor(
                     locationData = transactionDataModel.location,
                     photoUri = transactionDataModel.photoUri,
                     placeName = transactionDataModel.placeName,
+                    placeAddress = transactionDataModel.placeAddress,
                 )
             }
 

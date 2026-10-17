@@ -24,4 +24,5 @@ data class TransactionDataModel(
     val location: LocationData,
     val photoUri: String? = null,
     val placeName: String? = null,
+    val placeAddress: String? = null,
 )

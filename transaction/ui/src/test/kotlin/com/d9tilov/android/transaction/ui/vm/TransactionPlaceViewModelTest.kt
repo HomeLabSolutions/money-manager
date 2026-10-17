@@ -145,37 +145,58 @@ class TransactionPlaceViewModelTest {
         }
 
     @Test
-    fun `selected name closes picker and persists only with save`() =
+    fun `selected name and address close picker and persist only with save`() =
         runTest(dispatcher) {
             val viewModel = createViewModel()
             runCurrent()
             viewModel.loadNearbyPlaces()
             runCurrent()
-            viewModel.updatePlaceName("Shop")
+            viewModel.updatePlaceName("Shop", "High Street")
+            assertEquals("High Street", viewModel.uiState.value.transaction.placeAddress)
             assertFalse(viewModel.uiState.value.placeState.pickerVisible)
             coVerify(exactly = 0) { transactions.update(any()) }
             viewModel.save()
             coVerify {
                 transactions.update(
-                    match { it.placeName == "Shop" && it.locationData == expense.locationData },
+                    match {
+                        it.placeName == "Shop" && it.placeAddress == "High Street" &&
+                            it.locationData == expense.locationData
+                    },
                 )
             }
         }
 
     @Test
-    fun `reopening saved transaction restores name without another API request`() =
+    fun `reopening saved transaction restores name and address without another API request`() =
         runTest(dispatcher) {
             var stored = expense
             every { transactions.getTransactionById(TRANSACTION_ID) } answers { flowOf(stored) }
             coEvery { transactions.update(any()) } coAnswers { stored = firstArg() }
             val editor = createViewModel()
             runCurrent()
-            editor.updatePlaceName("My cafe")
+            editor.updatePlaceName("My cafe", "  High Street  ")
             editor.save()
             val reopened = createViewModel()
             runCurrent()
             assertEquals("My cafe", reopened.uiState.value.transaction.placeName)
+            assertEquals("High Street", reopened.uiState.value.transaction.placeAddress)
             coVerify(exactly = 0) { places.getNearbyPlaces(any()) }
+        }
+
+    @Test
+    fun `changing places replaces address and custom naming clears old address`() =
+        runTest(dispatcher) {
+            val viewModel = createViewModel()
+            runCurrent()
+            viewModel.updatePlaceName("Cafe", "High Street")
+            viewModel.updatePlaceName("Shop", "Market Street")
+            assertEquals("Market Street", viewModel.uiState.value.transaction.placeAddress)
+            viewModel.updatePlaceName("My own place")
+            assertEquals(null, viewModel.uiState.value.transaction.placeAddress)
+            viewModel.updatePlaceName("Shop", "")
+            assertEquals(null, viewModel.uiState.value.transaction.placeAddress)
+            viewModel.updatePlaceName("", "Market Street")
+            assertEquals(null, viewModel.uiState.value.transaction.placeAddress)
         }
 
     @Test

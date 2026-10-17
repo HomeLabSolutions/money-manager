@@ -10,5 +10,6 @@ val MIGRATION_2_3 =
     object : Migration(FROM_VERSION, TO_VERSION) {
         override fun migrate(db: SupportSQLiteDatabase) {
             db.execSQL("ALTER TABLE transactions ADD COLUMN placeName TEXT")
+            db.execSQL("ALTER TABLE transactions ADD COLUMN placeAddress TEXT")
         }
     }

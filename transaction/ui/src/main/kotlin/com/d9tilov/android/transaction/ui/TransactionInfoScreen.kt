@@ -119,7 +119,8 @@ fun TransactionInfoRoute(
             TransactionPlaceActions(
                 onEdit = viewModel::loadNearbyPlaces,
                 onDismiss = viewModel::dismissPlacePicker,
-                onNameChanged = viewModel::updatePlaceName,
+                onNameChanged = { viewModel.updatePlaceName(it) },
+                onPlaceSelected = { viewModel.updatePlaceName(it.name, it.address) },
             ),
     )
 }

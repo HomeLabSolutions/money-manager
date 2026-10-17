@@ -43,7 +43,7 @@ class NearbyPlacesResponseTest {
                 location = LocationData.EMPTY,
             )
         listOf(null, "", "My cafe").forEach { name ->
-            val original = transaction.copy(placeName = name)
+            val original = transaction.copy(placeName = name, placeAddress = "High Street")
             assertEquals(original, original.toDbModel().toDataModel())
         }
     }

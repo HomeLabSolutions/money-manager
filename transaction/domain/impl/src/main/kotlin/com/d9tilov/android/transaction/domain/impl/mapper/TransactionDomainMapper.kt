@@ -24,6 +24,7 @@ fun Transaction.toDataModel(): TransactionDataModel =
         locationData,
         photoUri,
         placeName,
+        placeAddress,
     )
 
 fun TransactionDataModel.toDomainModel(category: Category): Transaction =
@@ -43,6 +44,7 @@ fun TransactionDataModel.toDomainModel(category: Category): Transaction =
         locationData = location,
         photoUri = photoUri,
         placeName = placeName,
+        placeAddress = placeAddress,
     )
 
 fun TransactionDataModel.toChartModel(
