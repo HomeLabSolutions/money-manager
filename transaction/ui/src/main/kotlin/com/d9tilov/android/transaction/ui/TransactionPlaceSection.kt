@@ -37,6 +37,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.designsystem.MoneyManagerIcons
 import com.d9tilov.android.transaction.domain.model.NearbyPlace
+import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.model.TransactionInfoMode
 import com.d9tilov.android.transaction.ui.vm.NearbyPlacesStatus
 import com.d9tilov.android.transaction.ui.vm.TransactionInfoUiState
@@ -61,7 +62,7 @@ internal fun TransactionPlaceSection(
             TransactionPlaceNameRow(uiState, actions)
         } else {
             Text(stringResource(R.string.transaction_place_title), style = MaterialTheme.typography.labelLarge)
-            Text(name.orEmpty(), style = MaterialTheme.typography.bodyLarge)
+            SelectedPlaceDetails(uiState.transaction)
         }
     }
 }
@@ -79,16 +80,7 @@ private fun TransactionPlaceNameRow(
         onExpandedChange = { onToggle() },
     ) {
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text =
-                    uiState.transaction.placeName.orEmpty().ifBlank {
-                        stringResource(R.string.transaction_place_not_selected)
-                    },
-                modifier = Modifier.weight(1f),
-                style = MaterialTheme.typography.bodyLarge,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-            )
+            SelectedPlaceDetails(uiState.transaction, modifier = Modifier.weight(1f))
             PlaceEditButton(
                 loading = uiState.placeState.status == NearbyPlacesStatus.LOADING,
                 onClick = onToggle,
@@ -143,8 +135,31 @@ private fun ExposedDropdownMenuBoxScope.PlaceSelectionMenu(
             }
             uiState.placeState.places.forEach { place ->
                 HorizontalDivider()
-                PlaceMenuItem(onClick = { actions.onNameChanged(place.name) }) { PlaceDetails(place) }
+                PlaceMenuItem(onClick = { actions.onPlaceSelected(place) }) { PlaceDetails(place) }
             }
+        }
+    }
+}
+
+@Composable
+private fun SelectedPlaceDetails(
+    transaction: Transaction,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        Text(
+            text = transaction.placeName.orEmpty().ifBlank { stringResource(R.string.transaction_place_not_selected) },
+            style = MaterialTheme.typography.bodyLarge,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+        )
+        if (!transaction.placeName.isNullOrBlank() && !transaction.placeAddress.isNullOrBlank()) {
+            Text(
+                text = transaction.placeAddress.orEmpty(),
+                style = MaterialTheme.typography.bodySmall,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
         }
     }
 }

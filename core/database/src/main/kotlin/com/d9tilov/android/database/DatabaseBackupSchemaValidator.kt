@@ -23,7 +23,11 @@ internal object DatabaseBackupSchemaValidator {
             val expectedSchema =
                 if (legacyBackup && table == "transactions") {
                     destinationSchema.copy(
-                        columns = destinationSchema.columns.filterNot { it.name == "placeName" }.toSet(),
+                        columns =
+                            destinationSchema.columns
+                                .filterNot {
+                                    it.name == "placeName" || it.name == "placeAddress"
+                                }.toSet(),
                     )
                 } else {
                     destinationSchema

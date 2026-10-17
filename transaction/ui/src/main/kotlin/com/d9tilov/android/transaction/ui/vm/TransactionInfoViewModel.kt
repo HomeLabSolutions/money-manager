@@ -77,11 +77,18 @@ class TransactionInfoViewModel
 
         fun updateAmount(amount: String) = _uiState.update { state -> state.copy(amount = amount) }
 
-        fun updatePlaceName(name: String) {
+        fun updatePlaceName(
+            name: String,
+            address: String? = null,
+        ) {
             if (!canEditPlace()) return
             _uiState.update { state ->
                 state.copy(
-                    transaction = state.transaction.copy(placeName = name),
+                    transaction =
+                        state.transaction.copy(
+                            placeName = name,
+                            placeAddress = address?.takeIf { name.isNotBlank() && it.isNotBlank() },
+                        ),
                     placeState = state.placeState.copy(pickerVisible = false),
                 )
             }
@@ -196,6 +203,7 @@ class TransactionInfoViewModel
                 state.transaction.copy(
                     sum = state.amount.toBigDecimal(),
                     placeName = state.transaction.placeName?.trim(),
+                    placeAddress = state.transaction.placeAddress?.trim(),
                 ),
             )
         }

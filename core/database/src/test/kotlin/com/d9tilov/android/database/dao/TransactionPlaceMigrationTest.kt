@@ -10,7 +10,7 @@ import java.sql.DriverManager
 
 class TransactionPlaceMigrationTest {
     @Test
-    fun `migration preserves existing expenses and adds nullable place name`() {
+    fun `migration from 2 to 3 preserves expenses and adds nullable place name and address`() {
         DriverManager.getConnection("jdbc:sqlite::memory:").use { connection ->
             connection.createStatement().use { statement ->
                 statement.execute("CREATE TABLE transactions (id INTEGER PRIMARY KEY, description TEXT NOT NULL)")
@@ -27,15 +27,21 @@ class TransactionPlaceMigrationTest {
                 } as SupportSQLiteDatabase
             MIGRATION_2_3.migrate(database)
             connection.createStatement().use { statement ->
-                statement.executeQuery("SELECT description, placeName FROM transactions WHERE id = 1").use { row ->
+                statement
+                    .executeQuery("SELECT description, placeName, placeAddress FROM transactions WHERE id = 1")
+                    .use { row ->
+                        check(row.next())
+                        assertEquals("Existing expense", row.getString("description"))
+                        assertNull(row.getString("placeName"))
+                        assertNull(row.getString("placeAddress"))
+                    }
+                statement.execute(
+                    "UPDATE transactions SET placeName = 'My cafe', placeAddress = 'High Street' WHERE id = 1",
+                )
+                statement.executeQuery("SELECT placeName, placeAddress FROM transactions WHERE id = 1").use { row ->
                     check(row.next())
-                    assertEquals("Existing expense", row.getString("description"))
-                    assertNull(row.getString("placeName"))
-                }
-                statement.execute("UPDATE transactions SET placeName = 'My cafe' WHERE id = 1")
-                statement.executeQuery("SELECT placeName FROM transactions WHERE id = 1").use { row ->
-                    check(row.next())
-                    assertEquals("My cafe", row.getString(1))
+                    assertEquals("My cafe", row.getString("placeName"))
+                    assertEquals("High Street", row.getString("placeAddress"))
                 }
             }
         }

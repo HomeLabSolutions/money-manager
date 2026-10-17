@@ -10,8 +10,10 @@ class TransactionPlaceMapperTest {
     @Test
     fun `place decision survives domain mapping`() {
         listOf(null, "", "My cafe").forEach { name ->
-            val original = Transaction.EMPTY.copy(placeName = name)
-            assertEquals(name, original.toDataModel().toDomainModel(original.category).placeName)
+            val original = Transaction.EMPTY.copy(placeName = name, placeAddress = "High Street")
+            val restored = original.toDataModel().toDomainModel(original.category)
+            assertEquals(name, restored.placeName)
+            assertEquals("High Street", restored.placeAddress)
         }
     }
 }

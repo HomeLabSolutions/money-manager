@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "2d8137dd3d73f9badd48413129f5f251",
+    "identityHash": "f61897cf805d80ccbe167723ce4d3caf",
     "entities": [
       {
         "tableName": "users",
@@ -141,7 +141,7 @@
       },
       {
         "tableName": "transactions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `clientId` TEXT NOT NULL, `type` INTEGER NOT NULL, `categoryId` INTEGER NOT NULL, `currency` TEXT NOT NULL, `sum` TEXT NOT NULL, `usd_sum` TEXT NOT NULL, `date` INTEGER NOT NULL, `description` TEXT NOT NULL, `qrCode` TEXT, `isRegular` INTEGER NOT NULL, `inStatistics` INTEGER NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `photo` TEXT, `placeName` TEXT, FOREIGN KEY(`clientId`) REFERENCES `users`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `clientId` TEXT NOT NULL, `type` INTEGER NOT NULL, `categoryId` INTEGER NOT NULL, `currency` TEXT NOT NULL, `sum` TEXT NOT NULL, `usd_sum` TEXT NOT NULL, `date` INTEGER NOT NULL, `description` TEXT NOT NULL, `qrCode` TEXT, `isRegular` INTEGER NOT NULL, `inStatistics` INTEGER NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `photo` TEXT, `placeName` TEXT, `placeAddress` TEXT, FOREIGN KEY(`clientId`) REFERENCES `users`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -234,6 +234,11 @@
           {
             "fieldPath": "placeName",
             "columnName": "placeName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "placeAddress",
+            "columnName": "placeAddress",
             "affinity": "TEXT"
           }
         ],
@@ -661,7 +666,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2d8137dd3d73f9badd48413129f5f251')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f61897cf805d80ccbe167723ce4d3caf')"
     ]
   }
 }
