@@ -82,7 +82,7 @@ class TransactionInfoViewModel
             _uiState.update { state ->
                 state.copy(
                     transaction = state.transaction.copy(placeName = name),
-                    placeState = state.placeState.copy(dialogVisible = false),
+                    placeState = state.placeState.copy(pickerVisible = false),
                 )
             }
         }
@@ -92,14 +92,14 @@ class TransactionInfoViewModel
             val state = _uiState.value
             if (state.placeState.status == NearbyPlacesStatus.LOADING) return
             if (state.placeState.status == NearbyPlacesStatus.READY) {
-                _uiState.update { it.copy(placeState = it.placeState.copy(dialogVisible = true)) }
+                _uiState.update { it.copy(placeState = it.placeState.copy(pickerVisible = true)) }
                 return
             }
             val location = state.transaction.locationData
             if (!hasUsableCoordinates(location)) {
                 _uiState.update {
                     it.copy(
-                        placeState = it.placeState.copy(status = NearbyPlacesStatus.NO_LOCATION, dialogVisible = true),
+                        placeState = it.placeState.copy(status = NearbyPlacesStatus.NO_LOCATION, pickerVisible = true),
                     )
                 }
                 return
@@ -110,7 +110,7 @@ class TransactionInfoViewModel
                         it.placeState.copy(
                             status = NearbyPlacesStatus.LOADING,
                             places = emptyList(),
-                            dialogVisible = false,
+                            pickerVisible = false,
                         ),
                 )
             }
@@ -123,7 +123,7 @@ class TransactionInfoViewModel
                                 it.placeState.copy(
                                     places = places,
                                     status = NearbyPlacesStatus.READY,
-                                    dialogVisible = true,
+                                    pickerVisible = true,
                                 ),
                         )
                     }
@@ -135,7 +135,7 @@ class TransactionInfoViewModel
                             placeState =
                                 it.placeState.copy(
                                     status = NearbyPlacesStatus.UNAVAILABLE,
-                                    dialogVisible = true,
+                                    pickerVisible = true,
                                 ),
                         )
                     }
@@ -143,8 +143,8 @@ class TransactionInfoViewModel
             }
         }
 
-        fun dismissPlaceDialog() {
-            _uiState.update { state -> state.copy(placeState = state.placeState.copy(dialogVisible = false)) }
+        fun dismissPlacePicker() {
+            _uiState.update { state -> state.copy(placeState = state.placeState.copy(pickerVisible = false)) }
         }
 
         private fun canEditPlace(): Boolean =
