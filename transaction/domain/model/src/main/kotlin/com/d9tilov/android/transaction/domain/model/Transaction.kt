@@ -25,6 +25,8 @@ data class Transaction(
     val inStatistics: Boolean,
     val locationData: LocationData,
     val photoUri: String?,
+    val placeName: String? = null,
+    val placeAddress: String? = null,
 ) {
     companion object {
         val EMPTY =

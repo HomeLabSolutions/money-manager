@@ -11,10 +11,12 @@ val keystorePropertiesFile: File = rootProject.file("keystore.properties")
 val keystoreProperties = Properties()
 var currencyApiKey = ""
 var geocodingApiKey = ""
+var geoapifyApiKey = ""
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
     currencyApiKey = keystoreProperties["currency_api_key"] as String
     geocodingApiKey = keystoreProperties["geocoding_api_key"] as String
+    geoapifyApiKey = keystoreProperties["geoapify_api_key"] as String
 } else {
     println("Warning: keystore.properties file not found. Release signing configuration will not be applied.")
     ""
@@ -28,8 +30,10 @@ android {
     }
 
     defaultConfig {
-        buildConfigField("String", "CURRENCY_API_KEY", "\"$currencyApiKey\"")
-        buildConfigField("String", "GEOCODING_API_KEY", "\"$geocodingApiKey\"")
+        val stringType = "String"
+        buildConfigField(stringType, "CURRENCY_API_KEY", "\"$currencyApiKey\"")
+        buildConfigField(stringType, "GEOCODING_API_KEY", "\"$geocodingApiKey\"")
+        buildConfigField(stringType, "GEOAPIFY_API_KEY", "\"$geoapifyApiKey\"")
     }
 }
 
@@ -42,4 +46,6 @@ dependencies {
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.retrofit)
     implementation(libs.timber)
+
+    testImplementation(libs.junit)
 }

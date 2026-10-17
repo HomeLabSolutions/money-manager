@@ -15,7 +15,9 @@ import androidx.compose.material.icons.rounded.AddTask
 import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.rounded.BarChart
 import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.KeyboardHide
+import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.RemoveCircle
@@ -50,4 +52,6 @@ object MoneyManagerIcons {
     val Cross = Icons.Rounded.RemoveCircle
     val Delete = Icons.Outlined.Delete
     val Search = Icons.Rounded.Search
+    val Edit = Icons.Rounded.Edit
+    val Location = Icons.Rounded.LocationOn
 }

@@ -24,6 +24,8 @@ fun TransactionDbModel.toDataModel(): TransactionDataModel =
         inStatistics,
         LocationData(latitude, longitude),
         photoUri,
+        placeName,
+        placeAddress,
     )
 
 fun TransactionDataModel.toDbModel(): TransactionDbModel =
@@ -43,6 +45,8 @@ fun TransactionDataModel.toDbModel(): TransactionDbModel =
         location.latitude,
         location.longitude,
         photoUri,
+        placeName,
+        placeAddress,
     )
 
 fun TransactionMinMaxDateDbModel.toDataModel(): TransactionMinMaxDateModel =

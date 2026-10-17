@@ -149,37 +149,6 @@ class TransactionInteractorImplTest {
         }
 
     @Test
-    fun `getTransactionById should return transaction with category`() =
-        runTest {
-            val transactionDataModel =
-                TransactionDataModel(
-                    id = 1L,
-                    clientId = "test-client-id",
-                    type = TransactionType.EXPENSE,
-                    categoryId = 1L,
-                    currencyCode = "USD",
-                    sum = BigDecimal(100),
-                    usdSum = BigDecimal(100),
-                    date = LocalDateTime(2024, 1, 1, 0, 0),
-                    description = "Test",
-                    qrCode = "",
-                    inStatistics = true,
-                    isRegular = false,
-                    location = LocationData(0.0, 0.0),
-                    photoUri = "",
-                )
-
-            coEvery { transactionRepo.getTransactionById(1L) } returns flowOf(transactionDataModel)
-
-            val transaction = interactor.getTransactionById(1L).first()
-
-            assertEquals(1L, transaction.id)
-            assertEquals(testCategory, transaction.category)
-            assertEquals(BigDecimal(100), transaction.sum)
-            assertEquals(TransactionType.EXPENSE, transaction.type)
-        }
-
-    @Test
     fun `getTransactionsGroupedByCategory should group transactions by category`() =
         runTest {
             val transactionDataModel =

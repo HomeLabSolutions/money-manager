@@ -240,6 +240,8 @@ class TransactionInteractorImpl @Inject constructor(
                     isRegular = transactionDataModel.isRegular,
                     locationData = transactionDataModel.location,
                     photoUri = transactionDataModel.photoUri,
+                    placeName = transactionDataModel.placeName,
+                    placeAddress = transactionDataModel.placeAddress,
                 )
             }
 

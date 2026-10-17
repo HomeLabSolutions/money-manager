@@ -115,6 +115,13 @@ fun TransactionInfoRoute(
         onCurrencyClicked = clickCurrency,
         onCategoryClicked = clickCategory,
         onDateClicked = viewModel::updateDate,
+        placeActions =
+            TransactionPlaceActions(
+                onEdit = viewModel::loadNearbyPlaces,
+                onDismiss = viewModel::dismissPlacePicker,
+                onNameChanged = { viewModel.updatePlaceName(it) },
+                onPlaceSelected = { viewModel.updatePlaceName(it.name, it.address) },
+            ),
     )
 }
 
@@ -130,6 +137,7 @@ fun TransactionInfoScreen(
     onCategoryClicked: (TransactionType, CategoryDestination) -> Unit,
     onDateClicked: (Long) -> Unit,
     onSaveClicked: () -> Unit,
+    placeActions: TransactionPlaceActions = TransactionPlaceActions(),
 ) {
     val mode = uiState.mode
     val context = LocalContext.current
@@ -282,12 +290,28 @@ fun TransactionInfoScreen(
                     readOnly = mode == TransactionInfoMode.VIEW,
                 )
 
+                TransactionPlaceSection(
+                    uiState = uiState,
+                    actions = placeActions,
+                    modifier =
+                        Modifier.padding(
+                            horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
+                            vertical = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small),
+                        ),
+                )
                 if (uiState.transaction.locationData != LocationData.EMPTY) {
                     TransactionLocationMap(
                         locationData = uiState.transaction.locationData,
                         categoryName = uiState.transaction.category.name,
                     )
                 }
+                TransactionPlaceAttribution(
+                    uiState = uiState,
+                    modifier =
+                        Modifier.padding(
+                            horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
+                        ),
+                )
             }
             if (mode == TransactionInfoMode.EDIT) {
                 BottomActionButton(

@@ -23,6 +23,8 @@ fun Transaction.toDataModel(): TransactionDataModel =
         inStatistics,
         locationData,
         photoUri,
+        placeName,
+        placeAddress,
     )
 
 fun TransactionDataModel.toDomainModel(category: Category): Transaction =
@@ -41,6 +43,8 @@ fun TransactionDataModel.toDomainModel(category: Category): Transaction =
         inStatistics = inStatistics,
         locationData = location,
         photoUri = photoUri,
+        placeName = placeName,
+        placeAddress = placeAddress,
     )
 
 fun TransactionDataModel.toChartModel(
