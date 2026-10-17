@@ -10,7 +10,7 @@ data class GeoapifyPlacesResponse(
 
 @Serializable
 data class GeoapifyPlaceFeature(
-    @SerialName("properties") val properties: GeoapifyPlaceProperties? = null,
+    @SerialName("properties") val properties: GeoapifyPlaceProperties,
 )
 
 @Serializable
