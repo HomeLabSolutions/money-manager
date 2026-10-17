@@ -1,21 +1,24 @@
 package com.d9tilov.android.transaction.ui
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuBoxScope
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -27,7 +30,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -64,30 +66,40 @@ internal fun TransactionPlaceSection(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TransactionPlaceNameRow(
     uiState: TransactionInfoUiState,
     actions: TransactionPlaceActions,
 ) {
     var customNameVisible by rememberSaveable { mutableStateOf(false) }
-    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-        Text(
-            text =
-                uiState.transaction.placeName.orEmpty().ifBlank {
-                    stringResource(R.string.transaction_place_not_selected)
-                },
-            modifier = Modifier.weight(1f),
-            style = MaterialTheme.typography.bodyLarge,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
-        )
-        PlaceEditButton(
-            loading = uiState.placeState.status == NearbyPlacesStatus.LOADING,
-            onClick = actions.onEdit,
-        )
-    }
-    if (uiState.placeState.dialogVisible) {
-        PlaceSelectionDialog(
+    val onToggle = { if (uiState.placeState.pickerVisible) actions.onDismiss() else actions.onEdit() }
+    ExposedDropdownMenuBox(
+        expanded = uiState.placeState.pickerVisible,
+        onExpandedChange = { onToggle() },
+    ) {
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text =
+                    uiState.transaction.placeName.orEmpty().ifBlank {
+                        stringResource(R.string.transaction_place_not_selected)
+                    },
+                modifier = Modifier.weight(1f),
+                style = MaterialTheme.typography.bodyLarge,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
+            PlaceEditButton(
+                loading = uiState.placeState.status == NearbyPlacesStatus.LOADING,
+                onClick = onToggle,
+                modifier =
+                    Modifier.menuAnchor(
+                        type = ExposedDropdownMenuAnchorType.PrimaryNotEditable,
+                        enabled = uiState.placeState.status != NearbyPlacesStatus.LOADING,
+                    ),
+            )
+        }
+        PlaceSelectionMenu(
             uiState = uiState,
             actions = actions,
             onCustomName = {
@@ -105,38 +117,52 @@ private fun TransactionPlaceNameRow(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PlaceSelectionDialog(
+private fun ExposedDropdownMenuBoxScope.PlaceSelectionMenu(
     uiState: TransactionInfoUiState,
     actions: TransactionPlaceActions,
     onCustomName: () -> Unit,
 ) {
-    AlertDialog(
+    ExposedDropdownMenu(
+        expanded = uiState.placeState.pickerVisible,
         onDismissRequest = actions.onDismiss,
-        text = {
-            val itemColors = ListItemDefaults.colors(containerColor = Color.Transparent)
-            LazyColumn(
-                modifier = Modifier.heightIn(max = dimensionResource(R.dimen.transaction_places_dialog_max_height)),
-            ) {
-                item { PlaceListStatus(uiState) }
-                item {
-                    ListItem(
-                        headlineContent = { Text(stringResource(R.string.transaction_place_custom_name)) },
-                        modifier = Modifier.clickable(onClick = onCustomName),
-                        colors = itemColors,
-                    )
-                }
-                items(uiState.placeState.places, key = { it.id }) { place ->
-                    HorizontalDivider()
-                    ListItem(
-                        headlineContent = { PlaceDetails(place) },
-                        modifier = Modifier.clickable { actions.onNameChanged(place.name) },
-                        colors = itemColors,
-                    )
-                }
+        modifier = Modifier.heightIn(max = dimensionResource(R.dimen.transaction_places_menu_max_height)),
+        shape = RoundedCornerShape(dimensionResource(R.dimen.transaction_places_menu_corner_radius)),
+    ) {
+        Column(
+            modifier =
+                Modifier.padding(
+                    horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_expanded),
+                    vertical = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                ),
+        ) {
+            PlaceListStatus(uiState)
+            PlaceMenuItem(onClick = onCustomName) {
+                Text(stringResource(R.string.transaction_place_custom_name), style = MaterialTheme.typography.bodyLarge)
             }
-        },
-        confirmButton = {},
+            uiState.placeState.places.forEach { place ->
+                HorizontalDivider()
+                PlaceMenuItem(onClick = { actions.onNameChanged(place.name) }) { PlaceDetails(place) }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PlaceMenuItem(
+    onClick: () -> Unit,
+    content: @Composable () -> Unit,
+) {
+    DropdownMenuItem(
+        text = content,
+        onClick = onClick,
+        modifier = Modifier.heightIn(min = dimensionResource(R.dimen.transaction_place_item_min_height)),
+        contentPadding =
+            PaddingValues(
+                horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                vertical = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small),
+            ),
     )
 }
 
@@ -144,8 +170,9 @@ private fun PlaceSelectionDialog(
 private fun PlaceEditButton(
     loading: Boolean,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    IconButton(onClick = onClick, enabled = !loading) {
+    IconButton(onClick = onClick, enabled = !loading, modifier = modifier) {
         if (loading) {
             CircularProgressIndicator(
                 modifier = Modifier.size(dimensionResource(R.dimen.transaction_place_loader_size)),
