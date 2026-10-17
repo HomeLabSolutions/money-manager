@@ -35,7 +35,7 @@ class GeoapifyPlaceMapperTest {
         val response =
             GeoapifyPlacesResponse(
                 listOf(
-                    GeoapifyPlaceFeature(),
+                    GeoapifyPlaceFeature(GeoapifyPlaceProperties()),
                     feature("", "Cafe", 0.0),
                     feature("blank", " ", 1.0),
                     feature("outside", "Shop", 150.001),

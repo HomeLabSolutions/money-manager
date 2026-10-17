@@ -1,10 +1,10 @@
 package com.d9tilov.android.network
 
+import com.d9tilov.android.network.model.GeoapifyPlaceProperties
 import com.d9tilov.android.network.model.GeoapifyPlacesResponse
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertThrows
 import org.junit.Test
 
@@ -28,7 +28,7 @@ class GeoapifyPlacesResponseTest {
                 }
                 """.trimIndent(),
             )
-        val properties = checkNotNull(response.features.single().properties)
+        val properties = response.features.single().properties
         assertEquals("cafe", properties.id)
         assertEquals("Cafe", properties.name)
         assertEquals("High Street", properties.address)
@@ -38,19 +38,34 @@ class GeoapifyPlacesResponseTest {
     }
 
     @Test
-    fun `missing optional properties can be filtered by the mapper`() {
-        val response = json.decodeFromString<GeoapifyPlacesResponse>("""{"features": [{}, {"properties": {}}]}""")
-        assertNull(response.features[0].properties)
-        assertNull(response.features[1].properties?.id)
+    fun `missing or null optional place fields deserialize to null`() {
+        listOf(
+            "{}",
+            """
+            {
+              "place_id": null, "name": null, "formatted": null,
+              "distance": null, "lat": null, "lon": null
+            }
+            """.trimIndent(),
+        ).forEach { properties ->
+            val response =
+                json.decodeFromString<GeoapifyPlacesResponse>("""{"features":[{"properties":$properties}]}""")
+            assertEquals(GeoapifyPlaceProperties(), response.features.single().properties)
+        }
     }
 
     @Test
     fun `malformed service responses fail instead of appearing as an empty successful list`() {
-        listOf("""{"error": "Invalid key"}""", """{"features": null}""", """{"features": [null]}""")
-            .forEach { response ->
-                assertThrows(SerializationException::class.java) {
-                    json.decodeFromString<GeoapifyPlacesResponse>(response)
-                }
+        listOf(
+            """{"error": "Invalid key"}""",
+            """{"features": null}""",
+            """{"features": [null]}""",
+            """{"features": [{}]}""",
+            """{"features": [{"properties": null}]}""",
+        ).forEach { response ->
+            assertThrows(SerializationException::class.java) {
+                json.decodeFromString<GeoapifyPlacesResponse>(response)
             }
+        }
     }
 }

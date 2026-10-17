@@ -16,7 +16,7 @@ private const val EARTH_RADIUS_METERS = 6_371_000.0
 
 internal fun GeoapifyPlacesResponse.toNearbyPlaces(location: LocationData): List<NearbyPlace> =
     features
-        .mapNotNull { it.properties?.toCandidate(location) }
+        .mapNotNull { it.properties.toCandidate(location) }
         .sortedBy { it.distance }
         .distinctBy { it.place.id }
         .take(NEARBY_PLACES_LIMIT)
