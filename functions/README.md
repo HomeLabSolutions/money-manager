@@ -17,9 +17,9 @@ Run `npm ci && npm test` in this directory to check the request contract locally
 
 ## Nearby expense places
 
-Nearby places are requested directly from Geoapify by the Kotlin `GeoapifyNearbyPlacesRepo` through the Retrofit API in `core:network`. Firebase Functions and Firebase Authentication are not involved in this request.
+Nearby places are requested directly from Geoapify by the Kotlin `NearbyPlacesDataRepo` through the Retrofit API in `core:network`. Firebase Functions and Firebase Authentication are not involved in this request.
 
-Set `geoapify_api_key` in the ignored root `keystore.properties`, alongside `currency_api_key`. Gradle reads the key only from this file and exposes it as `BuildConfig.GEOAPIFY_API_KEY`. Builds without a key can compile, but cannot fetch places. The key is bundled in Android, following the currency API configuration. The Geoapify client does not log requests or responses.
+Set `geoapify_api_key` in the ignored root `keystore.properties`, alongside `currency_api_key`. Gradle reads the key only from this file and exposes it as `BuildConfig.GEOAPIFY_API_KEY`. Builds without a key can compile, but cannot fetch places. The key is bundled in Android, following the currency API configuration. Geoapify uses the shared OkHttp client and debug logging, with apiKey redacted from logged request URLs.
 
 The app sends saved expense coordinates only after tapping the pencil and requests named catering/retail places within 150 meters. Kotlin filters results to this radius, orders them by distance, removes duplicate IDs, and limits the list to 20. A missing distance is calculated from place coordinates. Opening a transaction reads its saved name and address from the database without an API request. The pencil becomes a loader while fetching; successful lists are cached for the lifetime of the ViewModel. A failed request can be retried on the next tap. The rounded exposed menu keeps its dividers and shows each distance below its address.
 
