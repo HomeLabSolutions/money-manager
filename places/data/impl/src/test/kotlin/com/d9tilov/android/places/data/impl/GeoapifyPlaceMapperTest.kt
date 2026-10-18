@@ -10,7 +10,7 @@ import org.junit.Test
 
 class GeoapifyPlaceMapperTest {
     @Test
-    fun `results retain the nearest duplicate and sort using distance before rounding`() {
+    fun `results preserve api order and retain the first duplicate`() {
         val response =
             GeoapifyPlacesResponse(
                 listOf(
@@ -21,8 +21,8 @@ class GeoapifyPlaceMapperTest {
                 ),
             )
         val places = response.toNearbyPlaces()
-        assertEquals(listOf("closer", "cafe", "shop"), places.map { it.id })
-        assertEquals(listOf(1, 1, 150), places.map { it.distanceMeters })
+        assertEquals(listOf("shop", "cafe", "closer"), places.map { it.id })
+        assertEquals(listOf(150, 1, 1), places.map { it.distanceMeters })
         assertEquals("Cafe", places[1].name)
         assertEquals("High Street", places[1].address)
     }

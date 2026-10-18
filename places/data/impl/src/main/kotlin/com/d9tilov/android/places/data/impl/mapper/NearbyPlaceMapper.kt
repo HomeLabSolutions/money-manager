@@ -7,31 +7,20 @@ import com.d9tilov.android.places.domain.model.NearbyPlace
 
 internal fun GeoapifyPlacesResponse.toNearbyPlaces(): List<NearbyPlace> =
     features
-        .mapNotNull { it.properties.toCandidate() }
-        .sortedBy { it.distance }
-        .distinctBy { it.place.id }
+        .mapNotNull { it.properties.toNearbyPlace() }
+        .distinctBy { it.id }
         .take(NEARBY_PLACES_LIMIT)
-        .map { it.place }
 
-private fun GeoapifyPlaceProperties.toCandidate(): PlaceCandidate? {
+private fun GeoapifyPlaceProperties.toNearbyPlace(): NearbyPlace? {
     val id = id.orEmpty().trim()
     val name = name.orEmpty().trim()
     val distance = distance
     if (id.isBlank() || name.isBlank() || distance == null) return null
     if (!distance.isFinite() || distance < 0) return null
-    return PlaceCandidate(
-        place =
-            NearbyPlace(
-                id = id,
-                name = name,
-                address = address.orEmpty().trim(),
-                distanceMeters = distance.toInt(),
-            ),
-        distance = distance,
+    return NearbyPlace(
+        id = id,
+        name = name,
+        address = address.orEmpty().trim(),
+        distanceMeters = distance.toInt(),
     )
 }
-
-private data class PlaceCandidate(
-    val place: NearbyPlace,
-    val distance: Double,
-)
