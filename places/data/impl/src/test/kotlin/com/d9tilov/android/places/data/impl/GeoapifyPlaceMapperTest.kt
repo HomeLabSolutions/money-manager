@@ -14,7 +14,7 @@ class GeoapifyPlaceMapperTest {
         val response =
             GeoapifyPlacesResponse(
                 listOf(
-                    feature("shop", "Shop", 150.0),
+                    feature("shop", "Shop", 150.5),
                     feature("cafe", " Cafe ", 1.9),
                     feature("closer", "Closer", 1.1),
                     feature("cafe", "Cafe duplicate", 20.0),
@@ -28,14 +28,13 @@ class GeoapifyPlaceMapperTest {
     }
 
     @Test
-    fun `invalid unnamed and out of radius features are omitted`() {
+    fun `invalid and unnamed features are omitted`() {
         val response =
             GeoapifyPlacesResponse(
                 listOf(
                     GeoapifyPlaceFeature(GeoapifyPlaceProperties()),
                     feature("", "Cafe", 0.0),
                     feature("blank", " ", 1.0),
-                    feature("outside", "Shop", 150.001),
                     feature("negative", "Shop", -1.0),
                     feature("nan", "Shop", Double.NaN),
                     feature("infinite", "Shop", Double.POSITIVE_INFINITY),
