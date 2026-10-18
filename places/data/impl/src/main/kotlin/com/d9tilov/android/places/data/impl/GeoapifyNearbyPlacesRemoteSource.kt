@@ -30,16 +30,14 @@ class GeoapifyNearbyPlacesRemoteSource @Inject constructor(
             setOf(
                 "catering",
                 "commercial",
-                "service.vehicle",
-                "service.beauty",
-                "service.cleaning",
+                "service",
                 "healthcare",
                 "entertainment",
                 "accommodation",
-                "sport.fitness",
-                "parking.cars",
-                "pet.veterinary",
-                "rental.car",
+                "sport",
+                "parking",
+                "pet",
+                "rental",
             )
     }
 }
