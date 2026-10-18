@@ -10,7 +10,6 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame
-import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.IOException
 
@@ -40,18 +39,17 @@ class NearbyPlacesDataRepoTest {
         }
 
     @Test
-    fun `invalid coordinates fail before sending a request`() =
+    fun `coordinates are forwarded to source without validation`() =
         runTest {
-            listOf(
-                LocationData(Double.NaN, 0.0),
-                LocationData(0.0, Double.POSITIVE_INFINITY),
-                LocationData(91.0, 0.0),
-                LocationData(0.0, -181.0),
-            ).forEach { invalid ->
-                val failure = runCatching { repo.getNearbyPlaces(invalid) }.exceptionOrNull()
-                assertTrue(failure is IllegalArgumentException)
-            }
-            assertTrue(source.requests.isEmpty())
+            val coordinates =
+                listOf(
+                    LocationData(Double.NaN, 0.0),
+                    LocationData(0.0, Double.POSITIVE_INFINITY),
+                    LocationData(91.0, 0.0),
+                    LocationData(0.0, -181.0),
+                )
+            coordinates.forEach { repo.getNearbyPlaces(it) }
+            assertEquals(coordinates, source.requests)
         }
 
     @Test

@@ -103,7 +103,7 @@ class TransactionInfoViewModel
                 return
             }
             val location = state.transaction.locationData
-            if (!hasUsableCoordinates(location)) {
+            if (location == LocationData.EMPTY) {
                 _uiState.update {
                     it.copy(
                         placeState = it.placeState.copy(status = NearbyPlacesStatus.NO_LOCATION, pickerVisible = true),
@@ -157,12 +157,6 @@ class TransactionInfoViewModel
         private fun canEditPlace(): Boolean =
             _uiState.value.run { mode == TransactionInfoMode.EDIT && transaction.type == TransactionType.EXPENSE }
 
-        private fun hasUsableCoordinates(location: LocationData): Boolean {
-            val validLatitude = location.latitude.isFinite() && location.latitude in MIN_LATITUDE..MAX_LATITUDE
-            val validLongitude = location.longitude.isFinite() && location.longitude in MIN_LONGITUDE..MAX_LONGITUDE
-            return location != LocationData.EMPTY && validLatitude && validLongitude
-        }
-
         fun updateDescription(description: String) =
             _uiState.update { state ->
                 val tr = state.transaction
@@ -206,12 +200,5 @@ class TransactionInfoViewModel
                     placeAddress = state.transaction.placeAddress?.trim(),
                 ),
             )
-        }
-
-        private companion object {
-            const val MIN_LATITUDE = -90.0
-            const val MAX_LATITUDE = 90.0
-            const val MIN_LONGITUDE = -180.0
-            const val MAX_LONGITUDE = 180.0
         }
     }
