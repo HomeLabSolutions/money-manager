@@ -63,6 +63,7 @@ import com.d9tilov.android.designsystem.CheckboxWithLabel
 import com.d9tilov.android.designsystem.DescriptionTextField
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
+import com.d9tilov.android.places.domain.model.Place
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.model.TransactionInfoMode
 import com.d9tilov.android.transaction.ui.vm.TransactionInfoUiState
@@ -299,9 +300,9 @@ fun TransactionInfoScreen(
                             vertical = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small),
                         ),
                 )
-                if (uiState.transaction.locationData != LocationData.EMPTY) {
+                if (uiState.transaction.place.location != LocationData.EMPTY) {
                     TransactionLocationMap(
-                        locationData = uiState.transaction.locationData,
+                        locationData = uiState.transaction.place.location,
                         categoryName = uiState.transaction.category.name,
                     )
                 }
@@ -498,10 +499,13 @@ fun DefaultTransactionInfoPreview(mode: TransactionInfoMode = TransactionInfoMod
                                     icon = com.d9tilov.android.common.android.R.drawable.ic_category_cafe,
                                     color = android.R.color.holo_red_dark,
                                 ),
-                            locationData =
-                                LocationData(
-                                    latitude = 55.7558,
-                                    longitude = 37.6173,
+                            place =
+                                Place(
+                                    location =
+                                        LocationData(
+                                            latitude = 55.7558,
+                                            longitude = 37.6173,
+                                        ),
                                 ),
                         ),
                 ),

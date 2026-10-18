@@ -2,6 +2,7 @@ package com.d9tilov.android.transaction.data.impl
 
 import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.places.domain.model.Place
 import com.d9tilov.android.transaction.data.impl.mapper.toDataModel
 import com.d9tilov.android.transaction.data.impl.mapper.toDbModel
 import com.d9tilov.android.transaction.domain.model.TransactionDataModel
@@ -21,10 +22,10 @@ class TransactionPlaceDataMapperTest {
                 usdSum = BigDecimal.ONE,
                 isRegular = false,
                 inStatistics = true,
-                location = LocationData.EMPTY,
+                place = Place(location = LocationData(51.5, -0.1)),
             )
         listOf(null, "", "My cafe").forEach { name ->
-            val original = transaction.copy(placeName = name, placeAddress = "High Street")
+            val original = transaction.copy(place = transaction.place.copy(name = name, address = "High Street"))
             assertEquals(original, original.toDbModel().toDataModel())
         }
     }

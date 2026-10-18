@@ -86,8 +86,11 @@ class TransactionInfoViewModel
                 state.copy(
                     transaction =
                         state.transaction.copy(
-                            placeName = name,
-                            placeAddress = address?.takeIf { name.isNotBlank() && it.isNotBlank() },
+                            place =
+                                state.transaction.place.copy(
+                                    name = name,
+                                    address = address?.takeIf { name.isNotBlank() && it.isNotBlank() },
+                                ),
                         ),
                     placeState = state.placeState.copy(pickerVisible = false),
                 )
@@ -102,7 +105,7 @@ class TransactionInfoViewModel
                 _uiState.update { it.copy(placeState = it.placeState.copy(pickerVisible = true)) }
                 return
             }
-            val location = state.transaction.locationData
+            val location = state.transaction.place.location
             if (location == LocationData.EMPTY) {
                 _uiState.update {
                     it.copy(
@@ -196,8 +199,15 @@ class TransactionInfoViewModel
             transactionInteractor.update(
                 state.transaction.copy(
                     sum = state.amount.toBigDecimal(),
-                    placeName = state.transaction.placeName?.trim(),
-                    placeAddress = state.transaction.placeAddress?.trim(),
+                    place =
+                        state.transaction.place.copy(
+                            name =
+                                state.transaction.place.name
+                                    ?.trim(),
+                            address =
+                                state.transaction.place.address
+                                    ?.trim(),
+                        ),
                 ),
             )
         }

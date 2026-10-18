@@ -49,7 +49,7 @@ internal fun TransactionPlaceSection(
     modifier: Modifier = Modifier,
 ) {
     if (uiState.transaction.type != TransactionType.EXPENSE) return
-    val name = uiState.transaction.placeName
+    val name = uiState.transaction.place.name
     if (uiState.mode == TransactionInfoMode.VIEW && name.isNullOrBlank()) return
     Column(
         modifier = modifier,
@@ -102,7 +102,9 @@ private fun TransactionPlaceNameRow(
     }
     if (customNameVisible) {
         CustomPlaceNameDialog(
-            name = uiState.transaction.placeName.orEmpty(),
+            name =
+                uiState.transaction.place.name
+                    .orEmpty(),
             onNameChanged = actions.onNameChanged,
             onDismiss = { customNameVisible = false },
         )
@@ -148,14 +150,17 @@ private fun SelectedPlaceDetails(
 ) {
     Column(modifier = modifier) {
         Text(
-            text = transaction.placeName.orEmpty().ifBlank { stringResource(R.string.transaction_place_not_selected) },
+            text =
+                transaction.place.name
+                    .orEmpty()
+                    .ifBlank { stringResource(R.string.transaction_place_not_selected) },
             style = MaterialTheme.typography.bodyLarge,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
         )
-        if (!transaction.placeName.isNullOrBlank() && !transaction.placeAddress.isNullOrBlank()) {
+        if (!transaction.place.name.isNullOrBlank() && !transaction.place.address.isNullOrBlank()) {
             Text(
-                text = transaction.placeAddress.orEmpty(),
+                text = transaction.place.address.orEmpty(),
                 style = MaterialTheme.typography.bodySmall,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -281,7 +286,12 @@ internal fun TransactionPlaceAttribution(
     modifier: Modifier = Modifier,
 ) {
     if (uiState.transaction.type != TransactionType.EXPENSE) return
-    if (uiState.placeState.places.isEmpty() && uiState.transaction.placeName.isNullOrBlank()) return
+    if (uiState.placeState.places.isEmpty() &&
+        uiState.transaction.place.name
+            .isNullOrBlank()
+    ) {
+        return
+    }
     val uriHandler = LocalUriHandler.current
     Row(modifier = modifier) {
         TextButton(onClick = { uriHandler.openUri("https://www.geoapify.com/") }) {

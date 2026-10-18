@@ -31,7 +31,7 @@ class TransactionPlaceReadTest {
             val transaction = Transaction.EMPTY.copy(id = TRANSACTION_ID)
             coEvery { categories.getCategoryById(transaction.category.id) } returns transaction.category
             listOf(null to null, "Saved cafe" to null, "Saved cafe" to "High Street").forEach { (name, address) ->
-                val saved = transaction.copy(placeName = name, placeAddress = address)
+                val saved = transaction.copy(place = transaction.place.copy(name = name, address = address))
                 every { repo.getTransactionById(TRANSACTION_ID) } returns flowOf(saved.toDataModel())
                 assertEquals(saved, interactor.getTransactionById(TRANSACTION_ID).first())
             }

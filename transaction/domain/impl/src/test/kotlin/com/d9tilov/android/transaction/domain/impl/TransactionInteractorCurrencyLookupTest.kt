@@ -7,6 +7,7 @@ import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
+import com.d9tilov.android.places.domain.model.Place
 import com.d9tilov.android.transaction.domain.contract.TransactionRepo
 import com.d9tilov.android.transaction.domain.model.TransactionDataModel
 import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactionInteractor
@@ -134,7 +135,7 @@ class TransactionInteractorCurrencyLookupTest {
             qrCode = "",
             inStatistics = true,
             isRegular = false,
-            location = LocationData(0.0, 0.0),
+            place = Place(location = LocationData(0.0, 0.0)),
             photoUri = "",
         )
 }

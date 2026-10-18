@@ -12,6 +12,7 @@ import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
+import com.d9tilov.android.places.domain.model.Place
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.contract.TransactionRepo
 import com.d9tilov.android.transaction.domain.model.Transaction
@@ -165,7 +166,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    location = LocationData(0.0, 0.0),
+                    place = Place(location = LocationData(0.0, 0.0)),
                     photoUri = "",
                 )
 
@@ -217,7 +218,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    location = LocationData(0.0, 0.0),
+                    place = Place(location = LocationData(0.0, 0.0)),
                     photoUri = "",
                 )
             var persistedBudget = testBudget
@@ -321,7 +322,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    location = LocationData(0.0, 0.0),
+                    place = Place(location = LocationData(0.0, 0.0)),
                     photoUri = "",
                 )
 
@@ -339,7 +340,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    location = LocationData(0.0, 0.0),
+                    place = Place(location = LocationData(0.0, 0.0)),
                     photoUri = "",
                 )
 
@@ -389,7 +390,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    location = LocationData(0.0, 0.0),
+                    place = Place(location = LocationData(0.0, 0.0)),
                     photoUri = "",
                 )
             val from = LocalDateTime(2024, 1, 1, 0, 0)
@@ -455,7 +456,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    location = LocationData(0.0, 0.0),
+                    place = Place(location = LocationData(0.0, 0.0)),
                     photoUri = "",
                 )
 
@@ -490,7 +491,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    location = LocationData(0.0, 0.0),
+                    place = Place(location = LocationData(0.0, 0.0)),
                     photoUri = "",
                 )
 
@@ -535,7 +536,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    location = LocationData(0.0, 0.0),
+                    place = Place(location = LocationData(0.0, 0.0)),
                     photoUri = "",
                 )
 
@@ -567,7 +568,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    location = LocationData(0.0, 0.0),
+                    place = Place(location = LocationData(0.0, 0.0)),
                     photoUri = "",
                 )
 
@@ -600,7 +601,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    location = LocationData(0.0, 0.0),
+                    place = Place(location = LocationData(0.0, 0.0)),
                     photoUri = "",
                 )
 
@@ -681,7 +682,7 @@ class TransactionInteractorImplTest {
         qrCode = "",
         inStatistics = true,
         isRegular = false,
-        location = LocationData(0.0, 0.0),
+        place = Place(location = LocationData(0.0, 0.0)),
         photoUri = "",
     )
 }

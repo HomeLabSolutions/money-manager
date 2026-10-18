@@ -238,10 +238,8 @@ class TransactionInteractorImpl @Inject constructor(
                     qrCode = transactionDataModel.qrCode,
                     inStatistics = transactionDataModel.inStatistics,
                     isRegular = transactionDataModel.isRegular,
-                    locationData = transactionDataModel.location,
+                    place = transactionDataModel.place,
                     photoUri = transactionDataModel.photoUri,
-                    placeName = transactionDataModel.placeName,
-                    placeAddress = transactionDataModel.placeAddress,
                 )
             }
 

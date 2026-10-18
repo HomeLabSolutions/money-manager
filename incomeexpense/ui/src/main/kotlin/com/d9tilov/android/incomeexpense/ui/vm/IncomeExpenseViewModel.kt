@@ -29,6 +29,7 @@ import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.incomeexpense.ui.R
+import com.d9tilov.android.places.domain.model.Place
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
@@ -399,7 +400,7 @@ class IncomeExpenseViewModel
                             currencyCode = price.currencyCode,
                             date = currentDateTime(),
                             type = category.type,
-                            locationData = location,
+                            place = Place(location = location),
                         ),
                     )
                     withContext(Dispatchers.Main) { onAdded() }
