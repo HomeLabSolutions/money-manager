@@ -1,7 +1,7 @@
 package com.d9tilov.android.transaction.ui.model
 
-import com.d9tilov.android.core.model.Place
 import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.places.domain.model.Place
 import com.d9tilov.android.transaction.domain.model.Transaction
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

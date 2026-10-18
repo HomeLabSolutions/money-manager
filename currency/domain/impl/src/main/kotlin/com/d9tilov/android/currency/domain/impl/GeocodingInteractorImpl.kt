@@ -1,10 +1,10 @@
 package com.d9tilov.android.currency.domain.impl
 
-import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.contract.GeocodeRepo
 import com.d9tilov.android.currency.domain.contract.GeocodingInteractor
 import com.d9tilov.android.currency.domain.model.Currency
+import com.d9tilov.android.places.domain.model.LocationData
 import javax.inject.Inject
 
 class GeocodingInteractorImpl @Inject constructor(

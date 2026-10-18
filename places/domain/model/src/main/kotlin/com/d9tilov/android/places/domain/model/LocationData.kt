@@ -1,4 +1,4 @@
-package com.d9tilov.android.core.model
+package com.d9tilov.android.places.domain.model
 
 data class LocationData(
     val latitude: Double,

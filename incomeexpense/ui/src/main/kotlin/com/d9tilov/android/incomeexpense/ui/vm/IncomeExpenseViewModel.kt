@@ -18,7 +18,6 @@ import com.d9tilov.android.common.android.location.LocationProvider
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
-import com.d9tilov.android.core.model.Place
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.KeyPress
@@ -30,6 +29,7 @@ import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.incomeexpense.ui.R
+import com.d9tilov.android.places.domain.model.Place
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel

@@ -1,6 +1,6 @@
 package com.d9tilov.android.places.domain.contract
 
-import com.d9tilov.android.core.model.LocationData
+import com.d9tilov.android.places.domain.model.LocationData
 import com.d9tilov.android.places.domain.model.NearbyPlace
 
 interface NearbyPlacesRepo {

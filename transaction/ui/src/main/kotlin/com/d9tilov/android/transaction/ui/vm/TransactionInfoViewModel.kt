@@ -5,11 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
-import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.places.domain.contract.NearbyPlacesInteractor
+import com.d9tilov.android.places.domain.model.LocationData
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.R

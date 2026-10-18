@@ -23,6 +23,7 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":currency:domain:contract"))
     implementation(project(":currency:domain:model"))
+    implementation(project(":places:domain:model"))
     implementation(project(":transaction:domain:contract"))
     implementation(project(":transaction:domain:model"))
     implementation(project(":transaction:ui"))

@@ -28,7 +28,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:common"))
     implementation(project(":places:data:contract"))
     implementation(project(":places:domain:contract"))
     implementation(project(":places:domain:model"))

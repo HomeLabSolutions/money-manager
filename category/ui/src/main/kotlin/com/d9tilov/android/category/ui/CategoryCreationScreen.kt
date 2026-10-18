@@ -57,12 +57,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.currentStateAsState
 import com.d9tilov.android.category.data.impl.color.ColorManager
 import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.category.domain.entity.ItemState
 import com.d9tilov.android.category.domain.entity.exception.CategoryException
 import com.d9tilov.android.category.ui.vm.CategoryCreationUiState
 import com.d9tilov.android.category.ui.vm.CategoryCreationViewModel
 import com.d9tilov.android.category.ui.vm.CategorySharedViewModel
 import com.d9tilov.android.core.constants.DataConstants.NO_RES_ID
-import com.d9tilov.android.core.model.ItemState
 import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons

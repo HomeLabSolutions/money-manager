@@ -135,6 +135,7 @@ dependencies {
     implementation(project(":notification"))
     implementation(project(":notification:domain"))
     implementation(project(":places:di"))
+    implementation(project(":places:domain:model"))
     implementation(project(":profile:ui"))
     implementation(project(":settings:ui"))
     implementation(project(":statistics:ui"))

@@ -1,4 +1,4 @@
-package com.d9tilov.android.core.model
+package com.d9tilov.android.category.domain.entity
 
 enum class ItemState {
     UNKNOWN,

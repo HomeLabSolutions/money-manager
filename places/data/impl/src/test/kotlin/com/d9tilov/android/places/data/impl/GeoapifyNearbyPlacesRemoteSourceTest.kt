@@ -1,8 +1,8 @@
 package com.d9tilov.android.places.data.impl
 
-import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.places.data.contract.model.GeoapifyPlacesResponse
 import com.d9tilov.android.places.data.impl.api.GeoapifyApi
+import com.d9tilov.android.places.domain.model.LocationData
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.test.runTest
 import org.junit.After

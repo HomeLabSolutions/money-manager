@@ -6,7 +6,7 @@ import android.content.Context
 import android.location.Location
 import androidx.annotation.RequiresPermission
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
-import com.d9tilov.android.core.model.LocationData
+import com.d9tilov.android.places.domain.model.LocationData
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource

@@ -51,8 +51,6 @@ import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.CategoryDestination
 import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_TIME_FORMAT
 import com.d9tilov.android.common.android.utils.formatDate
-import com.d9tilov.android.core.model.LocationData
-import com.d9tilov.android.core.model.Place
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.MainPriceFieldParser.isInputValid
@@ -64,6 +62,8 @@ import com.d9tilov.android.designsystem.CheckboxWithLabel
 import com.d9tilov.android.designsystem.DescriptionTextField
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
+import com.d9tilov.android.places.domain.model.LocationData
+import com.d9tilov.android.places.domain.model.Place
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.model.TransactionInfoMode
 import com.d9tilov.android.transaction.ui.vm.TransactionInfoUiState
