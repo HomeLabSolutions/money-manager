@@ -5,21 +5,40 @@ import com.d9tilov.android.network.GeoapifyApi
 import com.d9tilov.android.network.model.GeoapifyPlacesResponse
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.IOException
+import java.util.Locale
 
 class GeoapifyNearbyPlacesRemoteSourceTest {
+    private val locale = Locale.getDefault()
     private val location = LocationData(51.5, -0.1)
     private val api = RecordingGeoapifyApi()
     private val source = GeoapifyNearbyPlacesRemoteSource(api)
 
+    @After
+    fun tearDown() {
+        Locale.setDefault(locale)
+    }
+
+    @Test
+    fun `empty and three letter locale languages use english`() =
+        runTest {
+            listOf(Locale.ROOT, Locale.forLanguageTag("fil-PH"), Locale.forLanguageTag("haw-US")).forEach {
+                Locale.setDefault(it)
+                source.getNearbyPlaces(location)
+            }
+            assertEquals(listOf("en", "en", "en"), api.requests.map { it["lang"] })
+        }
+
     @Test
     fun `request fixes categories radius limit and longitude first ordering`() =
         runTest {
-            assertTrue(source.getNearbyPlaces(location, "ru").features.isEmpty())
+            Locale.setDefault(Locale.forLanguageTag("ru-RU"))
+            assertTrue(source.getNearbyPlaces(location).features.isEmpty())
             assertEquals(
                 mapOf(
                     "categories" to "catering,commercial",
@@ -38,7 +57,7 @@ class GeoapifyNearbyPlacesRemoteSourceTest {
         runTest {
             listOf(IOException("Unavailable"), CancellationException("Cancelled")).forEach { error ->
                 api.error = error
-                val failure = runCatching { source.getNearbyPlaces(location, "en") }.exceptionOrNull()
+                val failure = runCatching { source.getNearbyPlaces(location) }.exceptionOrNull()
                 assertSame(error, failure)
             }
         }

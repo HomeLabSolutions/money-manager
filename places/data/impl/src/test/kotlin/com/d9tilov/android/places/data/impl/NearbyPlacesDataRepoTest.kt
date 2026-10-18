@@ -8,29 +8,20 @@ import com.d9tilov.android.places.data.contract.NearbyPlacesRemoteSource
 import com.d9tilov.android.places.domain.model.NearbyPlace
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.test.runTest
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.IOException
-import java.util.Locale
 
 class NearbyPlacesDataRepoTest {
-    private val locale = Locale.getDefault()
     private val location = LocationData(51.5, -0.1)
     private val source = RecordingNearbyPlacesRemoteSource()
     private val repo = NearbyPlacesDataRepo(source)
 
-    @After
-    fun tearDown() {
-        Locale.setDefault(locale)
-    }
-
     @Test
-    fun `repository passes coordinates and locale to source and maps the response`() =
+    fun `repository passes coordinates to source and maps the response`() =
         runTest {
-            Locale.setDefault(Locale.forLanguageTag("ru-RU"))
             source.response =
                 GeoapifyPlacesResponse(
                     listOf(
@@ -45,17 +36,7 @@ class NearbyPlacesDataRepoTest {
                     ),
                 )
             assertEquals(listOf(NearbyPlace("cafe", "Cafe", "High Street", 10)), repo.getNearbyPlaces(location))
-            assertEquals(listOf(location to "ru"), source.requests)
-        }
-
-    @Test
-    fun `empty and three letter locale languages use english`() =
-        runTest {
-            listOf(Locale.ROOT, Locale.forLanguageTag("fil-PH"), Locale.forLanguageTag("haw-US")).forEach {
-                Locale.setDefault(it)
-                repo.getNearbyPlaces(location)
-            }
-            assertEquals(listOf("en", "en", "en"), source.requests.map { it.second })
+            assertEquals(listOf(location), source.requests)
         }
 
     @Test
@@ -84,15 +65,12 @@ class NearbyPlacesDataRepoTest {
         }
 
     private class RecordingNearbyPlacesRemoteSource : NearbyPlacesRemoteSource {
-        val requests = mutableListOf<Pair<LocationData, String>>()
+        val requests = mutableListOf<LocationData>()
         var response = GeoapifyPlacesResponse(emptyList())
         var error: Exception? = null
 
-        override suspend fun getNearbyPlaces(
-            location: LocationData,
-            language: String,
-        ): GeoapifyPlacesResponse {
-            requests.add(location to language)
+        override suspend fun getNearbyPlaces(location: LocationData): GeoapifyPlacesResponse {
+            requests.add(location)
             error?.let { throw it }
             return response
         }

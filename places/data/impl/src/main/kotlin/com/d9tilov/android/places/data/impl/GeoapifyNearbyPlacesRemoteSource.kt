@@ -4,16 +4,16 @@ import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.network.GeoapifyApi
 import com.d9tilov.android.network.model.GeoapifyPlacesResponse
 import com.d9tilov.android.places.data.contract.NearbyPlacesRemoteSource
+import java.util.Locale
 import javax.inject.Inject
 
 class GeoapifyNearbyPlacesRemoteSource @Inject constructor(
     private val geoapifyApi: GeoapifyApi,
 ) : NearbyPlacesRemoteSource {
-    override suspend fun getNearbyPlaces(
-        location: LocationData,
-        language: String,
-    ): GeoapifyPlacesResponse =
-        geoapifyApi.getPlaces(
+    override suspend fun getNearbyPlaces(location: LocationData): GeoapifyPlacesResponse {
+        val language =
+            Locale.getDefault().language.takeIf { it.length == LANGUAGE_CODE_LENGTH } ?: Locale.ENGLISH.language
+        return geoapifyApi.getPlaces(
             filter = "circle:${location.longitude},${location.latitude},$NEARBY_PLACES_RADIUS_METERS",
             bias = "proximity:${location.longitude},${location.latitude}",
             language = language,
@@ -21,8 +21,10 @@ class GeoapifyNearbyPlacesRemoteSource @Inject constructor(
             categories = PLACE_CATEGORIES.joinToString(","),
             conditions = "named",
         )
+    }
 
     private companion object {
+        const val LANGUAGE_CODE_LENGTH = 2
         const val NEARBY_PLACES_RADIUS_METERS = 150
         val PLACE_CATEGORIES = setOf("catering", "commercial")
     }

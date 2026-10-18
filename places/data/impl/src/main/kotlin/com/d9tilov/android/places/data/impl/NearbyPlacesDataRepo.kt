@@ -5,7 +5,6 @@ import com.d9tilov.android.places.data.contract.NearbyPlacesRemoteSource
 import com.d9tilov.android.places.data.impl.mapper.toNearbyPlaces
 import com.d9tilov.android.places.domain.contract.NearbyPlacesRepo
 import com.d9tilov.android.places.domain.model.NearbyPlace
-import java.util.Locale
 import javax.inject.Inject
 
 class NearbyPlacesDataRepo @Inject constructor(
@@ -13,8 +12,7 @@ class NearbyPlacesDataRepo @Inject constructor(
 ) : NearbyPlacesRepo {
     override suspend fun getNearbyPlaces(location: LocationData): List<NearbyPlace> {
         require(location.hasValidPlaceCoordinates())
-        val language = Locale.getDefault().language.takeIf { it.length == 2 } ?: Locale.ENGLISH.language
-        return remoteSource.getNearbyPlaces(location, language).toNearbyPlaces()
+        return remoteSource.getNearbyPlaces(location).toNearbyPlaces()
     }
 }
 
