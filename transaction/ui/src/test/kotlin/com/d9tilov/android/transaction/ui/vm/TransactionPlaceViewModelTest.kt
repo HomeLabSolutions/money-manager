@@ -197,11 +197,14 @@ class TransactionPlaceViewModelTest {
             viewModel.updatePlaceName("Cafe", "High Street")
             viewModel.updatePlaceName("Shop", "Market Street")
             assertEquals("Market Street", viewModel.uiState.value.transaction.place.address)
+            val selectedPlace = viewModel.uiState.value.transaction.place
+            listOf(null, "", "   ").forEach { name ->
+                viewModel.updatePlaceName(name, "Another address")
+                assertEquals(selectedPlace, viewModel.uiState.value.transaction.place)
+            }
             viewModel.updatePlaceName("My own place")
             assertEquals(null, viewModel.uiState.value.transaction.place.address)
             viewModel.updatePlaceName("Shop", "")
-            assertEquals(null, viewModel.uiState.value.transaction.place.address)
-            viewModel.updatePlaceName("", "Market Street")
             assertEquals(null, viewModel.uiState.value.transaction.place.address)
         }
 

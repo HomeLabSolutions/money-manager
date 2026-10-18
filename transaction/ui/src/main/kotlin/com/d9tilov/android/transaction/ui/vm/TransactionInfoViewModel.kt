@@ -74,10 +74,10 @@ class TransactionInfoViewModel
         fun updateAmount(amount: String) = _uiState.update { state -> state.copy(amount = amount) }
 
         fun updatePlaceName(
-            name: String,
+            name: String?,
             address: String? = null,
         ) {
-            if (!canEditPlace()) return
+            if (!canEditPlace() || name.isNullOrBlank()) return
             _uiState.update { state ->
                 state.copy(
                     transaction =
@@ -85,7 +85,7 @@ class TransactionInfoViewModel
                             place =
                                 state.transaction.place.copy(
                                     name = name,
-                                    address = address?.takeIf { name.isNotBlank() && it.isNotBlank() },
+                                    address = address?.takeIf { it.isNotBlank() },
                                 ),
                         ),
                     placeState = state.placeState.copy(pickerVisible = false),
