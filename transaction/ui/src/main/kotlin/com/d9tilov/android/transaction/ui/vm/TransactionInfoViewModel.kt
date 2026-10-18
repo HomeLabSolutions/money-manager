@@ -20,7 +20,6 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -60,10 +59,7 @@ class TransactionInfoViewModel
         init {
             val transactionExceptionHandler = CoroutineExceptionHandler { _, _ -> }
             viewModelScope.launch(transactionExceptionHandler) {
-                val transactions = transactionInteractor.getTransactionById(transactionId)
-                val loadedTransactions =
-                    if (transactionArgs.mode == TransactionInfoMode.EDIT) transactions.take(1) else transactions
-                loadedTransactions.collect { transaction ->
+                transactionInteractor.getTransactionById(transactionId).collect { transaction ->
                     _uiState.update { state ->
                         state.copy(
                             mode = transactionArgs.mode,

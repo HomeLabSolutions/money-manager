@@ -295,16 +295,20 @@ class TransactionPlaceViewModelTest {
         }
 
     @Test
-    fun `later database emissions do not overwrite editing draft`() =
+    fun `editing mode continues observing database changes`() =
         runTest(dispatcher) {
             val updates = MutableStateFlow(expense)
             every { transactions.getTransactionById(TRANSACTION_ID) } returns updates
             val viewModel = createViewModel()
             runCurrent()
-            viewModel.updatePlaceName("Draft")
-            updates.value = expense.copy(description = "External update")
+            val updatedTransaction =
+                expense.copy(
+                    description = "External update",
+                    place = expense.place.copy(name = "Updated cafe"),
+                )
+            updates.value = updatedTransaction
             runCurrent()
-            assertEquals("Draft", viewModel.uiState.value.transaction.place.name)
+            assertEquals(updatedTransaction, viewModel.uiState.value.transaction)
         }
 
     @Test
