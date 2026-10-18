@@ -41,7 +41,9 @@ class GeoapifyNearbyPlacesRemoteSourceTest {
             assertTrue(source.getNearbyPlaces(location).features.isEmpty())
             assertEquals(
                 mapOf(
-                    "categories" to "catering,commercial",
+                    "categories" to
+                        "catering,commercial,service.vehicle,service.beauty,service.cleaning," +
+                        "healthcare,entertainment,accommodation,sport.fitness,parking.cars,pet.veterinary,rental.car",
                     "conditions" to "named",
                     "filter" to "circle:-0.1,51.5,150",
                     "bias" to "proximity:-0.1,51.5",
