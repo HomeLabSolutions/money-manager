@@ -43,11 +43,13 @@ class NearbyPlacesDataRepoTest {
         }
 
     @Test
-    fun `locales without a supported language use english`() =
+    fun `empty and three letter locale languages use english`() =
         runTest {
-            Locale.setDefault(Locale.ROOT)
-            repo.getNearbyPlaces(location)
-            assertEquals("en", api.requests.single()["lang"])
+            listOf(Locale.ROOT, Locale.forLanguageTag("fil-PH"), Locale.forLanguageTag("haw-US")).forEach {
+                Locale.setDefault(it)
+                repo.getNearbyPlaces(location)
+            }
+            assertEquals(listOf("en", "en", "en"), api.requests.map { it["lang"] })
         }
 
     @Test

@@ -13,7 +13,7 @@ class NearbyPlacesDataRepo @Inject constructor(
 ) : NearbyPlacesRepo {
     override suspend fun getNearbyPlaces(location: LocationData): List<NearbyPlace> {
         require(location.hasValidPlaceCoordinates())
-        val language = Locale.getDefault().language.takeIf { it.matches(LANGUAGE_PATTERN) } ?: "en"
+        val language = Locale.getDefault().language.takeIf { it.length == 2 } ?: Locale.ENGLISH.language
         return geoapifyApi
             .getPlaces(
                 filter = "circle:${location.longitude},${location.latitude},$NEARBY_PLACES_RADIUS_METERS",
@@ -27,7 +27,6 @@ class NearbyPlacesDataRepo @Inject constructor(
 
     private companion object {
         val PLACE_CATEGORIES = setOf("catering", "commercial")
-        val LANGUAGE_PATTERN = Regex("[a-z]{2,3}")
     }
 }
 
