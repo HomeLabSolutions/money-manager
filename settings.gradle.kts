@@ -66,6 +66,7 @@ include(":insights:presentation")
 include(":notification")
 include(":notification:domain")
 
+include(":places:data:contract")
 include(":places:data:impl")
 include(":places:di")
 include(":places:domain:contract")

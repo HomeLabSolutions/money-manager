@@ -9,6 +9,7 @@ android {
 
 dependencies {
     implementation(project(":core:network"))
+    implementation(project(":places:data:contract"))
     implementation(project(":places:data:impl"))
     implementation(project(":places:domain:contract"))
     implementation(project(":places:domain:impl"))
