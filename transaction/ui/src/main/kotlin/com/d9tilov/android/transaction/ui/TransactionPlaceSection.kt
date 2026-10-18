@@ -184,23 +184,24 @@ private fun SelectedPlaceDetails(
     transaction: Transaction,
     modifier: Modifier = Modifier,
 ) {
+    val name = transaction.place.name
+    val address = transaction.place.address
     Column(modifier = modifier) {
-        Text(
-            text =
-                transaction.place.name
-                    .orEmpty()
-                    .ifBlank { stringResource(R.string.transaction_place_not_selected) },
-            style = MaterialTheme.typography.bodyLarge,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
-        )
-        if (!transaction.place.name.isNullOrBlank() && !transaction.place.address.isNullOrBlank()) {
+        if (!name.isNullOrBlank()) {
             Text(
-                text = transaction.place.address.orEmpty(),
-                style = MaterialTheme.typography.bodySmall,
+                text = name,
+                style = MaterialTheme.typography.bodyLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
+            if (!address.isNullOrBlank()) {
+                Text(
+                    text = address,
+                    style = MaterialTheme.typography.bodySmall,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         }
     }
 }

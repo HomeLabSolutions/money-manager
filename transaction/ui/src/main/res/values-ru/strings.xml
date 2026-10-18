@@ -14,7 +14,6 @@
     <string name="transaction_place_distance">На расстоянии %1$dм</string>
     <string name="transaction_place_saved">Место сохранено</string>
     <string name="transaction_place_custom_name">Своё название…</string>
-    <string name="transaction_place_not_selected">Место не выбрано</string>
     <string name="transaction_place_empty">В радиусе %1$dм ничего не найдено</string>
     <string name="transaction_place_unavailable">Не удалось загрузить места</string>
     <string name="transaction_place_no_location">Геопозиция не сохранена</string>
