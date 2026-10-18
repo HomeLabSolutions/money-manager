@@ -25,7 +25,7 @@ class GeoapifyNearbyPlacesRemoteSource @Inject constructor(
 
     private companion object {
         const val LANGUAGE_CODE_LENGTH = 2
-        const val NEARBY_PLACES_RADIUS_METERS = 150
+        const val NEARBY_PLACES_RADIUS_METERS = 500
         val PLACE_CATEGORIES =
             setOf(
                 "catering",

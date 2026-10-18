@@ -17,7 +17,7 @@
     <string name="transaction_place_saved">Place saved</string>
     <string name="transaction_place_custom_name">Custom name…</string>
     <string name="transaction_place_not_selected">Place not selected</string>
-    <string name="transaction_place_empty">No places found within 150 m</string>
+    <string name="transaction_place_empty">No places found within 500 m</string>
     <string name="transaction_place_unavailable">Could not load nearby places</string>
     <string name="transaction_place_no_location">No saved location</string>
 </resources>
