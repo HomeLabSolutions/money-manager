@@ -14,15 +14,3 @@ The function requires Firebase Authentication. It uses the OpenAI Responses API 
 The API key is available only to this function. Do not place it in Remote Config, Android resources, or the repository. Before a production release, configure Firebase App Check and a usage limit for the OpenAI project to control abuse and spending. Update the Play Data safety form and privacy policy to reflect the data transfer.
 
 Run `npm ci && npm test` in this directory to check the request contract locally. An end-to-end test needs a configured Firebase project and OpenAI key.
-
-## Nearby expense places
-
-Nearby places are requested directly from Geoapify by the Kotlin `NearbyPlacesDataRepo` in `places:data:impl` through the Retrofit API in `core:network`. The `places` modules own the domain model, repository, interactor, and dependency injection. The transaction editor uses `places:domain:contract` and `places:domain:model`; its place picker and ViewModel cache remain in `transaction:ui`. Firebase Functions and Firebase Authentication are not involved in this request.
-
-Set `geoapify_api_key` in the ignored root `keystore.properties`, alongside `currency_api_key`. Gradle reads the key only from this file and exposes it as `BuildConfig.GEOAPIFY_API_KEY`. Builds without a key can compile, but cannot fetch places. The key is bundled in Android, following the currency API configuration. Geoapify uses the shared OkHttp client and debug logging, with apiKey redacted from logged request URLs.
-
-The app sends saved expense coordinates only after tapping the pencil and requests named catering/retail places within 150 meters. Kotlin filters results to this radius, orders them by distance, removes duplicate IDs, and limits the list to 20. A missing distance is calculated from place coordinates. Opening a transaction reads its saved name and address from the database without an API request. The pencil becomes a loader while fetching; successful lists are cached for the lifetime of the ViewModel. A failed request can be retried on the next tap. The rounded exposed menu keeps its dividers and shows each distance below its address.
-
-Choosing a place updates the draft name and address. The address appears below the selected name; both fields are stored by the existing Save button. Custom naming clears the previous address. Database version 3 adds both nullable fields in the single migration 2→3. Backup restoration requires the same database version as the installed app. A saved place enables the list item's location icon. Geoapify/OpenStreetMap attribution remains below the Google Maps view.
-
-The former Firebase callable `getNearbyPlaces` and Secret Manager key `GEOAPIFY_API_KEY` are no longer used. `generateInsight` continues to use its own `OPENAI_API_KEY` secret. Update the privacy disclosure to include direct transfer of saved transaction coordinates to Geoapify.
