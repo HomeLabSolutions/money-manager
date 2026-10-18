@@ -209,24 +209,7 @@ private fun PlaceEditButton(
 
 @Composable
 private fun PlaceListStatus(uiState: TransactionInfoUiState) {
-    val message =
-        when (uiState.placeState.status) {
-            NearbyPlacesStatus.UNAVAILABLE -> {
-                R.string.transaction_place_unavailable
-            }
-
-            NearbyPlacesStatus.NO_LOCATION -> {
-                R.string.transaction_place_no_location
-            }
-
-            NearbyPlacesStatus.READY -> {
-                if (uiState.placeState.places.isEmpty()) R.string.transaction_place_empty else null
-            }
-
-            else -> {
-                null
-            }
-        }
+    val message = uiState.placeState.messageRes
     if (message != null) {
         Text(stringResource(message), style = MaterialTheme.typography.bodyMedium)
     }
