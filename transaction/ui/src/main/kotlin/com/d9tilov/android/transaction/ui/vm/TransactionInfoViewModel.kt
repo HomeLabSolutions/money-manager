@@ -76,11 +76,11 @@ class TransactionInfoViewModel
 
         fun selectPlace(place: NearbyPlace) = updatePlace(place.name, place.address)
 
-        fun updatePlaceName(name: String?) = updatePlace(name, null)
+        fun updatePlaceName(name: String?) = updatePlace(name)
 
         private fun updatePlace(
             name: String?,
-            address: String?,
+            address: String? = null,
         ) {
             if (!canEditPlace() || name.isNullOrBlank()) return
             _uiState.update { state ->
