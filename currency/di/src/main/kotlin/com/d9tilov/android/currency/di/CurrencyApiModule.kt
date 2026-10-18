@@ -1,7 +1,7 @@
 package com.d9tilov.android.currency.di
 
-import com.d9tilov.android.network.CurrencyApi
-import com.d9tilov.android.network.GeocodeApi
+import com.d9tilov.android.currency.data.impl.api.CurrencyApi
+import com.d9tilov.android.currency.data.impl.api.GeocodeApi
 import com.d9tilov.android.network.di.qualifier.CurrencyNetworkApi
 import com.d9tilov.android.network.di.qualifier.GeoNetworkApi
 import dagger.Module

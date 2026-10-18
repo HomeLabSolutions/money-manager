@@ -1,25 +1,6 @@
-import java.io.FileInputStream
-import java.util.Properties
-
 plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
-    alias(libs.plugins.serialization)
-}
-
-val keystorePropertiesFile: File = rootProject.file("keystore.properties")
-val keystoreProperties = Properties()
-var currencyApiKey = ""
-var geocodingApiKey = ""
-var geoapifyApiKey = ""
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
-    currencyApiKey = keystoreProperties["currency_api_key"] as String
-    geocodingApiKey = keystoreProperties["geocoding_api_key"] as String
-    geoapifyApiKey = keystoreProperties["geoapify_api_key"] as String
-} else {
-    println("Warning: keystore.properties file not found. Release signing configuration will not be applied.")
-    ""
 }
 
 android {
@@ -28,17 +9,11 @@ android {
     buildFeatures {
         buildConfig = true
     }
-
-    defaultConfig {
-        val stringType = "String"
-        buildConfigField(stringType, "CURRENCY_API_KEY", "\"$currencyApiKey\"")
-        buildConfigField(stringType, "GEOCODING_API_KEY", "\"$geocodingApiKey\"")
-        buildConfigField(stringType, "GEOAPIFY_API_KEY", "\"$geoapifyApiKey\"")
-    }
 }
 
 dependencies {
     implementation(project(":core:common"))
+    implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization.converter)
     implementation(libs.kotlinx.serialization.json)

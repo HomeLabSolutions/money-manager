@@ -1,7 +1,7 @@
 package com.d9tilov.android.places.data.impl.mapper
 
-import com.d9tilov.android.network.model.GeoapifyPlaceProperties
-import com.d9tilov.android.network.model.GeoapifyPlacesResponse
+import com.d9tilov.android.places.data.contract.model.GeoapifyPlaceProperties
+import com.d9tilov.android.places.data.contract.model.GeoapifyPlacesResponse
 import com.d9tilov.android.places.data.impl.NEARBY_PLACES_LIMIT
 import com.d9tilov.android.places.domain.model.NearbyPlace
 

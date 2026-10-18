@@ -1,7 +1,7 @@
-package com.d9tilov.android.network
+package com.d9tilov.android.places.data.contract
 
-import com.d9tilov.android.network.model.GeoapifyPlaceProperties
-import com.d9tilov.android.network.model.GeoapifyPlacesResponse
+import com.d9tilov.android.places.data.contract.model.GeoapifyPlaceProperties
+import com.d9tilov.android.places.data.contract.model.GeoapifyPlacesResponse
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals

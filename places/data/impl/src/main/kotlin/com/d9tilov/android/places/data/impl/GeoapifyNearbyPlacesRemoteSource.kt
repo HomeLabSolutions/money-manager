@@ -1,9 +1,9 @@
 package com.d9tilov.android.places.data.impl
 
 import com.d9tilov.android.core.model.LocationData
-import com.d9tilov.android.network.GeoapifyApi
-import com.d9tilov.android.network.model.GeoapifyPlacesResponse
 import com.d9tilov.android.places.data.contract.NearbyPlacesRemoteSource
+import com.d9tilov.android.places.data.contract.model.GeoapifyPlacesResponse
+import com.d9tilov.android.places.data.impl.api.GeoapifyApi
 import java.util.Locale
 import javax.inject.Inject
 

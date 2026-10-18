@@ -1,7 +1,7 @@
 package com.d9tilov.android.places.di
 
-import com.d9tilov.android.network.GeoapifyApi
 import com.d9tilov.android.network.di.qualifier.GeoapifyNetworkApi
+import com.d9tilov.android.places.data.impl.api.GeoapifyApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

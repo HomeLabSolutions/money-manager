@@ -1,7 +1,5 @@
 package com.d9tilov.android.network.di
 
-import com.d9tilov.android.core.constants.DataConstants.TAG
-import com.d9tilov.android.network.BuildConfig
 import com.d9tilov.android.network.di.qualifier.CurrencyNetworkApi
 import com.d9tilov.android.network.di.qualifier.GeoNetworkApi
 import com.d9tilov.android.network.di.qualifier.GeoapifyNetworkApi
@@ -15,7 +13,6 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 @Module
@@ -36,18 +33,6 @@ object NetworkModule {
             .connectTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
             .addInterceptor(interceptor)
             .build()
-
-    @Provides
-    fun provideLoggingInterceptor(): HttpLoggingInterceptor =
-        HttpLoggingInterceptor { message -> Timber.tag(TAG).d("HTTP REQUEST: $message") }.apply {
-            redactQueryParams("apiKey")
-            level =
-                if (BuildConfig.DEBUG) {
-                    HttpLoggingInterceptor.Level.BODY
-                } else {
-                    HttpLoggingInterceptor.Level.NONE
-                }
-        }
 
     @CurrencyNetworkApi
     @Provides

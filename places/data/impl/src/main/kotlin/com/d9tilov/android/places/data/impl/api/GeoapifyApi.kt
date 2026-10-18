@@ -1,6 +1,7 @@
-package com.d9tilov.android.network
+package com.d9tilov.android.places.data.impl.api
 
-import com.d9tilov.android.network.model.GeoapifyPlacesResponse
+import com.d9tilov.android.places.data.contract.model.GeoapifyPlacesResponse
+import com.d9tilov.android.places.data.impl.BuildConfig
 import retrofit2.http.GET
 import retrofit2.http.Query
 

@@ -1,10 +1,10 @@
 package com.d9tilov.android.places.data.impl
 
 import com.d9tilov.android.core.model.LocationData
-import com.d9tilov.android.network.model.GeoapifyPlaceFeature
-import com.d9tilov.android.network.model.GeoapifyPlaceProperties
-import com.d9tilov.android.network.model.GeoapifyPlacesResponse
 import com.d9tilov.android.places.data.contract.NearbyPlacesRemoteSource
+import com.d9tilov.android.places.data.contract.model.GeoapifyPlaceFeature
+import com.d9tilov.android.places.data.contract.model.GeoapifyPlaceProperties
+import com.d9tilov.android.places.data.contract.model.GeoapifyPlacesResponse
 import com.d9tilov.android.places.domain.model.NearbyPlace
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.test.runTest

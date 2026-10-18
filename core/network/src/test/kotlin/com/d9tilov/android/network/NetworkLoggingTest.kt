@@ -1,6 +1,6 @@
 package com.d9tilov.android.network
 
-import com.d9tilov.android.network.di.NetworkModule
+import com.d9tilov.android.network.di.NetworkLoggingModule
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
 import okhttp3.Request
@@ -31,7 +31,7 @@ class NetworkLoggingTest {
             val client =
                 OkHttpClient
                     .Builder()
-                    .addInterceptor(NetworkModule.provideLoggingInterceptor())
+                    .addInterceptor(NetworkLoggingModule.provideLoggingInterceptor())
                     .addInterceptor { chain ->
                         Response
                             .Builder()

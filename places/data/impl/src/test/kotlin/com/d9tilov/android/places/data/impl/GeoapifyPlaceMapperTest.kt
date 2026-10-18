@@ -1,8 +1,8 @@
 package com.d9tilov.android.places.data.impl
 
-import com.d9tilov.android.network.model.GeoapifyPlaceFeature
-import com.d9tilov.android.network.model.GeoapifyPlaceProperties
-import com.d9tilov.android.network.model.GeoapifyPlacesResponse
+import com.d9tilov.android.places.data.contract.model.GeoapifyPlaceFeature
+import com.d9tilov.android.places.data.contract.model.GeoapifyPlaceProperties
+import com.d9tilov.android.places.data.contract.model.GeoapifyPlacesResponse
 import com.d9tilov.android.places.data.impl.mapper.toNearbyPlaces
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
