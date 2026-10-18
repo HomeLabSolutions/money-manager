@@ -10,6 +10,7 @@ import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.places.domain.contract.NearbyPlacesInteractor
 import com.d9tilov.android.places.domain.model.LocationData
+import com.d9tilov.android.places.domain.model.NearbyPlace
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.R
@@ -73,9 +74,13 @@ class TransactionInfoViewModel
 
         fun updateAmount(amount: String) = _uiState.update { state -> state.copy(amount = amount) }
 
-        fun updatePlaceName(
+        fun selectPlace(place: NearbyPlace) = updatePlace(place.name, place.address)
+
+        fun updatePlaceName(name: String?) = updatePlace(name, null)
+
+        private fun updatePlace(
             name: String?,
-            address: String? = null,
+            address: String?,
         ) {
             if (!canEditPlace() || name.isNullOrBlank()) return
             _uiState.update { state ->
@@ -93,7 +98,7 @@ class TransactionInfoViewModel
             }
         }
 
-        fun loadNearbyPlaces() {
+        private fun loadNearbyPlaces() {
             if (!canEditPlace()) return
             val state = _uiState.value
             if (state.placeState.status == NearbyPlacesStatus.LOADING) return
@@ -149,8 +154,12 @@ class TransactionInfoViewModel
             }
         }
 
-        fun dismissPlacePicker() {
-            _uiState.update { state -> state.copy(placeState = state.placeState.copy(pickerVisible = false)) }
+        fun updatePlacePickerVisibility(visible: Boolean) {
+            if (visible) {
+                loadNearbyPlaces()
+            } else {
+                _uiState.update { state -> state.copy(placeState = state.placeState.copy(pickerVisible = false)) }
+            }
         }
 
         private fun canEditPlace(): Boolean =
