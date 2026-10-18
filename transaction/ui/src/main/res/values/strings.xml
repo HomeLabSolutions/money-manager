@@ -14,6 +14,8 @@
     <string name="transaction_place_distance">%1$dm away</string>
     <string name="transaction_place_geoapify" translatable="false">Powered by Geoapify</string>
     <string name="transaction_place_osm" translatable="false">© OpenStreetMap contributors</string>
+    <string name="transaction_place_geoapify_url" translatable="false">https://www.geoapify.com/</string>
+    <string name="transaction_place_osm_url" translatable="false">https://www.openstreetmap.org/copyright</string>
     <string name="transaction_place_saved">Place saved</string>
     <string name="transaction_place_custom_name">Custom name…</string>
     <string name="transaction_place_empty">No places found within %1$dm</string>

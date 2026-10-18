@@ -24,13 +24,18 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -263,7 +268,15 @@ private fun CustomPlaceNameDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.transaction_place_name)) },
         text = {
+            val focusRequester = remember { FocusRequester() }
+            val windowInfo = LocalWindowInfo.current
+            LaunchedEffect(windowInfo.isWindowFocused) {
+                if (windowInfo.isWindowFocused) {
+                    focusRequester.requestFocus()
+                }
+            }
             OutlinedTextField(
+                modifier = Modifier.focusRequester(focusRequester),
                 value = draft,
                 onValueChange = { draft = it },
                 singleLine = true,
@@ -312,11 +325,13 @@ private fun TransactionPlaceAttribution(
         return
     }
     val uriHandler = LocalUriHandler.current
+    val geoapifyUrl = stringResource(R.string.transaction_place_geoapify_url)
+    val osmUrl = stringResource(R.string.transaction_place_osm_url)
     Row(modifier = modifier) {
-        TextButton(onClick = { uriHandler.openUri("https://www.geoapify.com/") }) {
+        TextButton(onClick = { uriHandler.openUri(geoapifyUrl) }) {
             Text(stringResource(R.string.transaction_place_geoapify), style = MaterialTheme.typography.labelSmall)
         }
-        TextButton(onClick = { uriHandler.openUri("https://www.openstreetmap.org/copyright") }) {
+        TextButton(onClick = { uriHandler.openUri(osmUrl) }) {
             Text(stringResource(R.string.transaction_place_osm), style = MaterialTheme.typography.labelSmall)
         }
     }
