@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
-import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.places.domain.contract.NearbyPlacesInteractor
@@ -162,8 +161,7 @@ class TransactionInfoViewModel
             }
         }
 
-        private fun canEditPlace(): Boolean =
-            _uiState.value.run { mode == TransactionInfoMode.EDIT && transaction.type == TransactionType.EXPENSE }
+        private fun canEditPlace(): Boolean = _uiState.value.mode == TransactionInfoMode.EDIT
 
         fun updateDescription(description: String) =
             _uiState.update { state ->

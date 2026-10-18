@@ -67,5 +67,5 @@ fun Transaction.toUiModel(isStatisticsScreen: Boolean = false) =
         showTime = isStatisticsScreen,
         isRegular = isRegular,
         inStatistics = inStatistics,
-        hasPlace = type == TransactionType.EXPENSE && !place.name.isNullOrBlank(),
+        hasPlace = !place.name.isNullOrBlank(),
     )

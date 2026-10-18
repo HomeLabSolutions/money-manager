@@ -28,8 +28,8 @@ class TransactionPlaceIndicatorTest {
     }
 
     @Test
-    fun `income never shows location indicator`() {
-        assertFalse(
+    fun `income with saved name exposes location indicator`() {
+        assertTrue(
             Transaction.EMPTY
                 .copy(type = TransactionType.INCOME, place = Place(name = "Cafe"))
                 .toUiModel()

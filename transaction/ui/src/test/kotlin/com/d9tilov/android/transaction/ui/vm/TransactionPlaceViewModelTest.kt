@@ -1,7 +1,6 @@
 package com.d9tilov.android.transaction.ui.vm
 
 import androidx.lifecycle.SavedStateHandle
-import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.places.domain.contract.NearbyPlacesInteractor
 import com.d9tilov.android.places.domain.model.LocationData
 import com.d9tilov.android.places.domain.model.NearbyPlace
@@ -226,21 +225,15 @@ class TransactionPlaceViewModelTest {
         }
 
     @Test
-    fun `income and read only mode never request or modify places`() =
+    fun `read only mode never requests or modifies places`() =
         runTest(dispatcher) {
-            listOf(
-                TransactionType.INCOME to TransactionInfoMode.EDIT,
-                TransactionType.EXPENSE to TransactionInfoMode.VIEW,
-            ).forEach { (type, mode) ->
-                every { transactions.getTransactionById(TRANSACTION_ID) } returns flowOf(expense.copy(type = type))
-                val viewModel = createViewModel(mode)
-                runCurrent()
-                viewModel.updatePlacePickerVisibility(true)
-                viewModel.updatePlaceName("Changed")
-                viewModel.selectPlace(nearby.first())
-                assertEquals(null, viewModel.uiState.value.transaction.place.name)
-                assertFalse(viewModel.uiState.value.placeState.pickerVisible)
-            }
+            val viewModel = createViewModel(TransactionInfoMode.VIEW)
+            runCurrent()
+            viewModel.updatePlacePickerVisibility(true)
+            viewModel.updatePlaceName("Changed")
+            viewModel.selectPlace(nearby.first())
+            assertEquals(null, viewModel.uiState.value.transaction.place.name)
+            assertFalse(viewModel.uiState.value.placeState.pickerVisible)
             coVerify(exactly = 0) { places.getNearbyPlaces(any()) }
         }
 
