@@ -1,10 +1,8 @@
 package com.d9tilov.android.transaction.di
 
 import com.d9tilov.android.transaction.data.contract.TransactionSource
-import com.d9tilov.android.transaction.data.impl.NearbyPlacesDataRepo
 import com.d9tilov.android.transaction.data.impl.TransactionDataRepo
 import com.d9tilov.android.transaction.data.impl.TransactionLocalSource
-import com.d9tilov.android.transaction.domain.contract.NearbyPlacesRepo
 import com.d9tilov.android.transaction.domain.contract.TransactionRepo
 import dagger.Binds
 import dagger.Module
@@ -19,7 +17,4 @@ interface TransactionDataModule {
 
     @Binds
     fun provideTransactionRepo(impl: TransactionDataRepo): TransactionRepo
-
-    @Binds
-    fun provideNearbyPlacesRepo(impl: NearbyPlacesDataRepo): NearbyPlacesRepo
 }

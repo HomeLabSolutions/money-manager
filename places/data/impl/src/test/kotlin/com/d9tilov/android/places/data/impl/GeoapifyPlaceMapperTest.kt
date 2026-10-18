@@ -1,10 +1,10 @@
-package com.d9tilov.android.transaction.data.impl
+package com.d9tilov.android.places.data.impl
 
 import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.network.model.GeoapifyPlaceFeature
 import com.d9tilov.android.network.model.GeoapifyPlaceProperties
 import com.d9tilov.android.network.model.GeoapifyPlacesResponse
-import com.d9tilov.android.transaction.data.impl.mapper.toNearbyPlaces
+import com.d9tilov.android.places.data.impl.mapper.toNearbyPlaces
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

@@ -1,4 +1,4 @@
-package com.d9tilov.android.transaction.di
+package com.d9tilov.android.places.di
 
 import com.d9tilov.android.network.GeoapifyApi
 import com.d9tilov.android.network.di.qualifier.GeoapifyNetworkApi
@@ -11,7 +11,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object TransactionApiModule {
+object PlacesApiModule {
     @Provides
     @Singleton
     fun provideGeoapifyApi(

@@ -11,8 +11,8 @@ interface GeoapifyApi {
         @Query("bias") bias: String,
         @Query("lang") language: String,
         @Query("limit") limit: Int,
-        @Query("categories") categories: String = "catering,commercial",
-        @Query("conditions") conditions: String = "named",
+        @Query("categories") categories: String,
+        @Query("conditions") conditions: String,
         @Query("apiKey") key: String = BuildConfig.GEOAPIFY_API_KEY,
     ): GeoapifyPlacesResponse
 }

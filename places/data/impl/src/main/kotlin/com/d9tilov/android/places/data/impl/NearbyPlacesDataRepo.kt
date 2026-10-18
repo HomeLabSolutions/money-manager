@@ -1,10 +1,10 @@
-package com.d9tilov.android.transaction.data.impl
+package com.d9tilov.android.places.data.impl
 
 import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.network.GeoapifyApi
-import com.d9tilov.android.transaction.data.impl.mapper.toNearbyPlaces
-import com.d9tilov.android.transaction.domain.contract.NearbyPlacesRepo
-import com.d9tilov.android.transaction.domain.model.NearbyPlace
+import com.d9tilov.android.places.data.impl.mapper.toNearbyPlaces
+import com.d9tilov.android.places.domain.contract.NearbyPlacesRepo
+import com.d9tilov.android.places.domain.model.NearbyPlace
 import java.util.Locale
 import javax.inject.Inject
 
@@ -20,10 +20,13 @@ class NearbyPlacesDataRepo @Inject constructor(
                 bias = "proximity:${location.longitude},${location.latitude}",
                 language = language,
                 limit = NEARBY_PLACES_LIMIT,
+                categories = PLACE_CATEGORIES.joinToString(","),
+                conditions = "named",
             ).toNearbyPlaces(location)
     }
 
     private companion object {
+        val PLACE_CATEGORIES = setOf("catering", "commercial")
         val LANGUAGE_PATTERN = Regex("[a-z]{2,3}")
     }
 }

@@ -1,6 +1,6 @@
 package com.d9tilov.android.transaction.ui.vm
 
-import com.d9tilov.android.transaction.domain.model.NearbyPlace
+import com.d9tilov.android.places.domain.model.NearbyPlace
 
 data class TransactionPlaceState(
     val places: List<NearbyPlace> = emptyList(),

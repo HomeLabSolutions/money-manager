@@ -1,12 +1,12 @@
-package com.d9tilov.android.transaction.data.impl.mapper
+package com.d9tilov.android.places.data.impl.mapper
 
 import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.network.model.GeoapifyPlaceProperties
 import com.d9tilov.android.network.model.GeoapifyPlacesResponse
-import com.d9tilov.android.transaction.data.impl.NEARBY_PLACES_LIMIT
-import com.d9tilov.android.transaction.data.impl.NEARBY_PLACES_RADIUS_METERS
-import com.d9tilov.android.transaction.data.impl.hasValidPlaceCoordinates
-import com.d9tilov.android.transaction.domain.model.NearbyPlace
+import com.d9tilov.android.places.data.impl.NEARBY_PLACES_LIMIT
+import com.d9tilov.android.places.data.impl.NEARBY_PLACES_RADIUS_METERS
+import com.d9tilov.android.places.data.impl.hasValidPlaceCoordinates
+import com.d9tilov.android.places.domain.model.NearbyPlace
 import kotlin.math.asin
 import kotlin.math.cos
 import kotlin.math.sin

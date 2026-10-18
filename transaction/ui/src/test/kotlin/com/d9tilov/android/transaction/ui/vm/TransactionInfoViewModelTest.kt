@@ -2,7 +2,7 @@ package com.d9tilov.android.transaction.ui.vm
 
 import androidx.lifecycle.SavedStateHandle
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
-import com.d9tilov.android.transaction.domain.contract.NearbyPlacesRepo
+import com.d9tilov.android.places.domain.contract.NearbyPlacesInteractor
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.model.TransactionInfoMode
@@ -33,7 +33,7 @@ class TransactionInfoViewModelTest {
     private val testDispatcher = StandardTestDispatcher()
     private val transactionInteractor: TransactionInteractor = mockk(relaxed = true)
     private val categoryInteractor: CategoryInteractor = mockk(relaxed = true)
-    private val nearbyPlacesRepo: NearbyPlacesRepo = mockk(relaxed = true)
+    private val nearbyPlacesInteractor: NearbyPlacesInteractor = mockk(relaxed = true)
 
     @Before
     fun setUp() {
@@ -115,7 +115,7 @@ class TransactionInfoViewModelTest {
             savedStateHandle = SavedStateHandle(mapOf(TRANSACTION_ID_ARG to TRANSACTION_ID)),
             transactionInteractor = transactionInteractor,
             categoryInteractor = categoryInteractor,
-            nearbyPlacesRepo = nearbyPlacesRepo,
+            nearbyPlacesInteractor = nearbyPlacesInteractor,
         )
     }
 
@@ -127,7 +127,7 @@ class TransactionInfoViewModelTest {
                 ),
             transactionInteractor = transactionInteractor,
             categoryInteractor = categoryInteractor,
-            nearbyPlacesRepo = nearbyPlacesRepo,
+            nearbyPlacesInteractor = nearbyPlacesInteractor,
         )
 
     private companion object {

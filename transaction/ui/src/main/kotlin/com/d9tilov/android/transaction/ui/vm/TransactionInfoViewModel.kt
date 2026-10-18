@@ -9,7 +9,7 @@ import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.core.utils.toLocalDateTime
-import com.d9tilov.android.transaction.domain.contract.NearbyPlacesRepo
+import com.d9tilov.android.places.domain.contract.NearbyPlacesInteractor
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.R
@@ -49,7 +49,7 @@ class TransactionInfoViewModel
         savedStateHandle: SavedStateHandle,
         private val transactionInteractor: TransactionInteractor,
         private val categoryInteractor: CategoryInteractor,
-        private val nearbyPlacesRepo: NearbyPlacesRepo,
+        private val nearbyPlacesInteractor: NearbyPlacesInteractor,
     ) : ViewModel() {
         private val transactionArgs: TransactionArgs.TransactionInfoArgs =
             TransactionArgs.TransactionInfoArgs(savedStateHandle)
@@ -123,7 +123,7 @@ class TransactionInfoViewModel
             }
             viewModelScope.launch {
                 try {
-                    val places = nearbyPlacesRepo.getNearbyPlaces(location)
+                    val places = nearbyPlacesInteractor.getNearbyPlaces(location)
                     _uiState.update {
                         it.copy(
                             placeState =

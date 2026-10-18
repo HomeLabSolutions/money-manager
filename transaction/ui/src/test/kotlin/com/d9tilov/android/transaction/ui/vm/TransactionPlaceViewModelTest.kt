@@ -3,9 +3,9 @@ package com.d9tilov.android.transaction.ui.vm
 import androidx.lifecycle.SavedStateHandle
 import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.core.model.TransactionType
-import com.d9tilov.android.transaction.domain.contract.NearbyPlacesRepo
+import com.d9tilov.android.places.domain.contract.NearbyPlacesInteractor
+import com.d9tilov.android.places.domain.model.NearbyPlace
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
-import com.d9tilov.android.transaction.domain.model.NearbyPlace
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.model.TransactionInfoMode
 import com.d9tilov.android.transaction.ui.navigation.TRANSACTION_ID_ARG
@@ -35,7 +35,7 @@ import org.junit.Test
 class TransactionPlaceViewModelTest {
     private val dispatcher = StandardTestDispatcher()
     private val transactions: TransactionInteractor = mockk(relaxed = true)
-    private val places: NearbyPlacesRepo = mockk()
+    private val places: NearbyPlacesInteractor = mockk()
     private val expense = Transaction.EMPTY.copy(id = TRANSACTION_ID, locationData = LocationData(51.5, -0.1))
     private val nearby =
         listOf(NearbyPlace("cafe", "Cafe", "High Street", 10), NearbyPlace("shop", "Shop", "High Street", 25))
@@ -325,7 +325,7 @@ class TransactionPlaceViewModelTest {
                 ),
             transactionInteractor = transactions,
             categoryInteractor = mockk(relaxed = true),
-            nearbyPlacesRepo = places,
+            nearbyPlacesInteractor = places,
         )
 
     private companion object {

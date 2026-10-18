@@ -1,4 +1,4 @@
-package com.d9tilov.android.transaction.data.impl
+package com.d9tilov.android.places.data.impl
 
 import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.network.GeoapifyApi

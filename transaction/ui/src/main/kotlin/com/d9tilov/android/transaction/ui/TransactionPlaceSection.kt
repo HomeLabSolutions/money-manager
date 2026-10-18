@@ -36,7 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.designsystem.MoneyManagerIcons
-import com.d9tilov.android.transaction.domain.model.NearbyPlace
+import com.d9tilov.android.places.domain.model.NearbyPlace
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.model.TransactionInfoMode
 import com.d9tilov.android.transaction.ui.vm.NearbyPlacesStatus
