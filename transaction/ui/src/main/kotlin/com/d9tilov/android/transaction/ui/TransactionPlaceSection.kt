@@ -36,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.designsystem.MoneyManagerIcons
+import com.d9tilov.android.places.domain.model.NEARBY_PLACES_RADIUS_METERS
 import com.d9tilov.android.places.domain.model.NearbyPlace
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.model.TransactionInfoMode
@@ -211,7 +212,7 @@ private fun PlaceEditButton(
 private fun PlaceListStatus(uiState: TransactionInfoUiState) {
     val message = uiState.placeState.messageRes
     if (message != null) {
-        Text(stringResource(message), style = MaterialTheme.typography.bodyMedium)
+        Text(stringResource(message, NEARBY_PLACES_RADIUS_METERS), style = MaterialTheme.typography.bodyMedium)
     }
 }
 
