@@ -22,7 +22,7 @@ class NearbyPlacesDataRepo @Inject constructor(
                 limit = NEARBY_PLACES_LIMIT,
                 categories = PLACE_CATEGORIES.joinToString(","),
                 conditions = "named",
-            ).toNearbyPlaces(location)
+            ).toNearbyPlaces()
     }
 
     private companion object {

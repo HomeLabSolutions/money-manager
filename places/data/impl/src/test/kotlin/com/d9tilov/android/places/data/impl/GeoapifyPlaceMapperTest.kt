@@ -1,6 +1,5 @@
 package com.d9tilov.android.places.data.impl
 
-import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.network.model.GeoapifyPlaceFeature
 import com.d9tilov.android.network.model.GeoapifyPlaceProperties
 import com.d9tilov.android.network.model.GeoapifyPlacesResponse
@@ -10,8 +9,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class GeoapifyPlaceMapperTest {
-    private val location = LocationData(51.5, -0.1)
-
     @Test
     fun `results retain the nearest duplicate and sort using distance before rounding`() {
         val response =
@@ -23,7 +20,7 @@ class GeoapifyPlaceMapperTest {
                     feature("cafe", "Cafe duplicate", 20.0),
                 ),
             )
-        val places = response.toNearbyPlaces(location)
+        val places = response.toNearbyPlaces()
         assertEquals(listOf("closer", "cafe", "shop"), places.map { it.id })
         assertEquals(listOf(1, 1, 150), places.map { it.distanceMeters })
         assertEquals("Cafe", places[1].name)
@@ -44,11 +41,11 @@ class GeoapifyPlaceMapperTest {
                     feature("infinite", "Shop", Double.POSITIVE_INFINITY),
                 ),
             )
-        assertTrue(response.toNearbyPlaces(location).isEmpty())
+        assertTrue(response.toNearbyPlaces().isEmpty())
     }
 
     @Test
-    fun `missing distance uses coordinates and excludes distant or invalid positions`() {
+    fun `places without api distance are omitted even when coordinates are present`() {
         val response =
             GeoapifyPlacesResponse(
                 listOf(
@@ -58,17 +55,14 @@ class GeoapifyPlaceMapperTest {
                     point("invalid", 91.0, -0.1),
                 ),
             )
-        val places = response.toNearbyPlaces(location)
-        assertEquals(listOf("same", "near"), places.map { it.id })
-        assertEquals(0, places.first().distanceMeters)
-        assertTrue(places.last().distanceMeters in 10..12)
+        assertTrue(response.toNearbyPlaces().isEmpty())
     }
 
     @Test
     fun `results are capped at twenty and empty responses are valid`() {
         val response = GeoapifyPlacesResponse((0..24).map { feature(it.toString(), "Shop", it.toDouble()) })
-        assertEquals((0..19).map(Int::toString), response.toNearbyPlaces(location).map { it.id })
-        assertTrue(GeoapifyPlacesResponse(emptyList()).toNearbyPlaces(location).isEmpty())
+        assertEquals((0..19).map(Int::toString), response.toNearbyPlaces().map { it.id })
+        assertTrue(GeoapifyPlacesResponse(emptyList()).toNearbyPlaces().isEmpty())
     }
 
     private fun feature(
