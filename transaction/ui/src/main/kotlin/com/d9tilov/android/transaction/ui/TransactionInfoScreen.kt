@@ -294,24 +294,6 @@ fun TransactionInfoScreen(
                 TransactionPlaceSection(
                     uiState = uiState,
                     actions = placeActions,
-                    modifier =
-                        Modifier.padding(
-                            horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
-                            vertical = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small),
-                        ),
-                )
-                if (uiState.transaction.place.location != LocationData.EMPTY) {
-                    TransactionLocationMap(
-                        locationData = uiState.transaction.place.location,
-                        categoryName = uiState.transaction.category.name,
-                    )
-                }
-                TransactionPlaceAttribution(
-                    uiState = uiState,
-                    modifier =
-                        Modifier.padding(
-                            horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
-                        ),
                 )
             }
             if (mode == TransactionInfoMode.EDIT) {

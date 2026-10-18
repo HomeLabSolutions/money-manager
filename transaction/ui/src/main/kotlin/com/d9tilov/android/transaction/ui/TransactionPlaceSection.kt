@@ -36,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.designsystem.MoneyManagerIcons
+import com.d9tilov.android.places.domain.model.LocationData
 import com.d9tilov.android.places.domain.model.NEARBY_PLACES_RADIUS_METERS
 import com.d9tilov.android.places.domain.model.NearbyPlace
 import com.d9tilov.android.transaction.domain.model.Transaction
@@ -49,7 +50,41 @@ internal fun TransactionPlaceSection(
     actions: TransactionPlaceActions,
     modifier: Modifier = Modifier,
 ) {
-    if (uiState.transaction.type != TransactionType.EXPENSE) return
+    val isExpense = uiState.transaction.type == TransactionType.EXPENSE
+    val horizontalPadding = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large)
+    Column(modifier = modifier) {
+        if (isExpense) {
+            TransactionPlaceDetails(
+                uiState = uiState,
+                actions = actions,
+                modifier =
+                    Modifier.padding(
+                        horizontal = horizontalPadding,
+                        vertical = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small),
+                    ),
+            )
+        }
+        if (uiState.transaction.place.location != LocationData.EMPTY) {
+            TransactionLocationMap(
+                locationData = uiState.transaction.place.location,
+                categoryName = uiState.transaction.category.name,
+            )
+        }
+        if (isExpense) {
+            TransactionPlaceAttribution(
+                uiState = uiState,
+                modifier = Modifier.padding(horizontal = horizontalPadding),
+            )
+        }
+    }
+}
+
+@Composable
+private fun TransactionPlaceDetails(
+    uiState: TransactionInfoUiState,
+    actions: TransactionPlaceActions,
+    modifier: Modifier = Modifier,
+) {
     val name = uiState.transaction.place.name
     if (uiState.mode == TransactionInfoMode.VIEW && name.isNullOrBlank()) return
     Column(
@@ -265,11 +300,10 @@ private fun PlaceDetails(place: NearbyPlace) {
 }
 
 @Composable
-internal fun TransactionPlaceAttribution(
+private fun TransactionPlaceAttribution(
     uiState: TransactionInfoUiState,
     modifier: Modifier = Modifier,
 ) {
-    if (uiState.transaction.type != TransactionType.EXPENSE) return
     if (uiState.placeState.places.isEmpty() &&
         uiState.transaction.place.name
             .isNullOrBlank()
