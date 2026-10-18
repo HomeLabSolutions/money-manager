@@ -41,7 +41,7 @@ data class Transaction(
                 qrCode = null,
                 isRegular = false,
                 inStatistics = true,
-                place = Place(),
+                place = Place.EMPTY,
                 photoUri = null,
             )
     }
