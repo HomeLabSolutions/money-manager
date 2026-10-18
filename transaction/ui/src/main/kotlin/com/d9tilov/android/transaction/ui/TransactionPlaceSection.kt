@@ -35,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -269,11 +268,8 @@ private fun CustomPlaceNameDialog(
         title = { Text(stringResource(R.string.transaction_place_name)) },
         text = {
             val focusRequester = remember { FocusRequester() }
-            val windowInfo = LocalWindowInfo.current
-            LaunchedEffect(windowInfo.isWindowFocused) {
-                if (windowInfo.isWindowFocused) {
-                    focusRequester.requestFocus()
-                }
+            LaunchedEffect(Unit) {
+                focusRequester.requestFocus()
             }
             OutlinedTextField(
                 modifier = Modifier.focusRequester(focusRequester),
