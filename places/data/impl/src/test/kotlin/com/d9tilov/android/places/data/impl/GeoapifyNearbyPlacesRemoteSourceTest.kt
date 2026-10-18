@@ -44,7 +44,7 @@ class GeoapifyNearbyPlacesRemoteSourceTest {
                     "categories" to
                         "catering,commercial,service,healthcare,entertainment,accommodation,sport,parking,pet,rental",
                     "conditions" to "named",
-                    "filter" to "circle:-0.1,51.5,500",
+                    "filter" to "circle:-0.1,51.5,200",
                     "bias" to "proximity:-0.1,51.5",
                     "limit" to "20",
                     "lang" to "ru",
