@@ -6,13 +6,13 @@ import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.LocationData
+import com.d9tilov.android.core.model.Place
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
-import com.d9tilov.android.places.domain.model.Place
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.contract.TransactionRepo
 import com.d9tilov.android.transaction.domain.model.Transaction

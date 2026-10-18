@@ -2,8 +2,8 @@ package com.d9tilov.android.transaction.data.impl
 
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.model.LocationData
+import com.d9tilov.android.core.model.Place
 import com.d9tilov.android.core.model.TransactionType
-import com.d9tilov.android.places.domain.model.Place
 import com.d9tilov.android.transaction.data.contract.TransactionSource
 import com.d9tilov.android.transaction.domain.contract.TransactionRepo
 import com.d9tilov.android.transaction.domain.model.TransactionDataModel

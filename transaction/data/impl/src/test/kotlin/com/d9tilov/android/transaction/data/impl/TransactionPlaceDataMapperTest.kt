@@ -1,8 +1,8 @@
 package com.d9tilov.android.transaction.data.impl
 
 import com.d9tilov.android.core.model.LocationData
+import com.d9tilov.android.core.model.Place
 import com.d9tilov.android.core.model.TransactionType
-import com.d9tilov.android.places.domain.model.Place
 import com.d9tilov.android.transaction.data.impl.mapper.toDataModel
 import com.d9tilov.android.transaction.data.impl.mapper.toDbModel
 import com.d9tilov.android.transaction.domain.model.TransactionDataModel

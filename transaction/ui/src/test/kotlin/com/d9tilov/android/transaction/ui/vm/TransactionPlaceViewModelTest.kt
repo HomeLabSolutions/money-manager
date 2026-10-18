@@ -2,10 +2,10 @@ package com.d9tilov.android.transaction.ui.vm
 
 import androidx.lifecycle.SavedStateHandle
 import com.d9tilov.android.core.model.LocationData
+import com.d9tilov.android.core.model.Place
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.places.domain.contract.NearbyPlacesInteractor
 import com.d9tilov.android.places.domain.model.NearbyPlace
-import com.d9tilov.android.places.domain.model.Place
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.model.TransactionInfoMode
