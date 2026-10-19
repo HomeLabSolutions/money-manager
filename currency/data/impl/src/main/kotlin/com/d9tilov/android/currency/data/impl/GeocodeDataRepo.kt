@@ -1,9 +1,9 @@
 package com.d9tilov.android.currency.data.impl
 
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
+import com.d9tilov.android.currency.data.impl.api.GeocodeApi
 import com.d9tilov.android.currency.domain.contract.GeocodeRepo
 import com.d9tilov.android.datastore.PreferencesStore
-import com.d9tilov.android.network.GeocodeApi
 import javax.inject.Inject
 
 class GeocodeDataRepo @Inject constructor(

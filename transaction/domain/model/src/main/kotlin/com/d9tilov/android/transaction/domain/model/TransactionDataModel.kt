@@ -2,9 +2,9 @@ package com.d9tilov.android.transaction.domain.model
 
 import com.d9tilov.android.core.constants.DataConstants.DEFAULT_DATA_ID
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
-import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDateTime
+import com.d9tilov.android.places.domain.model.Place
 import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
 
@@ -21,6 +21,6 @@ data class TransactionDataModel(
     val qrCode: String? = null,
     val isRegular: Boolean,
     val inStatistics: Boolean,
-    val location: LocationData,
+    val place: Place,
     val photoUri: String? = null,
 )

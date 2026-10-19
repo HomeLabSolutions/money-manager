@@ -1,4 +1,4 @@
-package com.d9tilov.android.network.model
+package com.d9tilov.android.currency.data.contract.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -51,7 +51,6 @@ import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.CategoryDestination
 import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_TIME_FORMAT
 import com.d9tilov.android.common.android.utils.formatDate
-import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.MainPriceFieldParser.isInputValid
@@ -63,6 +62,8 @@ import com.d9tilov.android.designsystem.CheckboxWithLabel
 import com.d9tilov.android.designsystem.DescriptionTextField
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
+import com.d9tilov.android.places.domain.model.LocationData
+import com.d9tilov.android.places.domain.model.Place
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.model.TransactionInfoMode
 import com.d9tilov.android.transaction.ui.vm.TransactionInfoUiState
@@ -115,6 +116,13 @@ fun TransactionInfoRoute(
         onCurrencyClicked = clickCurrency,
         onCategoryClicked = clickCategory,
         onDateClicked = viewModel::updateDate,
+        placeActions =
+            TransactionPlaceActions(
+                onEdit = { viewModel.updatePlacePickerVisibility(true) },
+                onDismiss = { viewModel.updatePlacePickerVisibility(false) },
+                onNameChanged = viewModel::updatePlaceName,
+                onPlaceSelected = viewModel::selectPlace,
+            ),
     )
 }
 
@@ -130,6 +138,7 @@ fun TransactionInfoScreen(
     onCategoryClicked: (TransactionType, CategoryDestination) -> Unit,
     onDateClicked: (Long) -> Unit,
     onSaveClicked: () -> Unit,
+    placeActions: TransactionPlaceActions = TransactionPlaceActions(),
 ) {
     val mode = uiState.mode
     val context = LocalContext.current
@@ -282,12 +291,10 @@ fun TransactionInfoScreen(
                     readOnly = mode == TransactionInfoMode.VIEW,
                 )
 
-                if (uiState.transaction.locationData != LocationData.EMPTY) {
-                    TransactionLocationMap(
-                        locationData = uiState.transaction.locationData,
-                        categoryName = uiState.transaction.category.name,
-                    )
-                }
+                TransactionPlaceSection(
+                    uiState = uiState,
+                    actions = placeActions,
+                )
             }
             if (mode == TransactionInfoMode.EDIT) {
                 BottomActionButton(
@@ -474,10 +481,13 @@ fun DefaultTransactionInfoPreview(mode: TransactionInfoMode = TransactionInfoMod
                                     icon = com.d9tilov.android.common.android.R.drawable.ic_category_cafe,
                                     color = android.R.color.holo_red_dark,
                                 ),
-                            locationData =
-                                LocationData(
-                                    latitude = 55.7558,
-                                    longitude = 37.6173,
+                            place =
+                                Place(
+                                    location =
+                                        LocationData(
+                                            latitude = 55.7558,
+                                            longitude = 37.6173,
+                                        ),
                                 ),
                         ),
                 ),

@@ -21,7 +21,7 @@ fun Transaction.toDataModel(): TransactionDataModel =
         qrCode,
         isRegular,
         inStatistics,
-        locationData,
+        place,
         photoUri,
     )
 
@@ -39,7 +39,7 @@ fun TransactionDataModel.toDomainModel(category: Category): Transaction =
         qrCode = qrCode,
         isRegular = isRegular,
         inStatistics = inStatistics,
-        locationData = location,
+        place = place,
         photoUri = photoUri,
     )
 

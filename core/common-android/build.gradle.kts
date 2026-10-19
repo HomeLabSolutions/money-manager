@@ -16,6 +16,7 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
+    implementation(project(":places:domain:model"))
     implementation(libs.accompanist.permissions)
     implementation(libs.activity.compose)
     implementation(libs.androidx.compose.material3)

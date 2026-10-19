@@ -24,6 +24,7 @@ data class TransactionUiModel(
     val showTime: Boolean,
     val isRegular: Boolean,
     val inStatistics: Boolean,
+    val hasPlace: Boolean,
 ) : BaseTransaction {
     override val itemType: Int = ITEM
 
@@ -47,6 +48,7 @@ data class TransactionUiModel(
                 showTime = true,
                 isRegular = false,
                 inStatistics = true,
+                hasPlace = false,
             )
     }
 }
@@ -65,4 +67,5 @@ fun Transaction.toUiModel(isStatisticsScreen: Boolean = false) =
         showTime = isStatisticsScreen,
         isRegular = isRegular,
         inStatistics = inStatistics,
+        hasPlace = !place.name.isNullOrBlank(),
     )

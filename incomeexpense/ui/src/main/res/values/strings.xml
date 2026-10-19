@@ -8,7 +8,7 @@
     <string name="transaction_search_hint">Search…</string>
     <string name="transaction_search_close">Close search</string>
     <string name="transaction_search_empty_title">No transactions found</string>
-    <string name="transaction_search_empty_subtitle">Try a different amount, category or description</string>
+    <string name="transaction_search_empty_subtitle">Try a different search</string>
 
     <string name="income_expense_empty_sum_error">The amount is too small</string>
 

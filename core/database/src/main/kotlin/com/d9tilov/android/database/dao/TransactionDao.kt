@@ -136,6 +136,7 @@ internal const val TRANSACTION_SEARCH_QUERY = """
     WHERE t.clientId = :clientId AND t.type = :type AND t.date >= :from AND t.date <= :to
         AND (
             t.description GLOB :textPattern
+            OR t.placeName GLOB :textPattern
             OR EXISTS (
                 SELECT 1 FROM categories AS c
                 WHERE c.id = t.categoryId AND c.clientId = t.clientId AND c.name GLOB :textPattern

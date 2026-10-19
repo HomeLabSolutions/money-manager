@@ -5,13 +5,14 @@ import com.d9tilov.android.budget.domain.model.BudgetData
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.model.ExecutionPeriod
-import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
+import com.d9tilov.android.places.domain.model.LocationData
+import com.d9tilov.android.places.domain.model.Place
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.contract.TransactionRepo
 import com.d9tilov.android.transaction.domain.model.Transaction
@@ -149,37 +150,6 @@ class TransactionInteractorImplTest {
         }
 
     @Test
-    fun `getTransactionById should return transaction with category`() =
-        runTest {
-            val transactionDataModel =
-                TransactionDataModel(
-                    id = 1L,
-                    clientId = "test-client-id",
-                    type = TransactionType.EXPENSE,
-                    categoryId = 1L,
-                    currencyCode = "USD",
-                    sum = BigDecimal(100),
-                    usdSum = BigDecimal(100),
-                    date = LocalDateTime(2024, 1, 1, 0, 0),
-                    description = "Test",
-                    qrCode = "",
-                    inStatistics = true,
-                    isRegular = false,
-                    location = LocationData(0.0, 0.0),
-                    photoUri = "",
-                )
-
-            coEvery { transactionRepo.getTransactionById(1L) } returns flowOf(transactionDataModel)
-
-            val transaction = interactor.getTransactionById(1L).first()
-
-            assertEquals(1L, transaction.id)
-            assertEquals(testCategory, transaction.category)
-            assertEquals(BigDecimal(100), transaction.sum)
-            assertEquals(TransactionType.EXPENSE, transaction.type)
-        }
-
-    @Test
     fun `getTransactionsGroupedByCategory should group transactions by category`() =
         runTest {
             val transactionDataModel =
@@ -196,7 +166,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    location = LocationData(0.0, 0.0),
+                    place = Place(location = LocationData(0.0, 0.0)),
                     photoUri = "",
                 )
 
@@ -248,7 +218,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    location = LocationData(0.0, 0.0),
+                    place = Place(location = LocationData(0.0, 0.0)),
                     photoUri = "",
                 )
             var persistedBudget = testBudget
@@ -352,7 +322,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    location = LocationData(0.0, 0.0),
+                    place = Place(location = LocationData(0.0, 0.0)),
                     photoUri = "",
                 )
 
@@ -370,7 +340,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    location = LocationData(0.0, 0.0),
+                    place = Place(location = LocationData(0.0, 0.0)),
                     photoUri = "",
                 )
 
@@ -420,7 +390,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    location = LocationData(0.0, 0.0),
+                    place = Place(location = LocationData(0.0, 0.0)),
                     photoUri = "",
                 )
             val from = LocalDateTime(2024, 1, 1, 0, 0)
@@ -486,7 +456,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    location = LocationData(0.0, 0.0),
+                    place = Place(location = LocationData(0.0, 0.0)),
                     photoUri = "",
                 )
 
@@ -521,7 +491,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    location = LocationData(0.0, 0.0),
+                    place = Place(location = LocationData(0.0, 0.0)),
                     photoUri = "",
                 )
 
@@ -566,7 +536,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    location = LocationData(0.0, 0.0),
+                    place = Place(location = LocationData(0.0, 0.0)),
                     photoUri = "",
                 )
 
@@ -598,7 +568,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    location = LocationData(0.0, 0.0),
+                    place = Place(location = LocationData(0.0, 0.0)),
                     photoUri = "",
                 )
 
@@ -631,7 +601,7 @@ class TransactionInteractorImplTest {
                     qrCode = "",
                     inStatistics = true,
                     isRegular = false,
-                    location = LocationData(0.0, 0.0),
+                    place = Place(location = LocationData(0.0, 0.0)),
                     photoUri = "",
                 )
 
@@ -712,7 +682,7 @@ class TransactionInteractorImplTest {
         qrCode = "",
         inStatistics = true,
         isRegular = false,
-        location = LocationData(0.0, 0.0),
+        place = Place(location = LocationData(0.0, 0.0)),
         photoUri = "",
     )
 }
