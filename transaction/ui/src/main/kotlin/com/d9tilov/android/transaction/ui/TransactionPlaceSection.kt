@@ -54,32 +54,24 @@ internal fun TransactionPlaceSection(
     actions: TransactionPlaceActions,
     modifier: Modifier = Modifier,
 ) {
-    val isExpense = uiState.transaction.type == TransactionType.EXPENSE
+    val transaction = uiState.transaction
+    if (transaction.type != TransactionType.EXPENSE || transaction.place.location == LocationData.EMPTY) return
     val horizontalPadding = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large)
     Column(modifier = modifier) {
-        if (isExpense) {
-            TransactionPlaceDetails(
-                uiState = uiState,
-                actions = actions,
-                modifier =
-                    Modifier.padding(
-                        horizontal = horizontalPadding,
-                        vertical = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small),
-                    ),
-            )
-        }
-        if (uiState.transaction.place.location != LocationData.EMPTY) {
-            TransactionLocationMap(
-                locationData = uiState.transaction.place.location,
-                categoryName = uiState.transaction.category.name,
-            )
-        }
-        if (isExpense) {
-            TransactionPlaceAttribution(
-                uiState = uiState,
-                modifier = Modifier.padding(horizontal = horizontalPadding),
-            )
-        }
+        TransactionPlaceDetails(
+            uiState = uiState,
+            actions = actions,
+            modifier =
+                Modifier.padding(
+                    horizontal = horizontalPadding,
+                    vertical = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small),
+                ),
+        )
+        TransactionLocationMap(
+            locationData = transaction.place.location,
+            categoryName = transaction.category.name,
+        )
+        TransactionPlaceAttribution(modifier = Modifier.padding(horizontal = horizontalPadding))
     }
 }
 
@@ -89,8 +81,6 @@ private fun TransactionPlaceDetails(
     actions: TransactionPlaceActions,
     modifier: Modifier = Modifier,
 ) {
-    val name = uiState.transaction.place.name
-    if (uiState.mode == TransactionInfoMode.VIEW && name.isNullOrBlank()) return
     Column(
         modifier = modifier,
         verticalArrangement =
@@ -318,16 +308,7 @@ private fun PlaceDetails(place: NearbyPlace) {
 }
 
 @Composable
-private fun TransactionPlaceAttribution(
-    uiState: TransactionInfoUiState,
-    modifier: Modifier = Modifier,
-) {
-    if (uiState.placeState.places.isEmpty() &&
-        uiState.transaction.place.name
-            .isNullOrBlank()
-    ) {
-        return
-    }
+private fun TransactionPlaceAttribution(modifier: Modifier = Modifier) {
     val uriHandler = LocalUriHandler.current
     val geoapifyUrl = stringResource(R.string.transaction_place_geoapify_url)
     val osmUrl = stringResource(R.string.transaction_place_osm_url)
