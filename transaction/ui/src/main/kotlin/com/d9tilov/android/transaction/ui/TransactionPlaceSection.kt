@@ -206,6 +206,14 @@ private fun SelectedPlaceDetails(
                     overflow = TextOverflow.Ellipsis,
                 )
             }
+        } else {
+            Text(
+                text = stringResource(R.string.transaction_place_not_selected),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
         }
     }
 }
