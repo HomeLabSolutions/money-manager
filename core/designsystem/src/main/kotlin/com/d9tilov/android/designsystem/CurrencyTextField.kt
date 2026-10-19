@@ -20,12 +20,12 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.ParagraphIntrinsics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.createFontFamilyResolver
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.d9tilov.android.core.utils.reduceScaleStr
 import java.math.BigDecimal
 
@@ -176,7 +176,10 @@ private fun CurrencyTextField(
             var intrinsics = calculateIntrinsics()
             val maxInputWidth =
                 LocalDensity.current.run {
-                    val textFieldDefaultHorizontalPadding = 16.dp.toPx()
+                    val textFieldDefaultHorizontalPadding =
+                        dimensionResource(
+                            R.dimen.padding_medium,
+                        ).toPx()
                     maxWidth.toPx() - 2 * textFieldDefaultHorizontalPadding
                 }
             while (intrinsics.maxIntrinsicWidth > maxInputWidth) {
@@ -191,7 +194,9 @@ private fun CurrencyTextField(
                     modifier =
                         Modifier
                             .alignByBaseline()
-                            .offset(x = 12.dp),
+                            .offset(
+                                x = dimensionResource(R.dimen.currency_symbol_offset),
+                            ),
                 )
                 var text by remember { mutableStateOf(amount) }
                 TextField(

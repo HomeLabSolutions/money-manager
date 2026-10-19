@@ -1,11 +1,11 @@
 package com.d9tilov.android.currency.data.impl
 
 import com.d9tilov.android.currency.data.contract.CurrencySource
+import com.d9tilov.android.currency.data.impl.api.CurrencyApi
 import com.d9tilov.android.currency.data.impl.mapper.toDataModel
 import com.d9tilov.android.currency.domain.contract.CurrencyRepo
 import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
-import com.d9tilov.android.network.CurrencyApi
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

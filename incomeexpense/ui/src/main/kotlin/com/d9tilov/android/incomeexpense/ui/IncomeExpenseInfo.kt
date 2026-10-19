@@ -13,8 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.d9tilov.android.incomeexpense.ui.vm.ExpenseInfo
 import com.d9tilov.android.incomeexpense.ui.vm.IncomeInfo
 import com.d9tilov.android.incomeexpense.ui.vm.Price
@@ -43,10 +43,16 @@ fun IncomeInfoBlock(
 
 @Composable
 fun InfoLabel(price: Price) {
-    Row(Modifier.padding(bottom = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        Modifier.padding(bottom = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_extra_small)),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         InfoLabelTitle(text = stringResource(id = price.label))
         Text(
-            modifier = Modifier.padding(start = 4.dp),
+            modifier =
+                Modifier.padding(
+                    start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_extra_small),
+                ),
             text = price.value,
             style = MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.primary),
         )
@@ -61,11 +67,14 @@ fun InfoLabelTitle(
     Box(
         modifier =
             modifier
-                .clip(RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.primary),
+                .clip(
+                    RoundedCornerShape(
+                        dimensionResource(com.d9tilov.android.designsystem.R.dimen.income_expense_badge_corner_radius),
+                    ),
+                ).background(MaterialTheme.colorScheme.primary),
     ) {
         Text(
-            modifier = Modifier.padding(6.dp),
+            modifier = Modifier.padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_compact)),
             text = text,
             style = MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.onPrimary),
         )

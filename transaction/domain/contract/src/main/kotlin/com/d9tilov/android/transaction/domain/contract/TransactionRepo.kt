@@ -1,6 +1,5 @@
 package com.d9tilov.android.transaction.domain.contract
 
-import androidx.paging.PagingData
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.transaction.domain.model.TransactionDataModel
@@ -8,12 +7,10 @@ import com.d9tilov.android.transaction.domain.model.TransactionMinMaxDateModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
 
-interface TransactionRepo {
+interface TransactionRepo : TransactionPagingRepo {
     suspend fun addTransaction(transaction: TransactionDataModel)
 
     fun getTransactionById(id: Long): Flow<TransactionDataModel>
-
-    fun getTransactionsByType(transactionType: TransactionType): Flow<PagingData<TransactionDataModel>>
 
     fun getTransactionsByTypeInPeriod(
         from: LocalDateTime,

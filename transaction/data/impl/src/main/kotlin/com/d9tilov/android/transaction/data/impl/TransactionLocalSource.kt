@@ -3,6 +3,7 @@ package com.d9tilov.android.transaction.data.impl
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.PagingSource
 import androidx.paging.map
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
@@ -13,6 +14,8 @@ import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.core.utils.toLocal
 import com.d9tilov.android.database.dao.TransactionDao
+import com.d9tilov.android.database.dao.TransactionSearchQuery
+import com.d9tilov.android.database.entity.TransactionDbModel
 import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.transaction.data.contract.TransactionSource
 import com.d9tilov.android.transaction.data.impl.mapper.toDataModel
@@ -27,6 +30,7 @@ import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDateTime
+import java.math.BigDecimal
 import javax.inject.Inject
 import javax.inject.Named
 import kotlin.time.ExperimentalTime
@@ -51,15 +55,79 @@ class TransactionLocalSource @Inject constructor(
             .filterNotNull()
             .flatMapMerge { uid -> transactionDao.getById(uid, id).map { it.toDataModel() } }
 
-    @OptIn(ExperimentalTime::class)
     override fun getAllByTypePaging(transactionType: TransactionType): Flow<PagingData<TransactionDataModel>> =
+        pagedTransactions { uid, from, to ->
+            transactionDao.getAllByType(uid, from, to, transactionType.value)
+        }
+
+    override fun searchByTypePaging(
+        transactionType: TransactionType,
+        query: String,
+    ): Flow<PagingData<TransactionDataModel>> {
+        val searchQuery = toTransactionSearchQuery(query)
+        return pagedTransactions { uid, from, to ->
+            transactionDao.searchByTypeQuery(
+                clientId = uid,
+                from = from,
+                to = to,
+                type = transactionType.value,
+                textPattern = searchQuery.textPattern,
+                amountQuery = searchQuery.amountQuery?.toPlainString(),
+            )
+        }
+    }
+
+    private fun toTransactionSearchQuery(query: String): TransactionSearchQuery {
+        val amountQuery = toAmountSearchQuery(query)
+        return TransactionSearchQuery(
+            amountQuery = amountQuery,
+            textPattern = toTextSearchPattern(query.trim()),
+        )
+    }
+
+    private fun toAmountSearchQuery(query: String): BigDecimal? =
+        query
+            .replace(',', '.')
+            .filterNot { it.isWhitespace() }
+            .toBigDecimalOrNull()
+
+    // SQLite LIKE only ignores ASCII case. Character classes also match Cyrillic letters.
+    private fun toTextSearchPattern(query: String): String =
+        query
+            .map { character ->
+                when (character) {
+                    '*' -> {
+                        "[*]"
+                    }
+
+                    '?' -> {
+                        "[?]"
+                    }
+
+                    '[' -> {
+                        "[[]"
+                    }
+
+                    else -> {
+                        if (character.lowercaseChar() != character.uppercaseChar()) {
+                            "[$character${character.uppercaseChar()}${character.lowercaseChar()}]"
+                        } else {
+                            character.toString()
+                        }
+                    }
+                }
+            }.joinToString(separator = "", prefix = "*", postfix = "*")
+
+    @OptIn(ExperimentalTime::class)
+    private fun pagedTransactions(
+        pagingSourceFactory: (String, LocalDateTime, LocalDateTime) -> PagingSource<Int, TransactionDbModel>,
+    ): Flow<PagingData<TransactionDataModel>> =
         preferencesStore.uid.filterNotNull().flatMapMerge { uid ->
             Pager(config = PagingConfig(PAGE_SIZE, enablePlaceholders = false)) {
-                transactionDao.getAllByType(
+                pagingSourceFactory(
                     uid,
                     Instant.fromEpochMilliseconds(0).toLocal().getEndOfDay(),
                     currentDateTime().getEndOfDay(),
-                    transactionType.value,
                 )
             }.flow
                 .map { value -> value.map { it.toDataModel() } }

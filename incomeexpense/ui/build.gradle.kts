@@ -23,9 +23,11 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":currency:domain:contract"))
     implementation(project(":currency:domain:model"))
+    implementation(project(":places:domain:model"))
     implementation(project(":transaction:domain:contract"))
     implementation(project(":transaction:domain:model"))
     implementation(project(":transaction:ui"))
+    implementation(libs.activity.compose)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.firebase.analytics)
@@ -38,4 +40,6 @@ dependencies {
     implementation(libs.timber)
 
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk.core)
 }

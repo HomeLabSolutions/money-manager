@@ -42,7 +42,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.budget.ui.BudgetScreen
@@ -105,7 +104,7 @@ fun PrepopulateScreen(
                             text = buildAnnotatedString { AnnotatedString(stringResource(R.string.toolbar_menu_skip)) },
                             modifier =
                                 Modifier
-                                    .padding(8.dp)
+                                    .padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small))
                                     .clickable { onBudgetSaveAndComplete() },
                         )
                     },
@@ -154,7 +153,7 @@ fun BottomNavigationBar(
     Row(
         modifier =
             modifier
-                .padding(vertical = 16.dp),
+                .padding(vertical = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -163,7 +162,7 @@ fun BottomNavigationBar(
             indicatorProgress = progress,
             modifier =
                 Modifier
-                    .padding(16.dp)
+                    .padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium))
                     .fillMaxWidth(FRACTION),
         )
         Row(
@@ -184,12 +183,18 @@ fun BottomNavigationBar(
                 },
                 modifier =
                     Modifier
-                        .padding(horizontal = 4.dp)
-                        .border(
-                            1.dp,
+                        .padding(
+                            horizontal =
+                                dimensionResource(
+                                    com.d9tilov.android.designsystem.R.dimen.padding_extra_small,
+                                ),
+                        ).border(
+                            dimensionResource(com.d9tilov.android.designsystem.R.dimen.border_width_thin),
                             MaterialTheme.colorScheme.primary,
                             shape = RoundedCornerShape(SHAPE_RADIUS),
-                        ).size(40.dp),
+                        ).size(
+                            dimensionResource(com.d9tilov.android.designsystem.R.dimen.prepopulate_control_size),
+                        ),
             ) {
                 Icon(
                     imageVector = MoneyManagerIcons.ArrowDropDown,
@@ -216,9 +221,17 @@ fun BottomNavigationBar(
                 },
                 modifier =
                     Modifier
-                        .height(height = 40.dp)
-                        .wrapContentWidth(),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                        .height(
+                            height =
+                                dimensionResource(
+                                    com.d9tilov.android.designsystem.R.dimen.prepopulate_control_size,
+                                ),
+                        ).wrapContentWidth(),
+                border =
+                    BorderStroke(
+                        dimensionResource(com.d9tilov.android.designsystem.R.dimen.border_width_thin),
+                        MaterialTheme.colorScheme.primary,
+                    ),
                 shape = RoundedCornerShape(SHAPE_RADIUS),
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
             ) {

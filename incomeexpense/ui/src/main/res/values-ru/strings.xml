@@ -5,6 +5,10 @@
     <string name="transaction_empty_placeholder_subtitle">Введите сумму и выберите категорию</string>
     <string name="transaction_delete_dialog_title">Удаление транзакции</string>
     <string name="transaction_delete_dialog_subtitle">Вы действительно хотите удалить транзакцию?</string>
+    <string name="transaction_search_hint">Search…</string>
+    <string name="transaction_search_close">Закрыть поиск</string>
+    <string name="transaction_search_empty_title">Транзакции не найдены</string>
+    <string name="transaction_search_empty_subtitle">Попробуйте изменить запрос</string>
 
     <string name="income_expense_empty_sum_error">Сумма слишком маленькая</string>
 

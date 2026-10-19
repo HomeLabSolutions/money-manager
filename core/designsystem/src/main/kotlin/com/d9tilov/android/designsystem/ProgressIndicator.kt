@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
 
 private const val FULL_PERCENTAGE = 100f
 
@@ -31,13 +31,15 @@ fun ProgressIndicator(
     val primaryColor = MaterialTheme.colorScheme.primary
     val surfaceVariant = MaterialTheme.colorScheme.surfaceVariant
 
+    val indicatorCornerRadius =
+        dimensionResource(R.dimen.progress_indicator_corner_radius)
     Canvas(
         modifier =
             modifier
                 .fillMaxWidth()
-                .height(4.dp),
+                .height(dimensionResource(R.dimen.progress_indicator_height)),
     ) {
-        val cornerRadius = 2.dp.toPx()
+        val cornerRadius = indicatorCornerRadius.toPx()
 
         drawRoundRect(
             color = surfaceVariant,

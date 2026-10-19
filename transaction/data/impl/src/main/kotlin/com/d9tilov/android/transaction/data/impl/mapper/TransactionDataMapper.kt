@@ -1,10 +1,11 @@
 package com.d9tilov.android.transaction.data.impl.mapper
 
-import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.core.model.toType
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.database.entity.TransactionDbModel
 import com.d9tilov.android.database.entity.TransactionMinMaxDateDbModel
+import com.d9tilov.android.places.domain.model.LocationData
+import com.d9tilov.android.places.domain.model.Place
 import com.d9tilov.android.transaction.domain.model.TransactionDataModel
 import com.d9tilov.android.transaction.domain.model.TransactionMinMaxDateModel
 
@@ -22,7 +23,7 @@ fun TransactionDbModel.toDataModel(): TransactionDataModel =
         qrCode,
         isRegular,
         inStatistics,
-        LocationData(latitude, longitude),
+        Place(location = LocationData(latitude, longitude), name = placeName, address = placeAddress),
         photoUri,
     )
 
@@ -40,9 +41,11 @@ fun TransactionDataModel.toDbModel(): TransactionDbModel =
         qrCode,
         isRegular,
         inStatistics,
-        location.latitude,
-        location.longitude,
+        place.location.latitude,
+        place.location.longitude,
         photoUri,
+        place.name,
+        place.address,
     )
 
 fun TransactionMinMaxDateDbModel.toDataModel(): TransactionMinMaxDateModel =

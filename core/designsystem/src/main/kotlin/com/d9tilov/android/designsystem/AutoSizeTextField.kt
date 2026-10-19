@@ -30,8 +30,6 @@ import androidx.compose.ui.text.font.createFontFamilyResolver
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.d9tilov.android.core.utils.MainPriceFieldParser
 
 private const val TEXT_SCALE_REDUCTION_INTERVAL = 0.8f
@@ -40,12 +38,12 @@ private const val TEXT_SCALE_REDUCTION_INTERVAL = 0.8f
 fun AutoSizeTextField(
     inputValue: String,
     inputValueChanged: (String) -> Unit,
-    showError: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    fontSize: TextUnit = 72.sp,
+    fontSize: TextUnit = textDimensionResource(R.dimen.amount_input_text_size),
     fontColor: Color = MaterialTheme.colorScheme.primary,
     autoFocus: Boolean = true,
     readOnly: Boolean = false,
+    content: @Composable () -> Unit,
 ) {
     var amount by remember { mutableStateOf(TextFieldValue()) }
     amount = amount.copy(text = inputValue, selection = TextRange(inputValue.length))
@@ -63,8 +61,11 @@ fun AutoSizeTextField(
 
         var intrinsics = calculateIntrinsics()
         with(LocalDensity.current) {
-            // TextField and OutlinedText field have default horizontal padding of 16.dp
-            val textFieldDefaultHorizontalPadding = 16.dp.toPx()
+            // Account for the horizontal content padding of the text field.
+            val textFieldDefaultHorizontalPadding =
+                dimensionResource(
+                    R.dimen.padding_medium,
+                ).toPx()
             val maxInputWidth = maxWidth.toPx() - 2 * textFieldDefaultHorizontalPadding
 
             while (intrinsics.maxIntrinsicWidth > maxInputWidth) {
@@ -98,7 +99,7 @@ fun AutoSizeTextField(
                     inputValueChanged(newText)
                 }
             },
-            supportingText = showError,
+            supportingText = content,
         )
         if (autoFocus && !readOnly) {
             LaunchedEffect(Unit) { focusRequester.requestFocus() }

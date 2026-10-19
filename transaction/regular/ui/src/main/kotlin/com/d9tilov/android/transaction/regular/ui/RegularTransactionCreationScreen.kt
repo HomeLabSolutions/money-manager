@@ -48,7 +48,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -63,7 +62,6 @@ import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.designsystem.AutoSizeTextField
 import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.DescriptionTextField
-import com.d9tilov.android.designsystem.DottedDivider
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
 import com.d9tilov.android.transaction.regular.ui.vm.DaysInWeek
@@ -203,7 +201,8 @@ fun RegularTransactionCreationScreen(
                             showError = !MainPriceFieldParser.isInputValid(text)
                             onSumChanged(text)
                         },
-                        showError = { if (showError) ShowError() },
+                        content = { if (showError) ShowError() },
+                        autoFocus = false,
                     )
                 }
                 RegularCategorySelector(
@@ -217,14 +216,16 @@ fun RegularTransactionCreationScreen(
                             .fillMaxWidth()
                             .clickable { onPushEnabledChanged(!uiState.transaction.pushEnabled) }
                             .padding(
-                                horizontal =
+                                start =
                                     dimensionResource(
                                         id = com.d9tilov.android.designsystem.R.dimen.padding_medium,
                                     ),
-                                vertical =
+                                end =
                                     dimensionResource(
-                                        id = com.d9tilov.android.designsystem.R.dimen.padding_large,
+                                        id = com.d9tilov.android.designsystem.R.dimen.padding_medium,
                                     ),
+                                top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                                bottom = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
                             ),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -243,14 +244,6 @@ fun RegularTransactionCreationScreen(
                     onCurPeriodItemUpdate = onCurPeriodItemUpdate,
                     onWeekDayClicked = onWeekDayClicked,
                     onOpenDayOfMonthDialog = { openDayOfMonthDialog = true },
-                )
-                DottedDivider(
-                    modifier =
-                        Modifier.padding(
-                            start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                            end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                            top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                        ),
                 )
                 DescriptionTextField(
                     modifier =
@@ -359,7 +352,7 @@ private fun RegularRepeatSelector(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .height(82.dp)
+                .height(dimensionResource(com.d9tilov.android.designsystem.R.dimen.regular_transaction_title_height))
                 .padding(
                     horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
                     vertical = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
@@ -447,10 +440,18 @@ fun DayInMonthDialog(
             Column(
                 modifier =
                     Modifier
-                        .height(342.dp)
-                        .width(260.dp)
-                        .clip(shape = RoundedCornerShape(20.dp))
-                        .background(MaterialTheme.colorScheme.background)
+                        .height(
+                            dimensionResource(com.d9tilov.android.designsystem.R.dimen.regular_category_picker_height),
+                        ).width(
+                            dimensionResource(com.d9tilov.android.designsystem.R.dimen.regular_category_picker_width),
+                        ).clip(
+                            shape =
+                                RoundedCornerShape(
+                                    dimensionResource(
+                                        com.d9tilov.android.designsystem.R.dimen.regular_category_picker_corner_radius,
+                                    ),
+                                ),
+                        ).background(MaterialTheme.colorScheme.background)
                         .padding(dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -471,11 +472,14 @@ fun DayInMonthDialog(
                         Box(
                             modifier =
                                 Modifier
-                                    .size(36.dp)
-                                    .padding(2.dp)
+                                    .size(
+                                        dimensionResource(
+                                            com.d9tilov.android.designsystem.R.dimen.regular_category_icon_size,
+                                        ),
+                                    ).padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_tiny))
                                     .clip(CircleShape)
                                     .border(
-                                        1.dp,
+                                        dimensionResource(com.d9tilov.android.designsystem.R.dimen.border_width_thin),
                                         MaterialTheme.colorScheme.secondary,
                                         CircleShape,
                                     ).clickable { onDayClicked(item) }
@@ -599,12 +603,15 @@ fun DaysOfWeek(
             Box(
                 modifier =
                     Modifier
-                        .size(32.dp)
-                        .padding(2.dp)
+                        .size(dimensionResource(com.d9tilov.android.designsystem.R.dimen.regular_currency_icon_size))
+                        .padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_tiny))
                         .aspectRatio(1f)
                         .clip(CircleShape)
-                        .border(1.dp, MaterialTheme.colorScheme.secondary, CircleShape)
-                        .clickable { onDayClicked(item) }
+                        .border(
+                            dimensionResource(com.d9tilov.android.designsystem.R.dimen.border_width_thin),
+                            MaterialTheme.colorScheme.secondary,
+                            CircleShape,
+                        ).clickable { onDayClicked(item) }
                         .background(
                             color =
                                 if (item == selected) {

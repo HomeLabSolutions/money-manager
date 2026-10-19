@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -35,7 +36,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
@@ -48,6 +48,7 @@ import com.d9tilov.android.designsystem.SimpleDialog
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.EXPENSE
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.INCOME
+import com.d9tilov.android.incomeexpense.ui.vm.TransactionSearchState
 import com.d9tilov.android.transaction.ui.TransactionItem
 import com.d9tilov.android.transaction.ui.model.BaseTransaction
 import com.d9tilov.android.transaction.ui.model.TransactionUiModel
@@ -62,42 +63,67 @@ fun TransactionListLayout(
     screenType: ScreenType,
     onTransactionClicked: (TransactionUiModel) -> Unit,
     onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
+    searchState: TransactionSearchState = TransactionSearchState(),
+    onSearchQueryChanged: (String) -> Unit = {},
+    onSearchOpened: () -> Unit = {},
+    onSearchClosed: () -> Unit = {},
+) {
+    TransactionSearchLayout(
+        searchState = searchState,
+        onQueryChanged = { query ->
+            if (query != searchState.searchQuery && query.isNotBlank()) listState.requestScrollToItem(0)
+            onSearchQueryChanged(query)
+        },
+        onSearchOpened = onSearchOpened,
+        onSearchClosed = onSearchClosed,
+        modifier = modifier,
+    ) {
+        TransactionListContent(
+            listState = listState,
+            modifier = Modifier.weight(1f),
+            transactions = transactions,
+            screenType = screenType,
+            searchQuery = searchState.searchQuery,
+            onTransactionClicked = onTransactionClicked,
+            onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked,
+        )
+    }
+}
+
+@Composable
+private fun TransactionListContent(
+    listState: LazyListState,
+    modifier: Modifier,
+    transactions: Flow<PagingData<BaseTransaction>>,
+    screenType: ScreenType,
+    searchQuery: String,
+    onTransactionClicked: (TransactionUiModel) -> Unit,
+    onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
 ) {
     val lazyTransactionItems: LazyPagingItems<BaseTransaction> =
         transactions.collectAsLazyPagingItems()
-    val captureScrollAnchor = rememberTransactionScrollAnchor(lazyTransactionItems, listState)
+    val captureScrollAnchor = rememberTransactionScrollAnchor(lazyTransactionItems, listState, searchQuery)
     val coroutineScope = rememberCoroutineScope()
-    if (lazyTransactionItems.loadState.refresh is LoadState.NotLoading && lazyTransactionItems.itemCount == 0) {
-        EmptyListPlaceholder(
-            modifier = Modifier.fillMaxSize(),
-            icon = painterResource(id = MoneyManagerIcons.EmptyPlaceholder),
-            title =
-                when (screenType) {
-                    EXPENSE -> stringResource(id = R.string.transaction_empty_placeholder_expense_title)
-                    INCOME -> stringResource(id = R.string.transaction_empty_placeholder_income_title)
-                },
-            subtitle = stringResource(id = R.string.transaction_empty_placeholder_subtitle),
-        )
-        return
-    }
-    if (lazyTransactionItems.loadState.refresh is LoadState.Error) {
-        // handle error
-    }
     val openRemoveDialog = remember { mutableStateOf<Pair<TransactionUiModel, SwipeToDismissBoxState>?>(null) }
-    LazyColumn(modifier = modifier, state = listState) {
-        transactionItems(
-            lazyTransactionItems = lazyTransactionItems,
-            onTransactionClicked = { transaction ->
-                captureScrollAnchor(transaction.id, null)
-                onTransactionClicked(transaction)
-            },
-            onRemoveRequested = { transaction, state -> openRemoveDialog.value = transaction to state },
-        )
-        item {
-            if (lazyTransactionItems.loadState.append is LoadState.Loading) {
-                // handle loading
+    Box(modifier = modifier) {
+        LazyColumn(modifier = Modifier.fillMaxSize(), state = listState) {
+            transactionItems(
+                lazyTransactionItems = lazyTransactionItems,
+                onTransactionClicked = { transaction ->
+                    captureScrollAnchor(transaction.id, null)
+                    onTransactionClicked(transaction)
+                },
+                onRemoveRequested = { transaction, state -> openRemoveDialog.value = transaction to state },
+            )
+            item {
+                if (lazyTransactionItems.loadState.append is LoadState.Loading) {
+                    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
+                }
             }
         }
+        TransactionListPlaceholder(lazyTransactionItems, screenType, searchQuery)
     }
     SimpleDialog(
         show = openRemoveDialog.value != null,
@@ -121,6 +147,40 @@ fun TransactionListLayout(
     )
 }
 
+@Composable
+private fun TransactionListPlaceholder(
+    items: LazyPagingItems<BaseTransaction>,
+    screenType: ScreenType,
+    searchQuery: String,
+) {
+    val appendState = items.loadState.append
+    if (items.itemCount != 0 || items.loadState.refresh !is LoadState.NotLoading) return
+    if (appendState !is LoadState.NotLoading || !appendState.endOfPaginationReached) return
+    val isSearching = searchQuery.isNotBlank()
+    val title =
+        if (isSearching) {
+            R.string.transaction_search_empty_title
+        } else {
+            when (screenType) {
+                EXPENSE -> R.string.transaction_empty_placeholder_expense_title
+                INCOME -> R.string.transaction_empty_placeholder_income_title
+            }
+        }
+    EmptyListPlaceholder(
+        modifier = Modifier.fillMaxSize(),
+        icon = painterResource(MoneyManagerIcons.EmptyPlaceholder),
+        title = stringResource(title),
+        subtitle =
+            stringResource(
+                if (isSearching) {
+                    R.string.transaction_search_empty_subtitle
+                } else {
+                    R.string.transaction_empty_placeholder_subtitle
+                },
+            ),
+    )
+}
+
 private fun BaseTransaction.listKey(): String =
     if (itemType == BaseTransaction.HEADER) {
         "header:$date"
@@ -132,8 +192,9 @@ private fun BaseTransaction.listKey(): String =
 private fun rememberTransactionScrollAnchor(
     lazyTransactionItems: LazyPagingItems<BaseTransaction>,
     listState: LazyListState,
+    searchQuery: String,
 ): (Long?, Long?) -> Unit {
-    var scrollAnchor by rememberSaveable { mutableStateOf<ScrollAnchor?>(null) }
+    var scrollAnchor by rememberSaveable(searchQuery) { mutableStateOf<ScrollAnchor?>(null) }
     val snapshot = lazyTransactionItems.itemSnapshotList
     LaunchedEffect(snapshot) {
         scrollAnchor?.let { anchor ->
@@ -245,7 +306,10 @@ private fun TransactionDateHeader(
         color = MaterialTheme.colorScheme.primaryContainer,
     ) {
         Text(
-            modifier = Modifier.padding(start = 24.dp),
+            modifier =
+                Modifier.padding(
+                    start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_expanded),
+                ),
             text = formatDate(transaction.date, TRANSACTION_DATE_FORMAT),
             color = MaterialTheme.colorScheme.onPrimaryContainer,
         )
@@ -259,8 +323,8 @@ private fun DismissibleTransactionItem(
     onRemoveRequested: (TransactionUiModel, SwipeToDismissBoxState) -> Unit,
 ) {
     val dismissState = rememberSwipeToDismissBoxState(SwipeToDismissBoxValue.Settled)
-    LaunchedEffect(dismissState.currentValue) {
-        if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
+    LaunchedEffect(dismissState.settledValue) {
+        if (dismissState.settledValue == SwipeToDismissBoxValue.EndToStart) {
             onRemoveRequested(item, dismissState)
         }
     }
@@ -276,6 +340,7 @@ private fun DismissibleTransactionItem(
                 modifier =
                     Modifier
                         .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.background)
                         .clickable {
                             onTransactionClicked(item)
                         },
@@ -288,7 +353,7 @@ private fun DismissibleTransactionItem(
 @Composable
 private fun TransactionDismissBackground(dismissState: SwipeToDismissBoxState) {
     val backgroundColor by animateColorAsState(
-        if (dismissState.targetValue == SwipeToDismissBoxValue.EndToStart) {
+        if (dismissState.dismissDirection == SwipeToDismissBoxValue.EndToStart) {
             MaterialTheme.colorScheme.error
         } else {
             Color.Transparent
@@ -297,7 +362,7 @@ private fun TransactionDismissBackground(dismissState: SwipeToDismissBoxState) {
     )
     val iconScale by animateFloatAsState(
         targetValue =
-            if (dismissState.targetValue ==
+            if (dismissState.dismissDirection ==
                 SwipeToDismissBoxValue.Settled
             ) {
                 0.0f

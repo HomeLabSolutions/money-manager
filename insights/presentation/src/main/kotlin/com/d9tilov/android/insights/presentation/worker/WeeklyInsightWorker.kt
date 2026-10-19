@@ -53,7 +53,7 @@ class WeeklyInsightWorker @AssistedInject constructor(
 
     companion object {
         private const val WORK_NAME = "weekly_insight_after_consent"
-        private const val INTERVAL_DAYS = 7L
+        private const val INTERVAL_DAYS = 5L
 
         fun startPeriodicJob(context: Context) {
             val recurringWork =

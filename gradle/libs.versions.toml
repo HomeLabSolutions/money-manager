@@ -14,12 +14,12 @@ composeConstraintLayout = "1.1.2"
 coroutinesCore = "1.11.0"
 datastore = "1.2.1"
 detektPlugin = "1.23.8"
-firebaseBom = "35.0.0"
+firebaseBom = "35.0.2"
 firebaseCrashlyticsPlugin = "3.0.8"
 firebaseUi = "9.1.1"
 googlePlayServices = "4.5.0"
 googlePlayServicesLocation = "21.4.0"
-googlePlayServicesMaps = "20.0.0"
+googlePlayServicesMaps = "20.1.0"
 gradlePlugin = "9.4.1"
 hilt = "2.60.1"
 hiltCommon = "1.4.0"
@@ -28,7 +28,7 @@ javaDesugaring = "2.1.5"
 javaPoet = "1.13.0"
 javaxInject = "1"
 junit = "4.13.2"
-kotlin = "2.4.20"
+kotlin = "2.4.21"
 kotlinDatetime = "0.7.1"
 kotlinxSerialization = "1.11.0"
 ksp = "2.3.12"
@@ -39,12 +39,13 @@ mockk = "1.14.11"
 moshi = "1.15.2"
 navigation = "2.10.2"
 okhttp = "5.5.0"
-paging = "3.5.2"
+paging = "3.5.3"
 retrofit = "3.0.0"
 retrofitConverter = "1.0.0"
 room = "2.8.5"
 secretesGradle = "2.0.1"
 splashScreen = "1.2.0"
+sqliteJdbc = "3.53.4.0"
 startup = "1.2.0"
 timber = "5.0.1"
 worker = "2.12.0"
@@ -106,6 +107,7 @@ kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "ko
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesCore" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinDatetime" }
 kotlinx-serialization-converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitConverter" }
+kotlinx-serialization-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version.ref = "kotlinxSerialization" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 ktlint-cli = { group = "com.pinterest.ktlint", name = "ktlint-cli", version.ref = "ktlint" }
@@ -121,12 +123,14 @@ okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhtt
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 paging-common = { group = "androidx.paging", name = "paging-common", version.ref = "paging" }
 paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
+paging-testing = { group = "androidx.paging", name = "paging-testing", version.ref = "paging" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "googlePlayServicesLocation" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "googlePlayServicesMaps" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "room" }
+sqlite-jdbc = { group = "org.xerial", name = "sqlite-jdbc", version.ref = "sqliteJdbc" }
 startup = { group = "androidx.startup", name = "startup-runtime", version.ref = "startup" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 

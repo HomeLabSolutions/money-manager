@@ -22,7 +22,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 
 /**
  * MoneyManager filled button with generic content slot. Wraps Material 3 [Button].
@@ -347,13 +346,13 @@ private fun RowScope.ButtonContent(
                     if (leadingIcon != null) {
                         MoneyManagerButtonDefaults.ButtonContentSpacing
                     } else {
-                        0.dp
+                        dimensionResource(R.dimen.dimension_zero)
                     },
                 end =
                     if (trailingIcon != null) {
                         MoneyManagerButtonDefaults.ButtonContentSpacing
                     } else {
-                        0.dp
+                        dimensionResource(R.dimen.dimension_zero)
                     },
             ),
     ) {
@@ -372,16 +371,26 @@ private fun RowScope.ButtonContent(
 object MoneyManagerButtonDefaults {
     private const val DISABLE_BUTTON_CONTAINER_ALPHA = 0.12f
     private const val DISABLE_BUTTON_CONTENT_ALPHA = 0.38f
-    private val ButtonHorizontalPadding = 24.dp
-    private val ButtonHorizontalIconPadding = 16.dp
-    private val ButtonVerticalPadding = 8.dp
-    private val SmallButtonHorizontalPadding = 16.dp
-    private val SmallButtonHorizontalIconPadding = 12.dp
-    private val SmallButtonVerticalPadding = 7.dp
-    val SmallButtonHeight = 32.dp
-    val ButtonContentSpacing = 8.dp
-    val ButtonIconSize = 18.dp
+    private val ButtonHorizontalPadding: Dp
+        @Composable get() = dimensionResource(R.dimen.padding_expanded)
+    private val ButtonHorizontalIconPadding: Dp
+        @Composable get() = dimensionResource(R.dimen.padding_medium)
+    private val ButtonVerticalPadding: Dp
+        @Composable get() = dimensionResource(R.dimen.padding_small)
+    private val SmallButtonHorizontalPadding: Dp
+        @Composable get() = dimensionResource(R.dimen.padding_medium)
+    private val SmallButtonHorizontalIconPadding: Dp
+        @Composable get() = dimensionResource(R.dimen.padding_intermediate)
+    private val SmallButtonVerticalPadding: Dp
+        @Composable get() = dimensionResource(R.dimen.small_button_vertical_padding)
+    val SmallButtonHeight: Dp
+        @Composable get() = dimensionResource(R.dimen.small_button_height)
+    val ButtonContentSpacing: Dp
+        @Composable get() = dimensionResource(R.dimen.padding_small)
+    val ButtonIconSize: Dp
+        @Composable get() = dimensionResource(R.dimen.button_icon_size)
 
+    @Composable
     fun buttonContentPadding(
         small: Boolean,
         leadingIcon: Boolean = false,
@@ -428,7 +437,7 @@ object MoneyManagerButtonDefaults {
     @Composable
     fun outlinedButtonBorder(
         enabled: Boolean,
-        width: Dp = 1.dp,
+        width: Dp = dimensionResource(R.dimen.border_width_thin),
         color: Color = MaterialTheme.colorScheme.onBackground,
         disabledColor: Color =
             MaterialTheme.colorScheme.onBackground.copy(

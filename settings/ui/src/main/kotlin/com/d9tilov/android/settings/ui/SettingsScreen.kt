@@ -43,7 +43,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.designsystem.BottomActionButton
@@ -252,12 +251,17 @@ fun StartOfPeriodLayout(
     modifier: Modifier,
     onPeriodDateChanged: (String) -> Unit,
 ) {
-    Row(modifier = modifier.padding(top = 32.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier = modifier.padding(top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large)),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         Text(
             text = stringResource(R.string.settings_start_period_day_title),
             style = MaterialTheme.typography.titleMedium,
         )
-        Box(modifier = Modifier.width(64.dp)) {
+        Box(
+            modifier = Modifier.width(dimensionResource(com.d9tilov.android.designsystem.R.dimen.settings_label_width)),
+        ) {
             OutlinedTextField(
                 value = day,
                 modifier =
@@ -306,7 +310,7 @@ fun BackupLayout(
                 .padding(top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small)),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Column(modifier = Modifier.weight(2f)) {
+        Column(modifier = Modifier.weight(1f, fill = false)) {
             Text(
                 text = stringResource(R.string.settings_backup),
                 style = MaterialTheme.typography.titleMedium,
@@ -320,33 +324,37 @@ fun BackupLayout(
                 style = MaterialTheme.typography.labelSmall,
             )
         }
-        IconButton(
-            modifier = Modifier.weight(2f),
-            enabled = !backupState.backupLoading,
-            onClick = onBackupClick,
+        Row(
+            modifier =
+                Modifier.padding(
+                    start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
+                ),
+            horizontalArrangement =
+                Arrangement.spacedBy(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small)),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(
-                modifier =
-                    Modifier.then(
-                        if (backupState.backupLoading) Modifier.graphicsLayer { rotationZ = angle } else Modifier,
-                    ),
-                imageVector = MoneyManagerIcons.Backup,
-                contentDescription = "Backup",
-            )
-        }
-        if (backupState.showBackupCloseBtn) {
             IconButton(
-                modifier = Modifier.weight(1f),
-                onClick = onClearBackupClick,
+                enabled = !backupState.backupLoading,
+                onClick = onBackupClick,
             ) {
                 Icon(
-                    imageVector = MoneyManagerIcons.Close,
-                    contentDescription = "Close",
-                    tint = MaterialTheme.colorScheme.error,
+                    modifier =
+                        Modifier.then(
+                            if (backupState.backupLoading) Modifier.graphicsLayer { rotationZ = angle } else Modifier,
+                        ),
+                    imageVector = MoneyManagerIcons.Backup,
+                    contentDescription = "Backup",
                 )
             }
-        } else {
-            Spacer(modifier = Modifier.weight(1f))
+            if (backupState.showBackupCloseBtn) {
+                IconButton(onClick = onClearBackupClick) {
+                    Icon(
+                        imageVector = MoneyManagerIcons.Close,
+                        contentDescription = "Close",
+                        tint = MaterialTheme.colorScheme.error,
+                    )
+                }
+            }
         }
     }
 }
@@ -369,8 +377,14 @@ fun SubscriptionLayout(
 ) {
     Card(
         modifier = modifier.clickable { onClick() },
-        elevation = CardDefaults.cardElevation(2.dp),
-        shape = RoundedCornerShape(dimensionResource(com.d9tilov.android.designsystem.R.dimen.card_view_corner_radius)),
+        elevation =
+            CardDefaults.cardElevation(
+                dimensionResource(com.d9tilov.android.designsystem.R.dimen.settings_card_elevation),
+            ),
+        shape =
+            RoundedCornerShape(
+                dimensionResource(com.d9tilov.android.designsystem.R.dimen.card_view_corner_radius),
+            ),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -430,7 +444,11 @@ enum class DialogType {
 fun DefaultSettingsPreview() {
     MoneyManagerTheme {
         SettingsScreen(
-            SettingsUiState(SubscriptionUiState(), startPeriodDay = 30.toString()),
+            SettingsUiState(
+                SubscriptionUiState(),
+                startPeriodDay = 30.toString(),
+                backupState = BackupState(showBackupCloseBtn = true),
+            ),
             onPeriodDateChanged = {},
             onShowSnackBar = { _, _ -> true },
         )

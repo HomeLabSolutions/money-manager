@@ -9,9 +9,9 @@ import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.category.domain.entity.ItemState
 import com.d9tilov.android.category.ui.navigation.CategoryArgs
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
-import com.d9tilov.android.core.model.ItemState
 import com.d9tilov.android.core.model.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler

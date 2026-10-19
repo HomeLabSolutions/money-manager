@@ -36,4 +36,6 @@ data class TransactionDbModel(
     @ColumnInfo(name = "latitude") val latitude: Double,
     @ColumnInfo(name = "longitude") val longitude: Double,
     @ColumnInfo(name = "photo") val photoUri: String?,
+    @ColumnInfo(name = "placeName") val placeName: String? = null,
+    @ColumnInfo(name = "placeAddress") val placeAddress: String? = null,
 )

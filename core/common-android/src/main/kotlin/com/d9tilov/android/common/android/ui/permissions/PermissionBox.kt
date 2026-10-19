@@ -23,7 +23,7 @@ import com.google.accompanist.permissions.shouldShowRationale
 
 /**
  * The PermissionBox uses a [Box] to show a simple permission request UI when the provided [permission]
- * is revoked or the provided [onGranted] content if the permission is granted.
+ * is revoked or the provided [content] content if the permission is granted.
  *
  * This composable follows the permission request flow but for a complete example check the samples
  * under privacy/permissions
@@ -35,7 +35,7 @@ fun PermissionBox(
     permissionTitle: String,
     permissionExplanation: String,
     contentAlignment: Alignment = Alignment.TopStart,
-    onGranted: @Composable BoxScope.() -> Unit,
+    content: @Composable BoxScope.() -> Unit,
 ) {
     PermissionBox(
         modifier,
@@ -44,11 +44,11 @@ fun PermissionBox(
         permissionTitle,
         permissionExplanation,
         contentAlignment,
-    ) { onGranted() }
+    ) { content() }
 }
 
 /**
- * A variation of [PermissionBox] that takes a list of permissions and only calls [onGranted] when
+ * A variation of [PermissionBox] that takes a list of permissions and only calls [content] when
  * all the [requiredPermissions] are granted.
  *
  * By default it assumes that all [permissions] are required.
@@ -62,7 +62,7 @@ fun PermissionBox(
     permissionTitle: String,
     permissionExplanation: String,
     contentAlignment: Alignment = Alignment.TopStart,
-    onGranted: @Composable BoxScope.(List<String>) -> Unit,
+    content: @Composable BoxScope.(List<String>) -> Unit,
 ) {
     val permissionState = rememberMultiplePermissionsState(permissions = permissions) { _ -> }
     val allRequiredPermissionsGranted =
@@ -83,7 +83,7 @@ fun PermissionBox(
             },
     ) {
         if (allRequiredPermissionsGranted) {
-            onGranted(
+            content(
                 permissionState.permissions
                     .filter { it.status.isGranted }
                     .map { it.permission },

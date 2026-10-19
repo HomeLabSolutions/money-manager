@@ -29,6 +29,72 @@ class TransactionLocalSourceTest {
         )
 
     @Test
+    fun `ordinary pager uses the unfiltered DAO method`() =
+        runTest {
+            every { preferencesStore.uid } returns flowOf(CURRENT_USER_ID)
+            every {
+                transactionDao.getAllByType(
+                    clientId = CURRENT_USER_ID,
+                    from = any(),
+                    to = any(),
+                    type = TransactionType.EXPENSE.value,
+                )
+            } returns mockk(relaxed = true)
+            val pagingSource =
+                TransactionLocalSource(
+                    ioDispatcher = StandardTestDispatcher(testScheduler),
+                    preferencesStore = preferencesStore,
+                    transactionDao = transactionDao,
+                )
+
+            pagingSource.getAllByTypePaging(TransactionType.EXPENSE).first()
+
+            verify(exactly = 1) {
+                transactionDao.getAllByType(
+                    clientId = CURRENT_USER_ID,
+                    from = any(),
+                    to = any(),
+                    type = TransactionType.EXPENSE.value,
+                )
+            }
+        }
+
+    @Test
+    fun `search pager passes the current user and decimal query to the search DAO method`() =
+        runTest {
+            every { preferencesStore.uid } returns flowOf(CURRENT_USER_ID)
+            every {
+                transactionDao.searchByTypeQuery(
+                    clientId = CURRENT_USER_ID,
+                    from = any(),
+                    to = any(),
+                    type = TransactionType.EXPENSE.value,
+                    textPattern = "*1 234,50*",
+                    amountQuery = "1234.50",
+                )
+            } returns mockk(relaxed = true)
+            val pagingSource =
+                TransactionLocalSource(
+                    ioDispatcher = StandardTestDispatcher(testScheduler),
+                    preferencesStore = preferencesStore,
+                    transactionDao = transactionDao,
+                )
+
+            pagingSource.searchByTypePaging(TransactionType.EXPENSE, " 1 234,50 ").first()
+
+            verify(exactly = 1) {
+                transactionDao.searchByTypeQuery(
+                    clientId = CURRENT_USER_ID,
+                    from = any(),
+                    to = any(),
+                    type = TransactionType.EXPENSE.value,
+                    textPattern = "*1 234,50*",
+                    amountQuery = "1234.50",
+                )
+            }
+        }
+
+    @Test
     fun `getMinMaxDate returns dates only for the current user`() =
         runTest {
             val currentUserDates =

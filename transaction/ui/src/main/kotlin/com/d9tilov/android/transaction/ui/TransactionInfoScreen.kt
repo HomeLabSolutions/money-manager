@@ -43,7 +43,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -52,7 +51,6 @@ import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.CategoryDestination
 import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_TIME_FORMAT
 import com.d9tilov.android.common.android.utils.formatDate
-import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.MainPriceFieldParser.isInputValid
@@ -62,9 +60,10 @@ import com.d9tilov.android.designsystem.AutoSizeTextField
 import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.CheckboxWithLabel
 import com.d9tilov.android.designsystem.DescriptionTextField
-import com.d9tilov.android.designsystem.DottedDivider
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
+import com.d9tilov.android.places.domain.model.LocationData
+import com.d9tilov.android.places.domain.model.Place
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.model.TransactionInfoMode
 import com.d9tilov.android.transaction.ui.vm.TransactionInfoUiState
@@ -117,6 +116,13 @@ fun TransactionInfoRoute(
         onCurrencyClicked = clickCurrency,
         onCategoryClicked = clickCategory,
         onDateClicked = viewModel::updateDate,
+        placeActions =
+            TransactionPlaceActions(
+                onEdit = { viewModel.updatePlacePickerVisibility(true) },
+                onDismiss = { viewModel.updatePlacePickerVisibility(false) },
+                onNameChanged = viewModel::updatePlaceName,
+                onPlaceSelected = viewModel::selectPlace,
+            ),
     )
 }
 
@@ -132,6 +138,7 @@ fun TransactionInfoScreen(
     onCategoryClicked: (TransactionType, CategoryDestination) -> Unit,
     onDateClicked: (Long) -> Unit,
     onSaveClicked: () -> Unit,
+    placeActions: TransactionPlaceActions = TransactionPlaceActions(),
 ) {
     val mode = uiState.mode
     val context = LocalContext.current
@@ -257,27 +264,21 @@ fun TransactionInfoScreen(
                 CheckboxWithLabel(
                     modifier =
                         Modifier.padding(
-                            horizontal =
+                            start =
                                 dimensionResource(
                                     id = com.d9tilov.android.designsystem.R.dimen.padding_medium,
                                 ),
-                            vertical =
+                            end =
                                 dimensionResource(
-                                    id = com.d9tilov.android.designsystem.R.dimen.padding_large,
+                                    id = com.d9tilov.android.designsystem.R.dimen.padding_medium,
                                 ),
+                            top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                            bottom = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_small),
                         ),
                     value = uiState.transaction.inStatistics,
                     label = stringResource(id = R.string.transaction_edit_in_statistics),
                     onCheckChanged = { onInStatisticsChanged(it) },
                     enabled = mode == TransactionInfoMode.EDIT,
-                )
-                DottedDivider(
-                    modifier =
-                        Modifier.padding(
-                            start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                            end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                            top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                        ),
                 )
                 DescriptionTextField(
                     modifier =
@@ -290,12 +291,10 @@ fun TransactionInfoScreen(
                     readOnly = mode == TransactionInfoMode.VIEW,
                 )
 
-                if (uiState.transaction.locationData != LocationData.EMPTY) {
-                    TransactionLocationMap(
-                        locationData = uiState.transaction.locationData,
-                        categoryName = uiState.transaction.category.name,
-                    )
-                }
+                TransactionPlaceSection(
+                    uiState = uiState,
+                    actions = placeActions,
+                )
             }
             if (mode == TransactionInfoMode.EDIT) {
                 BottomActionButton(
@@ -349,7 +348,7 @@ private fun TransactionAmountField(
             modifier = Modifier.alignByBaseline(),
             inputValue = uiState.amount,
             inputValueChanged = onSumChanged,
-            showError = { if (showError) ShowError() },
+            content = { if (showError) ShowError() },
             autoFocus = false,
             readOnly = mode == TransactionInfoMode.VIEW,
         )
@@ -419,9 +418,9 @@ fun TransactionLocationMap(
     Text(
         modifier =
             Modifier.padding(
+                top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_medium),
                 start = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
                 end = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                top = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
             ),
         text = stringResource(id = R.string.transaction_location_title),
         style = MaterialTheme.typography.labelLarge,
@@ -432,7 +431,7 @@ fun TransactionLocationMap(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .height(250.dp)
+                .height(dimensionResource(com.d9tilov.android.designsystem.R.dimen.transaction_calendar_height))
                 .padding(
                     horizontal =
                         dimensionResource(
@@ -442,7 +441,11 @@ fun TransactionLocationMap(
                         dimensionResource(
                             id = com.d9tilov.android.designsystem.R.dimen.padding_small,
                         ),
-                ).clip(RoundedCornerShape(16.dp)),
+                ).clip(
+                    RoundedCornerShape(
+                        dimensionResource(com.d9tilov.android.designsystem.R.dimen.card_view_corner_radius),
+                    ),
+                ),
         cameraPositionState = cameraPositionState,
         onMapClick = {
             val latitude = locationData.latitude
@@ -478,10 +481,13 @@ fun DefaultTransactionInfoPreview(mode: TransactionInfoMode = TransactionInfoMod
                                     icon = com.d9tilov.android.common.android.R.drawable.ic_category_cafe,
                                     color = android.R.color.holo_red_dark,
                                 ),
-                            locationData =
-                                LocationData(
-                                    latitude = 55.7558,
-                                    longitude = 37.6173,
+                            place =
+                                Place(
+                                    location =
+                                        LocationData(
+                                            latitude = 55.7558,
+                                            longitude = 37.6173,
+                                        ),
                                 ),
                         ),
                 ),

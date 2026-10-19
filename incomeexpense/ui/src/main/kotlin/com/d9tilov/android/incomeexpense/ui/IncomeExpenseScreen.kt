@@ -1,13 +1,17 @@
 package com.d9tilov.android.incomeexpense.ui
 
+import android.view.HapticFeedbackConstants
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,15 +19,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -44,11 +50,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -64,6 +72,7 @@ import com.d9tilov.android.incomeexpense.ui.vm.IncomeExpenseViewModel
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.EXPENSE
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType.INCOME
+import com.d9tilov.android.incomeexpense.ui.vm.SearchStatus
 import com.d9tilov.android.incomeexpense.ui.vm.screenTypes
 import com.d9tilov.android.incomeexpense.ui.vm.toScreenType
 import com.d9tilov.android.transaction.ui.model.TransactionUiModel
@@ -78,6 +87,7 @@ fun IncomeExpenseRoute(
 ) {
     val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val view = LocalView.current
     LaunchedEffect(Unit) {
         viewModel.errorMessageFlow
             .collect { message ->
@@ -90,12 +100,19 @@ fun IncomeExpenseRoute(
         uiState = uiState,
         onTransactionClicked = onTransactionClicked,
         onNumberClicked = { viewModel.addNumber(it) },
-        onCategoryClicked = { category -> viewModel.addTransaction(category.id) },
+        onCategoryClicked = { category ->
+            viewModel.addTransaction(category.id) {
+                view.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
+            }
+        },
         onEditModeChanged = { mode -> viewModel.updateMode(mode) },
         onCurrencyClicked = { onCurrencyClicked(uiState.price.currencyCode) },
         onAllCategoryClicked = onAllCategoryClicked,
         onDeleteTransactionConfirmClicked = viewModel::deleteTransaction,
         onScreenTypeClicked = viewModel::onTabClicked,
+        onSearchQueryChanged = viewModel::updateSearchQuery,
+        onSearchOpened = viewModel::onSearchOpened,
+        onSearchClosed = viewModel::onSearchClosed,
     )
 }
 
@@ -110,6 +127,9 @@ fun IncomeExpenseScreen(
     onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
     onScreenTypeClicked: (ScreenType) -> Unit,
+    onSearchQueryChanged: (ScreenType, String) -> Unit = { _, _ -> },
+    onSearchOpened: (ScreenType) -> Unit = {},
+    onSearchClosed: (ScreenType) -> Unit = {},
 ) {
     val expenseListState = rememberLazyListState()
     val incomeListState = rememberLazyListState()
@@ -147,6 +167,9 @@ fun IncomeExpenseScreen(
             onTransactionClicked = onTransactionClicked,
             onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked,
             onScreenTypeClicked = onScreenTypeClicked,
+            onSearchQueryChanged = onSearchQueryChanged,
+            onSearchOpened = onSearchOpened,
+            onSearchClosed = onSearchClosed,
         )
     }
 }
@@ -194,7 +217,6 @@ fun AnimatedFloatingActionButton(
 }
 
 @Composable
-@Suppress("CognitiveComplexMethod")
 fun HomeTabs(
     expenseListState: LazyListState,
     incomeListState: LazyListState,
@@ -209,117 +231,45 @@ fun HomeTabs(
     onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
     onScreenTypeClicked: (ScreenType) -> Unit,
+    onSearchQueryChanged: (ScreenType, String) -> Unit = { _, _ -> },
+    onSearchOpened: (ScreenType) -> Unit = {},
+    onSearchClosed: (ScreenType) -> Unit = {},
 ) {
-    val coroutineScope = rememberCoroutineScope()
-    Column {
-        PrimaryTabRow(
-            selectedTabIndex = pagerState.currentPage,
-            modifier = modifier,
-            containerColor = MaterialTheme.colorScheme.background,
-            indicator = {
-                HomeTabIndicator(
-                    Modifier.tabIndicatorOffset(pagerState.currentPage),
-                )
-            },
-        ) {
-            screenTypes.forEachIndexed { index, type ->
-                Tab(
-                    selected = pagerState.currentPage == index,
-                    onClick = {
-                        val screenType = index.toScreenType()
-                        onScreenTypeClicked(screenType)
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(index)
-                        }
-                    },
-                    text = {
-                        Text(
-                            text =
-                                when (type) {
-                                    EXPENSE -> stringResource(R.string.tab_expense)
-                                    INCOME -> stringResource(R.string.tab_income)
-                                },
-                        )
-                    },
-                    selectedContentColor = MaterialTheme.colorScheme.primary,
-                    unselectedContentColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-                )
-            }
-        }
+    val focusManager = LocalFocusManager.current
+    val closeSearch: (ScreenType) -> Unit = { screenType ->
+        focusManager.clearFocus()
+        onSearchClosed(screenType)
+    }
+    HomeTransactionSearchBackHandler(pagerState, uiState, closeSearch)
+    Column(modifier = modifier.fillMaxSize()) {
+        HomeTabRow(pagerState, onScreenTypeClicked)
         if (uiState.mode == EditMode.KEYBOARD) {
             MainPriceInput(
                 price = uiState.price,
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 32.dp, vertical = 8.dp),
+                        .padding(
+                            horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
+                            vertical = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small),
+                        ),
                 onCurrencyClicked = onCurrencyClicked,
             )
-            Spacer(modifier = Modifier.weight(1f))
         }
-        HorizontalPager(state = pagerState) { tabIndex: Int ->
+        HorizontalPager(state = pagerState, modifier = Modifier.weight(1f)) { tabIndex: Int ->
             if (uiState.mode == EditMode.KEYBOARD) {
-                Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.Center) {
-                    val screenType = tabIndex.toScreenType()
-                    if (screenType == INCOME) {
-                        uiState.incomeUiState.incomeInfo?.let {
-                            IncomeInfoBlock(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .height(120.dp)
-                                    .padding(start = 32.dp),
-                                it,
-                            )
-                        }
-                    } else {
-                        uiState.expenseUiState.expenseInfo?.let {
-                            ExpenseInfoBlock(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .height(120.dp)
-                                    .padding(start = 32.dp),
-                                it,
-                            )
-                        }
-                    }
-
-                    CategoryListLayout(
-                        categoryList =
-                            if (screenType == INCOME) {
-                                uiState.incomeUiState.incomeCategoryList
-                            } else {
-                                uiState.expenseUiState.expenseCategoryList
-                            },
-                        modifier = Modifier.fillMaxWidth(),
-                        onItemClicked = { category -> onCategoryClicked(category) },
-                        onAllCategoryClicked = {
-                            onAllCategoryClicked(
-                                screenType,
-                                if (uiState.price.value == ZERO) {
-                                    CategoryDestination.MAIN_SCREEN
-                                } else {
-                                    CategoryDestination.MAIN_WITH_SUM_SCREEN
-                                },
-                            )
-                        },
-                    )
-                }
+                HomeKeyboardPage(uiState, tabIndex.toScreenType(), onCategoryClicked, onAllCategoryClicked)
             } else {
-                TransactionListLayout(
-                    if (tabIndex.toScreenType() == INCOME) {
-                        incomeListState
-                    } else {
-                        expenseListState
-                    },
-                    Modifier.fillMaxSize(),
-                    if (tabIndex.toScreenType() == INCOME) {
-                        uiState.incomeUiState.incomeTransactions
-                    } else {
-                        uiState.expenseUiState.expenseTransactions
-                    },
-                    tabIndex.toScreenType(),
+                val screenType = tabIndex.toScreenType()
+                HomeTransactionPage(
+                    uiState = uiState,
+                    screenType = screenType,
+                    listState = if (screenType == INCOME) incomeListState else expenseListState,
                     onTransactionClicked = onTransactionClicked,
                     onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked,
+                    onSearchQueryChanged = { query -> onSearchQueryChanged(screenType, query) },
+                    onSearchOpened = { onSearchOpened(screenType) },
+                    onSearchClosed = { closeSearch(screenType) },
                 )
             }
         }
@@ -334,17 +284,157 @@ fun HomeTabs(
 }
 
 @Composable
+private fun HomeTransactionSearchBackHandler(
+    pagerState: PagerState,
+    uiState: IncomeExpenseUiState,
+    onSearchClosed: (ScreenType) -> Unit,
+) {
+    val screenType = pagerState.currentPage.toScreenType()
+    val searchState =
+        when (screenType) {
+            EXPENSE -> uiState.expenseUiState.searchState
+            INCOME -> uiState.incomeUiState.searchState
+        }
+    BackHandler(enabled = uiState.mode == EditMode.LIST && searchState.status == SearchStatus.OPEN) {
+        onSearchClosed(screenType)
+    }
+}
+
+@Composable
+private fun HomeTransactionPage(
+    uiState: IncomeExpenseUiState,
+    screenType: ScreenType,
+    listState: LazyListState,
+    onTransactionClicked: (TransactionUiModel) -> Unit,
+    onDeleteTransactionConfirmClicked: (TransactionUiModel) -> Unit,
+    onSearchQueryChanged: (String) -> Unit,
+    onSearchOpened: () -> Unit,
+    onSearchClosed: () -> Unit,
+) {
+    val transactions =
+        when (screenType) {
+            INCOME -> uiState.incomeUiState.incomeTransactions
+            EXPENSE -> uiState.expenseUiState.expenseTransactions
+        }
+    val searchState =
+        when (screenType) {
+            INCOME -> uiState.incomeUiState.searchState
+            EXPENSE -> uiState.expenseUiState.searchState
+        }
+    TransactionListLayout(
+        listState = listState,
+        modifier = Modifier.fillMaxSize(),
+        transactions = transactions,
+        screenType = screenType,
+        onTransactionClicked = onTransactionClicked,
+        onDeleteTransactionConfirmClicked = onDeleteTransactionConfirmClicked,
+        searchState = searchState,
+        onSearchQueryChanged = onSearchQueryChanged,
+        onSearchOpened = onSearchOpened,
+        onSearchClosed = onSearchClosed,
+    )
+}
+
+@Composable
+private fun HomeTabRow(
+    pagerState: PagerState,
+    onScreenTypeClicked: (ScreenType) -> Unit,
+) {
+    val coroutineScope = rememberCoroutineScope()
+    PrimaryTabRow(
+        selectedTabIndex = pagerState.currentPage,
+        modifier = Modifier.fillMaxWidth(),
+        containerColor = MaterialTheme.colorScheme.background,
+        indicator = {
+            HomeTabIndicator(
+                Modifier.tabIndicatorOffset(pagerState.currentPage),
+            )
+        },
+    ) {
+        screenTypes.forEachIndexed { index, type ->
+            Tab(
+                selected = pagerState.currentPage == index,
+                onClick = {
+                    val screenType = index.toScreenType()
+                    onScreenTypeClicked(screenType)
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(index)
+                    }
+                },
+                text = {
+                    Text(
+                        text =
+                            when (type) {
+                                EXPENSE -> stringResource(R.string.tab_expense)
+                                INCOME -> stringResource(R.string.tab_income)
+                            },
+                    )
+                },
+                selectedContentColor = MaterialTheme.colorScheme.primary,
+                unselectedContentColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+            )
+        }
+    }
+}
+
+@Composable
+private fun HomeKeyboardPage(
+    uiState: IncomeExpenseUiState,
+    screenType: ScreenType,
+    onCategoryClicked: (Category) -> Unit,
+    onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
+) {
+    Column(Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier.weight(1f).fillMaxWidth(),
+            contentAlignment = Alignment.Center,
+        ) {
+            val infoModifier =
+                Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large))
+            when (screenType) {
+                INCOME -> uiState.incomeUiState.incomeInfo?.let { info -> IncomeInfoBlock(infoModifier, info) }
+                EXPENSE -> uiState.expenseUiState.expenseInfo?.let { info -> ExpenseInfoBlock(infoModifier, info) }
+            }
+        }
+        CategoryListLayout(
+            categoryList =
+                when (screenType) {
+                    INCOME -> uiState.incomeUiState.incomeCategoryList
+                    EXPENSE -> uiState.expenseUiState.expenseCategoryList
+                },
+            modifier = Modifier.fillMaxWidth(),
+            onItemClicked = onCategoryClicked,
+            onAllCategoryClicked = {
+                onAllCategoryClicked(
+                    screenType,
+                    if (uiState.price.value == ZERO) {
+                        CategoryDestination.MAIN_SCREEN
+                    } else {
+                        CategoryDestination.MAIN_WITH_SUM_SCREEN
+                    },
+                )
+            },
+        )
+    }
+}
+
+@Composable
 fun HomeTabIndicator(
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.primary,
 ) {
     Spacer(
         modifier
-            .padding(horizontal = 24.dp)
-            .height(4.dp)
+            .padding(horizontal = dimensionResource(R.dimen.home_tab_indicator_horizontal_padding))
+            .height(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_extra_small))
             .background(color, RoundedCornerShape(topStartPercent = 100, topEndPercent = 100)),
     )
 }
+
+private const val CATEGORY_ROW_COUNT = 2
 
 @Composable
 fun CategoryListLayout(
@@ -353,46 +443,69 @@ fun CategoryListLayout(
     onItemClicked: (Category) -> Unit,
     onAllCategoryClicked: () -> Unit,
 ) {
-    val context = LocalContext.current
-
-    LazyHorizontalGrid(
-        modifier =
-            modifier
-                .height(200.dp)
-                .padding(16.dp),
-        rows = GridCells.Fixed(2),
-        horizontalArrangement = Arrangement.Start,
-        verticalArrangement = Arrangement.Center,
+    val spacing = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_extra_small)
+    LazyRow(
+        modifier = modifier,
+        contentPadding =
+            PaddingValues(
+                start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                end = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                bottom = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
+            ),
+        horizontalArrangement = Arrangement.spacedBy(spacing),
     ) {
-        items(categoryList, { it.id }) { item ->
+        items(categoryList.chunked(CATEGORY_ROW_COUNT), key = { it.first().id }) { categories ->
             Column(
-                modifier =
-                    Modifier
-                        .size(dimensionResource(id = R.dimen.category_item_size))
-                        .padding(8.dp)
-                        .clickable {
-                            if (item.id == ALL_ITEMS_ID) {
+                verticalArrangement =
+                    Arrangement.spacedBy(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small)),
+            ) {
+                categories.forEach { category ->
+                    HomeCategoryItem(
+                        category = category,
+                        onClick = {
+                            if (category.id == ALL_ITEMS_ID) {
                                 onAllCategoryClicked()
                             } else {
-                                onItemClicked(item)
+                                onItemClicked(category)
                             }
                         },
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = item.icon),
-                    modifier = Modifier.size(dimensionResource(id = R.dimen.category_icon_size)),
-                    contentDescription = "Backup",
-                    tint = Color(ContextCompat.getColor(context, item.color)),
-                )
-                Text(
-                    text = if (item.id == ALL_ITEMS_ID) stringResource(id = R.string.category_all) else item.name,
-                    color = Color(ContextCompat.getColor(context, item.color)),
-                    style = MaterialTheme.typography.bodySmall,
-                    overflow = TextOverflow.Ellipsis,
-                )
+                    )
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun HomeCategoryItem(
+    category: Category,
+    onClick: () -> Unit,
+) {
+    val context = LocalContext.current
+    val color = Color(ContextCompat.getColor(context, category.color))
+    Column(
+        modifier =
+            Modifier
+                .width(dimensionResource(R.dimen.category_item_width))
+                .clickable(onClick = onClick)
+                .padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_extra_small)),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(id = category.icon),
+            modifier = Modifier.size(dimensionResource(R.dimen.category_icon_size)),
+            contentDescription = null,
+            tint = color,
+        )
+        Text(
+            text = if (category.id == ALL_ITEMS_ID) stringResource(R.string.category_all) else category.name,
+            color = color,
+            style = MaterialTheme.typography.bodySmall,
+            textAlign = TextAlign.Center,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }

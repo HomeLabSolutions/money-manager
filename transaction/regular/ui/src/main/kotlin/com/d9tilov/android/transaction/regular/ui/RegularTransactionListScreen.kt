@@ -157,8 +157,8 @@ private fun DismissibleRegularTransactionItem(
             initialValue = SwipeToDismissBoxValue.Settled,
         )
 
-    LaunchedEffect(dismissState.currentValue) {
-        if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
+    LaunchedEffect(dismissState.settledValue) {
+        if (dismissState.settledValue == SwipeToDismissBoxValue.EndToStart) {
             onRemoveRequested(item, dismissState)
         }
     }
@@ -171,6 +171,7 @@ private fun DismissibleRegularTransactionItem(
         },
         content = {
             RegularTransactionItem(
+                modifier = Modifier.background(MaterialTheme.colorScheme.background),
                 transaction = item,
                 onClick = { onTransactionClicked(item) },
             )
@@ -182,7 +183,7 @@ private fun DismissibleRegularTransactionItem(
 @Composable
 private fun RegularTransactionDismissBackground(dismissState: SwipeToDismissBoxState) {
     val backgroundColor by animateColorAsState(
-        if (dismissState.targetValue == SwipeToDismissBoxValue.EndToStart) {
+        if (dismissState.dismissDirection == SwipeToDismissBoxValue.EndToStart) {
             MaterialTheme.colorScheme.error
         } else {
             Color.Transparent
@@ -191,7 +192,7 @@ private fun RegularTransactionDismissBackground(dismissState: SwipeToDismissBoxS
     )
     val iconScale by animateFloatAsState(
         targetValue =
-            if (dismissState.targetValue ==
+            if (dismissState.dismissDirection ==
                 SwipeToDismissBoxValue.Settled
             ) {
                 0.0f
@@ -231,7 +232,16 @@ fun DefaultRegularTransactionListPreview() {
                 regularTransactions =
                     List(PREVIEW_TRANSACTION_COUNT) { index ->
                         val id = (index + 1).toLong()
-                        RegularTransaction.EMPTY.copy(id = id, category = mockCategory(id, "Category$id"))
+                        RegularTransaction.EMPTY.copy(
+                            id = id,
+                            category = mockCategory(id, "Category$id"),
+                            description =
+                                if (index % 2 == 0) {
+                                    "Monthly subscription payment with a long description"
+                                } else {
+                                    ""
+                                },
+                        )
                     },
             ),
         onAddClicked = {},

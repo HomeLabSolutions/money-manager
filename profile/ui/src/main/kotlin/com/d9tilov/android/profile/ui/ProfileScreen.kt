@@ -35,7 +35,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -130,7 +129,7 @@ fun ProfileScreen(
             title = stringResource(R.string.logout_dialog_title),
             subtitle = stringResource(R.string.logout_dialog_subtitle),
             dismissButton = stringResource(com.d9tilov.android.common.android.R.string.cancel),
-            confirmButton = stringResource(R.string.logout_dialog_button),
+            confirmButton = stringResource(R.string.profile_logout),
             onConfirm = { onLogoutConfirmClicked() },
             onDismiss = { onLogoutDismissClicked() },
         )
@@ -143,11 +142,21 @@ fun ProfileCard(userProfile: UserUiProfile) {
         Card(
             modifier =
                 Modifier
-                    .padding(top = 32.dp, bottom = 4.dp, start = 16.dp, end = 16.dp)
-                    .fillMaxWidth()
+                    .padding(
+                        top = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_large),
+                        bottom = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_extra_small),
+                        start = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                        end = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium),
+                    ).fillMaxWidth()
                     .wrapContentHeight(align = Alignment.Top),
-            elevation = CardDefaults.cardElevation(2.dp),
-            shape = RoundedCornerShape(20.dp),
+            elevation =
+                CardDefaults.cardElevation(
+                    dimensionResource(com.d9tilov.android.designsystem.R.dimen.profile_summary_card_elevation),
+                ),
+            shape =
+                RoundedCornerShape(
+                    dimensionResource(com.d9tilov.android.designsystem.R.dimen.profile_card_corner_radius),
+                ),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -162,9 +171,16 @@ fun ProfileCard(userProfile: UserUiProfile) {
 fun ProfilePicture(uri: Uri?) {
     Card(
         shape = CircleShape,
-        border = BorderStroke(2.dp, MaterialTheme.colorScheme.onPrimaryContainer),
-        modifier = Modifier.padding(16.dp),
-        elevation = CardDefaults.cardElevation(4.dp),
+        border =
+            BorderStroke(
+                dimensionResource(com.d9tilov.android.designsystem.R.dimen.border_width_medium),
+                MaterialTheme.colorScheme.onPrimaryContainer,
+            ),
+        modifier = Modifier.padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
+        elevation =
+            CardDefaults.cardElevation(
+                dimensionResource(com.d9tilov.android.designsystem.R.dimen.profile_card_elevation),
+            ),
     ) {
         AsyncImage(
             model =
@@ -177,7 +193,7 @@ fun ProfilePicture(uri: Uri?) {
             modifier =
                 Modifier
                     .clip(CircleShape)
-                    .size(72.dp),
+                    .size(dimensionResource(com.d9tilov.android.designsystem.R.dimen.profile_avatar_size)),
         )
     }
 }
@@ -250,7 +266,7 @@ fun ProfileSection(
                     } else {
                         Modifier
                             .fillMaxWidth()
-                            .padding(0.dp)
+                            .padding(dimensionResource(com.d9tilov.android.designsystem.R.dimen.dimension_zero))
                     },
                 ).height(dimensionResource(com.d9tilov.android.designsystem.R.dimen.profile_item_height))
                 .clickable(onClick = navigationCallback),
@@ -288,8 +304,12 @@ fun ProfileSection(
                 Text(
                     modifier =
                         Modifier
-                            .padding(horizontal = 4.dp)
-                            .constrainAs(idCurrencyIcon) {
+                            .padding(
+                                horizontal =
+                                    dimensionResource(
+                                        com.d9tilov.android.designsystem.R.dimen.padding_extra_small,
+                                    ),
+                            ).constrainAs(idCurrencyIcon) {
                                 baseline.linkTo(idTitle.baseline)
                                 start.linkTo(idTitle.end)
                             },
@@ -314,8 +334,12 @@ fun ProfileSection(
                     currencyCode = profileUiItem.budgetData.currencyCode.getSymbolByCode(),
                     modifier =
                         Modifier
-                            .padding(horizontal = 4.dp)
-                            .constrainAs(idData) {
+                            .padding(
+                                horizontal =
+                                    dimensionResource(
+                                        com.d9tilov.android.designsystem.R.dimen.padding_extra_small,
+                                    ),
+                            ).constrainAs(idData) {
                                 baseline.linkTo(idTitle.baseline)
                                 start.linkTo(idTitle.end)
                             },
@@ -354,7 +378,7 @@ fun ProfileSection(
                             }.background(
                                 color = backgroundColor,
                                 shape = CircleShape,
-                            ).padding(all = 8.dp),
+                            ).padding(all = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_small)),
                     style =
                         MaterialTheme.typography.labelSmall.copy(
                             color = textColor,

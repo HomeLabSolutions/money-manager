@@ -29,6 +29,7 @@ dependencies {
     implementation(libs.room.runtime.android)
 
     testImplementation(libs.junit)
+    testImplementation(libs.sqlite.jdbc)
 
     ksp(libs.room.compiler)
 }

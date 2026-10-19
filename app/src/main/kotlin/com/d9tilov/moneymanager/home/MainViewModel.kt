@@ -11,13 +11,13 @@ import com.d9tilov.android.common.android.location.LocationProvider
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.core.exceptions.WrongUidException
-import com.d9tilov.android.core.model.LocationData
 import com.d9tilov.android.core.model.ResultOf
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.contract.GeocodingInteractor
 import com.d9tilov.android.currency.observer.contract.CurrencyUpdateObserver
 import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.network.exception.NetworkException
+import com.d9tilov.android.places.domain.model.LocationData
 import com.d9tilov.android.user.data.impl.mapper.toDataModel
 import com.d9tilov.android.user.domain.contract.UserInteractor
 import com.google.firebase.FirebaseException
