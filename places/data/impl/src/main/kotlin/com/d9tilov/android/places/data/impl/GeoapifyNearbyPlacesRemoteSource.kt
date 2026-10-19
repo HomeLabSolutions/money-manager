@@ -33,10 +33,7 @@ class GeoapifyNearbyPlacesRemoteSource @Inject constructor(
                 "service",
                 "healthcare",
                 "entertainment",
-                "accommodation",
-                "sport",
                 "parking",
-                "pet",
                 "rental",
             )
     }

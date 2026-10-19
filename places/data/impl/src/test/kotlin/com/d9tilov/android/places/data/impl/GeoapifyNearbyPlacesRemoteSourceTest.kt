@@ -42,7 +42,7 @@ class GeoapifyNearbyPlacesRemoteSourceTest {
             assertEquals(
                 mapOf(
                     "categories" to
-                        "catering,commercial,service,healthcare,entertainment,accommodation,sport,parking,pet,rental",
+                        "catering,commercial,service,healthcare,entertainment,parking,rental",
                     "conditions" to "named",
                     "filter" to "circle:-0.1,51.5,200",
                     "bias" to "proximity:-0.1,51.5",
