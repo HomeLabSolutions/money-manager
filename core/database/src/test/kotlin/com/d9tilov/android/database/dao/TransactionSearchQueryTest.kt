@@ -20,13 +20,13 @@ class TransactionSearchQueryTest {
                 """
                 CREATE TABLE transactions (
                     id INTEGER, clientId TEXT, type INTEGER, categoryId INTEGER,
-                    date INTEGER, description TEXT, sum TEXT, currency TEXT
+                    date INTEGER, description TEXT, sum TEXT, currency TEXT, placeName TEXT
                 )
                 """.trimIndent(),
             )
             statement.execute("INSERT INTO categories VALUES (1, 'user', 'Продукты')")
         }
-        val insert = "INSERT INTO transactions VALUES (?, 'user', 0, 1, ?, ?, ?, 'USD')"
+        val insert = "INSERT INTO transactions VALUES (?, 'user', 0, 1, ?, ?, ?, 'USD', NULL)"
         database.prepareStatement(insert).use { statement ->
             for (id in 1..50) {
                 statement.setInt(1, id)
@@ -52,7 +52,7 @@ class TransactionSearchQueryTest {
 
     @Test
     fun `filtered pages contain only matches in date order`() {
-        database.createStatement().use { it.execute("UPDATE transactions SET description = 'Match' WHERE id >= 25") }
+        database.createStatement().use { it.execute("UPDATE transactions SET placeName = 'Match' WHERE id >= 25") }
 
         assertEquals((25..34).toList(), search("match"))
         assertEquals((35..44).toList(), search("match", offset = 10))
@@ -65,6 +65,17 @@ class TransactionSearchQueryTest {
         updateDescription("Покупка в МаГаЗиНе у дома Café")
         assertEquals(listOf(50), search("МАГАЗИНЕ У ДОМА"))
         assertEquals(listOf(50), search("CAFÉ"))
+    }
+
+    @Test
+    fun `saved place name matches Cyrillic and Latin text in unloaded transactions ignoring case`() {
+        updatePlaceName("КоФеЙнЯ Urban Baristas Café")
+
+        assertEquals(listOf(50), search("КОФЕЙНЯ"))
+        assertEquals(listOf(50), search("bARISTAS"))
+        assertEquals(listOf(50), search("CAFÉ"))
+        updatePlaceName(null)
+        assertTrue(search("baristas").isEmpty())
     }
 
     @Test
@@ -109,20 +120,22 @@ class TransactionSearchQueryTest {
 
     @Test
     fun `wildcards and punctuation are searched literally`() {
-        updateDescription("Discount 10%_*?[x] \\ quote'🙂")
-
-        listOf("%", "_", "*", "?", "[x]", "]", "\\", "'", "🙂").forEach { query ->
-            assertEquals(query, listOf(50), search(query))
+        listOf(::updateDescription, ::updatePlaceName).forEach { updateText ->
+            updateText("Discount 10%_*?[x] \\ quote'🙂")
+            listOf("%", "_", "*", "?", "[x]", "]", "\\", "'", "🙂").forEach { query ->
+                assertEquals(query, listOf(50), search(query))
+            }
+            updateText("")
         }
     }
 
     @Test
     fun `search respects current user type and date bounds`() {
         database.createStatement().use { statement ->
-            statement.execute("UPDATE transactions SET description = 'Match', clientId = 'other' WHERE id = 47")
-            statement.execute("UPDATE transactions SET description = 'Match', type = 1 WHERE id = 48")
-            statement.execute("UPDATE transactions SET description = 'Match', date = 1000 WHERE id = 49")
-            statement.execute("UPDATE transactions SET description = 'Match' WHERE id = 50")
+            statement.execute("UPDATE transactions SET placeName = 'Match', clientId = 'other' WHERE id = 47")
+            statement.execute("UPDATE transactions SET placeName = 'Match', type = 1 WHERE id = 48")
+            statement.execute("UPDATE transactions SET placeName = 'Match', date = 1000 WHERE id = 49")
+            statement.execute("UPDATE transactions SET placeName = 'Match' WHERE id = 50")
         }
         assertEquals(listOf(50), search("match"))
     }
@@ -211,6 +224,13 @@ class TransactionSearchQueryTest {
     private fun updateAmount(amount: String) {
         database.prepareStatement("UPDATE transactions SET sum = ? WHERE id = 50").use { statement ->
             statement.setString(1, CurrencyConverter.fromBigDecimalToString(BigDecimal(amount)))
+            statement.executeUpdate()
+        }
+    }
+
+    private fun updatePlaceName(name: String?) {
+        database.prepareStatement("UPDATE transactions SET placeName = ? WHERE id = 50").use { statement ->
+            statement.setString(1, name)
             statement.executeUpdate()
         }
     }
