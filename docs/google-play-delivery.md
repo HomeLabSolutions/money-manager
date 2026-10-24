@@ -31,6 +31,9 @@ Open [Settings → Secrets and variables → Actions](https://github.com/HomeLab
 | `ANDROID_KEY_ALIAS` | Alias of the upload key inside that keystore. |
 | `ANDROID_KEY_PASSWORD` | Password for that key; it may equal the keystore password. |
 | `MAPS_API_KEY` | Production Maps SDK for Android API key used by `maps_api_key`. Its Android restrictions must allow `com.d9tilov.moneymanager` with the Google Play **app signing** certificate. |
+| `CURRENCY_API_KEY` | Exchange-rate API key from the local `currency_api_key` property. |
+| `GEOCODING_API_KEY` | Geocoding API key from the local `geocoding_api_key` property. |
+| `GEOAPIFY_API_KEY` | Nearby-place API key from the local `geoapify_api_key` property. |
 | `GOOGLE_SERVICES_JSON` | Base64 encoding of the production `google-services.json`. This secret is already used by Android CI; keep it if it is current. |
 | `PLAY_SERVICE_ACCOUNT_JSON` | Raw contents of the service account JSON key, without base64 encoding. Only needed when uploading to Google Play. |
 
