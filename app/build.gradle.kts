@@ -16,15 +16,22 @@ plugins {
 secrets {
     propertiesFileName = "keystore.properties"
     defaultPropertiesFileName = "local.defaults.properties"
+    ignoreList.addAll(listOf("keyAlias", "keyPassword", "storeFile", "storePassword"))
 }
 
 val keystorePropertiesFile: File = rootProject.file("keystore.properties")
+val releaseKeystorePath = providers.environmentVariable("ANDROID_KEYSTORE_PATH").orNull
 
 android {
 
     signingConfigs {
         create("release") {
-            if (keystorePropertiesFile.exists()) {
+            if (!releaseKeystorePath.isNullOrBlank()) {
+                storeFile = file(releaseKeystorePath)
+                storePassword = providers.environmentVariable("ANDROID_KEYSTORE_PASSWORD").get()
+                keyAlias = providers.environmentVariable("ANDROID_KEY_ALIAS").get()
+                keyPassword = providers.environmentVariable("ANDROID_KEY_PASSWORD").get()
+            } else if (keystorePropertiesFile.exists()) {
                 val keystoreProperties = Properties()
                 keystoreProperties.load(FileInputStream(keystorePropertiesFile))
                 keyAlias = keystoreProperties["keyAlias"] as String
@@ -54,7 +61,11 @@ android {
         val versionMinor: Int by rootProject.extra
         val versionPatch: Int by rootProject.extra
         val versionBuild: Int by rootProject.extra
-        versionCode = 1000 * (1000 * versionMajor + 100 * versionMinor + versionPatch) + versionBuild
+        versionCode =
+            providers
+                .gradleProperty("releaseVersionCode")
+                .map(String::toInt)
+                .getOrElse(1000 * (1000 * versionMajor + 100 * versionMinor + versionPatch) + versionBuild)
         versionName = "$versionMajor.$versionMinor.$versionPatch.$versionBuild"
 
         vectorDrawables.useSupportLibrary = true
@@ -79,7 +90,7 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             isDebuggable = false
-            if (keystorePropertiesFile.exists()) {
+            if (!releaseKeystorePath.isNullOrBlank() || keystorePropertiesFile.exists()) {
                 signingConfig = signingConfigs.getByName("release")
             }
             proguardFiles(
