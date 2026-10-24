@@ -62,8 +62,14 @@ jobs:
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
           MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }}
+          CURRENCY_API_KEY: ${{ secrets.CURRENCY_API_KEY }}
+          GEOCODING_API_KEY: ${{ secrets.GEOCODING_API_KEY }}
+          GEOAPIFY_API_KEY: ${{ secrets.GEOAPIFY_API_KEY }}
         run: |
-          required_secrets=(ANDROID_KEYSTORE_BASE64 ANDROID_KEYSTORE_PASSWORD ANDROID_KEY_ALIAS ANDROID_KEY_PASSWORD GOOGLE_SERVICES_JSON MAPS_API_KEY)
+          required_secrets=(
+            ANDROID_KEYSTORE_BASE64 ANDROID_KEYSTORE_PASSWORD ANDROID_KEY_ALIAS ANDROID_KEY_PASSWORD
+            GOOGLE_SERVICES_JSON MAPS_API_KEY CURRENCY_API_KEY GEOCODING_API_KEY GEOAPIFY_API_KEY
+          )
           for secret_name in "${required_secrets[@]}"; do
             if [[ -z "${!secret_name}" ]]; then
               echo "::error::Configure the $secret_name Actions secret."
@@ -74,7 +80,11 @@ jobs:
           printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/upload-keystore.jks"
           mkdir -p app/src/release
           printf '%s' "$GOOGLE_SERVICES_JSON" | base64 --decode > app/src/release/google-services.json
-          printf 'maps_api_key=%s\n' "$MAPS_API_KEY" > keystore.properties
+          printf '%s\n' \
+            "maps_api_key=$MAPS_API_KEY" \
+            "currency_api_key=$CURRENCY_API_KEY" \
+            "geocoding_api_key=$GEOCODING_API_KEY" \
+            "geoapify_api_key=$GEOAPIFY_API_KEY" > keystore.properties
       - name: Build and check release
         env:
           VERSION_CODE: ${{ inputs.version_code }}
