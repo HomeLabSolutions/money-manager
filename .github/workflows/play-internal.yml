@@ -1,10 +1,11 @@
 name: Google Play internal testing
+run-name: Google Play ${{ inputs.version }} (${{ inputs.publish && 'publish' || 'build only' }})
 
 on:
   workflow_dispatch:
     inputs:
-      version_code:
-        description: Version code greater than every version already uploaded to Google Play
+      version:
+        description: App version in major.minor.patch.build format, for example 1.4.3.3
         required: true
         type: string
       publish:
@@ -21,8 +22,81 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  prepare:
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    outputs:
+      source_sha: ${{ steps.commit.outputs.source_sha }}
+      version_name: ${{ steps.version.outputs.version_name }}
+      version_code: ${{ steps.version.outputs.version_code }}
+      pr_number: ${{ steps.commit.outputs.pr_number }}
+      ci_run_id: ${{ steps.commit.outputs.ci_run_id }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: develop
+      - name: Validate and set app version
+        id: version
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: python3 .github/scripts/release_version.py "$RELEASE_VERSION" --output "$GITHUB_OUTPUT"
+      - name: Check version availability in Google Play
+        env:
+          VERSION_CODE: ${{ steps.version.outputs.version_code }}
+          PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+        run: python3 .github/scripts/check_play_version.py "$VERSION_CODE"
+      - name: Prepare version commit and required CI
+        id: commit
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_VERSION: ${{ steps.version.outputs.version_name }}
+          VERSION_CODE: ${{ steps.version.outputs.version_code }}
+        run: |
+          if git diff --quiet -- build.gradle.kts; then
+            printf 'source_sha=%s\n' "$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          branch="release/version-$RELEASE_VERSION-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git checkout -b "$branch"
+          git add build.gradle.kts
+          git commit -m "Set app version to $RELEASE_VERSION"
+          git push origin "$branch"
+          source_sha=$(git rev-parse HEAD)
+          printf 'Set app version to `%s` (`versionCode = %s`).\n\nCreated by the Google Play delivery workflow.\n' \
+            "$RELEASE_VERSION" "$VERSION_CODE" > "$RUNNER_TEMP/version-pr.md"
+          pr_url=$(gh pr create --base develop --head "$branch" \
+            --title "Set app version to $RELEASE_VERSION" --body-file "$RUNNER_TEMP/version-pr.md")
+          gh workflow run android.yml --ref "$branch"
+          ci_run_id=''
+          for attempt in {1..10}; do
+            ci_run_id=$(gh run list --workflow android.yml --branch "$branch" --event workflow_dispatch \
+              --json databaseId,headSha --jq ".[] | select(.headSha == \"$source_sha\") | .databaseId" | head -n 1)
+            if [[ -n "$ci_run_id" ]]; then break; fi
+            sleep 2
+          done
+          if [[ -z "$ci_run_id" ]]; then
+            echo '::error::Could not find the required CI run for the version commit.'
+            exit 1
+          fi
+          printf 'source_sha=%s\npr_number=%s\nci_run_id=%s\n' \
+            "$source_sha" "${pr_url##*/}" "$ci_run_id" >> "$GITHUB_OUTPUT"
+          printf 'Version PR: %s\n' "$pr_url" >> "$GITHUB_STEP_SUMMARY"
+      - name: Summarize app version
+        env:
+          RELEASE_VERSION: ${{ steps.version.outputs.version_name }}
+          VERSION_CODE: ${{ steps.version.outputs.version_code }}
+        run: |
+          printf 'App version: **%s** · versionCode: **%s**\n' "$RELEASE_VERSION" "$VERSION_CODE" >> "$GITHUB_STEP_SUMMARY"
+
   build:
-    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master'
+    needs: prepare
     runs-on: ubuntu-latest
     timeout-minutes: 60
     outputs:
@@ -30,24 +104,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
+          ref: ${{ needs.prepare.outputs.source_sha }}
           persist-credentials: false
-      - name: Validate version code
-        env:
-          VERSION_CODE: ${{ inputs.version_code }}
-        run: |
-          if [[ ! "$VERSION_CODE" =~ ^[1-9][0-9]{0,9}$ ]] || (( VERSION_CODE > 2100000000 )); then
-            echo "::error::version_code must be an integer between 1 and 2100000000."
-            exit 1
-          fi
-      - name: Check Google Play credentials
-        if: inputs.publish
-        env:
-          PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
-        run: |
-          if [[ -z "$PLAY_SERVICE_ACCOUNT_JSON" ]]; then
-            echo "::error::Configure the PLAY_SERVICE_ACCOUNT_JSON Actions secret before publishing."
-            exit 1
-          fi
       - name: Set up JDK 17
         uses: actions/setup-java@v6
         with:
@@ -87,7 +145,6 @@ jobs:
             "geoapify_api_key=$GEOAPIFY_API_KEY" > keystore.properties
       - name: Build and check release
         env:
-          VERSION_CODE: ${{ inputs.version_code }}
           ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/upload-keystore.jks
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
@@ -95,26 +152,53 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew :app:bundleRelease test ktlintCheck detektCheck :app:lintRelease \
-            -PreleaseVersionCode="$VERSION_CODE" --no-configuration-cache --console=plain
+            --no-configuration-cache --console=plain
           test -s app/build/outputs/bundle/release/app-release.aab
           test -s app/build/outputs/mapping/release/mapping.txt
       - name: Save signed AAB and R8 mapping
         id: artifact
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
-          name: play-internal-${{ inputs.version_code }}-${{ github.run_attempt }}
+          name: play-internal-${{ needs.prepare.outputs.version_name }}-${{ github.run_attempt }}
           path: |
             app/build/outputs/bundle/release/app-release.aab
             app/build/outputs/mapping/release/mapping.txt
           if-no-files-found: error
           retention-days: 7
-          compression-level: 0
+          compression-level: 6
       - name: Remove release configuration
         if: always()
         run: rm -f -- "$RUNNER_TEMP/upload-keystore.jks" keystore.properties app/src/release/google-services.json
 
+  record-version:
+    needs: [prepare, build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: read
+      checks: read
+      statuses: read
+    steps:
+      - name: Save version in develop after successful checks
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ needs.prepare.outputs.pr_number }}
+          CI_RUN_ID: ${{ needs.prepare.outputs.ci_run_id }}
+          SOURCE_SHA: ${{ needs.prepare.outputs.source_sha }}
+        run: |
+          if [[ -n "$PR_NUMBER" ]]; then
+            gh run watch "$CI_RUN_ID" --interval 30 --exit-status
+            gh pr merge "$PR_NUMBER" --squash --delete-branch --match-head-commit "$SOURCE_SHA"
+            printf 'Version saved in develop via PR #%s.\n' "$PR_NUMBER" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'The requested version is already saved in develop.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
   publish:
-    needs: build
+    needs: [prepare, build, record-version]
     if: inputs.publish
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -130,6 +214,7 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: com.d9tilov.moneymanager
+          releaseName: ${{ needs.prepare.outputs.version_code }} (${{ needs.prepare.outputs.version_name }})
           releaseFiles: release/bundle/release/app-release.aab
           mappingFile: release/mapping/release/mapping.txt
           tracks: internal
