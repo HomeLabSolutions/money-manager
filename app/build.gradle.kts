@@ -61,11 +61,7 @@ android {
         val versionMinor: Int by rootProject.extra
         val versionPatch: Int by rootProject.extra
         val versionBuild: Int by rootProject.extra
-        versionCode =
-            providers
-                .gradleProperty("releaseVersionCode")
-                .map(String::toInt)
-                .getOrElse(1000 * (1000 * versionMajor + 100 * versionMinor + versionPatch) + versionBuild)
+        versionCode = 1000 * (1000 * versionMajor + 100 * versionMinor + versionPatch) + versionBuild
         versionName = "$versionMajor.$versionMinor.$versionPatch.$versionBuild"
 
         vectorDrawables.useSupportLibrary = true

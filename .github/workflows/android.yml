@@ -1,6 +1,7 @@
 name: Android CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "develop" ]
   pull_request:
@@ -29,6 +30,8 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+    - name: Test release version automation
+      run: python3 -m unittest discover -s .github/scripts -p '*_test.py'
     - name: Build with Gradle
       run: ./gradlew assembleDebug
     - name: Save debug APK
