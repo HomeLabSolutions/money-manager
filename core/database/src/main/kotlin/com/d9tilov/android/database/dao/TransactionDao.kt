@@ -137,6 +137,7 @@ internal const val TRANSACTION_SEARCH_QUERY = """
         AND (
             t.description GLOB :textPattern
             OR t.placeName GLOB :textPattern
+            OR t.placeAddress GLOB :textPattern
             OR EXISTS (
                 SELECT 1 FROM categories AS c
                 WHERE c.id = t.categoryId AND c.clientId = t.clientId AND c.name GLOB :textPattern
