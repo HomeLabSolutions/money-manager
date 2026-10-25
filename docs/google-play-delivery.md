@@ -38,6 +38,7 @@ Open [Settings → Secrets and variables → Actions](https://github.com/HomeLab
 | `GEOAPIFY_API_KEY` | Nearby-place API key from the local `geoapify_api_key` property. |
 | `GOOGLE_SERVICES_JSON` | Base64 encoding of the production `google-services.json`. This secret is already used by Android CI; keep it if it is current. |
 | `PLAY_SERVICE_ACCOUNT_JSON` | Raw contents of the service account JSON key, without base64 encoding. Required for the version-availability check even in build-only mode. |
+| `RELEASE_BOT_TOKEN` (optional) | Fine-grained GitHub PAT for `HomeLabSolutions/money-manager` with Contents and Pull requests read/write, and Actions read access. This lets ordinary PR CI start without the approval required for PRs created by `GITHUB_TOKEN`. |
 
 On macOS, copy the base64 keystore directly to the clipboard, replacing the path:
 
@@ -62,11 +63,15 @@ Enter `major.minor.patch.build`, for example `1.4.3.3`. The workflow updates the
 
 The existing formula is `1000 * (1000 * major + 100 * minor + patch) + build`: `1.4.3.3` becomes `1403003`. To keep this mapping unambiguous, minor must be 0–9, patch 0–99 and build 0–999. Leading zeroes, downgrades and codes outside Google's 1–2100000000 range are rejected.
 
-Code `1403002` was already uploaded with display version `1.4.3.1` using the previous workflow. Consequently, `1.4.3.2` is reserved too; the next available version with the current formula is `1.4.3.3`.
+Code `1403002` was already uploaded with display version `1.4.3.1` using the previous workflow. Consequently, `1.4.3.2` is reserved too; the first unused version for migration to version-name input was `1.4.3.3`. After that version is uploaded, choose a higher version such as `1.4.3.4`.
 
-`develop` requires a PR and a successful `build` check. When the version changes, the workflow creates a dedicated version branch and PR, explicitly dispatches Android CI on that commit, and builds the release from the same immutable commit in parallel. After both succeed, it merges the version PR into `develop`; only then can it upload the checked AAB to Play. The ordinary `GITHUB_TOKEN` is used with job-specific contents, PR and Actions permissions; no additional personal token is needed.
+`develop` requires a PR and a successful `build` check. When the version changes, the workflow creates a dedicated branch and a PR named `Release app version 1.4.3.3`, then waits for its ordinary `pull_request` CI while building the release from the same immutable commit in parallel. After both succeed, it merges the version PR into `develop`; only then can it upload the checked AAB to Play.
 
-Explicit CI dispatch is necessary because pushes made with `GITHUB_TOKEN` do not trigger ordinary push workflows. The version PR still follows the existing branch protection requirements. See [GitHub workflow triggering](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow).
+By default the version PR is created with `GITHUB_TOKEN`. GitHub requires approval before running CI on such a PR: open the version PR and select **Approve workflows to run**. The delivery summary links to the PR, and the merge step waits for approval and CI completion. Merge remains automatic after successful PR checks.
+
+For unattended releases, configure the optional `RELEASE_BOT_TOKEN` repository secret. Open the [pre-filled fine-grained token form](https://github.com/settings/personal-access-tokens/new?name=money-manager-release&target_name=HomeLabSolutions&expires_in=90&contents=write&pull_requests=write&actions=read), choose **Only select repositories → money-manager**, and generate the token. The form requests **Contents: Read and write**, **Pull requests: Read and write**, and **Actions: Read**, with a 90-day expiration. Save the generated value as `RELEASE_BOT_TOKEN` in repository Actions secrets and renew it before expiration. It is used only to push the version branch and create/read the version PR and CI; build and publish jobs keep their existing credentials.
+
+The version PR follows the existing branch protection requirements. A successful `workflow_dispatch` run does **not** satisfy required PR checks, so the delivery waits specifically for a `pull_request` run on the expected commit. See [GitHub workflow triggering](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow) and [required status checks](https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/troubleshooting-required-status-checks).
 
 Build-only runs also save the version after successful checks. A later publishing run can reuse that repository version if its code has not yet been uploaded to Play. A failed build leaves its version PR open and does not publish. If `develop` moves during validation and GitHub blocks the version PR as out of date, the workflow fails before publishing; start a fresh run to build and validate the latest `develop`.
 
