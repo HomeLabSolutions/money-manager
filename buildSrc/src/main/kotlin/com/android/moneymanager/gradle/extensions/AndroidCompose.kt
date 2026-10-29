@@ -18,8 +18,12 @@ package com.android.moneymanager.gradle.extensions
 
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.LibraryExtension
+import com.android.build.api.variant.ApplicationAndroidComponentsExtension
+import com.android.build.api.variant.HostTestBuilder
+import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.File
@@ -37,10 +41,17 @@ internal fun Project.configureAndroidCompose(extension: ApplicationExtension) {
         buildFeatures {
             compose = true
         }
+        testOptions {
+            unitTests.isIncludeAndroidResources = true
+        }
 
         dependencies {
             implementation(platform(buildLibs.androidx.compose.bom))
         }
+    }
+
+    extensions.getByType<ApplicationAndroidComponentsExtension>().beforeVariants {
+        it.hostTests[HostTestBuilder.UNIT_TEST_TYPE]?.enable = true
     }
 
     configureComposeMetrics()
@@ -59,10 +70,17 @@ internal fun Project.configureAndroidCompose(extension: LibraryExtension) {
         buildFeatures {
             compose = true
         }
+        testOptions {
+            unitTests.isIncludeAndroidResources = true
+        }
 
         dependencies {
             implementation(platform(buildLibs.androidx.compose.bom))
         }
+    }
+
+    extensions.getByType<LibraryAndroidComponentsExtension>().beforeVariants {
+        it.hostTests[HostTestBuilder.UNIT_TEST_TYPE]?.enable = true
     }
 
     configureComposeMetrics()
