@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
+    implementation(project(":shared"))
     implementation(libs.androidx.annotation)
     implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)
