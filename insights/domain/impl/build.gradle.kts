@@ -6,6 +6,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":insights:domain:contract"))
     implementation(project(":insights:domain:model"))
+    implementation(project(":shared"))
     implementation(project(":transaction:domain:contract"))
     implementation(project(":transaction:domain:model"))
     implementation(project(":user-info:domain:model"))

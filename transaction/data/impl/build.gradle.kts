@@ -12,6 +12,7 @@ dependencies {
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
     implementation(project(":places:domain:model"))
+    implementation(project(":shared"))
     implementation(project(":transaction:data:contract"))
     implementation(project(":transaction:domain:contract"))
     implementation(project(":transaction:domain:model"))

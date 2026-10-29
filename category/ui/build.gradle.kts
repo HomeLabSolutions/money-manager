@@ -18,6 +18,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
     implementation(project(":core:designsystem"))
+    implementation(project(":shared"))
     implementation(project(":transaction:domain:contract"))
     implementation(project(":transaction:regular:domain:contract"))
     implementation(libs.activity.compose)
