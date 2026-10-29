@@ -145,6 +145,7 @@ dependencies {
     implementation(project(":places:domain:model"))
     implementation(project(":profile:ui"))
     implementation(project(":settings:ui"))
+    implementation(project(":shared"))
     implementation(project(":statistics:ui"))
     implementation(project(":transaction:di"))
     implementation(project(":transaction:domain:contract"))

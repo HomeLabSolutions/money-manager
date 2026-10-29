@@ -15,6 +15,7 @@ dependencies {
     implementation(project(":core:datastore"))
     implementation(project(":notification"))
     implementation(project(":notification:domain"))
+    implementation(project(":shared"))
     implementation(project(":transaction:domain:contract"))
     implementation(project(":transaction:regular:data:contract"))
     implementation(project(":transaction:regular:domain:contract"))

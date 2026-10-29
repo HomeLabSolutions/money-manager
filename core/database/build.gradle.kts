@@ -22,6 +22,7 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
+    implementation(project(":shared"))
     implementation(libs.hilt.android)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.datetime)

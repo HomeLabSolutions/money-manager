@@ -5,6 +5,7 @@ include(":analytics:data")
 include(":analytics:domain")
 
 include(":app")
+include(":shared")
 
 include(":backup:data:contract")
 include(":backup:data:impl")

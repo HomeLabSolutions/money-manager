@@ -11,6 +11,7 @@ dependencies {
     implementation(project(":currency:domain:contract"))
     implementation(project(":currency:domain:model"))
     implementation(project(":places:domain:model"))
+    implementation(project(":shared"))
     implementation(project(":transaction:domain:contract"))
     implementation(project(":transaction:domain:model"))
     implementation(project(":transaction:regular:domain:contract"))
