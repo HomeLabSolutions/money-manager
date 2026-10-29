@@ -1,14 +1,12 @@
 package com.d9tilov.moneymanager.home
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -21,37 +19,17 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
-import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.prepopulate.PrepopulateScreen
 import com.d9tilov.moneymanager.ui.MmApp
-import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
-import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
-
-    private val providers =
-        arrayListOf(
-            AuthUI.IdpConfig.EmailBuilder().build(),
-            AuthUI.IdpConfig.PhoneBuilder().build(),
-            AuthUI.IdpConfig.GoogleBuilder().build(),
-        )
-    private val startForResult: ActivityResultLauncher<Intent> =
-        registerForActivityResult(
-            FirebaseAuthUIActivityResultContract(),
-        ) { result: FirebaseAuthUIAuthenticationResult ->
-            Timber.tag(DataConstants.TAG).d("Sign in result: $result")
-            viewModel.updateData()
-        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -61,30 +39,11 @@ class MainActivity : ComponentActivity() {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiStateFlow.collectLatest { state ->
                     uiState = state
-                    when (uiState) {
-                        is MainActivityUiState.Success.Auth -> {
-                            viewModel.setToLoadingState()
-                            startForResult.launch(
-                                AuthUI
-                                    .getInstance()
-                                    .createSignInIntentBuilder()
-                                    .setLogo(R.mipmap.ic_launcher_foreground)
-                                    .setTheme(R.style.Login_Theme_MoneyManager)
-                                    .setAvailableProviders(providers)
-                                    .build(),
-                            )
-                        }
-
-                        is MainActivityUiState.Success.Prepopulate,
-                        is MainActivityUiState.Success.Main,
-                        is MainActivityUiState.Loading,
-                        -> {
-                            openScreen(uiState)
-                        }
-                    }
                 }
             }
         }
+
+        openScreen { uiState }
 
         // Keep the splash screen on-screen until the UI state is loaded. This condition is
         // evaluated each time the app needs to be redrawn so it should be fast to avoid blocking
@@ -98,7 +57,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @SuppressLint("MissingPermission")
-    private fun openScreen(state: MainActivityUiState) {
+    private fun openScreen(state: () -> MainActivityUiState) {
         // Turn off the decor fitting system windows, which allows us to handle insets,
         // including IME animations, and go edge-to-edge
         // This also sets up the initial system bar style based on the platform theme
@@ -126,11 +85,11 @@ class MainActivity : ComponentActivity() {
             }
 
             MoneyManagerTheme(darkTheme = darkTheme) {
-                when (state) {
+                when (val currentState = state()) {
                     is MainActivityUiState.Success.Main -> {
                         MmApp(
                             windowSizeClass = calculateWindowSizeClass(this),
-                            locationCurrencyState = state.locationCurrencyState,
+                            locationCurrencyState = currentState.locationCurrencyState,
                             onLocationRequest = { viewModel.onLocationRequest(it) },
                             onConfirmClicked = { viewModel.updateCurrency(it) },
                             onDismissClicked = { viewModel.updateLocalCurrency(it) },
@@ -141,7 +100,17 @@ class MainActivity : ComponentActivity() {
                         PrepopulateScreen()
                     }
 
-                    is MainActivityUiState.Loading, MainActivityUiState.Success.Auth -> {}
+                    is MainActivityUiState.Success.Auth -> {
+                        SignInScreen(
+                            onSignInSuccess = {
+                                viewModel.setToLoadingState()
+                                viewModel.updateData()
+                            },
+                            onSignInCancelled = { finish() },
+                        )
+                    }
+
+                    is MainActivityUiState.Loading -> {}
                 }
             }
         }
