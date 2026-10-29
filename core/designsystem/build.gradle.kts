@@ -12,6 +12,12 @@ android {
 }
 
 dependencies {
+    constraints {
+        implementation(libs.androidx.lifecycle.runtime) {
+            because("Older Lifecycle lint checks reference Kotlin APIs removed in AGP 9.5")
+        }
+    }
+
     implementation(project(":core:common"))
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material.icons.core)

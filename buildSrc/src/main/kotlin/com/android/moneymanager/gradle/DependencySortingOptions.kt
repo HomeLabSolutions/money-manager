@@ -9,7 +9,11 @@ object DependencySortingOptions {
         }
 
         tasks.named("check") {
-            dependsOn(subprojects.map { it.tasks.matching { task -> task.name == "checkSortDependencies" } })
+            dependsOn(
+                subprojects
+                    .filter { "checkSortDependencies" in it.tasks.names }
+                    .map { it.tasks.named("checkSortDependencies") },
+            )
         }
     }
 }
