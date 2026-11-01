@@ -22,6 +22,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.moneymanager.prepopulate.PrepopulateScreen
 import com.d9tilov.moneymanager.ui.MmApp
+import com.d9tilov.moneymanager.widget.SpendingWidgetWork
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -30,6 +31,11 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
+
+    override fun onStop() {
+        super.onStop()
+        SpendingWidgetWork.schedule(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
