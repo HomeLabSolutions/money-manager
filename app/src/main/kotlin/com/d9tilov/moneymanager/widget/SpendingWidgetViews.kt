@@ -30,7 +30,15 @@ object SpendingWidgetViews {
         views.setTextViewText(R.id.widget_today_label, context.getString(R.string.widget_spent_today))
         views.setTextViewText(R.id.widget_period_label, context.getString(R.string.widget_spent_period))
         views.setContentDescription(R.id.widget_refresh, context.getString(R.string.widget_refresh))
-        views.setOnClickPendingIntent(R.id.spending_widget_root, openApp(context))
+        val openApp = openApp(context)
+        for (id in listOf(
+            R.id.spending_widget_root,
+            R.id.widget_available_value,
+            R.id.widget_today_value,
+            R.id.widget_period_value,
+        )) {
+            views.setOnClickPendingIntent(id, openApp)
+        }
         views.setOnClickPendingIntent(R.id.widget_refresh, refresh(context))
         val ready = state as? SpendingWidgetState.Ready
         views.setViewVisibility(R.id.widget_amounts, if (ready == null) View.GONE else View.VISIBLE)

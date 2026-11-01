@@ -60,7 +60,8 @@
 
         <TextView
             android:id="@+id/widget_available_value"
-            style="@style/Widget.Spending.FeaturedAmount" />
+            style="@style/Widget.Spending.FeaturedAmount"
+            android:textIsSelectable="true" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -83,7 +84,8 @@
 
                 <TextView
                     android:id="@+id/widget_today_value"
-                    style="@style/Widget.Spending.Amount" />
+                    style="@style/Widget.Spending.Amount"
+                    android:textIsSelectable="true" />
             </LinearLayout>
 
             <LinearLayout
@@ -99,7 +101,8 @@
 
                 <TextView
                     android:id="@+id/widget_period_value"
-                    style="@style/Widget.Spending.Amount" />
+                    style="@style/Widget.Spending.Amount"
+                    android:textIsSelectable="true" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

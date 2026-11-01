@@ -83,7 +83,7 @@ class SpendingWidgetObserver @Inject constructor(
             transactions.get().ableToSpendToday(),
             transactions.get().getApproxSumTodayCurrentCurrency(TransactionType.EXPENSE),
             currency.get().getMainCurrencyFlow(),
-        ) { _, _, _ -> Unit }
+        ) { _, _, _ -> }
 
     companion object {
         private const val RETRY_DELAY_MILLIS = 30_000L

@@ -10,6 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.annotation.UiThread
+import androidx.annotation.WorkerThread
+import androidx.core.graphics.createBitmap
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.d9tilov.moneymanager.R
@@ -20,6 +23,7 @@ import org.junit.runner.RunWith
 import java.io.File
 import java.math.BigDecimal
 import java.util.Locale
+import java.util.concurrent.atomic.AtomicReference
 
 @RunWith(AndroidJUnit4::class)
 class SpendingWidgetViewsTest {
@@ -31,35 +35,16 @@ class SpendingWidgetViewsTest {
     fun amountsRenderInBothLanguagesAndThemes() {
         for (language in listOf("en", "ru")) {
             for (night in listOf(false, true)) {
+                val context = localizedContext(language, night)
+                val preview = AtomicReference<Bitmap>()
                 instrumentation.runOnMainSync {
-                    val context = localizedContext(language, night)
                     val view = SpendingWidgetViews.create(context, ready).apply(context, FrameLayout(context))
-                    assertEquals("₽125.5", view.findViewById<TextView>(R.id.widget_available_value).text.toString())
-                    assertEquals("₽24.75", view.findViewById<TextView>(R.id.widget_today_value).text.toString())
-                    assertEquals("₽975.25", view.findViewById<TextView>(R.id.widget_period_value).text.toString())
-                    assertEquals(View.GONE, view.findViewById<View>(R.id.widget_message).visibility)
-                    assertEquals(
-                        if (language == "ru") "Расходы" else "Spending",
-                        view.findViewById<TextView>(R.id.widget_title).text.toString(),
-                    )
-                    assertEquals(
-                        if (language == "ru") "Потрачено сегодня" else "Spent today",
-                        view.findViewById<TextView>(R.id.widget_today_label).text.toString(),
-                    )
-                    assertEquals(
-                        if (language == "ru") "Потрачено за период" else "Spent in period",
-                        view.findViewById<TextView>(R.id.widget_period_label).text.toString(),
-                    )
-                    assertEquals(
-                        if (language == "ru") "Можно потратить сегодня" else "Can spend today",
-                        view.findViewById<TextView>(R.id.widget_available_label).text.toString(),
-                    )
-                    assertEquals(
-                        context.getColor(R.color.widget_accent),
-                        view.findViewById<TextView>(R.id.widget_available_value).currentTextColor,
-                    )
-                    savePreview(context, view, "widget-$language-${if (night) "dark" else "light"}.png")
+                    assertReadyAmounts(context, view)
+                    assertLocalizedLabels(language, view)
+                    preview.set(renderPreview(context, view))
                 }
+                val theme = if (night) "dark" else "light"
+                savePreview(context, requireNotNull(preview.get()), "widget-$language-$theme.png")
             }
         }
     }
@@ -118,19 +103,61 @@ class SpendingWidgetViewsTest {
         }
     }
 
-    private fun savePreview(
+    @UiThread
+    private fun assertReadyAmounts(
         context: Context,
         view: View,
-        name: String,
     ) {
+        assertEquals("₽125.5", view.findViewById<TextView>(R.id.widget_available_value).text.toString())
+        assertEquals("₽24.75", view.findViewById<TextView>(R.id.widget_today_value).text.toString())
+        assertEquals("₽975.25", view.findViewById<TextView>(R.id.widget_period_value).text.toString())
+        assertEquals(View.GONE, view.findViewById<View>(R.id.widget_message).visibility)
+        assertEquals(
+            context.getColor(R.color.widget_accent),
+            view.findViewById<TextView>(R.id.widget_available_value).currentTextColor,
+        )
+    }
+
+    @UiThread
+    private fun assertLocalizedLabels(
+        language: String,
+        view: View,
+    ) {
+        val expected =
+            if (language == "ru") {
+                listOf("Расходы", "Потрачено сегодня", "Потрачено за период", "Можно потратить сегодня")
+            } else {
+                listOf("Spending", "Spent today", "Spent in period", "Can spend today")
+            }
+        val ids =
+            listOf(R.id.widget_title, R.id.widget_today_label, R.id.widget_period_label, R.id.widget_available_label)
+        for ((id, label) in ids.zip(expected)) {
+            assertEquals(label, view.findViewById<TextView>(id).text.toString())
+        }
+    }
+
+    @UiThread
+    private fun renderPreview(
+        context: Context,
+        view: View,
+    ): Bitmap {
         val density = context.resources.displayMetrics.density
         view.measure(
             View.MeasureSpec.makeMeasureSpec((360 * density).toInt(), View.MeasureSpec.EXACTLY),
             View.MeasureSpec.makeMeasureSpec((240 * density).toInt(), View.MeasureSpec.EXACTLY),
         )
         view.layout(0, 0, view.measuredWidth, view.measuredHeight)
-        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        val bitmap = createBitmap(view.width, view.height)
         view.draw(Canvas(bitmap))
+        return bitmap
+    }
+
+    @WorkerThread
+    private fun savePreview(
+        context: Context,
+        bitmap: Bitmap,
+        name: String,
+    ) {
         val directory = requireNotNull(context.getExternalFilesDir("widget-test-previews"))
         File(directory, name).outputStream().use { stream -> bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream) }
     }
