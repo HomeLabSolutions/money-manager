@@ -103,6 +103,12 @@ include(":user-info:domain:contract")
 include(":user-info:domain:impl")
 include(":user-info:domain:model")
 
+include(":widget:di")
+include(":widget:domain:contract")
+include(":widget:domain:impl")
+include(":widget:domain:model")
+include(":widget:ui")
+
 pluginManagement {
     repositories {
         gradlePluginPortal()

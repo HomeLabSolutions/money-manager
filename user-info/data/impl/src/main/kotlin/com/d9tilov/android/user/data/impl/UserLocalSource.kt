@@ -10,9 +10,9 @@ import com.d9tilov.android.user.data.impl.mapper.toDbModel
 import com.d9tilov.android.user.domain.model.UserProfile
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -71,8 +71,13 @@ class UserLocalSource @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getCurrentUser(): Flow<UserProfile?> =
         preferencesStore.uid
-            .filterNotNull()
-            .flatMapMerge { uid -> userDao.getById(uid).map { user: UserDbModel? -> user?.toDataModel() } }
+            .flatMapLatest { uid ->
+                if (uid == null) {
+                    flowOf(null)
+                } else {
+                    userDao.getById(uid).map { user: UserDbModel? -> user?.toDataModel() }
+                }
+            }
 
     override suspend fun deleteUser() {
         val currentUserId = preferencesStore.uid.firstOrNull()

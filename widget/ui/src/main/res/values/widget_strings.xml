@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_name">Spending</string>
+    <string name="widget_description">Available to spend today, spent today, and spent in the current fiscal period</string>
+    <string name="widget_available_today">Can spend today:</string>
+    <string name="widget_overspending">Overspending:</string>
+    <string name="widget_spent_today">Spent today:</string>
+    <string name="widget_spent_period">Spent in period:</string>
+    <string name="widget_sign_in">Open app to sign in</string>
+    <string name="widget_setup_required">Open app to finish setup</string>
+    <string name="widget_premium_required">Open app to view Premium options</string>
+    <string name="widget_unavailable">Open app to refresh amounts.</string>
+</resources>

@@ -1,5 +1,3 @@
-import com.android.moneymanager.gradle.extensions.ksp
-
 plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.library.compose")
@@ -33,6 +31,4 @@ dependencies {
     implementation(libs.navigation.runtime)
     implementation(libs.play.services.location)
     implementation(libs.timber)
-
-    ksp(libs.hilt.ext.compiler)
 }

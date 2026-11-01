@@ -57,6 +57,7 @@ android {
     defaultConfig {
 
         applicationId = "com.d9tilov.moneymanager"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         val versionMajor: Int by rootProject.extra
         val versionMinor: Int by rootProject.extra
         val versionPatch: Int by rootProject.extra
@@ -117,6 +118,7 @@ dependencies {
     implementation(project(":backup:di"))
     implementation(project(":backup:domain:contract"))
     implementation(project(":billing:di"))
+    implementation(project(":billing:domain:contract"))
     implementation(project(":budget:di"))
     implementation(project(":budget:domain:contract"))
     implementation(project(":budget:domain:model"))
@@ -156,6 +158,9 @@ dependencies {
     implementation(project(":user-info:di"))
     implementation(project(":user-info:domain:contract"))
     implementation(project(":user-info:domain:model"))
+    implementation(project(":widget:di"))
+    implementation(project(":widget:domain:contract"))
+    implementation(project(":widget:ui"))
     implementation(libs.activity)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material3)
@@ -184,4 +189,9 @@ dependencies {
     implementation(libs.timber)
 
     runtimeOnly(libs.androidx.credentials.play.services.auth)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk.core)
+
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
 }

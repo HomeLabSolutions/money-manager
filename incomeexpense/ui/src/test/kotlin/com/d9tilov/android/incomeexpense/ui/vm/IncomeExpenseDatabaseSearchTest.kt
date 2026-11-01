@@ -8,6 +8,7 @@ import com.d9tilov.android.common.android.location.LocationProvider
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.KeyPress
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
+import com.d9tilov.android.transaction.domain.contract.ObserveSpendingSummaryUseCase
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import io.mockk.every
 import io.mockk.mockk
@@ -37,12 +38,14 @@ class IncomeExpenseDatabaseSearchTest {
     private val categories = mockk<CategoryInteractor>(relaxed = true)
     private val currencies = mockk<CurrencyInteractor>(relaxed = true)
     private val billing = mockk<BillingInteractor>(relaxed = true)
+    private val observeSpendingSummary = mockk<ObserveSpendingSummaryUseCase>()
 
     @Before
     fun setUp() {
         Dispatchers.setMain(dispatcher)
         every { currencies.getMainCurrencyFlow() } returns emptyFlow()
         every { billing.isPremium() } returns emptyFlow()
+        every { observeSpendingSummary() } returns emptyFlow()
         every { categories.getGroupedCategoriesByType(any()) } returns emptyFlow()
         every { transactions.getTransactionsByType(any()) } returns flowOf(PagingData.empty())
         every { transactions.searchTransactionsByType(any(), any()) } returns flowOf(PagingData.empty())
@@ -171,6 +174,7 @@ class IncomeExpenseDatabaseSearchTest {
             currencyInteractor = currencies,
             categoryInteractor = categories,
             transactionInteractor = transactions,
+            observeSpendingSummary = observeSpendingSummary,
             locationProvider = mockk<LocationProvider>(relaxed = true),
         )
 }

@@ -20,6 +20,7 @@ import com.d9tilov.android.network.exception.NetworkException
 import com.d9tilov.android.places.domain.model.LocationData
 import com.d9tilov.android.user.data.impl.mapper.toDataModel
 import com.d9tilov.android.user.domain.contract.UserInteractor
+import com.d9tilov.android.widget.domain.contract.SpendingWidgetStateObserver
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Lazy
@@ -47,6 +48,7 @@ class MainViewModel
         private val preferencesStore: PreferencesStore,
         private val backupInteractor: BackupInteractor,
         private val userInteractor: UserInteractor,
+        private val spendingWidgetStateObserver: SpendingWidgetStateObserver,
         private val categoryInteractor: Lazy<CategoryInteractor>,
         private val currencyUpdateObserver: CurrencyUpdateObserver,
         private val currencyInteractor: CurrencyInteractor,
@@ -124,6 +126,7 @@ class MainViewModel
                                         categoryInteractor.get().createDefaultCategories()
                                     }
                                 }
+                                spendingWidgetStateObserver.notifyStateChanged()
                                 MainActivityUiState.Success.Main(localCurrencyState.value)
                             }
                         }

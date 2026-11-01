@@ -406,7 +406,7 @@ class TransactionInteractorImpl @Inject constructor(
             .getMainCurrencyFlow()
             .flatMapMerge { currency ->
                 val fiscalDay = userInteractor.getFiscalDay()
-                val endDate = currentDateTime()
+                val endDate = currentDateTime().getEndOfDay()
                 val startDate = getStartDateOfFiscalPeriod(fiscalDay)
                 transactionRepo
                     .getTransactionsByTypeInPeriod(
