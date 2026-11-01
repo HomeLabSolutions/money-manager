@@ -11,7 +11,7 @@ The widget follows the same Premium availability as the in-app summary.
 
 After installing the app, open the launcher's widget picker and add **Money Manager → Spending**
 (**Расходы** in Russian). Tap the widget to open the app. The compact layout defaults to 2 × 1 cells
-and shows three labeled rows without a title or refresh button. Its minimum content size is 110 × 56 dp.
+and shows a compact title and three labeled rows without a refresh button. Its minimum content size is 110 × 64 dp.
 The widget can be resized, supports light and dark themes, and uses system colors on Android 12 and later.
 
 The widget refreshes when it is added, when the app leaves the foreground, when transaction,

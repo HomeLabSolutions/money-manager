@@ -89,9 +89,11 @@ class SpendingWidgetViewsTest {
             val density = context.resources.displayMetrics.density
             view.measure(
                 View.MeasureSpec.makeMeasureSpec((110 * density).toInt(), View.MeasureSpec.EXACTLY),
-                View.MeasureSpec.makeMeasureSpec((56 * density).toInt(), View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec((64 * density).toInt(), View.MeasureSpec.EXACTLY),
             )
             view.layout(0, 0, view.measuredWidth, view.measuredHeight)
+            val title = view.findViewById<TextView>(R.id.widget_title)
+            assertTrue("Title must fit at the minimum widget size", title.height >= title.lineHeight)
             val amounts = view.findViewById<View>(R.id.widget_amounts)
             val period = view.findViewById<TextView>(R.id.widget_period_value)
             val periodBounds = Rect(0, 0, period.width, period.height)
@@ -125,12 +127,12 @@ class SpendingWidgetViewsTest {
     ) {
         val expected =
             if (language == "ru") {
-                listOf("Сегодня", "За период", "Доступно")
+                listOf("Расходы", "Сегодня", "За период", "Доступно")
             } else {
-                listOf("Today", "Period", "Available")
+                listOf("Spending", "Today", "Period", "Available")
             }
         val ids =
-            listOf(R.id.widget_today_label, R.id.widget_period_label, R.id.widget_available_label)
+            listOf(R.id.widget_title, R.id.widget_today_label, R.id.widget_period_label, R.id.widget_available_label)
         for ((id, label) in ids.zip(expected)) {
             assertEquals(label, view.findViewById<TextView>(id).text.toString())
         }
