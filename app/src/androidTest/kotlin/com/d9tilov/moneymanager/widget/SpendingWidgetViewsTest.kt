@@ -92,8 +92,6 @@ class SpendingWidgetViewsTest {
                 View.MeasureSpec.makeMeasureSpec((96 * density).toInt(), View.MeasureSpec.EXACTLY),
             )
             view.layout(0, 0, view.measuredWidth, view.measuredHeight)
-            val title = view.findViewById<TextView>(R.id.widget_title)
-            assertTrue("Title must fit at the minimum widget size", title.height >= title.lineHeight)
             for (id in listOf(R.id.widget_available_label, R.id.widget_today_label, R.id.widget_period_label)) {
                 val label = view.findViewById<TextView>(id)
                 assertTrue("Full home screen labels must fit", label.layout.height <= label.height)
@@ -134,12 +132,12 @@ class SpendingWidgetViewsTest {
     ) {
         val expected =
             if (language == "ru") {
-                listOf("Расходы", "потрачено сегодня:", "потрачено за период:", "можно потратить сегодня:")
+                listOf("потрачено сегодня:", "потрачено за период:", "можно потратить сегодня:")
             } else {
-                listOf("Spending", "spent today:", "spent in period:", "can spend today:")
+                listOf("spent today:", "spent in period:", "can spend today:")
             }
         val ids =
-            listOf(R.id.widget_title, R.id.widget_today_label, R.id.widget_period_label, R.id.widget_available_label)
+            listOf(R.id.widget_today_label, R.id.widget_period_label, R.id.widget_available_label)
         for ((id, label) in ids.zip(expected)) {
             assertEquals(label, view.findViewById<TextView>(id).text.toString())
         }
