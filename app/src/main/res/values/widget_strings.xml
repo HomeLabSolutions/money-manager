@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_name">Spending</string>
+    <string name="widget_description">Available to spend today, spent today, and spent in the current fiscal period</string>
+    <string name="widget_available_today">Can spend today</string>
+    <string name="widget_overspending">Overspending today</string>
+    <string name="widget_spent_today">Spent today</string>
+    <string name="widget_spent_period">Spent in period</string>
+    <string name="widget_refresh">Refresh amounts</string>
+    <string name="widget_loading">Loading amounts…</string>
+    <string name="widget_sign_in">Open Money Manager to sign in</string>
+    <string name="widget_setup_required">Open Money Manager to finish setup</string>
+    <string name="widget_premium_required">Open Money Manager to view Premium options</string>
+    <string name="widget_unavailable">Unable to load amounts. Tap refresh to try again.</string>
+    <string name="widget_amount_placeholder" translatable="false">—</string>
+</resources>

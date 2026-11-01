@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.Spending.Label" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/widget_text_secondary</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:maxLines">2</item>
+    </style>
+
+    <style name="Widget.Spending.Amount.Base" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:textColor">@color/widget_text</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:text">@string/widget_amount_placeholder</item>
+    </style>
+
+    <style name="Widget.Spending.Amount" parent="Widget.Spending.Amount.Base" />
+
+    <style name="Widget.Spending.FeaturedAmount" parent="Widget.Spending.Amount">
+        <item name="android:layout_height">40dp</item>
+        <item name="android:textColor">@color/widget_accent</item>
+        <item name="android:textSize">28sp</item>
+    </style>
+</resources>

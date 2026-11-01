@@ -6,6 +6,7 @@ import com.d9tilov.android.backup.data.impl.PeriodicBackupWorker
 import com.d9tilov.android.currency.data.impl.sync.initializers.Sync
 import com.d9tilov.android.insights.presentation.worker.WeeklyInsightWorker
 import com.d9tilov.android.transaction.regular.data.impl.worker.RegularTransactionSyncWorker
+import com.d9tilov.moneymanager.widget.SpendingWidgetWork
 import com.google.android.material.color.DynamicColors
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -43,5 +44,6 @@ class App : Application() {
         PeriodicBackupWorker.startPeriodicJob(this)
         RegularTransactionSyncWorker.startPeriodicJob(this)
         WeeklyInsightWorker.startPeriodicJob(this)
+        SpendingWidgetWork.schedule(this)
     }
 }

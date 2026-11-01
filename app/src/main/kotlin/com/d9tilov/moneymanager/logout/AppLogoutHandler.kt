@@ -14,6 +14,9 @@ import com.d9tilov.android.notification.AndroidNotificationData
 import com.d9tilov.android.notification.domain.MoneyManagerNotificationManager
 import com.d9tilov.android.transaction.regular.data.impl.worker.RegularTransactionSyncWorker
 import com.d9tilov.android.user.domain.contract.UserInteractor
+import com.d9tilov.moneymanager.widget.SpendingWidgetState
+import com.d9tilov.moneymanager.widget.SpendingWidgetViews
+import com.d9tilov.moneymanager.widget.SpendingWidgetWork
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -32,6 +35,8 @@ class AppLogoutHandler @Inject constructor(
         withContext(ioDispatcher) {
             userInfoInteractor.deleteUser()
             preferencesStore.clearAllData()
+            SpendingWidgetWork.cancel(application)
+            SpendingWidgetViews.update(application, SpendingWidgetState.SignedOut)
             analyticsSender.send(
                 AnalyticsEvent.Client.Auth,
                 mapOf(AnalyticsParams.Auth.Action to "logout"),

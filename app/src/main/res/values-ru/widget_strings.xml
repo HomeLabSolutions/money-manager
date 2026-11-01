@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_name">Расходы</string>
+    <string name="widget_description">Можно потратить сегодня, потрачено сегодня и за текущий расчётный период</string>
+    <string name="widget_available_today">Можно потратить сегодня</string>
+    <string name="widget_overspending">Перерасход сегодня</string>
+    <string name="widget_spent_today">Потрачено сегодня</string>
+    <string name="widget_spent_period">Потрачено за период</string>
+    <string name="widget_refresh">Обновить суммы</string>
+    <string name="widget_loading">Загружаем суммы…</string>
+    <string name="widget_sign_in">Откройте Money Manager, чтобы войти</string>
+    <string name="widget_setup_required">Откройте Money Manager, чтобы завершить настройку</string>
+    <string name="widget_premium_required">Откройте Money Manager, чтобы узнать о Premium</string>
+    <string name="widget_unavailable">Не удалось загрузить суммы. Нажмите «Обновить», чтобы повторить.</string>
+</resources>
