@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="sign_in_logo">Логотип Money Manager</string>
+    <string name="sign_in_google_loading">Вход через Google…</string>
+    <string name="sign_in_google_error">Не удалось войти через Google. Попробуйте ещё раз.</string>
     <string name="title_prepopulate_currency">Выберите валюту</string>
     <string name="title_prepopulate_budget">Текущий бюджет</string>
     <string name="toolbar_menu_skip">Пропустить</string>

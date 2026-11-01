@@ -1,4 +1,7 @@
 <resources>
+    <string name="sign_in_logo">Money Manager logo</string>
+    <string name="sign_in_google_loading">Signing in with Google…</string>
+    <string name="sign_in_google_error">Could not sign in with Google. Please try again.</string>
     <string name="title_prepopulate_currency">Choose currency</string>
     <string name="title_prepopulate_budget">Current budget</string>
     <string name="toolbar_menu_skip">Skip</string>
