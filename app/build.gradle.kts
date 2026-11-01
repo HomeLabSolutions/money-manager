@@ -162,6 +162,7 @@ dependencies {
     implementation(libs.androidx.compose.material3.window.size)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.credentials)
     implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.work.runtime)
     implementation(libs.firebase.analytics)
@@ -170,8 +171,10 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.storage)
     implementation(libs.firebase.ui.auth)
+    implementation(libs.googleid)
     implementation(libs.hilt.android)
     implementation(libs.hilt.lifecycle.viewmodel.compose)
+    implementation(libs.kotlinx.coroutines.play.services)
     implementation(libs.kotlinx.datetime)
     implementation(libs.material)
     implementation(libs.navigation.compose)
@@ -179,4 +182,6 @@ dependencies {
     implementation(libs.play.services.location)
     implementation(libs.retrofit)
     implementation(libs.timber)
+
+    runtimeOnly(libs.androidx.credentials.play.services.auth)
 }

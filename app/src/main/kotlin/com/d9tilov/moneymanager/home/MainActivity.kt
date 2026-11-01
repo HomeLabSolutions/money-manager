@@ -106,7 +106,6 @@ class MainActivity : ComponentActivity() {
                                 viewModel.setToLoadingState()
                                 viewModel.updateData()
                             },
-                            onSignInCancelled = { finish() },
                         )
                     }
 
