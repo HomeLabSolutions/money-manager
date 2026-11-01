@@ -2,10 +2,10 @@
 <resources>
     <string name="widget_name">Расходы</string>
     <string name="widget_description">Можно потратить сегодня, потрачено сегодня и за текущий расчётный период</string>
-    <string name="widget_available_today">Доступно</string>
-    <string name="widget_overspending">Перерасход</string>
-    <string name="widget_spent_today">Сегодня</string>
-    <string name="widget_spent_period">За период</string>
+    <item type="string" name="widget_available_today">@string/expense_info_can_spend_today_title</item>
+    <item type="string" name="widget_overspending">@string/expense_info_can_spend_today_negate_title</item>
+    <item type="string" name="widget_spent_today">@string/expense_info_today_title</item>
+    <item type="string" name="widget_spent_period">@string/expense_info_period_title</item>
     <string name="widget_loading">Загружаем суммы…</string>
     <string name="widget_sign_in">Откройте Money Manager, чтобы войти</string>
     <string name="widget_setup_required">Откройте Money Manager, чтобы завершить настройку</string>

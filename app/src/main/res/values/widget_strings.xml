@@ -2,10 +2,10 @@
 <resources>
     <string name="widget_name">Spending</string>
     <string name="widget_description">Available to spend today, spent today, and spent in the current fiscal period</string>
-    <string name="widget_available_today">Available</string>
-    <string name="widget_overspending">Over budget</string>
-    <string name="widget_spent_today">Today</string>
-    <string name="widget_spent_period">Period</string>
+    <item type="string" name="widget_available_today">@string/expense_info_can_spend_today_title</item>
+    <item type="string" name="widget_overspending">@string/expense_info_can_spend_today_negate_title</item>
+    <item type="string" name="widget_spent_today">@string/expense_info_today_title</item>
+    <item type="string" name="widget_spent_period">@string/expense_info_period_title</item>
     <string name="widget_loading">Loading amounts…</string>
     <string name="widget_sign_in">Open Money Manager to sign in</string>
     <string name="widget_setup_required">Open Money Manager to finish setup</string>

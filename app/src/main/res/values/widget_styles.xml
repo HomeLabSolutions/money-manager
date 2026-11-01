@@ -3,19 +3,19 @@
     <style name="Widget.Spending.Label" parent="">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_weight">1</item>
+        <item name="android:layout_weight">1.5</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:includeFontPadding">false</item>
         <item name="android:textColor">@color/widget_text_secondary</item>
         <item name="android:textSize">10sp</item>
-        <item name="android:maxLines">1</item>
+        <item name="android:maxLines">2</item>
         <item name="android:ellipsize">end</item>
     </style>
 
     <style name="Widget.Spending.Amount.Base" parent="">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_weight">1.2</item>
+        <item name="android:layout_weight">1</item>
         <item name="android:gravity">end|center_vertical</item>
         <item name="android:includeFontPadding">false</item>
         <item name="android:textColor">@color/widget_text</item>

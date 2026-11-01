@@ -55,7 +55,7 @@ class SpendingWidgetViewsTest {
             val context = localizedContext("ru", false)
             val state = ready.copy(availableToday = BigDecimal("-12.25"))
             val view = SpendingWidgetViews.create(context, state).apply(context, FrameLayout(context))
-            assertEquals("Перерасход", view.findViewById<TextView>(R.id.widget_available_label).text.toString())
+            assertEquals("перерасход:", view.findViewById<TextView>(R.id.widget_available_label).text.toString())
             assertEquals("₽-12.25", view.findViewById<TextView>(R.id.widget_available_value).text.toString())
             assertEquals(
                 context.getColor(R.color.widget_overspending),
@@ -88,12 +88,19 @@ class SpendingWidgetViewsTest {
             val view = SpendingWidgetViews.create(context, ready).apply(context, FrameLayout(context))
             val density = context.resources.displayMetrics.density
             view.measure(
-                View.MeasureSpec.makeMeasureSpec((110 * density).toInt(), View.MeasureSpec.EXACTLY),
-                View.MeasureSpec.makeMeasureSpec((64 * density).toInt(), View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec((180 * density).toInt(), View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec((96 * density).toInt(), View.MeasureSpec.EXACTLY),
             )
             view.layout(0, 0, view.measuredWidth, view.measuredHeight)
             val title = view.findViewById<TextView>(R.id.widget_title)
             assertTrue("Title must fit at the minimum widget size", title.height >= title.lineHeight)
+            for (id in listOf(R.id.widget_available_label, R.id.widget_today_label, R.id.widget_period_label)) {
+                val label = view.findViewById<TextView>(id)
+                assertTrue("Full home screen labels must fit", label.layout.height <= label.height)
+                for (line in 0 until label.lineCount) {
+                    assertEquals("Home screen labels must not be truncated", 0, label.layout.getEllipsisCount(line))
+                }
+            }
             val amounts = view.findViewById<View>(R.id.widget_amounts)
             val period = view.findViewById<TextView>(R.id.widget_period_value)
             val periodBounds = Rect(0, 0, period.width, period.height)
@@ -127,9 +134,9 @@ class SpendingWidgetViewsTest {
     ) {
         val expected =
             if (language == "ru") {
-                listOf("Расходы", "Сегодня", "За период", "Доступно")
+                listOf("Расходы", "потрачено сегодня:", "потрачено за период:", "можно потратить сегодня:")
             } else {
-                listOf("Spending", "Today", "Period", "Available")
+                listOf("Spending", "spent today:", "spent in period:", "can spend today:")
             }
         val ids =
             listOf(R.id.widget_title, R.id.widget_today_label, R.id.widget_period_label, R.id.widget_available_label)
@@ -146,7 +153,7 @@ class SpendingWidgetViewsTest {
         val density = context.resources.displayMetrics.density
         view.measure(
             View.MeasureSpec.makeMeasureSpec((180 * density).toInt(), View.MeasureSpec.EXACTLY),
-            View.MeasureSpec.makeMeasureSpec((72 * density).toInt(), View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec((96 * density).toInt(), View.MeasureSpec.EXACTLY),
         )
         view.layout(0, 0, view.measuredWidth, view.measuredHeight)
         val bitmap = createBitmap(view.width, view.height)
