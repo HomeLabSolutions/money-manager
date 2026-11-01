@@ -7,6 +7,8 @@ import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDate
+import com.d9tilov.android.core.utils.currentDateTime
+import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.Currency
@@ -30,6 +32,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDateTime
@@ -486,6 +489,30 @@ class TransactionInteractorImplTest {
             val result = interactor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.EXPENSE).first()
 
             assertEquals(0, result.compareTo(BigDecimal(100)))
+        }
+
+    @Test
+    fun `fiscal period subscription includes transactions added later today`() =
+        runTest {
+            every { currencyInteractor.getMainCurrencyFlow() } returns flowOf(testCurrencyMetaData)
+            coEvery { userInteractor.getFiscalDay() } returns 1
+            val endOfToday = currentDateTime().getEndOfDay()
+            val laterTransaction =
+                transactionDataModel(id = 1L, type = TransactionType.EXPENSE, sum = BigDecimal.TEN)
+                    .copy(date = endOfToday)
+            coEvery {
+                transactionRepo.getTransactionsByTypeInPeriod(any(), any(), TransactionType.EXPENSE)
+            } answers {
+                val queryEnd = secondArg<LocalDateTime>()
+                flow {
+                    emit(emptyList())
+                    emit(listOf(laterTransaction).filter { it.date <= queryEnd })
+                }
+            }
+
+            val amounts = interactor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.EXPENSE).toList()
+
+            assertEquals(listOf("0", "10"), amounts.map { it.toPlainString() })
         }
 
     @Test

@@ -3,6 +3,7 @@ package com.d9tilov.android.transaction.data.impl
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.transaction.data.contract.TransactionSource
+import com.d9tilov.android.transaction.domain.contract.TransactionChangeNotifier
 import com.d9tilov.android.transaction.domain.contract.TransactionRepo
 import com.d9tilov.android.transaction.domain.model.TransactionDataModel
 import com.d9tilov.android.transaction.domain.model.TransactionMinMaxDateModel
@@ -12,8 +13,12 @@ import javax.inject.Inject
 
 class TransactionDataRepo @Inject constructor(
     private val transactionSource: TransactionSource,
+    private val transactionChangeNotifier: TransactionChangeNotifier,
 ) : TransactionRepo {
-    override suspend fun addTransaction(transaction: TransactionDataModel) = transactionSource.insert(transaction)
+    override suspend fun addTransaction(transaction: TransactionDataModel) {
+        transactionSource.insert(transaction)
+        transactionChangeNotifier.onTransactionChanged()
+    }
 
     override fun getTransactionById(id: Long): Flow<TransactionDataModel> = transactionSource.getById(id)
 
@@ -52,7 +57,13 @@ class TransactionDataRepo @Inject constructor(
 
     override suspend fun getTransactionMinMaxDate(): TransactionMinMaxDateModel = transactionSource.getMinMaxDate()
 
-    override suspend fun update(transaction: TransactionDataModel) = transactionSource.update(transaction)
+    override suspend fun update(transaction: TransactionDataModel) {
+        transactionSource.update(transaction)
+        transactionChangeNotifier.onTransactionChanged()
+    }
 
-    override suspend fun removeTransaction(transaction: TransactionDataModel) = transactionSource.remove(transaction)
+    override suspend fun removeTransaction(transaction: TransactionDataModel) {
+        transactionSource.remove(transaction)
+        transactionChangeNotifier.onTransactionChanged()
+    }
 }
