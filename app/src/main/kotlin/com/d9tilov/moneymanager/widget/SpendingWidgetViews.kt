@@ -26,10 +26,8 @@ object SpendingWidgetViews {
         state: SpendingWidgetState,
     ): RemoteViews {
         val views = RemoteViews(context.packageName, R.layout.spending_widget)
-        views.setTextViewText(R.id.widget_title, context.getString(R.string.widget_name))
         views.setTextViewText(R.id.widget_today_label, context.getString(R.string.widget_spent_today))
         views.setTextViewText(R.id.widget_period_label, context.getString(R.string.widget_spent_period))
-        views.setContentDescription(R.id.widget_refresh, context.getString(R.string.widget_refresh))
         val openApp = openApp(context)
         for (id in listOf(
             R.id.spending_widget_root,
@@ -39,7 +37,6 @@ object SpendingWidgetViews {
         )) {
             views.setOnClickPendingIntent(id, openApp)
         }
-        views.setOnClickPendingIntent(R.id.widget_refresh, refresh(context))
         val ready = state as? SpendingWidgetState.Ready
         views.setViewVisibility(R.id.widget_amounts, if (ready == null) View.GONE else View.VISIBLE)
         views.setViewVisibility(R.id.widget_message, if (ready == null) View.VISIBLE else View.GONE)
@@ -90,18 +87,6 @@ object SpendingWidgetViews {
                 .addCategory(Intent.CATEGORY_LAUNCHER)
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
         return PendingIntent.getActivity(
-            context,
-            0,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
-        )
-    }
-
-    private fun refresh(context: Context): PendingIntent {
-        val intent =
-            Intent(context, SpendingWidgetProvider::class.java)
-                .setAction(SpendingWidgetProvider.refreshAction(context))
-        return PendingIntent.getBroadcast(
             context,
             0,
             intent,

@@ -55,7 +55,7 @@ class SpendingWidgetViewsTest {
             val context = localizedContext("ru", false)
             val state = ready.copy(availableToday = BigDecimal("-12.25"))
             val view = SpendingWidgetViews.create(context, state).apply(context, FrameLayout(context))
-            assertEquals("Перерасход сегодня", view.findViewById<TextView>(R.id.widget_available_label).text.toString())
+            assertEquals("Перерасход", view.findViewById<TextView>(R.id.widget_available_label).text.toString())
             assertEquals("₽-12.25", view.findViewById<TextView>(R.id.widget_available_value).text.toString())
             assertEquals(
                 context.getColor(R.color.widget_overspending),
@@ -88,8 +88,8 @@ class SpendingWidgetViewsTest {
             val view = SpendingWidgetViews.create(context, ready).apply(context, FrameLayout(context))
             val density = context.resources.displayMetrics.density
             view.measure(
-                View.MeasureSpec.makeMeasureSpec((250 * density).toInt(), View.MeasureSpec.EXACTLY),
-                View.MeasureSpec.makeMeasureSpec((220 * density).toInt(), View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec((110 * density).toInt(), View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec((56 * density).toInt(), View.MeasureSpec.EXACTLY),
             )
             view.layout(0, 0, view.measuredWidth, view.measuredHeight)
             val amounts = view.findViewById<View>(R.id.widget_amounts)
@@ -125,12 +125,12 @@ class SpendingWidgetViewsTest {
     ) {
         val expected =
             if (language == "ru") {
-                listOf("Расходы", "Потрачено сегодня", "Потрачено за период", "Можно потратить сегодня")
+                listOf("Сегодня", "За период", "Доступно")
             } else {
-                listOf("Spending", "Spent today", "Spent in period", "Can spend today")
+                listOf("Today", "Period", "Available")
             }
         val ids =
-            listOf(R.id.widget_title, R.id.widget_today_label, R.id.widget_period_label, R.id.widget_available_label)
+            listOf(R.id.widget_today_label, R.id.widget_period_label, R.id.widget_available_label)
         for ((id, label) in ids.zip(expected)) {
             assertEquals(label, view.findViewById<TextView>(id).text.toString())
         }
@@ -143,8 +143,8 @@ class SpendingWidgetViewsTest {
     ): Bitmap {
         val density = context.resources.displayMetrics.density
         view.measure(
-            View.MeasureSpec.makeMeasureSpec((360 * density).toInt(), View.MeasureSpec.EXACTLY),
-            View.MeasureSpec.makeMeasureSpec((240 * density).toInt(), View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec((180 * density).toInt(), View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec((72 * density).toInt(), View.MeasureSpec.EXACTLY),
         )
         view.layout(0, 0, view.measuredWidth, view.measuredHeight)
         val bitmap = createBitmap(view.width, view.height)

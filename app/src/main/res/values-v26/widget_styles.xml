@@ -2,14 +2,13 @@
 <resources>
     <style name="Widget.Spending.Amount" parent="Widget.Spending.Amount.Base">
         <item name="android:autoSizeTextType">uniform</item>
-        <item name="android:autoSizeMinTextSize">12sp</item>
-        <item name="android:autoSizeMaxTextSize">20sp</item>
+        <item name="android:autoSizeMinTextSize">8sp</item>
+        <item name="android:autoSizeMaxTextSize">16sp</item>
         <item name="android:autoSizeStepGranularity">1sp</item>
     </style>
 
     <style name="Widget.Spending.FeaturedAmount" parent="Widget.Spending.Amount">
-        <item name="android:layout_height">40dp</item>
         <item name="android:textColor">@color/widget_accent</item>
-        <item name="android:autoSizeMaxTextSize">28sp</item>
+        <item name="android:autoSizeMaxTextSize">16sp</item>
     </style>
 </resources>

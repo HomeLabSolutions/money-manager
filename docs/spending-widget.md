@@ -10,7 +10,8 @@ All amounts use the main currency and the existing `TransactionInteractor` calcu
 The widget follows the same Premium availability as the in-app summary.
 
 After installing the app, open the launcher's widget picker and add **Money Manager → Spending**
-(**Расходы** in Russian). Tap the widget to open the app, or tap the refresh icon to update its amounts.
+(**Расходы** in Russian). Tap the widget to open the app. The compact layout defaults to 2 × 1 cells
+and shows three labeled rows without a title or refresh button. Its minimum content size is 110 × 56 dp.
 The widget can be resized, supports light and dark themes, and uses system colors on Android 12 and later.
 
 The widget refreshes when it is added, when the app leaves the foreground, when transaction,
@@ -22,7 +23,7 @@ Removing the last widget cancels its background work.
 
 The widget displays a sign-in or setup message before the account is ready. Logging out clears its
 amounts immediately; a background refresh checks the account again before publishing a snapshot.
-If data cannot be read, it clears the amounts and offers refresh instead of showing zero or stale values.
+If data cannot be read, it clears the amounts and offers to open the app instead of showing zero or stale values.
 
 ## Verification
 
@@ -35,5 +36,5 @@ They save widget previews under the app's external files directory in `widget-te
 On an emulator or device, add the widget and compare all three amounts with the home screen.
 Add, edit, and delete a transaction, then return to the launcher and check the refreshed amounts.
 Also check a negative daily allowance, a different main currency and fiscal day, Russian and English,
-both themes, resizing, refresh, and opening the app. Log out and confirm that the amounts disappear.
+both themes, resizing, automatic refresh, and opening the app. Log out and confirm that the amounts disappear.
 Add two widget instances, then remove them one at a time to verify that updates stop only after the last removal.
