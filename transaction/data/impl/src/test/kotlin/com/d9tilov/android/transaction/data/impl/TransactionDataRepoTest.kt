@@ -166,14 +166,4 @@ class TransactionDataRepoTest {
 
             coVerify(exactly = 1) { transactionSource.remove(testTransaction) }
         }
-
-    @Test
-    fun `clearAll should delegate to transactionSource clearAll`() =
-        runTest {
-            coEvery { transactionSource.clearAll() } returns Unit
-
-            repository.clearAll()
-
-            coVerify(exactly = 1) { transactionSource.clearAll() }
-        }
 }

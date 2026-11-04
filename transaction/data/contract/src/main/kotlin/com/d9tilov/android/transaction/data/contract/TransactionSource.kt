@@ -34,6 +34,4 @@ interface TransactionSource : TransactionPagingSource {
     suspend fun update(transaction: TransactionDataModel)
 
     suspend fun remove(transaction: TransactionDataModel)
-
-    suspend fun clearAll()
 }

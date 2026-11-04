@@ -34,6 +34,4 @@ interface TransactionRepo : TransactionPagingRepo {
     suspend fun update(transaction: TransactionDataModel)
 
     suspend fun removeTransaction(transaction: TransactionDataModel)
-
-    suspend fun clearAll()
 }

@@ -120,9 +120,6 @@ interface TransactionDao {
         clientId: String,
         categoryId: Long,
     )
-
-    @Query("DELETE FROM transactions WHERE clientId=:clientId")
-    suspend fun clearAll(clientId: String)
 }
 
 internal const val TRANSACTION_LIST_QUERY = """

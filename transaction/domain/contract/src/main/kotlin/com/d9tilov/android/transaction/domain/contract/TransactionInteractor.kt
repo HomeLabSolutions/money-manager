@@ -5,7 +5,6 @@ import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
-import com.d9tilov.android.transaction.domain.model.TransactionLineChartModel
 import com.d9tilov.android.transaction.domain.model.TransactionMinMaxDateModel
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
 import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
@@ -22,14 +21,6 @@ interface TransactionInteractor {
         inStatistics: Boolean,
         onlySubcategories: Boolean,
     ): Flow<List<TransactionChartModel>>
-
-    fun getTransactionsGroupedByDate(
-        type: TransactionType,
-        from: LocalDateTime,
-        to: LocalDateTime,
-        currencyCode: String,
-        inStatistics: Boolean,
-    ): Flow<Map<LocalDateTime, TransactionLineChartModel>>
 
     suspend fun getTransactionsByCategoryId(
         categoryId: Long,
@@ -48,10 +39,6 @@ interface TransactionInteractor {
     ): Flow<PagingData<Transaction>>
 
     fun ableToSpendToday(): Flow<TransactionSpendingTodayModel>
-
-    fun ableToSpendInFiscalPeriod(): Flow<BigDecimal>
-
-    fun getSumInFiscalPeriod(): Flow<BigDecimal>
 
     fun getSumInPeriod(
         from: LocalDateTime,
@@ -76,6 +63,4 @@ interface TransactionInteractor {
     suspend fun update(transaction: Transaction)
 
     suspend fun removeTransaction(transaction: Transaction)
-
-    suspend fun clearAll()
 }
