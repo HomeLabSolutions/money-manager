@@ -55,6 +55,4 @@ class TransactionDataRepo @Inject constructor(
     override suspend fun update(transaction: TransactionDataModel) = transactionSource.update(transaction)
 
     override suspend fun removeTransaction(transaction: TransactionDataModel) = transactionSource.remove(transaction)
-
-    override suspend fun clearAll() = transactionSource.clearAll()
 }

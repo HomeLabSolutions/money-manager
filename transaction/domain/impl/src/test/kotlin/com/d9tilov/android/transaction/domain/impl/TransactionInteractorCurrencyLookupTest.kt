@@ -5,7 +5,6 @@ import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.Currency
-import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.places.domain.model.LocationData
 import com.d9tilov.android.places.domain.model.Place
 import com.d9tilov.android.transaction.domain.contract.TransactionRepo
@@ -74,41 +73,6 @@ class TransactionInteractorCurrencyLookupTest {
 
             assertEquals(0, result.compareTo(BigDecimal("15")))
             coVerify(exactly = 1) { currencyInteractor.getCurrencyByCode("EUR") }
-        }
-
-    @Test
-    fun `getSumInFiscalPeriod should load each current rate once per emission`() =
-        runTest {
-            val transactions = (1L..3L).map(::transaction)
-            coEvery { userInteractor.getFiscalDay() } returns 1
-            coEvery { currencyInteractor.getMainCurrency() } returns
-                CurrencyMetaData(clientId = "client", code = "EUR", symbol = "€")
-            coEvery { currencyInteractor.getCurrencyByCode("EUR") } returns currency("EUR", "0.5")
-            coEvery { currencyInteractor.getCurrencyByCode("GBP") } returns currency("GBP", "2")
-            coEvery {
-                transactionRepo.getTransactionsByTypeInPeriod(
-                    any(),
-                    any(),
-                    TransactionType.INCOME,
-                    onlyInStatistics = true,
-                    withRegular = true,
-                )
-            } returns flowOf(transactions)
-            coEvery {
-                transactionRepo.getTransactionsByTypeInPeriod(
-                    any(),
-                    any(),
-                    TransactionType.EXPENSE,
-                    onlyInStatistics = true,
-                    withRegular = true,
-                )
-            } returns flowOf(emptyList())
-
-            val result = interactor.getSumInFiscalPeriod().first()
-
-            assertEquals(0, result.compareTo(BigDecimal("7.5")))
-            coVerify(exactly = 1) { currencyInteractor.getCurrencyByCode("EUR") }
-            coVerify(exactly = 1) { currencyInteractor.getCurrencyByCode("GBP") }
         }
 
     private fun currency(

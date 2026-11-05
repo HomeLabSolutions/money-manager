@@ -28,7 +28,6 @@ import com.d9tilov.android.transaction.domain.impl.mapper.toDomainModel
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
 import com.d9tilov.android.transaction.domain.model.TransactionDataModel
-import com.d9tilov.android.transaction.domain.model.TransactionLineChartModel
 import com.d9tilov.android.transaction.domain.model.TransactionMinMaxDateModel
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
 import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactionInteractor
@@ -162,40 +161,6 @@ class TransactionInteractorImpl @Inject constructor(
             }
         }
 
-    override fun getTransactionsGroupedByDate(
-        type: TransactionType,
-        from: LocalDateTime,
-        to: LocalDateTime,
-        currencyCode: String,
-        inStatistics: Boolean,
-    ): Flow<Map<LocalDateTime, TransactionLineChartModel>> =
-        transactionRepo
-            .getTransactionsByTypeInPeriod(from, to, type, inStatistics)
-            .map { list ->
-                list
-                    .map { item -> item.copy(date = item.date.getStartOfDay()) }
-                    .toList()
-                    .groupBy { item -> item.date }
-                    .toSortedMap()
-                    .mapValues { item: Map.Entry<LocalDateTime, List<TransactionDataModel>> ->
-                        TransactionLineChartModel(
-                            currencyCode = currencyCode,
-                            sum =
-                                item.value.sumOf { model ->
-                                    if (currencyCode == DEFAULT_CURRENCY_CODE) {
-                                        model.usdSum
-                                    } else {
-                                        currencyInteractor.toTargetCurrency(
-                                            model.sum,
-                                            model.currencyCode,
-                                            currencyCode,
-                                        )
-                                    }
-                                },
-                        )
-                    }
-            }
-
     override suspend fun getTransactionsByCategoryId(
         categoryId: Long,
         from: LocalDateTime,
@@ -298,12 +263,6 @@ class TransactionInteractorImpl @Inject constructor(
             }
         }
     }
-
-    override fun ableToSpendInFiscalPeriod(): Flow<BigDecimal> =
-        combine(
-            getNumerator(),
-            getExpensesPerCurrentDay(),
-        ) { numerator, expensesPerCurrentDay -> numerator.minus(expensesPerCurrentDay).reduceScale() }
 
     private fun getExpensesPerCurrentDay(): Flow<BigDecimal> =
         transactionRepo
@@ -424,55 +383,6 @@ class TransactionInteractorImpl @Inject constructor(
             },
             currencyCode = RegularTransaction::currencyCode,
         )
-    }
-
-    override fun getSumInFiscalPeriod(): Flow<BigDecimal> {
-        val incomesFlow =
-            flow { emit(userInteractor.getFiscalDay()) }
-                .flatMapMerge { fiscalDay ->
-                    val endDate = currentDateTime().getEndOfDay()
-                    val startDate = getStartDateOfFiscalPeriod(fiscalDay)
-                    transactionRepo
-                        .getTransactionsByTypeInPeriod(
-                            startDate,
-                            endDate,
-                            TransactionType.INCOME,
-                            onlyInStatistics = true,
-                            withRegular = true,
-                        ).map { list ->
-                            sumAtCurrentRates(
-                                items = list,
-                                targetCurrencyCode = currencyInteractor.getMainCurrency().code,
-                                amount = TransactionDataModel::sum,
-                                currencyCode = TransactionDataModel::currencyCode,
-                            )
-                        }
-                }
-        val expenseFlow =
-            flow { emit(userInteractor.getFiscalDay()) }
-                .flatMapMerge { fiscalDay ->
-                    val endDate = currentDateTime().getEndOfDay()
-                    val startDate = getStartDateOfFiscalPeriod(fiscalDay)
-                    transactionRepo
-                        .getTransactionsByTypeInPeriod(
-                            startDate,
-                            endDate,
-                            TransactionType.EXPENSE,
-                            onlyInStatistics = true,
-                            withRegular = true,
-                        ).map { list ->
-                            sumAtCurrentRates(
-                                items = list,
-                                targetCurrencyCode = currencyInteractor.getMainCurrency().code,
-                                amount = TransactionDataModel::sum,
-                                currencyCode = TransactionDataModel::currencyCode,
-                            )
-                        }
-                }
-        return combine(
-            incomesFlow,
-            expenseFlow,
-        ) { income, expense -> income.minus(expense) }
     }
 
     override fun getSumInPeriod(
@@ -661,10 +571,6 @@ class TransactionInteractorImpl @Inject constructor(
         transactionRepo
             .getAllByCategory(category)
             .forEach { tr -> removeTransaction(tr.toDomainModel(category)) }
-    }
-
-    override suspend fun clearAll() {
-        transactionRepo.clearAll()
     }
 
     companion object {

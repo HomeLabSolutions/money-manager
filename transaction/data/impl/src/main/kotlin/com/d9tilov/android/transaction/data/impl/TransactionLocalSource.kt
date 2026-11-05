@@ -201,15 +201,6 @@ class TransactionLocalSource @Inject constructor(
         }
     }
 
-    override suspend fun clearAll() {
-        val currentUserId = preferencesStore.uid.firstOrNull()
-        if (currentUserId == null) {
-            throw WrongUidException()
-        } else {
-            transactionDao.clearAll(currentUserId)
-        }
-    }
-
     companion object {
         private const val PAGE_SIZE = 10
     }
