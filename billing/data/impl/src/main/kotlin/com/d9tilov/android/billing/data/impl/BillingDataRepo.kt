@@ -1,19 +1,22 @@
 package com.d9tilov.android.billing.data.impl
 
-import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.BillingFlowParams
-import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.d9tilov.android.billing.data.contract.BillingSource
 import com.d9tilov.android.billing.domain.contract.BillingRepo
 import com.d9tilov.android.billing.domain.model.BillingSkuDetails
+import com.d9tilov.android.billing.domain.model.PremiumEmails
 import com.d9tilov.android.billing.domain.model.exceptions.BillingFailure
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.currency.domain.model.Currency
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import com.google.firebase.remoteconfig.remoteConfig
+import com.squareup.moshi.Moshi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import javax.inject.Inject
 
 class BillingDataRepo
@@ -21,34 +24,46 @@ class BillingDataRepo
     constructor(
         private val billingSource: BillingSource,
     ) : BillingRepo {
-        override val currentPurchases: Flow<List<Purchase>> = billingSource.purchases
+        private val currentPurchases: Flow<List<Purchase>> = billingSource.purchases
         override val billingConnectionReady: Flow<Boolean> = billingSource.billingConnectionReady
-
-        // ProductDetails for the premium subscription.
-        override val premiumProductDetails: Flow<ProductDetails?> =
-            billingSource.productWithProductDetails
-                .filter {
-                    it.containsKey(PREMIUM_SUB)
-                }.map { it[PREMIUM_SUB] }
+        private val productDetails = billingSource.productWithProductDetails
+        private val premiumEmailList = MutableStateFlow(emptyList<String>())
 
         // Set to true when a purchase is acknowledged.
         override val isNewPurchaseAcknowledged: Flow<Boolean> = billingSource.isNewPurchaseAcknowledged
 
+        override val isPremiumEmail: Flow<Boolean> =
+            premiumEmailList.map { it.contains(Firebase.auth.currentUser?.email) }
+
+        override val hasPremiumPurchase: Flow<Boolean> = currentPurchases.map { it.isNotEmpty() }
+
         // Set to true when a returned purchases is an auto-renewing premium subscription.
         override val hasRenewablePremium: Flow<Boolean> =
-            billingSource.purchases
+            currentPurchases
                 .map { purchaseList ->
                     purchaseList.any { purchase ->
                         purchase.products.contains(PREMIUM_SUB) && purchase.isAutoRenewing
                     }
                 }
 
+        init {
+            Firebase.remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val config = Firebase.remoteConfig.getValue("premium_list").asString()
+                    val jsonAdapter = Moshi.Builder().build().adapter(PremiumEmails::class.java)
+                    runCatching { jsonAdapter.fromJson(config) }
+                        .onSuccess { premiumEmailList.value = it?.emails.orEmpty() }
+                        .onFailure { error -> Timber.e(error, "Unable to parse premium email list") }
+                }
+            }
+        }
+
         override fun startBillingConnection() = billingSource.startBillingConnection()
 
         override fun terminateBillingConnection() = billingSource.terminateBillingConnection()
 
         override fun getSkuDetails(): Flow<List<BillingSkuDetails>> =
-            billingSource.productWithProductDetails
+            productDetails
                 .map { details: Map<String, ProductDetails> ->
                     val list = details.toList()
                     val item = list.firstOrNull()
@@ -82,15 +97,6 @@ class BillingDataRepo
                         } ?: emptyList()
                     }
                 }
-
-        override fun buySku(
-            tag: String,
-            productDetails: ProductDetails?,
-            currentPurchases: List<Purchase>,
-            result: (billingClient: BillingClient, paramBuilder: BillingFlowParams) -> BillingResult,
-        ) {
-            billingSource.buySku(tag, productDetails, currentPurchases, result)
-        }
 
         companion object {
             // List of subscription product offerings

@@ -1,26 +1,12 @@
 plugins {
-    id("com.google.devtools.ksp")
-    id("moneymanager.android.library")
-}
-
-android {
-    namespace = "com.d9tilov.android.billing.domain.impl"
+    id("moneymanager.android.library.kotlin")
 }
 
 dependencies {
     implementation(project(":billing:domain:contract"))
     implementation(project(":billing:domain:model"))
-    implementation(project(":core:common"))
     implementation(project(":currency:domain:contract"))
     implementation(project(":currency:domain:model"))
-    implementation(libs.billing)
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.config)
-    implementation(libs.firebase.crashlytics)
-    implementation(libs.firebase.storage)
-    implementation(libs.firebase.ui.auth)
+    implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.moshi)
-    implementation(libs.timber)
 }

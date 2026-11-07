@@ -13,6 +13,9 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":currency:domain:model"))
     implementation(libs.billing)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.config)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.moshi)
     implementation(libs.timber)
 }
