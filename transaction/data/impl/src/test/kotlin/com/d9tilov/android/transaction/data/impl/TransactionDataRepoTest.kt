@@ -5,6 +5,7 @@ import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.places.domain.model.LocationData
 import com.d9tilov.android.places.domain.model.Place
 import com.d9tilov.android.transaction.data.contract.TransactionSource
+import com.d9tilov.android.transaction.domain.contract.TransactionChangeNotifier
 import com.d9tilov.android.transaction.domain.contract.TransactionRepo
 import com.d9tilov.android.transaction.domain.model.TransactionDataModel
 import com.d9tilov.android.transaction.domain.model.TransactionMinMaxDateModel
@@ -21,7 +22,13 @@ import java.math.BigDecimal
 
 class TransactionDataRepoTest {
     private val transactionSource: TransactionSource = mockk(relaxed = true)
-    private val repository: TransactionRepo by lazy { TransactionDataRepo(transactionSource) }
+    private val transactionChangeNotifier: TransactionChangeNotifier = mockk(relaxed = true)
+    private val repository: TransactionRepo by lazy {
+        TransactionDataRepo(
+            transactionSource,
+            transactionChangeNotifier,
+        )
+    }
 
     private val testCategory =
         Category(

@@ -1,7 +1,6 @@
 plugins {
     id("moneymanager.android.library")
     id("moneymanager.android.hilt")
-    id("com.google.devtools.ksp")
 }
 
 android {
@@ -13,6 +12,4 @@ dependencies {
     implementation(project(":transaction:data:impl"))
     implementation(project(":transaction:domain:contract"))
     implementation(project(":transaction:domain:impl"))
-
-    ksp(libs.hilt.ext.compiler)
 }
