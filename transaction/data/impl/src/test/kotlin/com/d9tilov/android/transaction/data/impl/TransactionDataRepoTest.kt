@@ -8,6 +8,7 @@ import com.d9tilov.android.transaction.data.contract.TransactionSource
 import com.d9tilov.android.transaction.domain.contract.TransactionRepo
 import com.d9tilov.android.transaction.domain.model.TransactionDataModel
 import com.d9tilov.android.transaction.domain.model.TransactionMinMaxDateModel
+import com.d9tilov.android.widget.domain.contract.SpendingWidgetStateObserver
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -21,7 +22,13 @@ import java.math.BigDecimal
 
 class TransactionDataRepoTest {
     private val transactionSource: TransactionSource = mockk(relaxed = true)
-    private val repository: TransactionRepo by lazy { TransactionDataRepo(transactionSource) }
+    private val spendingWidgetStateObserver: SpendingWidgetStateObserver = mockk(relaxed = true)
+    private val repository: TransactionRepo by lazy {
+        TransactionDataRepo(
+            transactionSource,
+            spendingWidgetStateObserver,
+        )
+    }
 
     private val testCategory =
         Category(

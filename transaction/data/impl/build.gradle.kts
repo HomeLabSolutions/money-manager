@@ -15,6 +15,7 @@ dependencies {
     implementation(project(":transaction:data:contract"))
     implementation(project(":transaction:domain:contract"))
     implementation(project(":transaction:domain:model"))
+    implementation(project(":widget:domain:contract"))
     implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.datetime)

@@ -30,6 +30,7 @@ import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.incomeexpense.ui.R
 import com.d9tilov.android.places.domain.model.Place
+import com.d9tilov.android.transaction.domain.contract.ObserveSpendingSummaryUseCase
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
@@ -150,6 +151,7 @@ class IncomeExpenseViewModel
         private val currencyInteractor: CurrencyInteractor,
         private val categoryInteractor: CategoryInteractor,
         private val transactionInteractor: TransactionInteractor,
+        private val observeSpendingSummary: ObserveSpendingSummaryUseCase,
         private val locationProvider: LocationProvider,
     ) : ViewModel() {
         private val uiState = MutableStateFlow(IncomeExpenseUiState.EMPTY)
@@ -212,21 +214,15 @@ class IncomeExpenseViewModel
                 }
                 launch {
                     val expenseSpendingExpenseInfoFlow =
-                        combine(
-                            transactionInteractor.ableToSpendToday(),
-                            transactionInteractor.getApproxSumTodayCurrentCurrency(TransactionType.EXPENSE),
-                            transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(
-                                TransactionType.EXPENSE,
-                            ),
-                        ) { ableToSpendToday, spentTodayApprox, spentInPeriodApprox ->
-                            val currencyCode = mainCurrency.value.code
+                        observeSpendingSummary().map { spendingSummary ->
+                            val currencyCode = spendingSummary.currency.code
                             ExpenseInfo(
-                                when (ableToSpendToday) {
+                                when (val availableToday = spendingSummary.availableToday) {
                                     is TransactionSpendingTodayModel.NORMAL -> {
                                         Price(
                                             R.string.expense_info_can_spend_today_title,
                                             "${currencyCode.getSymbolByCode()}${
-                                                ableToSpendToday.trSum.reduceScaleStr()
+                                                availableToday.trSum.reduceScaleStr()
                                             }",
                                         )
                                     }
@@ -235,7 +231,7 @@ class IncomeExpenseViewModel
                                         Price(
                                             R.string.expense_info_can_spend_today_negate_title,
                                             "${currencyCode.getSymbolByCode()}${
-                                                ableToSpendToday.trSum.reduceScaleStr()
+                                                availableToday.trSum.reduceScaleStr()
                                             }",
                                         )
                                     }
@@ -243,13 +239,13 @@ class IncomeExpenseViewModel
                                 Price(
                                     R.string.expense_info_today_title,
                                     "${currencyCode.getSymbolByCode()}${
-                                        spentTodayApprox.reduceScaleStr()
+                                        spendingSummary.spentToday.reduceScaleStr()
                                     }",
                                 ),
                                 Price(
                                     R.string.expense_info_period_title,
                                     "${currencyCode.getSymbolByCode()}${
-                                        spentInPeriodApprox.reduceScaleStr()
+                                        spendingSummary.spentInPeriod.reduceScaleStr()
                                     }",
                                 ),
                             )
