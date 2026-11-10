@@ -6,20 +6,13 @@ import com.d9tilov.android.category.data.impl.CategoryLocalSource
 import com.d9tilov.android.category.data.impl.CategoryRepoImpl
 import com.d9tilov.android.category.data.impl.DefaultCategoriesManagerImpl
 import com.d9tilov.android.category.domain.contract.CategoryRepo
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import org.koin.dsl.bind
+import org.koin.dsl.module
+import org.koin.plugin.module.dsl.factory
 
-@Module
-@InstallIn(SingletonComponent::class)
-interface CategoryDataModule {
-    @Binds
-    fun provideDefaultCategoriesManager(impl: DefaultCategoriesManagerImpl): DefaultCategoriesManager
-
-    @Binds
-    fun provideCategoryLocalSource(impl: CategoryLocalSource): CategorySource
-
-    @Binds
-    fun provideCategoryRepo(impl: CategoryRepoImpl): CategoryRepo
-}
+val categoryDataModule =
+    module {
+        factory<DefaultCategoriesManagerImpl>() bind DefaultCategoriesManager::class
+        factory<CategoryLocalSource>() bind CategorySource::class
+        factory<CategoryRepoImpl>() bind CategoryRepo::class
+    }

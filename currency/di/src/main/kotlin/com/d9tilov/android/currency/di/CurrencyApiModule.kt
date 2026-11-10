@@ -4,27 +4,22 @@ import com.d9tilov.android.currency.data.impl.api.CurrencyApi
 import com.d9tilov.android.currency.data.impl.api.GeocodeApi
 import com.d9tilov.android.currency.data.impl.api.KtorCurrencyApi
 import com.d9tilov.android.currency.data.impl.api.KtorGeocodeApi
-import com.d9tilov.android.network.di.qualifier.CurrencyNetworkApi
-import com.d9tilov.android.network.di.qualifier.GeoNetworkApi
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
-import javax.inject.Singleton
+import org.koin.core.annotation.Named
+import org.koin.dsl.module
+import org.koin.plugin.module.dsl.create
+import org.koin.plugin.module.dsl.single
 
-@Module
-@InstallIn(SingletonComponent::class)
-object CurrencyApiModule {
-    @Provides
-    @Singleton
-    fun provideCurrencyApi(
-        @CurrencyNetworkApi client: HttpClient,
-    ): CurrencyApi = KtorCurrencyApi(client)
+fun provideCurrencyApi(
+    @Named("CurrencyNetworkApi") client: HttpClient,
+): CurrencyApi = KtorCurrencyApi(client)
 
-    @Provides
-    @Singleton
-    fun provideGeoApi(
-        @GeoNetworkApi client: HttpClient,
-    ): GeocodeApi = KtorGeocodeApi(client)
-}
+fun provideGeoApi(
+    @Named("GeoNetworkApi") client: HttpClient,
+): GeocodeApi = KtorGeocodeApi(client)
+
+val currencyApiModule =
+    module {
+        single { create(::provideCurrencyApi) }
+        single { create(::provideGeoApi) }
+    }

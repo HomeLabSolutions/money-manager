@@ -9,9 +9,8 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class InsightLanguageLocalSource @Inject constructor(
+class InsightLanguageLocalSource(
     private val preferencesStore: PreferencesStore,
     private val userDao: UserDao,
 ) : InsightLanguageSource {

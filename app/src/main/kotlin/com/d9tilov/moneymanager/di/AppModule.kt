@@ -1,33 +1,20 @@
 package com.d9tilov.moneymanager.di
 
-import android.app.Application
-import android.content.Context
 import com.d9tilov.android.common.android.ui.logout.LogoutHandler
-import com.d9tilov.moneymanager.App
 import com.d9tilov.moneymanager.logout.AppLogoutHandler
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
-import javax.inject.Singleton
+import org.koin.dsl.module
+import org.koin.plugin.module.dsl.create
+import org.koin.plugin.module.dsl.factory
+import org.koin.plugin.module.dsl.single
 
-@Module
-@InstallIn(SingletonComponent::class)
-object AppModule {
-    @Provides
-    @Singleton
-    fun provideContext(application: Application): Context = application
+fun provideLogoutHandler(handler: AppLogoutHandler): LogoutHandler = handler
 
-    @Provides
-    @Singleton
-    fun provideApplication(application: Application): App = application as App
+fun providesApplicationScope(): CoroutineScope = CoroutineScope(SupervisorJob())
 
-    @Provides
-    fun provideLogoutHandler(handler: AppLogoutHandler): LogoutHandler = handler
-
-    @Provides
-    @Singleton
-    fun providesApplicationScope(): CoroutineScope = CoroutineScope(SupervisorJob())
-}
+val appModule =
+    module {
+        factory { create(::provideLogoutHandler) }
+        single { create(::providesApplicationScope) }
+    }

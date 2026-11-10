@@ -1,6 +1,7 @@
 plugins {
+    id("com.google.devtools.ksp")
+    alias(libs.plugins.koin.compiler)
     id("moneymanager.android.library")
-    id("moneymanager.android.hilt")
     id("kotlin-parcelize")
 }
 
@@ -22,7 +23,7 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
-    implementation(libs.hilt.android)
+    implementation(libs.koin.core)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.datetime)
     implementation(libs.room.paging)

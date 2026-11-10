@@ -33,10 +33,6 @@ gradlePlugin {
             id = "moneymanager.android.library"
             implementationClass = "com.android.moneymanager.gradle.plugins.AndroidLibraryConventionPlugin"
         }
-        register("androidHilt") {
-            id = "moneymanager.android.hilt"
-            implementationClass = "com.android.moneymanager.gradle.plugins.AndroidHiltConventionPlugin"
-        }
         register("androidApplicationCompose") {
             id = "moneymanager.android.application.compose"
             implementationClass = "com.android.moneymanager.gradle.plugins.AndroidApplicationComposeConventionPlugin"

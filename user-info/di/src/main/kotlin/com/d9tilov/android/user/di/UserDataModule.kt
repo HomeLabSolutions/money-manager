@@ -4,17 +4,12 @@ import com.d9tilov.android.user.data.contract.UserSource
 import com.d9tilov.android.user.data.impl.UserDataRepo
 import com.d9tilov.android.user.data.impl.UserLocalSource
 import com.d9tilov.android.user.domain.contract.UserRepo
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import org.koin.dsl.bind
+import org.koin.dsl.module
+import org.koin.plugin.module.dsl.factory
 
-@Module
-@InstallIn(SingletonComponent::class)
-interface UserDataModule {
-    @Binds
-    fun provideUserSource(impl: UserLocalSource): UserSource
-
-    @Binds
-    fun provideUserRepo(impl: UserDataRepo): UserRepo
-}
+val userDataModule =
+    module {
+        factory<UserLocalSource>() bind UserSource::class
+        factory<UserDataRepo>() bind UserRepo::class
+    }

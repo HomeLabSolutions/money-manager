@@ -13,61 +13,57 @@ import com.d9tilov.android.statistics.ui.navigation.TransactionDetailsArgs
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.ui.model.TransactionUiModel
 import com.d9tilov.android.transaction.ui.model.toUiModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-import javax.inject.Named
+import org.koin.core.annotation.Named
 
 data class StatisticsDetailsUiState(
     val categoryName: String = "",
     val transactions: List<TransactionUiModel> = emptyList(),
 )
 
-@HiltViewModel
-class StatisticsDetailsViewModel
-    @Inject constructor(
-        analyticsSender: AnalyticsSender,
-        savedStateHandle: SavedStateHandle,
-        transactionInteractor: TransactionInteractor,
-        categoryInteractor: CategoryInteractor,
-        @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
-    ) : ViewModel() {
-        private val transactionDetailsArgs: TransactionDetailsArgs = TransactionDetailsArgs(savedStateHandle)
-        private val _uiState = MutableStateFlow(StatisticsDetailsUiState())
-        val uiState = _uiState.asStateFlow()
+class StatisticsDetailsViewModel(
+    analyticsSender: AnalyticsSender,
+    savedStateHandle: SavedStateHandle,
+    transactionInteractor: TransactionInteractor,
+    categoryInteractor: CategoryInteractor,
+    @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
+) : ViewModel() {
+    private val transactionDetailsArgs: TransactionDetailsArgs = TransactionDetailsArgs(savedStateHandle)
+    private val _uiState = MutableStateFlow(StatisticsDetailsUiState())
+    val uiState = _uiState.asStateFlow()
 
-        init {
-            analyticsSender.send(
-                AnalyticsEvent.Internal.Screen,
-                mapOf(AnalyticsParams.Screen.Name to "statistics_details"),
-            )
-            viewModelScope.launch(ioDispatcher) {
-                val transactionsDeferred =
-                    async {
-                        transactionInteractor.getTransactionsByCategoryId(
-                            transactionDetailsArgs.categoryId,
-                            transactionDetailsArgs.dateFrom.toLocalDateTime(),
-                            transactionDetailsArgs.dateTo.toLocalDateTime(),
-                            transactionDetailsArgs.inStatistics,
-                        )
-                    }
-
-                val categoryDeferred = async { categoryInteractor.getCategoryById(transactionDetailsArgs.categoryId) }
-                _uiState.update {
-                    it.copy(
-                        categoryName = categoryDeferred.await().name,
-                        transactions =
-                            transactionsDeferred
-                                .await()
-                                .sortedByDescending { transaction -> transaction.date }
-                                .map { transaction -> transaction.toUiModel(isStatisticsScreen = true) },
+    init {
+        analyticsSender.send(
+            AnalyticsEvent.Internal.Screen,
+            mapOf(AnalyticsParams.Screen.Name to "statistics_details"),
+        )
+        viewModelScope.launch(ioDispatcher) {
+            val transactionsDeferred =
+                async {
+                    transactionInteractor.getTransactionsByCategoryId(
+                        transactionDetailsArgs.categoryId,
+                        transactionDetailsArgs.dateFrom.toLocalDateTime(),
+                        transactionDetailsArgs.dateTo.toLocalDateTime(),
+                        transactionDetailsArgs.inStatistics,
                     )
                 }
+
+            val categoryDeferred = async { categoryInteractor.getCategoryById(transactionDetailsArgs.categoryId) }
+            _uiState.update {
+                it.copy(
+                    categoryName = categoryDeferred.await().name,
+                    transactions =
+                        transactionsDeferred
+                            .await()
+                            .sortedByDescending { transaction -> transaction.date }
+                            .map { transaction -> transaction.toUiModel(isStatisticsScreen = true) },
+                )
             }
         }
     }
+}

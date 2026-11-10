@@ -1,6 +1,5 @@
 package com.d9tilov.android.transaction.ui.navigation
 
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -15,6 +14,7 @@ import com.d9tilov.android.currency.domain.model.CurrencyArgs.CURRENCY_CODE_ARGS
 import com.d9tilov.android.transaction.ui.TransactionInfoRoute
 import com.d9tilov.android.transaction.ui.model.TransactionInfoMode
 import com.d9tilov.android.transaction.ui.vm.TransactionInfoViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 const val TRANSACTION_NAVIGATION_ROUTE = "transaction_route"
 const val TRANSACTION_ID_ARG = "transaction_id"
@@ -55,7 +55,7 @@ fun NavGraphBuilder.transactionInfoScreen(
                 navArgument(TRANSACTION_MODE_ARG) { type = NavType.StringType },
             ),
     ) { entry ->
-        val viewModel: TransactionInfoViewModel = hiltViewModel()
+        val viewModel: TransactionInfoViewModel = koinViewModel()
         val categoryId = entry.savedStateHandle.get<Long>(CategoryArgs.CATEGORY_ID_ARGS)
         categoryId?.let { id ->
             viewModel.updateCategory(id)

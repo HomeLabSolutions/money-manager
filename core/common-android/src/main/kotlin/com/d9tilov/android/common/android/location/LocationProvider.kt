@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.tasks.await
-import javax.inject.Named
+import org.koin.core.annotation.Named
 
 interface LocationProvider {
     suspend fun getCurrentLocation(

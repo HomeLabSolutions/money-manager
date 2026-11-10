@@ -38,7 +38,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.core.content.ContextCompat
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.CategoryDestination
@@ -51,6 +50,7 @@ import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
 import com.d9tilov.android.designsystem.SimpleDialog
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
+import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
@@ -62,7 +62,7 @@ private const val PREVIEW_CATEGORY_NAME_LIMIT = 15
 
 @Composable
 fun CategoryListRoute(
-    viewModel: CategoryListViewModel = hiltViewModel(),
+    viewModel: CategoryListViewModel = koinViewModel(),
     openCategory: (Long, TransactionType) -> Unit,
     onCategoryClickAndBack: (Category) -> Unit,
     clickBack: () -> Unit,

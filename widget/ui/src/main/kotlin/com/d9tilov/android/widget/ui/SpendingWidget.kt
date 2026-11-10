@@ -43,9 +43,11 @@ import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.designsystem.theme.MoneyManagerColorScheme
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
+import com.d9tilov.android.widget.domain.contract.SpendingWidgetInteractor
 import com.d9tilov.android.widget.domain.model.SpendingWidgetState
-import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.flow.first
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.math.BigDecimal
 import kotlin.math.ceil
 
@@ -56,7 +58,10 @@ private const val VERTICAL_PADDING = 2
 private const val AMOUNT_GAP = 4
 private const val MAX_LABEL_WIDTH_FRACTION = 2f / 3f
 
-class SpendingWidget : GlanceAppWidget() {
+class SpendingWidget :
+    GlanceAppWidget(),
+    KoinComponent {
+    private val interactor: SpendingWidgetInteractor by inject()
     override val sizeMode = SizeMode.Exact
     override val stateDefinition: GlanceStateDefinition<*>? = null
 
@@ -65,9 +70,7 @@ class SpendingWidget : GlanceAppWidget() {
         id: GlanceId,
     ) {
         val state =
-            EntryPointAccessors
-                .fromApplication<SpendingWidgetEntryPoint>(context)
-                .spendingWidgetInteractor()
+            interactor
                 .observe()
         val initialState = state.first()
         provideContent {

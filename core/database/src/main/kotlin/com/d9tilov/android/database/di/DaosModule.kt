@@ -10,38 +10,37 @@ import com.d9tilov.android.database.dao.MainCurrencyDao
 import com.d9tilov.android.database.dao.RegularTransactionDao
 import com.d9tilov.android.database.dao.TransactionDao
 import com.d9tilov.android.database.dao.UserDao
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import org.koin.dsl.module
+import org.koin.plugin.module.dsl.create
+import org.koin.plugin.module.dsl.factory
 
-@Module
-@InstallIn(SingletonComponent::class)
-object DaosModule {
-    @Provides
-    fun providesUserDao(database: AppDatabase): UserDao = database.userDao()
+fun providesUserDao(database: AppDatabase): UserDao = database.userDao()
 
-    @Provides
-    fun providesCategoryDao(database: AppDatabase): CategoryDao = database.categoryDao()
+fun providesCategoryDao(database: AppDatabase): CategoryDao = database.categoryDao()
 
-    @Provides
-    fun providesTransactionDao(database: AppDatabase): TransactionDao = database.transactionDao()
+fun providesTransactionDao(database: AppDatabase): TransactionDao = database.transactionDao()
 
-    @Provides
-    fun providesBudgetDao(database: AppDatabase): BudgetDao = database.budgetDao()
+fun providesBudgetDao(database: AppDatabase): BudgetDao = database.budgetDao()
 
-    @Provides
-    fun providesCurrencyListDao(database: AppDatabase): CurrencyListDao = database.currencyDao()
+fun providesCurrencyListDao(database: AppDatabase): CurrencyListDao = database.currencyDao()
 
-    @Provides
-    fun providesMainCurrencyDao(database: AppDatabase): MainCurrencyDao = database.mainCurrencyDao()
+fun providesMainCurrencyDao(database: AppDatabase): MainCurrencyDao = database.mainCurrencyDao()
 
-    @Provides
-    fun providesRegularTransactionDao(database: AppDatabase): RegularTransactionDao = database.regularTransactionDao()
+fun providesRegularTransactionDao(database: AppDatabase): RegularTransactionDao = database.regularTransactionDao()
 
-    @Provides
-    fun providesGoalDao(database: AppDatabase): GoalDao = database.goalDao()
+fun providesGoalDao(database: AppDatabase): GoalDao = database.goalDao()
 
-    @Provides
-    fun providesInsightDao(database: AppDatabase): InsightDao = database.insightDao()
-}
+fun providesInsightDao(database: AppDatabase): InsightDao = database.insightDao()
+
+val daosModule =
+    module {
+        factory { create(::providesUserDao) }
+        factory { create(::providesCategoryDao) }
+        factory { create(::providesTransactionDao) }
+        factory { create(::providesBudgetDao) }
+        factory { create(::providesCurrencyListDao) }
+        factory { create(::providesMainCurrencyDao) }
+        factory { create(::providesRegularTransactionDao) }
+        factory { create(::providesGoalDao) }
+        factory { create(::providesInsightDao) }
+    }

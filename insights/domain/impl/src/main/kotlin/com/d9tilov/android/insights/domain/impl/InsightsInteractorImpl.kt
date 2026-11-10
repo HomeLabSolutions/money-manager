@@ -15,9 +15,8 @@ import com.d9tilov.android.user.domain.model.InsightLanguage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
-import javax.inject.Inject
 
-class InsightsInteractorImpl @Inject constructor(
+class InsightsInteractorImpl(
     private val transactionRepo: TransactionRepo,
     private val insightsRepo: InsightsRepo,
     private val consentRepo: InsightsConsentRepo,

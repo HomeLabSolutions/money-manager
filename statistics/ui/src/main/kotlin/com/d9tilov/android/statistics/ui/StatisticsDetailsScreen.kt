@@ -13,7 +13,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.designsystem.MmTopAppBar
@@ -22,12 +21,13 @@ import com.d9tilov.android.statistics.ui.vm.StatisticsDetailsUiState
 import com.d9tilov.android.statistics.ui.vm.StatisticsDetailsViewModel
 import com.d9tilov.android.transaction.ui.TransactionItem
 import com.d9tilov.android.transaction.ui.model.TransactionUiModel
+import org.koin.compose.viewmodel.koinViewModel
 import java.math.BigDecimal
 import com.d9tilov.android.common.android.R as CommonAndroidR
 
 @Composable
 fun StatisticsDetailsRoute(
-    viewModel: StatisticsDetailsViewModel = hiltViewModel(),
+    viewModel: StatisticsDetailsViewModel = koinViewModel(),
     onBackClicked: () -> Unit,
     onTransactionClicked: (Long) -> Unit,
 ) {

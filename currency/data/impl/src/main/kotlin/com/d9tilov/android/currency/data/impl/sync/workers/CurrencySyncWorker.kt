@@ -1,7 +1,6 @@
 package com.d9tilov.android.currency.data.impl.sync.workers
 
 import android.content.Context
-import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.OneTimeWorkRequestBuilder
@@ -13,16 +12,13 @@ import com.d9tilov.android.common.android.worker.delegatedData
 import com.d9tilov.android.common.android.worker.syncForegroundInfo
 import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-@HiltWorker
-class CurrencySyncWorker @AssistedInject constructor(
-    @Assisted private val context: Context,
-    @Assisted workerParameters: WorkerParameters,
+class CurrencySyncWorker(
+    private val context: Context,
+    workerParameters: WorkerParameters,
     private val currencyInteractor: CurrencyInteractor,
 ) : CoroutineWorker(context, workerParameters) {
     override suspend fun getForegroundInfo(): ForegroundInfo = context.syncForegroundInfo()

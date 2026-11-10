@@ -1,20 +1,14 @@
 package com.d9tilov.android.transaction.di
 
-import com.d9tilov.android.transaction.data.contract.TransactionSource
 import com.d9tilov.android.transaction.data.impl.TransactionDataRepo
-import com.d9tilov.android.transaction.data.impl.TransactionLocalSource
+import com.d9tilov.android.transaction.data.impl.transactionLocalSourceModule
 import com.d9tilov.android.transaction.domain.contract.TransactionRepo
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import org.koin.dsl.bind
+import org.koin.dsl.module
+import org.koin.plugin.module.dsl.factory
 
-@Module
-@InstallIn(SingletonComponent::class)
-interface TransactionDataModule {
-    @Binds
-    fun provideTransactionLocalSource(impl: TransactionLocalSource): TransactionSource
-
-    @Binds
-    fun provideTransactionRepo(impl: TransactionDataRepo): TransactionRepo
-}
+val transactionDataModule =
+    module {
+        includes(transactionLocalSourceModule)
+        factory<TransactionDataRepo>() bind TransactionRepo::class
+    }

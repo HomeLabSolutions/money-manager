@@ -6,20 +6,13 @@ import com.d9tilov.android.currency.domain.impl.CurrencyInteractorImpl
 import com.d9tilov.android.currency.domain.impl.GeocodingInteractorImpl
 import com.d9tilov.android.currency.observer.contract.CurrencyUpdateObserver
 import com.d9tilov.android.currency.observer.impl.CurrencyUpdateObserverImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import org.koin.dsl.bind
+import org.koin.dsl.module
+import org.koin.plugin.module.dsl.factory
 
-@Module
-@InstallIn(SingletonComponent::class)
-interface CurrencyDomainModule {
-    @Binds
-    fun provideCurrencyInteractor(impl: CurrencyInteractorImpl): CurrencyInteractor
-
-    @Binds
-    fun provideGeocodingInteractor(impl: GeocodingInteractorImpl): GeocodingInteractor
-
-    @Binds
-    fun provideCurrencyObserver(impl: CurrencyUpdateObserverImpl): CurrencyUpdateObserver
-}
+val currencyDomainModule =
+    module {
+        factory<CurrencyInteractorImpl>() bind CurrencyInteractor::class
+        factory<GeocodingInteractorImpl>() bind GeocodingInteractor::class
+        factory<CurrencyUpdateObserverImpl>() bind CurrencyUpdateObserver::class
+    }

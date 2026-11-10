@@ -1,4 +1,5 @@
 plugins {
+    alias(libs.plugins.koin.compiler)
     id("moneymanager.android.library.kotlin")
 }
 
@@ -13,7 +14,8 @@ dependencies {
     implementation(project(":user-info:domain:model"))
     implementation(project(":widget:domain:contract"))
     implementation(project(":widget:domain:model"))
-    implementation(libs.javax.inject)
+    implementation(libs.koin.annotations)
+    implementation(libs.koin.core)
     implementation(libs.kotlinx.coroutines.core)
 
     testImplementation(libs.junit)

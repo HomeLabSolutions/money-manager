@@ -58,7 +58,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.core.content.ContextCompat
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.Category.Companion.ALL_ITEMS_ID
@@ -77,10 +76,11 @@ import com.d9tilov.android.incomeexpense.ui.vm.screenTypes
 import com.d9tilov.android.incomeexpense.ui.vm.toScreenType
 import com.d9tilov.android.transaction.ui.model.TransactionUiModel
 import kotlinx.coroutines.launch
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun IncomeExpenseRoute(
-    viewModel: IncomeExpenseViewModel = hiltViewModel(),
+    viewModel: IncomeExpenseViewModel = koinViewModel(),
     onTransactionClicked: (TransactionUiModel) -> Unit,
     onCurrencyClicked: (String) -> Unit,
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,

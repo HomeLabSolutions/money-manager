@@ -1,7 +1,7 @@
 package com.d9tilov.android.places.data.impl.api
 
 import com.d9tilov.android.network.createNetworkClient
-import com.d9tilov.android.network.di.NetworkModule
+import com.d9tilov.android.network.di.provideJson
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.plugins.ClientRequestException
@@ -15,7 +15,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class KtorGeoapifyApiTest {
-    private val json = NetworkModule.provideJson()
+    private val json = provideJson()
 
     @Test
     fun `places request preserves all parameters and decodes optional properties`() =

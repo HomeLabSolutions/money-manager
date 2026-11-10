@@ -9,11 +9,9 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.d9tilov.android.notification.domain.MoneyManagerNotificationManager
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
 
-class MoneyManagerNotificationManagerImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
+class MoneyManagerNotificationManagerImpl(
+    private val context: Context,
 ) : MoneyManagerNotificationManager<AndroidNotificationData> {
     override fun notify(
         id: Int,

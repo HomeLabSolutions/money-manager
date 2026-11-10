@@ -1,6 +1,6 @@
 plugins {
+    alias(libs.plugins.koin.compiler)
     id("moneymanager.android.library")
-    id("moneymanager.android.hilt")
 }
 
 android {
@@ -9,8 +9,7 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
-
     implementation(libs.datastore)
-    implementation(libs.hilt.android)
+    implementation(libs.koin.core)
     implementation(libs.kotlinx.coroutines.core)
 }

@@ -4,17 +4,12 @@ import com.d9tilov.android.transaction.regular.data.contract.RegularTransactionS
 import com.d9tilov.android.transaction.regular.data.impl.RegularTransactionDataRepo
 import com.d9tilov.android.transaction.regular.data.impl.RegularTransactionLocalSource
 import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactionRepo
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import org.koin.dsl.bind
+import org.koin.dsl.module
+import org.koin.plugin.module.dsl.factory
 
-@Module
-@InstallIn(SingletonComponent::class)
-interface RegularTransactionDataModule {
-    @Binds
-    fun provideRegularTransactionSource(impl: RegularTransactionLocalSource): RegularTransactionSource
-
-    @Binds
-    fun provideRegularTransactionRepo(impl: RegularTransactionDataRepo): RegularTransactionRepo
-}
+val regularTransactionDataModule =
+    module {
+        factory<RegularTransactionLocalSource>() bind RegularTransactionSource::class
+        factory<RegularTransactionDataRepo>() bind RegularTransactionRepo::class
+    }

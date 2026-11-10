@@ -14,11 +14,10 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
-import javax.inject.Named
+import org.koin.core.annotation.Named
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class SpendingWidgetInteractorImpl @Inject constructor(
+class SpendingWidgetInteractorImpl(
     @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
     private val observeSpendingSummary: ObserveSpendingSummaryUseCase,
     private val users: UserInteractor,

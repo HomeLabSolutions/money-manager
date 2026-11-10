@@ -14,9 +14,8 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class UserLocalSource @Inject constructor(
+class UserLocalSource(
     private val preferencesStore: PreferencesStore,
     private val userDao: UserDao,
 ) : UserSource {

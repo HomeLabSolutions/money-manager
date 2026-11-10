@@ -6,12 +6,10 @@ import com.d9tilov.android.analytics.domain.AnalyticsSender
 import com.d9tilov.android.analytics.model.AnalyticsEvent
 import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.category.domain.entity.CategoryGroup
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
-import javax.inject.Inject
 
 data class CategoryIconListUiState(
     val groups: List<CategoryGroup> =
@@ -35,24 +33,21 @@ data class CategoryIconListUiState(
     }
 }
 
-@HiltViewModel
-class CategoryGroupIconListViewModel
-    @Inject
-    constructor(
-        analyticsSender: AnalyticsSender,
-    ) : ViewModel() {
-        val uiState: StateFlow<CategoryIconListUiState> =
-            flowOf(CategoryIconListUiState.EMPTY)
-                .stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.WhileSubscribed(),
-                    initialValue = CategoryIconListUiState.EMPTY,
-                )
-
-        init {
-            analyticsSender.send(
-                AnalyticsEvent.Internal.Screen,
-                mapOf(AnalyticsParams.Screen.Name to "group_icon_list"),
+class CategoryGroupIconListViewModel(
+    analyticsSender: AnalyticsSender,
+) : ViewModel() {
+    val uiState: StateFlow<CategoryIconListUiState> =
+        flowOf(CategoryIconListUiState.EMPTY)
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(),
+                initialValue = CategoryIconListUiState.EMPTY,
             )
-        }
+
+    init {
+        analyticsSender.send(
+            AnalyticsEvent.Internal.Screen,
+            mapOf(AnalyticsParams.Screen.Name to "group_icon_list"),
+        )
     }
+}

@@ -15,9 +15,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
-import javax.inject.Inject
 
-class InsightLocalSource @Inject constructor(
+class InsightLocalSource(
     private val dao: InsightDao,
     private val preferencesStore: PreferencesStore,
 ) : InsightSource {

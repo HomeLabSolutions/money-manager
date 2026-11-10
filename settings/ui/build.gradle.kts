@@ -1,6 +1,6 @@
 plugins {
+    alias(libs.plugins.koin.compiler)
     id("moneymanager.android.library")
-    id("moneymanager.android.hilt")
     id("moneymanager.android.library.compose")
     id("kotlin-parcelize")
 }
@@ -33,8 +33,10 @@ dependencies {
     implementation(libs.billing)
     implementation(libs.firebase.config)
     implementation(libs.firebase.ui.auth)
-    implementation(libs.hilt.android)
-    implementation(libs.hilt.lifecycle.viewmodel.compose)
+    implementation(libs.koin.annotations)
+    implementation(libs.koin.compose.viewmodel)
+    implementation(libs.koin.core)
+    implementation(libs.koin.core.viewmodel)
     implementation(libs.kotlinx.coroutines.play.services)
     implementation(libs.navigation.compose)
     implementation(libs.navigation.runtime)

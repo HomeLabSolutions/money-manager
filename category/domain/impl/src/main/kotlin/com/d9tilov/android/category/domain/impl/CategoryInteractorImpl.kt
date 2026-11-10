@@ -8,9 +8,8 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class CategoryInteractorImpl @Inject constructor(
+class CategoryInteractorImpl(
     private val categoryRepo: CategoryRepo,
 ) : CategoryInteractor {
     override suspend fun create(category: Category) = categoryRepo.create(category)

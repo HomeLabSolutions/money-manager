@@ -2,14 +2,11 @@ package com.d9tilov.android.places.di
 
 import com.d9tilov.android.places.domain.contract.NearbyPlacesInteractor
 import com.d9tilov.android.places.domain.impl.NearbyPlacesInteractorImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import org.koin.dsl.bind
+import org.koin.dsl.module
+import org.koin.plugin.module.dsl.factory
 
-@Module
-@InstallIn(SingletonComponent::class)
-interface PlacesDomainModule {
-    @Binds
-    fun provideNearbyPlacesInteractor(impl: NearbyPlacesInteractorImpl): NearbyPlacesInteractor
-}
+val placesDomainModule =
+    module {
+        factory<NearbyPlacesInteractorImpl>() bind NearbyPlacesInteractor::class
+    }

@@ -1,6 +1,6 @@
 plugins {
+    alias(libs.plugins.koin.compiler)
     id("moneymanager.android.library")
-    id("moneymanager.android.hilt")
     id("moneymanager.android.library.compose")
 }
 
@@ -22,11 +22,13 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core)
-    implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.work.runtime)
     implementation(libs.firebase.auth)
-    implementation(libs.hilt.android)
-    implementation(libs.hilt.lifecycle.viewmodel.compose)
+    implementation(libs.koin.androidx.workmanager)
+    implementation(libs.koin.annotations)
+    implementation(libs.koin.compose.viewmodel)
+    implementation(libs.koin.core)
+    implementation(libs.koin.core.viewmodel)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.datetime)
     implementation(libs.navigation.compose)

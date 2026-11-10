@@ -49,9 +49,8 @@ import kotlinx.datetime.atTime
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import java.math.BigDecimal
-import javax.inject.Inject
 
-class TransactionInteractorImpl @Inject constructor(
+class TransactionInteractorImpl(
     private val transactionRepo: TransactionRepo,
     private val regularTransactionInteractor: RegularTransactionInteractor,
     private val categoryInteractor: CategoryInteractor,
