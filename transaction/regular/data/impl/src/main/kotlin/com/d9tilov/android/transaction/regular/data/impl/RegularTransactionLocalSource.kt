@@ -14,9 +14,8 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class RegularTransactionLocalSource @Inject constructor(
+class RegularTransactionLocalSource(
     private val preferencesStore: PreferencesStore,
     private val regularTransactionDao: RegularTransactionDao,
 ) : RegularTransactionSource {

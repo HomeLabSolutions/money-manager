@@ -1,7 +1,6 @@
 package com.d9tilov.android.insights.presentation.worker
 
 import android.content.Context
-import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ForegroundInfo
@@ -17,16 +16,13 @@ import com.d9tilov.android.insights.domain.model.WeeklyInsightNotification
 import com.d9tilov.android.insights.domain.model.exception.DailyInsightLimitException
 import com.d9tilov.android.insights.domain.model.exception.InsufficientInsightsDataException
 import com.d9tilov.android.insights.presentation.notification.WeeklyInsightNotificationSender
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CancellationException
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-@HiltWorker
-class WeeklyInsightWorker @AssistedInject constructor(
-    @Assisted private val context: Context,
-    @Assisted workerParameters: WorkerParameters,
+class WeeklyInsightWorker(
+    private val context: Context,
+    workerParameters: WorkerParameters,
     private val insightsInteractor: InsightsInteractor,
     private val notification: WeeklyInsightNotificationSender,
 ) : CoroutineWorker(context, workerParameters) {

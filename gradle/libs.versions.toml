@@ -25,13 +25,12 @@ googlePlayServices = "4.5.0"
 googlePlayServicesLocation = "21.4.0"
 googlePlayServicesMaps = "20.1.0"
 gradlePlugin = "9.5.1"
-hilt = "2.60.1"
-hiltCommon = "1.4.0"
 java = "17"
 javaDesugaring = "2.1.5"
 javaPoet = "1.13.0"
-javaxInject = "1"
 junit = "4.13.2"
+koin = "4.2.2"
+koinCompiler = "1.2.1"
 kotlin = "2.4.21"
 kotlinDatetime = "0.7.1"
 kotlinxSerialization = "1.12.0"
@@ -51,7 +50,6 @@ sqliteJdbc = "3.54.1.0"
 startup = "1.2.0"
 timber = "5.0.1"
 worker = "2.12.0"
-workerHilt = "1.4.0"
 
 [libraries]
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
@@ -76,7 +74,6 @@ androidx-credentials-play-services-auth = { group = "androidx.credentials", name
 androidx-glance = { group = "androidx.glance", name = "glance", version.ref = "glance" }
 androidx-glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glance" }
 androidx-glance-material3 = { group = "androidx.glance", name = "glance-material3", version.ref = "glance" }
-androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "workerHilt" }
 androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime", version.ref = "lifecycle" }
 androidx-lifecycle-viewmodel-compose-android = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose-android", version.ref = "lifecycle" }
 androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxTestJunit" }
@@ -89,7 +86,6 @@ coil-core = { group = "io.coil-kt.coil3", name = "coil-core", version.ref = "coi
 coil-network-cache-control = { group = "io.coil-kt.coil3", name = "coil-network-cache-control", version.ref = "coil" }
 coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
 coil-singleton = { group = "io.coil-kt.coil3", name = "coil", version.ref = "coil" }
-dagger = { group = "com.google.dagger", name = "dagger", version.ref = "hilt" }
 datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 detekt = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detektPlugin" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
@@ -103,17 +99,15 @@ firebase-storage = { group = "com.google.firebase", name = "firebase-storage" }
 firebase-ui-auth = { group = "com.firebaseui", name = "firebase-ui-auth", version.ref = "firebaseUi" }
 google-services = { group = "com.google.gms", name = "google-services", version.ref = "googlePlayServices" }
 googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleId" }
-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
-hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
-hilt-android-gradle-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt" }
-hilt-common = { group = "androidx.hilt", name = "hilt-common", version.ref = "hiltCommon" }
-hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "hilt" }
-hilt-ext-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltCommon" }
-hilt-lifecycle-viewmodel-compose = { group = "androidx.hilt", name = "hilt-lifecycle-viewmodel-compose", version.ref = "hiltCommon" }
 java-desugaring = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "javaDesugaring" }
 java-poet = { group = "com.squareup", name = "javapoet", version.ref = "javaPoet" }
-javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javaxInject" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+koin-androidx-workmanager = { group = "io.insert-koin", name = "koin-androidx-workmanager", version.ref = "koin" }
+koin-annotations = { group = "io.insert-koin", name = "koin-annotations", version.ref = "koin" }
+koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = "koin" }
+koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+koin-core-viewmodel = { group = "io.insert-koin", name = "koin-core-viewmodel", version.ref = "koin" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-metadata-jvm = { group = "org.jetbrains.kotlin", name = "kotlin-metadata-jvm", version.ref = "kotlin" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
@@ -153,6 +147,6 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 deps-sorting = { id = "com.squareup.sort-dependencies", version.ref = "autonomousappsSorting" }
 deps-unused = { id = "com.autonomousapps.dependency-analysis", version.ref = "autonomousappsUnused" }
-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+koin-compiler = { id = "io.insert-koin.compiler.plugin", version.ref = "koinCompiler" }
 secrets-gradle-plugin = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secretesGradle" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

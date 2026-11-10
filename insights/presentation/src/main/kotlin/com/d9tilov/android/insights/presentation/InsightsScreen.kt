@@ -38,13 +38,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.d9tilov.android.common.android.ui.permissions.rememberNotificationPermissionRequester
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.android.insights.domain.model.Insight
 import com.d9tilov.android.insights.domain.model.InsightGenerationStatus
 import com.d9tilov.android.insights.domain.model.InsightsConstants.MIN_INSIGHT_TRANSACTION_COUNT
 import kotlinx.coroutines.launch
+import org.koin.compose.viewmodel.koinViewModel
 import java.text.DateFormat
 import java.util.Date
 
@@ -53,7 +53,7 @@ private const val INSIGHT_BUBBLE_SURFACE_ALPHA = 0.94f
 
 @Composable
 fun InsightsRoute(
-    viewModel: InsightsViewModel = hiltViewModel(),
+    viewModel: InsightsViewModel = koinViewModel(),
     onShowSnackBar: suspend (String, String?) -> Boolean,
 ) {
     val state by viewModel.state.collectAsState()

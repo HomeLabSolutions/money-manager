@@ -1,6 +1,6 @@
 plugins {
+    alias(libs.plugins.koin.compiler)
     id("moneymanager.android.library")
-    id("moneymanager.android.hilt")
 }
 
 android {
@@ -13,7 +13,7 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
-    implementation(libs.javax.inject)
+    implementation(libs.koin.core)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.ktor.client.android)

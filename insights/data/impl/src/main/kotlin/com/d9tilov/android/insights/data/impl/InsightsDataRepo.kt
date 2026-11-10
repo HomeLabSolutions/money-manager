@@ -30,11 +30,8 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.minus
 import java.util.Locale
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class InsightsDataRepo @Inject constructor(
+class InsightsDataRepo(
     private val localSource: InsightSource,
     private val insightLanguageSource: InsightLanguageSource,
     private val transactionSource: TransactionSource,

@@ -50,7 +50,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.core.content.ContextCompat
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -69,13 +68,14 @@ import com.d9tilov.android.designsystem.MoneyManagerIcons
 import com.d9tilov.android.designsystem.OutlineCircle
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import kotlinx.coroutines.launch
+import org.koin.compose.viewmodel.koinViewModel
 
 private const val SELECTED_CATEGORY_SCALE = 1.5f
 
 @Composable
 fun CategoryCreationRoute(
     sharedViewModel: CategorySharedViewModel,
-    viewModel: CategoryCreationViewModel = hiltViewModel(),
+    viewModel: CategoryCreationViewModel = koinViewModel(),
     openCategoryGroupIconList: () -> Unit,
     openCategoryIconGrid: () -> Unit,
     clickBack: () -> Unit,

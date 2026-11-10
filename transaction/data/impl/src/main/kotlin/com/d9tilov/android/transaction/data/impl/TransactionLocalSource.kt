@@ -30,13 +30,12 @@ import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDateTime
+import org.koin.core.annotation.Named
 import java.math.BigDecimal
-import javax.inject.Inject
-import javax.inject.Named
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
-class TransactionLocalSource @Inject constructor(
+class TransactionLocalSource(
     @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
     private val preferencesStore: PreferencesStore,
     private val transactionDao: TransactionDao,

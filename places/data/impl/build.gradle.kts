@@ -31,7 +31,6 @@ dependencies {
     implementation(project(":places:data:contract"))
     implementation(project(":places:domain:contract"))
     implementation(project(":places:domain:model"))
-    implementation(libs.javax.inject)
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.http)
 

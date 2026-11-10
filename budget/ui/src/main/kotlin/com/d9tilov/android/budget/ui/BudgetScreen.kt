@@ -16,16 +16,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.CurrencyTextFieldBig
 import com.d9tilov.android.designsystem.CurrencyTextFieldExtraBig
 import com.d9tilov.android.designsystem.MmTopAppBar
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun BudgetRoute(
-    viewModel: BudgetAmountViewModel = hiltViewModel(),
+    viewModel: BudgetAmountViewModel = koinViewModel(),
     clickBack: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

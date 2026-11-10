@@ -4,17 +4,12 @@ import com.d9tilov.android.transaction.domain.contract.ObserveSpendingSummaryUse
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.impl.ObserveSpendingSummaryUseCaseImpl
 import com.d9tilov.android.transaction.domain.impl.TransactionInteractorImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import org.koin.dsl.bind
+import org.koin.dsl.module
+import org.koin.plugin.module.dsl.factory
 
-@Module
-@InstallIn(SingletonComponent::class)
-interface TransactionDomainModule {
-    @Binds
-    fun provideObserveSpendingSummaryUseCase(impl: ObserveSpendingSummaryUseCaseImpl): ObserveSpendingSummaryUseCase
-
-    @Binds
-    fun provideTransactionInteractor(impl: TransactionInteractorImpl): TransactionInteractor
-}
+val transactionDomainModule =
+    module {
+        factory<ObserveSpendingSummaryUseCaseImpl>() bind ObserveSpendingSummaryUseCase::class
+        factory<TransactionInteractorImpl>() bind TransactionInteractor::class
+    }

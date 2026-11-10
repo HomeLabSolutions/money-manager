@@ -1,6 +1,6 @@
 plugins {
+    alias(libs.plugins.koin.compiler)
     id("moneymanager.android.library")
-    id("moneymanager.android.hilt")
     id("moneymanager.android.library.compose")
 }
 
@@ -19,7 +19,7 @@ dependencies {
     implementation(libs.androidx.glance)
     implementation(libs.androidx.glance.appwidget)
     implementation(libs.androidx.glance.material3)
-    implementation(libs.hilt.android)
+    implementation(libs.koin.core)
     implementation(libs.kotlinx.coroutines.core)
 
     androidTestImplementation(libs.androidx.core)

@@ -10,7 +10,6 @@ import com.d9tilov.android.insights.domain.model.Insight
 import com.d9tilov.android.insights.domain.model.InsightGenerationStatus
 import com.d9tilov.android.insights.domain.model.InsightsConstants.MAX_INSIGHTS_PER_DAY
 import com.d9tilov.android.insights.domain.model.exception.InsightServiceException
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,8 +19,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
-import javax.inject.Named
+import org.koin.core.annotation.Named
 
 data class InsightsUiState(
     val insights: List<Insight> = emptyList(),
@@ -36,8 +34,7 @@ data class InsightsErrorState(
     val messageArg: Int? = null,
 )
 
-@HiltViewModel
-class InsightsViewModel @Inject constructor(
+class InsightsViewModel(
     @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
     private val insightsInteractor: InsightsInteractor,
 ) : ViewModel() {

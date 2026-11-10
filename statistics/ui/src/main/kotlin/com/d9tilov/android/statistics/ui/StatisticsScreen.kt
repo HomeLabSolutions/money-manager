@@ -59,7 +59,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.constants.CurrencyConstants
 import com.d9tilov.android.core.model.TransactionType
@@ -91,6 +90,7 @@ import com.d9tilov.android.statistics.ui.vm.StatisticsUiState
 import com.d9tilov.android.statistics.ui.vm.StatisticsViewModel
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
 import kotlinx.datetime.LocalDateTime
+import org.koin.compose.viewmodel.koinViewModel
 import java.math.BigDecimal
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -100,7 +100,7 @@ private const val CHART_HEIGHT_FRACTION = 0.6f
 
 @Composable
 fun StatisticsRoute(
-    viewModel: StatisticsViewModel = hiltViewModel(),
+    viewModel: StatisticsViewModel = koinViewModel(),
     onTransactionClicked: (TransactionDetailsChartModel, LocalDateTime, LocalDateTime) -> Unit,
 ) {
     val uiState: StatisticsUiState by viewModel.uiState.collectAsState()

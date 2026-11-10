@@ -1,6 +1,6 @@
 plugins {
+    alias(libs.plugins.koin.compiler)
     id("moneymanager.android.library")
-    id("com.google.devtools.ksp")
 }
 
 android {
@@ -11,7 +11,5 @@ dependencies {
     implementation(project(":core:common-android"))
     implementation(project(":notification:domain"))
     implementation(libs.androidx.core)
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.android.compiler)
-    ksp(libs.kotlin.metadata.jvm)
+    implementation(libs.koin.core)
 }

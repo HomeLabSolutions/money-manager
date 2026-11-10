@@ -2,14 +2,11 @@ package com.d9tilov.android.budget.di
 
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.budget.domain.impl.BudgetInteractorImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import org.koin.dsl.bind
+import org.koin.dsl.module
+import org.koin.plugin.module.dsl.factory
 
-@Module
-@InstallIn(SingletonComponent::class)
-interface BudgetDomainModule {
-    @Binds
-    fun provideBudgetInteractor(impl: BudgetInteractorImpl): BudgetInteractor
-}
+val budgetDomainModule =
+    module {
+        factory<BudgetInteractorImpl>() bind BudgetInteractor::class
+    }

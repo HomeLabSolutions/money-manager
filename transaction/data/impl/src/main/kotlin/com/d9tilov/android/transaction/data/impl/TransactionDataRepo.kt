@@ -9,9 +9,8 @@ import com.d9tilov.android.transaction.domain.model.TransactionMinMaxDateModel
 import com.d9tilov.android.widget.domain.contract.SpendingWidgetStateObserver
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
-import javax.inject.Inject
 
-class TransactionDataRepo @Inject constructor(
+class TransactionDataRepo(
     private val transactionSource: TransactionSource,
     private val spendingWidgetStateObserver: SpendingWidgetStateObserver,
 ) : TransactionRepo {

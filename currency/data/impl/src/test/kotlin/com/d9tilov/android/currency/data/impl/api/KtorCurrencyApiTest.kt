@@ -1,7 +1,7 @@
 package com.d9tilov.android.currency.data.impl.api
 
 import com.d9tilov.android.network.createNetworkClient
-import com.d9tilov.android.network.di.NetworkModule
+import com.d9tilov.android.network.di.provideJson
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.http.HttpHeaders
@@ -11,7 +11,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class KtorCurrencyApiTest {
-    private val json = NetworkModule.provideJson()
+    private val json = provideJson()
 
     @Test
     fun `currency request encodes path segments and decodes rates with unknown fields`() =

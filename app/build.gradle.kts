@@ -2,10 +2,9 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
+    alias(libs.plugins.koin.compiler)
     id("moneymanager.android.application")
-    id("moneymanager.android.hilt")
     id("moneymanager.android.application.compose")
-    id("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("kotlin-parcelize")
@@ -129,6 +128,7 @@ dependencies {
     implementation(project(":category:ui"))
     implementation(project(":core:common"))
     implementation(project(":core:common-android"))
+    implementation(project(":core:database"))
     implementation(project(":core:datastore"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:network"))
@@ -168,7 +168,6 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.credentials)
-    implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.work.runtime)
     implementation(libs.coil.core)
     implementation(libs.coil.network.cache.control)
@@ -181,8 +180,12 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.firebase.ui.auth)
     implementation(libs.googleid)
-    implementation(libs.hilt.android)
-    implementation(libs.hilt.lifecycle.viewmodel.compose)
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.workmanager)
+    implementation(libs.koin.annotations)
+    implementation(libs.koin.compose.viewmodel)
+    implementation(libs.koin.core)
+    implementation(libs.koin.core.viewmodel)
     implementation(libs.kotlinx.coroutines.play.services)
     implementation(libs.kotlinx.datetime)
     implementation(libs.material)
@@ -191,9 +194,15 @@ dependencies {
     implementation(libs.timber)
 
     runtimeOnly(libs.androidx.credentials.play.services.auth)
+
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk.core)
 
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.kotlinx.coroutines.test)
+}
+
+koinCompiler {
+    compileSafety = true
+    strictSafety = true
 }

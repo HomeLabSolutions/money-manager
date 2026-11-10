@@ -1,6 +1,6 @@
 plugins {
+    alias(libs.plugins.koin.compiler)
     id("moneymanager.android.library")
-    id("moneymanager.android.hilt")
 }
 
 android {
@@ -8,10 +8,9 @@ android {
 }
 
 dependencies {
-
     implementation(project(":analytics:data"))
     implementation(project(":analytics:domain"))
     implementation(project(":core:datastore"))
     implementation(libs.firebase.analytics)
-    implementation(libs.hilt.android)
+    implementation(libs.koin.core)
 }

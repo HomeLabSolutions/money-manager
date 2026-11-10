@@ -19,26 +19,22 @@ package com.d9tilov.android.network.di
 import com.d9tilov.android.network.dispatchers.DEFAULT
 import com.d9tilov.android.network.dispatchers.IO
 import com.d9tilov.android.network.dispatchers.MAIN
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import javax.inject.Named
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
+import org.koin.plugin.module.dsl.create
+import org.koin.plugin.module.dsl.factory
 
-@Module
-@InstallIn(SingletonComponent::class)
-object DispatchersModule {
-    @Provides
-    @Named(IO)
-    fun providesIODispatcher(): CoroutineDispatcher = Dispatchers.IO
+fun providesIODispatcher(): CoroutineDispatcher = Dispatchers.IO
 
-    @Provides
-    @Named(DEFAULT)
-    fun providesDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
+fun providesDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
 
-    @Provides
-    @Named(MAIN)
-    fun providesMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
-}
+fun providesMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
+
+val dispatchersModule =
+    module {
+        factory(named(IO)) { create(::providesIODispatcher) }
+        factory(named(DEFAULT)) { create(::providesDefaultDispatcher) }
+        factory(named(MAIN)) { create(::providesMainDispatcher) }
+    }

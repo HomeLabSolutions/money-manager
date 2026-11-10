@@ -19,20 +19,20 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.category.ui.vm.CategoryIconGridUiState
 import com.d9tilov.android.category.ui.vm.CategoryIconGridViewModel
 import com.d9tilov.android.category.ui.vm.CategorySharedViewModel
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
+import org.koin.compose.viewmodel.koinViewModel
 
 private const val ICON_GRID_COLUMN_COUNT = 4
 
 @Composable
 fun CategoryIconGridRoute(
     sharedViewModel: CategorySharedViewModel,
-    viewModel: CategoryIconGridViewModel = hiltViewModel(),
+    viewModel: CategoryIconGridViewModel = koinViewModel(),
     onIconClick: (Boolean) -> Unit,
     clickBack: () -> Unit,
 ) {

@@ -5,9 +5,8 @@ import com.d9tilov.android.currency.domain.contract.GeocodeRepo
 import com.d9tilov.android.currency.domain.contract.GeocodingInteractor
 import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.places.domain.model.LocationData
-import javax.inject.Inject
 
-class GeocodingInteractorImpl @Inject constructor(
+class GeocodingInteractorImpl(
     val geocodingRepo: GeocodeRepo,
     val currencyInteractor: CurrencyInteractor,
 ) : GeocodingInteractor {

@@ -1,6 +1,6 @@
 package com.d9tilov.android.network
 
-import com.d9tilov.android.network.di.NetworkModule
+import com.d9tilov.android.network.di.provideJson
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.request.get
@@ -12,7 +12,7 @@ import org.junit.Test
 import timber.log.Timber
 
 class NetworkLoggingTest {
-    private val json = NetworkModule.provideJson()
+    private val json = provideJson()
 
     @Test
     fun `network logging follows the build type and excludes credentials`() =

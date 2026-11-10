@@ -18,7 +18,6 @@ import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
 import com.d9tilov.android.user.domain.contract.UserInteractor
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -28,7 +27,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 sealed class ProfileUiItem {
     data class CurrencyUiItem(
@@ -67,72 +65,69 @@ data class ProfileUiState(
     val showLogoutDialog: Boolean = false,
 )
 
-@HiltViewModel
-class ProfileViewModel
-    @Inject
-    constructor(
-        private val analyticsSender: AnalyticsSender,
-        private val userInfoInteractor: UserInteractor,
-        private val logoutHandler: LogoutHandler,
-        currencyInteractor: CurrencyInteractor,
-        budgetInteractor: BudgetInteractor,
-        regularTransactionInteractor: RegularTransactionInteractor,
-        billingInteractor: BillingInteractor,
-    ) : ViewModel() {
-        private val _showDialog: MutableStateFlow<Boolean> = MutableStateFlow(false)
-        val showDialog: StateFlow<Boolean> = _showDialog.asStateFlow()
-        private val userCurrencyPair =
-            combine(
-                userInfoInteractor.getCurrentUser(),
-                currencyInteractor.getMainCurrencyFlow(),
-            ) { userInfo, currency ->
-                Pair(userInfo, currency)
-            }
-        val profileState: StateFlow<ProfileUiState> =
-            combine(
-                userCurrencyPair,
-                budgetInteractor.get(),
-                regularTransactionInteractor.getAll(TransactionType.INCOME),
-                regularTransactionInteractor.getAll(TransactionType.EXPENSE),
-                billingInteractor.isPremium(),
-            ) { userCurrencyPair, budgetData, regularIncomeList, regularExpenseList, isPremium ->
-                val userInfo = userCurrencyPair.first
-                val currency: CurrencyMetaData = userCurrencyPair.second
-                userInfo?.let { user ->
-                    val photoUri: Uri? = if (user.photoUrl != null) user.photoUrl?.toUri() else null
-                    ProfileUiState(
-                        userProfile = UserUiProfile(photoUri, user.displayedName),
-                        currency = ProfileUiItem.CurrencyUiItem(currency.code),
-                        budgetData = ProfileUiItem.BudgetUiItem(budgetData),
-                        regularIncomes = ProfileUiItem.RegularIncomeUiItem(regularIncomeList),
-                        regularExpenses = ProfileUiItem.RegularExpenseUiItem(regularExpenseList),
-                        settings = ProfileUiItem.Settings(isPremium),
-                    )
-                } ?: ProfileUiState()
-            }.flowOn(Dispatchers.IO)
-                .stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.WhileSubscribed(),
-                    initialValue = ProfileUiState(),
+class ProfileViewModel(
+    private val analyticsSender: AnalyticsSender,
+    private val userInfoInteractor: UserInteractor,
+    private val logoutHandler: LogoutHandler,
+    currencyInteractor: CurrencyInteractor,
+    budgetInteractor: BudgetInteractor,
+    regularTransactionInteractor: RegularTransactionInteractor,
+    billingInteractor: BillingInteractor,
+) : ViewModel() {
+    private val _showDialog: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val showDialog: StateFlow<Boolean> = _showDialog.asStateFlow()
+    private val userCurrencyPair =
+        combine(
+            userInfoInteractor.getCurrentUser(),
+            currencyInteractor.getMainCurrencyFlow(),
+        ) { userInfo, currency ->
+            Pair(userInfo, currency)
+        }
+    val profileState: StateFlow<ProfileUiState> =
+        combine(
+            userCurrencyPair,
+            budgetInteractor.get(),
+            regularTransactionInteractor.getAll(TransactionType.INCOME),
+            regularTransactionInteractor.getAll(TransactionType.EXPENSE),
+            billingInteractor.isPremium(),
+        ) { userCurrencyPair, budgetData, regularIncomeList, regularExpenseList, isPremium ->
+            val userInfo = userCurrencyPair.first
+            val currency: CurrencyMetaData = userCurrencyPair.second
+            userInfo?.let { user ->
+                val photoUri: Uri? = if (user.photoUrl != null) user.photoUrl?.toUri() else null
+                ProfileUiState(
+                    userProfile = UserUiProfile(photoUri, user.displayedName),
+                    currency = ProfileUiItem.CurrencyUiItem(currency.code),
+                    budgetData = ProfileUiItem.BudgetUiItem(budgetData),
+                    regularIncomes = ProfileUiItem.RegularIncomeUiItem(regularIncomeList),
+                    regularExpenses = ProfileUiItem.RegularExpenseUiItem(regularExpenseList),
+                    settings = ProfileUiItem.Settings(isPremium),
                 )
-
-        init {
-            analyticsSender.send(
-                AnalyticsEvent.Internal.Screen,
-                mapOf(AnalyticsParams.Screen.Name to "profile"),
+            } ?: ProfileUiState()
+        }.flowOn(Dispatchers.IO)
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(),
+                initialValue = ProfileUiState(),
             )
-        }
 
-        fun showDialog() {
-            _showDialog.value = true
-        }
-
-        fun dismissDialog() {
-            _showDialog.value = false
-        }
-
-        fun logout() =
-            viewModelScope.launch {
-                logoutHandler.onLogout()
-            }
+    init {
+        analyticsSender.send(
+            AnalyticsEvent.Internal.Screen,
+            mapOf(AnalyticsParams.Screen.Name to "profile"),
+        )
     }
+
+    fun showDialog() {
+        _showDialog.value = true
+    }
+
+    fun dismissDialog() {
+        _showDialog.value = false
+    }
+
+    fun logout() =
+        viewModelScope.launch {
+            logoutHandler.onLogout()
+        }
+}

@@ -2,14 +2,11 @@ package com.d9tilov.android.backup.di
 
 import com.d9tilov.android.backup.domain.contract.BackupInteractor
 import com.d9tilov.android.backup.domain.impl.BackupInteractorImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import org.koin.dsl.bind
+import org.koin.dsl.module
+import org.koin.plugin.module.dsl.factory
 
-@Module
-@InstallIn(SingletonComponent::class)
-interface BackupDomainModule {
-    @Binds
-    fun provideBackupInteractor(impl: BackupInteractorImpl): BackupInteractor
-}
+val backupDomainModule =
+    module {
+        factory<BackupInteractorImpl>() bind BackupInteractor::class
+    }

@@ -42,7 +42,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.budget.ui.BudgetScreen
 import com.d9tilov.android.currency.domain.model.DomainCurrency
@@ -52,12 +51,13 @@ import com.d9tilov.android.designsystem.ProgressIndicator
 import com.d9tilov.moneymanager.R
 import com.d9tilov.moneymanager.home.MainActivity
 import com.d9tilov.moneymanager.prepopulate.PrepopulateScreen.Companion.fromScreenId
+import org.koin.compose.viewmodel.koinViewModel
 
 private const val SHAPE_RADIUS = 10
 private const val FRACTION = 0.5f
 
 @Composable
-fun PrepopulateScreen(prepopulateViewModel: PrepopulateViewModel = hiltViewModel()) {
+fun PrepopulateScreen(prepopulateViewModel: PrepopulateViewModel = koinViewModel()) {
     val uiState: PrepopulateUiState by prepopulateViewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     PrepopulateScreen(

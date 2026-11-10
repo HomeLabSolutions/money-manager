@@ -12,11 +12,9 @@ import com.d9tilov.android.notification.AndroidNotificationData
 import com.d9tilov.android.notification.domain.MoneyManagerNotificationManager
 import com.d9tilov.android.notification.domain.NotificationData
 import com.d9tilov.android.notification.domain.NotificationSender
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
 
-class WeeklyInsightNotificationSender @Inject constructor(
-    @ApplicationContext private val context: Context,
+class WeeklyInsightNotificationSender(
+    private val context: Context,
     private val notificationManager: MoneyManagerNotificationManager<AndroidNotificationData>,
 ) : NotificationSender<WeeklyInsightNotification> {
     override fun send(data: WeeklyInsightNotification) {

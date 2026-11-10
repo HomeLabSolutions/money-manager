@@ -16,9 +16,8 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class CurrencyLocalSource @Inject constructor(
+class CurrencyLocalSource(
     private val preferencesStore: PreferencesStore,
     private val currencyListDao: CurrencyListDao,
     private val mainCurrencyDao: MainCurrencyDao,

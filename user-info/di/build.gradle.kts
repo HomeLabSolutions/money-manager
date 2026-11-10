@@ -1,6 +1,6 @@
 plugins {
+    alias(libs.plugins.koin.compiler)
     id("moneymanager.android.library")
-    id("moneymanager.android.hilt")
 }
 
 android {
@@ -12,4 +12,5 @@ dependencies {
     implementation(project(":user-info:data:impl"))
     implementation(project(":user-info:domain:contract"))
     implementation(project(":user-info:domain:impl"))
+    implementation(libs.koin.core)
 }

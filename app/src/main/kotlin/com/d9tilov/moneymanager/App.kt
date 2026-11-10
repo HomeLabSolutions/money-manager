@@ -13,15 +13,17 @@ import com.d9tilov.android.backup.data.impl.PeriodicBackupWorker
 import com.d9tilov.android.currency.data.impl.sync.initializers.Sync
 import com.d9tilov.android.insights.presentation.worker.WeeklyInsightWorker
 import com.d9tilov.android.transaction.regular.data.impl.worker.RegularTransactionSyncWorker
+import com.d9tilov.moneymanager.di.moneyManagerModule
 import com.google.android.material.color.DynamicColors
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import dagger.hilt.android.HiltAndroidApp
+import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.workmanager.koin.workManagerFactory
+import org.koin.core.context.startKoin
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
-@HiltAndroidApp
 class App :
     Application(),
     SingletonImageLoader.Factory {
@@ -57,6 +59,11 @@ class App :
         FirebaseApp.initializeApp(this)
         FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(!BuildConfig.DEBUG)
         FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled = !BuildConfig.DEBUG
+        startKoin {
+            androidContext(this@App)
+            modules(moneyManagerModule)
+            workManagerFactory()
+        }
         Sync.initialize(this)
         PeriodicBackupWorker.startPeriodicJob(this)
         RegularTransactionSyncWorker.startPeriodicJob(this)

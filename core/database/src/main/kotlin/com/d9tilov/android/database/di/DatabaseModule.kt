@@ -7,24 +7,18 @@ import com.d9tilov.android.core.constants.DataConstants.DATABASE_NAME
 import com.d9tilov.android.database.AppDatabase
 import com.d9tilov.android.database.migration.MIGRATION_1_2
 import com.d9tilov.android.database.migration.MIGRATION_2_3
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import org.koin.dsl.module
+import org.koin.plugin.module.dsl.create
+import org.koin.plugin.module.dsl.single
 
-@Module
-@InstallIn(SingletonComponent::class)
-object DatabaseModule {
-    @Provides
-    @Singleton
-    fun provideDatabase(
-        @ApplicationContext context: Context,
-    ): AppDatabase =
-        Room
-            .databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
-            .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
-            .build()
-}
+fun provideDatabase(context: Context): AppDatabase =
+    Room
+        .databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
+        .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
+        .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+        .build()
+
+val databaseModule =
+    module {
+        single { create(::provideDatabase) }
+    }

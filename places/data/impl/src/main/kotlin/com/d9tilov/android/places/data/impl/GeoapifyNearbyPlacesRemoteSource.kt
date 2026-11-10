@@ -6,9 +6,8 @@ import com.d9tilov.android.places.data.impl.api.GeoapifyApi
 import com.d9tilov.android.places.domain.model.LocationData
 import com.d9tilov.android.places.domain.model.NEARBY_PLACES_RADIUS_METERS
 import java.util.Locale
-import javax.inject.Inject
 
-class GeoapifyNearbyPlacesRemoteSource @Inject constructor(
+class GeoapifyNearbyPlacesRemoteSource(
     private val geoapifyApi: GeoapifyApi,
 ) : NearbyPlacesRemoteSource {
     override suspend fun getNearbyPlaces(location: LocationData): GeoapifyPlacesResponse {

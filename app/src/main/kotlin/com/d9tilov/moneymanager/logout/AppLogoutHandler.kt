@@ -15,10 +15,9 @@ import com.d9tilov.android.user.domain.contract.UserInteractor
 import com.d9tilov.android.widget.domain.contract.SpendingWidgetStateObserver
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
-import javax.inject.Named
+import org.koin.core.annotation.Named
 
-class AppLogoutHandler @Inject constructor(
+class AppLogoutHandler(
     private val application: Application,
     private val notificationManager: MoneyManagerNotificationManager<AndroidNotificationData>,
     private val userInfoInteractor: UserInteractor,

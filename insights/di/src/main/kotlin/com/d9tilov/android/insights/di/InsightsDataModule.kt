@@ -14,32 +14,18 @@ import com.d9tilov.android.insights.data.impl.PreferencesInsightsConsentRepo
 import com.d9tilov.android.insights.domain.contract.InsightLanguageRepo
 import com.d9tilov.android.insights.domain.contract.InsightsConsentRepo
 import com.d9tilov.android.insights.domain.contract.InsightsRepo
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import org.koin.dsl.bind
+import org.koin.dsl.module
+import org.koin.plugin.module.dsl.factory
+import org.koin.plugin.module.dsl.single
 
-@Module
-@InstallIn(SingletonComponent::class)
-interface InsightsDataModule {
-    @Binds
-    fun bindInsightsConsentRepo(impl: PreferencesInsightsConsentRepo): InsightsConsentRepo
-
-    @Binds
-    fun bindInsightLanguageRepo(impl: InsightLanguageDataRepo): InsightLanguageRepo
-
-    @Binds
-    fun bindInsightLanguageSource(impl: InsightLanguageLocalSource): InsightLanguageSource
-
-    @Binds
-    fun bindInsightsRepo(impl: InsightsDataRepo): InsightsRepo
-
-    @Binds
-    fun bindInsightSource(impl: InsightLocalSource): InsightSource
-
-    @Binds
-    fun bindInsightsRemoteSource(impl: FirebaseInsightsRemoteSource): InsightsRemoteSource
-
-    @Binds
-    fun bindInsightsAggregator(impl: DefaultInsightsAggregator): InsightsAggregator
-}
+val insightsDataModule =
+    module {
+        factory<PreferencesInsightsConsentRepo>() bind InsightsConsentRepo::class
+        factory<InsightLanguageDataRepo>() bind InsightLanguageRepo::class
+        factory<InsightLanguageLocalSource>() bind InsightLanguageSource::class
+        single<InsightsDataRepo>() bind InsightsRepo::class
+        factory<InsightLocalSource>() bind InsightSource::class
+        factory<FirebaseInsightsRemoteSource>() bind InsightsRemoteSource::class
+        factory<DefaultInsightsAggregator>() bind InsightsAggregator::class
+    }

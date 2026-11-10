@@ -25,7 +25,6 @@ import com.d9tilov.android.statistics.ui.model.toTransactionType
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
 import com.d9tilov.android.transaction.domain.model.TransactionMinMaxDateModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,8 +37,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
-import javax.inject.Inject
-import javax.inject.Named
+import org.koin.core.annotation.Named
 
 data class StatisticsUiState(
     val periodState: PeriodUiState = PeriodUiState(),
@@ -86,233 +84,231 @@ data class DetailsSpentInPeriodState(
 )
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@HiltViewModel
-class StatisticsViewModel
-    @Inject constructor(
-        analyticsSender: AnalyticsSender,
-        @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
-        private val transactionInteractor: TransactionInteractor,
-        private val currencyInteractor: CurrencyInteractor,
-    ) : ViewModel() {
-        private val _uiState = MutableStateFlow(StatisticsUiState())
-        val uiState = _uiState.asStateFlow()
-        private val updateTrigger = MutableStateFlow(0)
+class StatisticsViewModel(
+    analyticsSender: AnalyticsSender,
+    @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
+    private val transactionInteractor: TransactionInteractor,
+    private val currencyInteractor: CurrencyInteractor,
+) : ViewModel() {
+    private val _uiState = MutableStateFlow(StatisticsUiState())
+    val uiState = _uiState.asStateFlow()
+    private val updateTrigger = MutableStateFlow(0)
 
-        init {
-            analyticsSender.send(
-                AnalyticsEvent.Internal.Screen,
-                mapOf(AnalyticsParams.Screen.Name to "statistics"),
-            )
-            viewModelScope.launch(ioDispatcher) {
-                _uiState.update {
-                    it.copy(
-                        periodState =
-                            it.periodState.copy(
-                                minMaxTransactionDate =
-                                    TransactionMinMaxDateModel(
-                                        minDate = transactionInteractor.getTransactionMinMaxDate().minDate,
-                                        maxDate = currentDateTime().getEndOfDay(),
-                                    ),
-                            ),
-                    )
-                }
-                _uiState.update {
-                    val currency = currencyInteractor.getMainCurrency()
-                    it.copy(
-                        statisticsMenuState =
-                            it.statisticsMenuState.copy(
-                                currency =
-                                    StatisticsMenuCurrencyType.Current(
-                                        currency.code,
-                                    ),
-                            ),
-                        periodState =
-                            it.periodState.copy(
-                                showNextArrow = showNextArrow(it.periodState.selectedPeriod),
-                                showPrevArrow = showPrevArrow(it.periodState.selectedPeriod),
-                            ),
-                        detailsTransactionListState =
-                            it.detailsTransactionListState.copy(
-                                amount =
-                                    it.detailsTransactionListState.amount.copy(
-                                        currencySymbol = currency.symbol,
-                                    ),
-                            ),
-                    )
-                }
-                updateTrigger
-                    .flatMapLatest {
-                        val (periodState: PeriodUiState, statisticsMenuState: StatisticsMenuState) = _uiState.value
+    init {
+        analyticsSender.send(
+            AnalyticsEvent.Internal.Screen,
+            mapOf(AnalyticsParams.Screen.Name to "statistics"),
+        )
+        viewModelScope.launch(ioDispatcher) {
+            _uiState.update {
+                it.copy(
+                    periodState =
+                        it.periodState.copy(
+                            minMaxTransactionDate =
+                                TransactionMinMaxDateModel(
+                                    minDate = transactionInteractor.getTransactionMinMaxDate().minDate,
+                                    maxDate = currentDateTime().getEndOfDay(),
+                                ),
+                        ),
+                )
+            }
+            _uiState.update {
+                val currency = currencyInteractor.getMainCurrency()
+                it.copy(
+                    statisticsMenuState =
+                        it.statisticsMenuState.copy(
+                            currency =
+                                StatisticsMenuCurrencyType.Current(
+                                    currency.code,
+                                ),
+                        ),
+                    periodState =
+                        it.periodState.copy(
+                            showNextArrow = showNextArrow(it.periodState.selectedPeriod),
+                            showPrevArrow = showPrevArrow(it.periodState.selectedPeriod),
+                        ),
+                    detailsTransactionListState =
+                        it.detailsTransactionListState.copy(
+                            amount =
+                                it.detailsTransactionListState.amount.copy(
+                                    currencySymbol = currency.symbol,
+                                ),
+                        ),
+                )
+            }
+            updateTrigger
+                .flatMapLatest {
+                    val (periodState: PeriodUiState, statisticsMenuState: StatisticsMenuState) = _uiState.value
 
-                        val transactionsFlow =
-                            transactionInteractor
-                                .getTransactionsGroupedByCategory(
-                                    statisticsMenuState.transactionType.toTransactionType(),
-                                    periodState.selectedPeriod.from,
-                                    periodState.selectedPeriod.to,
-                                    statisticsMenuState.currency.currencyCode,
-                                    statisticsMenuState.inStatistics == StatisticsMenuInStatisticsType.InStatisticsType,
-                                    false,
-                                ).map { list -> list.sortedByDescending { tr -> tr.sum } }
-
-                        val sumFlow =
-                            transactionInteractor.getSumInPeriod(
+                    val transactionsFlow =
+                        transactionInteractor
+                            .getTransactionsGroupedByCategory(
+                                statisticsMenuState.transactionType.toTransactionType(),
                                 periodState.selectedPeriod.from,
                                 periodState.selectedPeriod.to,
-                                statisticsMenuState.transactionType.toTransactionType(),
                                 statisticsMenuState.currency.currencyCode,
                                 statisticsMenuState.inStatistics == StatisticsMenuInStatisticsType.InStatisticsType,
-                            )
+                                false,
+                            ).map { list -> list.sortedByDescending { tr -> tr.sum } }
 
-                        combine(transactionsFlow, sumFlow) { transactions, sum ->
-                            transactions to sum
-                        }
-                    }.collect { (transactions, sum) ->
-                        _uiState.update {
-                            val currencySymbol =
-                                it.statisticsMenuState.currency.currencyCode
-                                    .getSymbolByCode()
-                            it.copy(
-                                chartState =
-                                    it.chartState.copy(
-                                        pieData =
-                                            transactions.map { item ->
-                                                Pie(
-                                                    label = item.category.name,
-                                                    data = item.sum.toDouble(),
-                                                    color = item.category.color,
-                                                    selectedScale = 1.05f,
-                                                )
-                                            },
-                                    ),
-                                detailsTransactionListState =
-                                    it.detailsTransactionListState.copy(
-                                        transactions = transactions,
-                                        amount =
-                                            it.detailsTransactionListState.amount.copy(
-                                                value = sum.reduceScaleStr(),
-                                                currencySymbol = currencySymbol,
-                                            ),
-                                    ),
-                            )
-                        }
+                    val sumFlow =
+                        transactionInteractor.getSumInPeriod(
+                            periodState.selectedPeriod.from,
+                            periodState.selectedPeriod.to,
+                            statisticsMenuState.transactionType.toTransactionType(),
+                            statisticsMenuState.currency.currencyCode,
+                            statisticsMenuState.inStatistics == StatisticsMenuInStatisticsType.InStatisticsType,
+                        )
+
+                    combine(transactionsFlow, sumFlow) { transactions, sum ->
+                        transactions to sum
                     }
-            }
-        }
-
-        fun updatePeriod(period: StatisticsPeriodModel) {
-            _uiState.update {
-                it.copy(
-                    periodState =
-                        it.periodState.copy(
-                            selectedPeriod = period,
-                            showNextArrow = showNextArrow(period),
-                            showPrevArrow = showPrevArrow(period),
-                        ),
-                )
-            }
-            updateTrigger.update { it + 1 }
-        }
-
-        fun onMenuClick(type: StatisticsMenuType) =
-            viewModelScope.launch {
-                when (type) {
-                    StatisticsMenuType.CURRENCY -> {
-                        updateCurrency()
-                    }
-
-                    StatisticsMenuType.CHART -> {}
-
-                    StatisticsMenuType.TRANSACTION_TYPE -> {
-                        updateTransactionType()
-                    }
-
-                    StatisticsMenuType.STATISTICS -> {
-                        updateInStatistics()
+                }.collect { (transactions, sum) ->
+                    _uiState.update {
+                        val currencySymbol =
+                            it.statisticsMenuState.currency.currencyCode
+                                .getSymbolByCode()
+                        it.copy(
+                            chartState =
+                                it.chartState.copy(
+                                    pieData =
+                                        transactions.map { item ->
+                                            Pie(
+                                                label = item.category.name,
+                                                data = item.sum.toDouble(),
+                                                color = item.category.color,
+                                                selectedScale = 1.05f,
+                                            )
+                                        },
+                                ),
+                            detailsTransactionListState =
+                                it.detailsTransactionListState.copy(
+                                    transactions = transactions,
+                                    amount =
+                                        it.detailsTransactionListState.amount.copy(
+                                            value = sum.reduceScaleStr(),
+                                            currencySymbol = currencySymbol,
+                                        ),
+                                ),
+                        )
                     }
                 }
-                updateTrigger.update { it + 1 }
-            }
-
-        fun onPeriodArrowClicked(isForward: Boolean) {
-            val period = _uiState.value.periodState.selectedPeriod
-            val newPeriod =
-                if (isForward) {
-                    period plus 1
-                } else {
-                    period minus 1
-                }
-            _uiState.update {
-                it.copy(
-                    periodState =
-                        it.periodState.copy(
-                            selectedPeriod = newPeriod,
-                            showNextArrow = showNextArrow(newPeriod),
-                            showPrevArrow = showPrevArrow(newPeriod),
-                        ),
-                )
-            }
-            updateTrigger.update { it + 1 }
-        }
-
-        private fun showNextArrow(period: StatisticsPeriodModel): Boolean =
-            period !is StatisticsPeriodModel.CUSTOM &&
-                period
-                    .to
-                    .date
-                    .plus(1, DateTimeUnit.DAY)
-                    .getEndOfDay() <=
-                _uiState
-                    .value
-                    .periodState
-                    .minMaxTransactionDate
-                    .maxDate
-
-        private fun showPrevArrow(period: StatisticsPeriodModel): Boolean =
-            period !is StatisticsPeriodModel.CUSTOM &&
-                period
-                    .from
-                    .date
-                    .minus(1, DateTimeUnit.DAY)
-                    .getEndOfDay() >=
-                _uiState
-                    .value
-                    .periodState
-                    .minMaxTransactionDate
-                    .minDate
-
-        private suspend fun updateCurrency() {
-            val currency = currencyInteractor.getMainCurrency()
-            val curCurrency = _uiState.value.statisticsMenuState.currency
-            val newCurrency =
-                when (curCurrency) {
-                    is StatisticsMenuCurrencyType.Current -> StatisticsMenuCurrencyType.Default
-                    is StatisticsMenuCurrencyType.Default -> StatisticsMenuCurrencyType.Current(currency.code)
-                }
-            _uiState.update { it.copy(statisticsMenuState = it.statisticsMenuState.copy(currency = newCurrency)) }
-        }
-
-        private fun updateTransactionType() {
-            val currentTransactionType = _uiState.value.statisticsMenuState.transactionType
-            val newTransactionType =
-                when (currentTransactionType) {
-                    StatisticsMenuTransactionType.Expense -> StatisticsMenuTransactionType.Income
-                    StatisticsMenuTransactionType.Income -> StatisticsMenuTransactionType.Expense
-                }
-            _uiState.update {
-                it.copy(statisticsMenuState = it.statisticsMenuState.copy(transactionType = newTransactionType))
-            }
-        }
-
-        private fun updateInStatistics() {
-            val currentInStatistics = _uiState.value.statisticsMenuState.inStatistics
-            val newInStatistics =
-                when (currentInStatistics) {
-                    StatisticsMenuInStatisticsType.InStatisticsType -> StatisticsMenuInStatisticsType.All
-                    StatisticsMenuInStatisticsType.All -> StatisticsMenuInStatisticsType.InStatisticsType
-                }
-            _uiState.update {
-                it.copy(statisticsMenuState = it.statisticsMenuState.copy(inStatistics = newInStatistics))
-            }
         }
     }
+
+    fun updatePeriod(period: StatisticsPeriodModel) {
+        _uiState.update {
+            it.copy(
+                periodState =
+                    it.periodState.copy(
+                        selectedPeriod = period,
+                        showNextArrow = showNextArrow(period),
+                        showPrevArrow = showPrevArrow(period),
+                    ),
+            )
+        }
+        updateTrigger.update { it + 1 }
+    }
+
+    fun onMenuClick(type: StatisticsMenuType) =
+        viewModelScope.launch {
+            when (type) {
+                StatisticsMenuType.CURRENCY -> {
+                    updateCurrency()
+                }
+
+                StatisticsMenuType.CHART -> {}
+
+                StatisticsMenuType.TRANSACTION_TYPE -> {
+                    updateTransactionType()
+                }
+
+                StatisticsMenuType.STATISTICS -> {
+                    updateInStatistics()
+                }
+            }
+            updateTrigger.update { it + 1 }
+        }
+
+    fun onPeriodArrowClicked(isForward: Boolean) {
+        val period = _uiState.value.periodState.selectedPeriod
+        val newPeriod =
+            if (isForward) {
+                period plus 1
+            } else {
+                period minus 1
+            }
+        _uiState.update {
+            it.copy(
+                periodState =
+                    it.periodState.copy(
+                        selectedPeriod = newPeriod,
+                        showNextArrow = showNextArrow(newPeriod),
+                        showPrevArrow = showPrevArrow(newPeriod),
+                    ),
+            )
+        }
+        updateTrigger.update { it + 1 }
+    }
+
+    private fun showNextArrow(period: StatisticsPeriodModel): Boolean =
+        period !is StatisticsPeriodModel.CUSTOM &&
+            period
+                .to
+                .date
+                .plus(1, DateTimeUnit.DAY)
+                .getEndOfDay() <=
+            _uiState
+                .value
+                .periodState
+                .minMaxTransactionDate
+                .maxDate
+
+    private fun showPrevArrow(period: StatisticsPeriodModel): Boolean =
+        period !is StatisticsPeriodModel.CUSTOM &&
+            period
+                .from
+                .date
+                .minus(1, DateTimeUnit.DAY)
+                .getEndOfDay() >=
+            _uiState
+                .value
+                .periodState
+                .minMaxTransactionDate
+                .minDate
+
+    private suspend fun updateCurrency() {
+        val currency = currencyInteractor.getMainCurrency()
+        val curCurrency = _uiState.value.statisticsMenuState.currency
+        val newCurrency =
+            when (curCurrency) {
+                is StatisticsMenuCurrencyType.Current -> StatisticsMenuCurrencyType.Default
+                is StatisticsMenuCurrencyType.Default -> StatisticsMenuCurrencyType.Current(currency.code)
+            }
+        _uiState.update { it.copy(statisticsMenuState = it.statisticsMenuState.copy(currency = newCurrency)) }
+    }
+
+    private fun updateTransactionType() {
+        val currentTransactionType = _uiState.value.statisticsMenuState.transactionType
+        val newTransactionType =
+            when (currentTransactionType) {
+                StatisticsMenuTransactionType.Expense -> StatisticsMenuTransactionType.Income
+                StatisticsMenuTransactionType.Income -> StatisticsMenuTransactionType.Expense
+            }
+        _uiState.update {
+            it.copy(statisticsMenuState = it.statisticsMenuState.copy(transactionType = newTransactionType))
+        }
+    }
+
+    private fun updateInStatistics() {
+        val currentInStatistics = _uiState.value.statisticsMenuState.inStatistics
+        val newInStatistics =
+            when (currentInStatistics) {
+                StatisticsMenuInStatisticsType.InStatisticsType -> StatisticsMenuInStatisticsType.All
+                StatisticsMenuInStatisticsType.All -> StatisticsMenuInStatisticsType.InStatisticsType
+            }
+        _uiState.update {
+            it.copy(statisticsMenuState = it.statisticsMenuState.copy(inStatistics = newInStatistics))
+        }
+    }
+}
