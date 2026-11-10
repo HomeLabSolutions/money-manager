@@ -16,6 +16,6 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.config)
     implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.moshi)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.timber)
 }

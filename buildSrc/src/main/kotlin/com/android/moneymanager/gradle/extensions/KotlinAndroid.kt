@@ -16,8 +16,7 @@ package com.android.moneymanager.gradle.extensions
  * limitations under the License.
  */
 
-import com.android.build.api.dsl.ApplicationExtension
-import com.android.build.api.dsl.LibraryExtension
+import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.extra
@@ -26,65 +25,22 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 /**
- * Configure base Kotlin with Android options for Application
+ * Configure base Kotlin with Android options
  */
-internal fun Project.configureKotlinAndroid(extension: ApplicationExtension) {
+internal fun Project.configureKotlinAndroid(extension: CommonExtension) {
     extension.apply {
         compileSdk = rootProject.extra.get("compileSdkVersion") as Int
 
-        defaultConfig {
-            minSdk = rootProject.extra.get("minSdkVersion") as Int
-        }
+        defaultConfig.minSdk = rootProject.extra.get("minSdkVersion") as Int
 
-        compileOptions {
+        compileOptions.apply {
             isCoreLibraryDesugaringEnabled = true
             sourceCompatibility(buildLibs.versions.java.get())
             targetCompatibility(buildLibs.versions.java.get())
         }
 
-        lint {
-            warningsAsErrors = true
-            abortOnError = true
-            ignoreWarnings = false
-            checkDependencies = true
-            checkAllWarnings = true
-            checkTestSources = true
-            enable += listOf("StopShip", "TypographyQuotes", "UnusedAttribute")
-            disable +=
-                listOf(
-                    "VectorPath",
-                    "NewerVersionAvailable",
-                    "GradleDependency",
-                    "AndroidGradlePluginVersion",
-                )
-        }
-    }
-
-    configureKotlin()
-
-    dependencies {
-        add("coreLibraryDesugaring", buildLibs.java.desugaring.get())
-    }
-}
-
-/**
- * Configure base Kotlin with Android options for Library
- */
-internal fun Project.configureKotlinAndroid(extension: LibraryExtension) {
-    extension.apply {
-        compileSdk = rootProject.extra.get("compileSdkVersion") as Int
-
-        defaultConfig {
-            minSdk = rootProject.extra.get("minSdkVersion") as Int
-        }
-
-        compileOptions {
-            isCoreLibraryDesugaringEnabled = true
-            sourceCompatibility(buildLibs.versions.java.get())
-            targetCompatibility(buildLibs.versions.java.get())
-        }
-
-        lint {
+        lint.apply {
+            lintConfig = rootProject.file("config/lint/lint.xml")
             warningsAsErrors = true
             abortOnError = true
             ignoreWarnings = false

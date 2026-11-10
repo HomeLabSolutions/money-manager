@@ -2,13 +2,15 @@ package com.d9tilov.android.currency.di
 
 import com.d9tilov.android.currency.data.impl.api.CurrencyApi
 import com.d9tilov.android.currency.data.impl.api.GeocodeApi
+import com.d9tilov.android.currency.data.impl.api.KtorCurrencyApi
+import com.d9tilov.android.currency.data.impl.api.KtorGeocodeApi
 import com.d9tilov.android.network.di.qualifier.CurrencyNetworkApi
 import com.d9tilov.android.network.di.qualifier.GeoNetworkApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import retrofit2.Retrofit
+import io.ktor.client.HttpClient
 import javax.inject.Singleton
 
 @Module
@@ -17,12 +19,12 @@ object CurrencyApiModule {
     @Provides
     @Singleton
     fun provideCurrencyApi(
-        @CurrencyNetworkApi retrofit: Retrofit,
-    ): CurrencyApi = retrofit.create(CurrencyApi::class.java)
+        @CurrencyNetworkApi client: HttpClient,
+    ): CurrencyApi = KtorCurrencyApi(client)
 
     @Provides
     @Singleton
     fun provideGeoApi(
-        @GeoNetworkApi retrofit: Retrofit,
-    ): GeocodeApi = retrofit.create(GeocodeApi::class.java)
+        @GeoNetworkApi client: HttpClient,
+    ): GeocodeApi = KtorGeocodeApi(client)
 }

@@ -16,5 +16,5 @@ dependencies {
     implementation(project(":currency:observer:contract"))
 
     implementation(project(":currency:observer:impl"))
-    implementation(libs.retrofit)
+    implementation(libs.ktor.client.core)
 }

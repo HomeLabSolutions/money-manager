@@ -187,9 +187,7 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.material)
     implementation(libs.navigation.compose)
-    implementation(libs.okhttp)
     implementation(libs.play.services.location)
-    implementation(libs.retrofit)
     implementation(libs.timber)
 
     runtimeOnly(libs.androidx.credentials.play.services.auth)
