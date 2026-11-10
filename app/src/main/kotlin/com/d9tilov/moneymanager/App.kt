@@ -1,7 +1,14 @@
 package com.d9tilov.moneymanager
 
 import android.app.Application
+import android.content.Context
 import android.os.StrictMode
+import coil3.ImageLoader
+import coil3.SingletonImageLoader
+import coil3.annotation.ExperimentalCoilApi
+import coil3.network.cachecontrol.CacheControlCacheStrategy
+import coil3.network.okhttp.OkHttpNetworkFetcherFactory
+import coil3.request.crossfade
 import com.d9tilov.android.backup.data.impl.PeriodicBackupWorker
 import com.d9tilov.android.currency.data.impl.sync.initializers.Sync
 import com.d9tilov.android.insights.presentation.worker.WeeklyInsightWorker
@@ -15,7 +22,18 @@ import timber.log.Timber
 import timber.log.Timber.DebugTree
 
 @HiltAndroidApp
-class App : Application() {
+class App :
+    Application(),
+    SingletonImageLoader.Factory {
+    @OptIn(ExperimentalCoilApi::class)
+    override fun newImageLoader(context: Context): ImageLoader =
+        ImageLoader
+            .Builder(context)
+            .crossfade(true)
+            .components {
+                add(OkHttpNetworkFetcherFactory(cacheStrategy = { CacheControlCacheStrategy() }))
+            }.build()
+
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.DEBUG) {
