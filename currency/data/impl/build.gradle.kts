@@ -52,7 +52,14 @@ dependencies {
     implementation(libs.hilt.common)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.datetime)
-    implementation(libs.retrofit)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.http)
     implementation(libs.startup)
     implementation(libs.timber)
+
+    testImplementation(project(":core:network"))
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.kotlinx.serialization.json)
+    testImplementation(libs.ktor.client.mock)
 }

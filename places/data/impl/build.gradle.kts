@@ -32,8 +32,12 @@ dependencies {
     implementation(project(":places:domain:contract"))
     implementation(project(":places:domain:model"))
     implementation(libs.javax.inject)
-    implementation(libs.retrofit)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.http)
 
+    testImplementation(project(":core:network"))
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.kotlinx.serialization.json)
+    testImplementation(libs.ktor.client.mock)
 }

@@ -12,10 +12,10 @@ import com.d9tilov.android.currency.domain.model.Currency
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.remoteconfig.remoteConfig
-import com.squareup.moshi.Moshi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.json.Json
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -23,6 +23,7 @@ class BillingDataRepo
     @Inject
     constructor(
         private val billingSource: BillingSource,
+        private val json: Json,
     ) : BillingRepo {
         private val currentPurchases: Flow<List<Purchase>> = billingSource.purchases
         override val billingConnectionReady: Flow<Boolean> = billingSource.billingConnectionReady
@@ -50,8 +51,7 @@ class BillingDataRepo
             Firebase.remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val config = Firebase.remoteConfig.getValue("premium_list").asString()
-                    val jsonAdapter = Moshi.Builder().build().adapter(PremiumEmails::class.java)
-                    runCatching { jsonAdapter.fromJson(config) }
+                    runCatching { json.decodeFromString<PremiumEmails?>(config) }
                         .onSuccess { premiumEmailList.value = it?.emails.orEmpty() }
                         .onFailure { error -> Timber.e(error, "Unable to parse premium email list") }
                 }

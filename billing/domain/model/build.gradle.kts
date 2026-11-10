@@ -1,13 +1,12 @@
-import com.android.moneymanager.gradle.extensions.ksp
-
 plugins {
-    id("com.google.devtools.ksp")
     id("moneymanager.android.library.kotlin")
+    alias(libs.plugins.serialization)
 }
+
 dependencies {
     implementation(project(":currency:domain:model"))
+    implementation(libs.kotlinx.serialization.core)
 
-    implementation(libs.moshi)
-
-    ksp(libs.moshi.kotlin.codegen)
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.serialization.json)
 }

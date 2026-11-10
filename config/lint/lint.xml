@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lint>
+    <!-- Ktor's optional IntelliJ debugger detector catches missing JVM management APIs
+         and returns false on Android. Match that class only; retain all other package checks.
+         https://github.com/ktorio/ktor/blob/3.6.1/ktor-utils/jvm/src/io/ktor/util/debug/IntellijIdeaDebugDetectorJvm.kt -->
+    <issue id="InvalidPackage">
+        <ignore regexp="io\.ktor\.util\.debug\.IntellijIdeaDebugDetector" />
+    </issue>
+</lint>

@@ -1,8 +1,8 @@
 package com.d9tilov.android.billing.domain.model
 
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.Serializable
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class PremiumEmails(
     val emails: List<String>,
 )
