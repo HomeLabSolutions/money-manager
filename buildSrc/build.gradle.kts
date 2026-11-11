@@ -16,7 +16,9 @@ buildscript {
 dependencies {
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
     implementation(libs.android.gradle.plugin)
+    implementation(libs.androidx.baselineprofile.gradle.plugin)
     implementation(libs.detekt)
+    implementation(libs.google.services)
     implementation(libs.java.poet)
     implementation(libs.kotlin.gradle.plugin)
     implementation(libs.kotlin.metadata.jvm)
@@ -40,6 +42,11 @@ gradlePlugin {
         register("androidApplicationCompose") {
             id = "moneymanager.android.application.compose"
             implementationClass = "com.android.moneymanager.gradle.plugins.AndroidApplicationComposeConventionPlugin"
+        }
+        register("androidApplicationBaselineProfile") {
+            id = "moneymanager.android.application.baseline-profile"
+            implementationClass =
+                "com.android.moneymanager.gradle.plugins.AndroidApplicationBaselineProfileConventionPlugin"
         }
         register("androidApplicationStartupBenchmark") {
             id = "moneymanager.android.application.startup-benchmark"

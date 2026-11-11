@@ -58,7 +58,8 @@ def markdown(result):
     status = "PASS" if result["passed"] else "FAIL"
     return (
         f"## Startup regression: {status}\n\n"
-        "Cold process start to initial display (TTID), fully compiled non-debuggable R8 APKs. "
+        "Cold process start to initial display (TTID), non-debuggable R8 APKs with "
+        "Partial compilation and required Baseline Profiles. "
         "Signed-out fixture, network disabled; both APKs measured on the same device.\n\n"
         "| Version | Median, ms | Samples |\n|---|---:|---:|\n"
         f"| Previous | {baseline['medianMs']:.3f} | {baseline['sampleCount']} |\n"

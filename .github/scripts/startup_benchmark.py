@@ -14,6 +14,8 @@ import tarfile
 
 from compare_startup_benchmark import MAX_REGRESSION, METRIC, compare, markdown, summarize
 from prepare_startup_benchmark import PACKAGE, prepare
+from startup_baseline import PROTOCOL, positive_milliseconds
+from baseline_profile_artifact import apply_profile_artifact
 
 ROOT = Path(__file__).resolve().parents[2]
 TEST_PACKAGE = "com.d9tilov.moneymanager.startup"
@@ -74,16 +76,27 @@ def build_apks(checkout, output, label):
     shutil.copy2(tests[0], output / "startup-test.apk")
 
 
+def prepare_profiles(artifact, checkout, output, label, source_sha):
+    if artifact is None:
+        return None
+    metadata = apply_profile_artifact(
+        artifact, checkout / "app/src/main/generated/baselineProfiles", source_sha,
+    )
+    shutil.copytree(artifact, output / f"{label}-profile")
+    return metadata
+
+
 def build_candidate(args):
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
     candidate_sha = resolve(args.repository, args.candidate_ref)
     checkout = output / "sources/candidate"
     archive(args.repository, candidate_sha, checkout)
+    profile = prepare_profiles(args.profile_directory, checkout, output, "candidate", candidate_sha)
     build_apks(checkout, output, "candidate")
-    info = {"schemaVersion": 1, "candidateSha": candidate_sha,
+    info = {"schemaVersion": 2, "candidateSha": candidate_sha, "protocol": PROTOCOL,
             "candidateApkSha256": sha256(output / "candidate.apk"),
-            "testApkSha256": sha256(output / "startup-test.apk")}
+            "testApkSha256": sha256(output / "startup-test.apk"), "baselineProfile": profile}
     (output / "build-info.json").write_text(json.dumps(info, indent=2) + "\n")
     print(json.dumps(info, indent=2), flush=True)
 
@@ -92,10 +105,10 @@ def measure_candidate(args):
     output = args.output.resolve()
     if args.rounds < 2 or args.iterations < 10:
         raise ValueError("Use at least two rounds and ten iterations per round")
-    baseline_ms = float(args.baseline_ms)
-    if baseline_ms <= 0:
-        raise ValueError("The stored startup baseline must be positive")
+    baseline_ms = positive_milliseconds(args.baseline_ms)
     info = json.loads((output / "build-info.json").read_text())
+    if info.get("protocol") != PROTOCOL:
+        raise ValueError("Startup harness protocol changed; rebuild the benchmark APKs")
     for filename, key in [("candidate.apk", "candidateApkSha256"),
                           ("startup-test.apk", "testApkSha256")]:
         if sha256(output / filename) != info[key]:
@@ -163,11 +176,12 @@ def measure_candidate(args):
             "maxRegressionPercent": float(MAX_REGRESSION), "regressionPercent": float(regression),
             "baseline": {"medianMs": baseline_ms}, "candidate": candidate,
             "candidateSha": info["candidateSha"], "environment": environment,
-            "protocol": {"startupMode": "COLD", "compilationMode": "Full",
+            "protocol": {**PROTOCOL,
                          "rounds": args.rounds, "iterationsPerRound": args.iterations},
         }
         (output / "comparison.json").write_text(json.dumps(result, indent=2) + "\n")
         summary = (f"## Startup regression: {'PASS' if passed else 'FAIL'}\\n\\n"
+                   "Signed-out cold startup, Partial compilation with required Baseline Profile.\\n\\n"
                    f"Previous published median: **{baseline_ms:.3f} ms**\\n\\n"
                    f"Candidate median: **{candidate['medianMs']:.3f} ms**\\n\\n"
                    f"Change: **{float(regression):+.2f}%**; maximum allowed: **5%**.\\n")
@@ -175,11 +189,14 @@ def measure_candidate(args):
         print(summary.replace("\\n", "\n"), flush=True)
         if args.publish_baseline and passed:
             (output / "published-baseline").mkdir()
-            record = {"schemaVersion": 1, "sourceSha": info["candidateSha"],
+            record = {"schemaVersion": 2, "sourceSha": info["candidateSha"],
                       "packageName": PACKAGE, "metric": METRIC,
-                      "medianMs": candidate["medianMs"], "environment": environment}
+                      "medianMs": candidate["medianMs"], "environment": environment,
+                      "protocol": result["protocol"], "baselineProfile": info.get("baselineProfile")}
             (output / "published-baseline/measurement.json").write_text(
                 json.dumps(record, indent=2) + "\n")
+            if info.get("baselineProfile"):
+                shutil.copytree(output / "candidate-profile", output / "published-baseline/profiles")
         if not passed:
             raise ValueError("Startup median regressed by more than 5%")
     finally:
@@ -225,7 +242,7 @@ def build(args):
     output.mkdir(parents=True, exist_ok=True)
     baseline_sha = resolve(args.repository, args.baseline_ref)
     candidate_sha = resolve(args.repository, args.candidate_ref)
-    reference = cached_baseline(baseline_sha, output)
+    reference = None if args.baseline_profile_directory else cached_baseline(baseline_sha, output)
     if args.baseline_apk:
         shutil.copy2(args.baseline_apk, output / "baseline.apk")
         reference = None
@@ -234,16 +251,20 @@ def build(args):
     else:
         checkout = output / "sources/baseline"
         archive(args.repository, baseline_sha, checkout)
+        prepare_profiles(args.baseline_profile_directory, checkout, output, "baseline", baseline_sha)
         build_apks(checkout, output, "baseline")
     checkout = output / "sources/candidate"
     archive(args.repository, candidate_sha, checkout)
+    profile = prepare_profiles(args.profile_directory, checkout, output, "candidate", candidate_sha)
     build_apks(checkout, output, "candidate")
     metadata = {
-        "schemaVersion": 1, "baselineSha": baseline_sha, "candidateSha": candidate_sha,
+        "schemaVersion": 2, "baselineSha": baseline_sha, "candidateSha": candidate_sha,
+        "protocol": PROTOCOL,
         "baselineApkSha256": sha256(output / "baseline.apk"),
         "candidateApkSha256": sha256(output / "candidate.apk"),
         "testApkSha256": sha256(output / "startup-test.apk"),
         "previousMeasurement": reference[1] if reference else None,
+        "baselineProfile": profile,
     }
     (output / "build-info.json").write_text(json.dumps(metadata, indent=2) + "\n")
     print(json.dumps(metadata, indent=2), flush=True)
@@ -254,6 +275,8 @@ def measure(args):
     if args.rounds < 2 or args.iterations < 10:
         raise ValueError("Use at least two rounds and ten iterations per round")
     metadata = json.loads((output / "build-info.json").read_text())
+    if metadata.get("protocol") != PROTOCOL:
+        raise ValueError("Startup harness protocol changed; rebuild the benchmark APKs")
     for label in ["baseline", "candidate"]:
         if sha256(output / f"{label}.apk") != metadata[f"{label}ApkSha256"]:
             raise ValueError(f"{label} APK changed after the build")
@@ -268,8 +291,8 @@ def measure(args):
         "fingerprint": "ro.build.fingerprint", "api": "ro.build.version.sdk",
         "abi": "ro.product.cpu.abi", "model": "ro.product.model",
     }.items()}
-    if int(environment["api"]) < 34:
-        raise ValueError("API 34+ is required to preserve fixture state across compilation resets")
+    if int(environment["api"]) < 29:
+        raise ValueError("API 29+ is required for the signed-out startup benchmark")
     wifi = shell("settings", "get", "global", "wifi_on")
     mobile = shell("settings", "get", "global", "mobile_data")
     reports = {"baseline": [], "candidate": []}
@@ -323,7 +346,7 @@ def measure(args):
         result.update(metadata)
         result["environment"] = environment
         result["protocol"] = {
-            "startupMode": "COLD", "compilationMode": "Full", "rounds": args.rounds,
+            **PROTOCOL, "rounds": args.rounds,
             "iterationsPerRound": args.iterations, "killProcessDelayMillis": 1000,
         }
         (output / "comparison.json").write_text(json.dumps(result, indent=2) + "\n")
@@ -333,12 +356,16 @@ def measure(args):
             baseline.mkdir()
             shutil.copy2(output / "candidate.apk", baseline / "app-benchmark.apk")
             record = {
-                "schemaVersion": 1, "sourceSha": metadata["candidateSha"],
+                "schemaVersion": 2, "sourceSha": metadata["candidateSha"],
                 "packageName": PACKAGE,
                 "apkSha256": metadata["candidateApkSha256"], "metric": result["metric"],
                 "medianMs": result["candidate"]["medianMs"], "environment": environment,
+                "protocol": result["protocol"],
+                "baselineProfile": metadata.get("baselineProfile"),
             }
             (baseline / "measurement.json").write_text(json.dumps(record, indent=2) + "\n")
+            if metadata.get("baselineProfile"):
+                shutil.copytree(output / "candidate-profile", baseline / "profiles")
         print(markdown(result), flush=True)
         if not result["passed"]:
             raise ValueError("Startup median regressed by more than 5%")
@@ -359,6 +386,7 @@ def main():
     candidate_builder.add_argument("--repository", type=Path, default=ROOT)
     candidate_builder.add_argument("--candidate-ref", required=True)
     candidate_builder.add_argument("--output", type=Path, required=True)
+    candidate_builder.add_argument("--profile-directory", type=Path)
     candidate_runner = commands.add_parser("measure-candidate")
     candidate_runner.add_argument("--device", required=True)
     candidate_runner.add_argument("--output", required=True, type=Path)
@@ -373,6 +401,8 @@ def main():
     builder.add_argument("--baseline-ref", required=True)
     builder.add_argument("--candidate-ref", required=True)
     builder.add_argument("--baseline-apk", type=Path)
+    builder.add_argument("--profile-directory", type=Path)
+    builder.add_argument("--baseline-profile-directory", type=Path)
     builder.add_argument("--output", type=Path, required=True)
     runner = commands.add_parser("measure")
     runner.add_argument("--device", required=True)

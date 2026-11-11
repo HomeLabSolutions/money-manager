@@ -1,4 +1,3 @@
-import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
@@ -21,11 +20,14 @@ secrets {
 
 val keystorePropertiesFile: File = rootProject.file("keystore.properties")
 val releaseKeystorePath = providers.environmentVariable("ANDROID_KEYSTORE_PATH").orNull
+val releaseBuildTypeName = "release"
+val debugBuildTypeName = "debug"
+val appNamePlaceholder = "appName"
 
 android {
 
     signingConfigs {
-        create("release") {
+        create(releaseBuildTypeName) {
             if (!releaseKeystorePath.isNullOrBlank()) {
                 storeFile = file(releaseKeystorePath)
                 storePassword = providers.environmentVariable("ANDROID_KEYSTORE_PASSWORD").get()
@@ -33,7 +35,7 @@ android {
                 keyPassword = providers.environmentVariable("ANDROID_KEY_PASSWORD").get()
             } else if (keystorePropertiesFile.exists()) {
                 val keystoreProperties = Properties()
-                keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+                keystorePropertiesFile.inputStream().use { keystoreProperties.load(it) }
                 keyAlias = keystoreProperties["keyAlias"] as String
                 keyPassword = keystoreProperties["keyPassword"] as String
                 storeFile = file(keystoreProperties["storeFile"]!!)
@@ -44,7 +46,7 @@ android {
                 )
             }
         }
-        getByName("debug") {
+        getByName(debugBuildTypeName) {
             storeFile = file("debug.keystore")
             storePassword = "android"
             keyAlias = "androiddebugkey"
@@ -88,21 +90,21 @@ android {
             isShrinkResources = true
             isDebuggable = false
             if (!releaseKeystorePath.isNullOrBlank() || keystorePropertiesFile.exists()) {
-                signingConfig = signingConfigs.getByName("release")
+                signingConfig = signingConfigs.getByName(releaseBuildTypeName)
             }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            manifestPlaceholders["appName"] = "Money Manager"
+            manifestPlaceholders[appNamePlaceholder] = "Money Manager"
         }
         debug {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
             isMinifyEnabled = false
             isDebuggable = true
-            manifestPlaceholders["appName"] = "Money Manager debug"
-            signingConfig = signingConfigs.getByName("debug")
+            manifestPlaceholders[appNamePlaceholder] = "Money Manager debug"
+            signingConfig = signingConfigs.getByName(debugBuildTypeName)
         }
     }
 
@@ -162,6 +164,7 @@ dependencies {
     implementation(project(":widget:domain:contract"))
     implementation(project(":widget:ui"))
     implementation(libs.activity)
+    implementation(libs.activity.compose)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material3.window.size)
@@ -191,6 +194,7 @@ dependencies {
     implementation(libs.timber)
 
     runtimeOnly(libs.androidx.credentials.play.services.auth)
+    runtimeOnly(libs.profileinstaller)
 
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk.core)
@@ -200,6 +204,8 @@ dependencies {
     androidTestImplementation(libs.androidx.work.testing)
     androidTestImplementation(libs.kotlinx.coroutines.test)
 }
+
+apply(plugin = "moneymanager.android.application.baseline-profile")
 
 if (providers.gradleProperty("startupBenchmark").orNull == "true") {
     apply(plugin = "moneymanager.android.application.startup-benchmark")

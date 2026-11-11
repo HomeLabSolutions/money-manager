@@ -49,6 +49,7 @@ tasks.named("clean", Delete::class) {
 
 plugins {
     base
+    alias(libs.plugins.androidx.baselineprofile) apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.deps.sorting)
     alias(libs.plugins.deps.unused) apply true

@@ -3,6 +3,7 @@ package com.d9tilov.android.incomeexpense.ui
 import android.view.HapticFeedbackConstants
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
@@ -52,6 +53,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -67,6 +69,7 @@ import com.d9tilov.android.core.constants.CurrencyConstants.ZERO
 import com.d9tilov.android.core.utils.KeyPress
 import com.d9tilov.android.designsystem.MoneyManagerIcons
 import com.d9tilov.android.incomeexpense.ui.vm.EditMode
+import com.d9tilov.android.incomeexpense.ui.vm.IncomeExpenseScreenState
 import com.d9tilov.android.incomeexpense.ui.vm.IncomeExpenseUiState
 import com.d9tilov.android.incomeexpense.ui.vm.IncomeExpenseViewModel
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType
@@ -86,8 +89,8 @@ fun IncomeExpenseRoute(
     onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
 ) {
     val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
+    ReportDrawnWhen { uiState is IncomeExpenseScreenState.Ready }
     val context = LocalContext.current
-    val view = LocalView.current
     LaunchedEffect(Unit) {
         viewModel.errorMessageFlow
             .collect { message ->
@@ -96,6 +99,30 @@ fun IncomeExpenseRoute(
                     .show()
             }
     }
+    when (val state = uiState) {
+        IncomeExpenseScreenState.Loading -> {}
+
+        is IncomeExpenseScreenState.Ready -> {
+            IncomeExpenseContent(
+                uiState = state.uiState,
+                viewModel = viewModel,
+                onTransactionClicked = onTransactionClicked,
+                onCurrencyClicked = onCurrencyClicked,
+                onAllCategoryClicked = onAllCategoryClicked,
+            )
+        }
+    }
+}
+
+@Composable
+private fun IncomeExpenseContent(
+    uiState: IncomeExpenseUiState,
+    viewModel: IncomeExpenseViewModel,
+    onTransactionClicked: (TransactionUiModel) -> Unit,
+    onCurrencyClicked: (String) -> Unit,
+    onAllCategoryClicked: (ScreenType, CategoryDestination) -> Unit,
+) {
+    val view = LocalView.current
     IncomeExpenseScreen(
         uiState = uiState,
         onTransactionClicked = onTransactionClicked,
@@ -144,6 +171,7 @@ fun IncomeExpenseScreen(
             INCOME -> incomeListState
         }
     Scaffold(
+        modifier = Modifier.testTag("IncomeExpenseReady"),
         floatingActionButton = {
             if (uiState.mode == EditMode.LIST) {
                 AnimatedFloatingActionButton(
