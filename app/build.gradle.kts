@@ -200,3 +200,7 @@ dependencies {
     androidTestImplementation(libs.androidx.work.testing)
     androidTestImplementation(libs.kotlinx.coroutines.test)
 }
+
+if (providers.gradleProperty("startupBenchmark").orNull == "true") {
+    apply(from = rootProject.file("benchmark/target.gradle.kts"))
+}

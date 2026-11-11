@@ -51,7 +51,7 @@ class WaitForPrCiTest(unittest.TestCase):
     @patch("wait_for_pr_ci.run_status", return_value=status(conclusion="action_required"))
     def test_approval_wait_has_a_deadline(self, _, __, ___):
         with self.assertRaisesRegex(ValueError, "Timed out"):
-            wait_for_ci(123, "expected")
+            wait_for_ci(123, "expected", timeout=1500)
 
 
 if __name__ == "__main__":

@@ -6,6 +6,8 @@
 **/build/
 /captures
 /app/release
+/app/src/benchmark/google-services.json
+__pycache__/
 .externalNativeBuild
 .cxx
 .kotlin

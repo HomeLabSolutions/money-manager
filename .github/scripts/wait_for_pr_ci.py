@@ -14,7 +14,7 @@ def run_status(run_id):
     return json.loads(result.stdout)
 
 
-def wait_for_ci(run_id, source_sha, timeout=1500, interval=30):
+def wait_for_ci(run_id, source_sha, timeout=3300, interval=30):
     deadline = time.monotonic() + timeout
     previous = None
     while time.monotonic() < deadline:

@@ -2,13 +2,26 @@ name: Android CI
 
 on:
   workflow_dispatch:
+    inputs:
+      startup_baseline_ref:
+        description: Optional previous application ref for startup comparison
+        type: string
+      startup_candidate_ref:
+        description: Optional candidate application ref for startup comparison
+        type: string
   push:
     branches: [ "develop" ]
   pull_request:
     branches: [ "develop" ]
+  merge_group:
+
+permissions:
+  contents: read
+  actions: read
 
 jobs:
-  build:
+  verify:
+    name: Android checks
 
     runs-on: ubuntu-latest
 
@@ -60,3 +73,23 @@ jobs:
       run: npm ci --prefix functions
     - name: Test Firebase Function
       run: npm test --prefix functions
+
+  startup:
+    uses: ./.github/workflows/startup-benchmark.yml
+    with:
+      baseline_ref: ${{ inputs.startup_baseline_ref || github.event.pull_request.base.sha || github.event.merge_group.base_sha || github.event.before || 'develop^' }}
+      candidate_ref: ${{ inputs.startup_candidate_ref || github.sha }}
+      publish_baseline: ${{ github.event_name == 'push' && github.ref == 'refs/heads/develop' }}
+
+  build:
+    name: ${{ github.event_name == 'workflow_dispatch' && 'Manual checks' || 'build' }}
+    if: always()
+    needs: [verify, startup]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Require Android checks and the startup performance gate
+        env:
+          ANDROID_RESULT: ${{ needs.verify.result }}
+          STARTUP_RESULT: ${{ needs.startup.result }}
+        run: |
+          [[ "$ANDROID_RESULT" == "success" && "$STARTUP_RESULT" == "success" ]]
