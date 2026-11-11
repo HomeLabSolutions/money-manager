@@ -49,7 +49,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.core.content.ContextCompat
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -67,6 +66,7 @@ import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
 import com.d9tilov.android.designsystem.OutlineCircle
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.coroutines.launch
 
 private const val SELECTED_CATEGORY_SCALE = 1.5f
@@ -74,7 +74,7 @@ private const val SELECTED_CATEGORY_SCALE = 1.5f
 @Composable
 fun CategoryCreationRoute(
     sharedViewModel: CategorySharedViewModel,
-    viewModel: CategoryCreationViewModel = hiltViewModel(),
+    viewModel: CategoryCreationViewModel = metroViewModel(),
     openCategoryGroupIconList: () -> Unit,
     openCategoryIconGrid: () -> Unit,
     clickBack: () -> Unit,

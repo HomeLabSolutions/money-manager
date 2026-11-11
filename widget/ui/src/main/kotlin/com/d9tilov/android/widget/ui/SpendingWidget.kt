@@ -44,7 +44,6 @@ import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.designsystem.theme.MoneyManagerColorScheme
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
 import com.d9tilov.android.widget.domain.model.SpendingWidgetState
-import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.flow.first
 import java.math.BigDecimal
 import kotlin.math.ceil
@@ -65,8 +64,7 @@ class SpendingWidget : GlanceAppWidget() {
         id: GlanceId,
     ) {
         val state =
-            EntryPointAccessors
-                .fromApplication<SpendingWidgetEntryPoint>(context)
+            (context.applicationContext as SpendingWidgetEntryPoint)
                 .spendingWidgetInteractor()
                 .observe()
         val initialState = state.first()

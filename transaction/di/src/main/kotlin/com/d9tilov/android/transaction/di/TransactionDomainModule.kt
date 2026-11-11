@@ -4,17 +4,15 @@ import com.d9tilov.android.transaction.domain.contract.ObserveSpendingSummaryUse
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.impl.ObserveSpendingSummaryUseCaseImpl
 import com.d9tilov.android.transaction.domain.impl.TransactionInteractorImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
 interface TransactionDomainModule {
     @Binds
-    fun provideObserveSpendingSummaryUseCase(impl: ObserveSpendingSummaryUseCaseImpl): ObserveSpendingSummaryUseCase
+    val ObserveSpendingSummaryUseCaseImpl.provideObserveSpendingSummaryUseCase: ObserveSpendingSummaryUseCase
 
     @Binds
-    fun provideTransactionInteractor(impl: TransactionInteractorImpl): TransactionInteractor
+    val TransactionInteractorImpl.provideTransactionInteractor: TransactionInteractor
 }

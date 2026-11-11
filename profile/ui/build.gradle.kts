@@ -1,7 +1,7 @@
 plugins {
     id("moneymanager.android.library")
-    id("moneymanager.android.hilt")
     id("moneymanager.android.library.compose")
+    id("moneymanager.di")
 }
 
 android {
@@ -36,9 +36,9 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.ui.auth)
-    implementation(libs.hilt.android)
-    implementation(libs.hilt.lifecycle.viewmodel.compose)
     implementation(libs.kotlinx.datetime)
+    implementation(libs.metro.viewmodel)
+    implementation(libs.metro.viewmodel.compose)
     implementation(libs.navigation.compose)
     implementation(libs.navigation.runtime)
 }

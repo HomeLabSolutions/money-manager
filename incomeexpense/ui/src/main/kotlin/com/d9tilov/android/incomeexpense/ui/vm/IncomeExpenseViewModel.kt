@@ -38,7 +38,12 @@ import com.d9tilov.android.transaction.ui.model.BaseTransaction
 import com.d9tilov.android.transaction.ui.model.TransactionUiHeader
 import com.d9tilov.android.transaction.ui.model.TransactionUiModel
 import com.d9tilov.android.transaction.ui.model.toUiModel
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Named
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -64,8 +69,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.math.BigDecimal
-import javax.inject.Inject
-import javax.inject.Named
 
 sealed interface IncomeExpenseScreenState {
     data object Loading : IncomeExpenseScreenState
@@ -153,342 +156,340 @@ enum class EditMode {
     LIST,
 }
 
-@HiltViewModel
-class IncomeExpenseViewModel
-    @Inject
-    constructor(
-        billingInteractor: BillingInteractor,
-        private val analyticsSender: AnalyticsSender,
-        @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
-        private val currencyInteractor: CurrencyInteractor,
-        private val categoryInteractor: CategoryInteractor,
-        private val transactionInteractor: TransactionInteractor,
-        private val observeSpendingSummary: ObserveSpendingSummaryUseCase,
-        private val locationProvider: LocationProvider,
-    ) : ViewModel() {
-        private val uiState = MutableStateFlow(IncomeExpenseUiState.EMPTY)
-        private val mainCurrency = MutableStateFlow(CurrencyMetaData.EMPTY)
-        val uiStateFlow: StateFlow<IncomeExpenseScreenState> =
-            observeContent()
-                .map<IncomeExpenseUiState, IncomeExpenseScreenState> { IncomeExpenseScreenState.Ready(it) }
-                .flowOn(ioDispatcher)
-                .stateIn(viewModelScope, SharingStarted.Eagerly, IncomeExpenseScreenState.Loading)
-        private val errorMessage = MutableSharedFlow<Int>()
-        val errorMessageFlow = errorMessage.asSharedFlow()
+@ViewModelKey
+@ContributesIntoMap(AppScope::class, binding<ViewModel>())
+@Inject
+class IncomeExpenseViewModel(
+    billingInteractor: BillingInteractor,
+    private val analyticsSender: AnalyticsSender,
+    @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
+    private val currencyInteractor: CurrencyInteractor,
+    private val categoryInteractor: CategoryInteractor,
+    private val transactionInteractor: TransactionInteractor,
+    private val observeSpendingSummary: ObserveSpendingSummaryUseCase,
+    private val locationProvider: LocationProvider,
+) : ViewModel() {
+    private val uiState = MutableStateFlow(IncomeExpenseUiState.EMPTY)
+    private val mainCurrency = MutableStateFlow(CurrencyMetaData.EMPTY)
+    val uiStateFlow: StateFlow<IncomeExpenseScreenState> =
+        observeContent()
+            .map<IncomeExpenseUiState, IncomeExpenseScreenState> { IncomeExpenseScreenState.Ready(it) }
+            .flowOn(ioDispatcher)
+            .stateIn(viewModelScope, SharingStarted.Eagerly, IncomeExpenseScreenState.Loading)
+    private val errorMessage = MutableSharedFlow<Int>()
+    val errorMessageFlow = errorMessage.asSharedFlow()
 
-        init {
-            analyticsSender.send(
-                AnalyticsEvent.Internal.Screen,
-                mapOf(AnalyticsParams.Screen.Name to "main"),
-            )
-            viewModelScope.launch(ioDispatcher) {
-                launch {
-                    getSortedCategories(TransactionType.INCOME).collect { list ->
-                        uiState.update { state ->
-                            state.copy(incomeUiState = state.incomeUiState.copy(incomeCategoryList = list))
-                        }
-                    }
-                }
-                launch {
+    init {
+        analyticsSender.send(
+            AnalyticsEvent.Internal.Screen,
+            mapOf(AnalyticsParams.Screen.Name to "main"),
+        )
+        viewModelScope.launch(ioDispatcher) {
+            launch {
+                getSortedCategories(TransactionType.INCOME).collect { list ->
                     uiState.update { state ->
-                        state.copy(
-                            expenseUiState =
-                                state.expenseUiState.copy(
-                                    expenseTransactions =
-                                        searchableTransactions(TransactionType.EXPENSE),
-                                ),
-                        )
-                    }
-                }
-                launch {
-                    uiState.update { state ->
-                        state.copy(
-                            incomeUiState =
-                                state.incomeUiState.copy(
-                                    incomeTransactions =
-                                        searchableTransactions(TransactionType.INCOME),
-                                ),
-                        )
-                    }
-                }
-                launch {
-                    val expenseSpendingExpenseInfoFlow =
-                        observeSpendingSummary().map { spendingSummary ->
-                            val currencyCode = spendingSummary.currency.code
-                            ExpenseInfo(
-                                when (val availableToday = spendingSummary.availableToday) {
-                                    is TransactionSpendingTodayModel.NORMAL -> {
-                                        Price(
-                                            R.string.expense_info_can_spend_today_title,
-                                            "${currencyCode.getSymbolByCode()}${
-                                                availableToday.trSum.reduceScaleStr()
-                                            }",
-                                        )
-                                    }
-
-                                    is TransactionSpendingTodayModel.OVERSPENDING -> {
-                                        Price(
-                                            R.string.expense_info_can_spend_today_negate_title,
-                                            "${currencyCode.getSymbolByCode()}${
-                                                availableToday.trSum.reduceScaleStr()
-                                            }",
-                                        )
-                                    }
-                                },
-                                Price(
-                                    R.string.expense_info_today_title,
-                                    "${currencyCode.getSymbolByCode()}${
-                                        spendingSummary.spentToday.reduceScaleStr()
-                                    }",
-                                ),
-                                Price(
-                                    R.string.expense_info_period_title,
-                                    "${currencyCode.getSymbolByCode()}${
-                                        spendingSummary.spentInPeriod.reduceScaleStr()
-                                    }",
-                                ),
-                            )
-                        }
-                    combine(
-                        billingInteractor.isPremium(),
-                        expenseSpendingExpenseInfoFlow,
-                    ) { isPremium, info -> if (isPremium) info else null }
-                        .collect { info ->
-                            uiState.update { state ->
-                                val expenseUiState = state.expenseUiState
-                                state.copy(expenseUiState = expenseUiState.copy(expenseInfo = info))
-                            }
-                        }
-                }
-                launch {
-                    combine(
-                        billingInteractor.isPremium(),
-                        transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.INCOME),
-                    ) { isPremium: Boolean, approxSum: BigDecimal ->
-                        if (isPremium) {
-                            val currencyCode = mainCurrency.value.code
-                            IncomeInfo(
-                                Price(
-                                    R.string.income_info_period_title,
-                                    "${currencyCode.getSymbolByCode()}${approxSum.reduceScaleStr()}",
-                                ),
-                            )
-                        } else {
-                            null
-                        }
-                    }.collect { info ->
-                        uiState.update { state ->
-                            state.copy(
-                                incomeUiState =
-                                    state.incomeUiState.copy(
-                                        incomeInfo = info,
-                                    ),
-                            )
-                        }
+                        state.copy(incomeUiState = state.incomeUiState.copy(incomeCategoryList = list))
                     }
                 }
             }
-        }
-
-        @OptIn(ExperimentalCoroutinesApi::class)
-        private fun observeContent(): Flow<IncomeExpenseUiState> =
-            combine(
-                currencyInteractor.getMainCurrencyFlow().onEach { updateMainCurrency(it) },
-                getSortedCategories(TransactionType.EXPENSE).onEach { updateExpenseCategories(it) },
-            ) { _, _ -> uiState }
-                .flatMapLatest { it }
-
-        private fun updateMainCurrency(currency: CurrencyMetaData) {
-            uiState.update { state -> state.copy(price = state.price.copy(currencyCode = currency.code)) }
-            mainCurrency.value = currency
-        }
-
-        private fun updateExpenseCategories(categories: List<Category>) {
-            uiState.update { state ->
-                state.copy(expenseUiState = state.expenseUiState.copy(expenseCategoryList = categories))
-            }
-        }
-
-        private fun getSortedCategories(type: TransactionType): Flow<List<Category>> =
-            categoryInteractor
-                .getGroupedCategoriesByType(type)
-                .flowOn(Dispatchers.IO)
-                .map { list -> list.sortedByDescending { it.usageCount } }
-                .flowOn(Dispatchers.Default)
-
-        private fun searchableTransactions(type: TransactionType): Flow<PagingData<BaseTransaction>> {
-            val queries =
-                uiState
-                    .map { state ->
-                        val searchState =
-                            when (type) {
-                                TransactionType.EXPENSE -> state.expenseUiState.searchState
-                                TransactionType.INCOME -> state.incomeUiState.searchState
-                            }
-                        if (searchState.status == SearchStatus.OPEN) searchState.searchQuery.trim() else ""
-                    }.distinctUntilChanged()
-            val transactions =
-                queries
-                    .flatMapLatest { query ->
-                        if (query.isEmpty()) {
-                            transactionInteractor.getTransactionsByType(type)
-                        } else {
-                            transactionInteractor.searchTransactionsByType(type, query)
-                        }
-                    }.map { data -> data.map { transaction -> transaction.toUiModel() } }
-            return mapWithStickyHeaders(transactions).cachedIn(viewModelScope)
-        }
-
-        fun updateSearchQuery(
-            screenType: ScreenType,
-            query: String,
-        ) {
-            updateSearchState(screenType) { state -> state.copy(searchQuery = query) }
-        }
-
-        fun onSearchOpened(screenType: ScreenType) {
-            updateSearchState(screenType) { state -> state.copy(status = SearchStatus.OPEN) }
-        }
-
-        fun onSearchClosed(screenType: ScreenType) {
-            updateSearchState(screenType) { TransactionSearchState() }
-        }
-
-        private fun updateSearchState(
-            screenType: ScreenType,
-            transform: (TransactionSearchState) -> TransactionSearchState,
-        ) {
-            uiState.update { state ->
-                when (screenType) {
-                    ScreenType.EXPENSE -> {
-                        state.copy(
-                            expenseUiState =
-                                state.expenseUiState.copy(
-                                    searchState = transform(state.expenseUiState.searchState),
-                                ),
-                        )
-                    }
-
-                    ScreenType.INCOME -> {
-                        state.copy(
-                            incomeUiState =
-                                state.incomeUiState.copy(
-                                    searchState = transform(state.incomeUiState.searchState),
-                                ),
-                        )
-                    }
-                }
-            }
-        }
-
-        fun addNumber(btn: KeyPress) {
-            uiState.update { state ->
-                val newPriceStr = MainPriceFieldParser.parse(state.price.value, btn)
-                val newPrice = state.price.copy(value = newPriceStr)
-                state.copy(price = newPrice)
-            }
-        }
-
-        fun addTransaction(
-            categoryId: Long,
-            onAdded: () -> Unit,
-        ) {
-            if (uiState.value.price.value
-                    .toBigDecimal()
-                    .signum() == 0
-            ) {
-                viewModelScope.launch { errorMessage.emit(R.string.income_expense_empty_sum_error) }
-                return
-            }
-            updateMode(EditMode.LIST)
-            uiState.value.run {
-                viewModelScope.launch(ioDispatcher) {
-                    val categoryDeff = async { categoryInteractor.getCategoryById(categoryId) }
-                    val locationDeff = async { locationProvider.getCurrentLocation().first() }
-                    val category = categoryDeff.await()
-                    val location = locationDeff.await()
-                    transactionInteractor.addTransaction(
-                        Transaction.EMPTY.copy(
-                            sum = price.value.toBigDecimal(),
-                            category = category,
-                            currencyCode = price.currencyCode,
-                            date = currentDateTime(),
-                            type = category.type,
-                            place = Place(location = location),
-                        ),
+            launch {
+                uiState.update { state ->
+                    state.copy(
+                        expenseUiState =
+                            state.expenseUiState.copy(
+                                expenseTransactions =
+                                    searchableTransactions(TransactionType.EXPENSE),
+                            ),
                     )
-                    withContext(Dispatchers.Main) { onAdded() }
                 }
             }
-            uiState.update { state ->
-                val price = state.price.copy(value = BigDecimal.ZERO.reduceScaleStr())
-                state.copy(price = price)
-            }
-        }
-
-        fun updateCurrencyCode(code: String) {
-            uiState.update { state ->
-                val price = state.price.copy(currencyCode = code)
-                state.copy(price = price)
-            }
-        }
-
-        fun updateMode(mode: EditMode) {
-            uiState.update { state -> state.copy(mode = mode) }
-            analyticsSender.send(
-                AnalyticsEvent.Internal.Screen,
-                mapOf(
-                    AnalyticsParams.Screen.Name to "main",
-                    AnalyticsParams.Screen.Mode to mode.name,
-                ),
-            )
-        }
-
-        fun onTabClicked(screenType: ScreenType) {
-            analyticsSender.send(
-                AnalyticsEvent.Internal.Screen,
-                mapOf(
-                    AnalyticsParams.Screen.Name to "main",
-                    AnalyticsParams.Screen.Type to screenType.name,
-                ),
-            )
-        }
-
-        fun deleteTransaction(transaction: TransactionUiModel) {
-            val deleteTransactionExceptionHandler =
-                CoroutineExceptionHandler { _, exception ->
-                    Timber.tag(TAG).d("Delete: $exception")
+            launch {
+                uiState.update { state ->
+                    state.copy(
+                        incomeUiState =
+                            state.incomeUiState.copy(
+                                incomeTransactions =
+                                    searchableTransactions(TransactionType.INCOME),
+                            ),
+                    )
                 }
-            viewModelScope.launch(deleteTransactionExceptionHandler + ioDispatcher) {
-                val tr = transactionInteractor.getTransactionById(transaction.id).first()
-                transactionInteractor.removeTransaction(tr)
             }
-        }
+            launch {
+                val expenseSpendingExpenseInfoFlow =
+                    observeSpendingSummary().map { spendingSummary ->
+                        val currencyCode = spendingSummary.currency.code
+                        ExpenseInfo(
+                            when (val availableToday = spendingSummary.availableToday) {
+                                is TransactionSpendingTodayModel.NORMAL -> {
+                                    Price(
+                                        R.string.expense_info_can_spend_today_title,
+                                        "${currencyCode.getSymbolByCode()}${
+                                            availableToday.trSum.reduceScaleStr()
+                                        }",
+                                    )
+                                }
 
-        private fun mapWithStickyHeaders(
-            flow: Flow<PagingData<TransactionUiModel>>,
-        ): Flow<PagingData<BaseTransaction>> =
-            flow.map { pagingData ->
-                pagingData.insertSeparators { before: TransactionUiModel?, after: TransactionUiModel? ->
-                    if (before == null && after == null) {
-                        null
-                    } else if (before != null && after == null) {
-                        null
-                    } else if (before == null && after != null) {
-                        TransactionUiHeader(
-                            after.date.getEndOfDay(),
-                            after.currencyCode,
+                                is TransactionSpendingTodayModel.OVERSPENDING -> {
+                                    Price(
+                                        R.string.expense_info_can_spend_today_negate_title,
+                                        "${currencyCode.getSymbolByCode()}${
+                                            availableToday.trSum.reduceScaleStr()
+                                        }",
+                                    )
+                                }
+                            },
+                            Price(
+                                R.string.expense_info_today_title,
+                                "${currencyCode.getSymbolByCode()}${
+                                    spendingSummary.spentToday.reduceScaleStr()
+                                }",
+                            ),
+                            Price(
+                                R.string.expense_info_period_title,
+                                "${currencyCode.getSymbolByCode()}${
+                                    spendingSummary.spentInPeriod.reduceScaleStr()
+                                }",
+                            ),
                         )
-                    } else if (before != null && after != null && before.date.isSameDay(after.date)) {
-                        null
-                    } else if (before != null && after != null && !before.date.isSameDay(after.date)) {
-                        TransactionUiHeader(
-                            after.date.getEndOfDay(),
-                            after.currencyCode,
+                    }
+                combine(
+                    billingInteractor.isPremium(),
+                    expenseSpendingExpenseInfoFlow,
+                ) { isPremium, info -> if (isPremium) info else null }
+                    .collect { info ->
+                        uiState.update { state ->
+                            val expenseUiState = state.expenseUiState
+                            state.copy(expenseUiState = expenseUiState.copy(expenseInfo = info))
+                        }
+                    }
+            }
+            launch {
+                combine(
+                    billingInteractor.isPremium(),
+                    transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.INCOME),
+                ) { isPremium: Boolean, approxSum: BigDecimal ->
+                    if (isPremium) {
+                        val currencyCode = mainCurrency.value.code
+                        IncomeInfo(
+                            Price(
+                                R.string.income_info_period_title,
+                                "${currencyCode.getSymbolByCode()}${approxSum.reduceScaleStr()}",
+                            ),
                         )
                     } else {
                         null
                     }
+                }.collect { info ->
+                    uiState.update { state ->
+                        state.copy(
+                            incomeUiState =
+                                state.incomeUiState.copy(
+                                    incomeInfo = info,
+                                ),
+                        )
+                    }
                 }
             }
+        }
     }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun observeContent(): Flow<IncomeExpenseUiState> =
+        combine(
+            currencyInteractor.getMainCurrencyFlow().onEach { updateMainCurrency(it) },
+            getSortedCategories(TransactionType.EXPENSE).onEach { updateExpenseCategories(it) },
+        ) { _, _ -> uiState }
+            .flatMapLatest { it }
+
+    private fun updateMainCurrency(currency: CurrencyMetaData) {
+        uiState.update { state -> state.copy(price = state.price.copy(currencyCode = currency.code)) }
+        mainCurrency.value = currency
+    }
+
+    private fun updateExpenseCategories(categories: List<Category>) {
+        uiState.update { state ->
+            state.copy(expenseUiState = state.expenseUiState.copy(expenseCategoryList = categories))
+        }
+    }
+
+    private fun getSortedCategories(type: TransactionType): Flow<List<Category>> =
+        categoryInteractor
+            .getGroupedCategoriesByType(type)
+            .flowOn(Dispatchers.IO)
+            .map { list -> list.sortedByDescending { it.usageCount } }
+            .flowOn(Dispatchers.Default)
+
+    private fun searchableTransactions(type: TransactionType): Flow<PagingData<BaseTransaction>> {
+        val queries =
+            uiState
+                .map { state ->
+                    val searchState =
+                        when (type) {
+                            TransactionType.EXPENSE -> state.expenseUiState.searchState
+                            TransactionType.INCOME -> state.incomeUiState.searchState
+                        }
+                    if (searchState.status == SearchStatus.OPEN) searchState.searchQuery.trim() else ""
+                }.distinctUntilChanged()
+        val transactions =
+            queries
+                .flatMapLatest { query ->
+                    if (query.isEmpty()) {
+                        transactionInteractor.getTransactionsByType(type)
+                    } else {
+                        transactionInteractor.searchTransactionsByType(type, query)
+                    }
+                }.map { data -> data.map { transaction -> transaction.toUiModel() } }
+        return mapWithStickyHeaders(transactions).cachedIn(viewModelScope)
+    }
+
+    fun updateSearchQuery(
+        screenType: ScreenType,
+        query: String,
+    ) {
+        updateSearchState(screenType) { state -> state.copy(searchQuery = query) }
+    }
+
+    fun onSearchOpened(screenType: ScreenType) {
+        updateSearchState(screenType) { state -> state.copy(status = SearchStatus.OPEN) }
+    }
+
+    fun onSearchClosed(screenType: ScreenType) {
+        updateSearchState(screenType) { TransactionSearchState() }
+    }
+
+    private fun updateSearchState(
+        screenType: ScreenType,
+        transform: (TransactionSearchState) -> TransactionSearchState,
+    ) {
+        uiState.update { state ->
+            when (screenType) {
+                ScreenType.EXPENSE -> {
+                    state.copy(
+                        expenseUiState =
+                            state.expenseUiState.copy(
+                                searchState = transform(state.expenseUiState.searchState),
+                            ),
+                    )
+                }
+
+                ScreenType.INCOME -> {
+                    state.copy(
+                        incomeUiState =
+                            state.incomeUiState.copy(
+                                searchState = transform(state.incomeUiState.searchState),
+                            ),
+                    )
+                }
+            }
+        }
+    }
+
+    fun addNumber(btn: KeyPress) {
+        uiState.update { state ->
+            val newPriceStr = MainPriceFieldParser.parse(state.price.value, btn)
+            val newPrice = state.price.copy(value = newPriceStr)
+            state.copy(price = newPrice)
+        }
+    }
+
+    fun addTransaction(
+        categoryId: Long,
+        onAdded: () -> Unit,
+    ) {
+        if (uiState.value.price.value
+                .toBigDecimal()
+                .signum() == 0
+        ) {
+            viewModelScope.launch { errorMessage.emit(R.string.income_expense_empty_sum_error) }
+            return
+        }
+        updateMode(EditMode.LIST)
+        uiState.value.run {
+            viewModelScope.launch(ioDispatcher) {
+                val categoryDeff = async { categoryInteractor.getCategoryById(categoryId) }
+                val locationDeff = async { locationProvider.getCurrentLocation().first() }
+                val category = categoryDeff.await()
+                val location = locationDeff.await()
+                transactionInteractor.addTransaction(
+                    Transaction.EMPTY.copy(
+                        sum = price.value.toBigDecimal(),
+                        category = category,
+                        currencyCode = price.currencyCode,
+                        date = currentDateTime(),
+                        type = category.type,
+                        place = Place(location = location),
+                    ),
+                )
+                withContext(Dispatchers.Main) { onAdded() }
+            }
+        }
+        uiState.update { state ->
+            val price = state.price.copy(value = BigDecimal.ZERO.reduceScaleStr())
+            state.copy(price = price)
+        }
+    }
+
+    fun updateCurrencyCode(code: String) {
+        uiState.update { state ->
+            val price = state.price.copy(currencyCode = code)
+            state.copy(price = price)
+        }
+    }
+
+    fun updateMode(mode: EditMode) {
+        uiState.update { state -> state.copy(mode = mode) }
+        analyticsSender.send(
+            AnalyticsEvent.Internal.Screen,
+            mapOf(
+                AnalyticsParams.Screen.Name to "main",
+                AnalyticsParams.Screen.Mode to mode.name,
+            ),
+        )
+    }
+
+    fun onTabClicked(screenType: ScreenType) {
+        analyticsSender.send(
+            AnalyticsEvent.Internal.Screen,
+            mapOf(
+                AnalyticsParams.Screen.Name to "main",
+                AnalyticsParams.Screen.Type to screenType.name,
+            ),
+        )
+    }
+
+    fun deleteTransaction(transaction: TransactionUiModel) {
+        val deleteTransactionExceptionHandler =
+            CoroutineExceptionHandler { _, exception ->
+                Timber.tag(TAG).d("Delete: $exception")
+            }
+        viewModelScope.launch(deleteTransactionExceptionHandler + ioDispatcher) {
+            val tr = transactionInteractor.getTransactionById(transaction.id).first()
+            transactionInteractor.removeTransaction(tr)
+        }
+    }
+
+    private fun mapWithStickyHeaders(flow: Flow<PagingData<TransactionUiModel>>): Flow<PagingData<BaseTransaction>> =
+        flow.map { pagingData ->
+            pagingData.insertSeparators { before: TransactionUiModel?, after: TransactionUiModel? ->
+                if (before == null && after == null) {
+                    null
+                } else if (before != null && after == null) {
+                    null
+                } else if (before == null && after != null) {
+                    TransactionUiHeader(
+                        after.date.getEndOfDay(),
+                        after.currencyCode,
+                    )
+                } else if (before != null && after != null && before.date.isSameDay(after.date)) {
+                    null
+                } else if (before != null && after != null && !before.date.isSameDay(after.date)) {
+                    TransactionUiHeader(
+                        after.date.getEndOfDay(),
+                        after.currencyCode,
+                    )
+                } else {
+                    null
+                }
+            }
+        }
+}

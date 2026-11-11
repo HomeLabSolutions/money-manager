@@ -2,14 +2,12 @@ package com.d9tilov.android.backup.di
 
 import com.d9tilov.android.backup.domain.contract.BackupInteractor
 import com.d9tilov.android.backup.domain.impl.BackupInteractorImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
 interface BackupDomainModule {
     @Binds
-    fun provideBackupInteractor(impl: BackupInteractorImpl): BackupInteractor
+    val BackupInteractorImpl.provideBackupInteractor: BackupInteractor
 }

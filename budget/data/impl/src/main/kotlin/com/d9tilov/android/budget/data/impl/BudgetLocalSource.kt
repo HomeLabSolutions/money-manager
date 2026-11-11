@@ -7,14 +7,15 @@ import com.d9tilov.android.budget.domain.model.BudgetData
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.database.dao.BudgetDao
 import com.d9tilov.android.datastore.PreferencesStore
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class BudgetLocalSource @Inject constructor(
+@Inject
+class BudgetLocalSource(
     private val preferencesStore: PreferencesStore,
     private val budgetDao: BudgetDao,
 ) : BudgetSource {

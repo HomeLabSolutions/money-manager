@@ -2,7 +2,9 @@ package com.d9tilov.android.category.ui.vm
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.d9tilov.android.analytics.domain.AnalyticsSender
 import com.d9tilov.android.analytics.model.AnalyticsEvent
 import com.d9tilov.android.analytics.model.AnalyticsParams
@@ -13,7 +15,13 @@ import com.d9tilov.android.category.domain.entity.ItemState
 import com.d9tilov.android.category.ui.navigation.CategoryArgs
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.android.core.model.TransactionType
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactory
+import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactoryKey
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +31,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class CategoryCreationUiState(
     val category: Category =
@@ -41,104 +48,111 @@ data class CategoryCreationUiState(
     }
 }
 
-@HiltViewModel
-class CategoryCreationViewModel
-    @Inject
-    constructor(
-        savedStateHandle: SavedStateHandle,
-        private val analyticsSender: AnalyticsSender,
-        private val categoryInteractor: CategoryInteractor,
-        private val billingInteractor: BillingInteractor,
-    ) : ViewModel() {
-        private val categoryArgs: CategoryArgs.CategoryCreationArgs =
-            CategoryArgs.CategoryCreationArgs(savedStateHandle)
-        private val categoryId: Long = categoryArgs.categoryId
-        private val transactionType: TransactionType = categoryArgs.transactionType
-        private val _uiState = MutableStateFlow(CategoryCreationUiState.EMPTY)
-        val uiState: StateFlow<CategoryCreationUiState> = _uiState
-        private val categoryExceptionHandler = CoroutineExceptionHandler { _, _ -> }
+@AssistedInject
+class CategoryCreationViewModel(
+    @Assisted savedStateHandle: SavedStateHandle,
+    private val analyticsSender: AnalyticsSender,
+    private val categoryInteractor: CategoryInteractor,
+    private val billingInteractor: BillingInteractor,
+) : ViewModel() {
+    private val categoryArgs: CategoryArgs.CategoryCreationArgs =
+        CategoryArgs.CategoryCreationArgs(savedStateHandle)
+    private val categoryId: Long = categoryArgs.categoryId
+    private val transactionType: TransactionType = categoryArgs.transactionType
+    private val _uiState = MutableStateFlow(CategoryCreationUiState.EMPTY)
+    val uiState: StateFlow<CategoryCreationUiState> = _uiState
+    private val categoryExceptionHandler = CoroutineExceptionHandler { _, _ -> }
 
-        init {
-            analyticsSender.send(
-                AnalyticsEvent.Internal.Screen,
-                mapOf(
-                    AnalyticsParams.Screen.Name to "category",
-                    AnalyticsParams.Screen.Mode to if (categoryId == NO_ID) "create" else "edit",
-                ),
-            )
-            viewModelScope.launch(categoryExceptionHandler) {
-                launch {
-                    _uiState.update { state: CategoryCreationUiState ->
-                        state.copy(
-                            category =
-                                when (transactionType) {
-                                    TransactionType.EXPENSE -> {
-                                        Category.EMPTY_EXPENSE.copy(
-                                            color = com.d9tilov.android.category.data.impl.R.color.category_blue,
-                                            icon = com.d9tilov.android.common.android.R.drawable.ic_category_cafe,
-                                        )
-                                    }
+    init {
+        analyticsSender.send(
+            AnalyticsEvent.Internal.Screen,
+            mapOf(
+                AnalyticsParams.Screen.Name to "category",
+                AnalyticsParams.Screen.Mode to if (categoryId == NO_ID) "create" else "edit",
+            ),
+        )
+        viewModelScope.launch(categoryExceptionHandler) {
+            launch {
+                _uiState.update { state: CategoryCreationUiState ->
+                    state.copy(
+                        category =
+                            when (transactionType) {
+                                TransactionType.EXPENSE -> {
+                                    Category.EMPTY_EXPENSE.copy(
+                                        color = com.d9tilov.android.category.data.impl.R.color.category_blue,
+                                        icon = com.d9tilov.android.common.android.R.drawable.ic_category_cafe,
+                                    )
+                                }
 
-                                    TransactionType.INCOME -> {
-                                        Category.EMPTY_INCOME.copy(
-                                            color = com.d9tilov.android.category.data.impl.R.color.category_blue,
-                                            icon = com.d9tilov.android.category.data.impl.R.drawable.ic_category_salary,
-                                        )
-                                    }
-                                },
-                            itemState = ItemState.CREATE,
-                            type = transactionType,
-                        )
-                    }
-                }
-                launch {
-                    _uiState.update { state: CategoryCreationUiState ->
-                        state.copy(
-                            category = categoryInteractor.getCategoryById(categoryId),
-                            itemState = ItemState.EDIT,
-                        )
-                    }
-                }
-                launch {
-                    billingInteractor
-                        .isPremium()
-                        .flowOn(Dispatchers.IO)
-                        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
-                        .collect {
-                            _uiState.update { state: CategoryCreationUiState -> state.copy(isPremium = it) }
-                        }
+                                TransactionType.INCOME -> {
+                                    Category.EMPTY_INCOME.copy(
+                                        color = com.d9tilov.android.category.data.impl.R.color.category_blue,
+                                        icon = com.d9tilov.android.category.data.impl.R.drawable.ic_category_salary,
+                                    )
+                                }
+                            },
+                        itemState = ItemState.CREATE,
+                        type = transactionType,
+                    )
                 }
             }
-        }
-
-        fun save() {
-            val saveCategoryExceptionHandler =
-                CoroutineExceptionHandler { _, ex ->
-                    _uiState.update { state -> state.copy(saveStatus = Result.failure(ex)) }
+            launch {
+                _uiState.update { state: CategoryCreationUiState ->
+                    state.copy(
+                        category = categoryInteractor.getCategoryById(categoryId),
+                        itemState = ItemState.EDIT,
+                    )
                 }
-            viewModelScope.launch(saveCategoryExceptionHandler) {
-                hideError()
-                if (categoryId == NO_ID) {
-                    categoryInteractor.create(_uiState.value.category)
-                } else {
-                    categoryInteractor.update(_uiState.value.category)
-                }
-                _uiState.update { state -> state.copy(saveStatus = Result.success(Unit)) }
             }
-        }
-
-        fun updateCategory(category: Category) {
-            _uiState.update { state -> state.copy(category = category) }
-        }
-
-        fun hideError() {
-            _uiState.update { state -> state.copy(saveStatus = null) }
-        }
-
-        fun onColorClicked() {
-            analyticsSender.send(
-                AnalyticsEvent.Internal.Screen,
-                mapOf(AnalyticsParams.Screen.Click to "category_color"),
-            )
+            launch {
+                billingInteractor
+                    .isPremium()
+                    .flowOn(Dispatchers.IO)
+                    .stateIn(viewModelScope, SharingStarted.Eagerly, false)
+                    .collect {
+                        _uiState.update { state: CategoryCreationUiState -> state.copy(isPremium = it) }
+                    }
+            }
         }
     }
+
+    fun save() {
+        val saveCategoryExceptionHandler =
+            CoroutineExceptionHandler { _, ex ->
+                _uiState.update { state -> state.copy(saveStatus = Result.failure(ex)) }
+            }
+        viewModelScope.launch(saveCategoryExceptionHandler) {
+            hideError()
+            if (categoryId == NO_ID) {
+                categoryInteractor.create(_uiState.value.category)
+            } else {
+                categoryInteractor.update(_uiState.value.category)
+            }
+            _uiState.update { state -> state.copy(saveStatus = Result.success(Unit)) }
+        }
+    }
+
+    fun updateCategory(category: Category) {
+        _uiState.update { state -> state.copy(category = category) }
+    }
+
+    fun hideError() {
+        _uiState.update { state -> state.copy(saveStatus = null) }
+    }
+
+    fun onColorClicked() {
+        analyticsSender.send(
+            AnalyticsEvent.Internal.Screen,
+            mapOf(AnalyticsParams.Screen.Click to "category_color"),
+        )
+    }
+
+    @AssistedFactory
+    @ViewModelAssistedFactoryKey(CategoryCreationViewModel::class)
+    @ContributesIntoMap(AppScope::class)
+    fun interface Factory : ViewModelAssistedFactory {
+        override fun create(extras: CreationExtras): CategoryCreationViewModel = create(extras.createSavedStateHandle())
+
+        fun create(savedStateHandle: SavedStateHandle): CategoryCreationViewModel
+    }
+}

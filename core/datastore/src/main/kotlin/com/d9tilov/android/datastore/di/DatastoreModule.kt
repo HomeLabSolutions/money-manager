@@ -1,19 +1,19 @@
 package com.d9tilov.android.datastore.di
 
 import android.content.Context
+import com.d9tilov.android.core.di.ApplicationContext
 import com.d9tilov.android.datastore.PreferencesStore
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 
-@Module
-@InstallIn(SingletonComponent::class)
+@BindingContainer
+@ContributesTo(AppScope::class)
 object DatastoreModule {
     @Provides
-    @Singleton
+    @SingleIn(AppScope::class)
     fun providePreferenceStore(
         @ApplicationContext context: Context,
     ): PreferencesStore = PreferencesStore(context)

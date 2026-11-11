@@ -8,15 +8,16 @@ import com.d9tilov.android.user.data.contract.UserSource
 import com.d9tilov.android.user.data.impl.mapper.toDataModel
 import com.d9tilov.android.user.data.impl.mapper.toDbModel
 import com.d9tilov.android.user.domain.model.UserProfile
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class UserLocalSource @Inject constructor(
+@Inject
+class UserLocalSource(
     private val preferencesStore: PreferencesStore,
     private val userDao: UserDao,
 ) : UserSource {

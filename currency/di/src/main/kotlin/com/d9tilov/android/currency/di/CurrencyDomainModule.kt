@@ -6,20 +6,18 @@ import com.d9tilov.android.currency.domain.impl.CurrencyInteractorImpl
 import com.d9tilov.android.currency.domain.impl.GeocodingInteractorImpl
 import com.d9tilov.android.currency.observer.contract.CurrencyUpdateObserver
 import com.d9tilov.android.currency.observer.impl.CurrencyUpdateObserverImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
 interface CurrencyDomainModule {
     @Binds
-    fun provideCurrencyInteractor(impl: CurrencyInteractorImpl): CurrencyInteractor
+    val CurrencyInteractorImpl.provideCurrencyInteractor: CurrencyInteractor
 
     @Binds
-    fun provideGeocodingInteractor(impl: GeocodingInteractorImpl): GeocodingInteractor
+    val GeocodingInteractorImpl.provideGeocodingInteractor: GeocodingInteractor
 
     @Binds
-    fun provideCurrencyObserver(impl: CurrencyUpdateObserverImpl): CurrencyUpdateObserver
+    val CurrencyUpdateObserverImpl.provideCurrencyObserver: CurrencyUpdateObserver
 }

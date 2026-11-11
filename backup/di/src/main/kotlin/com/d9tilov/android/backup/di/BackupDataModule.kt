@@ -6,20 +6,18 @@ import com.d9tilov.android.backup.data.impl.BackupDataRepo
 import com.d9tilov.android.backup.data.impl.BackupLocalSource
 import com.d9tilov.android.backup.data.impl.BackupManagerImpl
 import com.d9tilov.android.backup.domain.contract.BackupRepo
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
 interface BackupDataModule {
     @Binds
-    fun provideBackupRepo(impl: BackupDataRepo): BackupRepo
+    val BackupDataRepo.provideBackupRepo: BackupRepo
 
     @Binds
-    fun provideBackupLocalSource(impl: BackupLocalSource): BackupSource
+    val BackupLocalSource.provideBackupLocalSource: BackupSource
 
     @Binds
-    fun provideBackupManager(impl: BackupManagerImpl): BackupManager
+    val BackupManagerImpl.provideBackupManager: BackupManager
 }

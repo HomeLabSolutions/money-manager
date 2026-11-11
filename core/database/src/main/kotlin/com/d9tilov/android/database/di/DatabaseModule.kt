@@ -4,21 +4,21 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.d9tilov.android.core.constants.DataConstants.DATABASE_NAME
+import com.d9tilov.android.core.di.ApplicationContext
 import com.d9tilov.android.database.AppDatabase
 import com.d9tilov.android.database.migration.MIGRATION_1_2
 import com.d9tilov.android.database.migration.MIGRATION_2_3
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 
-@Module
-@InstallIn(SingletonComponent::class)
+@BindingContainer
+@ContributesTo(AppScope::class)
 object DatabaseModule {
     @Provides
-    @Singleton
+    @SingleIn(AppScope::class)
     fun provideDatabase(
         @ApplicationContext context: Context,
     ): AppDatabase =

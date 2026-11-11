@@ -3,9 +3,10 @@ package com.d9tilov.android.budget.data.impl
 import com.d9tilov.android.budget.data.contract.BudgetSource
 import com.d9tilov.android.budget.domain.contract.BudgetRepo
 import com.d9tilov.android.budget.domain.model.BudgetData
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class BudgetDataRepo @Inject constructor(
+@Inject
+class BudgetDataRepo(
     private val budgetSource: BudgetSource,
 ) : BudgetRepo {
     override fun get() = budgetSource.get()

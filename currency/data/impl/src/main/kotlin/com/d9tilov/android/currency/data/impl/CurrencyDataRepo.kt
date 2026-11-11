@@ -6,10 +6,11 @@ import com.d9tilov.android.currency.data.impl.mapper.toDataModel
 import com.d9tilov.android.currency.domain.contract.CurrencyRepo
 import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
-class CurrencyDataRepo @Inject constructor(
+@Inject
+class CurrencyDataRepo(
     private val currencySource: CurrencySource,
     private val currencyApi: CurrencyApi,
 ) : CurrencyRepo {

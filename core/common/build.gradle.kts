@@ -1,5 +1,6 @@
 plugins {
     id("moneymanager.android.library.kotlin")
+    id("moneymanager.di")
 }
 
 dependencies {

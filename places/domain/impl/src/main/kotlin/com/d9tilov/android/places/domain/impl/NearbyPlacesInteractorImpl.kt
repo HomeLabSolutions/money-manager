@@ -4,9 +4,10 @@ import com.d9tilov.android.places.domain.contract.NearbyPlacesInteractor
 import com.d9tilov.android.places.domain.contract.NearbyPlacesRepo
 import com.d9tilov.android.places.domain.model.LocationData
 import com.d9tilov.android.places.domain.model.NearbyPlace
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class NearbyPlacesInteractorImpl @Inject constructor(
+@Inject
+class NearbyPlacesInteractorImpl(
     private val nearbyPlacesRepo: NearbyPlacesRepo,
 ) : NearbyPlacesInteractor {
     override suspend fun getNearbyPlaces(location: LocationData): List<NearbyPlace> =

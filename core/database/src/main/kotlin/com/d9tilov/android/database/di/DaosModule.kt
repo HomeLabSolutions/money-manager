@@ -10,13 +10,13 @@ import com.d9tilov.android.database.dao.MainCurrencyDao
 import com.d9tilov.android.database.dao.RegularTransactionDao
 import com.d9tilov.android.database.dao.TransactionDao
 import com.d9tilov.android.database.dao.UserDao
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
 
-@Module
-@InstallIn(SingletonComponent::class)
+@BindingContainer
+@ContributesTo(AppScope::class)
 object DaosModule {
     @Provides
     fun providesUserDao(database: AppDatabase): UserDao = database.userDao()

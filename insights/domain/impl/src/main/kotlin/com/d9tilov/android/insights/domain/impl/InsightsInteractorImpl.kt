@@ -12,12 +12,13 @@ import com.d9tilov.android.insights.domain.model.Insight
 import com.d9tilov.android.insights.domain.model.InsightsConstants.MIN_INSIGHT_TRANSACTION_COUNT
 import com.d9tilov.android.transaction.domain.contract.TransactionRepo
 import com.d9tilov.android.user.domain.model.InsightLanguage
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
-import javax.inject.Inject
 
-class InsightsInteractorImpl @Inject constructor(
+@Inject
+class InsightsInteractorImpl(
     private val transactionRepo: TransactionRepo,
     private val insightsRepo: InsightsRepo,
     private val consentRepo: InsightsConsentRepo,

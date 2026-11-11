@@ -1,6 +1,6 @@
 plugins {
     id("moneymanager.android.library")
-    id("moneymanager.android.hilt")
+    id("moneymanager.di")
 }
 
 android {

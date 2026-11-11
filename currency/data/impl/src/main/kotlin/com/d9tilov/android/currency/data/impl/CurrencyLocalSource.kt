@@ -11,14 +11,15 @@ import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.database.dao.CurrencyListDao
 import com.d9tilov.android.database.dao.MainCurrencyDao
 import com.d9tilov.android.datastore.PreferencesStore
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class CurrencyLocalSource @Inject constructor(
+@Inject
+class CurrencyLocalSource(
     private val preferencesStore: PreferencesStore,
     private val currencyListDao: CurrencyListDao,
     private val mainCurrencyDao: MainCurrencyDao,

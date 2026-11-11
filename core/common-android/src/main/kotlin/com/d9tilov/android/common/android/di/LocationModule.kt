@@ -4,20 +4,20 @@ import android.content.Context
 import com.d9tilov.android.common.android.location.LocationProvider
 import com.d9tilov.android.common.android.location.LocationProviderImpl
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
+import com.d9tilov.android.core.di.ApplicationContext
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Named
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineDispatcher
-import javax.inject.Named
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
+@BindingContainer
+@ContributesTo(AppScope::class)
 class LocationModule {
     @Provides
-    @Singleton
+    @SingleIn(AppScope::class)
     fun provideLocationProvider(
         @ApplicationContext context: Context,
         @Named(DISPATCHER_IO) ioDispatcher: CoroutineDispatcher,

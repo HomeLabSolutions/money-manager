@@ -4,17 +4,15 @@ import com.d9tilov.android.transaction.regular.data.contract.RegularTransactionS
 import com.d9tilov.android.transaction.regular.data.impl.RegularTransactionDataRepo
 import com.d9tilov.android.transaction.regular.data.impl.RegularTransactionLocalSource
 import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactionRepo
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
 interface RegularTransactionDataModule {
     @Binds
-    fun provideRegularTransactionSource(impl: RegularTransactionLocalSource): RegularTransactionSource
+    val RegularTransactionLocalSource.provideRegularTransactionSource: RegularTransactionSource
 
     @Binds
-    fun provideRegularTransactionRepo(impl: RegularTransactionDataRepo): RegularTransactionRepo
+    val RegularTransactionDataRepo.provideRegularTransactionRepo: RegularTransactionRepo
 }

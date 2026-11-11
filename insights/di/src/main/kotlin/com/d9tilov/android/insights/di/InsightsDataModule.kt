@@ -14,32 +14,30 @@ import com.d9tilov.android.insights.data.impl.PreferencesInsightsConsentRepo
 import com.d9tilov.android.insights.domain.contract.InsightLanguageRepo
 import com.d9tilov.android.insights.domain.contract.InsightsConsentRepo
 import com.d9tilov.android.insights.domain.contract.InsightsRepo
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
 interface InsightsDataModule {
     @Binds
-    fun bindInsightsConsentRepo(impl: PreferencesInsightsConsentRepo): InsightsConsentRepo
+    val PreferencesInsightsConsentRepo.bindInsightsConsentRepo: InsightsConsentRepo
 
     @Binds
-    fun bindInsightLanguageRepo(impl: InsightLanguageDataRepo): InsightLanguageRepo
+    val InsightLanguageDataRepo.bindInsightLanguageRepo: InsightLanguageRepo
 
     @Binds
-    fun bindInsightLanguageSource(impl: InsightLanguageLocalSource): InsightLanguageSource
+    val InsightLanguageLocalSource.bindInsightLanguageSource: InsightLanguageSource
 
     @Binds
-    fun bindInsightsRepo(impl: InsightsDataRepo): InsightsRepo
+    val InsightsDataRepo.bindInsightsRepo: InsightsRepo
 
     @Binds
-    fun bindInsightSource(impl: InsightLocalSource): InsightSource
+    val InsightLocalSource.bindInsightSource: InsightSource
 
     @Binds
-    fun bindInsightsRemoteSource(impl: FirebaseInsightsRemoteSource): InsightsRemoteSource
+    val FirebaseInsightsRemoteSource.bindInsightsRemoteSource: InsightsRemoteSource
 
     @Binds
-    fun bindInsightsAggregator(impl: DefaultInsightsAggregator): InsightsAggregator
+    val DefaultInsightsAggregator.bindInsightsAggregator: InsightsAggregator
 }

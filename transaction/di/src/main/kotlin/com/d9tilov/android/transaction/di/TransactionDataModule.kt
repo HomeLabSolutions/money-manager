@@ -4,17 +4,15 @@ import com.d9tilov.android.transaction.data.contract.TransactionSource
 import com.d9tilov.android.transaction.data.impl.TransactionDataRepo
 import com.d9tilov.android.transaction.data.impl.TransactionLocalSource
 import com.d9tilov.android.transaction.domain.contract.TransactionRepo
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
 interface TransactionDataModule {
     @Binds
-    fun provideTransactionLocalSource(impl: TransactionLocalSource): TransactionSource
+    val TransactionLocalSource.provideTransactionLocalSource: TransactionSource
 
     @Binds
-    fun provideTransactionRepo(impl: TransactionDataRepo): TransactionRepo
+    val TransactionDataRepo.provideTransactionRepo: TransactionRepo
 }
