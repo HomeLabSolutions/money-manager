@@ -4,17 +4,15 @@ import com.d9tilov.android.user.data.contract.UserSource
 import com.d9tilov.android.user.data.impl.UserDataRepo
 import com.d9tilov.android.user.data.impl.UserLocalSource
 import com.d9tilov.android.user.domain.contract.UserRepo
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
 interface UserDataModule {
     @Binds
-    fun provideUserSource(impl: UserLocalSource): UserSource
+    val UserLocalSource.provideUserSource: UserSource
 
     @Binds
-    fun provideUserRepo(impl: UserDataRepo): UserRepo
+    val UserDataRepo.provideUserRepo: UserRepo
 }

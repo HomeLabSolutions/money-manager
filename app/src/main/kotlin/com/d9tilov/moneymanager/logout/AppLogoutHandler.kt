@@ -13,12 +13,13 @@ import com.d9tilov.android.notification.domain.MoneyManagerNotificationManager
 import com.d9tilov.android.transaction.regular.data.impl.worker.RegularTransactionSyncWorker
 import com.d9tilov.android.user.domain.contract.UserInteractor
 import com.d9tilov.android.widget.domain.contract.SpendingWidgetStateObserver
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Named
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
-import javax.inject.Named
 
-class AppLogoutHandler @Inject constructor(
+@Inject
+class AppLogoutHandler(
     private val application: Application,
     private val notificationManager: MoneyManagerNotificationManager<AndroidNotificationData>,
     private val userInfoInteractor: UserInteractor,

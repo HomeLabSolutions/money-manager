@@ -1,6 +1,6 @@
 plugins {
     id("moneymanager.android.library")
-    id("com.google.devtools.ksp")
+    id("moneymanager.di")
 }
 
 android {
@@ -8,10 +8,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:common"))
     implementation(project(":core:common-android"))
     implementation(project(":notification:domain"))
     implementation(libs.androidx.core)
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.android.compiler)
-    ksp(libs.kotlin.metadata.jvm)
 }

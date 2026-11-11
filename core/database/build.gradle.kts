@@ -1,7 +1,8 @@
 plugins {
     id("moneymanager.android.library")
-    id("moneymanager.android.hilt")
+    id("com.google.devtools.ksp")
     id("kotlin-parcelize")
+    id("moneymanager.di")
 }
 
 android {
@@ -22,7 +23,6 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
-    implementation(libs.hilt.android)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.datetime)
     implementation(libs.room.paging)

@@ -19,12 +19,16 @@ dependencies {
     implementation(libs.detekt)
     implementation(libs.java.poet)
     implementation(libs.kotlin.gradle.plugin)
-    implementation(libs.kotlin.metadata.jvm)
     implementation(libs.ksp.gradle.plugin)
+    implementation(libs.metro.gradle.plugin)
 }
 
 gradlePlugin {
     plugins {
+        register("dependencyInjection") {
+            id = "moneymanager.di"
+            implementationClass = "com.android.moneymanager.gradle.plugins.DependencyInjectionConventionPlugin"
+        }
         register("androidApplication") {
             id = "moneymanager.android.application"
             implementationClass = "com.android.moneymanager.gradle.plugins.AndroidApplicationConventionPlugin"
@@ -32,10 +36,6 @@ gradlePlugin {
         register("androidLibrary") {
             id = "moneymanager.android.library"
             implementationClass = "com.android.moneymanager.gradle.plugins.AndroidLibraryConventionPlugin"
-        }
-        register("androidHilt") {
-            id = "moneymanager.android.hilt"
-            implementationClass = "com.android.moneymanager.gradle.plugins.AndroidHiltConventionPlugin"
         }
         register("androidApplicationCompose") {
             id = "moneymanager.android.application.compose"

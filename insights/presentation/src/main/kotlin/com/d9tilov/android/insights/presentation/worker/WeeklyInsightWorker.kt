@@ -1,15 +1,16 @@
 package com.d9tilov.android.insights.presentation.worker
 
 import android.content.Context
-import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ForegroundInfo
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import com.d9tilov.android.common.android.worker.ChildWorkerFactory
 import com.d9tilov.android.common.android.worker.DelegatingWorker
 import com.d9tilov.android.common.android.worker.SyncConstraints
+import com.d9tilov.android.common.android.worker.WorkerKey
 import com.d9tilov.android.common.android.worker.delegatedData
 import com.d9tilov.android.common.android.worker.syncForegroundInfo
 import com.d9tilov.android.insights.domain.contract.InsightsInteractor
@@ -17,14 +18,18 @@ import com.d9tilov.android.insights.domain.model.WeeklyInsightNotification
 import com.d9tilov.android.insights.domain.model.exception.DailyInsightLimitException
 import com.d9tilov.android.insights.domain.model.exception.InsufficientInsightsDataException
 import com.d9tilov.android.insights.presentation.notification.WeeklyInsightNotificationSender
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.binding
 import kotlinx.coroutines.CancellationException
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-@HiltWorker
-class WeeklyInsightWorker @AssistedInject constructor(
+@AssistedInject
+class WeeklyInsightWorker(
     @Assisted private val context: Context,
     @Assisted workerParameters: WorkerParameters,
     private val insightsInteractor: InsightsInteractor,
@@ -78,5 +83,15 @@ class WeeklyInsightWorker @AssistedInject constructor(
         fun stopPeriodicJob(context: Context) {
             WorkManager.getInstance(context).cancelAllWorkByTag(WORK_NAME)
         }
+    }
+
+    @AssistedFactory
+    @WorkerKey(WeeklyInsightWorker::class)
+    @ContributesIntoMap(AppScope::class, binding<ChildWorkerFactory>())
+    fun interface Factory : ChildWorkerFactory {
+        override fun create(
+            context: Context,
+            workerParameters: WorkerParameters,
+        ): WeeklyInsightWorker
     }
 }

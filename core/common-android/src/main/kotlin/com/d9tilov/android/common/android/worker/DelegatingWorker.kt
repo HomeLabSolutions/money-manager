@@ -1,25 +1,11 @@
 package com.d9tilov.android.common.android.worker
 
 import android.content.Context
-import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.components.SingletonComponent
 import kotlin.reflect.KClass
-
-/**
- * An entry point to retrieve the [HiltWorkerFactory] at runtime
- */
-@EntryPoint
-@InstallIn(SingletonComponent::class)
-interface HiltWorkerFactoryEntryPoint {
-    fun hiltWorkerFactory(): HiltWorkerFactory
-}
 
 private const val WORKER_CLASS_NAME = "RouterWorkerDelegateClassName2"
 
@@ -30,7 +16,7 @@ private const val WORKER_CLASS_NAME = "RouterWorkerDelegateClassName2"
 fun KClass<out CoroutineWorker>.delegatedData() = Data.Builder().putString(WORKER_CLASS_NAME, qualifiedName).build()
 
 /**
- * A worker that delegates sync to another [CoroutineWorker] constructed with a [HiltWorkerFactory].
+ * A worker that delegates sync to another [CoroutineWorker] constructed with the application worker factory.
  *
  * This allows for creating and using [CoroutineWorker] instances with extended arguments
  * without having to provide a custom WorkManager configuration that the app module needs to utilize.
@@ -45,9 +31,8 @@ class DelegatingWorker(
     private val workerClassName = workerParams.inputData.getString(WORKER_CLASS_NAME) ?: ""
 
     private val delegateWorker by lazy {
-        EntryPointAccessors
-            .fromApplication<HiltWorkerFactoryEntryPoint>(appContext)
-            .hiltWorkerFactory()
+        (appContext.applicationContext as WorkerFactoryOwner)
+            .workerFactory
             .createWorker(appContext, workerClassName, workerParams) as? CoroutineWorker
             ?: throw IllegalArgumentException("Unable to find appropriate worker")
     }

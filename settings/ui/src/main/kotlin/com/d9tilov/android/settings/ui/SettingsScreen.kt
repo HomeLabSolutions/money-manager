@@ -43,7 +43,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.MmTopAppBar
@@ -55,13 +54,14 @@ import com.d9tilov.android.settings.ui.vm.SettingsUiState
 import com.d9tilov.android.settings.ui.vm.SettingsViewModel
 import com.d9tilov.android.settings.ui.vm.SubscriptionUiState
 import com.d9tilov.android.user.domain.model.InsightLanguage
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 
 private const val BACKUP_SPINNER_DURATION_MILLIS = 2000
 private const val MAX_FISCAL_DAY = 31
 
 @Composable
 fun SettingsRoute(
-    viewModel: SettingsViewModel = hiltViewModel(),
+    viewModel: SettingsViewModel = metroViewModel(),
     clickBack: () -> Unit,
     onShowSnackBar: suspend (String, String?) -> Boolean,
 ) {

@@ -3,10 +3,11 @@ package com.d9tilov.android.user.data.impl
 import com.d9tilov.android.user.data.contract.UserSource
 import com.d9tilov.android.user.domain.contract.UserRepo
 import com.d9tilov.android.user.domain.model.UserProfile
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
-class UserDataRepo @Inject constructor(
+@Inject
+class UserDataRepo(
     private val userLocalSource: UserSource,
 ) : UserRepo {
     override fun getCurrentUser(): Flow<UserProfile?> = userLocalSource.getCurrentUser()

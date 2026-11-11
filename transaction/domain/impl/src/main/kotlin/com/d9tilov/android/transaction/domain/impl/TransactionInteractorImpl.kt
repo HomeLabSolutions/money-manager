@@ -33,6 +33,7 @@ import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayMode
 import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
 import com.d9tilov.android.user.domain.contract.UserInteractor
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -49,9 +50,9 @@ import kotlinx.datetime.atTime
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import java.math.BigDecimal
-import javax.inject.Inject
 
-class TransactionInteractorImpl @Inject constructor(
+@Inject
+class TransactionInteractorImpl(
     private val transactionRepo: TransactionRepo,
     private val regularTransactionInteractor: RegularTransactionInteractor,
     private val categoryInteractor: CategoryInteractor,

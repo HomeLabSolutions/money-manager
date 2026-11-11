@@ -37,7 +37,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.d9tilov.android.common.android.utils.getAppVersion
@@ -51,10 +50,11 @@ import com.d9tilov.android.profile.ui.vm.ProfileUiItem
 import com.d9tilov.android.profile.ui.vm.ProfileUiState
 import com.d9tilov.android.profile.ui.vm.ProfileViewModel
 import com.d9tilov.android.profile.ui.vm.UserUiProfile
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 
 @Composable
 fun ProfileRoute(
-    viewModel: ProfileViewModel = hiltViewModel(),
+    viewModel: ProfileViewModel = metroViewModel(),
     navigateToCurrencyListScreen: () -> Unit,
     navigateToBudgetScreen: () -> Unit,
     navigateToRegularIncomeScreen: () -> Unit,

@@ -1,8 +1,8 @@
 plugins {
     id("moneymanager.android.library")
-    id("moneymanager.android.hilt")
     id("moneymanager.android.library.compose")
     id("kotlin-parcelize")
+    id("moneymanager.di")
 }
 
 android {
@@ -25,9 +25,9 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.constraintlayout.compose)
-    implementation(libs.hilt.android)
-    implementation(libs.hilt.lifecycle.viewmodel.compose)
     implementation(libs.kotlinx.datetime)
+    implementation(libs.metro.viewmodel)
+    implementation(libs.metro.viewmodel.compose)
     implementation(libs.navigation.compose)
     implementation(libs.navigation.runtime)
 

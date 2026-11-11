@@ -45,7 +45,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.CategoryDestination
@@ -74,6 +73,7 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberUpdatedMarkerState
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -82,7 +82,7 @@ private const val MAP_ZOOM_LEVEL = 15f
 
 @Composable
 fun TransactionInfoRoute(
-    viewModel: TransactionInfoViewModel = hiltViewModel(),
+    viewModel: TransactionInfoViewModel = metroViewModel(),
     clickBack: () -> Unit,
     clickCurrency: (String) -> Unit,
     clickCategory: (TransactionType, CategoryDestination) -> Unit,

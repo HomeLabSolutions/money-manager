@@ -4,17 +4,15 @@ import com.d9tilov.android.billing.data.contract.BillingSource
 import com.d9tilov.android.billing.data.impl.BillingDataRepo
 import com.d9tilov.android.billing.data.impl.BillingDataSource
 import com.d9tilov.android.billing.domain.contract.BillingRepo
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
 interface BillingDataModule {
     @Binds
-    fun provideBillingLocalSource(impl: BillingDataSource): BillingSource
+    val BillingDataSource.provideBillingLocalSource: BillingSource
 
     @Binds
-    fun provideBillingRepo(impl: BillingDataRepo): BillingRepo
+    val BillingDataRepo.provideBillingRepo: BillingRepo
 }

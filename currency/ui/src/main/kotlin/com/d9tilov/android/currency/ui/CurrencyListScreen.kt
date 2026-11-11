@@ -53,13 +53,13 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.MoneyManagerIcons
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -67,7 +67,7 @@ private const val CURRENCY_LABEL_WIDTH_FRACTION = 0.85f
 
 @Composable
 fun CurrencyListRoute(
-    viewModel: CurrencyViewModel = hiltViewModel(),
+    viewModel: CurrencyViewModel = metroViewModel(),
     clickBack: () -> Unit,
     onChooseCurrency: (currencyCode: String) -> Unit,
 ) {
