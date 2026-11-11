@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application android:usesCleartextTraffic="true">
+        <provider
+            android:name="com.d9tilov.moneymanager.baselinefixture.AuthEmulatorProvider"
+            android:authorities="${applicationId}.baselinefixture"
+            android:exported="false"
+            android:initOrder="90" />
+        <activity
+            android:name="com.d9tilov.moneymanager.baselinefixture.FixtureActivity"
+            android:exported="true" />
+    </application>
+</manifest>

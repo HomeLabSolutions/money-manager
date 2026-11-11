@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "123456789012",
+    "project_id": "demo-baseline-profile",
+    "storage_bucket": "demo-baseline-profile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123456789012:android:0123456789abcdef012345",
+        "android_client_info": {
+          "package_name": "com.d9tilov.moneymanager.baselineprofile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "123456789012-baseline.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSy000000000000000000000000000000000"
+        }
+      ]
+    }
+  ],
+  "configuration_version": "1"
+}

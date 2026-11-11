@@ -1,3 +1,6 @@
+import androidx.baselineprofile.gradle.consumer.BaselineProfileConsumerExtension
+import com.google.gms.googleservices.GoogleServicesTask
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -21,11 +24,15 @@ secrets {
 
 val keystorePropertiesFile: File = rootProject.file("keystore.properties")
 val releaseKeystorePath = providers.environmentVariable("ANDROID_KEYSTORE_PATH").orNull
+val releaseBuildTypeName = "release"
+val debugBuildTypeName = "debug"
+val appNamePlaceholder = "appName"
+val baselineProfileBuildTypes = listOf("nonMinifiedRelease", "benchmarkRelease")
 
 android {
 
     signingConfigs {
-        create("release") {
+        create(releaseBuildTypeName) {
             if (!releaseKeystorePath.isNullOrBlank()) {
                 storeFile = file(releaseKeystorePath)
                 storePassword = providers.environmentVariable("ANDROID_KEYSTORE_PASSWORD").get()
@@ -44,7 +51,7 @@ android {
                 )
             }
         }
-        getByName("debug") {
+        getByName(debugBuildTypeName) {
             storeFile = file("debug.keystore")
             storePassword = "android"
             keyAlias = "androiddebugkey"
@@ -88,21 +95,21 @@ android {
             isShrinkResources = true
             isDebuggable = false
             if (!releaseKeystorePath.isNullOrBlank() || keystorePropertiesFile.exists()) {
-                signingConfig = signingConfigs.getByName("release")
+                signingConfig = signingConfigs.getByName(releaseBuildTypeName)
             }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            manifestPlaceholders["appName"] = "Money Manager"
+            manifestPlaceholders[appNamePlaceholder] = "Money Manager"
         }
         debug {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
             isMinifyEnabled = false
             isDebuggable = true
-            manifestPlaceholders["appName"] = "Money Manager debug"
-            signingConfig = signingConfigs.getByName("debug")
+            manifestPlaceholders[appNamePlaceholder] = "Money Manager debug"
+            signingConfig = signingConfigs.getByName(debugBuildTypeName)
         }
     }
 
@@ -162,6 +169,7 @@ dependencies {
     implementation(project(":widget:domain:contract"))
     implementation(project(":widget:ui"))
     implementation(libs.activity)
+    implementation(libs.activity.compose)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material3.window.size)
@@ -191,6 +199,7 @@ dependencies {
     implementation(libs.timber)
 
     runtimeOnly(libs.androidx.credentials.play.services.auth)
+    runtimeOnly(libs.profileinstaller)
 
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk.core)
@@ -199,4 +208,62 @@ dependencies {
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.androidx.work.testing)
     androidTestImplementation(libs.kotlinx.coroutines.test)
+}
+
+if (providers.gradleProperty("baselineProfile").orNull == "true") {
+    apply(plugin = "androidx.baselineprofile")
+
+    android.buildTypes {
+        baselineProfileBuildTypes.forEach { buildTypeName ->
+            maybeCreate(buildTypeName).apply {
+                initWith(getByName(releaseBuildTypeName))
+                applicationIdSuffix = ".baselineprofile"
+                versionNameSuffix = "-baselineprofile"
+                signingConfig = android.signingConfigs.getByName(debugBuildTypeName)
+                manifestPlaceholders[appNamePlaceholder] = "Money Manager profile"
+            }
+        }
+    }
+
+    androidComponents.finalizeDsl {
+        baselineProfileBuildTypes.forEach { buildTypeName ->
+            android.sourceSets.getByName(buildTypeName).apply {
+                manifest.srcFile(rootProject.file("baselineprofile/target/AndroidManifest.xml"))
+            }
+        }
+    }
+    tasks.withType<KotlinCompile>().configureEach {
+        if (name in listOf("compileNonMinifiedReleaseKotlin", "compileBenchmarkReleaseKotlin")) {
+            source(rootProject.file("baselineprofile/target/src"))
+        }
+    }
+
+    configure<BaselineProfileConsumerExtension> {
+        automaticGenerationDuringBuild = false
+        saveInSrc = true
+        mergeIntoMain = true
+    }
+
+    dependencies {
+        add("baselineProfile", project(":baselineprofile"))
+        listOf("nonMinifiedReleaseImplementation", "benchmarkReleaseImplementation").forEach { configuration ->
+            add(configuration, project(":core:database"))
+            add(configuration, libs.room.runtime.android)
+        }
+    }
+
+    androidComponents.onVariants { variant ->
+        if (variant.buildType in listOf("nonMinifiedRelease", "benchmarkRelease")) {
+            val variantName = variant.name.replaceFirstChar(Char::uppercaseChar)
+            tasks.named<GoogleServicesTask>("process${variantName}GoogleServices") {
+                googleServicesJsonFiles.set(listOf(rootProject.file("baselineprofile/google-services.json")))
+            }
+        }
+    }
+} else {
+    androidComponents.onVariants { variant ->
+        if (!variant.debuggable) {
+            variant.sources.baselineProfiles?.addStaticSourceDirectory("src/main/generated/baselineProfiles")
+        }
+    }
 }

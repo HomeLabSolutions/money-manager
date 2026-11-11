@@ -10,6 +10,7 @@ annotation = "1.11.0"
 appCompat = "1.8.0"
 autonomousappsSorting = "0.21.0"
 autonomousappsUnused = "3.20.2"
+benchmark = "1.5.0"
 billing = "9.1.0"
 coil = "3.6.3"
 composeConstraintLayout = "1.1.2"
@@ -44,12 +45,14 @@ material = "1.14.0"
 mockk = "1.14.12"
 navigation = "2.10.2"
 paging = "3.5.3"
+profileInstaller = "1.4.1"
 room = "2.8.5"
 secretesGradle = "2.0.1"
 splashScreen = "1.2.0"
 sqliteJdbc = "3.54.1.0"
 startup = "1.2.0"
 timber = "5.0.1"
+uiAutomator = "2.3.0"
 worker = "2.12.0"
 workerHilt = "1.4.0"
 
@@ -59,6 +62,8 @@ activity = { group = "androidx.activity", name = "activity", version.ref = "acti
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "gradlePlugin" }
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
+androidx-benchmark-junit4 = { group = "androidx.benchmark", name = "benchmark-junit4", version.ref = "benchmark" }
+androidx-benchmark-macro = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "benchmark" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
 androidx-compose-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core" }
@@ -81,6 +86,7 @@ androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-r
 androidx-lifecycle-viewmodel-compose-android = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose-android", version.ref = "lifecycle" }
 androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxTestJunit" }
 androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTestRunner" }
+androidx-test-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiAutomator" }
 androidx-work-runtime = { group = "androidx.work", name = "work-runtime", version.ref = "worker" }
 androidx-work-testing = { group = "androidx.work", name = "work-testing", version.ref = "worker" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appCompat" }
@@ -143,6 +149,7 @@ paging-compose = { group = "androidx.paging", name = "paging-compose", version.r
 paging-testing = { group = "androidx.paging", name = "paging-testing", version.ref = "paging" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "googlePlayServicesLocation" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "googlePlayServicesMaps" }
+profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileInstaller" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "room" }
@@ -151,6 +158,7 @@ startup = { group = "androidx.startup", name = "startup-runtime", version.ref = 
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
 [plugins]
+androidx-baselineprofile = { id = "androidx.baselineprofile", version.ref = "benchmark" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 deps-sorting = { id = "com.squareup.sort-dependencies", version.ref = "autonomousappsSorting" }
 deps-unused = { id = "com.autonomousapps.dependency-analysis", version.ref = "autonomousappsUnused" }
