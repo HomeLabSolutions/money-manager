@@ -191,11 +191,12 @@ dependencies {
     implementation(libs.timber)
 
     runtimeOnly(libs.androidx.credentials.play.services.auth)
+
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk.core)
 
-    androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(project(":backup:domain:model"))
+    androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.androidx.work.testing)
     androidTestImplementation(libs.kotlinx.coroutines.test)
 }

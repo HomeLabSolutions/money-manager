@@ -53,14 +53,15 @@ class CurrencyInteractorImplTest {
     }
 
     @Test
-    fun `updateCurrencyRates should propagate cancellation`() = runTest {
-        val cancellation = CancellationException("Worker stopped")
-        coEvery { currencyRepo.updateCurrencies() } throws cancellation
+    fun `updateCurrencyRates should propagate cancellation`() =
+        runTest {
+            val cancellation = CancellationException("Worker stopped")
+            coEvery { currencyRepo.updateCurrencies() } throws cancellation
 
-        val result = runCatching { interactor.updateCurrencyRates() }
+            val result = runCatching { interactor.updateCurrencyRates() }
 
-        assertSame(cancellation, result.exceptionOrNull())
-    }
+            assertSame(cancellation, result.exceptionOrNull())
+        }
 
     @Test
     fun `getCurrencies should return currencies with main currency marked`() =

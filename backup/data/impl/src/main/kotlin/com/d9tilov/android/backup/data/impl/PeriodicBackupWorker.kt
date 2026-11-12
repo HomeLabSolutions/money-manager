@@ -42,9 +42,11 @@ class PeriodicBackupWorker
                         Result.retry()
                     }
                 }
+
                 is ResultOf.Loading -> {
                     if (runAttemptCount < MAX_RETRIES) Result.retry() else Result.failure()
                 }
+
                 is ResultOf.Success -> {
                     Result.success()
                 }
