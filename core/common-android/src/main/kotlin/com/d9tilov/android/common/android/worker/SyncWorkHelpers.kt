@@ -20,6 +20,7 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.pm.ServiceInfo
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.work.Constraints
@@ -27,7 +28,7 @@ import androidx.work.ForegroundInfo
 import androidx.work.NetworkType
 import com.d9tilov.android.common.android.R
 
-private const val SYNC_NOTIFICATION_ID = 0
+private const val SYNC_NOTIFICATION_ID = 1
 private const val SYNC_NOTIFICATION_CHANNEL_ID = "SyncNotificationChannel"
 
 // All sync work needs an internet connections
@@ -46,6 +47,7 @@ fun Context.syncForegroundInfo() =
     ForegroundInfo(
         SYNC_NOTIFICATION_ID,
         syncWorkNotification(),
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC else 0,
     )
 
 /**
