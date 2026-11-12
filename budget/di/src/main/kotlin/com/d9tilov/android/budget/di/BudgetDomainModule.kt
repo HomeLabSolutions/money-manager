@@ -2,14 +2,12 @@ package com.d9tilov.android.budget.di
 
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.budget.domain.impl.BudgetInteractorImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
 interface BudgetDomainModule {
     @Binds
-    fun provideBudgetInteractor(impl: BudgetInteractorImpl): BudgetInteractor
+    val BudgetInteractorImpl.provideBudgetInteractor: BudgetInteractor
 }

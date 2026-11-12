@@ -26,6 +26,16 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${maps_api_key}" />
 
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                tools:node="remove" />
+        </provider>
+
         <activity
             android:name="com.d9tilov.moneymanager.home.MainActivity"
             android:exported="true"

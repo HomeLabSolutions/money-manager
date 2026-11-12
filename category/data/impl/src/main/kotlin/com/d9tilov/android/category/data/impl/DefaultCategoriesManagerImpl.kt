@@ -8,7 +8,7 @@ import com.d9tilov.android.category.data.contract.DefaultCategoriesManager
 import com.d9tilov.android.category.domain.entity.DefaultCategory
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.android.core.model.TransactionType
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 class DefaultCategoriesManagerImpl
     @Inject

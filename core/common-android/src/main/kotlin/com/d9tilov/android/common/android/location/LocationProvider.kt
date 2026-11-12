@@ -10,6 +10,7 @@ import com.d9tilov.android.places.domain.model.LocationData
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
+import dev.zacsweers.metro.Named
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -17,7 +18,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.tasks.await
-import javax.inject.Named
 
 interface LocationProvider {
     suspend fun getCurrentLocation(

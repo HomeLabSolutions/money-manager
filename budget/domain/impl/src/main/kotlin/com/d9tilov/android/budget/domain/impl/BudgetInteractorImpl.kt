@@ -4,11 +4,15 @@ import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.budget.domain.contract.BudgetRepo
 import com.d9tilov.android.budget.domain.model.BudgetData
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class BudgetInteractorImpl @Inject constructor(
+@Inject
+@SingleIn(AppScope::class)
+class BudgetInteractorImpl(
     private val budgetRepo: BudgetRepo,
     private val currencyInteractor: CurrencyInteractor,
 ) : BudgetInteractor {

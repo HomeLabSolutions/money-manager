@@ -3,18 +3,18 @@ package com.d9tilov.android.places.di
 import com.d9tilov.android.network.di.qualifier.GeoapifyNetworkApi
 import com.d9tilov.android.places.data.impl.api.GeoapifyApi
 import com.d9tilov.android.places.data.impl.api.KtorGeoapifyApi
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import io.ktor.client.HttpClient
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
+@BindingContainer
+@ContributesTo(AppScope::class)
 object PlacesApiModule {
     @Provides
-    @Singleton
+    @SingleIn(AppScope::class)
     fun provideGeoapifyApi(
         @GeoapifyNetworkApi client: HttpClient,
     ): GeoapifyApi = KtorGeoapifyApi(client)

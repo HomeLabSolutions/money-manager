@@ -4,13 +4,14 @@ import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.contract.CategoryRepo
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.model.TransactionType
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class CategoryInteractorImpl @Inject constructor(
+@Inject
+class CategoryInteractorImpl(
     private val categoryRepo: CategoryRepo,
 ) : CategoryInteractor {
     override suspend fun create(category: Category) = categoryRepo.create(category)

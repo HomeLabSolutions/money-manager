@@ -5,9 +5,10 @@ import com.d9tilov.android.places.data.impl.mapper.toNearbyPlaces
 import com.d9tilov.android.places.domain.contract.NearbyPlacesRepo
 import com.d9tilov.android.places.domain.model.LocationData
 import com.d9tilov.android.places.domain.model.NearbyPlace
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class NearbyPlacesDataRepo @Inject constructor(
+@Inject
+class NearbyPlacesDataRepo(
     private val remoteSource: NearbyPlacesRemoteSource,
 ) : NearbyPlacesRepo {
     override suspend fun getNearbyPlaces(location: LocationData): List<NearbyPlace> =

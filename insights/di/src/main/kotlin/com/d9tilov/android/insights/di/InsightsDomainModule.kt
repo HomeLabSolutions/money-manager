@@ -2,14 +2,12 @@ package com.d9tilov.android.insights.di
 
 import com.d9tilov.android.insights.domain.contract.InsightsInteractor
 import com.d9tilov.android.insights.domain.impl.InsightsInteractorImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
 interface InsightsDomainModule {
     @Binds
-    fun bindInsightsInteractor(impl: InsightsInteractorImpl): InsightsInteractor
+    val InsightsInteractorImpl.bindInsightsInteractor: InsightsInteractor
 }

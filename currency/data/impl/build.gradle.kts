@@ -3,7 +3,7 @@ import java.util.Properties
 
 plugins {
     id("moneymanager.android.library")
-    id("moneymanager.android.hilt")
+    id("moneymanager.di")
 }
 
 val keystorePropertiesFile: File = rootProject.file("keystore.properties")
@@ -46,10 +46,7 @@ dependencies {
     implementation(project(":currency:data:contract"))
     implementation(project(":currency:domain:contract"))
     implementation(project(":currency:domain:model"))
-    implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.work.runtime)
-    implementation(libs.dagger)
-    implementation(libs.hilt.common)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.datetime)
     implementation(libs.ktor.client.core)

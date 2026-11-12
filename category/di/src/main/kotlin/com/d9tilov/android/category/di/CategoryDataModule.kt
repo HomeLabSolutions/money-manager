@@ -6,20 +6,18 @@ import com.d9tilov.android.category.data.impl.CategoryLocalSource
 import com.d9tilov.android.category.data.impl.CategoryRepoImpl
 import com.d9tilov.android.category.data.impl.DefaultCategoriesManagerImpl
 import com.d9tilov.android.category.domain.contract.CategoryRepo
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
 interface CategoryDataModule {
     @Binds
-    fun provideDefaultCategoriesManager(impl: DefaultCategoriesManagerImpl): DefaultCategoriesManager
+    val DefaultCategoriesManagerImpl.provideDefaultCategoriesManager: DefaultCategoriesManager
 
     @Binds
-    fun provideCategoryLocalSource(impl: CategoryLocalSource): CategorySource
+    val CategoryLocalSource.provideCategoryLocalSource: CategorySource
 
     @Binds
-    fun provideCategoryRepo(impl: CategoryRepoImpl): CategoryRepo
+    val CategoryRepoImpl.provideCategoryRepo: CategoryRepo
 }

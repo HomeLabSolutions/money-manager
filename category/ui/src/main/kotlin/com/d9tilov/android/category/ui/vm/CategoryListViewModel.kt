@@ -2,7 +2,9 @@ package com.d9tilov.android.category.ui.vm
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.d9tilov.android.analytics.domain.AnalyticsSender
 import com.d9tilov.android.analytics.model.AnalyticsEvent
 import com.d9tilov.android.analytics.model.AnalyticsParams
@@ -13,7 +15,13 @@ import com.d9tilov.android.category.domain.entity.CategoryDestination
 import com.d9tilov.android.category.ui.navigation.CategoryArgs
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactionInteractor
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactory
+import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactoryKey
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -22,7 +30,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class CategoryUiState(
     val categories: List<Category> = emptyList(),
@@ -32,51 +39,58 @@ data class CategoryUiState(
     }
 }
 
-@HiltViewModel
-class CategoryListViewModel
-    @Inject
-    constructor(
-        analyticsSender: AnalyticsSender,
-        savedStateHandle: SavedStateHandle,
-        private val categoryInteractor: CategoryInteractor,
-        private val transactionInteractor: TransactionInteractor,
-        private val regularTransactionInteractor: RegularTransactionInteractor,
-    ) : ViewModel() {
-        private val categoryArgs: CategoryArgs.CategoryListArgs = CategoryArgs.CategoryListArgs(savedStateHandle)
-        val transactionType = checkNotNull(categoryArgs.transactionType)
-        val destination: CategoryDestination = checkNotNull(categoryArgs.destination)
-        private val _uiState =
-            categoryInteractor
-                .getGroupedCategoriesByType(transactionType)
-                .map { list -> CategoryUiState(list.filter { it.id != ALL_ITEMS_ID }) }
-                .stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.WhileSubscribed(),
-                    initialValue = CategoryUiState.EMPTY,
-                )
-        val uiState: StateFlow<CategoryUiState> = _uiState
-
-        init {
-            analyticsSender.send(
-                AnalyticsEvent.Internal.Screen,
-                mapOf(AnalyticsParams.Screen.Name to "category_list"),
+@AssistedInject
+class CategoryListViewModel(
+    analyticsSender: AnalyticsSender,
+    @Assisted savedStateHandle: SavedStateHandle,
+    private val categoryInteractor: CategoryInteractor,
+    private val transactionInteractor: TransactionInteractor,
+    private val regularTransactionInteractor: RegularTransactionInteractor,
+) : ViewModel() {
+    private val categoryArgs: CategoryArgs.CategoryListArgs = CategoryArgs.CategoryListArgs(savedStateHandle)
+    val transactionType = checkNotNull(categoryArgs.transactionType)
+    val destination: CategoryDestination = checkNotNull(categoryArgs.destination)
+    private val _uiState =
+        categoryInteractor
+            .getGroupedCategoriesByType(transactionType)
+            .map { list -> CategoryUiState(list.filter { it.id != ALL_ITEMS_ID }) }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(),
+                initialValue = CategoryUiState.EMPTY,
             )
-        }
+    val uiState: StateFlow<CategoryUiState> = _uiState
 
-        fun remove(category: Category) {
-            val categoryExceptionHandler = CoroutineExceptionHandler { _, _ -> }
-            viewModelScope.launch(categoryExceptionHandler) {
+    init {
+        analyticsSender.send(
+            AnalyticsEvent.Internal.Screen,
+            mapOf(AnalyticsParams.Screen.Name to "category_list"),
+        )
+    }
+
+    fun remove(category: Category) {
+        val categoryExceptionHandler = CoroutineExceptionHandler { _, _ -> }
+        viewModelScope.launch(categoryExceptionHandler) {
+            awaitAll(
+                async { transactionInteractor.removeAllByCategory(category) },
+                async { regularTransactionInteractor.removeAllByCategory(category) },
+            )
+            category.children.forEach { child ->
                 awaitAll(
-                    async { transactionInteractor.removeAllByCategory(category) },
-                    async { regularTransactionInteractor.removeAllByCategory(category) },
+                    async { transactionInteractor.removeAllByCategory(child) },
+                    async { regularTransactionInteractor.removeAllByCategory(child) },
                 )
-                category.children.forEach { child ->
-                    awaitAll(
-                        async { transactionInteractor.removeAllByCategory(child) },
-                        async { regularTransactionInteractor.removeAllByCategory(child) },
-                    )
-                }
-                categoryInteractor.deleteCategory(category)
             }
+            categoryInteractor.deleteCategory(category)
         }
     }
+
+    @AssistedFactory
+    @ViewModelAssistedFactoryKey(CategoryListViewModel::class)
+    @ContributesIntoMap(AppScope::class)
+    fun interface Factory : ViewModelAssistedFactory {
+        override fun create(extras: CreationExtras): CategoryListViewModel = create(extras.createSavedStateHandle())
+
+        fun create(savedStateHandle: SavedStateHandle): CategoryListViewModel
+    }
+}

@@ -22,6 +22,8 @@ import com.d9tilov.android.transaction.data.impl.mapper.toDataModel
 import com.d9tilov.android.transaction.data.impl.mapper.toDbModel
 import com.d9tilov.android.transaction.domain.model.TransactionDataModel
 import com.d9tilov.android.transaction.domain.model.TransactionMinMaxDateModel
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Named
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
@@ -31,12 +33,11 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
-import javax.inject.Inject
-import javax.inject.Named
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
-class TransactionLocalSource @Inject constructor(
+@Inject
+class TransactionLocalSource(
     @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
     private val preferencesStore: PreferencesStore,
     private val transactionDao: TransactionDao,

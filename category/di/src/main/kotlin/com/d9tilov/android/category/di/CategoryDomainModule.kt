@@ -2,14 +2,12 @@ package com.d9tilov.android.category.di
 
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.impl.CategoryInteractorImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
 interface CategoryDomainModule {
     @Binds
-    fun provideCategoryInteractor(impl: CategoryInteractorImpl): CategoryInteractor
+    val CategoryInteractorImpl.provideCategoryInteractor: CategoryInteractor
 }

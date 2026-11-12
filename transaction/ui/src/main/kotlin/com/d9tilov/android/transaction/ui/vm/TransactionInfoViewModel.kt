@@ -2,7 +2,9 @@ package com.d9tilov.android.transaction.ui.vm
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.utils.reduceScaleStr
@@ -15,14 +17,19 @@ import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.R
 import com.d9tilov.android.transaction.ui.model.TransactionInfoMode
 import com.d9tilov.android.transaction.ui.navigation.TransactionArgs
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactory
+import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactoryKey
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class TransactionInfoUiState(
     val mode: TransactionInfoMode = TransactionInfoMode.VIEW,
@@ -42,176 +49,184 @@ data class TransactionInfoUiState(
     }
 }
 
-@HiltViewModel
-class TransactionInfoViewModel
-    @Inject constructor(
-        savedStateHandle: SavedStateHandle,
-        private val transactionInteractor: TransactionInteractor,
-        private val categoryInteractor: CategoryInteractor,
-        private val nearbyPlacesInteractor: NearbyPlacesInteractor,
-    ) : ViewModel() {
-        private val transactionArgs: TransactionArgs.TransactionInfoArgs =
-            TransactionArgs.TransactionInfoArgs(savedStateHandle)
-        private val _uiState = MutableStateFlow(TransactionInfoUiState.EMPTY)
-        val uiState = _uiState.asStateFlow()
-        private val transactionId: Long = transactionArgs.transactionId
+@AssistedInject
+class TransactionInfoViewModel(
+    @Assisted savedStateHandle: SavedStateHandle,
+    private val transactionInteractor: TransactionInteractor,
+    private val categoryInteractor: CategoryInteractor,
+    private val nearbyPlacesInteractor: NearbyPlacesInteractor,
+) : ViewModel() {
+    private val transactionArgs: TransactionArgs.TransactionInfoArgs =
+        TransactionArgs.TransactionInfoArgs(savedStateHandle)
+    private val _uiState = MutableStateFlow(TransactionInfoUiState.EMPTY)
+    val uiState = _uiState.asStateFlow()
+    private val transactionId: Long = transactionArgs.transactionId
 
-        init {
-            val transactionExceptionHandler = CoroutineExceptionHandler { _, _ -> }
-            viewModelScope.launch(transactionExceptionHandler) {
-                transactionInteractor.getTransactionById(transactionId).collect { transaction ->
-                    _uiState.update { state ->
-                        state.copy(
-                            mode = transactionArgs.mode,
-                            amount = transaction.sum.reduceScaleStr(),
-                            transaction = transaction,
-                        )
-                    }
-                }
-            }
-        }
-
-        fun updateAmount(amount: String) = _uiState.update { state -> state.copy(amount = amount) }
-
-        fun selectPlace(place: NearbyPlace) = updatePlace(place.name, place.address)
-
-        fun updatePlaceName(name: String?) = updatePlace(name)
-
-        private fun updatePlace(
-            name: String?,
-            address: String? = null,
-        ) {
-            if (!canEditPlace() || name.isNullOrBlank()) return
-            _uiState.update { state ->
-                state.copy(
-                    transaction =
-                        state.transaction.copy(
-                            place =
-                                state.transaction.place.copy(
-                                    name = name,
-                                    address = address?.takeIf { it.isNotBlank() },
-                                ),
-                        ),
-                    placeState = state.placeState.copy(pickerVisible = false),
-                )
-            }
-        }
-
-        private fun loadNearbyPlaces() {
-            if (!canEditPlace()) return
-            val state = _uiState.value
-            if (state.placeState.status == NearbyPlacesStatus.LOADING) return
-            if (state.placeState.status == NearbyPlacesStatus.READY) {
-                _uiState.update { it.copy(placeState = it.placeState.copy(pickerVisible = true)) }
-                return
-            }
-            val location = state.transaction.place.location
-            if (location == LocationData.EMPTY) {
-                _uiState.update {
-                    it.copy(
-                        placeState = it.placeState.copy(status = NearbyPlacesStatus.NO_LOCATION, pickerVisible = true),
+    init {
+        val transactionExceptionHandler = CoroutineExceptionHandler { _, _ -> }
+        viewModelScope.launch(transactionExceptionHandler) {
+            transactionInteractor.getTransactionById(transactionId).collect { transaction ->
+                _uiState.update { state ->
+                    state.copy(
+                        mode = transactionArgs.mode,
+                        amount = transaction.sum.reduceScaleStr(),
+                        transaction = transaction,
                     )
                 }
-                return
-            }
-            _uiState.update {
-                it.copy(
-                    placeState =
-                        it.placeState.copy(
-                            status = NearbyPlacesStatus.LOADING,
-                            places = emptyList(),
-                            pickerVisible = false,
-                        ),
-                )
-            }
-            viewModelScope.launch {
-                try {
-                    val places = nearbyPlacesInteractor.getNearbyPlaces(location)
-                    _uiState.update {
-                        it.copy(
-                            placeState =
-                                it.placeState.copy(
-                                    places = places,
-                                    status = NearbyPlacesStatus.READY,
-                                    pickerVisible = true,
-                                ),
-                        )
-                    }
-                } catch (error: CancellationException) {
-                    throw error
-                } catch (_: Exception) {
-                    _uiState.update {
-                        it.copy(
-                            placeState =
-                                it.placeState.copy(
-                                    status = NearbyPlacesStatus.UNAVAILABLE,
-                                    pickerVisible = true,
-                                ),
-                        )
-                    }
-                }
             }
         }
+    }
 
-        fun updatePlacePickerVisibility(visible: Boolean) {
-            if (visible) {
-                loadNearbyPlaces()
-            } else {
-                _uiState.update { state -> state.copy(placeState = state.placeState.copy(pickerVisible = false)) }
-            }
-        }
+    fun updateAmount(amount: String) = _uiState.update { state -> state.copy(amount = amount) }
 
-        private fun canEditPlace(): Boolean = _uiState.value.mode == TransactionInfoMode.EDIT
+    fun selectPlace(place: NearbyPlace) = updatePlace(place.name, place.address)
 
-        fun updateDescription(description: String) =
-            _uiState.update { state ->
-                val tr = state.transaction
-                state.copy(transaction = tr.copy(description = description))
-            }
+    fun updatePlaceName(name: String?) = updatePlace(name)
 
-        fun updateDate(date: Long) =
-            _uiState.update { state ->
-                val tr = state.transaction
-                state.copy(transaction = tr.copy(date = date.toLocalDateTime()))
-            }
-
-        fun updateInStatistics(inStatistics: Boolean) =
-            _uiState.update { state ->
-                val tr = state.transaction
-                state.copy(transaction = tr.copy(inStatistics = inStatistics))
-            }
-
-        fun updateCurrencyCode(code: String) =
-            _uiState.update { state ->
-                val tr = state.transaction
-                state.copy(transaction = tr.copy(currencyCode = code))
-            }
-
-        fun updateCategory(id: Long) =
-            viewModelScope.launch {
-                val category = categoryInteractor.getCategoryById(id)
-                _uiState.update { state ->
-                    val tr = state.transaction
-                    state.copy(transaction = tr.copy(category = category))
-                }
-            }
-
-        suspend fun save() {
-            val state = _uiState.value
-            if (state.mode == TransactionInfoMode.VIEW) return
-            transactionInteractor.update(
-                state.transaction.copy(
-                    sum = state.amount.toBigDecimal(),
-                    place =
-                        state.transaction.place.copy(
-                            name =
-                                state.transaction.place.name
-                                    ?.trim(),
-                            address =
-                                state.transaction.place.address
-                                    ?.trim(),
-                        ),
-                ),
+    private fun updatePlace(
+        name: String?,
+        address: String? = null,
+    ) {
+        if (!canEditPlace() || name.isNullOrBlank()) return
+        _uiState.update { state ->
+            state.copy(
+                transaction =
+                    state.transaction.copy(
+                        place =
+                            state.transaction.place.copy(
+                                name = name,
+                                address = address?.takeIf { it.isNotBlank() },
+                            ),
+                    ),
+                placeState = state.placeState.copy(pickerVisible = false),
             )
         }
     }
+
+    private fun loadNearbyPlaces() {
+        if (!canEditPlace()) return
+        val state = _uiState.value
+        if (state.placeState.status == NearbyPlacesStatus.LOADING) return
+        if (state.placeState.status == NearbyPlacesStatus.READY) {
+            _uiState.update { it.copy(placeState = it.placeState.copy(pickerVisible = true)) }
+            return
+        }
+        val location = state.transaction.place.location
+        if (location == LocationData.EMPTY) {
+            _uiState.update {
+                it.copy(
+                    placeState = it.placeState.copy(status = NearbyPlacesStatus.NO_LOCATION, pickerVisible = true),
+                )
+            }
+            return
+        }
+        _uiState.update {
+            it.copy(
+                placeState =
+                    it.placeState.copy(
+                        status = NearbyPlacesStatus.LOADING,
+                        places = emptyList(),
+                        pickerVisible = false,
+                    ),
+            )
+        }
+        viewModelScope.launch {
+            try {
+                val places = nearbyPlacesInteractor.getNearbyPlaces(location)
+                _uiState.update {
+                    it.copy(
+                        placeState =
+                            it.placeState.copy(
+                                places = places,
+                                status = NearbyPlacesStatus.READY,
+                                pickerVisible = true,
+                            ),
+                    )
+                }
+            } catch (error: CancellationException) {
+                throw error
+            } catch (_: Exception) {
+                _uiState.update {
+                    it.copy(
+                        placeState =
+                            it.placeState.copy(
+                                status = NearbyPlacesStatus.UNAVAILABLE,
+                                pickerVisible = true,
+                            ),
+                    )
+                }
+            }
+        }
+    }
+
+    fun updatePlacePickerVisibility(visible: Boolean) {
+        if (visible) {
+            loadNearbyPlaces()
+        } else {
+            _uiState.update { state -> state.copy(placeState = state.placeState.copy(pickerVisible = false)) }
+        }
+    }
+
+    private fun canEditPlace(): Boolean = _uiState.value.mode == TransactionInfoMode.EDIT
+
+    fun updateDescription(description: String) =
+        _uiState.update { state ->
+            val tr = state.transaction
+            state.copy(transaction = tr.copy(description = description))
+        }
+
+    fun updateDate(date: Long) =
+        _uiState.update { state ->
+            val tr = state.transaction
+            state.copy(transaction = tr.copy(date = date.toLocalDateTime()))
+        }
+
+    fun updateInStatistics(inStatistics: Boolean) =
+        _uiState.update { state ->
+            val tr = state.transaction
+            state.copy(transaction = tr.copy(inStatistics = inStatistics))
+        }
+
+    fun updateCurrencyCode(code: String) =
+        _uiState.update { state ->
+            val tr = state.transaction
+            state.copy(transaction = tr.copy(currencyCode = code))
+        }
+
+    fun updateCategory(id: Long) =
+        viewModelScope.launch {
+            val category = categoryInteractor.getCategoryById(id)
+            _uiState.update { state ->
+                val tr = state.transaction
+                state.copy(transaction = tr.copy(category = category))
+            }
+        }
+
+    suspend fun save() {
+        val state = _uiState.value
+        if (state.mode == TransactionInfoMode.VIEW) return
+        transactionInteractor.update(
+            state.transaction.copy(
+                sum = state.amount.toBigDecimal(),
+                place =
+                    state.transaction.place.copy(
+                        name =
+                            state.transaction.place.name
+                                ?.trim(),
+                        address =
+                            state.transaction.place.address
+                                ?.trim(),
+                    ),
+            ),
+        )
+    }
+
+    @AssistedFactory
+    @ViewModelAssistedFactoryKey(TransactionInfoViewModel::class)
+    @ContributesIntoMap(AppScope::class)
+    fun interface Factory : ViewModelAssistedFactory {
+        override fun create(extras: CreationExtras): TransactionInfoViewModel = create(extras.createSavedStateHandle())
+
+        fun create(savedStateHandle: SavedStateHandle): TransactionInfoViewModel
+    }
+}

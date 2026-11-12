@@ -6,6 +6,8 @@ import com.d9tilov.android.transaction.domain.contract.ObserveSpendingSummaryUse
 import com.d9tilov.android.user.domain.contract.UserInteractor
 import com.d9tilov.android.widget.domain.contract.SpendingWidgetInteractor
 import com.d9tilov.android.widget.domain.model.SpendingWidgetState
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Named
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -14,11 +16,10 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
-import javax.inject.Named
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class SpendingWidgetInteractorImpl @Inject constructor(
+@Inject
+class SpendingWidgetInteractorImpl(
     @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
     private val observeSpendingSummary: ObserveSpendingSummaryUseCase,
     private val users: UserInteractor,

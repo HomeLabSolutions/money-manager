@@ -6,20 +6,18 @@ import com.d9tilov.android.currency.data.impl.CurrencyLocalSource
 import com.d9tilov.android.currency.data.impl.GeocodeDataRepo
 import com.d9tilov.android.currency.domain.contract.CurrencyRepo
 import com.d9tilov.android.currency.domain.contract.GeocodeRepo
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
 interface CurrencyDataModule {
     @Binds
-    fun provideCurrencySource(impl: CurrencyLocalSource): CurrencySource
+    val CurrencyLocalSource.provideCurrencySource: CurrencySource
 
     @Binds
-    fun provideCurrencyRepo(impl: CurrencyDataRepo): CurrencyRepo
+    val CurrencyDataRepo.provideCurrencyRepo: CurrencyRepo
 
     @Binds
-    fun provideGeoRepo(impl: GeocodeDataRepo): GeocodeRepo
+    val GeocodeDataRepo.provideGeoRepo: GeocodeRepo
 }

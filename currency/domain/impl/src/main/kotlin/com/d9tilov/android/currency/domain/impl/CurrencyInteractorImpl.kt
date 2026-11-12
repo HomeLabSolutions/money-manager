@@ -9,14 +9,15 @@ import com.d9tilov.android.currency.domain.contract.mapper.toDomain
 import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.currency.domain.model.DomainCurrency
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
 import java.math.BigDecimal
-import javax.inject.Inject
 
-class CurrencyInteractorImpl @Inject constructor(
+@Inject
+class CurrencyInteractorImpl(
     private val currencyRepo: CurrencyRepo,
 ) : CurrencyInteractor {
     override fun getCurrencies(): Flow<List<DomainCurrency>> =

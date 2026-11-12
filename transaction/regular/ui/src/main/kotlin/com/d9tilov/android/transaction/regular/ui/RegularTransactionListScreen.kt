@@ -32,7 +32,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
@@ -44,13 +43,14 @@ import com.d9tilov.android.designsystem.SimpleDialog
 import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
 import com.d9tilov.android.transaction.regular.ui.vm.RegularTransactionListState
 import com.d9tilov.android.transaction.regular.ui.vm.RegularTransactionListViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.coroutines.launch
 
 private const val PREVIEW_TRANSACTION_COUNT = 18
 
 @Composable
 fun RegularTransactionListRoute(
-    viewModel: RegularTransactionListViewModel = hiltViewModel(),
+    viewModel: RegularTransactionListViewModel = metroViewModel(),
     onAddClicked: (TransactionType, Long) -> Unit,
     onItemClicked: (RegularTransaction) -> Unit,
     clickBack: () -> Unit,

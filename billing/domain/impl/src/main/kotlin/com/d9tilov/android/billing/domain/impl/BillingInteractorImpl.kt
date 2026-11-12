@@ -6,13 +6,14 @@ import com.d9tilov.android.billing.domain.model.BillingSkuDetails
 import com.d9tilov.android.billing.domain.model.PremiumInfo
 import com.d9tilov.android.currency.domain.contract.mapper.toDomain
 import com.d9tilov.android.currency.domain.model.DomainCurrency
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class BillingInteractorImpl @Inject constructor(
+@Inject
+class BillingInteractorImpl(
     private val billingRepo: BillingRepo,
 ) : BillingInteractor {
     override val isNewPurchaseAcknowledged: Flow<Boolean> = billingRepo.isNewPurchaseAcknowledged

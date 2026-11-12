@@ -2,7 +2,9 @@ package com.d9tilov.android.currency.ui
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.d9tilov.android.analytics.domain.AnalyticsSender
 import com.d9tilov.android.analytics.model.AnalyticsEvent
 import com.d9tilov.android.analytics.model.AnalyticsParams
@@ -13,14 +15,19 @@ import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.android.currency.observer.contract.CurrencyUpdateObserver
 import com.d9tilov.android.currency.ui.navigation.CurrencyArgs
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Named
+import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactory
+import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactoryKey
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-import javax.inject.Named
 
 sealed interface CurrencyUiState {
     val isLoading: Boolean
@@ -41,98 +48,105 @@ sealed interface CurrencyUiState {
     ) : CurrencyUiState
 }
 
-@HiltViewModel
-class CurrencyViewModel
-    @Inject
-    constructor(
-        @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
-        savedStateHandle: SavedStateHandle,
-        currencyInteractor: CurrencyInteractor,
-        analyticsSender: AnalyticsSender,
-        private val currencyUpdateObserver: CurrencyUpdateObserver,
-    ) : ViewModel() {
-        private val currencyArgs: CurrencyArgs.CurrencyScreenArgs =
-            CurrencyArgs.CurrencyScreenArgs(savedStateHandle)
-        private val selectedCurrency: String? = currencyArgs.currencyCode
+@AssistedInject
+class CurrencyViewModel(
+    @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
+    @Assisted savedStateHandle: SavedStateHandle,
+    currencyInteractor: CurrencyInteractor,
+    analyticsSender: AnalyticsSender,
+    private val currencyUpdateObserver: CurrencyUpdateObserver,
+) : ViewModel() {
+    private val currencyArgs: CurrencyArgs.CurrencyScreenArgs =
+        CurrencyArgs.CurrencyScreenArgs(savedStateHandle)
+    private val selectedCurrency: String? = currencyArgs.currencyCode
 
-        private val _uiState: MutableStateFlow<CurrencyUiState> =
-            MutableStateFlow(CurrencyUiState.NoCurrencies())
-        val uiState = _uiState
+    private val _uiState: MutableStateFlow<CurrencyUiState> =
+        MutableStateFlow(CurrencyUiState.NoCurrencies())
+    val uiState = _uiState
 
-        init {
-            analyticsSender.send(
-                AnalyticsEvent.Internal.Screen,
-                mapOf(
-                    AnalyticsParams.Screen.Name to "currency_list",
-                    AnalyticsParams.Currency to selectedCurrency,
-                ),
-            )
-            viewModelScope.launch(ioDispatcher) {
-                currencyInteractor
-                    .getCurrencies()
-                    .map {
-                        CurrencyUiState.HasCurrencies(
-                            currencyList = it,
-                            filteredCurrencyList = it,
-                            isLoading = false,
-                        )
-                    }.collect { newState: CurrencyUiState.HasCurrencies ->
-                        _uiState.update { state ->
-                            val updatedList =
-                                if (selectedCurrency != null) {
-                                    newState.currencyList.map { item ->
-                                        item.copy(isBase = item.code == selectedCurrency)
-                                    }
-                                } else {
-                                    newState.currencyList
-                                }
-                            newState.copy(
-                                currencyList = updatedList,
-                                filteredCurrencyList = updatedList,
-                            )
-                        }
-                    }
-            }
-        }
-
-        fun changeCurrency(code: String) =
-            viewModelScope.launch {
-                if (selectedCurrency == null) currencyUpdateObserver.updateMainCurrency(code)
-            }
-
-        fun updateSearchQuery(query: String) {
-            _uiState.update { state ->
-                if (state is CurrencyUiState.HasCurrencies) {
-                    val filtered = filterCurrencies(state.currencyList, query)
-                    state.copy(searchQuery = query, filteredCurrencyList = filtered)
-                } else {
-                    state
-                }
-            }
-        }
-
-        fun setSearchActive(active: Boolean) {
-            _uiState.update { state ->
-                if (state is CurrencyUiState.HasCurrencies) {
-                    val query = if (!active) "" else state.searchQuery
-                    val filtered = filterCurrencies(state.currencyList, query)
-                    state.copy(
-                        isSearchActive = active,
-                        searchQuery = query,
-                        filteredCurrencyList = filtered,
+    init {
+        analyticsSender.send(
+            AnalyticsEvent.Internal.Screen,
+            mapOf(
+                AnalyticsParams.Screen.Name to "currency_list",
+                AnalyticsParams.Currency to selectedCurrency,
+            ),
+        )
+        viewModelScope.launch(ioDispatcher) {
+            currencyInteractor
+                .getCurrencies()
+                .map {
+                    CurrencyUiState.HasCurrencies(
+                        currencyList = it,
+                        filteredCurrencyList = it,
+                        isLoading = false,
                     )
-                } else {
-                    state
+                }.collect { newState: CurrencyUiState.HasCurrencies ->
+                    _uiState.update { state ->
+                        val updatedList =
+                            if (selectedCurrency != null) {
+                                newState.currencyList.map { item ->
+                                    item.copy(isBase = item.code == selectedCurrency)
+                                }
+                            } else {
+                                newState.currencyList
+                            }
+                        newState.copy(
+                            currencyList = updatedList,
+                            filteredCurrencyList = updatedList,
+                        )
+                    }
                 }
-            }
+        }
+    }
+
+    fun changeCurrency(code: String) =
+        viewModelScope.launch {
+            if (selectedCurrency == null) currencyUpdateObserver.updateMainCurrency(code)
         }
 
-        private fun filterCurrencies(
-            currencies: List<DomainCurrency>,
-            query: String,
-        ): List<DomainCurrency> =
-            currencies.filter { currency ->
-                currency.code.contains(query, ignoreCase = true) ||
-                    CurrencyUtils.getCurrencyFullName(currency.code).contains(query, ignoreCase = true)
+    fun updateSearchQuery(query: String) {
+        _uiState.update { state ->
+            if (state is CurrencyUiState.HasCurrencies) {
+                val filtered = filterCurrencies(state.currencyList, query)
+                state.copy(searchQuery = query, filteredCurrencyList = filtered)
+            } else {
+                state
             }
+        }
     }
+
+    fun setSearchActive(active: Boolean) {
+        _uiState.update { state ->
+            if (state is CurrencyUiState.HasCurrencies) {
+                val query = if (!active) "" else state.searchQuery
+                val filtered = filterCurrencies(state.currencyList, query)
+                state.copy(
+                    isSearchActive = active,
+                    searchQuery = query,
+                    filteredCurrencyList = filtered,
+                )
+            } else {
+                state
+            }
+        }
+    }
+
+    private fun filterCurrencies(
+        currencies: List<DomainCurrency>,
+        query: String,
+    ): List<DomainCurrency> =
+        currencies.filter { currency ->
+            currency.code.contains(query, ignoreCase = true) ||
+                CurrencyUtils.getCurrencyFullName(currency.code).contains(query, ignoreCase = true)
+        }
+
+    @AssistedFactory
+    @ViewModelAssistedFactoryKey(CurrencyViewModel::class)
+    @ContributesIntoMap(AppScope::class)
+    fun interface Factory : ViewModelAssistedFactory {
+        override fun create(extras: CreationExtras): CurrencyViewModel = create(extras.createSavedStateHandle())
+
+        fun create(savedStateHandle: SavedStateHandle): CurrencyViewModel
+    }
+}

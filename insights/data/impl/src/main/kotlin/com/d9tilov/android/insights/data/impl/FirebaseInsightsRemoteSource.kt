@@ -6,10 +6,11 @@ import com.d9tilov.android.insights.data.contract.model.InsightResponse
 import com.d9tilov.android.insights.domain.model.exception.InsightServiceException
 import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.functions.FirebaseFunctionsException
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.tasks.await
-import javax.inject.Inject
 
-class FirebaseInsightsRemoteSource @Inject constructor() : InsightsRemoteSource {
+@Inject
+class FirebaseInsightsRemoteSource : InsightsRemoteSource {
     override suspend fun generate(
         periodStart: String,
         periodEnd: String,

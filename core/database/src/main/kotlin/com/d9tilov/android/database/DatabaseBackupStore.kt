@@ -2,12 +2,14 @@ package com.d9tilov.android.database
 
 import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import java.io.File
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class DatabaseBackupStore @Inject constructor(
+@SingleIn(AppScope::class)
+@Inject
+class DatabaseBackupStore(
     private val database: AppDatabase,
 ) {
     fun restore(

@@ -1,5 +1,6 @@
 plugins {
     id("moneymanager.android.library")
+    id("moneymanager.di")
 }
 
 android {
@@ -14,6 +15,5 @@ dependencies {
     implementation(project(":user-info:domain:contract"))
     implementation(project(":user-info:domain:model"))
     implementation(libs.firebase.ui.auth)
-    implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)
 }

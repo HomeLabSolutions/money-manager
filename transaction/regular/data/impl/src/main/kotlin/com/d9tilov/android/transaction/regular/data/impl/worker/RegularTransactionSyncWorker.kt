@@ -1,74 +1,87 @@
 package com.d9tilov.android.transaction.regular.data.impl.worker
 
 import android.content.Context
-import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ForegroundInfo
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import com.d9tilov.android.common.android.worker.ChildWorkerFactory
 import com.d9tilov.android.common.android.worker.DelegatingWorker
 import com.d9tilov.android.common.android.worker.SyncConstraints
+import com.d9tilov.android.common.android.worker.WorkerKey
 import com.d9tilov.android.common.android.worker.delegatedData
 import com.d9tilov.android.common.android.worker.syncForegroundInfo
 import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.regular.data.impl.notification.TransactionNotificationSender
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.binding
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-@HiltWorker
-class RegularTransactionSyncWorker
-    @AssistedInject
-    constructor(
-        @Assisted private val context: Context,
-        @Assisted workerParameters: WorkerParameters,
-        private val transactionInteractor: TransactionInteractor,
-        private val transactionNotificationSender: TransactionNotificationSender,
-    ) : CoroutineWorker(context, workerParameters) {
-        override suspend fun getForegroundInfo(): ForegroundInfo = context.syncForegroundInfo()
+@AssistedInject
+class RegularTransactionSyncWorker(
+    @Assisted private val context: Context,
+    @Assisted workerParameters: WorkerParameters,
+    private val transactionInteractor: TransactionInteractor,
+    private val transactionNotificationSender: TransactionNotificationSender,
+) : CoroutineWorker(context, workerParameters) {
+    override suspend fun getForegroundInfo(): ForegroundInfo = context.syncForegroundInfo()
 
-        override suspend fun doWork(): Result {
-            val added =
-                transactionInteractor.executeRegularIfNeeded(TransactionType.INCOME) +
-                    transactionInteractor.executeRegularIfNeeded(TransactionType.EXPENSE)
-            transactionNotificationSender.send(added)
-            return Result.success()
+    override suspend fun doWork(): Result {
+        val added =
+            transactionInteractor.executeRegularIfNeeded(TransactionType.INCOME) +
+                transactionInteractor.executeRegularIfNeeded(TransactionType.EXPENSE)
+        transactionNotificationSender.send(added)
+        return Result.success()
+    }
+
+    companion object {
+        private const val REGULAR_TRANSACTION_SYNC_WORK_NAME = "regular_transaction_work_name"
+        private const val LOGIN_WORK_TAG = "periodic_regular"
+        private const val PERIOD_WORK_IN_HOURS = 24L
+
+        fun startPeriodicJob(context: Context) {
+            Timber.tag(DataConstants.TAG).d("Start regular transaction periodic job")
+            val recurringWork =
+                PeriodicWorkRequest
+                    .Builder(
+                        DelegatingWorker::class.java,
+                        PERIOD_WORK_IN_HOURS,
+                        TimeUnit.HOURS,
+                    ).addTag(LOGIN_WORK_TAG)
+                    .setConstraints(SyncConstraints)
+                    .setInputData(RegularTransactionSyncWorker::class.delegatedData())
+                    .build()
+
+            val workManager = WorkManager.getInstance(context)
+            workManager.enqueueUniquePeriodicWork(
+                REGULAR_TRANSACTION_SYNC_WORK_NAME,
+                ExistingPeriodicWorkPolicy.KEEP,
+                recurringWork,
+            )
         }
 
-        companion object {
-            private const val REGULAR_TRANSACTION_SYNC_WORK_NAME = "regular_transaction_work_name"
-            private const val LOGIN_WORK_TAG = "periodic_regular"
-            private const val PERIOD_WORK_IN_HOURS = 24L
-
-            fun startPeriodicJob(context: Context) {
-                Timber.tag(DataConstants.TAG).d("Start regular transaction periodic job")
-                val recurringWork =
-                    PeriodicWorkRequest
-                        .Builder(
-                            DelegatingWorker::class.java,
-                            PERIOD_WORK_IN_HOURS,
-                            TimeUnit.HOURS,
-                        ).addTag(LOGIN_WORK_TAG)
-                        .setConstraints(SyncConstraints)
-                        .setInputData(RegularTransactionSyncWorker::class.delegatedData())
-                        .build()
-
-                val workManager = WorkManager.getInstance(context)
-                workManager.enqueueUniquePeriodicWork(
-                    REGULAR_TRANSACTION_SYNC_WORK_NAME,
-                    ExistingPeriodicWorkPolicy.KEEP,
-                    recurringWork,
-                )
-            }
-
-            fun stopPeriodicJob(context: Context) {
-                Timber.tag(DataConstants.TAG).d("Stop periodic job")
-                WorkManager.getInstance(context).cancelAllWorkByTag(LOGIN_WORK_TAG)
-            }
+        fun stopPeriodicJob(context: Context) {
+            Timber.tag(DataConstants.TAG).d("Stop periodic job")
+            WorkManager.getInstance(context).cancelAllWorkByTag(LOGIN_WORK_TAG)
         }
     }
+
+    @AssistedFactory
+    @WorkerKey(RegularTransactionSyncWorker::class)
+    @ContributesIntoMap(AppScope::class, binding<ChildWorkerFactory>())
+    fun interface Factory : ChildWorkerFactory {
+        override fun create(
+            context: Context,
+            workerParameters: WorkerParameters,
+        ): RegularTransactionSyncWorker
+    }
+}

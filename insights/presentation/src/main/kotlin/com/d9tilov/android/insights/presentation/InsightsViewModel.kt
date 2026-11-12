@@ -10,7 +10,12 @@ import com.d9tilov.android.insights.domain.model.Insight
 import com.d9tilov.android.insights.domain.model.InsightGenerationStatus
 import com.d9tilov.android.insights.domain.model.InsightsConstants.MAX_INSIGHTS_PER_DAY
 import com.d9tilov.android.insights.domain.model.exception.InsightServiceException
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Named
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,8 +25,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
-import javax.inject.Named
 
 data class InsightsUiState(
     val insights: List<Insight> = emptyList(),
@@ -36,8 +39,10 @@ data class InsightsErrorState(
     val messageArg: Int? = null,
 )
 
-@HiltViewModel
-class InsightsViewModel @Inject constructor(
+@ViewModelKey
+@ContributesIntoMap(AppScope::class, binding<ViewModel>())
+@Inject
+class InsightsViewModel(
     @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
     private val insightsInteractor: InsightsInteractor,
 ) : ViewModel() {
