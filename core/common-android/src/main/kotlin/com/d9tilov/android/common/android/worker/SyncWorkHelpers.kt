@@ -20,7 +20,6 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.content.pm.ServiceInfo
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.work.Constraints
@@ -40,14 +39,13 @@ val SyncConstraints
             .build()
 
 /**
- * Foreground information for sync on lower API levels when sync workers are being
- * run with a foreground service
+ * Foreground information for expedited currency sync on Android versions below 12.
+ * On Android 12 and above, WorkManager uses expedited jobs instead of a foreground service.
  */
 fun Context.syncForegroundInfo() =
     ForegroundInfo(
         SYNC_NOTIFICATION_ID,
         syncWorkNotification(),
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC else 0,
     )
 
 /**
