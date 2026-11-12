@@ -3,26 +3,25 @@ name: Startup benchmark
 on:
   workflow_call:
     inputs:
-      baseline_ref:
-        required: true
-        type: string
       candidate_ref:
         required: true
+        type: string
+      baseline_ms:
+        default: ''
         type: string
       publish_baseline:
         default: false
         type: boolean
   workflow_dispatch:
     inputs:
-      baseline_ref:
-        description: Previous application revision, for example develop
+      candidate_ref:
+        description: Application revision to measure
         default: develop
         required: true
         type: string
-      candidate_ref:
-        description: Application revision to compare, for example migration/metro
-        default: migration/metro
-        required: true
+      baseline_ms:
+        description: One-time baseline in milliseconds when bootstrapping the baseline branch
+        required: false
         type: string
 
 permissions:
@@ -46,28 +45,39 @@ jobs:
       - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
         with:
           cache-read-only: true
+      - name: Read the last published startup baseline
+        id: baseline
+        env:
+          GH_TOKEN: ${{ github.token }}
+          INITIAL_BASELINE_MS: ${{ inputs.baseline_ms }}
+        run: |
+          baseline=$(gh api "repos/$GITHUB_REPOSITORY/contents/measurement.json?ref=startup-benchmark-baseline" --jq '.content' 2>/dev/null | base64 --decode | jq -r '.medianMs' || true)
+          if [[ -z "$baseline" || "$baseline" == "null" ]]; then baseline="$INITIAL_BASELINE_MS"; fi
+          if [[ ! "$baseline" =~ ^[0-9]+([.][0-9]+)?$ ]] || ! awk "BEGIN { exit !($baseline > 0) }"; then
+            echo '::error::No stored startup baseline. Seed startup-benchmark-baseline/measurement.json or provide baseline_ms once.'
+            exit 1
+          fi
+          printf 'median_ms=%s\n' "$baseline" >> "$GITHUB_OUTPUT"
       - name: Check the threshold and report parser
         run: python3 -m unittest discover -s .github/scripts -p 'startup_benchmark_test.py'
-      - name: Build both application revisions with the same harness
+      - name: Build candidate application with the startup harness
         env:
-          BASELINE_REF: ${{ inputs.baseline_ref }}
           CANDIDATE_REF: ${{ inputs.candidate_ref }}
-          GH_TOKEN: ${{ github.token }}
         run: |
-          python3 .github/scripts/startup_benchmark.py build \
-            --baseline-ref "$BASELINE_REF" --candidate-ref "$CANDIDATE_REF" \
-            --output "$RUNNER_TEMP/startup"
+          python3 .github/scripts/startup_benchmark.py build-candidate \
+            --candidate-ref "$CANDIDATE_REF" --output "$RUNNER_TEMP/startup"
       - name: Enable KVM access
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
-      - name: Measure alternating cold-start batches and enforce 5% limit
+      - name: Measure candidate and enforce the 5% limit
         uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2
         env:
           PUBLISH_BASELINE: ${{ inputs.publish_baseline || false }}
+          BASELINE_MS: ${{ steps.baseline.outputs.median_ms }}
         with:
-          api-level: 35
+          api-level: 29
           target: google_apis
           arch: x86_64
           profile: pixel_6
@@ -75,7 +85,7 @@ jobs:
           ram-size: 2048M
           disable-animations: true
           emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect -no-snapshot
-          script: python3 .github/scripts/startup_benchmark.py measure --device emulator-5554 --output "$RUNNER_TEMP/startup" --rounds 3 --iterations 15
+          script: python3 .github/scripts/startup_benchmark.py measure-candidate --device emulator-5554 --output "$RUNNER_TEMP/startup" --rounds 3 --iterations 15
       - name: Add startup comparison to job summary
         if: always()
         run: |
@@ -91,11 +101,8 @@ jobs:
             ${{ runner.temp }}/startup/comparison.*
             ${{ runner.temp }}/startup/build-info.json
             ${{ runner.temp }}/startup/build-*.log
-            ${{ runner.temp }}/startup/baseline-*/*.json
             ${{ runner.temp }}/startup/candidate-*/*.json
-            ${{ runner.temp }}/startup/baseline-*/instrumentation.log
             ${{ runner.temp }}/startup/candidate-*/instrumentation.log
-            ${{ runner.temp }}/startup/baseline-*/device-logcat.log
             ${{ runner.temp }}/startup/candidate-*/device-logcat.log
           if-no-files-found: error
           retention-days: 7
@@ -105,16 +112,15 @@ jobs:
         with:
           name: startup-traces-${{ github.run_attempt }}
           path: |
-            ${{ runner.temp }}/startup/baseline-*/*.perfetto-trace
             ${{ runner.temp }}/startup/candidate-*/*.perfetto-trace
           if-no-files-found: ignore
           retention-days: 3
-      - name: Publish the successful develop reference for subsequent runs
+      - name: Save the passing measurement for publication
         if: success() && inputs.publish_baseline
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
-          name: startup-baseline
+          name: startup-baseline-${{ github.run_attempt }}
           path: ${{ runner.temp }}/startup/published-baseline/
           if-no-files-found: error
-          retention-days: 30
+          retention-days: 7
           compression-level: 0

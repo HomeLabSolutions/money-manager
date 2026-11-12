@@ -8,13 +8,13 @@ The module and target variant are enabled only with `-PstartupBenchmark=true`.
 
 ## Scenario and comparison
 
-Both APKs use the same test APK and harness, `CompilationMode.Full`, a fresh
-signed-out fixture per batch, and disabled Wi-Fi/mobile data. Each batch has
-15 cold starts; three alternating batches per version yield 45 samples each.
-The gate compares the median of all candidate samples with the median of all
-reference samples. An increase greater than 5% fails; exactly 5% passes.
-Missing reports, failed instrumentation, unequal sample counts, invalid samples,
-or too few samples fail the job instead of bypassing the gate.
+The candidate uses the Macrobenchmark test harness, `CompilationMode.Full`, a
+fresh signed-out fixture per batch, and disabled Wi-Fi/mobile data. Each batch
+has 15 cold starts; three batches yield 45 samples. The gate compares its median
+with the saved median from the last published version. An increase greater than
+5% fails; exactly 5% passes.
+Missing reports, failed instrumentation, invalid samples, or too few samples
+fail the job instead of bypassing the gate.
 
 WorkManager jobs for the disposable package are cancelled between iterations.
 Macrobenchmark's `killProcessDelayMillis=1000` gives process shutdown time to settle
@@ -22,46 +22,35 @@ before its cold-start assertion and cache clearing. Both run outside the measure
 startup; `StartupMode.COLD` and the assertion that no process is running remain
 enabled. Failed instrumentation also saves filtered benchmark/device error logs.
 
-The previous APK is remeasured on the same runner/emulator as the candidate.
-This avoids treating hardware differences between GitHub-hosted runners as an
-application regression. The previously recorded measurement is retained in the
-report when a reference artifact exists, but the gate uses the paired measurement.
-Hosted-emulator measurements are a relative regression signal, not latency
-representative of physical end-user devices. This scenario does not measure
-authenticated home-screen loading, first-ever installation, or TTFD.
+Only the candidate is measured. The previous APK is not rebuilt or run again;
+its median is stored in the `startup-benchmark-baseline` branch. Hosted-emulator
+measurements are a relative regression signal, not latency representative of
+physical end-user devices. This scenario does not measure authenticated
+home-screen loading, first-ever installation, or TTFD.
 
 The harness creates a synthetic Firebase configuration for the benchmark-only
 package. No production credentials or account are required. Networking stays off
 during measurement, and the disposable package is uninstalled before restoring
 the device's network state. Existing user application data is left intact.
 
-## CI and merge protection
+## Release gate
 
-`Android CI` calls `startup-benchmark.yml` for pull requests and develop pushes.
-The existing required `build` check now aggregates Android checks and the startup
-gate. Its final step explicitly fails if either dependency failed, was cancelled,
-or was skipped. Existing branch protection requiring `build` therefore blocks
-merging startup regressions without adding a new required-check name.
-Merge-queue events run the same gate. Manual runs use the distinct `Manual checks`
-name, so a manual comparison against another revision cannot satisfy the PR's
-required `build` check.
+The benchmark runs only in the Google Play release workflow, immediately before
+uploading the AAB. A failed benchmark blocks the upload. After Play accepts the
+release, the workflow updates the `startup-benchmark-baseline` branch with the
+candidate median and source SHA. Failed measurements and uploads do not move the
+baseline. Android CI and pull requests do not run this benchmark.
 
-Pull requests compare their merge revision with the PR's base SHA. Develop pushes
-compare the pushed revision with the previous develop SHA. After a successful
-develop comparison, `startup-baseline` stores the candidate APK, its SHA-256,
-source commit, median and device metadata for 30 days. Future runs reuse it only
-from a successful develop push with the exact required source SHA and matching
-APK digest. If the artifact is missing or expired, CI rebuilds that reference;
-it still runs the comparison.
+The first release needs the current published version's median. Supply it once
+as `initial_startup_baseline_ms` when starting the Play workflow; after a
+successful publish the workflow creates the baseline branch, and later releases
+read and update it automatically.
 
-CI uses the standard Ubuntu 24.04 GitHub-hosted runner and an API 35 x86_64
+CI uses the standard Ubuntu 24.04 GitHub-hosted runner and an API 29 x86_64
 Google APIs emulator with KVM. Standard hosted runner compute is free for public
 repositories. The emulator action and artifact/Gradle actions are pinned to
 commits. The benchmark job receives read-only repository/Actions permissions.
 Results, JSON samples and build logs are artifacts; traces are retained on failure.
-
-The release-version automation waits up to 55 minutes for CI so its deadline
-allows for the additional startup measurement job.
 
 ## Run locally or compare DI implementations
 
@@ -82,10 +71,8 @@ The resulting `comparison.md` and `comparison.json` identify both exact source
 SHAs, APK digests, raw samples and device environment. Local and CI measurements
 must not be compared as absolute values across different devices/architectures.
 
-To compare Hilt and Metro in CI, manually run `Startup benchmark` with
-`baseline_ref=develop` and `candidate_ref=migration/metro`. Manual comparisons do
-not publish a develop reference. A regression still fails the manual workflow,
-and its samples and traces remain available for investigation.
+For an ad hoc measurement, manually run `Startup benchmark`, provide a candidate
+revision and baseline median. Manual runs do not update the release baseline.
 
 For a single source checkout, prepare the synthetic configuration and build:
 
