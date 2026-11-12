@@ -8,11 +8,13 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -49,6 +51,17 @@ class CurrencyInteractorImplTest {
     fun setup() {
         every { currencyRepo.getMainCurrency() } returns flowOf(mainCurrencyMetaData)
     }
+
+    @Test
+    fun `updateCurrencyRates should propagate cancellation`() =
+        runTest {
+            val cancellation = CancellationException("Worker stopped")
+            coEvery { currencyRepo.updateCurrencies() } throws cancellation
+
+            val result = runCatching { interactor.updateCurrencyRates() }
+
+            assertSame(cancellation, result.exceptionOrNull())
+        }
 
     @Test
     fun `getCurrencies should return currencies with main currency marked`() =

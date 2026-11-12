@@ -2,6 +2,7 @@ package com.d9tilov.android.currency.data.impl.sync.workers
 
 import android.content.Context
 import androidx.hilt.work.HiltWorker
+import androidx.work.BackoffPolicy
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.OneTimeWorkRequestBuilder
@@ -15,9 +16,11 @@ import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 @HiltWorker
 class CurrencySyncWorker @AssistedInject constructor(
@@ -39,11 +42,16 @@ class CurrencySyncWorker @AssistedInject constructor(
             if (res.isSuccess) {
                 Result.success()
             } else {
-                Result.failure()
+                val error = res.exceptionOrNull()
+                if (error is CancellationException) throw error
+                if (runAttemptCount < MAX_RETRIES) Result.retry() else Result.failure()
             }
         }
 
     companion object {
+        private const val MAX_RETRIES = 3
+        private const val RETRY_DELAY_MINUTES = 15L
+
         /**
          * Expedited one time work to sync data on app startup
          */
@@ -51,6 +59,7 @@ class CurrencySyncWorker @AssistedInject constructor(
             OneTimeWorkRequestBuilder<DelegatingWorker>()
                 .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
                 .setConstraints(SyncConstraints)
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, RETRY_DELAY_MINUTES, TimeUnit.MINUTES)
                 .setInputData(CurrencySyncWorker::class.delegatedData())
                 .build()
     }

@@ -4,14 +4,11 @@ import android.content.Context
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.ForegroundInfo
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.d9tilov.android.common.android.worker.DelegatingWorker
-import com.d9tilov.android.common.android.worker.SyncConstraints
 import com.d9tilov.android.common.android.worker.delegatedData
-import com.d9tilov.android.common.android.worker.syncForegroundInfo
 import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
@@ -25,13 +22,11 @@ import java.util.concurrent.TimeUnit
 class RegularTransactionSyncWorker
     @AssistedInject
     constructor(
-        @Assisted private val context: Context,
+        @Assisted context: Context,
         @Assisted workerParameters: WorkerParameters,
         private val transactionInteractor: TransactionInteractor,
         private val transactionNotificationSender: TransactionNotificationSender,
     ) : CoroutineWorker(context, workerParameters) {
-        override suspend fun getForegroundInfo(): ForegroundInfo = context.syncForegroundInfo()
-
         override suspend fun doWork(): Result {
             val added =
                 transactionInteractor.executeRegularIfNeeded(TransactionType.INCOME) +
@@ -54,14 +49,13 @@ class RegularTransactionSyncWorker
                             PERIOD_WORK_IN_HOURS,
                             TimeUnit.HOURS,
                         ).addTag(LOGIN_WORK_TAG)
-                        .setConstraints(SyncConstraints)
                         .setInputData(RegularTransactionSyncWorker::class.delegatedData())
                         .build()
 
                 val workManager = WorkManager.getInstance(context)
                 workManager.enqueueUniquePeriodicWork(
                     REGULAR_TRANSACTION_SYNC_WORK_NAME,
-                    ExistingPeriodicWorkPolicy.KEEP,
+                    ExistingPeriodicWorkPolicy.UPDATE,
                     recurringWork,
                 )
             }

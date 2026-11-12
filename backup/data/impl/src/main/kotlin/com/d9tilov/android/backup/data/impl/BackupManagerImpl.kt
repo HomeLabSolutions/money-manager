@@ -24,6 +24,7 @@ import com.d9tilov.android.network.exception.NetworkException
 import com.google.firebase.Firebase
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.storage
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.sync.Mutex
@@ -92,6 +93,8 @@ class BackupManagerImpl
                         lastBackupTimestamp = fileRef.metadata?.updatedTimeMillis ?: currentDateTime().toMillis(),
                     ),
                 )
+            } catch (ex: CancellationException) {
+                throw ex
             } catch (ex: Exception) {
                 Timber.tag(TAG).e("Backup failed: $ex")
                 analyticsSender.send(
@@ -139,6 +142,8 @@ class BackupManagerImpl
                         mapOf(AnalyticsParams.Method to "restored"),
                     )
                     ResultOf.Success(metadata.updatedTimeMillis)
+                } catch (ex: CancellationException) {
+                    throw ex
                 } catch (ex: Exception) {
                     Timber.tag(TAG).e("Restore backup failed: $ex")
                     analyticsSender.send(
@@ -184,6 +189,8 @@ class BackupManagerImpl
                     mapOf(AnalyticsParams.Method to "deleted"),
                 )
                 ResultOf.Success(Unit)
+            } catch (ex: CancellationException) {
+                throw ex
             } catch (ex: Exception) {
                 Timber.tag(TAG).e(ex, "Failed to delete backup")
                 analyticsSender.send(
