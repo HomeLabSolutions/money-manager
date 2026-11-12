@@ -12,6 +12,6 @@
   "dependencies": {
     "firebase-admin": "14.5.1",
     "firebase-functions": "7.4.0",
-    "openai": "7.55.0"
+    "openai": "7.56.0"
   }
 }
