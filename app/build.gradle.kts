@@ -196,6 +196,6 @@ dependencies {
 
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(project(":backup:domain:model"))
-    androidTestImplementation("androidx.work:work-testing:${libs.versions.worker.get()}")
+    androidTestImplementation(libs.androidx.work.testing)
     androidTestImplementation(libs.kotlinx.coroutines.test)
 }
