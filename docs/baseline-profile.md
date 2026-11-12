@@ -75,9 +75,12 @@ this comparison isolates compilation, not the additional Startup Profile layout
 benefit. The packaged profile also contains upstream library rules, so it does
 not isolate application rules from library rules.
 
-`StartupTimingMetric` records both TTID and TTFD. The expense screen waits for
-the initial currency and expense-category reads, including a valid empty
-category list.
+`StartupTimingMetric` records both TTID and TTFD. `MemoryUsageMetric` records
+maximum and last sampled memory during the same startup trace. It reports
+anonymous RSS, file-backed RSS, ART heap size, and GPU memory; these are separate
+submetrics and should not be added together as one total. The expense screen
+waits for the initial currency and expense-category reads, including a valid
+empty category list.
 Premium-only summaries and background synchronization do not gate these usable
 controls. The UI readiness marker and `ReportDrawnWhen` use this same condition.
 Fixture setup and authentication requests are outside both metrics. No profile
@@ -87,6 +90,13 @@ The independent startup regression gate uses `CompilationMode.Full` and compares
 application revisions. Full compilation cannot measure the ART compilation
 benefit of a Baseline Profile. Keep those regression results separate from this
 None/Partial comparison.
+
+The memory metric API is marked experimental by AndroidX Benchmark, so the
+measurement should be treated as an initial comparison rather than a regression
+gate. RSS and heap values describe different parts of process memory. For an
+application-wide memory study, add representative screen navigation and longer
+idle/use periods; the current trace only covers cold startup through usable
+content.
 
 Results are in `baselineprofile/build/outputs/connected_android_test_additional_output/`.
 The Baseline Profile CI workflow runs the same comparison for profile changes
