@@ -7,5 +7,6 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":currency:domain:model"))
     implementation(project(":places:domain:model"))
+    implementation(project(":shared"))
     implementation(libs.kotlinx.datetime)
 }

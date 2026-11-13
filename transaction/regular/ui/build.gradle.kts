@@ -18,6 +18,7 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":currency:domain:contract"))
     implementation(project(":currency:domain:model"))
+    implementation(project(":shared"))
     implementation(project(":transaction:regular:domain:contract"))
     implementation(project(":transaction:regular:domain:model"))
     implementation(libs.androidx.compose.foundation)
