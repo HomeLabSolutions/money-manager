@@ -68,7 +68,12 @@ data class IncomeExpenseUiState(
     val price: MainPrice = MainPrice.EMPTY,
     val expenseUiState: ExpenseUiState = ExpenseUiState.EMPTY,
     val incomeUiState: IncomeUiState = IncomeUiState.EMPTY,
+    val isMainCurrencyLoaded: Boolean = false,
+    val isExpenseCategoriesLoaded: Boolean = false,
 ) {
+    val isContentReady: Boolean
+        get() = isMainCurrencyLoaded && isExpenseCategoriesLoaded
+
     companion object {
         val EMPTY = IncomeExpenseUiState()
     }
@@ -171,7 +176,10 @@ class IncomeExpenseViewModel
                         .getMainCurrencyFlow()
                         .collect { currencyData ->
                             uiState.update { state ->
-                                state.copy(price = state.price.copy(currencyCode = currencyData.code))
+                                state.copy(
+                                    price = state.price.copy(currencyCode = currencyData.code),
+                                    isMainCurrencyLoaded = true,
+                                )
                             }
                             mainCurrency.value = currencyData
                         }
@@ -179,7 +187,10 @@ class IncomeExpenseViewModel
                 launch {
                     getSortedCategories(TransactionType.EXPENSE).collect { list ->
                         uiState.update { state ->
-                            state.copy(expenseUiState = state.expenseUiState.copy(expenseCategoryList = list))
+                            state.copy(
+                                expenseUiState = state.expenseUiState.copy(expenseCategoryList = list),
+                                isExpenseCategoriesLoaded = true,
+                            )
                         }
                     }
                 }

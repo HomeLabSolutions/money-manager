@@ -1,17 +1,16 @@
 rootProject.name = "MoneyManager"
 
-include(":analytics:di")
 include(":analytics:data")
+include(":analytics:di")
 include(":analytics:domain")
-
 include(":app")
-
 include(":backup:data:contract")
 include(":backup:data:impl")
 include(":backup:di")
 include(":backup:domain:contract")
 include(":backup:domain:impl")
 include(":backup:domain:model")
+include(":baselineprofile")
 
 include(":billing:data:contract")
 include(":billing:data:impl")
@@ -36,8 +35,8 @@ include(":category:domain:impl")
 include(":category:domain:model")
 include(":category:ui")
 
-include(":core:common-android")
 include(":core:common")
+include(":core:common-android")
 include(":core:database")
 include(":core:datastore")
 include(":core:designsystem")
@@ -54,7 +53,6 @@ include(":currency:observer:impl")
 include(":currency:ui")
 
 include(":incomeexpense:ui")
-
 include(":insights:data:contract")
 include(":insights:data:impl")
 include(":insights:di")
@@ -65,7 +63,6 @@ include(":insights:presentation")
 
 include(":notification")
 include(":notification:domain")
-
 include(":places:data:contract")
 include(":places:data:impl")
 include(":places:di")
@@ -86,6 +83,7 @@ include(":transaction:di")
 include(":transaction:domain:contract")
 include(":transaction:domain:impl")
 include(":transaction:domain:model")
+include(":transaction:regular")
 include(":transaction:regular:data:contract")
 include(":transaction:regular:data:impl")
 include(":transaction:regular:di")
@@ -93,7 +91,6 @@ include(":transaction:regular:domain:contract")
 include(":transaction:regular:domain:impl")
 include(":transaction:regular:domain:model")
 include(":transaction:regular:ui")
-include(":transaction:regular")
 include(":transaction:ui")
 
 include(":user-info:data:contract")
