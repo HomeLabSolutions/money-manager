@@ -40,7 +40,7 @@ extra["targetSdkVersion"] = 36
 extra["versionMajor"] = 1
 extra["versionMinor"] = 5
 extra["versionPatch"] = 2
-extra["versionBuild"] = 2
+extra["versionBuild"] = 3
 
 tasks.named("clean", Delete::class) {
     description = "clean"
