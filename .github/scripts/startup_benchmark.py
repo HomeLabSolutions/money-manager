@@ -131,6 +131,7 @@ def measure_candidate(args):
             command(adb + ["install", "-r", output / "candidate.apk"])
             if shell("pm", "clear", PACKAGE) != "Success":
                 raise ValueError("Could not reset the benchmark-only application fixture")
+            shell("am", "force-stop", PACKAGE)
             shell("mkdir", "-p", remote)
             result = subprocess.run(adb + [
                 "shell", "am", "instrument", "-w", "-r",
@@ -291,6 +292,7 @@ def measure(args):
                 command(adb + ["install", "-r", output / f"{label}.apk"])
                 if shell("pm", "clear", PACKAGE) != "Success":
                     raise ValueError("Could not reset the benchmark-only application fixture")
+                shell("am", "force-stop", PACKAGE)
                 shell("mkdir", "-p", remote)
                 result = subprocess.run(adb + [
                     "shell", "am", "instrument", "-w", "-r",
