@@ -58,10 +58,10 @@ android {
 
         applicationId = "com.d9tilov.moneymanager"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        val versionMajor: Int by rootProject.extra
-        val versionMinor: Int by rootProject.extra
-        val versionPatch: Int by rootProject.extra
-        val versionBuild: Int by rootProject.extra
+        val versionMajor = rootProject.extra["versionMajor"] as Int
+        val versionMinor = rootProject.extra["versionMinor"] as Int
+        val versionPatch = rootProject.extra["versionPatch"] as Int
+        val versionBuild = rootProject.extra["versionBuild"] as Int
         versionCode = 1000 * (1000 * versionMajor + 100 * versionMinor + versionPatch) + versionBuild
         versionName = "$versionMajor.$versionMinor.$versionPatch.$versionBuild"
 
