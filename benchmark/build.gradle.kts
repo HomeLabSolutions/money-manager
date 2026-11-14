@@ -16,8 +16,9 @@ android {
     experimentalProperties["android.experimental.self-instrumenting"] = true
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        val javaVersion = JavaVersion.toVersion(libs.versions.java.get())
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
     }
 
     buildTypes {
