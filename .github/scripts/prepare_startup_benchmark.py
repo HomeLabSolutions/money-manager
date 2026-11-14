@@ -20,8 +20,24 @@ if (providers.gradleProperty("startupBenchmark").orNull == "true") {
 '''
 APP_CONFIG = '''
 if (providers.gradleProperty("startupBenchmark").orNull == "true") {
-    apply(from = rootProject.file("benchmark/target.gradle.kts"))
+    apply(plugin = "moneymanager.android.application.startup-benchmark")
 }
+'''
+PLUGIN_ID = "moneymanager.android.application.startup-benchmark"
+PLUGIN_SOURCE = Path(
+    "buildSrc/src/main/kotlin/com/android/moneymanager/gradle/plugins/"
+    "AndroidApplicationStartupBenchmarkConventionPlugin.kt"
+)
+PLUGIN_REGISTRATION = f'''
+
+gradlePlugin {{
+    plugins {{
+        register("androidApplicationStartupBenchmark") {{
+            id = "{PLUGIN_ID}"
+            implementationClass = "com.android.moneymanager.gradle.plugins.AndroidApplicationStartupBenchmarkConventionPlugin"
+        }}
+    }}
+}}
 '''
 
 
@@ -32,11 +48,17 @@ def prepare(source, target):
             source / "benchmark", target / "benchmark", dirs_exist_ok=True,
             ignore=shutil.ignore_patterns("build", ".gradle"),
         )
+        plugin_target = target / PLUGIN_SOURCE
+        plugin_target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source / PLUGIN_SOURCE, plugin_target)
+    build_src = target / "buildSrc/build.gradle.kts"
+    if PLUGIN_ID not in build_src.read_text():
+        build_src.write_text(build_src.read_text().rstrip() + PLUGIN_REGISTRATION)
     settings = target / "settings.gradle.kts"
     if 'include(":benchmark")' not in settings.read_text():
         settings.write_text(settings.read_text().rstrip() + "\n" + SETTINGS)
     app = target / "app/build.gradle.kts"
-    if 'benchmark/target.gradle.kts' not in app.read_text():
+    if PLUGIN_ID not in app.read_text():
         app.write_text(app.read_text().rstrip() + "\n" + APP_CONFIG)
     # Deliberately synthetic Firebase configuration. No production secrets or account.
     firebase = {

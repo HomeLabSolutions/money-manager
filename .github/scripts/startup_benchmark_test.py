@@ -127,7 +127,14 @@ class StartupHarnessTest(unittest.TestCase):
             source, target = root / "source", root / "target"
             (source / "benchmark").mkdir(parents=True)
             (source / "benchmark/build.gradle.kts").write_text("// identical harness\n")
+            plugin = source / "buildSrc/src/main/kotlin/com/android/moneymanager/gradle/plugins"
+            plugin.mkdir(parents=True)
+            (plugin / "AndroidApplicationStartupBenchmarkConventionPlugin.kt").write_text("// plugin\n")
+            (source / "buildSrc/build.gradle.kts").write_text("gradlePlugin { plugins { } }\n")
             (target / "app").mkdir(parents=True)
+            (target / "buildSrc").mkdir(parents=True)
+            target_build_src = target / "buildSrc/build.gradle.kts"
+            target_build_src.write_text("gradlePlugin { plugins { } }\n")
             (target / "settings.gradle.kts").write_text('rootProject.name = "MoneyManager"\n')
             app = target / "app/build.gradle.kts"
             app.write_text('plugins { id("moneymanager.di") }\n')
@@ -138,6 +145,10 @@ class StartupHarnessTest(unittest.TestCase):
             self.assertEqual(app.read_text(), first_app)
             self.assertEqual((target / "settings.gradle.kts").read_text(), first_settings)
             self.assertIn('id("moneymanager.di")', first_app)
+            self.assertIn('moneymanager.android.application.startup-benchmark', first_app)
+            plugin_target = target / "buildSrc/src/main/kotlin/com/android/moneymanager/gradle/plugins/AndroidApplicationStartupBenchmarkConventionPlugin.kt"
+            self.assertTrue(plugin_target.is_file())
+            self.assertIn('moneymanager.android.application.startup-benchmark', target_build_src.read_text())
             self.assertEqual(first_settings.count('include(":benchmark")'), 1)
             config = json.loads((target / "app/src/benchmark/google-services.json").read_text())
             self.assertEqual(config["client"][0]["client_info"]["android_client_info"]["package_name"], PACKAGE)

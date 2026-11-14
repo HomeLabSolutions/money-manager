@@ -202,5 +202,5 @@ dependencies {
 }
 
 if (providers.gradleProperty("startupBenchmark").orNull == "true") {
-    apply(from = rootProject.file("benchmark/target.gradle.kts"))
+    apply(plugin = "moneymanager.android.application.startup-benchmark")
 }

@@ -41,6 +41,10 @@ gradlePlugin {
             id = "moneymanager.android.application.compose"
             implementationClass = "com.android.moneymanager.gradle.plugins.AndroidApplicationComposeConventionPlugin"
         }
+        register("androidApplicationStartupBenchmark") {
+            id = "moneymanager.android.application.startup-benchmark"
+            implementationClass = "com.android.moneymanager.gradle.plugins.AndroidApplicationStartupBenchmarkConventionPlugin"
+        }
         register("androidLibraryCompose") {
             id = "moneymanager.android.library.compose"
             implementationClass = "com.android.moneymanager.gradle.plugins.AndroidLibraryComposeConventionPlugin"
