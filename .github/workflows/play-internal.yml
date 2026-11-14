@@ -13,9 +13,14 @@ on:
         required: true
         default: false
         type: boolean
+      initial_startup_baseline_ms:
+        description: One-time median of the currently published version, required only before the baseline branch exists
+        required: false
+        type: string
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: google-play-internal
@@ -177,7 +182,7 @@ jobs:
   record-version:
     needs: [prepare, build]
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     permissions:
       contents: write
       pull-requests: write
@@ -205,8 +210,17 @@ jobs:
             echo 'The requested version is already saved in develop.' >> "$GITHUB_STEP_SUMMARY"
           fi
 
-  publish:
+  startup:
     needs: [prepare, build, record-version]
+    if: inputs.publish
+    uses: ./.github/workflows/startup-benchmark.yml
+    with:
+      candidate_ref: ${{ needs.prepare.outputs.source_sha }}
+      baseline_ms: ${{ inputs.initial_startup_baseline_ms || '' }}
+      publish_baseline: true
+
+  publish:
+    needs: [prepare, build, record-version, startup]
     if: inputs.publish
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -227,3 +241,42 @@ jobs:
           mappingFile: release/mapping/release/mapping.txt
           tracks: internal
           status: completed
+
+  record-startup-baseline:
+    needs: [prepare, startup, publish]
+    if: inputs.publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          name: startup-baseline-${{ github.run_attempt }}
+          path: baseline
+      - uses: actions/checkout@v7
+        with:
+          ref: develop
+          path: baseline-branch
+      - name: Prepare persistent baseline branch
+        working-directory: baseline-branch
+        run: |
+          if git ls-remote --exit-code --heads origin startup-benchmark-baseline >/dev/null; then
+            git fetch origin startup-benchmark-baseline
+            git checkout -B startup-benchmark-baseline FETCH_HEAD
+          else
+            git checkout --orphan startup-benchmark-baseline
+            git rm -rf . >/dev/null 2>&1 || true
+          fi
+      - name: Store the published startup measurement
+        env:
+          SOURCE_SHA: ${{ needs.prepare.outputs.source_sha }}
+          VERSION_NAME: ${{ needs.prepare.outputs.version_name }}
+        run: |
+          cp baseline/measurement.json baseline-branch/measurement.json
+          printf '{"sourceSha":"%s","version":"%s"}\n' "$SOURCE_SHA" "$VERSION_NAME" > baseline-branch/release.json
+          cd baseline-branch
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add measurement.json release.json
+          git commit -m "Update startup baseline for $VERSION_NAME"
+          git push origin startup-benchmark-baseline

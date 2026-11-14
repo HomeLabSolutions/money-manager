@@ -1,5 +1,16 @@
 rootProject.name = "MoneyManager"
 
+if (providers.gradleProperty("startupBenchmark").orNull == "true") {
+    include(":benchmark")
+    dependencyResolutionManagement {
+        versionCatalogs {
+            create("startupBenchmark") {
+                from(files("benchmark/libs.versions.toml"))
+            }
+        }
+    }
+}
+
 include(":analytics:di")
 include(":analytics:data")
 include(":analytics:domain")

@@ -1,17 +1,29 @@
 package com.android.moneymanager.gradle.task
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.CacheableTask
+import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
-import java.io.File
 
-@CacheableTask
 abstract class TomlFileValidationTask : DefaultTask() {
+    @get:InputFiles
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    abstract val tomlFiles: ConfigurableFileCollection
+
+    init {
+        tomlFiles.from(
+            project.rootProject.layout.projectDirectory.asFileTree.matching {
+                include("**/*.toml")
+                exclude("**/build/**", "**/.git/**", "**/.gradle/**")
+            },
+        )
+    }
+
     @TaskAction
     fun action() {
-        val directory = File(DIR_PATH)
-        val files = directory.listFiles()?.filter { it.extension == FILE_EXTENSION } ?: emptyList()
-        for (file in files) {
+        for (file in tomlFiles.files.sortedBy { it.path }) {
             val fileName = file.name
             val content =
                 file
@@ -212,7 +224,5 @@ abstract class TomlFileValidationTask : DefaultTask() {
         private const val ANCHOR_PLUGINS = "[plugins]"
         private val anchors =
             listOf(ANCHOR_VERSIONS, ANCHOR_LIBRARIES, ANCHOR_BUNDLES, ANCHOR_PLUGINS)
-        private const val DIR_PATH = "gradle"
-        private const val FILE_EXTENSION = "toml"
     }
 }

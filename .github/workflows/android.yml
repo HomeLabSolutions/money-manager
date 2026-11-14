@@ -6,9 +6,15 @@ on:
     branches: [ "develop" ]
   pull_request:
     branches: [ "develop" ]
+  merge_group:
+
+permissions:
+  contents: read
+  actions: read
 
 jobs:
-  build:
+  verify:
+    name: Android checks
 
     runs-on: ubuntu-latest
 
@@ -60,3 +66,15 @@ jobs:
       run: npm ci --prefix functions
     - name: Test Firebase Function
       run: npm test --prefix functions
+
+  build:
+    name: ${{ github.event_name == 'workflow_dispatch' && 'Manual checks' || 'build' }}
+    if: always()
+    needs: [verify]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Require Android checks
+        env:
+          ANDROID_RESULT: ${{ needs.verify.result }}
+        run: |
+          [[ "$ANDROID_RESULT" == "success" ]]
