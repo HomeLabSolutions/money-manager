@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "sourceSha": "d26a282607c78e91989c478b25cc9a004e4ba44e",
+  "packageName": "com.d9tilov.moneymanager.benchmark",
+  "metric": "timeToInitialDisplayMs",
+  "medianMs": 2357.67434,
+  "environment": {
+    "fingerprint": "google/sdk_gphone_x86_64/generic_x86_64:10/QSR1.211112.011/13135432:userdebug/dev-keys",
+    "api": "29",
+    "abi": "x86_64",
+    "model": "Android SDK built for x86_64"
+  }
+}
