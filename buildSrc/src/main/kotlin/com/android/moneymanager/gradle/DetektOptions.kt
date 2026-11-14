@@ -16,14 +16,7 @@ object DetektOptions {
     fun Project.applyDetektOptions() {
         plugins.apply("io.gitlab.arturbosch.detekt")
 
-        tasks.register<TomlFileValidationTask>("tomlCheck") {
-            tomlFiles.from(
-                project.fileTree(project.rootDir) {
-                    include("**/*.toml")
-                    exclude("**/build/**", "**/.git/**", "**/.gradle/**")
-                },
-            )
-        }
+        tasks.register<TomlFileValidationTask>("tomlCheck")
         tasks.register<CheckNoApiDependenciesTask>("noApiCheck")
 
         tasks.register<Detekt>("detektCheck") {

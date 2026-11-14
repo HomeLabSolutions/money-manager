@@ -12,6 +12,15 @@ abstract class TomlFileValidationTask : DefaultTask() {
     @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val tomlFiles: ConfigurableFileCollection
 
+    init {
+        tomlFiles.from(
+            project.rootProject.layout.projectDirectory.asFileTree.matching {
+                include("**/*.toml")
+                exclude("**/build/**", "**/.git/**", "**/.gradle/**")
+            },
+        )
+    }
+
     @TaskAction
     fun action() {
         for (file in tomlFiles.files.sortedBy { it.path }) {
