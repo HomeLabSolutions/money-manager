@@ -4,11 +4,11 @@ plugins {
 
 android {
     namespace = "com.d9tilov.moneymanager.startup"
-    compileSdk = 37
+    compileSdk = rootProject.extra.get("compileSdkVersion") as Int
 
     defaultConfig {
-        minSdk = 24
-        targetSdk = 36
+        minSdk = rootProject.extra.get("minSdkVersion") as Int
+        targetSdk = rootProject.extra.get("targetSdkVersion") as Int
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
