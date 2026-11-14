@@ -71,7 +71,7 @@ jobs:
     name: ${{ github.event_name == 'workflow_dispatch' && 'Manual checks' || 'build' }}
     if: always()
     needs: [verify]
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Require Android checks
         env:
