@@ -1,13 +1,31 @@
 {
-  "schemaVersion": 1,
-  "sourceSha": "d26a282607c78e91989c478b25cc9a004e4ba44e",
+  "schemaVersion": 2,
+  "sourceSha": "ff2d9f26a39fe9958ec33ca37af96d80e0bd852c",
   "packageName": "com.d9tilov.moneymanager.benchmark",
+  "apkSha256": "5cd49e8e3fd6dd58487c4547bc08a6a5eab6c307acf9f6b775d73f502f48081e",
   "metric": "timeToInitialDisplayMs",
-  "medianMs": 2357.67434,
+  "medianMs": 2759.14222,
   "environment": {
     "fingerprint": "google/sdk_gphone_x86_64/generic_x86_64:10/QSR1.211112.011/13135432:userdebug/dev-keys",
     "api": "29",
     "abi": "x86_64",
     "model": "Android SDK built for x86_64"
+  },
+  "protocol": {
+    "startupMode": "COLD",
+    "compilationMode": "Partial",
+    "baselineProfileMode": "Require",
+    "scenario": "signed-out",
+    "rounds": 3,
+    "iterationsPerRound": 15,
+    "killProcessDelayMillis": 1000
+  },
+  "baselineProfile": {
+    "schemaVersion": 1,
+    "sourceSha": "ff2d9f26a39fe9958ec33ca37af96d80e0bd852c",
+    "files": {
+      "baseline-prof.txt": "87e109cf95e117122361c32caa1e5f4c738300ba9fd7ab6e0455e273c0d98272",
+      "startup-prof.txt": "87e109cf95e117122361c32caa1e5f4c738300ba9fd7ab6e0455e273c0d98272"
+    }
   }
 }
