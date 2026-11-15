@@ -13,7 +13,7 @@ concurrency:
 jobs:
   profile:
     name: Generate Baseline Profile
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 40
     steps:
       - uses: actions/checkout@v7
