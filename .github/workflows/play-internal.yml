@@ -143,6 +143,17 @@ jobs:
           disable-animations: true
           emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect -no-snapshot
           script: npx --yes firebase-tools@15.34.0 emulators:exec --only auth --project demo-baseline-profile --config baselineprofile/firebase.json "bash .github/scripts/generate_baseline_profile.sh"
+      - name: Save profile generation failure reports
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: baseline-profile-failure-${{ github.run_attempt }}
+          path: |
+            baselineprofile/build/reports/androidTests/
+            baselineprofile/build/outputs/androidTest-results/
+            baselineprofile/build/diagnostics/
+          if-no-files-found: ignore
+          retention-days: 7
       - name: Snapshot the generated profiles
         env:
           SOURCE_SHA: ${{ needs.prepare.outputs.source_sha }}

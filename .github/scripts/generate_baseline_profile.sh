@@ -1,6 +1,22 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+report_failure() {
+  local status=$?
+  trap - ERR
+  set +e
+  printf '\nBaseline Profile generation failed; test reports follow.\n'
+  while IFS= read -r report; do
+    printf '\nReport: %s\n' "$report"
+    cat "$report"
+  done < <(rg --files baselineprofile/build/outputs/androidTest-results -g '*.xml')
+  mkdir -p baselineprofile/build/diagnostics
+  adb logcat -d -v threadtime -t 1000 > baselineprofile/build/diagnostics/logcat.txt
+  cat baselineprofile/build/diagnostics/logcat.txt
+  exit "$status"
+}
+trap report_failure ERR
+
 # CI owns this disposable emulator and profiles the isolated .baselineprofile package.
 adb shell svc wifi disable
 adb shell svc data disable
