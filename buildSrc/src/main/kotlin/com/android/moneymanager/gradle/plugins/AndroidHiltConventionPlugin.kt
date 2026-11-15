@@ -27,7 +27,11 @@ class AndroidHiltConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("com.google.devtools.ksp")
+                apply(
+                    target.buildLibs.plugins.ksp
+                        .get()
+                        .pluginId,
+                )
             }
 
             dependencies {

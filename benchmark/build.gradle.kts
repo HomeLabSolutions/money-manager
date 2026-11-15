@@ -1,5 +1,5 @@
 plugins {
-    id("com.android.test")
+    alias(startupBenchmark.plugins.android.test)
 }
 
 android {

@@ -159,10 +159,19 @@ startup = { group = "androidx.startup", name = "startup-runtime", version.ref = 
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
 [plugins]
+android-application = { id = "com.android.application" }
+android-library = { id = "com.android.library" }
+android-test = { id = "com.android.test" }
 androidx-baselineprofile = { id = "androidx.baselineprofile" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 deps-sorting = { id = "com.squareup.sort-dependencies", version.ref = "autonomousappsSorting" }
 deps-unused = { id = "com.autonomousapps.dependency-analysis", version.ref = "autonomousappsUnused" }
+detekt = { id = "io.gitlab.arturbosch.detekt" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics" }
+google-services = { id = "com.google.gms.google-services" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize" }
+ksp = { id = "com.google.devtools.ksp" }
 secrets-gradle-plugin = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secretesGradle" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

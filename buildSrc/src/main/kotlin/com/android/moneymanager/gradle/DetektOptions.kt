@@ -1,5 +1,6 @@
 package com.android.moneymanager.gradle
 
+import com.android.moneymanager.gradle.extensions.buildLibs
 import com.android.moneymanager.gradle.task.CheckNoApiDependenciesTask
 import com.android.moneymanager.gradle.task.TomlFileValidationTask
 import io.gitlab.arturbosch.detekt.Detekt
@@ -14,7 +15,11 @@ object DetektOptions {
     private const val BASELINE_FILE = "baseline.xml"
 
     fun Project.applyDetektOptions() {
-        plugins.apply("io.gitlab.arturbosch.detekt")
+        plugins.apply(
+            buildLibs.plugins.detekt
+                .get()
+                .pluginId,
+        )
 
         tasks.register<TomlFileValidationTask>("tomlCheck")
         tasks.register<CheckNoApiDependenciesTask>("noApiCheck")

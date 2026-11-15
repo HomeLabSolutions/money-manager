@@ -17,6 +17,7 @@
 package com.android.moneymanager.gradle.plugins
 
 import com.android.build.api.dsl.ApplicationExtension
+import com.android.moneymanager.gradle.extensions.buildLibs
 import com.android.moneymanager.gradle.extensions.configureAndroidCompose
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -26,7 +27,11 @@ class AndroidApplicationComposeConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("com.android.application")
+                apply(
+                    target.buildLibs.plugins.android.application
+                        .get()
+                        .pluginId,
+                )
             }
             val extension = extensions.getByType<ApplicationExtension>()
             configureAndroidCompose(extension)

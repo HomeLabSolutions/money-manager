@@ -17,6 +17,7 @@
 package com.android.moneymanager.gradle.plugins
 
 import com.android.build.api.dsl.LibraryExtension
+import com.android.moneymanager.gradle.extensions.buildLibs
 import com.android.moneymanager.gradle.extensions.configureAndroidFirebase
 import com.android.moneymanager.gradle.extensions.configureKotlinAndroid
 import org.gradle.api.Plugin
@@ -28,8 +29,16 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("com.android.library")
-                apply("com.autonomousapps.dependency-analysis")
+                apply(
+                    target.buildLibs.plugins.android.library
+                        .get()
+                        .pluginId,
+                )
+                apply(
+                    target.buildLibs.plugins.deps.unused
+                        .get()
+                        .pluginId,
+                )
             }
 
             extensions.configure<LibraryExtension> {

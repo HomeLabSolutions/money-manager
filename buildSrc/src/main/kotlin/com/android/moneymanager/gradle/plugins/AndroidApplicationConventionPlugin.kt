@@ -32,8 +32,16 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("com.android.application")
-                apply("com.autonomousapps.dependency-analysis")
+                apply(
+                    target.buildLibs.plugins.android.application
+                        .get()
+                        .pluginId,
+                )
+                apply(
+                    target.buildLibs.plugins.deps.unused
+                        .get()
+                        .pluginId,
+                )
             }
 
             extensions.configure<ApplicationExtension> {
