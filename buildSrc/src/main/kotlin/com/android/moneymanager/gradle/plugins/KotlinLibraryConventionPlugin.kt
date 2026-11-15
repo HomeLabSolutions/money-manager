@@ -26,8 +26,16 @@ class KotlinLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("kotlin")
-                apply("com.autonomousapps.dependency-analysis")
+                apply(
+                    target.buildLibs.plugins.kotlin.jvm
+                        .get()
+                        .pluginId,
+                )
+                apply(
+                    target.buildLibs.plugins.deps.unused
+                        .get()
+                        .pluginId,
+                )
             }
             dependencies {
                 implementation(buildLibs.kotlin.stdlib)

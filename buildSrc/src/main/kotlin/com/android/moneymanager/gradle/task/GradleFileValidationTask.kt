@@ -1,5 +1,6 @@
 package com.android.moneymanager.gradle.task
 
+import com.android.moneymanager.gradle.extensions.buildLibs
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import java.nio.file.FileVisitResult
@@ -13,6 +14,11 @@ import kotlin.io.path.name
 import kotlin.io.path.pathString
 
 abstract class GradleFileValidationTask : DefaultTask() {
+    private val applicationPluginId =
+        project.buildLibs.plugins.android.application
+            .get()
+            .pluginId
+
     private val ignoredPaths =
         setOf(
             "gradle-plugins",
@@ -70,7 +76,7 @@ abstract class GradleFileValidationTask : DefaultTask() {
             Files.lines(path).use { lines ->
                 lines
                     .map { it.trim() }
-                    .anyMatch { it.contains(TEST_APP_ANCHOR) or it.contains(APP_ANCHOR) }
+                    .anyMatch { it.contains(TEST_APP_ANCHOR) or it.contains(applicationPluginId) }
             }
         }
 
@@ -105,7 +111,6 @@ abstract class GradleFileValidationTask : DefaultTask() {
     private companion object {
         const val DEPENDENCY_ANALYSIS_PREFIX = "dependencyAnalysis"
         const val TEST_APP_ANCHOR = "android-test-application"
-        const val APP_ANCHOR = "com.android.application"
         val TRANSITIVE_DEPENDENCY_LIST =
             listOf(
                 "api(project(\"",

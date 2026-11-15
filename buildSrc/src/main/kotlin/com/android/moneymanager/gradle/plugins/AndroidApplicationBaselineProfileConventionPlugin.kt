@@ -19,7 +19,11 @@ class AndroidApplicationBaselineProfileConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         val androidComponents = target.extensions.getByType<ApplicationAndroidComponentsExtension>()
         if (target.providers.gradleProperty("baselineProfile").orNull == "true") {
-            target.pluginManager.apply("androidx.baselineprofile")
+            target.pluginManager.apply(
+                target.buildLibs.plugins.androidx.baselineprofile
+                    .get()
+                    .pluginId,
+            )
             configureBuildTypes(target.extensions.getByType<ApplicationExtension>())
             configureFixtureSources(target, androidComponents)
             configureConsumer(target)

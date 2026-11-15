@@ -1,6 +1,6 @@
 plugins {
     id("moneymanager.android.library")
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.ksp)
 }
 
 android {

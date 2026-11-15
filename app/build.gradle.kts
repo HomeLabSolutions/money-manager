@@ -4,11 +4,11 @@ plugins {
     id("moneymanager.android.application")
     id("moneymanager.android.hilt")
     id("moneymanager.android.application.compose")
-    id("com.google.dagger.hilt.android")
-    id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")
-    id("kotlin-parcelize")
-    id("io.gitlab.arturbosch.detekt")
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.detekt)
     alias(libs.plugins.secrets.gradle.plugin)
 }
 

@@ -12,3 +12,6 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
 test-junit = { group = "androidx.test.ext", name = "junit", version.ref = "testExtJunit" }
 test-runner = { group = "androidx.test", name = "runner", version.ref = "testRunner" }
+
+[plugins]
+android-test = { id = "com.android.test" }
