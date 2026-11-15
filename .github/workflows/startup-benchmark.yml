@@ -12,6 +12,9 @@ on:
       publish_baseline:
         default: false
         type: boolean
+      profile_artifact_id:
+        default: ''
+        type: string
   workflow_dispatch:
     inputs:
       candidate_ref:
@@ -20,7 +23,7 @@ on:
         required: true
         type: string
       baseline_ms:
-        description: One-time baseline in milliseconds when bootstrapping the baseline branch
+        description: One-time signed-out TTID median in ms measured with Partial compilation and a required Baseline Profile
         required: false
         type: string
 
@@ -51,31 +54,69 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           INITIAL_BASELINE_MS: ${{ inputs.baseline_ms }}
         run: |
-          baseline=$(gh api "repos/$GITHUB_REPOSITORY/contents/measurement.json?ref=startup-benchmark-baseline" --jq '.content' 2>/dev/null | base64 --decode | jq -r '.medianMs' || true)
-          if [[ -z "$baseline" || "$baseline" == "null" ]]; then baseline="$INITIAL_BASELINE_MS"; fi
-          if [[ ! "$baseline" =~ ^[0-9]+([.][0-9]+)?$ ]] || ! awk "BEGIN { exit !($baseline > 0) }"; then
-            echo '::error::No stored startup baseline. Seed startup-benchmark-baseline/measurement.json or provide baseline_ms once.'
-            exit 1
+          mkdir -p "$RUNNER_TEMP/published-startup-baseline"
+          if gh api "repos/$GITHUB_REPOSITORY/tarball/startup-benchmark-baseline" \
+            > "$RUNNER_TEMP/startup-baseline.tar.gz" 2>/dev/null; then
+            tar -xzf "$RUNNER_TEMP/startup-baseline.tar.gz" --strip-components=1 \
+              -C "$RUNNER_TEMP/published-startup-baseline"
+          else
+            printf '{}\n' > "$RUNNER_TEMP/published-startup-baseline/measurement.json"
           fi
-          printf 'median_ms=%s\n' "$baseline" >> "$GITHUB_OUTPUT"
+          python3 .github/scripts/startup_baseline.py \
+            --record "$RUNNER_TEMP/published-startup-baseline/measurement.json" \
+            --initial-baseline-ms "$INITIAL_BASELINE_MS" --output "$GITHUB_OUTPUT"
       - name: Check the threshold and report parser
         run: python3 -m unittest discover -s .github/scripts -p 'startup_benchmark_test.py'
+      - name: Download the profiles used by the release build
+        if: inputs.profile_artifact_id != ''
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          artifact-ids: ${{ inputs.profile_artifact_id }}
+          path: ${{ runner.temp }}/release-baseline-profile
+          merge-multiple: true
       - name: Build candidate application with the startup harness
         env:
           CANDIDATE_REF: ${{ inputs.candidate_ref }}
+          BASELINE_REF: ${{ steps.baseline.outputs.baseline_ref }}
+          PROFILE_ARTIFACT_ID: ${{ inputs.profile_artifact_id }}
+          PUBLISH_BASELINE: ${{ inputs.publish_baseline || false }}
         run: |
-          python3 .github/scripts/startup_benchmark.py build-candidate \
-            --candidate-ref "$CANDIDATE_REF" --output "$RUNNER_TEMP/startup"
+          if [[ "$PUBLISH_BASELINE" == 'true' && -z "$PROFILE_ARTIFACT_ID" ]]; then
+            echo '::error::A publication gate requires the generated profiles from the release build.'
+            exit 1
+          fi
+          if ! git rev-parse --verify --end-of-options "${CANDIDATE_REF}^{commit}" >/dev/null 2>&1; then
+            git fetch --no-tags origin "$CANDIDATE_REF"
+          fi
+          profile_args=()
+          if [[ -n "$PROFILE_ARTIFACT_ID" ]]; then
+            profile_args=(--profile-directory "$RUNNER_TEMP/release-baseline-profile")
+          fi
+          if [[ -n "$BASELINE_REF" ]]; then
+            if ! git rev-parse --verify --end-of-options "${BASELINE_REF}^{commit}" >/dev/null 2>&1; then
+              git fetch --no-tags origin "$BASELINE_REF"
+            fi
+            if [[ -d "$RUNNER_TEMP/published-startup-baseline/profiles" ]]; then
+              profile_args+=(--baseline-profile-directory "$RUNNER_TEMP/published-startup-baseline/profiles")
+            fi
+            python3 .github/scripts/startup_benchmark.py build \
+              --baseline-ref "$BASELINE_REF" --candidate-ref "$CANDIDATE_REF" \
+              --output "$RUNNER_TEMP/startup" "${profile_args[@]}"
+          else
+            python3 .github/scripts/startup_benchmark.py build-candidate \
+              --candidate-ref "$CANDIDATE_REF" --output "$RUNNER_TEMP/startup" "${profile_args[@]}"
+          fi
       - name: Enable KVM access
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
-      - name: Measure candidate and enforce the 5% limit
+      - name: Measure with required Baseline Profile and enforce the 5% limit
         uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2
         env:
           PUBLISH_BASELINE: ${{ inputs.publish_baseline || false }}
-          BASELINE_MS: ${{ steps.baseline.outputs.median_ms }}
+          BASELINE_MS: ${{ steps.baseline.outputs.baseline_ms }}
+          MEASURE_COMMAND: ${{ steps.baseline.outputs.measure_command }}
         with:
           api-level: 29
           target: google_apis
@@ -85,7 +126,7 @@ jobs:
           ram-size: 2048M
           disable-animations: true
           emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect -no-snapshot
-          script: python3 .github/scripts/startup_benchmark.py measure-candidate --device emulator-5554 --output "$RUNNER_TEMP/startup" --rounds 3 --iterations 15
+          script: python3 .github/scripts/startup_benchmark.py "$MEASURE_COMMAND" --device emulator-5554 --output "$RUNNER_TEMP/startup" --rounds 3 --iterations 15
       - name: Add startup comparison to job summary
         if: always()
         run: |
@@ -104,6 +145,11 @@ jobs:
             ${{ runner.temp }}/startup/candidate-*/*.json
             ${{ runner.temp }}/startup/candidate-*/instrumentation.log
             ${{ runner.temp }}/startup/candidate-*/device-logcat.log
+            ${{ runner.temp }}/startup/baseline-*/*.json
+            ${{ runner.temp }}/startup/baseline-*/instrumentation.log
+            ${{ runner.temp }}/startup/baseline-*/device-logcat.log
+            ${{ runner.temp }}/published-startup-baseline/measurement.json
+            ${{ runner.temp }}/release-baseline-profile/metadata.json
           if-no-files-found: error
           retention-days: 7
       - name: Save traces for failed measurements
@@ -113,6 +159,7 @@ jobs:
           name: startup-traces-${{ github.run_attempt }}
           path: |
             ${{ runner.temp }}/startup/candidate-*/*.perfetto-trace
+            ${{ runner.temp }}/startup/baseline-*/*.perfetto-trace
           if-no-files-found: ignore
           retention-days: 3
       - name: Save the passing measurement for publication

@@ -8,6 +8,7 @@ import com.d9tilov.android.common.android.location.LocationProvider
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.KeyPress
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
+import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.transaction.domain.contract.ObserveSpendingSummaryUseCase
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import io.mockk.every
@@ -17,6 +18,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
@@ -43,10 +45,10 @@ class IncomeExpenseDatabaseSearchTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(dispatcher)
-        every { currencies.getMainCurrencyFlow() } returns emptyFlow()
+        every { currencies.getMainCurrencyFlow() } returns flowOf(CurrencyMetaData.EMPTY)
         every { billing.isPremium() } returns emptyFlow()
         every { observeSpendingSummary() } returns emptyFlow()
-        every { categories.getGroupedCategoriesByType(any()) } returns emptyFlow()
+        every { categories.getGroupedCategoriesByType(any()) } returns flowOf(emptyList())
         every { transactions.getTransactionsByType(any()) } returns flowOf(PagingData.empty())
         every { transactions.searchTransactionsByType(any(), any()) } returns flowOf(PagingData.empty())
         every { transactions.ableToSpendToday() } returns emptyFlow()
@@ -83,9 +85,12 @@ class IncomeExpenseDatabaseSearchTest {
                 }
             }
             val viewModel = createViewModel()
+            viewModel.uiStateFlow.first { it is IncomeExpenseScreenState.Ready }
             runCurrent()
             backgroundScope.launch {
-                viewModel.uiStateFlow.value.expenseUiState.expenseTransactions
+                viewModel
+                    .readyUiState()
+                    .expenseUiState.expenseTransactions
                     .collect()
             }
             runCurrent()
@@ -94,7 +99,7 @@ class IncomeExpenseDatabaseSearchTest {
             runCurrent()
             assertEquals(
                 TransactionSearchState(status = SearchStatus.OPEN),
-                viewModel.uiStateFlow.value.expenseUiState.searchState,
+                viewModel.readyUiState().expenseUiState.searchState,
             )
             assertEquals(listOf(""), queries)
             viewModel.updateSearchQuery(ScreenType.EXPENSE, " old ")
@@ -111,7 +116,7 @@ class IncomeExpenseDatabaseSearchTest {
             viewModel.onSearchClosed(ScreenType.EXPENSE)
             runCurrent()
             assertEquals(listOf("", "old", "new", ""), queries)
-            assertEquals(TransactionSearchState(), viewModel.uiStateFlow.value.expenseUiState.searchState)
+            assertEquals(TransactionSearchState(), viewModel.readyUiState().expenseUiState.searchState)
             viewModel.updateSearchQuery(ScreenType.EXPENSE, " \t\u00a0 ")
             runCurrent()
             assertEquals(listOf("", "old", "new", ""), queries)
@@ -130,13 +135,18 @@ class IncomeExpenseDatabaseSearchTest {
                 flowOf(PagingData.empty())
             }
             val viewModel = createViewModel()
+            viewModel.uiStateFlow.first { it is IncomeExpenseScreenState.Ready }
             runCurrent()
             backgroundScope.launch {
-                viewModel.uiStateFlow.value.expenseUiState.expenseTransactions
+                viewModel
+                    .readyUiState()
+                    .expenseUiState.expenseTransactions
                     .collect()
             }
             backgroundScope.launch {
-                viewModel.uiStateFlow.value.incomeUiState.incomeTransactions
+                viewModel
+                    .readyUiState()
+                    .incomeUiState.incomeTransactions
                     .collect()
             }
             runCurrent()
@@ -159,12 +169,15 @@ class IncomeExpenseDatabaseSearchTest {
                 ),
                 requests,
             )
-            assertEquals(TransactionSearchState(), viewModel.uiStateFlow.value.expenseUiState.searchState)
+            assertEquals(TransactionSearchState(), viewModel.readyUiState().expenseUiState.searchState)
             assertEquals(
                 TransactionSearchState(searchQuery = "salary", status = SearchStatus.OPEN),
-                viewModel.uiStateFlow.value.incomeUiState.searchState,
+                viewModel.readyUiState().incomeUiState.searchState,
             )
         }
+
+    private fun IncomeExpenseViewModel.readyUiState(): IncomeExpenseUiState =
+        (uiStateFlow.value as IncomeExpenseScreenState.Ready).uiState
 
     private fun createViewModel(): IncomeExpenseViewModel =
         IncomeExpenseViewModel(

@@ -9,7 +9,8 @@ from unittest.mock import patch
 
 from compare_startup_benchmark import METRIC, TEST_CLASS, compare, read_samples
 from prepare_startup_benchmark import PACKAGE, prepare
-from startup_benchmark import cached_baseline, sha256
+from startup_baseline import PROTOCOL, select_baseline
+from startup_benchmark import cached_baseline, measure_candidate, sha256
 
 
 class StartupComparisonTest(unittest.TestCase):
@@ -93,6 +94,88 @@ class StartupComparisonTest(unittest.TestCase):
         self.assertEqual(process.returncode, 1)
         self.assertFalse(json.loads(output.read_text())["passed"])
         self.assertIn("more than 5%", process.stderr)
+
+
+class StartupBaselineTest(unittest.TestCase):
+    def record(self):
+        return {"schemaVersion": 2, "sourceSha": "a" * 40, "packageName": PACKAGE,
+                "metric": METRIC, "medianMs": 100.0, "protocol": dict(PROTOCOL)}
+
+    def test_compatible_partial_require_median_is_reused(self):
+        selected = select_baseline(self.record())
+        self.assertEqual(selected["measure_command"], "measure-candidate")
+        self.assertEqual(selected["baseline_ms"], "100.0")
+        self.assertEqual(selected["baseline_ref"], "")
+
+    def test_legacy_full_measurement_is_remeasured_instead_of_compared(self):
+        for protocol in [None, {**PROTOCOL, "compilationMode": "Full"},
+                         {**PROTOCOL, "baselineProfileMode": "Disable"},
+                         {**PROTOCOL, "scenario": "signed-in"}]:
+            with self.subTest(protocol=protocol):
+                record = self.record()
+                if protocol is None:
+                    del record["protocol"]
+                else:
+                    record["protocol"] = protocol
+                selected = select_baseline(record)
+                self.assertEqual(selected["measure_command"], "measure")
+                self.assertEqual(selected["baseline_ref"], record["sourceSha"])
+                self.assertEqual(selected["baseline_ms"], "")
+
+    def test_incompatible_record_without_a_source_revision_fails_closed(self):
+        record = self.record()
+        record.pop("protocol")
+        for revision in [None, "develop", "", "a" * 40 + "\ninjected=value"]:
+            with self.subTest(revision=revision), self.assertRaises(ValueError):
+                select_baseline({**record, "sourceSha": revision})
+
+    def test_wrong_package_and_metric_are_not_accepted(self):
+        for change in [{"packageName": "another.application"}, {"metric": "anotherMetric"}]:
+            with self.subTest(change=change), self.assertRaises(ValueError):
+                select_baseline({**self.record(), **change})
+
+    def test_invalid_stored_or_initial_values_are_rejected(self):
+        for value in [0, -1, True, float("nan"), float("inf"), "bad"]:
+            with self.subTest(value=value):
+                with self.assertRaises(ValueError):
+                    select_baseline({**self.record(), "medianMs": value})
+                with self.assertRaises(ValueError):
+                    select_baseline({}, value)
+
+    def test_bootstrap_requires_an_explicit_positive_partial_measurement(self):
+        with self.assertRaises(ValueError):
+            select_baseline({})
+        selected = select_baseline({}, "123.5")
+        self.assertEqual(selected["baseline_ms"], "123.5")
+        self.assertEqual(selected["measure_command"], "measure-candidate")
+
+    def test_cli_selects_remeasurement_without_exporting_the_full_median(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            record = self.record()
+            record.pop("protocol")
+            (root / "measurement.json").write_text(json.dumps(record))
+            result = subprocess.run([
+                sys.executable, str(Path(__file__).with_name("startup_baseline.py")),
+                "--record", str(root / "measurement.json"), "--output", str(root / "outputs"),
+            ], capture_output=True, text=True, check=False)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            outputs = (root / "outputs").read_text()
+            self.assertIn("baseline_ms=\n", outputs)
+            self.assertIn("baseline_ref=" + record["sourceSha"], outputs)
+            self.assertIn("measure_command=measure\n", outputs)
+
+    @patch("startup_benchmark.command")
+    def test_old_compilation_harness_is_rejected_before_device_access(self, device_command):
+        from argparse import Namespace
+
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "build-info.json").write_text(json.dumps({"protocol": {"compilationMode": "Full"}}))
+            args = Namespace(output=root, rounds=3, iterations=15, baseline_ms=100)
+            with self.assertRaisesRegex(ValueError, "rebuild"):
+                measure_candidate(args)
+            device_command.assert_not_called()
 
 
 class StartupHarnessTest(unittest.TestCase):

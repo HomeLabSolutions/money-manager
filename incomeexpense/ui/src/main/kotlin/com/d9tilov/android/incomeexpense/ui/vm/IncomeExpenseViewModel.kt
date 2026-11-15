@@ -42,12 +42,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -55,6 +57,8 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -62,6 +66,14 @@ import timber.log.Timber
 import java.math.BigDecimal
 import javax.inject.Inject
 import javax.inject.Named
+
+sealed interface IncomeExpenseScreenState {
+    data object Loading : IncomeExpenseScreenState
+
+    data class Ready(
+        val uiState: IncomeExpenseUiState,
+    ) : IncomeExpenseScreenState
+}
 
 data class IncomeExpenseUiState(
     val mode: EditMode = EditMode.KEYBOARD,
@@ -155,8 +167,12 @@ class IncomeExpenseViewModel
         private val locationProvider: LocationProvider,
     ) : ViewModel() {
         private val uiState = MutableStateFlow(IncomeExpenseUiState.EMPTY)
-        val uiStateFlow = uiState.asStateFlow()
         private val mainCurrency = MutableStateFlow(CurrencyMetaData.EMPTY)
+        val uiStateFlow: StateFlow<IncomeExpenseScreenState> =
+            observeContent()
+                .map<IncomeExpenseUiState, IncomeExpenseScreenState> { IncomeExpenseScreenState.Ready(it) }
+                .flowOn(ioDispatcher)
+                .stateIn(viewModelScope, SharingStarted.Eagerly, IncomeExpenseScreenState.Loading)
         private val errorMessage = MutableSharedFlow<Int>()
         val errorMessageFlow = errorMessage.asSharedFlow()
 
@@ -166,23 +182,6 @@ class IncomeExpenseViewModel
                 mapOf(AnalyticsParams.Screen.Name to "main"),
             )
             viewModelScope.launch(ioDispatcher) {
-                launch {
-                    currencyInteractor
-                        .getMainCurrencyFlow()
-                        .collect { currencyData ->
-                            uiState.update { state ->
-                                state.copy(price = state.price.copy(currencyCode = currencyData.code))
-                            }
-                            mainCurrency.value = currencyData
-                        }
-                }
-                launch {
-                    getSortedCategories(TransactionType.EXPENSE).collect { list ->
-                        uiState.update { state ->
-                            state.copy(expenseUiState = state.expenseUiState.copy(expenseCategoryList = list))
-                        }
-                    }
-                }
                 launch {
                     getSortedCategories(TransactionType.INCOME).collect { list ->
                         uiState.update { state ->
@@ -288,6 +287,25 @@ class IncomeExpenseViewModel
                         }
                     }
                 }
+            }
+        }
+
+        @OptIn(ExperimentalCoroutinesApi::class)
+        private fun observeContent(): Flow<IncomeExpenseUiState> =
+            combine(
+                currencyInteractor.getMainCurrencyFlow().onEach { updateMainCurrency(it) },
+                getSortedCategories(TransactionType.EXPENSE).onEach { updateExpenseCategories(it) },
+            ) { _, _ -> uiState }
+                .flatMapLatest { it }
+
+        private fun updateMainCurrency(currency: CurrencyMetaData) {
+            uiState.update { state -> state.copy(price = state.price.copy(currencyCode = currency.code)) }
+            mainCurrency.value = currency
+        }
+
+        private fun updateExpenseCategories(categories: List<Category>) {
+            uiState.update { state ->
+                state.copy(expenseUiState = state.expenseUiState.copy(expenseCategoryList = categories))
             }
         }
 
