@@ -7,6 +7,32 @@ import org.junit.Test
 
 class RegularTransactionOccurrencesTest {
     @Test
+    fun `annual schedule includes each year and respects creation date`() {
+        assertEquals(
+            listOf(LocalDate(2024, 7, 15), LocalDate(2025, 7, 15)),
+            occurrencesBetween(
+                executionPeriod = ExecutionPeriod.EveryYear(month = 7, dayOfMonth = 15),
+                activeFrom = LocalDate(2023, 7, 16),
+                from = LocalDate(2023, 1, 1),
+                to = LocalDate(2025, 7, 15),
+            ),
+        )
+    }
+
+    @Test
+    fun `February 29 annual schedule falls back to February 28 in common years`() {
+        assertEquals(
+            listOf(LocalDate(2023, 2, 28), LocalDate(2024, 2, 29), LocalDate(2025, 2, 28)),
+            occurrencesBetween(
+                executionPeriod = ExecutionPeriod.EveryYear(month = 2, dayOfMonth = 29),
+                activeFrom = LocalDate(2023, 1, 1),
+                from = LocalDate(2023, 1, 1),
+                to = LocalDate(2025, 12, 31),
+            ),
+        )
+    }
+
+    @Test
     fun `daily includes both interval boundaries`() {
         val occurrences =
             occurrencesBetween(

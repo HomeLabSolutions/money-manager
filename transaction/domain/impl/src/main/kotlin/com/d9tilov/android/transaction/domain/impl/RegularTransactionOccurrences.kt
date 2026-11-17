@@ -26,9 +26,21 @@ internal fun occurrencesBetween(
 
 private fun ExecutionPeriod.occursOn(date: LocalDate): Boolean =
     when (this) {
-        is ExecutionPeriod.EveryDay -> true
-        is ExecutionPeriod.EveryWeek -> date.dayOfWeek.ordinal == dayOfWeek
-        is ExecutionPeriod.EveryMonth -> date.day == minOf(dayOfMonth, date.month.days(date.year))
+        is ExecutionPeriod.EveryDay -> {
+            true
+        }
+
+        is ExecutionPeriod.EveryWeek -> {
+            date.dayOfWeek.ordinal == dayOfWeek
+        }
+
+        is ExecutionPeriod.EveryMonth -> {
+            date.day == minOf(dayOfMonth, date.month.days(date.year))
+        }
+
+        is ExecutionPeriod.EveryYear -> {
+            date.month.ordinal + 1 == month && date.day == minOf(dayOfMonth, date.month.days(date.year))
+        }
     }
 
 private fun Month.days(year: Int): Int =

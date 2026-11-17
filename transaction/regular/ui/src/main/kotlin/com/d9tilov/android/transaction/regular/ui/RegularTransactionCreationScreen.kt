@@ -71,6 +71,7 @@ import com.d9tilov.android.transaction.regular.ui.vm.RegularTransactionCreationV
 import com.d9tilov.android.transaction.regular.ui.vm.toPeriodMenuItem
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 
 private const val MAX_DAY_OF_MONTH = 31
 private const val DAY_GRID_COLUMN_COUNT = 5
@@ -114,6 +115,7 @@ fun RegularTransactionCreationRoute(
         onCurPeriodItemUpdate = viewModel::updateCurPeriodItem,
         onWeekDayClicked = viewModel::updateWeekDay,
         onDayOfMonthClicked = viewModel::updateDayOfMonth,
+        onYearDateClicked = viewModel::updateYearDate,
         onDescriptionChanged = viewModel::updateDescription,
         onPushEnabledChanged = { enabled ->
             viewModel.updatePushEnabled(enabled)
@@ -132,6 +134,7 @@ fun RegularTransactionCreationScreen(
     onCurPeriodItemUpdate: (PeriodMenuItem) -> Unit,
     onWeekDayClicked: (DaysInWeek) -> Unit,
     onDayOfMonthClicked: (Int) -> Unit,
+    onYearDateClicked: (LocalDate) -> Unit,
     onDescriptionChanged: (String) -> Unit,
     onPushEnabledChanged: (Boolean) -> Unit,
     onBackClicked: () -> Unit,
@@ -244,6 +247,7 @@ fun RegularTransactionCreationScreen(
                     onCurPeriodItemUpdate = onCurPeriodItemUpdate,
                     onWeekDayClicked = onWeekDayClicked,
                     onOpenDayOfMonthDialog = { openDayOfMonthDialog = true },
+                    onYearDateClicked = onYearDateClicked,
                 )
                 DescriptionTextField(
                     modifier =
@@ -347,6 +351,7 @@ private fun RegularRepeatSelector(
     onCurPeriodItemUpdate: (PeriodMenuItem) -> Unit,
     onWeekDayClicked: (DaysInWeek) -> Unit,
     onOpenDayOfMonthDialog: () -> Unit,
+    onYearDateClicked: (LocalDate) -> Unit,
 ) {
     Row(
         modifier =
@@ -421,6 +426,10 @@ private fun RegularRepeatSelector(
                         color = MaterialTheme.colorScheme.secondary,
                         style = MaterialTheme.typography.labelMedium,
                     )
+                }
+
+                is ExecutionPeriod.EveryYear -> {
+                    AnnualRepeatDateSelector(executionPeriod, onYearDateClicked)
                 }
             }
         }
@@ -520,7 +529,6 @@ fun DropdownPeriodMenu(
 ) {
     val items = PeriodMenuItem.entries
     var isExpanded by remember { mutableStateOf(false) }
-    var curValue by remember { mutableStateOf(selectedItem) }
     Row(
         modifier =
             modifier
@@ -529,10 +537,11 @@ fun DropdownPeriodMenu(
     ) {
         Text(
             text =
-                when (curValue) {
+                when (selectedItem) {
                     PeriodMenuItem.DAY -> stringResource(id = R.string.regular_transaction_repeat_list_day)
                     PeriodMenuItem.WEEK -> stringResource(id = R.string.regular_transaction_repeat_list_week)
                     PeriodMenuItem.MONTH -> stringResource(id = R.string.regular_transaction_repeat_list_month)
+                    PeriodMenuItem.YEAR -> stringResource(id = R.string.regular_transaction_repeat_list_year)
                 },
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.bodyLarge,
@@ -572,13 +581,16 @@ fun DropdownPeriodMenu(
                                             id = R.string.regular_transaction_repeat_list_month,
                                         )
                                     }
+
+                                    PeriodMenuItem.YEAR -> {
+                                        stringResource(id = R.string.regular_transaction_repeat_list_year)
+                                    }
                                 },
                             color = MaterialTheme.colorScheme.onTertiaryContainer,
                             style = MaterialTheme.typography.bodyLarge,
                         )
                     },
                     onClick = {
-                        curValue = item
                         onMenuItemClick(item)
                         isExpanded = false
                     },
@@ -666,6 +678,7 @@ fun DefaultRegularTransactionCreationPreview() {
         onCurPeriodItemUpdate = {},
         onWeekDayClicked = {},
         onDayOfMonthClicked = {},
+        onYearDateClicked = {},
         onDescriptionChanged = {},
         onPushEnabledChanged = {},
     )

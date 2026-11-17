@@ -26,6 +26,7 @@
     <string name="regular_transaction_repeat_period_day">every day</string>
     <string name="regular_transaction_repeat_period_week">repeat on: %1$s</string>
     <string name="regular_transaction_repeat_period_month">every month on %1$sth</string>
+    <string name="regular_transaction_repeat_period_year">every year on %1$s</string>
     <string name="regular_transaction_income_title">Regular income</string>
     <string name="regular_transaction_expense_title">Regular expense</string>
     <string name="regular_transaction_edit_sum_title">Amount</string>
@@ -34,6 +35,9 @@
     <string name="regular_transaction_repeat_list_day">Day</string>
     <string name="regular_transaction_repeat_list_week">Week</string>
     <string name="regular_transaction_repeat_list_month">Month</string>
+    <string name="regular_transaction_repeat_list_year">Year</string>
+    <string name="regular_transaction_repeat_every_year_on">Every year on %1$s</string>
+    <string name="regular_transaction_repeat_year_date">Annual payment date</string>
     <string name="regular_transaction_repeat_day_of_month">Day of month</string>
     <string name="regular_transaction_delete_dialog_title">Delete this transaction</string>
     <string name="regular_transaction_delete_dialog_subtitle">Do you really want to delete the transaction?</string>

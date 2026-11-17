@@ -372,14 +372,9 @@ class TransactionInteractorImpl @Inject constructor(
             items = transactions,
             targetCurrencyCode = currencyInteractor.getMainCurrency().code,
             amount = { transaction ->
-                val occurrenceCount =
-                    occurrencesBetween(
-                        executionPeriod = transaction.executionPeriod,
-                        activeFrom = transaction.createdDate.date,
-                        from = startDate,
-                        to = endDate,
-                    ).size
-                transaction.sum.multiply(BigDecimal(occurrenceCount))
+                val allocationStart =
+                    if (transaction.executionPeriod is ExecutionPeriod.EveryYear) curDate.date else startDate
+                transaction.amountInPeriod(allocationStart, endDate)
             },
             currencyCode = RegularTransaction::currencyCode,
         )
@@ -524,6 +519,7 @@ class TransactionInteractorImpl @Inject constructor(
             is ExecutionPeriod.EveryDay -> ExecutionPeriod.EveryDay(date.getStartOfDay())
             is ExecutionPeriod.EveryWeek -> ExecutionPeriod.EveryWeek(dayOfWeek, date.getStartOfDay())
             is ExecutionPeriod.EveryMonth -> ExecutionPeriod.EveryMonth(dayOfMonth, date.getStartOfDay())
+            is ExecutionPeriod.EveryYear -> copy(lastExecDate = date.getStartOfDay())
         }
 
     override suspend fun update(transaction: Transaction) {

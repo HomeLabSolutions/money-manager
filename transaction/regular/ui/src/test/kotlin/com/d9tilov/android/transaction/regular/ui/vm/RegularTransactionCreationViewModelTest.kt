@@ -25,6 +25,7 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -49,6 +50,49 @@ class RegularTransactionCreationViewModelTest {
     fun tearDown() {
         Dispatchers.resetMain()
     }
+
+    @Test
+    fun `annual schedule can be selected edited and saved`() =
+        runTest(testDispatcher) {
+            coEvery { regularTransactionInteractor.getById(TRANSACTION_ID) } returns
+                transaction(ExecutionPeriod.EveryMonth(14))
+            val viewModel = createViewModel()
+            advanceUntilIdle()
+
+            viewModel.updateCurPeriodItem(PeriodMenuItem.YEAR)
+            val selectedPeriod =
+                viewModel.uiState.value.transaction.executionPeriod
+                    .toPeriodMenuItem()
+            assertEquals(PeriodMenuItem.YEAR, selectedPeriod)
+            viewModel.updateYearDate(LocalDate(2024, 2, 29))
+            viewModel.saveOrUpdate()
+
+            coVerify(exactly = 1) {
+                regularTransactionInteractor.insert(
+                    match {
+                        it.executionPeriod == ExecutionPeriod.EveryYear(2, 29, currentDate().getStartOfDay())
+                    },
+                )
+            }
+        }
+
+    @Test
+    fun `reselecting annual date preserves last execution watermark`() =
+        runTest(testDispatcher) {
+            val period = ExecutionPeriod.EveryYear(2, 29, LocalDateTime(2024, 2, 29, 0, 0))
+            coEvery { regularTransactionInteractor.getById(TRANSACTION_ID) } returns transaction(period)
+            val viewModel = createViewModel()
+            advanceUntilIdle()
+
+            viewModel.updateCurPeriodItem(PeriodMenuItem.YEAR)
+            viewModel.updateYearDate(LocalDate(2028, 2, 29))
+            viewModel.updateDescription("Annual subscription")
+            viewModel.saveOrUpdate()
+
+            coVerify(exactly = 1) {
+                regularTransactionInteractor.insert(match { it.executionPeriod == period })
+            }
+        }
 
     @Test
     fun `saving an unchanged schedule preserves its last execution date`() =
