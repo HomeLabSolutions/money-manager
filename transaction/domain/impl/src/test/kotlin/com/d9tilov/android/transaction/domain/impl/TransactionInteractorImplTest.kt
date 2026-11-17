@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.number
 import kotlinx.datetime.plus
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -162,7 +163,7 @@ class TransactionInteractorImplTest {
         runTest {
             val today = currentDate()
             val yesterday = today.plus(-1, DateTimeUnit.DAY)
-            val period = ExecutionPeriod.EveryYear(today.month.ordinal + 1, today.day, yesterday.getStartOfDay())
+            val period = ExecutionPeriod.EveryYear(today.month.number, today.day, yesterday.getStartOfDay())
             val template =
                 RegularTransaction.EMPTY.copy(
                     id = 1L,

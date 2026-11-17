@@ -519,7 +519,7 @@ class TransactionInteractorImpl @Inject constructor(
             is ExecutionPeriod.EveryDay -> ExecutionPeriod.EveryDay(date.getStartOfDay())
             is ExecutionPeriod.EveryWeek -> ExecutionPeriod.EveryWeek(dayOfWeek, date.getStartOfDay())
             is ExecutionPeriod.EveryMonth -> ExecutionPeriod.EveryMonth(dayOfMonth, date.getStartOfDay())
-            is ExecutionPeriod.EveryYear -> copy(lastExecDate = date.getStartOfDay())
+            is ExecutionPeriod.EveryYear -> ExecutionPeriod.EveryYear(month, dayOfMonth, date.getStartOfDay())
         }
 
     override suspend fun update(transaction: Transaction) {

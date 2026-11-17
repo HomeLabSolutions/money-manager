@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.number
 import javax.inject.Inject
 
 data class RegularTransactionCreationUiState(
@@ -148,7 +149,7 @@ class RegularTransactionCreationViewModel
                         PeriodMenuItem.YEAR -> {
                             currentPeriod as? ExecutionPeriod.EveryYear
                                 ?: ExecutionPeriod.EveryYear(
-                                    month = currentDate().month.ordinal + 1,
+                                    month = currentDate().month.number,
                                     dayOfMonth = currentDate().day,
                                     lastExecDate = currentDate().getStartOfDay(),
                                 )
@@ -206,7 +207,7 @@ class RegularTransactionCreationViewModel
         fun updateYearDate(date: LocalDate) {
             _uiState.update { state ->
                 val currentPeriod = state.transaction.executionPeriod
-                val month = date.month.ordinal + 1
+                val month = date.month.number
                 if (currentPeriod is ExecutionPeriod.EveryYear &&
                     currentPeriod.month == month && currentPeriod.dayOfMonth == date.day
                 ) {
