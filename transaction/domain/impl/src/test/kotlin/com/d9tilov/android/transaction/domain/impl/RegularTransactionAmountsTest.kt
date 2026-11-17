@@ -62,6 +62,6 @@ class RegularTransactionAmountsTest {
         from: LocalDate,
         to: LocalDate,
     ) {
-        assertEquals(0, BigDecimal(expected).compareTo(transaction.amountInPeriod(from, to)))
+        assertEquals(0, BigDecimal(expected).compareTo(transaction.amountInPeriod(from, to, today = from)))
     }
 }

@@ -372,9 +372,7 @@ class TransactionInteractorImpl @Inject constructor(
             items = transactions,
             targetCurrencyCode = currencyInteractor.getMainCurrency().code,
             amount = { transaction ->
-                val allocationStart =
-                    if (transaction.executionPeriod is ExecutionPeriod.EveryYear) curDate.date else startDate
-                transaction.amountInPeriod(allocationStart, endDate)
+                transaction.amountInPeriod(from = startDate, to = endDate, today = curDate.date)
             },
             currencyCode = RegularTransaction::currencyCode,
         )

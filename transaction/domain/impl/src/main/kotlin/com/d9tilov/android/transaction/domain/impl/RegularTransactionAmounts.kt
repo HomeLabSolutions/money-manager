@@ -13,9 +13,10 @@ import java.math.BigDecimal
 internal fun RegularTransaction.amountInPeriod(
     from: LocalDate,
     to: LocalDate,
+    today: LocalDate,
 ): BigDecimal =
     if (executionPeriod is ExecutionPeriod.EveryYear) {
-        annualAmountInPeriod(maxOf(createdDate.date, from), to)
+        annualAmountInPeriod(maxOf(createdDate.date, from, today), to)
     } else {
         val occurrenceCount = occurrencesBetween(executionPeriod, createdDate.date, from, to).size
         sum.multiply(BigDecimal(occurrenceCount))
@@ -25,17 +26,15 @@ private fun RegularTransaction.annualAmountInPeriod(
     from: LocalDate,
     to: LocalDate,
 ): BigDecimal {
-    var start = from
-    var total = BigDecimal.ZERO
-    while (start <= to) {
-        val yearStart = LocalDate(start.year, 1, 1)
-        val nextYearStart = LocalDate(start.year + 1, 1, 1)
-        val endExclusive = minOf(to.plus(1, DateTimeUnit.DAY), nextYearStart)
-        total +=
-            sum
-                .multiply(start.daysUntil(endExclusive).toBigDecimal())
-                .divideBy(yearStart.daysUntil(nextYearStart).toBigDecimal())
-        start = endExclusive
+    if (from > to) return BigDecimal.ZERO
+
+    return (from.year..to.year).sumOf { year ->
+        val yearStart = LocalDate(year, 1, 1)
+        val nextYearStart = LocalDate(year + 1, 1, 1)
+        val periodStart = maxOf(from, yearStart)
+        val periodEnd = minOf(to.plus(1, DateTimeUnit.DAY), nextYearStart)
+        sum
+            .multiply(periodStart.daysUntil(periodEnd).toBigDecimal())
+            .divideBy(yearStart.daysUntil(nextYearStart).toBigDecimal())
     }
-    return total
 }
