@@ -10,8 +10,6 @@ import com.d9tilov.android.core.model.PeriodType.Companion.YEAR_NAME
 import com.d9tilov.android.core.model.TransactionType
 
 object ModelTypeConverter {
-    private const val YEAR_LAST_EXECUTION_INDEX = 3
-
     @TypeConverter
     @JvmStatic
     fun fromTransactionType(value: TransactionType): Int = value.value
@@ -78,7 +76,7 @@ object ModelTypeConverter {
                 ExecutionPeriod.EveryYear(
                     month = ar[1].toInt(),
                     dayOfMonth = ar[2].toInt(),
-                    lastExecDate = DateConverter.toOffsetDateTime(ar[YEAR_LAST_EXECUTION_INDEX].toLong()),
+                    lastExecDate = DateConverter.toOffsetDateTime(ar.last().toLong()),
                 )
             }
 
