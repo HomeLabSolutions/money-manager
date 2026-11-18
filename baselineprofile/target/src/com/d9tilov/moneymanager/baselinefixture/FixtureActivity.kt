@@ -1,6 +1,7 @@
 package com.d9tilov.moneymanager.baselinefixture
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
@@ -21,10 +22,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.math.BigDecimal
 
 private const val FIXTURE_CURRENCY = "USD"
+private const val FIXTURE_TAG = "StartupFixture"
 
 class FixtureActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,13 +35,14 @@ class FixtureActivity : ComponentActivity() {
             runCatching { prepareSignedInScenario() }
                 .onSuccess { showResult("baseline-fixture-ready", "Ready") }
                 .onFailure { error ->
-                    Timber.e(error, "Startup fixture preparation failed")
+                    Log.e(FIXTURE_TAG, "Startup fixture preparation failed", error)
                     showResult("baseline-fixture-error", error.toString())
                 }
         }
     }
 
     private suspend fun prepareSignedInScenario() {
+        Log.i(FIXTURE_TAG, "Resetting startup fixture")
         val auth = FirebaseAuth.getInstance()
         auth.signOut()
         val preferences = PreferencesStore(applicationContext)
@@ -54,8 +56,11 @@ class FixtureActivity : ComponentActivity() {
         preferences: PreferencesStore,
     ) {
         val user = requireNotNull(auth.signInAnonymously().await().user)
+        Log.i(FIXTURE_TAG, "Auth Emulator sign-in completed; seeding database")
         seedDatabase(user.uid)
+        Log.i(FIXTURE_TAG, "Database seeded; saving fixture user")
         preferences.updateUid(user.uid)
+        Log.i(FIXTURE_TAG, "Startup fixture ready")
     }
 
     private suspend fun seedDatabase(uid: String) =
