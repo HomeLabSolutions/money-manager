@@ -24,6 +24,7 @@ import com.d9tilov.android.core.utils.KeyPress
 import com.d9tilov.android.core.utils.MainPriceFieldParser
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getEndOfDay
+import com.d9tilov.android.core.utils.isSameDay
 import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
@@ -478,9 +479,9 @@ class IncomeExpenseViewModel
                             after.date.getEndOfDay(),
                             after.currencyCode,
                         )
-                    } else if (before != null && after != null && before.date.date == after.date.date) {
+                    } else if (before != null && after != null && before.date.isSameDay(after.date)) {
                         null
-                    } else if (before != null && after != null && before.date.date != after.date.date) {
+                    } else if (before != null && after != null && !before.date.isSameDay(after.date)) {
                         TransactionUiHeader(
                             after.date.getEndOfDay(),
                             after.currencyCode,

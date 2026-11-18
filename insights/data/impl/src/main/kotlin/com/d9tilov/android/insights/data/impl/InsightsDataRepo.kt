@@ -5,6 +5,7 @@ import com.d9tilov.android.core.constants.DataConstants.DEFAULT_DATA_ID
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getStartOfDay
+import com.d9tilov.android.core.utils.toMillis
 import com.d9tilov.android.insights.data.contract.InsightLanguageSource
 import com.d9tilov.android.insights.data.contract.InsightSource
 import com.d9tilov.android.insights.data.contract.InsightsAggregator
@@ -98,7 +99,7 @@ class InsightsDataRepo @Inject constructor(
         localSource.save(
             Insight(
                 id = DEFAULT_DATA_ID,
-                createdAtMillis = System.currentTimeMillis(),
+                createdAtMillis = currentDateTime().toMillis(),
                 text = insight.text,
             ),
         )

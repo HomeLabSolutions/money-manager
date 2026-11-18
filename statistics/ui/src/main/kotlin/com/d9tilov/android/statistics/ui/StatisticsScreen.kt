@@ -65,9 +65,8 @@ import com.d9tilov.android.core.constants.CurrencyConstants
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
-import com.d9tilov.android.core.utils.getEndOfDay
-import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.core.utils.reduceScaleStr
+import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.core.utils.toStandardStringDate
 import com.d9tilov.android.designsystem.ButtonSelector
 import com.d9tilov.android.designsystem.ComposeCurrencyView
@@ -206,8 +205,8 @@ fun StatisticsScreen(
             onDateRangeSelected = { pairPeriod ->
                 onPeriodClick(
                     StatisticsPeriodModel.CUSTOM(
-                        pairPeriod.first.getStartOfDay(),
-                        pairPeriod.second.getEndOfDay(),
+                        pairPeriod.first.toLocalDateTime(),
+                        pairPeriod.second.toLocalDateTime(),
                     ),
                 )
             },

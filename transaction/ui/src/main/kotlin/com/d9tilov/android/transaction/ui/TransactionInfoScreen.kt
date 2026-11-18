@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -54,8 +55,6 @@ import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.MainPriceFieldParser.isInputValid
 import com.d9tilov.android.core.utils.currentDateTime
-import com.d9tilov.android.core.utils.getStartOfDay
-import com.d9tilov.android.core.utils.toLocalDate
 import com.d9tilov.android.core.utils.toMillis
 import com.d9tilov.android.designsystem.AutoSizeTextField
 import com.d9tilov.android.designsystem.BottomActionButton
@@ -77,8 +76,6 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberUpdatedMarkerState
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
 import java.math.BigDecimal
 
 private const val MAP_ZOOM_LEVEL = 15f
@@ -139,7 +136,7 @@ fun TransactionInfoScreen(
     onBackClicked: () -> Unit,
     onCurrencyClicked: (String) -> Unit,
     onCategoryClicked: (TransactionType, CategoryDestination) -> Unit,
-    onDateClicked: (LocalDate) -> Unit,
+    onDateClicked: (Long) -> Unit,
     onSaveClicked: () -> Unit,
     placeActions: TransactionPlaceActions = TransactionPlaceActions(),
 ) {
@@ -147,6 +144,11 @@ fun TransactionInfoScreen(
     val context = LocalContext.current
     var showError by remember { mutableStateOf(false) }
     val showDatePickerDialog = remember { mutableStateOf(false) }
+    val datePickerState: DatePickerState =
+        rememberDatePickerState().also {
+            it.selectedDateMillis =
+                uiState.transaction.date.toMillis()
+        }
     Scaffold(topBar = {
         MmTopAppBar(
             titleRes = R.string.title_transaction,
@@ -306,7 +308,7 @@ fun TransactionInfoScreen(
             }
             if (showDatePickerDialog.value) {
                 TransactionDatePickerDialog(
-                    date = uiState.transaction.date.date,
+                    datePickerState = datePickerState,
                     onDismiss = { showDatePickerDialog.value = false },
                     onDateClicked = onDateClicked,
                 )
@@ -356,21 +358,16 @@ private fun TransactionAmountField(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TransactionDatePickerDialog(
-    date: LocalDate,
+    datePickerState: DatePickerState,
     onDismiss: () -> Unit,
-    onDateClicked: (LocalDate) -> Unit,
+    onDateClicked: (Long) -> Unit,
 ) {
-    val datePickerState =
-        rememberDatePickerState(initialSelectedDateMillis = date.getStartOfDay().toMillis(TimeZone.UTC))
     DatePickerDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
             TextButton(
-                enabled = datePickerState.selectedDateMillis != null,
                 onClick = {
-                    datePickerState.selectedDateMillis?.let { millis ->
-                        onDateClicked(millis.toLocalDate(TimeZone.UTC))
-                    }
+                    onDateClicked(datePickerState.selectedDateMillis ?: currentDateTime().toMillis())
                     onDismiss()
                 },
             ) {

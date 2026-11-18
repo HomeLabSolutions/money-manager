@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -18,13 +19,10 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.utils.currentDate
-import com.d9tilov.android.core.utils.getStartOfDay
-import com.d9tilov.android.core.utils.toLocalDate
-import com.d9tilov.android.core.utils.toMillis
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
 import java.time.MonthDay
 
+private const val MILLIS_IN_DAY = 86_400_000L
 private const val DATE_PART_LENGTH = 2
 
 @Composable
@@ -54,6 +52,7 @@ internal fun AnnualRepeatDateSelector(
 internal fun ExecutionPeriod.EveryYear.annualDateText(): String =
     "${dayOfMonth.toString().padStart(DATE_PART_LENGTH, '0')}.${month.toString().padStart(DATE_PART_LENGTH, '0')}"
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AnnualDatePickerDialog(
     period: ExecutionPeriod.EveryYear,
@@ -66,10 +65,7 @@ private fun AnnualDatePickerDialog(
             val year = generateSequence(currentDate().year) { it + 1 }.first { monthDay.isValidYear(it) }
             LocalDate(year, period.month, period.dayOfMonth)
         }
-    val state =
-        rememberDatePickerState(
-            initialSelectedDateMillis = initialDate.getStartOfDay().toMillis(TimeZone.UTC),
-        )
+    val state = rememberDatePickerState(initialSelectedDateMillis = initialDate.toEpochDays() * MILLIS_IN_DAY)
     DatePickerDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
@@ -77,7 +73,7 @@ private fun AnnualDatePickerDialog(
                 enabled = state.selectedDateMillis != null,
                 onClick = {
                     state.selectedDateMillis?.let { millis ->
-                        onDateClicked(millis.toLocalDate(TimeZone.UTC))
+                        onDateClicked(LocalDate.fromEpochDays((millis / MILLIS_IN_DAY).toInt()))
                     }
                     onDismiss()
                 },
