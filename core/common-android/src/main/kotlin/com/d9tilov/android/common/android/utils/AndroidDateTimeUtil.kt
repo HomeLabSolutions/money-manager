@@ -1,5 +1,3 @@
-@file:Suppress("TooManyFunctions", "PackageNaming")
-
 package com.d9tilov.android.common.android.utils
 
 import android.text.format.DateUtils

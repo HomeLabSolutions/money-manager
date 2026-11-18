@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -56,7 +55,6 @@ internal fun AnnualRepeatDateSelector(
 internal fun ExecutionPeriod.EveryYear.annualDateText(): String =
     MonthDay.of(month, dayOfMonth).format(annualDateFormatter)
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AnnualDatePickerDialog(
     period: ExecutionPeriod.EveryYear,

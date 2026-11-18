@@ -1,5 +1,3 @@
-@file:Suppress("ktlint:standard:filename")
-
 package com.d9tilov.android.common.android.utils
 
 import android.content.Context

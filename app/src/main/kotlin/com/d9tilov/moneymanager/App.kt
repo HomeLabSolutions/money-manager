@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.StrictMode
 import coil3.ImageLoader
 import coil3.SingletonImageLoader
-import coil3.annotation.ExperimentalCoilApi
 import coil3.network.cachecontrol.CacheControlCacheStrategy
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
 import coil3.request.crossfade
@@ -25,7 +24,6 @@ import timber.log.Timber.DebugTree
 class App :
     Application(),
     SingletonImageLoader.Factory {
-    @OptIn(ExperimentalCoilApi::class)
     override fun newImageLoader(context: Context): ImageLoader =
         ImageLoader
             .Builder(context)

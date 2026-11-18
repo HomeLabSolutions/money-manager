@@ -1,7 +1,6 @@
 package com.d9tilov.android.common.android.location
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
 import androidx.annotation.RequiresPermission
@@ -31,7 +30,6 @@ internal class LocationProviderImpl(
 ) : LocationProvider {
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
-    @SuppressLint("MissingPermission")
     @RequiresPermission(
         anyOf = [
             Manifest.permission.ACCESS_COARSE_LOCATION,
