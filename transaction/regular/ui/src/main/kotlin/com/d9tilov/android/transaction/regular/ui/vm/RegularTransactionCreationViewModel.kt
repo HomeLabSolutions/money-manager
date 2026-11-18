@@ -125,12 +125,12 @@ class RegularTransactionCreationViewModel
                 val currentPeriod = state.transaction.executionPeriod
                 val executionPeriod =
                     when (menuItem) {
-                        PeriodMenuItem.DAY -> {
+                        DAY -> {
                             currentPeriod as? ExecutionPeriod.EveryDay
                                 ?: ExecutionPeriod.EveryDay(currentDate().getStartOfDay())
                         }
 
-                        PeriodMenuItem.WEEK -> {
+                        WEEK -> {
                             currentPeriod as? ExecutionPeriod.EveryWeek
                                 ?: ExecutionPeriod.EveryWeek(
                                     dayOfWeek = currentDate().dayOfWeek.ordinal,
@@ -138,7 +138,7 @@ class RegularTransactionCreationViewModel
                                 )
                         }
 
-                        PeriodMenuItem.MONTH -> {
+                        MONTH -> {
                             currentPeriod as? ExecutionPeriod.EveryMonth
                                 ?: ExecutionPeriod.EveryMonth(
                                     dayOfMonth = currentDate().day,
@@ -146,7 +146,7 @@ class RegularTransactionCreationViewModel
                                 )
                         }
 
-                        PeriodMenuItem.YEAR -> {
+                        YEAR -> {
                             currentPeriod as? ExecutionPeriod.EveryYear
                                 ?: ExecutionPeriod.EveryYear(
                                     month = currentDate().month.number,

@@ -19,10 +19,15 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.utils.currentDate
+import com.d9tilov.android.core.utils.getStartOfDay
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 import java.time.MonthDay
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
-private const val MILLIS_IN_DAY = 86_400_000L
 private const val DATE_PART_LENGTH = 2
 
 @Composable
@@ -52,7 +57,7 @@ internal fun AnnualRepeatDateSelector(
 internal fun ExecutionPeriod.EveryYear.annualDateText(): String =
     "${dayOfMonth.toString().padStart(DATE_PART_LENGTH, '0')}.${month.toString().padStart(DATE_PART_LENGTH, '0')}"
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class)
 @Composable
 private fun AnnualDatePickerDialog(
     period: ExecutionPeriod.EveryYear,
@@ -65,7 +70,10 @@ private fun AnnualDatePickerDialog(
             val year = generateSequence(currentDate().year) { it + 1 }.first { monthDay.isValidYear(it) }
             LocalDate(year, period.month, period.dayOfMonth)
         }
-    val state = rememberDatePickerState(initialSelectedDateMillis = initialDate.toEpochDays() * MILLIS_IN_DAY)
+    val state =
+        rememberDatePickerState(
+            initialSelectedDateMillis = initialDate.getStartOfDay().toInstant(TimeZone.UTC).toEpochMilliseconds(),
+        )
     DatePickerDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
@@ -73,7 +81,7 @@ private fun AnnualDatePickerDialog(
                 enabled = state.selectedDateMillis != null,
                 onClick = {
                     state.selectedDateMillis?.let { millis ->
-                        onDateClicked(LocalDate.fromEpochDays((millis / MILLIS_IN_DAY).toInt()))
+                        onDateClicked(Instant.fromEpochMilliseconds(millis).toLocalDateTime(TimeZone.UTC).date)
                     }
                     onDismiss()
                 },
