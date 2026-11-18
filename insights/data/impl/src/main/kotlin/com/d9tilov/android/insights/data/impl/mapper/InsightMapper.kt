@@ -1,19 +1,22 @@
 package com.d9tilov.android.insights.data.impl.mapper
 
+import com.d9tilov.android.core.utils.toLocalDateTime
+import com.d9tilov.android.core.utils.toMillis
 import com.d9tilov.android.database.entity.InsightDbModel
 import com.d9tilov.android.insights.domain.model.Insight
+import kotlinx.datetime.TimeZone
 
 internal fun Insight.toDbModel(clientId: String): InsightDbModel =
     InsightDbModel(
         id = id,
         clientId = clientId,
         text = text,
-        createdDate = createdAtMillis,
+        createdDate = createdAtMillis.toLocalDateTime(TimeZone.UTC),
     )
 
 internal fun InsightDbModel.toDomainModel(): Insight =
     Insight(
         id = id,
-        createdAtMillis = createdDate,
+        createdAtMillis = createdDate.toMillis(TimeZone.UTC),
         text = text,
     )

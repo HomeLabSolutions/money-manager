@@ -1,5 +1,6 @@
 package com.d9tilov.android.insights.data.impl.mapper
 
+import com.d9tilov.android.database.converters.UtcDateConverter
 import com.d9tilov.android.insights.domain.model.Insight
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -30,9 +31,11 @@ class InsightMapperTest {
             for (timestamp in timestamps) {
                 val insight = Insight(id = 1L, createdAtMillis = timestamp, text = "Insight")
                 val stored = insight.toDbModel("client-id")
+                val storedMillis = UtcDateConverter.fromDateTime(stored.createdDate)
+                val restored = stored.copy(createdDate = UtcDateConverter.toDateTime(storedMillis))
 
-                assertEquals(timestamp, stored.createdDate)
-                assertEquals(insight, stored.toDomainModel())
+                assertEquals(timestamp, storedMillis)
+                assertEquals(insight, restored.toDomainModel())
             }
         }
     }
