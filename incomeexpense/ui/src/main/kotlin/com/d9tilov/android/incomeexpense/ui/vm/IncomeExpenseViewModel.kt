@@ -478,9 +478,9 @@ class IncomeExpenseViewModel
                             after.date.getEndOfDay(),
                             after.currencyCode,
                         )
-                    } else if (before != null && after != null && before.date.isSameDay(after.date)) {
+                    } else if (before != null && after != null && before.date.date == after.date.date) {
                         null
-                    } else if (before != null && after != null && !before.date.isSameDay(after.date)) {
+                    } else if (before != null && after != null && before.date.date != after.date.date) {
                         TransactionUiHeader(
                             after.date.getEndOfDay(),
                             after.currencyCode,
