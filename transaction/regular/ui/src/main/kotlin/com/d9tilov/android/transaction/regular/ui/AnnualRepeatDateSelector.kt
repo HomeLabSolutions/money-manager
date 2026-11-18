@@ -25,8 +25,9 @@ import com.d9tilov.android.core.utils.toMillis
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import java.time.MonthDay
+import java.time.format.DateTimeFormatter
 
-private const val DATE_PART_LENGTH = 2
+private val annualDateFormatter = DateTimeFormatter.ofPattern("dd.MM")
 
 @Composable
 internal fun AnnualRepeatDateSelector(
@@ -53,7 +54,7 @@ internal fun AnnualRepeatDateSelector(
 }
 
 internal fun ExecutionPeriod.EveryYear.annualDateText(): String =
-    "${dayOfMonth.toString().padStart(DATE_PART_LENGTH, '0')}.${month.toString().padStart(DATE_PART_LENGTH, '0')}"
+    MonthDay.of(month, dayOfMonth).format(annualDateFormatter)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
