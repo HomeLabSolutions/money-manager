@@ -18,11 +18,14 @@ import com.d9tilov.android.transaction.regular.ui.navigator.RegularTransactionAr
 import com.d9tilov.android.transaction.regular.ui.vm.PeriodMenuItem.DAY
 import com.d9tilov.android.transaction.regular.ui.vm.PeriodMenuItem.MONTH
 import com.d9tilov.android.transaction.regular.ui.vm.PeriodMenuItem.WEEK
+import com.d9tilov.android.transaction.regular.ui.vm.PeriodMenuItem.YEAR
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.number
 import javax.inject.Inject
 
 data class RegularTransactionCreationUiState(
@@ -38,6 +41,7 @@ enum class PeriodMenuItem {
     DAY,
     WEEK,
     MONTH,
+    YEAR,
 }
 
 enum class DaysInWeek(
@@ -57,6 +61,7 @@ fun ExecutionPeriod.toPeriodMenuItem(): PeriodMenuItem =
         is ExecutionPeriod.EveryDay -> DAY
         is ExecutionPeriod.EveryWeek -> WEEK
         is ExecutionPeriod.EveryMonth -> MONTH
+        is ExecutionPeriod.EveryYear -> YEAR
     }
 
 @HiltViewModel
@@ -120,12 +125,12 @@ class RegularTransactionCreationViewModel
                 val currentPeriod = state.transaction.executionPeriod
                 val executionPeriod =
                     when (menuItem) {
-                        PeriodMenuItem.DAY -> {
+                        DAY -> {
                             currentPeriod as? ExecutionPeriod.EveryDay
                                 ?: ExecutionPeriod.EveryDay(currentDate().getStartOfDay())
                         }
 
-                        PeriodMenuItem.WEEK -> {
+                        WEEK -> {
                             currentPeriod as? ExecutionPeriod.EveryWeek
                                 ?: ExecutionPeriod.EveryWeek(
                                     dayOfWeek = currentDate().dayOfWeek.ordinal,
@@ -133,9 +138,18 @@ class RegularTransactionCreationViewModel
                                 )
                         }
 
-                        PeriodMenuItem.MONTH -> {
+                        MONTH -> {
                             currentPeriod as? ExecutionPeriod.EveryMonth
                                 ?: ExecutionPeriod.EveryMonth(
+                                    dayOfMonth = currentDate().day,
+                                    lastExecDate = currentDate().getStartOfDay(),
+                                )
+                        }
+
+                        YEAR -> {
+                            currentPeriod as? ExecutionPeriod.EveryYear
+                                ?: ExecutionPeriod.EveryYear(
+                                    month = currentDate().month.number,
                                     dayOfMonth = currentDate().day,
                                     lastExecDate = currentDate().getStartOfDay(),
                                 )
@@ -188,6 +202,30 @@ class RegularTransactionCreationViewModel
         fun updateDescription(description: String) {
             val tr = _uiState.value.transaction.copy(description = description)
             _uiState.update { state -> state.copy(transaction = tr) }
+        }
+
+        fun updateYearDate(date: LocalDate) {
+            _uiState.update { state ->
+                val currentPeriod = state.transaction.executionPeriod
+                val month = date.month.number
+                if (currentPeriod is ExecutionPeriod.EveryYear &&
+                    currentPeriod.month == month && currentPeriod.dayOfMonth == date.day
+                ) {
+                    state
+                } else {
+                    state.copy(
+                        transaction =
+                            state.transaction.copy(
+                                executionPeriod =
+                                    ExecutionPeriod.EveryYear(
+                                        month = month,
+                                        dayOfMonth = date.day,
+                                        lastExecDate = currentDate().getStartOfDay(),
+                                    ),
+                            ),
+                    )
+                }
+            }
         }
 
         fun updatePushEnabled(enabled: Boolean) {

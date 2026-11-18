@@ -183,6 +183,10 @@ private fun RegularTransaction.repeatPeriodText(): String =
         is ExecutionPeriod.EveryMonth -> {
             stringResource(R.string.regular_transaction_repeat_period_month, period.dayOfMonth.toString())
         }
+
+        is ExecutionPeriod.EveryYear -> {
+            stringResource(R.string.regular_transaction_repeat_period_year, period.annualDateText())
+        }
     }
 
 @Composable

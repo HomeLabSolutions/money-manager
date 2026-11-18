@@ -18,7 +18,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
 const val DATE_FORMAT = "dd.MM.yyyy"
@@ -42,28 +41,23 @@ fun Long.toBackupDate(): String =
 fun LocalDateTime.toStandardStringDate(): String =
     SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(Date(this.toMillis()))
 
-@OptIn(ExperimentalTime::class)
 fun currentDateTime(): LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 
 fun currentDate(): LocalDate = currentDateTime().date
 
-@OptIn(ExperimentalTime::class)
 fun LocalDateTime.toUTC(): LocalDateTime =
     Instant.fromEpochMilliseconds(this.toMillis()).toLocalDateTime(
         TimeZone.UTC,
     )
 
-@OptIn(ExperimentalTime::class)
 fun Instant.toLocal() = this.toLocalDateTime(TimeZone.currentSystemDefault())
 
-@OptIn(ExperimentalTime::class)
-fun LocalDateTime.toMillis(): Long = this.toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+fun LocalDateTime.toMillis(timeZone: TimeZone = TimeZone.currentSystemDefault()): Long =
+    this.toInstant(timeZone).toEpochMilliseconds()
 
-@OptIn(ExperimentalTime::class)
 fun Long.toLocalDateTime(): LocalDateTime =
     Instant.fromEpochMilliseconds(this).toLocalDateTime(TimeZone.currentSystemDefault())
 
-@OptIn(ExperimentalTime::class)
 fun Long.fromUTCToLocalDateTime(): LocalDateTime {
     val timeZone = TimeZone.currentSystemDefault()
     val newMillis =
@@ -71,9 +65,8 @@ fun Long.fromUTCToLocalDateTime(): LocalDateTime {
     return Instant.fromEpochMilliseconds(newMillis).toLocal()
 }
 
-@OptIn(ExperimentalTime::class)
-fun Long.toLocalDate(): LocalDate =
-    Instant.fromEpochMilliseconds(this).toLocalDateTime(TimeZone.currentSystemDefault()).date
+fun Long.toLocalDate(timeZone: TimeZone = TimeZone.currentSystemDefault()): LocalDate =
+    Instant.fromEpochMilliseconds(this).toLocalDateTime(timeZone).date
 
 fun LocalDate.getStartOfDay(): LocalDateTime = atTime(0, 0, 0, 0)
 

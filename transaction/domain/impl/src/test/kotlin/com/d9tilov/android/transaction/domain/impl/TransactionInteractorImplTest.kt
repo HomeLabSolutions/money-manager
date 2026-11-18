@@ -28,6 +28,8 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
@@ -36,6 +38,7 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.number
 import kotlinx.datetime.plus
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -109,6 +112,82 @@ class TransactionInteractorImplTest {
         coEvery { categoryInteractor.getCategoryById(any()) } returns testCategory
         coEvery { budgetInteractor.get() } returns flowOf(testBudget)
     }
+
+    @Test
+    fun `annual allowance stays uniform at start middle and end of month including leap year`() =
+        runTest {
+            coEvery { userInteractor.getFiscalDay() } returns 1
+            every { budgetInteractor.get() } returns flowOf(testBudget.copy(saveSum = BigDecimal.ZERO))
+            every {
+                transactionRepo.getTransactionsByTypeInPeriod(any(), any(), any(), true, false)
+            } returns flowOf(emptyList())
+            mockkStatic("com.d9tilov.android.core.utils.DateTimeUtilKt")
+            try {
+                val dates =
+                    listOf(
+                        LocalDateTime(2023, 1, 1, 12, 0),
+                        LocalDateTime(2023, 1, 17, 12, 0),
+                        LocalDateTime(2023, 1, 31, 12, 0),
+                        LocalDateTime(2024, 2, 29, 12, 0),
+                        LocalDateTime(2024, 12, 31, 12, 0),
+                    )
+                for (date in dates) {
+                    every { currentDateTime() } returns date
+                    every { currentDate() } returns date.date
+                    val yearlyExpense = if (date.year == 2024) BigDecimal("3660") else BigDecimal("3650")
+                    val template =
+                        RegularTransaction.EMPTY.copy(
+                            currencyCode = "USD",
+                            createdDate = LocalDateTime(2023, 1, 1, 0, 0),
+                            executionPeriod = ExecutionPeriod.EveryYear(month = 12, dayOfMonth = 1),
+                        )
+                    every { regularTransactionInteractor.getAll(TransactionType.EXPENSE) } returns
+                        flowOf(listOf(template.copy(sum = yearlyExpense)))
+                    every { regularTransactionInteractor.getAll(TransactionType.INCOME) } returns
+                        flowOf(
+                            listOf(template.copy(type = TransactionType.INCOME, sum = yearlyExpense * BigDecimal(2))),
+                        )
+
+                    val result = interactor.ableToSpendToday().first()
+
+                    assertTrue(result is TransactionSpendingTodayModel.NORMAL)
+                    assertEquals(0, (result as TransactionSpendingTodayModel.NORMAL).trSum.compareTo(BigDecimal.TEN))
+                }
+            } finally {
+                unmockkStatic("com.d9tilov.android.core.utils.DateTimeUtilKt")
+            }
+        }
+
+    @Test
+    fun `annual execution adds full payment once and preserves schedule`() =
+        runTest {
+            val today = currentDate()
+            val yesterday = today.plus(-1, DateTimeUnit.DAY)
+            val period = ExecutionPeriod.EveryYear(today.month.number, today.day, yesterday.getStartOfDay())
+            val template =
+                RegularTransaction.EMPTY.copy(
+                    id = 1L,
+                    sum = BigDecimal("3650"),
+                    category = testCategory,
+                    createdDate = yesterday.getStartOfDay(),
+                    executionPeriod = period,
+                )
+            var persisted = template
+            every { regularTransactionInteractor.getAll(TransactionType.EXPENSE) } answers {
+                flow { emit(listOf(persisted)) }
+            }
+            coEvery { regularTransactionInteractor.update(any()) } answers { persisted = firstArg() }
+
+            assertEquals(listOf(template), interactor.executeRegularIfNeeded(TransactionType.EXPENSE))
+            assertTrue(interactor.executeRegularIfNeeded(TransactionType.EXPENSE).isEmpty())
+
+            coVerify(exactly = 1) {
+                transactionRepo.addTransaction(
+                    match { it.sum == template.sum && it.date == today.getStartOfDay() && it.isRegular },
+                )
+            }
+            assertEquals(period.copy(lastExecDate = today.getStartOfDay()), persisted.executionPeriod)
+        }
 
     @Test
     fun `regular execution returns all added transactions`() =

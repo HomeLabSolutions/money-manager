@@ -46,6 +46,7 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.atTime
+import kotlinx.datetime.daysUntil
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import java.math.BigDecimal
@@ -364,25 +365,43 @@ class TransactionInteractorImpl @Inject constructor(
     private suspend fun getSumOfRegularTransactions(
         fiscalDay: Int,
         transactions: List<RegularTransaction>,
-    ): BigDecimal {
-        val curDate = currentDateTime().getEndOfDay()
-        val startDate = getStartDateOfFiscalPeriod(fiscalDay).date
-        val endDate = curDate.getEndDateOfFiscalPeriod(fiscalDay).date
-        return sumAtCurrentRates(
+    ): BigDecimal =
+        sumAtCurrentRates(
             items = transactions,
             targetCurrencyCode = currencyInteractor.getMainCurrency().code,
             amount = { transaction ->
-                val occurrenceCount =
-                    occurrencesBetween(
-                        executionPeriod = transaction.executionPeriod,
-                        activeFrom = transaction.createdDate.date,
-                        from = startDate,
-                        to = endDate,
-                    ).size
-                transaction.sum.multiply(BigDecimal(occurrenceCount))
+                transaction.amountInPeriod(fiscalDay)
             },
             currencyCode = RegularTransaction::currencyCode,
         )
+
+    private fun RegularTransaction.amountInPeriod(fiscalDay: Int): BigDecimal {
+        val curDate = currentDateTime().getEndOfDay()
+        val startDate = getStartDateOfFiscalPeriod(fiscalDay).date
+        val endDate = curDate.getEndDateOfFiscalPeriod(fiscalDay).date
+        return if (executionPeriod is ExecutionPeriod.EveryYear) {
+            annualAmountInPeriod(maxOf(createdDate.date, startDate, curDate.date), endDate)
+        } else {
+            val occurrenceCount = occurrencesBetween(executionPeriod, createdDate.date, startDate, endDate).size
+            sum.multiply(BigDecimal(occurrenceCount))
+        }
+    }
+
+    private fun RegularTransaction.annualAmountInPeriod(
+        from: LocalDate,
+        to: LocalDate,
+    ): BigDecimal {
+        if (from > to) return BigDecimal.ZERO
+
+        return (from.year..to.year).sumOf { year ->
+            val yearStart = LocalDate(year, 1, 1)
+            val nextYearStart = LocalDate(year + 1, 1, 1)
+            val periodStart = maxOf(from, yearStart)
+            val periodEnd = minOf(to.plus(1, DateTimeUnit.DAY), nextYearStart)
+            sum
+                .multiply(periodStart.daysUntil(periodEnd).toBigDecimal())
+                .divideBy(yearStart.daysUntil(nextYearStart).toBigDecimal())
+        }
     }
 
     override fun getSumInPeriod(
@@ -524,6 +543,7 @@ class TransactionInteractorImpl @Inject constructor(
             is ExecutionPeriod.EveryDay -> ExecutionPeriod.EveryDay(date.getStartOfDay())
             is ExecutionPeriod.EveryWeek -> ExecutionPeriod.EveryWeek(dayOfWeek, date.getStartOfDay())
             is ExecutionPeriod.EveryMonth -> ExecutionPeriod.EveryMonth(dayOfMonth, date.getStartOfDay())
+            is ExecutionPeriod.EveryYear -> ExecutionPeriod.EveryYear(month, dayOfMonth, date.getStartOfDay())
         }
 
     override suspend fun update(transaction: Transaction) {

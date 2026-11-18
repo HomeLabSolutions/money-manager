@@ -6,6 +6,7 @@ import com.d9tilov.android.core.model.PeriodType
 import com.d9tilov.android.core.model.PeriodType.Companion.DAY_NAME
 import com.d9tilov.android.core.model.PeriodType.Companion.MONTH_NAME
 import com.d9tilov.android.core.model.PeriodType.Companion.WEEK_NAME
+import com.d9tilov.android.core.model.PeriodType.Companion.YEAR_NAME
 import com.d9tilov.android.core.model.TransactionType
 
 object ModelTypeConverter {
@@ -30,6 +31,7 @@ object ModelTypeConverter {
     @JvmStatic
     fun toPeriodType(value: String): PeriodType =
         when (value) {
+            YEAR_NAME -> PeriodType.YEAR
             MONTH_NAME -> PeriodType.MONTH
             WEEK_NAME -> PeriodType.WEEK
             DAY_NAME -> PeriodType.DAY
@@ -57,6 +59,12 @@ object ModelTypeConverter {
                     ":${(value as ExecutionPeriod.EveryMonth).dayOfMonth}" +
                     ":${DateConverter.fromOffsetDateTime(value.lastExecutionDateTime)}"
             }
+
+            PeriodType.YEAR -> {
+                val period = value as ExecutionPeriod.EveryYear
+                "${period.periodType.name}:${period.month}:${period.dayOfMonth}:" +
+                    DateConverter.fromOffsetDateTime(period.lastExecutionDateTime)
+            }
         }
 
     @TypeConverter
@@ -64,6 +72,14 @@ object ModelTypeConverter {
     fun toExecutionPeriod(value: String): ExecutionPeriod {
         val ar = value.split(":")
         return when (ar[0]) {
+            YEAR_NAME -> {
+                ExecutionPeriod.EveryYear(
+                    month = ar[1].toInt(),
+                    dayOfMonth = ar[2].toInt(),
+                    lastExecDate = DateConverter.toOffsetDateTime(ar.last().toLong()),
+                )
+            }
+
             DAY_NAME -> {
                 ExecutionPeriod.EveryDay(DateConverter.toOffsetDateTime(ar[2].toLong()))
             }

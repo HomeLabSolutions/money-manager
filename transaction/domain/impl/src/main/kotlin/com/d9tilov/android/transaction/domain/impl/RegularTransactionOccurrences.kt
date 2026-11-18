@@ -4,6 +4,7 @@ import com.d9tilov.android.core.model.ExecutionPeriod
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
+import kotlinx.datetime.number
 import kotlinx.datetime.plus
 
 /** Returns all scheduled dates in the inclusive [from]..[to] interval. */
@@ -28,8 +29,11 @@ private fun ExecutionPeriod.occursOn(date: LocalDate): Boolean =
     when (this) {
         is ExecutionPeriod.EveryDay -> true
         is ExecutionPeriod.EveryWeek -> date.dayOfWeek.ordinal == dayOfWeek
-        is ExecutionPeriod.EveryMonth -> date.day == minOf(dayOfMonth, date.month.days(date.year))
+        is ExecutionPeriod.EveryMonth -> date.matchesDayOfMonth(dayOfMonth)
+        is ExecutionPeriod.EveryYear -> date.month.number == month && date.matchesDayOfMonth(dayOfMonth)
     }
+
+private fun LocalDate.matchesDayOfMonth(dayOfMonth: Int): Boolean = day == minOf(dayOfMonth, month.days(year))
 
 private fun Month.days(year: Int): Int =
     when (this) {

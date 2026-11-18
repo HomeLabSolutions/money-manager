@@ -8,6 +8,12 @@ sealed class ExecutionPeriod(
     val periodType: PeriodType,
     val lastExecutionDateTime: LocalDateTime = currentDate().getStartOfDay(),
 ) {
+    data class EveryYear(
+        val month: Int,
+        val dayOfMonth: Int,
+        val lastExecDate: LocalDateTime = currentDate().getStartOfDay(),
+    ) : ExecutionPeriod(PeriodType.YEAR, lastExecDate)
+
     data class EveryMonth(
         val dayOfMonth: Int,
         val lastExecDate: LocalDateTime = currentDate().getStartOfDay(),
