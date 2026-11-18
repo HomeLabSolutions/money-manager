@@ -13,13 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.d9tilov.android.core.utils.currentDateTime
-import com.d9tilov.android.core.utils.toMillis
+import com.d9tilov.android.core.utils.toLocalDate
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateRangePickerModal(
-    onDateRangeSelected: (Pair<Long, Long>) -> Unit,
+    onDateRangeSelected: (Pair<LocalDate, LocalDate>) -> Unit,
     onDismiss: () -> Unit,
 ) {
     val dateRangePickerState = rememberDateRangePickerState()
@@ -27,15 +28,15 @@ fun DateRangePickerModal(
     DatePickerDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
+            val startDate = dateRangePickerState.selectedStartDateMillis?.toLocalDate(TimeZone.UTC)
+            val endDate = dateRangePickerState.selectedEndDateMillis?.toLocalDate(TimeZone.UTC)
             TextButton(
+                enabled = startDate != null && endDate != null,
                 onClick = {
-                    onDateRangeSelected(
-                        Pair(
-                            dateRangePickerState.selectedStartDateMillis ?: currentDateTime().toMillis(),
-                            dateRangePickerState.selectedEndDateMillis ?: currentDateTime().toMillis(),
-                        ),
-                    )
-                    onDismiss()
+                    if (startDate != null && endDate != null) {
+                        onDateRangeSelected(startDate to endDate)
+                        onDismiss()
+                    }
                 },
             ) {
                 Text(stringResource(R.string.ok))

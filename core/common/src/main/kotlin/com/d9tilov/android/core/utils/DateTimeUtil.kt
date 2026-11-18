@@ -48,11 +48,10 @@ fun Instant.toLocal() = this.toLocalDateTime(TimeZone.currentSystemDefault())
 fun LocalDateTime.toMillis(timeZone: TimeZone = TimeZone.currentSystemDefault()): Long =
     this.toInstant(timeZone).toEpochMilliseconds()
 
-fun Long.toLocalDateTime(): LocalDateTime =
-    Instant.fromEpochMilliseconds(this).toLocalDateTime(TimeZone.currentSystemDefault())
+fun Long.toLocalDateTime(timeZone: TimeZone = TimeZone.currentSystemDefault()): LocalDateTime =
+    Instant.fromEpochMilliseconds(this).toLocalDateTime(timeZone)
 
-fun Long.toLocalDate(): LocalDate =
-    Instant.fromEpochMilliseconds(this).toLocalDateTime(TimeZone.currentSystemDefault()).date
+fun Long.toLocalDate(timeZone: TimeZone = TimeZone.currentSystemDefault()): LocalDate = toLocalDateTime(timeZone).date
 
 fun LocalDate.getStartOfDay(): LocalDateTime = atTime(0, 0, 0, 0)
 

@@ -22,6 +22,8 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -45,6 +47,20 @@ class TransactionInfoViewModelTest {
     fun tearDown() {
         Dispatchers.resetMain()
     }
+
+    @Test
+    fun `changing the calendar date preserves the transactions local time`() =
+        runTest(testDispatcher) {
+            val originalDate = LocalDateTime(2026, 11, 18, 23, 45)
+            every { transactionInteractor.getTransactionById(TRANSACTION_ID) } returns
+                flowOf(Transaction.EMPTY.copy(id = TRANSACTION_ID, date = originalDate))
+            val viewModel = createViewModel(mode = TransactionInfoMode.EDIT)
+            runCurrent()
+
+            viewModel.updateDate(LocalDate(2024, 2, 29))
+
+            assertEquals(LocalDateTime(2024, 2, 29, 23, 45), viewModel.uiState.value.transaction.date)
+        }
 
     @Test
     fun `save becomes successful only after update completes`() =

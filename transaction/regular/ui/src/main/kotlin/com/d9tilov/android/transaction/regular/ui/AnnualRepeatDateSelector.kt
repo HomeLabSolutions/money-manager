@@ -19,12 +19,11 @@ import androidx.compose.ui.res.stringResource
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.core.utils.getStartOfDay
+import com.d9tilov.android.core.utils.toLocalDate
 import com.d9tilov.android.core.utils.toMillis
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import java.time.MonthDay
-import kotlin.time.Instant
 
 private const val DATE_PART_LENGTH = 2
 
@@ -78,7 +77,7 @@ private fun AnnualDatePickerDialog(
                 enabled = state.selectedDateMillis != null,
                 onClick = {
                     state.selectedDateMillis?.let { millis ->
-                        onDateClicked(Instant.fromEpochMilliseconds(millis).toLocalDateTime(TimeZone.UTC).date)
+                        onDateClicked(millis.toLocalDate(TimeZone.UTC))
                     }
                     onDismiss()
                 },

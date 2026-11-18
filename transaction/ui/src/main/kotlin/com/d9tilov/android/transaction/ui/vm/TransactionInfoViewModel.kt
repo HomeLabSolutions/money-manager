@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.utils.reduceScaleStr
-import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.places.domain.contract.NearbyPlacesInteractor
 import com.d9tilov.android.places.domain.model.LocationData
 import com.d9tilov.android.places.domain.model.NearbyPlace
@@ -22,6 +21,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import javax.inject.Inject
 
 data class TransactionInfoUiState(
@@ -169,10 +170,10 @@ class TransactionInfoViewModel
                 state.copy(transaction = tr.copy(description = description))
             }
 
-        fun updateDate(date: Long) =
+        fun updateDate(date: LocalDate) =
             _uiState.update { state ->
                 val tr = state.transaction
-                state.copy(transaction = tr.copy(date = date.toLocalDateTime()))
+                state.copy(transaction = tr.copy(date = LocalDateTime(date, tr.date.time)))
             }
 
         fun updateInStatistics(inStatistics: Boolean) =
