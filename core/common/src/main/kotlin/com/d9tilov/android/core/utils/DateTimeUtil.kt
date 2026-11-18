@@ -1,4 +1,4 @@
-@file:Suppress("TooManyFunctions", "PackageNaming")
+@file:Suppress("TooManyFunctions")
 
 package com.d9tilov.android.core.utils
 

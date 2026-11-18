@@ -15,7 +15,6 @@ fun getAppVersion(context: Context): String {
                     PackageManager.PackageInfoFlags.of(0),
                 )
             } else {
-                @Suppress("DEPRECATION")
                 context.packageManager.getPackageInfo(context.packageName, 0)
             }
         val a = packageInfo.versionName ?: "N/A"

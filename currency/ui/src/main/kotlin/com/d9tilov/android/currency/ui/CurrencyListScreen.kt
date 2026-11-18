@@ -86,7 +86,6 @@ fun CurrencyListRoute(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CurrencyListScreen(
     currencyUiState: CurrencyUiState,
@@ -123,7 +122,6 @@ fun CurrencyListScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CurrencyTopBar(
     isSearchActive: Boolean,

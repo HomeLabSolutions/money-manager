@@ -1,5 +1,3 @@
-@file:Suppress("ktlint:standard:filename")
-
 package com.d9tilov.android.core.utils
 
 import com.d9tilov.android.core.constants.CurrencyConstants.LONG_DECIMAL_LENGTH
