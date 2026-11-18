@@ -16,8 +16,6 @@ import com.d9tilov.android.core.constants.ExceptionMessageConstants.NETWORK_EXCE
 import com.d9tilov.android.core.constants.ExceptionMessageConstants.UID_IS_NULL_OR_EMPTY
 import com.d9tilov.android.core.exceptions.WrongUidException
 import com.d9tilov.android.core.model.ResultOf
-import com.d9tilov.android.core.utils.currentDateTime
-import com.d9tilov.android.core.utils.toMillis
 import com.d9tilov.android.database.DatabaseBackupStore
 import com.d9tilov.android.datastore.PreferencesStore
 import com.d9tilov.android.network.exception.NetworkException
@@ -90,7 +88,7 @@ class BackupManagerImpl
                 )
                 ResultOf.Success(
                     BackupData.EMPTY.copy(
-                        lastBackupTimestamp = fileRef.metadata?.updatedTimeMillis ?: currentDateTime().toMillis(),
+                        lastBackupTimestamp = fileRef.metadata?.updatedTimeMillis ?: System.currentTimeMillis(),
                     ),
                 )
             } catch (ex: CancellationException) {
