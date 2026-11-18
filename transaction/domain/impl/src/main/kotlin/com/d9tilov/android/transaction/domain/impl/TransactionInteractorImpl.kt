@@ -14,6 +14,7 @@ import com.d9tilov.android.core.utils.countDaysRemainingNextFiscalDate
 import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.divideBy
+import com.d9tilov.android.core.utils.getEndDateOfFiscalPeriod
 import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.getStartDateOfFiscalPeriod
 import com.d9tilov.android.core.utils.getStartOfDay
@@ -45,6 +46,7 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.atTime
+import kotlinx.datetime.daysUntil
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import java.math.BigDecimal
@@ -372,6 +374,35 @@ class TransactionInteractorImpl @Inject constructor(
             },
             currencyCode = RegularTransaction::currencyCode,
         )
+
+    private fun RegularTransaction.amountInPeriod(fiscalDay: Int): BigDecimal {
+        val curDate = currentDateTime().getEndOfDay()
+        val startDate = getStartDateOfFiscalPeriod(fiscalDay).date
+        val endDate = curDate.getEndDateOfFiscalPeriod(fiscalDay).date
+        return if (executionPeriod is ExecutionPeriod.EveryYear) {
+            annualAmountInPeriod(maxOf(createdDate.date, startDate, curDate.date), endDate)
+        } else {
+            val occurrenceCount = occurrencesBetween(executionPeriod, createdDate.date, startDate, endDate).size
+            sum.multiply(BigDecimal(occurrenceCount))
+        }
+    }
+
+    private fun RegularTransaction.annualAmountInPeriod(
+        from: LocalDate,
+        to: LocalDate,
+    ): BigDecimal {
+        if (from > to) return BigDecimal.ZERO
+
+        return (from.year..to.year).sumOf { year ->
+            val yearStart = LocalDate(year, 1, 1)
+            val nextYearStart = LocalDate(year + 1, 1, 1)
+            val periodStart = maxOf(from, yearStart)
+            val periodEnd = minOf(to.plus(1, DateTimeUnit.DAY), nextYearStart)
+            sum
+                .multiply(periodStart.daysUntil(periodEnd).toBigDecimal())
+                .divideBy(yearStart.daysUntil(nextYearStart).toBigDecimal())
+        }
+    }
 
     override fun getSumInPeriod(
         from: LocalDateTime,
