@@ -14,7 +14,6 @@ import com.d9tilov.android.core.utils.countDaysRemainingNextFiscalDate
 import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.divideBy
-import com.d9tilov.android.core.utils.getEndDateOfFiscalPeriod
 import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.getStartDateOfFiscalPeriod
 import com.d9tilov.android.core.utils.getStartOfDay
@@ -364,19 +363,15 @@ class TransactionInteractorImpl @Inject constructor(
     private suspend fun getSumOfRegularTransactions(
         fiscalDay: Int,
         transactions: List<RegularTransaction>,
-    ): BigDecimal {
-        val curDate = currentDateTime().getEndOfDay()
-        val startDate = getStartDateOfFiscalPeriod(fiscalDay).date
-        val endDate = curDate.getEndDateOfFiscalPeriod(fiscalDay).date
-        return sumAtCurrentRates(
+    ): BigDecimal =
+        sumAtCurrentRates(
             items = transactions,
             targetCurrencyCode = currencyInteractor.getMainCurrency().code,
             amount = { transaction ->
-                transaction.amountInPeriod(from = startDate, to = endDate, today = curDate.date)
+                transaction.amountInPeriod(fiscalDay)
             },
             currencyCode = RegularTransaction::currencyCode,
         )
-    }
 
     override fun getSumInPeriod(
         from: LocalDateTime,

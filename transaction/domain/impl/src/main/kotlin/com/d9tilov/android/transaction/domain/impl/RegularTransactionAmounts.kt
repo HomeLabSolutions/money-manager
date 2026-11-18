@@ -1,13 +1,24 @@
 package com.d9tilov.android.transaction.domain.impl
 
 import com.d9tilov.android.core.model.ExecutionPeriod
+import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.divideBy
+import com.d9tilov.android.core.utils.getEndDateOfFiscalPeriod
+import com.d9tilov.android.core.utils.getEndOfDay
+import com.d9tilov.android.core.utils.getStartDateOfFiscalPeriod
 import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.plus
 import java.math.BigDecimal
+
+internal fun RegularTransaction.amountInPeriod(fiscalDay: Int): BigDecimal {
+    val curDate = currentDateTime().getEndOfDay()
+    val startDate = getStartDateOfFiscalPeriod(fiscalDay).date
+    val endDate = curDate.getEndDateOfFiscalPeriod(fiscalDay).date
+    return amountInPeriod(from = startDate, to = endDate, today = curDate.date)
+}
 
 /** Annual amounts accrue evenly over each calendar year for the spending allowance. */
 internal fun RegularTransaction.amountInPeriod(
