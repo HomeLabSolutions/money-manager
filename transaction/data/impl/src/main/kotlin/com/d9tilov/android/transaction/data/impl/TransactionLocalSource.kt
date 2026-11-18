@@ -33,7 +33,6 @@ import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
 import javax.inject.Inject
 import javax.inject.Named
-import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
 class TransactionLocalSource @Inject constructor(
@@ -118,7 +117,6 @@ class TransactionLocalSource @Inject constructor(
                 }
             }.joinToString(separator = "", prefix = "*", postfix = "*")
 
-    @OptIn(ExperimentalTime::class)
     private fun pagedTransactions(
         pagingSourceFactory: (String, LocalDateTime, LocalDateTime) -> PagingSource<Int, TransactionDbModel>,
     ): Flow<PagingData<TransactionDataModel>> =

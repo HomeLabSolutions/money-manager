@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -20,12 +19,11 @@ import androidx.compose.ui.res.stringResource
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.core.utils.getStartOfDay
+import com.d9tilov.android.core.utils.toMillis
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import java.time.MonthDay
-import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
 private const val DATE_PART_LENGTH = 2
@@ -57,7 +55,6 @@ internal fun AnnualRepeatDateSelector(
 internal fun ExecutionPeriod.EveryYear.annualDateText(): String =
     "${dayOfMonth.toString().padStart(DATE_PART_LENGTH, '0')}.${month.toString().padStart(DATE_PART_LENGTH, '0')}"
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class)
 @Composable
 private fun AnnualDatePickerDialog(
     period: ExecutionPeriod.EveryYear,
@@ -72,7 +69,7 @@ private fun AnnualDatePickerDialog(
         }
     val state =
         rememberDatePickerState(
-            initialSelectedDateMillis = initialDate.getStartOfDay().toInstant(TimeZone.UTC).toEpochMilliseconds(),
+            initialSelectedDateMillis = initialDate.getStartOfDay().toMillis(TimeZone.UTC),
         )
     DatePickerDialog(
         onDismissRequest = onDismiss,

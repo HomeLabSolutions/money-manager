@@ -10,7 +10,6 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.minus
-import kotlinx.datetime.offsetAt
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
@@ -18,12 +17,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
 const val DATE_FORMAT = "dd.MM.yyyy"
 const val BACKUP_DATE = "dd.MM.yyyy HH:mm"
-private const val MILLISECONDS_IN_SECOND = 1000L
 private const val NANOSECONDS_MINUS_ONE = 999_999_999
 private const val SECONDS_MINUS_ONE = 59
 private const val HOURS_MINUS_ONE = 23
@@ -42,36 +39,18 @@ fun Long.toBackupDate(): String =
 fun LocalDateTime.toStandardStringDate(): String =
     SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(Date(this.toMillis()))
 
-@OptIn(ExperimentalTime::class)
 fun currentDateTime(): LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 
 fun currentDate(): LocalDate = currentDateTime().date
 
-@OptIn(ExperimentalTime::class)
-fun LocalDateTime.toUTC(): LocalDateTime =
-    Instant.fromEpochMilliseconds(this.toMillis()).toLocalDateTime(
-        TimeZone.UTC,
-    )
-
-@OptIn(ExperimentalTime::class)
 fun Instant.toLocal() = this.toLocalDateTime(TimeZone.currentSystemDefault())
 
-@OptIn(ExperimentalTime::class)
-fun LocalDateTime.toMillis(): Long = this.toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+fun LocalDateTime.toMillis(timeZone: TimeZone = TimeZone.currentSystemDefault()): Long =
+    this.toInstant(timeZone).toEpochMilliseconds()
 
-@OptIn(ExperimentalTime::class)
 fun Long.toLocalDateTime(): LocalDateTime =
     Instant.fromEpochMilliseconds(this).toLocalDateTime(TimeZone.currentSystemDefault())
 
-@OptIn(ExperimentalTime::class)
-fun Long.fromUTCToLocalDateTime(): LocalDateTime {
-    val timeZone = TimeZone.currentSystemDefault()
-    val newMillis =
-        this + timeZone.offsetAt(Instant.fromEpochMilliseconds(this)).totalSeconds * MILLISECONDS_IN_SECOND
-    return Instant.fromEpochMilliseconds(newMillis).toLocal()
-}
-
-@OptIn(ExperimentalTime::class)
 fun Long.toLocalDate(): LocalDate =
     Instant.fromEpochMilliseconds(this).toLocalDateTime(TimeZone.currentSystemDefault()).date
 
@@ -84,10 +63,6 @@ fun LocalDate.getEndOfDay(): LocalDateTime =
 
 fun LocalDateTime.getEndOfDay(): LocalDateTime =
     date.atTime(HOURS_MINUS_ONE, SECONDS_MINUS_ONE, SECONDS_MINUS_ONE, NANOSECONDS_MINUS_ONE)
-
-fun LocalDateTime.isSameDay(date: LocalDateTime): Boolean = this.year == date.year && this.dayOfYear == date.dayOfYear
-
-fun LocalDate.isSameDay(date: LocalDate): Boolean = this.year == date.year && this.dayOfYear == date.dayOfYear
 
 fun getStartDateOfFiscalPeriod(fiscalDay: Int): LocalDateTime = getStartDateOfFiscalPeriod(fiscalDay, currentDate())
 
