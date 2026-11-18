@@ -9,9 +9,11 @@ report_failure() {
   while IFS= read -r report; do
     printf '\nReport: %s\n' "$report"
     cat "$report"
-  done < <(rg --files baselineprofile/build/outputs/androidTest-results -g '*.xml')
+  done < <(find baselineprofile/build/outputs/androidTest-results -type f -name '*.xml')
   mkdir -p baselineprofile/build/diagnostics
   adb logcat -d -v threadtime -t 1000 > baselineprofile/build/diagnostics/logcat.txt
+  adb shell uiautomator dump /sdcard/baseline-profile-failure.xml
+  adb pull /sdcard/baseline-profile-failure.xml baselineprofile/build/diagnostics/window.xml
   cat baselineprofile/build/diagnostics/logcat.txt
   exit "$status"
 }

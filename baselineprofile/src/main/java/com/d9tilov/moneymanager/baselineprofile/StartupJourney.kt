@@ -5,6 +5,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
+import java.util.regex.Pattern
 
 internal const val TARGET_PACKAGE = "com.d9tilov.moneymanager.baselineprofile"
 private const val SCREEN_TIMEOUT_MILLIS = 30_000L
@@ -17,8 +18,16 @@ internal fun prepareSignedInScenario() {
     device.executeShellCommand(
         "am start -W -n $TARGET_PACKAGE/com.d9tilov.moneymanager.baselinefixture.FixtureActivity",
     )
-    check(device.wait(Until.hasObject(By.desc("baseline-fixture-ready")), SCREEN_TIMEOUT_MILLIS)) {
-        "Could not prepare startup fixture. Check the local Auth Emulator and fixture activity logs."
+    val result =
+        device.wait(
+            Until.findObject(By.desc(Pattern.compile("baseline-fixture-(ready|error)"))),
+            SCREEN_TIMEOUT_MILLIS,
+        )
+    checkNotNull(result) {
+        "Startup fixture timed out. Check the local Auth Emulator and fixture activity logs."
+    }
+    check(result.contentDescription == "baseline-fixture-ready") {
+        "Startup fixture preparation failed: ${result.text}"
     }
 }
 
