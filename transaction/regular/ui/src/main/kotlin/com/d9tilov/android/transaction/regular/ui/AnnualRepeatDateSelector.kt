@@ -32,7 +32,7 @@ internal fun AnnualRepeatDateSelector(
 ) {
     var showDatePicker by remember { mutableStateOf(false) }
     Text(
-        text = stringResource(R.string.regular_transaction_repeat_every_year_on, period.annualDateText()),
+        text = stringResource(R.string.regular_transaction_repeat_period_year, period.annualDateText()),
         modifier =
             Modifier
                 .clickable { showDatePicker = true }
