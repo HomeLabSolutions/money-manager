@@ -1,10 +1,9 @@
 {
   "schemaVersion": 2,
-  "sourceSha": "ff2d9f26a39fe9958ec33ca37af96d80e0bd852c",
+  "sourceSha": "2a9f84b7a6286c96267fe569edcd402e283a6e51",
   "packageName": "com.d9tilov.moneymanager.benchmark",
-  "apkSha256": "5cd49e8e3fd6dd58487c4547bc08a6a5eab6c307acf9f6b775d73f502f48081e",
   "metric": "timeToInitialDisplayMs",
-  "medianMs": 2759.14222,
+  "medianMs": 2854.69352,
   "environment": {
     "fingerprint": "google/sdk_gphone_x86_64/generic_x86_64:10/QSR1.211112.011/13135432:userdebug/dev-keys",
     "api": "29",
@@ -17,15 +16,14 @@
     "baselineProfileMode": "Require",
     "scenario": "signed-out",
     "rounds": 3,
-    "iterationsPerRound": 15,
-    "killProcessDelayMillis": 1000
+    "iterationsPerRound": 15
   },
   "baselineProfile": {
     "schemaVersion": 1,
-    "sourceSha": "ff2d9f26a39fe9958ec33ca37af96d80e0bd852c",
+    "sourceSha": "2a9f84b7a6286c96267fe569edcd402e283a6e51",
     "files": {
-      "baseline-prof.txt": "87e109cf95e117122361c32caa1e5f4c738300ba9fd7ab6e0455e273c0d98272",
-      "startup-prof.txt": "87e109cf95e117122361c32caa1e5f4c738300ba9fd7ab6e0455e273c0d98272"
+      "baseline-prof.txt": "a6160c7bf9507d4749485ec7b5604b6c4bb48bafa48938fe072a5faecf785b51",
+      "startup-prof.txt": "a6160c7bf9507d4749485ec7b5604b6c4bb48bafa48938fe072a5faecf785b51"
     }
   }
 }
