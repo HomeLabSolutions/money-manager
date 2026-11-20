@@ -5,10 +5,11 @@ import com.d9tilov.android.places.data.contract.model.GeoapifyPlacesResponse
 import com.d9tilov.android.places.data.impl.api.GeoapifyApi
 import com.d9tilov.android.places.domain.model.LocationData
 import com.d9tilov.android.places.domain.model.NEARBY_PLACES_RADIUS_METERS
+import dev.zacsweers.metro.Inject
 import java.util.Locale
-import javax.inject.Inject
 
-class GeoapifyNearbyPlacesRemoteSource @Inject constructor(
+@Inject
+class GeoapifyNearbyPlacesRemoteSource(
     private val geoapifyApi: GeoapifyApi,
 ) : NearbyPlacesRemoteSource {
     override suspend fun getNearbyPlaces(location: LocationData): GeoapifyPlacesResponse {

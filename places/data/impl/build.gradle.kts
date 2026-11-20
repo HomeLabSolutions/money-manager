@@ -3,6 +3,7 @@ import java.util.Properties
 
 plugins {
     id("moneymanager.android.library")
+    id("moneymanager.di")
 }
 
 val keystorePropertiesFile: File = rootProject.file("keystore.properties")
@@ -31,7 +32,6 @@ dependencies {
     implementation(project(":places:data:contract"))
     implementation(project(":places:domain:contract"))
     implementation(project(":places:domain:model"))
-    implementation(libs.javax.inject)
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.http)
 

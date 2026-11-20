@@ -6,9 +6,10 @@ import com.d9tilov.android.insights.domain.model.CategoryName
 import com.d9tilov.android.insights.domain.model.CategoryTrace
 import com.d9tilov.android.insights.domain.model.DailyTotal
 import com.d9tilov.android.insights.domain.model.InsightTransaction
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class DefaultInsightsAggregator @Inject constructor() : InsightsAggregator {
+@Inject
+class DefaultInsightsAggregator : InsightsAggregator {
     override fun aggregateTransactions(rows: List<InsightTransaction>): Map<CategoryName, List<DailyTotalDto>> =
         rows
             .groupBy(InsightTransaction::category)

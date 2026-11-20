@@ -1,6 +1,6 @@
 plugins {
     id("moneymanager.android.library")
-    id("moneymanager.android.hilt")
+    id("moneymanager.di")
 }
 
 android {
@@ -11,6 +11,5 @@ dependencies {
     implementation(project(":core:common"))
 
     implementation(libs.datastore)
-    implementation(libs.hilt.android)
     implementation(libs.kotlinx.coroutines.core)
 }

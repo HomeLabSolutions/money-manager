@@ -1,16 +1,12 @@
 package com.d9tilov.android.notification
 
 import com.d9tilov.android.notification.domain.MoneyManagerNotificationManager
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
 interface NotificationModule {
     @Binds
-    fun bindNotificationManager(
-        impl: MoneyManagerNotificationManagerImpl,
-    ): MoneyManagerNotificationManager<AndroidNotificationData>
+    val MoneyManagerNotificationManagerImpl.bindManager: MoneyManagerNotificationManager<AndroidNotificationData>
 }

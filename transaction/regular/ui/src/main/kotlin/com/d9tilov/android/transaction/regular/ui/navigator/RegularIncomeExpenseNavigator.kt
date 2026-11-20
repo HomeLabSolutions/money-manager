@@ -1,6 +1,5 @@
 package com.d9tilov.android.transaction.regular.ui.navigator
 
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -17,6 +16,7 @@ import com.d9tilov.android.currency.domain.model.CurrencyArgs.CURRENCY_CODE_ARGS
 import com.d9tilov.android.transaction.regular.ui.RegularTransactionCreationRoute
 import com.d9tilov.android.transaction.regular.ui.RegularTransactionListRoute
 import com.d9tilov.android.transaction.regular.ui.vm.RegularTransactionCreationViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 
 const val REGULAR_TRANSACTION_ID_ARGS = "regular_transaction_id"
 const val REGULAR_TRANSACTION_LIST_NAVIGATION_ROUTE = "regular_transaction_list_route"
@@ -98,7 +98,7 @@ fun NavGraphBuilder.regularTransactionCreationScreen(
                 navArgument(REGULAR_TRANSACTION_ID_ARGS) { type = NavType.LongType },
             ),
     ) { entry ->
-        val viewModel: RegularTransactionCreationViewModel = hiltViewModel()
+        val viewModel: RegularTransactionCreationViewModel = metroViewModel()
         val categoryId = entry.savedStateHandle.get<Long>(CategoryArgs.CATEGORY_ID_ARGS)
         categoryId?.let { id ->
             viewModel.updateCategory(id)

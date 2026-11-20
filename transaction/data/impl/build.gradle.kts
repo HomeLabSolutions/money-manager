@@ -1,5 +1,6 @@
 plugins {
     id("moneymanager.android.library")
+    id("moneymanager.di")
 }
 
 android {
@@ -16,7 +17,6 @@ dependencies {
     implementation(project(":transaction:domain:contract"))
     implementation(project(":transaction:domain:model"))
     implementation(project(":widget:domain:contract"))
-    implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.datetime)
     implementation(libs.paging.common)

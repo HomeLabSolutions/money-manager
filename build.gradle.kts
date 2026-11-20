@@ -14,7 +14,6 @@ buildscript {
     dependencies {
         classpath(libs.firebase.crashlytics.gradle)
         classpath(libs.google.services)
-        classpath(libs.hilt.android.gradle.plugin)
     }
 }
 
@@ -53,7 +52,6 @@ plugins {
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.deps.sorting)
     alias(libs.plugins.deps.unused) apply true
-    alias(libs.plugins.hilt) apply false
     alias(libs.plugins.serialization) apply false
     alias(libs.plugins.secrets.gradle.plugin) apply false
 }

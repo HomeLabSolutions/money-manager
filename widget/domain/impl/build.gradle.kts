@@ -1,5 +1,6 @@
 plugins {
     id("moneymanager.android.library.kotlin")
+    id("moneymanager.di")
 }
 
 dependencies {
@@ -13,7 +14,6 @@ dependencies {
     implementation(project(":user-info:domain:model"))
     implementation(project(":widget:domain:contract"))
     implementation(project(":widget:domain:model"))
-    implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)
 
     testImplementation(libs.junit)

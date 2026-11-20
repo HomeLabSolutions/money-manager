@@ -23,8 +23,12 @@ import com.d9tilov.android.user.domain.contract.UserInteractor
 import com.d9tilov.android.widget.domain.contract.SpendingWidgetStateObserver
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
-import dagger.Lazy
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Named
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,176 +40,174 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.FileNotFoundException
-import javax.inject.Inject
-import javax.inject.Named
 
-@HiltViewModel
-class MainViewModel
-    @Inject
-    constructor(
-        @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
-        private val analyticsSender: AnalyticsSender,
-        private val preferencesStore: PreferencesStore,
-        private val backupInteractor: BackupInteractor,
-        private val userInteractor: UserInteractor,
-        private val spendingWidgetStateObserver: SpendingWidgetStateObserver,
-        private val categoryInteractor: Lazy<CategoryInteractor>,
-        private val currencyUpdateObserver: CurrencyUpdateObserver,
-        private val currencyInteractor: CurrencyInteractor,
-        private val geocodingInteractor: GeocodingInteractor,
-        private val locationProvider: LocationProvider,
-    ) : ViewModel() {
-        private val auth by lazy { FirebaseAuth.getInstance() }
-        private val updateCurrencyExceptionHandler =
-            CoroutineExceptionHandler { _, exception ->
-                Timber.tag(TAG).d("Unable to update currency: $exception")
-            }
+@ViewModelKey
+@ContributesIntoMap(AppScope::class, binding<ViewModel>())
+@Inject
+class MainViewModel(
+    @param:Named(DISPATCHER_IO) private val ioDispatcher: CoroutineDispatcher,
+    private val analyticsSender: AnalyticsSender,
+    private val preferencesStore: PreferencesStore,
+    private val backupInteractor: Lazy<BackupInteractor>,
+    private val userInteractor: Lazy<UserInteractor>,
+    private val spendingWidgetStateObserver: SpendingWidgetStateObserver,
+    private val categoryInteractor: Lazy<CategoryInteractor>,
+    private val currencyUpdateObserver: Lazy<CurrencyUpdateObserver>,
+    private val currencyInteractor: Lazy<CurrencyInteractor>,
+    private val geocodingInteractor: Lazy<GeocodingInteractor>,
+    private val locationProvider: Lazy<LocationProvider>,
+) : ViewModel() {
+    private val auth by lazy { FirebaseAuth.getInstance() }
+    private val updateCurrencyExceptionHandler =
+        CoroutineExceptionHandler { _, exception ->
+            Timber.tag(TAG).d("Unable to update currency: $exception")
+        }
 
-        private val uiState: MutableStateFlow<MainActivityUiState> =
-            MutableStateFlow(MainActivityUiState.Loading)
-        private val localCurrencyState = MutableStateFlow(LocationCurrencyState())
-        val uiStateFlow: StateFlow<MainActivityUiState> = uiState
+    private val uiState: MutableStateFlow<MainActivityUiState> =
+        MutableStateFlow(MainActivityUiState.Loading)
+    private val localCurrencyState = MutableStateFlow(LocationCurrencyState())
+    val uiStateFlow: StateFlow<MainActivityUiState> = uiState
 
-        init {
-            viewModelScope.launch {
-                preferencesStore.uid
-                    .map { uid ->
-                        val firebaseUid = auth.currentUser?.uid
-                        if (firebaseUid == null) {
+    init {
+        viewModelScope.launch {
+            preferencesStore.uid
+                .map { uid ->
+                    val firebaseUid = auth.currentUser?.uid
+                    if (firebaseUid == null) {
+                        MainActivityUiState.Success.Auth
+                    } else {
+                        if (firebaseUid != uid) {
+                            if (uid != null) userInteractor.value.deleteUser()
+                            auth.signOut()
                             MainActivityUiState.Success.Auth
                         } else {
-                            if (firebaseUid != uid) {
-                                if (uid != null) userInteractor.deleteUser()
-                                auth.signOut()
-                                MainActivityUiState.Success.Auth
-                            } else {
-                                var user = userInteractor.getCurrentUser().firstOrNull()
-                                if (user == null) {
-                                    when (val result = backupInteractor.restoreBackup()) {
-                                        is ResultOf.Success -> {
-                                            Timber.tag(TAG).d("Database restored successfully")
-                                        }
+                            var user = userInteractor.value.getCurrentUser().firstOrNull()
+                            if (user == null) {
+                                when (val result = backupInteractor.value.restoreBackup()) {
+                                    is ResultOf.Success -> {
+                                        Timber.tag(TAG).d("Database restored successfully")
+                                    }
 
-                                        is ResultOf.Failure -> {
-                                            when (result.throwable) {
-                                                is NetworkException -> {
-                                                    Timber
-                                                        .tag(TAG)
-                                                        .d("Do work with network exception: ${result.throwable}")
-                                                }
+                                    is ResultOf.Failure -> {
+                                        when (result.throwable) {
+                                            is NetworkException -> {
+                                                Timber
+                                                    .tag(TAG)
+                                                    .d("Do work with network exception: ${result.throwable}")
+                                            }
 
-                                                is WrongUidException -> {
-                                                    Timber
-                                                        .tag(TAG)
-                                                        .d("Do work with wrong uid exception: ${result.throwable}")
-                                                }
+                                            is WrongUidException -> {
+                                                Timber
+                                                    .tag(TAG)
+                                                    .d("Do work with wrong uid exception: ${result.throwable}")
+                                            }
 
-                                                is FileNotFoundException -> {
-                                                    Timber
-                                                        .tag(TAG)
-                                                        .d("Do work with file not found error: ${result.throwable}")
-                                                }
+                                            is FileNotFoundException -> {
+                                                Timber
+                                                    .tag(TAG)
+                                                    .d("Do work with file not found error: ${result.throwable}")
+                                            }
 
-                                                is FirebaseException -> {
-                                                    Timber
-                                                        .tag(TAG)
-                                                        .d("Do work with Firebase exception: ${result.throwable}")
-                                                }
+                                            is FirebaseException -> {
+                                                Timber
+                                                    .tag(TAG)
+                                                    .d("Do work with Firebase exception: ${result.throwable}")
+                                            }
 
-                                                else -> {
-                                                    Timber.tag(TAG).d("Do work with exception: ${result.throwable}")
-                                                }
+                                            else -> {
+                                                Timber.tag(TAG).d("Do work with exception: ${result.throwable}")
                                             }
                                         }
+                                    }
 
-                                        else -> {}
-                                    }
-                                    user = userInteractor.getCurrentUser().firstOrNull()
-                                    if (user == null || user.showPrepopulate) {
-                                        userInteractor.createUser(auth.currentUser.toDataModel())
-                                        categoryInteractor.get().createDefaultCategories()
-                                    }
+                                    else -> {}
                                 }
-                                spendingWidgetStateObserver.notifyStateChanged()
-                                MainActivityUiState.Success.Main(localCurrencyState.value)
+                                user = userInteractor.value.getCurrentUser().firstOrNull()
+                                if (user == null || user.showPrepopulate) {
+                                    userInteractor.value.createUser(auth.currentUser.toDataModel())
+                                    categoryInteractor.value.createDefaultCategories()
+                                }
                             }
-                        }
-                    }.collectLatest { state -> uiState.update { state } }
-            }
-        }
-
-        fun updateData() {
-            Timber.tag(TAG).d("Update data")
-            viewModelScope.launch(ioDispatcher) {
-                auth.currentUser?.let { firebaseUser ->
-                    analyticsSender.send(
-                        AnalyticsEvent.Client.Auth,
-                        mapOf(AnalyticsParams.Auth.Provider to firebaseUser.providerData.firstOrNull()?.providerId),
-                    )
-                    Timber.tag(TAG).d("Update data. FirebaseUser: $firebaseUser")
-                    preferencesStore.updateUid(firebaseUser.uid) // need for dataBase decryption
-                    backupInteractor.restoreBackup()
-                }
-            }
-        }
-
-        fun setToLoadingState() {
-            uiState.update { MainActivityUiState.Loading }
-        }
-
-        fun onLocationRequest(permissions: List<String>) =
-            viewModelScope.launch {
-                locationProvider
-                    .getCurrentLocation(permissions)
-                    .collect { updateLocationCurrencyCode(it) }
-            }
-
-        private fun updateLocationCurrencyCode(location: LocationData) =
-            viewModelScope.launch(ioDispatcher + updateCurrencyExceptionHandler) {
-                if (uiState.value !is MainActivityUiState.Success.Main) return@launch
-                val locationCurrency = geocodingInteractor.getCurrencyByCoords(location)
-                val newState =
-                    when (locationCurrency.code) {
-                        preferencesStore.getLocalCurrency().firstOrNull() -> {
-                            LocationCurrencyState(showDialog = false, currencyCode = locationCurrency.code)
-                        }
-
-                        currencyInteractor.getMainCurrency().code -> {
-                            geocodingInteractor.resetLocalCurrency()
-                            LocationCurrencyState(
-                                showDialog = false,
-                                currencyCode = currencyInteractor.getMainCurrency().code,
-                            )
-                        }
-
-                        else -> {
-                            LocationCurrencyState(showDialog = true, currencyCode = locationCurrency.code)
+                            spendingWidgetStateObserver.notifyStateChanged()
+                            MainActivityUiState.Success.Main(localCurrencyState.value)
                         }
                     }
-                localCurrencyState.update { newState }
-                uiState.update { MainActivityUiState.Success.Main(newState) }
-            }
-
-        fun updateCurrency(currencyCode: String?) =
-            viewModelScope.launch {
-                if (currencyCode == null) return@launch
-                if (uiState.value !is MainActivityUiState.Success.Main) return@launch
-                launch { currencyUpdateObserver.updateMainCurrency(currencyCode) }
-                launch { geocodingInteractor.resetLocalCurrency() }
-                val newState = LocationCurrencyState(showDialog = false, currencyCode = currencyCode)
-                localCurrencyState.update { newState }
-                uiState.update { MainActivityUiState.Success.Main(newState) }
-            }
-
-        fun updateLocalCurrency(currencyCode: String?) =
-            viewModelScope.launch {
-                if (currencyCode == null) return@launch
-                geocodingInteractor.updateLocalCurrency(currencyCode)
-                val newState = LocationCurrencyState(showDialog = false, currencyCode = currencyCode)
-                localCurrencyState.update { newState }
-                uiState.update { MainActivityUiState.Success.Main(newState) }
-            }
+                }.collectLatest { state -> uiState.update { state } }
+        }
     }
+
+    fun updateData() {
+        Timber.tag(TAG).d("Update data")
+        viewModelScope.launch(ioDispatcher) {
+            auth.currentUser?.let { firebaseUser ->
+                analyticsSender.send(
+                    AnalyticsEvent.Client.Auth,
+                    mapOf(AnalyticsParams.Auth.Provider to firebaseUser.providerData.firstOrNull()?.providerId),
+                )
+                Timber.tag(TAG).d("Update data. FirebaseUser: $firebaseUser")
+                preferencesStore.updateUid(firebaseUser.uid) // need for dataBase decryption
+                backupInteractor.value.restoreBackup()
+            }
+        }
+    }
+
+    fun setToLoadingState() {
+        uiState.update { MainActivityUiState.Loading }
+    }
+
+    fun onLocationRequest(permissions: List<String>) =
+        viewModelScope.launch {
+            locationProvider.value
+                .getCurrentLocation(permissions)
+                .collect { updateLocationCurrencyCode(it) }
+        }
+
+    private fun updateLocationCurrencyCode(location: LocationData) =
+        viewModelScope.launch(ioDispatcher + updateCurrencyExceptionHandler) {
+            if (uiState.value !is MainActivityUiState.Success.Main) return@launch
+            val locationCurrency = geocodingInteractor.value.getCurrencyByCoords(location)
+            val newState =
+                when (locationCurrency.code) {
+                    preferencesStore.getLocalCurrency().firstOrNull() -> {
+                        LocationCurrencyState(showDialog = false, currencyCode = locationCurrency.code)
+                    }
+
+                    currencyInteractor.value.getMainCurrency().code -> {
+                        geocodingInteractor.value.resetLocalCurrency()
+                        LocationCurrencyState(
+                            showDialog = false,
+                            currencyCode = currencyInteractor.value.getMainCurrency().code,
+                        )
+                    }
+
+                    else -> {
+                        LocationCurrencyState(showDialog = true, currencyCode = locationCurrency.code)
+                    }
+                }
+            localCurrencyState.update { newState }
+            uiState.update { MainActivityUiState.Success.Main(newState) }
+        }
+
+    fun updateCurrency(currencyCode: String?) =
+        viewModelScope.launch {
+            if (currencyCode == null) return@launch
+            if (uiState.value !is MainActivityUiState.Success.Main) return@launch
+            launch { currencyUpdateObserver.value.updateMainCurrency(currencyCode) }
+            launch { geocodingInteractor.value.resetLocalCurrency() }
+            val newState = LocationCurrencyState(showDialog = false, currencyCode = currencyCode)
+            localCurrencyState.update { newState }
+            uiState.update { MainActivityUiState.Success.Main(newState) }
+        }
+
+    fun updateLocalCurrency(currencyCode: String?) =
+        viewModelScope.launch {
+            if (currencyCode == null) return@launch
+            geocodingInteractor.value.updateLocalCurrency(currencyCode)
+            val newState = LocationCurrencyState(showDialog = false, currencyCode = currencyCode)
+            localCurrencyState.update { newState }
+            uiState.update { MainActivityUiState.Success.Main(newState) }
+        }
+}
 
 sealed interface MainActivityUiState {
     data object Loading : MainActivityUiState

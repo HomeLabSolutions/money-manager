@@ -11,13 +11,14 @@ import com.d9tilov.android.insights.data.impl.mapper.toDbModel
 import com.d9tilov.android.insights.domain.model.Insight
 import com.d9tilov.android.insights.domain.model.InsightsConstants.INSIGHT_WINDOW_DAYS
 import com.d9tilov.android.insights.domain.model.InsightsConstants.MAX_INSIGHTS_PER_DAY
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
-import javax.inject.Inject
 
-class InsightLocalSource @Inject constructor(
+@Inject
+class InsightLocalSource(
     private val dao: InsightDao,
     private val preferencesStore: PreferencesStore,
 ) : InsightSource {

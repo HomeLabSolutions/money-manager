@@ -9,14 +9,15 @@ import com.d9tilov.android.transaction.regular.data.contract.RegularTransactionS
 import com.d9tilov.android.transaction.regular.data.impl.mapper.toDataModel
 import com.d9tilov.android.transaction.regular.data.impl.mapper.toDbModel
 import com.d9tilov.android.transaction.regular.domain.model.RegularTransactionData
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class RegularTransactionLocalSource @Inject constructor(
+@Inject
+class RegularTransactionLocalSource(
     private val preferencesStore: PreferencesStore,
     private val regularTransactionDao: RegularTransactionDao,
 ) : RegularTransactionSource {

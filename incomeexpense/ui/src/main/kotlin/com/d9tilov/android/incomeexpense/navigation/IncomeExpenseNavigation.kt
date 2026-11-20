@@ -2,7 +2,6 @@ package com.d9tilov.android.incomeexpense.navigation
 
 import android.view.HapticFeedbackConstants
 import androidx.compose.ui.platform.LocalView
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -15,6 +14,7 @@ import com.d9tilov.android.incomeexpense.ui.IncomeExpenseRoute
 import com.d9tilov.android.incomeexpense.ui.vm.IncomeExpenseViewModel
 import com.d9tilov.android.incomeexpense.ui.vm.ScreenType
 import com.d9tilov.android.transaction.ui.model.TransactionUiModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 
 const val INCOME_EXPENSE_NAVIGATION_ROUTE = "income_expense_route"
 
@@ -30,7 +30,7 @@ fun NavGraphBuilder.incomeExpenseScreen(
 ) {
     composable(route = route) { entry ->
         val view = LocalView.current
-        val viewModel: IncomeExpenseViewModel = hiltViewModel()
+        val viewModel: IncomeExpenseViewModel = metroViewModel()
         val categoryId = entry.savedStateHandle.get<Long>(CategoryArgs.CATEGORY_ID_ARGS)
         categoryId?.let { id ->
             viewModel.addTransaction(id) {

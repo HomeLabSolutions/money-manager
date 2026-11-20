@@ -4,17 +4,15 @@ import com.d9tilov.android.budget.data.contract.BudgetSource
 import com.d9tilov.android.budget.data.impl.BudgetDataRepo
 import com.d9tilov.android.budget.data.impl.BudgetLocalSource
 import com.d9tilov.android.budget.domain.contract.BudgetRepo
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
 interface BudgetDataModule {
     @Binds
-    fun provideBudgetLocalSource(impl: BudgetLocalSource): BudgetSource
+    val BudgetLocalSource.provideBudgetLocalSource: BudgetSource
 
     @Binds
-    fun provideBudgetRepo(impl: BudgetDataRepo): BudgetRepo
+    val BudgetDataRepo.provideBudgetRepo: BudgetRepo
 }

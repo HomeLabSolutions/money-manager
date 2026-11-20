@@ -2,14 +2,12 @@ package com.d9tilov.android.billing.di
 
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.billing.domain.impl.BillingInteractorImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
 interface BillingDomainModule {
     @Binds
-    fun provideBillingInteractor(impl: BillingInteractorImpl): BillingInteractor
+    val BillingInteractorImpl.provideBillingInteractor: BillingInteractor
 }

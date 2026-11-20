@@ -1,6 +1,6 @@
 plugins {
     id("moneymanager.android.library")
-    id("moneymanager.android.hilt")
+    id("moneymanager.di")
 }
 
 android {
@@ -13,7 +13,6 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
-    implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.ktor.client.android)

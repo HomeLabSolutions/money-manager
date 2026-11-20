@@ -7,6 +7,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.StyleSpan
 import android.widget.RemoteViews
+import com.d9tilov.android.core.di.ApplicationContext
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.notification.AndroidNotificationData
@@ -15,70 +16,68 @@ import com.d9tilov.android.notification.domain.NotificationData
 import com.d9tilov.android.notification.domain.NotificationSender
 import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
 import com.d9tilov.android.transaction.regular.impl.R
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class TransactionNotificationSender
-    @Inject
-    constructor(
-        @ApplicationContext private val context: Context,
-        private val notificationManager: MoneyManagerNotificationManager<AndroidNotificationData>,
-    ) : NotificationSender<List<RegularTransaction>> {
-        override fun send(data: List<RegularTransaction>) {
-            val notifiableTransactions = data.filter { it.pushEnabled }
-            if (notifiableTransactions.isEmpty()) return
+@Inject
+class TransactionNotificationSender(
+    @ApplicationContext private val context: Context,
+    private val notificationManager: MoneyManagerNotificationManager<AndroidNotificationData>,
+) : NotificationSender<List<RegularTransaction>> {
+    override fun send(data: List<RegularTransaction>) {
+        val notifiableTransactions = data.filter { it.pushEnabled }
+        if (notifiableTransactions.isEmpty()) return
 
-            val launchIntent = checkNotNull(context.packageManager.getLaunchIntentForPackage(context.packageName))
-            val contentIntent =
-                PendingIntent.getActivity(
-                    context,
-                    0,
-                    launchIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
-                )
-            val notificationTitle = context.getString(R.string.regular_transaction_notification_title)
-            notifiableTransactions.forEach { transaction ->
-                val transactionId = transaction.id.hashCode()
-                val styledNotificationText = getNotificationText(transaction)
-                val notificationContent =
-                    RemoteViews(context.packageName, R.layout.regular_transaction_notification).apply {
-                        setTextViewText(R.id.notification_title, notificationTitle)
-                        setImageViewResource(R.id.category_icon, transaction.category.icon)
-                        setTextViewText(R.id.notification_text, styledNotificationText)
-                    }
-                notificationManager.notify(
-                    transactionId,
-                    RegularTransactionNotificationData(
-                        data =
-                            NotificationData(
-                                channelId = REGULAR_TRANSACTION_CHANNEL_ID,
-                                channelName = context.getString(R.string.regular_transaction_notification_channel),
-                                title = notificationTitle,
-                                text = styledNotificationText,
-                            ),
-                        contentIntent = contentIntent,
-                        customContentView = notificationContent,
-                    ),
-                )
-            }
-        }
-
-        private fun getNotificationText(transaction: RegularTransaction): CharSequence {
-            val category = transaction.category.name
-
-            return SpannableString(
-                "$category: ${transaction.currencyCode.getSymbolByCode()}${transaction.sum.reduceScaleStr()}",
-            ).apply {
-                setSpan(
-                    StyleSpan(Typeface.BOLD),
-                    0,
-                    category.length,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
-                )
-            }
-        }
-
-        private companion object {
-            const val REGULAR_TRANSACTION_CHANNEL_ID = "regular_transactions"
+        val launchIntent = checkNotNull(context.packageManager.getLaunchIntentForPackage(context.packageName))
+        val contentIntent =
+            PendingIntent.getActivity(
+                context,
+                0,
+                launchIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+            )
+        val notificationTitle = context.getString(R.string.regular_transaction_notification_title)
+        notifiableTransactions.forEach { transaction ->
+            val transactionId = transaction.id.hashCode()
+            val styledNotificationText = getNotificationText(transaction)
+            val notificationContent =
+                RemoteViews(context.packageName, R.layout.regular_transaction_notification).apply {
+                    setTextViewText(R.id.notification_title, notificationTitle)
+                    setImageViewResource(R.id.category_icon, transaction.category.icon)
+                    setTextViewText(R.id.notification_text, styledNotificationText)
+                }
+            notificationManager.notify(
+                transactionId,
+                RegularTransactionNotificationData(
+                    data =
+                        NotificationData(
+                            channelId = REGULAR_TRANSACTION_CHANNEL_ID,
+                            channelName = context.getString(R.string.regular_transaction_notification_channel),
+                            title = notificationTitle,
+                            text = styledNotificationText,
+                        ),
+                    contentIntent = contentIntent,
+                    customContentView = notificationContent,
+                ),
+            )
         }
     }
+
+    private fun getNotificationText(transaction: RegularTransaction): CharSequence {
+        val category = transaction.category.name
+
+        return SpannableString(
+            "$category: ${transaction.currencyCode.getSymbolByCode()}${transaction.sum.reduceScaleStr()}",
+        ).apply {
+            setSpan(
+                StyleSpan(Typeface.BOLD),
+                0,
+                category.length,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+            )
+        }
+    }
+
+    private companion object {
+        const val REGULAR_TRANSACTION_CHANNEL_ID = "regular_transactions"
+    }
+}

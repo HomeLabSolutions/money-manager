@@ -1,6 +1,6 @@
 plugins {
     id("moneymanager.android.library")
-    id("moneymanager.android.hilt")
+    id("moneymanager.di")
 }
 
 android {
@@ -19,9 +19,7 @@ dependencies {
     implementation(project(":transaction:regular:data:contract"))
     implementation(project(":transaction:regular:domain:contract"))
     implementation(project(":transaction:regular:domain:model"))
-    implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.work.runtime)
-    implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.datetime)
     implementation(libs.timber)

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.TaskStackBuilder
 import androidx.core.net.toUri
+import com.d9tilov.android.core.di.ApplicationContext
 import com.d9tilov.android.insights.domain.model.WeeklyInsightNotification
 import com.d9tilov.android.insights.presentation.R
 import com.d9tilov.android.insights.presentation.navigation.INSIGHTS_DEEP_LINK_URI
@@ -12,10 +13,10 @@ import com.d9tilov.android.notification.AndroidNotificationData
 import com.d9tilov.android.notification.domain.MoneyManagerNotificationManager
 import com.d9tilov.android.notification.domain.NotificationData
 import com.d9tilov.android.notification.domain.NotificationSender
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class WeeklyInsightNotificationSender @Inject constructor(
+@Inject
+class WeeklyInsightNotificationSender(
     @ApplicationContext private val context: Context,
     private val notificationManager: MoneyManagerNotificationManager<AndroidNotificationData>,
 ) : NotificationSender<WeeklyInsightNotification> {

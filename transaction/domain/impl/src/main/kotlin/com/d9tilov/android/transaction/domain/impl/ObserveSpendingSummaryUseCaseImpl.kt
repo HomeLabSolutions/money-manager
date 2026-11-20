@@ -5,11 +5,12 @@ import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.transaction.domain.contract.ObserveSpendingSummaryUseCase
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.model.SpendingSummary
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import javax.inject.Inject
 
-class ObserveSpendingSummaryUseCaseImpl @Inject constructor(
+@Inject
+class ObserveSpendingSummaryUseCaseImpl(
     private val transactions: TransactionInteractor,
     private val currency: CurrencyInteractor,
 ) : ObserveSpendingSummaryUseCase {
