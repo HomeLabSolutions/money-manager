@@ -22,10 +22,10 @@ internal fun prepareSignedInScenario() {
     )
     val fixtureResult = By.desc(Pattern.compile("baseline-fixture-(ready|error)"))
     val launcherAnrDialog =
-        By.res("android", "parentPanel").hasDescendant(
-            By.res("android", "alertTitle").text("Pixel Launcher isn't responding"),
+        By.res("android:id/parentPanel").hasDescendant(
+            By.res("android:id/alertTitle").text("Pixel Launcher isn't responding"),
         )
-    val closeApp = By.res("android", "aerr_close")
+    val closeApp = By.res("android:id/aerr_close")
     val result =
         device.wait(
             Condition { currentDevice ->
