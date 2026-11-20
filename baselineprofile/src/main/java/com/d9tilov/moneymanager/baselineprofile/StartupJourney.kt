@@ -1,8 +1,10 @@
 package com.d9tilov.moneymanager.baselineprofile
 
+import android.util.Log
 import androidx.benchmark.macro.MacrobenchmarkScope
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
+import androidx.test.uiautomator.Condition
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
 import java.util.regex.Pattern
@@ -18,9 +20,21 @@ internal fun prepareSignedInScenario() {
     device.executeShellCommand(
         "am start -W -n $TARGET_PACKAGE/com.d9tilov.moneymanager.baselinefixture.FixtureActivity",
     )
+    val fixtureResult = By.desc(Pattern.compile("baseline-fixture-(ready|error)"))
+    val launcherAnrDialog =
+        By.res("android", "parentPanel").hasDescendant(
+            By.res("android", "alertTitle").text("Pixel Launcher isn't responding"),
+        )
+    val closeApp = By.res("android", "aerr_close")
     val result =
         device.wait(
-            Until.findObject(By.desc(Pattern.compile("baseline-fixture-(ready|error)"))),
+            Condition { currentDevice ->
+                currentDevice.findObject(launcherAnrDialog)?.findObject(closeApp)?.let { button ->
+                    button.click()
+                    Log.w("StartupJourney", "Dismissed Pixel Launcher ANR while preparing the startup fixture")
+                }
+                currentDevice.findObject(fixtureResult)
+            },
             SCREEN_TIMEOUT_MILLIS,
         )
     checkNotNull(result) {
