@@ -31,20 +31,20 @@ val MIGRATION_3_4 =
             db.execSQL("DROP TABLE transactions_v3")
             db.execSQL("CREATE INDEX index_transactions_clientId ON transactions (clientId)")
         }
-    }
 
-private fun decodeLegacyAmount(
-    code: String,
-    stored: String,
-): Money? {
-    val currency = Currency.fromCode(code) ?: return null
-    val oldAmount = stored.toBigDecimalOrNull() ?: return null
-    return try {
-        oldAmount.movePointLeft(CurrencyConverter.STORAGE_SCALE).toMoneyOrNull(currency)
-    } catch (_: ArithmeticException) {
-        null
+        private fun decodeLegacyAmount(
+            code: String,
+            stored: String,
+        ): Money? {
+            val currency = Currency.fromCode(code) ?: return null
+            val oldAmount = stored.toBigDecimalOrNull() ?: return null
+            return try {
+                oldAmount.movePointLeft(CurrencyConverter.STORAGE_SCALE).toMoneyOrNull(currency)
+            } catch (_: ArithmeticException) {
+                null
+            }
+        }
     }
-}
 
 private const val CREATE_TRANSACTIONS = """
     CREATE TABLE transactions (
