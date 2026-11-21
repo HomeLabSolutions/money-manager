@@ -4,15 +4,17 @@ import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.budget.domain.model.BudgetData
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.core.model.Currency
 import com.d9tilov.android.core.model.ExecutionPeriod
+import com.d9tilov.android.core.model.Money
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
-import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
+import com.d9tilov.android.currency.domain.model.CurrencyRate
 import com.d9tilov.android.places.domain.model.LocationData
 import com.d9tilov.android.places.domain.model.Place
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
@@ -72,7 +74,7 @@ class TransactionInteractorImplTest {
         )
 
     private val testCurrency =
-        Currency(
+        CurrencyRate(
             code = "USD",
             symbol = "$",
             value = BigDecimal.ONE,
@@ -216,8 +218,7 @@ class TransactionInteractorImplTest {
                 Transaction.EMPTY.copy(
                     type = TransactionType.EXPENSE,
                     category = testCategory,
-                    sum = BigDecimal(100),
-                    currencyCode = "USD",
+                    sum = Money(10_000, Currency.USD),
                 )
 
             coEvery { categoryInteractor.getCategoryById(1L) } returns testCategory
@@ -310,8 +311,7 @@ class TransactionInteractorImplTest {
                     id = 1L,
                     type = TransactionType.EXPENSE,
                     category = testCategory,
-                    sum = BigDecimal(150),
-                    currencyCode = "USD",
+                    sum = Money(15_000, Currency.USD),
                 )
 
             coEvery { transactionRepo.getTransactionById(1L) } returns
@@ -347,8 +347,7 @@ class TransactionInteractorImplTest {
                     id = 1L,
                     type = TransactionType.EXPENSE,
                     category = testCategory,
-                    sum = BigDecimal(100),
-                    currencyCode = "USD",
+                    sum = Money(10_000, Currency.USD),
                 )
 
             coEvery { transactionRepo.removeTransaction(any()) } returns Unit

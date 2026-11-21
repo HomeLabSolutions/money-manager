@@ -6,6 +6,7 @@ import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDateTime
+import com.d9tilov.android.core.utils.toDecimal
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.model.BaseTransaction.Companion.ITEM
 import kotlinx.datetime.LocalDateTime
@@ -59,9 +60,9 @@ fun Transaction.toUiModel(isStatisticsScreen: Boolean = false) =
         clientId = clientId,
         type = type,
         category = category,
-        currencyCode = currencyCode,
-        sum = sum,
-        usdSum = if (currencyCode == DEFAULT_CURRENCY_CODE) null else usdSum,
+        currencyCode = sum.currency.name,
+        sum = sum.toDecimal(),
+        usdSum = if (sum.currency.name == DEFAULT_CURRENCY_CODE) null else usdSum,
         date = date,
         description = if (!isStatisticsScreen) description else "",
         showTime = isStatisticsScreen,

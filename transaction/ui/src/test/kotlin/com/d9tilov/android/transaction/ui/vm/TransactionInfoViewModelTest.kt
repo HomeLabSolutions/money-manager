@@ -2,6 +2,8 @@ package com.d9tilov.android.transaction.ui.vm
 
 import androidx.lifecycle.SavedStateHandle
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
+import com.d9tilov.android.core.model.Currency
+import com.d9tilov.android.core.model.Money
 import com.d9tilov.android.places.domain.contract.NearbyPlacesInteractor
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.model.Transaction
@@ -38,7 +40,8 @@ class TransactionInfoViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        every { transactionInteractor.getTransactionById(TRANSACTION_ID) } returns flowOf(Transaction.EMPTY)
+        every { transactionInteractor.getTransactionById(TRANSACTION_ID) } returns
+            flowOf(Transaction.EMPTY.copy(sum = Money(100, Currency.USD)))
     }
 
     @After
@@ -107,6 +110,29 @@ class TransactionInfoViewModelTest {
             viewModel.updateDescription("Edited")
             viewModel.save()
             coVerify { transactionInteractor.update(match { it.description == "Edited" }) }
+        }
+
+    @Test
+    fun `editor resets incompatible amount blocks extra digits and saves exact minor units`() =
+        runTest(testDispatcher) {
+            val viewModel = createViewModel(mode = TransactionInfoMode.EDIT)
+            runCurrent()
+
+            viewModel.updateAmount("12.34")
+            viewModel.updateCurrencyCode("JPY")
+            assertEquals("0", viewModel.uiState.value.amount)
+            viewModel.updateAmount("12.34")
+            assertEquals("0", viewModel.uiState.value.amount)
+
+            viewModel.updateAmount("12")
+            viewModel.updateCurrencyCode("KWD")
+            assertEquals("12", viewModel.uiState.value.amount)
+            viewModel.updateAmount("12.345")
+            viewModel.updateAmount("12.3456")
+            assertEquals("12.345", viewModel.uiState.value.amount)
+
+            viewModel.save()
+            coVerify { transactionInteractor.update(match { it.sum == Money(12_345, Currency.KWD) }) }
         }
 
     @Test(expected = IllegalStateException::class)

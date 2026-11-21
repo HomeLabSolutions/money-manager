@@ -8,7 +8,11 @@ plugins {
 android {
     namespace = "com.d9tilov.android.database"
 
+    sourceSets.getByName("androidTest").assets.srcDir("schemas")
+
     defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments +=
@@ -31,6 +35,9 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.sqlite.jdbc)
 
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.junit)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
     ksp(libs.room.compiler)
 }
 

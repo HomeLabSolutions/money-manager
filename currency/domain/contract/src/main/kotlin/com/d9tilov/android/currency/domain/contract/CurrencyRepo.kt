@@ -1,15 +1,15 @@
 package com.d9tilov.android.currency.domain.contract
 
-import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
+import com.d9tilov.android.currency.domain.model.CurrencyRate
 import kotlinx.coroutines.flow.Flow
 
 interface CurrencyRepo {
-    fun getCurrencies(): Flow<List<Currency>>
+    fun getCurrencies(): Flow<List<CurrencyRate>>
 
     fun getMainCurrency(): Flow<CurrencyMetaData>
 
-    suspend fun getCurrencyByCode(code: String): Currency
+    suspend fun getCurrencyByCode(code: String): CurrencyRate
 
     suspend fun updateCurrencies()
 

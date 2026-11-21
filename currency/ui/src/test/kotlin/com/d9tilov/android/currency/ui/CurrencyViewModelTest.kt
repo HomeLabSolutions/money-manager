@@ -69,6 +69,8 @@ class CurrencyViewModelTest {
     @Test
     fun `init should load currencies and update UI state`() =
         runTest {
+            val unsupported = testCurrencies.first().copy(code = "XDR")
+            coEvery { currencyInteractor.getCurrencies() } returns flowOf(testCurrencies + unsupported)
             val savedStateHandle = SavedStateHandle()
             val viewModel =
                 CurrencyViewModel(
@@ -83,7 +85,7 @@ class CurrencyViewModelTest {
             val state = viewModel.uiState.value
             assertTrue(state is CurrencyUiState.HasCurrencies)
             if (state is CurrencyUiState.HasCurrencies) {
-                assertEquals(3, state.currencyList.size)
+                assertEquals(listOf("USD", "EUR", "GBP"), state.currencyList.map { it.code })
                 assertEquals(false, state.isLoading)
             }
         }

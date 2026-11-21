@@ -4,8 +4,8 @@ import com.d9tilov.android.currency.data.contract.CurrencySource
 import com.d9tilov.android.currency.data.impl.api.CurrencyApi
 import com.d9tilov.android.currency.data.impl.mapper.toDataModel
 import com.d9tilov.android.currency.domain.contract.CurrencyRepo
-import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
+import com.d9tilov.android.currency.domain.model.CurrencyRate
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 
@@ -14,11 +14,11 @@ class CurrencyDataRepo(
     private val currencySource: CurrencySource,
     private val currencyApi: CurrencyApi,
 ) : CurrencyRepo {
-    override fun getCurrencies(): Flow<List<Currency>> = currencySource.getCurrencies()
+    override fun getCurrencies(): Flow<List<CurrencyRate>> = currencySource.getCurrencies()
 
     override fun getMainCurrency(): Flow<CurrencyMetaData> = currencySource.getMainCurrency()
 
-    override suspend fun getCurrencyByCode(code: String): Currency = currencySource.getCurrencyByCode(code)
+    override suspend fun getCurrencyByCode(code: String): CurrencyRate = currencySource.getCurrencyByCode(code)
 
     override suspend fun updateCurrencies() {
         val currencies = currencyApi.getCurrencies()

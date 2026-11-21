@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.budget.ui.BudgetUiState
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
+import com.d9tilov.android.core.model.Currency
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
@@ -52,10 +53,11 @@ class PrepopulateViewModel(
                 currencyInteractor.getCurrencies(),
                 budgetInteractor.get(),
             ) { currencyList, budget ->
+                val supported = currencyList.filter { Currency.fromCode(it.code) != null }
                 PrepopulateUiState(
                     CurrencyUiState.HasCurrencies(
-                        currencyList = currencyList,
-                        filteredCurrencyList = currencyList,
+                        currencyList = supported,
+                        filteredCurrencyList = supported,
                         isLoading = false,
                     ),
                     BudgetUiState(budget.sum.reduceScaleStr(), budget.currencyCode.getSymbolByCode()),

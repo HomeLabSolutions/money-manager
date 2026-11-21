@@ -37,6 +37,7 @@ interface TransactionDao {
             AND type = :type
             AND date >= :from
             AND date <= :to
+            AND sum IS NOT NULL
             AND (:onlyInStatistics = 0 OR inStatistics = 1)
             AND (:withRegular = 1 OR isRegular = 0)
         """,
@@ -50,13 +51,13 @@ interface TransactionDao {
         withRegular: Boolean,
     ): Flow<List<TransactionDbModel>>
 
-    @Query("SELECT * FROM transactions WHERE clientId =:uid AND id = :id")
+    @Query("SELECT * FROM transactions WHERE clientId =:uid AND id = :id AND sum IS NOT NULL")
     fun getById(
         uid: String,
         id: Long,
-    ): Flow<TransactionDbModel>
+    ): Flow<TransactionDbModel?>
 
-    @Query("SELECT * FROM transactions WHERE clientId =:uid AND categoryId =:categoryId")
+    @Query("SELECT * FROM transactions WHERE clientId =:uid AND categoryId =:categoryId AND sum IS NOT NULL")
     suspend fun getByCategoryId(
         uid: String,
         categoryId: Long,
@@ -69,6 +70,7 @@ interface TransactionDao {
             AND categoryId = :categoryId
             AND date >= :from
             AND date <= :to
+            AND sum IS NOT NULL
             AND (:onlyInStatistics = 0 OR inStatistics = 1)
         """,
     )
@@ -83,7 +85,12 @@ interface TransactionDao {
     @Upsert
     suspend fun insert(transaction: TransactionDbModel)
 
-    @Query("SELECT count(*) FROM transactions WHERE clientId=:uid AND type=:type AND date >= :from AND date <= :to")
+    @Query(
+        """
+        SELECT count(*) FROM transactions
+        WHERE clientId=:uid AND type=:type AND date >= :from AND date <= :to AND sum IS NOT NULL
+        """,
+    )
     suspend fun getItemsCountInDay(
         uid: String,
         type: Int,
@@ -91,13 +98,18 @@ interface TransactionDao {
         to: LocalDateTime,
     ): Int
 
-    @Query("SELECT count(*) FROM transactions WHERE clientId=:uid AND currency=:code")
+    @Query("SELECT count(*) FROM transactions WHERE clientId=:uid AND currency=:code AND sum IS NOT NULL")
     suspend fun getCountByCurrencyCode(
         uid: String,
         code: String,
     ): Int
 
-    @Query("SELECT MIN(date) as minDate, MAX(date) as maxDate FROM transactions WHERE clientId=:uid")
+    @Query(
+        """
+        SELECT MIN(date) as minDate, MAX(date) as maxDate FROM transactions
+        WHERE clientId=:uid AND sum IS NOT NULL
+        """,
+    )
     suspend fun getMinMaxDate(uid: String): TransactionMinMaxDateDbModel
 
     @Update
@@ -124,13 +136,24 @@ interface TransactionDao {
 
 internal const val TRANSACTION_LIST_QUERY = """
     SELECT * FROM transactions
-    WHERE clientId = :clientId AND type = :type AND date >= :from AND date <= :to
+    WHERE clientId = :clientId AND type = :type AND date >= :from AND date <= :to AND sum IS NOT NULL
     ORDER BY date DESC, id DESC
+"""
+
+private const val MINOR_UNIT_FACTOR = """
+    CASE t.sum_precision WHEN 0 THEN 1 WHEN 1 THEN 10 WHEN 2 THEN 100 WHEN 3 THEN 1000 WHEN 4 THEN 10000 END
+"""
+
+private const val TRANSACTION_AMOUNT_TEXT = """
+    (CASE WHEN t.sum < 0 THEN '-' ELSE '' END) ||
+    ltrim(CAST(t.sum / ($MINOR_UNIT_FACTOR) AS TEXT), '-') ||
+    (CASE WHEN t.sum_precision = 0 THEN ''
+          ELSE '.' || printf('%0*d', t.sum_precision, abs(t.sum % ($MINOR_UNIT_FACTOR))) END)
 """
 
 internal const val TRANSACTION_SEARCH_QUERY = """
     SELECT t.* FROM transactions AS t
-    WHERE t.clientId = :clientId AND t.type = :type AND t.date >= :from AND t.date <= :to
+    WHERE t.clientId = :clientId AND t.type = :type AND t.date >= :from AND t.date <= :to AND t.sum IS NOT NULL
         AND (
             t.description GLOB :textPattern
             OR t.placeName GLOB :textPattern
@@ -139,7 +162,7 @@ internal const val TRANSACTION_SEARCH_QUERY = """
                 SELECT 1 FROM categories AS c
                 WHERE c.id = t.categoryId AND c.clientId = t.clientId AND c.name GLOB :textPattern
             )
-            OR (:amountQuery IS NOT NULL AND instr(printf('%.2f', CAST(t.sum AS REAL) / 100.0), :amountQuery) > 0)
+            OR (:amountQuery IS NOT NULL AND instr(($TRANSACTION_AMOUNT_TEXT), :amountQuery) > 0)
         )
     ORDER BY t.date DESC, t.id DESC
 """

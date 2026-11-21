@@ -46,6 +46,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
@@ -53,11 +54,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.CategoryDestination
 import com.d9tilov.android.common.android.ui.permissions.rememberNotificationPermissionRequester
+import com.d9tilov.android.core.model.Currency
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
-import com.d9tilov.android.core.utils.MainPriceFieldParser
 import com.d9tilov.android.core.utils.currentDate
+import com.d9tilov.android.core.utils.moneyOrNull
 import com.d9tilov.android.designsystem.AutoSizeTextField
 import com.d9tilov.android.designsystem.BottomActionButton
 import com.d9tilov.android.designsystem.DescriptionTextField
@@ -141,7 +143,9 @@ fun RegularTransactionCreationScreen(
     val context = LocalContext.current
     val executionPeriod = uiState.transaction.executionPeriod
     val periodMenuItem = executionPeriod.toPeriodMenuItem()
-    var showError by remember { mutableStateOf(false) }
+    val currency = Currency.fromCode(uiState.transaction.currencyCode)
+    val amount = currency?.let { uiState.amount.moneyOrNull(it) }
+    val showError = amount == null || amount.value == 0L
     val saveBtnEnabled = !showError && uiState.transaction.category != Category.EMPTY_EXPENSE
     var openDayOfMonthDialog by remember { mutableStateOf(false) }
     Scaffold(
@@ -179,33 +183,13 @@ fun RegularTransactionCreationScreen(
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary,
                 )
-                Row(
-                    modifier =
-                        Modifier.padding(
-                            horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
-                        ),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        modifier =
-                            Modifier
-                                .alignByBaseline()
-                                .clickable(onClick = { onCurrencyClicked(uiState.transaction.currencyCode) }),
-                        text = uiState.transaction.currencyCode.getSymbolByCode(),
-                        style = MaterialTheme.typography.displaySmall,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                    AutoSizeTextField(
-                        modifier = Modifier.alignByBaseline(),
-                        inputValue = uiState.amount,
-                        inputValueChanged = { text ->
-                            showError = !MainPriceFieldParser.isInputValid(text)
-                            onSumChanged(text)
-                        },
-                        content = { if (showError) ShowError() },
-                        autoFocus = false,
-                    )
-                }
+                RegularTransactionAmountField(
+                    uiState = uiState,
+                    currency = currency,
+                    showError = showError,
+                    onCurrencyClicked = onCurrencyClicked,
+                    onSumChanged = onSumChanged,
+                )
                 RegularCategorySelector(
                     category = uiState.transaction.category,
                     type = uiState.transaction.type,
@@ -276,6 +260,41 @@ fun RegularTransactionCreationScreen(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun RegularTransactionAmountField(
+    uiState: RegularTransactionCreationUiState,
+    currency: Currency?,
+    showError: Boolean,
+    onCurrencyClicked: (String) -> Unit,
+    onSumChanged: (String) -> Unit,
+) {
+    Row(
+        modifier =
+            Modifier.padding(
+                horizontal = dimensionResource(id = com.d9tilov.android.designsystem.R.dimen.padding_large),
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            modifier =
+                Modifier
+                    .alignByBaseline()
+                    .clickable(onClick = { onCurrencyClicked(uiState.transaction.currencyCode) }),
+            text = uiState.transaction.currencyCode.getSymbolByCode(),
+            style = MaterialTheme.typography.displaySmall,
+            color = MaterialTheme.colorScheme.primary,
+        )
+        AutoSizeTextField(
+            modifier = Modifier.alignByBaseline(),
+            inputValue = uiState.amount,
+            inputValueChanged = onSumChanged,
+            keyboardType = if (currency?.precision == 0) KeyboardType.Number else KeyboardType.Decimal,
+            content = { if (showError) ShowError() },
+            autoFocus = false,
+        )
     }
 }
 

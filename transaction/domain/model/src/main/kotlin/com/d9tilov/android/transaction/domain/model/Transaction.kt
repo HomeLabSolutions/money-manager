@@ -1,9 +1,10 @@
 package com.d9tilov.android.transaction.domain.model
 
 import com.d9tilov.android.category.domain.entity.Category
-import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
+import com.d9tilov.android.core.model.Currency
+import com.d9tilov.android.core.model.Money
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.places.domain.model.Place
@@ -15,8 +16,7 @@ data class Transaction(
     val clientId: String,
     val type: TransactionType,
     val category: Category,
-    val currencyCode: String,
-    val sum: BigDecimal,
+    val sum: Money,
     val usdSum: BigDecimal,
     val date: LocalDateTime,
     val description: String,
@@ -33,8 +33,7 @@ data class Transaction(
                 clientId = NO_ID.toString(),
                 type = TransactionType.EXPENSE,
                 category = Category.EMPTY_EXPENSE,
-                currencyCode = DEFAULT_CURRENCY_CODE,
-                sum = BigDecimal.ZERO,
+                sum = Money(0, Currency.USD),
                 usdSum = BigDecimal.ZERO,
                 date = currentDateTime(),
                 description = "",
