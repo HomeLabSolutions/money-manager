@@ -8,7 +8,7 @@ import com.d9tilov.android.billing.domain.model.BillingSkuDetails
 import com.d9tilov.android.billing.domain.model.PremiumEmails
 import com.d9tilov.android.billing.domain.model.exceptions.BillingFailure
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
-import com.d9tilov.android.currency.domain.model.Currency
+import com.d9tilov.android.currency.domain.model.CurrencyRate
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.remoteconfig.remoteConfig
@@ -83,7 +83,7 @@ class BillingDataRepo(
                             price.priceAmountMicros.toBigDecimal().divide(AMOUNT_DIVIDER.toBigDecimal())
                         val currencyCode = price.priceCurrencyCode
                         val currency =
-                            Currency.EMPTY.copy(
+                            CurrencyRate.EMPTY.copy(
                                 code = currencyCode,
                                 value = formattedPrice,
                                 symbol = currencyCode.getSymbolByCode(),

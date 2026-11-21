@@ -7,11 +7,15 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
+import com.d9tilov.android.core.model.Currency
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.TransactionType
+import com.d9tilov.android.core.utils.MainPriceFieldParser
+import com.d9tilov.android.core.utils.amountAfterCurrencyChange
 import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.core.utils.getStartOfDay
-import com.d9tilov.android.core.utils.reduceScaleStr
+import com.d9tilov.android.core.utils.moneyOrNull
+import com.d9tilov.android.core.utils.toDecimal
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
@@ -92,7 +96,7 @@ class RegularTransactionCreationViewModel(
                 if (transactionId != NO_ID) {
                     tr = regularTransactionInteractor.getById(transactionId)
                     state.copy(
-                        amount = tr.sum.reduceScaleStr(),
+                        amount = tr.sum.stripTrailingZeros().toPlainString(),
                         transaction = tr.copy(type = transactionType),
                     )
                 } else {
@@ -100,7 +104,9 @@ class RegularTransactionCreationViewModel(
                         transaction =
                             tr.copy(
                                 type = transactionType,
-                                currencyCode = currencyInteractor.getMainCurrency().code,
+                                currencyCode =
+                                    Currency.fromCode(currencyInteractor.getMainCurrency().code)?.name
+                                        ?: Currency.USD.name,
                             ),
                     )
                 }
@@ -108,13 +114,29 @@ class RegularTransactionCreationViewModel(
         }
     }
 
-    fun updateAmount(amount: String) = _uiState.update { state -> state.copy(amount = amount) }
-
-    fun updateCurrencyCode(code: String) =
+    fun updateAmount(amount: String) =
         _uiState.update { state ->
-            val tr = state.transaction
-            state.copy(transaction = tr.copy(currencyCode = code))
+            val currency = Currency.fromCode(state.transaction.currencyCode)
+            if (currency != null && MainPriceFieldParser.allowsAmountInput(amount, currency.precision)) {
+                state.copy(amount = amount)
+            } else {
+                state
+            }
         }
+
+    fun updateCurrencyCode(code: String) {
+        val currency = Currency.fromCode(code) ?: return
+        _uiState.update { state ->
+            if (state.transaction.currencyCode == code) {
+                state
+            } else {
+                state.copy(
+                    amount = state.amount.amountAfterCurrencyChange(currency),
+                    transaction = state.transaction.copy(currencyCode = code),
+                )
+            }
+        }
+    }
 
     fun updateCategory(id: Long) =
         viewModelScope.launch {
@@ -241,7 +263,9 @@ class RegularTransactionCreationViewModel(
 
     suspend fun saveOrUpdate() {
         val state = _uiState.value
-        val tr = state.transaction.copy(sum = state.amount.toBigDecimal())
+        val currency = Currency.fromCode(state.transaction.currencyCode) ?: return
+        val amount = state.amount.moneyOrNull(currency)?.takeIf { it.value != 0L } ?: return
+        val tr = state.transaction.copy(sum = amount.toDecimal())
         regularTransactionInteractor.insert(tr)
     }
 

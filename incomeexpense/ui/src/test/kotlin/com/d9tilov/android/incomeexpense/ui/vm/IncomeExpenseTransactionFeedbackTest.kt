@@ -27,7 +27,6 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import java.math.BigDecimal
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class IncomeExpenseTransactionFeedbackTest {
@@ -99,7 +98,7 @@ class IncomeExpenseTransactionFeedbackTest {
         runTest(dispatcher) {
             val allowFirstSave = CompletableDeferred<Unit>()
             coEvery {
-                transactions.addTransaction(match { it.sum.compareTo(BigDecimal.ONE) == 0 })
+                transactions.addTransaction(match { it.sum.value == 100L })
             } coAnswers { allowFirstSave.await() }
             val viewModel = createViewModel()
             val callbacks = mutableListOf<String>()

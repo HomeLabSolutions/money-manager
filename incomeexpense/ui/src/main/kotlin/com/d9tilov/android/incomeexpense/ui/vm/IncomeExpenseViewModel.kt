@@ -18,13 +18,16 @@ import com.d9tilov.android.common.android.location.LocationProvider
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
+import com.d9tilov.android.core.model.Currency
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.KeyPress
 import com.d9tilov.android.core.utils.MainPriceFieldParser
+import com.d9tilov.android.core.utils.amountAfterCurrencyChange
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.isSameDay
+import com.d9tilov.android.core.utils.moneyOrNull
 import com.d9tilov.android.core.utils.reduceScaleStr
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
@@ -302,7 +305,7 @@ class IncomeExpenseViewModel(
             .flatMapLatest { it }
 
     private fun updateMainCurrency(currency: CurrencyMetaData) {
-        uiState.update { state -> state.copy(price = state.price.copy(currencyCode = currency.code)) }
+        updateCurrencyCode(Currency.fromCode(currency.code)?.name ?: DEFAULT_CURRENCY_CODE)
         mainCurrency.value = currency
     }
 
@@ -386,9 +389,14 @@ class IncomeExpenseViewModel(
 
     fun addNumber(btn: KeyPress) {
         uiState.update { state ->
-            val newPriceStr = MainPriceFieldParser.parse(state.price.value, btn)
-            val newPrice = state.price.copy(value = newPriceStr)
-            state.copy(price = newPrice)
+            val price = state.price
+            val currency = Currency.fromCode(price.currencyCode)
+            if (currency == null) {
+                state
+            } else {
+                val input = MainPriceFieldParser.parse(price.value, btn, currency.precision)
+                state.copy(price = price.copy(value = input))
+            }
         }
     }
 
@@ -396,10 +404,9 @@ class IncomeExpenseViewModel(
         categoryId: Long,
         onAdded: () -> Unit,
     ) {
-        if (uiState.value.price.value
-                .toBigDecimal()
-                .signum() == 0
-        ) {
+        val price = uiState.value.price
+        val amount = Currency.fromCode(price.currencyCode)?.let { price.value.moneyOrNull(it) }
+        if (amount == null || amount.value == 0L) {
             viewModelScope.launch { errorMessage.emit(R.string.income_expense_empty_sum_error) }
             return
         }
@@ -412,9 +419,8 @@ class IncomeExpenseViewModel(
                 val location = locationDeff.await()
                 transactionInteractor.addTransaction(
                     Transaction.EMPTY.copy(
-                        sum = price.value.toBigDecimal(),
+                        sum = amount,
                         category = category,
-                        currencyCode = price.currencyCode,
                         date = currentDateTime(),
                         type = category.type,
                         place = Place(location = location),
@@ -430,9 +436,15 @@ class IncomeExpenseViewModel(
     }
 
     fun updateCurrencyCode(code: String) {
+        val currency = Currency.fromCode(code) ?: return
         uiState.update { state ->
-            val price = state.price.copy(currencyCode = code)
-            state.copy(price = price)
+            val price = state.price
+            if (price.currencyCode == code) {
+                state
+            } else {
+                val amount = price.value.amountAfterCurrencyChange(currency)
+                state.copy(price = price.copy(value = amount, currencyCode = code))
+            }
         }
     }
 

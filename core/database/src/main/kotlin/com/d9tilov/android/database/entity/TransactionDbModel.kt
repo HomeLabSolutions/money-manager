@@ -26,7 +26,8 @@ data class TransactionDbModel(
     @ColumnInfo(name = "type") val type: Int,
     @ColumnInfo(name = "categoryId") val categoryId: Long,
     @ColumnInfo(name = "currency") val currency: String,
-    @ColumnInfo(name = "sum") val sum: BigDecimal,
+    @ColumnInfo(name = "sum") val sum: Long?,
+    @ColumnInfo(name = "sum_precision") val sumPrecision: Int?,
     @ColumnInfo(name = "usd_sum") val usdSum: BigDecimal,
     @ColumnInfo(name = "date") val date: LocalDateTime,
     @ColumnInfo(name = "description") val description: String,
@@ -38,4 +39,5 @@ data class TransactionDbModel(
     @ColumnInfo(name = "photo") val photoUri: String?,
     @ColumnInfo(name = "placeName") val placeName: String? = null,
     @ColumnInfo(name = "placeAddress") val placeAddress: String? = null,
+    @ColumnInfo(name = "legacy_sum") val legacySum: String? = null,
 )

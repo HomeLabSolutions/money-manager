@@ -147,7 +147,7 @@ fun TransactionItem(
             horizontalAlignment = Alignment.End,
         ) {
             ComposeCurrencyView(
-                value = transaction.sum.reduceScaleStr(),
+                value = transaction.sum.stripTrailingZeros().toPlainString(),
                 valueStyle = MaterialTheme.typography.headlineSmall,
                 symbol = transaction.currencyCode.getSymbolByCode(),
                 symbolStyle = MaterialTheme.typography.labelLarge,

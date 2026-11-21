@@ -9,6 +9,7 @@ import com.d9tilov.android.analytics.domain.AnalyticsSender
 import com.d9tilov.android.analytics.model.AnalyticsEvent
 import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
+import com.d9tilov.android.core.model.Currency
 import com.d9tilov.android.core.model.ErrorMessage
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
@@ -75,10 +76,11 @@ class CurrencyViewModel(
         viewModelScope.launch(ioDispatcher) {
             currencyInteractor
                 .getCurrencies()
-                .map {
+                .map { currencies ->
+                    val supported = currencies.filter { Currency.fromCode(it.code) != null }
                     CurrencyUiState.HasCurrencies(
-                        currencyList = it,
-                        filteredCurrencyList = it,
+                        currencyList = supported,
+                        filteredCurrencyList = supported,
                         isLoading = false,
                     )
                 }.collect { newState: CurrencyUiState.HasCurrencies ->

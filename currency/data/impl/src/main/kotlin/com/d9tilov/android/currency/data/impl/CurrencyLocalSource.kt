@@ -6,8 +6,8 @@ import com.d9tilov.android.core.utils.toLocalDate
 import com.d9tilov.android.currency.data.contract.CurrencySource
 import com.d9tilov.android.currency.data.impl.mapper.toDataModel
 import com.d9tilov.android.currency.data.impl.mapper.toDbModel
-import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
+import com.d9tilov.android.currency.domain.model.CurrencyRate
 import com.d9tilov.android.database.dao.CurrencyListDao
 import com.d9tilov.android.database.dao.MainCurrencyDao
 import com.d9tilov.android.datastore.PreferencesStore
@@ -31,15 +31,15 @@ class CurrencyLocalSource(
                 mainCurrencyDao.get(uid).map { it?.toDataModel() ?: CurrencyMetaData.EMPTY }
             }
 
-    override suspend fun saveCurrencies(currencies: List<Currency>) =
+    override suspend fun saveCurrencies(currencies: List<CurrencyRate>) =
         currencyListDao.insert(currencies.map { item -> item.toDbModel() }.toList())
 
-    override suspend fun getCurrencyByCode(code: String): Currency = currencyListDao.getByCode(code).toDataModel()
+    override suspend fun getCurrencyByCode(code: String): CurrencyRate = currencyListDao.getByCode(code).toDataModel()
 
     override suspend fun hasAlreadyUpdatedToday(baseCurrency: String): Boolean =
         currencyListDao.getLastUpdateTime(baseCurrency).toLocalDate() == currentDate()
 
-    override suspend fun update(currency: Currency) = currencyListDao.update(currency.toDbModel())
+    override suspend fun update(currency: CurrencyRate) = currencyListDao.update(currency.toDbModel())
 
     override suspend fun updateMainCurrency(code: String) {
         val uid = preferencesStore.uid.firstOrNull()
@@ -54,7 +54,7 @@ class CurrencyLocalSource(
         }
     }
 
-    override fun getCurrencies(): Flow<List<Currency>> =
+    override fun getCurrencies(): Flow<List<CurrencyRate>> =
         currencyListDao
             .getAll()
             .map { it.map { item -> item.toDataModel() } }
