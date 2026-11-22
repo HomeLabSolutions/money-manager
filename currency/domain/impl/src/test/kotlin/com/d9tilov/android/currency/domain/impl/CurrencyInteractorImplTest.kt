@@ -126,6 +126,19 @@ class CurrencyInteractorImplTest {
         }
 
     @Test
+    fun `toTargetCurrency rounds at the target currency precision`() =
+        runTest {
+            coEvery { currencyRepo.getCurrencyByCode("USD") } returns usdCurrency
+            coEvery { currencyRepo.getCurrencyByCode("JPY") } returns
+                usdCurrency.copy(code = "JPY", value = Decimal("150.5"))
+            coEvery { currencyRepo.getCurrencyByCode("KWD") } returns
+                usdCurrency.copy(code = "KWD", value = Decimal("0.3075"))
+
+            assertEquals(Decimal(151), interactor.toTargetCurrency(Decimal.ONE, "USD", "JPY"))
+            assertEquals(Decimal("0.308"), interactor.toTargetCurrency(Decimal.ONE, "USD", "KWD"))
+        }
+
+    @Test
     fun `toTargetCurrency should return same amount for same currency`() =
         runTest {
             val result = interactor.toTargetCurrency(Decimal(100), "USD", "USD")
@@ -142,6 +155,15 @@ class CurrencyInteractorImplTest {
             val result = interactor.toUsd(Decimal(85), "EUR")
 
             assertEquals(0, result.compareTo(Decimal("100.00")))
+        }
+
+    @Test
+    fun `toUsd rounds an exact half cent to cents`() =
+        runTest {
+            coEvery { currencyRepo.getCurrencyByCode("EUR") } returns eurCurrency.copy(value = Decimal(14))
+
+            assertEquals(Decimal("0.01"), interactor.toUsd(Decimal("0.07"), "EUR"))
+            assertEquals(Decimal("-0.01"), interactor.toUsd(Decimal("-0.07"), "EUR"))
         }
 
     @Test

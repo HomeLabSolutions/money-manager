@@ -8,6 +8,7 @@ import com.d9tilov.android.core.di.ApplicationContext
 import com.d9tilov.android.database.AppDatabase
 import com.d9tilov.android.database.migration.MIGRATION_1_2
 import com.d9tilov.android.database.migration.MIGRATION_2_3
+import com.d9tilov.android.database.migration.MIGRATION_3_4
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
@@ -21,10 +22,15 @@ object DatabaseModule {
     @SingleIn(AppScope::class)
     fun provideDatabase(
         @ApplicationContext context: Context,
-    ): AppDatabase =
-        Room
-            .databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
-            .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
-            .build()
+    ): AppDatabase = buildAppDatabase(context, DATABASE_NAME)
 }
+
+internal fun buildAppDatabase(
+    context: Context,
+    name: String,
+): AppDatabase =
+    Room
+        .databaseBuilder(context, AppDatabase::class.java, name)
+        .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
+        .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+        .build()

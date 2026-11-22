@@ -6,10 +6,9 @@ import com.d9tilov.android.analytics.domain.AnalyticsSender
 import com.d9tilov.android.analytics.model.AnalyticsEvent
 import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
-import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
+import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.model.Decimal
-import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
-import com.d9tilov.android.core.utils.reduceScaleStr
+import com.d9tilov.android.core.utils.toAmountString
 import com.d9tilov.android.core.utils.toDecimalOrNull
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
@@ -25,7 +24,7 @@ import kotlinx.coroutines.launch
 data class BudgetUiState(
     val budgetSum: String = "",
     val amountToSave: String = "",
-    val currencySymbol: String = DEFAULT_CURRENCY_SYMBOL,
+    val currencyCode: String = DEFAULT_CURRENCY_CODE,
 )
 
 @ViewModelKey
@@ -49,9 +48,9 @@ class BudgetAmountViewModel(
                 .collect { budget ->
                     _uiState.update {
                         it.copy(
-                            budgetSum = budget.sum.reduceScaleStr(),
-                            amountToSave = budget.saveSum.reduceScaleStr(),
-                            currencySymbol = budget.currencyCode.getSymbolByCode(),
+                            budgetSum = budget.sum.toAmountString(budget.currencyCode),
+                            amountToSave = budget.saveSum.toAmountString(budget.currencyCode),
+                            currencyCode = budget.currencyCode,
                         )
                     }
                 }

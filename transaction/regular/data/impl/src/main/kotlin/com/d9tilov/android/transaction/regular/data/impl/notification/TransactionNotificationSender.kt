@@ -9,7 +9,7 @@ import android.text.style.StyleSpan
 import android.widget.RemoteViews
 import com.d9tilov.android.core.di.ApplicationContext
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
-import com.d9tilov.android.core.utils.reduceScaleStr
+import com.d9tilov.android.core.utils.toAmountString
 import com.d9tilov.android.notification.AndroidNotificationData
 import com.d9tilov.android.notification.domain.MoneyManagerNotificationManager
 import com.d9tilov.android.notification.domain.NotificationData
@@ -64,10 +64,10 @@ class TransactionNotificationSender(
 
     private fun getNotificationText(transaction: RegularTransaction): CharSequence {
         val category = transaction.category.name
+        val symbol = transaction.currencyCode.getSymbolByCode()
+        val amount = transaction.sum.toAmountString(transaction.currencyCode)
 
-        return SpannableString(
-            "$category: ${transaction.currencyCode.getSymbolByCode()}${transaction.sum.reduceScaleStr()}",
-        ).apply {
+        return SpannableString("$category: $symbol$amount").apply {
             setSpan(
                 StyleSpan(Typeface.BOLD),
                 0,

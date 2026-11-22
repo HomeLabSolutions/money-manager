@@ -1,6 +1,8 @@
 package com.d9tilov.android.transaction.ui.vm
 
 import androidx.lifecycle.SavedStateHandle
+import com.d9tilov.android.core.model.Currency
+import com.d9tilov.android.core.model.Money
 import com.d9tilov.android.places.domain.contract.NearbyPlacesInteractor
 import com.d9tilov.android.places.domain.model.LocationData
 import com.d9tilov.android.places.domain.model.NearbyPlace
@@ -39,6 +41,7 @@ class TransactionPlaceViewModelTest {
     private val expense =
         Transaction.EMPTY.copy(
             id = TRANSACTION_ID,
+            sum = Money(100, Currency.USD),
             place = Place(location = LocationData(51.5, -0.1)),
         )
     private val nearby =

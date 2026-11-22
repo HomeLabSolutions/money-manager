@@ -1,8 +1,8 @@
 package com.d9tilov.android.database.dao
 
+import com.d9tilov.android.core.model.Currency
 import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.utils.toDecimalOrNull
-import com.d9tilov.android.database.converters.CurrencyConverter
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -21,7 +21,8 @@ class TransactionSearchQueryTest {
                 """
                 CREATE TABLE transactions (
                     id INTEGER, clientId TEXT, type INTEGER, categoryId INTEGER,
-                    date INTEGER, description TEXT, sum TEXT, currency TEXT, placeName TEXT, placeAddress TEXT
+                    date INTEGER, description TEXT, sum INTEGER NOT NULL,
+                    currency TEXT, placeName TEXT, placeAddress TEXT
                 )
                 """.trimIndent(),
             )
@@ -33,7 +34,7 @@ class TransactionSearchQueryTest {
                 statement.setInt(1, id)
                 statement.setInt(2, 100 - id)
                 statement.setString(3, "Запись $id")
-                statement.setString(4, CurrencyConverter.fromDecimalToString(Decimal("10.00")))
+                statement.setLong(4, 1000)
                 statement.addBatch()
             }
             statement.executeBatch()
@@ -165,6 +166,23 @@ class TransactionSearchQueryTest {
         assertTrue(search("Not found").isEmpty())
     }
 
+    @Test
+    fun `amount search handles zero three and four decimal places and the signed Long range exactly`() {
+        updateAmount("123", Currency.JPY)
+        assertEquals(listOf(50), search("123"))
+        assertTrue(search("1.23").isEmpty())
+
+        updateAmount("1.234", Currency.KWD)
+        assertEquals(listOf(50), search("1.234"))
+        assertTrue(search("1.235").isEmpty())
+
+        updateAmount("-0.0001", Currency.CLF)
+        assertEquals(listOf(50), search("-0.0001"))
+
+        updateAmount(Long.MIN_VALUE.toString(), Currency.JPY)
+        assertEquals(listOf(50), search(Long.MIN_VALUE.toString()))
+    }
+
     private fun search(
         query: String,
         offset: Int = 0,
@@ -236,9 +254,14 @@ class TransactionSearchQueryTest {
         }
     }
 
-    private fun updateAmount(amount: String) {
-        database.prepareStatement("UPDATE transactions SET sum = ? WHERE id = 50").use { statement ->
-            statement.setString(1, CurrencyConverter.fromDecimalToString(Decimal(amount)))
+    private fun updateAmount(
+        amount: String,
+        currency: Currency = Currency.USD,
+    ) {
+        val minorUnits = Decimal(amount).toLongExact(currency.precision)
+        database.prepareStatement("UPDATE transactions SET sum = ?, currency = ? WHERE id = 50").use { statement ->
+            statement.setLong(1, minorUnits)
+            statement.setString(2, currency.name)
             statement.executeUpdate()
         }
     }

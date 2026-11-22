@@ -1,5 +1,8 @@
 package com.d9tilov.android.transaction.data.impl.mapper
 
+import com.d9tilov.android.core.model.Currency
+import com.d9tilov.android.core.model.Decimal
+import com.d9tilov.android.core.model.Money
 import com.d9tilov.android.core.model.toType
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.database.entity.TransactionDbModel
@@ -16,8 +19,8 @@ fun TransactionDbModel.toDataModel(): TransactionDataModel =
         type.toType(),
         categoryId,
         currency,
-        sum,
-        usdSum,
+        Money(sum, checkNotNull(Currency.fromCode(currency))).toDecimal(),
+        Decimal(usdSum).movePoint(-Currency.USD.precision).withoutTrailingFractionZeros(),
         date,
         description,
         qrCode,
@@ -27,15 +30,19 @@ fun TransactionDbModel.toDataModel(): TransactionDataModel =
         photoUri,
     )
 
-fun TransactionDataModel.toDbModel(): TransactionDbModel =
-    TransactionDbModel(
+fun TransactionDataModel.toDbModel(): TransactionDbModel {
+    val currency = checkNotNull(Currency.fromCode(currencyCode)) { "Unsupported currency: $currencyCode" }
+    val amount = sum.toMoney(currency)
+    val usdPrecision = Currency.USD.precision
+    val usdCents = usdSum.roundTo(usdPrecision).toLongExact(usdPrecision)
+    return TransactionDbModel(
         id,
         clientId,
         type.value,
         categoryId,
         currencyCode,
-        sum,
-        usdSum,
+        amount.value,
+        usdCents,
         date,
         description,
         qrCode,
@@ -47,6 +54,7 @@ fun TransactionDataModel.toDbModel(): TransactionDbModel =
         place.name,
         place.address,
     )
+}
 
 fun TransactionMinMaxDateDbModel.toDataModel(): TransactionMinMaxDateModel =
     TransactionMinMaxDateModel(minDate ?: currentDateTime(), maxDate ?: currentDateTime())

@@ -74,7 +74,7 @@ fun BudgetScreen(
                     .fillMaxWidth()
                     .padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
                 uiState.budgetSum,
-                uiState.currencySymbol,
+                uiState.currencyCode,
                 true,
             ) { s ->
                 onBudgetInputChanged(s)
@@ -93,7 +93,7 @@ fun BudgetScreen(
                     .fillMaxWidth()
                     .padding(horizontal = dimensionResource(com.d9tilov.android.designsystem.R.dimen.padding_medium)),
                 uiState.amountToSave,
-                uiState.currencySymbol,
+                uiState.currencyCode,
                 true,
             ) { s ->
                 onAmountToSaveInputChanged(s)

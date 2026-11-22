@@ -4,8 +4,10 @@ import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.budget.domain.model.BudgetData
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.core.model.Currency
 import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.ExecutionPeriod
+import com.d9tilov.android.core.model.Money
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.core.utils.currentDateTime
@@ -216,8 +218,7 @@ class TransactionInteractorImplTest {
                 Transaction.EMPTY.copy(
                     type = TransactionType.EXPENSE,
                     category = testCategory,
-                    sum = Decimal(100),
-                    currencyCode = "USD",
+                    sum = Money(10_000, Currency.USD),
                 )
 
             coEvery { categoryInteractor.getCategoryById(1L) } returns testCategory
@@ -310,8 +311,7 @@ class TransactionInteractorImplTest {
                     id = 1L,
                     type = TransactionType.EXPENSE,
                     category = testCategory,
-                    sum = Decimal(150),
-                    currencyCode = "USD",
+                    sum = Money(15_000, Currency.USD),
                 )
 
             coEvery { transactionRepo.getTransactionById(1L) } returns
@@ -347,8 +347,7 @@ class TransactionInteractorImplTest {
                     id = 1L,
                     type = TransactionType.EXPENSE,
                     category = testCategory,
-                    sum = Decimal(100),
-                    currencyCode = "USD",
+                    sum = Money(10_000, Currency.USD),
                 )
 
             coEvery { transactionRepo.removeTransaction(any()) } returns Unit

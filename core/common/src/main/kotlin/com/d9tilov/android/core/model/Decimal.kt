@@ -8,6 +8,8 @@ class Decimal private constructor(
     private val value: BigDecimal,
     val fractionDigits: Int = 0,
 ) : Comparable<Decimal> {
+    val isNegative: Boolean get() = value.signum() < 0
+
     init {
         require(value.exponent in supportedPowers) { "Decimal exponent out of range: ${value.exponent}" }
     }
@@ -31,17 +33,13 @@ class Decimal private constructor(
         return Decimal(value * other.value, scale)
     }
 
-    fun negate(): Decimal = Decimal(value.negate(), fractionDigits)
-
-    fun signum(): Int = value.signum()
-
     fun divide(
         divisor: Decimal,
         fractionDigits: Int,
     ): Decimal {
         checkedFractionDigits(fractionDigits.toLong())
-        if (divisor.signum() == 0) throw ArithmeticException("Division by zero")
-        if (signum() == 0) return Decimal(BigDecimal.ZERO, fractionDigits)
+        if (divisor.value.isZero()) throw ArithmeticException("Division by zero")
+        if (value.isZero()) return Decimal(BigDecimal.ZERO, fractionDigits)
 
         // Divide the unscaled magnitudes and round the exact remainder away from zero on a tie.
         val shift = value.powerOfTen() - divisor.value.powerOfTen() + fractionDigits
@@ -52,7 +50,7 @@ class Decimal private constructor(
         val scaledDenominator = if (shift < 0) denominator * BigInteger.TEN.pow(-shift) else denominator
         val (quotient, remainder) = scaledNumerator.divideAndRemainder(scaledDenominator)
         val rounded = if (remainder + remainder >= scaledDenominator) quotient + BigInteger.ONE else quotient
-        val signed = if (signum() == divisor.signum()) rounded else rounded.negate()
+        val signed = if (isNegative == divisor.isNegative) rounded else rounded.negate()
 
         val result = BigDecimal.fromBigInteger(signed).moveDecimalPoint(-fractionDigits.toLong())
         return Decimal(result, fractionDigits)
@@ -71,9 +69,13 @@ class Decimal private constructor(
         return Decimal(value.moveDecimalPoint(power), scale)
     }
 
+    fun toLongExact(pointShift: Int): Long = value.moveDecimalPoint(pointShift).longValue(exactRequired = true)
+
+    fun toMoney(currency: Currency): Money = Money(toLongExact(currency.precision), currency)
+
     fun withoutTrailingFractionZeros(): Decimal {
         if (fractionDigits == 0) return this
-        if (signum() == 0) return ZERO
+        if (value.isZero()) return ZERO
 
         var scale = -value.powerOfTen()
         var significand = value.significand
@@ -114,6 +116,8 @@ class Decimal private constructor(
         val TEN = Decimal(BigDecimal.TEN)
     }
 }
+
+fun Decimal.negate(): Decimal = Decimal.ZERO - this
 
 private const val MAX_DECIMAL_DIGITS = 100_000
 private val supportedPowers = -MAX_DECIMAL_DIGITS.toLong()..MAX_DECIMAL_DIGITS.toLong()

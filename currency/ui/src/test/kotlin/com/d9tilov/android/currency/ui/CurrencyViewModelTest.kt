@@ -83,7 +83,7 @@ class CurrencyViewModelTest {
             val state = viewModel.uiState.value
             assertTrue(state is CurrencyUiState.HasCurrencies)
             if (state is CurrencyUiState.HasCurrencies) {
-                assertEquals(3, state.currencyList.size)
+                assertEquals(listOf("USD", "EUR", "GBP"), state.currencyList.map { it.code })
                 assertEquals(false, state.isLoading)
             }
         }

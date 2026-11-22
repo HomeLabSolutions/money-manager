@@ -1,8 +1,8 @@
 package com.d9tilov.android.core.model
 
 import com.d9tilov.android.core.utils.divideBy
-import com.d9tilov.android.core.utils.reduceScale
-import com.d9tilov.android.core.utils.reduceScaleStr
+import com.d9tilov.android.core.utils.roundToCurrency
+import com.d9tilov.android.core.utils.toAmountString
 import com.d9tilov.android.core.utils.toDecimalOrNull
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -69,23 +69,33 @@ class DecimalTest {
     fun `display rounding reuses amounts that already have two fractional digits`() {
         val amount = Decimal("12.30")
 
-        assertSame(amount, amount.reduceScale())
-        assertEquals("12.3", Decimal("12.3").reduceScaleStr())
-        assertEquals("12.31", Decimal("12.305").reduceScaleStr())
+        assertSame(amount, amount.roundToCurrency(Currency.USD.name))
+        assertEquals("12.3", Decimal("12.3").toAmountString(Currency.USD.name))
+        assertEquals("12.31", Decimal("12.305").toAmountString(Currency.USD.name))
+    }
+
+    @Test
+    fun `amount formatting uses the currency precision`() {
+        val amount = Decimal("123.45678")
+
+        assertEquals("123", amount.toAmountString(Currency.JPY.name))
+        assertEquals("123.46", amount.toAmountString(Currency.USD.name))
+        assertEquals("123.457", amount.toAmountString(Currency.KWD.name))
+        assertEquals("123.4568", amount.toAmountString(Currency.CLF.name))
     }
 
     @Test
     fun `normalized amounts retain current display and report precision`() {
-        assertEquals("12.35", Decimal("12.345").reduceScaleStr())
-        assertEquals("-12.35", Decimal("-12.345").reduceScaleStr())
+        assertEquals("12.35", Decimal("12.345").toAmountString(Currency.USD.name))
+        assertEquals("-12.35", Decimal("-12.345").toAmountString(Currency.USD.name))
         assertEquals("10.00000000000000000000", Decimal("100").divideBy(Decimal.TEN).toPlainString())
-        assertEquals("123.2", Decimal("123.20").reduceScaleStr())
-        assertEquals("123.02", Decimal("123.02").reduceScaleStr())
-        assertEquals("1", Decimal("1.00").reduceScaleStr())
-        assertEquals("1", Decimal("0.995").reduceScaleStr())
-        assertEquals("0", Decimal("-0.004").reduceScaleStr())
-        assertEquals("0", Decimal.ZERO.reduceScaleStr())
-        assertEquals("0", null.reduceScaleStr())
+        assertEquals("123.2", Decimal("123.20").toAmountString(Currency.USD.name))
+        assertEquals("123.02", Decimal("123.02").toAmountString(Currency.USD.name))
+        assertEquals("1", Decimal("1.00").toAmountString(Currency.USD.name))
+        assertEquals("1", Decimal("0.995").toAmountString(Currency.USD.name))
+        assertEquals("0", Decimal("-0.004").toAmountString(Currency.USD.name))
+        assertEquals("0", Decimal.ZERO.toAmountString(Currency.USD.name))
+        assertEquals("0", null.toAmountString(Currency.USD.name))
     }
 
     @Test(expected = ArithmeticException::class)

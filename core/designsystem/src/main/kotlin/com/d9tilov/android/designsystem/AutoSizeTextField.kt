@@ -43,6 +43,7 @@ fun AutoSizeTextField(
     fontColor: Color = MaterialTheme.colorScheme.primary,
     autoFocus: Boolean = true,
     readOnly: Boolean = false,
+    keyboardType: KeyboardType = KeyboardType.Number,
     content: @Composable () -> Unit,
 ) {
     var amount by remember { mutableStateOf(TextFieldValue()) }
@@ -88,7 +89,7 @@ fun AutoSizeTextField(
                         horizontal = dimensionResource(id = R.dimen.padding_extra_small),
                         vertical = dimensionResource(id = R.dimen.padding_medium),
                     ),
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
             maxLines = 1,
             textStyle = TextStyle.Default.copy(fontSize = shrunkFontSize, color = fontColor),
             singleLine = true,

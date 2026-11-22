@@ -4,7 +4,6 @@ import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.common.android.location.LocationProvider
-import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.utils.KeyPress
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.places.domain.model.LocationData
@@ -99,7 +98,7 @@ class IncomeExpenseTransactionFeedbackTest {
         runTest(dispatcher) {
             val allowFirstSave = CompletableDeferred<Unit>()
             coEvery {
-                transactions.addTransaction(match { it.sum.compareTo(Decimal.ONE) == 0 })
+                transactions.addTransaction(match { it.sum.value == 100L })
             } coAnswers { allowFirstSave.await() }
             val viewModel = createViewModel()
             val callbacks = mutableListOf<String>()

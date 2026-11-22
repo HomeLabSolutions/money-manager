@@ -65,7 +65,7 @@ import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
-import com.d9tilov.android.core.utils.reduceScaleStr
+import com.d9tilov.android.core.utils.toAmountString
 import com.d9tilov.android.core.utils.toFloat
 import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.core.utils.toStandardStringDate
@@ -96,6 +96,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
+private const val PERCENT_FRACTION_DIGITS = 2
 private const val ANIMATION_DURATION = 300
 private const val CHART_HEIGHT_FRACTION = 0.6f
 
@@ -619,13 +620,13 @@ fun TransactionStatisticsItem(
             horizontalAlignment = Alignment.End,
         ) {
             ComposeCurrencyView(
-                value = transaction.sum.reduceScaleStr(),
+                value = transaction.sum.toAmountString(transaction.currencyCode),
                 valueStyle = MaterialTheme.typography.headlineSmall,
                 symbol = transaction.currencyCode.getSymbolByCode(),
                 symbolStyle = MaterialTheme.typography.labelLarge,
             )
             Text(
-                text = "${transaction.percent.reduceScaleStr()}${
+                text = "${transaction.percent.roundTo(PERCENT_FRACTION_DIGITS).withoutTrailingFractionZeros()}${
                     stringResource(
                         com.d9tilov.android.common.android.R.string.percent_sign,
                     )

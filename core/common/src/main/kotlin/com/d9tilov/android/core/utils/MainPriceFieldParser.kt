@@ -2,26 +2,62 @@ package com.d9tilov.android.core.utils
 
 object MainPriceFieldParser {
     const val MAX_PRICE_LENGTH = 11
-    private const val MAX_FRACTION_DIGITS = 2
 
     fun parse(
         priceStr: String,
         btn: KeyPress,
+        precision: Int,
     ): String =
         when {
-            btn == KeyPress.Del -> priceStr.dropLast(1).ifEmpty { KeyPress.Zero.value }
-            priceStr.length >= MAX_PRICE_LENGTH -> priceStr
-            btn == KeyPress.Dot -> if (priceStr.contains(KeyPress.Dot.value)) priceStr else priceStr + btn.value
-            priceStr == KeyPress.Zero.value -> btn.value
-            hasMaxFractionDigits(priceStr) -> priceStr
-            else -> priceStr + btn.value
+            btn == KeyPress.Del -> {
+                priceStr.dropLast(1).ifEmpty { KeyPress.Zero.value }
+            }
+
+            priceStr.length >= MAX_PRICE_LENGTH -> {
+                priceStr
+            }
+
+            btn == KeyPress.Dot -> {
+                if (precision == 0 || priceStr.contains(KeyPress.Dot.value)) priceStr else priceStr + btn.value
+            }
+
+            priceStr == KeyPress.Zero.value -> {
+                btn.value
+            }
+
+            hasMaxFractionDigits(priceStr, precision) -> {
+                priceStr
+            }
+
+            else -> {
+                priceStr + btn.value
+            }
         }
 
     fun isInputValid(str: String): Boolean =
         str.length in 1..MAX_PRICE_LENGTH && hasValidPrefix(str) && str.toDecimalOrNull() != null
 
-    private fun hasMaxFractionDigits(str: String): Boolean =
-        str.contains(KeyPress.Dot.value) && str.substringAfterLast(KeyPress.Dot.value).length >= MAX_FRACTION_DIGITS
+    fun allowsAmountInput(
+        text: String,
+        precision: Int,
+    ): Boolean {
+        val parts =
+            text
+                .removePrefix("-")
+                .replace(',', '.')
+                .split('.')
+        return parts.all { part -> part.all { it in '0'..'9' } } &&
+            when (parts.size) {
+                1 -> true
+                2 -> precision > 0 && parts[1].length <= precision
+                else -> false
+            }
+    }
+
+    private fun hasMaxFractionDigits(
+        str: String,
+        precision: Int,
+    ): Boolean = str.contains(KeyPress.Dot.value) && str.substringAfterLast(KeyPress.Dot.value).length >= precision
 
     private fun hasValidPrefix(str: String): Boolean =
         when {

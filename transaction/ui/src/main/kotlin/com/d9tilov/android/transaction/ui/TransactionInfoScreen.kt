@@ -41,6 +41,7 @@ import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
@@ -49,11 +50,12 @@ import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.CategoryDestination
 import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_TIME_FORMAT
 import com.d9tilov.android.common.android.utils.formatDate
-import com.d9tilov.android.core.model.Decimal
+import com.d9tilov.android.core.model.Currency
+import com.d9tilov.android.core.model.Money
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
-import com.d9tilov.android.core.utils.MainPriceFieldParser.isInputValid
 import com.d9tilov.android.core.utils.currentDateTime
+import com.d9tilov.android.core.utils.moneyOrNull
 import com.d9tilov.android.core.utils.toMillis
 import com.d9tilov.android.designsystem.AutoSizeTextField
 import com.d9tilov.android.designsystem.BottomActionButton
@@ -140,7 +142,8 @@ fun TransactionInfoScreen(
 ) {
     val mode = uiState.mode
     val context = LocalContext.current
-    var showError by remember { mutableStateOf(false) }
+    val amount = uiState.amount.moneyOrNull(uiState.transaction.sum.currency)
+    val showError = mode == TransactionInfoMode.EDIT && (amount == null || amount.value == 0L)
     val showDatePickerDialog = remember { mutableStateOf(false) }
     val datePickerState: DatePickerState =
         rememberDatePickerState().also {
@@ -180,10 +183,7 @@ fun TransactionInfoScreen(
                     uiState = uiState,
                     showError = showError,
                     onCurrencyClicked = onCurrencyClicked,
-                    onSumChanged = { text ->
-                        showError = !isInputValid(text)
-                        onSumChanged(text)
-                    },
+                    onSumChanged = onSumChanged,
                 )
                 Row(
                     modifier =
@@ -323,6 +323,7 @@ private fun TransactionAmountField(
     onSumChanged: (String) -> Unit,
 ) {
     val mode = uiState.mode
+    val currency = uiState.transaction.sum.currency
     Row(
         modifier =
             Modifier.padding(
@@ -336,9 +337,11 @@ private fun TransactionAmountField(
                     .alignByBaseline()
                     .clickable(
                         enabled = mode == TransactionInfoMode.EDIT,
-                        onClick = { onCurrencyClicked(uiState.transaction.currencyCode) },
+                        onClick = { onCurrencyClicked(currency.name) },
                     ),
-            text = uiState.transaction.currencyCode.getSymbolByCode(),
+            text =
+                uiState.transaction.sum.currency.name
+                    .getSymbolByCode(),
             style = MaterialTheme.typography.displaySmall,
             color = MaterialTheme.colorScheme.primary,
         )
@@ -349,6 +352,7 @@ private fun TransactionAmountField(
             content = { if (showError) ShowError() },
             autoFocus = false,
             readOnly = mode == TransactionInfoMode.VIEW,
+            keyboardType = if (currency.precision == 0) KeyboardType.Number else KeyboardType.Decimal,
         )
     }
 }
@@ -467,10 +471,9 @@ fun DefaultTransactionInfoPreview(mode: TransactionInfoMode = TransactionInfoMod
                     amount = "1500.50",
                     transaction =
                         Transaction.EMPTY.copy(
-                            sum = Decimal("1500.50"),
+                            sum = Money(PREVIEW_MINOR_AMOUNT, Currency.USD),
                             description = "Покупка продуктов в магазине",
                             inStatistics = true,
-                            currencyCode = "USD",
                             date = currentDateTime(),
                             category =
                                 Category.EMPTY_EXPENSE.copy(
@@ -505,3 +508,5 @@ fun DefaultTransactionInfoPreview(mode: TransactionInfoMode = TransactionInfoMod
 fun ViewTransactionInfoPreview() {
     DefaultTransactionInfoPreview(mode = TransactionInfoMode.VIEW)
 }
+
+private const val PREVIEW_MINOR_AMOUNT = 150_050L

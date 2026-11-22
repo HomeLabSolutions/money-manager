@@ -1,9 +1,7 @@
 package com.d9tilov.android.currency.domain.impl
 
-import com.d9tilov.android.core.constants.CurrencyConstants.DECIMAL_LENGTH
-import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
+import com.d9tilov.android.core.model.Currency
 import com.d9tilov.android.core.model.Decimal
-import com.d9tilov.android.core.utils.divideBy
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.contract.CurrencyRepo
 import com.d9tilov.android.currency.domain.contract.mapper.toDomain
@@ -45,18 +43,17 @@ class CurrencyInteractorImpl(
         if (sourceCurrencyCode == targetCurrencyCode) return amount
         val targetCurrency = getCurrencyByCode(targetCurrencyCode)
         val sourceCurrency = getCurrencyByCode(sourceCurrencyCode)
-        return (amount * targetCurrency.value).divide(sourceCurrency.value, DECIMAL_LENGTH)
+        val precision = Currency.valueOf(targetCurrencyCode).precision
+        return (amount * targetCurrency.value).divide(sourceCurrency.value, precision)
     }
 
     override suspend fun toUsd(
         amount: Decimal,
         currencyCode: String,
     ): Decimal {
-        val mainCurrencyCode = DEFAULT_CURRENCY_CODE
-        if (currencyCode == mainCurrencyCode) return amount
-        val currentCurrency = getCurrencyByCode(currencyCode)
-        val currentAbsoluteAmount = currentCurrency.value
-        return amount.divideBy(currentAbsoluteAmount)
+        val usd = Currency.USD
+        if (currencyCode == usd.name) return amount.roundTo(usd.precision)
+        return amount.divide(getCurrencyByCode(currencyCode).value, usd.precision)
     }
 
     override suspend fun updateCurrencyRates(): Result<Boolean> =
