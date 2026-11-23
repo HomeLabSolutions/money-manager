@@ -1,6 +1,7 @@
 package com.d9tilov.android.widget.domain.impl
 
 import com.d9tilov.android.billing.domain.contract.BillingInteractor
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
@@ -28,7 +29,6 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.math.BigDecimal
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SpendingWidgetInteractorImplTest {
@@ -70,14 +70,14 @@ class SpendingWidgetInteractorImplTest {
     @Test
     fun `widget uses the home screen calculations and main currency`() =
         runTest {
-            prepareAmounts(TransactionSpendingTodayModel.NORMAL(BigDecimal("125.50")))
+            prepareAmounts(TransactionSpendingTodayModel.NORMAL(Decimal("125.50")))
 
             assertEquals(
                 SpendingWidgetState.Ready(
                     SpendingSummary(
-                        TransactionSpendingTodayModel.NORMAL(BigDecimal("125.50")),
-                        BigDecimal("24.75"),
-                        BigDecimal("975.25"),
+                        TransactionSpendingTodayModel.NORMAL(Decimal("125.50")),
+                        Decimal("24.75"),
+                        Decimal("975.25"),
                         CurrencyMetaData.EMPTY.copy(code = "RUB"),
                     ),
                 ),
@@ -88,12 +88,12 @@ class SpendingWidgetInteractorImplTest {
     @Test
     fun `overspending retains its negative amount`() =
         runTest {
-            prepareAmounts(TransactionSpendingTodayModel.OVERSPENDING(BigDecimal("-12.25")))
+            prepareAmounts(TransactionSpendingTodayModel.OVERSPENDING(Decimal("-12.25")))
 
             val state = source.observe().first() as SpendingWidgetState.Ready
 
             assertEquals(
-                BigDecimal("-12.25"),
+                Decimal("-12.25"),
                 (state.spendingSummary.availableToday as TransactionSpendingTodayModel.OVERSPENDING).trSum,
             )
         }
@@ -101,16 +101,16 @@ class SpendingWidgetInteractorImplTest {
     @Test
     fun `each refresh recreates date bounded flows and reads the current currency`() =
         runTest {
-            prepareAmounts(TransactionSpendingTodayModel.NORMAL(BigDecimal.TEN))
+            prepareAmounts(TransactionSpendingTodayModel.NORMAL(Decimal.TEN))
             source.observe().first()
             every { currency.getMainCurrencyFlow() } returns flowOf(CurrencyMetaData.EMPTY.copy(code = "USD"))
             every { transactions.getApproxSumTodayCurrentCurrency(TransactionType.EXPENSE) } returns
-                flowOf(BigDecimal.ZERO)
+                flowOf(Decimal.ZERO)
 
             val state = source.observe().first() as SpendingWidgetState.Ready
 
             assertEquals("USD", state.spendingSummary.currency.code)
-            assertEquals(BigDecimal.ZERO, state.spendingSummary.spentToday)
+            assertEquals(Decimal.ZERO, state.spendingSummary.spentToday)
             verify(exactly = 2) {
                 transactions.ableToSpendToday()
                 transactions.getApproxSumTodayCurrentCurrency(TransactionType.EXPENSE)
@@ -122,13 +122,13 @@ class SpendingWidgetInteractorImplTest {
     @Test
     fun `all three amounts update on the existing subscription`() =
         runTest {
-            prepareAmounts(TransactionSpendingTodayModel.NORMAL(BigDecimal("125.50")))
+            prepareAmounts(TransactionSpendingTodayModel.NORMAL(Decimal("125.50")))
             val available =
                 MutableStateFlow<TransactionSpendingTodayModel>(
-                    TransactionSpendingTodayModel.NORMAL(BigDecimal("125.50")),
+                    TransactionSpendingTodayModel.NORMAL(Decimal("125.50")),
                 )
-            val today = MutableStateFlow(BigDecimal("24.75"))
-            val period = MutableStateFlow(BigDecimal("975.25"))
+            val today = MutableStateFlow(Decimal("24.75"))
+            val period = MutableStateFlow(Decimal("975.25"))
             every { transactions.ableToSpendToday() } returns available
             every { transactions.getApproxSumTodayCurrentCurrency(TransactionType.EXPENSE) } returns today
             every { transactions.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.EXPENSE) } returns period
@@ -137,26 +137,26 @@ class SpendingWidgetInteractorImplTest {
                 source.observe().toList(states)
             }
 
-            available.value = TransactionSpendingTodayModel.NORMAL(BigDecimal("115.50"))
-            today.value = BigDecimal("34.75")
-            period.value = BigDecimal("985.25")
+            available.value = TransactionSpendingTodayModel.NORMAL(Decimal("115.50"))
+            today.value = Decimal("34.75")
+            period.value = Decimal("985.25")
             runCurrent()
 
             assertEquals(
                 SpendingWidgetState.Ready(
                     SpendingSummary(
-                        TransactionSpendingTodayModel.NORMAL(BigDecimal("115.50")),
-                        BigDecimal("34.75"),
-                        BigDecimal("985.25"),
+                        TransactionSpendingTodayModel.NORMAL(Decimal("115.50")),
+                        Decimal("34.75"),
+                        Decimal("985.25"),
                         CurrencyMetaData.EMPTY.copy(code = "RUB"),
                     ),
                 ),
                 states.last(),
             )
-            period.value = BigDecimal("1234.56")
+            period.value = Decimal("1234.56")
             runCurrent()
             assertEquals(
-                BigDecimal("1234.56"),
+                Decimal("1234.56"),
                 (states.last() as SpendingWidgetState.Ready).spendingSummary.spentInPeriod,
             )
             verify(exactly = 1) { transactions.ableToSpendToday() }
@@ -165,7 +165,7 @@ class SpendingWidgetInteractorImplTest {
     @Test
     fun `premium changes hide and restore live amounts`() =
         runTest {
-            prepareAmounts(TransactionSpendingTodayModel.NORMAL(BigDecimal.TEN))
+            prepareAmounts(TransactionSpendingTodayModel.NORMAL(Decimal.TEN))
             val premium = MutableStateFlow(true)
             every { billingInteractor.isPremium() } returns premium
             val states = mutableListOf<SpendingWidgetState>()
@@ -180,7 +180,7 @@ class SpendingWidgetInteractorImplTest {
             premium.value = true
             runCurrent()
             assertEquals(
-                BigDecimal.TEN,
+                Decimal.TEN,
                 (
                     (states.last() as SpendingWidgetState.Ready).spendingSummary.availableToday as
                         TransactionSpendingTodayModel.NORMAL
@@ -191,7 +191,7 @@ class SpendingWidgetInteractorImplTest {
     @Test
     fun `currency and fiscal day changes update the summary`() =
         runTest {
-            prepareAmounts(TransactionSpendingTodayModel.NORMAL(BigDecimal.TEN))
+            prepareAmounts(TransactionSpendingTodayModel.NORMAL(Decimal.TEN))
             val currencies = MutableStateFlow(CurrencyMetaData.EMPTY.copy(code = "RUB"))
             val profiles = MutableStateFlow<UserProfile?>(user)
             every { currency.getMainCurrencyFlow() } returns currencies
@@ -220,9 +220,9 @@ class SpendingWidgetInteractorImplTest {
         every { currency.getMainCurrencyFlow() } returns flowOf(CurrencyMetaData.EMPTY.copy(code = "RUB"))
         every { transactions.ableToSpendToday() } returns flowOf(available)
         every { transactions.getApproxSumTodayCurrentCurrency(TransactionType.EXPENSE) } returns
-            flowOf(BigDecimal("24.75"))
+            flowOf(Decimal("24.75"))
         every { transactions.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.EXPENSE) } returns
-            flowOf(BigDecimal("975.25"))
+            flowOf(Decimal("975.25"))
         every { observeSpendingSummary.invoke() } answers {
             combine(
                 transactions.ableToSpendToday(),

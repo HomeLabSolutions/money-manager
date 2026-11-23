@@ -1,10 +1,10 @@
 package com.d9tilov.android.currency.domain.contract
 
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.currency.domain.model.CurrencyRate
 import com.d9tilov.android.currency.domain.model.DomainCurrency
 import kotlinx.coroutines.flow.Flow
-import java.math.BigDecimal
 
 interface CurrencyInteractor {
     fun getCurrencies(): Flow<List<DomainCurrency>>
@@ -16,15 +16,15 @@ interface CurrencyInteractor {
     suspend fun getCurrencyByCode(code: String): CurrencyRate
 
     suspend fun toTargetCurrency(
-        amount: BigDecimal,
+        amount: Decimal,
         sourceCurrencyCode: String,
         targetCurrencyCode: String,
-    ): BigDecimal
+    ): Decimal
 
     suspend fun toUsd(
-        amount: BigDecimal,
+        amount: Decimal,
         currencyCode: String,
-    ): BigDecimal
+    ): Decimal
 
     suspend fun updateCurrencyRates(): Result<Boolean>
 

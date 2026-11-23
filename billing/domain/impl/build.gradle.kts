@@ -6,6 +6,7 @@ plugins {
 dependencies {
     implementation(project(":billing:domain:contract"))
     implementation(project(":billing:domain:model"))
+    implementation(project(":core:common"))
     implementation(project(":currency:domain:contract"))
     implementation(project(":currency:domain:model"))
     implementation(libs.kotlinx.coroutines.core)

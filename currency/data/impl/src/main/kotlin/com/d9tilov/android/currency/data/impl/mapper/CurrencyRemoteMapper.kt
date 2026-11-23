@@ -1,9 +1,10 @@
 package com.d9tilov.android.currency.data.impl.mapper
 
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
+import com.d9tilov.android.core.utils.toDecimal
 import com.d9tilov.android.currency.data.contract.model.CurrencyResponse
 import com.d9tilov.android.currency.domain.model.CurrencyRate
-import java.math.BigDecimal
 
 fun CurrencyResponse.toDataModel(): List<CurrencyRate> {
     val currencyRateList = mutableSetOf<CurrencyRate>()
@@ -12,7 +13,7 @@ fun CurrencyResponse.toDataModel(): List<CurrencyRate> {
             CurrencyRate(
                 code = key,
                 symbol = key.getSymbolByCode(),
-                value = value.toBigDecimal(),
+                value = value.content.toDecimal(),
                 lastUpdateTime = date,
             )
         currencyRateList.add(item)
@@ -25,7 +26,7 @@ fun CurrencyResponse.toDataModelValues(list: List<CurrencyRate>): List<CurrencyR
     list.forEach { currency ->
         val newCurrency =
             currency.copy(
-                value = rates[currency.code]?.toBigDecimal() ?: BigDecimal.ZERO,
+                value = rates[currency.code]?.content?.toDecimal() ?: Decimal.ZERO,
                 lastUpdateTime = date * MILLIS,
             )
         newList.add(newCurrency)

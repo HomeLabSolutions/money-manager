@@ -12,6 +12,7 @@ import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.core.utils.reduceScaleStr
+import com.d9tilov.android.core.utils.toDecimal
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.transaction.regular.domain.contract.RegularTransactionInteractor
 import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
@@ -241,7 +242,7 @@ class RegularTransactionCreationViewModel(
 
     suspend fun saveOrUpdate() {
         val state = _uiState.value
-        val tr = state.transaction.copy(sum = state.amount.toBigDecimal())
+        val tr = state.transaction.copy(sum = state.amount.toDecimal())
         regularTransactionInteractor.insert(tr)
     }
 

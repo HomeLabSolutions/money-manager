@@ -8,4 +8,5 @@ dependencies {
     implementation(project(":currency:domain:model"))
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
 }

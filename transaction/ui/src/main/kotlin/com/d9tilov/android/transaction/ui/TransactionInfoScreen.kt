@@ -49,6 +49,7 @@ import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.CategoryDestination
 import com.d9tilov.android.common.android.utils.TRANSACTION_DATE_TIME_FORMAT
 import com.d9tilov.android.common.android.utils.formatDate
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.MainPriceFieldParser.isInputValid
@@ -75,7 +76,6 @@ import com.google.maps.android.compose.rememberUpdatedMarkerState
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
 
 private const val MAP_ZOOM_LEVEL = 15f
 
@@ -467,7 +467,7 @@ fun DefaultTransactionInfoPreview(mode: TransactionInfoMode = TransactionInfoMod
                     amount = "1500.50",
                     transaction =
                         Transaction.EMPTY.copy(
-                            sum = BigDecimal("1500.50"),
+                            sum = Decimal("1500.50"),
                             description = "Покупка продуктов в магазине",
                             inStatistics = true,
                             currencyCode = "USD",

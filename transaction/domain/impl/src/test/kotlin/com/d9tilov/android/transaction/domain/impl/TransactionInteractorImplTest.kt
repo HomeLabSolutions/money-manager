@@ -4,6 +4,7 @@ import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.budget.domain.model.BudgetData
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDate
@@ -44,7 +45,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import java.math.BigDecimal
 
 class TransactionInteractorImplTest {
     private val transactionRepo: TransactionRepo = mockk(relaxed = true)
@@ -75,7 +75,7 @@ class TransactionInteractorImplTest {
         CurrencyRate(
             code = "USD",
             symbol = "$",
-            value = BigDecimal.ONE,
+            value = Decimal.ONE,
             lastUpdateTime = 0L,
         )
 
@@ -96,8 +96,8 @@ class TransactionInteractorImplTest {
         BudgetData(
             id = 1L,
             clientId = "test-client-id",
-            sum = BigDecimal(1000),
-            saveSum = BigDecimal(100),
+            sum = Decimal(1000),
+            saveSum = Decimal(100),
             currencyCode = "USD",
             createdDate = LocalDateTime(2024, 1, 1, 0, 0),
         )
@@ -106,8 +106,8 @@ class TransactionInteractorImplTest {
     fun setup() {
         coEvery { currencyInteractor.getMainCurrency() } returns testCurrencyMetaData
         every { currencyInteractor.getMainCurrencyFlow() } returns flowOf(testCurrencyMetaData)
-        coEvery { currencyInteractor.toUsd(any(), any()) } returns BigDecimal.TEN
-        coEvery { currencyInteractor.toTargetCurrency(any(), any(), any()) } returns BigDecimal.TEN
+        coEvery { currencyInteractor.toUsd(any(), any()) } returns Decimal.TEN
+        coEvery { currencyInteractor.toTargetCurrency(any(), any(), any()) } returns Decimal.TEN
         coEvery { currencyInteractor.getCurrencyByCode(any()) } returns testCurrency
         coEvery { categoryInteractor.getCategoryById(any()) } returns testCategory
         coEvery { budgetInteractor.get() } returns flowOf(testBudget)
@@ -117,7 +117,7 @@ class TransactionInteractorImplTest {
     fun `annual allowance stays uniform at start middle and end of month including leap year`() =
         runTest {
             coEvery { userInteractor.getFiscalDay() } returns 1
-            every { budgetInteractor.get() } returns flowOf(testBudget.copy(saveSum = BigDecimal.ZERO))
+            every { budgetInteractor.get() } returns flowOf(testBudget.copy(saveSum = Decimal.ZERO))
             every {
                 transactionRepo.getTransactionsByTypeInPeriod(any(), any(), any(), true, false)
             } returns flowOf(emptyList())
@@ -134,7 +134,7 @@ class TransactionInteractorImplTest {
                 for (date in dates) {
                     every { currentDateTime() } returns date
                     every { currentDate() } returns date.date
-                    val yearlyExpense = if (date.year == 2024) BigDecimal("3660") else BigDecimal("3650")
+                    val yearlyExpense = if (date.year == 2024) Decimal("3660") else Decimal("3650")
                     val template =
                         RegularTransaction.EMPTY.copy(
                             currencyCode = "USD",
@@ -145,13 +145,13 @@ class TransactionInteractorImplTest {
                         flowOf(listOf(template.copy(sum = yearlyExpense)))
                     every { regularTransactionInteractor.getAll(TransactionType.INCOME) } returns
                         flowOf(
-                            listOf(template.copy(type = TransactionType.INCOME, sum = yearlyExpense * BigDecimal(2))),
+                            listOf(template.copy(type = TransactionType.INCOME, sum = yearlyExpense * Decimal(2))),
                         )
 
                     val result = interactor.ableToSpendToday().first()
 
                     assertTrue(result is TransactionSpendingTodayModel.NORMAL)
-                    assertEquals(0, (result as TransactionSpendingTodayModel.NORMAL).trSum.compareTo(BigDecimal.TEN))
+                    assertEquals(0, (result as TransactionSpendingTodayModel.NORMAL).trSum.compareTo(Decimal.TEN))
                 }
             } finally {
                 unmockkStatic("com.d9tilov.android.core.utils.DateTimeUtilKt")
@@ -167,7 +167,7 @@ class TransactionInteractorImplTest {
             val template =
                 RegularTransaction.EMPTY.copy(
                     id = 1L,
-                    sum = BigDecimal("3650"),
+                    sum = Decimal("3650"),
                     category = testCategory,
                     createdDate = yesterday.getStartOfDay(),
                     executionPeriod = period,
@@ -216,7 +216,7 @@ class TransactionInteractorImplTest {
                 Transaction.EMPTY.copy(
                     type = TransactionType.EXPENSE,
                     category = testCategory,
-                    sum = BigDecimal(100),
+                    sum = Decimal(100),
                     currencyCode = "USD",
                 )
 
@@ -241,8 +241,8 @@ class TransactionInteractorImplTest {
                     type = TransactionType.EXPENSE,
                     categoryId = 1L,
                     currencyCode = "USD",
-                    sum = BigDecimal(100),
-                    usdSum = BigDecimal(100),
+                    sum = Decimal(100),
+                    usdSum = Decimal(100),
                     date = LocalDateTime(2024, 1, 1, 0, 0),
                     description = "Test",
                     qrCode = "",
@@ -265,7 +265,7 @@ class TransactionInteractorImplTest {
 
             coEvery {
                 currencyInteractor.toTargetCurrency(any(), any(), any())
-            } returns BigDecimal(100)
+            } returns Decimal(100)
 
             val result =
                 interactor
@@ -280,7 +280,7 @@ class TransactionInteractorImplTest {
 
             assertEquals(1, result.size)
             assertEquals(testCategory.name, result.first().category.name)
-            assertEquals(BigDecimal(100), result.first().sum)
+            assertEquals(Decimal(100), result.first().sum)
         }
 
     @Test
@@ -293,8 +293,8 @@ class TransactionInteractorImplTest {
                     type = TransactionType.EXPENSE,
                     categoryId = 1L,
                     currencyCode = "USD",
-                    sum = BigDecimal(100),
-                    usdSum = BigDecimal(100),
+                    sum = Decimal(100),
+                    usdSum = Decimal(100),
                     date = LocalDateTime(2024, 1, 1, 0, 0),
                     description = "Test",
                     qrCode = "",
@@ -310,7 +310,7 @@ class TransactionInteractorImplTest {
                     id = 1L,
                     type = TransactionType.EXPENSE,
                     category = testCategory,
-                    sum = BigDecimal(150),
+                    sum = Decimal(150),
                     currencyCode = "USD",
                 )
 
@@ -322,7 +322,7 @@ class TransactionInteractorImplTest {
             coEvery { transactionRepo.update(any()) } answers {
                 persistedTransaction = firstArg()
             }
-            coEvery { currencyInteractor.toUsd(any(), any()) } returns BigDecimal(150)
+            coEvery { currencyInteractor.toUsd(any(), any()) } returns Decimal(150)
             coEvery {
                 currencyInteractor.toTargetCurrency(any(), any(), any())
             } answers {
@@ -336,7 +336,7 @@ class TransactionInteractorImplTest {
 
             coVerify { transactionRepo.update(any()) }
             coVerify { budgetInteractor.update(any()) }
-            assertEquals(0, persistedBudget.sum.compareTo(BigDecimal(950)))
+            assertEquals(0, persistedBudget.sum.compareTo(Decimal(950)))
         }
 
     @Test
@@ -347,12 +347,12 @@ class TransactionInteractorImplTest {
                     id = 1L,
                     type = TransactionType.EXPENSE,
                     category = testCategory,
-                    sum = BigDecimal(100),
+                    sum = Decimal(100),
                     currencyCode = "USD",
                 )
 
             coEvery { transactionRepo.removeTransaction(any()) } returns Unit
-            coEvery { currencyInteractor.toTargetCurrency(any(), any(), any()) } returns BigDecimal(100)
+            coEvery { currencyInteractor.toTargetCurrency(any(), any(), any()) } returns Decimal(100)
 
             interactor.removeTransaction(transaction)
 
@@ -402,8 +402,8 @@ class TransactionInteractorImplTest {
                     type = TransactionType.EXPENSE,
                     categoryId = 2L,
                     currencyCode = "USD",
-                    sum = BigDecimal(100),
-                    usdSum = BigDecimal(100),
+                    sum = Decimal(100),
+                    usdSum = Decimal(100),
                     date = LocalDateTime(2024, 1, 1, 0, 0),
                     description = "Test",
                     qrCode = "",
@@ -437,8 +437,8 @@ class TransactionInteractorImplTest {
                     type = TransactionType.EXPENSE,
                     categoryId = 1L,
                     currencyCode = "USD",
-                    sum = BigDecimal(100),
-                    usdSum = BigDecimal(100),
+                    sum = Decimal(100),
+                    usdSum = Decimal(100),
                     date = LocalDateTime(2024, 1, 1, 0, 0),
                     description = "Test",
                     qrCode = "",
@@ -456,8 +456,8 @@ class TransactionInteractorImplTest {
             } returns flowOf(listOf(transactionDataModel))
 
             coEvery {
-                currencyInteractor.toTargetCurrency(BigDecimal(100), "USD", "USD")
-            } returns BigDecimal(100)
+                currencyInteractor.toTargetCurrency(Decimal(100), "USD", "USD")
+            } returns Decimal(100)
 
             val result =
                 interactor
@@ -469,7 +469,7 @@ class TransactionInteractorImplTest {
                         inStatistics = true,
                     ).first()
 
-            assertEquals(BigDecimal(100), result)
+            assertEquals(Decimal(100), result)
         }
 
     @Test
@@ -482,8 +482,8 @@ class TransactionInteractorImplTest {
                     type = TransactionType.EXPENSE,
                     categoryId = 1L,
                     currencyCode = "USD",
-                    sum = BigDecimal(100),
-                    usdSum = BigDecimal(100),
+                    sum = Decimal(100),
+                    usdSum = Decimal(100),
                     date = LocalDateTime(2024, 1, 1, 0, 0),
                     description = "Test",
                     qrCode = "",
@@ -496,7 +496,7 @@ class TransactionInteractorImplTest {
             coEvery { transactionRepo.getAllByCategory(testCategory) } returns listOf(transactionDataModel)
             coEvery { transactionRepo.removeTransaction(any()) } returns Unit
             coEvery { budgetInteractor.get() } returns flowOf(testBudget)
-            coEvery { currencyInteractor.toTargetCurrency(any(), any(), any()) } returns BigDecimal(100)
+            coEvery { currencyInteractor.toTargetCurrency(any(), any(), any()) } returns Decimal(100)
 
             interactor.removeAllByCategory(testCategory)
 
@@ -514,8 +514,8 @@ class TransactionInteractorImplTest {
                     type = TransactionType.EXPENSE,
                     categoryId = 1L,
                     currencyCode = "USD",
-                    sum = BigDecimal(100),
-                    usdSum = BigDecimal(100),
+                    sum = Decimal(100),
+                    usdSum = Decimal(100),
                     date = LocalDateTime(2024, 1, 1, 0, 0),
                     description = "Test",
                     qrCode = "",
@@ -534,7 +534,7 @@ class TransactionInteractorImplTest {
 
             val result = interactor.getApproxSumTodayCurrentCurrency(TransactionType.EXPENSE).first()
 
-            assertEquals(0, result.compareTo(BigDecimal(100)))
+            assertEquals(0, result.compareTo(Decimal(100)))
         }
 
     @Test
@@ -547,8 +547,8 @@ class TransactionInteractorImplTest {
                     type = TransactionType.EXPENSE,
                     categoryId = 1L,
                     currencyCode = "USD",
-                    sum = BigDecimal(100),
-                    usdSum = BigDecimal(100),
+                    sum = Decimal(100),
+                    usdSum = Decimal(100),
                     date = LocalDateTime(2024, 1, 1, 0, 0),
                     description = "Test",
                     qrCode = "",
@@ -567,7 +567,7 @@ class TransactionInteractorImplTest {
 
             val result = interactor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.EXPENSE).first()
 
-            assertEquals(0, result.compareTo(BigDecimal(100)))
+            assertEquals(0, result.compareTo(Decimal(100)))
         }
 
     @Test
@@ -577,7 +577,7 @@ class TransactionInteractorImplTest {
             coEvery { userInteractor.getFiscalDay() } returns 1
             val endOfToday = currentDateTime().getEndOfDay()
             val laterTransaction =
-                transactionDataModel(id = 1L, type = TransactionType.EXPENSE, sum = BigDecimal.TEN)
+                transactionDataModel(id = 1L, type = TransactionType.EXPENSE, sum = Decimal.TEN)
                     .copy(date = endOfToday)
             coEvery {
                 transactionRepo.getTransactionsByTypeInPeriod(any(), any(), TransactionType.EXPENSE)
@@ -591,7 +591,7 @@ class TransactionInteractorImplTest {
 
             val amounts = interactor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.EXPENSE).toList()
 
-            assertEquals(listOf("0", "10"), amounts.map { it.toPlainString() })
+            assertEquals(listOf("0.00", "10.00"), amounts.map { it.toPlainString() })
         }
 
     @Test
@@ -599,12 +599,12 @@ class TransactionInteractorImplTest {
         runTest {
             val today = currentDate()
             val fiscalDayInTenDays = today.plus(10, DateTimeUnit.DAY).day
-            val income = transactionDataModel(id = 1L, type = TransactionType.INCOME, sum = BigDecimal(100))
-            val todayExpense = transactionDataModel(id = 2L, type = TransactionType.EXPENSE, sum = BigDecimal(20))
+            val income = transactionDataModel(id = 1L, type = TransactionType.INCOME, sum = Decimal(100))
+            val todayExpense = transactionDataModel(id = 2L, type = TransactionType.EXPENSE, sum = Decimal(20))
 
             coEvery { userInteractor.getFiscalDay() } returns fiscalDayInTenDays
             every { regularTransactionInteractor.getAll(any()) } returns flowOf(emptyList())
-            coEvery { budgetInteractor.get() } returns flowOf(testBudget.copy(saveSum = BigDecimal.ZERO))
+            coEvery { budgetInteractor.get() } returns flowOf(testBudget.copy(saveSum = Decimal.ZERO))
             every {
                 transactionRepo.getTransactionsByTypeInPeriod(
                     any(),
@@ -627,25 +627,25 @@ class TransactionInteractorImplTest {
                 flowOf(if (from.date == today) listOf(todayExpense) else emptyList())
             }
             coEvery {
-                currencyInteractor.toTargetCurrency(BigDecimal(100), "USD", "USD")
-            } returns BigDecimal(100)
+                currencyInteractor.toTargetCurrency(Decimal(100), "USD", "USD")
+            } returns Decimal(100)
             coEvery {
-                currencyInteractor.toTargetCurrency(BigDecimal(20), "USD", "USD")
-            } returns BigDecimal(20)
+                currencyInteractor.toTargetCurrency(Decimal(20), "USD", "USD")
+            } returns Decimal(20)
 
             val result = interactor.ableToSpendToday().first()
 
             assertTrue(result is TransactionSpendingTodayModel.OVERSPENDING)
             assertEquals(
                 0,
-                (result as TransactionSpendingTodayModel.OVERSPENDING).trSum.compareTo(BigDecimal(-10)),
+                (result as TransactionSpendingTodayModel.OVERSPENDING).trSum.compareTo(Decimal(-10)),
             )
         }
 
     private fun transactionDataModel(
         id: Long,
         type: TransactionType,
-        sum: BigDecimal,
+        sum: Decimal,
     ) = TransactionDataModel(
         id = id,
         clientId = "test-client-id-$id",

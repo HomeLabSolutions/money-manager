@@ -9,6 +9,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.d9tilov.android.core.constants.DataConstants.DATABASE_NAME
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.database.AppDatabase
 import com.d9tilov.android.database.entity.CategoryDbModel
@@ -22,7 +23,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.math.BigDecimal
 
 private const val FIXTURE_CURRENCY = "USD"
 private const val FIXTURE_TAG = "StartupFixture"
@@ -82,7 +82,7 @@ class FixtureActivity : ComponentActivity() {
                         insightLanguage = InsightLanguage.SYSTEM.tag,
                     ),
                 )
-                database.currencyDao().insert(listOf(CurrencyDbModel(FIXTURE_CURRENCY, "$", BigDecimal.ONE, 0)))
+                database.currencyDao().insert(listOf(CurrencyDbModel(FIXTURE_CURRENCY, "$", Decimal.ONE, 0)))
                 database.mainCurrencyDao().insert(MainCurrencyDbModel(clientId = uid, code = FIXTURE_CURRENCY))
                 seedCategories(database, uid)
             } finally {

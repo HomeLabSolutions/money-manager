@@ -18,6 +18,7 @@ import com.d9tilov.android.common.android.location.LocationProvider
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.DataConstants.TAG
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.KeyPress
@@ -26,6 +27,7 @@ import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.isSameDay
 import com.d9tilov.android.core.utils.reduceScaleStr
+import com.d9tilov.android.core.utils.toDecimal
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.incomeexpense.ui.R
@@ -68,7 +70,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.math.BigDecimal
 
 sealed interface IncomeExpenseScreenState {
     data object Loading : IncomeExpenseScreenState
@@ -125,7 +126,7 @@ data class MainPrice(
 
 data class Price(
     @field:StringRes val label: Int = R.string.expense_info_can_spend_today_title,
-    val value: String = "${BigDecimal.ZERO}$DEFAULT_CURRENCY_CODE",
+    val value: String = "${Decimal.ZERO.reduceScaleStr()}$DEFAULT_CURRENCY_CODE",
 ) {
     companion object {
         val EMPTY = Price()
@@ -267,7 +268,7 @@ class IncomeExpenseViewModel(
                 combine(
                     billingInteractor.isPremium(),
                     transactionInteractor.getApproxSumInFiscalPeriodCurrentCurrency(TransactionType.INCOME),
-                ) { isPremium: Boolean, approxSum: BigDecimal ->
+                ) { isPremium: Boolean, approxSum: Decimal ->
                     if (isPremium) {
                         val currencyCode = mainCurrency.value.code
                         IncomeInfo(
@@ -397,7 +398,7 @@ class IncomeExpenseViewModel(
         onAdded: () -> Unit,
     ) {
         if (uiState.value.price.value
-                .toBigDecimal()
+                .toDecimal()
                 .signum() == 0
         ) {
             viewModelScope.launch { errorMessage.emit(R.string.income_expense_empty_sum_error) }
@@ -412,7 +413,7 @@ class IncomeExpenseViewModel(
                 val location = locationDeff.await()
                 transactionInteractor.addTransaction(
                     Transaction.EMPTY.copy(
-                        sum = price.value.toBigDecimal(),
+                        sum = price.value.toDecimal(),
                         category = category,
                         currencyCode = price.currencyCode,
                         date = currentDateTime(),
@@ -424,7 +425,7 @@ class IncomeExpenseViewModel(
             }
         }
         uiState.update { state ->
-            val price = state.price.copy(value = BigDecimal.ZERO.reduceScaleStr())
+            val price = state.price.copy(value = KeyPress.Zero.value)
             state.copy(price = price)
         }
     }

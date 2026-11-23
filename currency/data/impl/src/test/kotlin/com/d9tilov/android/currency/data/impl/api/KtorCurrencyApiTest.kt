@@ -1,5 +1,8 @@
 package com.d9tilov.android.currency.data.impl.api
 
+import com.d9tilov.android.core.model.Decimal
+import com.d9tilov.android.currency.data.impl.mapper.toDataModel
+import com.d9tilov.android.currency.data.impl.mapper.toDataModelValues
 import com.d9tilov.android.network.createNetworkClient
 import com.d9tilov.android.network.di.NetworkModule
 import io.ktor.client.engine.mock.MockEngine
@@ -14,14 +17,14 @@ class KtorCurrencyApiTest {
     private val json = NetworkModule.provideJson()
 
     @Test
-    fun `currency request encodes path segments and decodes rates with unknown fields`() =
+    fun `currency request encodes path segments and preserves exact decimal rates`() =
         runTest {
             MockEngine { request ->
                 assertEquals("https://v6.exchangerate-api.com/v6/test%2Fkey/latest/GBP", request.url.toString())
                 respond(
                     """
                     {"result":"success","base_code":"GBP","time_last_update_unix":42,
-                    "conversion_rates":{"GBP":1.0,"USD":1.25},"extra":"ignored"}
+                    "conversion_rates":{"GBP":1.0000,"USD":1.2500000000000000010,"EUR":1.00e-7},"extra":"ignored"}
                     """.trimIndent(),
                     headers = headersOf(HttpHeaders.ContentType, "application/json"),
                 )
@@ -30,7 +33,16 @@ class KtorCurrencyApiTest {
                     val response = KtorCurrencyApi(client).getCurrencies("GBP", "test/key")
                     assertEquals("GBP", response.base)
                     assertEquals(42L, response.date)
-                    assertEquals(1.25, response.rates["USD"])
+                    val rates = response.toDataModel()
+                    val expectedRates =
+                        mapOf(
+                            "GBP" to "1.0000",
+                            "USD" to "1.2500000000000000010",
+                            "EUR" to "0.000000100",
+                        )
+                    assertEquals(expectedRates, rates.associate { it.code to it.value.toPlainString() })
+                    val updatedRates = response.toDataModelValues(rates.map { it.copy(value = Decimal.ZERO) })
+                    assertEquals(expectedRates, updatedRates.associate { it.code to it.value.toPlainString() })
                 }
             }
         }

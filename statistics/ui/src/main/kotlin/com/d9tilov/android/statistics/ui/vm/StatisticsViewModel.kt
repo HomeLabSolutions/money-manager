@@ -11,6 +11,7 @@ import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.reduceScaleStr
+import com.d9tilov.android.core.utils.toDouble
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.statistics.data.model.StatisticsMenuType
 import com.d9tilov.android.statistics.ui.model.StatisticsMenuChartModel

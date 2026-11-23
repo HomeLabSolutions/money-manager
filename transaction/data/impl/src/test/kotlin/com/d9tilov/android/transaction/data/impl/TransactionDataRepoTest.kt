@@ -1,6 +1,7 @@
 package com.d9tilov.android.transaction.data.impl
 
 import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.places.domain.model.LocationData
 import com.d9tilov.android.places.domain.model.Place
@@ -18,7 +19,6 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.LocalDateTime
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.math.BigDecimal
 
 class TransactionDataRepoTest {
     private val transactionSource: TransactionSource = mockk(relaxed = true)
@@ -50,8 +50,8 @@ class TransactionDataRepoTest {
             type = TransactionType.EXPENSE,
             categoryId = 1L,
             currencyCode = "USD",
-            sum = BigDecimal(100),
-            usdSum = BigDecimal(100),
+            sum = Decimal(100),
+            usdSum = Decimal(100),
             date = LocalDateTime(2024, 1, 1, 0, 0),
             description = "Test",
             qrCode = "",

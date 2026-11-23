@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.utils.reduceScaleStr
+import com.d9tilov.android.core.utils.toDecimal
 import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.places.domain.contract.NearbyPlacesInteractor
 import com.d9tilov.android.places.domain.model.LocationData
@@ -207,7 +208,7 @@ class TransactionInfoViewModel(
         if (state.mode == TransactionInfoMode.VIEW) return
         transactionInteractor.update(
             state.transaction.copy(
-                sum = state.amount.toBigDecimal(),
+                sum = state.amount.toDecimal(),
                 place =
                     state.transaction.place.copy(
                         name =

@@ -55,6 +55,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.d9tilov.android.core.constants.DataConstants.TAG
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.android.designsystem.MmTopAppBar
@@ -356,35 +357,35 @@ fun DefaultPreviewCurrencyItem() {
             DomainCurrency(
                 code = "USD",
                 symbol = "$",
-                value = java.math.BigDecimal.ONE,
+                value = Decimal.ONE,
                 isBase = true,
                 lastUpdateTime = System.currentTimeMillis(),
             ),
             DomainCurrency(
                 code = "EUR",
                 symbol = "€",
-                value = java.math.BigDecimal("0.85"),
+                value = Decimal("0.85"),
                 isBase = false,
                 lastUpdateTime = System.currentTimeMillis(),
             ),
             DomainCurrency(
                 code = "GBP",
                 symbol = "£",
-                value = java.math.BigDecimal("0.73"),
+                value = Decimal("0.73"),
                 isBase = false,
                 lastUpdateTime = System.currentTimeMillis(),
             ),
             DomainCurrency(
                 code = "JPY",
                 symbol = "¥",
-                value = java.math.BigDecimal("110.0"),
+                value = Decimal("110.0"),
                 isBase = false,
                 lastUpdateTime = System.currentTimeMillis(),
             ),
             DomainCurrency(
                 code = "RUB",
                 symbol = "₽",
-                value = java.math.BigDecimal("75.0"),
+                value = Decimal("75.0"),
                 isBase = false,
                 lastUpdateTime = System.currentTimeMillis(),
             ),

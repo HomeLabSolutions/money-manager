@@ -26,8 +26,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.createFontFamilyResolver
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.utils.reduceScaleStr
-import java.math.BigDecimal
+import com.d9tilov.android.core.utils.toDecimalOrNull
 
 private const val TEXT_SCALE_REDUCTION_INTERVAL = 0.9f
 private const val DECIMAL_SIZE = 2
@@ -211,7 +212,7 @@ private fun CurrencyTextField(
                     },
                     placeholder = {
                         Text(
-                            text = BigDecimal.ZERO.reduceScaleStr(),
+                            text = Decimal.ZERO.reduceScaleStr(),
                             style = style.copy(color = MaterialTheme.colorScheme.primaryContainer),
                         )
                     },
@@ -274,10 +275,10 @@ private fun parseCurrencyNumber(
     input: String,
     previousValue: String,
 ): String {
-    val number = input.toBigDecimalOrNull()
+    val number = input.toDecimalOrNull()
     return when {
         number == null -> previousValue
-        number.scale() > DECIMAL_SIZE -> input.take(input.indexOf(DELIMITER) + DECIMAL_SIZE + 1)
+        number.fractionDigits > DECIMAL_SIZE -> input.take(input.indexOf(DELIMITER) + DECIMAL_SIZE + 1)
         else -> input
     }
 }
@@ -286,7 +287,7 @@ private fun parseCurrencyNumber(
 @Composable
 fun DefaultPreviewCurrencyTextField() {
     CurrencyTextFieldSmall(
-        amount = BigDecimal(PREVIEW_AMOUNT).reduceScaleStr(),
+        amount = Decimal(PREVIEW_AMOUNT).reduceScaleStr(),
         currencyCode = "$",
         isEditable = false,
     )

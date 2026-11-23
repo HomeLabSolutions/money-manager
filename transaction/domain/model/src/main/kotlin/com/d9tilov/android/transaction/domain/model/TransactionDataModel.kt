@@ -2,11 +2,11 @@ package com.d9tilov.android.transaction.domain.model
 
 import com.d9tilov.android.core.constants.DataConstants.DEFAULT_DATA_ID
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.places.domain.model.Place
 import kotlinx.datetime.LocalDateTime
-import java.math.BigDecimal
 
 data class TransactionDataModel(
     val id: Long = DEFAULT_DATA_ID,
@@ -14,8 +14,8 @@ data class TransactionDataModel(
     val type: TransactionType,
     val categoryId: Long,
     val currencyCode: String,
-    val sum: BigDecimal,
-    val usdSum: BigDecimal,
+    val sum: Decimal,
+    val usdSum: Decimal,
     val date: LocalDateTime = currentDateTime(),
     val description: String = "",
     val qrCode: String? = null,

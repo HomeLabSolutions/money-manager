@@ -8,6 +8,7 @@ import com.d9tilov.android.billing.domain.model.BillingSkuDetails
 import com.d9tilov.android.billing.domain.model.PremiumEmails
 import com.d9tilov.android.billing.domain.model.exceptions.BillingFailure
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
+import com.d9tilov.android.core.utils.toDecimal
 import com.d9tilov.android.currency.domain.model.CurrencyRate
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -80,7 +81,7 @@ class BillingDataRepo(
                         if (pricingList.isEmpty()) throw BillingFailure.PriceNotFoundException(product)
                         val price = checkNotNull(pricingList.firstOrNull())
                         val formattedPrice =
-                            price.priceAmountMicros.toBigDecimal().divide(AMOUNT_DIVIDER.toBigDecimal())
+                            price.priceAmountMicros.toDecimal().movePoint(-PRICE_MICROS_SCALE)
                         val currencyCode = price.priceCurrencyCode
                         val currency =
                             CurrencyRate.EMPTY.copy(
@@ -100,6 +101,6 @@ class BillingDataRepo(
     companion object {
         // List of subscription product offerings
         private const val PREMIUM_SUB = "common_subs"
-        private const val AMOUNT_DIVIDER = 1_000_000
+        private const val PRICE_MICROS_SCALE = 6
     }
 }

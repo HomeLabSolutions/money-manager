@@ -4,6 +4,7 @@ import com.d9tilov.android.billing.domain.contract.BillingInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.common.android.location.LocationProvider
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.utils.KeyPress
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.places.domain.model.LocationData
@@ -27,7 +28,6 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import java.math.BigDecimal
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class IncomeExpenseTransactionFeedbackTest {
@@ -99,7 +99,7 @@ class IncomeExpenseTransactionFeedbackTest {
         runTest(dispatcher) {
             val allowFirstSave = CompletableDeferred<Unit>()
             coEvery {
-                transactions.addTransaction(match { it.sum.compareTo(BigDecimal.ONE) == 0 })
+                transactions.addTransaction(match { it.sum.compareTo(Decimal.ONE) == 0 })
             } coAnswers { allowFirstSave.await() }
             val viewModel = createViewModel()
             val callbacks = mutableListOf<String>()

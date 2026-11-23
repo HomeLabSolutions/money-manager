@@ -27,6 +27,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.core.content.ContextCompat
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.reduceScaleStr
@@ -35,7 +36,6 @@ import com.d9tilov.android.designsystem.ComposeCurrencyView
 import com.d9tilov.android.designsystem.MoneyManagerIcons
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.android.transaction.ui.model.TransactionUiModel
-import java.math.BigDecimal
 
 @Composable
 fun TransactionItem(
@@ -223,7 +223,7 @@ fun TransactionItemPreview() {
                             icon = MoneyManagerIcons.InStatisticsTransaction,
                             color = android.R.color.black,
                         ),
-                    sum = BigDecimal(1),
+                    sum = Decimal(1),
                     type = TransactionType.EXPENSE,
                     showTime = true,
                     isRegular = true,

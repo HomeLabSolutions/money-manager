@@ -40,6 +40,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.d9tilov.android.common.android.utils.getAppVersion
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.reduceScaleStr
@@ -443,8 +444,8 @@ fun DefaultPreviewProfile() {
                             id = 1L,
                             clientId = PREVIEW_USER_ID,
                             currencyCode = PREVIEW_CURRENCY,
-                            sum = java.math.BigDecimal("5000.00"),
-                            saveSum = java.math.BigDecimal("1200.00"),
+                            sum = Decimal("5000.00"),
+                            saveSum = Decimal("1200.00"),
                             createdDate = kotlinx.datetime.LocalDateTime.parse("2024-01-15T10:30:00"),
                         ),
                 ),
@@ -457,7 +458,7 @@ fun DefaultPreviewProfile() {
                                 clientId = PREVIEW_USER_ID,
                                 currencyCode = PREVIEW_CURRENCY,
                                 type = com.d9tilov.android.core.model.TransactionType.INCOME,
-                                sum = java.math.BigDecimal("3500.00"),
+                                sum = Decimal("3500.00"),
                                 category =
                                     com.d9tilov.android.category.domain.entity.Category.EMPTY_INCOME.copy(
                                         id = 1L,
@@ -478,7 +479,7 @@ fun DefaultPreviewProfile() {
                                 clientId = PREVIEW_USER_ID,
                                 currencyCode = PREVIEW_CURRENCY,
                                 type = com.d9tilov.android.core.model.TransactionType.INCOME,
-                                sum = java.math.BigDecimal("500.00"),
+                                sum = Decimal("500.00"),
                                 category =
                                     com.d9tilov.android.category.domain.entity.Category.EMPTY_INCOME.copy(
                                         id = 2L,
@@ -505,7 +506,7 @@ fun DefaultPreviewProfile() {
                                 clientId = PREVIEW_USER_ID,
                                 currencyCode = PREVIEW_CURRENCY,
                                 type = com.d9tilov.android.core.model.TransactionType.EXPENSE,
-                                sum = java.math.BigDecimal("1200.00"),
+                                sum = Decimal("1200.00"),
                                 category =
                                     com.d9tilov.android.category.domain.entity.Category.EMPTY_EXPENSE.copy(
                                         id = 3L,
@@ -526,7 +527,7 @@ fun DefaultPreviewProfile() {
                                 clientId = PREVIEW_USER_ID,
                                 currencyCode = PREVIEW_CURRENCY,
                                 type = com.d9tilov.android.core.model.TransactionType.EXPENSE,
-                                sum = java.math.BigDecimal("50.00"),
+                                sum = Decimal("50.00"),
                                 category =
                                     com.d9tilov.android.category.domain.entity.Category.EMPTY_EXPENSE.copy(
                                         id = 4L,
@@ -547,7 +548,7 @@ fun DefaultPreviewProfile() {
                                 clientId = PREVIEW_USER_ID,
                                 currencyCode = PREVIEW_CURRENCY,
                                 type = com.d9tilov.android.core.model.TransactionType.EXPENSE,
-                                sum = java.math.BigDecimal("80.00"),
+                                sum = Decimal("80.00"),
                                 category =
                                     com.d9tilov.android.category.domain.entity.Category.EMPTY_EXPENSE.copy(
                                         id = 5L,
@@ -568,7 +569,7 @@ fun DefaultPreviewProfile() {
                                 clientId = PREVIEW_USER_ID,
                                 currencyCode = PREVIEW_CURRENCY,
                                 type = com.d9tilov.android.core.model.TransactionType.EXPENSE,
-                                sum = java.math.BigDecimal("120.00"),
+                                sum = Decimal("120.00"),
                                 category =
                                     com.d9tilov.android.category.domain.entity.Category.EMPTY_EXPENSE.copy(
                                         id = 6L,
@@ -589,7 +590,7 @@ fun DefaultPreviewProfile() {
                                 clientId = PREVIEW_USER_ID,
                                 currencyCode = PREVIEW_CURRENCY,
                                 type = com.d9tilov.android.core.model.TransactionType.EXPENSE,
-                                sum = java.math.BigDecimal("250.00"),
+                                sum = Decimal("250.00"),
                                 category =
                                     com.d9tilov.android.category.domain.entity.Category.EMPTY_EXPENSE.copy(
                                         id = 7L,

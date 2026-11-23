@@ -4,8 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.d9tilov.android.core.model.Decimal
 import kotlinx.datetime.LocalDateTime
-import java.math.BigDecimal
 
 @Entity(
     tableName = "transactions",
@@ -26,8 +26,8 @@ data class TransactionDbModel(
     @ColumnInfo(name = "type") val type: Int,
     @ColumnInfo(name = "categoryId") val categoryId: Long,
     @ColumnInfo(name = "currency") val currency: String,
-    @ColumnInfo(name = "sum") val sum: BigDecimal,
-    @ColumnInfo(name = "usd_sum") val usdSum: BigDecimal,
+    @ColumnInfo(name = "sum") val sum: Decimal,
+    @ColumnInfo(name = "usd_sum") val usdSum: Decimal,
     @ColumnInfo(name = "date") val date: LocalDateTime,
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "qrCode") val qrCode: String?,

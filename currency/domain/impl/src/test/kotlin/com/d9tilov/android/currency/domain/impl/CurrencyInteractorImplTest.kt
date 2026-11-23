@@ -1,5 +1,6 @@
 package com.d9tilov.android.currency.domain.impl
 
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.contract.CurrencyRepo
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
@@ -18,7 +19,6 @@ import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import java.math.BigDecimal
 
 class CurrencyInteractorImplTest {
     private val currencyRepo: CurrencyRepo = mockk(relaxed = true)
@@ -28,7 +28,7 @@ class CurrencyInteractorImplTest {
         CurrencyRate(
             code = "USD",
             symbol = "$",
-            value = BigDecimal.ONE,
+            value = Decimal.ONE,
             lastUpdateTime = 0L,
         )
 
@@ -36,7 +36,7 @@ class CurrencyInteractorImplTest {
         CurrencyRate(
             code = "EUR",
             symbol = "€",
-            value = BigDecimal("0.85"),
+            value = Decimal("0.85"),
             lastUpdateTime = 0L,
         )
 
@@ -101,7 +101,7 @@ class CurrencyInteractorImplTest {
             val result = interactor.getCurrencyByCode("EUR")
 
             assertEquals("EUR", result.code)
-            assertEquals(BigDecimal("0.85"), result.value)
+            assertEquals(Decimal("0.85"), result.value)
         }
 
     @Test
@@ -110,17 +110,27 @@ class CurrencyInteractorImplTest {
             coEvery { currencyRepo.getCurrencyByCode("USD") } returns usdCurrency
             coEvery { currencyRepo.getCurrencyByCode("EUR") } returns eurCurrency
 
-            val result = interactor.toTargetCurrency(BigDecimal(100), "USD", "EUR")
+            val result = interactor.toTargetCurrency(Decimal(100), "USD", "EUR")
 
-            assertEquals(0, result.compareTo(BigDecimal("85.00")))
+            assertEquals(0, result.compareTo(Decimal("85.00")))
+        }
+
+    @Test
+    fun `toTargetCurrency rounds the converted amount once at a half-cent tie`() =
+        runTest {
+            coEvery { currencyRepo.getCurrencyByCode("USD") } returns usdCurrency
+            coEvery { currencyRepo.getCurrencyByCode("EUR") } returns eurCurrency.copy(value = Decimal(14))
+
+            assertEquals(Decimal("0.01"), interactor.toTargetCurrency(Decimal("0.07"), "EUR", "USD"))
+            assertEquals(Decimal("-0.01"), interactor.toTargetCurrency(Decimal("-0.07"), "EUR", "USD"))
         }
 
     @Test
     fun `toTargetCurrency should return same amount for same currency`() =
         runTest {
-            val result = interactor.toTargetCurrency(BigDecimal(100), "USD", "USD")
+            val result = interactor.toTargetCurrency(Decimal(100), "USD", "USD")
 
-            assertEquals(BigDecimal(100), result)
+            assertEquals(Decimal(100), result)
             coVerify(exactly = 0) { currencyRepo.getCurrencyByCode(any()) }
         }
 
@@ -129,17 +139,17 @@ class CurrencyInteractorImplTest {
         runTest {
             coEvery { currencyRepo.getCurrencyByCode("EUR") } returns eurCurrency
 
-            val result = interactor.toUsd(BigDecimal(85), "EUR")
+            val result = interactor.toUsd(Decimal(85), "EUR")
 
-            assertEquals(0, result.compareTo(BigDecimal("100.00")))
+            assertEquals(0, result.compareTo(Decimal("100.00")))
         }
 
     @Test
     fun `toUsd should return same amount if currency is already USD`() =
         runTest {
-            val result = interactor.toUsd(BigDecimal(100), "USD")
+            val result = interactor.toUsd(Decimal(100), "USD")
 
-            assertEquals(BigDecimal(100), result)
+            assertEquals(Decimal(100), result)
             coVerify(exactly = 0) { currencyRepo.getCurrencyByCode(any()) }
         }
 

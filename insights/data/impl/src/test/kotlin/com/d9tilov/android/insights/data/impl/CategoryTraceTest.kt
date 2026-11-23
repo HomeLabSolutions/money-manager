@@ -1,12 +1,12 @@
 package com.d9tilov.android.insights.data.impl
 
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.insights.data.contract.model.DailyTotalDto
 import com.d9tilov.android.insights.domain.model.InsightTransaction
 import kotlinx.datetime.LocalDateTime
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.math.BigDecimal
 
 class CategoryTraceTest {
     @Test
@@ -16,7 +16,7 @@ class CategoryTraceTest {
                 row(27, "Cafe", "USD", "100"),
                 row(26, "Cafe", "USD", "200"),
                 row(27, "Cafe", "USD", "300"),
-                row(27, "Cafe", "EUR", "20"),
+                row(27, "Cafe", "EUR", "20.12300"),
                 row(27, "Food", "USD", "50"),
             )
 
@@ -26,7 +26,7 @@ class CategoryTraceTest {
         assertEquals(
             listOf(
                 DailyTotalDto("2026-09-26", "expense", "USD", "200"),
-                DailyTotalDto("2026-09-27", "expense", "EUR", "20"),
+                DailyTotalDto("2026-09-27", "expense", "EUR", "20.123"),
                 DailyTotalDto("2026-09-27", "expense", "USD", "400"),
             ),
             traces.getValue("Cafe"),
@@ -43,7 +43,7 @@ class CategoryTraceTest {
         type = TransactionType.EXPENSE,
         date = LocalDateTime(2026, 9, day, 12, 0),
         currency = currency,
-        amount = BigDecimal(amount),
+        amount = Decimal(amount),
         category = category,
     )
 }

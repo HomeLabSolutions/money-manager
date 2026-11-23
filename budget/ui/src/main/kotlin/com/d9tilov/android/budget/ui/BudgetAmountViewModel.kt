@@ -7,8 +7,10 @@ import com.d9tilov.android.analytics.model.AnalyticsEvent
 import com.d9tilov.android.analytics.model.AnalyticsParams
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.reduceScaleStr
+import com.d9tilov.android.core.utils.toDecimalOrNull
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
@@ -19,7 +21,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
 
 data class BudgetUiState(
     val budgetSum: String = "",
@@ -71,8 +72,8 @@ class BudgetAmountViewModel(
             budget?.let {
                 budgetInteractor.update(
                     budget.copy(
-                        sum = _uiState.value.budgetSum.toBigDecimalOrNull() ?: BigDecimal.ZERO,
-                        saveSum = _uiState.value.amountToSave.toBigDecimalOrNull() ?: BigDecimal.ZERO,
+                        sum = _uiState.value.budgetSum.toDecimalOrNull() ?: Decimal.ZERO,
+                        saveSum = _uiState.value.amountToSave.toDecimalOrNull() ?: Decimal.ZERO,
                     ),
                 )
             }

@@ -6,7 +6,9 @@ import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.exception.CategoryException
+import com.d9tilov.android.core.constants.CurrencyConstants.DECIMAL_LENGTH
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.model.isIncome
@@ -19,6 +21,8 @@ import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.getStartDateOfFiscalPeriod
 import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.core.utils.reduceScale
+import com.d9tilov.android.core.utils.sumOfDecimals
+import com.d9tilov.android.core.utils.toDecimal
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
 import com.d9tilov.android.transaction.domain.contract.TransactionRepo
@@ -50,7 +54,6 @@ import kotlinx.datetime.atTime
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
-import java.math.BigDecimal
 
 @Inject
 class TransactionInteractorImpl(
@@ -118,7 +121,7 @@ class TransactionInteractorImpl(
                             )
                         }
                     }.map { list ->
-                        val sum = list.sumOf { tr -> tr.sum }
+                        val sum = list.sumOfDecimals { tr -> tr.sum }
                         list
                             .groupBy { tr ->
                                 if (onlySubcategories) {
@@ -130,7 +133,7 @@ class TransactionInteractorImpl(
                                 val category = entry.key
                                 category.copy(children = parentChildrenMap[category] ?: emptyList())
                             }.map { entry: Map.Entry<Category, List<TransactionChartModel>> ->
-                                val currencySum: BigDecimal = entry.value.sumOf { item -> item.sum }
+                                val currencySum: Decimal = entry.value.sumOfDecimals { item -> item.sum }
                                 val transaction: TransactionChartModel =
                                     checkNotNull(entry.value.firstOrNull())
                                 val category = entry.key
@@ -142,7 +145,7 @@ class TransactionInteractorImpl(
                                     currencySum,
                                     currencySum
                                         .divideBy(sum)
-                                        .multiply(BigDecimal(PERCENT_FULL_COUNT)),
+                                        .times(Decimal(PERCENT_FULL_COUNT)),
                                 )
                             }
                     }
@@ -151,7 +154,7 @@ class TransactionInteractorImpl(
     private suspend fun getItemSumBaseOnCurrency(
         currencyCode: String,
         item: TransactionDataModel,
-    ): BigDecimal =
+    ): Decimal =
         if (currencyCode == DEFAULT_CURRENCY_CODE) {
             item.usdSum
         } else {
@@ -159,7 +162,7 @@ class TransactionInteractorImpl(
                 item.sum
             } else {
                 val trCurrency = currencyInteractor.getCurrencyByCode(currencyCode)
-                trCurrency.value.multiply(item.usdSum)
+                trCurrency.value.times(item.usdSum)
             }
         }
 
@@ -241,11 +244,11 @@ class TransactionInteractorImpl(
             }
 
     override fun ableToSpendToday(): Flow<TransactionSpendingTodayModel> {
-        val countDaysSinceFiscalDateFlow: Flow<BigDecimal> =
+        val countDaysSinceFiscalDateFlow: Flow<Decimal> =
             flow { emit(userInteractor.getFiscalDay()) }.map { fiscalDay ->
-                currentDateTime().countDaysRemainingNextFiscalDate(fiscalDay).toBigDecimal()
+                currentDateTime().countDaysRemainingNextFiscalDate(fiscalDay).toDecimal()
             }
-        val numeratorFlow: Flow<BigDecimal> = getNumerator()
+        val numeratorFlow: Flow<Decimal> = getNumerator()
         val expensesPerCurrentDayFlow = getExpensesPerCurrentDay()
 
         return combine(
@@ -266,7 +269,7 @@ class TransactionInteractorImpl(
         }
     }
 
-    private fun getExpensesPerCurrentDay(): Flow<BigDecimal> =
+    private fun getExpensesPerCurrentDay(): Flow<Decimal> =
         transactionRepo
             .getTransactionsByTypeInPeriod(
                 currentDateTime().getStartOfDay(),
@@ -283,7 +286,7 @@ class TransactionInteractorImpl(
                 )
             }
 
-    private fun getNumerator(): Flow<BigDecimal> {
+    private fun getNumerator(): Flow<Decimal> {
         val regularIncomeSumFlow =
             flow { emit(userInteractor.getFiscalDay()) }
                 .flatMapMerge { fiscalDay ->
@@ -366,7 +369,7 @@ class TransactionInteractorImpl(
     private suspend fun getSumOfRegularTransactions(
         fiscalDay: Int,
         transactions: List<RegularTransaction>,
-    ): BigDecimal =
+    ): Decimal =
         sumAtCurrentRates(
             items = transactions,
             targetCurrencyCode = currencyInteractor.getMainCurrency().code,
@@ -376,7 +379,7 @@ class TransactionInteractorImpl(
             currencyCode = RegularTransaction::currencyCode,
         )
 
-    private fun RegularTransaction.amountInPeriod(fiscalDay: Int): BigDecimal {
+    private fun RegularTransaction.amountInPeriod(fiscalDay: Int): Decimal {
         val curDate = currentDateTime().getEndOfDay()
         val startDate = getStartDateOfFiscalPeriod(fiscalDay).date
         val endDate = curDate.getEndDateOfFiscalPeriod(fiscalDay).date
@@ -384,24 +387,24 @@ class TransactionInteractorImpl(
             annualAmountInPeriod(maxOf(createdDate.date, startDate, curDate.date), endDate)
         } else {
             val occurrenceCount = occurrencesBetween(executionPeriod, createdDate.date, startDate, endDate).size
-            sum.multiply(BigDecimal(occurrenceCount))
+            sum.times(Decimal(occurrenceCount))
         }
     }
 
     private fun RegularTransaction.annualAmountInPeriod(
         from: LocalDate,
         to: LocalDate,
-    ): BigDecimal {
-        if (from > to) return BigDecimal.ZERO
+    ): Decimal {
+        if (from > to) return Decimal.ZERO
 
-        return (from.year..to.year).sumOf { year ->
+        return (from.year..to.year).sumOfDecimals { year ->
             val yearStart = LocalDate(year, 1, 1)
             val nextYearStart = LocalDate(year + 1, 1, 1)
             val periodStart = maxOf(from, yearStart)
             val periodEnd = minOf(to.plus(1, DateTimeUnit.DAY), nextYearStart)
             sum
-                .multiply(periodStart.daysUntil(periodEnd).toBigDecimal())
-                .divideBy(yearStart.daysUntil(nextYearStart).toBigDecimal())
+                .times(periodStart.daysUntil(periodEnd).toDecimal())
+                .divideBy(yearStart.daysUntil(nextYearStart).toDecimal())
         }
     }
 
@@ -411,7 +414,7 @@ class TransactionInteractorImpl(
         transactionType: TransactionType,
         currencyCode: String,
         inStatistics: Boolean,
-    ): Flow<BigDecimal> =
+    ): Flow<Decimal> =
         transactionRepo
             .getTransactionsByTypeInPeriod(
                 from,
@@ -421,7 +424,7 @@ class TransactionInteractorImpl(
                 withRegular = true,
             ).map { list -> list.sumStoredValuesInCurrency(currencyCode) }
 
-    override fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<BigDecimal> =
+    override fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<Decimal> =
         currencyInteractor
             .getMainCurrencyFlow()
             .flatMapMerge { currency ->
@@ -436,7 +439,7 @@ class TransactionInteractorImpl(
                     ).map { list -> list.sumStoredValuesInCurrency(currency.code).reduceScale() }
             }
 
-    override fun getApproxSumTodayCurrentCurrency(type: TransactionType): Flow<BigDecimal> =
+    override fun getApproxSumTodayCurrentCurrency(type: TransactionType): Flow<Decimal> =
         combine(
             transactionRepo.getTransactionsByTypeInPeriod(
                 currentDateTime().getStartOfDay(),
@@ -448,18 +451,18 @@ class TransactionInteractorImpl(
             list.sumStoredValuesInCurrency(currency.code).reduceScale()
         }
 
-    private suspend fun List<TransactionDataModel>.sumStoredValuesInCurrency(targetCurrencyCode: String): BigDecimal {
+    private suspend fun List<TransactionDataModel>.sumStoredValuesInCurrency(targetCurrencyCode: String): Decimal {
         val targetCurrencyRate =
             if (any { transaction -> transaction.currencyCode != targetCurrencyCode }) {
                 currencyInteractor.getCurrencyByCode(targetCurrencyCode).value
             } else {
                 null
             }
-        return sumOf { transaction ->
+        return sumOfDecimals { transaction ->
             if (transaction.currencyCode == targetCurrencyCode) {
                 transaction.sum
             } else {
-                checkNotNull(targetCurrencyRate).multiply(transaction.usdSum)
+                checkNotNull(targetCurrencyRate).times(transaction.usdSum)
             }
         }
     }
@@ -467,27 +470,24 @@ class TransactionInteractorImpl(
     private suspend fun <T> sumAtCurrentRates(
         items: List<T>,
         targetCurrencyCode: String,
-        amount: (T) -> BigDecimal,
+        amount: (T) -> Decimal,
         currencyCode: (T) -> String,
-    ): BigDecimal {
-        val sourceCurrencyCodes = items.map(currencyCode).filterNot { code -> code == targetCurrencyCode }.toSet()
-        if (sourceCurrencyCodes.isEmpty()) return items.sumOf(amount)
+    ): Decimal {
+        val totalsByCurrency = items.groupingBy(currencyCode).fold(Decimal.ZERO) { total, item -> total + amount(item) }
+        val targetAmount = totalsByCurrency[targetCurrencyCode] ?: Decimal.ZERO
+        val sourceTotals = totalsByCurrency.filterKeys { it != targetCurrencyCode }
+        if (sourceTotals.isEmpty()) return targetAmount
 
-        val ratesByCode =
-            (sourceCurrencyCodes + targetCurrencyCode).associateWith { code ->
-                currencyInteractor.getCurrencyByCode(code).value
-            }
-        val targetCurrencyRate = checkNotNull(ratesByCode[targetCurrencyCode])
-        return items.sumOf { item ->
-            val sourceCurrencyCode = currencyCode(item)
-            if (sourceCurrencyCode == targetCurrencyCode) {
-                amount(item)
-            } else {
-                amount(item)
-                    .multiply(targetCurrencyRate.divideBy(checkNotNull(ratesByCode[sourceCurrencyCode])))
-                    .reduceScale()
-            }
+        val targetRate = currencyInteractor.getCurrencyByCode(targetCurrencyCode).value
+        var numerator = Decimal.ZERO
+        var denominator = Decimal.ONE
+        // Add each source total / rate exactly so the combined amount can be rounded once.
+        for ((code, subtotal) in sourceTotals) {
+            val sourceRate = currencyInteractor.getCurrencyByCode(code).value
+            numerator = numerator * sourceRate + subtotal * denominator
+            denominator *= sourceRate
         }
+        return (targetAmount * denominator + numerator * targetRate).divide(denominator, DECIMAL_LENGTH)
     }
 
     override suspend fun getTransactionMinMaxDate(): TransactionMinMaxDateModel =

@@ -3,6 +3,7 @@ package com.d9tilov.android.budget.domain.impl
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.budget.domain.contract.BudgetRepo
 import com.d9tilov.android.budget.domain.model.BudgetData
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import io.mockk.coEvery
@@ -16,7 +17,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
-import java.math.BigDecimal
 
 class BudgetInteractorImplTest {
     private val budgetRepo: BudgetRepo = mockk(relaxed = true)
@@ -36,8 +36,8 @@ class BudgetInteractorImplTest {
         BudgetData(
             id = 1L,
             clientId = "test-client-id",
-            sum = BigDecimal(1000),
-            saveSum = BigDecimal(100),
+            sum = Decimal(1000),
+            saveSum = Decimal(100),
             currencyCode = "USD",
             createdDate = LocalDateTime(2024, 1, 1, 0, 0),
         )
@@ -66,8 +66,8 @@ class BudgetInteractorImplTest {
                 BudgetData(
                     id = 1L,
                     clientId = "new-client-id",
-                    sum = BigDecimal.ZERO,
-                    saveSum = BigDecimal.ZERO,
+                    sum = Decimal.ZERO,
+                    saveSum = Decimal.ZERO,
                     currencyCode = "USD",
                     createdDate = LocalDateTime(2024, 1, 1, 0, 0),
                 )
@@ -89,8 +89,8 @@ class BudgetInteractorImplTest {
                 BudgetData(
                     id = 1L,
                     clientId = "new-client-id",
-                    sum = BigDecimal.ZERO,
-                    saveSum = BigDecimal.ZERO,
+                    sum = Decimal.ZERO,
+                    saveSum = Decimal.ZERO,
                     currencyCode = "USD",
                     createdDate = LocalDateTime(2024, 1, 1, 0, 0),
                 )
@@ -117,8 +117,8 @@ class BudgetInteractorImplTest {
     fun `updateBudgetWithCurrency should convert currency and update budget`() =
         runTest {
             coEvery { budgetRepo.get() } returns flowOf(testBudget)
-            coEvery { currencyInteractor.toTargetCurrency(BigDecimal(1000), "USD", "EUR") } returns BigDecimal(850)
-            coEvery { currencyInteractor.toTargetCurrency(BigDecimal(100), "USD", "EUR") } returns BigDecimal(85)
+            coEvery { currencyInteractor.toTargetCurrency(Decimal(1000), "USD", "EUR") } returns Decimal(850)
+            coEvery { currencyInteractor.toTargetCurrency(Decimal(100), "USD", "EUR") } returns Decimal(85)
             coEvery { budgetRepo.update(any()) } returns Unit
 
             interactor.updateBudgetWithCurrency("EUR")
@@ -127,8 +127,8 @@ class BudgetInteractorImplTest {
                 budgetRepo.update(
                     match {
                         it.currencyCode == "EUR" &&
-                            it.sum == BigDecimal(850) &&
-                            it.saveSum == BigDecimal(85)
+                            it.sum == Decimal(850) &&
+                            it.saveSum == Decimal(85)
                     },
                 )
             }
