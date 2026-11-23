@@ -2,6 +2,7 @@ package com.d9tilov.android.transaction.domain.impl
 
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.CurrencyRate
@@ -20,7 +21,6 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.LocalDateTime
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.math.BigDecimal
 
 class TransactionInteractorCurrencyLookupTest {
     private val transactionRepo: TransactionRepo = mockk(relaxed = true)
@@ -46,7 +46,7 @@ class TransactionInteractorCurrencyLookupTest {
                 CurrencyRate(
                     code = "EUR",
                     symbol = "€",
-                    value = BigDecimal("0.5"),
+                    value = Decimal("0.5"),
                     lastUpdateTime = 0L,
                 )
 
@@ -71,7 +71,7 @@ class TransactionInteractorCurrencyLookupTest {
                         inStatistics = true,
                     ).first()
 
-            assertEquals(0, result.compareTo(BigDecimal("15")))
+            assertEquals(0, result.compareTo(Decimal("15")))
             coVerify(exactly = 1) { currencyInteractor.getCurrencyByCode("EUR") }
         }
 
@@ -81,7 +81,7 @@ class TransactionInteractorCurrencyLookupTest {
     ) = CurrencyRate(
         code = code,
         symbol = code,
-        value = BigDecimal(rate),
+        value = Decimal(rate),
         lastUpdateTime = 0L,
     )
 
@@ -92,8 +92,8 @@ class TransactionInteractorCurrencyLookupTest {
             type = TransactionType.EXPENSE,
             categoryId = 1L,
             currencyCode = "GBP",
-            sum = BigDecimal.TEN,
-            usdSum = BigDecimal.TEN,
+            sum = Decimal.TEN,
+            usdSum = Decimal.TEN,
             date = LocalDateTime(2024, 1, 1, 0, 0),
             description = "Test",
             qrCode = "",

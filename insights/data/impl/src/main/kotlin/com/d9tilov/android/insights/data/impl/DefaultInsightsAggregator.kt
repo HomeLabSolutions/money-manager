@@ -1,5 +1,6 @@
 package com.d9tilov.android.insights.data.impl
 
+import com.d9tilov.android.core.utils.sumOfDecimals
 import com.d9tilov.android.insights.data.contract.InsightsAggregator
 import com.d9tilov.android.insights.data.contract.model.DailyTotalDto
 import com.d9tilov.android.insights.domain.model.CategoryName
@@ -22,7 +23,7 @@ class DefaultInsightsAggregator : InsightsAggregator {
                                 date = key.first,
                                 type = key.second,
                                 currency = key.third,
-                                amount = dayTransactions.sumOf(InsightTransaction::amount),
+                                amount = dayTransactions.sumOfDecimals(InsightTransaction::amount),
                             )
                         }.sortedWith(compareBy(DailyTotal::date, { it.type.value }, DailyTotal::currency))
                 CategoryTrace(dailyTotals)
@@ -35,7 +36,7 @@ class DefaultInsightsAggregator : InsightsAggregator {
                     date = day.date.toString(),
                     type = day.type.name,
                     currency = day.currency,
-                    amount = day.amount.stripTrailingZeros().toPlainString(),
+                    amount = day.amount.withoutTrailingFractionZeros().toPlainString(),
                 )
             }
         }

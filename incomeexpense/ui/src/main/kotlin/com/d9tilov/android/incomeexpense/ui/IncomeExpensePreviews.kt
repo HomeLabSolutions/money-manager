@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
 import com.d9tilov.android.incomeexpense.ui.vm.ExpenseInfo
 import com.d9tilov.android.incomeexpense.ui.vm.ExpenseUiState
@@ -13,7 +14,6 @@ import com.d9tilov.android.incomeexpense.ui.vm.IncomeUiState
 import com.d9tilov.android.incomeexpense.ui.vm.Price
 import com.d9tilov.android.transaction.ui.TransactionItem
 import com.d9tilov.android.transaction.ui.model.TransactionUiModel
-import java.math.BigDecimal
 
 private const val PREVIEW_USD_AMOUNT = 5
 private const val PREVIEW_CATEGORY_COUNT = 15
@@ -26,8 +26,8 @@ fun TransactionListItemPreview() {
             modifier = Modifier.fillMaxWidth(),
             transaction =
                 TransactionUiModel.EMPTY.copy(
-                    sum = BigDecimal.TEN,
-                    usdSum = BigDecimal(PREVIEW_USD_AMOUNT),
+                    sum = Decimal.TEN,
+                    usdSum = Decimal(PREVIEW_USD_AMOUNT),
                     currencyCode = "RUB",
                     isRegular = true,
                     inStatistics = true,

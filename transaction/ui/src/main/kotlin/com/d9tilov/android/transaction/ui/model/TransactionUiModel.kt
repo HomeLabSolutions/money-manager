@@ -4,12 +4,12 @@ import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.ui.model.BaseTransaction.Companion.ITEM
 import kotlinx.datetime.LocalDateTime
-import java.math.BigDecimal
 
 data class TransactionUiModel(
     val id: Long,
@@ -17,8 +17,8 @@ data class TransactionUiModel(
     val type: TransactionType,
     val category: Category,
     val currencyCode: String,
-    val sum: BigDecimal,
-    val usdSum: BigDecimal?,
+    val sum: Decimal,
+    val usdSum: Decimal?,
     override val date: LocalDateTime,
     val description: String,
     val showTime: Boolean,
@@ -41,8 +41,8 @@ data class TransactionUiModel(
                         icon = com.d9tilov.android.common.android.R.drawable.ic_category_cafe,
                     ),
                 currencyCode = DEFAULT_CURRENCY_CODE,
-                sum = BigDecimal.ZERO,
-                usdSum = BigDecimal.ZERO,
+                sum = Decimal.ZERO,
+                usdSum = Decimal.ZERO,
                 date = currentDateTime(),
                 description = "",
                 showTime = true,

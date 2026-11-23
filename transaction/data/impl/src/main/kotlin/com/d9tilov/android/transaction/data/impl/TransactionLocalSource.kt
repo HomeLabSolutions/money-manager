@@ -8,10 +8,12 @@ import androidx.paging.map
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.core.exceptions.WrongUidException
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.getStartOfDay
+import com.d9tilov.android.core.utils.toDecimalOrNull
 import com.d9tilov.android.core.utils.toLocal
 import com.d9tilov.android.database.dao.TransactionDao
 import com.d9tilov.android.database.dao.TransactionSearchQuery
@@ -32,7 +34,6 @@ import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDateTime
-import java.math.BigDecimal
 import kotlin.time.Instant
 
 @Inject
@@ -85,11 +86,11 @@ class TransactionLocalSource(
         )
     }
 
-    private fun toAmountSearchQuery(query: String): BigDecimal? =
+    private fun toAmountSearchQuery(query: String): Decimal? =
         query
             .replace(',', '.')
             .filterNot { it.isWhitespace() }
-            .toBigDecimalOrNull()
+            .toDecimalOrNull()
 
     // SQLite LIKE only ignores ASCII case. Character classes also match Cyrillic letters.
     private fun toTextSearchPattern(query: String): String =

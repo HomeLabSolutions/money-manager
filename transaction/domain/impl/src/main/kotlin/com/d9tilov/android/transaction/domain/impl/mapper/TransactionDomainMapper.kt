@@ -1,11 +1,11 @@
 package com.d9tilov.android.transaction.domain.impl.mapper
 
 import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.utils.reduceScale
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
 import com.d9tilov.android.transaction.domain.model.TransactionDataModel
-import java.math.BigDecimal
 
 fun Transaction.toDataModel(): TransactionDataModel =
     TransactionDataModel(
@@ -46,7 +46,7 @@ fun TransactionDataModel.toDomainModel(category: Category): Transaction =
 fun TransactionDataModel.toChartModel(
     category: Category,
     currencyCode: String,
-    sum: BigDecimal,
+    sum: Decimal,
 ): TransactionChartModel =
     TransactionChartModel(
         clientId,
@@ -54,5 +54,5 @@ fun TransactionDataModel.toChartModel(
         category,
         currencyCode,
         sum,
-        BigDecimal.ZERO,
+        Decimal.ZERO,
     )

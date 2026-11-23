@@ -1,6 +1,7 @@
 package com.d9tilov.android.insights.data.impl
 
 import com.d9tilov.android.category.data.contract.CategorySource
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getStartOfDay
@@ -27,7 +28,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import java.math.BigDecimal
 
 class InsightTransactionCountTest {
     private val local = mockk<InsightSource>()
@@ -44,7 +44,7 @@ class InsightTransactionCountTest {
             every { type } returns TransactionType.EXPENSE
             every { categoryId } returns 1L
             every { currencyCode } returns "USD"
-            every { sum } returns BigDecimal.ONE
+            every { sum } returns Decimal.ONE
         }
 
     @Before

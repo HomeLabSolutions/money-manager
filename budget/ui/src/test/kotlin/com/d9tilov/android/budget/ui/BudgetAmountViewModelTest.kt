@@ -3,6 +3,7 @@ package com.d9tilov.android.budget.ui
 import com.d9tilov.android.analytics.domain.AnalyticsSender
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.budget.domain.model.BudgetData
+import com.d9tilov.android.core.model.Decimal
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -20,7 +21,6 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import java.math.BigDecimal
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class BudgetAmountViewModelTest {
@@ -33,8 +33,8 @@ class BudgetAmountViewModelTest {
             id = 1L,
             clientId = "test-budget-id",
             currencyCode = "USD",
-            sum = BigDecimal("1000.00"),
-            saveSum = BigDecimal("200.00"),
+            sum = Decimal("1000.00"),
+            saveSum = Decimal("200.00"),
             createdDate = LocalDateTime(2024, 1, 1, 0, 0),
         )
 
@@ -102,8 +102,8 @@ class BudgetAmountViewModelTest {
             coVerify {
                 budgetInteractor.update(
                     match { budget ->
-                        budget.sum.compareTo(BigDecimal("1500")) == 0 &&
-                            budget.saveSum.compareTo(BigDecimal("300")) == 0
+                        budget.sum.compareTo(Decimal("1500")) == 0 &&
+                            budget.saveSum.compareTo(Decimal("300")) == 0
                     },
                 )
             }
@@ -126,8 +126,8 @@ class BudgetAmountViewModelTest {
             coVerify {
                 budgetInteractor.update(
                     match { budget ->
-                        budget.sum.compareTo(BigDecimal.ZERO) == 0 &&
-                            budget.saveSum.compareTo(BigDecimal.ZERO) == 0
+                        budget.sum.compareTo(Decimal.ZERO) == 0 &&
+                            budget.saveSum.compareTo(Decimal.ZERO) == 0
                     },
                 )
             }

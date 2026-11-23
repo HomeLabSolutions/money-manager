@@ -2,6 +2,7 @@ package com.d9tilov.android.currency.ui
 
 import androidx.lifecycle.SavedStateHandle
 import com.d9tilov.android.analytics.domain.AnalyticsSender
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.model.DomainCurrency
 import com.d9tilov.android.currency.observer.contract.CurrencyUpdateObserver
@@ -21,7 +22,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import java.math.BigDecimal
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class CurrencyViewModelTest {
@@ -36,21 +36,21 @@ class CurrencyViewModelTest {
                 code = "USD",
                 symbol = "$",
                 isBase = false,
-                value = BigDecimal.ONE,
+                value = Decimal.ONE,
                 lastUpdateTime = 0L,
             ),
             DomainCurrency(
                 code = "EUR",
                 symbol = "€",
                 isBase = false,
-                value = BigDecimal("0.85"),
+                value = Decimal("0.85"),
                 lastUpdateTime = 0L,
             ),
             DomainCurrency(
                 code = "GBP",
                 symbol = "£",
                 isBase = false,
-                value = BigDecimal("0.73"),
+                value = Decimal("0.73"),
                 lastUpdateTime = 0L,
             ),
         )

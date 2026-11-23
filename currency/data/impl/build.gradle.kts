@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.androidx.work.runtime)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.http)
     implementation(libs.startup)
@@ -57,6 +58,5 @@ dependencies {
     testImplementation(project(":core:network"))
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.kotlinx.serialization.json)
     testImplementation(libs.ktor.client.mock)
 }

@@ -4,8 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.d9tilov.android.core.model.Decimal
 import kotlinx.datetime.LocalDateTime
-import java.math.BigDecimal
 
 @Entity(
     tableName = "budget",
@@ -24,7 +24,7 @@ data class BudgetDbModel(
     val id: Long,
     @ColumnInfo(name = "clientId", index = true) val clientId: String,
     @ColumnInfo(name = "currency") val currency: String,
-    @ColumnInfo(name = "sum") val sum: BigDecimal,
-    @ColumnInfo(name = "saveSum") val saveSum: BigDecimal,
+    @ColumnInfo(name = "sum") val sum: Decimal,
+    @ColumnInfo(name = "saveSum") val saveSum: Decimal,
     @ColumnInfo(name = "createdDate") val createdDate: LocalDateTime,
 )

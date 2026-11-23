@@ -1,5 +1,6 @@
 package com.d9tilov.android.transaction.data.impl
 
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.places.domain.model.LocationData
 import com.d9tilov.android.places.domain.model.Place
@@ -8,7 +9,6 @@ import com.d9tilov.android.transaction.data.impl.mapper.toDbModel
 import com.d9tilov.android.transaction.domain.model.TransactionDataModel
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.math.BigDecimal
 
 class TransactionPlaceDataMapperTest {
     @Test
@@ -18,8 +18,8 @@ class TransactionPlaceDataMapperTest {
                 type = TransactionType.EXPENSE,
                 categoryId = 1,
                 currencyCode = "USD",
-                sum = BigDecimal.ONE,
-                usdSum = BigDecimal.ONE,
+                sum = Decimal.ONE,
+                usdSum = Decimal.ONE,
                 isRegular = false,
                 inStatistics = true,
                 place = Place(location = LocationData(51.5, -0.1)),

@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.constants.NavigationConstants
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDate
@@ -32,7 +33,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Test
-import java.math.BigDecimal
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class RegularTransactionCreationViewModelTest {
@@ -223,7 +223,7 @@ class RegularTransactionCreationViewModelTest {
             clientId = "client-id",
             currencyCode = "GBP",
             type = TransactionType.EXPENSE,
-            sum = BigDecimal("25.50"),
+            sum = Decimal("25.50"),
             category = Category.EMPTY_EXPENSE,
             createdDate = LocalDateTime(2026, 1, 1, 0, 0),
             executionPeriod = executionPeriod,

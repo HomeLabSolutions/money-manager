@@ -61,10 +61,12 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.constants.CurrencyConstants
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.CurrencyUtils
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.reduceScaleStr
+import com.d9tilov.android.core.utils.toFloat
 import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.core.utils.toStandardStringDate
 import com.d9tilov.android.designsystem.ButtonSelector
@@ -91,7 +93,6 @@ import com.d9tilov.android.statistics.ui.vm.StatisticsViewModel
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.datetime.LocalDateTime
-import java.math.BigDecimal
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -672,8 +673,8 @@ fun DefaultCategoryIconGridPreview() {
                                             color = android.R.color.holo_red_dark,
                                         ),
                                     currencyCode = CurrencyConstants.DEFAULT_CURRENCY_CODE,
-                                    sum = BigDecimal.TEN,
-                                    percent = BigDecimal(0.4),
+                                    sum = Decimal.TEN,
+                                    percent = Decimal("0.4"),
                                 ),
                                 TransactionChartModel(
                                     type = TransactionType.EXPENSE,
@@ -685,8 +686,8 @@ fun DefaultCategoryIconGridPreview() {
                                             color = android.R.color.holo_blue_dark,
                                         ),
                                     currencyCode = CurrencyConstants.DEFAULT_CURRENCY_CODE,
-                                    sum = BigDecimal.TEN,
-                                    percent = BigDecimal(0.2),
+                                    sum = Decimal.TEN,
+                                    percent = Decimal("0.2"),
                                 ),
                                 TransactionChartModel(
                                     type = TransactionType.EXPENSE,
@@ -698,8 +699,8 @@ fun DefaultCategoryIconGridPreview() {
                                             color = android.R.color.holo_orange_dark,
                                         ),
                                     currencyCode = CurrencyConstants.DEFAULT_CURRENCY_CODE,
-                                    sum = BigDecimal.TEN,
-                                    percent = BigDecimal(0.2),
+                                    sum = Decimal.TEN,
+                                    percent = Decimal("0.2"),
                                 ),
                                 TransactionChartModel(
                                     type = TransactionType.EXPENSE,
@@ -711,8 +712,8 @@ fun DefaultCategoryIconGridPreview() {
                                             color = android.R.color.holo_orange_dark,
                                         ),
                                     currencyCode = CurrencyConstants.DEFAULT_CURRENCY_CODE,
-                                    sum = BigDecimal.TEN,
-                                    percent = BigDecimal(1.0),
+                                    sum = Decimal.TEN,
+                                    percent = Decimal("1.0"),
                                 ),
                                 TransactionChartModel(
                                     type = TransactionType.EXPENSE,
@@ -724,8 +725,8 @@ fun DefaultCategoryIconGridPreview() {
                                             color = android.R.color.holo_orange_dark,
                                         ),
                                     currencyCode = CurrencyConstants.DEFAULT_CURRENCY_CODE,
-                                    sum = BigDecimal.TEN,
-                                    percent = BigDecimal(0.8),
+                                    sum = Decimal.TEN,
+                                    percent = Decimal("0.8"),
                                 ),
                                 TransactionChartModel(
                                     type = TransactionType.EXPENSE,
@@ -737,8 +738,8 @@ fun DefaultCategoryIconGridPreview() {
                                             color = android.R.color.holo_orange_dark,
                                         ),
                                     currencyCode = CurrencyConstants.DEFAULT_CURRENCY_CODE,
-                                    sum = BigDecimal.TEN,
-                                    percent = BigDecimal(0.7),
+                                    sum = Decimal.TEN,
+                                    percent = Decimal("0.7"),
                                 ),
                             ),
                     ),
@@ -771,8 +772,8 @@ fun TransactionItemPreview() {
                         color = android.R.color.black,
                     ),
                 currencyCode = CurrencyConstants.DEFAULT_CURRENCY_CODE,
-                sum = BigDecimal.TEN,
-                percent = BigDecimal(0.2),
+                sum = Decimal.TEN,
+                percent = Decimal("0.2"),
             ),
         )
     }

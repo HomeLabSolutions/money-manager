@@ -1,5 +1,7 @@
 package com.d9tilov.android.database.dao
 
+import com.d9tilov.android.core.model.Decimal
+import com.d9tilov.android.core.utils.toDecimalOrNull
 import com.d9tilov.android.database.converters.CurrencyConverter
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -7,7 +9,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.sqlite.SQLiteDataSource
-import java.math.BigDecimal
 
 class TransactionSearchQueryTest {
     private val database = SQLiteDataSource().apply { url = "jdbc:sqlite::memory:" }.connection
@@ -32,7 +33,7 @@ class TransactionSearchQueryTest {
                 statement.setInt(1, id)
                 statement.setInt(2, 100 - id)
                 statement.setString(3, "Запись $id")
-                statement.setString(4, CurrencyConverter.fromBigDecimalToString(BigDecimal("10.00")))
+                statement.setString(4, CurrencyConverter.fromDecimalToString(Decimal("10.00")))
                 statement.addBatch()
             }
             statement.executeBatch()
@@ -198,7 +199,7 @@ class TransactionSearchQueryTest {
             query
                 .replace(',', '.')
                 .filterNot { it.isWhitespace() }
-                .toBigDecimalOrNull()
+                .toDecimalOrNull()
         return TransactionSearchQuery(
             amountQuery = amountQuery,
             textPattern = query.trim().map(::globCharacter).joinToString(separator = "", prefix = "*", postfix = "*"),
@@ -237,7 +238,7 @@ class TransactionSearchQueryTest {
 
     private fun updateAmount(amount: String) {
         database.prepareStatement("UPDATE transactions SET sum = ? WHERE id = 50").use { statement ->
-            statement.setString(1, CurrencyConverter.fromBigDecimalToString(BigDecimal(amount)))
+            statement.setString(1, CurrencyConverter.fromDecimalToString(Decimal(amount)))
             statement.executeUpdate()
         }
     }

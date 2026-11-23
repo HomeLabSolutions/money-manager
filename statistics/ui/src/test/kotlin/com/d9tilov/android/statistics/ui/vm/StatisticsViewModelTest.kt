@@ -2,6 +2,7 @@ package com.d9tilov.android.statistics.ui.vm
 
 import com.d9tilov.android.analytics.domain.AnalyticsSender
 import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
@@ -31,7 +32,6 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import java.math.BigDecimal
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class StatisticsViewModelTest {
@@ -67,8 +67,8 @@ class StatisticsViewModelTest {
                 type = TransactionType.EXPENSE,
                 category = testCategory,
                 currencyCode = "USD",
-                sum = BigDecimal("100.00"),
-                percent = BigDecimal.ZERO,
+                sum = Decimal("100.00"),
+                percent = Decimal.ZERO,
             ),
         )
 
@@ -88,7 +88,7 @@ class StatisticsViewModelTest {
         } returns flowOf(testTransactions)
         coEvery {
             transactionInteractor.getSumInPeriod(any(), any(), any(), any(), any())
-        } returns flowOf(BigDecimal("100.00"))
+        } returns flowOf(Decimal("100.00"))
     }
 
     @After
@@ -400,7 +400,7 @@ class StatisticsViewModelTest {
             coEvery { currencyInteractor.getMainCurrency() } returns eurCurrency
             coEvery {
                 transactionInteractor.getSumInPeriod(any(), any(), any(), any(), any())
-            } returns flowOf(BigDecimal("250.50"))
+            } returns flowOf(Decimal("250.50"))
 
             val viewModel =
                 StatisticsViewModel(

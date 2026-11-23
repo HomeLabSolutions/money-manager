@@ -25,6 +25,7 @@ import androidx.core.view.children
 import androidx.glance.appwidget.compose
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
 import com.d9tilov.android.transaction.domain.model.SpendingSummary
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
@@ -38,7 +39,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
-import java.math.BigDecimal
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicReference
 
@@ -49,9 +49,9 @@ class SpendingWidgetViewsTest {
     private val ready =
         SpendingWidgetState.Ready(
             SpendingSummary(
-                TransactionSpendingTodayModel.NORMAL(BigDecimal("125.50")),
-                BigDecimal("24.75"),
-                BigDecimal("975.25"),
+                TransactionSpendingTodayModel.NORMAL(Decimal("125.50")),
+                Decimal("24.75"),
+                Decimal("975.25"),
                 CurrencyMetaData.EMPTY.copy(code = "RUB"),
             ),
         )
@@ -82,7 +82,7 @@ class SpendingWidgetViewsTest {
                 ready.copy(
                     spendingSummary =
                         ready.spendingSummary.copy(
-                            availableToday = TransactionSpendingTodayModel.OVERSPENDING(BigDecimal("-12.25")),
+                            availableToday = TransactionSpendingTodayModel.OVERSPENDING(Decimal("-12.25")),
                         ),
                 ),
             ) { view ->

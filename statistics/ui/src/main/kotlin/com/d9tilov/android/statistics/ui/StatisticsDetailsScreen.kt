@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.designsystem.MmTopAppBar
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
@@ -21,7 +22,6 @@ import com.d9tilov.android.statistics.ui.vm.StatisticsDetailsViewModel
 import com.d9tilov.android.transaction.ui.TransactionItem
 import com.d9tilov.android.transaction.ui.model.TransactionUiModel
 import dev.zacsweers.metrox.viewmodel.metroViewModel
-import java.math.BigDecimal
 import com.d9tilov.android.common.android.R as CommonAndroidR
 
 @Composable
@@ -84,7 +84,7 @@ fun StatisticsDetailsScreenPreview() {
                                         icon = CommonAndroidR.drawable.ic_category_cafe,
                                         color = android.R.color.black,
                                     ),
-                                sum = BigDecimal.valueOf((index + 1).toLong()),
+                                sum = Decimal((index + 1).toLong()),
                                 type = TransactionType.EXPENSE,
                             )
                         },

@@ -18,7 +18,7 @@ object MainPriceFieldParser {
         }
 
     fun isInputValid(str: String): Boolean =
-        str.length in 1..MAX_PRICE_LENGTH && hasValidPrefix(str) && str.toBigDecimalOrNull() != null
+        str.length in 1..MAX_PRICE_LENGTH && hasValidPrefix(str) && str.toDecimalOrNull() != null
 
     private fun hasMaxFractionDigits(str: String): Boolean =
         str.contains(KeyPress.Dot.value) && str.substringAfterLast(KeyPress.Dot.value).length >= MAX_FRACTION_DIGITS

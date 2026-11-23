@@ -1,8 +1,9 @@
 package com.d9tilov.android.currency.domain.impl
 
+import com.d9tilov.android.core.constants.CurrencyConstants.DECIMAL_LENGTH
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.utils.divideBy
-import com.d9tilov.android.core.utils.reduceScale
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.contract.CurrencyRepo
 import com.d9tilov.android.currency.domain.contract.mapper.toDomain
@@ -15,7 +16,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
-import java.math.BigDecimal
 
 @Inject
 class CurrencyInteractorImpl(
@@ -38,22 +38,20 @@ class CurrencyInteractorImpl(
     override suspend fun getCurrencyByCode(code: String): CurrencyRate = currencyRepo.getCurrencyByCode(code)
 
     override suspend fun toTargetCurrency(
-        amount: BigDecimal,
+        amount: Decimal,
         sourceCurrencyCode: String,
         targetCurrencyCode: String,
-    ): BigDecimal {
+    ): Decimal {
         if (sourceCurrencyCode == targetCurrencyCode) return amount
         val targetCurrency = getCurrencyByCode(targetCurrencyCode)
         val sourceCurrency = getCurrencyByCode(sourceCurrencyCode)
-        val mainAbsoluteAmount = targetCurrency.value
-        val currentAbsoluteAmount = sourceCurrency.value
-        return amount.multiply(mainAbsoluteAmount.divideBy(currentAbsoluteAmount)).reduceScale()
+        return (amount * targetCurrency.value).divide(sourceCurrency.value, DECIMAL_LENGTH)
     }
 
     override suspend fun toUsd(
-        amount: BigDecimal,
+        amount: Decimal,
         currencyCode: String,
-    ): BigDecimal {
+    ): Decimal {
         val mainCurrencyCode = DEFAULT_CURRENCY_CODE
         if (currencyCode == mainCurrencyCode) return amount
         val currentCurrency = getCurrencyByCode(currencyCode)

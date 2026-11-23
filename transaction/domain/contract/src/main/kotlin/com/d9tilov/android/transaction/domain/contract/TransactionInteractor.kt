@@ -2,6 +2,7 @@ package com.d9tilov.android.transaction.domain.contract
 
 import androidx.paging.PagingData
 import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.transaction.domain.model.Transaction
 import com.d9tilov.android.transaction.domain.model.TransactionChartModel
@@ -10,7 +11,6 @@ import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayMode
 import com.d9tilov.android.transaction.regular.domain.model.RegularTransaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
-import java.math.BigDecimal
 
 interface TransactionInteractor {
     fun getTransactionsGroupedByCategory(
@@ -46,11 +46,11 @@ interface TransactionInteractor {
         transactionType: TransactionType,
         currencyCode: String,
         inStatistics: Boolean,
-    ): Flow<BigDecimal>
+    ): Flow<Decimal>
 
-    fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<BigDecimal>
+    fun getApproxSumInFiscalPeriodCurrentCurrency(type: TransactionType): Flow<Decimal>
 
-    fun getApproxSumTodayCurrentCurrency(type: TransactionType): Flow<BigDecimal>
+    fun getApproxSumTodayCurrentCurrency(type: TransactionType): Flow<Decimal>
 
     suspend fun getTransactionMinMaxDate(): TransactionMinMaxDateModel
 

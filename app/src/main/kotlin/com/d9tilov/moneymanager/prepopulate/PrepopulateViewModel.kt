@@ -5,8 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.budget.ui.BudgetUiState
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.reduceScaleStr
+import com.d9tilov.android.core.utils.toDecimalOrNull
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.observer.contract.CurrencyUpdateObserver
 import com.d9tilov.android.currency.ui.CurrencyUiState
@@ -25,7 +27,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
 
 data class PrepopulateUiState(
     val currencyUiState: CurrencyUiState = CurrencyUiState.NoCurrencies(),
@@ -86,8 +87,8 @@ class PrepopulateViewModel(
                         budget.copy(
                             sum =
                                 _uiState.value.budgetUiState.budgetSum
-                                    .toBigDecimalOrNull()
-                                    ?: BigDecimal.ZERO,
+                                    .toDecimalOrNull()
+                                    ?: Decimal.ZERO,
                         ),
                     )
                 }

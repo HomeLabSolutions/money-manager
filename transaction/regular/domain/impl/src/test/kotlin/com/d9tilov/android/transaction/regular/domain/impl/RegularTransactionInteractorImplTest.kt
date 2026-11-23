@@ -2,6 +2,7 @@ package com.d9tilov.android.transaction.regular.domain.impl
 
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
@@ -22,7 +23,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
-import java.math.BigDecimal
 
 class RegularTransactionInteractorImplTest {
     private val currencyInteractor: CurrencyInteractor = mockk(relaxed = true)
@@ -62,7 +62,7 @@ class RegularTransactionInteractorImplTest {
             clientId = "test-regular-transaction-client-id",
             currencyCode = "USD",
             type = TransactionType.EXPENSE,
-            sum = BigDecimal(100),
+            sum = Decimal(100),
             category = testCategory,
             createdDate = LocalDateTime(2024, 1, 1, 0, 0),
             executionPeriod = ExecutionPeriod.EveryMonth(1, LocalDateTime(2024, 1, 1, 0, 0)),
@@ -77,7 +77,7 @@ class RegularTransactionInteractorImplTest {
             type = TransactionType.EXPENSE,
             categoryId = 1L,
             currencyCode = "USD",
-            sum = BigDecimal(100),
+            sum = Decimal(100),
             description = "Test regular transaction",
             executionPeriod = ExecutionPeriod.EveryMonth(1, LocalDateTime(2024, 1, 1, 0, 0)),
         )
@@ -95,7 +95,7 @@ class RegularTransactionInteractorImplTest {
             val result = interactor.createDefault().first()
 
             assertEquals("USD", result.currencyCode)
-            assertEquals(BigDecimal.ZERO, result.sum)
+            assertEquals(Decimal.ZERO, result.sum)
         }
 
     @Test
@@ -119,7 +119,7 @@ class RegularTransactionInteractorImplTest {
 
             assertEquals(1, result.size)
             assertEquals(testCategory.id, result.first().category.id)
-            assertEquals(BigDecimal(100), result.first().sum)
+            assertEquals(Decimal(100), result.first().sum)
         }
 
     @Test
@@ -142,7 +142,7 @@ class RegularTransactionInteractorImplTest {
             assertNotNull(result)
             assertEquals(1L, result.id)
             assertEquals(testCategory.id, result.category.id)
-            assertEquals(BigDecimal(100), result.sum)
+            assertEquals(Decimal(100), result.sum)
         }
 
     @Test

@@ -4,11 +4,11 @@ import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
 import com.d9tilov.android.core.constants.DataConstants
 import com.d9tilov.android.core.constants.DataConstants.NO_ID
+import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.places.domain.model.Place
 import kotlinx.datetime.LocalDateTime
-import java.math.BigDecimal
 
 data class Transaction(
     val id: Long,
@@ -16,8 +16,8 @@ data class Transaction(
     val type: TransactionType,
     val category: Category,
     val currencyCode: String,
-    val sum: BigDecimal,
-    val usdSum: BigDecimal,
+    val sum: Decimal,
+    val usdSum: Decimal,
     val date: LocalDateTime,
     val description: String,
     val qrCode: String?,
@@ -34,8 +34,8 @@ data class Transaction(
                 type = TransactionType.EXPENSE,
                 category = Category.EMPTY_EXPENSE,
                 currencyCode = DEFAULT_CURRENCY_CODE,
-                sum = BigDecimal.ZERO,
-                usdSum = BigDecimal.ZERO,
+                sum = Decimal.ZERO,
+                usdSum = Decimal.ZERO,
                 date = currentDateTime(),
                 description = "",
                 qrCode = null,
