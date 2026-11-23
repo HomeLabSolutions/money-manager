@@ -4,7 +4,7 @@ import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
-import com.d9tilov.android.currency.domain.model.Currency
+import com.d9tilov.android.currency.domain.model.CurrencyRate
 import com.d9tilov.android.places.domain.model.LocationData
 import com.d9tilov.android.places.domain.model.Place
 import com.d9tilov.android.transaction.domain.contract.TransactionRepo
@@ -43,7 +43,7 @@ class TransactionInteractorCurrencyLookupTest {
             val to = LocalDateTime(2024, 1, 31, 23, 59)
             val transactions = (1L..3L).map(::transaction)
             val euro =
-                Currency(
+                CurrencyRate(
                     code = "EUR",
                     symbol = "€",
                     value = BigDecimal("0.5"),
@@ -78,7 +78,7 @@ class TransactionInteractorCurrencyLookupTest {
     private fun currency(
         code: String,
         rate: String,
-    ) = Currency(
+    ) = CurrencyRate(
         code = code,
         symbol = code,
         value = BigDecimal(rate),

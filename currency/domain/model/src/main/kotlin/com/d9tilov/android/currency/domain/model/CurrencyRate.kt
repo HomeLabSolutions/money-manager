@@ -4,7 +4,7 @@ import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_COD
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_SYMBOL
 import java.math.BigDecimal
 
-data class Currency(
+data class CurrencyRate(
     val code: String = DEFAULT_CURRENCY_CODE,
     val symbol: String,
     val value: BigDecimal,
@@ -12,7 +12,7 @@ data class Currency(
 ) {
     companion object {
         val EMPTY =
-            Currency(
+            CurrencyRate(
                 code = DEFAULT_CURRENCY_CODE,
                 symbol = DEFAULT_CURRENCY_SYMBOL,
                 value = BigDecimal.ZERO,

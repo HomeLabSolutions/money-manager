@@ -2,8 +2,8 @@ package com.d9tilov.android.currency.domain.impl
 
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.contract.CurrencyRepo
-import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
+import com.d9tilov.android.currency.domain.model.CurrencyRate
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -25,7 +25,7 @@ class CurrencyInteractorImplTest {
     private val interactor: CurrencyInteractor by lazy { CurrencyInteractorImpl(currencyRepo) }
 
     private val usdCurrency =
-        Currency(
+        CurrencyRate(
             code = "USD",
             symbol = "$",
             value = BigDecimal.ONE,
@@ -33,7 +33,7 @@ class CurrencyInteractorImplTest {
         )
 
     private val eurCurrency =
-        Currency(
+        CurrencyRate(
             code = "EUR",
             symbol = "€",
             value = BigDecimal("0.85"),
