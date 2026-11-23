@@ -11,8 +11,8 @@ import com.d9tilov.android.core.utils.currentDateTime
 import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.getStartOfDay
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
-import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
+import com.d9tilov.android.currency.domain.model.CurrencyRate
 import com.d9tilov.android.places.domain.model.LocationData
 import com.d9tilov.android.places.domain.model.Place
 import com.d9tilov.android.transaction.domain.contract.TransactionInteractor
@@ -72,7 +72,7 @@ class TransactionInteractorImplTest {
         )
 
     private val testCurrency =
-        Currency(
+        CurrencyRate(
             code = "USD",
             symbol = "$",
             value = BigDecimal.ONE,

@@ -6,8 +6,8 @@ import com.d9tilov.android.core.utils.reduceScale
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.domain.contract.CurrencyRepo
 import com.d9tilov.android.currency.domain.contract.mapper.toDomain
-import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
+import com.d9tilov.android.currency.domain.model.CurrencyRate
 import com.d9tilov.android.currency.domain.model.DomainCurrency
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CancellationException
@@ -35,7 +35,7 @@ class CurrencyInteractorImpl(
     override suspend fun getMainCurrency(): CurrencyMetaData =
         currencyRepo.getMainCurrency().firstOrNull() ?: CurrencyMetaData.EMPTY
 
-    override suspend fun getCurrencyByCode(code: String): Currency = currencyRepo.getCurrencyByCode(code)
+    override suspend fun getCurrencyByCode(code: String): CurrencyRate = currencyRepo.getCurrencyByCode(code)
 
     override suspend fun toTargetCurrency(
         amount: BigDecimal,

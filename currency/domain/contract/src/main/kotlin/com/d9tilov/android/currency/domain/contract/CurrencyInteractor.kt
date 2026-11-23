@@ -1,7 +1,7 @@
 package com.d9tilov.android.currency.domain.contract
 
-import com.d9tilov.android.currency.domain.model.Currency
 import com.d9tilov.android.currency.domain.model.CurrencyMetaData
+import com.d9tilov.android.currency.domain.model.CurrencyRate
 import com.d9tilov.android.currency.domain.model.DomainCurrency
 import kotlinx.coroutines.flow.Flow
 import java.math.BigDecimal
@@ -13,7 +13,7 @@ interface CurrencyInteractor {
 
     suspend fun getMainCurrency(): CurrencyMetaData
 
-    suspend fun getCurrencyByCode(code: String): Currency
+    suspend fun getCurrencyByCode(code: String): CurrencyRate
 
     suspend fun toTargetCurrency(
         amount: BigDecimal,
