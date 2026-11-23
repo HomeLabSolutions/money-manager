@@ -1,9 +1,9 @@
 {
   "schemaVersion": 2,
-  "sourceSha": "53476c3e3c7dec4a28300f6f7879d6f7644d2afd",
+  "sourceSha": "a1daa736649f57d0c972d5e0a5ecd3430be99068",
   "packageName": "com.d9tilov.moneymanager.benchmark",
   "metric": "timeToInitialDisplayMs",
-  "medianMs": 2874.80531,
+  "medianMs": 2727.98009,
   "environment": {
     "fingerprint": "google/sdk_gphone_x86_64/generic_x86_64:10/QSR1.211112.011/13135432:userdebug/dev-keys",
     "api": "29",
@@ -20,10 +20,10 @@
   },
   "baselineProfile": {
     "schemaVersion": 1,
-    "sourceSha": "53476c3e3c7dec4a28300f6f7879d6f7644d2afd",
+    "sourceSha": "a1daa736649f57d0c972d5e0a5ecd3430be99068",
     "files": {
-      "baseline-prof.txt": "fccc5c438c09fbaf808d21fd02ec102eb40fd04874b3ab91756e1a9500ae848b",
-      "startup-prof.txt": "fccc5c438c09fbaf808d21fd02ec102eb40fd04874b3ab91756e1a9500ae848b"
+      "baseline-prof.txt": "681f26b385311aaeec83baba7a2381baf49c458f0da490b6e9ec8755f2061f7c",
+      "startup-prof.txt": "681f26b385311aaeec83baba7a2381baf49c458f0da490b6e9ec8755f2061f7c"
     }
   }
 }
