@@ -60,7 +60,22 @@ class BudgetAmountViewModelTest {
             val state = viewModel.uiState.value
             assertEquals("1000", state.budgetSum)
             assertEquals("200", state.amountToSave)
-            assertEquals("$", state.currencySymbol)
+            assertEquals("USD", state.currencyCode)
+        }
+
+    @Test
+    fun `budget state preserves three fractional digits for KWD`() =
+        runTest {
+            val budget = testBudget.copy(currencyCode = "KWD", sum = Decimal("12.345"), saveSum = Decimal("1.230"))
+            every { budgetInteractor.get() } returns flowOf(budget)
+
+            val viewModel = BudgetAmountViewModel(analyticsSender, budgetInteractor)
+            advanceUntilIdle()
+
+            val state = viewModel.uiState.value
+            assertEquals("12.345", state.budgetSum)
+            assertEquals("1.23", state.amountToSave)
+            assertEquals("KWD", state.currencyCode)
         }
 
     @Test

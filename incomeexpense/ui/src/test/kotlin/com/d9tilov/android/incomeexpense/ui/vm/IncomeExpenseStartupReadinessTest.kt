@@ -77,7 +77,7 @@ class IncomeExpenseStartupReadinessTest {
         }
 
     @Test
-    fun `ready content preserves edits when categories and currency change`() =
+    fun `ready content preserves edits on category updates and resets the amount when currency changes`() =
         runTest(dispatcher) {
             val viewModel = createViewModel()
             currencyUpdates.emit(CurrencyMetaData.EMPTY)
@@ -87,18 +87,21 @@ class IncomeExpenseStartupReadinessTest {
 
             viewModel.addNumber(KeyPress.One)
             viewModel.updateCurrencyCode("EUR")
-            readyStates.first { it.uiState.price.currencyCode == "EUR" }
+            val selectedCurrency = readyStates.first { it.uiState.price.currencyCode == "EUR" }.uiState
+            assertEquals("0", selectedCurrency.price.value)
+            viewModel.addNumber(KeyPress.Two)
+            viewModel.updateCurrencyCode("EUR")
 
             val updatedCategories = listOf(Category.EMPTY_EXPENSE.copy(name = "Updated"))
             categoryUpdates.emit(updatedCategories)
             val categoryUpdate =
                 readyStates.first { it.uiState.expenseUiState.expenseCategoryList == updatedCategories }.uiState
-            assertEquals("1", categoryUpdate.price.value)
+            assertEquals("2", categoryUpdate.price.value)
             assertEquals("EUR", categoryUpdate.price.currencyCode)
 
             currencyUpdates.emit(CurrencyMetaData.EMPTY.copy(code = "GBP"))
             val currencyUpdate = readyStates.first { it.uiState.price.currencyCode == "GBP" }.uiState
-            assertEquals("1", currencyUpdate.price.value)
+            assertEquals("0", currencyUpdate.price.value)
             assertEquals(updatedCategories, currencyUpdate.expenseUiState.expenseCategoryList)
         }
 

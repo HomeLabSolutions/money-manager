@@ -28,7 +28,7 @@ import androidx.core.content.ContextCompat
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
-import com.d9tilov.android.core.utils.reduceScaleStr
+import com.d9tilov.android.core.utils.toAmountString
 import com.d9tilov.android.designsystem.ComposeCurrencyView
 import com.d9tilov.android.designsystem.MoneyManagerIcons
 import com.d9tilov.android.designsystem.theme.MoneyManagerTheme
@@ -160,7 +160,7 @@ fun RegularTransactionItem(
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
                     },
-                value = transaction.sum.reduceScaleStr(),
+                value = transaction.sum.toAmountString(transaction.currencyCode),
                 valueStyle = MaterialTheme.typography.headlineSmall,
                 symbol = transaction.currencyCode.getSymbolByCode(),
                 symbolStyle = MaterialTheme.typography.labelLarge,

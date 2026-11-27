@@ -1,7 +1,10 @@
 package com.d9tilov.android.database
 
+import android.content.Context
 import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
+import com.d9tilov.android.core.di.ApplicationContext
+import com.d9tilov.android.database.di.buildAppDatabase
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -11,13 +14,42 @@ import java.io.File
 @Inject
 class DatabaseBackupStore(
     private val database: AppDatabase,
+    @ApplicationContext private val context: Context,
 ) {
     fun restore(
         file: File,
         uid: String,
     ) {
+        val version =
+            SQLiteDatabase.openDatabase(file.absolutePath, null, SQLiteDatabase.OPEN_READONLY).use { source ->
+                validateBackup(source, uid)
+                source.version
+            }
+        if (version == LEGACY_BACKUP_VERSION) {
+            restoreLegacyBackup(file)
+        } else {
+            restoreCurrentBackup(file)
+        }
+    }
+
+    private fun restoreLegacyBackup(file: File) {
+        val copy = File.createTempFile("money-manager-restore-", ".db", context.cacheDir)
+        try {
+            file.copyTo(copy, overwrite = true)
+            val backup = buildAppDatabase(context, copy.absolutePath)
+            try {
+                backup.openHelper.writableDatabase
+            } finally {
+                backup.close()
+            }
+            restoreCurrentBackup(copy)
+        } finally {
+            SQLiteDatabase.deleteDatabase(copy)
+        }
+    }
+
+    private fun restoreCurrentBackup(file: File) {
         SQLiteDatabase.openDatabase(file.absolutePath, null, SQLiteDatabase.OPEN_READONLY).use { source ->
-            validateBackup(source, uid)
             database.runInTransaction {
                 val destination = database.openHelper.writableDatabase
                 val tables = backupTables()
@@ -55,7 +87,9 @@ class DatabaseBackupStore(
         backup: SQLiteDatabase,
         uid: String,
     ) {
-        check(backup.version == AppDatabase.VERSION_NUMBER) { "Backup database version is not supported" }
+        check(backup.version == LEGACY_BACKUP_VERSION || backup.version == AppDatabase.VERSION_NUMBER) {
+            "Backup database version is not supported"
+        }
         check(backup.isDatabaseIntegrityOk) { "Backup database is corrupted" }
         backup.rawQuery("PRAGMA foreign_key_check", null).use { cursor ->
             check(!cursor.moveToFirst()) { "Backup database contains broken references" }
@@ -81,3 +115,5 @@ class DatabaseBackupStore(
                 }
             }
 }
+
+private const val LEGACY_BACKUP_VERSION = 3

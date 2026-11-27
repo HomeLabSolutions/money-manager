@@ -42,8 +42,7 @@ import coil3.compose.AsyncImage
 import com.d9tilov.android.common.android.utils.getAppVersion
 import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.utils.CurrencyUtils
-import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
-import com.d9tilov.android.core.utils.reduceScaleStr
+import com.d9tilov.android.core.utils.toAmountString
 import com.d9tilov.android.core.utils.toStandardStringDate
 import com.d9tilov.android.designsystem.CurrencyTextFieldExtraSmall
 import com.d9tilov.android.designsystem.SimpleDialog
@@ -325,8 +324,8 @@ fun ProfileSection(
 
             is ProfileUiItem.BudgetUiItem -> {
                 CurrencyTextFieldExtraSmall(
-                    amount = profileUiItem.budgetData.sum.reduceScaleStr(),
-                    currencyCode = profileUiItem.budgetData.currencyCode.getSymbolByCode(),
+                    amount = profileUiItem.budgetData.sum.toAmountString(profileUiItem.budgetData.currencyCode),
+                    currencyCode = profileUiItem.budgetData.currencyCode,
                     modifier =
                         Modifier
                             .padding(

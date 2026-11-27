@@ -6,12 +6,13 @@ import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
 import com.d9tilov.android.category.domain.entity.exception.CategoryException
-import com.d9tilov.android.core.constants.CurrencyConstants.DECIMAL_LENGTH
 import com.d9tilov.android.core.constants.CurrencyConstants.DEFAULT_CURRENCY_CODE
+import com.d9tilov.android.core.model.Currency
 import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.model.ExecutionPeriod
 import com.d9tilov.android.core.model.TransactionType
 import com.d9tilov.android.core.model.isIncome
+import com.d9tilov.android.core.model.negate
 import com.d9tilov.android.core.utils.countDaysRemainingNextFiscalDate
 import com.d9tilov.android.core.utils.currentDate
 import com.d9tilov.android.core.utils.currentDateTime
@@ -20,7 +21,7 @@ import com.d9tilov.android.core.utils.getEndDateOfFiscalPeriod
 import com.d9tilov.android.core.utils.getEndOfDay
 import com.d9tilov.android.core.utils.getStartDateOfFiscalPeriod
 import com.d9tilov.android.core.utils.getStartOfDay
-import com.d9tilov.android.core.utils.reduceScale
+import com.d9tilov.android.core.utils.roundToCurrency
 import com.d9tilov.android.core.utils.sumOfDecimals
 import com.d9tilov.android.core.utils.toDecimal
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
@@ -65,10 +66,11 @@ class TransactionInteractorImpl(
     private val budgetInteractor: BudgetInteractor,
 ) : TransactionInteractor {
     override suspend fun addTransaction(transaction: Transaction) {
-        val currencyCode = transaction.currencyCode
-        val usdSumValue = currencyInteractor.toUsd(transaction.sum, currencyCode)
+        val currencyCode = transaction.sum.currency.name
+        val amount = transaction.sum.toDecimal()
+        val usdSumValue = currencyInteractor.toUsd(amount, currencyCode)
         val newTransaction =
-            transaction.copy(currencyCode = currencyCode, usdSum = usdSumValue).toDataModel()
+            transaction.copy(usdSum = usdSumValue).toDataModel()
         coroutineScope {
             launch { transactionRepo.addTransaction(newTransaction) }
             launch {
@@ -81,7 +83,7 @@ class TransactionInteractorImpl(
                 var budgetSum = budget.sum
                 budgetSum +=
                     currencyInteractor.toTargetCurrency(
-                        if (transaction.type.isIncome()) transaction.sum else transaction.sum.negate(),
+                        if (transaction.type.isIncome()) amount else amount.negate(),
                         currencyCode,
                         currencyInteractor.getMainCurrency().code,
                     )
@@ -195,22 +197,7 @@ class TransactionInteractorImpl(
             .getTransactionById(id)
             .map { transactionDataModel ->
                 val category = categoryInteractor.getCategoryById(transactionDataModel.categoryId)
-                Transaction.EMPTY.copy(
-                    id = transactionDataModel.id,
-                    clientId = transactionDataModel.clientId,
-                    type = transactionDataModel.type,
-                    category = category,
-                    currencyCode = transactionDataModel.currencyCode,
-                    sum = transactionDataModel.sum,
-                    usdSum = transactionDataModel.usdSum,
-                    date = transactionDataModel.date,
-                    description = transactionDataModel.description,
-                    qrCode = transactionDataModel.qrCode,
-                    inStatistics = transactionDataModel.inStatistics,
-                    isRegular = transactionDataModel.isRegular,
-                    place = transactionDataModel.place,
-                    photoUri = transactionDataModel.photoUri,
-                )
+                transactionDataModel.toDomainModel(category, roundUsd = false)
             }
 
     override fun getTransactionsByType(type: TransactionType): Flow<PagingData<Transaction>> =
@@ -260,8 +247,8 @@ class TransactionInteractorImpl(
                 numerator
                     .divideBy(countDaysSinceFiscalDate)
                     .minus(expensesPerCurrentDay)
-                    .reduceScale()
-            if (dailyAvailable.signum() < 0) {
+                    .roundToCurrency(currencyInteractor.getMainCurrency().code)
+            if (dailyAvailable.isNegative) {
                 TransactionSpendingTodayModel.OVERSPENDING(dailyAvailable)
             } else {
                 TransactionSpendingTodayModel.NORMAL(dailyAvailable)
@@ -436,7 +423,7 @@ class TransactionInteractorImpl(
                         startDate,
                         endDate,
                         type,
-                    ).map { list -> list.sumStoredValuesInCurrency(currency.code).reduceScale() }
+                    ).map { list -> list.sumStoredValuesInCurrency(currency.code).roundToCurrency(currency.code) }
             }
 
     override fun getApproxSumTodayCurrentCurrency(type: TransactionType): Flow<Decimal> =
@@ -448,7 +435,7 @@ class TransactionInteractorImpl(
             ),
             currencyInteractor.getMainCurrencyFlow(),
         ) { list, currency ->
-            list.sumStoredValuesInCurrency(currency.code).reduceScale()
+            list.sumStoredValuesInCurrency(currency.code).roundToCurrency(currency.code)
         }
 
     private suspend fun List<TransactionDataModel>.sumStoredValuesInCurrency(targetCurrencyCode: String): Decimal {
@@ -487,7 +474,8 @@ class TransactionInteractorImpl(
             numerator = numerator * sourceRate + subtotal * denominator
             denominator *= sourceRate
         }
-        return (targetAmount * denominator + numerator * targetRate).divide(denominator, DECIMAL_LENGTH)
+        val precision = Currency.valueOf(targetCurrencyCode).precision
+        return (targetAmount * denominator + numerator * targetRate).divide(denominator, precision)
     }
 
     override suspend fun getTransactionMinMaxDate(): TransactionMinMaxDateModel =
@@ -499,6 +487,7 @@ class TransactionInteractorImpl(
             .getAll(type)
             .map { transactions ->
                 for (tr in transactions) {
+                    val amount = Currency.fromCode(tr.currencyCode)?.let(tr.sum::toMoney) ?: continue
                     val curDay = currentDate()
                     val skippedDates =
                         occurrencesBetween(
@@ -515,9 +504,8 @@ class TransactionInteractorImpl(
                         addTransaction(
                             Transaction.EMPTY.copy(
                                 type = tr.type,
-                                sum = tr.sum,
+                                sum = amount,
                                 category = tr.category,
-                                currencyCode = tr.currencyCode,
                                 date = day.getStartOfDay(),
                                 description = tr.description,
                                 isRegular = true,
@@ -550,7 +538,8 @@ class TransactionInteractorImpl(
     override suspend fun update(transaction: Transaction) {
         val oldTransaction =
             checkNotNull(transactionRepo.getTransactionById(transaction.id).firstOrNull())
-        val usdSumValue = currencyInteractor.toUsd(transaction.sum, transaction.currencyCode)
+        val amount = transaction.sum.toDecimal()
+        val usdSumValue = currencyInteractor.toUsd(amount, transaction.sum.currency.name)
         val budget = checkNotNull(budgetInteractor.get().firstOrNull())
         val mainCurrencyCode = currencyInteractor.getMainCurrency().code
         var budgetSum = budget.sum
@@ -562,8 +551,8 @@ class TransactionInteractorImpl(
             )
         budgetSum +=
             currencyInteractor.toTargetCurrency(
-                if (transaction.type.isIncome()) transaction.sum else transaction.sum.negate(),
-                transaction.currencyCode,
+                if (transaction.type.isIncome()) amount else amount.negate(),
+                transaction.sum.currency.name,
                 mainCurrencyCode,
             )
 
@@ -572,6 +561,7 @@ class TransactionInteractorImpl(
     }
 
     override suspend fun removeTransaction(transaction: Transaction) {
+        val amount = transaction.sum.toDecimal()
         coroutineScope {
             launch { transactionRepo.removeTransaction(transaction.toDataModel()) }
             launch {
@@ -579,8 +569,8 @@ class TransactionInteractorImpl(
                 var budgetSum = budget.sum
                 budgetSum +=
                     currencyInteractor.toTargetCurrency(
-                        if (transaction.type.isIncome()) transaction.sum.negate() else transaction.sum,
-                        transaction.currencyCode,
+                        if (transaction.type.isIncome()) amount.negate() else amount,
+                        transaction.sum.currency.name,
                         currencyInteractor.getMainCurrency().code,
                     )
                 budgetInteractor.update(budget.copy(sum = budgetSum))

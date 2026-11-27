@@ -3,8 +3,14 @@ package com.d9tilov.android.database.dao
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
+import androidx.room.RawQuery
 import androidx.room.Update
 import androidx.room.Upsert
+import androidx.sqlite.db.SimpleSQLiteQuery
+import androidx.sqlite.db.SupportSQLiteQuery
+import com.d9tilov.android.core.model.Currency
+import com.d9tilov.android.database.converters.DateConverter
+import com.d9tilov.android.database.entity.CategoryDbModel
 import com.d9tilov.android.database.entity.TransactionDbModel
 import com.d9tilov.android.database.entity.TransactionMinMaxDateDbModel
 import kotlinx.coroutines.flow.Flow
@@ -20,7 +26,6 @@ interface TransactionDao {
         type: Int,
     ): PagingSource<Int, TransactionDbModel>
 
-    @Query(TRANSACTION_SEARCH_QUERY)
     fun searchByTypeQuery(
         clientId: String,
         from: LocalDateTime,
@@ -28,7 +33,23 @@ interface TransactionDao {
         type: Int,
         textPattern: String,
         amountQuery: String?,
-    ): PagingSource<Int, TransactionDbModel>
+    ): PagingSource<Int, TransactionDbModel> =
+        searchTransactions(
+            SimpleSQLiteQuery(
+                TRANSACTION_SEARCH_QUERY,
+                arrayOf<Any?>(
+                    clientId,
+                    type,
+                    DateConverter.fromOffsetDateTime(from),
+                    DateConverter.fromOffsetDateTime(to),
+                    textPattern,
+                    amountQuery,
+                ),
+            ),
+        )
+
+    @RawQuery(observedEntities = [TransactionDbModel::class, CategoryDbModel::class])
+    fun searchTransactions(query: SupportSQLiteQuery): PagingSource<Int, TransactionDbModel>
 
     @Query(
         """
@@ -54,7 +75,7 @@ interface TransactionDao {
     fun getById(
         uid: String,
         id: Long,
-    ): Flow<TransactionDbModel>
+    ): Flow<TransactionDbModel?>
 
     @Query("SELECT * FROM transactions WHERE clientId =:uid AND categoryId =:categoryId")
     suspend fun getByCategoryId(
@@ -83,7 +104,12 @@ interface TransactionDao {
     @Upsert
     suspend fun insert(transaction: TransactionDbModel)
 
-    @Query("SELECT count(*) FROM transactions WHERE clientId=:uid AND type=:type AND date >= :from AND date <= :to")
+    @Query(
+        """
+        SELECT count(*) FROM transactions
+        WHERE clientId=:uid AND type=:type AND date >= :from AND date <= :to
+        """,
+    )
     suspend fun getItemsCountInDay(
         uid: String,
         type: Int,
@@ -97,7 +123,12 @@ interface TransactionDao {
         code: String,
     ): Int
 
-    @Query("SELECT MIN(date) as minDate, MAX(date) as maxDate FROM transactions WHERE clientId=:uid")
+    @Query(
+        """
+        SELECT MIN(date) as minDate, MAX(date) as maxDate FROM transactions
+        WHERE clientId=:uid
+        """,
+    )
     suspend fun getMinMaxDate(uid: String): TransactionMinMaxDateDbModel
 
     @Update
@@ -128,7 +159,28 @@ internal const val TRANSACTION_LIST_QUERY = """
     ORDER BY date DESC, id DESC
 """
 
-internal const val TRANSACTION_SEARCH_QUERY = """
+private val transactionAmountText =
+    Currency.entries
+        .groupBy(Currency::precision)
+        .entries
+        .joinToString(separator = " ", prefix = "CASE ", postfix = " END") { (precision, currencies) ->
+            val codes = currencies.joinToString { "'${it.name}'" }
+            val factor = "1" + "0".repeat(precision)
+            val amount =
+                if (precision == 0) {
+                    "CAST(t.sum AS TEXT)"
+                } else {
+                    """
+                    (CASE WHEN t.sum < 0 THEN '-' ELSE '' END) ||
+                    ltrim(CAST(t.sum / $factor AS TEXT), '-') || '.' ||
+                    printf('%0*d', $precision, abs(t.sum % $factor))
+                    """.trimIndent()
+                }
+            "WHEN t.currency IN ($codes) THEN ($amount)"
+        }
+
+internal val TRANSACTION_SEARCH_QUERY =
+    """
     SELECT t.* FROM transactions AS t
     WHERE t.clientId = :clientId AND t.type = :type AND t.date >= :from AND t.date <= :to
         AND (
@@ -139,7 +191,7 @@ internal const val TRANSACTION_SEARCH_QUERY = """
                 SELECT 1 FROM categories AS c
                 WHERE c.id = t.categoryId AND c.clientId = t.clientId AND c.name GLOB :textPattern
             )
-            OR (:amountQuery IS NOT NULL AND instr(printf('%.2f', CAST(t.sum AS REAL) / 100.0), :amountQuery) > 0)
+            OR (:amountQuery IS NOT NULL AND instr(($transactionAmountText), :amountQuery) > 0)
         )
     ORDER BY t.date DESC, t.id DESC
-"""
+    """.trimIndent()

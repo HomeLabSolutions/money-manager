@@ -41,7 +41,7 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
-import com.d9tilov.android.core.utils.reduceScaleStr
+import com.d9tilov.android.core.utils.toAmountString
 import com.d9tilov.android.designsystem.theme.MoneyManagerColorScheme
 import com.d9tilov.android.transaction.domain.model.TransactionSpendingTodayModel
 import com.d9tilov.android.widget.domain.model.SpendingWidgetState
@@ -121,7 +121,7 @@ private fun SpendingAmounts(state: SpendingWidgetState.Ready) {
             is TransactionSpendingTodayModel.NORMAL -> amount.trSum
             is TransactionSpendingTodayModel.OVERSPENDING -> amount.trSum
         }
-    val overspending = availableToday.signum() < 0
+    val overspending = availableToday.isNegative
     val context = LocalContext.current
     val availableLabel = if (overspending) R.string.widget_overspending else R.string.widget_available_today
     Column(GlanceModifier.fillMaxSize()) {
@@ -151,7 +151,7 @@ private fun ColumnScope.SpendingRow(
     currencyCode: String,
     color: ColorProvider = GlanceTheme.colors.onSurface,
 ) {
-    val value = "${currencyCode.getSymbolByCode()}${amount.reduceScaleStr()}"
+    val value = "${currencyCode.getSymbolByCode()}${amount.toAmountString(currencyCode)}"
     val context = LocalContext.current
     // Reserve a pixel-rounding margin when Glance measures the styled amount independently.
     val valueWidth = textWidth(context, value, AMOUNT_TEXT_SIZE.toFloat(), bold = true) + 1.dp

@@ -10,10 +10,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -26,15 +22,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.createFontFamilyResolver
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
-import com.d9tilov.android.core.model.Decimal
-import com.d9tilov.android.core.utils.reduceScaleStr
-import com.d9tilov.android.core.utils.toDecimalOrNull
+import com.d9tilov.android.core.model.Currency
+import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
+import com.d9tilov.android.core.utils.MainPriceFieldParser
 
 private const val TEXT_SCALE_REDUCTION_INTERVAL = 0.9f
-private const val DECIMAL_SIZE = 2
-private const val DELIMITER = "."
-
-private const val PREVIEW_AMOUNT = 123
 
 @Composable
 fun CurrencyTextFieldExtraSmall(
@@ -156,12 +148,14 @@ private fun CurrencyTextField(
     style: TextStyle,
     inputValueChanged: (String) -> Unit,
 ) {
-    if (isEditable) {
+    val symbol = currencyCode.getSymbolByCode()
+    val currency = Currency.fromCode(currencyCode)
+    if (isEditable && currency != null) {
         BoxWithConstraints(modifier = modifier.fillMaxWidth().clipToBounds()) {
             var shrunkFontSize = style.fontSize
             val calculateIntrinsics = @Composable {
                 ParagraphIntrinsics(
-                    text = currencyCode + amount,
+                    text = symbol + amount,
                     style =
                         TextStyle(
                             fontSize = shrunkFontSize,
@@ -189,7 +183,7 @@ private fun CurrencyTextField(
             }
             Row(modifier = Modifier.align(Alignment.Center)) {
                 Text(
-                    text = currencyCode,
+                    text = symbol,
                     fontSize = shrunkFontSize * 0.6,
                     style = style,
                     modifier =
@@ -199,7 +193,6 @@ private fun CurrencyTextField(
                                 x = dimensionResource(R.dimen.currency_symbol_offset),
                             ),
                 )
-                var text by remember { mutableStateOf(amount) }
                 TextField(
                     modifier =
                         Modifier
@@ -207,12 +200,13 @@ private fun CurrencyTextField(
                             .alignByBaseline(),
                     value = amount,
                     onValueChange = { input ->
-                        text = parseCurrencyInput(input, text)
-                        inputValueChanged(text)
+                        if (MainPriceFieldParser.allowsAmountInput(input, currency.precision)) {
+                            inputValueChanged(input.replace(',', '.'))
+                        }
                     },
                     placeholder = {
                         Text(
-                            text = Decimal.ZERO.reduceScaleStr(),
+                            text = "0",
                             style = style.copy(color = MaterialTheme.colorScheme.primaryContainer),
                         )
                     },
@@ -240,7 +234,7 @@ private fun CurrencyTextField(
     } else {
         Row(modifier = modifier) {
             Text(
-                text = currencyCode,
+                text = symbol,
                 modifier = Modifier.alignByBaseline(),
                 style =
                     TextStyle(
@@ -261,34 +255,12 @@ private fun CurrencyTextField(
     }
 }
 
-private fun parseCurrencyInput(
-    input: String,
-    previousValue: String,
-): String =
-    when {
-        input.isEmpty() -> input
-        input[0] == '0' -> input.substring(1)
-        else -> parseCurrencyNumber(input, previousValue)
-    }
-
-private fun parseCurrencyNumber(
-    input: String,
-    previousValue: String,
-): String {
-    val number = input.toDecimalOrNull()
-    return when {
-        number == null -> previousValue
-        number.fractionDigits > DECIMAL_SIZE -> input.take(input.indexOf(DELIMITER) + DECIMAL_SIZE + 1)
-        else -> input
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreviewCurrencyTextField() {
     CurrencyTextFieldSmall(
-        amount = Decimal(PREVIEW_AMOUNT).reduceScaleStr(),
-        currencyCode = "$",
+        amount = "123",
+        currencyCode = Currency.USD.name,
         isEditable = false,
     )
 }

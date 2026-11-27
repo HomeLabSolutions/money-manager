@@ -6,8 +6,7 @@ import com.d9tilov.android.budget.domain.contract.BudgetInteractor
 import com.d9tilov.android.budget.ui.BudgetUiState
 import com.d9tilov.android.core.constants.DiConstants.DISPATCHER_IO
 import com.d9tilov.android.core.model.Decimal
-import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
-import com.d9tilov.android.core.utils.reduceScaleStr
+import com.d9tilov.android.core.utils.toAmountString
 import com.d9tilov.android.core.utils.toDecimalOrNull
 import com.d9tilov.android.currency.domain.contract.CurrencyInteractor
 import com.d9tilov.android.currency.observer.contract.CurrencyUpdateObserver
@@ -59,7 +58,11 @@ class PrepopulateViewModel(
                         filteredCurrencyList = currencyList,
                         isLoading = false,
                     ),
-                    BudgetUiState(budget.sum.reduceScaleStr(), budget.currencyCode.getSymbolByCode()),
+                    BudgetUiState(
+                        budgetSum = budget.sum.toAmountString(budget.currencyCode),
+                        amountToSave = budget.saveSum.toAmountString(budget.currencyCode),
+                        currencyCode = budget.currencyCode,
+                    ),
                 )
             }.collect { state -> _uiState.update { state } }
         }

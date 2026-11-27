@@ -1,25 +1,23 @@
 package com.d9tilov.android.currency.data.impl.mapper
 
+import com.d9tilov.android.core.model.Currency
 import com.d9tilov.android.core.model.Decimal
 import com.d9tilov.android.core.utils.CurrencyUtils.getSymbolByCode
 import com.d9tilov.android.core.utils.toDecimal
 import com.d9tilov.android.currency.data.contract.model.CurrencyResponse
 import com.d9tilov.android.currency.domain.model.CurrencyRate
 
-fun CurrencyResponse.toDataModel(): List<CurrencyRate> {
-    val currencyRateList = mutableSetOf<CurrencyRate>()
-    for ((key, value) in rates) {
-        val item =
+fun CurrencyResponse.toDataModel(): List<CurrencyRate> =
+    rates
+        .filterKeys { Currency.fromCode(it) != null }
+        .map { (code, rate) ->
             CurrencyRate(
-                code = key,
-                symbol = key.getSymbolByCode(),
-                value = value.content.toDecimal(),
+                code = code,
+                symbol = code.getSymbolByCode(),
+                value = rate.content.toDecimal(),
                 lastUpdateTime = date,
             )
-        currencyRateList.add(item)
-    }
-    return currencyRateList.toList()
-}
+        }
 
 fun CurrencyResponse.toDataModelValues(list: List<CurrencyRate>): List<CurrencyRate> {
     val newList = mutableListOf<CurrencyRate>()

@@ -52,6 +52,22 @@ class RegularTransactionCreationViewModelTest {
     }
 
     @Test
+    fun `changing currency resets the amount even when it fits the new currency`() =
+        runTest(testDispatcher) {
+            coEvery { regularTransactionInteractor.getById(TRANSACTION_ID) } returns
+                transaction(ExecutionPeriod.EveryMonth(14))
+            val viewModel = createViewModel()
+            advanceUntilIdle()
+
+            viewModel.updateCurrencyCode("USD")
+            assertEquals("0", viewModel.uiState.value.amount)
+            viewModel.updateAmount("12.34")
+            viewModel.updateAmount("12.345")
+            viewModel.updateCurrencyCode("USD")
+            assertEquals("12.34", viewModel.uiState.value.amount)
+        }
+
+    @Test
     fun `annual schedule can be selected edited and saved`() =
         runTest(testDispatcher) {
             coEvery { regularTransactionInteractor.getById(TRANSACTION_ID) } returns

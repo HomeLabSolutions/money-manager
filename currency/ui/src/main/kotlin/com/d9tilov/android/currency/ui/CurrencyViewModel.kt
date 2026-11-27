@@ -75,10 +75,10 @@ class CurrencyViewModel(
         viewModelScope.launch(ioDispatcher) {
             currencyInteractor
                 .getCurrencies()
-                .map {
+                .map { currencies ->
                     CurrencyUiState.HasCurrencies(
-                        currencyList = it,
-                        filteredCurrencyList = it,
+                        currencyList = currencies,
+                        filteredCurrencyList = currencies,
                         isLoading = false,
                     )
                 }.collect { newState: CurrencyUiState.HasCurrencies ->

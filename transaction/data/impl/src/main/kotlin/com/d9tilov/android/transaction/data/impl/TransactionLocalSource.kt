@@ -54,7 +54,7 @@ class TransactionLocalSource(
     override fun getById(id: Long): Flow<TransactionDataModel> =
         preferencesStore.uid
             .filterNotNull()
-            .flatMapMerge { uid -> transactionDao.getById(uid, id).map { it.toDataModel() } }
+            .flatMapMerge { uid -> transactionDao.getById(uid, id).filterNotNull().map { it.toDataModel() } }
 
     override fun getAllByTypePaging(transactionType: TransactionType): Flow<PagingData<TransactionDataModel>> =
         pagedTransactions { uid, from, to ->

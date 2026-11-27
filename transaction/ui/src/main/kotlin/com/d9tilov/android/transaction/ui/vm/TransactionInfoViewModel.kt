@@ -7,8 +7,11 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.d9tilov.android.category.domain.contract.CategoryInteractor
 import com.d9tilov.android.category.domain.entity.Category
-import com.d9tilov.android.core.utils.reduceScaleStr
-import com.d9tilov.android.core.utils.toDecimal
+import com.d9tilov.android.core.constants.CurrencyConstants.ZERO
+import com.d9tilov.android.core.model.Currency
+import com.d9tilov.android.core.model.Money
+import com.d9tilov.android.core.utils.MainPriceFieldParser
+import com.d9tilov.android.core.utils.moneyOrNull
 import com.d9tilov.android.core.utils.toLocalDateTime
 import com.d9tilov.android.places.domain.contract.NearbyPlacesInteractor
 import com.d9tilov.android.places.domain.model.LocationData
@@ -70,7 +73,7 @@ class TransactionInfoViewModel(
                 _uiState.update { state ->
                     state.copy(
                         mode = transactionArgs.mode,
-                        amount = transaction.sum.reduceScaleStr(),
+                        amount = transaction.sum.toAmountString(),
                         transaction = transaction,
                     )
                 }
@@ -78,7 +81,14 @@ class TransactionInfoViewModel(
         }
     }
 
-    fun updateAmount(amount: String) = _uiState.update { state -> state.copy(amount = amount) }
+    fun updateAmount(amount: String) =
+        _uiState.update { state ->
+            if (MainPriceFieldParser.allowsAmountInput(amount, state.transaction.sum.currency.precision)) {
+                state.copy(amount = amount)
+            } else {
+                state
+            }
+        }
 
     fun selectPlace(place: NearbyPlace) = updatePlace(place.name, place.address)
 
@@ -188,11 +198,16 @@ class TransactionInfoViewModel(
             state.copy(transaction = tr.copy(inStatistics = inStatistics))
         }
 
-    fun updateCurrencyCode(code: String) =
+    fun updateCurrencyCode(code: String) {
+        val currency = Currency.fromCode(code) ?: return
         _uiState.update { state ->
-            val tr = state.transaction
-            state.copy(transaction = tr.copy(currencyCode = code))
+            if (state.transaction.sum.currency == currency) {
+                state
+            } else {
+                state.copy(amount = ZERO, transaction = state.transaction.copy(sum = Money(0L, currency)))
+            }
         }
+    }
 
     fun updateCategory(id: Long) =
         viewModelScope.launch {
@@ -208,7 +223,7 @@ class TransactionInfoViewModel(
         if (state.mode == TransactionInfoMode.VIEW) return
         transactionInteractor.update(
             state.transaction.copy(
-                sum = state.amount.toDecimal(),
+                sum = state.amount.moneyOrNull(state.transaction.sum.currency)?.takeIf { it.value != 0L } ?: return,
                 place =
                     state.transaction.place.copy(
                         name =
